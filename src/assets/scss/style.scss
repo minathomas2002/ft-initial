@@ -1,0 +1,11 @@
+@use './core/variables' as *;
+@use './core/fonts' as *;
+@use './vendors/plugins';
+@use './vendors/primeng-custom' as *;
+@use './vendors/animation' as *;
+
+
+
+html{
+  font-family: $font-family;
+}

@@ -1,0 +1,143 @@
+@use '../core/variables' as *;
+
+@mixin primengInputsFontSize {
+  font-size: 0.875rem !important;
+}
+
+/*timeline*/
+  .p-timeline-hidden-opposite {
+  .p-timeline-event-opposite {
+    display: none !important;
+  }
+}
+
+/*timeline end*/
+
+/*p-tooltip */
+.p-tooltip {
+  .p-tooltip-text{
+    font-size: 12px;
+    text-align: center;
+  }
+}
+/*p-tooltip end*/
+
+/*p-button */
+.p-button {
+  @include primengInputsFontSize;
+}
+/*p-button end*/
+
+/*.p-inputtext */
+.p-inputtext {
+    @include primengInputsFontSize;
+  }
+  /*p-inputtext end*/
+
+/*.p-inputtext */
+.p-inputtext {
+  @include primengInputsFontSize;
+}
+/*.p-inputtext end*/
+
+/*.p-textarea */
+.p-textarea {
+  @include primengInputsFontSize;
+}
+/*.p-textarea end*/
+
+/*.p-select */
+.p-select {
+  @include primengInputsFontSize;
+}
+/*.p-select end*/
+
+/*.p-select */
+.p-menu-list {
+  @include primengInputsFontSize;
+}
+/*.p-select end*/
+
+/*.p-autocomplete */
+.p-autocomplete {
+  @include primengInputsFontSize;
+}
+.p-autocomplete-input-chip input{
+  @include primengInputsFontSize;
+}
+/*.p-autocomplete end*/
+
+/*.p-select */
+.p-multiselect{
+  @include primengInputsFontSize;
+  .p-multiselect-label .p-chip{
+    border: 1px solid var(--p-primary-200);
+    padding-top: calc((var(--p-multiselect-padding-y) - 1px) / 2) !important;
+    padding-bottom: calc((var(--p-multiselect-padding-y) - 1px) / 2) !important;
+  }
+}
+
+/*.p-select end*/
+
+/*.p-datepicker */
+.p-datepicker {
+  &:has(.p-datepicker-input-icon-container) .p-datepicker-clear-icon {
+      inset-inline-end: calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size)) !important;
+  }
+  .p-datepicker-day-view{
+    @include primengInputsFontSize;
+  }
+}
+/*.p-datepicker end*/
+
+/*.p-chip-label*/
+.p-chip-label{
+  max-width: 110px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+/*.p-chip-label end*/
+
+/*.p-accordion start*/
+.p-accordion{
+  .p-accordioncontent-content{
+    border-radius: 0 0 12px 12px;
+  }
+}
+/*.p-accordion end*/
+
+/*.p-radiobutton start*/
+.p-radiobutton{
+  .p-radiobutton-icon{
+    width: 8px;
+    height: 8px;
+  }
+}
+/*.p-radiobutton end*/
+
+// .p-datepicker start
+.p-datepicker-fluid .p-datepicker-clear-icon {
+  background: var(--p-inputtext-background) !important;
+  padding: 0 0 0 4px !important;
+}
+// .p-datepicker end
+
+// p-editor start
+.p-editor{
+  .ql-toolbar button.ql-image {
+    display: none !important;
+  }
+  .ql-blank::before{
+    font-style: normal !important;
+  }
+  .ql-container{
+    font-family: $font-family;
+    &.ql-disabled{
+      .ql-editor{
+        background-color: var(--p-gray-100);
+      }
+    }
+  }
+}
+// p-editor end
