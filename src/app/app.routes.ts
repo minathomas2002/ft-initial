@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { ERoutes } from './shared/enums';
+import { AuthLayout } from './core/layouts/auth-layout/auth-layout';
 const MAIN_LAYOUT_ROUTES: Routes = [
 	{
 		path: "",
@@ -28,5 +29,11 @@ export const routes: Routes = [
   {
     path: '',
     children: [...MAIN_LAYOUT_ROUTES],
+  },
+  {
+	path: 'auth',
+	component: AuthLayout,
+	loadChildren: () =>
+		import('./features/authentication/authentication.routes').then((m) => m.AUTHENTICATION_ROUTES),
   }
 ];
