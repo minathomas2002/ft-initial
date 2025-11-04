@@ -1,1 +1,13 @@
-<app-dashboard-view></app-dashboard-view>
+<div class="text-[14px]">
+  <router-outlet></router-outlet>
+  <p-toast
+    [life]="5000"
+    position="top-right"
+    baseZIndex="999"
+    [breakpoints]="{
+      '640px':{
+        'width':'80vw',
+      }
+    }"
+  />
+</div>

@@ -1,7 +1,6 @@
 import { Component, computed, inject, model, signal } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { PanelModule } from "primeng/panel";
-import { PoweredByBoxComponent } from "../powered-by-box/powered-by-box.component";
 import { SidebarDropdownComponent } from "../sidebar-dropdown/sidebar-dropdown.component";
 import { SidebarLinkComponent } from "../sidebar-link/sidebar-link.component";
 import type { ISideBarLink } from "./../../models/sidebar.interface";
@@ -11,7 +10,6 @@ import { ERoutes } from "../../../../../shared/enums";
 	selector: "app-sidebar-content",
 	imports: [
 		SidebarLinkComponent,
-		PoweredByBoxComponent,
 		PanelModule,
 		SidebarDropdownComponent,
 		RouterModule,
