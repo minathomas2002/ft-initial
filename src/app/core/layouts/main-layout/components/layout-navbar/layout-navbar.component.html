@@ -1,0 +1,36 @@
+<div class="main-layout--navbar bg-white py-[16px] md:px-[32px] px-[20px]  border-b-1 border-b-gray-200">
+  <div class="flex justify-between flex-row-reverse">
+    <div class="flex items-center gap-[28px]">
+      <div>
+        <app-navbar-notifications></app-navbar-notifications>
+      </div>
+      <div>
+        <app-navbar-profile-dropdown></app-navbar-profile-dropdown>
+      </div>
+    </div>
+    <div class="inline-block lg:hidden">
+      <p-button
+        severity="secondary"
+        styleClass="!text-lg"
+        icon="icon-menu"
+        text
+        (onClick)="visibleSidebarDrawer.set(true)"
+      />
+    </div>
+  </div>
+</div>
+
+<p-drawer
+  header="Right Drawer"
+  [(visible)]="visibleSidebarDrawer"
+  position="left"
+  #drawerRef
+  styleClass="!w-[311px] max-w-[95%]"
+>
+  <ng-template #headless>
+    <app-sidebar-content
+      [(sidebarDrawerVisibility)]="visibleSidebarDrawer"
+      class="h-full px-[16px] py-[24px]"
+    />
+  </ng-template>
+</p-drawer>

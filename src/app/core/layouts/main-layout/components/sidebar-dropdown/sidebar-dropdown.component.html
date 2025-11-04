@@ -1,0 +1,35 @@
+<p-panel
+  toggler="header"
+  [toggleable]="true"
+  expandIcon="icon-chevron-up"
+  collapseIcon="icon-chevron-down"
+  #panel
+>
+  <ng-template #header>
+    <a
+      [routerLink]="link().routerLink"
+      (click)="onCloseSidebarDrawer.emit()"
+      routerLinkActive="bg-gray-50"
+      class="flex items-center hover:!bg-gray-50 text-[16px] transition-all block w-full p-3 rounded-lg font-semibold p-[12px]"
+    >
+      <i class="{{link().icon}} me-[11px] text-gray-400 text-2xl"></i>
+      {{link().label}}
+    </a>
+  </ng-template>
+
+  @let children = link().children;
+  @for(child of children; track child.routerLink){
+  @if(child.show){
+  <a
+    [routerLink]="child.routerLink"
+    (click)="onCloseSidebarDrawer.emit()"
+    routerLinkActive="bg-gray-50"
+    [routerLinkActiveOptions]="{ exact: false }"
+    class="flex items-center hover:!bg-gray-50 text-[16px] transition-all block w-full p-3 rounded-lg font-semibold p-[12px] mt-2"
+  >
+    <i class="w-[30px]"></i>
+    {{child.label}}
+  </a>
+  }
+  }
+</p-panel>

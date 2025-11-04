@@ -1,0 +1,40 @@
+<div (click)="op.toggle($event)">
+  <p-overlaybadge
+    styleClass="!p-0 !rounded-full !text-[10px]"
+    [value]="0"
+    [badgeDisabled]="false"
+  >
+    <i class="icon-bell !text-gray-400 !text-2xl cursor-pointer">
+    </i>
+  </p-overlaybadge>
+</div>
+
+<p-popover
+  #op
+  class="custom-popover"
+>
+  <div class="flex flex-col ">
+    <div class="flex justify-between py-[16px] px-[24px]">
+      <p class="font-semibold">
+        Notifications
+      </p>
+      <span
+        class="text-gray-400 text-xl cursor-pointer"
+        (click)="
+        op.toggle($event)"
+      ><i class="icon-close"></i></span>
+    </div>
+    <div class="max-h-[500px] !max-w-[35rem] md:min-w-[35rem] overflow-auto border-t border-gray-200">
+      <!-- <app-notifications-tabs></app-notifications-tabs> -->
+    </div>
+    <div class="border-t border-gray-200 px-[24px] py-4">
+      <div class="flex justify-center">
+        <span
+          class="text-primary cursor-pointer font-medium text-sm"
+          [routerLink]="['/',ERoutes.dashboard]"
+          (click)="op.hide()"
+        >View All</span>
+      </div>
+    </div>
+  </div>
+</p-popover>
