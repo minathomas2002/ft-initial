@@ -1,1 +1,50 @@
-<p>login works!</p>
+<div class="pt-10 px-10">
+    <div class="flex flex-col gap-3">
+        <h1 class="text-3xl font-semibold">Log in</h1>
+        <!-- TODO: set color -->
+        <p>Welcome back! Please enter your details.</p>
+    </div>
+    <div class="w-full mt-10 max-w-[500px]">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+            <!-- Email -->
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" pInputText formControlName="email" placeholder="Enter your email"
+                    class="w-full" />
+                @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
+                <small class="text-red-500">
+                    {{ loginForm.get('email')?.hasError('required') ? 'Email is required' : 'Invalid email format' }}
+                </small>
+                }
+            </div>
+
+            <!-- Password -->
+            <div class="field">
+                <label for="password">Password</label>
+                <p-password id="password" formControlName="password" [feedback]="false" class="w-full"
+                    placeholder="Enter your password" inputStyleClass="w-full"></p-password>
+                @if(loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+                <small class="text-red-500">
+                    Password is required
+                </small>
+                }
+            </div>
+
+            <div class="flex items-center">
+                <p-checkbox binary="true" formControlName="rememberMe" inputId="rememberMe"></p-checkbox>
+                <label for="rememberMe" class="ml-2 cursor-pointer">Remember for 30 days</label>
+                <!-- TODO: set link -->
+                <p-button class="ms-auto" label="Forgot your password?" link />
+            </div>
+
+            <!-- Submit -->
+            <button pButton type="submit" label="Login" class="w-full" [disabled]="loginForm.invalid"></button>
+            <div class="flex justify-center items-center">
+                <p>Don't have an account?</p>
+                <!-- TODO: set link -->
+                <p-button label="Sign up" link />
+            </div>
+        </form>
+    </div>
+
+</div>
