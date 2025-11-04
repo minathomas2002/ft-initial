@@ -1,0 +1,35 @@
+<div class="flex items-center w-full">
+  <p-avatar
+    [image]="userAvatar() || 'assets/img/avatar/user_placeholder.png'"
+    class="mr-[12px] {{avatarClass()}}"
+    shape="circle"
+    size="large"
+  />
+  <span
+    class="flex flex-col"
+    [style]="{
+    'width':'calc(100% - 50px)'
+  }"
+  >
+    <span
+      class="
+    {{titleClass()}}
+    truncate"
+      [pTooltip]="userName()"
+      tooltipPosition="top"
+    >{{userName()}}</span>
+    <span
+      class="{{subTitleClass()}} truncate"
+      [pTooltip]="userTitle()"
+      tooltipPosition="top"
+    >{{userTitle()}}</span>
+    @if(userDepartment()){
+    <span
+      class="{{departmentClass()}} truncate"
+      [pTooltip]="userDepartment()"
+      tooltipPosition="top"
+    >{{userDepartment()}}</span>
+    }
+  </span>
+
+</div>
