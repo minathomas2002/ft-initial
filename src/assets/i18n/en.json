@@ -17,6 +17,12 @@
 		"warning": "Warning",
 		"info": "Info"
 	},
+  "footer": {
+    "message": "© 2025 SEC. All rights reserved.",
+    "terms":"Terms",
+    "privacy":"Privacy",
+    "cookie":"Cookie"
+  },
 	"auth": {
 		"login": "Login",
 		"logout": "Logout",
