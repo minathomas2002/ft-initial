@@ -4,6 +4,7 @@ import { NavbarNotificationsComponent } from '../navbar-notifications/navbar-not
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { SidebarContentComponent } from '../sidebar-content/sidebar-content.component';
+import { LanguageSwitcherComponent } from '../../../../../shared/components/language-switcher';
 
 @Component({
 	selector: 'app-layout-navbar',
@@ -13,6 +14,7 @@ import { SidebarContentComponent } from '../sidebar-content/sidebar-content.comp
 		ButtonModule,
 		DrawerModule,
 		SidebarContentComponent,
+		LanguageSwitcherComponent,
 	],
 	templateUrl: './layout-navbar.component.html',
 	styleUrl: './layout-navbar.component.scss',

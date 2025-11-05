@@ -1,0 +1,49 @@
+{
+	"common": {
+		"welcome": "مرحباً",
+		"hello": "مرحبا",
+		"yes": "نعم",
+		"no": "لا",
+		"cancel": "إلغاء",
+		"confirm": "تأكيد",
+		"save": "حفظ",
+		"delete": "حذف",
+		"edit": "تعديل",
+		"add": "إضافة",
+		"search": "بحث",
+		"loading": "جاري التحميل...",
+		"error": "خطأ",
+		"success": "نجح",
+		"warning": "تحذير",
+		"info": "معلومة"
+	},
+	"auth": {
+		"login": "تسجيل الدخول",
+		"logout": "تسجيل الخروج",
+		"register": "التسجيل",
+		"email": "البريد الإلكتروني",
+		"password": "كلمة المرور",
+		"forgotPassword": "نسيت كلمة المرور؟",
+		"rememberMe": "تذكرني",
+		"signIn": "تسجيل الدخول",
+		"signUp": "إنشاء حساب"
+	},
+	"dashboard": {
+		"title": "لوحة التحكم",
+		"overview": "نظرة عامة",
+		"statistics": "الإحصائيات"
+	},
+	"navigation": {
+		"home": "الرئيسية",
+		"dashboard": "لوحة التحكم",
+		"profile": "الملف الشخصي",
+		"settings": "الإعدادات",
+		"help": "مساعدة"
+	},
+	"language": {
+		"english": "الإنجليزية",
+		"arabic": "العربية",
+		"changeLanguage": "تغيير اللغة"
+	}
+}
+

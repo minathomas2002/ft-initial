@@ -1,0 +1,10 @@
+<p-select
+  [ngModel]="currentLanguage()"
+  [options]="languages"
+  optionLabel="label"
+  optionValue="value"
+  (ngModelChange)="onLanguageChange($event)"
+  [style]="{ width: '150px' }"
+  placeholder="Language"
+>
+</p-select>

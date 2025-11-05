@@ -486,7 +486,9 @@ const FILE_UPLOAD_COMPONENT = {
 };
 
 const MY_PRESET = definePreset(Lara, {
-  components:{},
+  components:{
+    ...BUTTON_COMPONENT,
+  },
 	semantic: {
 		gray: {
       25:"#FCFCFC",

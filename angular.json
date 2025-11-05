@@ -67,7 +67,7 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
-            }
+            },
           },
           "defaultConfiguration": "production"
         },
@@ -79,12 +79,9 @@
             },
             "development": {
               "buildTarget": "benaa:build:development"
-            }
+            },
           },
           "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
         },
         "test": {
           "builder": "@angular/build:karma",
