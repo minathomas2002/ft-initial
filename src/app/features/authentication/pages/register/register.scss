@@ -1,0 +1,12 @@
+:host ::ng-deep .iti {
+    width: 100% !important;
+}
+:host ::ng-deep .iti__dropdown-content {
+    min-width: 20rem !important;
+}
+
+:host ::ng-deep .iti__country-list {
+    z-index: 9999 !important;
+    overflow-y: auto !important;
+    max-height: 200px !important;
+}
