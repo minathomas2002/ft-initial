@@ -4,39 +4,47 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
 import { RouterModule } from '@angular/router';
+import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
+import { PasswordPolicy } from '../../components/password-policy/password-policy';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   imports: [
     ReactiveFormsModule,
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    CheckboxModule,
-    RouterModule
+    RouterModule,
+    NgxIntlTelInputModule,
+    PasswordPolicy
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  templateUrl: './register.html',
+  styleUrl: './register.scss',
 })
-export class Login {
-  loginForm: FormGroup;
+export class Register {
+
+  //enum
+  searchCountryField = SearchCountryField;
+  countryISO = CountryISO;
+  
+  registerForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    this.loginForm = this.fb.group({
+    this.registerForm = this.fb.group({
+      name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      rememberMe: [false],
+      phone: ['']
     });
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      console.log('Form Data:', this.loginForm.value);
+    if (this.registerForm.valid) {
+      console.log('Form Data:', this.registerForm.value);
       // call your login API here
     } else {
-      this.loginForm.markAllAsTouched();
+      this.registerForm.markAllAsTouched();
     }
   }
 }
