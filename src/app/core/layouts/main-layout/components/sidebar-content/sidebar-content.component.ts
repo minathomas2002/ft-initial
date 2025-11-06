@@ -33,7 +33,13 @@ export class SidebarContentComponent {
 				icon: "icon-home",
 				routerLink: ERoutes.dashboard,
 				show: true,
-			}
+			},
+      {
+				label: this.i18nService.translate("navigation.users"),
+				icon: "icon-users",
+				routerLink: ERoutes.users,
+				show: true,
+			},
 		];
 	});
 

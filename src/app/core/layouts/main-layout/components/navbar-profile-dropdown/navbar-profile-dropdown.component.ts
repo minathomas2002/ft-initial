@@ -4,7 +4,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { Router } from '@angular/router';
 import { ERoutes } from '../../../../../shared/enums';
 import { IdentifyUserComponent } from '../../../../../shared/components/utility-components/identify-user/identify-user.component';
-import { AuthStore } from '../../../../../shared/stores';
+import { AuthStore } from '../../../../../shared/stores/auth/auth.store';
 
 
 @Component({

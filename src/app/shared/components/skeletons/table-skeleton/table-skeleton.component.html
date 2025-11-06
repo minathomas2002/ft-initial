@@ -1,0 +1,33 @@
+@if(isLoading()){
+<ng-container *ngTemplateOutlet="loading"></ng-container>
+}
+@else{
+<ng-content></ng-content>
+}
+
+<ng-template #loading>
+  <p-table
+    [value]="items"
+    styleClass="bg-white border-1 border-gray-200 rounded-xl overflow-hidden"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template #header>
+      <tr>
+        @for(header of headers(); track header){
+        <th class="!bg-gray-50 text-sm !text-gray-500 !font-medium !px-[24px] !py-[13px]">{{header.label}}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template
+      #body
+      let-item
+    >
+      <tr>
+        @for(header of headers(); track header){
+        <td><p-skeleton /></td>
+        }
+
+      </tr>
+    </ng-template>
+  </p-table>
+</ng-template>

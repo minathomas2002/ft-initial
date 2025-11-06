@@ -64,7 +64,8 @@
 		"dashboard": "Dashboard",
 		"profile": "Profile",
 		"settings": "Settings",
-		"help": "Help"
+		"help": "Help",
+		"users": "Users"
 	},
 	"language": {
 		"english": "English",

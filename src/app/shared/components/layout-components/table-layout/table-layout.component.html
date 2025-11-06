@@ -1,0 +1,21 @@
+<div class="table-layout">
+  <div class="table-layout--header mb-[24px]">
+    <div class="flex items-center justify-between gap-[16px]">
+      <div class="table-layout--title sm:w-auto">
+        <ng-content select="table-title">
+          <h4 class="font-semibold xl:text-2xl text-lg"> {{tableTitle()}} </h4>
+          <h4 class="xl:text-md text-sm text-gray-600"> {{tableSubTitle()}} </h4>
+        </ng-content>
+      </div>
+      <div class="table-layout--actions">
+        <ng-content select="table-actions"></ng-content>
+      </div>
+    </div>
+  </div>
+  <div class="table-layout--filters mb-[16px]">
+    <ng-content select="table-filters"></ng-content>
+  </div>
+  <div class="table-layout--body">
+    <ng-content select="table-body"></ng-content>
+  </div>
+</div>

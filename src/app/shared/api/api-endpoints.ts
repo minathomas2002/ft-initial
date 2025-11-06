@@ -1,11 +1,15 @@
 import { environment } from "../../../environments/environment";
 
 const baseUrl = environment.baseUrl;
-
+const Users = "Users";
+const Dashboard = "Dashboard";
 
 export const API_ENDPOINTS = {
 	baseUrl: baseUrl,
 	dashboard: {
-		getHelloWorld: `${baseUrl}/api/hello-world`,
+		getHelloWorld: `${Dashboard}/hello-world`,
 	},
+  users: {
+    getUserTitles: `${Users}/user-titles`,
+  },
 };

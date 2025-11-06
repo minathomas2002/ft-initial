@@ -1,0 +1,96 @@
+<div class="data-table bg-white border-1 border-gray-200 rounded-xl overflow-hidden">
+  <p-table
+    [loading]="isLoading()"
+    [columns]="columns()"
+    [value]="rows()"
+    [(selection)]="selectedRows"
+    [scrollable]="true"
+    [scrollHeight]="scrollHeight()"
+    [selectionPageOnly]="true"
+    [rowSelectable]="rowSelectable()"
+    [dataKey]="rowDataKey()"
+  >
+    <ng-template
+      pTemplate="header"
+      let-columns
+    >
+      <tr>
+        @if(rowsCheckable()){
+        <th class="!bg-gray-50 text-sm !text-gray-600 !font-medium !ps-[24px] !pe-0 !py-[13px]">
+          <p-tableHeaderCheckbox />
+        </th>
+        }
+        @for(col of columns; track col){
+        <th class="!bg-gray-50 text-sm !text-gray-600 !font-medium !px-[24px] !py-[13px] whitespace-nowrap">
+          <div class="flex items-center gap-[4px]">
+            {{ col.label}}
+            @if(col.isSortable && totalRecords() > 0){
+            <i
+              class="transition-transform duration-300 cursor-pointer text-xs ms-[7px]"
+              [ngClass]="{
+                'icon-sort ':filter().sortField === col.sortingKey,
+                'icon-chevron-up-down': filter().sortField !== col.sortingKey,
+                'rotate-180': filter().sortOrder == ESortingOrder.asc && filter().sortField === col.sortingKey
+              }"
+              role="
+              button"
+              (click)="setSortingKey(col.sortingKey)"
+            ></i>
+            }
+          </div>
+        </th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-item
+      let-rowIndex="rowIndex"
+    >
+      <tr
+        class="sm:text-sm text-xs"
+        (click)="onRowClick.emit({item, rowIndex})"
+      >
+        @if(rowsCheckable()){
+        <td class="!ps-[24px] !pe-1 !bg-white">
+          <p-tableCheckbox
+            [disabled]="disabledRows()[rowIndex]"
+            [value]="item"
+          />
+        </td>
+        }
+        <ng-container
+          [ngTemplateOutletContext]="{ item: item }"
+          [ngTemplateOutlet]="itemsTemplate()"
+        ></ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td
+          colspan="100%"
+          class="!p-20"
+        >
+
+          <ng-content select="emptyContent">
+            <app-empty-records [messageTitle]="messageTitle()"></app-empty-records>
+          </ng-content>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+
+    </ng-template>
+
+  </p-table>
+  @if(totalRecords() > 0){
+  <div class="flex">
+    <app-paginator
+      class="flex-1"
+      [totalRecords]="totalRecords()"
+      [(filter)]="filter"
+    ></app-paginator>
+  </div>
+  }
+</div>

@@ -1,0 +1,51 @@
+<div class="grid grid-cols-12 gap-4">
+
+  <div class="col-span-6 hidden md:block">
+    <p-iconfield>
+      <p-inputicon
+        inputId="users-search"
+        class="icon-search"
+      />
+      <input
+        class="w-full"
+        type="text"
+        pInputText
+        [disabled]="disableFilterInputs()"
+        placeholder="Search by user name or email or ID"
+        [(ngModel)]="filter().userNameEmailId"
+        (ngModelChange)="userSearchSubject.next(filter().userNameEmailId??'')"
+      />
+    </p-iconfield>
+  </div>
+
+  <div class="col-span-3 hidden md:block">
+    <p-multiselect
+      [options]="userTitles()"
+      [(ngModel)]="filter().userTitleId"
+      optionLabel="name"
+      placeholder="Title"
+      display="chip"
+      dropdownIcon="icon-chevron-down"
+      fluid
+    >
+    </p-multiselect>
+  </div>
+
+  @if(usersFilterService.showClearAll()){
+  <div class="col-span-3 hidden md:flex items-center">
+    <app-clear-all (onClearAll)="usersFilterService.clearAllFilters()"></app-clear-all>
+  </div>
+  }
+
+  <div class="col-span-full md:hidden">
+    <p-button
+      severity="secondary"
+      styleClass="!w-full"
+      icon="icon-filter-lines"
+      label="Filters"
+      [raised]="true"
+      (onClick)="filterDrawerVisible.set(true)"
+      fluid
+    />
+  </div>
+</div>

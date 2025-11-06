@@ -22,6 +22,12 @@ const MAIN_LAYOUT_ROUTES: Routes = [
 					).then((c) => c.DashboardView),
 				data: { animation: ERoutes.dashboard },
 			},
+      {
+        path: ERoutes.users,
+        loadComponent: () =>
+          import("./features/users/pages/users-view/users-view").then((c) => c.UsersView),
+        data: { animation: ERoutes.users },
+      },
 		],
 	},
 ];

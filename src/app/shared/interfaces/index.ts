@@ -2,3 +2,8 @@ export * from './api-response.interface';
 export * from './auth.interface';
 export * from './filter.interface';
 export * from './colors.interface';
+export * from './users.interface';
+export * from './filterAdapter.interface';
+export * from './select-item.interface';
+export * from './table-header-item.interface';
+export * from './menu.interface';

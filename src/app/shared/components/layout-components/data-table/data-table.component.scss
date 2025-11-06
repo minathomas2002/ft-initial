@@ -1,0 +1,15 @@
+.data-table{
+  ::ng-deep{
+    td{
+      padding: 16px 24px !important
+    }
+    .p-datatable {
+    .p-selectable-row:not(.p-highlight) {
+      &[style*="cursor: pointer"] {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+  }
+  }
+}

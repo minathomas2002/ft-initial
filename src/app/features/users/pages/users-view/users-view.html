@@ -1,0 +1,83 @@
+<app-table-layout
+  tableTitle="Users"
+  tableSubTitle="Manage employee roles and permissions"
+>
+  <ng-container ngProjectAs="table-filters">
+    <app-users-filter></app-users-filter>
+  </ng-container>
+
+  <ng-container ngProjectAs="table-body">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="usersStore.loading()"
+    >
+      <app-data-table
+        [columns]="headers()"
+        [rows]="rows()"
+        [(filter)]="filterService.filter"
+        [totalRecords]="totalRecords()"
+        (filterChange)="filterService.applyFilterWithPaging()"
+        messageTitle="No Assessment Cycle Available"
+        [showCheckBox]="true"
+        [rowsCheckable]="true"
+        [(selectedRows)]="selectedRows"
+      >
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
+          <!-- ID -->
+          <td>
+            {{item.id}}
+          </td>
+
+          <!-- Employee name & Title -->
+          <td>
+            {{item.name}}
+          </td>
+
+          <!-- Employee Email -->
+          <td>
+            <p
+              class="text-sm text-gray-600 max-w-[200px] truncate"
+              [pTooltip]="item.email"
+              tooltipPosition="top"
+              [innerHTML]="item.email"
+            > </p>
+          </td>
+
+          <!-- Role -->
+          <td>
+            {{item.role}}
+          </td>
+
+          <!-- Role -->
+          <td>
+            {{item.joinDate | date : "dd MMM yyyy"}}
+          </td>
+
+          <!-- Assessment Status -->
+          <td>
+            @let status = getUserStatus(item.status);
+            <app-base-tag
+              [color]="status.color"
+              [value]="status.title"
+            />
+          </td>
+          <!-- Action -->
+          <td>
+            @if(item.actions.length>0){
+            <app-users-action-menu
+              [actions]="item.actions"
+              (onChangeRole)="onChangeRole(item)"
+              (onDelete)="onDelete(item)"
+            ></app-users-action-menu>
+            }@else{
+            <div class="text-center">-</div>
+            }
+          </td>
+        </ng-template>
+      </app-data-table>
+    </app-table-skeleton>
+  </ng-container>
+</app-table-layout>
