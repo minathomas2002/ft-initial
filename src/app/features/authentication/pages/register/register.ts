@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -27,7 +26,7 @@ export class Register {
   //enum
   searchCountryField = SearchCountryField;
   countryISO = CountryISO;
-  
+
   registerForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
