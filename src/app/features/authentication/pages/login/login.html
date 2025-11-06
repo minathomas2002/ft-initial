@@ -1,50 +1,85 @@
 <div class="pt-10 px-10">
+  <div class="flex flex-col gap-3">
+    <h1 class="text-3xl font-semibold text-gray-900">Log in</h1>
+    <!-- TODO: set color -->
+    <p class="
+      text-gray-600">{{ i18nService.translate('auth.welcomeBack') }}</p>
+  </div>
+  <div class="w-full my-10 max-w-[500px]">
     <div class="flex flex-col gap-3">
-        <h1 class="text-3xl font-semibold">Log in</h1>
-        <!-- TODO: set color -->
-        <p>Welcome back! Please enter your details.</p>
+      <!-- Email -->
+      <div class="field">
+        <app-base-label [title]="i18nService.translate('auth.email')"></app-base-label>
+        <input
+          type="email"
+          pInputText
+          [formControl]="loginFormService.email"
+          [placeholder]="i18nService.translate('auth.enterYourEmail')"
+          fluid
+        />
+        @if (loginFormService.email.touched && loginFormService.email.invalid) {
+        <small class="text-red-500">
+          {{ loginFormService.email.hasError('required') ? i18nService.translate('auth.emailRequired') : i18nService.translate('auth.invalidEmailFormat') }}
+        </small>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="field">
+        <app-base-label [title]="i18nService.translate('auth.password')"></app-base-label>
+        <p-password
+          [formControl]="loginFormService.password"
+          [feedback]="false"
+          class="w-full"
+          [placeholder]="i18nService.translate('auth.enterYourPassword')"
+          inputStyleClass="w-full"
+        ></p-password>
+        @if(loginFormService.password.touched && loginFormService.password.invalid) {
+        <small class="text-red-500">
+          {{ loginFormService.password.hasError('required') ? i18nService.translate('auth.passwordRequired') : i18nService.translate('auth.invalidPasswordFormat') }}
+        </small>
+        }
+      </div>
+
+      <div class="flex items-center">
+        <div class="flex items-center">
+          <p-checkbox
+            inputId="rememberMe"
+            name="rememberMe"
+            binary
+            size="small"
+            [formControl]="loginFormService.rememberMe"
+          />
+          <label
+            for="rememberMe"
+            class="ms-2 cursor-pointer text-gray-700"
+          >{{ i18nService.translate('auth.rememberMe') }}</label>
+        </div>
+        <p-button
+          class="ms-auto"
+          variant="text"
+          [label]="i18nService.translate('auth.forgotPassword')"
+          routerLink="/auth/forgot-password"
+        />
+      </div>
+
+      <!-- Submit -->
+      <p-button
+        label="{{ i18nService.translate('auth.signIn') }}"
+        fluid
+        [disabled]="loginForm.invalid"
+        (onClick)="onSubmit()"
+      ></p-button>
     </div>
-    <div class="w-full mt-10 max-w-[500px]">
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
-            <!-- Email -->
-            <div class="field">
-                <label for="email">Email</label>
-                <input id="email" type="email" pInputText formControlName="email" placeholder="Enter your email"
-                    class="w-full" />
-                @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
-                <small class="text-red-500">
-                    {{ loginForm.get('email')?.hasError('required') ? 'Email is required' : 'Invalid email format' }}
-                </small>
-                }
-            </div>
-
-            <!-- Password -->
-            <div class="field">
-                <label for="password">Password</label>
-                <p-password id="password" formControlName="password" [feedback]="false" class="w-full"
-                    placeholder="Enter your password" inputStyleClass="w-full"></p-password>
-                @if(loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
-                <small class="text-red-500">
-                    Password is required
-                </small>
-                }
-            </div>
-
-            <div class="flex items-center">
-                <p-checkbox binary="true" formControlName="rememberMe" inputId="rememberMe"></p-checkbox>
-                <label for="rememberMe" class="ml-2 cursor-pointer">Remember for 30 days</label>
-                <!-- TODO: set link -->
-                <p-button class="ms-auto" label="Forgot your password?" link />
-            </div>
-
-            <!-- Submit -->
-            <button pButton type="submit" label="Login" class="w-full" [disabled]="loginForm.invalid"></button>
-            <div class="flex justify-center items-center">
-                <p>Don't have an account?</p>
-                <!-- TODO: set link -->
-                <p-button label="Sign up" link routerLink="/auth/register" />
-            </div>
-        </form>
-    </div>
-
+  </div>
+  <div class="flex justify-center items-center">
+    <p class="text-gray-600">{{ i18nService.translate('auth.dontHaveAccount') }}</p>
+    <!-- TODO: set link -->
+    <p-button
+      class="ms-2"
+      variant="text"
+      [label]="i18nService.translate('auth.signUp')"
+      [routerLink]="['/auth/register']"
+    />
+  </div>
 </div>

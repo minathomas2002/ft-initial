@@ -1,8 +1,9 @@
 import { Component, input, model, output } from "@angular/core";
 import { ButtonModule } from "primeng/button";
-import { AbstractServiceFilter } from "../../../classes/abstract-service-filter";
+
 import type { IFilterBase } from "../../../interfaces";
 import { BaseDrawerComponent } from "../base-drawer/base-drawer.component";
+import { AbstractServiceFilter } from "../../../classes/abstract-service-filter";
 
 @Component({
 	selector: "app-filter-drawer",

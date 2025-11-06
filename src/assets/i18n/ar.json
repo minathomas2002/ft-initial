@@ -29,10 +29,18 @@
 		"register": "التسجيل",
 		"email": "البريد الإلكتروني",
 		"password": "كلمة المرور",
+		"welcomeBack": "مرحبا بعودتك! يرجى إدخال تفاصيلك.",
+		"enterYourEmail": "أدخل بريدك الإلكتروني",
+		"emailRequired": "البريد الإلكتروني مطلوب",
+		"invalidEmailFormat": "البريد الإلكتروني غير صالح",
+		"enterYourPassword": "أدخل كلمة المرور",
+		"passwordRequired": "كلمة المرور مطلوبة",
+		"invalidPasswordFormat": "كلمة المرور غير صالحة",
 		"forgotPassword": "نسيت كلمة المرور؟",
 		"rememberMe": "تذكرني",
 		"signIn": "تسجيل الدخول",
-		"signUp": "إنشاء حساب"
+		"signUp": "إنشاء حساب",
+		"dontHaveAccount": "ليس لديك حساب؟"
 	},
 	"dashboard": {
 		"title": "لوحة التحكم",

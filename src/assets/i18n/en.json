@@ -24,15 +24,23 @@
     "cookie":"Cookie"
   },
 	"auth": {
-		"login": "Login",
+		"login": "Sign In",
 		"logout": "Logout",
 		"register": "Register",
 		"email": "Email",
 		"password": "Password",
+		"welcomeBack": "Welcome back! Please enter your details.",
+		"enterYourEmail": "Enter your email",
+		"emailRequired": "Email is required",
+		"invalidEmailFormat": "Invalid email format",
+		"enterYourPassword": "Enter your password",
+		"passwordRequired": "Password is required",
+		"invalidPasswordFormat": "Invalid password format",
 		"forgotPassword": "Forgot Password?",
 		"rememberMe": "Remember Me",
 		"signIn": "Sign In",
-		"signUp": "Sign Up"
+		"signUp": "Sign Up",
+		"dontHaveAccount": "Don't have an account?"
 	},
 	"dashboard": {
 		"title": "Dashboard",

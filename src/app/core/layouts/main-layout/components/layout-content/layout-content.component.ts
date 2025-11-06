@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 
 
-import { AnimationsContext } from "../../../../../shared/classes";
+import { AnimationsContext } from "../../../../../shared/classes/animations";
 import { slideInOutAnimation } from "../../../../animations/animations.animation";
 
 @Component({
