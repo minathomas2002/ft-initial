@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { PasswordPolicy } from '../../components/password-policy/password-policy';
+import { RegisterFormService } from '../../services/register-form/register-form';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 
 @Component({
   selector: 'app-register',
@@ -16,32 +19,26 @@ import { PasswordPolicy } from '../../components/password-policy/password-policy
     ButtonModule,
     RouterModule,
     NgxIntlTelInputModule,
-    PasswordPolicy
+    PasswordPolicy,
+    BaseLabelComponent
   ],
+  providers: [RegisterFormService],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
 export class Register {
+  registerFormService = inject(RegisterFormService);
+  registerForm = this.registerFormService.registerForm;
+  i18nService = inject(I18nService);
 
   //enum
   searchCountryField = SearchCountryField;
   countryISO = CountryISO;
 
-  registerForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.registerForm = this.fb.group({
-      name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      phone: ['']
-    });
-  }
-
   onSubmit() {
     if (this.registerForm.valid) {
       console.log('Form Data:', this.registerForm.value);
-      // call your login API here
+      // call your register API here
     } else {
       this.registerForm.markAllAsTouched();
     }

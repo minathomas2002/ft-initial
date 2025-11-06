@@ -2,41 +2,40 @@
   <div class="flex flex-col gap-3">
     <h1 class="text-3xl font-semibold text-gray-900">Log in</h1>
     <!-- TODO: set color -->
-    <p class="
-      text-gray-600">{{ i18nService.translate('auth.welcomeBack') }}</p>
+    <p class="text-gray-600">{{ 'auth.welcomeBack' | translate }}</p>
   </div>
-  <div class="w-full my-10 max-w-[500px]">
+  <div class="w-full my-10">
     <div class="flex flex-col gap-3">
       <!-- Email -->
       <div class="field">
-        <app-base-label [title]="i18nService.translate('auth.email')"></app-base-label>
+        <app-base-label [title]="'auth.email' | translate"></app-base-label>
         <input
           type="email"
           pInputText
           [formControl]="loginFormService.email"
-          [placeholder]="i18nService.translate('auth.enterYourEmail')"
+          [placeholder]="'auth.enterYourEmail' | translate"
           fluid
         />
         @if (loginFormService.email.touched && loginFormService.email.invalid) {
         <small class="text-red-500">
-          {{ loginFormService.email.hasError('required') ? i18nService.translate('auth.emailRequired') : i18nService.translate('auth.invalidEmailFormat') }}
+          {{ loginFormService.email.hasError('required') ? ('auth.emailRequired' | translate) : ('auth.invalidEmailFormat' | translate) }}
         </small>
         }
       </div>
 
       <!-- Password -->
       <div class="field">
-        <app-base-label [title]="i18nService.translate('auth.password')"></app-base-label>
+        <app-base-label [title]="'auth.password' | translate"></app-base-label>
         <p-password
           [formControl]="loginFormService.password"
           [feedback]="false"
           class="w-full"
-          [placeholder]="i18nService.translate('auth.enterYourPassword')"
+          [placeholder]="'auth.enterYourPassword' | translate"
           inputStyleClass="w-full"
         ></p-password>
         @if(loginFormService.password.touched && loginFormService.password.invalid) {
         <small class="text-red-500">
-          {{ loginFormService.password.hasError('required') ? i18nService.translate('auth.passwordRequired') : i18nService.translate('auth.invalidPasswordFormat') }}
+          {{ loginFormService.password.hasError('required') ? ('auth.passwordRequired' | translate) : ('auth.invalidPasswordFormat' | translate) }}
         </small>
         }
       </div>
@@ -53,19 +52,19 @@
           <label
             for="rememberMe"
             class="ms-2 cursor-pointer text-gray-700"
-          >{{ i18nService.translate('auth.rememberMe') }}</label>
+          >{{ 'auth.rememberMe' | translate }}</label>
         </div>
         <p-button
           class="ms-auto"
           variant="text"
-          [label]="i18nService.translate('auth.forgotPassword')"
+          [label]="'auth.forgotPassword' | translate"
           routerLink="/auth/forgot-password"
         />
       </div>
 
       <!-- Submit -->
       <p-button
-        label="{{ i18nService.translate('auth.signIn') }}"
+        [label]="'auth.signIn' | translate"
         fluid
         [disabled]="loginForm.invalid"
         (onClick)="onSubmit()"
@@ -73,12 +72,12 @@
     </div>
   </div>
   <div class="flex justify-center items-center">
-    <p class="text-gray-600">{{ i18nService.translate('auth.dontHaveAccount') }}</p>
+    <p class="text-gray-600">{{ 'auth.dontHaveAccount' | translate }}</p>
     <!-- TODO: set link -->
     <p-button
       class="ms-2"
       variant="text"
-      [label]="i18nService.translate('auth.signUp')"
+      [label]="'auth.signUp' | translate"
       [routerLink]="['/auth/register']"
     />
   </div>

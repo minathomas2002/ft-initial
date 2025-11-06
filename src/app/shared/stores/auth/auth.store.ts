@@ -8,6 +8,7 @@ import {
 } from "@ngrx/signals";
 import { type Observable, type Subscription, finalize, tap, timer } from "rxjs";
 import { IUser } from "../../interfaces";
+import { AuthApiService } from "../../api/auth/auth-api-service";
 
 const initialState: {
 	user: IUser | null;
@@ -28,24 +29,16 @@ export const AuthStore = signalStore(
 		return {};
 	}),
 	withMethods((store) => {
-		// const authService = inject(AuthService);
+		const authApiService = inject(AuthApiService);
 
-		// Helper to clear and restart inactivity timer
 
-		const logout = (): void => {
-			patchState(store, {
-				user: null,
-				loading: false,
-				isFlightHub: false,
-				_inactivityTimeout$: null,
-			});
-			// authService.logout();
-		};
 		return {
 			logout(): void {
+				authApiService.logout();
 			},
 
-			login(): void {
+			login(email: string, password: string): void {
+				authApiService.login(email, password);
 			},
 
 		};

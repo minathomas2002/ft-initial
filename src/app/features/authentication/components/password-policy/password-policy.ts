@@ -1,36 +1,37 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { ControlContainer, FormGroupDirective, FormControl } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { BaseLabelComponent } from "src/app/shared/components/base-components/base-label/base-label.component";
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-password-policy',
-  imports: [PasswordModule, ReactiveFormsModule, NgClass],
+  imports: [PasswordModule, ReactiveFormsModule, NgClass, BaseLabelComponent, TranslatePipe],
   templateUrl: './password-policy.html',
   styleUrl: './password-policy.scss',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
 })
 export class PasswordPolicy implements OnInit {
-  @Input() controlName!: string;
-
-  get control(): FormControl | null {
-    const parent = this.controlContainer?.control;
-    return parent?.get(this.controlName) as FormControl;
+ formControl = input.required<FormControl>(
+  {
+    alias:'passwordFormControl'
   }
+ );
 
   constructor(private controlContainer: ControlContainer) {}
 
   ngOnInit() {
     // Add validator dynamically
-    if (this.control) {
-      const validators = this.control.validator
-        ? [this.control.validator, passwordPolicyValidator()]
+    if (this.formControl()) {
+      const validators = this.formControl().validator
+        ? [this.formControl().validator, passwordPolicyValidator()]
         : [passwordPolicyValidator()];
 
-      this.control.setValidators(validators);
-      this.control.updateValueAndValidity();
+      this.formControl().setValidators(validators as ValidatorFn[]);
+      this.formControl().updateValueAndValidity();
     }
   }
 }
