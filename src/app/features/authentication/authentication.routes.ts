@@ -10,6 +10,10 @@ export const AUTHENTICATION_ROUTES: Routes = [
         loadComponent: () => import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
     },
     {
+        path: 'register',
+        loadComponent: () => import('./pages/register/register').then((m) => m.Register),
+    },
+    {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full',
