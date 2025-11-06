@@ -1,0 +1,71 @@
+<p-drawer
+  [(visible)]="visible"
+  position="right"
+  #drawerRef
+  (onShow)="onShow.emit()"
+  (onHide)="onHide.emit()"
+  styleClass="!w-[480px] max-w-[95%] !border-none"
+  [blockScroll]="true"
+>
+  <ng-template #headless>
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between px-[24px] py-[16px] shrink-0 border-b-1 border-b-gray-200">
+        <span class="inline-flex items-center gap-2">
+          <span class="bg-primary-50 w-[40px] h-[40px] rounded-full grid place-content-center">
+            <i class="{{icon()}} text-primary"></i>
+          </span>
+          <span
+            class="font-semibold text-lg text-gray-900 ms-[12px] max-w-[300px] truncate"
+            [pTooltip]="title()"
+            [tooltipPosition]="'top'"
+          >
+            <ng-content select="title"> {{title()}} </ng-content>
+          </span>
+        </span>
+        <div class="flex items-center">
+          @if(showClearAll()){
+          <span
+            class="text-red-600 cursor-pointer font-semibold"
+            (click)="onClearAll.emit()"
+          >Clear all</span>
+          }
+          <span>
+            <p-button
+              icon="icon-close"
+              size="large"
+              type="button"
+              variant="text"
+              severity="secondary"
+              [outlined]="true"
+              [rounded]="true"
+              (click)="closeCallback($event)"
+            ></p-button>
+          </span>
+        </div>
+      </div>
+      <div class="overflow-y-auto flex-1 px-[24px] py-[20px]">
+        <!-- main content projection -->
+        @if(visible()){
+        <ng-content></ng-content>
+        }
+      </div>
+      <div class="mt-auto border-t-1 border-t-gray-200">
+        <div class="flex justify-end py-[16px] px-[24px]">
+          <p-button
+            label="Cancel"
+            variant="outlined"
+            type="button"
+            severity="secondary"
+            class="ms-2 min-w-[100px]"
+            fluid
+            (click)="cancelClicked($event)"
+            [disabled]="isLoading()"
+          ></p-button>
+
+          <!-- action buttons -->
+          <ng-content select="drawer-actions"></ng-content>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-drawer>

@@ -1,0 +1,23 @@
+<app-base-drawer
+  id="drawer"
+  icon="icon-filter-lines"
+  title="Filter"
+  [(visible)]="drawerVisible"
+  [showClearAll]="filterService().showClearAll()"
+  (onClearAll)="filterService().clearAll()"
+  (onShow)="handleShow()"
+  (onHide)="handleHide()"
+>
+  <ng-content></ng-content>
+
+  <ng-container ngProjectAs="drawer-actions">
+    <p-button
+      label="Save"
+      type="button"
+      severity="primary"
+      class="ms-2 min-w-[100px]"
+      fluid
+      (onClick)="handleApplyFilter()"
+    ></p-button>
+  </ng-container>
+</app-base-drawer>

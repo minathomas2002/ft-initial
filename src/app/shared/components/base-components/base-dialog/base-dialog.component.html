@@ -1,0 +1,59 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [resizable]="false"
+  #dialogRef
+  (onHide)="onClose.emit()"
+  (onShow)="onShow.emit()"
+  [appendTo]="appendTo()"
+  [contentStyleClass]="contentStyleClass()"
+  [styleClass]="styleClass() + ' lg:min-w-[25rem] max-w-[90%] min-w-[15rem]'"
+>
+  @if(visible()){
+  <ng-template #header>
+    <span class="inline-flex items-center gap-2">
+      <div class="bg-primary-50 !min-w-[48px] !min-h-[48px] rounded-full grid place-content-center">
+        <i class="{{icon()}} text-primary text-xl"></i>
+      </div>
+      <div class="ms-[12px]">
+        <span class="font-semibold text-lg text-gray-900"> {{title()}} </span>
+        <ng-content select="subTitle"></ng-content>
+      </div>
+    </span>
+  </ng-template>
+  <ng-content></ng-content>
+  <ng-template #footer>
+    <div class="w-full">
+      <p-divider styleClass=" !my-0" />
+      <div class="flex flex-wrap items-center p-[24px]">
+        <ng-content select="
+        footerMessage"></ng-content>
+        <div class="flex justify-end gap-4 flex-1">
+          <ng-content select="footerButtons"></ng-content>
+          @if(showCloseButton()){
+          <p-button
+            label="Cancel"
+            severity="secondary"
+            class="{{cancelButtonClass()}} flex-initial"
+            (onClick)="visible.set(false); onClose.emit()"
+            fluid
+            [disabled]="isLoading()"
+          />
+          }
+          @if(showConfirmButton()){
+          <p-button
+            [label]="confirmLabel()"
+            [disabled]="isConfirmationDisabled()"
+            class="{{confirmButtonClass()}} flex-initial"
+            (onClick)="onConfirm.emit()"
+            fluid
+            [loading]="isLoading()"
+          />
+          }
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+  }
+</p-dialog>
