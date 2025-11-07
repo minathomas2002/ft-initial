@@ -6,8 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RouterModule } from '@angular/router';
 import { BaseLabelComponent } from "src/app/shared/components/base-components/base-label/base-label.component";
-import { LoginFormService } from '../../services/log-form/login-form';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { LoginFormService } from '../../services/login-form/login-form';
 
 @Component({
   selector: 'app-login',

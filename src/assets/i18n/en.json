@@ -24,14 +24,10 @@
     "cookie":"Cookie"
   },
 	"auth": {
-		"login": "Sign In",
-		"logout": "Logout",
-		"register": "Register",
 		"email": "Email",
 		"password": "Password",
 		"name": "Name",
 		"phone": "Phone",
-		"welcomeBack": "Welcome back! Please enter your details.",
 		"welcomeMessage": "Welcome! Please enter your details.",
 		"enterYourEmail": "Enter your email",
 		"enterYourName": "Enter your name",
@@ -45,14 +41,37 @@
 		"passwordRequired": "Password is required",
 		"passwordMinLength": "Password must be at least 8 characters.",
 		"passwordSpecialChar": "Password must contain at least one special character.",
-		"invalidPasswordFormat": "Invalid password format",
-		"forgotPassword": "Forgot Password?",
-		"rememberMe": "Remember Me",
 		"signIn": "Sign In",
 		"signUp": "Sign Up",
 		"getStarted": "Get started",
-		"dontHaveAccount": "Don't have an account?",
-		"alreadyHaveAccount": "Already have an account?"
+		"alreadyHaveAccount": "Already have an account?",
+		"login": {
+			"title": "Log in",
+			"description": "Welcome back! Please enter your details.",
+			"email": "Email",
+			"enterYourEmail": "Enter your email",
+			"emailRequired": "Email is required",
+			"invalidEmailFormat": "Invalid email format",
+			"password": "Password",
+			"enterYourPassword": "Enter your password",
+			"passwordRequired": "Password is required",
+			"invalidPasswordFormat": "Invalid password format",
+			"rememberMe": "Remember Me",
+			"forgotPassword": "Forgot Password?",
+			"signIn": "Sign In",
+			"dontHaveAccount": "Don't have an account?",
+			"signUp": "Sign Up"
+		},
+		"forgot": {
+			"title": "Forgot password?",
+			"description": "No worries, we'll send you reset instructions.",
+			"email": "Email",
+			"enterYourEmail": "Enter your email",
+			"emailRequired": "Email is required",
+			"invalidEmailFormat": "Invalid email format",
+			"buttonLabel": "Reset password",
+			"backButtonLabel": "Back to login"
+		}
 	},
 	"dashboard": {
 		"title": "Dashboard",
