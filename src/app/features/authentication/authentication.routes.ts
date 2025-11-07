@@ -10,6 +10,10 @@ export const AUTHENTICATION_ROUTES: Routes = [
         loadComponent: () => import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
     },
     {
+        path: 'reset-password',
+        loadComponent: () => import('./pages/reset-password/reset-password').then((m) => m.ResetPassword),
+    },
+    {
         path: 'register',
         loadComponent: () => import('./pages/register/register').then((m) => m.Register),
     },

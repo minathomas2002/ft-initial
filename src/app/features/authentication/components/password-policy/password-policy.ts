@@ -4,22 +4,28 @@ import { PasswordModule } from 'primeng/password';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { BaseLabelComponent } from "src/app/shared/components/base-components/base-label/base-label.component";
+import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-password-policy',
-  imports: [PasswordModule, ReactiveFormsModule, NgClass, BaseLabelComponent, TranslatePipe],
+  imports: [
+    PasswordModule,
+    ReactiveFormsModule,
+    NgClass,
+    BaseLabelComponent,
+    TranslatePipe,
+    InputTextModule
+  ],
   templateUrl: './password-policy.html',
   styleUrl: './password-policy.scss',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
 })
 export class PasswordPolicy implements OnInit {
- formControl = input.required<FormControl>(
-  {
-    alias:'passwordFormControl'
-  }
- );
+  formControl = input.required<FormControl>({
+    alias: 'passwordFormControl',
+  });
 
   constructor(private controlContainer: ControlContainer) {}
 
@@ -35,7 +41,6 @@ export class PasswordPolicy implements OnInit {
     }
   }
 }
-
 
 export function passwordPolicyValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

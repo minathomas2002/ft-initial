@@ -71,6 +71,18 @@
 			"invalidEmailFormat": "Invalid email format",
 			"buttonLabel": "Reset password",
 			"backButtonLabel": "Back to login"
+		},
+		"reset": {
+			"title": "Set new password",
+			"description": "Your new password must be different to previously used passwords.",
+			"password": "Password",
+			"enterYourPassword": "Enter your new password",
+			"confirmPassword": "Confirm password",
+			"enterYourConfirmPassword": "Confirm your new password",
+			"confirmPasswordRequired": "Confirm password is required",
+			"passwordMismatch": "Passwords do not match",
+			"buttonLabel": "Reset password",
+			"backButtonLabel": "Back to login"
 		}
 	},
 	"dashboard": {
