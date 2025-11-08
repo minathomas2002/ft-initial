@@ -34,12 +34,18 @@ export class SidebarContentComponent {
 				routerLink: ERoutes.dashboard,
 				show: true,
 			},
-      {
+      		{
 				label: this.i18nService.translate("navigation.users"),
 				icon: "icon-users",
 				routerLink: ERoutes.users,
 				show: true,
 			},
+			{
+				label: this.i18nService.translate("navigation.opportunities"),
+				icon: "icon-idea",
+				routerLink: ERoutes.opportunities,
+				show: true,
+			}
 		];
 	});
 
