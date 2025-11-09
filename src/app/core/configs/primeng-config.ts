@@ -496,6 +496,7 @@ const MY_PRESET = definePreset(Lara, {
   components: {
     ...BUTTON_COMPONENT,
     ...TABLE_HEADER_CHECKBOX_COMPONENT,
+    ...DIALOG_COMPONENT,
   },
   semantic: {
     gray: {

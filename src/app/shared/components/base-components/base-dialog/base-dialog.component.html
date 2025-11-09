@@ -12,11 +12,11 @@
   @if(visible()){
   <ng-template #header>
     <span class="inline-flex items-center gap-2">
-      <div class="bg-primary-50 !min-w-[48px] !min-h-[48px] rounded-full grid place-content-center">
-        <i class="{{icon()}} text-primary text-xl"></i>
+      <div class="!min-w-[48px] !min-h-[48px] rounded-lg grid place-content-center border border-gray-300">
+        <i class="{{icon()}} text-gray-900 text-xl"></i>
       </div>
       <div class="ms-[12px]">
-        <span class="font-semibold text-lg text-gray-900"> {{title()}} </span>
+        <span class="font-semibold text-lg text-gray-900"> {{dialogTitle()}} </span>
         <ng-content select="subTitle"></ng-content>
       </div>
     </span>
