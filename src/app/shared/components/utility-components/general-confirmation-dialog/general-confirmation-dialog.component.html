@@ -1,0 +1,18 @@
+<app-base-dialog
+  [(visible)]="visible"
+  [icon]="icon()"
+  [confirmLabel]="confirmationLabel()"
+  [showCloseButton]="true"
+  (onConfirm)="confirmed.emit()"
+  [isLoading]="isLoading()"
+  (onClose)="closed.emit()"
+>
+  <div [class]="classes()">
+    <p class="text-base font-semibold text-gray-900"> {{ title() }} </p>
+    @if(description()){
+    <p class="mt-[8px]">
+      {{description()}}
+    </p>
+    }
+  </div>
+</app-base-dialog>
