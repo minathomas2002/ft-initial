@@ -3,6 +3,7 @@ import { IUser, IUserRecord, IUsersFilterRequest } from "../../interfaces";
 import { UsersApiService } from "../../api/users/users-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, tap, throwError } from "rxjs";
+import { EUserRole } from "../../enums/users.enum";
 
 
 const initialState: {
@@ -36,6 +37,23 @@ export const UsersStore = signalStore(
           catchError((error) => {
             patchState(store, { error: error.errorMessage });
             return throwError(() => new Error("error fetching data"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
+      changeUserRole(userId: string, roleId: EUserRole) {
+        patchState(store, { loading: false });
+        return usersApiService.changeUserRole(userId, roleId).pipe(
+          tap((res) => {
+            if (!res.data) {
+              patchState(store, { error: 'Failed to change user role' });
+            }
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error changing user role"));
           }),
           finalize(() => {
             patchState(store, { loading: false });
