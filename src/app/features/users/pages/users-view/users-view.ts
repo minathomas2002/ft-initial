@@ -17,6 +17,7 @@ import { UsersActionMenu } from '../../components/users-action-menu/users-action
 import { DatePipe } from '@angular/common';
 import { ChangeRoleDialog } from '../../components/change-role-dialog/change-role-dialog';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 
 @Component({
   selector: 'app-users-view',
@@ -30,7 +31,8 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     TooltipModule,
     UsersActionMenu,
     ChangeRoleDialog,
-    DatePipe
+    DatePipe,
+    GeneralConfirmationDialogComponent
   ],
   templateUrl: './users-view.html',
   styleUrl: './users-view.scss',
@@ -85,6 +87,7 @@ export class UsersView implements OnInit {
   selectedUser = signal<IUser | null>(null);
   changeRoleFormService = inject(ChangeRoleFormService);
   ToasterService = inject(ToasterService);
+  deleteDialogVisible = signal<boolean>(false);
   ngOnInit(): void {
     this.usersLookupsStore.getUserTitles()
       .pipe(take(1))
@@ -99,7 +102,8 @@ export class UsersView implements OnInit {
     this.changeRoleDialogVisible.set(true);
   }
   onDelete(item: IUser) {
-    console.log(item);
+    this.selectedUser.set(item);
+    this.deleteDialogVisible.set(true);
   }
   onChangeRoleConfirm() {
     const role = this.changeRoleFormService.role.value as unknown as ISelectItem;
@@ -116,5 +120,15 @@ export class UsersView implements OnInit {
           this.filterService.applyFilter();
         },
       });
+  }
+  onDeleteConfirm() {
+    this.deleteDialogVisible.set(false);
+    this.selectedUser.set(null);
+    this.usersStore.deleteUser(this.selectedUser()?.id!)
+      .pipe(finalize(() => {
+        this.ToasterService.success('User deleted successfully');
+        this.filterService.applyFilter();
+      }))
+      .subscribe();
   }
 }
