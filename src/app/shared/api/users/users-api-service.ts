@@ -61,4 +61,8 @@ export class UsersApiService {
     return of({ data: users, message: 'Success', status: 200 });
   }
 
+  changeUserRole(userId: string, roleId: EUserRole): Observable<IApiResponse<Boolean>> {
+    return of({ data: true, message: 'Success', status: 200 });
+  }
+
 }
