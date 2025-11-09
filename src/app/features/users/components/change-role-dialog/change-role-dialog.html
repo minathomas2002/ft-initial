@@ -1,0 +1,43 @@
+<app-base-dialog
+  [(visible)]="visible"
+  icon="icon-user-edit"
+  confirmLabel="Change"
+  [isConfirmationDisabled]="formService.form.invalid"
+  (onConfirm)="onConfirm.emit()"
+  (onClose)="resetForm()"
+  [isLoading]="isProcessing()"
+>
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">Change Role</p>
+    <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet consectetur adipiscing elit</p>
+  </div>
+
+  <div class="">
+    <app-base-label
+      title="Role"
+      [required]="true"
+    />
+    <p-select
+      [options]="roles()"
+      [loading]="isProcessing()"
+      [loadingIcon]="'icon-transfer'"
+      [formControl]="formService.role"
+      appendTo="body"
+      optionLabel="name"
+      placeholder="Select Role"
+      dropdownIcon="icon-chevron-down"
+      fluid
+    />
+    <div>
+      @if(formService.role.dirty && formService.role.errors){
+      @if(formService.role.hasError('required')){
+      <p-message
+        severity="error"
+        variant="simple"
+        size="small"
+      >Role is required.</p-message>
+      }
+      }
+    </div>
+  </div>
+</app-base-dialog>
