@@ -64,5 +64,9 @@ export class UsersApiService {
   changeUserRole(userId: string, roleId: EUserRole): Observable<IApiResponse<Boolean>> {
     return of({ data: true, message: 'Success', status: 200 });
   }
+  deleteUser(userId: string): Observable<IApiResponse<Boolean>> {
+    return of({ data: true, message: 'Success', status: 200 });
+    // return this.baseHttpService.delete<Boolean, unknown>(API_ENDPOINTS.users.deleteUser, { userId });
+  }
 
 }
