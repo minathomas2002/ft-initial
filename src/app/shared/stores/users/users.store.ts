@@ -59,7 +59,24 @@ export const UsersStore = signalStore(
             patchState(store, { loading: false });
           }),
         );
-      }
+      },
+      deleteUser(userId: string) {
+        patchState(store, { loading: true });
+        return usersApiService.deleteUser(userId).pipe(
+          tap((res) => {
+            if (!res.data) {
+              patchState(store, { error: 'Failed to delete user' });
+            }
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error deleting user"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
     }
   }),
 );
