@@ -81,3 +81,8 @@
     </app-table-skeleton>
   </ng-container>
 </app-table-layout>
+
+<app-change-role-dialog
+  [(visible)]="changeRoleDialogVisible"
+  (onConfirm)="onChangeRoleConfirm()"
+></app-change-role-dialog>
