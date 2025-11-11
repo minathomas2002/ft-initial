@@ -1,0 +1,40 @@
+@if(isLoading()){
+<ng-container *ngTemplateOutlet="loading"></ng-container>
+}
+@else{
+<ng-content></ng-content>
+}
+
+<ng-template #loading>
+    <div class="items-grid mb-6">
+        @for (item of items; track item) {
+        <p-card class="items-card">
+            <ng-template pTemplate="content">
+                <div class="items-card__body">
+                    <!-- Card Icon -->
+                    <div class="items-card__icon">
+                        <p-skeleton />
+                    </div>
+
+                    <!-- Card Content -->
+                    <div class="items-card__content">
+                        <h3 class="items-card__title line-clamp-2"><p-skeleton /></h3>
+                        <p class="items-card__description"><p-skeleton /></p>
+                    </div>
+
+                    <!-- Card Actions -->
+                    <div class="items-card__actions">
+                        <p-skeleton />
+                    </div>
+                </div>
+            </ng-template>
+        </p-card>
+        }
+        @empty {
+        <div class="col-span-full text-center py-12">
+            <p class="text-gray-500 text-lg">No items found</p>
+        </div>
+        }
+    </div>
+
+</ng-template>

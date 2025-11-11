@@ -1,4 +1,4 @@
-import { HttpClient, type HttpResponse, HttpEventType, type HttpEvent } from '@angular/common/http';
+import { HttpClient, type HttpResponse, HttpEventType, type HttpEvent, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -13,14 +13,21 @@ export class BaseHttpService {
 	protected http = inject(HttpClient);
 
 	public get<R, O>(endpoint: string, options?: O): Observable<IApiResponse<R>> {
-		return this.http
-			.get<IApiResponse<R>>(`${this.baseUrl}/${endpoint}`, { ...options, observe: 'events' })
+		const params = new HttpParams({
+			fromObject: options || {}
+		  });
+		
+		  return this.http
+			.get<IApiResponse<R>>(`${this.baseUrl}/${endpoint}`, {
+			  params,
+			  observe: 'events'
+			})
 			.pipe(
-				filter(
-					(event: HttpEvent<IApiResponse<R>>): event is HttpResponse<IApiResponse<R>> =>
-						event.type === HttpEventType.Response,
-				),
-				map((response: HttpResponse<IApiResponse<R>>) => response.body as IApiResponse<R>),
+			  filter(
+				(event: HttpEvent<IApiResponse<R>>): event is HttpResponse<IApiResponse<R>> =>
+				  event.type === HttpEventType.Response
+			  ),
+			  map((response: HttpResponse<IApiResponse<R>>) => response.body as IApiResponse<R>)
 			);
 	}
 
