@@ -1,0 +1,17 @@
+<div class="flex justify-between items-center py-[16px] px-[32px]">
+  <p class="text-gray-600 flex-1">{{ 'footer.message' | translate }}</p>
+  <div class="flex">
+    <a
+      [routerLink]="['/terms']"
+      class="text-gray-600 mr-4"
+    >{{ 'footer.terms' | translate }}</a>
+    <a
+      [routerLink]="['/privacy']"
+      class="text-gray-600 mr-4"
+    >{{ 'footer.privacy' | translate }}</a>
+    <a
+      [routerLink]="['/cookie']"
+      class="text-gray-600 mr-4"
+    >{{ 'footer.cookie' | translate }}</a>
+  </div>
+</div>

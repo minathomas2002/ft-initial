@@ -1,0 +1,18 @@
+<div class="grid grid-cols-1 md:grid-cols-2">
+  <div class="col-span-1">
+    <p-iconfield>
+      <p-inputicon
+        inputId="opportunities-search"
+        class="icon-search"
+      />
+      <input
+        type="text"
+        pInputText
+        class="w-full"
+        placeholder="Search"
+        [(ngModel)]="filter().searchText"
+        (ngModelChange)="searchSubject.next(filter().searchText??'')"
+      />
+    </p-iconfield>
+  </div>
+</div>

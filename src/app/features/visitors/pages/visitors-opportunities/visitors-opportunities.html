@@ -1,0 +1,58 @@
+<app-cards-page-layout
+  pageTitle="Opportunities"
+  pageSubTitle="Browse all available plans and view their details"
+  pageTitleClass="text-[48px] font-bold"
+  pageSubTitleClass="text-xl text-gray-600"
+>
+  <ng-container ngProjectAs="page-filters">
+    <app-visitors-opportunities-filters />
+  </ng-container>
+  <ng-container ngProjectAs="page-body">
+    <app-data-cards
+      [items]="items()"
+      [totalRecords]="totalRecords()"
+      [(filter)]="filter"
+    >
+      <ng-template
+        #itemsTemplate
+        let-item="item"
+      >
+        <app-opportunity-card
+          item
+          icon="icon-search"
+          cardTitle="EHV Power Transformers"
+          cardDescription="High-voltage transformers with strong demand and localization potential in manufacturing and services."
+          cardClass="bg-gray-50"
+        >
+          <ng-container ngProjectAs="opportunity-card-info">
+            <div class="flex flex-col gap-2">
+              @for(detail of details(); track detail){
+              <app-opportunity-detail-item
+                [label]="detail.label"
+                [value]="detail.value"
+              />
+              }
+            </div>
+          </ng-container>
+          <ng-container ngProjectAs="opportunity-card-actions">
+            <div class="flex gap-4">
+              <p-button
+                label="View Details"
+                severity="secondary"
+                class="flex-1"
+                fluid
+              />
+              <p-button
+                label="Apply"
+                severity="primary"
+                class="flex-1"
+                fluid
+              />
+            </div>
+          </ng-container>
+        </app-opportunity-card>
+      </ng-template>
+
+    </app-data-cards>
+  </ng-container>
+</app-cards-page-layout>

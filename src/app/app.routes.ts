@@ -29,9 +29,9 @@ const MAIN_LAYOUT_ROUTES: Routes = [
       {
         path: ERoutes.opportunities,
         loadChildren: () =>
-			import('./features/opportunities/opportunities.routes').then(
-			  (m) => m.OPPORTUNITIES_ROUTES
-			),
+          import('./features/opportunities/opportunities.routes').then(
+            (m) => m.OPPORTUNITIES_ROUTES
+          ),
         data: { animation: ERoutes.opportunities },
       },
     ],
@@ -41,6 +41,20 @@ const MAIN_LAYOUT_ROUTES: Routes = [
 export const routes: Routes = [
   {
     path: '',
+    loadComponent: () =>
+      import('./core/layouts/visitor-layout/visitor-layout').then((m) => m.VisitorLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/visitors/visitors.routes').then(
+            (m) => m.VISITORS_ROUTES
+          ),
+      },
+    ],
+  },
+  {
+    path: 'main',
     children: [...MAIN_LAYOUT_ROUTES],
   },
   {

@@ -1,0 +1,22 @@
+<div class="data-cards">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pb-[64px] border-b-1 border-b-gray-200">
+    @for(item of items(); track item){
+    <ng-container
+      [ngTemplateOutletContext]="{ item: item }"
+      [ngTemplateOutlet]="itemsTemplate()"
+    ></ng-container>
+    }
+    @empty {
+    <app-empty-records [messageTitle]="messageTitle()" />
+    }
+  </div>
+  @if(totalRecords() > 0){
+  <div class="flex">
+    <app-paginator
+      class="flex-1"
+      [totalRecords]="totalRecords()"
+      [(filter)]="filter"
+    ></app-paginator>
+  </div>
+  }
+</div>
