@@ -1,23 +1,39 @@
 import { inject, Injectable } from '@angular/core';
-import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { API_ENDPOINTS } from '../api-endpoints';
+import { IAuthResponse, IRefreshTokenRequest } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthApiService {
-  private readonly baseHttpService = inject(BaseHttpService);
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = API_ENDPOINTS.baseUrl;
 
-  windowsLogin() {}
+  windowsLogin() { }
 
-  windowsFakeLogin(email: string) {}
+  windowsFakeLogin(email: string) { }
 
-  login(email: string, password: string) {}
+  login(email: string, password: string): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(
+      `${this.baseUrl}/${API_ENDPOINTS.auth.login}`,
+      { email, password }
+    );
+  }
 
-  register(name: string, email: string, password: string, phone: string) {}
+  refreshToken(request: IRefreshTokenRequest): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(
+      `${this.baseUrl}/${API_ENDPOINTS.auth.refreshToken}`,
+      request
+    );
+  }
 
-  forgotPassword(email: string) {}
+  register(name: string, email: string, password: string, phone: string) { }
 
-  resetPassword(resetToken: string, password: string) {}
+  forgotPassword(email: string) { }
 
-  logout() {}
+  resetPassword(resetToken: string, password: string) { }
+
+  logout() { }
 }

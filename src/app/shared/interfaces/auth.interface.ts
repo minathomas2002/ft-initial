@@ -15,3 +15,28 @@ export interface IUser {
   isActive: boolean;
   isDeleted: boolean;
 }
+
+export interface IAuthData {
+  token: string;
+  refreshToken: string;
+  userId: string;
+  userName: string;
+  nameAR: string;
+  nameEN: string;
+  roleIds: string[];
+  roleNames: string[];
+  roleCodes: number[];
+  expiresAt: string;
+  refreshTokenExpiresAt: string;
+}
+
+export interface IAuthResponse {
+  data: IAuthData;
+  succeeded: boolean;
+  errors: string[];
+}
+
+export interface IRefreshTokenRequest {
+  accessToken: string;
+  refreshToken: string;
+}
