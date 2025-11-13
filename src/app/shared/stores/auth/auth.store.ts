@@ -13,12 +13,10 @@ import { AuthApiService } from "../../api/auth/auth-api-service";
 const initialState: {
   user: IUser | null;
   loading: boolean;
-  isFlightHub: boolean;
   _inactivityTimeout$: Subscription | null;
 } = {
   user: null,
   loading: false,
-  isFlightHub: false,
   _inactivityTimeout$: null,
 };
 

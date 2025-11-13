@@ -7,13 +7,17 @@ import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 export class AuthApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
+  windowsLogin() {}
+
+  windowsFakeLogin(email: string) {}
+
   login(email: string, password: string) {}
 
-  register(name: string, email: string, password: string) {}
+  register(name: string, email: string, password: string, phone: string) {}
 
   forgotPassword(email: string) {}
 
-  resetPassword(email: string, password: string) {}
+  resetPassword(resetToken: string, password: string) {}
 
   logout() {}
 }

@@ -4,5 +4,6 @@ export const environment = {
 	apiVersion: 'v1',
 	appName: 'Benaa',
 	enableDebug: false,
+	windowsAuthEnabled: true
 };
 
