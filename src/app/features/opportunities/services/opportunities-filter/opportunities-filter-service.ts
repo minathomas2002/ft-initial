@@ -2,8 +2,8 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { AbstractServiceFilter } from 'src/app/shared/classes/abstract-service-filter';
 import { IOpportunitiesFilter, IOpportunitiesFilterRequest } from 'src/app/shared/interfaces/opportunities.interface';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
-import { OpportunityFilter } from '../../class/opportunity-filter';
-import { OpportunitiesFilterInterfaceAdapter } from '../../class/opportunities-filter-adapter';
+import { OpportunityFilter } from '../../classes/opportunity-filter';
+import { OpportunitiesFilterInterfaceAdapter } from '../../classes/opportunities-filter-adapter';
 import { take } from 'rxjs';
 
 @Injectable({

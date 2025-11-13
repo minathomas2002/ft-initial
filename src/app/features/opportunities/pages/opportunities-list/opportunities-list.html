@@ -1,57 +1,60 @@
-<div class="opportunities-list-container p-6 md:p-8">
-  <!-- Header Section -->
-  <div class="mb-6">
-    <h1 class="text-3xl font-semibold text-gray-900 mb-2">Opportunities</h1>
-    <p class="text-gray-600 text-base">Browse all available plans and view their details</p>
-  </div>
-
-  <!-- Search Input -->
-  <div class="mb-6 max-w-[600px]">
-    <p-iconfield>
-      <p-inputicon inputId="opportunities-search" class="icon-search" />
-      <input type="text" pInputText class="w-full" placeholder="Search" [(value)]="filter().searchText"
-        (input)="onSearchChange($any($event.target).value)" fluid />
-    </p-iconfield>
-  </div>
-
-  <!-- Opportunities Grid -->
-  <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
-    <div class="opportunities-grid mb-6">
-      @for (opportunity of rows(); track opportunity.id) {
-      <p-card class="opportunity-card">
-        <ng-template pTemplate="content">
-          <div class="opportunity-card__body">
-            <!-- Card Icon -->
-            <div class="opportunity-card__icon">
-              <i [class]="'icon-message-circle' + ' text-2xl'"></i>
+<app-cards-page-layout
+  pageTitle="Opportunities"
+  pageSubTitle="Browse all available plans and view their details"
+  pageTitleClass="text-[48px] font-bold"
+  pageSubTitleClass="text-xl text-gray-600"
+>
+  <ng-container ngProjectAs="page-filters">
+    <app-opportunities-filters />
+  </ng-container>
+  <ng-container ngProjectAs="page-body">
+    <app-data-cards
+      [items]="items()"
+      [totalRecords]="totalRecords()"
+      [(filter)]="filter"
+    >
+      <ng-template
+        #itemsTemplate
+        let-item="item"
+      >
+        <app-opportunity-card
+          item
+          icon="icon-search"
+          cardTitle="EHV Power Transformers"
+          cardDescription="High-voltage transformers with strong demand and localization potential in manufacturing and services."
+          cardClass="bg-gray-50"
+        >
+          <ng-container ngProjectAs="opportunity-card-info">
+            <div class="flex flex-col gap-2">
+              @for(detail of details(); track detail){
+              <app-opportunity-detail-item
+                [label]="detail.label"
+                [value]="detail.value"
+              />
+              }
             </div>
-
-            <!-- Card Content -->
-            <div class="opportunity-card__content">
-              <h3 class="opportunity-card__title line-clamp-2">{{ opportunity.title }}</h3>
-              <p class="opportunity-card__description">{{ opportunity.shortDescription }}</p>
+          </ng-container>
+          <ng-container ngProjectAs="opportunity-card-actions">
+            <div class="flex gap-4">
+              <p-button
+                label="View Details"
+                severity="secondary"
+                class="flex-1"
+                fluid
+                (onClick)="onViewDetails(item)"
+              />
+              <p-button
+                label="Apply"
+                severity="primary"
+                class="flex-1"
+                fluid
+                (onClick)="onApply(item)"
+              />
             </div>
+          </ng-container>
+        </app-opportunity-card>
+      </ng-template>
 
-            <!-- Card Actions -->
-            <div class="opportunity-card__actions">
-              <p-button label="View Details" severity="secondary" [outlined]="true"
-                (onClick)="onViewDetails(opportunity)" class="flex-1" fluid />
-              <p-button label="Apply" severity="primary" (onClick)="onApply(opportunity)" class="flex-1" fluid />
-            </div>
-          </div>
-        </ng-template>
-      </p-card>
-      }
-      @empty {
-      <div class="col-span-full text-center py-12">
-        <p class="text-gray-500 text-lg">No opportunities found</p>
-      </div>
-      }
-    </div>
-  </app-cards-skeleton>
-
-  <!-- Pagination -->
-  @if (totalRecords() > 0) {
-  <app-paginator [(filter)]="filter" [totalRecords]="totalRecords()" />
-  }
-</div>
+    </app-data-cards>
+  </ng-container>
+</app-cards-page-layout>

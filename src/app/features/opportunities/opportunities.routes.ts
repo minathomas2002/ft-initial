@@ -11,4 +11,9 @@ export const OPPORTUNITIES_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/opportunities-list/opportunities-list').then((m) => m.OpportunitiesList),
   },
+  {
+    path: 'list/:id',
+    loadComponent: () =>
+      import('./pages/opportunity-details/opportunity-details').then((m) => m.OpportunityDetails),
+  },
 ];

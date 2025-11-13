@@ -1,19 +1,19 @@
-import { Component, DestroyRef, inject, input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap } from 'rxjs';
-import { OpportunitiesFilterService } from 'src/app/shared/services/opportunities-filter/opportunities-filter-service';
+import { OpportunitiesFilterService } from 'src/app/features/opportunities/services/opportunities-filter/opportunities-filter-service';
 
 @Component({
-  selector: 'app-visitors-opportunities-filters',
+  selector: 'app-opportunities-filters',
   imports: [IconFieldModule, InputIconModule, FormsModule, InputTextModule],
-  templateUrl: './visitors-opportunities-filters.html',
-  styleUrl: './visitors-opportunities-filters.scss',
+  templateUrl: './opportunities-filters.html',
+  styleUrl: './opportunities-filters.scss',
 })
-export class VisitorsOpportunitiesFilters implements OnInit {
+export class OpportunitiesFilters implements OnInit {
   filterService = inject(OpportunitiesFilterService);
   filter = this.filterService.filter;
   searchSubject = new Subject<string>();

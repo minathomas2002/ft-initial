@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { ERoutes } from './shared/enums';
 import { AuthLayout } from './core/layouts/auth-layout/auth-layout';
+import { visitorsGuard } from './core/guards/visitors/visitors.guard';
+import { authGuard } from './core/guards/auth/auth.guard';
 const MAIN_LAYOUT_ROUTES: Routes = [
   {
     path: '',
@@ -35,31 +37,39 @@ const MAIN_LAYOUT_ROUTES: Routes = [
         data: { animation: ERoutes.opportunities },
       },
     ],
+    canActivate: [authGuard],
   },
 ];
 
 export const routes: Routes = [
   {
-    path: '',
+    path: ERoutes.visitors,
+    canActivate: [visitorsGuard],
     loadComponent: () =>
       import('./core/layouts/visitor-layout/visitor-layout').then((m) => m.VisitorLayout),
     children: [
       {
         path: '',
+        redirectTo: `${ERoutes.opportunities}`,
+        pathMatch: 'full',
+      },
+      {
+        path: 'opportunities',
         loadChildren: () =>
-          import('./features/visitors/visitors.routes').then(
-            (m) => m.VISITORS_ROUTES
+          import('./features/opportunities/opportunities.routes').then(
+            (m) => m.OPPORTUNITIES_ROUTES
           ),
       },
     ],
   },
   {
-    path: 'main',
+    path: '',
     children: [...MAIN_LAYOUT_ROUTES],
   },
   {
-    path: 'auth',
+    path: ERoutes.auth,
     component: AuthLayout,
+    canActivate: [visitorsGuard],
     loadChildren: () =>
       import('./features/authentication/authentication.routes').then(
         (m) => m.AUTHENTICATION_ROUTES

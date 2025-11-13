@@ -1,86 +1,58 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
+import { Component, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { PaginatorComponent } from '../../../../shared/components/utility-components/paginator/paginator.component';
-import { Pagination } from '../../../../shared/classes/pagination';
-import { ESortingOrder } from '../../../../shared/enums';
-import type { IFilterBase } from '../../../../shared/interfaces';
-import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { IOpportunityRecord } from 'src/app/shared/interfaces/opportunities.interface';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/opportunities-filter-service';
-import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
-import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-export interface IOpportunity {
-  id: string;
-  icon: string;
-  title: string;
-  description: string;
-}
-
-interface IOpportunityFilter extends IFilterBase<string> {
-  searchText?: string;
-}
+import { OpportunityDetailItem } from 'src/app/shared/components/opportunities/opportunity-detail-item/opportunity-detail-item';
+import { DataCards } from 'src/app/shared/components/layout-components/data-cards/data-cards';
+import { OpportunitiesFilters } from '../../components/opportunities-filter/opportunities-filters';
+import { OpportunityCard } from 'src/app/shared/components/opportunities/opportunity-card/opportunity-card';
+import { CardsPageLayout } from 'src/app/shared/components/layout-components/cards-page-layout/cards-page-layout';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { ERoutes } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-opportunities-list',
   imports: [
-    CommonModule,
-    FormsModule,
-    IconFieldModule,
-    InputIconModule,
-    InputTextModule,
+    CardsPageLayout,
+    OpportunityCard,
+    OpportunitiesFilters,
     ButtonModule,
-    CardModule,
-    PaginatorComponent,
-    CardsSkeleton
+    DataCards,
+    OpportunityDetailItem
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
 })
 export class OpportunitiesList {
-  opportunitiesStore = inject(OpportunitiesStore)
-    
-  rows = computed<IOpportunityRecord[]>(() => this.opportunitiesStore.list());
+  items = signal<number[]>([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+  details = signal<{ label: string, value: string }[]>([
+    { label: 'Size', value: '500' },
+    { label: 'Location', value: '1000' },
+    { label: 'Type', value: '500' },
+    { label: 'Size', value: '1000' },
+  ]);
+  totalRecords = signal<number>(10);
   filterService = inject(OpportunitiesFilterService);
   filter = this.filterService.filter;
-  totalRecords = computed(() => this.opportunitiesStore.count());
-  //opportunityStatusMapper = new OpportunityStatusMapper();
-  selectedRows = signal<IOpportunityRecord[]>([]);
-  private searchInput$ = new Subject<string>();
-  private destroyRef = inject(DestroyRef);
-  
-  
+  router = inject(Router);
+  authStore = inject(AuthStore);
+  route = inject(ActivatedRoute);
   ngOnInit(): void {
     this.filterService.applyFilter()
-
-    this.searchInput$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe((search) => {
-        this.filterService.updateFilterSignal({ searchText: search });
-        this.filterService.applyFilter();
-      });
   }
 
   onViewDetails(opportunity: IOpportunityRecord) {
-
+    this.router.navigate(['list', 1], {
+      relativeTo: this.route.parent,
+    });
   }
 
   onApply(opportunity: IOpportunityRecord) {
+    if (this.authStore.isAuthenticated()) {
 
-  }
-
-  onSearchChange(search: string) {
-    this.searchInput$.next(search);
+    } else {
+      this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+    }
   }
 }
