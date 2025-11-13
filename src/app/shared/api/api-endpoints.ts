@@ -20,6 +20,8 @@ export const API_ENDPOINTS = {
   },
   auth: {
     login: `${Auth}/login`,
+    windowsLogin: `${Auth}/login`,
+    fakeWindowsLogin: `${Auth}/login`,
     refreshToken: `${Auth}/refresh-token`,
   },
 };

@@ -11,9 +11,18 @@ export class AuthApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = API_ENDPOINTS.baseUrl;
 
-  windowsLogin() { }
+  windowsLogin(): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(
+      `${this.baseUrl}/${API_ENDPOINTS.auth.login}`, {}      
+    );
+  }
 
-  windowsFakeLogin(email: string) { }
+  fakeWindowsLogin(userName: string): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(
+      `${this.baseUrl}/${API_ENDPOINTS.auth.login}`,
+      { userName }
+    );
+  }
 
   login(email: string, password: string): Observable<IAuthResponse> {
     return this.http.post<IAuthResponse>(

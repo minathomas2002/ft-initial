@@ -7,13 +7,13 @@ import {
   withState,
 } from "@ngrx/signals";
 import { type Observable, type Subscription, finalize, tap, timer } from "rxjs";
-import { IUser, IAuthResponse } from "../../interfaces";
+import { IAuthResponse, IAuthData } from "../../interfaces";
 import { AuthApiService } from "../../api/auth/auth-api-service";
-
-const AUTH_STORAGE_KEY = 'auth_data';
+import { LocalStorage } from "../../services/local-storage/local-storage";
+import { Router } from "@angular/router";
 
 const initialState: {
-  user: IUser | null;
+  user: IAuthData | null;
   loading: boolean;
   _inactivityTimeout$: Subscription | null;
 } = {
@@ -32,46 +32,46 @@ export const AuthStore = signalStore(
   }),
   withMethods((store) => {
     const authApiService = inject(AuthApiService);
-
-    const saveAuthDataToStorage = (authResponse: IAuthResponse): void => {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authResponse.data));
-      }
-    };
-
+    const localStorage = inject(LocalStorage);
+    
     return {
       logout(): void {
-        if (typeof window !== 'undefined' && window.localStorage) {
-          localStorage.removeItem(AUTH_STORAGE_KEY);
-        }
+        localStorage.cleanAuthData()
         authApiService.logout();
       },
 
       login(email: string, password: string): Observable<IAuthResponse> {
         patchState(store, { loading: true });
-        return authApiService.login(email, password).pipe(
+        return this.handleLoginMethod(authApiService.login(email, password))
+      },
+
+      windowsLogin(): Observable<IAuthResponse>{
+        patchState(store, { loading: true });
+        return this.handleLoginMethod(authApiService.windowsLogin())
+      },
+
+      fakeWindowsLogin(userName: string): Observable<IAuthResponse> {
+        patchState(store, { loading: true });
+        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName))
+      },
+
+      updateAuthDataInStorage(authResponse: IAuthResponse): void {
+        localStorage.saveAuthDataToStorage(authResponse);
+      },
+
+      handleLoginMethod(login$: Observable<IAuthResponse>): Observable<IAuthResponse> {
+        return login$.pipe(
           tap((response: IAuthResponse) => {
             if (response.succeeded && response.data) {
-              saveAuthDataToStorage(response);
+              patchState(store, { user: response.data });         
+              localStorage.saveAuthDataToStorage(response);              
             }
           }),
           finalize(() => {
             patchState(store, { loading: false });
           })
         );
-      },
-
-      getAuthDataFromStorage() {
-        if (typeof window !== 'undefined' && window.localStorage) {
-          const stored = localStorage.getItem(AUTH_STORAGE_KEY);
-          return stored ? JSON.parse(stored) : null;
-        }
-        return null;
-      },
-
-      updateAuthDataInStorage(authResponse: IAuthResponse): void {
-        saveAuthDataToStorage(authResponse);
-      },
+      }
     };
   }),
 );

@@ -10,22 +10,14 @@ const MAIN_LAYOUT_ROUTES: Routes = [
       import('./core/layouts/main-layout/main-layout.component').then((m) => m.MainLayoutComponent),
     children: [
       {
-        path: '',
-        redirectTo: `${ERoutes.dashboard}`,
-        pathMatch: 'full',
-      },
-      {
         path: ERoutes.dashboard,
         loadChildren: () =>
-          import('./features/dashboard/dashboard.routes').then(
-            (c) => c.DASHBOARD_ROUTES
-          ),
+          import('./features/dashboard/dashboard.routes').then((c) => c.DASHBOARD_ROUTES),
         data: { animation: ERoutes.dashboard },
       },
       {
         path: ERoutes.users,
-        loadChildren: () =>
-          import('./features/users/users.routes').then((c) => c.USERS_ROUTES),
+        loadChildren: () => import('./features/users/users.routes').then((c) => c.USERS_ROUTES),
         data: { animation: ERoutes.users },
       },
       {
@@ -43,26 +35,6 @@ const MAIN_LAYOUT_ROUTES: Routes = [
 
 export const routes: Routes = [
   {
-    path: ERoutes.visitors,
-    canActivate: [visitorsGuard],
-    loadComponent: () =>
-      import('./core/layouts/visitor-layout/visitor-layout').then((m) => m.VisitorLayout),
-    children: [
-      {
-        path: '',
-        redirectTo: `${ERoutes.opportunities}`,
-        pathMatch: 'full',
-      },
-      {
-        path: 'opportunities',
-        loadChildren: () =>
-          import('./features/opportunities/opportunities.routes').then(
-            (m) => m.OPPORTUNITIES_ROUTES
-          ),
-      },
-    ],
-  },
-  {
     path: '',
     children: [...MAIN_LAYOUT_ROUTES],
   },
@@ -75,4 +47,24 @@ export const routes: Routes = [
         (m) => m.AUTHENTICATION_ROUTES
       ),
   },
+  {
+    path: ERoutes.visitors,
+    canActivate: [visitorsGuard],
+    loadComponent: () =>
+      import('./core/layouts/visitor-layout/visitor-layout').then((m) => m.VisitorLayout),
+    children: [
+      {
+        path: 'opportunities',
+        loadChildren: () =>
+          import('./features/opportunities/opportunities.routes').then(
+            (m) => m.OPPORTUNITIES_ROUTES
+          ),
+      },
+      {
+        path: '',
+        redirectTo: `${ERoutes.opportunities}`,
+        pathMatch: 'full',
+      }
+    ],
+  }      
 ];
