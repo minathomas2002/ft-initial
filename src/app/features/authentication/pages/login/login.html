@@ -1,4 +1,3 @@
-{{authStore.isAuthenticated()}}
 @if(!isSecInternal()) {
 @if(!isFakeDev()){
 <form id="login" [formGroup]="loginForm" (ngSubmit)="publicLogin()">
