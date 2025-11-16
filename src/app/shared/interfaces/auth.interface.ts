@@ -40,3 +40,18 @@ export interface IRefreshTokenRequest {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface IRegisterRequest {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  countryCode: string;
+  password: string;
+  confirmPassword: string;
+}
+
+
+export interface IPhoneNumberControl {
+  dialCode: string;
+  nationalNumber: string;  
+}

@@ -21,9 +21,10 @@ export const API_ENDPOINTS = {
     getAdminOpportunities: `${AdminOpportunities}`    
   },
   auth: {
-    login: `${Auth}/login`,
+    investorLogin: `${Auth}/investor-login`,
     windowsLogin: `${Auth}/login`,
     fakeWindowsLogin: `${Auth}/login`,
     refreshToken: `${Auth}/refresh-token`,
+    register: `${Auth}/registerInvestor`    
   },
 };

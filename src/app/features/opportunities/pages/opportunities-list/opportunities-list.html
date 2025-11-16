@@ -5,11 +5,13 @@
   </ng-container>
   <ng-container ngProjectAs="page-body">
     <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
-      <app-data-cards [items]="opportunitiesStore.list()" [totalRecords]="opportunitiesStore.count()" [(filter)]="filter">
+      <app-data-cards [items]="opportunitiesStore.list()" [totalRecords]="opportunitiesStore.count()"
+        [(filter)]="filter">
         <ng-template #itemsTemplate let-item="item">
           <app-opportunity-card item icon="icon-search" cardTitle="{{item.title}}"
             cardDescription="High-voltage transformers with strong demand and localization potential in manufacturing and services."
             cardClass="bg-gray-50">
+            @if(isAdminMode()) {
             <ng-container ngProjectAs="opportunity-card-info">
               <div class="flex flex-col gap-2">
                 @for(detail of details(); track detail){
@@ -17,6 +19,7 @@
                 }
               </div>
             </ng-container>
+            }
             <ng-container ngProjectAs="opportunity-card-actions">
               <div class="flex gap-4">
                 <p-button label="View Details" severity="secondary" class="flex-1" fluid

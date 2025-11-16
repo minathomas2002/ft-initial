@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IAuthResponse, IRefreshTokenRequest } from '../../interfaces';
+import { IAuthResponse, IRefreshTokenRequest, IRegisterRequest } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -12,23 +12,20 @@ export class AuthApiService {
   private readonly baseUrl = API_ENDPOINTS.baseUrl;
 
   windowsLogin(): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(
-      `${this.baseUrl}/${API_ENDPOINTS.auth.login}`, {}      
-    );
+    return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.windowsLogin}`, {});
   }
 
   fakeWindowsLogin(userName: string): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(
-      `${this.baseUrl}/${API_ENDPOINTS.auth.login}`,
-      { userName }
-    );
+    return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.windowsLogin}`, {
+      userName,
+    });
   }
 
   login(email: string, password: string): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(
-      `${this.baseUrl}/${API_ENDPOINTS.auth.login}`,
-      { email, password }
-    );
+    return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.investorLogin}`, {
+      email,
+      password,
+    });
   }
 
   refreshToken(request: IRefreshTokenRequest): Observable<IAuthResponse> {
@@ -38,11 +35,13 @@ export class AuthApiService {
     );
   }
 
-  register(name: string, email: string, password: string, phone: string) { }
+  register(registerRequest: IRegisterRequest) {
+    return this.http.post<any>(`${this.baseUrl}/${API_ENDPOINTS.auth.register}`, registerRequest);
+  }
 
-  forgotPassword(email: string) { }
+  forgotPassword(email: string) {}
 
-  resetPassword(resetToken: string, password: string) { }
+  resetPassword(resetToken: string, password: string) {}
 
-  logout() { }
+  logout() {}
 }

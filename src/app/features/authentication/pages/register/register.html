@@ -4,24 +4,17 @@
     <!-- TODO: set color -->
     <p class="text-gray-600">{{ i18nService.translate('auth.welcomeMessage') }}</p>
   </div>
-  <form
-    [formGroup]="registerForm"
-    class="w-full my-10"
-  >
+  <form [formGroup]="registerForm" id="registerForm" (ngSubmit)="onSubmit()" class="w-full my-10">
     <div class="flex flex-col gap-3">
       <!-- Name -->
       <div class="field">
         <app-base-label [title]="i18nService.translate('auth.name')"></app-base-label>
-        <input
-          type="text"
-          pInputText
-          [formControl]="registerFormService.name"
-          [placeholder]="i18nService.translate('auth.enterYourName')"
-          fluid
-        />
-        @if (registerFormService.name.touched && registerFormService.name.invalid) {
+        <input type="text" pInputText [formControl]="registerFormService.fullName"
+          [placeholder]="i18nService.translate('auth.enterYourName')" fluid />
+        @if (registerFormService.fullName.touched && registerFormService.fullName.invalid) {
         <small class="text-red-500">
-          {{ registerFormService.name.hasError('required') ? i18nService.translate('auth.nameRequired') : i18nService.translate('auth.invalidName') }}
+          {{ registerFormService.fullName.hasError('required') ? i18nService.translate('auth.nameRequired') :
+          i18nService.translate('auth.invalidName') }}
         </small>
         }
       </div>
@@ -29,16 +22,12 @@
       <!-- Email -->
       <div class="field">
         <app-base-label [title]="i18nService.translate('auth.email')"></app-base-label>
-        <input
-          type="email"
-          pInputText
-          [formControl]="registerFormService.email"
-          [placeholder]="i18nService.translate('auth.enterYourEmail')"
-          fluid
-        />
+        <input type="email" pInputText [formControl]="registerFormService.email"
+          [placeholder]="i18nService.translate('auth.enterYourEmail')" fluid />
         @if (registerFormService.email.touched && registerFormService.email.invalid) {
         <small class="text-red-500">
-          {{ registerFormService.email.hasError('required') ? i18nService.translate('auth.emailRequired') : i18nService.translate('auth.invalidEmailFormat') }}
+          {{ registerFormService.email.hasError('required') ? i18nService.translate('auth.emailRequired') :
+          i18nService.translate('auth.invalidEmailFormat') }}
         </small>
         }
       </div>
@@ -46,21 +35,14 @@
       <!-- Phone -->
       <div class="field">
         <app-base-label [title]="i18nService.translate('auth.phone')"></app-base-label>
-        <ngx-intl-tel-input
-          class="w-full"
-          [cssClass]="'p-inputtext w-full'"
-          [preferredCountries]="['sa']"
-          [enableAutoCountrySelect]="true"
-          [enablePlaceholder]="true"
-          [searchCountryFlag]="true"
-          [separateDialCode]="true"
-          [searchCountryField]="[searchCountryField.DialCode, searchCountryField.Name]"
-          [maxLength]="15"
-          [formControl]="registerFormService.phone"
-        ></ngx-intl-tel-input>
+        <ngx-intl-tel-input class="w-full" [cssClass]="'p-inputtext w-full'" [preferredCountries]="['sa']"
+          [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+          [separateDialCode]="true" [searchCountryField]="[searchCountryField.DialCode, searchCountryField.Name]"
+          [maxLength]="15" [formControl]="registerFormService.phone"></ngx-intl-tel-input>
         @if (registerFormService.phone.touched && registerFormService.phone.invalid) {
         <small class="text-red-500">
-          {{ registerFormService.phone.hasError('required') ? i18nService.translate('auth.phoneRequired') : i18nService.translate('auth.invalidPhoneFormat') }}
+          {{ registerFormService.phone.hasError('required') ? i18nService.translate('auth.phoneRequired') :
+          i18nService.translate('auth.invalidPhoneFormat') }}
         </small>
         }
       </div>
@@ -71,22 +53,14 @@
       </div>
 
       <!-- Submit -->
-      <p-button
-        [label]="i18nService.translate('auth.getStarted')"
-        fluid
-        [disabled]="registerForm.invalid"
-        (onClick)="onSubmit()"
-      ></p-button>
+      <p-button [label]="i18nService.translate('auth.getStarted')" fluid [disabled]="registerForm.invalid"
+        type="submit"></p-button>
     </div>
   </form>
   <div class="flex justify-center items-center">
     <p class="text-gray-600">{{ i18nService.translate('auth.alreadyHaveAccount') }}</p>
     <!-- TODO: set link -->
-    <p-button
-      class="ms-2"
-      variant="text"
-      [label]="i18nService.translate('auth.signIn')"
-      [routerLink]="['/auth/login']"
-    />
+    <p-button class="ms-2" variant="text" [label]="i18nService.translate('auth.signIn')"
+      [routerLink]="['/auth/login']" />
   </div>
 </div>
