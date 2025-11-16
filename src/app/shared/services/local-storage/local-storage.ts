@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IAuthResponse } from '../../interfaces';
+import { IAuthData, IAuthResponse } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +14,9 @@ export class LocalStorage {
     }
   }
 
-  getAuthData(): IAuthResponse | null {
+  getAuthData(): IAuthData | null {
     var stored = localStorage.getItem(this.AUTH_STORAGE_KEY);
-    return stored ? JSON.parse(stored) as IAuthResponse : null;
+    return stored ? JSON.parse(stored) as IAuthData : null;
   }
 
   cleanAuthData() {

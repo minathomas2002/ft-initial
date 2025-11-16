@@ -4,7 +4,7 @@ export enum ERoutes {
   users = 'users',
   opportunities = 'opportunities',
   auth = 'auth',
-  login = 'login',
+  login = 'login/login',
   signup = 'signup',
   forgotPassword = 'forgot-password',
   resetPassword = 'reset-password',

@@ -4,7 +4,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { LoginFormService } from '../../services/login-form/login-form';
@@ -32,15 +32,17 @@ export class Login implements OnInit {
   loginFormService = inject(LoginFormService);
   authStore = inject(AuthStore);
   router = inject(Router);
+  route = inject(ActivatedRoute);
+  
 
   isSecInternal = signal(window.location.origin == environment.secDomain);
-  windowsAuthEnabled = signal(environment.windowsAuthEnabled);
+  isFakeDev = signal(false);
 
   loginForm = this.loginFormService.loginForm;
 
   ngOnInit(): void {
-    //if domain is sec domain & windows login is enabled
-    if (this.isSecInternal() && this.windowsAuthEnabled()) {
+    //if domain is sec domain
+    if (this.isSecInternal()) {
       this.authStore.windowsLogin().subscribe({
         next: (response) => {
           if (response.succeeded) {
@@ -48,6 +50,8 @@ export class Login implements OnInit {
           }
         },
       });
+    }else if(!environment.production && this.route.snapshot.queryParamMap.get('dev')) {
+      this.isFakeDev.set(true)
     }
   }
 

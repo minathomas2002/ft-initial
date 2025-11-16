@@ -52,7 +52,7 @@ export class OpportunitiesList {
     if (this.authStore.isAuthenticated()) {
 
     } else {
-      this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+      this.router.navigate(['/', ERoutes.login]);
     }
   }
 }

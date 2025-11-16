@@ -22,15 +22,15 @@
 >
   <div class="items-center md:!flex hidden text-sm">
     <app-identify-user
-      [userName]="authStore.user()?.name!"
-      [userTitle]="authStore.user()?.title!"
-      [userAvatar]="authStore.user()?.avatar!"
+      [userName]="authStore.user()?.nameEN!"
+      [userTitle]="authStore.user()?.userName!"
+      [userAvatar]="authStore.user()?.userName!"
     ></app-identify-user>
     <i class="icon-chevron-down ms-[18px] text-gray-400 {{isOpen()? 'rotate-180':'rotate-none'}} transition-all"></i>
   </div>
 
   <p-avatar
-    [image]="authStore.user()?.avatar"
+    [image]="authStore.user()?.userName!"
     class="!w-[40px] !h-[40px] md:!hidden block"
     shape="circle"
     size="large"

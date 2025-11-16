@@ -6,7 +6,6 @@ import { ERoutes } from '../../../../../shared/enums';
 import { IdentifyUserComponent } from '../../../../../shared/components/utility-components/identify-user/identify-user.component';
 import { AuthStore } from '../../../../../shared/stores/auth/auth.store';
 
-
 @Component({
   selector: 'app-navbar-profile-dropdown',
   imports: [MenuModule, IdentifyUserComponent, AvatarModule],
@@ -23,6 +22,13 @@ export class NavbarProfileDropdownComponent {
       icon: 'icon-user',
       command: () => this.router.navigate(['/', ERoutes.profile]),
     },
-    { label: 'Sign out', icon: 'icon-log-out', command: ()=>this.authStore.logout() },
+    {
+      label: 'Sign out',
+      icon: 'icon-log-out',
+      command: () => {
+        this.authStore.logout();
+        this.router.navigate(['/', ERoutes.login])
+      },
+    },
   ]);
 }

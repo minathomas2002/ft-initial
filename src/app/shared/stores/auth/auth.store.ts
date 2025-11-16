@@ -1,16 +1,16 @@
-import { computed, inject } from "@angular/core";
+import { computed, inject } from '@angular/core';
 import {
   patchState,
   signalStore,
   withComputed,
+  withHooks,
   withMethods,
   withState,
-} from "@ngrx/signals";
-import { type Observable, type Subscription, finalize, tap, timer } from "rxjs";
-import { IAuthResponse, IAuthData } from "../../interfaces";
-import { AuthApiService } from "../../api/auth/auth-api-service";
-import { LocalStorage } from "../../services/local-storage/local-storage";
-import { Router } from "@angular/router";
+} from '@ngrx/signals';
+import { type Observable, type Subscription, finalize, tap } from 'rxjs';
+import { IAuthResponse, IAuthData } from '../../interfaces';
+import { AuthApiService } from '../../api/auth/auth-api-service';
+import { LocalStorage } from '../../services/local-storage/local-storage';
 
 const initialState: {
   user: IAuthData | null;
@@ -23,8 +23,19 @@ const initialState: {
 };
 
 export const AuthStore = signalStore(
-  { providedIn: "root" },
+  { providedIn: 'root' },
   withState(initialState),
+  //Load user from localstorage automatically
+  withHooks({
+    onInit(store) {
+      const localStorage = inject(LocalStorage);
+      const stored = localStorage.getAuthData();
+
+      if (stored) {
+        patchState(store, { user: stored });
+      }
+    },
+  }),
   withComputed((store) => {
     return {
       isAuthenticated: computed(() => store.user() !== null),
@@ -33,26 +44,27 @@ export const AuthStore = signalStore(
   withMethods((store) => {
     const authApiService = inject(AuthApiService);
     const localStorage = inject(LocalStorage);
-    
+
     return {
       logout(): void {
-        localStorage.cleanAuthData()
+        localStorage.cleanAuthData();
+        patchState(store, { user: null });
         authApiService.logout();
       },
 
       login(email: string, password: string): Observable<IAuthResponse> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.login(email, password))
+        return this.handleLoginMethod(authApiService.login(email, password));
       },
 
-      windowsLogin(): Observable<IAuthResponse>{
+      windowsLogin(): Observable<IAuthResponse> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.windowsLogin())
+        return this.handleLoginMethod(authApiService.windowsLogin());
       },
 
       fakeWindowsLogin(userName: string): Observable<IAuthResponse> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName))
+        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName));
       },
 
       updateAuthDataInStorage(authResponse: IAuthResponse): void {
@@ -63,15 +75,15 @@ export const AuthStore = signalStore(
         return login$.pipe(
           tap((response: IAuthResponse) => {
             if (response.succeeded && response.data) {
-              patchState(store, { user: response.data });         
-              localStorage.saveAuthDataToStorage(response);              
+              patchState(store, { user: response.data });
+              localStorage.saveAuthDataToStorage(response);
             }
           }),
           finalize(() => {
             patchState(store, { loading: false });
           })
         );
-      }
+      },
     };
-  }),
+  })
 );
