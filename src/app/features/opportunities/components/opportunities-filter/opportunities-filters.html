@@ -1,21 +1,33 @@
-<div class="grid grid-cols-1 md:grid-cols-2">
-  <div class="col-span-1">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+  <!-- Search: spans 2 columns on medium+ screens -->
+  <div class="col-span-1 md:col-span-2">
     <p-iconfield>
-      <p-inputicon
-        inputId="opportunities-search"
-        class="icon-search"
-      />
-      <input
-        type="text"
-        pInputText
-        class="w-full"
-        placeholder="Search"
-        [(ngModel)]="filter().searchText"
-        (ngModelChange)="searchSubject.next(filter().searchText??'')"
-      />
+      <p-inputicon inputId="opportunities-search" class="icon-search" />
+      <input type="text" pInputText class="w-full" placeholder="Search" [(ngModel)]="filter().searchText"
+        (ngModelChange)="searchSubject.next(filter().searchText ?? '')" />
     </p-iconfield>
   </div>
-  <div>
-    <!-- <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" />     -->
+
+  @if(isAdminMode()) {
+  <!-- Opportunity Status -->
+  <div class="col-span-1 md:col-span-1">
+    <p-select [options]="opportunityStatuses" optionLabel="label" placeholder="Opportunity Status" class="w-full">
+      <ng-template pTemplate="item" let-option>
+        {{ option.label | translate }}
+      </ng-template>
+      <ng-template pTemplate="selectedItem" let-option>
+        {{ option?.label | translate }}
+      </ng-template>
+    </p-select>
   </div>
+
+  <!-- Opportunity Type -->
+  <div class="col-span-1 md:col-span-1">
+    <p-select [options]="opportunityTypes" optionLabel="label" placeholder="Opportunity Type" class="w-full">
+      <ng-template pTemplate="item" let-option>
+        {{ option.label | translate }}
+      </ng-template>
+    </p-select>
+  </div>
+  }
 </div>

@@ -1,108 +1,117 @@
 {
-	"common": {
-		"welcome": "Welcome",
-		"hello": "Hello",
-		"yes": "Yes",
-		"no": "No",
-		"cancel": "Cancel",
-		"confirm": "Confirm",
-		"save": "Save",
-		"delete": "Delete",
-		"edit": "Edit",
-		"add": "Add",
-		"search": "Search",
-		"loading": "Loading...",
-		"error": "Error",
-		"success": "Success",
-		"warning": "Warning",
-		"info": "Info"
-	},
+  "common": {
+    "welcome": "Welcome",
+    "hello": "Hello",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info"
+  },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
-    "terms":"Terms",
-    "privacy":"Privacy",
-    "cookie":"Cookie"
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "cookie": "Cookie"
   },
-	"auth": {
-		"email": "Email",
-		"password": "Password",
-		"name": "Name",
-		"phone": "Phone",
-		"welcomeMessage": "Welcome! Please enter your details.",
-		"enterYourEmail": "Enter your email",
-		"enterYourName": "Enter your name",
-		"emailRequired": "Email is required",
-		"nameRequired": "Name is required",
-		"phoneRequired": "Phone number is required",
-		"invalidEmailFormat": "Invalid email format",
-		"invalidName": "Invalid name",
-		"invalidPhoneFormat": "Invalid phone number format",
-		"enterYourPassword": "Enter your password",
-		"passwordRequired": "Password is required",
-		"passwordMinLength": "Password must be at least 8 characters.",
-		"passwordSpecialChar": "Password must contain at least one special character.",
-		"signIn": "Sign In",
-		"signUp": "Sign Up",
-		"getStarted": "Get started",
-		"alreadyHaveAccount": "Already have an account?",
-		"login": {
-			"title": "Log in",
-			"description": "Welcome back! Please enter your details.",
-			"email": "Email",
-			"enterYourEmail": "Enter your email",
-			"emailRequired": "Email is required",
-			"invalidEmailFormat": "Invalid email format",
-			"password": "Password",
-			"enterYourPassword": "Enter your password",
-			"passwordRequired": "Password is required",
-			"invalidPasswordFormat": "Invalid password format",
-			"rememberMe": "Remember Me",
-			"forgotPassword": "Forgot Password?",
-			"signIn": "Sign In",
-			"dontHaveAccount": "Don't have an account?",
-			"signUp": "Sign Up"
-		},
-		"forgot": {
-			"title": "Forgot password?",
-			"description": "No worries, we'll send you reset instructions.",
-			"email": "Email",
-			"enterYourEmail": "Enter your email",
-			"emailRequired": "Email is required",
-			"invalidEmailFormat": "Invalid email format",
-			"buttonLabel": "Reset password",
-			"backButtonLabel": "Back to login"
-		},
-		"reset": {
-			"title": "Set new password",
-			"description": "Your new password must be different to previously used passwords.",
-			"password": "Password",
-			"enterYourPassword": "Enter your new password",
-			"confirmPassword": "Confirm password",
-			"enterYourConfirmPassword": "Confirm your new password",
-			"confirmPasswordRequired": "Confirm password is required",
-			"passwordMismatch": "Passwords do not match",
-			"buttonLabel": "Reset password",
-			"backButtonLabel": "Back to login"
-		}
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "phone": "Phone",
+    "welcomeMessage": "Welcome! Please enter your details.",
+    "enterYourEmail": "Enter your email",
+    "enterYourName": "Enter your name",
+    "emailRequired": "Email is required",
+    "nameRequired": "Name is required",
+    "phoneRequired": "Phone number is required",
+    "invalidEmailFormat": "Invalid email format",
+    "invalidName": "Invalid name",
+    "invalidPhoneFormat": "Invalid phone number format",
+    "enterYourPassword": "Enter your password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters.",
+    "passwordSpecialChar": "Password must contain at least one special character.",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "getStarted": "Get started",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": {
+      "title": "Log in",
+      "description": "Welcome back! Please enter your details.",
+      "email": "Email",
+      "enterYourEmail": "Enter your email",
+      "emailRequired": "Email is required",
+      "invalidEmailFormat": "Invalid email format",
+      "password": "Password",
+      "enterYourPassword": "Enter your password",
+      "passwordRequired": "Password is required",
+      "invalidPasswordFormat": "Invalid password format",
+      "rememberMe": "Remember Me",
+      "forgotPassword": "Forgot Password?",
+      "signIn": "Sign In",
+      "dontHaveAccount": "Don't have an account?",
+      "signUp": "Sign Up"
+    },
+    "forgot": {
+      "title": "Forgot password?",
+      "description": "No worries, we'll send you reset instructions.",
+      "email": "Email",
+      "enterYourEmail": "Enter your email",
+      "emailRequired": "Email is required",
+      "invalidEmailFormat": "Invalid email format",
+      "buttonLabel": "Reset password",
+      "backButtonLabel": "Back to login"
+    },
+    "reset": {
+      "title": "Set new password",
+      "description": "Your new password must be different to previously used passwords.",
+      "password": "Password",
+      "enterYourPassword": "Enter your new password",
+      "confirmPassword": "Confirm password",
+      "enterYourConfirmPassword": "Confirm your new password",
+      "confirmPasswordRequired": "Confirm password is required",
+      "passwordMismatch": "Passwords do not match",
+      "buttonLabel": "Reset password",
+      "backButtonLabel": "Back to login"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "overview": "Overview",
+    "statistics": "Statistics"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "users": "Users",
+    "opportunities": "Opportunities"
+  },
+  "language": {
+    "english": "English",
+    "arabic": "Arabic",
+    "changeLanguage": "Change Language"
+  },
+  "opportunity": {
+	"status": {
+		"draft": "Draft",
+		"published": "Published"
 	},
-	"dashboard": {
-		"title": "Dashboard",
-		"overview": "Overview",
-		"statistics": "Statistics"
-	},
-	"navigation": {
-		"home": "Home",
-		"dashboard": "Dashboard",
-		"profile": "Profile",
-		"settings": "Settings",
-		"help": "Help",
-		"users": "Users",
-		"opportunities": "Opportunities"
-	},
-	"language": {
-		"english": "English",
-		"arabic": "Arabic",
-		"changeLanguage": "Change Language"
-	}
+	"type": {
+		"service": "Service",
+		"material": "Material"
+	}	
+  }
 }
-
