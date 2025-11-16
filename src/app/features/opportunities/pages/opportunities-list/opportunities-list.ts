@@ -50,9 +50,8 @@ export class OpportunitiesList {
 
   onApply(opportunity: IOpportunityRecord) {
     if (this.authStore.isAuthenticated()) {
-
     } else {
-      this.router.navigate(['/', ERoutes.login]);
+      this.router.navigate(['/',ERoutes.auth ,ERoutes.login])
     }
   }
 }

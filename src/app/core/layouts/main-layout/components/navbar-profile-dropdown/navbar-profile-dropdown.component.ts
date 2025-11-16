@@ -27,7 +27,7 @@ export class NavbarProfileDropdownComponent {
       icon: 'icon-log-out',
       command: () => {
         this.authStore.logout();
-        this.router.navigate(['/', ERoutes.login])
+        this.router.navigate(['/',ERoutes.auth ,ERoutes.login])
       },
     },
   ]);
