@@ -1,8 +1,11 @@
 import { Component, input } from '@angular/core';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-opportunity-card',
-  imports: [],
+  imports: [
+    TooltipModule
+  ],
   templateUrl: './opportunity-card.html',
   styleUrl: './opportunity-card.scss',
 })

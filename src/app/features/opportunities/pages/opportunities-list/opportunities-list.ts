@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IOpportunityRecord } from 'src/app/shared/interfaces/opportunities.interface';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/opportunities-filter-service';
@@ -10,6 +10,8 @@ import { CardsPageLayout } from 'src/app/shared/components/layout-components/car
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoutes } from 'src/app/shared/enums';
+import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -19,13 +21,15 @@ import { ERoutes } from 'src/app/shared/enums';
     OpportunitiesFilters,
     ButtonModule,
     DataCards,
-    OpportunityDetailItem
+    OpportunityDetailItem,
+    CardsSkeleton
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
 })
 export class OpportunitiesList {
-  items = signal<number[]>([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+  // items = signal<number[]>([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+  isAdminMode = computed(()=> this.authStore.isAuthenticated())
   details = signal<{ label: string, value: string }[]>([
     { label: 'Size', value: '500' },
     { label: 'Location', value: '1000' },
@@ -37,6 +41,7 @@ export class OpportunitiesList {
   filter = this.filterService.filter;
   router = inject(Router);
   authStore = inject(AuthStore);
+  opportunitiesStore = this.filterService.store;
   route = inject(ActivatedRoute);
   ngOnInit(): void {
     this.filterService.applyFilter()
