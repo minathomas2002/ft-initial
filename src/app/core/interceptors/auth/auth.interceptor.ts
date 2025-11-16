@@ -6,22 +6,9 @@ import { AuthApiService } from '../../../shared/api/auth/auth-api-service';
 import { AuthStore } from '../../../shared/stores/auth/auth.store';
 import { IAuthData, IRefreshTokenRequest } from '../../../shared/interfaces';
 import { API_ENDPOINTS } from '../../../shared/api/api-endpoints';
+import { LocalStorage } from 'src/app/shared/services/local-storage/local-storage';
 
 const AUTH_STORAGE_KEY = 'auth_data';
-
-const getAuthDataFromStorage = (): IAuthData | null => {
-  if (typeof window !== 'undefined' && window.localStorage) {
-    const stored = localStorage.getItem(AUTH_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : null;
-  }
-  return null;
-};
-
-const saveAuthDataToStorage = (authData: IAuthData): void => {
-  if (typeof window !== 'undefined' && window.localStorage) {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authData));
-  }
-};
 
 const isRefreshTokenEndpoint = (url: string): boolean => {
   return url.includes(API_ENDPOINTS.auth.refreshToken);
@@ -30,8 +17,9 @@ const isRefreshTokenEndpoint = (url: string): boolean => {
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authApiService = inject(AuthApiService);
   const authStore = inject(AuthStore);
+  const localStorage = inject(LocalStorage);
 
-  const authData = getAuthDataFromStorage();
+  const authData = localStorage.getAuthData();
   let clonedRequest = req;
 
   if (authData?.token) {
@@ -54,9 +42,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           switchMap((response) => {
             if (response.succeeded && response.data) {
               // Save new tokens to storage
-              saveAuthDataToStorage(response.data);
               authStore.updateAuthDataInStorage(response);
-
               // Retry the original request with new token
               const retryRequest = req.clone({
                 setHeaders: { Authorization: `Bearer ${response.data.token}` },
@@ -68,7 +54,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           catchError((refreshError) => {
             // Refresh failed, clear storage and return error
             if (typeof window !== 'undefined' && window.localStorage) {
-              localStorage.removeItem(AUTH_STORAGE_KEY);
+              localStorage.cleanAuthData()
             }
             return throwError(() => refreshError);
           })

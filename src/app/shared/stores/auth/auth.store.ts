@@ -68,15 +68,15 @@ export const AuthStore = signalStore(
       },
 
       updateAuthDataInStorage(authResponse: IAuthResponse): void {
+        patchState(store, { user: authResponse.data });
         localStorage.saveAuthDataToStorage(authResponse);
       },
 
       handleLoginMethod(login$: Observable<IAuthResponse>): Observable<IAuthResponse> {
         return login$.pipe(
           tap((response: IAuthResponse) => {
-            if (response.succeeded && response.data) {
-              patchState(store, { user: response.data });
-              localStorage.saveAuthDataToStorage(response);
+            if (response.succeeded && response.data) {              
+              this.updateAuthDataInStorage(response);
             }
           }),
           finalize(() => {

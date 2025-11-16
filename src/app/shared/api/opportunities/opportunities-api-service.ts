@@ -14,4 +14,8 @@ export class OpportunitiesApiService {
   getOpportunities(filter: IOpportunitiesFilterRequest): Observable<IApiResponse<IOpportunityRecord[]>> {
     return this.baseHttpService.get<IOpportunityRecord[], unknown>(API_ENDPOINTS.opportunities.getOpportunities, filter);
   }
+
+  getAdminOpportunities(filter: IOpportunitiesFilterRequest): Observable<IApiResponse<IOpportunityRecord[]>> {
+    return this.baseHttpService.get<IOpportunityRecord[], unknown>(API_ENDPOINTS.opportunities.getAdminOpportunities, filter);
+  }
 }

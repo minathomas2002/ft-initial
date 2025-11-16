@@ -2,7 +2,11 @@ import { patchState, signalStore, withComputed, withMethods, withState } from '@
 import { inject } from '@angular/core';
 import { catchError, finalize, tap, throwError } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
-import { IOpportunitiesFilterRequest, IOpportunityRecord } from '../../interfaces/opportunities.interface';
+import {
+  IOpportunitiesFilterRequest,
+  IOpportunityRecord,
+} from '../../interfaces/opportunities.interface';
+import { AuthStore } from '../auth/auth.store';
 
 const initialState: {
   loading: boolean;
@@ -23,11 +27,12 @@ export const OpportunitiesStore = signalStore(
   }),
   withMethods((store) => {
     const opportunitiesApiService = inject(OpportunitiesApiService);
+    const authStore = inject(AuthStore);
 
     return {
       getOpportunities(filter: IOpportunitiesFilterRequest) {
         patchState(store, { loading: true });
-        return opportunitiesApiService.getOpportunities(filter).pipe(
+        return this.getOpportunitiesRequest(filter).pipe(
           tap((res) => {
             patchState(store, { list: res.data, count: res.data.length });
           }),
@@ -39,6 +44,13 @@ export const OpportunitiesStore = signalStore(
             patchState(store, { loading: false });
           })
         );
+      },
+      getOpportunitiesRequest(filter: IOpportunitiesFilterRequest) {
+        if (authStore.isAuthenticated()) {
+          return opportunitiesApiService.getAdminOpportunities(filter);
+        } else {
+          return opportunitiesApiService.getOpportunities(filter);
+        }
       },
     };
   })

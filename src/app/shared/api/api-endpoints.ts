@@ -4,6 +4,7 @@ const baseUrl = environment.baseUrl;
 const Users = "Users";
 const Dashboard = "Dashboard";
 const Opportunities = "Opportunities";
+const AdminOpportunities = "Opportunities/admin";
 
 const Auth = "Auth";
 
@@ -17,6 +18,7 @@ export const API_ENDPOINTS = {
   },
   opportunities: {
     getOpportunities: `${Opportunities}`,
+    getAdminOpportunities: `${AdminOpportunities}`    
   },
   auth: {
     login: `${Auth}/login`,

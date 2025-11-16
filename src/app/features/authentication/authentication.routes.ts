@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
+import { visitorsGuard } from 'src/app/core/guards/visitors/visitors.guard';
 
 export const AUTHENTICATION_ROUTES: Routes = [
     {
         path: 'login',
+        canActivate: [visitorsGuard],    
         loadComponent: () => import('./pages/login/login').then((m) => m.Login),
     },
     {

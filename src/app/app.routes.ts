@@ -41,7 +41,6 @@ export const routes: Routes = [
   {
     path: ERoutes.auth,
     component: AuthLayout,
-    canActivate: [visitorsGuard],
     loadChildren: () =>
       import('./features/authentication/authentication.routes').then(
         (m) => m.AUTHENTICATION_ROUTES
