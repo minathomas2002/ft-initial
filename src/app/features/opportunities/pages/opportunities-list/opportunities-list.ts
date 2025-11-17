@@ -11,9 +11,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoutes } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
-import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -25,7 +25,8 @@ import { PermissionService } from 'src/app/shared/services/permission/permission
     DataCards,
     OpportunityDetailItem,
     CardsSkeleton,
-    TranslatePipe
+    TranslatePipe,
+    DatePipe
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
