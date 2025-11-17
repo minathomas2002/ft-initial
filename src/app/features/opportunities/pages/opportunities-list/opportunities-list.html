@@ -15,7 +15,7 @@
             <ng-container ngProjectAs="opportunity-card-info">
               <div class="flex flex-col gap-2">                
                 <app-opportunity-detail-item [label]="'opportunity.list.opportunityType' | translate" [value]="item.opportunityType" />
-                <app-opportunity-detail-item [label]="'opportunity.list.applicationPeriod' | translate" [value]="`${item.startDate | date:'dd-MMM'} - ${item.endDate | date:'dd-MMM'}`" />                
+                <app-opportunity-detail-item [label]="'opportunity.list.applicationPeriod' | translate" [value]="`${item.startDate | date:'dd MMM'} - ${item.endDate | date:'dd MMM'}`" />                
               </div>
             </ng-container>
             }

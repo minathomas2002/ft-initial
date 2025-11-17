@@ -34,7 +34,7 @@ export const OpportunitiesStore = signalStore(
         patchState(store, { loading: true });
         return this.getOpportunitiesRequest(filter).pipe(
           tap((res) => {
-            patchState(store, { list: res.data, count: res.data.length });
+            patchState(store, { list: res.data, count: res.data.length });//TODO: change to total count
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage });
