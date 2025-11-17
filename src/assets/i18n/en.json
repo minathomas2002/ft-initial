@@ -119,6 +119,11 @@
       "cardDescription": "High-voltage transformers with strong demand and localization potential in manufacturing and services.",
       "viewDetails": "View Details",
       "apply": "Apply"
+    },
+    "filter": {
+      "search": "Search",
+      "status": "Opportunity Status",
+      "type": "Opportunity Type"
     }
   }
 }
