@@ -105,13 +105,20 @@
     "changeLanguage": "Change Language"
   },
   "opportunity": {
-	"status": {
-		"draft": "Draft",
-		"published": "Published"
-	},
-	"type": {
-		"service": "Service",
-		"material": "Material"
-	}	
+    "status": {
+      "draft": "Draft",
+      "published": "Published"
+    },
+    "type": {
+      "service": "Service",
+      "material": "Material"
+    },
+    "list": {
+      "title": "Opportunities",
+      "subtitle": "Browse all available plans and view their details",
+      "cardDescription": "High-voltage transformers with strong demand and localization potential in manufacturing and services.",
+      "viewDetails": "View Details",
+      "apply": "Apply"
+    }
   }
 }

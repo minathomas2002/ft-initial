@@ -12,6 +12,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoutes } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -22,7 +23,8 @@ import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportun
     ButtonModule,
     DataCards,
     OpportunityDetailItem,
-    CardsSkeleton
+    CardsSkeleton,
+    TranslatePipe
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',

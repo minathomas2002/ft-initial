@@ -1,4 +1,4 @@
-<app-cards-page-layout pageTitle="Opportunities" pageSubTitle="Browse all available plans and view their details"
+<app-cards-page-layout [pageTitle]="'opportunity.list.title' | translate" [pageSubTitle]="'opportunity.list.subtitle' | translate"
   pageTitleClass="text-[48px] font-bold" pageSubTitleClass="text-xl text-gray-600">
   <ng-container ngProjectAs="page-filters">
     <app-opportunities-filters [isAdminMode]="isAdminMode()" />
@@ -8,8 +8,8 @@
       <app-data-cards [items]="opportunitiesStore.list()" [totalRecords]="opportunitiesStore.count()"
         [(filter)]="filter">
         <ng-template #itemsTemplate let-item="item">
-          <app-opportunity-card item icon="icon-search" cardTitle="{{item.title}}"
-            cardDescription="High-voltage transformers with strong demand and localization potential in manufacturing and services."
+          <app-opportunity-card item icon="icon-search" [cardTitle]="item.title"
+            [cardDescription]="'opportunity.list.cardDescription' | translate"
             cardClass="bg-gray-50">
             @if(isAdminMode()) {
             <ng-container ngProjectAs="opportunity-card-info">
@@ -22,9 +22,9 @@
             }
             <ng-container ngProjectAs="opportunity-card-actions">
               <div class="flex gap-4">
-                <p-button label="View Details" severity="secondary" class="flex-1" fluid
+                <p-button [label]="'opportunity.list.viewDetails' | translate" severity="secondary" class="flex-1" fluid
                   (onClick)="onViewDetails(item)" />
-                <p-button label="Apply" severity="primary" class="flex-1" fluid (onClick)="onApply(item)" />
+                <p-button [label]="'opportunity.list.apply' | translate" severity="primary" class="flex-1" fluid (onClick)="onApply(item)" />
               </div>
             </ng-container>
           </app-opportunity-card>
