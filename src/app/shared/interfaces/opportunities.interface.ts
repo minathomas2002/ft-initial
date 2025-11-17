@@ -2,6 +2,9 @@ import { IFilterBase } from './filter.interface';
 
 export interface IOpportunitiesFilter extends IFilterBase<TOpportunitySortingKeys> {
   searchText?: string;
+  status?: number;
+  type?: number;
+  isActive?: boolean;
 }
 
 export type TOpportunitySortingKeys = keyof IOpportunityRecord;
@@ -31,4 +34,6 @@ export interface IOpportunityRecord {
 
 export interface IOpportunitiesFilterRequest extends IFilterBase<TOpportunitySortingKeys> {
   searchText?: string;
+  status?: number;
+  type?: number;
 }

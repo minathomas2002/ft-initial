@@ -11,12 +11,12 @@
           <app-opportunity-card item icon="icon-search" [cardTitle]="item.title"
             [cardDescription]="'opportunity.list.cardDescription' | translate"
             cardClass="bg-gray-50">
-            @if(isAdminMode()) {
+            @if(permissionService.canViewOpportunityDetailsInCard()) {
             <ng-container ngProjectAs="opportunity-card-info">
-              <div class="flex flex-col gap-2">
-                @for(detail of details(); track detail){
-                <app-opportunity-detail-item [label]="detail.label" [value]="detail.value" />
-                }
+              <div class="flex flex-col gap-2">                
+                <app-opportunity-detail-item [label]="'opportunity.list.opportunityType' | translate" [value]="item.opportunityType" />
+                <app-opportunity-detail-item [label]="'opportunity.list.applicationPeriod' | translate" [value]="item.startDate" />
+                
               </div>
             </ng-container>
             }

@@ -1,3 +1,5 @@
+import { ERoles } from "../enums/roles.enum";
+
 export interface IUser {
   id: string;
   name: string;
@@ -25,7 +27,7 @@ export interface IAuthData {
   nameEN: string;
   roleIds: string[];
   roleNames: string[];
-  roleCodes: number[];
+  roleCodes: ERoles[];
   expiresAt: string;
   refreshTokenExpiresAt: string;
 }

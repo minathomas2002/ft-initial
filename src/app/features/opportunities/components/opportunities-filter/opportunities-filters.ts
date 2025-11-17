@@ -32,15 +32,35 @@ export class OpportunitiesFilters implements OnInit {
   filter = this.filterService.filter;
   searchSubject = new Subject<string>();
 
-  opportunityStatuses = [
-    { label: 'opportunity.status.published', value: EOpportunityStatus.DRAFT },
-    { label: 'opportunity.status.draft', value: EOpportunityStatus.PUBLISHED },
+  opportunityStates = [
+    { label: 'opportunity.state.isActive', value: true },
+    { label: 'opportunity.state.isNotActive', value: false },
   ];
 
   opportunityTypes = [
     { label: 'opportunity.type.material', value: EOpportunityType.MATERIAL },
     { label: 'opportunity.type.service', value: EOpportunityType.SERVICES },
   ];
+
+  opportunityStatuses = [
+    { label: 'opportunity.status.published', value: EOpportunityStatus.PUBLISHED },
+    { label: 'opportunity.status.draft', value: EOpportunityStatus.DRAFT },
+  ];
+
+  onStatusChange(status: number | null) {
+    this.filterService.updateFilterSignal({ status: status ?? undefined });
+    this.filterService.applyFilter();
+  }
+
+  onTypeChange(type: EOpportunityType | null) {
+    this.filterService.updateFilterSignal({ type: type ?? undefined });
+    this.filterService.applyFilter();
+  }
+
+  onStateChange(state: boolean | null) {
+    this.filterService.updateFilterSignal({ isActive: state ?? undefined });
+    this.filterService.applyFilter();
+  }
 
   ngOnInit() {
     this.listenToSearchText();

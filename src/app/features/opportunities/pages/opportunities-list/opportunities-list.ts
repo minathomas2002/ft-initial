@@ -13,6 +13,7 @@ import { ERoutes } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -30,21 +31,18 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   styleUrl: './opportunities-list.scss',
 })
 export class OpportunitiesList {
-  // items = signal<number[]>([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
-  isAdminMode = computed(()=> this.authStore.isAuthenticated())
-  details = signal<{ label: string, value: string }[]>([
-    { label: 'Size', value: '500' },
-    { label: 'Location', value: '1000' },
-    { label: 'Type', value: '500' },
-    { label: 'Size', value: '1000' },
-  ]);
-  totalRecords = signal<number>(10);
+
+  readonly permissionService = inject(PermissionService);
   filterService = inject(OpportunitiesFilterService);
-  filter = this.filterService.filter;
   router = inject(Router);
   authStore = inject(AuthStore);
-  opportunitiesStore = this.filterService.store;
   route = inject(ActivatedRoute);
+  
+  // items = signal<number[]>([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+  isAdminMode = computed(()=> this.authStore.isAuthenticated())
+  totalRecords = signal<number>(10);
+  filter = this.filterService.filter;
+  opportunitiesStore = this.filterService.store;
   ngOnInit(): void {
     this.filterService.applyFilter()
   }

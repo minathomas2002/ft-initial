@@ -105,16 +105,31 @@
 		"changeLanguage": "تغيير اللغة"
 	},
 	"opportunity": {
+		"status": {
+			"draft": "مسودة",
+			"published": "منشور"
+		},
+		"state": {
+			"isActive": "نشط",
+			"isNotActive": "غير نشط"
+		},
+		"type": {
+			"service": "خدمة",
+			"material": "مادة"
+		},
 		"list": {
 			"title": "الفرص",
 			"subtitle": "تصفح جميع الخطط المتاحة وعرض تفاصيلها",
 			"cardDescription": "محولات الجهد العالي ذات الطلب القوي وإمكانات التوطين في التصنيع والخدمات.",
+			"opportunityType": "نوع الفرصة",
+			"applicationPeriod": "فترة التقديم",
 			"viewDetails": "عرض التفاصيل",
 			"apply": "تطبيق"
 		},
 		"filter": {
 			"search": "بحث",
 			"status": "حالة الفرصة",
+			"state": "حالة الفرصة",
 			"type": "نوع الفرصة"
 		}
 	}

@@ -1,6 +1,6 @@
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
   <!-- Search: spans 2 columns on medium+ screens -->
-  <div class="col-span-1 md:col-span-2">
+  <div class="col-span-1 md:col-span-1">
     <p-iconfield>
       <p-inputicon inputId="opportunities-search" class="icon-search" />
       <input type="text" pInputText class="w-full" [placeholder]="'opportunity.filter.search' | translate" [(ngModel)]="filter().searchText"
@@ -11,7 +11,8 @@
   @if(isAdminMode()) {
   <!-- Opportunity Status -->
   <div class="col-span-1 md:col-span-1">
-    <p-select [options]="opportunityStatuses" optionLabel="label" [placeholder]="'opportunity.filter.status' | translate" class="w-full">
+    <p-select [options]="opportunityStatuses" optionLabel="label" optionValue="value" [placeholder]="'opportunity.filter.status' | translate" 
+      [ngModel]="filter().isActive" (ngModelChange)="onStatusChange($event)" class="w-full">
       <ng-template pTemplate="item" let-option>
         {{ option.label | translate }}
       </ng-template>
@@ -21,11 +22,29 @@
     </p-select>
   </div>
 
-  <!-- Opportunity Type -->
+  <!-- Opportunity State -->
   <div class="col-span-1 md:col-span-1">
-    <p-select [options]="opportunityTypes" optionLabel="label" [placeholder]="'opportunity.filter.type' | translate" class="w-full">
+    <p-select [options]="opportunityStates" optionLabel="label" optionValue="value" [placeholder]="'opportunity.filter.state' | translate" 
+      [ngModel]="filter().status" (ngModelChange)="onStateChange($event)" class="w-full">
       <ng-template pTemplate="item" let-option>
         {{ option.label | translate }}
+      </ng-template>
+      <ng-template pTemplate="selectedItem" let-option>
+        {{ option?.label | translate }}
+      </ng-template>
+    </p-select>
+  </div>
+
+  
+  <!-- Opportunity Type -->
+  <div class="col-span-1 md:col-span-1">
+    <p-select [options]="opportunityTypes" optionLabel="label" optionValue="value" [placeholder]="'opportunity.filter.type' | translate" 
+      [ngModel]="filter().type" (ngModelChange)="onTypeChange($event)" class="w-full">
+      <ng-template pTemplate="item" let-option>
+        {{ option.label | translate }}
+      </ng-template>
+      <ng-template pTemplate="selectedItem" let-option>
+        {{ option?.label | translate }}
       </ng-template>
     </p-select>
   </div>
