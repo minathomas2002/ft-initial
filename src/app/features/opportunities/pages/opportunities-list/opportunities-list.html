@@ -9,7 +9,7 @@
         [(filter)]="filter">
         <ng-template #itemsTemplate let-item="item">
           <app-opportunity-card item icon="icon-search" [cardTitle]="item.title"
-            [cardDescription]="'opportunity.list.cardDescription' | translate"
+            [cardDescription]="item.shortDescription"
             cardClass="bg-gray-50">
             @if(permissionService.canViewOpportunityDetailsInCard()) {
             <ng-container ngProjectAs="opportunity-card-info">

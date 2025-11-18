@@ -34,7 +34,9 @@ export const OpportunitiesStore = signalStore(
         patchState(store, { loading: true });
         return this.getOpportunitiesRequest(filter).pipe(
           tap((res) => {
-            patchState(store, { list: res.body.data, count: res.body.data.length });//TODO: change to total count
+            const opportunities = res.body.data || [];
+            const totalCount = res.body.pagination?.totalCount ?? 0;
+            patchState(store, { list: opportunities, count: totalCount });
           }),
           finalize(() => {
             patchState(store, { loading: false });
