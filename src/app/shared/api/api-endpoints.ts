@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
     fakeWindowsLogin: `${Auth}/login`,
     refreshToken: `${Auth}/refresh-token`,
     register: `${Auth}/register-investor`,
-    resetPassword: `${Auth}/reset-password`
+    resetPassword: `${Auth}/reset-password`,
+    forgotPassword: `${Auth}/forgot-password`
   },
 };

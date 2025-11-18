@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { IAuthResponse, IRefreshTokenRequest, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
+import { IApiResponse } from '../../interfaces/api-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,11 @@ export class AuthApiService {
     return this.http.post<any>(`${this.baseUrl}/${API_ENDPOINTS.auth.register}`, registerRequest);
   }
 
-  forgotPassword(email: string) {}
+  forgotPassword(email: string): Observable<IApiResponse<void>> {
+    return this.http.post<IApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.auth.forgotPassword}`, {
+      email,
+    });
+  }
 
   resetPassword(request: IResetPasswordRequest): Observable<IAuthResponse> {
     return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.resetPassword}`, request);

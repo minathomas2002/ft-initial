@@ -9,6 +9,7 @@ import {
 } from '@ngrx/signals';
 import { type Observable, type Subscription, finalize, tap } from 'rxjs';
 import { IAuthResponse, IAuthData, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
+import { IApiResponse } from '../../interfaces/api-response.interface';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
 
@@ -75,6 +76,7 @@ export const AuthStore = signalStore(
       handleLoginMethod(login$: Observable<IAuthResponse>): Observable<IAuthResponse> {
         return login$.pipe(
           tap((response: IAuthResponse) => {
+            debugger;
             if (response.succeeded && response.data) {              
               this.updateAuthDataInStorage(response);
             }
@@ -93,6 +95,15 @@ export const AuthStore = signalStore(
       resetPassword(request: IResetPasswordRequest): Observable<IAuthResponse> {
         patchState(store, { loading: true });
         return authApiService.resetPassword(request).pipe(
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
+      },
+
+      forgotPassword(email: string): Observable<IApiResponse<void>> {
+        patchState(store, { loading: true });
+        return authApiService.forgotPassword(email).pipe(
           finalize(() => {
             patchState(store, { loading: false });
           })
