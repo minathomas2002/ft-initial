@@ -7,7 +7,7 @@ export interface IBaseApiResponse<T> {
   timestamp: string;
 }
 
-export interface IApiPaginatedResponse<T> extends IBaseApiResponse<T> {
+export interface IApiPaginatedResponse<T> {
   data: T;
   pagination: {
     totalCount: number;
