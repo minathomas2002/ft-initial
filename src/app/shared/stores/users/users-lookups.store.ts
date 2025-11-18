@@ -26,9 +26,8 @@ export const UsersLookupsStore = signalStore(
         patchState(store, { isLoading: true });
         return usersApiService.getUserTitles().pipe(
           tap((res) => {
-            console.log(res.data);
             patchState(store, {
-              userTitles: res.data,
+              userTitles: res.body ?? [],
             });
           }),
           catchError((error) => {

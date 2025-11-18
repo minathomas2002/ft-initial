@@ -40,12 +40,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
         return authApiService.refreshToken(refreshRequest).pipe(
           switchMap((response) => {
-            if (response.succeeded && response.data) {
+            if (response.success && response.body) {
               // Save new tokens to storage
               authStore.updateAuthDataInStorage(response);
               // Retry the original request with new token
               const retryRequest = req.clone({
-                setHeaders: { Authorization: `Bearer ${response.data.token}` },
+                setHeaders: { Authorization: `Bearer ${response.body.token}` },
               });
               return next(retryRequest);
             }

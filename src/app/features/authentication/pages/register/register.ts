@@ -53,7 +53,7 @@ export class Register {
       }       
       this.authStore.register(request).subscribe({
         next: (response) => {
-          if (response.succeeded) {
+          if (response.success) {
             this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
           }
         },

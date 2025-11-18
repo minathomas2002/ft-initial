@@ -39,7 +39,7 @@ export class ForgotPassword {
       
       this.authStore.forgotPassword(email).subscribe({
         next: (response) => {
-          if (response.status === 200 || response.status === 201) {
+          if (response.statusCode === 200 || response.statusCode === 201) {
             // Redirect to login on success
             this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
           }

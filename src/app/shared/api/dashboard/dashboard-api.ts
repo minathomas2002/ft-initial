@@ -7,7 +7,7 @@ import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 export class DashboardApi {
   private readonly baseHttpService = inject(BaseHttpService);
 
-	// getAll(): Observable<IApiResponse<IAnnouncement[]>> {
+	// getAll(): Observable<IBaseApiResponse<IAnnouncement[]>> {
 	// 	return this.baseHttpService.get<IAnnouncement[], unknown>(API_ENDPOINTS.announcement.getAll);
 	// }
 }

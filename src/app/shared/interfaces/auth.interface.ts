@@ -32,12 +32,6 @@ export interface IAuthData {
   refreshTokenExpiresAt: string;
 }
 
-export interface IAuthResponse {
-  data: IAuthData;
-  succeeded: boolean;
-  errors: string[];
-}
-
 export interface IRefreshTokenRequest {
   accessToken: string;
   refreshToken: string;

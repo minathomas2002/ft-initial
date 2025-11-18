@@ -55,7 +55,7 @@ export class ResetPassword implements OnInit {
 
       this.authStore.resetPassword(formValue).subscribe({
         next: (response) => {
-          if (response.succeeded) {
+          if (response.success) {
             // Redirect to login on success
             this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
           }

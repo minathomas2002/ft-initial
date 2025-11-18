@@ -9,7 +9,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     tap((response: any) => {
       const responseBody = response as IBaseApiResponse<unknown>;
-      if (response instanceof HttpResponse && !responseBody.success) {
+      if (response instanceof HttpResponse && responseBody.success === false) {
         toaster.error(
           responseBody.message || 'failed to process ,check your internet connection',
         );

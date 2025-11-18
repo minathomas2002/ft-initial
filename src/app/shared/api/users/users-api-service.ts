@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable, of } from 'rxjs';
-import { IApiResponse, ISelectItem, IUser, IUserRecord, IUsersFilterRequest } from '../../interfaces';
+import { IBaseApiResponse, ISelectItem, IUser, IUserRecord, IUsersFilterRequest } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { EAdminUserActions, EUserRole, EUserStatus } from '../../enums/users.enum';
 
@@ -11,12 +11,18 @@ import { EAdminUserActions, EUserRole, EUserStatus } from '../../enums/users.enu
 export class UsersApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
-  getUserTitles(): Observable<IApiResponse<ISelectItem[]>> {
-    return of({ data: [{ id: '1', name: 'Mr' }, { id: '2', name: 'Mrs' }, { id: '3', name: 'Ms' }, { id: '4', name: 'Dr' }, { id: '5', name: 'Prof' }], message: 'Success', status: 200 });
-    // return this.baseHttpService.get<ISelectItem[], unknown>(API_ENDPOINTS.users.getUserTitles);
+  getUserTitles(): Observable<IBaseApiResponse<ISelectItem[]>> {
+    return of({ 
+      body: [{ id: '1', name: 'Mr' }, { id: '2', name: 'Mrs' }, { id: '3', name: 'Ms' }, { id: '4', name: 'Dr' }, { id: '5', name: 'Prof' }], 
+      success: true, 
+      statusCode: 200, 
+      message: 'Success', 
+      errors: null, 
+      timestamp: new Date().toISOString() 
+    });    
   }
 
-  getUsers(filter: IUsersFilterRequest): Observable<IApiResponse<IUserRecord[]>> {
+  getUsers(filter: IUsersFilterRequest): Observable<IBaseApiResponse<IUserRecord[]>> {
     // return this.baseHttpService.get<IUser[], unknown>(API_ENDPOINTS.users.getUsers, filter);
 
     // Provide mock IUser objects with all required fields to satisfy the IUser interface
@@ -58,14 +64,14 @@ export class UsersApiService {
         actions: [EAdminUserActions.ChangeRole, EAdminUserActions.Delete],
       },
     ];
-    return of({ data: users, message: 'Success', status: 200 });
+    return of({ body: users, success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString(), message: 'Success' });
   }
 
-  changeUserRole(userId: string, roleId: EUserRole): Observable<IApiResponse<Boolean>> {
-    return of({ data: true, message: 'Success', status: 200 });
+  changeUserRole(userId: string, roleId: EUserRole): Observable<IBaseApiResponse<Boolean>> {
+    return of({ body: true, message: 'Success', status: 200, success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString() });
   }
-  deleteUser(userId: string): Observable<IApiResponse<Boolean>> {
-    return of({ data: true, message: 'Success', status: 200 });
+  deleteUser(userId: string): Observable<IBaseApiResponse<Boolean>> {
+    return of({ body: true, success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString(), message: 'Success' });
     // return this.baseHttpService.delete<Boolean, unknown>(API_ENDPOINTS.users.deleteUser, { userId });
   }
 

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { IOpportunitiesFilterRequest, IOpportunityRecord } from '../../interfaces/opportunities.interface';
 import { Observable } from 'rxjs';
-import { IApiResponse } from '../../interfaces';
+import { IApiPaginatedResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 
 @Injectable({
@@ -11,11 +11,11 @@ import { API_ENDPOINTS } from '../api-endpoints';
 export class OpportunitiesApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
-  getOpportunities(filter: IOpportunitiesFilterRequest): Observable<IApiResponse<IOpportunityRecord[]>> {
-    return this.baseHttpService.get<IOpportunityRecord[], unknown>(API_ENDPOINTS.opportunities.getOpportunities, filter);
+  getOpportunities(filter: IOpportunitiesFilterRequest): Observable<IApiPaginatedResponse<IOpportunityRecord[]>> {
+    return this.baseHttpService.get<IOpportunityRecord[], unknown>(API_ENDPOINTS.opportunities.getOpportunities, filter) as Observable<IApiPaginatedResponse<IOpportunityRecord[]>>;
   }
 
-  getAdminOpportunities(filter: IOpportunitiesFilterRequest): Observable<IApiResponse<IOpportunityRecord[]>> {
-    return this.baseHttpService.get<IOpportunityRecord[], unknown>(API_ENDPOINTS.opportunities.getAdminOpportunities, filter);
+  getAdminOpportunities(filter: IOpportunitiesFilterRequest): Observable<IApiPaginatedResponse<IOpportunityRecord[]>> {
+    return this.baseHttpService.get<IOpportunityRecord[], unknown>(API_ENDPOINTS.opportunities.getAdminOpportunities, filter) as Observable<IApiPaginatedResponse<IOpportunityRecord[]>>;
   }
 }

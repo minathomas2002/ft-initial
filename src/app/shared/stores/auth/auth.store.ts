@@ -8,8 +8,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { type Observable, type Subscription, finalize, tap } from 'rxjs';
-import { IAuthResponse, IAuthData, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
-import { IApiResponse } from '../../interfaces/api-response.interface';
+import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
 
@@ -53,31 +52,30 @@ export const AuthStore = signalStore(
         authApiService.logout();
       },
 
-      login(email: string, password: string): Observable<IAuthResponse> {
+      login(email: string, password: string): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
         return this.handleLoginMethod(authApiService.login(email, password));
       },
 
-      windowsLogin(): Observable<IAuthResponse> {
+      windowsLogin(): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
         return this.handleLoginMethod(authApiService.windowsLogin());
       },
 
-      fakeWindowsLogin(userName: string): Observable<IAuthResponse> {
+      fakeWindowsLogin(userName: string): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
         return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName));
       },
 
-      updateAuthDataInStorage(authResponse: IAuthResponse): void {
-        patchState(store, { user: authResponse.data });
+      updateAuthDataInStorage(authResponse: IBaseApiResponse<IAuthData>): void {
+        patchState(store, { user: authResponse.body });
         localStorage.saveAuthDataToStorage(authResponse);
       },
 
-      handleLoginMethod(login$: Observable<IAuthResponse>): Observable<IAuthResponse> {
+      handleLoginMethod(login$: Observable<IBaseApiResponse<IAuthData>>): Observable<IBaseApiResponse<IAuthData>> {
         return login$.pipe(
-          tap((response: IAuthResponse) => {
-            debugger;
-            if (response.succeeded && response.data) {              
+          tap((response: IBaseApiResponse<IAuthData>) => {
+            if (response.success && response.body) {              
               this.updateAuthDataInStorage(response);
             }
           }),
@@ -87,12 +85,12 @@ export const AuthStore = signalStore(
         );
       },
 
-      register(registerRequest: IRegisterRequest): Observable<IAuthResponse> {
+      register(registerRequest: IRegisterRequest): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
         return authApiService.register(registerRequest);
       },
 
-      resetPassword(request: IResetPasswordRequest): Observable<IAuthResponse> {
+      resetPassword(request: IResetPasswordRequest): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
         return authApiService.resetPassword(request).pipe(
           finalize(() => {
@@ -101,7 +99,7 @@ export const AuthStore = signalStore(
         );
       },
 
-      forgotPassword(email: string): Observable<IApiResponse<void>> {
+      forgotPassword(email: string): Observable<IBaseApiResponse<void>> {
         patchState(store, { loading: true });
         return authApiService.forgotPassword(email).pipe(
           finalize(() => {

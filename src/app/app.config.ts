@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     ...PRIMENG_CONFIG,
     provideHttpClient(
 			withFetch(),
-			withInterceptors([cultureInterceptor, authInterceptor, errorInterceptor]),
+			withInterceptors([authInterceptor, errorInterceptor]),//cultureInterceptor,
 		),
     MessageService,
     {

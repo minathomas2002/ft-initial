@@ -32,7 +32,7 @@ export const UsersStore = signalStore(
         patchState(store, { loading: true });
         return usersApiService.getUsers(filter).pipe(
           tap((res) => {
-            patchState(store, { list: res.data, count: res.data.length });
+            patchState(store, { list: res.body, count: res.body.length });
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage });
@@ -47,7 +47,7 @@ export const UsersStore = signalStore(
         patchState(store, { loading: false });
         return usersApiService.changeUserRole(userId, roleId).pipe(
           tap((res) => {
-            if (!res.data) {
+            if (!res.body) {
               patchState(store, { error: 'Failed to change user role' });
             }
           }),
@@ -64,7 +64,7 @@ export const UsersStore = signalStore(
         patchState(store, { loading: true });
         return usersApiService.deleteUser(userId).pipe(
           tap((res) => {
-            if (!res.data) {
+            if (!res.body) {
               patchState(store, { error: 'Failed to delete user' });
             }
           }),

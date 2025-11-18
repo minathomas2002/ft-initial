@@ -2,8 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IAuthResponse, IRefreshTokenRequest, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
-import { IApiResponse } from '../../interfaces/api-response.interface';
+import { IAuthData, IBaseApiResponse, IRefreshTokenRequest, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -12,25 +11,25 @@ export class AuthApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = API_ENDPOINTS.baseUrl;
 
-  windowsLogin(): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.windowsLogin}`, {});
+  windowsLogin(): Observable<IBaseApiResponse<IAuthData>> {
+    return this.http.post<IBaseApiResponse<IAuthData>>(`${this.baseUrl}/${API_ENDPOINTS.auth.windowsLogin}`, {});
   }
 
-  fakeWindowsLogin(userName: string): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.windowsLogin}`, {
+  fakeWindowsLogin(userName: string): Observable<IBaseApiResponse<IAuthData>> {
+    return this.http.post<IBaseApiResponse<IAuthData>>(`${this.baseUrl}/${API_ENDPOINTS.auth.windowsLogin}`, {
       userName,
     });
   }
 
-  login(email: string, password: string): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.investorLogin}`, {
+  login(email: string, password: string): Observable<IBaseApiResponse<IAuthData>> {
+    return this.http.post<IBaseApiResponse<IAuthData>>(`${this.baseUrl}/${API_ENDPOINTS.auth.investorLogin}`, {
       email,
       password,
     });
   }
 
-  refreshToken(request: IRefreshTokenRequest): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(
+  refreshToken(request: IRefreshTokenRequest): Observable<IBaseApiResponse<IAuthData>> {
+    return this.http.post<IBaseApiResponse<IAuthData>>(
       `${this.baseUrl}/${API_ENDPOINTS.auth.refreshToken}`,
       request
     );
@@ -40,14 +39,14 @@ export class AuthApiService {
     return this.http.post<any>(`${this.baseUrl}/${API_ENDPOINTS.auth.register}`, registerRequest);
   }
 
-  forgotPassword(email: string): Observable<IApiResponse<void>> {
-    return this.http.post<IApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.auth.forgotPassword}`, {
+  forgotPassword(email: string): Observable<IBaseApiResponse<void>> {
+    return this.http.post<IBaseApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.auth.forgotPassword}`, {
       email,
     });
   }
 
-  resetPassword(request: IResetPasswordRequest): Observable<IAuthResponse> {
-    return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.resetPassword}`, request);
+  resetPassword(request: IResetPasswordRequest): Observable<IBaseApiResponse<any>> {
+    return this.http.post<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.resetPassword}`, request);
   }
 
   logout() {}

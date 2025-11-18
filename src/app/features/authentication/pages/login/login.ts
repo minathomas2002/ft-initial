@@ -45,7 +45,7 @@ export class Login implements OnInit {
     if (this.isSecInternal()) {
       this.authStore.windowsLogin().subscribe({
         next: (response) => {
-          if (response.succeeded) {
+          if (response.success) {
             this.router.navigate(['/', ERoutes.dashboard]);
           }
         },
@@ -60,7 +60,7 @@ export class Login implements OnInit {
       const formValue = this.loginForm.value;
       this.authStore.login(formValue.email!, formValue.password!).subscribe({
         next: (response) => {
-          if (response.succeeded) {
+          if (response.success) {
             this.router.navigate(['/', ERoutes.dashboard]);
           }
         },
@@ -73,7 +73,7 @@ export class Login implements OnInit {
   fakeLogin(userName: string) {
     this.authStore.fakeWindowsLogin(userName).subscribe({
       next: (response) => {
-        if (response.succeeded) {
+        if (response.success) {
           this.router.navigate(['/', ERoutes.dashboard]);
         }
       },
