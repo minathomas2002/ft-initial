@@ -8,7 +8,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { type Observable, type Subscription, finalize, tap } from 'rxjs';
-import { IAuthResponse, IAuthData, IRegisterRequest } from '../../interfaces';
+import { IAuthResponse, IAuthData, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
 
@@ -88,6 +88,15 @@ export const AuthStore = signalStore(
       register(registerRequest: IRegisterRequest): Observable<IAuthResponse> {
         patchState(store, { loading: true });
         return authApiService.register(registerRequest);
+      },
+
+      resetPassword(request: IResetPasswordRequest): Observable<IAuthResponse> {
+        patchState(store, { loading: true });
+        return authApiService.resetPassword(request).pipe(
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
       },
 
     };

@@ -57,3 +57,9 @@ export interface IPhoneNumberControl {
   dialCode: string;
   nationalNumber: string;  
 }
+
+export interface IResetPasswordRequest {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}

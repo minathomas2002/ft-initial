@@ -8,17 +8,22 @@ export class ResetPasswordFormService {
 
   resetForm = this.fb.group(
     {
-      password: ['', [Validators.required]],
+      token: ['', [Validators.required]],
+      newPassword: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
     },
     { validators: passwordMatchValidator }
   );
 
-  get password(): FormControl<string | null> {
-    return this.resetForm.get('password') as FormControl<string | null>;
+  get newPassword(): FormControl<string | null> {
+    return this.resetForm.get('newPassword') as FormControl<string | null>;
   }
 
   get confirmPassword(): FormControl<string | null> {
     return this.resetForm.get('confirmPassword') as FormControl<string | null>;
+  }
+
+  get token(): FormControl<string | null> {
+    return this.resetForm.get('token') as FormControl<string | null>;
   }
 }

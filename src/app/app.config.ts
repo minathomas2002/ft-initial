@@ -6,6 +6,7 @@ import { PRIMENG_CONFIG } from './core/configs/primeng-config';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error/error.interceptor';
+import { cultureInterceptor } from './core/interceptors/culture/culture.interceptor';
 import { MessageService } from 'primeng/api';
 import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 const scrollConfig: InMemoryScrollingOptions = {
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     ...PRIMENG_CONFIG,
     provideHttpClient(
 			withFetch(),
-			withInterceptors([authInterceptor, errorInterceptor]),
+			withInterceptors([cultureInterceptor, authInterceptor, errorInterceptor]),
 		),
     MessageService,
     {

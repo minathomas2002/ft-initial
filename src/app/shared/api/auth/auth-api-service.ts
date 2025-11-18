@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IAuthResponse, IRefreshTokenRequest, IRegisterRequest } from '../../interfaces';
+import { IAuthResponse, IRefreshTokenRequest, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +41,9 @@ export class AuthApiService {
 
   forgotPassword(email: string) {}
 
-  resetPassword(resetToken: string, password: string) {}
+  resetPassword(request: IResetPasswordRequest): Observable<IAuthResponse> {
+    return this.http.post<IAuthResponse>(`${this.baseUrl}/${API_ENDPOINTS.auth.resetPassword}`, request);
+  }
 
   logout() {}
 }
