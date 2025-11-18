@@ -34,16 +34,12 @@ export const OpportunitiesStore = signalStore(
         patchState(store, { loading: true });
         return this.getOpportunitiesRequest(filter).pipe(
           tap((res) => {
-            patchState(store, { list: res.data, count: res.data.length });//TODO: change to total count
-          }),
-          catchError((error) => {
-            patchState(store, { error: error.errorMessage });
-            return throwError(() => new Error('error fetching data'));
+            patchState(store, { list: res.body.data, count: res.body.data.length });//TODO: change to total count
           }),
           finalize(() => {
             patchState(store, { loading: false });
           })
-        );
+        )
       },
       getOpportunitiesRequest(filter: IOpportunitiesFilterRequest) {
         if (authStore.isAuthenticated()) {
