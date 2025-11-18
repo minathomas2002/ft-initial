@@ -17,8 +17,8 @@ export const API_ENDPOINTS = {
     getUserTitles: `${Users}/user-titles`,
   },
   opportunities: {
-    getOpportunities: `${Opportunities}`,
-    getAdminOpportunities: `${AdminOpportunities}`    
+    getOpportunities: `${Opportunities}/get-opportunities`,
+    getAdminOpportunities: `${AdminOpportunities}/admin`
   },
   auth: {
     investorLogin: `${Auth}/investor-login`,
