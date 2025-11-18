@@ -8,7 +8,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toaster = inject(ToasterService);
   return next(req).pipe(
     tap((response: any) => {
-      const responseBody = response as IBaseApiResponse<unknown>;
+      const responseBody = (response.body as IBaseApiResponse<unknown>);
       if (response instanceof HttpResponse && responseBody.success === false) {
         toaster.error(
           responseBody.message || 'failed to process ,check your internet connection',
