@@ -7,32 +7,28 @@ import {
   IOpportunityRecord,
 } from '../../interfaces/opportunities.interface';
 import { AuthStore } from '../auth/auth.store';
+import { IInvestorOpportunitiesFilterRequest, IInvestorOpportunity } from '../../interfaces';
 
 const initialState: {
   loading: boolean;
   error: string | null;
   count: number;
-  list: IOpportunityRecord[];
+  list: IInvestorOpportunity[];
 } = {
   loading: false,
   error: null,
   count: 0,
   list: [],
 };
-export const OpportunitiesStore = signalStore(
+export const InvestorOpportunitiesStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed((store) => {
-    return {};
-  }),
   withMethods((store) => {
     const opportunitiesApiService = inject(OpportunitiesApiService);
-    const authStore = inject(AuthStore);
-
     return {
-      getOpportunities(filter: IOpportunitiesFilterRequest) {
+      getInvestorOpportunities(filter: IInvestorOpportunitiesFilterRequest) {
         patchState(store, { loading: true });
-        return this.getOpportunitiesRequest(filter).pipe(
+        return opportunitiesApiService.getInvestorOpportunities(filter).pipe(
           tap((res) => {
             const opportunities = res.body.data || [];
             const totalCount = res.body.pagination?.totalCount ?? 0;
@@ -42,14 +38,7 @@ export const OpportunitiesStore = signalStore(
             patchState(store, { loading: false });
           })
         )
-      },
-      getOpportunitiesRequest(filter: IOpportunitiesFilterRequest) {
-        if (authStore.isAuthenticated()) {
-          return opportunitiesApiService.getAdminOpportunities(filter);
-        } else {
-          return opportunitiesApiService.getOpportunities(filter);
-        }
-      },
+      }
     };
   })
 );

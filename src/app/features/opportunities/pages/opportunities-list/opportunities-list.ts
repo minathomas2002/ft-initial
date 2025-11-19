@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { IOpportunityRecord } from 'src/app/shared/interfaces/opportunities.interface';
-import { OpportunitiesFilterService } from '../../services/opportunities-filter/opportunities-filter-service';
+import { InvestorOpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
 import { OpportunityDetailItem } from 'src/app/shared/components/opportunities/opportunity-detail-item/opportunity-detail-item';
 import { DataCards } from 'src/app/shared/components/layout-components/data-cards/data-cards';
 import { OpportunitiesFilters } from '../../components/opportunities-filter/opportunities-filters';
@@ -14,6 +13,7 @@ import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleto
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 import { DatePipe } from '@angular/common';
+import { IInvestorOpportunity } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -34,13 +34,13 @@ import { DatePipe } from '@angular/common';
 export class OpportunitiesList {
 
   readonly permissionService = inject(PermissionService);
-  filterService = inject(OpportunitiesFilterService);
+  filterService = inject(InvestorOpportunitiesFilterService);
   router = inject(Router);
   authStore = inject(AuthStore);
   route = inject(ActivatedRoute);
-  
+
   // items = signal<number[]>([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
-  isAdminMode = computed(()=> this.authStore.isAuthenticated())
+  isAdminMode = computed(() => this.authStore.isAuthenticated())
   totalRecords = signal<number>(10);
   filter = this.filterService.filter;
   opportunitiesStore = this.filterService.store;
@@ -48,16 +48,16 @@ export class OpportunitiesList {
     this.filterService.applyFilter()
   }
 
-  onViewDetails(opportunity: IOpportunityRecord) {
+  onViewDetails(opportunity: IInvestorOpportunity) {
     this.router.navigate(['list', 1], {
       relativeTo: this.route.parent,
     });
   }
 
-  onApply(opportunity: IOpportunityRecord) {
+  onApply(opportunity: IInvestorOpportunity) {
     if (this.authStore.isAuthenticated()) {
     } else {
-      this.router.navigate(['/',ERoutes.auth ,ERoutes.login])
+      this.router.navigate(['/', ERoutes.auth, ERoutes.login])
     }
   }
 }
