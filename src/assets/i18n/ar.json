@@ -36,7 +36,9 @@
 		"phoneRequired": "رقم الهاتف مطلوب",
 		"invalidEmailFormat": "البريد الإلكتروني غير صالح",
 		"invalidName": "الاسم غير صالح",
+		"invalidFullName": "يرجى إدخال اسم كامل صالح (أحرف فقط، بحد أقصى 100 حرف)",
 		"invalidPhoneFormat": "رقم الهاتف غير صالح",
+		"invalidPhoneNumber": "يرجى إدخال رقم هاتف صالح",
 		"enterYourPassword": "أدخل كلمة المرور",
 		"passwordRequired": "كلمة المرور مطلوبة",
 		"passwordMinLength": "يجب ألا تقل كلمة المرور عن 8 أحرف.",
@@ -83,6 +85,13 @@
 			"passwordMismatch": "كلمتا المرور غير متطابقتين",
 			"buttonLabel": "إعادة تعيين كلمة المرور",
 			"backButtonLabel": "العودة إلى تسجيل الدخول"
+		},
+		"register": {
+			"confirmPassword": "تأكيد كلمة المرور",
+			"enterYourConfirmPassword": "أكد كلمة المرور",
+			"confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
+			"passwordMismatch": "كلمتا المرور غير متطابقتين",
+			"success": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل."
 		}
 	},
 	"dashboard": {

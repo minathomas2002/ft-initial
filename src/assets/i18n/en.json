@@ -35,8 +35,8 @@
     "nameRequired": "Name is required",
     "phoneRequired": "Phone number is required",
     "invalidEmailFormat": "Invalid email format",
-    "invalidName": "Invalid name",
-    "invalidPhoneFormat": "Invalid phone number format",
+    "invalidFullName": "Please enter a valid full name (letters only, max 100 chars)",
+    "invalidPhoneNumber": "Please enter a valid phone number",
     "enterYourPassword": "Enter your password",
     "passwordRequired": "Password is required",
     "passwordMinLength": "Password must be at least 8 characters.",
@@ -83,6 +83,13 @@
       "passwordMismatch": "Passwords do not match",
       "buttonLabel": "Reset password",
       "backButtonLabel": "Back to login"
+    },
+    "register": {
+      "confirmPassword": "Confirm password",
+      "enterYourConfirmPassword": "Confirm your password",
+      "confirmPasswordRequired": "Confirm password is required",
+      "passwordMismatch": "Passwords do not match",
+      "success": "A verification link has been sent to your e-mail. Please verify to complete registration."
     }
   },
   "dashboard": {
