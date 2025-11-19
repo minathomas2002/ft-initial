@@ -26,7 +26,7 @@
         @if (registerFormService.email.touched && registerFormService.email.invalid) {
         <small class="text-red-500">
           {{ registerFormService.email.hasError('required') ? ('auth.emailRequired' | translate) :
-          ('auth.invalidEmailFormat' | translate) }}
+          ('auth.register.invalidEmailFormat' | translate) }}
         </small>
         }
       </div>

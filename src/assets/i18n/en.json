@@ -89,7 +89,9 @@
       "enterYourConfirmPassword": "Confirm your password",
       "confirmPasswordRequired": "Confirm password is required",
       "passwordMismatch": "Passwords do not match",
-      "success": "A verification link has been sent to your e-mail. Please verify to complete registration."
+      "success": "A verification link has been sent to your e-mail. Please verify to complete registration.",
+      "invalidEmailFormat": "Please enter a valid email",
+      "generalError": "Registration failed. Please try again later."
     }
   },
   "dashboard": {

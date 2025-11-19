@@ -61,6 +61,9 @@ export class Register {
             this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
           }
         },
+        error: (error) => {
+          this.toast.error(this.i18nService.translate('auth.register.generalError'));
+        }
       });
     } else {
       this.registerForm.markAllAsTouched();
