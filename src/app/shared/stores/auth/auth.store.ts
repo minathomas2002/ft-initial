@@ -109,13 +109,22 @@ export const AuthStore = signalStore(
         );
       },
 
+      resentVerifyEmail(email: string): Observable<IBaseApiResponse<void>> {
+        patchState(store, { loading: true });
+        return authApiService.resendVerifyEmail(email).pipe(
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
+      },
+
+      
       verifyEmail(token: string): Observable<IBaseApiResponse<void>> {
         patchState(store, { loading: true });
         return authApiService.verifyEmail(token).pipe(
           catchError((error: HttpErrorResponse) => {
             const errors = error.error.errors;
-            const errorMessage = errors['email'] as string[];
-            return throwError(() => new Error(errorMessage[0]));
+            return throwError(() => new Error(errors));
           }),
           finalize(() => {
             console.log('finalize');

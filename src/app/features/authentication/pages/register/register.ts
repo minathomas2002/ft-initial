@@ -26,7 +26,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
     NgxIntlTelInputModule,
     PasswordPolicy,
     BaseLabelComponent,
-    TranslatePipe
+    TranslatePipe,
   ],
   providers: [RegisterFormService],
   templateUrl: './register.html',
@@ -52,18 +52,21 @@ export class Register {
         password: formValue.password!,
         confirmPassword: formValue.password!,
         countryCode: formValue.phone?.dialCode!,
-        phoneNumber: formValue.phone?.nationalNumber?.replace(/\s/g, '') || ''        
-      }       
+        phoneNumber: formValue.phone?.nationalNumber?.replace(/\s/g, '') || '',
+      };
       this.authStore.register(request).subscribe({
         next: (response) => {
           if (response.success) {
-            this.toast.success(this.i18nService.translate('auth.register.success'));            
-            this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+            this.router.navigate(['/', ERoutes.auth, ERoutes.login], {
+              queryParams: { register: 'successful' },
+            });
           }
         },
         error: (error) => {
-          this.toast.error(this.i18nService.translate('auth.register.generalError'));
-        }
+          if (error.statusCode === 500) {
+            this.toast.error(this.i18nService.translate('auth.register.generalError'));
+          }
+        },
       });
     } else {
       this.registerForm.markAllAsTouched();

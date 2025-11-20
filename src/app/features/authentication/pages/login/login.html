@@ -6,48 +6,70 @@
     <!-- TODO: set color -->
     <p class="text-gray-600">{{ 'auth.login.description' | translate }}</p>
   </div>
-  <form id="login" [formGroup]="loginForm" (ngSubmit)="publicLogin()" class="w-full my-10">
-    <div class="flex flex-col gap-3">
-      <!-- Email -->
-      <div class="field">
-        <app-base-label [title]="'auth.login.email' | translate"></app-base-label>
-        <input type="email" pInputText [formControl]="loginFormService.email"
-          [placeholder]="'auth.login.enterYourEmail' | translate" fluid />
-        @if (loginFormService.email.touched && loginFormService.email.invalid) {
-        <small class="text-red-500">
-          {{ loginFormService.email.hasError('required') ? ('auth.login.emailRequired' | translate) :
-          ('auth.login.invalidEmailFormat' | translate) }}
-        </small>
+
+  <div class="mt-5 mb-5">
+    <form id="login" [formGroup]="loginForm" (ngSubmit)="publicLogin()" class="w-full">
+      <div class="flex flex-col gap-3">
+        <!-- Email -->
+        <div class="field">
+          <app-base-label [title]="'auth.login.email' | translate"></app-base-label>
+          <input type="email" pInputText [formControl]="loginFormService.email"
+            [placeholder]="'auth.login.enterYourEmail' | translate" fluid />
+          @if (loginFormService.email.touched && loginFormService.email.invalid) {
+          <small class="text-red-500">
+            {{ loginFormService.email.hasError('required') ? ('auth.login.emailRequired' | translate) :
+            ('auth.login.invalidEmailFormat' | translate) }}
+          </small>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <app-base-label [title]="'auth.login.password' | translate"></app-base-label>
+          <p-password [formControl]="loginFormService.password" [feedback]="false" class="w-full"
+            [placeholder]="'auth.login.enterYourPassword' | translate" inputStyleClass="w-full"></p-password>
+          @if(loginFormService.password.touched && loginFormService.password.invalid) {
+          <small class="text-red-500">
+            {{ loginFormService.password.hasError('required') ? ('auth.login.passwordRequired' | translate) :
+            ('auth.login.invalidPasswordFormat' | translate) }}
+          </small>
+          }
+        </div>
+
+        <div class="flex items-center">
+          <p-button variant="text" [label]="'auth.login.forgotPassword' | translate"
+            routerLink="/auth/forgot-password" />
+        </div>
+
+        <!-- Resend Verification Email Alert -->
+        @if (showResendVerification()) {
+        <app-base-alert color="green" [showClose]="true" (onClose)="onCloseResendAlert()">
+          <div class="text-sm text-gray-700">
+            <p class="mb-2">{{ 'auth.login.resendVerificationMessage' | translate }}</p>
+            <div class="flex justify-center gap-1 items-center">
+              <span>{{ 'auth.login.didntReceiveEmail' | translate }}</span>
+              <p-button link (onClick)="resendVerificationEmail()">{{ 'auth.login.clickToResend' | translate
+                }}</p-button>
+            </div>
+          </div>
+        </app-base-alert>
         }
+
+
+        <!-- Submit -->
+        <p-button [label]="'auth.login.signIn' | translate" fluid [disabled]="loginForm.invalid"
+          type="submit"></p-button>
       </div>
 
-      <!-- Password -->
-      <div class="field">
-        <app-base-label [title]="'auth.login.password' | translate"></app-base-label>
-        <p-password [formControl]="loginFormService.password" [feedback]="false" class="w-full"
-          [placeholder]="'auth.login.enterYourPassword' | translate" inputStyleClass="w-full"></p-password>
-        @if(loginFormService.password.touched && loginFormService.password.invalid) {
-        <small class="text-red-500">
-          {{ loginFormService.password.hasError('required') ? ('auth.login.passwordRequired' | translate) :
-          ('auth.login.invalidPasswordFormat' | translate) }}
-        </small>
-        }
+      <div class="flex justify-center items-center">
+        <p class="text-gray-600">{{ 'auth.login.dontHaveAccount' | translate }}</p>
+        <!-- TODO: set link -->
+        <p-button class="ms-2" variant="text" [label]="'auth.login.signUp' | translate"
+          [routerLink]="['/auth/register']" />
       </div>
+    </form>
+  </div>
 
-      <div class="flex items-center">
-        <p-button variant="text" [label]="'auth.login.forgotPassword' | translate" routerLink="/auth/forgot-password" />
-      </div>
-
-      <!-- Submit -->
-      <p-button [label]="'auth.login.signIn' | translate" fluid [disabled]="loginForm.invalid" type="submit"></p-button>
-    </div>
-    <div class="flex justify-center items-center">
-      <p class="text-gray-600">{{ 'auth.login.dontHaveAccount' | translate }}</p>
-      <!-- TODO: set link -->
-      <p-button class="ms-2" variant="text" [label]="'auth.login.signUp' | translate"
-        [routerLink]="['/auth/register']" />
-    </div>
-  </form>
 </div>
 }@else {
 <!-- fake login form -->

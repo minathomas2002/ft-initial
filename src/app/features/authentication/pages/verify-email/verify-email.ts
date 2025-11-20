@@ -6,6 +6,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { ERoutes } from 'src/app/shared/enums';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 @Component({
   selector: 'app-verify-email',
@@ -23,6 +24,8 @@ export class VerifyEmail implements OnInit {
   router = inject(Router);
   authStore = inject(AuthStore);
   toaster = inject(ToasterService);
+  i18nService = inject(I18nService);
+
   token = signal<string | null>(null);
   verified = signal<boolean>(false);
 
@@ -49,15 +52,14 @@ export class VerifyEmail implements OnInit {
       next: (response) => {
         if (response.success) {
           this.verified.set(true);
-        } else {
+          this.toaster.success(this.i18nService.translate('auth.verifyEmail.success'));
           // On failure, redirect to login
           this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
         }
       },
       error: (error) => {
-        this.toaster.error(error.message);
         this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
-      },
+      }
     });
   }
 

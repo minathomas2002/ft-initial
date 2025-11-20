@@ -45,6 +45,12 @@ export class AuthApiService {
     });
   }
 
+  resendVerifyEmail(email: string): Observable<IBaseApiResponse<void>> {
+    return this.http.post<IBaseApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.auth.resendVerifyEmail}`, {
+      email,
+    });
+  }
+
   resetPassword(request: IResetPasswordRequest): Observable<IBaseApiResponse<any>> {
     return this.http.post<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.resetPassword}`, request);
   }

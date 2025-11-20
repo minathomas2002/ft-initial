@@ -60,7 +60,11 @@
       "forgotPassword": "Forgot Password?",
       "signIn": "Sign In",
       "dontHaveAccount": "Don't have an account?",
-      "signUp": "Sign Up"
+      "signUp": "Sign Up",
+      "resendVerificationMessage": "A verification link has been sent to your e-mail. Please verify to complete registration.",
+      "didntReceiveEmail": "Didn't receive the email?",
+      "clickToResend": "Click to resend",
+      "resendVerificationSuccess": "Verification email has been resent successfully."
     },
     "forgot": {
       "title": "Forgot password?",
@@ -70,7 +74,8 @@
       "emailRequired": "Email is required",
       "invalidEmailFormat": "Invalid email format",
       "buttonLabel": "Reset password",
-      "backButtonLabel": "Back to login"
+      "backButtonLabel": "Back to login",
+      "success": "You will receive a password reset link shortly"
     },
     "reset": {
       "title": "Set new password",
@@ -97,7 +102,8 @@
       "title": "Verification complete",
       "subtitle": "You can access all available investment and qualification opportunities in the BENA portal.",
       "backToLogin": "Back to login",
-      "verifying": "Verifying your email..."
+      "verifying": "Verifying your email...",
+      "success": "Your email has been successfully verified. You can now log in."
     }
   },
   "navigation": {
