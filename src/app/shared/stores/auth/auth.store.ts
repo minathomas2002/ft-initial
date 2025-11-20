@@ -7,7 +7,7 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { type Observable, type Subscription, finalize, tap } from 'rxjs';
+import { type Observable, type Subscription, catchError, finalize, take, throwError, tap } from 'rxjs';
 import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
@@ -103,6 +103,24 @@ export const AuthStore = signalStore(
         patchState(store, { loading: true });
         return authApiService.forgotPassword(email).pipe(
           finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
+      },
+
+      verifyEmail(token: string): Observable<IBaseApiResponse<void>> {
+        patchState(store, { loading: true });
+        return authApiService.verifyEmail(token).pipe(          
+          catchError((error) => {
+            debugger;
+            // Re-throw error so subscriber can handle it
+            // This must come before finalize
+            return throwError(() => error);
+          }),
+          finalize(() => {
+            debugger;
+            // finalize runs after catchError, ensuring it always executes
+            // This ensures loading state is always reset
             patchState(store, { loading: false });
           })
         );

@@ -92,12 +92,13 @@
       "success": "A verification link has been sent to your e-mail. Please verify to complete registration.",
       "invalidEmailFormat": "Please enter a valid email",
       "generalError": "Registration failed. Please try again later."
+    },
+    "verifyEmail": {
+      "title": "Verification complete",
+      "subtitle": "You can access all available investment and qualification opportunities in the BENA portal.",
+      "backToLogin": "Back to login",
+      "verifying": "Verifying your email..."
     }
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "overview": "Overview",
-    "statistics": "Statistics"
   },
   "navigation": {
     "home": "Home",
@@ -107,11 +108,6 @@
     "help": "Help",
     "users": "Users",
     "opportunities": "Opportunities"
-  },
-  "language": {
-    "english": "English",
-    "arabic": "Arabic",
-    "changeLanguage": "Change Language"
   },
   "opportunity": {
     "status": {

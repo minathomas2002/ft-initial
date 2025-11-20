@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
     refreshToken: `${Auth}/refresh-token`,
     register: `${Auth}/register-investor`,
     resetPassword: `${Auth}/reset-password`,
-    forgotPassword: `${Auth}/forgot-password`
+    forgotPassword: `${Auth}/forgot-password`,
+    verifyEmail: `${Auth}/verify-email`
   },
 };

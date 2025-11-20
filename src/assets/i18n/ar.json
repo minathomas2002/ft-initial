@@ -17,12 +17,12 @@
 		"warning": "تحذير",
 		"info": "معلومة"
 	},
-    "footer": {
-    "message": "© 2025 SEC. جميع الحقوق محفوظة.",
-    "terms":"الشروط والأحكام",
-    "privacy":"الخصوصية",
-    "cookie":"ملفات التعريف"
-  },
+	"footer": {
+		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
+		"terms": "الشروط والأحكام",
+		"privacy": "الخصوصية",
+		"cookie": "ملفات التعريف"
+	},
 	"auth": {
 		"email": "البريد الإلكتروني",
 		"password": "كلمة المرور",
@@ -35,9 +35,7 @@
 		"nameRequired": "الاسم مطلوب",
 		"phoneRequired": "رقم الهاتف مطلوب",
 		"invalidEmailFormat": "البريد الإلكتروني غير صالح",
-		"invalidName": "الاسم غير صالح",
 		"invalidFullName": "يرجى إدخال اسم كامل صالح (أحرف فقط، بحد أقصى 100 حرف)",
-		"invalidPhoneFormat": "رقم الهاتف غير صالح",
 		"invalidPhoneNumber": "يرجى إدخال رقم هاتف صالح",
 		"enterYourPassword": "أدخل كلمة المرور",
 		"passwordRequired": "كلمة المرور مطلوبة",
@@ -91,13 +89,16 @@
 			"enterYourConfirmPassword": "أكد كلمة المرور",
 			"confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
 			"passwordMismatch": "كلمتا المرور غير متطابقتين",
-			"success": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل."
+			"success": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل.",
+			"invalidEmailFormat": "يرجى إدخال بريد إلكتروني صالح",
+			"generalError": "فشل التسجيل. يرجى المحاولة مرة أخرى لاحقاً."
+		},
+		"verifyEmail": {
+			"title": "اكتمال التحقق",
+			"subtitle": "يمكنك الآن الوصول إلى جميع فرص الاستثمار والتأهيل المتاحة في بوابة بينا.",
+			"backToLogin": "العودة إلى تسجيل الدخول",
+			"verifying": "جاري التحقق من بريدك الإلكتروني..."
 		}
-	},
-	"dashboard": {
-		"title": "لوحة التحكم",
-		"overview": "نظرة عامة",
-		"statistics": "الإحصائيات"
 	},
 	"navigation": {
 		"home": "الرئيسية",
@@ -107,11 +108,6 @@
 		"help": "مساعدة",
 		"users": "المستخدمين",
 		"opportunities": "الفرص"
-	},
-	"language": {
-		"english": "الإنجليزية",
-		"arabic": "العربية",
-		"changeLanguage": "تغيير اللغة"
 	},
 	"opportunity": {
 		"status": {
@@ -143,4 +139,3 @@
 		}
 	}
 }
-

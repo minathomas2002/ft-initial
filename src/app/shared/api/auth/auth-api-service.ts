@@ -49,5 +49,9 @@ export class AuthApiService {
     return this.http.post<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.resetPassword}`, request);
   }
 
+  verifyEmail(token: string): Observable<IBaseApiResponse<any>> {
+    return this.http.get<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.verifyEmail}?token=${token}`);
+  }
+
   logout() {}
 }

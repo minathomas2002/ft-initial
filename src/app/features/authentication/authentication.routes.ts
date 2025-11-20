@@ -20,6 +20,10 @@ export const AUTHENTICATION_ROUTES: Routes = [
         loadComponent: () => import('./pages/register/register').then((m) => m.Register),
     },
     {
+        path: 'verify-email',
+        loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
+    },
+    {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full',
