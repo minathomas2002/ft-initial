@@ -7,4 +7,5 @@ export * from './select-item.interface';
 export * from './table-header-item.interface';
 export * from './menu.interface';
 export * from './api.interface';
-export * from './investor-opportunities.interface';
+export * from './opportunities.interface';
+export * from './admin-opportunities.interface';

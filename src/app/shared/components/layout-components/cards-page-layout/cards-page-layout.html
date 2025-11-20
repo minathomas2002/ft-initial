@@ -1,10 +1,16 @@
 <div class="cards-page-layout px-[32px] py-[24px]">
   <div class="cards-page-layout--header mb-[24px]">
-    <div class="table-layout--title sm:w-auto">
-      <ng-content select="page-title">
-        <h4 class="{{pageTitleClass()}}"> {{pageTitle()}} </h4>
-        <h4 class="{{pageSubTitleClass()}}"> {{pageSubTitle()}} </h4>
-      </ng-content>
+    <div class="table-layout--title sm:w-auto flex items-center justify-between">
+      <div class="flex-1">
+        <ng-content select="page-title">
+          <h4 class="{{pageTitleClass()}}"> {{pageTitle()}} </h4>
+          <h4 class="{{pageSubTitleClass()}}"> {{pageSubTitle()}} </h4>
+        </ng-content>
+      </div>
+      <div class="flex-shrink-0">
+        <ng-content select="page-actions">
+        </ng-content>
+      </div>
     </div>
   </div>
   <div class="cards-page-layout--filters mb-[48px]">

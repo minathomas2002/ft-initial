@@ -63,7 +63,8 @@ export const routes: Routes = [
         path: '',
         redirectTo: `${ERoutes.opportunities}`,
         pathMatch: 'full',
-      }
+      },
+
     ],
-  }      
+  },
 ];

@@ -4,7 +4,6 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
-import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-opportunities-filters',
@@ -14,7 +13,6 @@ import { TranslatePipe } from 'src/app/shared/pipes';
     FormsModule,
     InputTextModule,
     SelectModule,
-    TranslatePipe,
   ],
   templateUrl: './opportunities-filters.html',
   styleUrl: './opportunities-filters.scss',

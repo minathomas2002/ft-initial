@@ -1,17 +1,17 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { AbstractServiceFilter } from 'src/app/shared/classes/abstract-service-filter';
-import { IOpportunitiesFilter, IOpportunitiesFilterRequest } from 'src/app/shared/interfaces/opportunities.interface';
-import { InvestorOpportunitiesStore } from 'src/app/shared/stores/opportunities/investor-opportunities.store';
 import { take } from 'rxjs';
-import { InvestorOpportunityFilter } from '../../classes/investor-opportunity-filter';
-import { IInvestorOpportunitiesFilterRequest } from 'src/app/shared/interfaces';
+import { OpportunitiesFilter } from '../../classes/investor-opportunity-filter';
+import { IOpportunitiesFilterRequest } from 'src/app/shared/interfaces';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+
 
 @Injectable({
   providedIn: 'root',
 })
-export class InvestorOpportunitiesFilterService extends AbstractServiceFilter<IInvestorOpportunitiesFilterRequest> {
-  store = inject(InvestorOpportunitiesStore);
-  filterClass = new InvestorOpportunityFilter();
+export class OpportunitiesFilterService extends AbstractServiceFilter<IOpportunitiesFilterRequest> {
+  store = inject(OpportunitiesStore);
+  filterClass = new OpportunitiesFilter();
   filter = signal(this.filterClass.filter);
 
   showClearAll = computed(() => {
@@ -20,7 +20,7 @@ export class InvestorOpportunitiesFilterService extends AbstractServiceFilter<II
 
   performFilter$() {
     this.resetPagination();
-    return this.store.getInvestorOpportunities(this.filter());
+    return this.store.getOpportunities(this.filter());
   }
 
   clearAllFilters() {
@@ -28,7 +28,7 @@ export class InvestorOpportunitiesFilterService extends AbstractServiceFilter<II
     this.applyFilter();
   }
 
-  get FilterRequest(): IInvestorOpportunitiesFilterRequest {
+  get FilterRequest(): IOpportunitiesFilterRequest {
     return this.filter();
   }
 
@@ -40,6 +40,6 @@ export class InvestorOpportunitiesFilterService extends AbstractServiceFilter<II
 
   applyFilterWithPaging() {
     this.updateFilterSignal();
-    this.store.getInvestorOpportunities(this.filter()).pipe(take(1)).subscribe();
+    this.store.getOpportunities(this.filter()).pipe(take(1)).subscribe();
   }
 }
