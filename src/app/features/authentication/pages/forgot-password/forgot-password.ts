@@ -40,7 +40,7 @@ export class ForgotPassword {
   onSubmit() {
     if (this.forgotPasswordForm.valid) {
       const email = this.forgotPasswordForm.value.email!;
-      
+
       this.authStore.forgotPassword(email).subscribe({
         next: (response) => {
           if (response.statusCode === 200 || response.statusCode === 201) {
@@ -60,12 +60,14 @@ export class ForgotPassword {
 
   resendEmail() {
     const email = this.forgotPasswordForm.value.email!;
-    this.authStore.resentVerifyEmail(email).subscribe({
-      next: (response) => {
-        if (response.statusCode === 200 || response.statusCode === 201) {
-          this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
-        }
-      }
-    });
+    if (email) {
+      this.authStore.resentVerifyEmail(email).subscribe({
+        next: (response) => {
+          if (response.statusCode === 200 || response.statusCode === 201) {
+            this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+          }
+        },
+      });
+    }
   }
 }

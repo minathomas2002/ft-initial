@@ -56,7 +56,7 @@
         }
 
         <!-- Submit -->
-        <p-button [label]="'auth.login.signIn' | translate" fluid [disabled]="loginForm.invalid"
+        <p-button [label]="'auth.login.signIn' | translate" fluid [disabled]="loginForm.invalid || authStore.loading()"
           type="submit"></p-button>
       </div>
 

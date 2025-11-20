@@ -47,10 +47,11 @@ export class Login implements OnInit {
   loginForm = this.loginFormService.loginForm;
 
   ngOnInit(): void {
-    // Check if register=successful query param exists
-    const registerSuccessful = this.route.snapshot.queryParams['register'];
-    if (registerSuccessful === 'successful') {
+    // Check if register=email query param exists
+    const registerEmail = this.route.snapshot.queryParams['register'];
+    if (!!registerEmail) {
       this.showResendVerification.set(true);
+      this.loginFormService.email.setValue(registerEmail);
     }
 
     //if domain is sec domain

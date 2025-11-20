@@ -69,7 +69,7 @@
 
 
       <!-- Submit -->
-      <p-button [label]="'auth.getStarted' | translate" fluid [disabled]="registerForm.invalid"
+      <p-button [label]="'auth.getStarted' | translate" fluid [disabled]="registerForm.invalid || authStore.loading()"
         type="submit"></p-button>
     </div>
   </form>

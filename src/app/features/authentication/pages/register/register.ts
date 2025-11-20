@@ -58,7 +58,7 @@ export class Register {
         next: (response) => {
           if (response.success) {
             this.router.navigate(['/', ERoutes.auth, ERoutes.login], {
-              queryParams: { register: 'successful' },
+              queryParams: { register: this.registerForm.value.email! },
             });
           }
         },
