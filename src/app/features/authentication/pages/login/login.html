@@ -8,12 +8,12 @@
   </div>
 
   <div class="mt-5 mb-5">
-    <form id="login" [formGroup]="loginForm" (ngSubmit)="publicLogin()" class="w-full">
+    <form autocomplete="off" id="login" [formGroup]="loginForm" (ngSubmit)="publicLogin()" class="w-full">
       <div class="flex flex-col gap-3">
         <!-- Email -->
         <div class="field">
           <app-base-label [title]="'auth.login.email' | translate"></app-base-label>
-          <input type="email" pInputText [formControl]="loginFormService.email"
+          <input autocomplete="new-field" type="email" pInputText [formControl]="loginFormService.email"
             [placeholder]="'auth.login.enterYourEmail' | translate" fluid />
           @if (loginFormService.email.touched && loginFormService.email.invalid) {
           <small class="text-red-500">
@@ -26,7 +26,7 @@
         <!-- Password -->
         <div class="field">
           <app-base-label [title]="'auth.login.password' | translate"></app-base-label>
-          <p-password [formControl]="loginFormService.password" [feedback]="false" class="w-full"
+          <p-password autocomplete="new-password" [formControl]="loginFormService.password" [feedback]="false" class="w-full"
             [placeholder]="'auth.login.enterYourPassword' | translate" inputStyleClass="w-full"></p-password>
           @if(loginFormService.password.touched && loginFormService.password.invalid) {
           <small class="text-red-500">
@@ -55,13 +55,12 @@
         </app-base-alert>
         }
 
-
         <!-- Submit -->
         <p-button [label]="'auth.login.signIn' | translate" fluid [disabled]="loginForm.invalid"
           type="submit"></p-button>
       </div>
 
-      <div class="flex justify-center items-center">
+      <div class="flex justify-center items-center mt-2">
         <p class="text-gray-600">{{ 'auth.login.dontHaveAccount' | translate }}</p>
         <!-- TODO: set link -->
         <p-button class="ms-2" variant="text" [label]="'auth.login.signUp' | translate"
@@ -69,7 +68,6 @@
       </div>
     </form>
   </div>
-
 </div>
 }@else {
 <!-- fake login form -->
