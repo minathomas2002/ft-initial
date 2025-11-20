@@ -2,7 +2,7 @@ export interface IBaseApiResponse<T> {
   body: T,
   success: boolean;
   statusCode: number;
-  message: string;
+  message: string[];
   errors: string[] | null;
   timestamp: string;
 }

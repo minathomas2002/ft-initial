@@ -12,14 +12,14 @@ export class UsersApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
   getUserTitles(): Observable<IBaseApiResponse<ISelectItem[]>> {
-    return of({ 
-      body: [{ id: '1', name: 'Mr' }, { id: '2', name: 'Mrs' }, { id: '3', name: 'Ms' }, { id: '4', name: 'Dr' }, { id: '5', name: 'Prof' }], 
-      success: true, 
-      statusCode: 200, 
-      message: 'Success', 
-      errors: null, 
-      timestamp: new Date().toISOString() 
-    });    
+    return of({
+      body: [{ id: '1', name: 'Mr' }, { id: '2', name: 'Mrs' }, { id: '3', name: 'Ms' }, { id: '4', name: 'Dr' }, { id: '5', name: 'Prof' }],
+      success: true,
+      statusCode: 200,
+      message: ['Success'],
+      errors: null,
+      timestamp: new Date().toISOString()
+    });
   }
 
   getUsers(filter: IUsersFilterRequest): Observable<IBaseApiResponse<IUserRecord[]>> {
@@ -64,14 +64,14 @@ export class UsersApiService {
         actions: [EAdminUserActions.ChangeRole, EAdminUserActions.Delete],
       },
     ];
-    return of({ body: users, success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString(), message: 'Success' });
+    return of({ body: users, message: ['Success'], success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString() });
   }
 
   changeUserRole(userId: string, roleId: EUserRole): Observable<IBaseApiResponse<Boolean>> {
-    return of({ body: true, message: 'Success', status: 200, success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString() });
+    return of({ body: true, message: ['Success'], status: 200, success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString() });
   }
   deleteUser(userId: string): Observable<IBaseApiResponse<Boolean>> {
-    return of({ body: true, success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString(), message: 'Success' });
+    return of({ body: true, message: ['Success'], success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString() });
     // return this.baseHttpService.delete<Boolean, unknown>(API_ENDPOINTS.users.deleteUser, { userId });
   }
 

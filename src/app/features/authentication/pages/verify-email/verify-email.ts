@@ -5,6 +5,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { ERoutes } from 'src/app/shared/enums';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-verify-email',
@@ -21,7 +22,7 @@ export class VerifyEmail implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   authStore = inject(AuthStore);
-  
+  toaster = inject(ToasterService);
   token = signal<string | null>(null);
   verified = signal<boolean>(false);
 
@@ -29,7 +30,7 @@ export class VerifyEmail implements OnInit {
     // Read token from URL query params
     this.route.queryParams.subscribe((params) => {
       const tokenValue = params['token'] || null;
-      
+
       if (!tokenValue) {
         // If no token, redirect to login
         this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
@@ -42,12 +43,10 @@ export class VerifyEmail implements OnInit {
   }
 
   verifyEmail(token: string) {
-    debugger;
     this.verified.set(false);
 
     this.authStore.verifyEmail(token).subscribe({
       next: (response) => {
-        debugger
         if (response.success) {
           this.verified.set(true);
         } else {
@@ -56,9 +55,7 @@ export class VerifyEmail implements OnInit {
         }
       },
       error: (error) => {
-        debugger
-        // On error, redirect to login
-        console.error('Email verification error:', error);
+        this.toaster.error(error.message);
         this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
       },
     });

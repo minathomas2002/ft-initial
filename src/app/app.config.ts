@@ -10,22 +10,24 @@ import { cultureInterceptor } from './core/interceptors/culture/culture.intercep
 import { MessageService } from 'primeng/api';
 import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 const scrollConfig: InMemoryScrollingOptions = {
-	scrollPositionRestoration: "disabled",
+  scrollPositionRestoration: "disabled",
 };
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    		provideRouter(
-			routes,
-			withInMemoryScrolling(scrollConfig),
-			withComponentInputBinding(),
-		),
+    provideRouter(
+      routes,
+      withInMemoryScrolling(scrollConfig),
+      withComponentInputBinding(),
+    ),
     ...PRIMENG_CONFIG,
     provideHttpClient(
-			withFetch(),
-			withInterceptors([authInterceptor, errorInterceptor]),//cultureInterceptor,
-		),
+      withFetch(),
+      withInterceptors(
+        [authInterceptor, errorInterceptor]
+      ),
+    ),
     MessageService,
     {
       provide: DATE_PIPE_DEFAULT_OPTIONS,

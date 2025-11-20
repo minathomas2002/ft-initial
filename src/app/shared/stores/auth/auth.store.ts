@@ -11,6 +11,7 @@ import { type Observable, type Subscription, catchError, finalize, take, throwEr
 import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const initialState: {
   user: IAuthData | null;
@@ -75,7 +76,7 @@ export const AuthStore = signalStore(
       handleLoginMethod(login$: Observable<IBaseApiResponse<IAuthData>>): Observable<IBaseApiResponse<IAuthData>> {
         return login$.pipe(
           tap((response: IBaseApiResponse<IAuthData>) => {
-            if (response.success && response.body) {              
+            if (response.success && response.body) {
               this.updateAuthDataInStorage(response);
             }
           }),
@@ -110,17 +111,14 @@ export const AuthStore = signalStore(
 
       verifyEmail(token: string): Observable<IBaseApiResponse<void>> {
         patchState(store, { loading: true });
-        return authApiService.verifyEmail(token).pipe(          
-          catchError((error) => {
-            debugger;
-            // Re-throw error so subscriber can handle it
-            // This must come before finalize
-            return throwError(() => error);
+        return authApiService.verifyEmail(token).pipe(
+          catchError((error: HttpErrorResponse) => {
+            const errors = error.error.errors;
+            const errorMessage = errors['email'] as string[];
+            return throwError(() => new Error(errorMessage[0]));
           }),
           finalize(() => {
-            debugger;
-            // finalize runs after catchError, ensuring it always executes
-            // This ensures loading state is always reset
+            console.log('finalize');
             patchState(store, { loading: false });
           })
         );

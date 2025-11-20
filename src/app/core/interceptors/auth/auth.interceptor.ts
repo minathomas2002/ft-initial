@@ -30,7 +30,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(clonedRequest).pipe(
     catchError((error: HttpErrorResponse) => {
-      debugger
       // Don't try to refresh token if the request is to the refresh token endpoint itself
       if (error.status === 401 && authData && !isRefreshTokenEndpoint(req.url)) {
         // Token expired, try to refresh
@@ -53,7 +52,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             return throwError(() => error);
           }),
           catchError((refreshError) => {
-            debugger;
             // Refresh failed, clear storage and return error
             if (typeof window !== 'undefined' && window.localStorage) {
               localStorage.cleanAuthData()
