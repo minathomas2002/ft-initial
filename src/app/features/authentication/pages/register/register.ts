@@ -7,11 +7,13 @@ import { Router, RouterModule } from '@angular/router';
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { PasswordPolicy } from '../../components/password-policy/password-policy';
 import { RegisterFormService } from '../../services/register-form/register-form';
-import { I18nService } from 'src/app/shared/services/i18n';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { IRegisterRequest } from 'src/app/shared/interfaces';
 import { ERoutes } from 'src/app/shared/enums';
+import { TranslatePipe } from 'src/app/shared/pipes';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +25,8 @@ import { ERoutes } from 'src/app/shared/enums';
     RouterModule,
     NgxIntlTelInputModule,
     PasswordPolicy,
-    BaseLabelComponent
+    BaseLabelComponent,
+    TranslatePipe
   ],
   providers: [RegisterFormService],
   templateUrl: './register.html',
@@ -32,10 +35,10 @@ import { ERoutes } from 'src/app/shared/enums';
 export class Register {
   registerFormService = inject(RegisterFormService);
   registerForm = this.registerFormService.registerForm;
-  i18nService = inject(I18nService);
   authStore = inject(AuthStore);
   router = inject(Router);
-
+  toast = inject(ToasterService);
+  i18nService = inject(I18nService);
   //enum
   searchCountryField = SearchCountryField;
   countryISO = CountryISO;
@@ -49,14 +52,18 @@ export class Register {
         password: formValue.password!,
         confirmPassword: formValue.password!,
         countryCode: formValue.phone?.dialCode!,
-        phoneNumber: formValue.phone?.nationalNumber!        
+        phoneNumber: formValue.phone?.nationalNumber?.replace(/\s/g, '') || ''        
       }       
       this.authStore.register(request).subscribe({
         next: (response) => {
           if (response.success) {
+            this.toast.success(this.i18nService.translate('auth.register.success'));            
             this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
           }
         },
+        error: (error) => {
+          this.toast.error(this.i18nService.translate('auth.register.generalError'));
+        }
       });
     } else {
       this.registerForm.markAllAsTouched();

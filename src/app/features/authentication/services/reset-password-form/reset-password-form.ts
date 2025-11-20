@@ -1,5 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { passwordMatchValidator } from '../../validators/password-match-validator';
 
 @Injectable()
@@ -9,14 +15,14 @@ export class ResetPasswordFormService {
   resetForm = this.fb.group(
     {
       token: ['', [Validators.required]],
-      newPassword: ['', [Validators.required]],
+      password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
     },
     { validators: passwordMatchValidator }
   );
 
-  get newPassword(): FormControl<string | null> {
-    return this.resetForm.get('newPassword') as FormControl<string | null>;
+  get password(): FormControl<string | null> {
+    return this.resetForm.get('password') as FormControl<string | null>;
   }
 
   get confirmPassword(): FormControl<string | null> {

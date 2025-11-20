@@ -1,47 +1,47 @@
 <div class="pt-10 px-10">
   <div class="flex flex-col gap-3">
-    <h1 class="text-3xl font-semibold text-gray-900">{{ i18nService.translate('auth.signUp') }}</h1>    
-    <p class="text-gray-600">{{ i18nService.translate('auth.welcomeMessage') }}</p>
+    <h1 class="text-3xl font-semibold text-gray-900">{{ 'auth.signUp' | translate }}</h1>
+    <p class="text-gray-600">{{ 'auth.welcomeMessage' | translate }}</p>
   </div>
   <form [formGroup]="registerForm" id="registerForm" (ngSubmit)="onSubmit()" class="w-full my-10">
     <div class="flex flex-col gap-3">
       <!-- Name -->
       <div class="field">
-        <app-base-label [title]="i18nService.translate('auth.name')"></app-base-label>
+        <app-base-label [title]="'auth.name' | translate"></app-base-label>
         <input type="text" pInputText [formControl]="registerFormService.fullName"
-          [placeholder]="i18nService.translate('auth.enterYourName')" fluid />
+          [placeholder]="'auth.enterYourName' | translate" fluid />
         @if (registerFormService.fullName.touched && registerFormService.fullName.invalid) {
         <small class="text-red-500">
-          {{ registerFormService.fullName.hasError('required') ? i18nService.translate('auth.nameRequired') :
-          i18nService.translate('auth.invalidName') }}
+          {{ registerFormService.fullName.hasError('required') ? ('auth.nameRequired' | translate) :
+          ('auth.invalidFullName' | translate) }}
         </small>
         }
       </div>
 
       <!-- Email -->
       <div class="field">
-        <app-base-label [title]="i18nService.translate('auth.email')"></app-base-label>
+        <app-base-label [title]="'auth.email' | translate"></app-base-label>
         <input type="email" pInputText [formControl]="registerFormService.email"
-          [placeholder]="i18nService.translate('auth.enterYourEmail')" fluid />
+          [placeholder]="'auth.enterYourEmail' | translate" fluid />
         @if (registerFormService.email.touched && registerFormService.email.invalid) {
         <small class="text-red-500">
-          {{ registerFormService.email.hasError('required') ? i18nService.translate('auth.emailRequired') :
-          i18nService.translate('auth.invalidEmailFormat') }}
+          {{ registerFormService.email.hasError('required') ? ('auth.emailRequired' | translate) :
+          ('auth.register.invalidEmailFormat' | translate) }}
         </small>
         }
       </div>
 
       <!-- Phone -->
       <div class="field">
-        <app-base-label [title]="i18nService.translate('auth.phone')"></app-base-label>
+        <app-base-label [title]="'auth.phone' | translate"></app-base-label>
         <ngx-intl-tel-input class="w-full" [cssClass]="'p-inputtext w-full'" [preferredCountries]="['sa']"
           [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
           [separateDialCode]="true" [searchCountryField]="[searchCountryField.DialCode, searchCountryField.Name]"
           [maxLength]="15" [formControl]="registerFormService.phone"></ngx-intl-tel-input>
         @if (registerFormService.phone.touched && registerFormService.phone.invalid) {
         <small class="text-red-500">
-          {{ registerFormService.phone.hasError('required') ? i18nService.translate('auth.phoneRequired') :
-          i18nService.translate('auth.invalidPhoneFormat') }}
+          {{ registerFormService.phone.hasError('required') ? ('auth.phoneRequired' | translate) :
+          ('auth.invalidPhoneNumber' | translate) }}
         </small>
         }
       </div>
@@ -51,15 +51,31 @@
         <app-password-policy [passwordFormControl]="registerFormService.password"></app-password-policy>
       </div>
 
+      <!-- Confirm Password -->
+      <div class="field">
+        <app-base-label [title]="'auth.register.confirmPassword' | translate"></app-base-label>
+        <p-password [formControl]="registerFormService.confirmPassword" [feedback]="false" class="w-full"
+          [placeholder]="'auth.register.enterYourConfirmPassword' | translate" inputStyleClass="w-full"></p-password>
+        @if (registerFormService.confirmPassword.touched && registerFormService.confirmPassword.invalid) {
+        <small class="text-red-500">
+          {{
+          registerFormService.confirmPassword.hasError('required')
+          ? ('auth.register.confirmPasswordRequired' | translate)
+          : ('auth.register.passwordMismatch' | translate)
+          }}
+        </small>
+        }
+      </div>
+
+
       <!-- Submit -->
-      <p-button [label]="i18nService.translate('auth.getStarted')" fluid [disabled]="registerForm.invalid"
+      <p-button [label]="'auth.getStarted' | translate" fluid [disabled]="registerForm.invalid"
         type="submit"></p-button>
     </div>
   </form>
   <div class="flex justify-center items-center">
-    <p class="text-gray-600">{{ i18nService.translate('auth.alreadyHaveAccount') }}</p>
+    <p class="text-gray-600">{{ 'auth.alreadyHaveAccount' | translate }}</p>
     <!-- TODO: set link -->
-    <p-button class="ms-2" variant="text" [label]="i18nService.translate('auth.signIn')"
-      [routerLink]="['/auth/login']" />
+    <p-button class="ms-2" variant="text" [label]="'auth.signIn' | translate" [routerLink]="['/auth/login']" />
   </div>
 </div>

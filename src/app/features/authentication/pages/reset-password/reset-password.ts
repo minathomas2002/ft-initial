@@ -51,7 +51,11 @@ export class ResetPassword implements OnInit {
 
   onSubmit() {
     if (this.resetPasswordForm.valid) {
-      var formValue = this.resetPasswordForm.value as IResetPasswordRequest;
+      var formValue: IResetPasswordRequest = {
+        token: this.resetPasswordFormService.token.value ?? '',
+        newPassword: this.resetPasswordFormService.password.value ?? '',
+        confirmPassword: this.resetPasswordFormService.confirmPassword.value ?? '',
+      };
 
       this.authStore.resetPassword(formValue).subscribe({
         next: (response) => {
