@@ -1,14 +1,24 @@
 <app-cards-page-layout
   [pageTitle]="'opportunity.list.title' | translate"
   [pageSubTitle]="'opportunity.list.subtitle' | translate"
-  pageTitleClass="text-[48px] font-bold"
-  pageSubTitleClass="text-xl text-gray-600"
+  pageTitleClass="text-[24px] font-semibold"
+  pageSubTitleClass="text-md text-gray-600"
 >
+  <ng-container ngProjectAs="page-actions">
+    <p-button
+      [label]="'Add opportunity'"
+      severity="primary"
+      class="flex-1"
+      fluid
+      icon="icon-plus"
+      (onClick)="onAddOpportunity()"
+    />
+  </ng-container>
   <ng-container ngProjectAs="page-filters">
     <!-- <app-opportunities-filters [isAdminMode]="isAdminMode()" /> -->
   </ng-container>
   <ng-container ngProjectAs="page-body">
-    <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
+    <!-- <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
       <app-data-cards
         [items]="opportunitiesStore.list()"
         [totalRecords]="opportunitiesStore.count()"
@@ -60,6 +70,8 @@
           </app-opportunity-card>
         </ng-template>
       </app-data-cards>
-    </app-cards-skeleton>
+    </app-cards-skeleton> -->
   </ng-container>
 </app-cards-page-layout>
+
+<app-create-opportunity-dialog [(visible)]="createOpportunityDialogVisible" />

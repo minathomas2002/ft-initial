@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { OpportunitiesFilterService } from './opportunities-filter-service';
+import { InvestorOpportunitiesFilterService } from './investor-opportunities-filter-service';
 
 describe('OpportunitiesFilterService', () => {
-  let service: OpportunitiesFilterService;
+  let service: InvestorOpportunitiesFilterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(OpportunitiesFilterService);
+    service = TestBed.inject(InvestorOpportunitiesFilterService);
   });
 
   it('should be created', () => {

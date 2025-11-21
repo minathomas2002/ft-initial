@@ -9,4 +9,5 @@ export enum ERoutes {
   forgotPassword = 'forgot-password',
   resetPassword = 'reset-password',
   visitors = 'visitors',
+  admin = 'admin',
 }

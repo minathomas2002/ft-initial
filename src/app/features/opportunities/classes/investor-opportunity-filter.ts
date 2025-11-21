@@ -2,16 +2,13 @@ import { Filter } from 'src/app/shared/classes/filter';
 import { Pagination } from 'src/app/shared/classes/pagination';
 import { Sorting } from 'src/app/shared/classes/sorting';
 import { ESortingOrder } from 'src/app/shared/enums';
-import {
-  IOpportunitiesFilter,
-  TOpportunitySortingKeys,
-} from 'src/app/shared/interfaces/opportunities.interface';
+import { IOpportunitiesFilterRequest, TOpportunitiesSortingKeys } from 'src/app/shared/interfaces';
 
-export class OpportunityFilter extends Filter<IOpportunitiesFilter, TOpportunitySortingKeys> {
+export class OpportunitiesFilter extends Filter<IOpportunitiesFilterRequest, TOpportunitiesSortingKeys> {
   constructor() {
     super();
     const pagination = new Pagination(9);
-    const sorting = new Sorting<TOpportunitySortingKeys>();
+    const sorting = new Sorting<TOpportunitiesSortingKeys>();
     //sorting.sortField = '';
     sorting.sortOrder = ESortingOrder.asc;
     this.filter = {

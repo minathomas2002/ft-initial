@@ -15,7 +15,7 @@ const initialState: {
   count: 0,
   list: [],
 };
-export const OpportunitiesStore = signalStore(
+export const AdminOpportunitiesStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods((store) => {

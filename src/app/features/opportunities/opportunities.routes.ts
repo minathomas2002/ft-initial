@@ -1,18 +1,23 @@
 import { Routes } from '@angular/router';
+import { adminOpportunitiesGuard } from 'src/app/core/guards/opportunities/admin-opportunities.guard';
 
 export const OPPORTUNITIES_ROUTES: Routes = [
   {
     path: '',
-    redirectTo: `list`,
+    loadComponent: () =>
+      import('./pages/opportunities-list/opportunities-list').then((m) => m.OpportunitiesList),
+
     pathMatch: 'full'
   },
   {
-    path: 'list',
+    path: 'admin',
     loadComponent: () =>
-      import('./pages/opportunities-list/opportunities-list').then((m) => m.OpportunitiesList),
+      import('./pages/admin-opportunities-view/admin-opportunities-view').then((m) => m.AdminOpportunitiesView),
+    canActivate: [adminOpportunitiesGuard],
+    pathMatch: 'full',
   },
   {
-    path: 'list/:id',
+    path: ':id',
     loadComponent: () =>
       import('./pages/opportunity-details/opportunity-details').then((m) => m.OpportunityDetails),
   },
