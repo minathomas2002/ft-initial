@@ -386,6 +386,14 @@ const DIALOG_COMPONENT = {
     },
   },
 };
+
+const STEPPER_COMPONENT = {
+  stepper: {
+    steppanel: {
+      background: "{gray.50}",
+    }
+  },
+};
 const CHIP_COMPONENT = {
   chip: {
     paddingX: "9px",
@@ -497,6 +505,7 @@ const MY_PRESET = definePreset(Lara, {
     ...BUTTON_COMPONENT,
     ...TABLE_HEADER_CHECKBOX_COMPONENT,
     ...DIALOG_COMPONENT,
+    ...STEPPER_COMPONENT,
   },
   semantic: {
     gray: {
