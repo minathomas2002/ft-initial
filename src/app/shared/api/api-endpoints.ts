@@ -26,7 +26,7 @@ export const API_ENDPOINTS = {
   },
   auth: {
     investorLogin: `${Auth}/investor-login`,
-    windowsLogin: `${Auth}/login`,
+    windowsLogin: `${Auth}/login`,//TODO: to be updated
     fakeWindowsLogin: `${Auth}/login`,
     refreshToken: `${Auth}/refresh-token`,
     register: `${Auth}/register-investor`,
