@@ -77,6 +77,12 @@ export class Login implements OnInit {
             this.router.navigate(['/', ERoutes.dashboard]);
           }
         },
+        error: (error) => {
+          if (error.statusCode === 500) {
+            this.toast.error(this.i18nService.translate('auth.login.generalError'));
+          }
+        },
+
       });
     } else {
       this.loginForm.markAllAsTouched();

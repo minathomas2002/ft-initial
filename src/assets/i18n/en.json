@@ -39,7 +39,7 @@
     "invalidPhoneNumber": "Please enter a valid phone number",
     "enterYourPassword": "Enter your password",
     "passwordRequired": "Password is required",
-    "passwordMinLength": "Password must be at least 8 characters.",
+    "passwordLength": "Password must be between 8 and 20 characters.",
     "passwordUppercase": "Password must contain at least one uppercase letter.",
     "passwordLowercase": "Password must contain at least one lowercase letter.",
     "passwordNumber": "Password must contain at least one number.",
@@ -67,7 +67,8 @@
       "resendVerificationMessage": "A verification link has been sent to your e-mail. Please verify to complete registration.",
       "didntReceiveEmail": "Didn't receive the email?",
       "clickToResend": "Click to resend",
-      "resendVerificationSuccess": "A new verification link has been sent to your email."
+      "resendVerificationSuccess": "A new verification link has been sent to your email.",
+      "generalError": "Login failed. Please try again later."
     },
     "forgot": {
       "title": "Forgot password?",

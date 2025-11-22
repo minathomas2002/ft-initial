@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 export class LoginFormService {
   private fb = inject(FormBuilder);
   loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
     password: ['', [Validators.required]],
     rememberMe: [false],
   });

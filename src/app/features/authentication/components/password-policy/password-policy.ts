@@ -55,9 +55,12 @@ export function passwordPolicyValidator(): ValidatorFn {
       return errors;
     }
 
-    // Min 8 characters
+    // Min 8 and Max 20 characters
     if (value.length < 8) {
       errors['minLength'] = { requiredLength: 8, actualLength: value.length };
+    }
+    if (value.length > 20) {
+      errors['maxLength'] = { requiredLength: 20, actualLength: value.length };
     }
 
     // At least 1 uppercase letter
