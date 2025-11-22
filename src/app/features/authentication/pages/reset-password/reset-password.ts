@@ -11,6 +11,8 @@ import { ResetPasswordFormService } from '../../services/reset-password-form/res
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoutes } from 'src/app/shared/enums';
 import { IResetPasswordRequest } from 'src/app/shared/interfaces';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -34,7 +36,9 @@ export class ResetPassword implements OnInit {
   authStore = inject(AuthStore);
   route = inject(ActivatedRoute);
   router = inject(Router);
-
+  toast = inject(ToasterService);
+  i18nService = inject(I18nService);
+  
   ngOnInit() {
     // Read token from URL query params and set it in the form
     this.route.queryParams.subscribe((params) => {
@@ -62,6 +66,7 @@ export class ResetPassword implements OnInit {
           if (response.success) {
             // Redirect to login on success
             this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+            this.toast.success(this.i18nService.translate('auth.reset.success'));
           }
         },
         error: (error) => {

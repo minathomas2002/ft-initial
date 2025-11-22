@@ -40,6 +40,9 @@
     "enterYourPassword": "Enter your password",
     "passwordRequired": "Password is required",
     "passwordMinLength": "Password must be at least 8 characters.",
+    "passwordUppercase": "Password must contain at least one uppercase letter.",
+    "passwordLowercase": "Password must contain at least one lowercase letter.",
+    "passwordNumber": "Password must contain at least one number.",
     "passwordSpecialChar": "Password must contain at least one special character.",
     "signIn": "Sign In",
     "signUp": "Sign Up",
@@ -87,7 +90,8 @@
       "confirmPasswordRequired": "Confirm password is required",
       "passwordMismatch": "Passwords do not match",
       "buttonLabel": "Reset password",
-      "backButtonLabel": "Back to login"
+      "backButtonLabel": "Back to login",
+      "success": "Your password has been successfully reset. Please log in."
     },
     "register": {
       "confirmPassword": "Confirm password",

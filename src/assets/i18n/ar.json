@@ -40,6 +40,9 @@
 		"enterYourPassword": "أدخل كلمة المرور",
 		"passwordRequired": "كلمة المرور مطلوبة",
 		"passwordMinLength": "يجب ألا تقل كلمة المرور عن 8 أحرف.",
+		"passwordUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.",
+		"passwordLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل.",
+		"passwordNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.",
 		"passwordSpecialChar": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل.",
 		"signIn": "تسجيل الدخول",
 		"signUp": "إنشاء حساب",
@@ -74,7 +77,8 @@
 			"emailRequired": "البريد الإلكتروني مطلوب",
 			"invalidEmailFormat": "البريد الإلكتروني غير صالح",
 			"buttonLabel": "إعادة تعيين كلمة المرور",
-			"backButtonLabel": "العودة إلى تسجيل الدخول"
+			"backButtonLabel": "العودة إلى تسجيل الدخول",
+			"success": "سوف تتلقى رابط إعادة تعيين كلمة المرور قريباً"
 		},
 		"reset": {
 			"title": "تعيين كلمة مرور جديدة",
@@ -86,7 +90,8 @@
 			"confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
 			"passwordMismatch": "كلمتا المرور غير متطابقتين",
 			"buttonLabel": "إعادة تعيين كلمة المرور",
-			"backButtonLabel": "العودة إلى تسجيل الدخول"
+			"backButtonLabel": "العودة إلى تسجيل الدخول",
+			"success": "تم إعادة تعيين كلمة المرور بنجاح. يرجى تسجيل الدخول."
 		},
 		"register": {
 			"confirmPassword": "تأكيد كلمة المرور",

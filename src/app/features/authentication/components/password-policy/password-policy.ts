@@ -55,10 +55,27 @@ export function passwordPolicyValidator(): ValidatorFn {
       return errors;
     }
 
+    // Min 8 characters
     if (value.length < 8) {
       errors['minLength'] = { requiredLength: 8, actualLength: value.length };
     }
 
+    // At least 1 uppercase letter
+    if (!/[A-Z]/.test(value)) {
+      errors['uppercase'] = true;
+    }
+
+    // At least 1 lowercase letter
+    if (!/[a-z]/.test(value)) {
+      errors['lowercase'] = true;
+    }
+
+    // At least 1 number
+    if (!/[0-9]/.test(value)) {
+      errors['number'] = true;
+    }
+
+    // At least 1 special character
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
       errors['specialChar'] = true;
     }
