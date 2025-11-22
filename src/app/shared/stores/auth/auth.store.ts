@@ -88,7 +88,11 @@ export const AuthStore = signalStore(
 
       register(registerRequest: IRegisterRequest): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
-        return authApiService.register(registerRequest);
+        return authApiService.register(registerRequest).pipe(
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
       },
 
       resetPassword(request: IResetPasswordRequest): Observable<IBaseApiResponse<IAuthData>> {

@@ -64,7 +64,7 @@
       "resendVerificationMessage": "A verification link has been sent to your e-mail. Please verify to complete registration.",
       "didntReceiveEmail": "Didn't receive the email?",
       "clickToResend": "Click to resend",
-      "resendVerificationSuccess": "Verification email has been resent successfully."
+      "resendVerificationSuccess": "A new verification link has been sent to your email."
     },
     "forgot": {
       "title": "Forgot password?",

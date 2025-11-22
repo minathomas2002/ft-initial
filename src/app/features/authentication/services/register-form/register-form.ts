@@ -9,7 +9,7 @@ export class RegisterFormService {
   private fb = inject(FormBuilder);
   registerForm = this.fb.group({
     fullName: ['', [Validators.required, Validators.maxLength(100), onlyTextValidator()]],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
     password: ['', [Validators.required]],
     confirmPassword: ['', [Validators.required]],
     phone: this.fb.control<IPhoneNumberControl | null>(null, Validators.required)
