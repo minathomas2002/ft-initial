@@ -17,7 +17,6 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },

@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, contentChildren, ContentChildren, input, model, output, QueryList, signal } from '@angular/core';
+import { Component, computed, contentChildren, input, model, output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Dialog, DialogPassThrough } from 'primeng/dialog';
 import { StepperModule } from 'primeng/stepper';
 import { StepContentDirective } from '../../../directives/step-content.directive';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { WizardStepStateComponent } from '../../../components/utility-components/wizard-step-state/wizard-step-state.component';
+
 
 
 @Component({
   selector: 'app-base-wizard-dialog',
-  imports: [Dialog, StepperModule, ButtonModule, CommonModule, ScrollPanelModule],
+  imports: [Dialog, StepperModule, ButtonModule, CommonModule, ScrollPanelModule, WizardStepStateComponent],
   templateUrl: './base-wizard-dialog.html',
   styleUrl: './base-wizard-dialog.scss',
 })
@@ -21,6 +23,12 @@ export class BaseWizardDialog {
   isNextStepDisabled = input<boolean>(false);
   onClose = output<void>();
   onShow = output<void>();
+  onNextStep = output<void>();
+  onPreviousStep = output<void>();
+  onSaveAsDraft = output<void>();
+  isLoading = input<boolean>(false);
+  isProcessing = input<boolean>(false);
+  wizardTitle = input<string>('Create Opportunity');
   pt: DialogPassThrough = {
     header: {
       class: '!ps-0 !pt-0 !pb-0',
@@ -29,18 +37,23 @@ export class BaseWizardDialog {
       class: '!ps-0 h-full !pb-0',
     }
   }
-  activeStep = signal<number>(1);
+  activeStep = model.required<number>();
   steps = input.required<{
     title: string;
     description: string;
     isValid: boolean;
+    hasStarted?: boolean;
+    hasErrors?: boolean;
   }[]>();
 
   stepContents = contentChildren<StepContentDirective>(StepContentDirective);
   previousStep = () => {
-    this.activeStep.set(this.activeStep() - 1);
+    this.onPreviousStep.emit();
   }
   nextStep = () => {
-    this.activeStep.set(this.activeStep() + 1);
+    this.onNextStep.emit();
+  }
+  saveAsDraft = () => {
+    this.onSaveAsDraft.emit();
   }
 }

@@ -1,0 +1,20 @@
+@if(fieldTree()().invalid() && fieldTree()().touched()){
+<p-message
+  severity="error"
+  size="small"
+>
+  <ng-template #container>
+    <ul>
+      @for (error of fieldTree()().errors(); track error; let index = $index) {
+      <li>
+        @if(fieldTree()().errors().length > 1){
+        - {{error.message}}
+        } @else {
+        {{ error.message }}
+        }
+      </li>
+      }
+    </ul>
+  </ng-template>
+</p-message>
+}

@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withFetch(),
       withInterceptors(
-        [authInterceptor, errorInterceptor]
+        [authInterceptor, errorInterceptor, cultureInterceptor]
       ),
     ),
     MessageService,

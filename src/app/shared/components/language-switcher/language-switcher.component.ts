@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { I18nService, SupportedLanguage } from '../../services/i18n/i18n.service';
 import { SelectModule } from 'primeng/select';
@@ -7,7 +7,7 @@ import { SelectModule } from 'primeng/select';
 @Component({
 	selector: 'app-language-switcher',
 	standalone: true,
-	imports: [CommonModule, FormsModule, SelectModule],
+	imports: [FormsModule, SelectModule],
 	templateUrl: './language-switcher.component.html',
 	styleUrl: './language-switcher.component.scss',
 })

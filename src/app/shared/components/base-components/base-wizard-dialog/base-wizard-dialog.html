@@ -8,12 +8,17 @@
   [pt]="pt"
 >
   <ng-template #header>
-    <div class="inline-flex items-center w-[440px] bg-gray-50 ps-5 pt-6 border-e-1 border-gray-200">
-      <img
-        src="assets/images/long-logo.svg"
-        alt="logo"
-        class="w-[156px]"
-      >
+    <div class="flex items-center">
+      <div class="inline-flex items-center w-[440px] bg-gray-50 ps-5 pt-6 border-e-1 border-gray-200">
+        <img
+          src="assets/images/long-logo.svg"
+          alt="logo"
+          class="w-[156px]"
+        >
+      </div>
+      <div class="header ps-8">
+        <h3 class="text-2xl font-semibold">{{wizardTitle()}}</h3>
+      </div>
     </div>
   </ng-template>
   <div class="flex h-full">
@@ -21,7 +26,6 @@
       <div class="flex flex-col h-full bg-gray-50">
         <p-stepper
           [(value)]="activeStep"
-          [linear]="true"
           class="bg-gray-50 basis-[10rem]"
         >
           @for (step of steps(); track step.title; let i = $index) {
@@ -39,34 +43,15 @@
                   class="bg-transparent border-0 inline-flex flex-col gap-2"
                   (click)="activateCallback()"
                 >
-                  <div class="flex items-center gap-4">
-                    <span class="p-step-number flex items-center justify-center">
-                      @if(step.isValid && activeStep() !== i + 1){
-                      <i class="icon-check-circle text-primary-600"></i>
-                      }@else {
-                      <i
-                        class="rounded-full w-[10px] h-[10px]"
-                        [ngClass]="{'
-                          bg-white': activeStep() === i + 1,
-                          'bg-gray-400': activeStep() !== i + 1,
-                        }"
-                      ></i>
-                      }
-                    </span>
-                    <div class="flex flex-col items-start">
-                      <h3
-                        class="text-md font-semibold"
-                        [ngClass]="{'text-primary-600': activeStep() === i + 1}"
-                      >{{step.title}}</h3>
-                      <h4
-                        class="text-sm"
-                        [ngClass]="{'text-primary-400': activeStep() === i + 1}"
-                      >
-                        {{step.description}}
-                      </h4>
-                    </div>
-                  </div>
-
+                  <app-wizard-step-state
+                    [title]="step.title"
+                    [description]="step.description"
+                    [isValid]="step.isValid"
+                    [hasStarted]="step.hasStarted ?? false"
+                    [hasErrors]="step.hasErrors ?? false"
+                    [activeStep]="activeStep()"
+                    [stepNumber]="i + 1"
+                  />
                 </button>
               </ng-template>
             </p-step>
@@ -107,6 +92,9 @@
             icon="icon-save"
             label="Save a draft"
             severity="secondary"
+            (click)="saveAsDraft()"
+            [disabled]="isProcessing()"
+            [loading]="isProcessing()"
           />
         </div>
         <div class="flex gap-4">
@@ -115,6 +103,7 @@
             (click)="previousStep()"
             icon="icon-arrow-left"
             label="Back"
+            [disabled]="isLoading()"
           />
           }
           @if (!isFinalStep()) {
@@ -122,7 +111,8 @@
             (click)="nextStep()"
             icon="icon-arrow-right"
             label="Next"
-            [disabled]="isNextStepDisabled()"
+            [disabled]="isNextStepDisabled() || isLoading()"
+            [loading]="isLoading()"
           />
           }
           @if (isFinalStep()) {
@@ -133,43 +123,3 @@
     </div>
   </div>
 </p-dialog>
-
-<!-- <p-step
-  [value]="1"
-  class="flex flex-row flex-auto gap-2"
->
-  <ng-template
-    #content
-    let-activateCallback="activateCallback"
-    let-value="value"
-  >
-    <button
-      class="bg-transparent border-0 inline-flex flex-col gap-2"
-      (click)="activateCallback()"
-    >
-      <div class="flex items-center gap-4">
-        <span class="
-                                                                                  rounded-full border-2 w-[32px] h-[32px]
-                                                                                  flex items-center justify-center p-[1px]
-                                                                                  border-primary-700">
-          <span class="bg-primary-700 rounded-full text-white flex items-center justify-center w-[24px] h-[24px]">
-            <span class="w-[5px] h-[5px] bg-white rounded-full"></span>
-          </span>
-        </span>
-        <div class="flex flex-col items-start">
-          <h3
-            class="text-md font-semibold"
-            [ngClass]="{'text-primary-600': activeStep() === 1}"
-          >Opportunity Information</h3>
-          <h4
-            class="text-sm"
-            [ngClass]="{'text-primary-400': activeStep() === 1}"
-          >
-            Enter Opportunity details
-          </h4>
-        </div>
-      </div>
-
-    </button>
-  </ng-template>
-</p-step> -->

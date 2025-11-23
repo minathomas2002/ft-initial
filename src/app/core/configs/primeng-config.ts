@@ -202,6 +202,7 @@ const DATEPICKER_COMPONENT = {
     },
     panel: {
       padding: "0.5rem",
+      maxWidth: "300px",
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
   },
@@ -490,7 +491,15 @@ const FILE_UPLOAD_COMPONENT = {
   fileupload: {
     colorScheme: {
       light: {
-        headerBackground: "transparent",
+        header: {
+          background: "transparent",
+          borderWidth: "0",
+          paddingButton: "0",
+        },
+        content: {
+          padding: "0 1.25rem 1.25rem 1.25rem",
+          gap: "0",
+        }
       },
     },
     headerBorderWidth: "0",
@@ -506,6 +515,8 @@ const MY_PRESET = definePreset(Lara, {
     ...TABLE_HEADER_CHECKBOX_COMPONENT,
     ...DIALOG_COMPONENT,
     ...STEPPER_COMPONENT,
+    ...DATEPICKER_COMPONENT,
+    ...FILE_UPLOAD_COMPONENT
   },
   semantic: {
     gray: {

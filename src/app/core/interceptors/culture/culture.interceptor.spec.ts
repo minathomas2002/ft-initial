@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpRequest, HttpHandler } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpResponse } from '@angular/common/http';
 import { cultureInterceptor } from './culture.interceptor';
 import { I18nService } from '../../../shared/services/i18n/i18n.service';
 import { of } from 'rxjs';
@@ -15,7 +15,7 @@ describe('CultureInterceptor', () => {
     });
 
     mockHandler = jasmine.createSpyObj('HttpHandler', ['handle']);
-    mockHandler.handle.and.returnValue(of({}));
+    mockHandler.handle.and.returnValue(of(new HttpResponse({ body: {} })));
 
     TestBed.configureTestingModule({
       providers: [
@@ -32,7 +32,7 @@ describe('CultureInterceptor', () => {
 
   it('should add Accept-Language header with current language', () => {
     const request = new HttpRequest('GET', '/api/test');
-    
+
     interceptor(request, (req) => {
       expect(req.headers.get('Accept-Language')).toBe('en-US');
       return mockHandler.handle(req);

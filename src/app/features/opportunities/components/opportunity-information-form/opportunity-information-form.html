@@ -1,0 +1,143 @@
+<div class="px-8 flex flex-col gap-8 pb-10">
+  <!-- Basic Information -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4">Basic Information</h3>
+    <div class="flex flex-col gap-4">
+      <!-- Title -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Opportunity Title'">
+        </app-base-label>
+        <input
+          type="text"
+          pInputText
+          placeholder="Enter opportunity title"
+          [field]="opportunityInformationForm.title"
+          [appPrimeInvalid]="opportunityInformationForm.title"
+        />
+        <app-form-input-error-messages [fieldTree]="opportunityInformationForm.title" />
+      </div>
+      <!-- Short Description -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Short Description'" />
+        <textarea
+          pTextarea
+          [rows]="4"
+          placeholder="Enter short description"
+          [field]="opportunityInformationForm.shortDescription"
+        >
+        </textarea>
+      </div>
+
+      <!-- Opportunity Type -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Opportunity Type'" />
+        <p-select
+          [field]="opportunityInformationForm.opportunityType"
+          [options]="opportunityTypes()"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Select"
+          class="md:w-[50%]"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Forecasted SEC Demand (2024–2030) -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4">Forecasted SEC Demand (2024–2030)</h3>
+    <div class="flex flex-col gap-4">
+      <!-- Min Quantity -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div class="flex flex-col">
+          <app-base-label [title]="'Spend (SAR)'" />
+          <input
+            type="number"
+            pInputText
+            placeholder="Enter spend (SAR)"
+            [field]="opportunityInformationForm.spendSAR"
+          />
+        </div>
+        <div class="flex flex-col">
+          <app-base-label [title]="'Quantity (Units)'" />
+          <div class="flex gap-2 items-center">
+            <input
+              type="number"
+              pInputText
+              placeholder="Enter min quantity"
+              [field]="opportunityInformationForm.minQuantity"
+            />
+            <span class="text-gray-700 text-xl font-semibold"> - </span>
+            <input
+              type="number"
+              pInputText
+              placeholder="Enter max quantity"
+              [field]="opportunityInformationForm.maxQuantity"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suppliers Base -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4">Supplier Base</h3>
+    <div class="flex flex-col gap-4">
+      <!-- Min Quantity -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div class="flex flex-col">
+          <app-base-label [title]="'Local Suppliers'" />
+          <input
+            type="text"
+            pInputText
+            placeholder="Enter Local Suppliers number"
+            [field]="opportunityInformationForm.localSuppliers"
+          />
+        </div>
+        <div class="flex flex-col">
+          <app-base-label [title]="'Global Suppliers'" />
+          <input
+            type="text"
+            pInputText
+            placeholder="Enter Global Suppliers number"
+            [field]="opportunityInformationForm.globalSuppliers"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opportunity Dates -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4">Opportunity Dates</h3>
+    <div class="flex flex-col gap-4">
+      <!-- Date Range -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Date Range'" />
+        <p-datepicker
+          [field]="opportunityInformationForm.dateRange"
+          [showIcon]="true"
+          [showTime]="false"
+          [selectionMode]="'range'"
+          placeholder="Select date range"
+          [dateFormat]="'dd M yy'"
+          class="w-full md:w-[50%]"
+          fluid
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Opportunity Image -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4">Opportunity Image</h3>
+    <div class="flex flex-col gap-4">
+      <!-- Image -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Image'" />
+        <app-fileupload [acceptedFileTypes]="'.jpg, .jpeg, .png'" />
+      </div>
+    </div>
+  </div>
+</div>
