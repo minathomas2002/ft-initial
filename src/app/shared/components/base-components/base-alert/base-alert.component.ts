@@ -1,11 +1,11 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, computed, input, output } from "@angular/core";
 import type { TColors } from "../../../interfaces";
 
 @Component({
 	selector: "app-base-alert",
 	standalone: true,
-	imports: [CommonModule],
+	imports: [],
 	templateUrl: "./base-alert.component.html",
 	styleUrls: ["./base-alert.component.scss"],
 })
