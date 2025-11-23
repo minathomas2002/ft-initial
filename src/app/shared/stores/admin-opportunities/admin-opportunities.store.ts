@@ -3,17 +3,27 @@ import { inject } from '@angular/core';
 import { finalize, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
 import { IOpportunitiesFilterRequest, IOpportunity } from '../../interfaces/opportunities.interface';
+import { ISelectItem } from '../../interfaces';
 
 const initialState: {
   loading: boolean;
   error: string | null;
   count: number;
   list: IOpportunity[];
+  opportunityTypes: ISelectItem[];
 } = {
   loading: false,
   error: null,
   count: 0,
   list: [],
+  opportunityTypes: [{
+    id: '1',
+    name: 'Service',
+  },
+  {
+    id: '2',
+    name: 'Product',
+  }],
 };
 export const AdminOpportunitiesStore = signalStore(
   { providedIn: 'root' },
