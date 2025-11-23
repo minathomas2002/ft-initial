@@ -1,0 +1,90 @@
+<p-fileupload
+  [maxFileSize]="maxFileSize()"
+  [accept]="acceptedFileTypes()"
+  [customUpload]="true"
+  [auto]="false"
+  (onSelect)="onSelectedFiles($event)"
+  #fileupload
+>
+  <!-- Header Slot -->
+  <ng-template
+    #header
+    let-files
+    let-chooseCallback="chooseCallback"
+    let-clearCallback="clearCallback"
+    let-uploadCallback="uploadCallback"
+  >
+    <div class="flex flex-wrap justify-center items-center flex-1 gap-4">
+      <div class="flex gap-2">
+        <p-button
+          (onClick)="choose($event, chooseCallback)"
+          icon="icon-cloud-upload"
+          [rounded]="true"
+          [outlined]="true"
+        />
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Content Slot -->
+  <ng-template
+    #content
+    let-files
+    let-uploadedFiles="uploadedFiles"
+    let-removeFileCallback="removeFileCallback"
+    let-removeUploadedFileCallback="removeUploadedFileCallback"
+  >
+    <div class="flex flex-col">
+      @if(files?.length > 0){
+      <div>
+        <h5>Files</h5>
+        <div class="flex flex-wrap gap-4">
+          @for(file of files; track file.name; let i = $index){
+          <div class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full">
+            <div>
+              @if(file.type && file.type.startsWith('image/')){
+              <img
+                role="presentation"
+                [alt]="file.name"
+                [src]="file.objectURL"
+                width="50"
+              />
+              }@else{
+              <span
+                class="pi pi-file"
+                style="font-size: 2em;"
+              ></span>
+              }
+            </div>
+            <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden">
+              {{ file.name }}
+            </span>
+            <p-button
+              icon="icon-x-close"
+              (onClick)="removeUploadedFile(i)"
+              [outlined]="true"
+              [rounded]="true"
+              severity="danger"
+            />
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </ng-template>
+
+  <ng-template #file></ng-template>
+  <!-- Empty Slot -->
+  <ng-template #empty>
+    <div class="flex items-center justify-center flex-col">
+      <p class="text-sm">
+        <span
+          class="text-primary-600 cursor-pointer hover:text-red-700"
+          (click)="chooseFiles()"
+        >Click to upload</span> or drag and drop
+      </p>
+      <p class="text-sm">{{ placeholder() }}</p>
+    </div>
+  </ng-template>
+</p-fileupload>
