@@ -64,10 +64,13 @@
 			"signIn": "تسجيل الدخول",
 			"dontHaveAccount": "ليس لديك حساب؟",
 			"signUp": "إنشاء حساب",
-			"resendVerificationMessage": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل.",
+			"resendVerificationSuccess": "تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني."
+		},
+		"verification": {
 			"didntReceiveEmail": "لم تستلم البريد الإلكتروني؟",
-			"clickToResend": "انقر لإعادة الإرسال",
-			"resendVerificationSuccess": "تم إعادة إرسال بريد التحقق بنجاح."
+			"title": "التحقق",
+			"subtitle": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل.",
+			"clickToResend": "انقر لإعادة الإرسال"
 		},
 		"forgot": {
 			"title": "نسيت كلمة المرور؟",

@@ -57,8 +57,8 @@ export class Register {
       this.authStore.register(request).subscribe({
         next: (response) => {
           if (response.success) {
-            this.router.navigate(['/', ERoutes.auth, ERoutes.login], {
-              queryParams: { register: this.registerForm.value.email! },
+            this.router.navigate(['/', ERoutes.auth, ERoutes.verification], {
+              queryParams: { email: this.registerForm.value.email! },
             });
           }
         },

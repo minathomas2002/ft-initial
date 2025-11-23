@@ -5,6 +5,7 @@ export enum ERoutes {
   opportunities = 'opportunities',
   auth = 'auth',
   login = 'login',
+  verification = 'verification',
   signup = 'signup',
   forgotPassword = 'forgot-password',
   resetPassword = 'reset-password',

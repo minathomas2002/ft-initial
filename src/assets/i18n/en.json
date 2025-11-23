@@ -64,11 +64,14 @@
       "signIn": "Sign In",
       "dontHaveAccount": "Don't have an account?",
       "signUp": "Sign Up",
-      "resendVerificationMessage": "A verification link has been sent to your e-mail. Please verify to complete registration.",
-      "didntReceiveEmail": "Didn't receive the email?",
-      "clickToResend": "Click to resend",
       "resendVerificationSuccess": "A new verification link has been sent to your email.",
       "generalError": "Login failed. Please try again later."
+    },
+    "verification": {
+      "didntReceiveEmail": "Didn't receive the email?",
+      "title": "Verification",
+      "subtitle": "A verification link has been sent to your e-mail. Please verify to complete registration.",
+      "clickToResend": "Click to resend"
     },
     "forgot": {
       "title": "Forgot password?",

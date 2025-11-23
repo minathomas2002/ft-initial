@@ -6,7 +6,6 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
-import { BaseAlertComponent } from 'src/app/shared/components/base-components/base-alert/base-alert.component';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { LoginFormService } from '../../services/login-form/login-form';
 import { environment } from 'src/environments/environment';
@@ -25,7 +24,6 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
     CheckboxModule,
     RouterModule,
     BaseLabelComponent,
-    BaseAlertComponent,
     TranslatePipe,
   ],
   providers: [LoginFormService],
@@ -47,13 +45,6 @@ export class Login implements OnInit {
   loginForm = this.loginFormService.loginForm;
 
   ngOnInit(): void {
-    // Check if register=email query param exists
-    const registerEmail = this.route.snapshot.queryParams['register'];
-    if (!!registerEmail) {
-      this.showResendVerification.set(true);
-      this.loginFormService.email.setValue(registerEmail);
-    }
-
     //if domain is sec domain
     if (this.isSecInternal()) {
       this.authStore.windowsLogin().subscribe({
@@ -63,8 +54,8 @@ export class Login implements OnInit {
           }
         },
       });
-    }else if(!environment.production && this.route.snapshot.queryParamMap.get('dev')) {
-      this.isFakeDev.set(true)
+    } else if (!environment.production && this.route.snapshot.queryParamMap.get('dev')) {
+      this.isFakeDev.set(true);
     }
   }
 
@@ -82,7 +73,6 @@ export class Login implements OnInit {
             this.toast.error(this.i18nService.translate('auth.login.generalError'));
           }
         },
-
       });
     } else {
       this.loginForm.markAllAsTouched();
@@ -99,33 +89,9 @@ export class Login implements OnInit {
     });
   }
 
-  resendVerificationEmail() {
-    const email = this.loginFormService.email.value;
-    if (!email || !this.loginFormService.email.valid) {
-      this.loginFormService.email.markAsTouched();
-      return;
-    }
-
-    this.authStore.resentVerifyEmail(email).subscribe({
-      next: (response) => {
-        if (response.statusCode === 200 || response.statusCode === 201) {
-          // Show success message
-          this.toast.success(this.i18nService.translate('auth.login.resendVerificationSuccess'));
-          this.router.navigate(['/', ERoutes.auth, ERoutes.login], {
-            replaceUrl: true
-          });
-        }
-      },
-      error: (error) => {
-        console.error('Resend verification email error:', error);
-      },
-    });
-  }
-
   onCloseResendAlert() {
-    this.showResendVerification.set(false);
     this.router.navigate(['/', ERoutes.auth, ERoutes.login], {
-      replaceUrl: true
+      replaceUrl: true,
     });
   }
 }
