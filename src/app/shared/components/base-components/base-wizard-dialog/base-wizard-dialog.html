@@ -93,6 +93,8 @@
             label="Save a draft"
             severity="secondary"
             (click)="saveAsDraft()"
+            [disabled]="isProcessing()"
+            [loading]="isProcessing()"
           />
         </div>
         <div class="flex gap-4">
@@ -101,6 +103,7 @@
             (click)="previousStep()"
             icon="icon-arrow-left"
             label="Back"
+            [disabled]="isLoading()"
           />
           }
           @if (!isFinalStep()) {
@@ -108,7 +111,8 @@
             (click)="nextStep()"
             icon="icon-arrow-right"
             label="Next"
-            [disabled]="isNextStepDisabled()"
+            [disabled]="isNextStepDisabled() || isLoading()"
+            [loading]="isLoading()"
           />
           }
           @if (isFinalStep()) {
@@ -119,43 +123,3 @@
     </div>
   </div>
 </p-dialog>
-
-<!-- <p-step
-  [value]="1"
-  class="flex flex-row flex-auto gap-2"
->
-  <ng-template
-    #content
-    let-activateCallback="activateCallback"
-    let-value="value"
-  >
-    <button
-      class="bg-transparent border-0 inline-flex flex-col gap-2"
-      (click)="activateCallback()"
-    >
-      <div class="flex items-center gap-4">
-        <span class="
-                                                                                  rounded-full border-2 w-[32px] h-[32px]
-                                                                                  flex items-center justify-center p-[1px]
-                                                                                  border-primary-700">
-          <span class="bg-primary-700 rounded-full text-white flex items-center justify-center w-[24px] h-[24px]">
-            <span class="w-[5px] h-[5px] bg-white rounded-full"></span>
-          </span>
-        </span>
-        <div class="flex flex-col items-start">
-          <h3
-            class="text-md font-semibold"
-            [ngClass]="{'text-primary-600': activeStep() === 1}"
-          >Opportunity Information</h3>
-          <h4
-            class="text-sm"
-            [ngClass]="{'text-primary-400': activeStep() === 1}"
-          >
-            Enter Opportunity details
-          </h4>
-        </div>
-      </div>
-
-    </button>
-  </ng-template>
-</p-step> -->

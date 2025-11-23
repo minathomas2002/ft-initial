@@ -6,6 +6,8 @@
   (onNextStep)="nextStep()"
   (onPreviousStep)="previousStep()"
   (onSaveAsDraft)="saveAsDraft()"
+  [isLoading]="adminOpportunitiesStore.isLoading()"
+  [isProcessing]="adminOpportunitiesStore.isProcessing()"
 >
   <ng-template [appStepContent]="1">
     <app-opportunity-information-form></app-opportunity-information-form>

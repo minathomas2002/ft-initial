@@ -1,6 +1,6 @@
 import { OpportunityInformationForm } from './../../components/opportunity-information-form/opportunity-information-form';
 import { ISelectItem } from '../../../../shared/interfaces/select-item.interface';
-import { Injectable, signal, } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { disabled, form, min, minLength, required } from '@angular/forms/signals'
 import { ICreateOpportunity, IOpportunityInformationFrom, IOpportunityLocalizationFrom } from 'src/app/shared/interfaces';
 
@@ -16,7 +16,7 @@ export interface IBasicInformation {
 export class OpportunityFormService {
   private OpportunityInformationFormInitialState: IOpportunityInformationFrom = {
     id: null,
-    opportunityTitle: '',
+    title: '',
     opportunityType: null,
     shortDescription: '',
     opportunityCategory: '',
@@ -28,7 +28,7 @@ export class OpportunityFormService {
     dateRange: [],
     image: null,
   }
-  OpportunityLocalizationFormInitialState: IOpportunityLocalizationFrom = {
+  private OpportunityLocalizationFormInitialState: IOpportunityLocalizationFrom = {
     designEngineerings: [],
     sourcings: [],
     manufacturings: [],
@@ -36,20 +36,30 @@ export class OpportunityFormService {
     afterSalesServices: [],
   }
 
-  opportunityInformation = signal<IOpportunityInformationFrom>(this.OpportunityInformationFormInitialState);
-  opportunityLocalization = signal<IOpportunityLocalizationFrom>(this.OpportunityLocalizationFormInitialState);
+  private opportunityInformation = signal<IOpportunityInformationFrom>(this.OpportunityInformationFormInitialState);
+  private opportunityLocalization = signal<IOpportunityLocalizationFrom>(this.OpportunityLocalizationFormInitialState);
 
+  //Public forms that can be accessed directly
   opportunityInformationForm = form(this.opportunityInformation, (schemaPath) => {
-    required(schemaPath.opportunityTitle, { message: 'opportunity title is required' }),
-      minLength(schemaPath.opportunityTitle, 3, { message: 'opportunity title must be at least 3 characters long' }),
-      min(schemaPath.opportunityTitle, 10, { message: 'opportunity title must be at least 10 characters long' })
+    required(schemaPath.title, { message: 'opportunity title is required' }),
+      minLength(schemaPath.title, 3, { message: 'opportunity title must be at least 3 characters long' }),
+      min(schemaPath.title, 10, { message: 'opportunity title must be at least 10 characters long' })
   });
   opportunityLocalizationForm = form(this.opportunityLocalization);
 
-  opportunitySignal = signal<ICreateOpportunity>({
-    opportunityInformationFrom: this.opportunityInformation(),
-    opportunityLocalizationForm: this.opportunityLocalization(),
+
+  isFormValid = computed(() => this.opportunityInformationForm().valid() && this.opportunityLocalizationForm().valid());
+  formValue = computed(() => {
+    return {
+      ...this.opportunityInformationForm().value(),
+      ...this.opportunityLocalizationForm().value(),
+    }
   });
 
-  opportunityForm = form(this.opportunitySignal);
+  resetForm() {
+    this.opportunityInformationForm().reset();
+    this.opportunityLocalizationForm().reset();
+    this.opportunityInformation.set(this.OpportunityInformationFormInitialState);
+    this.opportunityLocalization.set(this.OpportunityLocalizationFormInitialState);
+  }
 }

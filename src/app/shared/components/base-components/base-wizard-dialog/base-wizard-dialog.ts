@@ -26,6 +26,8 @@ export class BaseWizardDialog {
   onNextStep = output<void>();
   onPreviousStep = output<void>();
   onSaveAsDraft = output<void>();
+  isLoading = input<boolean>(false);
+  isProcessing = input<boolean>(false);
   wizardTitle = input<string>('Create Opportunity');
   pt: DialogPassThrough = {
     header: {

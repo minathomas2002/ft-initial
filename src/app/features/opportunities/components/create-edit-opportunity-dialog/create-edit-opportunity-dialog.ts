@@ -3,6 +3,9 @@ import { BaseWizardDialog } from 'src/app/shared/components/base-components/base
 import { StepContentDirective } from 'src/app/shared/directives/step-content.directive';
 import { OpportunityInformationForm } from '../opportunity-information-form/opportunity-information-form';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
+import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { Utilities } from 'src/app/shared/classes/utilities';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -13,6 +16,8 @@ import { OpportunityFormService } from '../../services/opportunity-form/opportun
 export class CreateEditOpportunityDialog {
   visible = model<boolean>(false);
   opportunityFormService = inject(OpportunityFormService);
+  adminOpportunitiesStore = inject(AdminOpportunitiesStore);
+  toasterService = inject(ToasterService);
   steps = computed(() => [
     {
       title: 'Opportunity Information',
@@ -35,9 +40,8 @@ export class CreateEditOpportunityDialog {
   previousStep = () => {
     this.activeStep.set(this.activeStep() - 1);
   }
-  saveAsDraft = () => {
-    const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.opportunityTitle();
-
+  saveAsDraft() {
+    const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.title()
     // Check if the field is invalid
     if (opportunityTitleField.invalid()) {
       // Mark as touched to show validation errors
@@ -45,6 +49,19 @@ export class CreateEditOpportunityDialog {
       return;
     }
 
+    const opportunityDraftRequest = this.opportunityFormService.formValue();
+    const formData = new Utilities().objToFormData(opportunityDraftRequest);
+
     // Continue with save as draft logic...
+    this.adminOpportunitiesStore.draftOpportunity(
+      formData
+    ).subscribe({
+      next: (res) => {
+        this.toasterService.success('Opportunity saved as draft');
+        this.opportunityFormService.resetForm();
+        this.activeStep.set(1);
+        this.visible.set(false);
+      },
+    });
   }
 }

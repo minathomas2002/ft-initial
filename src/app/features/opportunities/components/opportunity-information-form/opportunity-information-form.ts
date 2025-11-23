@@ -33,7 +33,7 @@ export class OpportunityInformationForm {
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes;
-  opportunityInformationForm = this.opportunityFormService.opportunityInformationForm;
+  opportunityInformationForm = this.opportunityFormService.opportunityInformationForm
 
   files = signal<File[]>([]);
   acceptedFileTypes = ".jpg,.png,.pdf,.docx,video/*";
