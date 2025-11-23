@@ -24,7 +24,7 @@ export interface ICreateOpportunity {
 
 export interface IOpportunityInformationFrom {
   id: string | null
-  opportunityTitle: string;
+  title: string;
   opportunityType: string | null;
   shortDescription: string;
   opportunityCategory: string;
@@ -48,4 +48,7 @@ export interface IOpportunityLocalizationFrom {
 export interface IKeyActivityRecord {
   keyActivity: string;
   orderIndex: number;
+}
+
+export interface IOpportunityDraftRequest extends IOpportunityInformationFrom, IOpportunityLocalizationFrom {
 }
