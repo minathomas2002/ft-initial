@@ -1,0 +1,19 @@
+<app-base-wizard-dialog
+  [(visible)]="visible"
+  [(activeStep)]="activeStep"
+  [isNextStepDisabled]="isNextStepDisabled()"
+  [steps]="steps()"
+  (onNextStep)="nextStep()"
+  (onPreviousStep)="previousStep()"
+  (onSaveAsDraft)="saveAsDraft()"
+>
+  <ng-template [appStepContent]="1">
+    <app-opportunity-information-form></app-opportunity-information-form>
+  </ng-template>
+  <ng-template [appStepContent]="2">
+    <div>hello world 02</div>
+  </ng-template>
+  <ng-template [appStepContent]="3">
+    <div>hello world 03</div>
+  </ng-template>
+</app-base-wizard-dialog>
