@@ -11,7 +11,7 @@ export class OpportunitiesApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
   getOpportunities(filter: IOpportunitiesFilterRequest): Observable<IBaseApiResponse<IApiPaginatedResponse<IOpportunity[]>>> {
-    return this.baseHttpService.post<IApiPaginatedResponse<IOpportunity[]>, unknown, IOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getOpportunities, filter);
+    return this.baseHttpService.get<IApiPaginatedResponse<IOpportunity[]>, IOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getOpportunities, filter);
   }
 
   draftOpportunity(opportunity: FormData): Observable<IBaseApiResponse<IOpportunity>> {

@@ -1,60 +1,24 @@
-<app-cards-page-layout
-  [pageTitle]="'opportunity.list.title' | translate"
-  [pageSubTitle]="'opportunity.list.subtitle' | translate"
-  pageTitleClass="text-[48px] font-bold"
-  pageSubTitleClass="text-xl text-gray-600"
->
-  <ng-container ngProjectAs="page-filters">
-    <!-- <app-opportunities-filters [isAdminMode]="isAdminMode()" /> -->
-  </ng-container>
+<app-cards-page-layout [pageTitle]="'opportunity.list.title' | translate"
+  [pageSubTitle]="'opportunity.list.subtitle' | translate" pageTitleClass="text-[48px] font-bold"
+  pageSubTitleClass="text-xl text-gray-600">
   <ng-container ngProjectAs="page-body">
     <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
-      <app-data-cards
-        [items]="opportunitiesStore.list()"
-        [totalRecords]="opportunitiesStore.count()"
-        [(filter)]="filter"
-      >
-        <ng-template
-          #itemsTemplate
-          let-item="item"
-        >
-          <app-opportunity-card
-            item
-            icon="icon-search"
-            [cardTitle]="item.title"
-            [cardDescription]="item.shortDescription"
-            cardClass="bg-gray-50"
-          >
-            @if(permissionService.canViewOpportunityDetailsInCard()) {
-            <ng-container ngProjectAs="opportunity-card-info">
-              <div class="flex flex-col gap-2">
-                <app-opportunity-detail-item
-                  [label]="'opportunity.list.opportunityType' | translate"
-                  [value]="item.opportunityType"
-                />
-                <app-opportunity-detail-item
-                  [label]="'opportunity.list.applicationPeriod' | translate"
-                  [value]="`${item.startDate | date:'dd MMM'} - ${item.endDate | date:'dd MMM'}`"
-                />
-              </div>
-            </ng-container>
-            }
+      <app-data-cards [items]="opportunitiesStore.list()" [totalRecords]="opportunitiesStore.count()"
+        [(filter)]="filter">
+        <ng-template #itemsTemplate let-item="item">
+          <app-opportunity-card item icon="icon-search" [cardTitle]="item.title"
+            [cardDescription]="item.shortDescription" [cardClass]="isAnonymous() ? 'bg-gray-50' : 'bg-white'">
             <ng-container ngProjectAs="opportunity-card-actions">
               <div class="flex gap-4">
-                <p-button
-                  [label]="'opportunity.list.viewDetails' | translate"
-                  severity="secondary"
-                  class="flex-1"
-                  fluid
-                  (onClick)="onViewDetails(item)"
-                />
-                <p-button
-                  [label]="'opportunity.list.apply' | translate"
-                  severity="primary"
-                  class="flex-1"
-                  fluid
-                  (onClick)="onApply(item)"
-                />
+                @if(!item.isOtherOpportunity) {
+                  <p-button [label]="'opportunity.list.viewDetails' | translate" severity="secondary" class="flex-1" fluid
+                  (onClick)="onViewDetails(item)" />
+                
+                }
+                @if(!item.isApplied && (permissionService.canApplyOnOpportunityCard() || isAnonymous())) {
+                <p-button [label]="'opportunity.list.apply' | translate" severity="primary" class="flex-1" fluid
+                  (onClick)="onApply(item)" />
+                }
               </div>
             </ng-container>
           </app-opportunity-card>

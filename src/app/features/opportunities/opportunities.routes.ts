@@ -7,7 +7,10 @@ export const LOGGED_IN_OPPORTUNITIES_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/opportunities-list/opportunities-list').then((m) => m.OpportunitiesList),
 
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      isAnonymous: false
+    }
   },
   {
     path: 'admin',
@@ -28,8 +31,10 @@ export const ANONYMOUS_OPPORTUNITIES_ROUTES: Routes = [
     path: '',
     loadComponent: () =>
       import('./pages/opportunities-list/opportunities-list').then((m) => m.OpportunitiesList),
-
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      isAnonymous: true
+    }
   },
   {
     path: ':id',
