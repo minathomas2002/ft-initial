@@ -1,0 +1,124 @@
+<div class="px-8 flex flex-col gap-8 pb-10">
+  <!-- Localization -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4">Localization</h3>
+    <div class="flex flex-col gap-4">
+      <!-- Design & Engineering -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Design & Engineering'">
+        </app-base-label>
+        <app-form-array-input
+          [(ft)]="opportunityLocalizationForm.designEngineerings"
+          [addButtonMessage]="'Add Design & Engineering Item'"
+          [maxItems]="10"
+          [createNewItem]="opportunityFormService.createNewKeyActivity"
+        >
+          <ng-template
+            #itemTemplate
+            let-itemFieldTree
+            let-index="index"
+          >
+            <td class="p-3 border border-gray-200">
+              <input
+                type="text"
+                pInputText
+                class="w-full"
+                placeholder="Enter Key Activities"
+                [field]="itemFieldTree.keyActivity"
+                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+              />
+            </td>
+          </ng-template>
+        </app-form-array-input>
+      </div>
+
+      <!-- Manufacturing -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Manufacturing'">
+        </app-base-label>
+        <app-form-array-input
+          [(ft)]="opportunityLocalizationForm.manufacturings"
+          [addButtonMessage]="'Add Manufacturing Item'"
+          [maxItems]="10"
+          [createNewItem]="opportunityFormService.createNewKeyActivity"
+        >
+          <ng-template
+            #itemTemplate
+            let-itemFieldTree
+            let-index="index"
+          >
+            <td class="p-3 border border-gray-200">
+              <input
+                type="text"
+                pInputText
+                class="w-full"
+                placeholder="Enter Key Activities"
+                [field]="itemFieldTree.keyActivity"
+                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+              />
+            </td>
+          </ng-template>
+        </app-form-array-input>
+      </div>
+
+      <!-- Assembly & Testing -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Assembly & Testing'">
+        </app-base-label>
+        <app-form-array-input
+          [(ft)]="opportunityLocalizationForm.assemblyTestings"
+          [addButtonMessage]="'Add Assembly & Testing Item'"
+          [maxItems]="10"
+          [createNewItem]="opportunityFormService.createNewKeyActivity"
+        >
+          <ng-template
+            #itemTemplate
+            let-itemFieldTree
+            let-index="index"
+          >
+            <td class="p-3 border border-gray-200">
+              <input
+                type="text"
+                pInputText
+                class="w-full"
+                placeholder="Enter Key Activities"
+                [field]="itemFieldTree.keyActivity"
+                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+              />
+            </td>
+          </ng-template>
+        </app-form-array-input>
+      </div>
+
+      <!-- After Sales Services -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'After Sales Services'">
+        </app-base-label>
+        <app-form-array-input
+          [(ft)]="opportunityLocalizationForm.afterSalesServices"
+          [addButtonMessage]="'Add After Sales Services Item'"
+          [maxItems]="10"
+          [createNewItem]="opportunityFormService.createNewKeyActivity"
+        >
+          <ng-template
+            #itemTemplate
+            let-itemFieldTree
+            let-index="index"
+          >
+            <td class="p-3 border border-gray-200">
+              <input
+                type="text"
+                pInputText
+                class="w-full"
+                placeholder="Enter Key Activities"
+                [field]="itemFieldTree.keyActivity"
+                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+              />
+            </td>
+          </ng-template>
+        </app-form-array-input>
+      </div>
+    </div>
+  </div>
+
+</div>

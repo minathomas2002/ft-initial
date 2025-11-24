@@ -6,10 +6,17 @@ import { OpportunityFormService } from '../../services/opportunity-form/opportun
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { Utilities } from 'src/app/shared/classes/utilities';
+import { OpportunityLocalizationForm } from '../opportunity-localization-form/opportunity-localization-form';
+import { OpportunityRequestsAdapter } from '../../classes/opportunity-requests-adapter';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
-  imports: [BaseWizardDialog, StepContentDirective, OpportunityInformationForm],
+  imports: [
+    BaseWizardDialog,
+    StepContentDirective,
+    OpportunityInformationForm,
+    OpportunityLocalizationForm
+  ],
   templateUrl: './create-edit-opportunity-dialog.html',
   styleUrl: './create-edit-opportunity-dialog.scss',
 })
@@ -41,6 +48,10 @@ export class CreateEditOpportunityDialog {
     this.activeStep.set(this.activeStep() - 1);
   }
   saveAsDraft() {
+
+    const formValue = this.opportunityFormService.formValue();
+    console.log('formValue', formValue);
+    return
     const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.title()
     // Check if the field is invalid
     if (opportunityTitleField.invalid()) {
@@ -49,8 +60,8 @@ export class CreateEditOpportunityDialog {
       return;
     }
 
-    const opportunityDraftRequest = this.opportunityFormService.formValue();
-    const formData = new Utilities().objToFormData(opportunityDraftRequest);
+    const opportunityInformationFormValue = new OpportunityRequestsAdapter().toOpportunityDraftRequest(formValue);
+    const formData = new Utilities().objToFormData(opportunityInformationFormValue);
 
     // Continue with save as draft logic...
     this.adminOpportunitiesStore.draftOpportunity(

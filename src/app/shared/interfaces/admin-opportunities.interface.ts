@@ -47,8 +47,17 @@ export interface IOpportunityLocalizationFrom {
 
 export interface IKeyActivityRecord {
   keyActivity: string;
+}
+
+export interface IKeyActivityRecordRequest {
+  keyActivity: string;
   orderIndex: number;
 }
 
-export interface IOpportunityDraftRequest extends IOpportunityInformationFrom, IOpportunityLocalizationFrom {
+export interface IOpportunityDraftRequest extends IOpportunityInformationFrom {
+  designEngineerings: IKeyActivityRecordRequest[];
+  sourcings: IKeyActivityRecordRequest[];
+  manufacturings: IKeyActivityRecordRequest[];
+  assemblyTestings: IKeyActivityRecordRequest[];
+  afterSalesServices: IKeyActivityRecordRequest[];
 }

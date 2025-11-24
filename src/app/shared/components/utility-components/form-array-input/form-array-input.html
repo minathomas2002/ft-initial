@@ -1,0 +1,53 @@
+<div class="flex flex-col rounded-md overflow-x-auto max-w-[970px]">
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="bg-gray-50">
+        @for (key of keys(); track key) {
+        <th class="p-3 border border-gray-200 text-left font-semibold">
+          <span>{{ key }}</span>
+        </th>
+        }
+        <th class="p-3 border border-gray-200 w-[48px]"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (object of objects(); track $index; let index = $index) {
+      <tr>
+        @if (itemTemplate) {
+        <ng-container *ngTemplateOutlet="itemTemplate; context: { 
+          $implicit: getItemFieldTree(index)!, 
+          index: index,
+          itemValue: object
+        }"></ng-container>
+        <td class="p-3 border border-gray-200 text-center">
+          @if(index > 0 || objects().length > 1){
+          <p-button
+            severity="danger"
+            [icon]="'icon-trash-2'"
+            text
+            (onClick)="onDeleteHandler(index)"
+          />
+          }
+        </td>
+        }
+      </tr>
+      }
+    </tbody>
+    <tfoot>
+      <tr>
+        <td
+          [attr.colspan]="keys().length + 1"
+          class="p-3 border border-gray-200"
+        >
+          <p-button
+            text
+            [icon]="'icon-plus'"
+            [label]="addButtonMessage()"
+            (onClick)="onAddHandler()"
+            [disabled]="objects().length >= maxItems()"
+          />
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

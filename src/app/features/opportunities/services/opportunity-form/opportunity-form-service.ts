@@ -29,11 +29,31 @@ export class OpportunityFormService {
     image: null,
   }
   private OpportunityLocalizationFormInitialState: IOpportunityLocalizationFrom = {
-    designEngineerings: [],
-    sourcings: [],
-    manufacturings: [],
-    assemblyTestings: [],
-    afterSalesServices: [],
+    designEngineerings: [
+      {
+        keyActivity: '',
+      }
+    ],
+    sourcings: [
+      {
+        keyActivity: '',
+      }
+    ],
+    manufacturings: [
+      {
+        keyActivity: '',
+      }
+    ],
+    assemblyTestings: [
+      {
+        keyActivity: '',
+      }
+    ],
+    afterSalesServices: [
+      {
+        keyActivity: '',
+      }
+    ],
   }
 
   private opportunityInformation = signal<IOpportunityInformationFrom>(this.OpportunityInformationFormInitialState);
@@ -51,8 +71,8 @@ export class OpportunityFormService {
   isFormValid = computed(() => this.opportunityInformationForm().valid() && this.opportunityLocalizationForm().valid());
   formValue = computed(() => {
     return {
-      ...this.opportunityInformationForm().value(),
-      ...this.opportunityLocalizationForm().value(),
+      opportunityInformationFrom: this.opportunityInformationForm().value(),
+      opportunityLocalizationForm: this.opportunityLocalizationForm().value(),
     }
   });
 
@@ -62,4 +82,7 @@ export class OpportunityFormService {
     this.opportunityInformation.set(this.OpportunityInformationFormInitialState);
     this.opportunityLocalization.set(this.OpportunityLocalizationFormInitialState);
   }
+
+  // Factory method to create new key activity records
+  createNewKeyActivity = () => ({ keyActivity: '' });
 }
