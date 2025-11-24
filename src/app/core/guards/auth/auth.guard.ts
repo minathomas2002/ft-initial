@@ -10,6 +10,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (authStore.isAuthenticated()) {
     return true;
   } else {
-    return router.navigate(['/', ERoutes.visitors]);
+    return router.navigate(['/', ERoutes.anonymous]);
   }
 };

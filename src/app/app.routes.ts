@@ -24,7 +24,7 @@ const MAIN_LAYOUT_ROUTES: Routes = [
         path: ERoutes.opportunities,
         loadChildren: () =>
           import('./features/opportunities/opportunities.routes').then(
-            (m) => m.OPPORTUNITIES_ROUTES
+            (m) => m.LOGGED_IN_OPPORTUNITIES_ROUTES
           ),
         data: { animation: ERoutes.opportunities },
       },
@@ -47,7 +47,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: ERoutes.visitors,
+    path: ERoutes.anonymous,
     canActivate: [visitorsGuard],
     loadComponent: () =>
       import('./core/layouts/visitor-layout/visitor-layout').then((m) => m.VisitorLayout),
@@ -56,7 +56,7 @@ export const routes: Routes = [
         path: 'opportunities',
         loadChildren: () =>
           import('./features/opportunities/opportunities.routes').then(
-            (m) => m.OPPORTUNITIES_ROUTES
+            (m) => m.ANONYMOUS_OPPORTUNITIES_ROUTES
           ),
       },
       {
@@ -64,7 +64,6 @@ export const routes: Routes = [
         redirectTo: `${ERoutes.opportunities}`,
         pathMatch: 'full',
       },
-
     ],
   },
 ];
