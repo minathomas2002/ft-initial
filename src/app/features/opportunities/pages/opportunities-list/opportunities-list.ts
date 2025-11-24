@@ -1,5 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { ChipModule } from 'primeng/chip';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
 import { DataCards } from 'src/app/shared/components/layout-components/data-cards/data-cards';
 import { OpportunityCard } from 'src/app/shared/components/opportunities/opportunity-card/opportunity-card';
@@ -12,6 +13,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 import { IOpportunity } from 'src/app/shared/interfaces';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { EOpportunityType } from 'src/app/shared/enums/opportunities.enum';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -19,6 +21,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     CardsPageLayout,
     OpportunityCard,
     ButtonModule,
+    ChipModule,
     DataCards,
     CardsSkeleton,
     TranslatePipe
@@ -69,11 +72,39 @@ export class OpportunitiesList implements OnInit {
   getOpportunityIcon(opportunity: IOpportunity) {
     switch(opportunity.opportunityType) {
       case 1:
-        return 'icon-project';
+        return 'icon-flag';
       case 2:
         return 'icon-idea';
       default:
         return 'icon-search';
+    }
+  }
+
+  getOpportunityTypeConfig(opportunityType: number): { label: string; style: { [key: string]: string } } {
+    switch(opportunityType) {
+      case EOpportunityType.SERVICES:
+        return {
+          label: 'opportunity.type.services',
+          style: {
+            'background-color': '#F4F7FA',
+            'color': '#1B3F82',
+            'border-color': '#1B3F82'
+          }
+        };
+      case EOpportunityType.MATERIAL:
+        return {
+          label: 'opportunity.type.materials',
+          style: {
+            'background-color': '#FEF4EB',
+            'color': '#B2672A',
+            'border-color': '#B2672A'
+          }
+        };
+      default:
+        return {
+          label: '',
+          style: {}
+        };
     }
   }
 }

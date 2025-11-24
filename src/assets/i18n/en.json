@@ -134,7 +134,9 @@
     },
     "type": {
       "service": "Service",
-      "material": "Material"
+      "services": "Services",
+      "material": "Material",
+      "materials": "Materials"
     },
     "list": {
       "title": "Opportunities",

@@ -8,6 +8,14 @@
         <ng-template #itemsTemplate let-item="item">
           <app-opportunity-card item icon="{{getOpportunityIcon(item)}}" [cardTitle]="item.title"
             [cardDescription]="item.shortDescription" [cardClass]="isAnonymous() ? 'bg-gray-50' : 'bg-white'">
+            <ng-container ngProjectAs="opportunity-card-status">
+              @let opportunityTypeConfig = getOpportunityTypeConfig(item.opportunityType);
+              <p-chip 
+                [label]="opportunityTypeConfig.label | translate"
+                [style]="opportunityTypeConfig.style"
+                styleClass="border-1">
+              </p-chip>
+            </ng-container>
             <ng-container ngProjectAs="opportunity-card-actions">
               <div class="flex gap-4">
                 @if(!item.isOtherOpportunity) {
@@ -15,8 +23,9 @@
                   (onClick)="onViewDetails(item)" />
                 
                 }
-                @if(!item.isApplied && (permissionService.canApplyOnOpportunityCard() || isAnonymous())) {
+                @if(permissionService.canApplyOnOpportunityCard() || isAnonymous()) {
                 <p-button [label]="'opportunity.list.apply' | translate" severity="primary" class="flex-1" fluid
+                  [disabled]="item.isApplied"
                   (onClick)="onApply(item)" />
                 }
               </div>

@@ -1,9 +1,13 @@
 <div class="p-[24px] flex flex-col gap-[24px] rounded-2xl border-1 border-gray-200 {{cardClass()}} min-h-[300px]">
   <ng-content select="opportunity-card-message"></ng-content>
-  <div
-    class="w-[40px] h-[40px] rounded-xl bg-warning-50 flex justify-between border-1 border-gray-200 items-center justify-center">
-    <i class="{{icon()}} text-gray-900 text-xl"></i>
-    <ng-content select="opportunity-card-status"></ng-content>
+  <div class="flex items-center justify-between gap-2">
+    <div
+      class="w-[40px] h-[40px] rounded-xl bg-warning-50 flex justify-between border-1 border-gray-200 items-center justify-center">
+      <i class="{{icon()}} text-gray-900 text-xl"></i>
+    </div>
+    <div class="flex justify-end">
+      <ng-content select="opportunity-card-status"></ng-content>
+    </div>
   </div>
   <div class="flex flex-col gap-1">
     <h5 class="text-xl font-semibold text-gray-900 line-clamp-1" pTooltip="{{cardTitle()}}">{{cardTitle()}}</h5>
