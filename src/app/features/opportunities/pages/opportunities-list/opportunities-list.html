@@ -6,7 +6,7 @@
       <app-data-cards [items]="opportunitiesStore.list()" [totalRecords]="opportunitiesStore.count()"
         [(filter)]="filter">
         <ng-template #itemsTemplate let-item="item">
-          <app-opportunity-card item icon="icon-search" [cardTitle]="item.title"
+          <app-opportunity-card item icon="{{getOpportunityIcon(item)}}" [cardTitle]="item.title"
             [cardDescription]="item.shortDescription" [cardClass]="isAnonymous() ? 'bg-gray-50' : 'bg-white'">
             <ng-container ngProjectAs="opportunity-card-actions">
               <div class="flex gap-4">

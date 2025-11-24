@@ -1,4 +1,4 @@
-import { ERoles } from "../enums/roles.enum";
+import { ERoles } from '../enums/roles.enum';
 
 export interface IUser {
   id: string;
@@ -32,6 +32,23 @@ export interface IAuthData {
   refreshTokenExpiresAt: string;
 }
 
+export interface IJwtUserDetails {
+  Email: string;
+  FullName: string;
+  InvestorId: string;
+  RoleCodes: ERoles[];
+  Roles: string[];
+  UserId: string;
+  UserType: string;
+
+  // Standard JWT claims
+  aud: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+}
+
 export interface IRefreshTokenRequest {
   accessToken: string;
   refreshToken: string;
@@ -46,10 +63,9 @@ export interface IRegisterRequest {
   confirmPassword: string;
 }
 
-
 export interface IPhoneNumberControl {
   dialCode: string;
-  nationalNumber: string;  
+  nationalNumber: string;
 }
 
 export interface IResetPasswordRequest {

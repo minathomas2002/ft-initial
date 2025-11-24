@@ -8,17 +8,20 @@ import {
   withState,
 } from '@ngrx/signals';
 import { type Observable, type Subscription, catchError, finalize, take, throwError, tap } from 'rxjs';
-import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse } from '../../interfaces';
+import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse, IJwtUserDetails } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
 import { HttpErrorResponse } from '@angular/common/http';
+import { JwtService } from '../../services/auth/jwt-service';
 
 const initialState: {
-  user: IAuthData | null;
+  authResponse: IAuthData | null;
+  jwtUserDetails: IJwtUserDetails | null;
   loading: boolean;
   _inactivityTimeout$: Subscription | null;
 } = {
-  user: null,
+  authResponse: null,
+  jwtUserDetails: null,
   loading: false,
   _inactivityTimeout$: null,
 };
@@ -31,25 +34,26 @@ export const AuthStore = signalStore(
     onInit(store) {
       const localStorage = inject(LocalStorage);
       const stored = localStorage.getAuthData();
-
+      const jwtService = inject(JwtService);
       if (stored) {
-        patchState(store, { user: stored });
+        patchState(store, { authResponse: stored, jwtUserDetails: jwtService.decodeJwt(stored?.token ?? '') });
       }
     },
   }),
   withComputed((store) => {
     return {
-      isAuthenticated: computed(() => store.user() !== null),
+      isAuthenticated: computed(() => store.authResponse() !== null),
     };
   }),
   withMethods((store) => {
     const authApiService = inject(AuthApiService);
     const localStorage = inject(LocalStorage);
+    const jwtService = inject(JwtService);
 
     return {
       logout(): void {
         localStorage.cleanAuthData();
-        patchState(store, { user: null });
+        patchState(store, { authResponse: null, jwtUserDetails: null });
         authApiService.logout();
       },
 
@@ -69,7 +73,7 @@ export const AuthStore = signalStore(
       },
 
       updateAuthDataInStorage(authResponse: IBaseApiResponse<IAuthData>): void {
-        patchState(store, { user: authResponse.body });
+        patchState(store, { authResponse: authResponse.body, jwtUserDetails: jwtService.decodeJwt(authResponse.body?.token ?? '') });
         localStorage.saveAuthDataToStorage(authResponse);
       },
 
@@ -77,7 +81,7 @@ export const AuthStore = signalStore(
         return login$.pipe(
           tap((response: IBaseApiResponse<IAuthData>) => {
             if (response.success && response.body) {
-              this.updateAuthDataInStorage(response);
+              this.updateAuthDataInStorage(response);              
             }
           }),
           finalize(() => {

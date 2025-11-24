@@ -41,7 +41,7 @@ export class OpportunitiesList implements OnInit {
   filter = this.filterService.filter;
   opportunitiesStore = this.filterService.store;
   isAnonymous = signal<boolean>(false);
-
+  
   ngOnInit(): void {
     const isAnonymousData = this.route.snapshot.data['isAnonymous'];
     if (isAnonymousData !== undefined) {
@@ -63,6 +63,17 @@ export class OpportunitiesList implements OnInit {
       this.toast.success('Not implemented in this sprint');
     } else {
       this.router.navigate(['/', ERoutes.auth, ERoutes.login])
+    }
+  }
+
+  getOpportunityIcon(opportunity: IOpportunity) {
+    switch(opportunity.opportunityType) {
+      case 1:
+        return 'icon-project';
+      case 2:
+        return 'icon-idea';
+      default:
+        return 'icon-search';
     }
   }
 }
