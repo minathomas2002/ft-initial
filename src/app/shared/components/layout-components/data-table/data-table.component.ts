@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   contentChild,
+  inject,
   input,
   model,
   output,
@@ -13,6 +14,7 @@ import type { IFilterBase, ITableHeaderItem } from "../../../interfaces";
 import { EmptyRecordsComponent } from "../../utility-components/empty-records/empty-records.component";
 import { PaginatorComponent } from "../../utility-components/paginator/paginator.component";
 import { ESortingOrder } from "./../../../enums/sorting.enum";
+import { I18nService } from "src/app/shared/services/i18n";
 
 @Component({
   selector: "app-data-table",
@@ -27,6 +29,8 @@ import { ESortingOrder } from "./../../../enums/sorting.enum";
   styleUrl: "./data-table.component.scss",
 })
 export class DataTableComponent<T> {
+  private readonly i18nService = inject(I18nService);
+  
   rowsCheckable = input<boolean>(false);
   itemsTemplate = contentChild.required<TemplateRef<unknown>>("itemsTemplate");
   columns = input.required<ITableHeaderItem<unknown>[]>();
@@ -42,7 +46,7 @@ export class DataTableComponent<T> {
     () => true,
   );
   scrollHeight = input<string>("");
-  messageTitle = input<string>("No Data found");
+  messageTitle = input<string>(this.i18nService.translate('common.noDataFound'));
   onRowClick = output<{ item: T | unknown; rowIndex: number }>();
   disabledRows = computed(() => {
     return this.rows().map(
