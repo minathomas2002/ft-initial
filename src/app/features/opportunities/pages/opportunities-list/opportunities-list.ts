@@ -15,6 +15,7 @@ import { IOpportunity, TColors } from 'src/app/shared/interfaces';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { EOpportunityType } from 'src/app/shared/enums/opportunities.enum';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
+import { OpportunitiesFilters } from '../../components/opportunities-filter/opportunities-filters';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -26,7 +27,8 @@ import { BaseTagComponent } from 'src/app/shared/components/base-components/base
     DataCards,
     CardsSkeleton,
     TranslatePipe,
-    BaseTagComponent
+    BaseTagComponent,
+    OpportunitiesFilters
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',

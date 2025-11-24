@@ -1,5 +1,4 @@
-<!-- <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-  <div class="col-span-1 md:col-span-1">
+<div class="w-full grid grid-cols-1 max-w-[500px]">  
     <p-iconfield>
       <p-inputicon
         inputId="opportunities-search"
@@ -13,83 +12,5 @@
         [(ngModel)]="filter().searchText"
         (ngModelChange)="searchSubject.next(filter().searchText ?? '')"
       />
-    </p-iconfield>
-  </div>
-
-  @if(isAdminMode()) {
-  <div class="col-span-1 md:col-span-1">
-    <p-select
-      [options]="opportunityStatuses"
-      optionLabel="label"
-      optionValue="value"
-      [placeholder]="'opportunity.filter.status' | translate"
-      [ngModel]="filter().isActive"
-      (ngModelChange)="onStatusChange($event)"
-      class="w-full"
-    >
-      <ng-template
-        pTemplate="item"
-        let-option
-      >
-        {{ option.label | translate }}
-      </ng-template>
-      <ng-template
-        pTemplate="selectedItem"
-        let-option
-      >
-        {{ option?.label | translate }}
-      </ng-template>
-    </p-select>
-  </div>
-
-  <div class="col-span-1 md:col-span-1">
-    <p-select
-      [options]="opportunityStates"
-      optionLabel="label"
-      optionValue="value"
-      [placeholder]="'opportunity.filter.state' | translate"
-      [ngModel]="filter().status"
-      (ngModelChange)="onStateChange($event)"
-      class="w-full"
-    >
-      <ng-template
-        pTemplate="item"
-        let-option
-      >
-        {{ option.label | translate }}
-      </ng-template>
-      <ng-template
-        pTemplate="selectedItem"
-        let-option
-      >
-        {{ option?.label | translate }}
-      </ng-template>
-    </p-select>
-  </div>
-
-  <div class="col-span-1 md:col-span-1">
-    <p-select
-      [options]="opportunityTypes"
-      optionLabel="label"
-      optionValue="value"
-      [placeholder]="'opportunity.filter.type' | translate"
-      [ngModel]="filter().type"
-      (ngModelChange)="onTypeChange($event)"
-      class="w-full"
-    >
-      <ng-template
-        pTemplate="item"
-        let-option
-      >
-        {{ option.label | translate }}
-      </ng-template>
-      <ng-template
-        pTemplate="selectedItem"
-        let-option
-      >
-        {{ option?.label | translate }}
-      </ng-template>
-    </p-select>
-  </div>
-  }
-</div> -->
+    </p-iconfield>  
+</div>

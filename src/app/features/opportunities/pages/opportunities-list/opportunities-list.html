@@ -1,6 +1,9 @@
 <app-cards-page-layout [pageTitle]="'opportunity.list.title' | translate"
   [pageSubTitle]="'opportunity.list.subtitle' | translate" pageTitleClass="text-[48px] font-bold"
-  pageSubTitleClass="text-xl text-gray-600">
+  pageSubTitleClass="text-xl text-gray-600">    
+  <ng-container ngProjectAs="page-filters">
+    <app-opportunities-filters />
+  </ng-container>
   <ng-container ngProjectAs="page-body">
     <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
       <app-data-cards [items]="opportunitiesStore.list()" [totalRecords]="opportunitiesStore.count()"
