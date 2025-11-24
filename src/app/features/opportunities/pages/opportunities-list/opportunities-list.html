@@ -10,11 +10,7 @@
             [cardDescription]="item.shortDescription" [cardClass]="isAnonymous() ? 'bg-gray-50' : 'bg-white'">
             <ng-container ngProjectAs="opportunity-card-chip">
               @let opportunityTypeConfig = getOpportunityTypeConfig(item.opportunityType);
-              <p-chip 
-                [label]="opportunityTypeConfig.label | translate"
-                [style]="opportunityTypeConfig.style"
-                styleClass="border-1">
-              </p-chip>
+              <app-base-tag [color]="opportunityTypeConfig.color" [value]="opportunityTypeConfig.label | translate" />
             </ng-container>
             <ng-container ngProjectAs="opportunity-card-actions">
               <div class="flex gap-4">

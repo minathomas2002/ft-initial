@@ -25,6 +25,8 @@ export class BaseAlertComponent {
 		purple: "border-purple-600 bg-purple-50",
 		pink: "border-pink-600 bg-pink-50",
 		gray: "border-gray-600 bg-gray-50",
+		orange: "border-orange-600 bg-orange-50",
+		primary: "border-primary-600 bg-primary-50",
 	};
 
 	private readonly iconClassesMap: Record<TColors, string> = {
@@ -36,6 +38,8 @@ export class BaseAlertComponent {
 		purple: "bg-[#9333EA26] text-purple-600",
 		pink: "bg-[#DB277726] text-pink-600",
 		gray: "bg-[#4B556326] text-gray-600",
+		orange: "bg-[#DC680326] text-orange-600",
+		primary: "bg-[#1E469126] text-primary-600",
 	};
 
 	private readonly iconMap: Record<TColors, string> = {
@@ -47,6 +51,8 @@ export class BaseAlertComponent {
 		purple: "icon-info-circle",
 		pink: "icon-info-circle",
 		gray: "icon-info-circle",
+		orange: "icon-info-circle",
+		primary: "icon-info-circle",
 	};
 
 	alertClasses = computed(() => {

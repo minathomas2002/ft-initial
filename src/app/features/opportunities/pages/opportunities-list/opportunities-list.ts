@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
@@ -11,9 +11,10 @@ import { ERoutes } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
-import { IOpportunity } from 'src/app/shared/interfaces';
+import { IOpportunity, TColors } from 'src/app/shared/interfaces';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { EOpportunityType } from 'src/app/shared/enums/opportunities.enum';
+import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -24,13 +25,13 @@ import { EOpportunityType } from 'src/app/shared/enums/opportunities.enum';
     ChipModule,
     DataCards,
     CardsSkeleton,
-    TranslatePipe
+    TranslatePipe,
+    BaseTagComponent
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
 })
 export class OpportunitiesList implements OnInit {
-
   readonly permissionService = inject(PermissionService);
   filterService = inject(OpportunitiesFilterService);
   router = inject(Router);
@@ -38,26 +39,24 @@ export class OpportunitiesList implements OnInit {
   route = inject(ActivatedRoute);
   toast = inject(ToasterService);
 
-  // items = signal<number[]>([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
-  isAdminMode = computed(() => this.authStore.isAuthenticated())
   totalRecords = signal<number>(10);
   filter = this.filterService.filter;
   opportunitiesStore = this.filterService.store;
   isAnonymous = signal<boolean>(false);
-  
+
   ngOnInit(): void {
     const isAnonymousData = this.route.snapshot.data['isAnonymous'];
     if (isAnonymousData !== undefined) {
       this.isAnonymous.set(isAnonymousData);
     }
-    this.filterService.applyFilter()
+    this.filterService.applyFilter();
   }
 
   onViewDetails(opportunity: IOpportunity) {
-    if(this.isAnonymous()) {
-      this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities, opportunity.id])
+    if (this.isAnonymous()) {
+      this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities, opportunity.id]);
     } else {
-      this.router.navigate(['/', ERoutes.opportunities, opportunity.id])
+      this.router.navigate(['/', ERoutes.opportunities, opportunity.id]);
     }
   }
 
@@ -65,12 +64,12 @@ export class OpportunitiesList implements OnInit {
     if (this.authStore.isAuthenticated()) {
       this.toast.success('Not implemented in this sprint');
     } else {
-      this.router.navigate(['/', ERoutes.auth, ERoutes.login])
+      this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
     }
   }
 
   getOpportunityIcon(opportunity: IOpportunity) {
-    switch(opportunity.opportunityType) {
+    switch (opportunity.opportunityType) {
       case 1:
         return 'icon-flag';
       case 2:
@@ -80,30 +79,22 @@ export class OpportunitiesList implements OnInit {
     }
   }
 
-  getOpportunityTypeConfig(opportunityType: number): { label: string; style: { [key: string]: string } } {
-    switch(opportunityType) {
+  getOpportunityTypeConfig(opportunityType: number): { label: string; color: TColors } {
+    switch (opportunityType) {
       case EOpportunityType.SERVICES:
         return {
           label: 'opportunity.type.services',
-          style: {
-            'background-color': '#F4F7FA',
-            'color': '#1B3F82',
-            'border-color': '#1B3F82'
-          }
+          color: 'primary'
         };
       case EOpportunityType.MATERIAL:
         return {
           label: 'opportunity.type.materials',
-          style: {
-            'background-color': '#FEF4EB',
-            'color': '#B2672A',
-            'border-color': '#B2672A'
-          }
+          color: 'orange'
         };
       default:
         return {
           label: '',
-          style: {}
+          color: 'gray',
         };
     }
   }
