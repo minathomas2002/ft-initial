@@ -133,7 +133,9 @@
 		},
 		"type": {
 			"service": "خدمة",
-			"material": "مادة"
+			"services": "خدمات",
+			"material": "مادة",
+			"materials": "مواد"
 		},
 		"list": {
 			"title": "الفرص",

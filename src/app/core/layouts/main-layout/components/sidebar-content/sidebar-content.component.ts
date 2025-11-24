@@ -6,6 +6,8 @@ import { SidebarLinkComponent } from "../sidebar-link/sidebar-link.component";
 import type { ISideBarLink } from "./../../models/sidebar.interface";
 import { ERoutes } from "../../../../../shared/enums";
 import { I18nService } from "../../../../../shared/services/i18n/i18n.service";
+import { RoleService } from "src/app/shared/services/role/role-service";
+import { ERoles } from "src/app/shared/enums/roles.enum";
 
 @Component({
 	selector: "app-sidebar-content",
@@ -20,6 +22,7 @@ import { I18nService } from "../../../../../shared/services/i18n/i18n.service";
 })
 export class SidebarContentComponent {
 	private readonly i18nService = inject(I18nService);
+	private readonly roleService = inject(RoleService);
 
 	contactUsFormVisibility = signal(false);
 	sidebarDrawerVisibility = model(false);
@@ -27,6 +30,8 @@ export class SidebarContentComponent {
 	sidebarLinks = computed<ISideBarLink[]>((): ISideBarLink[] => {
 		// Access currentLanguage to make computed reactive to language changes
 		this.i18nService.currentLanguage();
+		var isAdmin = this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
+		var opportunitiesLink = (isAdmin() ? ERoutes.opportunities + '/' + ERoutes.admin : ERoutes.opportunities);
 		return [
 			{
 				label: this.i18nService.translate("navigation.dashboard"),
@@ -43,10 +48,10 @@ export class SidebarContentComponent {
 			{
 				label: this.i18nService.translate("navigation.opportunities"),
 				icon: "icon-idea",
-				routerLink: ERoutes.opportunities,
+				routerLink: opportunitiesLink,
 				show: true,
 			}
-		];
+		];		
 	});
 
 	helpLink = computed<ISideBarLink>(() => {

@@ -15,12 +15,11 @@ export class RoleService {
    */
   hasAnyRoleSignal(roleCodes: ERoles[]) {
     return computed(() => {
-      const user = this.authStore.user();
-      if (!user || !user.roleCodes || user.roleCodes.length === 0) {
+      const user = this.authStore.jwtUserDetails();
+      if (!user || !user.RoleCodes || user.RoleCodes.length === 0) {
         return false;
       }
-      return roleCodes.some(roleCode => user.roleCodes.includes(roleCode));
+      return roleCodes.some((roleCode) => user.RoleCodes.includes(roleCode));
     });
   }
 }
-
