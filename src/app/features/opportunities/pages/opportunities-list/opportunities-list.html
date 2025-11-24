@@ -8,7 +8,7 @@
         <ng-template #itemsTemplate let-item="item">
           <app-opportunity-card item icon="{{getOpportunityIcon(item)}}" [cardTitle]="item.title"
             [cardDescription]="item.shortDescription" [cardClass]="isAnonymous() ? 'bg-gray-50' : 'bg-white'">
-            <ng-container ngProjectAs="opportunity-card-status">
+            <ng-container ngProjectAs="opportunity-card-chip">
               @let opportunityTypeConfig = getOpportunityTypeConfig(item.opportunityType);
               <p-chip 
                 [label]="opportunityTypeConfig.label | translate"
