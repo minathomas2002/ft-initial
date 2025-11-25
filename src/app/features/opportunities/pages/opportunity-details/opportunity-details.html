@@ -1,54 +1,53 @@
 <div class="page-layout px-[32px] py-[24px]">
-  <div class="page-layout--header mb-[80px]">
-    <span
-      class="flex items-center gap-2 text-primary-600 cursor-pointer mb-6"
-      (click)="onBack()"
-    >
+  <div class="page-layout--header mb-[20px]">
+    <span class="flex items-center gap-2 text-primary-600 cursor-pointer mb-6" (click)="onBack()">
       <i class="icon-arrow-left"></i>
       <span>Back to opportunities</span>
     </span>
 
     <div class="page-layout--title sm:w-auto">
-      <h4 class="font-semibold text-[36px]"> EHV Power Transformers </h4>
-      <p class="text-md text-gray-600"> High-voltage transformers with strong demand and localization potential in manufacturing and services. </p>
+      <div class="flex gap-4 items-center justify-between">
+        <div class="flex gap-4 items-center">
+          <h2 class="font-semibold text-[24px] truncate" [pTooltip]="opportunitiesStore.details()?.title"
+            tooltipPosition="top">{{opportunitiesStore.details()?.title}}</h2>
+          @if(opportunitiesStore.details()?.opportunityType || 2) {
+          @let opportunityTypeConfig = getOpportunityTypeConfig(2);
+          <app-base-tag [color]="opportunityTypeConfig.color" [value]="opportunityTypeConfig.label | translate" />
+          }
+        </div>
+        @if(permissionService.canApplyOnOpportunityCard() || isAnonymous()) {
+        <p-button [label]="'opportunity.list.apply' | translate" severity="primary"
+          [disabled]="opportunitiesStore.details()?.isApplied"
+          (onClick)="onApply()" />
+        }
+      </div>
+      <p class="text-md text-gray-600 break-words">{{opportunitiesStore.details()?.shortDescription}}</p>
     </div>
   </div>
   <div class="cpage-layout--body">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-[64px] items-end mb-[48px]">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-[64px] mb-[48px]">
       <div class="col-span-1 flex flex-col gap-[24px]">
         <div>
-          <h5 class="text-[24px] font-semibold mb-2">Forecasted SEC Demand (2024 – 2030)</h5>
-          <p class="text-md text-gray-600 mb-4">* Demand numbers provided here are estimated and subject to change
+          <h5 class="text-[20px] font-semibold mb-2">Forecasted SEC Demand (2024 – 2030)</h5>
+          <p class="text-md text-gray-600 mb-4">Demand numbers provided here are estimated and subject to change
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <app-base-card
-              icon="icon-flag"
-              cardTitle="Spend (SAR)"
-              cardDescription="2.5-4B"
-            >
+            <app-base-card icon="icon-flag" cardTitle="Spend (SAR)" cardClass="bg-white"
+              cardDescription="{{opportunitiesStore.details()?.spendSARFormatted}}">
             </app-base-card>
-            <app-base-card
-              icon="icon-flag"
-              cardTitle="Spend (SAR)"
-              cardDescription="2.5-4B"
-            >
+            <app-base-card icon="icon-flag" cardTitle="Quantity (Units)" cardClass="bg-white"
+              cardDescription="{{opportunitiesStore.details()?.maxQuantityFormatted}} - {{opportunitiesStore.details()?.maxQuantityFormatted}}">
             </app-base-card>
           </div>
         </div>
         <div>
-          <h5 class="text-[24px] font-semibold mb-2">SEC Current Supplier Base</h5>
+          <h5 class="text-[20px] font-semibold mb-2">SEC Current Supplier Base</h5>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <app-base-card
-              icon="icon-flag"
-              cardTitle="Local"
-              cardDescription="0"
-            >
+            <app-base-card icon="icon-flag" cardTitle="Local" cardClass="bg-white"
+              cardDescription="{{opportunitiesStore.details()?.localSuppliersFormatted}}">
             </app-base-card>
-            <app-base-card
-              icon="icon-flag"
-              cardTitle="Global"
-              cardDescription="5"
-            >
+            <app-base-card icon="icon-flag" cardTitle="Global" cardClass="bg-white"
+              cardDescription="{{opportunitiesStore.details()?.globalSuppliersFormatted}}">
             </app-base-card>
           </div>
         </div>
@@ -57,57 +56,51 @@
       <!-- image section -->
       <div class="col-span-1">
         <div>
-          <img
-            src="assets/images/opportunity-1.png"
-            alt=""
-            class="w-full h-full object-cover"
-          >
+          <img src="assets/images/opportunity-1.png" alt="" class="object-cover">
         </div>
       </div>
     </div>
     <div>
-      <h5 class="text-[24px] font-semibold mb-5">Localization Opportunity Areas</h5>
+      <h5 class="text-[20px] font-semibold mb-5">Localization Opportunity Areas</h5>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <app-base-card
-          icon="icon-flag"
-          cardTitle="Spend (SAR)"
-          cardDescription="2.5-4B"
-          cardClass="md:min-h-[260px]"
-        >
+        <app-base-card icon="icon-flag" cardTitle="Design & Engineering" cardClass="bg-white md:min-h-[260px]">
           <ng-container ngProjectAs="base-card-info">
-            <app-opportunity-details-card-info-item
-              icon="icon-check-circle"
-              label="Demand"
-            />
+            @for(item of opportunitiesStore.details()?.designEngineerings; track item.id){
+            <app-opportunity-details-card-info-item icon="icon-check-circle" label="{{item.keyActivityFormatted}}" />
+            }
           </ng-container>
         </app-base-card>
-        <app-base-card
-          icon="icon-flag"
-          cardTitle="Spend (SAR)"
-          cardDescription="2.5-4B"
-          cardClass="md:min-h-[260px]"
-        >
+        <app-base-card icon="icon-flag" cardTitle="Sourcing" cardClass="bg-white md:min-h-[260px]">
+          <ng-container ngProjectAs="base-card-info">
+            @for(item of opportunitiesStore.details()?.sourcings; track item.id){
+            <app-opportunity-details-card-info-item icon="icon-check-circle" label="{{item.keyActivityFormatted}}" />
+            }
+          </ng-container>
         </app-base-card>
-        <app-base-card
-          icon="icon-flag"
-          cardTitle="Spend (SAR)"
-          cardDescription="2.5-4B"
-          cardClass="md:min-h-[260px]"
-        >
+        <app-base-card icon="icon-flag" cardTitle="Manufacturing" cardClass="bg-white md:min-h-[260px]">
+          <ng-container ngProjectAs="base-card-info">
+            <div class="flex flex-col max-h-[90px] overflow-y-auto">
+              @for(item of opportunitiesStore.details()?.manufacturings; track item.id){
+              <app-opportunity-details-card-info-item icon="icon-check-circle" label="{{item.keyActivityFormatted}}" />
+              }
+            </div>
+
+          </ng-container>
         </app-base-card>
-        <app-base-card
-          icon="icon-flag"
-          cardTitle="Spend (SAR)"
-          cardDescription="2.5-4B"
-          cardClass="md:min-h-[260px]"
-        >
+        <app-base-card icon="icon-flag" cardTitle="Assembly Testing" cardClass="bg-white md:min-h-[260px]">
+          <ng-container ngProjectAs="base-card-info">
+            @for(item of opportunitiesStore.details()?.assemblyTestings; track item.id){
+            <app-opportunity-details-card-info-item icon="icon-check-circle" label="{{item.keyActivityFormatted}}" />
+            }
+          </ng-container>
         </app-base-card>
-        <app-base-card
-          icon="icon-flag"
-          cardTitle="Spend (SAR)"
-          cardDescription="2.5-4B"
-          cardClass="md:min-h-[260px]"
-        >
+
+        <app-base-card icon="icon-flag" cardTitle="After Sales Services" cardClass="bg-white md:min-h-[260px]">
+          <ng-container ngProjectAs="base-card-info">
+            @for(item of opportunitiesStore.details()?.afterSalesServices; track item.id){
+            <app-opportunity-details-card-info-item icon="icon-check-circle" label="{{item.keyActivityFormatted}}" />
+            }
+          </ng-container>
         </app-base-card>
       </div>
     </div>

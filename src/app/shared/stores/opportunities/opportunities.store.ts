@@ -2,18 +2,20 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { finalize, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
-import { IOpportunitiesFilterRequest, IOpportunity } from '../../interfaces/opportunities.interface';
+import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails } from '../../interfaces/opportunities.interface';
 
 const initialState: {
   loading: boolean;
   error: string | null;
   count: number;
   list: IOpportunity[];
+  details: IOpportunityDetails | null;  
 } = {
   loading: false,
   error: null,
   count: 0,
   list: [],
+  details: null
 };
 export const OpportunitiesStore = signalStore(
   { providedIn: 'root' },
@@ -28,6 +30,17 @@ export const OpportunitiesStore = signalStore(
             const opportunities = res.body.data || [];
             const totalCount = res.body.pagination?.totalCount ?? 0;
             patchState(store, { list: opportunities, count: totalCount });
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        )
+      },
+      getOpportunityDetails(id: string) {
+        patchState(store, { loading: true, error: null });
+        return opportunitiesApiService.getOpportunityById(id).pipe(
+          tap((res) => {
+            patchState(store, { details: res.body });
           }),
           finalize(() => {
             patchState(store, { loading: false });

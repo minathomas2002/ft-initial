@@ -6,8 +6,12 @@
   </ng-container>
   <ng-container ngProjectAs="page-body">
     <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
-      <app-data-cards [items]="opportunitiesStore.list()" [totalRecords]="opportunitiesStore.count()"
-        [(filter)]="filter">
+      <app-data-cards
+        [items]="opportunitiesStore.list()"
+        [totalRecords]="opportunitiesStore.count()"
+        [(filter)]="filter"
+        (filterChange)="filterService.applyFilterWithPaging()"
+      >
         <ng-template #itemsTemplate let-item="item">
           <app-opportunity-card item icon="{{getOpportunityIcon(item)}}" [cardTitle]="item.title"
             [cardDescription]="item.shortDescription" [cardClass]="isAnonymous() ? 'bg-gray-50' : 'bg-white'">
@@ -19,8 +23,7 @@
               <div class="flex gap-4">
                 @if(!item.isOtherOpportunity) {
                   <p-button [label]="'opportunity.list.viewDetails' | translate" severity="secondary" class="flex-1" fluid
-                  (onClick)="onViewDetails(item)" />
-                
+                  (onClick)="onViewDetails(item)" />                
                 }
                 @if(permissionService.canApplyOnOpportunityCard() || isAnonymous()) {
                 <p-button [label]="'opportunity.list.apply' | translate" severity="primary" class="flex-1" fluid

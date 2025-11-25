@@ -16,3 +16,53 @@ export type TOpportunitiesSortingKeys = keyof IOpportunity;
 export interface IOpportunitiesFilterRequest extends IFilterBase<TOpportunitiesSortingKeys> {
   searchText?: string;
 }
+
+export interface IOpportunityActivity {
+  id: string;
+  opportunityId: string;
+  keyActivity: string;
+  orderIndex: number;
+  createdDate: string;
+  keyActivityFormatted: string;
+}
+
+export interface IOpportunityAttachment {
+  id: string;
+  fileName: string;
+  fileExtension: string;
+  ibmIdentifier: string;
+  objectId: string;
+  fileUrl: string;
+  createdDate: string;
+}
+
+export interface IOpportunityDetails {
+  id: string;
+  title: string;
+  shortDescription: string;
+  opportunityType: EOpportunityType;
+  spendSAR: number;
+  minQuantity: number;
+  maxQuantity: number;
+  localSuppliers: number;
+  globalSuppliers: number;
+  startDate: string;
+  endDate: string;
+  status: number;
+  isActive: boolean;
+  createdDate: string;
+  updatedDate: string | null;
+  actions: number[];
+  spendSARFormatted: string;
+  minQuantityFormatted: string;
+  maxQuantityFormatted: string;
+  localSuppliersFormatted: string;
+  globalSuppliersFormatted: string;
+  designEngineerings: IOpportunityActivity[];
+  sourcings: IOpportunityActivity[];
+  manufacturings: IOpportunityActivity[];
+  assemblyTestings: IOpportunityActivity[];
+  afterSalesServices: IOpportunityActivity[];
+  attachments: IOpportunityAttachment[];
+  isApplied: boolean;
+}
