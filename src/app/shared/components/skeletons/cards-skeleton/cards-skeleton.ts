@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -15,6 +15,7 @@ import { SkeletonModule } from 'primeng/skeleton';
   styleUrl: './cards-skeleton.scss',
 })
 export class CardsSkeleton {
-  items = Array.from({ length: 9 }).map((_, i) => `Item #${i}`);
+  count = input<number>(9)
+  items = computed(() => Array.from({ length: this.count() }).map((_, i) => `Item #${i}`))
   isLoading = input<boolean>(true);
 }

@@ -63,6 +63,5 @@ export interface IOpportunityDetails {
   manufacturings: IOpportunityActivity[];
   assemblyTestings: IOpportunityActivity[];
   afterSalesServices: IOpportunityActivity[];
-  attachments: IOpportunityAttachment[];
-  isApplied: boolean;
+  attachments: IOpportunityAttachment[];  
 }

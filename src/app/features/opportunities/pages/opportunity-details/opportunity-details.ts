@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tooltip } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
@@ -12,10 +12,12 @@ import { PermissionService } from 'src/app/shared/services/permission/permission
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ERoutes } from 'src/app/shared/enums';
+import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
+import { OpportunityActionsService } from '../../services/opportunity-actions/opportunity-actions-service';
 
 @Component({
   selector: 'app-opportunity-details',
-  imports: [BaseCard, OpportunityDetailsCardInfoItem, Tooltip, BaseTagComponent, TranslatePipe, ButtonModule],
+  imports: [BaseCard, OpportunityDetailsCardInfoItem, Tooltip, BaseTagComponent, TranslatePipe, ButtonModule, CardsSkeleton],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
 })
@@ -27,14 +29,10 @@ export class OpportunityDetails implements OnInit {
   authStore = inject(AuthStore);
   toast = inject(ToasterService);
   getOpportunityTypeConfig = getOpportunityTypeConfig;
-  isAnonymous = signal<boolean>(false);
-
+  opportunityActionsService = inject(OpportunityActionsService);
+  isAnonymous = computed(() => !this.authStore.authResponse()?.token);
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    const isAnonymousData = this.route.snapshot.data['isAnonymous'];
-    if (isAnonymousData !== undefined) {
-      this.isAnonymous.set(isAnonymousData);
-    }
     if (id) {
       this.opportunitiesStore.getOpportunityDetails(id).subscribe({
         next: (data) => {

@@ -1,4 +1,4 @@
-import { EAdminOpportunityActions, EOpportunityStatus, EOpportunityType } from "../enums/opportunities.enum";
+import { EOpportunityAction, EOpportunityStatus, EOpportunityType } from "../enums/opportunities.enum";
 import { ISelectItem } from "./select-item.interface";
 
 export interface IAdminOpportunity {
@@ -12,7 +12,7 @@ export interface IAdminOpportunity {
   icon: string;
   warningMessage: string;
   applicationPeriod: string;
-  actions: EAdminOpportunityActions[];
+  actions: EOpportunityAction[];
 }
 
 
