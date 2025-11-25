@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { form, maxLength, minLength, required, submit, validate } from '@angular/forms/signals'
-import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord } from 'src/app/shared/interfaces';
+import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, SafeObjectUrl } from 'src/app/shared/interfaces';
 
 export interface IBasicInformation {
   title: string;
@@ -171,7 +171,7 @@ export class OpportunityFormService {
     submit(this.opportunityLocalizationForm, () => new Promise(() => { }))
   }
 
-  updateImageField(image: File | null) {
+  updateImageField(image: SafeObjectUrl | null) {
     const currentValue = this.opportunityInformation();
     this.opportunityInformation.set({
       ...currentValue,

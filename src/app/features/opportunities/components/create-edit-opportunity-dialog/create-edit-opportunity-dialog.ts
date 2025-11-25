@@ -50,7 +50,7 @@ export class CreateEditOpportunityDialog {
   previousStep = () => {
     this.activeStep.set(this.activeStep() - 1);
   }
-  saveAsDraft() {
+  async saveAsDraft() {
     const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.title()
     // Check if the field is invalid
     if (opportunityTitleField.invalid()) {
@@ -60,7 +60,7 @@ export class CreateEditOpportunityDialog {
     }
 
     const formValue = this.opportunityFormService.formValue();
-    const opportunityInformationFormValue = new OpportunityRequestsAdapter().toOpportunityDraftRequest(formValue);
+    const opportunityInformationFormValue = await new OpportunityRequestsAdapter().toOpportunityDraftRequest(formValue);
     const formData = new Utilities().objToFormData(opportunityInformationFormValue);
 
     // Continue with save as draft logic...
@@ -76,9 +76,19 @@ export class CreateEditOpportunityDialog {
     });
   }
 
-  publishOpportunity() {
+  async publishOpportunity() {
     this.opportunityFormService.markAsTouched();
-    console.log(this.opportunityFormService.formValue());
+    const formValue = this.opportunityFormService.formValue();
+    const opportunityInformationFormValue = await new OpportunityRequestsAdapter().toOpportunityDraftRequest(formValue);
+    const formData = new Utilities().objToFormData(opportunityInformationFormValue);
+    this.adminOpportunitiesStore.createOpportunity(formData).subscribe({
+      next: (res) => {
+        this.toasterService.success('Opportunity created successfully');
+        this.opportunityFormService.resetForm();
+        this.activeStep.set(1);
+        this.visible.set(false);
+      },
+    });
   }
 
   onClose() {

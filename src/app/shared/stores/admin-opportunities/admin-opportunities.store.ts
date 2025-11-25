@@ -63,6 +63,15 @@ export const AdminOpportunitiesStore = signalStore(
             patchState(store, { isProcessing: false, error: null });
           })
         )
+      },
+
+      createOpportunity(opportunity: FormData) {
+        patchState(store, { isProcessing: true });
+        return opportunitiesApiService.createOpportunity(opportunity).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false, error: null });
+          })
+        )
       }
     };
   })

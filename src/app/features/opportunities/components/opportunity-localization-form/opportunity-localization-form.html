@@ -31,6 +31,37 @@
             </td>
           </ng-template>
         </app-form-array-input>
+        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.sourcings" />
+      </div>
+
+      <!-- Sourcing -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Sourcing'">
+        </app-base-label>
+        <app-form-array-input
+          [(ft)]="opportunityLocalizationForm.sourcings"
+          [addButtonMessage]="'Add Sourcing Item'"
+          [maxItems]="10"
+          [createNewItem]="opportunityFormService.createNewKeyActivity"
+        >
+          <ng-template
+            #itemTemplate
+            let-itemFieldTree
+            let-index="index"
+          >
+            <td class="p-3 border border-gray-200">
+              <input
+                type="text"
+                pInputText
+                class="w-full"
+                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.designEngineerings)"
+                placeholder="Enter Key Activities"
+                [field]="itemFieldTree.keyActivity"
+                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+              />
+            </td>
+          </ng-template>
+        </app-form-array-input>
         <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.designEngineerings" />
       </div>
 

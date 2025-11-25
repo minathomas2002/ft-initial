@@ -34,7 +34,7 @@ export interface IOpportunityInformationFrom {
   localSuppliers: string;
   globalSuppliers: string;
   dateRange: [Date, Date] | null;
-  image: File | null;
+  image: SafeObjectUrl | null;
 }
 
 export interface IOpportunityLocalizationFrom {
@@ -54,10 +54,29 @@ export interface IKeyActivityRecordRequest {
   orderIndex: number;
 }
 
-export interface IOpportunityDraftRequest extends IOpportunityInformationFrom {
+export interface IOpportunityDraftRequest {
+  id: string | null
+  title: string;
+  opportunityType: string | null;
+  shortDescription: string;
+  opportunityCategory: string;
+  spendSAR: string;
+  minQuantity: string;
+  maxQuantity: string;
+  localSuppliers: string;
+  globalSuppliers: string;
+  startDate: string;
+  endDate: string;
+  image: File | null;
   designEngineerings: IKeyActivityRecordRequest[];
   sourcings: IKeyActivityRecordRequest[];
   manufacturings: IKeyActivityRecordRequest[];
   assemblyTestings: IKeyActivityRecordRequest[];
   afterSalesServices: IKeyActivityRecordRequest[];
+}
+
+export interface SafeObjectUrl {
+  objectURL: {
+    changingThisBreaksApplicationSecurity: string;
+  };
 }

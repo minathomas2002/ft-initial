@@ -12,6 +12,7 @@ import { MessageModule } from 'primeng/message';
 import { FormInputErrorMessages } from 'src/app/shared/components/utility-components/form-input-error-messages/form-input-error-messages';
 import { PrimeInvalidDirective } from 'src/app/shared/directives/prime-invalid.directive';
 import { FormsModule } from '@angular/forms';
+import { SafeObjectUrl } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -70,10 +71,12 @@ export class OpportunityInformationForm implements OnInit {
   }
 
   onFilesChanged(files: File[]) {
+    console.log(files);
+
     // Update the form field value with the files
     // This will automatically trigger validation and update the fieldTree
     const imageValue = files.length > 0 ? files[0] : null;
-    this.opportunityFormService.updateImageField(imageValue);
+    this.opportunityFormService.updateImageField(imageValue as SafeObjectUrl | null);
     // Mark the field as touched so validation errors appear when user interacts with it
     this.opportunityInformationForm.image().markAsTouched();
   }

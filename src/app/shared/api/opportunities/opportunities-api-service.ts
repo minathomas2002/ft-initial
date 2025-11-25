@@ -21,4 +21,8 @@ export class OpportunitiesApiService {
   getOpportunityById(id: string): Observable<IBaseApiResponse<IOpportunityDetails>> {
     return this.baseHttpService.get<IOpportunityDetails, never>(`${API_ENDPOINTS.opportunities.getOpportunityById}/${id}`);
   }
+
+  createOpportunity(opportunity: FormData): Observable<IBaseApiResponse<IOpportunity>> {
+    return this.baseHttpService.post<IOpportunity, unknown, FormData>(API_ENDPOINTS.opportunities.createOpportunity, opportunity);
+  }
 }
