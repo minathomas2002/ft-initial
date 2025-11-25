@@ -33,7 +33,7 @@ export interface IOpportunityInformationFrom {
   maxQuantity: string;
   localSuppliers: string;
   globalSuppliers: string;
-  dateRange: Date[] | null;
+  dateRange: [Date, Date] | null;
   image: File | null;
 }
 

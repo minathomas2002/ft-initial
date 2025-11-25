@@ -178,4 +178,69 @@ export class OpportunityFormService {
       image: image
     });
   }
+
+  updateDateRange(dateRange: [Date, Date] | null) {
+    const currentValue = this.opportunityInformation();
+    this.opportunityInformation.set({
+      ...currentValue,
+      dateRange: dateRange
+    });
+  }
+
+  handleDateRangeChange(event: any) {
+    // Handle date range selection from PrimeNG DatePicker
+    // PrimeNG DatePicker emits different formats depending on selection state
+    if (event === null || event === undefined) {
+      // Clear the value
+      this.updateDateRange(null);
+      return;
+    }
+
+    if (Array.isArray(event)) {
+      // Check if we have a complete date range (both start and end dates)
+      // event[0] and event[1] must be truthy and not null/undefined
+      if (event.length === 2 && event[0] != null && event[1] != null) {
+        // Ensure dates are Date objects and valid
+        let startDate: Date;
+        let endDate: Date;
+
+        if (event[0] instanceof Date) {
+          startDate = event[0];
+        } else if (typeof event[0] === 'string' || typeof event[0] === 'number') {
+          startDate = new Date(event[0]);
+        } else {
+          // Invalid start date
+          return;
+        }
+
+        if (event[1] instanceof Date) {
+          endDate = event[1];
+        } else if (typeof event[1] === 'string' || typeof event[1] === 'number') {
+          endDate = new Date(event[1]);
+        } else {
+          // Invalid end date
+          return;
+        }
+
+        // Validate dates are not invalid (NaN)
+        if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+          const normalizedDates: [Date, Date] = [startDate, endDate];
+          // Update the form field value
+          this.updateDateRange(normalizedDates);
+          // Mark the field as touched
+          this.opportunityInformationForm.dateRange().markAsTouched();
+        }
+      } else if (event.length === 1 && event[0] != null) {
+        // Only start date selected, don't update yet (wait for end date)
+        // This is normal behavior when user is selecting a range
+        return;
+      } else {
+        // Empty array or invalid format
+        this.updateDateRange(null);
+      }
+    } else {
+      // Single date or other format - treat as null
+      this.updateDateRange(null);
+    }
+  }
 }

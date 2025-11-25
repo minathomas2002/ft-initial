@@ -1,5 +1,5 @@
 import { FileuploadComponent } from './../../../../shared/components/utility-components/fileupload/fileupload.component';
-import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { Field } from '@angular/forms/signals';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { SelectModule } from 'primeng/select';
@@ -11,6 +11,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { MessageModule } from 'primeng/message';
 import { FormInputErrorMessages } from 'src/app/shared/components/utility-components/form-input-error-messages/form-input-error-messages';
 import { PrimeInvalidDirective } from 'src/app/shared/directives/prime-invalid.directive';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -23,13 +24,13 @@ import { PrimeInvalidDirective } from 'src/app/shared/directives/prime-invalid.d
     FileuploadComponent,
     MessageModule,
     FormInputErrorMessages,
-    PrimeInvalidDirective
+    PrimeInvalidDirective,
+    FormsModule
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpportunityInformationForm {
+export class OpportunityInformationForm implements OnInit {
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes;
@@ -41,9 +42,28 @@ export class OpportunityInformationForm {
   placeholder = "jpg, png, pdf, docx and video, max file size (10 MB)";
 
   invalidSelectedFile = signal(false);
-
-  maxFileSize = 10485760 /* 10 MB */;
   fileuploadComponent = viewChild<FileuploadComponent>("fileupload");
+
+  ngOnInit() {
+    // Initialize files signal from form service when component is created
+    // This ensures files are displayed when revisiting the step
+    this.syncFilesFromFormService();
+  }
+
+  private syncFilesFromFormService() {
+    const imageValue = this.opportunityInformationForm.image().value();
+
+    if (imageValue instanceof File) {
+      const currentFiles = this.files();
+      // Only update if files are different or empty
+      if (currentFiles.length === 0 || currentFiles[0] !== imageValue) {
+        this.files.set([imageValue]);
+      }
+    } else if (imageValue === null && this.files().length > 0) {
+      this.clearChildUpload();
+      this.files.set([]);
+    }
+  }
 
   clearChildUpload() {
     this.fileuploadComponent()?.clearFiles(); // Calls method in child, which calls .clear()
@@ -56,5 +76,9 @@ export class OpportunityInformationForm {
     this.opportunityFormService.updateImageField(imageValue);
     // Mark the field as touched so validation errors appear when user interacts with it
     this.opportunityInformationForm.image().markAsTouched();
+  }
+
+  onDateRangeChange(event: any) {
+    this.opportunityFormService.handleDateRangeChange(event);
   }
 }

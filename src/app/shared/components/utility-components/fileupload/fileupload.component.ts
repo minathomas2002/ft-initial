@@ -1,4 +1,4 @@
-import { Component, inject, input, model, viewChild } from "@angular/core";
+import { Component, effect, inject, input, model, viewChild, afterNextRender } from "@angular/core";
 import { MessageService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import {
@@ -24,6 +24,51 @@ export class FileuploadComponent {
 
   private fileupload = viewChild<FileUpload>("fileupload");
   private toasterService = inject(ToasterService);
+
+  constructor() {
+    // Sync PrimeNG's internal files array when the model signal changes
+    effect(() => {
+      const modelFiles = this.files();
+      const primeNgComponent = this.fileupload();
+
+      if (primeNgComponent) {
+        // Clean up old objectURLs to prevent memory leaks
+        if (primeNgComponent.files) {
+          primeNgComponent.files.forEach((file: any) => {
+            if (file.objectURL) {
+              URL.revokeObjectURL(file.objectURL);
+            }
+          });
+        }
+
+        // Sync PrimeNG's internal files array with the model signal
+        if (modelFiles.length > 0) {
+          // Clear existing files first
+          if (primeNgComponent.files) {
+            primeNgComponent.files.length = 0;
+          }
+
+          // Add files to PrimeNG's internal array with objectURL for preview
+          modelFiles.forEach(file => {
+            if (file instanceof File) {
+              // Create objectURL for file preview
+              const objectURL = URL.createObjectURL(file);
+              // Add file with objectURL to PrimeNG's files array
+              const fileWithUrl = Object.assign(file, { objectURL });
+              if (primeNgComponent.files) {
+                primeNgComponent.files.push(fileWithUrl);
+              }
+            }
+          });
+        } else {
+          // Clear PrimeNG's internal files array
+          if (primeNgComponent.files) {
+            primeNgComponent.files.length = 0;
+          }
+        }
+      }
+    });
+  }
 
   clear!: () => void;
 
