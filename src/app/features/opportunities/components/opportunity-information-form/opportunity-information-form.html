@@ -42,7 +42,10 @@
           class="md:w-[50%]"
           [appPrimeInvalid]="opportunityInformationForm.opportunityType"
         />
-        <app-form-input-error-messages [fieldTree]="opportunityInformationForm.opportunityType" />
+        <app-form-input-error-messages
+          [fieldTree]="opportunityInformationForm.opportunityType"
+          class="w-1/2"
+        />
       </div>
     </div>
   </div>
@@ -64,10 +67,10 @@
           />
           <app-form-input-error-messages [fieldTree]="opportunityInformationForm.spendSAR" />
         </div>
-        <div class="flex flex-col">
+        <div>
           <app-base-label [title]="'Quantity (Units)'" />
-          <div class="flex gap-2 items-center">
-            <div class="flex flex-col">
+          <div class="flex gap-2">
+            <div>
               <input
                 type="number"
                 pInputText
@@ -77,8 +80,8 @@
               />
               <app-form-input-error-messages [fieldTree]="opportunityInformationForm.minQuantity" />
             </div>
-            <span class="text-gray-700 text-xl font-semibold"> - </span>
-            <div class="flex flex-col">
+            <span class="text-gray-700 text-xl font-semibold pt-1"> - </span>
+            <div>
               <input
                 type="number"
                 pInputText
