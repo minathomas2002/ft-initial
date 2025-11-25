@@ -17,7 +17,7 @@ import { ToasterService } from "src/app/shared/services/toaster/toaster.service"
   providers: [MessageService],
 })
 export class FileuploadComponent {
-  maxFileSize = input<number>(1024 * 1024 * 10); // 10MB default
+  maxFileSize = input<number>(1024 * 1024 * 5); // 5MB default
   acceptedFileTypes = input<string>("*/*");
   files = model<File[]>([]);
   placeholder = input("SVG, PNG, JPG, PDF, DOCX, MP4");

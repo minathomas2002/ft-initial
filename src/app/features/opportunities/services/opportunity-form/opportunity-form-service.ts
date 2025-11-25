@@ -89,6 +89,17 @@ export class OpportunityFormService {
           }
         }
         return null;
+      }),
+      validate(schemaPath.dateRange, ({ value }) => {
+        console.log(value());
+
+        if (value() && !value()![1]) {
+          return {
+            kind: 'minLength',
+            message: 'You should select a date range'
+          }
+        }
+        return null;
       })
   });
   opportunityLocalizationForm = form(this.opportunityLocalization, schemaPath => {
