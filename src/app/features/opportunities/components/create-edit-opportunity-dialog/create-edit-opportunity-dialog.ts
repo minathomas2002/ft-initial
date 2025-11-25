@@ -80,4 +80,9 @@ export class CreateEditOpportunityDialog {
     this.opportunityFormService.markAsTouched();
     console.log(this.opportunityFormService.formValue());
   }
+
+  onClose() {
+    this.opportunityFormService.resetForm();
+    this.activeStep.set(1);
+  }
 }

@@ -53,5 +53,7 @@ export class OpportunityInformationForm {
     // This will automatically trigger validation and update the fieldTree
     const imageValue = files.length > 0 ? files[0] : null;
     this.opportunityFormService.updateImageField(imageValue);
+    // Mark the field as touched so validation errors appear when user interacts with it
+    this.opportunityInformationForm.image().markAsTouched();
   }
 }
