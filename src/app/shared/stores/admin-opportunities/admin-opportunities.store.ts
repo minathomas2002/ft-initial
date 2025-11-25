@@ -12,6 +12,7 @@ const initialState: {
   count: number;
   list: IOpportunity[];
   opportunityTypes: ISelectItem[];
+  opportunityCategories: ISelectItem[];
 } = {
   isLoading: false,
   isProcessing: false,
@@ -25,6 +26,14 @@ const initialState: {
   {
     id: '2',
     name: 'Product',
+  }],
+  opportunityCategories: [{
+    id: '1',
+    name: 'Category 1',
+  },
+  {
+    id: '2',
+    name: 'Category 2',
   }],
 };
 export const AdminOpportunitiesStore = signalStore(

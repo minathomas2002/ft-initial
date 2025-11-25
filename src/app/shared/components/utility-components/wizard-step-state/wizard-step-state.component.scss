@@ -1,0 +1,7 @@
+:host::ng-deep {
+  .p-step-number:has(.icon-check) {
+    background: var(--p-stepper-step-number-active-background) !important;
+    border-color: var(--p-stepper-step-number-active-border-color) !important;
+    color: var(--p-stepper-step-number-active-color) !important;
+}
+}

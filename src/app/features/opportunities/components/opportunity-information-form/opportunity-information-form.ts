@@ -33,6 +33,7 @@ export class OpportunityInformationForm {
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes;
+  opportunityCategories = this.adminOpportunitiesStore.opportunityCategories;
   opportunityInformationForm = this.opportunityFormService.opportunityInformationForm
 
   files = signal<File[]>([]);
