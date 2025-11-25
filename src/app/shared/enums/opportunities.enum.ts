@@ -13,9 +13,10 @@ export enum EOpportunityState {
   INACTIVE = 2,
 }
 
-export enum EAdminOpportunityActions {
-  Publish = 1,
-  Draft = 2,
-  Edit = 3,
-  Delete = 4,
+export enum EOpportunityAction {
+  Edit = 1,
+  Delete = 2,
+  MoveToDraft = 3,
+  Publish = 4,
+  Apply = 5,
 }

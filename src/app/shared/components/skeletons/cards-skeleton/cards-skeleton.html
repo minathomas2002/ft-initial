@@ -7,7 +7,7 @@
 
 <ng-template #loading>
     <div class="items-grid mb-6">
-        @for (item of items; track item) {
+        @for (item of items(); track item) {
         <p-card class="items-card">
             <ng-template pTemplate="content">
                 <div class="items-card__body">
