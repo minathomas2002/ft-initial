@@ -45,7 +45,13 @@ export class OpportunityDetails implements OnInit {
   }
 
   onBack() {
-    this.router.navigate(['../']);
+    if(this.isAnonymous()) {
+      this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities]);
+    } else if(this.permissionService.canAccessOnOpportunityAdmin()) {
+      this.router.navigate(['/', ERoutes.admin, ERoutes.opportunities]);
+    }else {
+      this.router.navigate(['/', ERoutes.opportunities]);
+    }
   }
 
   onApply() {

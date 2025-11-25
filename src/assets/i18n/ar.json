@@ -151,6 +151,22 @@
 			"status": "حالة الفرصة",
 			"state": "حالة الفرصة",
 			"type": "نوع الفرصة"
+		},
+		"details": {
+			"backToOpportunities": "العودة إلى الفرص",
+			"forecastedDemand": "الطلب المتوقع لشركة الكهرباء (2024 – 2030)",
+			"demandNote": "الأرقام المقدمة هنا تقديرية وقابلة للتغيير",
+			"spendSAR": "الإنفاق (ريال سعودي)",
+			"quantityUnits": "الكمية (وحدات)",
+			"supplierBase": "قاعدة الموردين الحالية لشركة الكهرباء",
+			"local": "محلي",
+			"global": "عالمي",
+			"localizationAreas": "مجالات فرص التوطين",
+			"designEngineering": "التصميم والهندسة",
+			"sourcing": "التوريد",
+			"manufacturing": "التصنيع",
+			"assemblyTesting": "التجميع والاختبار",
+			"afterSalesServices": "خدمات ما بعد البيع"
 		}
 	}
 }
