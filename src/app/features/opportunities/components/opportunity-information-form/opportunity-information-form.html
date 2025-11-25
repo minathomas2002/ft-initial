@@ -141,7 +141,7 @@
           placeholder="Select date range"
           [dateFormat]="'dd M yy'"
           class="w-full md:w-[50%]"
-          [appPrimeInvalid]="opportunityInformationForm.dateRange"
+          [invalid]="opportunityInformationForm.dateRange().invalid() && opportunityInformationForm.dateRange().touched()"
           fluid
         />
         <app-form-input-error-messages [fieldTree]="opportunityInformationForm.dateRange" />
