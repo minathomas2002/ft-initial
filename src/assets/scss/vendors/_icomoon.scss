@@ -9,7 +9,6 @@
   font-style: normal;
   font-display: block;
 }
-
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
@@ -25,6 +24,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-check:before {
+  content: "\e923";
+}
 .icon-arrow-right-up:before {
   content: "\e900";
 }
@@ -97,7 +99,7 @@
 .icon-arrow-right:before {
   content: "\e917";
 }
-.icon-currency-dollar-circle:before {
+.icon-curruncy-dollar-circle:before {
   content: "\e918";
 }
 .icon-cursor-click-01:before {
