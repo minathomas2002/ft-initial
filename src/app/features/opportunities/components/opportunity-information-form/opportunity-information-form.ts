@@ -47,4 +47,11 @@ export class OpportunityInformationForm {
   clearChildUpload() {
     this.fileuploadComponent()?.clearFiles(); // Calls method in child, which calls .clear()
   }
+
+  onFilesChanged(files: File[]) {
+    // Update the form field value with the files
+    // This will automatically trigger validation and update the fieldTree
+    const imageValue = files.length > 0 ? files[0] : null;
+    this.opportunityFormService.updateImageField(imageValue);
+  }
 }

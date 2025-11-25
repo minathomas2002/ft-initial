@@ -159,4 +159,12 @@ export class OpportunityFormService {
     submit(this.opportunityInformationForm, () => new Promise(() => { }))
     submit(this.opportunityLocalizationForm, () => new Promise(() => { }))
   }
+
+  updateImageField(image: File | null) {
+    const currentValue = this.opportunityInformation();
+    this.opportunityInformation.set({
+      ...currentValue,
+      image: image
+    });
+  }
 }
