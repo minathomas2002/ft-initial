@@ -153,6 +153,22 @@
       "status": "Opportunity Status",
       "state": "Opportunity State",
       "type": "Opportunity Type"
+    },
+    "details": {
+      "backToOpportunities": "Back to opportunities",
+      "forecastedDemand": "Forecasted SEC Demand (2024 – 2030)",
+      "demandNote": "Demand numbers provided here are estimated and subject to change",
+      "spendSAR": "Spend (SAR)",
+      "quantityUnits": "Quantity (Units)",
+      "supplierBase": "SEC Current Supplier Base",
+      "local": "Local",
+      "global": "Global",
+      "localizationAreas": "Localization Opportunity Areas",
+      "designEngineering": "Design & Engineering",
+      "sourcing": "Sourcing",
+      "manufacturing": "Manufacturing",
+      "assemblyTesting": "Assembly Testing",
+      "afterSalesServices": "After Sales Services"
     }
   }
 }

@@ -11,11 +11,11 @@ import { ERoutes } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
-import { IOpportunity, TColors } from 'src/app/shared/interfaces';
+import { IOpportunity } from 'src/app/shared/interfaces';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { EOpportunityType } from 'src/app/shared/enums/opportunities.enum';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { OpportunitiesFilters } from '../../components/opportunities-filter/opportunities-filters';
+import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.utils';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -81,23 +81,5 @@ export class OpportunitiesList implements OnInit {
     }
   }
 
-  getOpportunityTypeConfig(opportunityType: number): { label: string; color: TColors } {
-    switch (opportunityType) {
-      case EOpportunityType.SERVICES:
-        return {
-          label: 'opportunity.type.services',
-          color: 'primary'
-        };
-      case EOpportunityType.MATERIAL:
-        return {
-          label: 'opportunity.type.materials',
-          color: 'orange'
-        };
-      default:
-        return {
-          label: '',
-          color: 'gray',
-        };
-    }
-  }
+  getOpportunityTypeConfig = getOpportunityTypeConfig;
 }
