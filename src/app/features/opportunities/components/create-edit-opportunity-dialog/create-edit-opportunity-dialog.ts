@@ -8,6 +8,8 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { Utilities } from 'src/app/shared/classes/utilities';
 import { OpportunityLocalizationForm } from '../opportunity-localization-form/opportunity-localization-form';
 import { OpportunityRequestsAdapter } from '../../classes/opportunity-requests-adapter';
+import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -15,7 +17,8 @@ import { OpportunityRequestsAdapter } from '../../classes/opportunity-requests-a
     BaseWizardDialog,
     StepContentDirective,
     OpportunityInformationForm,
-    OpportunityLocalizationForm
+    OpportunityLocalizationForm,
+    ButtonModule
   ],
   templateUrl: './create-edit-opportunity-dialog.html',
   styleUrl: './create-edit-opportunity-dialog.scss',
@@ -25,22 +28,22 @@ export class CreateEditOpportunityDialog {
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   toasterService = inject(ToasterService);
-  steps = computed(() => [
+  steps = computed<IWizardStepState[]>(() => [
     {
       title: 'Opportunity Information',
       description: 'Enter Opportunity details',
-      isValid: this.opportunityFormService.opportunityInformationForm().valid(),
-      hasStarted: !this.opportunityFormService.opportunityInformationForm().touched(),
+      isActive: this.activeStep() === 1,
+      formState: this.opportunityFormService.opportunityInformationForm(),
     },
     {
       title: 'Opportunity Localization',
       description: 'Enter Opportunity localization details',
-      isValid: this.opportunityFormService.opportunityLocalizationForm().valid(),
-      hasStarted: !this.opportunityFormService.opportunityLocalizationForm().touched(),
+      isActive: this.activeStep() === 2,
+      formState: this.opportunityFormService.opportunityLocalizationForm(),
     },
   ])
   activeStep = signal<number>(1);
-  isNextStepDisabled = computed(() => !this.steps()[this.activeStep() - 1].isValid);
+
   nextStep = () => {
     this.activeStep.set(this.activeStep() + 1);
   }
@@ -48,10 +51,6 @@ export class CreateEditOpportunityDialog {
     this.activeStep.set(this.activeStep() - 1);
   }
   saveAsDraft() {
-
-    const formValue = this.opportunityFormService.formValue();
-    console.log('formValue', formValue);
-    return
     const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.title()
     // Check if the field is invalid
     if (opportunityTitleField.invalid()) {
@@ -60,6 +59,7 @@ export class CreateEditOpportunityDialog {
       return;
     }
 
+    const formValue = this.opportunityFormService.formValue();
     const opportunityInformationFormValue = new OpportunityRequestsAdapter().toOpportunityDraftRequest(formValue);
     const formData = new Utilities().objToFormData(opportunityInformationFormValue);
 
@@ -74,5 +74,10 @@ export class CreateEditOpportunityDialog {
         this.visible.set(false);
       },
     });
+  }
+
+  publishOpportunity() {
+    this.opportunityFormService.markAsTouched();
+    console.log(this.opportunityFormService.formValue());
   }
 }

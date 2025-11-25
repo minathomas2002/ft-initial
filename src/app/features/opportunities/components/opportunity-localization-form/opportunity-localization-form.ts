@@ -7,6 +7,7 @@ import { OpportunityFormService } from '../../services/opportunity-form/opportun
 import { InputTextModule } from 'primeng/inputtext';
 import { IKeyActivityRecord } from 'src/app/shared/interfaces';
 import { Field, FieldTree } from '@angular/forms/signals';
+import { FormInputErrorMessages } from 'src/app/shared/components/utility-components/form-input-error-messages/form-input-error-messages';
 
 
 interface IAfterSales {
@@ -31,12 +32,20 @@ interface IAfterSales {
     BaseLabelComponent,
     FormArrayInput,
     InputTextModule,
-    Field
+    Field,
+    FormInputErrorMessages,
   ],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',
 })
 export class OpportunityLocalizationForm {
   opportunityFormService = inject(OpportunityFormService);
-  opportunityLocalizationForm = this.opportunityFormService.opportunityLocalizationForm
+  opportunityLocalizationForm = this.opportunityFormService.opportunityLocalizationForm;
+
+  isRecordInvalid(itemFieldTree: FieldTree<IKeyActivityRecord>, formTree: FieldTree<IKeyActivityRecord[]>): boolean {
+    if (itemFieldTree().value().keyActivity.trim() != '') {
+      return false;
+    }
+    return formTree().touched() && formTree().invalid();
+  }
 }

@@ -1,7 +1,6 @@
 <app-base-wizard-dialog
   [(visible)]="visible"
   [(activeStep)]="activeStep"
-  [isNextStepDisabled]="isNextStepDisabled()"
   [steps]="steps()"
   (onNextStep)="nextStep()"
   (onPreviousStep)="previousStep()"
@@ -15,4 +14,13 @@
   <ng-template [appStepContent]="2">
     <app-opportunity-localization-form></app-opportunity-localization-form>
   </ng-template>
+
+  <ng-container ngProjectAs="final-step-action">
+    <p-button
+      label="Publish"
+      (click)="publishOpportunity()"
+      [disabled]="adminOpportunitiesStore.isProcessing()"
+      [loading]="adminOpportunitiesStore.isProcessing() ||adminOpportunitiesStore.isLoading()"
+    ></p-button>
+  </ng-container>
 </app-base-wizard-dialog>

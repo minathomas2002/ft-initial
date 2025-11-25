@@ -1,8 +1,6 @@
-import { OpportunityInformationForm } from './../../components/opportunity-information-form/opportunity-information-form';
-import { ISelectItem } from '../../../../shared/interfaces/select-item.interface';
 import { Injectable, signal, computed } from '@angular/core';
-import { disabled, form, min, minLength, required } from '@angular/forms/signals'
-import { ICreateOpportunity, IOpportunityInformationFrom, IOpportunityLocalizationFrom } from 'src/app/shared/interfaces';
+import { form, minLength, required, submit, validate } from '@angular/forms/signals'
+import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord } from 'src/app/shared/interfaces';
 
 export interface IBasicInformation {
   title: string;
@@ -62,13 +60,64 @@ export class OpportunityFormService {
   //Public forms that can be accessed directly
   opportunityInformationForm = form(this.opportunityInformation, (schemaPath) => {
     required(schemaPath.title, { message: 'opportunity title is required' }),
-      minLength(schemaPath.title, 3, { message: 'opportunity title must be at least 3 characters long' }),
-      min(schemaPath.title, 10, { message: 'opportunity title must be at least 10 characters long' })
+      required(schemaPath.shortDescription, { message: 'opportunity short description is required' }),
+      required(schemaPath.opportunityType, { message: 'opportunity type is required' }),
+      required(schemaPath.opportunityCategory, { message: 'opportunity category is required' }),
+      required(schemaPath.spendSAR, { message: 'opportunity spend SAR is required' }),
+      required(schemaPath.minQuantity, { message: 'opportunity min quantity is required' }),
+      required(schemaPath.maxQuantity, { message: 'opportunity max quantity is required' }),
+      required(schemaPath.localSuppliers, { message: 'opportunity local suppliers is required' }),
+      required(schemaPath.globalSuppliers, { message: 'opportunity global suppliers is required' }),
+      required(schemaPath.dateRange, { message: 'opportunity date range is required' }),
+      required(schemaPath.image, { message: 'opportunity image is required' })
   });
-  opportunityLocalizationForm = form(this.opportunityLocalization);
+  opportunityLocalizationForm = form(this.opportunityLocalization, schemaPath => {
+    // Validate arrays have at least one item
+    validate(schemaPath.designEngineerings, ({ value }) => {
+      return this.validateKeyActivityArray(value()) ? null : {
+        kind: 'required',
+        message: 'Design engineering is required'
+      };
+    })
+    validate(schemaPath.sourcings, ({ value }) => {
+      return this.validateKeyActivityArray(value()) ? null : {
+        kind: 'required',
+        message: 'Sourcing is required'
+      };
+    })
+    validate(schemaPath.manufacturings, ({ value }) => {
+      return this.validateKeyActivityArray(value()) ? null : {
+        kind: 'required',
+        message: 'Manufacturing is required'
+      };
+    })
+    validate(schemaPath.assemblyTestings, ({ value }) => {
+      return this.validateKeyActivityArray(value()) ? null : {
+        kind: 'required',
+        message: 'Assembly testing is required'
+      };
+    })
+    validate(schemaPath.afterSalesServices, ({ value }) => {
+      return this.validateKeyActivityArray(value()) ? null : {
+        kind: 'required',
+        message: 'After sales services is required'
+      };
+    })
+  });
+
+  // Helper function to validate a single array
+  private validateKeyActivityArray = (array: IKeyActivityRecord[]): boolean => {
+    return array.every(item => item.keyActivity && item.keyActivity.trim() !== '');
+  };
 
 
-  isFormValid = computed(() => this.opportunityInformationForm().valid() && this.opportunityLocalizationForm().valid());
+
+  isFormValid = computed(() => {
+    const infoFormValid = this.opportunityInformationForm().valid();
+    const localizationFormValid = this.opportunityLocalizationForm().valid();
+    // Form is invalid if any array validation fails
+    return infoFormValid && localizationFormValid
+  });
   formValue = computed(() => {
     return {
       opportunityInformationFrom: this.opportunityInformationForm().value(),
@@ -85,4 +134,9 @@ export class OpportunityFormService {
 
   // Factory method to create new key activity records
   createNewKeyActivity = () => ({ keyActivity: '' });
+
+  markAsTouched() {
+    submit(this.opportunityInformationForm, () => new Promise(() => { }))
+    submit(this.opportunityLocalizationForm, () => new Promise(() => { }))
+  }
 }

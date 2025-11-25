@@ -43,15 +43,7 @@
                   class="bg-transparent border-0 inline-flex flex-col gap-2"
                   (click)="activateCallback()"
                 >
-                  <app-wizard-step-state
-                    [title]="step.title"
-                    [description]="step.description"
-                    [isValid]="step.isValid"
-                    [hasStarted]="step.hasStarted ?? false"
-                    [hasErrors]="step.hasErrors ?? false"
-                    [activeStep]="activeStep()"
-                    [stepNumber]="i + 1"
-                  />
+                  <app-wizard-step-state [stepState]="step" />
                 </button>
               </ng-template>
             </p-step>
@@ -111,12 +103,12 @@
             (click)="nextStep()"
             icon="icon-arrow-right"
             label="Next"
-            [disabled]="isNextStepDisabled() || isLoading()"
+            [disabled]="isLoading()"
             [loading]="isLoading()"
           />
           }
           @if (isFinalStep()) {
-          <ng-content select="final-step"></ng-content>
+          <ng-content select="final-step-action"></ng-content>
           }
         </div>
       </div>

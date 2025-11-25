@@ -1,49 +1,37 @@
 import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BadgeModule } from 'primeng/badge';
+import { FieldState } from '@angular/forms/signals';
+import { EWizardStepState } from 'src/app/shared/enums/wizard-step-state.enum';
+import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 
 export type StepState = 'empty' | 'in-progress' | 'valid' | 'error';
 
 @Component({
   selector: 'app-wizard-step-state',
-  imports: [CommonModule],
+  imports: [BadgeModule],
   templateUrl: './wizard-step-state.component.html',
   styleUrl: './wizard-step-state.component.scss',
   standalone: true,
 })
 export class WizardStepStateComponent {
-  // Step information
-  title = input.required<string>();
-  description = input.required<string>();
+  stepState = input.required<IWizardStepState>();
+  formState = computed(() => this.stepState().formState);
+  errorsNumber = computed(() =>
+    this.formState().dirty()
+      ? this.formState().errors?.length ?? 0 : 0);
 
-  // Step state properties
-  isValid = input<boolean>(false);
-  hasStarted = input<boolean>(false);
-  hasErrors = input<boolean>(false);
-
-  // Active step information
-  activeStep = input.required<number>();
-  stepNumber = input.required<number>();
-
-  // Computed state
-  stepState = computed<StepState>(() => {
-    // If step is valid and not active, show checkmark
-    if (this.isValid()) {
-      return 'valid';
+  status = computed(() => {
+    if (this.formState().valid()) {
+      return EWizardStepState.Completed;
+    } else if (this.formState().dirty() && this.formState().invalid()) {
+      return EWizardStepState.Error;
     }
-
-    // If there are errors (invalid format, not empty), show error
-    if (this.hasErrors()) {
-      return 'error';
-    }
-
-    // If started but not valid, show in-progress
-    if (this.hasStarted()) {
-      return 'in-progress';
-    }
-
-    return 'empty';
+    return EWizardStepState.Incomplete;
   });
 
-  isActive = computed(() => this.activeStep() === this.stepNumber());
+  get EWizardStepState() {
+    return EWizardStepState;
+  }
 }
 

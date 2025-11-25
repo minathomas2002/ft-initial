@@ -2,10 +2,10 @@
   .p-step-active .p-step-number::before{
     content: '';
     position: absolute;
-    width: 130%;
-    height: 130%;
-    top: -15%;
-    left: -15%;
+    width: 135%;
+    height: 135%;
+    top: -18%;
+    left: -18%;
     border-radius: 50%;
     border: 2px solid var(--p-stepper-step-title-active-color);
 }

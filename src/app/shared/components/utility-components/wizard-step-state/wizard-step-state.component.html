@@ -1,36 +1,41 @@
-<div class="flex items-center gap-4">
-  <span class="p-step-number flex items-center justify-center !w-[32px] !h-[32px]">
-    @switch (stepState()) {
-    @case ('valid') {
-    <i
-      class="icon-check-circle text-success text-sm"
-      [class.text-white]="isActive()"
-    ></i>
-    }
-    @case ('error') {
-    <i
-      class="icon-error text-red-600 text-sm"
-      [class.text-white]="isActive()"
-    ></i>
-    }
-    @case ('in-progress') {
-    <i
-      class="icon-edit text-primary text-sm"
-      [class.text-white]="isActive()"
-    ></i>
-    }
-    }
-  </span>
-  <div class="flex flex-col items-start">
-    <h3
-      class="text-md font-semibold"
-      [ngClass]="{'text-primary-600': isActive()}"
-    >{{title()}}</h3>
-    <h4
-      class="text-sm"
-      [ngClass]="{'text-primary-400': isActive()}"
-    >
-      {{description()}}
-    </h4>
+<div class="flex items-center justify-between">
+  <div class="flex items-center gap-4">
+    <span class="p-step-number flex items-center justify-center !w-[32px] !h-[32px]">
+      @switch (status()) {
+      @case (EWizardStepState.Incomplete) {
+      <i
+        class="block w-[10px] h-[10px] bg-gray-200 rounded-full"
+        [class.bg-white]="stepState().isActive"
+      ></i>
+      }
+      @case (EWizardStepState.Completed) {
+      <i class="icon-check text-white"></i>
+      }
+      @case (EWizardStepState.Error) {
+      <i class="block w-[10px] h-[10px] bg-white rounded-full"></i>
+      }
+      }
+    </span>
+    <!-- Name and description -->
+    <div class="flex flex-col items-start">
+      <h3
+        class="text-md font-semibold"
+        [class.text-primary-600]="stepState().isActive"
+      >{{stepState().title}}</h3>
+      <h4
+        class="text-sm"
+        [class.text-primary-400]="stepState().isActive"
+      >
+        {{stepState().description}}
+      </h4>
+    </div>
   </div>
+
+  <!-- Errors Badge -->
+  @if(errorsNumber() > 0){
+  <p-badge
+    [value]="errorsNumber()"
+    [severity]="'danger'"
+  ></p-badge>
+  }
 </div>

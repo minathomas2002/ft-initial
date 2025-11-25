@@ -23,6 +23,7 @@
                 type="text"
                 pInputText
                 class="w-full"
+                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.designEngineerings)"
                 placeholder="Enter Key Activities"
                 [field]="itemFieldTree.keyActivity"
                 (blur)="itemFieldTree.keyActivity().markAsTouched()"
@@ -30,6 +31,7 @@
             </td>
           </ng-template>
         </app-form-array-input>
+        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.designEngineerings" />
       </div>
 
       <!-- Manufacturing -->
@@ -53,12 +55,14 @@
                 pInputText
                 class="w-full"
                 placeholder="Enter Key Activities"
+                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.manufacturings)"
                 [field]="itemFieldTree.keyActivity"
                 (blur)="itemFieldTree.keyActivity().markAsTouched()"
               />
             </td>
           </ng-template>
         </app-form-array-input>
+        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.manufacturings" />
       </div>
 
       <!-- Assembly & Testing -->
@@ -81,6 +85,7 @@
                 type="text"
                 pInputText
                 class="w-full"
+                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.assemblyTestings)"
                 placeholder="Enter Key Activities"
                 [field]="itemFieldTree.keyActivity"
                 (blur)="itemFieldTree.keyActivity().markAsTouched()"
@@ -88,6 +93,7 @@
             </td>
           </ng-template>
         </app-form-array-input>
+        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.assemblyTestings" />
       </div>
 
       <!-- After Sales Services -->
@@ -110,6 +116,7 @@
                 type="text"
                 pInputText
                 class="w-full"
+                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.afterSalesServices)"
                 placeholder="Enter Key Activities"
                 [field]="itemFieldTree.keyActivity"
                 (blur)="itemFieldTree.keyActivity().markAsTouched()"
@@ -117,6 +124,7 @@
             </td>
           </ng-template>
         </app-form-array-input>
+        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.afterSalesServices" />
       </div>
     </div>
   </div>
