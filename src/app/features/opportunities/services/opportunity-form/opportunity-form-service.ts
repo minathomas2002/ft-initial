@@ -1,5 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { form, minLength, required, submit, validate } from '@angular/forms/signals'
+import { form, maxLength, minLength, required, submit, validate } from '@angular/forms/signals'
 import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord } from 'src/app/shared/interfaces';
 
 export interface IBasicInformation {
@@ -23,7 +23,7 @@ export class OpportunityFormService {
     maxQuantity: '',
     localSuppliers: '',
     globalSuppliers: '',
-    dateRange: [],
+    dateRange: null,
     image: null,
   }
   private OpportunityLocalizationFormInitialState: IOpportunityLocalizationFrom = {
@@ -59,17 +59,37 @@ export class OpportunityFormService {
 
   //Public forms that can be accessed directly
   opportunityInformationForm = form(this.opportunityInformation, (schemaPath) => {
-    required(schemaPath.title, { message: 'opportunity title is required' }),
-      required(schemaPath.shortDescription, { message: 'opportunity short description is required' }),
-      required(schemaPath.opportunityType, { message: 'opportunity type is required' }),
-      required(schemaPath.opportunityCategory, { message: 'opportunity category is required' }),
-      required(schemaPath.spendSAR, { message: 'opportunity spend SAR is required' }),
-      required(schemaPath.minQuantity, { message: 'opportunity min quantity is required' }),
-      required(schemaPath.maxQuantity, { message: 'opportunity max quantity is required' }),
-      required(schemaPath.localSuppliers, { message: 'opportunity local suppliers is required' }),
-      required(schemaPath.globalSuppliers, { message: 'opportunity global suppliers is required' }),
-      required(schemaPath.dateRange, { message: 'opportunity date range is required' }),
-      required(schemaPath.image, { message: 'opportunity image is required' })
+    required(schemaPath.title, { message: 'Opportunity title is required' }),
+      maxLength(schemaPath.title, 100, { message: 'Opportunity title must be less than 100 characters' }),
+      required(schemaPath.shortDescription, { message: 'Short description is required' }),
+      maxLength(schemaPath.shortDescription, 250, { message: 'Short description must be less than 250 characters' }),
+      required(schemaPath.opportunityType, { message: 'Opportunity type is required' }),
+      required(schemaPath.opportunityCategory, { message: 'Category is required' }),
+      required(schemaPath.spendSAR, { message: 'Spend SAR is required' }),
+      required(schemaPath.minQuantity, { message: 'Min quantity is required' }),
+      required(schemaPath.maxQuantity, { message: 'Max quantity is required' }),
+      required(schemaPath.localSuppliers, { message: 'Local suppliers is required' }),
+      required(schemaPath.globalSuppliers, { message: 'Global suppliers is required' }),
+      required(schemaPath.dateRange, { message: 'Date range is required' }),
+      required(schemaPath.image, { message: 'Image is required' }),
+      validate(schemaPath.minQuantity, ({ value, valueOf }) => {
+        if (valueOf(schemaPath.maxQuantity) < value()) {
+          return {
+            kind: 'min',
+            message: 'Min quantity must be less than max quantity'
+          }
+        }
+        return null;
+      }),
+      validate(schemaPath.maxQuantity, ({ value, valueOf }) => {
+        if (valueOf(schemaPath.minQuantity) > value()) {
+          return {
+            kind: 'max',
+            message: 'max quantity must be greater than min quantity'
+          }
+        }
+        return null;
+      })
   });
   opportunityLocalizationForm = form(this.opportunityLocalization, schemaPath => {
     // Validate arrays have at least one item

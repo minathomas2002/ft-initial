@@ -24,8 +24,10 @@
           [rows]="4"
           placeholder="Enter short description"
           [field]="opportunityInformationForm.shortDescription"
+          [appPrimeInvalid]="opportunityInformationForm.shortDescription"
         >
         </textarea>
+        <app-form-input-error-messages [fieldTree]="opportunityInformationForm.shortDescription" />
       </div>
 
       <!-- Opportunity Type -->
@@ -39,6 +41,7 @@
           placeholder="Select"
           class="md:w-[50%]"
         />
+        <app-form-input-error-messages [fieldTree]="opportunityInformationForm.opportunityType" />
       </div>
     </div>
   </div>
@@ -52,28 +55,38 @@
         <div class="flex flex-col">
           <app-base-label [title]="'Spend (SAR)'" />
           <input
-            type="number"
+            type="text"
             pInputText
             placeholder="Enter spend (SAR)"
             [field]="opportunityInformationForm.spendSAR"
+            [appPrimeInvalid]="opportunityInformationForm.spendSAR"
           />
+          <app-form-input-error-messages [fieldTree]="opportunityInformationForm.spendSAR" />
         </div>
         <div class="flex flex-col">
           <app-base-label [title]="'Quantity (Units)'" />
           <div class="flex gap-2 items-center">
-            <input
-              type="number"
-              pInputText
-              placeholder="Enter min quantity"
-              [field]="opportunityInformationForm.minQuantity"
-            />
+            <div>
+              <input
+                type="number"
+                pInputText
+                placeholder="Enter min quantity"
+                [field]="opportunityInformationForm.minQuantity"
+                [appPrimeInvalid]="opportunityInformationForm.minQuantity"
+              />
+              <app-form-input-error-messages [fieldTree]="opportunityInformationForm.minQuantity" />
+            </div>
             <span class="text-gray-700 text-xl font-semibold"> - </span>
-            <input
-              type="number"
-              pInputText
-              placeholder="Enter max quantity"
-              [field]="opportunityInformationForm.maxQuantity"
-            />
+            <div>
+              <input
+                type="number"
+                pInputText
+                placeholder="Enter max quantity"
+                [field]="opportunityInformationForm.maxQuantity"
+                [appPrimeInvalid]="opportunityInformationForm.maxQuantity"
+              />
+              <app-form-input-error-messages [fieldTree]="opportunityInformationForm.maxQuantity" />
+            </div>
           </div>
         </div>
       </div>
@@ -89,20 +102,24 @@
         <div class="flex flex-col">
           <app-base-label [title]="'Local Suppliers'" />
           <input
-            type="text"
+            type="number"
             pInputText
             placeholder="Enter Local Suppliers number"
             [field]="opportunityInformationForm.localSuppliers"
+            [appPrimeInvalid]="opportunityInformationForm.localSuppliers"
           />
+          <app-form-input-error-messages [fieldTree]="opportunityInformationForm.localSuppliers" />
         </div>
         <div class="flex flex-col">
           <app-base-label [title]="'Global Suppliers'" />
           <input
-            type="text"
+            type="number"
             pInputText
             placeholder="Enter Global Suppliers number"
             [field]="opportunityInformationForm.globalSuppliers"
+            [appPrimeInvalid]="opportunityInformationForm.globalSuppliers"
           />
+          <app-form-input-error-messages [fieldTree]="opportunityInformationForm.globalSuppliers" />
         </div>
       </div>
     </div>
@@ -125,6 +142,7 @@
           class="w-full md:w-[50%]"
           fluid
         />
+        <app-form-input-error-messages [fieldTree]="opportunityInformationForm.dateRange" />
       </div>
     </div>
   </div>
@@ -136,7 +154,14 @@
       <!-- Image -->
       <div class="flex flex-col gap-2">
         <app-base-label [title]="'Image'" />
-        <app-fileupload [acceptedFileTypes]="'.jpg, .jpeg, .png'" />
+        <app-fileupload
+          [acceptedFileTypes]="'.jpg, .jpeg, .png'"
+          [(files)]="files"
+          [placeholder]="placeholder"
+          #fileupload
+          [appPrimeInvalid]="opportunityInformationForm.image"
+        />
+        <app-form-input-error-messages [fieldTree]="opportunityInformationForm.image" />
       </div>
     </div>
   </div>
