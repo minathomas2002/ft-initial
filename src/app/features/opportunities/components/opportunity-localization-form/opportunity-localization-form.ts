@@ -4,12 +4,14 @@ import { CardModule } from 'primeng/card';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { InputTextModule } from 'primeng/inputtext';
 import { IKeyActivityRecord } from 'src/app/shared/interfaces';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 @Component({
@@ -23,13 +25,16 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
     ReactiveFormsModule,
     MessageModule,
     TranslatePipe,
+    SkeletonModule,
   ],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',
 })
 export class OpportunityLocalizationForm {
   opportunityFormService = inject(OpportunityFormService);
+  opportunitiesStore = inject(OpportunitiesStore);
   opportunityLocalizationForm = this.opportunityFormService.opportunityLocalizationForm;
+  isLoading = this.opportunitiesStore.loading;
 
   // Bound method to preserve 'this' context when passed to form-array-input
   createKeyActivityControl = () => {

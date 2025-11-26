@@ -5,6 +5,7 @@ import { BaseLabelComponent } from 'src/app/shared/components/base-components/ba
 import { SelectModule } from 'primeng/select';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { SafeObjectUrl } from 'src/app/shared/interfaces';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -26,7 +28,8 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
     MessageModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    SkeletonModule
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',
@@ -34,10 +37,12 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 export class OpportunityInformationForm implements OnInit {
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
+  opportunitiesStore = inject(OpportunitiesStore);
   i18nService = inject(I18nService);
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes;
   opportunityCategories = this.adminOpportunitiesStore.opportunityCategories;
   opportunityInformationForm = this.opportunityFormService.opportunityInformationForm;
+  isLoading = this.opportunitiesStore.loading;
 
   files = signal<File[]>([]);
   acceptedFileTypes = ".jpg,.png,.pdf,.docx,video/*";

@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, SafeObjectUrl } from 'src/app/shared/interfaces';
+import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, SafeObjectUrl, IOpportunityDetails } from 'src/app/shared/interfaces';
 
 export interface IBasicInformation {
   title: string;
@@ -282,5 +282,9 @@ export class OpportunityFormService {
       // Single date or other format - treat as null
       this.updateDateRange(null);
     }
+  }
+
+  setFormValue(value: IOpportunityDetails) {
+
   }
 }

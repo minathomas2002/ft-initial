@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
+import { Component, computed, inject, model, OnInit, signal } from '@angular/core';
 import { BaseWizardDialog } from 'src/app/shared/components/base-components/base-wizard-dialog/base-wizard-dialog';
 import { StepContentDirective } from 'src/app/shared/directives/step-content.directive';
 import { OpportunityInformationForm } from '../opportunity-information-form/opportunity-information-form';
@@ -12,6 +12,8 @@ import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interfa
 import { ButtonModule } from 'primeng/button';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { EViewMode } from 'src/app/shared/enums';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -26,10 +28,11 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
   templateUrl: './create-edit-opportunity-dialog.html',
   styleUrl: './create-edit-opportunity-dialog.scss',
 })
-export class CreateEditOpportunityDialog {
+export class CreateEditOpportunityDialog implements OnInit {
   visible = model<boolean>(false);
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
+  opportunitiesStore = inject(OpportunitiesStore);
   toasterService = inject(ToasterService);
   i18nService = inject(I18nService);
   steps = computed<IWizardStepState[]>(() => [
@@ -48,6 +51,16 @@ export class CreateEditOpportunityDialog {
   ])
   activeStep = signal<number>(1);
   wizardTitle = computed(() => this.i18nService.translate('opportunity.wizard.createOpportunity'));
+
+  ngOnInit() {
+    if (this.adminOpportunitiesStore.viewMode() === EViewMode.Edit && this.adminOpportunitiesStore.selectedOpportunityId()) {
+      this.opportunitiesStore.getOpportunityDetails(this.adminOpportunitiesStore.selectedOpportunityId()!).subscribe({
+        next: (res) => {
+          this.opportunityFormService.setFormValue(res.body);
+        },
+      });
+    }
+  }
 
   nextStep = () => {
     this.activeStep.set(this.activeStep() + 1);

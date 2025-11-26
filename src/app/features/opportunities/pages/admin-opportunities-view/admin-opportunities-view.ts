@@ -11,7 +11,7 @@ import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleto
 import { IAdminOpportunity } from 'src/app/shared/interfaces/admin-opportunities.interface';
 import { EOpportunityAction } from 'src/app/shared/enums/opportunities.enum';
 import { Router } from '@angular/router';
-import { ERoutes } from 'src/app/shared/enums';
+import { ERoutes, EViewMode } from 'src/app/shared/enums';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
 
 @Component({
@@ -49,6 +49,8 @@ export class AdminOpportunitiesView implements OnInit {
     switch (event.action) {
       case EOpportunityAction.Edit:
         // Open edit dialog
+        this.adminOpportunitiesStore.setSelectedOpportunityId(event.opportunity.id);
+        this.adminOpportunitiesStore.setViewMode(EViewMode.Edit);
         this.createEditOpportunityDialogVisible.set(true);
         break;
       case EOpportunityAction.Delete:
@@ -67,6 +69,7 @@ export class AdminOpportunitiesView implements OnInit {
   }
 
   onAddOpportunity() {
+    this.adminOpportunitiesStore.setViewMode(EViewMode.Create);
     this.createEditOpportunityDialogVisible.set(true);
   }
 

@@ -2,9 +2,9 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { finalize, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
-import { IOpportunitiesFilterRequest, IOpportunity } from '../../interfaces/opportunities.interface';
-import { IOpportunityDraftRequest, ISelectItem, IAdminOpportunitiesFilterRequest, IAdminOpportunity, IDashboardResponse } from '../../interfaces';
-import { EOpportunityStatus, EOpportunityType, EOpportunityState } from '../../enums/opportunities.enum';
+import { ISelectItem, IAdminOpportunitiesFilterRequest, IAdminOpportunity } from '../../interfaces';
+import { EOpportunityStatus, EOpportunityType } from '../../enums/opportunities.enum';
+import { EViewMode } from '../../enums';
 
 const initialState: {
   isLoading: boolean;
@@ -23,6 +23,8 @@ const initialState: {
     inactiveOpportunities: number;
     draftOpportunities: number;
   };
+  viewMode: EViewMode;
+  selectedOpportunityId: string | null;
 } = {
   isLoading: false,
   isProcessing: false,
@@ -63,6 +65,8 @@ const initialState: {
     inactiveOpportunities: 0,
     draftOpportunities: 0,
   },
+  viewMode: EViewMode.Create,
+  selectedOpportunityId: null,
 };
 export const AdminOpportunitiesStore = signalStore(
   { providedIn: 'root' },
@@ -106,7 +110,15 @@ export const AdminOpportunitiesStore = signalStore(
             patchState(store, { isProcessing: false, error: null });
           })
         )
-      }
+      },
     };
-  })
+  }),
+  withMethods((store) => ({
+    setViewMode(viewMode: EViewMode) {
+      patchState(store, { viewMode });
+    },
+    setSelectedOpportunityId(opportunityId: string) {
+      patchState(store, { selectedOpportunityId: opportunityId });
+    }
+  }))
 );

@@ -1,4 +1,64 @@
 <div class="px-8 flex flex-col gap-8 pb-10">
+  @if(isLoading()) {
+  <!-- Skeleton Loading State -->
+  <div class="flex flex-col gap-8">
+    <!-- Localization Skeleton -->
+    <div>
+      <p-skeleton width="150px" height="24px" class="mb-4" />
+      <div class="flex flex-col gap-4">
+        <!-- Design & Engineering Skeleton -->
+        <div class="flex flex-col gap-2">
+          <p-skeleton width="180px" height="16px" />
+          <div class="border border-gray-200 rounded-lg p-4">
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="200px" height="36px" />
+          </div>
+        </div>
+
+        <!-- Sourcing Skeleton -->
+        <div class="flex flex-col gap-2">
+          <p-skeleton width="100px" height="16px" />
+          <div class="border border-gray-200 rounded-lg p-4">
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="200px" height="36px" />
+          </div>
+        </div>
+
+        <!-- Manufacturing Skeleton -->
+        <div class="flex flex-col gap-2">
+          <p-skeleton width="140px" height="16px" />
+          <div class="border border-gray-200 rounded-lg p-4">
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="200px" height="36px" />
+          </div>
+        </div>
+
+        <!-- Assembly & Testing Skeleton -->
+        <div class="flex flex-col gap-2">
+          <p-skeleton width="160px" height="16px" />
+          <div class="border border-gray-200 rounded-lg p-4">
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="200px" height="36px" />
+          </div>
+        </div>
+
+        <!-- After Sales Services Skeleton -->
+        <div class="flex flex-col gap-2">
+          <p-skeleton width="170px" height="16px" />
+          <div class="border border-gray-200 rounded-lg p-4">
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="100%" height="40px" class="mb-2" />
+            <p-skeleton width="200px" height="36px" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  } @else {
   <!-- Localization -->
   <div>
     <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.localization' | translate }}</h3>
@@ -174,5 +234,6 @@
       </div>
     </div>
   </div>
+  }
 
 </div>
