@@ -19,7 +19,7 @@ import { PermissionService } from 'src/app/shared/services/permission/permission
 export class SidebarContentComponent {
   private readonly i18nService = inject(I18nService);
   private readonly permissionService = inject(PermissionService);
-  
+
   contactUsFormVisibility = signal(false);
   sidebarDrawerVisibility = model(false);
 
@@ -52,9 +52,15 @@ export class SidebarContentComponent {
         label: this.i18nService.translate('navigation.investors'),
         icon: 'icon-users',
         routerLink: ERoutes.users + '/' + ERoutes.investors,
-        show:this.permissionService.canAccessInvestors()
+        show: this.permissionService.canAccessInvestors()
+      },
+      {
+        label: this.i18nService.translate('navigation.settings'),
+        icon: 'icon-settings',
+        routerLink: ERoutes.settings,
+        show: true
       }
-    ];          
+    ];
   });
 
   helpLink = computed<ISideBarLink>(() => {

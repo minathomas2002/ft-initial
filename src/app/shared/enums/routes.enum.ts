@@ -11,5 +11,6 @@ export enum ERoutes {
   resetPassword = 'reset-password',
   anonymous = 'public',
   admin = 'admin',
-  investors = 'investors'
+  investors = 'investors',
+  settings = 'settings'
 }
