@@ -25,9 +25,9 @@
           <div class="flex items-center gap-[4px]">
             {{ col.label}}
             @if(col.isSortable && totalRecords() > 0){
-              
+
             <i
-              class="transition-transform duration-300 cursor-pointer text-xs ms-[7px]"
+              class="transition-transform duration-300 cursor-pointer !text-white text-xs ms-[7px]"
               [ngClass]="{
                 'icon-arrow-up':filter().sortField === col.sortingKey,
                 'icon-chevron-selector-vertical': filter().sortField !== col.sortingKey,
@@ -36,7 +36,7 @@
               role="
               button"
               (click)="setSortingKey(col.sortingKey)"
-            >Sort</i>
+            ></i>
             }
           </div>
         </th>
