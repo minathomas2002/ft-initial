@@ -91,8 +91,6 @@ export class OpportunityFormService {
         return null;
       }),
       validate(schemaPath.dateRange, ({ value }) => {
-        console.log(value());
-
         if (value() && !value()![1]) {
           return {
             kind: 'minLength',
