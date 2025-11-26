@@ -130,7 +130,18 @@
 		},
 		"state": {
 			"isActive": "نشط",
-			"isNotActive": "غير نشط"
+			"isNotActive": "غير نشط",
+			"active": "نشط",
+			"inactive": "غير نشط"
+		},
+		"warning": {
+			"draftAfterStartDate": "هذه المسودة لديها تاريخ بداية قد مضى بالفعل."
+		},
+		"action": {
+			"edit": "تعديل",
+			"delete": "حذف",
+			"moveToDraft": "نقل إلى المسودة",
+			"publish": "نشر"
 		},
 		"type": {
 			"service": "خدمة",
@@ -149,9 +160,11 @@
 		},
 		"filter": {
 			"search": "بحث",
+			"searchByOpportunityName": "البحث عن طريق اسم الفرصة",
 			"status": "حالة الفرصة",
 			"state": "حالة الفرصة",
-			"type": "نوع الفرصة"
+			"type": "نوع الفرصة",
+			"opportunityType": "نوع الفرصة"
 		},
 		"details": {
 			"backToOpportunities": "العودة إلى الفرص",

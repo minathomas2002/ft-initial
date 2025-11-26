@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { TranslatePipe } from 'src/app/shared/pipes';
-import { IAdminOpportunitiesFilterRequest } from 'src/app/shared/interfaces/admin-opportunities.interface';
+import { IAdminOpportunitiesFilter, IAdminOpportunitiesFilterRequest } from 'src/app/shared/interfaces/admin-opportunities.interface';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 
 @Component({
@@ -24,7 +24,7 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
   styleUrl: './admin-opportunities-filter.scss',
 })
 export class AdminOpportunitiesFilter {
-  filter = model.required<IAdminOpportunitiesFilterRequest>();
+  filter = model.required<IAdminOpportunitiesFilter>();
   destroyRef = inject(DestroyRef);
   searchSubject = new Subject<string>();
   protected readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
