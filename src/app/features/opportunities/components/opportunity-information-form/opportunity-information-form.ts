@@ -42,6 +42,9 @@ export class OpportunityInformationForm implements OnInit {
   invalidSelectedFile = signal(false);
   fileuploadComponent = viewChild<FileuploadComponent>("fileupload");
 
+  // Today's date for minDate validation in datepicker
+  today = new Date();
+
   ngOnInit() {
     // Initialize files signal from form service when component is created
     // This ensures files are displayed when revisiting the step

@@ -165,6 +165,14 @@
                   Min quantity is required
                 </p-message>
                 }
+                @if(getControl('minQuantity').hasError('min')){
+                <p-message
+                  severity="error"
+                  size="small"
+                >
+                  Min quantity cannot be negative
+                </p-message>
+                }
                 @if(getControl('minQuantity').hasError('minQuantityError')){
                 <p-message
                   severity="error"
@@ -192,6 +200,14 @@
                   size="small"
                 >
                   Max quantity is required
+                </p-message>
+                }
+                @if(getControl('maxQuantity').hasError('min')){
+                <p-message
+                  severity="error"
+                  size="small"
+                >
+                  Max quantity cannot be negative
                 </p-message>
                 }
                 @if(getControl('maxQuantity').hasError('maxQuantityError')){
@@ -235,6 +251,14 @@
               Local suppliers is required
             </p-message>
             }
+            @if(getControl('localSuppliers').hasError('min')){
+            <p-message
+              severity="error"
+              size="small"
+            >
+              Local suppliers cannot be negative
+            </p-message>
+            }
           </div>
           }
         </div>
@@ -254,6 +278,14 @@
               size="small"
             >
               Global suppliers is required
+            </p-message>
+            }
+            @if(getControl('globalSuppliers').hasError('min')){
+            <p-message
+              severity="error"
+              size="small"
+            >
+              Global suppliers cannot be negative
             </p-message>
             }
           </div>
@@ -278,6 +310,7 @@
           [selectionMode]="'range'"
           placeholder="Select date range"
           [dateFormat]="'dd M yy'"
+          [minDate]="today"
           class="w-full md:w-[50%]"
           [invalid]="opportunityInformationForm.get('dateRange')?.invalid && opportunityInformationForm.get('dateRange')?.dirty"
           fluid
