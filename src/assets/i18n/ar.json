@@ -15,7 +15,8 @@
 		"error": "خطأ",
 		"success": "نجح",
 		"warning": "تحذير",
-		"info": "معلومة"
+		"info": "معلومة",
+		"noDataFound": "لا توجد بيانات"
 	},
 	"footer": {
 		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
@@ -167,6 +168,27 @@
 			"manufacturing": "التصنيع",
 			"assemblyTesting": "التجميع والاختبار",
 			"afterSalesServices": "خدمات ما بعد البيع"
+		}
+	},
+	"investors": {
+		"list": {
+			"title": "المستثمرون",
+			"subtitle": "إدارة معلومات المستثمرين والخطط",
+			"noInvestorsFound": "لم يتم العثور على مستثمرين"
+		},
+		"filter": {
+			"search": "بحث",
+			"joinDate": "تاريخ الانضمام",
+			"searchPlaceholder": "البحث بالاسم أو رقم الهاتف أو البريد الإلكتروني",
+			"selectJoinDate": "اختر تاريخ الانضمام"
+		},
+		"table": {
+			"name": "الاسم",
+			"email": "البريد الإلكتروني",
+			"phoneNumber": "رقم الهاتف",
+			"otherNumber": "رقم آخر",
+			"submittedPlans": "الخطط المقدمة",
+			"joinDate": "تاريخ الانضمام"
 		}
 	}
 }

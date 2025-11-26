@@ -1,0 +1,33 @@
+<div class="grid grid-cols-12 gap-4">
+  <div class="col-span-12 md:col-span-6">
+    <div class="flex flex-col">
+      <input
+        type="text"
+        pInputText
+        name="investorSearch"
+        placeholder="Search by Name, Phone Number, Email"
+        [ngModel]="filter().searchText ?? ''"
+        (ngModelChange)="onSearchTextChange($event)"
+      />
+    </div>
+  </div>
+
+  <div class="col-span-12 md:col-span-3">
+    <div class="flex flex-col">
+      <p-datepicker
+        name="investorJoinDate"
+        selectionMode="range"
+        [readonlyInput]="true"
+        [(ngModel)]="filter().joinDate"
+        (ngModelChange)="onPickerChange($event)"
+        
+        [showIcon]="true"
+        [showButtonBar]="true"
+        [iconDisplay]="'input'"
+        placeholder="Select join date"
+        appendTo="body"
+      ></p-datepicker>
+    </div>
+  </div>
+</div>
+

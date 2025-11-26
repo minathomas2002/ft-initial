@@ -1,0 +1,12 @@
+.investors-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+:host ::ng-deep p-datepicker {
+  input {
+    width: 100% !important;
+  }
+}

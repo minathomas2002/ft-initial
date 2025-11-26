@@ -141,3 +141,14 @@
   }
 }
 // p-editor end
+
+// p-datatable start
+.p-datatable {
+  --p-datatable-header-cell-background: var(--p-primary-600) !important;
+  --p-datatable-header-cell-color: white !important;
+  
+  .p-datatable-thead > tr > th {
+    background: var(--p-datatable-header-cell-background) !important;    
+  }
+}
+// p-datatable end

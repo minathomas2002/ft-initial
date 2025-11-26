@@ -11,6 +11,8 @@ export class PermissionService {
   canViewOpportunityDetailsInCard =  this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
   canApplyOnOpportunityCard =  this.roleService.hasAnyRoleSignal([ERoles.INVESTOR]);
   canAccessOnOpportunityAdmin =  this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
-  
+  canAccessDashboard =  this.roleService.hasAnyRoleSignal([ERoles.INVESTOR, ERoles.EMPLOYEE, ERoles.MANAGER, ERoles.DEPARTMENT_MANAGER]);
+  canAccessUsers =  this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
+  canAccessInvestors =  this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
 }
 

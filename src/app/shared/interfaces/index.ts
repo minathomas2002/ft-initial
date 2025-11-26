@@ -9,3 +9,4 @@ export * from './menu.interface';
 export * from './api.interface';
 export * from './opportunities.interface';
 export * from './admin-opportunities.interface';
+export * from './investors.interface';
