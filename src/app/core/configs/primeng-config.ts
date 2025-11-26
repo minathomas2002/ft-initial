@@ -303,12 +303,12 @@ const PAGINATOR_COMPONENT = {
         },
         color: "{gray.500}",
         border: {
-          radius: "8px", // Example value, replace with the desired value
+          radius: "8px",
         },
       },
     },
   },
-};
+} as any;
 const TIMELINE_COMPONENT = {
   event: {
     marker: {
@@ -516,7 +516,8 @@ const MY_PRESET = definePreset(Lara, {
     ...DIALOG_COMPONENT,
     ...STEPPER_COMPONENT,
     ...DATEPICKER_COMPONENT,
-    ...FILE_UPLOAD_COMPONENT
+    ...FILE_UPLOAD_COMPONENT,
+    ...PAGINATOR_COMPONENT,
   },
   semantic: {
     gray: {
