@@ -78,6 +78,7 @@ export class CreateEditOpportunityDialog {
 
   async publishOpportunity() {
     this.opportunityFormService.markAsTouched();
+    if (!this.opportunityFormService.isFormValid()) return
     const formValue = this.opportunityFormService.formValue();
     const opportunityInformationFormValue = await new OpportunityRequestsAdapter().toOpportunityDraftRequest(formValue);
     const formData = new Utilities().objToFormData(opportunityInformationFormValue);
