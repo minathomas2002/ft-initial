@@ -3,6 +3,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
 import { EOpportunityState, EOpportunityStatus } from 'src/app/shared/enums';
+import { AdminOpportunitiesFilterClass } from '../../classes/admin-opportunities-filter';
 
 @Component({
   selector: 'app-admin-opportunities-counts',
@@ -21,7 +22,7 @@ export class AdminOpportunitiesCounts {
 
   filterWithPublishedOpportunities() {
     this.adminOpportunitiesFilterService.filter.set({
-      ...this.adminOpportunitiesFilterService.filter(),
+      ...(structuredClone(this.adminOpportunitiesFilterService.filter())),
       status: EOpportunityStatus.PUBLISHED,
     });
     this.adminOpportunitiesFilterService.applyFilter();
@@ -29,7 +30,7 @@ export class AdminOpportunitiesCounts {
 
   filterWithInactiveOpportunities() {
     this.adminOpportunitiesFilterService.filter.set({
-      ...this.adminOpportunitiesFilterService.filter(),
+      ...(structuredClone(new AdminOpportunitiesFilterClass().filter)),
       state: EOpportunityState.INACTIVE,
     });
     this.adminOpportunitiesFilterService.applyFilter();
@@ -37,7 +38,7 @@ export class AdminOpportunitiesCounts {
 
   filterWithDraftOpportunities() {
     this.adminOpportunitiesFilterService.filter.set({
-      ...this.adminOpportunitiesFilterService.filter(),
+      ...(structuredClone(new AdminOpportunitiesFilterClass().filter)),
       status: EOpportunityStatus.DRAFT,
     });
     this.adminOpportunitiesFilterService.applyFilter();
