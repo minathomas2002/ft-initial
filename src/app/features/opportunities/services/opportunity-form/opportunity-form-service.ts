@@ -1,5 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { form, maxLength, minLength, required, submit, validate } from '@angular/forms/signals'
+import { Injectable, computed, signal } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, SafeObjectUrl } from 'src/app/shared/interfaces';
 
 export interface IBasicInformation {
@@ -54,135 +54,174 @@ export class OpportunityFormService {
     ],
   }
 
-  private opportunityInformation = signal<IOpportunityInformationFrom>(this.OpportunityInformationFormInitialState);
-  private opportunityLocalization = signal<IOpportunityLocalizationFrom>(this.OpportunityLocalizationFormInitialState);
+  constructor(private fb: FormBuilder) {
+    this.initializeForms();
+  }
 
-  //Public forms that can be accessed directly
-  opportunityInformationForm = form(this.opportunityInformation, (schemaPath) => {
-    required(schemaPath.title, { message: 'Opportunity title is required' }),
-      maxLength(schemaPath.title, 100, { message: 'Opportunity title must be less than 100 characters' }),
-      required(schemaPath.shortDescription, { message: 'Short description is required' }),
-      maxLength(schemaPath.shortDescription, 250, { message: 'Short description must be less than 250 characters' }),
-      required(schemaPath.opportunityType, { message: 'Opportunity type is required' }),
-      required(schemaPath.opportunityCategory, { message: 'Category is required' }),
-      required(schemaPath.spendSAR, { message: 'Spend SAR is required' }),
-      required(schemaPath.minQuantity, { message: 'Min quantity is required' }),
-      required(schemaPath.maxQuantity, { message: 'Max quantity is required' }),
-      required(schemaPath.localSuppliers, { message: 'Local suppliers is required' }),
-      required(schemaPath.globalSuppliers, { message: 'Global suppliers is required' }),
-      required(schemaPath.dateRange, { message: 'Date range is required' }),
-      required(schemaPath.image, { message: 'Image is required' }),
-      validate(schemaPath.minQuantity, ({ value, valueOf }) => {
-        if (valueOf(schemaPath.maxQuantity) < value()) {
-          return {
-            kind: 'min',
-            message: 'Min quantity must be less than max quantity'
-          }
-        }
-        return null;
+  // Main opportunity form with nested FormGroups
+  opportunityForm!: FormGroup;
+
+  // Getters for backward compatibility and easier access
+  get opportunityInformationForm(): FormGroup {
+    return this.opportunityForm.get('opportunityInformation') as FormGroup;
+  }
+
+  get opportunityLocalizationForm(): FormGroup {
+    return this.opportunityForm.get('opportunityLocalization') as FormGroup;
+  }
+
+  private initializeForms() {
+    // Initialize Opportunity Form with nested FormGroups
+    this.opportunityForm = this.fb.group({
+      opportunityInformation: this.fb.group({
+        id: [null],
+        title: ['', [Validators.required, Validators.maxLength(100)]],
+        opportunityType: [null, Validators.required],
+        shortDescription: ['', [Validators.required, Validators.maxLength(250)]],
+        opportunityCategory: ['', Validators.required],
+        spendSAR: ['', Validators.required],
+        minQuantity: ['', Validators.required],
+        maxQuantity: ['', Validators.required],
+        localSuppliers: ['', Validators.required],
+        globalSuppliers: ['', Validators.required],
+        dateRange: [null, [Validators.required, this.dateRangeValidator]],
+        image: [null, Validators.required],
+      }, { validators: [this.quantityRangeValidator] }),
+      opportunityLocalization: this.fb.group({
+        designEngineerings: this.fb.array(
+          [this.createKeyActivityControl()],
+          [this.keyActivityArrayValidator('Design engineering is required')]
+        ),
+        sourcings: this.fb.array(
+          [this.createKeyActivityControl()],
+          [this.keyActivityArrayValidator('Sourcing is required')]
+        ),
+        manufacturings: this.fb.array(
+          [this.createKeyActivityControl()],
+          [this.keyActivityArrayValidator('Manufacturing is required')]
+        ),
+        assemblyTestings: this.fb.array(
+          [this.createKeyActivityControl()],
+          [this.keyActivityArrayValidator('Assembly testing is required')]
+        ),
+        afterSalesServices: this.fb.array(
+          [this.createKeyActivityControl()],
+          [this.keyActivityArrayValidator('After sales services is required')]
+        ),
       }),
-      validate(schemaPath.maxQuantity, ({ value, valueOf }) => {
-        if (valueOf(schemaPath.minQuantity) > value()) {
-          return {
-            kind: 'max',
-            message: 'max quantity must be greater than min quantity'
-          }
-        }
-        return null;
-      }),
-      validate(schemaPath.dateRange, ({ value }) => {
-        if (value() && !value()![1]) {
-          return {
-            kind: 'minLength',
-            message: 'You should select a date range'
-          }
-        }
-        return null;
-      })
-  });
-  opportunityLocalizationForm = form(this.opportunityLocalization, schemaPath => {
-    // Validate arrays have at least one item
-    validate(schemaPath.designEngineerings, ({ value }) => {
-      return this.validateKeyActivityArray(value()) ? null : {
-        kind: 'required',
-        message: 'Design engineering is required'
-      };
-    })
-    validate(schemaPath.sourcings, ({ value }) => {
-      return this.validateKeyActivityArray(value()) ? null : {
-        kind: 'required',
-        message: 'Sourcing is required'
-      };
-    })
-    validate(schemaPath.manufacturings, ({ value }) => {
-      return this.validateKeyActivityArray(value()) ? null : {
-        kind: 'required',
-        message: 'Manufacturing is required'
-      };
-    })
-    validate(schemaPath.assemblyTestings, ({ value }) => {
-      return this.validateKeyActivityArray(value()) ? null : {
-        kind: 'required',
-        message: 'Assembly testing is required'
-      };
-    })
-    validate(schemaPath.afterSalesServices, ({ value }) => {
-      return this.validateKeyActivityArray(value()) ? null : {
-        kind: 'required',
-        message: 'After sales services is required'
-      };
-    })
-  });
+    });
+  }
+
+  // Custom validators
+  private dateRangeValidator = (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) {
+      return { required: { message: 'Date range is required' } };
+    }
+    if (Array.isArray(value) && value.length === 2 && value[0] && value[1]) {
+      return null;
+    }
+    return { invalidRange: { message: 'You should select a date range' } };
+  };
+
+  private quantityRangeValidator = (group: AbstractControl): ValidationErrors | null => {
+    const minQuantityControl = group.get('minQuantity');
+    const maxQuantityControl = group.get('maxQuantity');
+    const minQuantity = minQuantityControl?.value;
+    const maxQuantity = maxQuantityControl?.value;
+
+    if (minQuantity && maxQuantity && parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
+      // Merge errors instead of overwriting
+      const minErrors = minQuantityControl?.errors || {};
+      const maxErrors = maxQuantityControl?.errors || {};
+      minQuantityControl?.setErrors({ ...minErrors, minQuantityError: { message: 'Min quantity must be less than max quantity' } });
+      maxQuantityControl?.setErrors({ ...maxErrors, maxQuantityError: { message: 'Max quantity must be greater than min quantity' } });
+      return { quantityRange: true };
+    }
+
+    // Clear errors if valid
+    if (minQuantityControl?.hasError('minQuantityError')) {
+      const errors = { ...minQuantityControl.errors };
+      delete errors['minQuantityError'];
+      minQuantityControl.setErrors(Object.keys(errors).length > 0 ? errors : null);
+    }
+    if (maxQuantityControl?.hasError('maxQuantityError')) {
+      const errors = { ...maxQuantityControl.errors };
+      delete errors['maxQuantityError'];
+      maxQuantityControl.setErrors(Object.keys(errors).length > 0 ? errors : null);
+    }
+
+    return null;
+  };
+
+  private keyActivityArrayValidator = (errorMessage: string) => {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const array = control.value as IKeyActivityRecord[];
+      if (!array || array.length === 0) {
+        return { required: { message: errorMessage } };
+      }
+      const isValid = array.every(item => item.keyActivity && item.keyActivity.trim() !== '');
+      return isValid ? null : { invalidArray: { message: errorMessage } };
+    };
+  };
 
   // Helper function to validate a single array
   private validateKeyActivityArray = (array: IKeyActivityRecord[]): boolean => {
     return array.every(item => item.keyActivity && item.keyActivity.trim() !== '');
   };
 
+  // Create a FormGroup for a single key activity record
+  createKeyActivityControl(): FormGroup {
+    return this.fb.group({
+      keyActivity: ['', Validators.required]
+    });
+  }
 
+  isFormValid(): boolean {
+    return this.opportunityForm.valid;
+  }
 
-  isFormValid = computed(() => {
-    const infoFormValid = this.opportunityInformationForm().valid();
-    const localizationFormValid = this.opportunityLocalizationForm().valid();
-    // Form is invalid if any array validation fails
-    return infoFormValid && localizationFormValid
-  });
-  formValue = computed(() => {
+  formValue() {
     return {
-      opportunityInformationFrom: this.opportunityInformationForm().value(),
-      opportunityLocalizationForm: this.opportunityLocalizationForm().value(),
-    }
-  });
+      opportunityInformationFrom: this.opportunityInformationForm.value,
+      opportunityLocalizationForm: this.opportunityLocalizationForm.value,
+    };
+  }
 
   resetForm() {
-    this.opportunityInformationForm().reset();
-    this.opportunityLocalizationForm().reset();
-    this.opportunityInformation.set(this.OpportunityInformationFormInitialState);
-    this.opportunityLocalization.set(this.OpportunityLocalizationFormInitialState);
+    this.opportunityInformationForm.reset(this.OpportunityInformationFormInitialState);
+    this.opportunityLocalizationForm.reset();
+
+    // Reset form arrays to initial state
+    this.resetFormArray('designEngineerings');
+    this.resetFormArray('sourcings');
+    this.resetFormArray('manufacturings');
+    this.resetFormArray('assemblyTestings');
+    this.resetFormArray('afterSalesServices');
+  }
+
+  private resetFormArray(controlName: keyof IOpportunityLocalizationFrom) {
+    const formArray = this.opportunityLocalizationForm.get(controlName) as FormArray;
+    formArray.clear();
+    const initialArray = this.OpportunityLocalizationFormInitialState[controlName];
+    initialArray.forEach(() => {
+      formArray.push(this.createKeyActivityControl());
+    });
   }
 
   // Factory method to create new key activity records
   createNewKeyActivity = () => ({ keyActivity: '' });
 
   markAsTouched() {
-    submit(this.opportunityInformationForm, () => new Promise(() => { }))
-    submit(this.opportunityLocalizationForm, () => new Promise(() => { }))
+    this.opportunityForm.markAllAsTouched();
   }
 
   updateImageField(image: SafeObjectUrl | null) {
-    const currentValue = this.opportunityInformation();
-    this.opportunityInformation.set({
-      ...currentValue,
-      image: image
-    });
+    this.opportunityInformationForm.patchValue({ image });
   }
 
   updateDateRange(dateRange: [Date, Date] | null) {
-    const currentValue = this.opportunityInformation();
-    this.opportunityInformation.set({
-      ...currentValue,
-      dateRange: dateRange
-    });
+    this.opportunityInformationForm.patchValue({ dateRange });
   }
 
   handleDateRangeChange(event: any) {
@@ -226,7 +265,7 @@ export class OpportunityFormService {
           // Update the form field value
           this.updateDateRange(normalizedDates);
           // Mark the field as touched
-          this.opportunityInformationForm.dateRange().markAsTouched();
+          this.opportunityInformationForm.get('dateRange')?.markAsTouched();
         }
       } else if (event.length === 1 && event[0] != null) {
         // Only start date selected, don't update yet (wait for end date)

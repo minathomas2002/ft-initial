@@ -6,8 +6,9 @@ import { FormArrayInput } from 'src/app/shared/components/utility-components/for
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
 import { InputTextModule } from 'primeng/inputtext';
 import { IKeyActivityRecord } from 'src/app/shared/interfaces';
-import { Field, FieldTree } from '@angular/forms/signals';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FormInputErrorMessages } from 'src/app/shared/components/utility-components/form-input-error-messages/form-input-error-messages';
+import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
 
 
 interface IAfterSales {
@@ -32,7 +33,7 @@ interface IAfterSales {
     BaseLabelComponent,
     FormArrayInput,
     InputTextModule,
-    Field,
+    ReactiveFormsModule,
     FormInputErrorMessages,
   ],
   templateUrl: './opportunity-localization-form.html',
@@ -42,10 +43,19 @@ export class OpportunityLocalizationForm {
   opportunityFormService = inject(OpportunityFormService);
   opportunityLocalizationForm = this.opportunityFormService.opportunityLocalizationForm;
 
-  isRecordInvalid(itemFieldTree: FieldTree<IKeyActivityRecord>, formTree: FieldTree<IKeyActivityRecord[]>): boolean {
-    if (itemFieldTree().value().keyActivity.trim() != '') {
+  isRecordInvalid(itemControl: AbstractControl, formArray: FormArray): boolean {
+    const itemValue = itemControl.value as IKeyActivityRecord;
+    if (itemValue?.keyActivity?.trim() !== '') {
       return false;
     }
-    return formTree().touched() && formTree().invalid();
+    return formArray.touched && formArray.invalid;
+  }
+
+  getFormArray(controlName: string): FormArray {
+    return this.opportunityLocalizationForm.get(controlName) as FormArray;
+  }
+
+  getKeyActivityControl(itemControl: AbstractControl): FormControl | null {
+    return (itemControl as FormGroup).get('keyActivity') as FormControl | null;
   }
 }

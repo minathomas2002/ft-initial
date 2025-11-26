@@ -8,14 +8,14 @@
         <app-base-label [title]="'Design & Engineering'">
         </app-base-label>
         <app-form-array-input
-          [(ft)]="opportunityLocalizationForm.designEngineerings"
+          [ft]="getFormArray('designEngineerings')"
           [addButtonMessage]="'Add Design & Engineering Item'"
           [maxItems]="10"
-          [createNewItem]="opportunityFormService.createNewKeyActivity"
+          [createNewItem]="opportunityFormService.createKeyActivityControl"
         >
           <ng-template
             #itemTemplate
-            let-itemFieldTree
+            let-itemControl
             let-index="index"
           >
             <td class="p-3 border border-gray-200">
@@ -23,15 +23,15 @@
                 type="text"
                 pInputText
                 class="w-full"
-                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.designEngineerings)"
+                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('designEngineerings'))"
                 placeholder="Enter Key Activities"
-                [field]="itemFieldTree.keyActivity"
-                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+                [formControl]="getKeyActivityControl(itemControl)!"
+                (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.designEngineerings" />
+        <app-form-input-error-messages [control]="getFormArray('designEngineerings')" />
       </div>
 
       <!-- Sourcing -->
@@ -39,14 +39,14 @@
         <app-base-label [title]="'Sourcing'">
         </app-base-label>
         <app-form-array-input
-          [(ft)]="opportunityLocalizationForm.sourcings"
+          [ft]="getFormArray('sourcings')"
           [addButtonMessage]="'Add Sourcing Item'"
           [maxItems]="10"
-          [createNewItem]="opportunityFormService.createNewKeyActivity"
+          [createNewItem]="opportunityFormService.createKeyActivityControl"
         >
           <ng-template
             #itemTemplate
-            let-itemFieldTree
+            let-itemControl
             let-index="index"
           >
             <td class="p-3 border border-gray-200">
@@ -54,15 +54,15 @@
                 type="text"
                 pInputText
                 class="w-full"
-                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.designEngineerings)"
+                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('sourcings'))"
                 placeholder="Enter Key Activities"
-                [field]="itemFieldTree.keyActivity"
-                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+                [formControl]="getKeyActivityControl(itemControl)!"
+                (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.designEngineerings" />
+        <app-form-input-error-messages [control]="getFormArray('sourcings')" />
       </div>
 
       <!-- Manufacturing -->
@@ -70,14 +70,14 @@
         <app-base-label [title]="'Manufacturing'">
         </app-base-label>
         <app-form-array-input
-          [(ft)]="opportunityLocalizationForm.manufacturings"
+          [ft]="getFormArray('manufacturings')"
           [addButtonMessage]="'Add Manufacturing Item'"
           [maxItems]="10"
-          [createNewItem]="opportunityFormService.createNewKeyActivity"
+          [createNewItem]="opportunityFormService.createKeyActivityControl"
         >
           <ng-template
             #itemTemplate
-            let-itemFieldTree
+            let-itemControl
             let-index="index"
           >
             <td class="p-3 border border-gray-200">
@@ -86,14 +86,14 @@
                 pInputText
                 class="w-full"
                 placeholder="Enter Key Activities"
-                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.manufacturings)"
-                [field]="itemFieldTree.keyActivity"
-                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('manufacturings'))"
+                [formControl]="getKeyActivityControl(itemControl)!"
+                (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.manufacturings" />
+        <app-form-input-error-messages [control]="getFormArray('manufacturings')" />
       </div>
 
       <!-- Assembly & Testing -->
@@ -101,14 +101,14 @@
         <app-base-label [title]="'Assembly & Testing'">
         </app-base-label>
         <app-form-array-input
-          [(ft)]="opportunityLocalizationForm.assemblyTestings"
+          [ft]="getFormArray('assemblyTestings')"
           [addButtonMessage]="'Add Assembly & Testing Item'"
           [maxItems]="10"
-          [createNewItem]="opportunityFormService.createNewKeyActivity"
+          [createNewItem]="opportunityFormService.createKeyActivityControl"
         >
           <ng-template
             #itemTemplate
-            let-itemFieldTree
+            let-itemControl
             let-index="index"
           >
             <td class="p-3 border border-gray-200">
@@ -116,15 +116,15 @@
                 type="text"
                 pInputText
                 class="w-full"
-                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.assemblyTestings)"
+                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('assemblyTestings'))"
                 placeholder="Enter Key Activities"
-                [field]="itemFieldTree.keyActivity"
-                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+                [formControl]="getKeyActivityControl(itemControl)!"
+                (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.assemblyTestings" />
+        <app-form-input-error-messages [control]="getFormArray('assemblyTestings')" />
       </div>
 
       <!-- After Sales Services -->
@@ -132,14 +132,14 @@
         <app-base-label [title]="'After Sales Services'">
         </app-base-label>
         <app-form-array-input
-          [(ft)]="opportunityLocalizationForm.afterSalesServices"
+          [ft]="getFormArray('afterSalesServices')"
           [addButtonMessage]="'Add After Sales Services Item'"
           [maxItems]="10"
-          [createNewItem]="opportunityFormService.createNewKeyActivity"
+          [createNewItem]="opportunityFormService.createKeyActivityControl"
         >
           <ng-template
             #itemTemplate
-            let-itemFieldTree
+            let-itemControl
             let-index="index"
           >
             <td class="p-3 border border-gray-200">
@@ -147,15 +147,15 @@
                 type="text"
                 pInputText
                 class="w-full"
-                [class.p-invalid]="isRecordInvalid(itemFieldTree, opportunityLocalizationForm.afterSalesServices)"
+                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('afterSalesServices'))"
                 placeholder="Enter Key Activities"
-                [field]="itemFieldTree.keyActivity"
-                (blur)="itemFieldTree.keyActivity().markAsTouched()"
+                [formControl]="getKeyActivityControl(itemControl)!"
+                (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [fieldTree]="opportunityLocalizationForm.afterSalesServices" />
+        <app-form-input-error-messages [control]="getFormArray('afterSalesServices')" />
       </div>
     </div>
   </div>

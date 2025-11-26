@@ -1,4 +1,4 @@
-@if(fieldTree()().invalid() && fieldTree()().touched()){
+@if(isInvalid()){
 <div class="mt-2">
   <p-message
     severity="error"
@@ -6,9 +6,9 @@
   >
     <ng-template #container>
       <ul>
-        @for (error of fieldTree()().errors(); track error; let index = $index) {
+        @for (error of errors(); track $index; let index = $index) {
         <li>
-          @if(fieldTree()().errors().length > 1){
+          @if(errors().length > 1){
           - {{error.message}}
           } @else {
           {{ error.message }}

@@ -10,6 +10,28 @@ import { OpportunityLocalizationForm } from '../opportunity-localization-form/op
 import { OpportunityRequestsAdapter } from '../../classes/opportunity-requests-adapter';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { ButtonModule } from 'primeng/button';
+import { FormGroup } from '@angular/forms';
+import { FieldState } from '@angular/forms/signals';
+
+// Helper function to convert FormGroup to FieldState-like object
+function formGroupToFieldState(formGroup: FormGroup): FieldState<unknown, string | number> {
+  return {
+    valid: () => formGroup.valid,
+    invalid: () => formGroup.invalid,
+    touched: () => formGroup.touched,
+    dirty: () => formGroup.dirty,
+    errors: computed(() => {
+      const errors = formGroup.errors;
+      if (!errors) return [];
+      // Convert ValidationErrors to WithField[] format
+      return Object.keys(errors).map(key => ({
+        kind: key,
+        message: errors[key]?.message || `Validation error: ${key}`
+      }));
+    }),
+    value: () => formGroup.value,
+  } as FieldState<unknown, string | number>;
+}
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -33,13 +55,13 @@ export class CreateEditOpportunityDialog {
       title: 'Opportunity Information',
       description: 'Enter Opportunity details',
       isActive: this.activeStep() === 1,
-      formState: this.opportunityFormService.opportunityInformationForm(),
+      formState: formGroupToFieldState(this.opportunityFormService.opportunityInformationForm),
     },
     {
       title: 'Opportunity Localization',
       description: 'Enter Opportunity localization details',
       isActive: this.activeStep() === 2,
-      formState: this.opportunityFormService.opportunityLocalizationForm(),
+      formState: formGroupToFieldState(this.opportunityFormService.opportunityLocalizationForm),
     },
   ])
   activeStep = signal<number>(1);
@@ -51,9 +73,9 @@ export class CreateEditOpportunityDialog {
     this.activeStep.set(this.activeStep() - 1);
   }
   async saveAsDraft() {
-    const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.title()
+    const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.get('title');
     // Check if the field is invalid
-    if (opportunityTitleField.invalid()) {
+    if (opportunityTitleField?.invalid) {
       // Mark as touched to show validation errors
       opportunityTitleField.markAsTouched();
       return;

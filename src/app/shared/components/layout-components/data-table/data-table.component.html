@@ -28,8 +28,8 @@
             <i
               class="transition-transform duration-300 cursor-pointer text-xs ms-[7px]"
               [ngClass]="{
-                'icon-sort ':filter().sortField === col.sortingKey,
-                'icon-chevron-up-down': filter().sortField !== col.sortingKey,
+                'icon-arrow-up':filter().sortField === col.sortingKey,
+                'icon-chevron-selector-vertical': filter().sortField !== col.sortingKey,
                 'rotate-180': filter().sortOrder == ESortingOrder.asc && filter().sortField === col.sortingKey
               }"
               role="

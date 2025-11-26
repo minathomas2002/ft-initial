@@ -1,6 +1,6 @@
 import { FileuploadComponent } from './../../../../shared/components/utility-components/fileupload/fileupload.component';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild } from '@angular/core';
-import { Field } from '@angular/forms/signals';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { SelectModule } from 'primeng/select';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
@@ -19,14 +19,15 @@ import { SafeObjectUrl } from 'src/app/shared/interfaces';
   imports: [
     InputTextModule,
     BaseLabelComponent,
-    Field, SelectModule,
+    SelectModule,
     TextareaModule,
     DatePickerModule,
     FileuploadComponent,
     MessageModule,
     FormInputErrorMessages,
     PrimeInvalidDirective,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',
@@ -36,7 +37,7 @@ export class OpportunityInformationForm implements OnInit {
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes;
   opportunityCategories = this.adminOpportunitiesStore.opportunityCategories;
-  opportunityInformationForm = this.opportunityFormService.opportunityInformationForm
+  opportunityInformationForm = this.opportunityFormService.opportunityInformationForm;
 
   files = signal<File[]>([]);
   acceptedFileTypes = ".jpg,.png,.pdf,.docx,video/*";
@@ -52,7 +53,7 @@ export class OpportunityInformationForm implements OnInit {
   }
 
   private syncFilesFromFormService() {
-    const imageValue = this.opportunityInformationForm.image().value();
+    const imageValue = this.opportunityInformationForm.get('image')?.value;
 
     if (imageValue instanceof File) {
       const currentFiles = this.files();
@@ -78,10 +79,15 @@ export class OpportunityInformationForm implements OnInit {
     const imageValue = files.length > 0 ? files[0] : null;
     this.opportunityFormService.updateImageField(imageValue as SafeObjectUrl | null);
     // Mark the field as touched so validation errors appear when user interacts with it
-    this.opportunityInformationForm.image().markAsTouched();
+    this.opportunityInformationForm.get('image')?.markAsTouched();
   }
 
   onDateRangeChange(event: any) {
     this.opportunityFormService.handleDateRangeChange(event);
+  }
+
+  // Helper methods to get FormControls with proper typing
+  getControl(controlName: string): FormControl {
+    return this.opportunityInformationForm.get(controlName) as FormControl;
   }
 }

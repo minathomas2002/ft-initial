@@ -1,7 +1,7 @@
-import { Component, input, TemplateRef, ContentChild, computed, model } from '@angular/core';
+import { Component, input, TemplateRef, ContentChild, computed } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { NgTemplateOutlet } from '@angular/common';
-import { FieldTree } from '@angular/forms/signals';
+import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-form-array-input',
@@ -10,26 +10,27 @@ import { FieldTree } from '@angular/forms/signals';
   styleUrl: './form-array-input.scss',
 })
 export class FormArrayInput {
-  // Using any[] to accept any FieldTree array type (FieldTree is invariant in TypeScript)
-  ft = model.required<FieldTree<any[], string | number>>();
+  // Accept FormArray instead of FieldTree
+  // Using input instead of model since FormArray is mutable and changes are reflected automatically
+  ft = input.required<FormArray>();
   addButtonMessage = input<string>('Add');
   maxItems = input<number>(10);
-  // Function to create a new empty item when adding
-  createNewItem = input<() => any>(() => ({}));
+  // Function to create a new empty item when adding (returns FormGroup)
+  createNewItem = input<() => FormGroup>(() => {
+    throw new Error('createNewItem must be provided');
+  });
 
   @ContentChild('itemTemplate', { read: TemplateRef }) itemTemplate?: TemplateRef<{
-    $implicit: FieldTree<any, string | number>;
+    $implicit: AbstractControl;
     index: number;
     itemValue: any;
   }>;
 
-  // Get the array value from FieldTree
-  // ft() returns the FieldTree signal, ft()() gets the actual control, then .value() gets the array
+  // Get the array value from FormArray
   objects = computed(() => {
-    const fieldTree = this.ft();
-    if (!fieldTree) return [];
-    const control = fieldTree();
-    return control ? control.value() : [];
+    const formArray = this.ft();
+    if (!formArray) return [];
+    return formArray.value || [];
   });
 
   keys = computed(() => {
@@ -42,41 +43,35 @@ export class FormArrayInput {
     return Object.keys(firstObject);
   });
 
-  // Get FieldTree for a specific index
-  getItemFieldTree(index: number): FieldTree<any, string | number> | undefined {
-    const fieldTree = this.ft();
-    if (!fieldTree) return undefined;
-    return fieldTree[index];
+  // Get FormControl/FormGroup for a specific index
+  getItemControl(index: number): AbstractControl | undefined {
+    const formArray = this.ft();
+    if (!formArray) return undefined;
+    return formArray.at(index);
   }
 
   onDeleteHandler(index: number) {
-    const fieldTree = this.ft();
-    if (!fieldTree) return;
+    const formArray = this.ft();
+    if (!formArray) return;
 
-    const control = fieldTree();
-    if (!control) return;
-
-    const currentValue = control.value();
-    if (currentValue.length > 1) {
-      control.setControlValue(currentValue.filter((_: any, i: number) => i !== index));
+    const currentLength = formArray.length;
+    if (currentLength > 1) {
+      formArray.removeAt(index);
     } else {
       // Keep at least one item with empty values
+      formArray.clear();
       const newItem = this.createNewItem()();
-      control.setControlValue([newItem]);
+      formArray.push(newItem);
     }
   }
 
   onAddHandler() {
-    const fieldTree = this.ft();
-    if (!fieldTree) return;
+    const formArray = this.ft();
+    if (!formArray) return;
 
-    const control = fieldTree();
-    if (!control) return;
-
-    const currentValue = control.value();
-    if (currentValue.length >= this.maxItems()) return;
+    if (formArray.length >= this.maxItems()) return;
 
     const newItem = this.createNewItem()();
-    control.setControlValue([...currentValue, newItem]);
+    formArray.push(newItem);
   }
 }
