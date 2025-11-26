@@ -1,5 +1,5 @@
 import { FileuploadComponent } from './../../../../shared/components/utility-components/fileupload/fileupload.component';
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild, computed } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { SelectModule } from 'primeng/select';
@@ -11,6 +11,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { MessageModule } from 'primeng/message';
 import { FormsModule } from '@angular/forms';
 import { SafeObjectUrl } from 'src/app/shared/interfaces';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -23,7 +25,8 @@ import { SafeObjectUrl } from 'src/app/shared/interfaces';
     FileuploadComponent,
     MessageModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslatePipe
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',
@@ -31,13 +34,14 @@ import { SafeObjectUrl } from 'src/app/shared/interfaces';
 export class OpportunityInformationForm implements OnInit {
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
+  i18nService = inject(I18nService);
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes;
   opportunityCategories = this.adminOpportunitiesStore.opportunityCategories;
   opportunityInformationForm = this.opportunityFormService.opportunityInformationForm;
 
   files = signal<File[]>([]);
   acceptedFileTypes = ".jpg,.png,.pdf,.docx,video/*";
-  placeholder = "jpg, png, pdf, docx and video, max file size (10 MB)";
+  placeholder = computed(() => this.i18nService.translate('opportunity.form.fileUploadPlaceholder'));
 
   invalidSelectedFile = signal(false);
   fileuploadComponent = viewChild<FileuploadComponent>("fileupload");

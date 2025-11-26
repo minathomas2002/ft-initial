@@ -1,118 +1,76 @@
 <div class="px-8 flex flex-col gap-8 pb-10">
   <!-- Basic Information -->
   <div>
-    <h3 class="text-lg font-semibold mb-4">Basic Information</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.basicInformation' | translate }}</h3>
     <div class="flex flex-col gap-4">
       <!-- Title -->
       <div class="flex flex-col">
-        <app-base-label [title]="'Opportunity Title'">
+        <app-base-label [title]="'opportunity.form.opportunityTitle' | translate">
         </app-base-label>
         <input
           type="text"
           pInputText
-          placeholder="Enter opportunity title"
+          [placeholder]="'opportunity.form.enterOpportunityTitle' | translate"
           [formControl]="getControl('title')"
         />
         @if(getControl('title').invalid && getControl('title').dirty){
-        <div class="mt-2">
-          @if(getControl('title').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Opportunity title is required
-          </p-message>
-          }
-          @if(getControl('title').hasError('maxlength')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Maximum length exceeded
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ getControl('title').hasError('required') ? ('opportunity.form.titleRequired' | translate) :
+          ('opportunity.form.maxLengthExceeded' | translate) }}
+        </small>
         }
       </div>
       <!-- Short Description -->
       <div class="flex flex-col">
-        <app-base-label [title]="'Short Description'" />
+        <app-base-label [title]="'opportunity.form.shortDescription' | translate" />
         <textarea
           pTextarea
           [rows]="4"
-          placeholder="Enter short description"
+          [placeholder]="'opportunity.form.enterShortDescription' | translate"
           [formControl]="getControl('shortDescription')"
         >
         </textarea>
         @if(getControl('shortDescription').invalid && getControl('shortDescription').dirty){
-        <div class="mt-2">
-          @if(getControl('shortDescription').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Short description is required
-          </p-message>
-          }
-          @if(getControl('shortDescription').hasError('maxlength')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Maximum length exceeded
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ getControl('shortDescription').hasError('required') ? ('opportunity.form.shortDescriptionRequired' | translate) :
+          ('opportunity.form.maxLengthExceeded' | translate) }}
+        </small>
         }
       </div>
 
       <!-- Opportunity Category -->
       <div class="flex flex-col">
-        <app-base-label [title]="'Opportunity Category'" />
+        <app-base-label [title]="'opportunity.form.opportunityCategory' | translate" />
         <p-select
           [formControl]="getControl('opportunityCategory')"
           [options]="opportunityCategories()"
           optionLabel="name"
           optionValue="id"
-          placeholder="Select"
+          [placeholder]="'opportunity.form.select' | translate"
           class="md:w-[50%]"
         />
         @if(getControl('opportunityCategory').invalid && getControl('opportunityCategory').dirty){
-        <div class="mt-2">
-          @if(getControl('opportunityCategory').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Opportunity category is required
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ 'opportunity.form.opportunityCategoryRequired' | translate }}
+        </small>
         }
       </div>
 
       <!-- Opportunity Type -->
       <div class="flex flex-col">
-        <app-base-label [title]="'Opportunity Type'" />
+        <app-base-label [title]="'opportunity.form.opportunityType' | translate" />
         <p-select
           [formControl]="getControl('opportunityType')"
           [options]="opportunityTypes()"
           optionLabel="name"
           optionValue="id"
-          placeholder="Select"
+          [placeholder]="'opportunity.form.select' | translate"
           class="md:w-[50%]"
         />
         @if(getControl('opportunityType').invalid && getControl('opportunityType').dirty){
-        <div class="mt-2">
-          @if(getControl('opportunityType').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Opportunity type is required
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ 'opportunity.form.opportunityTypeRequired' | translate }}
+        </small>
         }
       </div>
     </div>
@@ -120,68 +78,40 @@
 
   <!-- Forecasted SEC Demand (2024–2030) -->
   <div>
-    <h3 class="text-lg font-semibold mb-4">Forecasted SEC Demand (2024–2030)</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.forecastedDemand' | translate }}</h3>
     <div class="flex flex-col gap-4">
       <!-- Min Quantity -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div class="flex flex-col">
-          <app-base-label [title]="'Spend (SAR)'" />
+          <app-base-label [title]="'opportunity.form.spendSAR' | translate" />
           <input
             type="text"
             pInputText
-            placeholder="Enter spend (SAR)"
+            [placeholder]="'opportunity.form.enterSpendSAR' | translate"
             [formControl]="getControl('spendSAR')"
           />
           @if(getControl('spendSAR').invalid && getControl('spendSAR').dirty){
-          <div class="mt-2">
-            @if(getControl('spendSAR').hasError('required')){
-            <p-message
-              severity="error"
-              size="small"
-            >
-              Spend (SAR) is required
-            </p-message>
-            }
-          </div>
+          <small class="text-red-500">
+            {{ 'opportunity.form.spendSARRequired' | translate }}
+          </small>
           }
         </div>
         <div>
-          <app-base-label [title]="'Quantity (Units)'" />
+          <app-base-label [title]="'opportunity.form.quantityUnits' | translate" />
           <div class="flex gap-2">
             <div>
               <input
                 type="number"
                 pInputText
-                placeholder="Enter min quantity"
+                [placeholder]="'opportunity.form.enterMinQuantity' | translate"
                 [formControl]="getControl('minQuantity')"
               />
               @if(getControl('minQuantity').invalid && getControl('minQuantity').dirty){
-              <div class="mt-2">
-                @if(getControl('minQuantity').hasError('required')){
-                <p-message
-                  severity="error"
-                  size="small"
-                >
-                  Min quantity is required
-                </p-message>
-                }
-                @if(getControl('minQuantity').hasError('min')){
-                <p-message
-                  severity="error"
-                  size="small"
-                >
-                  Min quantity cannot be negative
-                </p-message>
-                }
-                @if(getControl('minQuantity').hasError('minQuantityError')){
-                <p-message
-                  severity="error"
-                  size="small"
-                >
-                  Min quantity must be less than max quantity
-                </p-message>
-                }
-              </div>
+              <small class="text-red-500">
+                {{ getControl('minQuantity').hasError('required') ? ('opportunity.form.minQuantityRequired' | translate) :
+                getControl('minQuantity').hasError('min') ? ('opportunity.form.minQuantityCannotBeNegative' | translate) :
+                ('opportunity.form.minQuantityMustBeLessThanMax' | translate) }}
+              </small>
               }
             </div>
             <span class="text-gray-700 text-xl font-semibold pt-1"> - </span>
@@ -189,36 +119,15 @@
               <input
                 type="number"
                 pInputText
-                placeholder="Enter max quantity"
+                [placeholder]="'opportunity.form.enterMaxQuantity' | translate"
                 [formControl]="getControl('maxQuantity')"
               />
               @if(getControl('maxQuantity').invalid && getControl('maxQuantity').dirty){
-              <div class="mt-2">
-                @if(getControl('maxQuantity').hasError('required')){
-                <p-message
-                  severity="error"
-                  size="small"
-                >
-                  Max quantity is required
-                </p-message>
-                }
-                @if(getControl('maxQuantity').hasError('min')){
-                <p-message
-                  severity="error"
-                  size="small"
-                >
-                  Max quantity cannot be negative
-                </p-message>
-                }
-                @if(getControl('maxQuantity').hasError('maxQuantityError')){
-                <p-message
-                  severity="error"
-                  size="small"
-                >
-                  Max quantity must be greater than min quantity
-                </p-message>
-                }
-              </div>
+              <small class="text-red-500">
+                {{ getControl('maxQuantity').hasError('required') ? ('opportunity.form.maxQuantityRequired' | translate) :
+                getControl('maxQuantity').hasError('min') ? ('opportunity.form.maxQuantityCannotBeNegative' | translate) :
+                ('opportunity.form.maxQuantityMustBeGreaterThanMin' | translate) }}
+              </small>
               }
             </div>
           </div>
@@ -229,66 +138,38 @@
 
   <!-- Suppliers Base -->
   <div>
-    <h3 class="text-lg font-semibold mb-4">Supplier Base</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.supplierBase' | translate }}</h3>
     <div class="flex flex-col gap-4">
       <!-- Min Quantity -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div class="flex flex-col">
-          <app-base-label [title]="'Local Suppliers'" />
+          <app-base-label [title]="'opportunity.form.localSuppliers' | translate" />
           <input
             type="number"
             pInputText
-            placeholder="Enter Local Suppliers number"
+            [placeholder]="'opportunity.form.enterLocalSuppliersNumber' | translate"
             [formControl]="getControl('localSuppliers')"
           />
           @if(getControl('localSuppliers').invalid && getControl('localSuppliers').dirty){
-          <div class="mt-2">
-            @if(getControl('localSuppliers').hasError('required')){
-            <p-message
-              severity="error"
-              size="small"
-            >
-              Local suppliers is required
-            </p-message>
-            }
-            @if(getControl('localSuppliers').hasError('min')){
-            <p-message
-              severity="error"
-              size="small"
-            >
-              Local suppliers cannot be negative
-            </p-message>
-            }
-          </div>
+          <small class="text-red-500">
+            {{ getControl('localSuppliers').hasError('required') ? ('opportunity.form.localSuppliersRequired' | translate) :
+            ('opportunity.form.localSuppliersCannotBeNegative' | translate) }}
+          </small>
           }
         </div>
         <div class="flex flex-col">
-          <app-base-label [title]="'Global Suppliers'" />
+          <app-base-label [title]="'opportunity.form.globalSuppliers' | translate" />
           <input
             type="number"
             pInputText
-            placeholder="Enter Global Suppliers number"
+            [placeholder]="'opportunity.form.enterGlobalSuppliersNumber' | translate"
             [formControl]="getControl('globalSuppliers')"
           />
           @if(getControl('globalSuppliers').invalid && getControl('globalSuppliers').dirty){
-          <div class="mt-2">
-            @if(getControl('globalSuppliers').hasError('required')){
-            <p-message
-              severity="error"
-              size="small"
-            >
-              Global suppliers is required
-            </p-message>
-            }
-            @if(getControl('globalSuppliers').hasError('min')){
-            <p-message
-              severity="error"
-              size="small"
-            >
-              Global suppliers cannot be negative
-            </p-message>
-            }
-          </div>
+          <small class="text-red-500">
+            {{ getControl('globalSuppliers').hasError('required') ? ('opportunity.form.globalSuppliersRequired' | translate) :
+            ('opportunity.form.globalSuppliersCannotBeNegative' | translate) }}
+          </small>
           }
         </div>
       </div>
@@ -297,18 +178,18 @@
 
   <!-- Opportunity Dates -->
   <div>
-    <h3 class="text-lg font-semibold mb-4">Opportunity Dates</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.opportunityDates' | translate }}</h3>
     <div class="flex flex-col gap-4">
       <!-- Date Range -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Date Range'" />
+        <app-base-label [title]="'opportunity.form.dateRange' | translate" />
         <p-datepicker
           [showIcon]="true"
           [showTime]="false"
           [ngModel]="opportunityInformationForm.get('dateRange')?.value"
           (ngModelChange)="onDateRangeChange($event)"
           [selectionMode]="'range'"
-          placeholder="Select date range"
+          [placeholder]="'opportunity.form.selectDateRange' | translate"
           [dateFormat]="'dd M yy'"
           [minDate]="today"
           class="w-full md:w-[50%]"
@@ -316,24 +197,10 @@
           fluid
         />
         @if(getControl('dateRange').invalid && getControl('dateRange').dirty){
-        <div class="mt-2">
-          @if(getControl('dateRange').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Date range is required
-          </p-message>
-          }
-          @if(getControl('dateRange').hasError('invalidRange')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            You should select a date range
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ getControl('dateRange').hasError('required') ? ('opportunity.form.dateRangeRequired' | translate) :
+          ('opportunity.form.dateRangeInvalid' | translate) }}
+        </small>
         }
       </div>
     </div>
@@ -341,30 +208,23 @@
 
   <!-- Opportunity Image -->
   <div>
-    <h3 class="text-lg font-semibold mb-4">Opportunity Image</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.opportunityImage' | translate }}</h3>
     <div class="flex flex-col gap-4">
       <!-- Image -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Image'" />
+        <app-base-label [title]="'opportunity.form.image' | translate" />
         <app-fileupload
           [acceptedFileTypes]="'.jpg, .jpeg, .png'"
           [files]="files()"
-          [placeholder]="placeholder"
+          [placeholder]="placeholder()"
           #fileupload
           (filesChange)="onFilesChanged($event)"
           [class.p-invalid]="getControl('image').invalid && getControl('image').dirty"
         />
         @if(getControl('image').invalid && getControl('image').dirty){
-        <div class="mt-2">
-          @if(getControl('image').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Image is required
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ 'opportunity.form.imageRequired' | translate }}
+        </small>
         }
       </div>
     </div>

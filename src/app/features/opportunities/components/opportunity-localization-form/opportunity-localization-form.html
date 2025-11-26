@@ -1,15 +1,15 @@
 <div class="px-8 flex flex-col gap-8 pb-10">
   <!-- Localization -->
   <div>
-    <h3 class="text-lg font-semibold mb-4">Localization</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.localization' | translate }}</h3>
     <div class="flex flex-col gap-4">
       <!-- Design & Engineering -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Design & Engineering'">
+        <app-base-label [title]="'opportunity.form.designEngineering' | translate">
         </app-base-label>
         <app-form-array-input
           [ft]="getFormArray('designEngineerings')"
-          [addButtonMessage]="'Add Design & Engineering Item'"
+          [addButtonMessage]="'opportunity.form.addDesignEngineeringItem' | translate"
           [maxItems]="10"
           [createNewItem]="createKeyActivityControl"
         >
@@ -23,7 +23,7 @@
                 type="text"
                 pInputText
                 class="w-full"
-                placeholder="Enter Key Activities"
+                [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
@@ -31,34 +31,19 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('designEngineerings').invalid && getFormArray('designEngineerings').dirty){
-        <div class="mt-2">
-          @if(getFormArray('designEngineerings').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Design engineering is required
-          </p-message>
-          }
-          @if(getFormArray('designEngineerings').hasError('invalidArray')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Design engineering is required
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ 'opportunity.form.designEngineeringRequired' | translate }}
+        </small>
         }
       </div>
 
       <!-- Sourcing -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Sourcing'">
+        <app-base-label [title]="'opportunity.form.sourcing' | translate">
         </app-base-label>
         <app-form-array-input
           [ft]="getFormArray('sourcings')"
-          [addButtonMessage]="'Add Sourcing Item'"
+          [addButtonMessage]="'opportunity.form.addSourcingItem' | translate"
           [maxItems]="10"
           [createNewItem]="createKeyActivityControl"
         >
@@ -72,7 +57,7 @@
                 type="text"
                 pInputText
                 class="w-full"
-                placeholder="Enter Key Activities"
+                [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
@@ -80,34 +65,19 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('sourcings').invalid && getFormArray('sourcings').dirty){
-        <div class="mt-2">
-          @if(getFormArray('sourcings').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Sourcing is required
-          </p-message>
-          }
-          @if(getFormArray('sourcings').hasError('invalidArray')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Sourcing is required
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ 'opportunity.form.sourcingRequired' | translate }}
+        </small>
         }
       </div>
 
       <!-- Manufacturing -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Manufacturing'">
+        <app-base-label [title]="'opportunity.form.manufacturing' | translate">
         </app-base-label>
         <app-form-array-input
           [ft]="getFormArray('manufacturings')"
-          [addButtonMessage]="'Add Manufacturing Item'"
+          [addButtonMessage]="'opportunity.form.addManufacturingItem' | translate"
           [maxItems]="10"
           [createNewItem]="createKeyActivityControl"
         >
@@ -121,7 +91,7 @@
                 type="text"
                 pInputText
                 class="w-full"
-                placeholder="Enter Key Activities"
+                [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
@@ -129,34 +99,19 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('manufacturings').invalid && getFormArray('manufacturings').dirty){
-        <div class="mt-2">
-          @if(getFormArray('manufacturings').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Manufacturing is required
-          </p-message>
-          }
-          @if(getFormArray('manufacturings').hasError('invalidArray')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Manufacturing is required
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ 'opportunity.form.manufacturingRequired' | translate }}
+        </small>
         }
       </div>
 
       <!-- Assembly & Testing -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Assembly & Testing'">
+        <app-base-label [title]="'opportunity.form.assemblyTesting' | translate">
         </app-base-label>
         <app-form-array-input
           [ft]="getFormArray('assemblyTestings')"
-          [addButtonMessage]="'Add Assembly & Testing Item'"
+          [addButtonMessage]="'opportunity.form.addAssemblyTestingItem' | translate"
           [maxItems]="10"
           [createNewItem]="createKeyActivityControl"
         >
@@ -170,7 +125,7 @@
                 type="text"
                 pInputText
                 class="w-full"
-                placeholder="Enter Key Activities"
+                [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
@@ -178,34 +133,19 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('assemblyTestings').invalid && getFormArray('assemblyTestings').dirty){
-        <div class="mt-2">
-          @if(getFormArray('assemblyTestings').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Assembly testing is required
-          </p-message>
-          }
-          @if(getFormArray('assemblyTestings').hasError('invalidArray')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            Assembly testing is required
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ 'opportunity.form.assemblyTestingRequired' | translate }}
+        </small>
         }
       </div>
 
       <!-- After Sales Services -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'After Sales Services'">
+        <app-base-label [title]="'opportunity.form.afterSalesServices' | translate">
         </app-base-label>
         <app-form-array-input
           [ft]="getFormArray('afterSalesServices')"
-          [addButtonMessage]="'Add After Sales Services Item'"
+          [addButtonMessage]="'opportunity.form.addAfterSalesServicesItem' | translate"
           [maxItems]="10"
           [createNewItem]="createKeyActivityControl"
         >
@@ -219,7 +159,7 @@
                 type="text"
                 pInputText
                 class="w-full"
-                placeholder="Enter Key Activities"
+                [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
@@ -227,24 +167,9 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('afterSalesServices').invalid && getFormArray('afterSalesServices').dirty){
-        <div class="mt-2">
-          @if(getFormArray('afterSalesServices').hasError('required')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            After sales services is required
-          </p-message>
-          }
-          @if(getFormArray('afterSalesServices').hasError('invalidArray')){
-          <p-message
-            severity="error"
-            size="small"
-          >
-            After sales services is required
-          </p-message>
-          }
-        </div>
+        <small class="text-red-500">
+          {{ 'opportunity.form.afterSalesServicesRequired' | translate }}
+        </small>
         }
       </div>
     </div>

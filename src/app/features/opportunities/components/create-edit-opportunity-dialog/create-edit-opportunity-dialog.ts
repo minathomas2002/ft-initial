@@ -10,6 +10,8 @@ import { OpportunityLocalizationForm } from '../opportunity-localization-form/op
 import { OpportunityRequestsAdapter } from '../../classes/opportunity-requests-adapter';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { ButtonModule } from 'primeng/button';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -18,7 +20,8 @@ import { ButtonModule } from 'primeng/button';
     StepContentDirective,
     OpportunityInformationForm,
     OpportunityLocalizationForm,
-    ButtonModule
+    ButtonModule,
+    TranslatePipe
   ],
   templateUrl: './create-edit-opportunity-dialog.html',
   styleUrl: './create-edit-opportunity-dialog.scss',
@@ -28,21 +31,23 @@ export class CreateEditOpportunityDialog {
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   toasterService = inject(ToasterService);
+  i18nService = inject(I18nService);
   steps = computed<IWizardStepState[]>(() => [
     {
-      title: 'Opportunity Information',
-      description: 'Enter Opportunity details',
+      title: this.i18nService.translate('opportunity.wizard.opportunityInformation'),
+      description: this.i18nService.translate('opportunity.wizard.opportunityInformationDescription'),
       isActive: this.activeStep() === 1,
       formState: this.opportunityFormService.opportunityInformationForm,
     },
     {
-      title: 'Opportunity Localization',
-      description: 'Enter Opportunity localization details',
+      title: this.i18nService.translate('opportunity.wizard.opportunityLocalization'),
+      description: this.i18nService.translate('opportunity.wizard.opportunityLocalizationDescription'),
       isActive: this.activeStep() === 2,
       formState: this.opportunityFormService.opportunityLocalizationForm,
     },
   ])
   activeStep = signal<number>(1);
+  wizardTitle = computed(() => this.i18nService.translate('opportunity.wizard.createOpportunity'));
 
   nextStep = () => {
     this.activeStep.set(this.activeStep() + 1);

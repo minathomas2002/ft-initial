@@ -85,7 +85,7 @@
           <p-button
             text
             icon="icon-save"
-            label="Save a draft"
+            [label]="'opportunity.wizard.saveAsDraft' | translate"
             severity="secondary"
             (click)="saveAsDraft()"
             [disabled]="isProcessing()"
@@ -96,16 +96,16 @@
           @if (!isFirstStep()) {
           <p-button
             (click)="previousStep()"
-            icon="icon-arrow-left"
-            label="Back"
+            [icon]="currentLanguage() === 'ar' ? 'icon-arrow-right' : 'icon-arrow-left'"
+            [label]="'opportunity.wizard.back' | translate"
             [disabled]="isLoading()"
           />
           }
           @if (!isFinalStep()) {
           <p-button
             (click)="nextStep()"
-            icon="icon-arrow-right"
-            label="Next"
+            [icon]="nextButtonIcon()"
+            [label]="'opportunity.wizard.next' | translate"
             [disabled]="isLoading()"
             [loading]="isLoading()"
           />

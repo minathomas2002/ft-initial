@@ -4,7 +4,7 @@
       <tr class="bg-gray-50">
         @for (key of keys(); track key) {
         <th class="p-3 border border-gray-200 text-left font-semibold">
-          <span>{{ key }}</span>
+          <span>{{ key === 'keyActivity' ? ('opportunity.wizard.keyActivity' | translate) : key }}</span>
         </th>
         }
         <th class="p-3 border border-gray-200 w-[48px]"></th>

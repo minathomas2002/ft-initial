@@ -9,6 +9,7 @@ import { IKeyActivityRecord } from 'src/app/shared/interfaces';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 
 @Component({
@@ -21,6 +22,7 @@ import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/for
     InputTextModule,
     ReactiveFormsModule,
     MessageModule,
+    TranslatePipe,
   ],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',

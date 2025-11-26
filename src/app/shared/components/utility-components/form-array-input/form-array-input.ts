@@ -1,11 +1,12 @@
-import { Component, input, TemplateRef, ContentChild, computed, signal, effect } from '@angular/core';
+import { Component, input, TemplateRef, ContentChild, computed, signal, effect, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-form-array-input',
-  imports: [ButtonModule, NgTemplateOutlet],
+  imports: [ButtonModule, NgTemplateOutlet, TranslatePipe],
   templateUrl: './form-array-input.html',
   styleUrl: './form-array-input.scss',
 })
