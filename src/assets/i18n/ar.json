@@ -141,7 +141,8 @@
 			"edit": "تعديل",
 			"delete": "حذف",
 			"moveToDraft": "نقل إلى المسودة",
-			"publish": "نشر"
+			"publish": "نشر",
+			"apply": "تطبيق"
 		},
 		"type": {
 			"service": "خدمة",

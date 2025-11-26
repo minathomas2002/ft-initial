@@ -143,7 +143,8 @@
       "edit": "Edit",
       "delete": "Delete",
       "moveToDraft": "Move to Draft",
-      "publish": "Publish"
+      "publish": "Publish",
+      "apply": "Apply"
     },
     "type": {
       "service": "Service",
