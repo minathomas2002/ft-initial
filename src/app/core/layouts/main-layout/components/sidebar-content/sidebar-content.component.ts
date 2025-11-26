@@ -6,13 +6,12 @@ import { SidebarLinkComponent } from '../sidebar-link/sidebar-link.component';
 import type { ISideBarLink } from './../../models/sidebar.interface';
 import { ERoutes } from '../../../../../shared/enums';
 import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
-import { RoleService } from 'src/app/shared/services/role/role-service';
-import { ERoles } from 'src/app/shared/enums/roles.enum';
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
+import { BaseLogoComponent } from 'src/app/shared/components/base-components/base-logo/base-logo.component';
 
 @Component({
   selector: 'app-sidebar-content',
-  imports: [SidebarLinkComponent, PanelModule, SidebarDropdownComponent, RouterModule],
+  imports: [SidebarLinkComponent, PanelModule, SidebarDropdownComponent, RouterModule, BaseLogoComponent],
   templateUrl: './sidebar-content.component.html',
   styleUrl: './sidebar-content.component.scss',
 })

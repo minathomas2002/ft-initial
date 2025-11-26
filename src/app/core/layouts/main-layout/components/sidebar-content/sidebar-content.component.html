@@ -1,9 +1,6 @@
 <div class="flex flex-col justify-between h-full">
   <div>
-    <app-base-logo
-      [routerLink]="DashboardLink"
-      class="cursor-pointer"
-    />
+    <app-base-logo class="cursor-pointer" />
     <div class="sidebar-links mt-[48px]">
       <ul class="list-unstyles">
         @for(link of sidebarLinks(); track link.routerLink){

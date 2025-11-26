@@ -6,4 +6,4 @@ import { ImageModule } from 'primeng/image';
 	templateUrl: './base-logo.component.html',
 	styleUrl: './base-logo.component.scss',
 })
-export class BaseLogoComponent {}
+export class BaseLogoComponent { }
