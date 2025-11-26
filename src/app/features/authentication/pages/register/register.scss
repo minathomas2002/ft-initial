@@ -1,6 +1,14 @@
 :host ::ng-deep .iti {
     width: 100% !important;
 }
+
+:host ::ng-deep .iti__flag-container {
+    z-index: 1;
+    height: 100%;
+    display: flex;     
+    position: absolute;
+}
+
 :host ::ng-deep .iti__dropdown-content {
     min-width: 20rem !important;
 }
@@ -9,4 +17,10 @@
     z-index: 9999 !important;
     overflow-y: auto !important;
     max-height: 200px !important;
+}
+
+:host ::ng-deep .iti__selected-flag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
