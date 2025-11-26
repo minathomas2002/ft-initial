@@ -30,13 +30,8 @@
 
 /*.p-inputtext */
 .p-inputtext {
-    @include primengInputsFontSize;
-  }
-  /*p-inputtext end*/
-
-/*.p-inputtext */
-.p-inputtext {
   @include primengInputsFontSize;
+  height: 44px !important;
 }
 /*.p-inputtext end*/
 

@@ -518,6 +518,11 @@ const MY_PRESET = definePreset(Lara, {
     ...DATEPICKER_COMPONENT,
     ...FILE_UPLOAD_COMPONENT,
     ...PAGINATOR_COMPONENT,
+    ...SELECT_COMPONENT,
+    ...MULTISELECT_COMPONENT,
+    ...TEXTAREA_COMPONENT,
+    ...INPUTTEXT_COMPONENT,
+    ...TOOLTIP_COMPONENT,
   },
   semantic: {
     gray: {
