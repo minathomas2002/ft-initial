@@ -23,7 +23,6 @@
                 type="text"
                 pInputText
                 class="w-full"
-                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('designEngineerings'))"
                 placeholder="Enter Key Activities"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
@@ -31,7 +30,26 @@
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [control]="getFormArray('designEngineerings')" />
+        @if(getFormArray('designEngineerings').invalid && getFormArray('designEngineerings').dirty){
+        <div class="mt-2">
+          @if(getFormArray('designEngineerings').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Design engineering is required
+          </p-message>
+          }
+          @if(getFormArray('designEngineerings').hasError('invalidArray')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Design engineering is required
+          </p-message>
+          }
+        </div>
+        }
       </div>
 
       <!-- Sourcing -->
@@ -54,7 +72,6 @@
                 type="text"
                 pInputText
                 class="w-full"
-                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('sourcings'))"
                 placeholder="Enter Key Activities"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
@@ -62,7 +79,26 @@
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [control]="getFormArray('sourcings')" />
+        @if(getFormArray('sourcings').invalid && getFormArray('sourcings').dirty){
+        <div class="mt-2">
+          @if(getFormArray('sourcings').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Sourcing is required
+          </p-message>
+          }
+          @if(getFormArray('sourcings').hasError('invalidArray')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Sourcing is required
+          </p-message>
+          }
+        </div>
+        }
       </div>
 
       <!-- Manufacturing -->
@@ -86,14 +122,32 @@
                 pInputText
                 class="w-full"
                 placeholder="Enter Key Activities"
-                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('manufacturings'))"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [control]="getFormArray('manufacturings')" />
+        @if(getFormArray('manufacturings').invalid && getFormArray('manufacturings').dirty){
+        <div class="mt-2">
+          @if(getFormArray('manufacturings').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Manufacturing is required
+          </p-message>
+          }
+          @if(getFormArray('manufacturings').hasError('invalidArray')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Manufacturing is required
+          </p-message>
+          }
+        </div>
+        }
       </div>
 
       <!-- Assembly & Testing -->
@@ -116,7 +170,6 @@
                 type="text"
                 pInputText
                 class="w-full"
-                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('assemblyTestings'))"
                 placeholder="Enter Key Activities"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
@@ -124,7 +177,26 @@
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [control]="getFormArray('assemblyTestings')" />
+        @if(getFormArray('assemblyTestings').invalid && getFormArray('assemblyTestings').dirty){
+        <div class="mt-2">
+          @if(getFormArray('assemblyTestings').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Assembly testing is required
+          </p-message>
+          }
+          @if(getFormArray('assemblyTestings').hasError('invalidArray')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Assembly testing is required
+          </p-message>
+          }
+        </div>
+        }
       </div>
 
       <!-- After Sales Services -->
@@ -147,7 +219,6 @@
                 type="text"
                 pInputText
                 class="w-full"
-                [class.p-invalid]="isRecordInvalid(itemControl, getFormArray('afterSalesServices'))"
                 placeholder="Enter Key Activities"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
@@ -155,7 +226,26 @@
             </td>
           </ng-template>
         </app-form-array-input>
-        <app-form-input-error-messages [control]="getFormArray('afterSalesServices')" />
+        @if(getFormArray('afterSalesServices').invalid && getFormArray('afterSalesServices').dirty){
+        <div class="mt-2">
+          @if(getFormArray('afterSalesServices').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            After sales services is required
+          </p-message>
+          }
+          @if(getFormArray('afterSalesServices').hasError('invalidArray')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            After sales services is required
+          </p-message>
+          }
+        </div>
+        }
       </div>
     </div>
   </div>

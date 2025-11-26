@@ -12,9 +12,27 @@
           pInputText
           placeholder="Enter opportunity title"
           [formControl]="getControl('title')"
-          [appPrimeInvalid]="getControl('title')"
         />
-        <app-form-input-error-messages [control]="getControl('title')" />
+        @if(getControl('title').invalid && getControl('title').dirty){
+        <div class="mt-2">
+          @if(getControl('title').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Opportunity title is required
+          </p-message>
+          }
+          @if(getControl('title').hasError('maxlength')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Maximum length exceeded
+          </p-message>
+          }
+        </div>
+        }
       </div>
       <!-- Short Description -->
       <div class="flex flex-col">
@@ -24,10 +42,28 @@
           [rows]="4"
           placeholder="Enter short description"
           [formControl]="getControl('shortDescription')"
-          [appPrimeInvalid]="getControl('shortDescription')"
         >
         </textarea>
-        <app-form-input-error-messages [control]="getControl('shortDescription')" />
+        @if(getControl('shortDescription').invalid && getControl('shortDescription').dirty){
+        <div class="mt-2">
+          @if(getControl('shortDescription').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Short description is required
+          </p-message>
+          }
+          @if(getControl('shortDescription').hasError('maxlength')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Maximum length exceeded
+          </p-message>
+          }
+        </div>
+        }
       </div>
 
       <!-- Opportunity Category -->
@@ -40,12 +76,19 @@
           optionValue="id"
           placeholder="Select"
           class="md:w-[50%]"
-          [appPrimeInvalid]="getControl('opportunityCategory')"
         />
-        <app-form-input-error-messages
-          [control]="getControl('opportunityCategory')"
-          class="w-1/2"
-        />
+        @if(getControl('opportunityCategory').invalid && getControl('opportunityCategory').dirty){
+        <div class="mt-2">
+          @if(getControl('opportunityCategory').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Opportunity category is required
+          </p-message>
+          }
+        </div>
+        }
       </div>
 
       <!-- Opportunity Type -->
@@ -58,12 +101,19 @@
           optionValue="id"
           placeholder="Select"
           class="md:w-[50%]"
-          [appPrimeInvalid]="getControl('opportunityType')"
         />
-        <app-form-input-error-messages
-          [control]="getControl('opportunityType')"
-          class="w-1/2"
-        />
+        @if(getControl('opportunityType').invalid && getControl('opportunityType').dirty){
+        <div class="mt-2">
+          @if(getControl('opportunityType').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Opportunity type is required
+          </p-message>
+          }
+        </div>
+        }
       </div>
     </div>
   </div>
@@ -81,9 +131,19 @@
             pInputText
             placeholder="Enter spend (SAR)"
             [formControl]="getControl('spendSAR')"
-            [appPrimeInvalid]="getControl('spendSAR')"
           />
-          <app-form-input-error-messages [control]="getControl('spendSAR')" />
+          @if(getControl('spendSAR').invalid && getControl('spendSAR').dirty){
+          <div class="mt-2">
+            @if(getControl('spendSAR').hasError('required')){
+            <p-message
+              severity="error"
+              size="small"
+            >
+              Spend (SAR) is required
+            </p-message>
+            }
+          </div>
+          }
         </div>
         <div>
           <app-base-label [title]="'Quantity (Units)'" />
@@ -94,9 +154,27 @@
                 pInputText
                 placeholder="Enter min quantity"
                 [formControl]="getControl('minQuantity')"
-                [appPrimeInvalid]="getControl('minQuantity')"
               />
-              <app-form-input-error-messages [control]="getControl('minQuantity')" />
+              @if(getControl('minQuantity').invalid && getControl('minQuantity').dirty){
+              <div class="mt-2">
+                @if(getControl('minQuantity').hasError('required')){
+                <p-message
+                  severity="error"
+                  size="small"
+                >
+                  Min quantity is required
+                </p-message>
+                }
+                @if(getControl('minQuantity').hasError('minQuantityError')){
+                <p-message
+                  severity="error"
+                  size="small"
+                >
+                  Min quantity must be less than max quantity
+                </p-message>
+                }
+              </div>
+              }
             </div>
             <span class="text-gray-700 text-xl font-semibold pt-1"> - </span>
             <div>
@@ -105,9 +183,27 @@
                 pInputText
                 placeholder="Enter max quantity"
                 [formControl]="getControl('maxQuantity')"
-                [appPrimeInvalid]="getControl('maxQuantity')"
               />
-              <app-form-input-error-messages [control]="getControl('maxQuantity')" />
+              @if(getControl('maxQuantity').invalid && getControl('maxQuantity').dirty){
+              <div class="mt-2">
+                @if(getControl('maxQuantity').hasError('required')){
+                <p-message
+                  severity="error"
+                  size="small"
+                >
+                  Max quantity is required
+                </p-message>
+                }
+                @if(getControl('maxQuantity').hasError('maxQuantityError')){
+                <p-message
+                  severity="error"
+                  size="small"
+                >
+                  Max quantity must be greater than min quantity
+                </p-message>
+                }
+              </div>
+              }
             </div>
           </div>
         </div>
@@ -128,9 +224,19 @@
             pInputText
             placeholder="Enter Local Suppliers number"
             [formControl]="getControl('localSuppliers')"
-            [appPrimeInvalid]="getControl('localSuppliers')"
           />
-          <app-form-input-error-messages [control]="getControl('localSuppliers')" />
+          @if(getControl('localSuppliers').invalid && getControl('localSuppliers').dirty){
+          <div class="mt-2">
+            @if(getControl('localSuppliers').hasError('required')){
+            <p-message
+              severity="error"
+              size="small"
+            >
+              Local suppliers is required
+            </p-message>
+            }
+          </div>
+          }
         </div>
         <div class="flex flex-col">
           <app-base-label [title]="'Global Suppliers'" />
@@ -139,9 +245,19 @@
             pInputText
             placeholder="Enter Global Suppliers number"
             [formControl]="getControl('globalSuppliers')"
-            [appPrimeInvalid]="getControl('globalSuppliers')"
           />
-          <app-form-input-error-messages [control]="getControl('globalSuppliers')" />
+          @if(getControl('globalSuppliers').invalid && getControl('globalSuppliers').dirty){
+          <div class="mt-2">
+            @if(getControl('globalSuppliers').hasError('required')){
+            <p-message
+              severity="error"
+              size="small"
+            >
+              Global suppliers is required
+            </p-message>
+            }
+          </div>
+          }
         </div>
       </div>
     </div>
@@ -163,10 +279,29 @@
           placeholder="Select date range"
           [dateFormat]="'dd M yy'"
           class="w-full md:w-[50%]"
-          [invalid]="opportunityInformationForm.get('dateRange')?.invalid && opportunityInformationForm.get('dateRange')?.touched"
+          [invalid]="opportunityInformationForm.get('dateRange')?.invalid && opportunityInformationForm.get('dateRange')?.dirty"
           fluid
         />
-        <app-form-input-error-messages [control]="getControl('dateRange')" />
+        @if(getControl('dateRange').invalid && getControl('dateRange').dirty){
+        <div class="mt-2">
+          @if(getControl('dateRange').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Date range is required
+          </p-message>
+          }
+          @if(getControl('dateRange').hasError('invalidRange')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            You should select a date range
+          </p-message>
+          }
+        </div>
+        }
       </div>
     </div>
   </div>
@@ -184,9 +319,20 @@
           [placeholder]="placeholder"
           #fileupload
           (filesChange)="onFilesChanged($event)"
-          [appPrimeInvalid]="getControl('image')"
+          [class.p-invalid]="getControl('image').invalid && getControl('image').dirty"
         />
-        <app-form-input-error-messages [control]="getControl('image')" />
+        @if(getControl('image').invalid && getControl('image').dirty){
+        <div class="mt-2">
+          @if(getControl('image').hasError('required')){
+          <p-message
+            severity="error"
+            size="small"
+          >
+            Image is required
+          </p-message>
+          }
+        </div>
+        }
       </div>
     </div>
   </div>

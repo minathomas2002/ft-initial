@@ -7,23 +7,9 @@ import { OpportunityFormService } from '../../services/opportunity-form/opportun
 import { InputTextModule } from 'primeng/inputtext';
 import { IKeyActivityRecord } from 'src/app/shared/interfaces';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormInputErrorMessages } from 'src/app/shared/components/utility-components/form-input-error-messages/form-input-error-messages';
+import { MessageModule } from 'primeng/message';
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
 
-
-interface IAfterSales {
-  expenseHeader: string;
-  inHousehold: number;
-  cost: number;
-  currency: string;
-  costType: string;
-  costCategory: string;
-  costSubCategory: string;
-  costSubSubCategory: string;
-  costSubSubSubCategory: string;
-  costSubSubSubSubCategory: string;
-  costSubSubSubSubSubCategory: string;
-}
 
 @Component({
   selector: 'app-opportunity-localization-form',
@@ -34,7 +20,7 @@ interface IAfterSales {
     FormArrayInput,
     InputTextModule,
     ReactiveFormsModule,
-    FormInputErrorMessages,
+    MessageModule,
   ],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',

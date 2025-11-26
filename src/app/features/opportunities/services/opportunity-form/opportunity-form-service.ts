@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, SafeObjectUrl } from 'src/app/shared/interfaces';
 
@@ -54,7 +54,9 @@ export class OpportunityFormService {
     ],
   }
 
-  constructor(private fb: FormBuilder) {
+  private fb = inject(FormBuilder);
+
+  constructor() {
     this.initializeForms();
   }
 
@@ -212,8 +214,9 @@ export class OpportunityFormService {
   // Factory method to create new key activity records
   createNewKeyActivity = () => ({ keyActivity: '' });
 
-  markAsTouched() {
-    this.opportunityForm.markAllAsTouched();
+  markAsDirty() {
+    this.opportunityForm.markAllAsDirty();
+    this.opportunityForm.updateValueAndValidity();
   }
 
   updateImageField(image: SafeObjectUrl | null) {

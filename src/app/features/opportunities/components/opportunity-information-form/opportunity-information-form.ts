@@ -9,8 +9,6 @@ import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MessageModule } from 'primeng/message';
-import { FormInputErrorMessages } from 'src/app/shared/components/utility-components/form-input-error-messages/form-input-error-messages';
-import { PrimeInvalidDirective } from 'src/app/shared/directives/prime-invalid.directive';
 import { FormsModule } from '@angular/forms';
 import { SafeObjectUrl } from 'src/app/shared/interfaces';
 
@@ -24,8 +22,6 @@ import { SafeObjectUrl } from 'src/app/shared/interfaces';
     DatePickerModule,
     FileuploadComponent,
     MessageModule,
-    FormInputErrorMessages,
-    PrimeInvalidDirective,
     FormsModule,
     ReactiveFormsModule
   ],
