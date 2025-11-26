@@ -10,28 +10,6 @@ import { OpportunityLocalizationForm } from '../opportunity-localization-form/op
 import { OpportunityRequestsAdapter } from '../../classes/opportunity-requests-adapter';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { ButtonModule } from 'primeng/button';
-import { FormGroup } from '@angular/forms';
-import { FieldState } from '@angular/forms/signals';
-
-// Helper function to convert FormGroup to FieldState-like object
-function formGroupToFieldState(formGroup: FormGroup): FieldState<unknown, string | number> {
-  return {
-    valid: () => formGroup.valid,
-    invalid: () => formGroup.invalid,
-    touched: () => formGroup.touched,
-    dirty: () => formGroup.dirty,
-    errors: computed(() => {
-      const errors = formGroup.errors;
-      if (!errors) return [];
-      // Convert ValidationErrors to WithField[] format
-      return Object.keys(errors).map(key => ({
-        kind: key,
-        message: errors[key]?.message || `Validation error: ${key}`
-      }));
-    }),
-    value: () => formGroup.value,
-  } as FieldState<unknown, string | number>;
-}
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -55,13 +33,13 @@ export class CreateEditOpportunityDialog {
       title: 'Opportunity Information',
       description: 'Enter Opportunity details',
       isActive: this.activeStep() === 1,
-      formState: formGroupToFieldState(this.opportunityFormService.opportunityInformationForm),
+      formState: this.opportunityFormService.opportunityInformationForm,
     },
     {
       title: 'Opportunity Localization',
       description: 'Enter Opportunity localization details',
       isActive: this.activeStep() === 2,
-      formState: formGroupToFieldState(this.opportunityFormService.opportunityLocalizationForm),
+      formState: this.opportunityFormService.opportunityLocalizationForm,
     },
   ])
   activeStep = signal<number>(1);

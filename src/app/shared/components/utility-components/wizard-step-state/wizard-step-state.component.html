@@ -1,4 +1,4 @@
-<div class="flex items-center justify-between">
+<div class="flex items-center justify-between w-100">
   <div class="flex items-center gap-4">
     <span class="p-step-number flex items-center justify-center !w-[32px] !h-[32px]">
       @switch (status()) {
@@ -12,7 +12,7 @@
       <i class="icon-check text-white"></i>
       }
       @case (EWizardStepState.Error) {
-      <i class="block w-[10px] h-[10px] bg-white rounded-full"></i>
+      <i class="block w-[10px] h-[10px] bg-white rounded-full in-progress"></i>
       }
       }
     </span>
@@ -36,6 +36,7 @@
   <p-badge
     [value]="errorsNumber()"
     [severity]="'danger'"
+    class="bg-red-500 text-white"
   ></p-badge>
   }
 </div>
