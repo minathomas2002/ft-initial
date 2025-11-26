@@ -1,4 +1,4 @@
-import { Component, input, TemplateRef, ContentChild, computed } from '@angular/core';
+import { Component, input, TemplateRef, ContentChild, computed, signal, effect } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
@@ -26,10 +26,34 @@ export class FormArrayInput {
     itemValue: any;
   }>;
 
+  // Signal to track FormArray changes for reactivity
+  private updateTrigger = signal(0);
+
+  constructor() {
+    // Track FormArray changes to trigger computed updates
+    effect(() => {
+      const formArray = this.ft();
+      if (formArray) {
+        // Subscribe to valueChanges to detect mutations
+        const subscription = formArray.valueChanges.subscribe(() => {
+          this.updateTrigger.update(v => v + 1);
+        });
+        // Initial trigger
+        this.updateTrigger.update(v => v + 1);
+        // Cleanup subscription when effect re-runs or component is destroyed
+        return () => subscription.unsubscribe();
+      }
+      return undefined;
+    });
+  }
+
   // Get the array value from FormArray
+  // Reading updateTrigger signal makes the computed reactive to FormArray mutations
   objects = computed(() => {
     const formArray = this.ft();
     if (!formArray) return [];
+    // Read the signal to make computed reactive
+    this.updateTrigger();
     return formArray.value || [];
   });
 
@@ -63,6 +87,8 @@ export class FormArrayInput {
       const newItem = this.createNewItem()();
       formArray.push(newItem);
     }
+    // Trigger update to refresh computed signal
+    this.updateTrigger.update(v => v + 1);
   }
 
   onAddHandler() {
@@ -73,5 +99,7 @@ export class FormArrayInput {
 
     const newItem = this.createNewItem()();
     formArray.push(newItem);
+    // Trigger update to refresh computed signal
+    this.updateTrigger.update(v => v + 1);
   }
 }

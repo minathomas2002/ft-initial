@@ -29,6 +29,11 @@ export class OpportunityLocalizationForm {
   opportunityFormService = inject(OpportunityFormService);
   opportunityLocalizationForm = this.opportunityFormService.opportunityLocalizationForm;
 
+  // Bound method to preserve 'this' context when passed to form-array-input
+  createKeyActivityControl = () => {
+    return this.opportunityFormService.createKeyActivityControl();
+  };
+
   isRecordInvalid(itemControl: AbstractControl, formArray: FormArray): boolean {
     const itemValue = itemControl.value as IKeyActivityRecord;
     if (itemValue?.keyActivity?.trim() !== '') {
