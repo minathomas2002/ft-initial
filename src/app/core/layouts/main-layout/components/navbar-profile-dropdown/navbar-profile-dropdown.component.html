@@ -23,8 +23,8 @@
   <div class="items-center md:!flex hidden text-sm">
     <app-identify-user
       [userName]="authStore.jwtUserDetails()?.FullName!"
-      [userTitle]="'Mr'"
-      [userAvatar]="authStore.jwtUserDetails()?.Email!"
+      [userTitle]="authStore.jwtUserDetails()?.UserType!"
+      [userAvatar]="'assets/images/user_placeholder.png'"
     ></app-identify-user>
     <i class="icon-chevron-down ms-[18px] text-gray-400 {{isOpen()? 'rotate-180':'rotate-none'}} transition-all"></i>
   </div>
