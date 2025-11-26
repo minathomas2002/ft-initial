@@ -121,8 +121,9 @@
     "profile": "Profile",
     "settings": "Settings",
     "help": "Help",
-    "users": "Users",
-    "opportunities": "Opportunities"
+    "users": "Employees",
+    "opportunities": "Opportunities",
+    "investors": "Investors"
   },
   "opportunity": {
     "status": {
@@ -169,6 +170,27 @@
       "manufacturing": "Manufacturing",
       "assemblyTesting": "Assembly Testing",
       "afterSalesServices": "After Sales Services"
+    }
+  },
+  "investors": {
+    "list": {
+      "title": "Investors",
+      "subtitle": "Manage Investors Information and plans",
+      "noInvestorsFound": "No Investors Found"
+    },
+    "filter": {
+      "search": "Search",
+      "joinDate": "Join Date",
+      "searchPlaceholder": "Search by Name, Phone Number, Email",
+      "selectJoinDate": "Select join date"
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "otherNumber": "Other Number",
+      "submittedPlans": "Submitted Plans",
+      "joinDate": "Join Date"
     }
   }
 }

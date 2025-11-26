@@ -16,15 +16,16 @@
     >
       <tr>
         @if(rowsCheckable()){
-        <th class="!bg-gray-50 text-sm !text-gray-600 !font-medium !ps-[24px] !pe-0 !py-[13px]">
+        <th class="text-sm !font-medium !ps-[24px] !pe-0 !py-[13px]">
           <p-tableHeaderCheckbox />
         </th>
         }
         @for(col of columns; track col){
-        <th class="!bg-gray-50 text-sm !text-gray-600 !font-medium !px-[24px] !py-[13px] whitespace-nowrap">
+        <th class="text-sm !font-medium !px-[24px] !py-[13px] whitespace-nowrap">
           <div class="flex items-center gap-[4px]">
             {{ col.label}}
             @if(col.isSortable && totalRecords() > 0){
+              
             <i
               class="transition-transform duration-300 cursor-pointer text-xs ms-[7px]"
               [ngClass]="{
@@ -35,7 +36,7 @@
               role="
               button"
               (click)="setSortingKey(col.sortingKey)"
-            ></i>
+            >Sort</i>
             }
           </div>
         </th>

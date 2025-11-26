@@ -1,6 +1,6 @@
 <div class="grid grid-cols-12 gap-4">
 
-  <div class="col-span-6 hidden md:block">
+  <div class="col-span-12 md:col-span-6">
     <p-iconfield>
       <p-inputicon
         inputId="users-search"
@@ -18,7 +18,7 @@
     </p-iconfield>
   </div>
 
-  <div class="col-span-3 hidden md:block">
+  <div class="col-span-12 md:col-span-3">
     <p-multiselect
       [options]="userTitles()"
       [(ngModel)]="filter().userTitleId"
@@ -32,20 +32,8 @@
   </div>
 
   @if(usersFilterService.showClearAll()){
-  <div class="col-span-3 hidden md:flex items-center">
+  <div class="col-span-3 flex items-center">
     <app-clear-all (onClearAll)="usersFilterService.clearAllFilters()"></app-clear-all>
   </div>
   }
-
-  <div class="col-span-full md:hidden">
-    <p-button
-      severity="secondary"
-      styleClass="!w-full"
-      icon="icon-filter-lines"
-      label="Filters"
-      [raised]="true"
-      (onClick)="filterDrawerVisible.set(true)"
-      fluid
-    />
-  </div>
 </div>
