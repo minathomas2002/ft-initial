@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable } from 'rxjs';
-import { IApiPaginatedResponse, IBaseApiResponse, IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityDraftRequest } from '../../interfaces';
+import { IApiPaginatedResponse, IBaseApiResponse, IDashboardResponse, IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityDraftRequest, IAdminOpportunitiesFilterRequest, IAdminOpportunity } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 
 @Injectable({
@@ -12,6 +12,10 @@ export class OpportunitiesApiService {
 
   getOpportunities(filter: IOpportunitiesFilterRequest): Observable<IBaseApiResponse<IApiPaginatedResponse<IOpportunity[]>>> {
     return this.baseHttpService.get<IApiPaginatedResponse<IOpportunity[]>, IOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getOpportunities, filter);
+  }
+
+  getAdminOpportunities(filter: IAdminOpportunitiesFilterRequest): Observable<IBaseApiResponse<IDashboardResponse<IAdminOpportunity[]>>> {
+    return this.baseHttpService.get<IDashboardResponse<IAdminOpportunity[]>, IAdminOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getAdminOpportunities, filter);
   }
 
   draftOpportunity(opportunity: FormData): Observable<IBaseApiResponse<IOpportunity>> {

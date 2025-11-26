@@ -15,62 +15,31 @@
     />
   </ng-container>
   <ng-container ngProjectAs="page-filters">
-    <!-- <app-opportunities-filters [isAdminMode]="isAdminMode()" /> -->
+    <app-admin-opportunities-filter
+      [(filter)]="filter"
+      (filterChange)="applyFilter()"
+    />
   </ng-container>
   <ng-container ngProjectAs="page-body">
-    <!-- <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
+    <app-cards-skeleton [isLoading]="adminOpportunitiesStore.isLoading()">
       <app-data-cards
-        [items]="opportunitiesStore.list()"
-        [totalRecords]="opportunitiesStore.count()"
+        [items]="adminOpportunitiesStore.list()"
+        [totalRecords]="adminOpportunitiesStore.count()"
         [(filter)]="filter"
+        (filterChange)="applyFilter()"
       >
         <ng-template
           #itemsTemplate
           let-item="item"
         >
-          <app-opportunity-card
-            item
-            icon="icon-search"
-            [cardTitle]="item.title"
-            [cardDescription]="item.shortDescription"
-            cardClass="bg-gray-50"
-          >
-            @if(permissionService.canViewOpportunityDetailsInCard()) {
-            <ng-container ngProjectAs="opportunity-card-info">
-              <div class="flex flex-col gap-2">
-                <app-opportunity-detail-item
-                  [label]="'opportunity.list.opportunityType' | translate"
-                  [value]="item.opportunityType"
-                />
-                <app-opportunity-detail-item
-                  [label]="'opportunity.list.applicationPeriod' | translate"
-                  [value]="`${item.startDate | date:'dd MMM'} - ${item.endDate | date:'dd MMM'}`"
-                />
-              </div>
-            </ng-container>
-            }
-            <ng-container ngProjectAs="opportunity-card-actions">
-              <div class="flex gap-4">
-                <p-button
-                  [label]="'opportunity.list.viewDetails' | translate"
-                  severity="secondary"
-                  class="flex-1"
-                  fluid
-                  (onClick)="onViewDetails(item)"
-                />
-                <p-button
-                  [label]="'opportunity.list.apply' | translate"
-                  severity="primary"
-                  class="flex-1"
-                  fluid
-                  (onClick)="onApply(item)"
-                />
-              </div>
-            </ng-container>
-          </app-opportunity-card>
+          <app-admin-opportunity-card
+            [opportunity]="item"
+            (onViewDetails)="onViewDetails($event)"
+            (onAction)="onAction($event)"
+          />
         </ng-template>
       </app-data-cards>
-    </app-cards-skeleton> -->
+    </app-cards-skeleton>
   </ng-container>
 </app-cards-page-layout>
 

@@ -23,7 +23,7 @@ export const API_ENDPOINTS = {
     draftOpportunity: `${Opportunities}/draft`,
     getOpportunities: `${Opportunities}/get-opportunities`,
     getOpportunityById: `${Opportunities}`,
-    getAdminOpportunities: `${AdminOpportunities}/admin`,
+    getAdminOpportunities: `${AdminOpportunities}`,
     editOpportunity: `${Opportunities}/edit-opportunity`,
   },
   auth: {

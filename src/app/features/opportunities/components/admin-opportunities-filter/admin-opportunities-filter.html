@@ -1,0 +1,67 @@
+<div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  <p-iconfield>
+    <p-inputicon
+      inputId="admin-opportunities-search"
+      class="icon-search"
+    />
+    <input
+      type="text"
+      pInputText
+      class="w-full"
+      [placeholder]="'opportunity.filter.searchByOpportunityName' | translate"
+      [ngModel]="filter().SearchText || ''"
+      (ngModelChange)="onSearchChange($event)"
+    />
+  </p-iconfield>
+
+  <p-select
+    [ngModel]="filter().Status?.toString()"
+    [options]="adminOpportunitiesStore.statusOptions()"
+    optionLabel="name"
+    optionValue="id"
+    [placeholder]="'opportunity.filter.status' | translate"
+    (ngModelChange)="onStatusChange($event)"
+    [showClear]="true"
+  >
+    <ng-template
+      let-option
+      pTemplate="item"
+    >
+      {{ option.name | translate }}
+    </ng-template>
+  </p-select>
+
+  <p-select
+    [ngModel]="filter().OpportunityType?.toString()"
+    [options]="adminOpportunitiesStore.opportunityTypeOptions()"
+    optionLabel="name"
+    optionValue="id"
+    [placeholder]="'opportunity.filter.opportunityType' | translate"
+    (ngModelChange)="onOpportunityTypeChange($event)"
+    [showClear]="true"
+  >
+    <ng-template
+      let-option
+      pTemplate="item"
+    >
+      {{ option.name | translate }}
+    </ng-template>
+  </p-select>
+
+  <p-select
+    [ngModel]="filter().IsActive?.toString()"
+    [options]="adminOpportunitiesStore.stateOptions()"
+    optionLabel="name"
+    optionValue="id"
+    [placeholder]="'opportunity.filter.state' | translate"
+    (ngModelChange)="onIsActiveChange($event)"
+    [showClear]="true"
+  >
+    <ng-template
+      let-option
+      pTemplate="item"
+    >
+      {{ option.name | translate }}
+    </ng-template>
+  </p-select>
+</div>

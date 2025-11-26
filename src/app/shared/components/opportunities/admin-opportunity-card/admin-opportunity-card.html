@@ -1,0 +1,69 @@
+<div class="p-[24px] flex flex-col gap-[24px] rounded-2xl border-1 border-gray-200 bg-gray-50 min-h-[300px]">
+  <!-- Warning Message -->
+  @if(shouldShowWarning()) {
+    <div class="flex items-center gap-2 p-3 rounded-lg bg-yellow-50 border-1 border-yellow-200">
+      <i class="icon-warning text-yellow-600 text-xl"></i>
+      <span class="text-sm text-yellow-800">
+        {{ 'opportunity.warning.draftAfterStartDate' | translate }}
+      </span>
+    </div>
+  }
+
+  <div class="flex items-center justify-between gap-2 items-start">
+    <div
+      class="w-[40px] h-[40px] rounded-xl bg-warning-50 flex justify-between border-1 border-gray-200 items-center justify-center">
+      <i class="{{getOpportunityIcon()}} text-gray-900 text-xl"></i>
+    </div>
+    <div class="flex justify-end gap-2">
+      <!-- Status Badge (Published/Draft) -->
+      @let statusConfig = getStatusConfig();
+      <app-base-tag [color]="statusConfig.color" [value]="statusConfig.label | translate" />
+      
+      <!-- State Badge (Active/Inactive) - Only show if published -->
+      @if(opportunity().status === EOpportunityStatus.PUBLISHED) {
+        @let stateConfig = getStateConfig();
+        <app-base-tag [color]="stateConfig.color" [value]="stateConfig.label | translate" />
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <h5 class="text-xl font-semibold text-gray-900 line-clamp-1" pTooltip="{{opportunity().title}}">
+      {{opportunity().title}}
+    </h5>
+    <p class="text-opportunity text-gray-600 h-[100px] overflow-y-auto">
+      {{opportunity().shortDescription}}
+    </p>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <app-opportunity-detail-item
+      [label]="'opportunity.list.opportunityType' | translate"
+      [value]="opportunity().opportunityType === 1 ? ('opportunity.type.services' | translate) : ('opportunity.type.material' | translate)"
+    />
+    <app-opportunity-detail-item
+      [label]="'opportunity.list.applicationPeriod' | translate"
+      [value]="`${opportunity().startDate | date:'dd MMM'} - ${opportunity().endDate | date:'dd MMM'}`"
+    />
+  </div>
+
+  <div class="flex gap-4">
+    <p-button
+      [label]="'opportunity.list.viewDetails' | translate"
+      severity="secondary"
+      class="flex-1"
+      fluid
+      (onClick)="handleViewDetails()"
+    />
+    @if(getActionsMenuItems().length > 0) {
+      <p-button
+        icon="icon-more-vertical"
+        severity="secondary"
+        [style]="{ width: '48px' }"
+        (onClick)="menu.toggle($event)"
+      />
+      <p-menu #menu [model]="getActionsMenuItems()" [popup]="true" />
+    }
+  </div>
+</div>
+
