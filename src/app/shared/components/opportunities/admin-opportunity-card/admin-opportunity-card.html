@@ -1,4 +1,4 @@
-<div class="p-[24px] flex flex-col gap-[24px] rounded-2xl border-1 border-gray-200 bg-gray-50 min-h-[300px]">
+<div class="p-[24px] flex flex-col gap-[24px] rounded-2xl border-1 border-gray-200 bg-white min-h-[400px]">
   <!-- Warning Message -->
   @if(shouldShowWarning()) {
   <div class="flex items-center gap-2 p-3 rounded-lg bg-yellow-50 border-1 border-yellow-200">
@@ -10,8 +10,8 @@
   }
 
   <div class="flex items-center justify-between gap-2 items-start">
-    <div class="w-[40px] h-[40px] rounded-xl bg-warning-50 flex justify-between border-1 border-gray-200 items-center justify-center">
-      <i class="{{getOpportunityIcon()}} text-gray-900 text-xl"></i>
+    <div class="w-[40px] h-[40px] rounded-xl bg-orange-500 flex justify-between border-1 border-gray-200 items-center justify-center">
+      <i class="{{getOpportunityIcon()}} text-white text-xl"></i>
     </div>
     <div class="flex justify-end gap-2">
       <!-- Status Badge (Published/Draft) -->
@@ -32,14 +32,14 @@
     </div>
   </div>
 
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col gap-1 flex-1">
     <h5
       class="text-xl font-semibold text-gray-900 line-clamp-1"
       pTooltip="{{opportunity().title}}"
     >
       {{opportunity().title}}
     </h5>
-    <p class="text-opportunity text-gray-600 h-[100px] overflow-y-auto">
+    <p class="text-opportunity text-gray-600 overflow-y-auto">
       {{opportunity().shortDescription}}
     </p>
   </div>
