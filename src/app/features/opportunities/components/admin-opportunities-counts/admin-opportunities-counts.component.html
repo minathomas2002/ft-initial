@@ -2,7 +2,7 @@
   <!-- Total Opportunities -->
   <div
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-    (click)="onCardClick('all')"
+    (click)="removeFilters()"
   >
     <p class="text-sm text-gray-600 mb-2">
       {{ 'opportunity.counts.totalOpportunities' | translate }}
@@ -21,7 +21,7 @@
   <!-- Active Published Opportunities -->
   <div
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-    (click)="onCardClick('active')"
+    (click)="filterWithPublishedOpportunities()"
   >
     <p class="text-sm text-gray-600 mb-2">
       {{ 'opportunity.counts.activePublishedOpportunities' | translate }}
@@ -40,7 +40,7 @@
   <!-- Inactive Opportunities -->
   <div
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-    (click)="onCardClick('inactive')"
+    (click)="filterWithInactiveOpportunities()"
   >
     <p class="text-sm text-gray-600 mb-2">
       {{ 'opportunity.counts.inactiveOpportunities' | translate }}
@@ -59,7 +59,7 @@
   <!-- Draft Opportunities -->
   <div
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-    (click)="onCardClick('draft')"
+    (click)="filterWithDraftOpportunities()"
   >
     <p class="text-sm text-gray-600 mb-2">
       {{ 'opportunity.counts.draftOpportunities' | translate }}
@@ -75,4 +75,3 @@
     </div>
   </div>
 </div>
-

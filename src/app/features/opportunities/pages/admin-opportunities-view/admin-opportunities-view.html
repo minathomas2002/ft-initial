@@ -15,7 +15,7 @@
     />
   </ng-container>
   <ng-container ngProjectAs="page-filters">
-    <app-admin-opportunities-counts (onFilterClick)="onCountsFilterClick($event)" />
+    <app-admin-opportunities-counts />
     <app-admin-opportunities-filter
       [(filter)]="filter"
       (filterChange)="applyFilter()"

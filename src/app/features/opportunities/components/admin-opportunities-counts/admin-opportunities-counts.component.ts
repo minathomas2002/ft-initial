@@ -1,6 +1,8 @@
 import { Component, inject, output } from '@angular/core';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
+import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
+import { EOpportunityState, EOpportunityStatus } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-admin-opportunities-counts',
@@ -10,12 +12,35 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 })
 export class AdminOpportunitiesCounts {
   protected readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
-  onFilterClick = output<{ type: 'all' | 'active' | 'inactive' | 'draft' }>();
-
   counts = this.adminOpportunitiesStore.counts;
+  protected readonly adminOpportunitiesFilterService = inject(AdminOpportunitiesFilterService);
 
-  onCardClick(type: 'all' | 'active' | 'inactive' | 'draft') {
-    this.onFilterClick.emit({ type });
+  removeFilters() {
+    this.adminOpportunitiesFilterService.clearAllFilters();
+  }
+
+  filterWithPublishedOpportunities() {
+    this.adminOpportunitiesFilterService.filter.set({
+      ...this.adminOpportunitiesFilterService.filter(),
+      status: EOpportunityStatus.PUBLISHED,
+    });
+    this.adminOpportunitiesFilterService.applyFilter();
+  }
+
+  filterWithInactiveOpportunities() {
+    this.adminOpportunitiesFilterService.filter.set({
+      ...this.adminOpportunitiesFilterService.filter(),
+      state: EOpportunityState.INACTIVE,
+    });
+    this.adminOpportunitiesFilterService.applyFilter();
+  }
+
+  filterWithDraftOpportunities() {
+    this.adminOpportunitiesFilterService.filter.set({
+      ...this.adminOpportunitiesFilterService.filter(),
+      status: EOpportunityStatus.DRAFT,
+    });
+    this.adminOpportunitiesFilterService.applyFilter();
   }
 }
 

@@ -80,46 +80,4 @@ export class AdminOpportunitiesView implements OnInit {
   applyFilter() {
     this.adminOpportunitiesFilterService.applyFilterWithPaging();
   }
-
-  onCountsFilterClick(event: { type: 'all' | 'active' | 'inactive' | 'draft' }) {
-    switch (event.type) {
-      case 'all':
-        // Remove all filters
-        this.adminOpportunitiesFilterService.clearAll({
-          searchText: undefined,
-          status: undefined,
-          state: undefined,
-          opportunityType: undefined,
-        });
-        break;
-      case 'active':
-        // Status is published, clear other filters
-        this.adminOpportunitiesFilterService.clearAll({
-          searchText: undefined,
-          status: EOpportunityStatus.PUBLISHED,
-          state: undefined,
-          opportunityType: undefined,
-        });
-        break;
-      case 'inactive':
-        // State is inactive, clear other filters
-        this.adminOpportunitiesFilterService.clearAll({
-          searchText: undefined,
-          status: undefined,
-          state: EOpportunityState.INACTIVE,
-          opportunityType: undefined,
-        });
-        break;
-      case 'draft':
-        // Status is draft, clear other filters
-        this.adminOpportunitiesFilterService.clearAll({
-          searchText: undefined,
-          status: EOpportunityStatus.DRAFT,
-          state: undefined,
-          opportunityType: undefined,
-        });
-        break;
-    }
-    this.applyFilter();
-  }
 }
