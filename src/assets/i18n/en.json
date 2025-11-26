@@ -161,6 +161,13 @@
       "viewDetails": "View Details",
       "apply": "Apply"
     },
+    "counts": {
+      "totalOpportunities": "Total Opportunities",
+      "activePublishedOpportunities": "Active Published Opportunities",
+      "inactiveOpportunities": "Inactive Opportunities",
+      "draftOpportunities": "Draft Opportunities",
+      "viewDetails": "View Details"
+    },
     "filter": {
       "search": "Search",
       "searchByOpportunityName": "Search by opportunity name",

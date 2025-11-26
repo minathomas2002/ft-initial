@@ -159,6 +159,13 @@
 			"viewDetails": "عرض التفاصيل",
 			"apply": "تطبيق"
 		},
+		"counts": {
+			"totalOpportunities": "إجمالي الفرص",
+			"activePublishedOpportunities": "الفرص المنشورة النشطة",
+			"inactiveOpportunities": "الفرص غير النشطة",
+			"draftOpportunities": "الفرص المسودة",
+			"viewDetails": "عرض التفاصيل"
+		},
 		"filter": {
 			"search": "بحث",
 			"searchByOpportunityName": "البحث عن طريق اسم الفرصة",

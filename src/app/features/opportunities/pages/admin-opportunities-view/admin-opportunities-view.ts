@@ -6,10 +6,11 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { CreateEditOpportunityDialog } from '../../components/create-edit-opportunity-dialog/create-edit-opportunity-dialog';
 import { AdminOpportunityCard } from 'src/app/shared/components/opportunities/admin-opportunity-card/admin-opportunity-card';
 import { AdminOpportunitiesFilter } from '../../components/admin-opportunities-filter/admin-opportunities-filter';
+import { AdminOpportunitiesCounts } from '../../components/admin-opportunities-counts/admin-opportunities-counts.component';
 import { DataCards } from 'src/app/shared/components/layout-components/data-cards/data-cards';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { IAdminOpportunity } from 'src/app/shared/interfaces/admin-opportunities.interface';
-import { EOpportunityAction } from 'src/app/shared/enums/opportunities.enum';
+import { EOpportunityAction, EOpportunityStatus, EOpportunityState } from 'src/app/shared/enums/opportunities.enum';
 import { Router } from '@angular/router';
 import { ERoutes, EViewMode } from 'src/app/shared/enums';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
@@ -23,6 +24,7 @@ import { AdminOpportunitiesFilterService } from '../../services/admin-opportunit
     CreateEditOpportunityDialog,
     AdminOpportunityCard,
     AdminOpportunitiesFilter,
+    AdminOpportunitiesCounts,
     DataCards,
     CardsSkeleton
   ],
@@ -77,5 +79,47 @@ export class AdminOpportunitiesView implements OnInit {
 
   applyFilter() {
     this.adminOpportunitiesFilterService.applyFilterWithPaging();
+  }
+
+  onCountsFilterClick(event: { type: 'all' | 'active' | 'inactive' | 'draft' }) {
+    switch (event.type) {
+      case 'all':
+        // Remove all filters
+        this.adminOpportunitiesFilterService.clearAll({
+          searchText: undefined,
+          status: undefined,
+          state: undefined,
+          opportunityType: undefined,
+        });
+        break;
+      case 'active':
+        // Status is published, clear other filters
+        this.adminOpportunitiesFilterService.clearAll({
+          searchText: undefined,
+          status: EOpportunityStatus.PUBLISHED,
+          state: undefined,
+          opportunityType: undefined,
+        });
+        break;
+      case 'inactive':
+        // State is inactive, clear other filters
+        this.adminOpportunitiesFilterService.clearAll({
+          searchText: undefined,
+          status: undefined,
+          state: EOpportunityState.INACTIVE,
+          opportunityType: undefined,
+        });
+        break;
+      case 'draft':
+        // Status is draft, clear other filters
+        this.adminOpportunitiesFilterService.clearAll({
+          searchText: undefined,
+          status: EOpportunityStatus.DRAFT,
+          state: undefined,
+          opportunityType: undefined,
+        });
+        break;
+    }
+    this.applyFilter();
   }
 }

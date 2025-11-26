@@ -15,12 +15,12 @@
   </p-iconfield>
 
   <p-select
-    [ngModel]="filter().status"
-    [options]="adminOpportunitiesStore.statusOptions()"
+    [ngModel]="filter().state"
+    [options]="adminOpportunitiesStore.stateOptions()"
     optionLabel="name"
     optionValue="id"
-    [placeholder]="'opportunity.filter.status' | translate"
-    (ngModelChange)="onStatusChange($event)"
+    [placeholder]="'opportunity.filter.state' | translate"
+    (ngModelChange)="onIsActiveChange($event)"
     [showClear]="true"
   >
     <ng-template
@@ -49,12 +49,12 @@
   </p-select>
 
   <p-select
-    [ngModel]="filter().state"
-    [options]="adminOpportunitiesStore.stateOptions()"
+    [ngModel]="filter().status"
+    [options]="adminOpportunitiesStore.statusOptions()"
     optionLabel="name"
     optionValue="id"
-    [placeholder]="'opportunity.filter.state' | translate"
-    (ngModelChange)="onIsActiveChange($event)"
+    [placeholder]="'opportunity.filter.status' | translate"
+    (ngModelChange)="onStatusChange($event)"
     [showClear]="true"
   >
     <ng-template
@@ -64,4 +64,5 @@
       {{ option.name | translate }}
     </ng-template>
   </p-select>
+
 </div>

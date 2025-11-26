@@ -1,0 +1,78 @@
+<div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <!-- Total Opportunities -->
+  <div
+    class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+    (click)="onCardClick('all')"
+  >
+    <p class="text-sm text-gray-600 mb-2">
+      {{ 'opportunity.counts.totalOpportunities' | translate }}
+    </p>
+    <p class="text-3xl font-bold text-gray-900 mb-4">
+      {{ counts().totalOpportunities }}
+    </p>
+    <div class="flex items-center gap-1 text-primary cursor-pointer">
+      <span class="text-sm font-medium">
+        {{ 'opportunity.counts.viewDetails' | translate }}
+      </span>
+      <i class="icon-external-link text-sm"></i>
+    </div>
+  </div>
+
+  <!-- Active Published Opportunities -->
+  <div
+    class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+    (click)="onCardClick('active')"
+  >
+    <p class="text-sm text-gray-600 mb-2">
+      {{ 'opportunity.counts.activePublishedOpportunities' | translate }}
+    </p>
+    <p class="text-3xl font-bold text-gray-900 mb-4">
+      {{ counts().activeOpportunities }}
+    </p>
+    <div class="flex items-center gap-1 text-primary cursor-pointer">
+      <span class="text-sm font-medium">
+        {{ 'opportunity.counts.viewDetails' | translate }}
+      </span>
+      <i class="icon-external-link text-sm"></i>
+    </div>
+  </div>
+
+  <!-- Inactive Opportunities -->
+  <div
+    class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+    (click)="onCardClick('inactive')"
+  >
+    <p class="text-sm text-gray-600 mb-2">
+      {{ 'opportunity.counts.inactiveOpportunities' | translate }}
+    </p>
+    <p class="text-3xl font-bold text-gray-900 mb-4">
+      {{ counts().inactiveOpportunities }}
+    </p>
+    <div class="flex items-center gap-1 text-primary cursor-pointer">
+      <span class="text-sm font-medium">
+        {{ 'opportunity.counts.viewDetails' | translate }}
+      </span>
+      <i class="icon-external-link text-sm"></i>
+    </div>
+  </div>
+
+  <!-- Draft Opportunities -->
+  <div
+    class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+    (click)="onCardClick('draft')"
+  >
+    <p class="text-sm text-gray-600 mb-2">
+      {{ 'opportunity.counts.draftOpportunities' | translate }}
+    </p>
+    <p class="text-3xl font-bold text-gray-900 mb-4">
+      {{ counts().draftOpportunities }}
+    </p>
+    <div class="flex items-center gap-1 text-primary cursor-pointer">
+      <span class="text-sm font-medium">
+        {{ 'opportunity.counts.viewDetails' | translate }}
+      </span>
+      <i class="icon-external-link text-sm"></i>
+    </div>
+  </div>
+</div>
+
