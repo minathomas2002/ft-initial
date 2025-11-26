@@ -15,7 +15,7 @@
       <tr>
         @if (itemTemplate) {
         <ng-container *ngTemplateOutlet="itemTemplate; context: { 
-          $implicit: getItemFieldTree(index)!, 
+          $implicit: ft()[index]!, 
           index: index,
           itemValue: object
         }"></ng-container>
