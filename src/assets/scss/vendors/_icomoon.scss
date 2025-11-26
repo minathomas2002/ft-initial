@@ -9,6 +9,8 @@
   font-style: normal;
   font-display: block;
 }
+
+
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
@@ -24,6 +26,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-chevron-selector-vertical:before {
+  content: "\e924";
+  color: #4a4e5a;
+}
+.icon-arrow-up:before {
+  content: "\e925";
+  color: #9197a6;
+}
 .icon-check:before {
   content: "\e923";
 }
