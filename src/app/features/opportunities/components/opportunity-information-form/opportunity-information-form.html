@@ -362,6 +362,7 @@
           [dateFormat]="'dd M yy'"
           [minDate]="today"
           class="w-full md:w-[50%]"
+          keepInvalid
           [invalid]="opportunityInformationForm.get('dateRange')?.invalid && opportunityInformationForm.get('dateRange')?.dirty"
           fluid
         />

@@ -40,8 +40,10 @@ export class AdminOpportunitiesView implements OnInit {
   }
 
   onViewDetails(opportunity: IAdminOpportunity) {
-    // Navigate to opportunity details page
-    this.router.navigate(['/', ERoutes.opportunities, opportunity.id]);
+    // Navigate to opportunity details page with source parameter
+    this.router.navigate(['/', ERoutes.opportunities, opportunity.id], {
+      queryParams: { from: 'admin' }
+    });
   }
 
   onAction(event: { opportunity: IAdminOpportunity; action: EOpportunityAction }) {

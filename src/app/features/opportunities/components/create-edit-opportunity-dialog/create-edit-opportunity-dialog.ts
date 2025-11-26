@@ -53,6 +53,8 @@ export class CreateEditOpportunityDialog implements OnInit {
   wizardTitle = computed(() => this.i18nService.translate('opportunity.wizard.createOpportunity'));
 
   ngOnInit() {
+    this.opportunityFormService.resetForm();
+
     if (this.adminOpportunitiesStore.viewMode() === EViewMode.Edit && this.adminOpportunitiesStore.selectedOpportunityId()) {
       this.opportunitiesStore.getOpportunityDetails(this.adminOpportunitiesStore.selectedOpportunityId()!).subscribe({
         next: (res) => {
