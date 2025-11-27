@@ -31,7 +31,6 @@ export class OpportunityDetails implements OnInit {
   getOpportunityTypeConfig = getOpportunityTypeConfig;
   opportunityActionsService = inject(OpportunityActionsService);
   isAnonymous = computed(() => !this.authStore.authResponse()?.token);
-
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -44,17 +43,11 @@ export class OpportunityDetails implements OnInit {
   }
 
   onBack() {
-    // Get the source from query parameters
-    const from = this.route.snapshot.queryParams['from'];
-
-    if (from === 'admin') {
-      // Return to admin opportunities view
-      this.router.navigate(['/', ERoutes.opportunities, 'admin']);
-    } else if (this.isAnonymous()) {
-      // Return to anonymous opportunities list
+    if (this.isAnonymous()) {
       this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities]);
+    } else if (this.permissionService.canAccessOnOpportunityAdmin()) {
+      this.router.navigate(['/', ERoutes.opportunities, ERoutes.admin]);
     } else {
-      // Return to regular opportunities list
       this.router.navigate(['/', ERoutes.opportunities]);
     }
   }

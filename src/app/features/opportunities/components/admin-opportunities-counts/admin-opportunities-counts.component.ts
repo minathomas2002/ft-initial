@@ -23,7 +23,7 @@ export class AdminOpportunitiesCounts {
   filterWithPublishedOpportunities() {
     this.adminOpportunitiesFilterService.filter.set({
       ...(structuredClone(this.adminOpportunitiesFilterService.filter())),
-      status: EOpportunityStatus.PUBLISHED,
+      state: EOpportunityState.ACTIVE,
     });
     this.adminOpportunitiesFilterService.applyFilter();
   }

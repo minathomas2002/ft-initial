@@ -16,7 +16,7 @@ export class AdminOpportunitiesFilterService extends AbstractServiceFilter<IAdmi
   adaptedFilter = computed<IAdminOpportunitiesFilterRequest>(() => {
     return {
       ...this.filter(),
-      isActive: this.filter().state === EOpportunityState.ACTIVE,
+      isActive: this.filter().state ? this.filter().state === EOpportunityState.ACTIVE : undefined
     };
   });
 
@@ -26,7 +26,7 @@ export class AdminOpportunitiesFilterService extends AbstractServiceFilter<IAdmi
 
   performFilter$() {
     this.resetPagination();
-    return this.store.getAdminOpportunities(this.filter());
+    return this.store.getAdminOpportunities(this.adaptedFilter());
   }
 
   clearAllFilters() {
@@ -46,6 +46,6 @@ export class AdminOpportunitiesFilterService extends AbstractServiceFilter<IAdmi
 
   applyFilterWithPaging() {
     this.updateFilterSignal();
-    this.store.getAdminOpportunities(this.filter()).pipe(take(1)).subscribe();
+    this.store.getAdminOpportunities(this.adaptedFilter()).pipe(take(1)).subscribe();
   }
 }
