@@ -14,18 +14,10 @@ export class UserStatusMapper {
         title: "Inactive",
         color: "red",
       },
-      [EUserStatus.PENDING]: {
+      [EUserStatus.DELEGATED]: {
         title: "Pending",
-        color: "yellow",
-      },
-      [EUserStatus.BLOCKED]: {
-        title: "Blocked",
-        color: "red",
-      },
-      [EUserStatus.DELETED]: {
-        title: "Deleted",
-        color: "gray",
-      },
+        color: "orange",
+      }
     };
   }
 

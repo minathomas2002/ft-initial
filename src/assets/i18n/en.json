@@ -172,6 +172,22 @@
       "afterSalesServices": "After Sales Services"
     }
   },
+  "users": {
+    "actions": {
+      "changeRole": "Change Role",
+      "delete": "Delete",
+      "edit": "Edit",
+      "view": "View",
+      "deactivate": "Deactivate"
+    },
+    "roles": {
+      "admin": "Admin",
+      "employee": "Employee",
+      "manager": "Manager",
+      "departmentManager": "Department Manager",
+      "investor": "DV Manager"
+    }
+  },
   "investors": {
     "list": {
       "title": "Investors",
@@ -185,6 +201,7 @@
       "selectJoinDate": "Select join date"
     },
     "table": {
+      "id": "ID",
       "name": "Name",
       "email": "Email",
       "phoneNumber": "Phone Number",

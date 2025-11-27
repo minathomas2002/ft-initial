@@ -3,7 +3,7 @@ import { IUser, IUserRecord, IUsersFilterRequest } from "../../interfaces";
 import { UsersApiService } from "../../api/users/users-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, tap, throwError } from "rxjs";
-import { EUserRole } from "../../enums/users.enum";
+import { ERoles } from "../../enums";
 
 
 const initialState: {
@@ -32,7 +32,9 @@ export const UsersStore = signalStore(
         patchState(store, { loading: true });
         return usersApiService.getUsers(filter).pipe(
           tap((res) => {
-            patchState(store, { list: res.body, count: res.body.length });
+            const totalCount = res.body.pagination?.totalCount ?? 0;
+            
+            patchState(store, { list: res.body.data || [], count: totalCount });
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage });
@@ -43,7 +45,7 @@ export const UsersStore = signalStore(
           }),
         );
       },
-      changeUserRole(userId: string, roleId: EUserRole) {
+      changeUserRole(userId: string, roleId: ERoles) {
         patchState(store, { loading: false });
         return usersApiService.changeUserRole(userId, roleId).pipe(
           tap((res) => {

@@ -2,6 +2,7 @@ import { IFilterBase } from './filter.interface';
 
 export interface IInvestorRecord {
   id: string;
+  code: string;
   fullName: string;
   countryCode: string;
   email: string;

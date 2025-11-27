@@ -6,6 +6,7 @@ const Dashboard = "Dashboard";
 const Opportunities = "Opportunities";
 const Investors = "Investors";
 const AdminOpportunities = "Opportunities/admin";
+const SystemEmployees = "SystemEmployees";
 
 const Auth = "Auth";
 
@@ -16,6 +17,7 @@ export const API_ENDPOINTS = {
   },
   users: {
     getUserTitles: `${Users}/user-titles`,
+    getEmployees: `${SystemEmployees}/getSystemEmployeesList`,
     getInvestors: `${Investors}`,
   },
   opportunities: {

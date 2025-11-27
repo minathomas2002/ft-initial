@@ -170,6 +170,15 @@
 			"afterSalesServices": "خدمات ما بعد البيع"
 		}
 	},
+	"users": {
+		"roles": {
+			"admin": "مدير",
+			"employee": "موظف",
+			"manager": "مدير",
+			"departmentManager": "مدير القسم",
+			"dvManager": "مدير DV"
+		}
+	},
 	"investors": {
 		"list": {
 			"title": "المستثمرون",

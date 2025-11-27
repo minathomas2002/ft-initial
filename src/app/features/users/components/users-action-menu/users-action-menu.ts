@@ -1,9 +1,10 @@
-import { Component, computed, input, output, signal } from "@angular/core";
+import { Component, computed, inject, input, output, signal } from "@angular/core";
 import type { MenuItem } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { MenuModule } from "primeng/menu";
 import { EAdminUserActions } from "src/app/shared/enums/users.enum";
 import { UsersActionsMapper } from "../../classes/users-actions-mapper";
+import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 
 
 @Component({
@@ -15,14 +16,21 @@ import { UsersActionsMapper } from "../../classes/users-actions-mapper";
 export class UsersActionMenu {
   actions = input.required<EAdminUserActions[]>();
   selectedItem = signal<string | null>(null);
-  usersActionsMapper = new UsersActionsMapper();
+  private readonly _i18n = inject(I18nService);
+  usersActionsMapper = new UsersActionsMapper(this._i18n);
 
   onChangeRole = output();
   onDelete = output();
-
+  onEdit = output();
+  onView = output();
+  onDeactivate = output();
+  
   handleEventsMapper = {
-    [EAdminUserActions.ChangeRole]: this.onChangeRole,
-    [EAdminUserActions.Delete]: this.onDelete,
+    [EAdminUserActions.CHANGE_ROLE]: this.onChangeRole,
+    [EAdminUserActions.DELETE]: this.onDelete,
+    [EAdminUserActions.EDIT]: this.onEdit,
+    [EAdminUserActions.VIEW]: this.onView,
+    [EAdminUserActions.DEACTIVATE]: this.onDeactivate
   };
 
   menuItems = computed<MenuItem[]>(() => {
