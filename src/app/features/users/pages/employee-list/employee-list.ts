@@ -1,7 +1,6 @@
 import { ChangeRoleFormService } from './../../services/change-role-form/change-role-form-service';
 import { TooltipModule } from 'primeng/tooltip';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { finalize, take } from 'rxjs';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { UsersLookupsStore } from 'src/app/shared/stores/users/users-lookups.store';
@@ -27,7 +26,7 @@ import { DatePipe } from '@angular/common';
 import { ChangeRoleDialog } from '../../components/change-role-dialog/change-role-dialog';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
-import { ERoleNames, ERoles } from 'src/app/shared/enums';
+import { ERoles } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-employee-list',

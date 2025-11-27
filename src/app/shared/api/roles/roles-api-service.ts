@@ -13,5 +13,9 @@ export class RolesApiService {
   getRoles(): Observable<IBaseApiResponse<IRole[]>> {
     return this.baseHttpService.get<IRole[], unknown>(API_ENDPOINTS.roles.getRoles);
   }
+
+  getUserRoles(): Observable<IBaseApiResponse<IRole[]>> {
+    return this.baseHttpService.get<IRole[], unknown>(API_ENDPOINTS.roles.getUserRoles);
+  }
 }
 

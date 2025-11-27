@@ -24,7 +24,7 @@ export const RolesStore = signalStore(
     const rolesApiService = inject(RolesApiService);
 
     return {
-      getUserRoles() { //without investor role
+      getRoles() {
         patchState(store, { loading: true, error: null });
         return rolesApiService.getRoles().pipe(
           tap((res) => {
@@ -39,6 +39,21 @@ export const RolesStore = signalStore(
           }),
         );
       },
+      getUserRoles() {
+        patchState(store, { loading: true, error: null });
+        return rolesApiService.getUserRoles().pipe(
+          tap((res) => {
+            patchState(store, { list: res.body || [] });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error fetching roles' });
+            return throwError(() => new Error('Error fetching roles'));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      }
     };
   }),
 );

@@ -41,5 +41,6 @@ export const API_ENDPOINTS = {
   },
   roles: {
     getRoles: `${Roles}`,
+    getUserRoles: `${Roles}/system`,
   },
 };

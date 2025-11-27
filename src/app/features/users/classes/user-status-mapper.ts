@@ -35,10 +35,6 @@ export class UserStatusMapper {
   getMappedStatusList(): any[] {
     return [      
       {
-        label: this.i18nService.translate('users.status.all'),
-        value: undefined
-      },
-      {
         label: this.i18nService.translate(this._statusTranslationMap[EUserStatus.ACTIVE]),
         value: true
       },
