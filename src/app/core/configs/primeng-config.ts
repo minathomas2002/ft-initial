@@ -303,12 +303,12 @@ const PAGINATOR_COMPONENT = {
         },
         color: "{gray.500}",
         border: {
-          radius: "8px", // Example value, replace with the desired value
+          radius: "8px",
         },
       },
     },
   },
-};
+} as any;
 const TIMELINE_COMPONENT = {
   event: {
     marker: {
@@ -516,7 +516,13 @@ const MY_PRESET = definePreset(Lara, {
     ...DIALOG_COMPONENT,
     ...STEPPER_COMPONENT,
     ...DATEPICKER_COMPONENT,
-    ...FILE_UPLOAD_COMPONENT
+    ...FILE_UPLOAD_COMPONENT,
+    ...PAGINATOR_COMPONENT,
+    ...SELECT_COMPONENT,
+    ...MULTISELECT_COMPONENT,
+    ...TEXTAREA_COMPONENT,
+    ...INPUTTEXT_COMPONENT,
+    ...TOOLTIP_COMPONENT,
   },
   semantic: {
     gray: {
@@ -539,7 +545,7 @@ const MY_PRESET = definePreset(Lara, {
       200: "#FFB0A3",
       300: "#FF8D7A",
       400: "#F76656",
-      500: "#E9483C",
+      500: "#B42318",
       600: "#CF3B27",
       700: "#B13121",
       800: "#951F19",

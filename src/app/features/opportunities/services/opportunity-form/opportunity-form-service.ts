@@ -1,6 +1,6 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, SafeObjectUrl } from 'src/app/shared/interfaces';
+import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, SafeObjectUrl, IOpportunityDetails, IOpportunityActivity } from 'src/app/shared/interfaces';
 
 export interface IBasicInformation {
   title: string;
@@ -54,7 +54,9 @@ export class OpportunityFormService {
     ],
   }
 
-  constructor(private fb: FormBuilder) {
+  private fb = inject(FormBuilder);
+
+  constructor() {
     this.initializeForms();
   }
 
@@ -80,10 +82,10 @@ export class OpportunityFormService {
         shortDescription: ['', [Validators.required, Validators.maxLength(250)]],
         opportunityCategory: ['', Validators.required],
         spendSAR: ['', Validators.required],
-        minQuantity: ['', Validators.required],
-        maxQuantity: ['', Validators.required],
-        localSuppliers: ['', Validators.required],
-        globalSuppliers: ['', Validators.required],
+        minQuantity: ['', [Validators.required, Validators.min(0)]],
+        maxQuantity: ['', [Validators.required, Validators.min(0)]],
+        localSuppliers: ['', [Validators.required, Validators.min(0)]],
+        globalSuppliers: ['', [Validators.required, Validators.min(0)]],
         dateRange: [null, [Validators.required, this.dateRangeValidator]],
         image: [null, Validators.required],
       }, { validators: [this.quantityRangeValidator] }),
@@ -198,6 +200,10 @@ export class OpportunityFormService {
     this.resetFormArray('manufacturings');
     this.resetFormArray('assemblyTestings');
     this.resetFormArray('afterSalesServices');
+
+    this.opportunityForm.updateValueAndValidity();
+    this.opportunityInformationForm.updateValueAndValidity();
+    this.opportunityLocalizationForm.updateValueAndValidity();
   }
 
   private resetFormArray(controlName: keyof IOpportunityLocalizationFrom) {
@@ -212,8 +218,9 @@ export class OpportunityFormService {
   // Factory method to create new key activity records
   createNewKeyActivity = () => ({ keyActivity: '' });
 
-  markAsTouched() {
-    this.opportunityForm.markAllAsTouched();
+  markAsDirty() {
+    this.opportunityForm.markAllAsDirty();
+    this.opportunityForm.updateValueAndValidity();
   }
 
   updateImageField(image: SafeObjectUrl | null) {
@@ -278,6 +285,63 @@ export class OpportunityFormService {
     } else {
       // Single date or other format - treat as null
       this.updateDateRange(null);
+    }
+  }
+
+  setFormValue(value: IOpportunityDetails) {
+    // Patch opportunity information form
+    const dateRange: [Date, Date] | null = value.startDate && value.endDate
+      ? [new Date(value.startDate), new Date(value.endDate)]
+      : null;
+
+    // Get image from attachments (first attachment if available) and create SafeObjectUrl
+    const image: SafeObjectUrl | null = value.attachments && value.attachments.length > 0
+      ? {
+        objectURL: {
+          changingThisBreaksApplicationSecurity: value.attachments[0].fileUrl
+        }
+      }
+      : null;
+
+    this.opportunityInformationForm.patchValue({
+      id: value.id,
+      title: value.title,
+      shortDescription: value.shortDescription,
+      opportunityType: value.opportunityType.toString(),
+      opportunityCategory: '', // Not available in IOpportunityDetails, set to empty
+      spendSAR: value.spendSAR?.toString() || '',
+      minQuantity: value.minQuantity?.toString() || '',
+      maxQuantity: value.maxQuantity?.toString() || '',
+      localSuppliers: value.localSuppliers?.toString() || '',
+      globalSuppliers: value.globalSuppliers?.toString() || '',
+      dateRange: dateRange,
+      image: image,
+    });
+
+    // Patch opportunity localization form arrays
+    this.patchFormArray('designEngineerings', value.designEngineerings);
+    this.patchFormArray('sourcings', value.sourcings);
+    this.patchFormArray('manufacturings', value.manufacturings);
+    this.patchFormArray('assemblyTestings', value.assemblyTestings);
+    this.patchFormArray('afterSalesServices', value.afterSalesServices);
+  }
+
+  private patchFormArray(controlName: keyof IOpportunityLocalizationFrom, activities: IOpportunityActivity[]) {
+    const formArray = this.opportunityLocalizationForm.get(controlName) as FormArray;
+
+    // Clear existing controls
+    formArray.clear();
+
+    // Add controls for each activity
+    if (activities && activities.length > 0) {
+      activities.forEach(activity => {
+        const control = this.createKeyActivityControl();
+        control.patchValue({ keyActivity: activity.keyActivity || '' });
+        formArray.push(control);
+      });
+    } else {
+      // If no activities, add one empty control
+      formArray.push(this.createKeyActivityControl());
     }
   }
 }

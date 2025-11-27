@@ -4,26 +4,15 @@ import { CardModule } from 'primeng/card';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { InputTextModule } from 'primeng/inputtext';
 import { IKeyActivityRecord } from 'src/app/shared/interfaces';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormInputErrorMessages } from 'src/app/shared/components/utility-components/form-input-error-messages/form-input-error-messages';
+import { MessageModule } from 'primeng/message';
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { SkeletonModule } from 'primeng/skeleton';
 
-
-interface IAfterSales {
-  expenseHeader: string;
-  inHousehold: number;
-  cost: number;
-  currency: string;
-  costType: string;
-  costCategory: string;
-  costSubCategory: string;
-  costSubSubCategory: string;
-  costSubSubSubCategory: string;
-  costSubSubSubSubCategory: string;
-  costSubSubSubSubSubCategory: string;
-}
 
 @Component({
   selector: 'app-opportunity-localization-form',
@@ -34,14 +23,23 @@ interface IAfterSales {
     FormArrayInput,
     InputTextModule,
     ReactiveFormsModule,
-    FormInputErrorMessages,
+    MessageModule,
+    TranslatePipe,
+    SkeletonModule,
   ],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',
 })
 export class OpportunityLocalizationForm {
   opportunityFormService = inject(OpportunityFormService);
+  opportunitiesStore = inject(OpportunitiesStore);
   opportunityLocalizationForm = this.opportunityFormService.opportunityLocalizationForm;
+  isLoading = this.opportunitiesStore.loading;
+
+  // Bound method to preserve 'this' context when passed to form-array-input
+  createKeyActivityControl = () => {
+    return this.opportunityFormService.createKeyActivityControl();
+  };
 
   isRecordInvalid(itemControl: AbstractControl, formArray: FormArray): boolean {
     const itemValue = itemControl.value as IKeyActivityRecord;

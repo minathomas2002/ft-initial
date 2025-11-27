@@ -14,17 +14,19 @@ interface ErrorMessage {
 })
 export class FormInputErrorMessages {
   control = input.required<AbstractControl>();
-  
+
   // Convert FormControl errors to error messages format
   errors = computed<ErrorMessage[]>(() => {
     const ctrl = this.control();
+    console.log(this.control());
+
     if (!ctrl || !ctrl.errors || !ctrl.touched || !ctrl.invalid) {
       return [];
     }
-    
+
     const errorMessages: ErrorMessage[] = [];
     const errors = ctrl.errors;
-    
+
     // Handle different error types
     for (const key in errors) {
       if (errors.hasOwnProperty(key)) {
@@ -54,10 +56,10 @@ export class FormInputErrorMessages {
         }
       }
     }
-    
+
     return errorMessages;
   });
-  
+
   isInvalid = computed(() => {
     const ctrl = this.control();
     return ctrl ? (ctrl.invalid && ctrl.touched) : false;

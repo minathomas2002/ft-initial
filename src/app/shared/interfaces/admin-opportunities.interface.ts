@@ -1,18 +1,35 @@
-import { EOpportunityAction, EOpportunityStatus, EOpportunityType } from "../enums/opportunities.enum";
+import { EOpportunityAction, EOpportunityState, EOpportunityStatus, EOpportunityType } from "../enums/opportunities.enum";
 import { ISelectItem } from "./select-item.interface";
+import { IFilterBase } from "./filter.interface";
 
 export interface IAdminOpportunity {
   id: string;
   title: string;
   shortDescription: string;
   opportunityType: EOpportunityType;
+  opportunityCategory: number;
+  isActive: boolean;
   status: EOpportunityStatus;
-  state: string;
+  startDate: string;
+  endDate: string;
   isOtherOpportunity: boolean;
-  icon: string;
-  warningMessage: string;
-  applicationPeriod: string;
   actions: EOpportunityAction[];
+}
+
+export type TAdminOpportunitiesFilter = keyof IAdminOpportunity;
+
+export interface IAdminOpportunitiesFilter extends IFilterBase<TAdminOpportunitiesFilter> {
+  searchText?: string;
+  state?: EOpportunityState;
+  opportunityType?: EOpportunityType;
+  status?: EOpportunityStatus;
+}
+
+export interface IAdminOpportunitiesFilterRequest extends IFilterBase<TAdminOpportunitiesFilter> {
+  searchText?: string;
+  status?: EOpportunityStatus;
+  isActive?: boolean;
+  opportunityType?: EOpportunityType;
 }
 
 

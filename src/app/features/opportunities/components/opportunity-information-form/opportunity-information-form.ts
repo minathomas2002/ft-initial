@@ -1,18 +1,20 @@
 import { FileuploadComponent } from './../../../../shared/components/utility-components/fileupload/fileupload.component';
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild, computed } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { SelectModule } from 'primeng/select';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MessageModule } from 'primeng/message';
-import { FormInputErrorMessages } from 'src/app/shared/components/utility-components/form-input-error-messages/form-input-error-messages';
-import { PrimeInvalidDirective } from 'src/app/shared/directives/prime-invalid.directive';
 import { FormsModule } from '@angular/forms';
 import { SafeObjectUrl } from 'src/app/shared/interfaces';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -24,10 +26,10 @@ import { SafeObjectUrl } from 'src/app/shared/interfaces';
     DatePickerModule,
     FileuploadComponent,
     MessageModule,
-    FormInputErrorMessages,
-    PrimeInvalidDirective,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslatePipe,
+    SkeletonModule
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',
@@ -35,16 +37,22 @@ import { SafeObjectUrl } from 'src/app/shared/interfaces';
 export class OpportunityInformationForm implements OnInit {
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
+  opportunitiesStore = inject(OpportunitiesStore);
+  i18nService = inject(I18nService);
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes;
   opportunityCategories = this.adminOpportunitiesStore.opportunityCategories;
   opportunityInformationForm = this.opportunityFormService.opportunityInformationForm;
+  isLoading = this.opportunitiesStore.loading;
 
   files = signal<File[]>([]);
   acceptedFileTypes = ".jpg,.png,.pdf,.docx,video/*";
-  placeholder = "jpg, png, pdf, docx and video, max file size (10 MB)";
+  placeholder = computed(() => this.i18nService.translate('opportunity.form.fileUploadPlaceholder'));
 
   invalidSelectedFile = signal(false);
   fileuploadComponent = viewChild<FileuploadComponent>("fileupload");
+
+  // Today's date for minDate validation in datepicker
+  today = new Date();
 
   ngOnInit() {
     // Initialize files signal from form service when component is created

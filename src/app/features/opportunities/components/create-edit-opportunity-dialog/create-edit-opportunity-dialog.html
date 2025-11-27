@@ -2,6 +2,7 @@
   [(visible)]="visible"
   [(activeStep)]="activeStep"
   [steps]="steps()"
+  [wizardTitle]="wizardTitle()"
   (onNextStep)="nextStep()"
   (onPreviousStep)="previousStep()"
   (onSaveAsDraft)="saveAsDraft()"
@@ -18,7 +19,7 @@
 
   <ng-container ngProjectAs="final-step-action">
     <p-button
-      label="Publish"
+      [label]="'opportunity.wizard.publish' | translate"
       (click)="publishOpportunity()"
       [disabled]="adminOpportunitiesStore.isProcessing()"
       [loading]="adminOpportunitiesStore.isProcessing() ||adminOpportunitiesStore.isLoading()"

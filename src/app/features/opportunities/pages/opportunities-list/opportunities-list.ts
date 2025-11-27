@@ -56,9 +56,13 @@ export class OpportunitiesList implements OnInit {
 
   onViewDetails(opportunity: IOpportunity) {
     if (this.isAnonymous()) {
-      this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities, opportunity.id]);
+      this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities, opportunity.id], {
+        queryParams: { from: 'list' }
+      });
     } else {
-      this.router.navigate(['/', ERoutes.opportunities, opportunity.id]);
+      this.router.navigate(['/', ERoutes.opportunities, opportunity.id], {
+        queryParams: { from: 'list' }
+      });
     }
   }
 
