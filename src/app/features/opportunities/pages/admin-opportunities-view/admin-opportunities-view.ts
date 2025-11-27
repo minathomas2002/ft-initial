@@ -10,7 +10,7 @@ import { AdminOpportunitiesCounts } from '../../components/admin-opportunities-c
 import { DataCards } from 'src/app/shared/components/layout-components/data-cards/data-cards';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { IAdminOpportunity } from 'src/app/shared/interfaces/admin-opportunities.interface';
-import { EOpportunityAction, EOpportunityStatus, EOpportunityState } from 'src/app/shared/enums/opportunities.enum';
+import { EOpportunityAction } from 'src/app/shared/enums/opportunities.enum';
 import { Router } from '@angular/router';
 import { ERoutes, EViewMode } from 'src/app/shared/enums';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';

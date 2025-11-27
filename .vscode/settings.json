@@ -10,5 +10,6 @@
   ],
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "typescript.suggest.autoImports": true,
-  "angular.experimental-ivy": true
+  "angular.experimental-ivy": true,
+  "biome.executable": "${workspaceFolder}/node_modules/.bin/biome"
 }

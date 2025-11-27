@@ -4,17 +4,17 @@
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
     (click)="removeFilters()"
   >
-    <p class="text-sm text-gray-600 mb-2">
+    <p class="text-sm font-medium text-gray-600 mb-2">
       {{ 'opportunity.counts.totalOpportunities' | translate }}
     </p>
-    <p class="text-3xl font-bold text-gray-900 mb-4">
+    <p class="text-2xl font-semibold text-gray-900 mb-4">
       {{ counts().totalOpportunities }}
     </p>
-    <div class="flex items-center gap-1 text-primary cursor-pointer">
-      <span class="text-sm font-medium">
+    <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+      <span class="text-sm font-semibold">
         {{ 'opportunity.counts.viewDetails' | translate }}
       </span>
-      <i class="icon-external-link text-sm"></i>
+      <i class="icon-arrow-right-up text-xs  ms-1"></i>
     </div>
   </div>
 
@@ -23,17 +23,17 @@
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
     (click)="filterWithPublishedOpportunities()"
   >
-    <p class="text-sm text-gray-600 mb-2">
+    <p class="text-sm font-medium text-gray-600 mb-2">
       {{ 'opportunity.counts.activePublishedOpportunities' | translate }}
     </p>
-    <p class="text-3xl font-bold text-gray-900 mb-4">
+    <p class="text-2xl font-semibold text-gray-900 mb-4">
       {{ counts().activeOpportunities }}
     </p>
     <div class="flex items-center gap-1 text-primary cursor-pointer">
-      <span class="text-sm font-medium">
+      <span class="text-sm font-semibold">
         {{ 'opportunity.counts.viewDetails' | translate }}
       </span>
-      <i class="icon-external-link text-sm"></i>
+      <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
     </div>
   </div>
 
@@ -42,17 +42,17 @@
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
     (click)="filterWithInactiveOpportunities()"
   >
-    <p class="text-sm text-gray-600 mb-2">
+    <p class="text-sm font-medium text-gray-600 mb-2">
       {{ 'opportunity.counts.inactiveOpportunities' | translate }}
     </p>
-    <p class="text-3xl font-bold text-gray-900 mb-4">
+    <p class="text-2xl font-semibold text-gray-900 mb-4">
       {{ counts().inactiveOpportunities }}
     </p>
-    <div class="flex items-center gap-1 text-primary cursor-pointer">
-      <span class="text-sm font-medium">
+    <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+      <span class="text-sm font-semibold">
         {{ 'opportunity.counts.viewDetails' | translate }}
       </span>
-      <i class="icon-external-link text-sm"></i>
+      <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
     </div>
   </div>
 
@@ -61,17 +61,17 @@
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
     (click)="filterWithDraftOpportunities()"
   >
-    <p class="text-sm text-gray-600 mb-2">
+    <p class="text-sm font-medium text-gray-600 mb-2">
       {{ 'opportunity.counts.draftOpportunities' | translate }}
     </p>
-    <p class="text-3xl font-bold text-gray-900 mb-4">
+    <p class="text-2xl font-semibold text-gray-900 mb-4">
       {{ counts().draftOpportunities }}
     </p>
-    <div class="flex items-center gap-1 text-primary cursor-pointer">
-      <span class="text-sm font-medium">
+    <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+      <span class="text-sm font-semibold">
         {{ 'opportunity.counts.viewDetails' | translate }}
       </span>
-      <i class="icon-external-link text-sm"></i>
+      <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
     </div>
   </div>
 </div>
