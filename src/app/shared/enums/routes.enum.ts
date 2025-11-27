@@ -2,6 +2,7 @@ export enum ERoutes {
   dashboard = 'dashboard',
   profile = 'profile',
   users = 'users',
+  employees = 'employees',
   opportunities = 'opportunities',
   auth = 'auth',
   login = 'login',

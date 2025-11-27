@@ -268,12 +268,35 @@
 		}
 	},
 	"users": {
+		"actions": {
+			"changeRole": "تغيير الدور",
+			"delete": "حذف",
+			"edit": "تعديل",
+			"view": "عرض",
+			"deactivate": "إلغاء التفعيل"
+		},
 		"roles": {
 			"admin": "مدير",
 			"employee": "موظف",
 			"manager": "مدير",
 			"departmentManager": "مدير القسم",
 			"dvManager": "مدير DV"
+		},
+		"status": {
+			"active": "نشط",
+			"inactive": "غير نشط",
+			"delegated": "قيد الانتظار"
+		},
+		"table": {
+			"id": "الرقم",
+			"nameArabic": "الاسم (عربي)",
+			"nameEnglish": "الاسم (إنجليزي)",
+			"email": "البريد الإلكتروني",
+			"phoneNumber": "رقم الهاتف",
+			"role": "الدور",
+			"joinDate": "تاريخ الانضمام",
+			"status": "الحالة",
+			"actions": "الإجراءات"
 		}
 	},
 	"investors": {

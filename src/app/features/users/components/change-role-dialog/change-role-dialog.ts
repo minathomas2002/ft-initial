@@ -6,6 +6,9 @@ import { BaseLabelComponent } from 'src/app/shared/components/base-components/ba
 import { SelectModule } from 'primeng/select';
 import { MessageModule } from 'primeng/message';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RolesStore } from 'src/app/shared/stores/roles/roles.store';
+import { UserRoleMapper } from '../../classes/user-role-mapper';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 @Component({
   selector: 'app-change-role-dialog',
@@ -19,8 +22,17 @@ export class ChangeRoleDialog {
   onConfirm = output<void>();
   isProcessing = input<boolean>(false);
   usersLookupsStore = inject(UsersLookupsStore);
-  roles = computed(() => this.usersLookupsStore.userTitles());
   resetForm = () => {
     this.formService.form.reset();
   };
+  roleStore = inject(RolesStore);
+  i18nService = inject(I18nService);
+  userRoleMapper = new UserRoleMapper(this.i18nService);
+  userRoles = computed(() => 
+    this.roleStore.list().map(role => ({
+      label: this.userRoleMapper.getTranslatedRole(role.code),
+      value: role.id
+    })).filter(option => option.value !== undefined)
+  );
+  
 }

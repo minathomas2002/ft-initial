@@ -1,13 +1,13 @@
-import { ERoleNames } from 'src/app/shared/enums';
+import { ERoleNames, ERoles } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 export class UserRoleMapper {
   private _roleTranslationMap: Record<string, string> = {
-    [ERoleNames.Admin]: 'users.roles.admin',
-    [ERoleNames.Employee]: 'users.roles.employee',
-    [ERoleNames.Manager]: 'users.roles.manager',
-    [ERoleNames.DepartmentManager]: 'users.roles.departmentManager',
-    [ERoleNames.Investor]: 'users.roles.investor'    
+    [ERoles.ADMIN]: 'users.roles.admin',
+    [ERoles.EMPLOYEE]: 'users.roles.employee',
+    [ERoles.MANAGER]: 'users.roles.manager',
+    [ERoles.DEPARTMENT_MANAGER]: 'users.roles.departmentManager',
+    [ERoles.INVESTOR]: 'users.roles.investor'    
   };
 
   constructor(private i18nService: I18nService) {}
@@ -17,9 +17,9 @@ export class UserRoleMapper {
    * @param role - The role string to translate (e.g., "Admin", "admin", "Employee")
    * @returns Translated role name or original role if translation not found
    */
-  getTranslatedRole(role: ERoleNames): string {
+  getTranslatedRole(roleCode: ERoles): string {
     // Try to find translation key for the role
-    const translationKey = this._roleTranslationMap[role];
+    const translationKey = this._roleTranslationMap[roleCode];
     
     if (translationKey) {
       const translated = this.i18nService.translate(translationKey);
@@ -30,7 +30,7 @@ export class UserRoleMapper {
     }
 
     // Fallback to original role if no translation found
-    return role;
+    return roleCode?.toString();
   }
 }
 

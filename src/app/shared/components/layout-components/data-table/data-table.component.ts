@@ -60,20 +60,23 @@ export class DataTableComponent<T> {
     );
   }
 
-  setSortingKey(key: string) {
-    this.filter.update((res) => {
-      const isSameKey = res.sortField === key;
-      const newSortOrder = isSameKey
-        ? res.sortOrder === ESortingOrder.asc
-          ? ESortingOrder.desc
-          : ESortingOrder.asc
-        : ESortingOrder.asc;
-
-      return {
-        ...res,
-        sortField: key,
-        sortOrder: newSortOrder,
-      };
-    });
+  setSortingKey(column: ITableHeaderItem<unknown>) {
+    if(column.isSortable) {
+      let key = column.sortingKey;
+      this.filter.update((res) => {
+        const isSameKey = res.sortField === key;
+        const newSortOrder = isSameKey
+          ? res.sortOrder === ESortingOrder.asc
+            ? ESortingOrder.desc
+            : ESortingOrder.asc
+          : ESortingOrder.asc;
+  
+        return {
+          ...res,
+          sortField: key,
+          sortOrder: newSortOrder,
+        };
+      });
+    }    
   }
 }

@@ -283,6 +283,23 @@
       "manager": "Manager",
       "departmentManager": "Department Manager",
       "investor": "DV Manager"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "delegated": "Pending",
+      "all": "All"
+    },
+    "table": {
+      "id": "Job ID",
+      "nameArabic": "Name (Arabic)",
+      "nameEnglish": "Name (English)",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "role": "Role",
+      "joinDate": "Join Date",
+      "status": "Status",
+      "actions": "Actions"
     }
   },
   "investors": {

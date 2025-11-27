@@ -10,3 +10,4 @@ export * from './api.interface';
 export * from './opportunities.interface';
 export * from './admin-opportunities.interface';
 export * from './investors.interface';
+export * from './roles.interface';

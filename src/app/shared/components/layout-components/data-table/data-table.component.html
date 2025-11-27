@@ -22,7 +22,11 @@
         }
         @for(col of columns; track col){
         <th class="text-sm !font-medium !px-[24px] !py-[13px] whitespace-nowrap">
-          <div class="flex items-center gap-[4px]">
+          <div class="flex items-center gap-[4px]"
+          [ngClass]="{
+            'cursor-pointer': col.isSortable && totalRecords() > 0
+          }"
+          (click)="setSortingKey(col)">
             {{ col.label}}
             @if(col.isSortable && totalRecords() > 0){
 
@@ -34,8 +38,7 @@
                 'rotate-180': filter().sortOrder == ESortingOrder.asc && filter().sortField === col.sortingKey
               }"
               role="
-              button"
-              (click)="setSortingKey(col.sortingKey)"
+              button"              
             ></i>
             }
           </div>

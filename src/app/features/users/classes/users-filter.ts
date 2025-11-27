@@ -12,7 +12,7 @@ export class UsersFilter extends Filter<
 		super();
 		const pagination = new Pagination(10);
 		const sorting = new Sorting<TUsersSortingKeys>();
-		sorting.sortField = 'employeeID';
+		sorting.sortField = 'joinDate';
 		sorting.sortOrder = ESortingOrder.asc;
 		this.filter = {
 			...pagination,

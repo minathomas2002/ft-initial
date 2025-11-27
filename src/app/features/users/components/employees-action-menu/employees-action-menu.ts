@@ -8,12 +8,12 @@ import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 
 
 @Component({
-  selector: "app-users-action-menu",
+  selector: "app-employees-action-menu",
   imports: [MenuModule, ButtonModule],
-  templateUrl: "./users-action-menu.html",
-  styleUrl: "./users-action-menu.scss",
+  templateUrl: "./employees-action-menu.html",
+  styleUrl: "./employees-action-menu.scss",
 })
-export class UsersActionMenu {
+export class EmployeesActionMenu {
   actions = input.required<EAdminUserActions[]>();
   selectedItem = signal<string | null>(null);
   private readonly _i18n = inject(I18nService);
@@ -46,3 +46,4 @@ export class UsersActionMenu {
       });
   });
 }
+

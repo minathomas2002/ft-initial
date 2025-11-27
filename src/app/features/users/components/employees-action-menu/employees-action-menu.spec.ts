@@ -1,17 +1,17 @@
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { UsersActionMenu } from "./users-action-menu";
+import { EmployeesActionMenu } from "./employees-action-menu";
 
-describe("UsersActionMenu", () => {
-  let component: UsersActionMenu;
-  let fixture: ComponentFixture<UsersActionMenu>;
+describe("EmployeesActionMenu", () => {
+  let component: EmployeesActionMenu;
+  let fixture: ComponentFixture<EmployeesActionMenu>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UsersActionMenu],
+      imports: [EmployeesActionMenu],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(UsersActionMenu);
+    fixture = TestBed.createComponent(EmployeesActionMenu);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -20,3 +20,4 @@ describe("UsersActionMenu", () => {
     expect(component).toBeTruthy();
   });
 });
+

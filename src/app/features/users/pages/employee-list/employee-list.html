@@ -1,6 +1,6 @@
 <app-table-layout tableTitle="Employees" tableSubTitle="Manage employee roles and permissions">
     <ng-container ngProjectAs="table-filters">
-        <app-users-filter></app-users-filter>
+        <app-employees-filter></app-employees-filter>
     </ng-container>
 
     <ng-container ngProjectAs="table-body">
@@ -36,7 +36,7 @@
 
                     <!-- Role -->
                     <td>
-                        {{getUserTranslatedRole(item.role)}}
+                        {{getUserTranslatedRole(item.roleCode)}}
                     </td>
 
                     <!-- Role -->
@@ -52,8 +52,8 @@
                     <!-- Action -->
                     <td>
                         @if(item.actions.length>0){
-                        <app-users-action-menu [actions]="item.actions" (onChangeRole)="onChangeRole(item)"
-                            (onDelete)="onDelete(item)"></app-users-action-menu>
+                        <app-employees-action-menu [actions]="item.actions" (onChangeRole)="onChangeRole(item)"
+                            (onDelete)="onDelete(item)"></app-employees-action-menu>
                         }@else{
                         <div class="text-center">-</div>
                         }
