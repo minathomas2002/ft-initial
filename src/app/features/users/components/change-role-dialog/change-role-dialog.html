@@ -1,20 +1,20 @@
 <app-base-dialog
   [(visible)]="visible"
   icon="icon-user-edit"
-  confirmLabel="Change"
+  [confirmLabel]="'users.dialog.changeRole.confirmButton' | translate"
   [isConfirmationDisabled]="formService.form.invalid"
   (onConfirm)="onConfirm.emit()"
   (onClose)="resetForm()"
   [isLoading]="isProcessing()"
 >
   <div class="mb-5">
-    <p class="text-lg font-semibold text-gray-900 mb-1">Change Role</p>
-    <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet consectetur adipiscing elit</p>
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{ 'users.dialog.changeRole.title' | translate }}</p>
+    <p class="text-sm text-gray-600">{{ 'users.dialog.changeRole.description' | translate }}</p>
   </div>
 
   <div class="">
     <app-base-label
-      title="Role"
+      [title]="'users.dialog.changeRole.roleLabel' | translate"
       [required]="true"
     />
     <p-select
@@ -23,8 +23,9 @@
       [loadingIcon]="'icon-transfer'"
       [formControl]="formService.role"
       appendTo="body"
-      optionLabel="name"
-      placeholder="Select Role"
+      optionLabel="label"
+      optionValue="value"
+      [placeholder]="'users.dialog.changeRole.rolePlaceholder' | translate"
       dropdownIcon="icon-chevron-down"
       fluid
     />
@@ -35,7 +36,7 @@
         severity="error"
         variant="simple"
         size="small"
-      >Role is required.</p-message>
+      >{{ 'users.dialog.changeRole.roleRequired' | translate }}</p-message>
       }
       }
     </div>

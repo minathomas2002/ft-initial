@@ -300,6 +300,29 @@
       "joinDate": "Join Date",
       "status": "Status",
       "actions": "Actions"
+    },
+    "list": {
+      "title": "Employees",
+      "subtitle": "Manage employee roles and permissions"      
+    },
+    "filter": {
+      "searchPlaceholder": "Search by Username, Job ID, Phone, Email or Join Date",
+      "rolePlaceholder": "Role",
+      "statusPlaceholder": "Status"
+    },
+    "dialog": {
+      "changeRole": {
+        "title": "Change Role",
+        "description": "Select a new role for this employee",
+        "roleLabel": "Role",
+        "rolePlaceholder": "Select Role",
+        "roleRequired": "Role is required.",
+        "confirmButton": "Change"
+      },
+      "delete": {
+        "title": "Delete User",
+        "description": "Are you sure you want to delete this user?"
+      }
     }
   },
   "investors": {

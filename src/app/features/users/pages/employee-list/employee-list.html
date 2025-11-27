@@ -1,4 +1,4 @@
-<app-table-layout tableTitle="Employees" tableSubTitle="Manage employee roles and permissions">
+<app-table-layout [tableTitle]="'users.list.title' | translate" [tableSubTitle]="'users.list.subtitle' | translate">
     <ng-container ngProjectAs="table-filters">
         <app-employees-filter></app-employees-filter>
     </ng-container>
@@ -7,7 +7,7 @@
         <app-table-skeleton [headers]="headers()" [isLoading]="usersStore.loading()">
             <app-data-table [columns]="headers()" [rows]="rows()" [(filter)]="filterService.filter"
                 [totalRecords]="totalRecords()" (filterChange)="filterService.applyFilterWithPaging()"
-                messageTitle="No Assessment Cycle Available">
+                >
                 <ng-template #itemsTemplate let-item="item">
                     <!-- Employee ID -->
                     <td>
@@ -68,5 +68,5 @@
     (onConfirm)="onChangeRoleConfirm()"></app-change-role-dialog>
 
 <app-general-confirmation-dialog [(visible)]="deleteDialogVisible" (onConfirm)="onDeleteConfirm()"
-    [icon]="'icon-trash-2'" [title]="'Delete User'" [description]="'Are you sure you want to delete this user?'"
+    [icon]="'icon-trash-2'" [title]="'users.dialog.delete.title' | translate" [description]="'users.dialog.delete.description' | translate"
     (confirmed)="onDeleteConfirm()"></app-general-confirmation-dialog>

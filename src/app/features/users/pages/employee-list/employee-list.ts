@@ -22,6 +22,7 @@ import { UserRoleMapper } from '../../classes/user-role-mapper';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { EmployeesActionMenu } from '../../components/employees-action-menu/employees-action-menu';
+import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
 import { ChangeRoleDialog } from '../../components/change-role-dialog/change-role-dialog';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
@@ -42,6 +43,7 @@ import { ERoleNames, ERoles } from 'src/app/shared/enums';
     ChangeRoleDialog,
     DatePipe,
     GeneralConfirmationDialogComponent,
+    TranslatePipe,
   ],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',

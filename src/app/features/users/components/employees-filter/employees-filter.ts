@@ -12,10 +12,11 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { UserRoleMapper } from '../../classes/user-role-mapper';
 import { RolesStore } from 'src/app/shared/stores/roles/roles.store';
 import { UserStatusMapper } from '../../classes/user-status-mapper';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-employees-filter',
-  imports: [IconFieldModule, InputIconModule, InputTextModule, FormsModule, MultiSelectModule,ButtonModule],
+  imports: [IconFieldModule, InputIconModule, InputTextModule, FormsModule, MultiSelectModule, ButtonModule, TranslatePipe],
   templateUrl: './employees-filter.html',
   styleUrl: './employees-filter.scss',
 })

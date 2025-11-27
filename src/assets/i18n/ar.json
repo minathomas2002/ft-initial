@@ -297,6 +297,30 @@
 			"joinDate": "تاريخ الانضمام",
 			"status": "الحالة",
 			"actions": "الإجراءات"
+		},
+		"list": {
+			"title": "الموظفون",
+			"subtitle": "إدارة أدوار الموظفين والصلاحيات",
+			"noDataMessage": "لا توجد دورة تقييم متاحة"
+		},
+		"filter": {
+			"searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني أو تاريخ الانضمام",
+			"rolePlaceholder": "الدور",
+			"statusPlaceholder": "الحالة"
+		},
+		"dialog": {
+			"changeRole": {
+				"title": "تغيير الدور",
+				"description": "اختر دوراً جديداً لهذا الموظف",
+				"roleLabel": "الدور",
+				"rolePlaceholder": "اختر الدور",
+				"roleRequired": "الدور مطلوب.",
+				"confirmButton": "تغيير"
+			},
+			"delete": {
+				"title": "حذف المستخدم",
+				"description": "هل أنت متأكد من أنك تريد حذف هذا المستخدم؟"
+			}
 		}
 	},
 	"investors": {

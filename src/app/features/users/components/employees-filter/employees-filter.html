@@ -4,21 +4,21 @@
     <p-iconfield>
       <p-inputicon inputId="users-search" class="icon-search" />
       <input class="w-full" type="text" pInputText [disabled]="disableFilterInputs()"
-        placeholder="Search by Username, Job ID, Phone, Email or Join Date" [(ngModel)]="filter().searchText"
+        [placeholder]="'users.filter.searchPlaceholder' | translate" [(ngModel)]="filter().searchText"
         (ngModelChange)="userSearchSubject.next(filter().searchText??'')" />
     </p-iconfield>
   </div>
 
   <div class="col-span-12 md:col-span-3">
     <p-multiselect [options]="userRoles()" [(ngModel)]="filter().roleIds" optionLabel="label" optionValue="value"
-      placeholder="Role" display="chip" dropdownIcon="icon-chevron-down" fluid
+      [placeholder]="'users.filter.rolePlaceholder' | translate" display="chip" dropdownIcon="icon-chevron-down" fluid
       (ngModelChange)="usersFilterService.applyFilterWithPaging()">
     </p-multiselect>
   </div>
 
   <div class="col-span-12 md:col-span-3">
     <p-multiselect [options]="userStatuses" [(ngModel)]="filter().statusFilters" optionLabel="label" optionValue="value"
-      placeholder="Status" display="chip" dropdownIcon="icon-chevron-down" fluid
+      [placeholder]="'users.filter.statusPlaceholder' | translate" display="chip" dropdownIcon="icon-chevron-down" fluid
       (ngModelChange)="usersFilterService.applyFilterWithPaging()">
     </p-multiselect>
   </div>
