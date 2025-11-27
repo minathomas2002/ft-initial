@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { finalize, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
 import { ISelectItem, IAdminOpportunitiesFilterRequest, IAdminOpportunity } from '../../interfaces';
-import { EOpportunityStatus, EOpportunityType } from '../../enums/opportunities.enum';
+import { EOpportunityStatus, EOpportunityType, EOpportunityState } from '../../enums/opportunities.enum';
 import { EViewMode } from '../../enums';
 
 const initialState: {
@@ -56,8 +56,8 @@ const initialState: {
     { id: EOpportunityType.MATERIAL.toString(), name: 'opportunity.type.material' },
   ],
   stateOptions: [
-    { id: 'true', name: 'opportunity.state.active' },
-    { id: 'false', name: 'opportunity.state.inactive' },
+    { id: EOpportunityState.ACTIVE.toString(), name: 'opportunity.state.active' },
+    { id: EOpportunityState.INACTIVE.toString(), name: 'opportunity.state.inactive' },
   ],
   counts: {
     totalOpportunities: 0,
