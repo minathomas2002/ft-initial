@@ -26,7 +26,7 @@ export class BaseDialogComponent {
   confirmButtonClass = input("w-[50%]");
   cancelButtonClass = input("w-[50%]");
   appendTo = input("body");
-
+  confirmButtonSeverity = input<'primary' | 'secondary' | 'success' | 'info' | 'danger' | 'help'>("primary");
   closeCallback(e: Event): void {
     this.dialogRef()?.close(e);
   }

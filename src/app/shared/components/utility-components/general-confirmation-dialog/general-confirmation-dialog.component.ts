@@ -12,6 +12,7 @@ export class GeneralConfirmationDialogComponent {
   confirmationLabel = input<string>('Ok');
   icon = input<string>('icon-x-close');
   description = input<string>();
+  confirmButtonSeverity = input<'primary' | 'secondary' | 'success' | 'info' | 'danger' | 'help'>("primary");
   visible = model(false);
   confirmed = output();
   closed = output();

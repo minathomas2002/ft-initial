@@ -47,6 +47,7 @@
             class="{{confirmButtonClass()}} flex-initial"
             (onClick)="onConfirm.emit()"
             fluid
+            [severity]="confirmButtonSeverity()"
             [loading]="isLoading()"
           />
           }

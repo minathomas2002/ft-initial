@@ -6,6 +6,7 @@
   (onConfirm)="confirmed.emit()"
   [isLoading]="isLoading()"
   (onClose)="closed.emit()"
+  [confirmButtonSeverity]="confirmButtonSeverity()"
 >
   <div [class]="classes()">
     <p class="text-base font-semibold text-gray-900"> {{ title() }} </p>

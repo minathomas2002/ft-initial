@@ -111,7 +111,16 @@ export const AdminOpportunitiesStore = signalStore(
           })
         )
       },
-    };
+
+      deleteOpportunity(opportunityId: string) {
+        patchState(store, { isProcessing: true });
+        return opportunitiesApiService.deleteOpportunity(opportunityId).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false, error: null });
+          })
+        )
+      }
+    }
   }),
   withMethods((store) => ({
     setViewMode(viewMode: EViewMode) {

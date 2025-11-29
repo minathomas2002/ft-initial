@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
     getOpportunityById: `${Opportunities}`,
     getAdminOpportunities: `${AdminOpportunities}`,
     editOpportunity: `${Opportunities}/edit-opportunity`,
+    deleteOpportunity: `${Opportunities}`,
   },
   auth: {
     investorLogin: `${Auth}/investor-login`,

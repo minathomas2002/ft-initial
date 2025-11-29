@@ -14,6 +14,11 @@ import { EOpportunityAction } from 'src/app/shared/enums/opportunities.enum';
 import { Router } from '@angular/router';
 import { ERoutes, EViewMode } from 'src/app/shared/enums';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { translate } from 'node_modules/@angular/localize/tools/src/source_file_utils';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { take } from 'rxjs';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-admin-opportunities-view',
@@ -26,7 +31,8 @@ import { AdminOpportunitiesFilterService } from '../../services/admin-opportunit
     AdminOpportunitiesFilter,
     AdminOpportunitiesCounts,
     DataCards,
-    CardsSkeleton
+    CardsSkeleton,
+    GeneralConfirmationDialogComponent
   ],
   templateUrl: './admin-opportunities-view.html',
   styleUrl: './admin-opportunities-view.scss',
@@ -37,6 +43,9 @@ export class AdminOpportunitiesView implements OnInit {
   protected createEditOpportunityDialogVisible = signal<boolean>(false);
   protected readonly adminOpportunitiesFilterService = inject(AdminOpportunitiesFilterService);
   filter = this.adminOpportunitiesFilterService.filter;
+  protected deleteConfirmDialogVisible = signal<boolean>(false);
+  protected selectedOpportunity = signal<IAdminOpportunity | null>(null);
+  private readonly toasterService = inject(ToasterService);
   ngOnInit(): void {
     this.applyFilter();
   }
@@ -56,7 +65,7 @@ export class AdminOpportunitiesView implements OnInit {
         break;
       case EOpportunityAction.Delete:
         // Handle delete
-        console.log('Delete opportunity', event.opportunity.id);
+        this.handelDeleteOpportunity(event.opportunity);
         break;
       case EOpportunityAction.MoveToDraft:
         // Handle move to draft
@@ -76,5 +85,27 @@ export class AdminOpportunitiesView implements OnInit {
 
   applyFilter() {
     this.adminOpportunitiesFilterService.applyFilterWithPaging();
+  }
+
+  handelDeleteOpportunity(opportunity: IAdminOpportunity) {
+    this.selectedOpportunity.set(opportunity);
+    this.deleteConfirmDialogVisible.set(true);
+  }
+
+  deleteOpportunity() {
+    if (this.selectedOpportunity()) {
+      this.adminOpportunitiesStore.deleteOpportunity(this.selectedOpportunity()!.id)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.deleteConfirmDialogVisible.set(false);
+            this.applyFilter();
+            this.toasterService.success('Opportunity deleted successfully');
+          },
+          error: () => {
+            this.deleteConfirmDialogVisible.set(false);
+          }
+        });
+    }
   }
 }

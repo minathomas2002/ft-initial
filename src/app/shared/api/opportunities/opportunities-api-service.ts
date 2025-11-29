@@ -29,4 +29,8 @@ export class OpportunitiesApiService {
   createOpportunity(opportunity: FormData): Observable<IBaseApiResponse<IOpportunity>> {
     return this.baseHttpService.post<IOpportunity, unknown, FormData>(API_ENDPOINTS.opportunities.createOpportunity, opportunity);
   }
+
+  deleteOpportunity(opportunityId: string): Observable<IBaseApiResponse<void>> {
+    return this.baseHttpService.delete<void, never>(`${API_ENDPOINTS.opportunities.deleteOpportunity}/${opportunityId}`);
+  }
 }
