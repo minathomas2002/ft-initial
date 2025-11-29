@@ -3,6 +3,7 @@ import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable } from 'rxjs';
 import { IApiPaginatedResponse, IBaseApiResponse, IDashboardResponse, IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityDraftRequest, IAdminOpportunitiesFilterRequest, IAdminOpportunity } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
+import { EOpportunityStatus } from '../../enums';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,18 @@ export class OpportunitiesApiService {
 
   deleteOpportunity(opportunityId: string): Observable<IBaseApiResponse<void>> {
     return this.baseHttpService.delete<void, never>(`${API_ENDPOINTS.opportunities.deleteOpportunity}/${opportunityId}`);
+  }
+
+  changeOpportunityStatus(opportunityId: string, status: EOpportunityStatus): Observable<IBaseApiResponse<IOpportunity>> {
+    return this.baseHttpService.post<IOpportunity, {}, {}>(
+      `${API_ENDPOINTS.opportunities.changeStatus}`,
+      {},
+      {
+        params: {
+          opportunityId,
+          status,
+        },
+      }
+    );
   }
 }

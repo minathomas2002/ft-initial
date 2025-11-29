@@ -119,6 +119,23 @@ export const AdminOpportunitiesStore = signalStore(
             patchState(store, { isProcessing: false, error: null });
           })
         )
+      },
+
+      moveToDraftOpportunity(opportunityId: string) {
+        patchState(store, { isProcessing: true });
+        return opportunitiesApiService.changeOpportunityStatus(opportunityId, EOpportunityStatus.DRAFT).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false, error: null });
+          })
+        )
+      },
+      publishOpportunity(opportunityId: string) {
+        patchState(store, { isProcessing: true });
+        return opportunitiesApiService.changeOpportunityStatus(opportunityId, EOpportunityStatus.PUBLISHED).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false, error: null });
+          })
+        )
       }
     }
   }),

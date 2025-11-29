@@ -14,8 +14,6 @@ import { EOpportunityAction } from 'src/app/shared/enums/opportunities.enum';
 import { Router } from '@angular/router';
 import { ERoutes, EViewMode } from 'src/app/shared/enums';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { translate } from 'node_modules/@angular/localize/tools/src/source_file_utils';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { take } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
@@ -42,10 +40,12 @@ export class AdminOpportunitiesView implements OnInit {
   private readonly router = inject(Router);
   protected createEditOpportunityDialogVisible = signal<boolean>(false);
   protected readonly adminOpportunitiesFilterService = inject(AdminOpportunitiesFilterService);
-  filter = this.adminOpportunitiesFilterService.filter;
+  protected filter = this.adminOpportunitiesFilterService.filter;
   protected deleteConfirmDialogVisible = signal<boolean>(false);
   protected selectedOpportunity = signal<IAdminOpportunity | null>(null);
   private readonly toasterService = inject(ToasterService);
+  protected moveToDraftConfirmDialogVisible = signal<boolean>(false);
+  protected publishConfirmDialogVisible = signal<boolean>(false);
   ngOnInit(): void {
     this.applyFilter();
   }
@@ -69,11 +69,11 @@ export class AdminOpportunitiesView implements OnInit {
         break;
       case EOpportunityAction.MoveToDraft:
         // Handle move to draft
-        console.log('Move to draft', event.opportunity.id);
+        this.handelMoveToDraftOpportunity(event.opportunity);
         break;
       case EOpportunityAction.Publish:
         // Handle publish
-        console.log('Publish opportunity', event.opportunity.id);
+        this.handelPublishOpportunity(event.opportunity);
         break;
     }
   }
@@ -104,6 +104,46 @@ export class AdminOpportunitiesView implements OnInit {
           },
           error: () => {
             this.deleteConfirmDialogVisible.set(false);
+          }
+        });
+    }
+  }
+
+  handelMoveToDraftOpportunity(opportunity: IAdminOpportunity) {
+    this.selectedOpportunity.set(opportunity);
+    this.moveToDraftConfirmDialogVisible.set(true);
+  }
+
+  moveToDraftOpportunity() {
+    if (this.selectedOpportunity()) {
+      this.adminOpportunitiesStore.moveToDraftOpportunity(this.selectedOpportunity()!.id)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.toasterService.success('Opportunity moved to draft successfully');
+            this.selectedOpportunity.set(null);
+            this.moveToDraftConfirmDialogVisible.set(false);
+            this.applyFilter();
+          }
+        });
+    }
+  }
+
+  handelPublishOpportunity(opportunity: IAdminOpportunity) {
+    this.selectedOpportunity.set(opportunity);
+    this.publishConfirmDialogVisible.set(true);
+  }
+
+  publishOpportunity() {
+    if (this.selectedOpportunity()) {
+      this.adminOpportunitiesStore.publishOpportunity(this.selectedOpportunity()!.id)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.toasterService.success('Opportunity published successfully');
+            this.selectedOpportunity.set(null);
+            this.publishConfirmDialogVisible.set(false);
+            this.applyFilter();
           }
         });
     }

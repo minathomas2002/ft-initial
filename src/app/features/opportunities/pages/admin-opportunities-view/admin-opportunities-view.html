@@ -58,3 +58,21 @@
   [confirmButtonSeverity]="'danger'"
   [isLoading]="adminOpportunitiesStore.isProcessing()"
 />
+
+<app-general-confirmation-dialog
+  [(visible)]="moveToDraftConfirmDialogVisible"
+  [title]="'Are you sure you want to move this opportunity to draft?'"
+  [confirmationLabel]="'Draft'"
+  [icon]="'icon-save'"
+  (confirmed)="moveToDraftOpportunity()"
+  [isLoading]="adminOpportunitiesStore.isProcessing()"
+/>
+
+<app-general-confirmation-dialog
+  [(visible)]="publishConfirmDialogVisible"
+  [title]="'Are you sure you want to publish this opportunity?'"
+  [confirmationLabel]="'Publish'"
+  [icon]="'icon-cloud-upload'"
+  (confirmed)="publishOpportunity()"
+  [isLoading]="adminOpportunitiesStore.isProcessing()"
+/>
