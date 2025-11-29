@@ -1,7 +1,7 @@
 import { ICreateOpportunity, IOpportunityDraftRequest } from "src/app/shared/interfaces";
 
 export class OpportunityRequestsAdapter {
-  async toOpportunityDraftRequest(formValue: ICreateOpportunity): Promise<IOpportunityDraftRequest> {
+  async toOpportunityRequest(formValue: ICreateOpportunity): Promise<IOpportunityDraftRequest> {
     // Extract File from image - handle both File objects and objects with objectURL
     const imageValue = formValue.opportunityInformationFrom.image;
     let image: File | null = null;
@@ -23,7 +23,7 @@ export class OpportunityRequestsAdapter {
     // Helper function to map key activity arrays, filtering out empty keyActivity values
     // For required arrays (like sourcings), ensure at least one item remains
     const mapKeyActivities = (activities: { keyActivity: string }[]) => {
-      return activities.map((activity, i) => ({
+      return activities.filter(activity => activity.keyActivity.trim() !== '').map((activity, i) => ({
         keyActivity: activity.keyActivity.trim(),
         orderIndex: i,
       }));

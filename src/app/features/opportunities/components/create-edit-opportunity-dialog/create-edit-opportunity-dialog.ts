@@ -80,7 +80,7 @@ export class CreateEditOpportunityDialog implements OnInit {
     }
 
     const formValue = this.opportunityFormService.formValue();
-    const opportunityInformationFormValue = await new OpportunityRequestsAdapter().toOpportunityDraftRequest(formValue);
+    const opportunityInformationFormValue = await new OpportunityRequestsAdapter().toOpportunityRequest(formValue);
     const formData = new Utilities().objToFormData(opportunityInformationFormValue);
 
     // Continue with save as draft logic...
@@ -104,7 +104,7 @@ export class CreateEditOpportunityDialog implements OnInit {
       return;
     }
     const formValue = this.opportunityFormService.formValue();
-    const opportunityInformationFormValue = await new OpportunityRequestsAdapter().toOpportunityDraftRequest(formValue);
+    const opportunityInformationFormValue = await new OpportunityRequestsAdapter().toOpportunityRequest(formValue);
     const formData = new Utilities().objToFormData(opportunityInformationFormValue);
     this.adminOpportunitiesStore.createOpportunity(formData).subscribe({
       next: (res) => {
