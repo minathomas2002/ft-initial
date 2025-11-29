@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, model, OnInit, output, signal } from '@angular/core';
 import { BaseWizardDialog } from 'src/app/shared/components/base-components/base-wizard-dialog/base-wizard-dialog';
 import { StepContentDirective } from 'src/app/shared/directives/step-content.directive';
 import { OpportunityInformationForm } from '../opportunity-information-form/opportunity-information-form';
@@ -14,6 +14,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { EViewMode } from 'src/app/shared/enums';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { OpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -35,6 +36,7 @@ export class CreateEditOpportunityDialog implements OnInit {
   opportunitiesStore = inject(OpportunitiesStore);
   toasterService = inject(ToasterService);
   i18nService = inject(I18nService);
+  opportunityFilterService = inject(OpportunitiesFilterService);
   steps = computed<IWizardStepState[]>(() => [
     {
       title: this.i18nService.translate('opportunity.wizard.opportunityInformation'),
@@ -50,6 +52,7 @@ export class CreateEditOpportunityDialog implements OnInit {
     },
   ])
   activeStep = signal<number>(1);
+  onSuccess = output<void>();
   wizardTitle = computed(() => this.i18nService.translate('opportunity.wizard.createOpportunity'));
 
   ngOnInit() {
@@ -92,6 +95,7 @@ export class CreateEditOpportunityDialog implements OnInit {
         this.opportunityFormService.resetForm();
         this.activeStep.set(1);
         this.visible.set(false);
+        this.onSuccess.emit();
       },
     });
   }
@@ -112,6 +116,7 @@ export class CreateEditOpportunityDialog implements OnInit {
         this.opportunityFormService.resetForm();
         this.activeStep.set(1);
         this.visible.set(false);
+        this.onSuccess.emit();
       },
     });
   }
