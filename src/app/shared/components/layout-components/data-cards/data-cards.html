@@ -7,7 +7,10 @@
     ></ng-container>
     }
     @empty {
-    <app-empty-records [messageTitle]="messageTitle()" />
+    <app-empty-records
+      class="col-span-full"
+      [messageTitle]="messageTitle()"
+    />
     }
   </div>
   @if(totalRecords() > 0){
