@@ -303,7 +303,8 @@
     },
     "list": {
       "title": "Employees",
-      "subtitle": "Manage employee roles and permissions"      
+      "subtitle": "Manage employee roles and permissions",
+      "addEmployee": "Add Employee"
     },
     "filter": {
       "searchPlaceholder": "Search by Username, Job ID, Phone, Email or Join Date",

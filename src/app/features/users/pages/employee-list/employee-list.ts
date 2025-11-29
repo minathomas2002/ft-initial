@@ -27,6 +27,7 @@ import { ChangeRoleDialog } from '../../components/change-role-dialog/change-rol
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ERoles } from 'src/app/shared/enums';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-employee-list',
@@ -43,6 +44,7 @@ import { ERoles } from 'src/app/shared/enums';
     DatePipe,
     GeneralConfirmationDialogComponent,
     TranslatePipe,
+    ButtonModule,
   ],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
@@ -160,5 +162,8 @@ export class EmployeeList implements OnInit {
     //     this.filterService.applyFilter();
     //   }))
     //   .subscribe();
+  }
+  onAddEmployee() {
+    console.log('add employee');
   }
 }
