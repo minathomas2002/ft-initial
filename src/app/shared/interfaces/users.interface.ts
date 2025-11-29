@@ -1,24 +1,34 @@
-import { EAdminUserActions, EUserStatus } from "../enums/users.enum";
+import { EAdminUserActions, ERoleNames, ERoles, EUserStatus } from "../enums";
 import { IFilterBase } from "./filter.interface";
 
 export interface IUsersFilter extends IFilterBase<TUsersSortingKeys> {
-  userNameEmailId?: string;
-  userTitleId?: string[];
+  searchText?: string;
+  roleIds?: string[];
+  statusFilters?: boolean | undefined;
+  joinDate?: string;
 }
 
 export type TUsersSortingKeys = keyof IUserRecord;
 
 export interface IUserRecord {
   id: string;
-  name: string;
+  employeeID: string;
+  name_Ar: string;
+  name_En: string;
   email: string;
-  role: string;
-  status: EUserStatus;
+  phoneNumber: string;
+  department: string;
+  role: ERoleNames;
+  roleCode: ERoles;
   joinDate: string;
+  status: string;
+  userId: string;
   actions: EAdminUserActions[];
 }
 
 export interface IUsersFilterRequest {
-  userNameEmailId?: string;
-  userTitleId?: string[];
+  searchText?: string;
+  roleIds?: string[];
+  statusFilters?: boolean | undefined;
+  joinDate?: string;
 }

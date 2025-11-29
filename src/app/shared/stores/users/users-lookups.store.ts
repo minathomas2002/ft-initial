@@ -7,10 +7,8 @@ import { ToasterService } from "../../services/toaster/toaster.service";
 
 
 const initialState: {
-  userTitles: ISelectItem[],
   isLoading: boolean;
 } = {
-  userTitles: [],
   isLoading: false,
 }
 export const UsersLookupsStore = signalStore(
@@ -22,24 +20,7 @@ export const UsersLookupsStore = signalStore(
 
 
     return {
-      getUserTitles() {
-        patchState(store, { isLoading: true });
-        return usersApiService.getUserTitles().pipe(
-          tap((res) => {
-            patchState(store, {
-              userTitles: res.body ?? [],
-            });
-          }),
-          catchError((error) => {
-            toaster.error("failed to fetch user titles.");
-            patchState(store, {
-              userTitles: [],
-            });
-            return throwError(() => new Error("error fetching data"));
-          }),
-          finalize(() => patchState(store, { isLoading: false })),
-        );
-      }
+      
     }
   }),
 );

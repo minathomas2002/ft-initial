@@ -1,0 +1,26 @@
+<div class="grid grid-cols-12 gap-4">
+
+  <div class="col-span-12 md:col-span-6">
+    <p-iconfield>
+      <p-inputicon inputId="users-search" class="icon-search" />
+      <input class="w-full" type="text" pInputText [disabled]="disableFilterInputs()"
+        [placeholder]="'users.filter.searchPlaceholder' | translate" [(ngModel)]="filter().searchText"
+        (ngModelChange)="userSearchSubject.next(filter().searchText??'')" />
+    </p-iconfield>
+  </div>
+
+  <div class="col-span-12 md:col-span-3">
+    <p-multiselect [options]="userRoles()" [(ngModel)]="filter().roleIds" optionLabel="label" optionValue="value"
+      [placeholder]="'users.filter.rolePlaceholder' | translate" display="chip" dropdownIcon="icon-chevron-down" fluid
+      (ngModelChange)="usersFilterService.applyFilterWithPaging()">
+    </p-multiselect>
+  </div>
+
+  <div class="col-span-12 md:col-span-3">
+    <p-multiselect [options]="userStatuses" [(ngModel)]="filter().statusFilters" optionLabel="label" optionValue="value"
+      [placeholder]="'users.filter.statusPlaceholder' | translate" display="chip" dropdownIcon="icon-chevron-down" fluid
+      (ngModelChange)="usersFilterService.applyFilterWithPaging()">
+    </p-multiselect>
+  </div>
+</div>
+

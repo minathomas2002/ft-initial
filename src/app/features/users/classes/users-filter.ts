@@ -10,9 +10,9 @@ export class UsersFilter extends Filter<
 > {
 	constructor() {
 		super();
-		const pagination = new Pagination();
+		const pagination = new Pagination(10);
 		const sorting = new Sorting<TUsersSortingKeys>();
-		sorting.sortField = 'name';
+		sorting.sortField = 'joinDate';
 		sorting.sortOrder = ESortingOrder.asc;
 		this.filter = {
 			...pagination,

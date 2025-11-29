@@ -6,6 +6,8 @@ const Dashboard = "Dashboard";
 const Opportunities = "Opportunities";
 const Investors = "Investors";
 const AdminOpportunities = "Opportunities/admin";
+const SystemEmployees = "SystemEmployees";
+const Roles = "Roles";
 
 const Auth = "Auth";
 
@@ -15,7 +17,7 @@ export const API_ENDPOINTS = {
     getHelloWorld: `${Dashboard}/hello-world`,
   },
   users: {
-    getUserTitles: `${Users}/user-titles`,
+    getEmployees: `${SystemEmployees}/getSystemEmployeesList`,
     getInvestors: `${Investors}`,
   },
   opportunities: {
@@ -36,5 +38,9 @@ export const API_ENDPOINTS = {
     forgotPassword: `${Auth}/forget-password`,
     verifyEmail: `${Auth}/verify-email`,
     resendVerifyEmail: `${Auth}/resend-verification-email`
+  },
+  roles: {
+    getRoles: `${Roles}`,
+    getUserRoles: `${Roles}/system`,
   },
 };

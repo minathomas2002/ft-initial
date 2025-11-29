@@ -10,6 +10,9 @@
         messageTitle="No Investors Found" [showCheckBox]="false" [rowsCheckable]="false">
         <ng-template #itemsTemplate let-item="item">
           <td>
+            {{ item.code }}
+        </td>
+          <td>
             <div class="flex items-center gap-3">
               <p-avatar
                 [image]="item.photoURL || 'assets/images/user_placeholder.png'"

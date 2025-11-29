@@ -30,6 +30,7 @@ export class InvestorsList implements OnInit {
   private readonly i18nService = inject(I18nService);
 
   readonly headers = computed<ITableHeaderItem<TInvestorsSortingKeys>[]>(() => [
+    { label: this.i18nService.translate('investors.table.id'), isSortable: false, sortingKey: 'code' },
     { label: this.i18nService.translate('investors.table.name'), isSortable: true, sortingKey: 'fullName' },
     { label: this.i18nService.translate('investors.table.email'), isSortable: false, sortingKey: 'email' },
     { label: this.i18nService.translate('investors.table.phoneNumber'), isSortable: false, sortingKey: 'phoneNumber' },

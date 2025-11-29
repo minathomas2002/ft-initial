@@ -5,3 +5,11 @@ export enum ERoles {
     MANAGER = 4,
     DEPARTMENT_MANAGER = 5
 }
+
+export enum ERoleNames {
+    Admin = "Admin",
+    Investor = "Investor",
+    Employee = "Employee",
+    Manager = "Manager",
+    DepartmentManager = "DepartmentManager"
+}

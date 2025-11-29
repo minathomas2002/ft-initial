@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UsersFilter } from './users-filter';
+import { EmployeeList } from './employee-list';
 
-describe('UsersFilter', () => {
-  let component: UsersFilter;
-  let fixture: ComponentFixture<UsersFilter>;
+describe('EmployeeList', () => {
+  let component: EmployeeList;
+  let fixture: ComponentFixture<EmployeeList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UsersFilter]
+      imports: [EmployeeList]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UsersFilter);
+    fixture = TestBed.createComponent(EmployeeList);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -21,3 +21,4 @@ describe('UsersFilter', () => {
     expect(component).toBeTruthy();
   });
 });
+

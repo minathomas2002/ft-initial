@@ -1,6 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { AbstractServiceFilter } from 'src/app/shared/classes/abstract-service-filter';
-import { UsersFilterInterfaceAdapter } from '../../classes/users-filter-adapter';
 import { take } from 'rxjs';
 import { IUsersFilter, IUsersFilterRequest } from 'src/app/shared/interfaces';
 import { UsersFilter } from '../../classes/users-filter';
@@ -18,8 +17,7 @@ export class UsersFilterService extends AbstractServiceFilter<IUsersFilter> {
 
   performFilter$() {
     this.resetPagination();
-    const filtration = new UsersFilterInterfaceAdapter(this.filter());
-    return this.store.getUsers(filtration.adaptFilter());
+    return this.store.getUsers(this.filter());
   }
 
   clearAllFilters() {
@@ -28,8 +26,7 @@ export class UsersFilterService extends AbstractServiceFilter<IUsersFilter> {
   }
 
   get FilterRequest(): IUsersFilterRequest {
-    const filtration = new UsersFilterInterfaceAdapter(this.filter());
-    return filtration.adaptFilter();
+    return this.filter();
   }
 
   resetOptionalFilters() {
@@ -40,9 +37,8 @@ export class UsersFilterService extends AbstractServiceFilter<IUsersFilter> {
 
   applyFilterWithPaging() {
     this.updateFilterSignal();
-    const filtration = new UsersFilterInterfaceAdapter(this.filter());
     this.store
-      .getUsers(filtration.adaptFilter())
+      .getUsers(this.filter())
       .pipe(take(1))
       .subscribe();
   }

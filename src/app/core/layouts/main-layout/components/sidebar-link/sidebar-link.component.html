@@ -1,18 +1,12 @@
 @if(link().external){
-<a
-  [href]="link().routerLink"
-  target="_blank"
-  class="flex items-center hover:!bg-gray-50 text-[16px] transition-all block w-full p-3 rounded-lg font-semibold p-[12px]"
->
+<a [href]="link().routerLink" target="_blank"
+  class="flex items-center hover:!bg-gray-50 text-[16px] transition-all block w-full p-3 rounded-lg font-semibold p-[12px]">
   <i class="{{link().icon}} me-[11px] text-gray-400 text-2xl w-[25px]"></i>
   {{link().label}}
 </a>
-}@else {<a
-  [routerLink]="link().routerLink"
-  [routerLinkActiveOptions]="{ exact: true }"
-  routerLinkActive="bg-gray-50"
-  class="flex items-center hover:!bg-gray-50 text-[16px] transition-all block w-full p-3 rounded-lg font-semibold p-[12px]"
->
+}@else {
+<a [routerLink]="link().routerLink" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="bg-gray-50"
+  class="flex items-center hover:!bg-gray-50 text-[16px] transition-all block w-full p-3 rounded-lg font-semibold p-[12px]">
   <i class="{{link().icon}} me-[11px] text-gray-400 text-2xl w-[25px]"></i>
   {{link().label}}
 </a>}
