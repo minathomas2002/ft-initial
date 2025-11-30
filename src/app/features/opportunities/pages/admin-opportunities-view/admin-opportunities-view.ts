@@ -54,6 +54,15 @@ export class AdminOpportunitiesView implements OnInit {
     this.router.navigate(['/', ERoutes.opportunities, opportunity.id]);
   }
 
+  onAddOpportunity() {
+    this.adminOpportunitiesStore.setViewMode(EViewMode.Create);
+    this.createEditOpportunityDialogVisible.set(true);
+  }
+
+  applyFilter() {
+    this.adminOpportunitiesFilterService.applyFilterWithPaging();
+  }
+
   onAction(event: { opportunity: IAdminOpportunity; action: EOpportunityAction }) {
     // Handle actions (Edit, Delete, MoveToDraft, Publish)
     switch (event.action) {
@@ -76,15 +85,6 @@ export class AdminOpportunitiesView implements OnInit {
         this.handelPublishOpportunity(event.opportunity);
         break;
     }
-  }
-
-  onAddOpportunity() {
-    this.adminOpportunitiesStore.setViewMode(EViewMode.Create);
-    this.createEditOpportunityDialogVisible.set(true);
-  }
-
-  applyFilter() {
-    this.adminOpportunitiesFilterService.applyFilterWithPaging();
   }
 
   handelDeleteOpportunity(opportunity: IAdminOpportunity) {

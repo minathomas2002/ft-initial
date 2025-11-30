@@ -1,3 +1,21 @@
+@if(hasLabel()){
+<p-button
+  (click)="menu.toggle($event)"
+  iconPos="right"
+>
+  <span class="font-semibold">Actions</span>
+  <i class="icon-chevron-down {{isOpen() ? 'rotate-0' : 'rotate-180'}} transition-all"></i>
+</p-button>
+<p-menu
+  #menu
+  (onShow)="toggleMenu()"
+  (onHide)="toggleMenu()"
+  styleClass="!text-gray-400 max-w-[165px]"
+  [model]="menuItems()"
+  [popup]="true"
+/>
+}
+@else{
 <p-button
   (click)="menu.toggle($event); $event.stopPropagation()"
   severity="secondary"
@@ -10,3 +28,4 @@
   [model]="menuItems()"
   [popup]="true"
 />
+}
