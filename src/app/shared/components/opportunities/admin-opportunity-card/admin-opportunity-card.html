@@ -15,14 +15,14 @@
     </div>
     <div class="flex justify-end gap-2">
       <!-- Status Badge (Published/Draft) -->
+      @if(opportunity().status === EOpportunityStatus.DRAFT){
       @let statusConfig = getStatusConfig();
       <app-base-tag
         [color]="statusConfig.color"
         [value]="statusConfig.label | translate"
       />
-
-      <!-- State Badge (Active/Inactive) - Only show if published -->
-      @if(opportunity().status === EOpportunityStatus.PUBLISHED) {
+      }
+      @else{
       @let stateConfig = getStateConfig();
       <app-base-tag
         [color]="stateConfig.color"
