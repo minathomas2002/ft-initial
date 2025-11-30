@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { PanelModule } from 'primeng/panel';
 import { SidebarDropdownComponent } from '../sidebar-dropdown/sidebar-dropdown.component';
@@ -14,6 +14,7 @@ import { BaseLogoComponent } from 'src/app/shared/components/base-components/bas
   imports: [SidebarLinkComponent, PanelModule, SidebarDropdownComponent, RouterModule, BaseLogoComponent],
   templateUrl: './sidebar-content.component.html',
   styleUrl: './sidebar-content.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarContentComponent {
   private readonly i18nService = inject(I18nService);
