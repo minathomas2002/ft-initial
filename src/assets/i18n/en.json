@@ -306,6 +306,10 @@
       "subtitle": "Manage employee roles and permissions",
       "addEmployee": "Add Employee"
     },
+    "tabs": {
+      "employees": "Employees",
+      "roleManagement": "Role Management"
+    },
     "filter": {
       "searchPlaceholder": "Search by Username, Job ID, Phone, Email or Join Date",
       "rolePlaceholder": "Role",

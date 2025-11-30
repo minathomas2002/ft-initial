@@ -523,6 +523,7 @@ const MY_PRESET = definePreset(Lara, {
     ...TEXTAREA_COMPONENT,
     ...INPUTTEXT_COMPONENT,
     ...TOOLTIP_COMPONENT,
+    ...TABS_COMPONENT,
   },
   semantic: {
     gray: {

@@ -1,0 +1,28 @@
+<div class="flex justify-between items-center">
+    <div>
+        <h4 class="font-semibold xl:text-2xl text-lg"> {{'users.list.subtitle' | translate}} </h4>
+        <h4 class="xl:text-md text-sm text-gray-600"> {{'users.list.subtitle' | translate}} </h4>            
+    </div>
+    <p-button
+      [label]="'users.list.addEmployee' | translate"
+      severity="primary"
+      class="flex"
+      fluid
+      icon="icon-plus"
+      (onClick)="onAddEmployee()"
+    />
+</div>
+<p-tabs value="0" class="mt-10">
+    <p-tablist>
+        <p-tab value="0">{{'users.tabs.employees' | translate}}</p-tab>
+        <p-tab value="1">{{'users.tabs.roleManagement' | translate}}</p-tab>        
+    </p-tablist>
+    <p-tabpanels>
+        <p-tabpanel value="0">
+            <app-employee-list></app-employee-list>            
+        </p-tabpanel>
+        <p-tabpanel value="1">
+            Role Management content will be added here
+        </p-tabpanel>        
+    </p-tabpanels>
+</p-tabs>

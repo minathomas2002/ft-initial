@@ -162,8 +162,5 @@ export class EmployeeList implements OnInit {
     //     this.filterService.applyFilter();
     //   }))
     //   .subscribe();
-  }
-  onAddEmployee() {
-    console.log('add employee');
-  }
+  }  
 }
