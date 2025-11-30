@@ -1,1 +1,155 @@
-<p>add-edit-employee-dialog works!</p>
+<app-base-dialog
+  [(visible)]="dialogVisible"
+  icon="icon-user-create"
+  [confirmLabel]="'users.dialog.Add.confirmAdd' | translate"
+  [isConfirmationDisabled]="false"
+  (onConfirm)="onConfirm()"
+  (onClose)="resetForm()"
+  [isLoading]="isProcessing()"
+>
+  <!-- 
+  [isConfirmationDisabled]="formService.form.invalid" -->
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{ 'users.dialog.Add.title' | translate }}</p>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+
+    <div class="col-span-12 md:col-span-12">
+
+      <app-base-label [title]="'users.dialog.Add.job' | translate">
+      </app-base-label>
+      <input
+        class="w-full"
+        type="text"
+        pInputText
+        [placeholder]="'users.dialog.Add.jobPlaceHolder' | translate"
+        [formControl]="formService.job"
+      />
+
+    </div>
+    <div class="col-span-12 md:col-span-6">
+      <app-base-label [title]="'users.dialog.Add.enName' | translate">
+      </app-base-label>
+      <input
+        [formControl]="formService.nameEn"
+        [placeholder]="'users.dialog.Add.nameEnPlaceHolder' | translate"
+        fluid
+      />
+      <div>
+        @if(formService.nameEn.dirty && formService.nameEn.errors){
+        @if(formService.nameEn.hasError('required')){
+        <p-message
+          severity="error"
+          variant="simple"
+          size="small"
+        >{{ 'users.dialog.Add.nameEnRequired' | translate }}</p-message>
+        }
+        }
+      </div>
+    </div>
+    <div class="col-span-12 md:col-span-6">
+      <app-base-label [title]="'users.dialog.Add.arName' | translate">
+      </app-base-label>
+      <input
+        [formControl]="formService.nameAr"
+        [placeholder]="'users.dialog.Add.nameArPlaceholder' | translate"
+        fluid
+      />
+      <div>
+        @if(formService.nameAr.dirty && formService.nameAr.errors){
+        @if(formService.nameAr.hasError('required')){
+        <p-message
+          severity="error"
+          variant="simple"
+          size="small"
+        >{{ 'users.dialog.Add.nameArRequired' | translate }}</p-message>
+        }
+        }
+      </div>
+      <div>
+        <!-- add min $ max validation with translation -->
+        @if(formService.nameAr.errors?.['pattern']){
+        <p-message
+          severity="error"
+          variant="simple"
+          size="small"
+        >{{ 'users.dialog.Add.nameArRequired' | translate }}</p-message>
+        }
+
+      </div>
+    </div>
+    <div class="col-span-12 md:col-span-12">
+      <app-base-label [title]="'users.dialog.Add.email' | translate">
+      </app-base-label>
+      <input
+        [formControl]="formService.email"
+        [placeholder]="'users.dialog.Add.emailPlaceholder' | translate"
+        fluid
+      />
+      <div>
+        @if(formService.email.dirty && formService.email.errors){
+        @if(formService.email.hasError('required')){
+        <p-message
+          severity="error"
+          variant="simple"
+          size="small"
+        >{{ 'users.dialog.Add.emailRequired' | translate }}</p-message>
+        }
+        }
+      </div>
+    </div>
+
+    <div class="col-span-12 md:col-span-6">
+      <app-base-label [title]="'users.dialog.Add.phone' | translate">
+      </app-base-label>
+      <input
+        type="text"
+        pInputText
+        [placeholder]="'users.dialog.Add.phonePlaceholder' | translate"
+        [formControl]="formService.phoneNumber"
+      />
+      <div>
+        @if(formService.phoneNumber.dirty && formService.phoneNumber.errors){
+        @if(formService.phoneNumber.hasError('required')){
+        <p-message
+          severity="error"
+          variant="simple"
+          size="small"
+        >{{ 'users.dialog.Add.phoneRequired' | translate }}</p-message>
+        }
+        }
+      </div>
+    </div>
+
+    <div class="col-span-12 md:col-span-6 flex flex-col">
+      <app-base-label [title]="'users.dialog.Add.role' | translate">
+      </app-base-label>
+      <p-select
+        [options]="userRoles()"
+        [loading]="isProcessing()"
+        [loadingIcon]="'icon-transfer'"
+        [formControl]="formService.roleId"
+        appendTo="body"
+        optionLabel="label"
+        optionValue="value"
+        [placeholder]="'users.dialog.changeRole.rolePlaceholder' | translate"
+        dropdownIcon="icon-chevron-down"
+        fluid
+      />
+      <div>
+        @if(formService.roleId.dirty && formService.roleId.errors){
+        @if(formService.roleId.hasError('required')){
+        <p-message
+          severity="error"
+          variant="simple"
+          size="small"
+        >{{ 'users.dialog.changeRole.roleRequired' | translate }}</p-message>
+        }
+        }
+      </div>
+    </div>
+
+  </div>
+
+</app-base-dialog>

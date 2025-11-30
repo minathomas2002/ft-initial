@@ -17,7 +17,10 @@
   </ng-container>
 
   <ng-container ngProjectAs="table-body">
-    <app-table-skeleton [headers]="headers()" [isLoading]="usersStore.loading()">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="usersStore.loading()"
+    >
       <app-data-table
         [columns]="headers()"
         [rows]="rows()"
@@ -25,7 +28,10 @@
         [totalRecords]="totalRecords()"
         (filterChange)="filterService.applyFilterWithPaging()"
       >
-        <ng-template #itemsTemplate let-item="item">
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
           <!-- Employee ID -->
           <td>
             {{ item.employeeID }}
@@ -68,7 +74,10 @@
           <!-- Assessment Status -->
           <td>
             @let status = getUserStatus(item.status);
-            <app-base-tag [color]="status.color" [value]="status.title" />
+            <app-base-tag
+              [color]="status.color"
+              [value]="status.title"
+            />
           </td>
           <!-- Action -->
           <td>
@@ -101,3 +110,12 @@
   [description]="'users.dialog.delete.description' | translate"
   (confirmed)="onDeleteConfirm()"
 ></app-general-confirmation-dialog>
+
+@if(CreateEditEmpDialogVisible()){
+<app-add-edit-employee-dialog
+  [(dialogVisible)]="CreateEditEmpDialogVisible"
+  [isEditMode]="false"
+>
+
+</app-add-edit-employee-dialog>
+}

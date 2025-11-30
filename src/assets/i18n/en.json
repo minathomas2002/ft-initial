@@ -323,6 +323,26 @@
       "delete": {
         "title": "Delete User",
         "description": "Are you sure you want to delete this user?"
+      },
+      "Add":{
+        "title":"Add Employee",
+        "job": "Job No.",
+        "enName":"English Name",
+        "arName": "Arabic Name",
+        "email": "Email",
+        "phone": "Phone",
+        "role": "Role",
+        "confirmAdd": "Add Employee",
+        "JobRequired": "Job No. is required",
+        "jobPlaceHolder": "Enter Job No.",
+        "nameEnPlaceHolder": "Enter Name English.",
+        "nameEnRequired": "Name English is required",
+        "nameArPlaceholder": "Enter Name Arabic.",
+        "nameArRequired": "Name Arabic is required",
+        "emailPlaceholder": "Enter Email.",
+        "emailRequired": "Email is required",
+         "phonePlaceholder": "Enter Phone .",
+        "phoneRequired": "Phone is required"
       }
     }
   },

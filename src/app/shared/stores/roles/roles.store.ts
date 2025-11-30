@@ -53,6 +53,21 @@ export const RolesStore = signalStore(
             patchState(store, { loading: false });
           }),
         );
+      },
+      getFilteredRoles() {
+        patchState(store, { loading: true, error: null });
+        return rolesApiService.getFilteredRoles().pipe(
+          tap((res) => {
+            patchState(store, { list: res.body || [] });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error fetching roles' });
+            return throwError(() => new Error('Error fetching roles'));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
       }
     };
   }),

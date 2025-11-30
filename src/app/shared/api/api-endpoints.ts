@@ -19,6 +19,7 @@ export const API_ENDPOINTS = {
   users: {
     getEmployees: `${SystemEmployees}/getSystemEmployeesList`,
     getInvestors: `${Investors}`,
+    createEmployee:`${SystemEmployees}/CreateSystemEmployee`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,
@@ -44,5 +45,6 @@ export const API_ENDPOINTS = {
   roles: {
     getRoles: `${Roles}`,
     getUserRoles: `${Roles}/system`,
+    getFilteredRoles: `${Roles}/filtered`,
   },
 };

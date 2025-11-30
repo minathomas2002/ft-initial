@@ -1,5 +1,5 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
-import { IUser, IUserRecord, IUsersFilterRequest } from "../../interfaces";
+import { IUser, IUserCreate, IUserRecord, IUsersFilterRequest } from "../../interfaces";
 import { UsersApiService } from "../../api/users/users-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, tap, throwError } from "rxjs";
@@ -79,6 +79,24 @@ export const UsersStore = signalStore(
           }),
         );
       },
+      CreateEmployee(employee: IUserCreate) {
+        patchState(store, { loading: true });
+        return usersApiService.CreateEmployee(employee).pipe(
+          tap((res) => {
+            if (!res.body) {
+              patchState(store, { error: 'Failed to create user' });
+            }
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error creating user"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
+    
     }
   }),
 );

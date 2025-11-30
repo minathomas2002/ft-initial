@@ -32,3 +32,25 @@ export interface IUsersFilterRequest {
   statusFilters?: boolean | undefined;
   joinDate?: string;
 }
+
+export interface IUserCreate {
+  
+  employeeID: string;
+  nameAr: string;
+  nameEn: string;
+  email: string;
+  phoneNumber: string;
+  roleId: string;
+  job: string;
+}
+export interface IUserEdit extends IUserCreate {
+  
+  userID: string;
+}
+
+export interface IUserCreateResponse {
+  systemEmployeeId : string;
+  userId : string;
+}
+
+  

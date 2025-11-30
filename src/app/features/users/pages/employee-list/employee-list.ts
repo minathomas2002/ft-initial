@@ -28,6 +28,8 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ERoles } from 'src/app/shared/enums';
 import { ButtonModule } from 'primeng/button';
+import { AddEditEmployeeDialog } from "../../components/add-edit-employee-dialog/add-edit-employee-dialog";
+import { RolesStore } from 'src/app/shared/stores/roles/roles.store';
 
 @Component({
   selector: 'app-employee-list',
@@ -45,7 +47,8 @@ import { ButtonModule } from 'primeng/button';
     GeneralConfirmationDialogComponent,
     TranslatePipe,
     ButtonModule,
-  ],
+    AddEditEmployeeDialog
+],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
   providers: [UsersFilterService],
@@ -54,6 +57,7 @@ export class EmployeeList implements OnInit {
   usersLookupsStore = inject(UsersLookupsStore);
   usersStore = inject(UsersStore);
   i18nService = inject(I18nService);
+  roleStore = inject(RolesStore);
   headers = computed<ITableHeaderItem<TUsersSortingKeys>[]>(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
@@ -100,6 +104,8 @@ export class EmployeeList implements OnInit {
       },
     ];
   });
+  CreateEditEmpDialogVisible = signal<boolean>(false);
+
   rows = computed<IUserRecord[]>(() => this.usersStore.list());
   filterService = inject(UsersFilterService);
   filter = this.filterService.filter;
@@ -164,6 +170,7 @@ export class EmployeeList implements OnInit {
     //   .subscribe();
   }
   onAddEmployee() {
-    console.log('add employee');
+     
+    this.CreateEditEmpDialogVisible.set(true);
   }
 }
