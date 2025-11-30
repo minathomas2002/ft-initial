@@ -4,16 +4,18 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
 import { EOpportunityState, EOpportunityStatus } from 'src/app/shared/enums';
 import { AdminOpportunitiesFilterClass } from '../../classes/admin-opportunities-filter';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-admin-opportunities-counts',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, SkeletonModule],
   templateUrl: './admin-opportunities-counts.component.html',
   styleUrl: './admin-opportunities-counts.component.scss',
 })
 export class AdminOpportunitiesCounts {
   protected readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   counts = this.adminOpportunitiesStore.counts;
+  isLoading = this.adminOpportunitiesStore.isLoading;
   protected readonly adminOpportunitiesFilterService = inject(AdminOpportunitiesFilterService);
 
   removeFilters() {
