@@ -13,16 +13,17 @@
     <div class="w-[40px] h-[40px] rounded-xl bg-orange-500 flex justify-between border-1 border-gray-200 items-center justify-center">
       <i class="{{getOpportunityIcon()}} text-white text-xl"></i>
     </div>
+    @if(!opportunity().isOtherOpportunity){
     <div class="flex justify-end gap-2">
       <!-- Status Badge (Published/Draft) -->
+      @if(opportunity().status === EOpportunityStatus.DRAFT){
       @let statusConfig = getStatusConfig();
       <app-base-tag
         [color]="statusConfig.color"
         [value]="statusConfig.label | translate"
       />
-
-      <!-- State Badge (Active/Inactive) - Only show if published -->
-      @if(opportunity().status === EOpportunityStatus.PUBLISHED) {
+      }
+      @else{
       @let stateConfig = getStateConfig();
       <app-base-tag
         [color]="stateConfig.color"
@@ -30,6 +31,7 @@
       />
       }
     </div>
+    }
   </div>
 
   <div class="flex flex-col gap-1 flex-1">

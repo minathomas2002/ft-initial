@@ -1,5 +1,5 @@
 import { FileuploadComponent } from './../../../../shared/components/utility-components/fileupload/fileupload.component';
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild, computed, effect } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { SelectModule } from 'primeng/select';
@@ -11,7 +11,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MessageModule } from 'primeng/message';
 import { FormsModule } from '@angular/forms';
-import { SafeObjectUrl } from 'src/app/shared/interfaces';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -58,11 +57,13 @@ export class OpportunityInformationForm implements OnInit {
     // Initialize files signal from form service when component is created
     // This ensures files are displayed when revisiting the step
     this.syncFilesFromFormService();
+    this.opportunityFormService.formUpdated.subscribe(() => {
+      this.syncFilesFromFormService();
+    });
   }
 
   private syncFilesFromFormService() {
     const imageValue = this.opportunityInformationForm.get('image')?.value;
-
     if (imageValue instanceof File) {
       const currentFiles = this.files();
       // Only update if files are different or empty
@@ -80,14 +81,11 @@ export class OpportunityInformationForm implements OnInit {
   }
 
   onFilesChanged(files: File[]) {
-    console.log(files);
-
     // Update the form field value with the files
     // This will automatically trigger validation and update the fieldTree
     const imageValue = files.length > 0 ? files[0] : null;
-    this.opportunityFormService.updateImageField(imageValue as SafeObjectUrl | null);
+    this.opportunityFormService.updateImageField(imageValue);
     // Mark the field as touched so validation errors appear when user interacts with it
-    this.opportunityInformationForm.get('image')?.markAsTouched();
   }
 
   onDateRangeChange(event: any) {

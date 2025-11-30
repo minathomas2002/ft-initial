@@ -1,6 +1,6 @@
 export enum EOpportunityStatus {
-  PUBLISHED = 1,
-  DRAFT = 2,
+  DRAFT = 1,
+  PUBLISHED = 2,
 }
 
 export enum EOpportunityType {

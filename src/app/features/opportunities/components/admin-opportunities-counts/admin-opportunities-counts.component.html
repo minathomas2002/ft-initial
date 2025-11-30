@@ -1,4 +1,32 @@
 <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  @if(isLoading()) {
+  <!-- Skeleton Loading State -->
+  @for (item of [1, 2, 3, 4]; track item) {
+  <div class="bg-white rounded-xl border-1 border-gray-200 p-6">
+    <p-skeleton
+      width="120px"
+      height="16px"
+      class="mb-2"
+    />
+    <p-skeleton
+      width="60px"
+      height="32px"
+      class="mb-4"
+    />
+    <div class="flex items-center gap-1">
+      <p-skeleton
+        width="100px"
+        height="16px"
+      />
+      <p-skeleton
+        width="16px"
+        height="16px"
+        shape="circle"
+      />
+    </div>
+  </div>
+  }
+  } @else {
   <!-- Total Opportunities -->
   <div
     class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
@@ -74,4 +102,5 @@
       <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
     </div>
   </div>
+  }
 </div>
