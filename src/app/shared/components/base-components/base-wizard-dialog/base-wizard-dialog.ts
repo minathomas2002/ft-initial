@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, contentChildren, inject, input, model, output, viewChild, effect } from '@angular/core';
+import { Component, computed, contentChildren, inject, input, model, output, viewChild, effect, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Dialog, DialogPassThrough } from 'primeng/dialog';
 import { StepperModule } from 'primeng/stepper';
@@ -17,6 +17,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
   imports: [Dialog, StepperModule, ButtonModule, CommonModule, ScrollPanelModule, WizardStepStateComponent, TranslatePipe],
   templateUrl: './base-wizard-dialog.html',
   styleUrl: './base-wizard-dialog.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseWizardDialog {
   private i18nService = inject(I18nService);
@@ -32,7 +33,7 @@ export class BaseWizardDialog {
   isLoading = input<boolean>(false);
   isProcessing = input<boolean>(false);
   wizardTitle = input<string>('Create Opportunity');
-  
+
   // Computed to get current language for icon direction
   currentLanguage = computed(() => this.i18nService.currentLanguage());
   nextButtonIcon = computed(() => this.currentLanguage() === 'ar' ? 'icon-arrow-left' : 'icon-arrow-right');

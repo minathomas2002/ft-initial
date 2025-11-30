@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, effect, signal } from '@angular/core';
+import { Component, computed, inject, input, effect, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
 import { EWizardStepState } from 'src/app/shared/enums/wizard-step-state.enum';
@@ -14,7 +14,7 @@ export type StepState = 'empty' | 'in-progress' | 'valid' | 'error';
   imports: [BadgeModule],
   templateUrl: './wizard-step-state.component.html',
   styleUrl: './wizard-step-state.component.scss',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WizardStepStateComponent {
   private formUtilityService = inject(FormUtilityService);
