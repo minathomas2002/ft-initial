@@ -9,12 +9,13 @@ import { WizardStepStateComponent } from '../../../components/utility-components
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { ImageErrorDirective } from '../../../directives/image-error.directive';
 
 
 
 @Component({
   selector: 'app-base-wizard-dialog',
-  imports: [Dialog, StepperModule, ButtonModule, CommonModule, ScrollPanelModule, WizardStepStateComponent, TranslatePipe],
+  imports: [Dialog, StepperModule, ButtonModule, CommonModule, ScrollPanelModule, WizardStepStateComponent, TranslatePipe, ImageErrorDirective],
   templateUrl: './base-wizard-dialog.html',
   styleUrl: './base-wizard-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

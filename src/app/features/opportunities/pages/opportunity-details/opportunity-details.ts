@@ -19,6 +19,7 @@ import { OpportunityActionMenuComponent } from 'src/app/shared/components/opport
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { CreateEditOpportunityDialog } from '../../components/create-edit-opportunity-dialog/create-edit-opportunity-dialog';
+import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 
 @Component({
   selector: 'app-opportunity-details',
@@ -32,7 +33,8 @@ import { CreateEditOpportunityDialog } from '../../components/create-edit-opport
     CardsSkeleton,
     OpportunityActionMenuComponent,
     GeneralConfirmationDialogComponent,
-    CreateEditOpportunityDialog
+    CreateEditOpportunityDialog,
+    ImageErrorDirective
   ],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
