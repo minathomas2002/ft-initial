@@ -63,5 +63,6 @@ export interface IOpportunityDetails {
   manufacturings: IOpportunityActivity[];
   assemblyTestings: IOpportunityActivity[];
   afterSalesServices: IOpportunityActivity[];
-  attachments: IOpportunityAttachment[];  
+  attachments: IOpportunityAttachment[];
+  linkedPlans: number;
 }

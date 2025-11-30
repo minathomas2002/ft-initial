@@ -1,5 +1,5 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { inject } from '@angular/core';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { computed, inject } from '@angular/core';
 import { finalize, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
 import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails } from '../../interfaces/opportunities.interface';
@@ -9,7 +9,7 @@ const initialState: {
   error: string | null;
   count: number;
   list: IOpportunity[];
-  details: IOpportunityDetails | null;  
+  details: IOpportunityDetails | null;
 } = {
   loading: false,
   error: null,
@@ -20,6 +20,11 @@ const initialState: {
 export const OpportunitiesStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
+  withComputed((store) => {
+    return {
+      linkedPlans: computed(() => store.details()?.linkedPlans ?? 0),
+    };
+  }),
   withMethods((store) => {
     const opportunitiesApiService = inject(OpportunitiesApiService);
     return {
