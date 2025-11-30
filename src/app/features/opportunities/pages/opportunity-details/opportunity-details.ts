@@ -98,6 +98,7 @@ export class OpportunityDetails implements OnInit {
       case EOpportunityAction.Edit:
         // Open edit dialog
         this.adminOpportunitiesStore.setViewMode(EViewMode.Edit);
+        this.adminOpportunitiesStore.setSelectedOpportunityId(this.opportunityId()!);
         this.createEditOpportunityDialogVisible.set(true);
         break;
       case EOpportunityAction.Delete:

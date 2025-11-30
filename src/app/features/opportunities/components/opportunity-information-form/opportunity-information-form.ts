@@ -86,7 +86,6 @@ export class OpportunityInformationForm implements OnInit {
     const imageValue = files.length > 0 ? files[0] : null;
     this.opportunityFormService.updateImageField(imageValue);
     // Mark the field as touched so validation errors appear when user interacts with it
-    this.opportunityInformationForm.get('image')?.markAsTouched();
   }
 
   onDateRangeChange(event: any) {

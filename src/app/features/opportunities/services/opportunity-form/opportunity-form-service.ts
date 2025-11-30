@@ -228,6 +228,7 @@ export class OpportunityFormService {
 
   updateImageField(image: File | null) {
     this.opportunityInformationForm.patchValue({ image });
+    this.markAsDirty();
   }
 
   updateDateRange(dateRange: [Date, Date] | null) {
