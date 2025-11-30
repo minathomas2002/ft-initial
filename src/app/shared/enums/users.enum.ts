@@ -5,9 +5,9 @@ export enum EUserStatus {
 }
 
 export enum EAdminUserActions {
-  VIEW = 'View',
-  EDIT = 'Edit',
-  CHANGE_ROLE = 'ChangeRole',
-  DELETE = 'Delete',
-  DEACTIVATE = 'Deactivate'
+  EDIT = 1,
+  DEACTIVATE = 2,
+  VIEW = 3,
+  CHANGE_ROLE = 4,
+  DELETE = 5
 }

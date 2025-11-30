@@ -12,7 +12,7 @@ export class AuthApiService {
   private readonly baseUrl = API_ENDPOINTS.baseUrl;
 
   windowsLogin(): Observable<IBaseApiResponse<IAuthData>> {
-    return this.http.post<IBaseApiResponse<IAuthData>>(`${this.baseUrl}/${API_ENDPOINTS.auth.windowsLogin}`, {});
+    return this.http.get<IBaseApiResponse<IAuthData>>(`${this.baseUrl}/${API_ENDPOINTS.auth.windowsLogin}`, {});
   }
 
   fakeWindowsLogin(userName: string): Observable<IBaseApiResponse<IAuthData>> {
