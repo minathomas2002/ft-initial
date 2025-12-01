@@ -21,7 +21,7 @@ export class SystemEmployeesApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
   getEmployeeDateFromHR(employeeID: string): Observable<IBaseApiResponse<IEmployeeDateFromHR>> {
-    return this.baseHttpService.get<IEmployeeDateFromHR, string>(API_ENDPOINTS.systemEmployees.getEmployeeDataFromHr + '/' + { employeeID });
+    return this.baseHttpService.get<IEmployeeDateFromHR, string>(API_ENDPOINTS.systemEmployees.getEmployeeDataFromHr + '/' + employeeID);
   }
 
   getActiveEmployees(): Observable<IBaseApiResponse<IActiveEmployee[]>> {
@@ -29,7 +29,7 @@ export class SystemEmployeesApiService {
   }
 
   getEmployeeDetails(id: string): Observable<IBaseApiResponse<ISystemEmployeeDetails>> {
-    return this.baseHttpService.get<ISystemEmployeeDetails, string>(API_ENDPOINTS.systemEmployees.getEmployeeDetails + '/' + { id });
+    return this.baseHttpService.get<ISystemEmployeeDetails, string>(API_ENDPOINTS.systemEmployees.getEmployeeDetails + '/' + id);
   }
 
   createSystemEmployee(employee: ICreateSystemEmployeeRequest): Observable<IBaseApiResponse<void>> {
@@ -45,6 +45,6 @@ export class SystemEmployeesApiService {
   }
 
   toggleSystemEmployeeStatus(id: string): Observable<IBaseApiResponse<void>> {
-    return this.baseHttpService.put<void, string, unknown>(API_ENDPOINTS.systemEmployees.toggleEmployeeStatus + '/' + { id });
+    return this.baseHttpService.put<void, string, unknown>(API_ENDPOINTS.systemEmployees.toggleEmployeeStatus + '/' + id);
   }
 }
