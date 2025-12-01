@@ -70,17 +70,35 @@ export class AddEmployeeFormService {
   get nameEn() { return this.form.controls.nameEn; }
   get phoneNumber() { return this.form.controls.phoneNumber; }
 
-  patchForm(user: IUserDetails) {
+  patchForm(user: IUserDetails, isEditMode: boolean = false) {
   this.form.patchValue({
     roleId: user.roleId,
-    job: user.employeeID,    
+    job: user.employeeID,
     employeeID: user.employeeID,
     email: user.email,
     nameAr: user.name_Ar,
     nameEn: user.name_En,
     phoneNumber: user.phoneNumber,
   });
+
+  if (isEditMode) {
+    this.enableEditableFields();
+  }
 }
 
+enableEditableFields() {
+  this.nameAr.enable();
+  this.nameEn.enable();
+  this.phoneNumber.enable();
+  this.job.disable();
+}
+
+ResetFormFields() {
+  this.form.reset();
+  this.nameAr.disable();
+  this.nameEn.disable();
+  this.phoneNumber.disable();
+  this.job.enable();
+}
 
 }

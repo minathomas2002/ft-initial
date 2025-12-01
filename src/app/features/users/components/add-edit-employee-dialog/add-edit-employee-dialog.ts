@@ -11,7 +11,7 @@ import { Message } from "primeng/message";
 import { ReactiveFormsModule } from '@angular/forms';
 import { IUser, IUserCreate, IUserEdit, IUserRecord } from 'src/app/shared/interfaces';
 import { UsersStore } from 'src/app/shared/stores/users/users.store';
-import { filter, take, tap } from 'rxjs';
+import { filter, skip, take, tap } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { InputTextModule } from 'primeng/inputtext';
 
@@ -54,13 +54,15 @@ export class AddEditEmployeeDialog {
   );
 
   
-   ngOnInit() {    
-    this.formService.job.valueChanges
-    .pipe(filter(jobId => !!jobId))
-    .subscribe(() => this.GetUserByJobId());
-  
-   if(this.isEditMode()){}
-    this.LoadEmployeeDetails();
+   ngOnInit() {   
+    this.formService.ResetFormFields();
+    if (!this.isEditMode()) {
+      this.formService.job.valueChanges
+        .pipe(filter(jobId => !!jobId))
+        .subscribe(() => this.GetUserByJobId());
+    }else {
+      this.LoadEmployeeDetails();
+    }
   }
 
 
@@ -93,9 +95,9 @@ export class AddEditEmployeeDialog {
 						this.dialogVisible.set(false);
 						return;
 					}
-           this.toasterService.success('Employee Added Successfully');
-        this.resetForm();
-        this.dialogVisible.set(false);
+          this.toasterService.success('Employee Added Successfully');
+          this.resetForm();
+          this.dialogVisible.set(false);
        // this.onSuccess.emit(); update table
 
 				}),
@@ -131,7 +133,7 @@ export class AddEditEmployeeDialog {
    this.userStore.getUserDetails(selectedId).subscribe({
     next: () => {
       const user = this.userStore.user(); 
-      if (user) this.formService.patchForm(user);
+      if (user) this.formService.patchForm(user, this.isEditMode());
     }
   });
 
@@ -147,7 +149,7 @@ export class AddEditEmployeeDialog {
       },
     });
   }
-  
+
  resetForm = () => {
     this.formService.form.reset();
   };
