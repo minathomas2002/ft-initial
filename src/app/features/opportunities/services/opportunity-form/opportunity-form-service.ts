@@ -1,6 +1,7 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, SafeObjectUrl, IOpportunityDetails, IOpportunityActivity } from 'src/app/shared/interfaces';
+import { Subject } from 'rxjs';
+import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, IOpportunityDetails, IOpportunityActivity } from 'src/app/shared/interfaces';
 
 export interface IBasicInformation {
   title: string;
@@ -53,6 +54,8 @@ export class OpportunityFormService {
       }
     ],
   }
+
+  formUpdated = new Subject<void>();
 
   private fb = inject(FormBuilder);
 
@@ -223,8 +226,9 @@ export class OpportunityFormService {
     this.opportunityForm.updateValueAndValidity();
   }
 
-  updateImageField(image: SafeObjectUrl | null) {
+  updateImageField(image: File | null) {
     this.opportunityInformationForm.patchValue({ image });
+    this.markAsDirty();
   }
 
   updateDateRange(dateRange: [Date, Date] | null) {
@@ -288,27 +292,26 @@ export class OpportunityFormService {
     }
   }
 
-  setFormValue(value: IOpportunityDetails) {
+  async setFormValue(value: IOpportunityDetails) {
     // Patch opportunity information form
     const dateRange: [Date, Date] | null = value.startDate && value.endDate
       ? [new Date(value.startDate), new Date(value.endDate)]
       : null;
 
-    // Get image from attachments (first attachment if available) and create SafeObjectUrl
-    const image: SafeObjectUrl | null = value.attachments && value.attachments.length > 0
-      ? {
-        objectURL: {
-          changingThisBreaksApplicationSecurity: value.attachments[0].fileUrl
-        }
-      }
-      : null;
+    // Get image from attachments (first attachment if available) and convert to File
+    let image: File | null = null;
+    if (value.attachments && value.attachments.length > 0) {
+      const fileUrl = value.attachments[0].fileUrl;
+      const fileName = value.attachments[0].fileName || 'image';
+      image = await this.createFileFromUrl(fileUrl, fileName);
+    }
 
     this.opportunityInformationForm.patchValue({
       id: value.id,
       title: value.title,
       shortDescription: value.shortDescription,
       opportunityType: value.opportunityType.toString(),
-      opportunityCategory: '', // Not available in IOpportunityDetails, set to empty
+      opportunityCategory: value.opportunityCategory ?? '1', // TODO: Remove this once the API is updated
       spendSAR: value.spendSAR?.toString() || '',
       minQuantity: value.minQuantity?.toString() || '',
       maxQuantity: value.maxQuantity?.toString() || '',
@@ -324,6 +327,44 @@ export class OpportunityFormService {
     this.patchFormArray('manufacturings', value.manufacturings);
     this.patchFormArray('assemblyTestings', value.assemblyTestings);
     this.patchFormArray('afterSalesServices', value.afterSalesServices);
+
+    this.formUpdated.next();
+  }
+
+  private async createFileFromUrl(
+    fileUrl: string,
+    fileName: string = "image.jpg"
+  ): Promise<File> {
+    const response = await fetch(fileUrl);
+    const blob = await response.blob();
+
+    // Ensure file has correct extension based on blob type
+    let finalFileName = fileName;
+    const blobType = blob.type.toLowerCase();
+
+    // Determine extension from MIME type if fileName doesn't have valid extension
+    if (!fileName.match(/\.(jpg|jpeg|png)$/i)) {
+      if (blobType.includes('jpeg') || blobType.includes('jpg')) {
+        finalFileName = fileName.replace(/\.[^.]*$/, '') + '.jpg';
+      } else if (blobType.includes('png')) {
+        finalFileName = fileName.replace(/\.[^.]*$/, '') + '.png';
+      } else {
+        // Default to jpg if type is unknown
+        finalFileName = fileName.replace(/\.[^.]*$/, '') + '.jpg';
+      }
+    }
+
+    // Ensure the blob type matches the extension
+    let finalBlobType = blob.type;
+    if (finalFileName.endsWith('.jpg') || finalFileName.endsWith('.jpeg')) {
+      finalBlobType = blobType.includes('jpeg') || blobType.includes('jpg')
+        ? blob.type
+        : 'image/jpeg';
+    } else if (finalFileName.endsWith('.png')) {
+      finalBlobType = blobType.includes('png') ? blob.type : 'image/png';
+    }
+
+    return new File([blob], finalFileName, { type: finalBlobType });
   }
 
   private patchFormArray(controlName: keyof IOpportunityLocalizationFrom, activities: IOpportunityActivity[]) {

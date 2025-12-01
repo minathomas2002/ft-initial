@@ -51,7 +51,7 @@ export interface IOpportunityInformationFrom {
   localSuppliers: string;
   globalSuppliers: string;
   dateRange: [Date, Date] | null;
-  image: SafeObjectUrl | null;
+  image: File | null;
 }
 
 export interface IOpportunityLocalizationFrom {

@@ -60,8 +60,8 @@ export class CreateEditOpportunityDialog implements OnInit {
 
     if (this.adminOpportunitiesStore.viewMode() === EViewMode.Edit && this.adminOpportunitiesStore.selectedOpportunityId()) {
       this.opportunitiesStore.getOpportunityDetails(this.adminOpportunitiesStore.selectedOpportunityId()!).subscribe({
-        next: (res) => {
-          this.opportunityFormService.setFormValue(res.body);
+        next: async (res) => {
+          await this.opportunityFormService.setFormValue(res.body);
         },
       });
     }

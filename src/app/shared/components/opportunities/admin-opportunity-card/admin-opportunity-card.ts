@@ -8,6 +8,7 @@ import { TranslatePipe } from '../../../pipes';
 import { BaseTagComponent } from '../../base-components/base-tag/base-tag.component';
 import { OpportunityDetailItem } from '../opportunity-detail-item/opportunity-detail-item';
 import { OpportunityActionMenuComponent } from '../opportunity-action-menu/opportunity-action-menu.component';
+import { TColors } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-admin-opportunity-card',
@@ -43,7 +44,7 @@ export class AdminOpportunityCard {
     }
   }
 
-  getStatusConfig() {
+  getStatusConfig(): { label: string; color: TColors } {
     const status = this.opportunity().status;
     if (status === EOpportunityStatus.PUBLISHED) {
       return { label: 'opportunity.status.published', color: 'green' as const };
@@ -52,12 +53,12 @@ export class AdminOpportunityCard {
     }
   }
 
-  getStateConfig() {
+  getStateConfig(): { label: string; color: TColors } {
     const isActive = this.opportunity().isActive;
     if (isActive) {
       return { label: 'opportunity.state.active', color: 'green' as const };
     } else {
-      return { label: 'opportunity.state.inactive', color: 'gray' as const };
+      return { label: 'opportunity.state.inactive', color: 'red' as const };
     }
   }
 
