@@ -12,7 +12,7 @@ const initialState: {
   error: string | null;
   count: number;
   list: IUserRecord[]
-  user :IUserDetails | null;
+  user: IUserDetails | null;
   roleManagementList: IRoleManagementRecord[]
   roleManagementCount: number;
 } = {
@@ -20,7 +20,7 @@ const initialState: {
   error: null,
   count: 0,
   list: [],
-  user : null,
+  user: null,
   roleManagementList: [],
   roleManagementCount: 0,
 }
@@ -40,7 +40,7 @@ export const UsersStore = signalStore(
         return usersApiService.getUsers(filter).pipe(
           tap((res) => {
             const totalCount = res.body.pagination?.totalCount ?? 0;
-            
+
             patchState(store, { list: res.body.data || [], count: totalCount });
           }),
           catchError((error) => {
@@ -52,6 +52,7 @@ export const UsersStore = signalStore(
           }),
         );
       },
+
       changeUserRole(userId: string, roleId: ERoles) {
         patchState(store, { loading: false });
         return usersApiService.changeUserRole(userId, roleId).pipe(
@@ -69,6 +70,7 @@ export const UsersStore = signalStore(
           }),
         );
       },
+
       deleteUser(userId: string) {
         patchState(store, { loading: true });
         return usersApiService.deleteUser(userId).pipe(
@@ -86,6 +88,7 @@ export const UsersStore = signalStore(
           }),
         );
       },
+
       CreateEmployee(employee: IUserCreate): Observable<IBaseApiResponse<IUserCreateResponse>> {
         patchState(store, { loading: true });
         return usersApiService.CreateEmployee(employee).pipe(
@@ -103,6 +106,7 @@ export const UsersStore = signalStore(
           }),
         );
       },
+
       updateEmployee(employee: IUserEdit): Observable<IBaseApiResponse<IUserCreateResponse>> {
         patchState(store, { loading: true });
         return usersApiService.UpdateEmployee(employee).pipe(
@@ -120,11 +124,12 @@ export const UsersStore = signalStore(
           }),
         );
       },
-    getUserByID(employeeID: string) {
+
+      getUserByID(employeeID: string) {
         patchState(store, { loading: true });
         return usersApiService.GetEmployeeByJob(employeeID).pipe(
           tap((res) => {
-             if (!res.body) {
+            if (!res.body) {
               patchState(store, { error: 'Failed to get user' });
             }
           }),
@@ -137,11 +142,12 @@ export const UsersStore = signalStore(
           }),
         );
       },
-      ToggleUserStatus (req: IUserUpdateStatus) {
+
+      ToggleUserStatus(req: IUserUpdateStatus) {
         patchState(store, { loading: true });
         return usersApiService.ToggleEmployeeStatus(req).pipe(
           tap((res) => {
-             if (!res.body) {
+            if (!res.body) {
               patchState(store, { error: 'Failed to update user status' });
             }
           }),
@@ -154,6 +160,7 @@ export const UsersStore = signalStore(
           }),
         );
       },
+
       getUserDetails(employeeID: string): Observable<IBaseApiResponse<IUserDetails>> {
         patchState(store, { loading: true });
         return usersApiService.GetEmployeeDetailsById(employeeID).pipe(
@@ -161,7 +168,7 @@ export const UsersStore = signalStore(
             console.log('API result:', res);
             patchState(store, { user: res.body || null });
           }),
-           catchError((error) => {
+          catchError((error) => {
             patchState(store, { error: error.errorMessage });
             return throwError(() => new Error("error updating user status"));
           }),
@@ -170,12 +177,13 @@ export const UsersStore = signalStore(
           }),
         );
       },
-      getRoleManagmentList(filter: IRoleManagementFilterRequest) {
+
+      getRoleManagementList(filter: IRoleManagementFilterRequest) {
         patchState(store, { loading: true });
         return usersApiService.getRoleManagementList(filter).pipe(
           tap((res) => {
             const totalCount = res.body.pagination?.totalCount ?? 0;
-            
+
             patchState(store, { roleManagementList: res.body.data || [], roleManagementCount: totalCount });
           }),
           catchError((error) => {

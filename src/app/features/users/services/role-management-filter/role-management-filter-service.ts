@@ -22,15 +22,15 @@ export class RoleManagementFilterService extends AbstractServiceFilter<IRoleMana
 
   showClearAll = computed(() => {
     const current = this.filter();
-    return Boolean(current.searchText?.trim()) || 
-           Boolean(current.roleIds?.length) || 
-           Boolean(current.statusFilters) ||
-           Boolean(current.joinDate);
+    return Boolean(current.searchText?.trim()) ||
+      Boolean(current.roleIds?.length) ||
+      Boolean(current.statusFilters) ||
+      Boolean(current.joinDate);
   });
 
   performFilter$() {
     this.resetPagination();
-    return this.store.getRoleManagmentList(this.adaptedFilter());
+    return this.store.getRoleManagementList(this.adaptedFilter());
   }
 
   clearAllFilters() {
