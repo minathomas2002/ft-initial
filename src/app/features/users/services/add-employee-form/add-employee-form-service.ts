@@ -40,21 +40,22 @@ export class AddEmployeeFormService {
 
     email: this.fb.control<string | null>({ value: null, disabled: true }),
 
-    nameAr: this.fb.control<string | null>(null, [
+    nameAr: this.fb.control<string | null>({ value: null, disabled: true }, [
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(20),
       Validators.pattern(AddEmployeeFormService.ARABIC_REGEX)
+      
     ]),
 
-    nameEn: this.fb.control<string | null>(null, [
+    nameEn: this.fb.control<string | null>({ value: null, disabled: true }, [
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(100),
       Validators.pattern(AddEmployeeFormService.ENGLISH_REGEX)
     ]),
 
-    phoneNumber: this.fb.control<string | null>(null, [
+    phoneNumber: this.fb.control<string | null>({ value: null, disabled: true }, [
       Validators.required,
       Validators.pattern(AddEmployeeFormService.PHONE_REGEX)
     ])
