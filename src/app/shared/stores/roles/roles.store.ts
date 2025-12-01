@@ -1,7 +1,7 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { IRole } from '../../interfaces';
 import { RolesApiService } from '../../api/roles/roles-api-service';
-import { computed, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { catchError, finalize, tap, throwError } from 'rxjs';
 
 const initialState: {
