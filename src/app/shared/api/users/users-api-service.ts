@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable, of } from 'rxjs';
-import { IApiPaginatedResponse, IBaseApiResponse, ISelectItem, IUser, IUserCreate, IUserCreateResponse, IUserDetails, IUserEdit, IUserRecord, IUsersFilterRequest, IUserUpdateStatus } from '../../interfaces';
+import { IApiPaginatedResponse, IBaseApiResponse, ISelectItem, IUser, IUserRecord, IUsersFilterRequest, IRoleManagementRecord, IRoleManagementFilterRequest, IUserCreate, IUserCreateResponse, IUserEdit, IUserDetails, IUserUpdateStatus } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { ERoles } from '../../enums';
 
@@ -42,6 +42,9 @@ export class UsersApiService {
 
   ToggleEmployeeStatus(req: IUserUpdateStatus): Observable<IBaseApiResponse<boolean>> {
     return this.baseHttpService.post<boolean, unknown,unknown>(API_ENDPOINTS.users.toggleStatus+'/'+req.id, null);
+  }
+  getRoleManagementList(filter: IRoleManagementFilterRequest): Observable<IBaseApiResponse<IApiPaginatedResponse<IRoleManagementRecord[]>>> {
+    return this.baseHttpService.get<IApiPaginatedResponse<IRoleManagementRecord[]>, unknown>(API_ENDPOINTS.users.getRoleManagementList, filter);
   }
 
 }

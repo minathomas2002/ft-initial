@@ -292,12 +292,16 @@
     },
     "table": {
       "id": "Job ID",
+      "name": "Name",
       "nameArabic": "Name (Arabic)",
       "nameEnglish": "Name (English)",
+      "jobNo": "Job No.",
       "email": "Email",
       "phoneNumber": "Phone Number",
       "role": "Role",
       "joinDate": "Join Date",
+      "assignedDate": "Assigned Date",
+      "assignedBy": "Assigned BY",
       "status": "Status",
       "actions": "Actions"
     },
@@ -306,10 +310,16 @@
       "subtitle": "Manage employee roles and permissions",
       "addEmployee": "Add Employee"
     },
+    "tabs": {
+      "employees": "Employees",
+      "roleManagement": "Role Management"
+    },
     "filter": {
       "searchPlaceholder": "Search by Username, Job ID, Phone, Email or Join Date",
+      "roleManagementSearchPlaceholder": "Search by Username, Job ID, Phone, Email",
       "rolePlaceholder": "Role",
-      "statusPlaceholder": "Status"
+      "statusPlaceholder": "Status",
+      "selectJoinDate": "Select join date"
     },
     "dialog": {
       "changeRole": {

@@ -14,6 +14,8 @@ export class AdminOpportunitiesFilterClass extends Filter<IAdminOpportunitiesFil
     this.filter = {
       ...pagination,
       ...sorting,
+      status: undefined,
+      state: undefined,
     };
 
     this.initialState = structuredClone(this.filter);

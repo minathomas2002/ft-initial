@@ -5,10 +5,13 @@ import {
   input,
   output,
   inject,
+  signal,
+  viewChild,
+  ElementRef,
 } from '@angular/core';
 import type { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { MenuModule } from 'primeng/menu';
+import { Menu, MenuModule } from 'primeng/menu';
 import { OpportunityActionsMapper } from '../../../../features/opportunities/classes/opportunity-actions-mapper';
 import { EOpportunityAction } from '../../../enums/opportunities.enum';
 import { I18nService } from '../../../services/i18n/i18n.service';
@@ -23,13 +26,14 @@ export class OpportunityActionMenuComponent {
   actions = input.required<EOpportunityAction[]>();
   opportunityActionsMapper = new OpportunityActionsMapper();
   private readonly i18nService = inject(I18nService);
-
+  hasLabel = input<boolean>(false);
   onEdit = output();
   onDelete = output();
   onMoveToDraft = output();
   onPublish = output();
   onApply = output();
 
+  isOpen = signal<boolean>(false);
   handleEventsMapper: Partial<
     Record<EOpportunityAction, OutputEmitterRef<void>>
   > = {
@@ -54,5 +58,9 @@ export class OpportunityActionMenuComponent {
       };
     });
   });
+
+  toggleMenu() {
+    this.isOpen.set(!this.isOpen());
+  }
 }
 

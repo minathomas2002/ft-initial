@@ -11,13 +11,31 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { ERoutes } from 'src/app/shared/enums';
+import { EOpportunityAction, ERoutes, EViewMode } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { OpportunityActionsService } from '../../services/opportunity-actions/opportunity-actions-service';
+import { take } from 'rxjs';
+import { OpportunityActionMenuComponent } from 'src/app/shared/components/opportunities/opportunity-action-menu/opportunity-action-menu.component';
+import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { CreateEditOpportunityDialog } from '../../components/create-edit-opportunity-dialog/create-edit-opportunity-dialog';
+import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 
 @Component({
   selector: 'app-opportunity-details',
-  imports: [BaseCard, OpportunityDetailsCardInfoItem, Tooltip, BaseTagComponent, TranslatePipe, ButtonModule, CardsSkeleton],
+  imports: [
+    BaseCard,
+    OpportunityDetailsCardInfoItem,
+    Tooltip,
+    BaseTagComponent,
+    TranslatePipe,
+    ButtonModule,
+    CardsSkeleton,
+    OpportunityActionMenuComponent,
+    GeneralConfirmationDialogComponent,
+    CreateEditOpportunityDialog,
+    ImageErrorDirective
+  ],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
 })
@@ -31,15 +49,29 @@ export class OpportunityDetails implements OnInit {
   getOpportunityTypeConfig = getOpportunityTypeConfig;
   opportunityActionsService = inject(OpportunityActionsService);
   isAnonymous = computed(() => !this.authStore.authResponse()?.token);
+  adminOpportunitiesStore = inject(AdminOpportunitiesStore);
+  createEditOpportunityDialogVisible = signal<boolean>(false);
+  deleteConfirmDialogVisible = signal<boolean>(false);
+  moveToDraftConfirmDialogVisible = signal<boolean>(false);
+  publishConfirmDialogVisible = signal<boolean>(false);
+  opportunityId = signal<string | null>(null);
+
+  get EOpportunityAction() {
+    return EOpportunityAction;
+  }
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.opportunitiesStore.getOpportunityDetails(id).subscribe({
-        next: (data) => {
-          //after data load
-        }
-      });
+      this.opportunityId.set(id);
+      this.getOpportunityDetails();
     }
+  }
+
+  getOpportunityDetails() {
+    this.opportunitiesStore.getOpportunityDetails(this.opportunityId()!)
+      .pipe(take(1))
+      .subscribe();
   }
 
   onBack() {
@@ -58,5 +90,72 @@ export class OpportunityDetails implements OnInit {
     } else {
       this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
     }
+  }
+
+  onAction(action: EOpportunityAction) {
+    // Handle actions (Edit, Delete, MoveToDraft, Publish)
+    switch (action) {
+      case EOpportunityAction.Edit:
+        // Open edit dialog
+        this.adminOpportunitiesStore.setViewMode(EViewMode.Edit);
+        this.adminOpportunitiesStore.setSelectedOpportunityId(this.opportunityId()!);
+        this.createEditOpportunityDialogVisible.set(true);
+        break;
+      case EOpportunityAction.Delete:
+        // Handle delete
+        this.deleteConfirmDialogVisible.set(true);
+        break;
+      case EOpportunityAction.MoveToDraft:
+        // Handle move to draft
+        this.moveToDraftConfirmDialogVisible.set(true);
+        break;
+      case EOpportunityAction.Publish:
+        // Handle publish
+        this.publishConfirmDialogVisible.set(true);
+        break;
+    }
+  }
+
+  handelDeleteOpportunity() {
+    this.deleteConfirmDialogVisible.set(true);
+  }
+
+  deleteOpportunity() {
+    this.adminOpportunitiesStore.deleteOpportunity(this.opportunityId()!)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.deleteConfirmDialogVisible.set(false);
+          this.toast.success('Opportunity deleted successfully');
+          this.onBack();
+        },
+        error: () => {
+          this.deleteConfirmDialogVisible.set(false);
+        }
+      });
+  }
+
+  moveToDraftOpportunity() {
+    this.adminOpportunitiesStore.moveToDraftOpportunity(this.opportunityId()!)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.toast.success('Opportunity moved to draft successfully');
+          this.moveToDraftConfirmDialogVisible.set(false);
+          this.getOpportunityDetails();
+        }
+      });
+  }
+
+  publishOpportunity() {
+    this.adminOpportunitiesStore.publishOpportunity(this.opportunityId()!)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.toast.success('Opportunity published successfully');
+          this.publishConfirmDialogVisible.set(false);
+          this.getOpportunityDetails();
+        }
+      });
   }
 }

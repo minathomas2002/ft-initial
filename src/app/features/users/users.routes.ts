@@ -8,7 +8,7 @@ export const USERS_ROUTES: Routes = [
   },
   {
     path: 'employees',
-    loadComponent: () => import('./pages/employee-list/employee-list').then((m) => m.EmployeeList),
+    loadComponent: () => import('./pages/employee-management/employee-management').then((m) => m.EmployeeManagement),
   },
   {
     path: 'investors',

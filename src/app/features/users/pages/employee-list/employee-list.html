@@ -1,17 +1,4 @@
-<app-table-layout
-  [tableTitle]="'users.list.title' | translate"
-  [tableSubTitle]="'users.list.subtitle' | translate"
->
-  <ng-container ngProjectAs="table-actions">
-    <p-button
-      [label]="'users.list.addEmployee' | translate"
-      severity="primary"
-      class="flex-1"
-      fluid
-      icon="icon-plus"
-      (onClick)="onAddEmployee()"
-    />
-  </ng-container>
+<app-table-layout>
   <ng-container ngProjectAs="table-filters">
     <app-employees-filter></app-employees-filter>
   </ng-container>

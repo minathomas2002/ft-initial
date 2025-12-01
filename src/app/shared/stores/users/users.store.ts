@@ -1,5 +1,6 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
 import { IBaseApiResponse, IUser, IUserCreate, IUserCreateResponse, IUserDetails, IUserEdit, IUserRecord, IUsersFilterRequest, IUserUpdateStatus } from "../../interfaces";
+import { IRoleManagementRecord, IRoleManagementFilterRequest } from "../../interfaces";
 import { UsersApiService } from "../../api/users/users-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, Observable, tap, throwError } from "rxjs";
@@ -12,12 +13,16 @@ const initialState: {
   count: number;
   list: IUserRecord[]
   user :IUserDetails | null;
+  roleManagementList: IRoleManagementRecord[]
+  roleManagementCount: number;
 } = {
   loading: false,
   error: null,
   count: 0,
   list: [],
   user : null,
+  roleManagementList: [],
+  roleManagementCount: 0,
 }
 export const UsersStore = signalStore(
   { providedIn: "root" },
@@ -156,9 +161,26 @@ export const UsersStore = signalStore(
             console.log('API result:', res);
             patchState(store, { user: res.body || null });
           }),
+           catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error updating user status"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
+      getRoleManagmentList(filter: IRoleManagementFilterRequest) {
+        patchState(store, { loading: true });
+        return usersApiService.getRoleManagementList(filter).pipe(
+          tap((res) => {
+            const totalCount = res.body.pagination?.totalCount ?? 0;
+            
+            patchState(store, { roleManagementList: res.body.data || [], roleManagementCount: totalCount });
+          }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage });
-            return throwError(() => new Error("error fetching user details"));
+            return throwError(() => new Error("error fetching role management data"));
           }),
           finalize(() => {
             patchState(store, { loading: false });
