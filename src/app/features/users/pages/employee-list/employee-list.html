@@ -103,6 +103,7 @@
 <app-add-edit-employee-dialog
   [(dialogVisible)]="EditEmpDialogVisible"
   [isEditMode]="true"
+  (onSuccess)="filterService.applyFilter()"
   [SelectedItem]="user() ?? null"
 >
 </app-add-edit-employee-dialog>

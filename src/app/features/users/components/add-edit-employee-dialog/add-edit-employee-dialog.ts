@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, model } from '@angular/core';
+import { Component, computed, effect, inject, input, model, output } from '@angular/core';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { AddEmployeeFormService } from '../../services/add-employee-form/add-employee-form-service';
@@ -32,6 +32,7 @@ export class AddEditEmployeeDialog {
   toasterService = inject(ToasterService);
   userRoleMapper = new UserRoleMapper(this.i18nService);
   SelectedItem = model<IUserRecord |null>();
+  onSuccess =  output<void>();
   userRoles = computed(() => {
     const roles = this.roleStore.list();
     const selected = this.SelectedItem();
@@ -95,15 +96,18 @@ export class AddEditEmployeeDialog {
 						this.dialogVisible.set(false);
 						return;
 					}
-          this.toasterService.success('Employee Added Successfully');
-          this.resetForm();
-          this.dialogVisible.set(false);
-       // this.onSuccess.emit(); update table
-
 				}),
 				take(1),
 			)
-			.subscribe();
+			.subscribe({
+        next: (res) => {
+        this.toasterService.success('Employee Added Successfully');
+        this.resetForm();
+        this.dialogVisible.set(false);
+       this.onSuccess.emit(); // update table
+        },
+      } 
+    );
   }
 
   UpdateExisitingEmployee() {
@@ -117,12 +121,21 @@ export class AddEditEmployeeDialog {
     };
   	this.userStore
 			.updateEmployee(req)
+      .pipe(
+        tap((res) => {
+					if (res.errors) {
+						this.dialogVisible.set(false);
+						return;
+					}
+        }),
+				take(1),
+      )
       .subscribe({
       next: (res) => {
         this.toasterService.success('Employee Updated Successfully');
-         this.resetForm();
+        this.resetForm();
         this.dialogVisible.set(false);
-       // this.onSuccess.emit(); update table
+       this.onSuccess.emit(); // update table
       },
     });
   }
@@ -151,7 +164,7 @@ export class AddEditEmployeeDialog {
   }
 
  resetForm = () => {
-    this.formService.form.reset();
+    this.formService.ResetFormFields();
   };
 
   isProcessing():boolean{
