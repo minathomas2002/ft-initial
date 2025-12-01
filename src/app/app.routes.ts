@@ -3,6 +3,7 @@ import { ERoutes } from './shared/enums';
 import { AuthLayout } from './core/layouts/auth-layout/auth-layout';
 import { visitorsGuard } from './core/guards/visitors/visitors.guard';
 import { authGuard } from './core/guards/auth/auth.guard';
+import { adminGuard } from './core/guards/opportunities/admin.guard';
 const MAIN_LAYOUT_ROUTES: Routes = [
   {
     path: '',
@@ -18,6 +19,7 @@ const MAIN_LAYOUT_ROUTES: Routes = [
       {
         path: ERoutes.users,
         loadChildren: () => import('./features/users/users.routes').then((c) => c.USERS_ROUTES),
+        canActivate: [adminGuard],
         data: { animation: ERoutes.users },
       },
       {
@@ -27,7 +29,7 @@ const MAIN_LAYOUT_ROUTES: Routes = [
             (m) => m.LOGGED_IN_OPPORTUNITIES_ROUTES
           ),
         data: { animation: ERoutes.opportunities },
-      },
+      }
     ],
     canActivate: [authGuard],
   },

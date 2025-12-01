@@ -32,3 +32,37 @@ export interface IUsersFilterRequest {
   statusFilters?: boolean | undefined;
   joinDate?: string;
 }
+
+export interface IRoleManagementFilter extends IFilterBase<TRoleManagementSortingKeys> {
+  searchText?: string;
+  roleIds?: string[];
+  statusFilters?: boolean | undefined;
+  joinDate?: Date[] | undefined;
+}
+
+export type TRoleManagementSortingKeys = keyof IRoleManagementRecord;
+
+export interface IRoleManagementRecord {
+  id: string;
+  jobId: string;
+  name_En: string;
+  name_Ar: string;
+  email: string;
+  phoneNumber: string;
+  role: string;
+  roleCode: number;
+  status: string;
+  isActive: boolean;
+  assignedDate: string;
+  assignedBy: string;
+  userId: string;
+  userRoleId: string;
+}
+
+export interface IRoleManagementFilterRequest extends IFilterBase<TRoleManagementSortingKeys> {
+  searchText?: string;
+  roleIds?: string[];
+  statusFilters?: boolean | undefined;
+  joinDateFrom?: string | null;
+  joinDateTo?: string | null;
+}

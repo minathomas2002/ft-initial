@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable, of } from 'rxjs';
-import { IApiPaginatedResponse, IBaseApiResponse, ISelectItem, IUser, IUserRecord, IUsersFilterRequest } from '../../interfaces';
+import { IApiPaginatedResponse, IBaseApiResponse, ISelectItem, IUser, IUserRecord, IUsersFilterRequest, IRoleManagementRecord, IRoleManagementFilterRequest } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { ERoles } from '../../enums';
 
@@ -21,6 +21,10 @@ export class UsersApiService {
   deleteUser(userId: string): Observable<IBaseApiResponse<Boolean>> {
     return of({ body: true, message: ['Success'], success: true, statusCode: 200, errors: null, timestamp: new Date().toISOString() });
     // return this.baseHttpService.delete<Boolean, unknown>(API_ENDPOINTS.users.deleteUser, { userId });
+  }
+
+  getRoleManagementList(filter: IRoleManagementFilterRequest): Observable<IBaseApiResponse<IApiPaginatedResponse<IRoleManagementRecord[]>>> {
+    return this.baseHttpService.get<IApiPaginatedResponse<IRoleManagementRecord[]>, unknown>(API_ENDPOINTS.users.getRoleManagementList, filter);
   }
 
 }

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { adminOpportunitiesGuard } from 'src/app/core/guards/opportunities/admin-opportunities.guard';
+import { adminGuard } from 'src/app/core/guards/opportunities/admin.guard';
 
 export const LOGGED_IN_OPPORTUNITIES_ROUTES: Routes = [
   {
@@ -9,14 +9,16 @@ export const LOGGED_IN_OPPORTUNITIES_ROUTES: Routes = [
 
     pathMatch: 'full',
     data: {
-      isAnonymous: false
-    }
+      isAnonymous: false,
+    },
   },
   {
     path: 'admin',
     loadComponent: () =>
-      import('./pages/admin-opportunities-view/admin-opportunities-view').then((m) => m.AdminOpportunitiesView),
-    canActivate: [adminOpportunitiesGuard],
+      import('./pages/admin-opportunities-view/admin-opportunities-view').then(
+        (m) => m.AdminOpportunitiesView
+      ),
+    canActivate: [adminGuard],
     pathMatch: 'full',
   },
   {
@@ -33,8 +35,8 @@ export const ANONYMOUS_OPPORTUNITIES_ROUTES: Routes = [
       import('./pages/opportunities-list/opportunities-list').then((m) => m.OpportunitiesList),
     pathMatch: 'full',
     data: {
-      isAnonymous: true
-    }
+      isAnonymous: true,
+    },
   },
   {
     path: ':id',

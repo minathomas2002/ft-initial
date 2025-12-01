@@ -1,5 +1,5 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
-import { IUser, IUserRecord, IUsersFilterRequest } from "../../interfaces";
+import { IRoleManagementRecord, IUser, IUserRecord, IUsersFilterRequest, IRoleManagementFilterRequest } from "../../interfaces";
 import { UsersApiService } from "../../api/users/users-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, tap, throwError } from "rxjs";
@@ -11,11 +11,15 @@ const initialState: {
   error: string | null;
   count: number;
   list: IUserRecord[]
+  roleManagementList: IRoleManagementRecord[]
+  roleManagementCount: number;
 } = {
   loading: false,
   error: null,
   count: 0,
   list: [],
+  roleManagementList: [],
+  roleManagementCount: 0,
 }
 export const UsersStore = signalStore(
   { providedIn: "root" },
@@ -73,6 +77,23 @@ export const UsersStore = signalStore(
           catchError((error) => {
             patchState(store, { error: error.errorMessage });
             return throwError(() => new Error("error deleting user"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
+      getRoleManagmentList(filter: IRoleManagementFilterRequest) {
+        patchState(store, { loading: true });
+        return usersApiService.getRoleManagementList(filter).pipe(
+          tap((res) => {
+            const totalCount = res.body.pagination?.totalCount ?? 0;
+            
+            patchState(store, { roleManagementList: res.body.data || [], roleManagementCount: totalCount });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error fetching role management data"));
           }),
           finalize(() => {
             patchState(store, { loading: false });

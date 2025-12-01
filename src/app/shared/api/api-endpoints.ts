@@ -19,6 +19,7 @@ export const API_ENDPOINTS = {
   users: {
     getEmployees: `${SystemEmployees}/getSystemEmployeesList`,
     getInvestors: `${Investors}`,
+    getRoleManagementList: `${SystemEmployees}/RoleManagement/GetList`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,

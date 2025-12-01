@@ -289,12 +289,16 @@
 		},
 		"table": {
 			"id": "الرقم",
+			"name": "الاسم",
 			"nameArabic": "الاسم (عربي)",
 			"nameEnglish": "الاسم (إنجليزي)",
+			"jobNo": "رقم الوظيفة",
 			"email": "البريد الإلكتروني",
 			"phoneNumber": "رقم الهاتف",
 			"role": "الدور",
 			"joinDate": "تاريخ الانضمام",
+			"assignedDate": "تاريخ التعيين",
+			"assignedBy": "تم التعيين بواسطة",
 			"status": "الحالة",
 			"actions": "الإجراءات"
 		},
@@ -309,8 +313,10 @@
 		},
 		"filter": {
 			"searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني أو تاريخ الانضمام",
+			"roleManagementSearchPlaceholder": "البحث باسم المستخدم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
 			"rolePlaceholder": "الدور",
-			"statusPlaceholder": "الحالة"
+			"statusPlaceholder": "الحالة",
+			"selectJoinDate": "اختر تاريخ الانضمام"
 		},
 		"dialog": {
 			"changeRole": {
