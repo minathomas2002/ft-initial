@@ -101,7 +101,7 @@ export class AddEditEmployeeDialog {
 			)
 			.subscribe({
         next: (res) => {
-        this.toasterService.success('Employee Added Successfully');
+        this.toasterService.success(res.message[0]);
         this.resetForm();
         this.dialogVisible.set(false);
        this.onSuccess.emit(); // update table
@@ -132,7 +132,7 @@ export class AddEditEmployeeDialog {
       )
       .subscribe({
       next: (res) => {
-        this.toasterService.success('Employee Updated Successfully');
+        this.toasterService.success(res.message[0]);
         this.resetForm();
         this.dialogVisible.set(false);
        this.onSuccess.emit(); // update table
