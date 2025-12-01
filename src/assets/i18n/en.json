@@ -335,15 +335,20 @@
         "confirmAdd": "Add Employee",
         "JobRequired": "Job No. is required",
         "jobPlaceHolder": "Enter Job No.",
-        "nameEnPlaceHolder": "Enter Name English.",
+        "nameEnPlaceHolder": "Enter English  Name.",
         "nameEnRequired": "Name English is required",
-        "nameArPlaceholder": "Enter Name Arabic.",
+        "nameArPlaceholder": "Enter Arabic Name.",
         "nameArRequired": "Name Arabic is required",
         "emailPlaceholder": "Enter Email.",
         "emailRequired": "Email is required",
-         "phonePlaceholder": "Enter Phone .",
+         "phonePlaceholder": "Enter Phone",
         "phoneRequired": "Phone is required"
+      },
+      "edit":{
+        "confirmedit": "Edit Employee",
+        "title" : "x"
       }
+
     }
   },
   "investors": {

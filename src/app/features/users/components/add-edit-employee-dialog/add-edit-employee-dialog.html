@@ -1,7 +1,9 @@
 <app-base-dialog
   [(visible)]="dialogVisible"
-  icon="icon-user-create"
-  [confirmLabel]="'users.dialog.Add.confirmAdd' | translate"
+  icon="icon-user-plus"
+  [confirmLabel]="isEditMode() 
+  ? ('users.dialog.edit.confirmedit' | translate) 
+  : ('users.dialog.Add.confirmAdd' | translate)"
   [isConfirmationDisabled]="false"
   (onConfirm)="onConfirm()"
   (onClose)="resetForm()"
@@ -10,7 +12,11 @@
   <!-- 
   [isConfirmationDisabled]="formService.form.invalid" -->
   <div class="mb-5">
-    <p class="text-lg font-semibold text-gray-900 mb-1">{{ 'users.dialog.Add.title' | translate }}</p>
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{
+      isEditMode()
+      ? ('users.dialog.edit.confirmedit' | translate)
+      : ('users.dialog.Add.confirmAdd' | translate)
+      }}</p>
   </div>
 
   <div class="grid grid-cols-12 gap-4">
@@ -32,6 +38,7 @@
       <app-base-label [title]="'users.dialog.Add.enName' | translate">
       </app-base-label>
       <input
+        pInputText
         [formControl]="formService.nameEn"
         [placeholder]="'users.dialog.Add.nameEnPlaceHolder' | translate"
         fluid
@@ -52,6 +59,7 @@
       <app-base-label [title]="'users.dialog.Add.arName' | translate">
       </app-base-label>
       <input
+        pInputText
         [formControl]="formService.nameAr"
         [placeholder]="'users.dialog.Add.nameArPlaceholder' | translate"
         fluid
@@ -84,6 +92,7 @@
       </app-base-label>
       <input
         [formControl]="formService.email"
+        pInputText
         [placeholder]="'users.dialog.Add.emailPlaceholder' | translate"
         fluid
       />
@@ -108,6 +117,7 @@
         pInputText
         [placeholder]="'users.dialog.Add.phonePlaceholder' | translate"
         [formControl]="formService.phoneNumber"
+        fluid
       />
       <div>
         @if(formService.phoneNumber.dirty && formService.phoneNumber.errors){
@@ -122,7 +132,7 @@
       </div>
     </div>
 
-    <div class="col-span-12 md:col-span-6 flex flex-col">
+    <div class="col-span-12 md:col-span-6">
       <app-base-label [title]="'users.dialog.Add.role' | translate">
       </app-base-label>
       <p-select

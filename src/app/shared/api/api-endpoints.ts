@@ -20,6 +20,10 @@ export const API_ENDPOINTS = {
     getEmployees: `${SystemEmployees}/getSystemEmployeesList`,
     getInvestors: `${Investors}`,
     createEmployee:`${SystemEmployees}/CreateSystemEmployee`,
+    updateEmployee:`${SystemEmployees}/UpdateSystemEmployee`,
+    getEmployeeByHrId:`${SystemEmployees}/hr`,
+    toggleStatus:`${SystemEmployees}/ToggleEmployeeStatus`,
+    getEmployeeDetails:`${SystemEmployees}/GetEmployeeDetails`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,

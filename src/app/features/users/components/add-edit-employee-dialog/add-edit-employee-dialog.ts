@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model } from '@angular/core';
+import { Component, computed, effect, inject, input, model } from '@angular/core';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { AddEmployeeFormService } from '../../services/add-employee-form/add-employee-form-service';
@@ -9,14 +9,15 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { Select } from "primeng/select";
 import { Message } from "primeng/message";
 import { ReactiveFormsModule } from '@angular/forms';
-import { IUserCreate } from 'src/app/shared/interfaces';
+import { IUser, IUserCreate, IUserEdit, IUserRecord } from 'src/app/shared/interfaces';
 import { UsersStore } from 'src/app/shared/stores/users/users.store';
-import { take, tap } from 'rxjs';
+import { filter, take, tap } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-add-edit-employee-dialog',
-  imports: [BaseDialogComponent, TranslatePipe, ReactiveFormsModule, Select, Message, BaseLabelComponent],
+  imports: [BaseDialogComponent, TranslatePipe, ReactiveFormsModule, Select, Message, BaseLabelComponent,InputTextModule],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
 })
@@ -28,19 +29,37 @@ export class AddEditEmployeeDialog {
   roleStore = inject(RolesStore);
   userStore = inject(UsersStore);
   i18nService = inject(I18nService);
-   toasterService = inject(ToasterService);
+  toasterService = inject(ToasterService);
   userRoleMapper = new UserRoleMapper(this.i18nService);
-   userRoles = computed(() => 
-    this.roleStore.list().map(role => ({
-      label: this.userRoleMapper.getTranslatedRole(role.code),
+  SelectedItem = model<IUserRecord |null>();
+  userRoles = computed(() => {
+    const roles = this.roleStore.list();
+    const selected = this.SelectedItem();
+    let list = roles.map(role => ({
+      label: role.name, //this.userRoleMapper.getTranslatedRole(role.code),
       value: role.id
-    })).filter(option => option.value !== undefined)
+    }));
+    // If user exists AND their role is not in the list → add it
+    // if (selected && selected?.roleId && !list.some(r => r.value === selected?.roleId)) {
+    //   list = [
+    //     ...list,
+    //     {
+    //       label: selected?.roleName ?? 'Unknown Role', // fallback name
+    //       value: selected?.roleId ?? ''
+    //     }
+    //   ];
+    // }
+    return list;
+    }
   );
 
-
+  
    ngOnInit() {    
-   this.roleStore.getFilteredRoles().subscribe();
-   if(this.isEditMode())
+    this.formService.job.valueChanges
+    .pipe(filter(jobId => !!jobId))
+    .subscribe(() => this.GetUserByJobId());
+  
+   if(this.isEditMode()){}
     this.LoadEmployeeDetails();
   }
 
@@ -57,17 +76,15 @@ export class AddEditEmployeeDialog {
   // case Create New User
   SubmitNEwEmployee() {
     const form = this.formService.form;
-
-  const req: IUserCreate = {
-    employeeID: form.controls.employeeID.value!,
-    nameAr: form.controls.nameAr.value!,
-    nameEn: form.controls.nameEn.value!,
-    email: form.controls.email.getRawValue()?? '',  // since it's disabled
-    phoneNumber: form.controls.phoneNumber.value!,
-    roleId: String(form.controls.roleId.value!),  // convert enum/number to string
-    job: form.controls.job.value!,
-  };
-
+    const req: IUserCreate = {
+      employeeID: form.controls.employeeID.value!,
+      nameAr: form.controls.nameAr.value!,
+      nameEn: form.controls.nameEn.value!,
+      email: form.controls.email.getRawValue()?? '',  // since it's disabled
+      phoneNumber: form.controls.phoneNumber.value!,
+      roleId: String(form.controls.roleId.value!),  // convert enum/number to string
+      job: form.controls.job.value!,
+    };
   	this.userStore
 			.CreateEmployee(req)
 			.pipe(
@@ -85,26 +102,56 @@ export class AddEditEmployeeDialog {
 				take(1),
 			)
 			.subscribe();
-
-  console.log(req); // test output
-    
   }
 
   UpdateExisitingEmployee() {
-    console.log(this.formService.form.getRawValue());
+    const form = this.formService.form;
+    const req: IUserEdit = {
+      id: this.SelectedItem()?.id?? '',
+      name_Ar: form.controls.nameAr.value!,
+      name_En: form.controls.nameEn.value!,
+      phoneNumber: form.controls.phoneNumber.value!,
+      roleId: String(form.controls.roleId.value!),  
+    };
+  	this.userStore
+			.updateEmployee(req)
+      .subscribe({
+      next: (res) => {
+        this.toasterService.success('Employee Updated Successfully');
+         this.resetForm();
+        this.dialogVisible.set(false);
+       // this.onSuccess.emit(); update table
+      },
+    });
   }
 
   LoadEmployeeDetails(){
-    //patch form values
+   const selectedId = this.SelectedItem()?.id;
+   if (!selectedId) return;
+   this.userStore.getUserDetails(selectedId).subscribe({
+    next: () => {
+      const user = this.userStore.user(); 
+      if (user) this.formService.patchForm(user);
+    }
+  });
+
   }
 
+  GetUserByJobId(){
+    const form = this.formService.form;
+  	this.userStore
+			.getUserByID(form.controls.job.value!)
+      .subscribe({
+      next: (res) => {
+        this.formService.form.patchValue(res.body);
+      },
+    });
+  }
  resetForm = () => {
     this.formService.form.reset();
   };
 
-isProcessing():boolean{
-
- return false;
-
-}
+  isProcessing():boolean{
+   return this.roleStore.loading();
+  }
 }

@@ -1,8 +1,8 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
-import { IUser, IUserCreate, IUserRecord, IUsersFilterRequest } from "../../interfaces";
+import { IBaseApiResponse, IUser, IUserCreate, IUserCreateResponse, IUserDetails, IUserEdit, IUserRecord, IUsersFilterRequest, IUserUpdateStatus } from "../../interfaces";
 import { UsersApiService } from "../../api/users/users-api-service";
 import { inject } from "@angular/core";
-import { catchError, finalize, tap, throwError } from "rxjs";
+import { catchError, finalize, Observable, tap, throwError } from "rxjs";
 import { ERoles } from "../../enums";
 
 
@@ -11,11 +11,13 @@ const initialState: {
   error: string | null;
   count: number;
   list: IUserRecord[]
+  user :IUserDetails | null;
 } = {
   loading: false,
   error: null,
   count: 0,
   list: [],
+  user : null,
 }
 export const UsersStore = signalStore(
   { providedIn: "root" },
@@ -79,7 +81,7 @@ export const UsersStore = signalStore(
           }),
         );
       },
-      CreateEmployee(employee: IUserCreate) {
+      CreateEmployee(employee: IUserCreate): Observable<IBaseApiResponse<IUserCreateResponse>> {
         patchState(store, { loading: true });
         return usersApiService.CreateEmployee(employee).pipe(
           tap((res) => {
@@ -96,7 +98,73 @@ export const UsersStore = signalStore(
           }),
         );
       },
-    
+      updateEmployee(employee: IUserEdit): Observable<IBaseApiResponse<IUserCreateResponse>> {
+        patchState(store, { loading: true });
+        return usersApiService.UpdateEmployee(employee).pipe(
+          tap((res) => {
+            if (!res.body) {
+              patchState(store, { error: 'Failed to update user' });
+            }
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error updating user"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
+    getUserByID(employeeID: string) {
+        patchState(store, { loading: true });
+        return usersApiService.GetEmployeeByJob(employeeID).pipe(
+          tap((res) => {
+             if (!res.body) {
+              patchState(store, { error: 'Failed to get user' });
+            }
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error fetching user data"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
+      ToggleUserStatus (req: IUserUpdateStatus) {
+        patchState(store, { loading: true });
+        return usersApiService.ToggleEmployeeStatus(req).pipe(
+          tap((res) => {
+             if (!res.body) {
+              patchState(store, { error: 'Failed to update user status' });
+            }
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error updating user status"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
+      getUserDetails(employeeID: string): Observable<IBaseApiResponse<IUserDetails>> {
+        patchState(store, { loading: true });
+        return usersApiService.GetEmployeeDetailsById(employeeID).pipe(
+          tap((res) => {
+            console.log('API result:', res);
+            patchState(store, { user: res.body || null });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage });
+            return throwError(() => new Error("error fetching user details"));
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          }),
+        );
+      },
     }
   }),
 );

@@ -58,6 +58,8 @@ export class EmployeeList implements OnInit {
   usersStore = inject(UsersStore);
   i18nService = inject(I18nService);
   roleStore = inject(RolesStore);
+  user= signal<IUserRecord | null>(null);
+  
   headers = computed<ITableHeaderItem<TUsersSortingKeys>[]>(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
@@ -104,8 +106,8 @@ export class EmployeeList implements OnInit {
       },
     ];
   });
-  CreateEditEmpDialogVisible = signal<boolean>(false);
-
+  CreateEmpDialogVisible = signal<boolean>(false);
+  EditEmpDialogVisible = signal<boolean>(false);
   rows = computed<IUserRecord[]>(() => this.usersStore.list());
   filterService = inject(UsersFilterService);
   filter = this.filterService.filter;
@@ -170,7 +172,14 @@ export class EmployeeList implements OnInit {
     //   .subscribe();
   }
   onAddEmployee() {
-     
-    this.CreateEditEmpDialogVisible.set(true);
+    this.roleStore.getFilteredRoles().subscribe();
+    this.CreateEmpDialogVisible.set(true);
+  }
+
+  onUpdateEmployee(item:IUserRecord){
+    this.user.set(item);
+    
+    this.roleStore.getFilteredRoles().subscribe();
+    this.EditEmpDialogVisible.set(true);
   }
 }

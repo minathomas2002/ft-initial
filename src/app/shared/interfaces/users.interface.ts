@@ -43,9 +43,13 @@ export interface IUserCreate {
   roleId: string;
   job: string;
 }
-export interface IUserEdit extends IUserCreate {
-  
-  userID: string;
+
+export interface IUserEdit {
+  id: string;
+  name_Ar: string;
+  name_En: string;
+  phoneNumber: string;
+  roleId: string;
 }
 
 export interface IUserCreateResponse {
@@ -53,4 +57,25 @@ export interface IUserCreateResponse {
   userId : string;
 }
 
+export interface IUserUpdateStatus {
+  id : string;
+}
+
+export interface IUserDetails {
+  id : string;
+  employeeID : string;
+  name_En: string;
+  name_Ar : string;
+  email : string;
+  phoneNumber : string;
+  department : string;
+  roleId : string;
+  roleName : string; 
+  roleCode : number; 
+  active : boolean;
+  userId : string;
+  joinDate : Date;
+    
+  
+}
   

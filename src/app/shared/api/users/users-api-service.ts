@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable, of } from 'rxjs';
-import { IApiPaginatedResponse, IBaseApiResponse, ISelectItem, IUser, IUserCreate, IUserCreateResponse, IUserRecord, IUsersFilterRequest } from '../../interfaces';
+import { IApiPaginatedResponse, IBaseApiResponse, ISelectItem, IUser, IUserCreate, IUserCreateResponse, IUserDetails, IUserEdit, IUserRecord, IUsersFilterRequest, IUserUpdateStatus } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { ERoles } from '../../enums';
 
@@ -23,8 +23,25 @@ export class UsersApiService {
     // return this.baseHttpService.delete<Boolean, unknown>(API_ENDPOINTS.users.deleteUser, { userId });
   }
 
-   CreateEmployee(req: IUserCreate): Observable<IBaseApiResponse<IUserCreateResponse>> {
-    return this.baseHttpService.post<IUserCreateResponse, unknown, FormData>(API_ENDPOINTS.users.createEmployee, req);
+  CreateEmployee(req: IUserCreate): Observable<IBaseApiResponse<IUserCreateResponse>> {
+    return this.baseHttpService.post<IUserCreateResponse, IUserCreate,unknown>(API_ENDPOINTS.users.createEmployee, req);
+  }
+
+  UpdateEmployee(req: IUserEdit): Observable<IBaseApiResponse<IUserCreateResponse>> {
+    return this.baseHttpService.put<IUserCreateResponse, IUserEdit, unknown>(API_ENDPOINTS.users.updateEmployee, req);
+  }
+
+  GetEmployeeDetailsById(employeeID: string): Observable<IBaseApiResponse<IUserDetails>> {
+    return this.baseHttpService.get <IUserDetails, string>(API_ENDPOINTS.users.getEmployeeDetails+'/'+employeeID);
+  }
+
+  // hr Id 
+  GetEmployeeByJob(employeeID: string): Observable<IBaseApiResponse<IUserCreate>> {
+    return this.baseHttpService.get<IUserCreate, unknown>(API_ENDPOINTS.users.getEmployeeByHrId+'/'+employeeID);
+  }
+
+  ToggleEmployeeStatus(req: IUserUpdateStatus): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, unknown,unknown>(API_ENDPOINTS.users.toggleStatus+'/'+req.id, null);
   }
 
 }

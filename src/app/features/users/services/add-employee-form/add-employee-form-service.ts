@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 import { disabled } from '@angular/forms/signals';
 import { ERoles } from 'src/app/shared/enums';
+import { IUserDetails } from 'src/app/shared/interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class AddEmployeeFormService {
@@ -20,7 +21,7 @@ export class AddEmployeeFormService {
 
   /**  declare Strongly-typed form */
   readonly form: FormGroup<{
-    roleId: FormControl<ERoles | null>;
+    roleId: FormControl<string | null>;
     job: FormControl<string | null>;
     employeeID: FormControl<string | null>;
     email: FormControl<string | null>;
@@ -28,7 +29,7 @@ export class AddEmployeeFormService {
     nameEn: FormControl<string | null>;
     phoneNumber: FormControl<string | null>;
   }> = this.fb.group({
-    roleId: this.fb.control<ERoles | null>(null, [Validators.required]),
+    roleId: this.fb.control<string | null>(null, [Validators.required]),
 
     job: this.fb.control<string | null>(null, [
       Validators.required,
@@ -67,4 +68,18 @@ export class AddEmployeeFormService {
   get nameAr() { return this.form.controls.nameAr; }
   get nameEn() { return this.form.controls.nameEn; }
   get phoneNumber() { return this.form.controls.phoneNumber; }
+
+  patchForm(user: IUserDetails) {
+  this.form.patchValue({
+    roleId: user.roleId,
+    job: user.employeeID,    
+    employeeID: user.employeeID,
+    email: user.email,
+    nameAr: user.name_Ar,
+    nameEn: user.name_En,
+    phoneNumber: user.phoneNumber,
+  });
+}
+
+
 }

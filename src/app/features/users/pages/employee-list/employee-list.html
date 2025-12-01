@@ -86,6 +86,7 @@
               [actions]="item.actions"
               (onChangeRole)="onChangeRole(item)"
               (onDelete)="onDelete(item)"
+              (onEdit)="onUpdateEmployee(item)"
             ></app-employees-action-menu>
             }@else{
             <div class="text-center">-</div>
@@ -111,11 +112,19 @@
   (confirmed)="onDeleteConfirm()"
 ></app-general-confirmation-dialog>
 
-@if(CreateEditEmpDialogVisible()){
+@if(CreateEmpDialogVisible()){
 <app-add-edit-employee-dialog
-  [(dialogVisible)]="CreateEditEmpDialogVisible"
+  [(dialogVisible)]="CreateEmpDialogVisible"
   [isEditMode]="false"
 >
+</app-add-edit-employee-dialog>
+}
 
+@if(EditEmpDialogVisible()){
+<app-add-edit-employee-dialog
+  [(dialogVisible)]="EditEmpDialogVisible"
+  [isEditMode]="true"
+  [SelectedItem]="user() ?? null"
+>
 </app-add-edit-employee-dialog>
 }

@@ -15,6 +15,7 @@ export interface IUser {
   zip: string;
   country: string;
   isActive: boolean;
+  roleId : string;
   isDeleted: boolean;
 }
 
