@@ -18,7 +18,7 @@ export class InvestorsApiService {
   getInvestorsList(
     filter: IInvestorsFilterRequest
   ): Observable<IBaseApiResponse<IApiPaginatedResponse<IInvestorRecord[]>>> {
-    return this.baseHttpService.get(API_ENDPOINTS.users.getInvestors, filter);
+    return this.baseHttpService.get(API_ENDPOINTS.investors.getInvestors, filter);
   }
 }
 
