@@ -10,12 +10,14 @@ const initialState: {
   isProcessing: boolean;
   error: string | null;
   roleManagementList: IRoleManagementAssignmentRecord[];
+  roleManagementCount: number;
   currentRoleHolders: ICurrentRoleHolders[];
 } = {
   isLoading: false,
   isProcessing: false,
   error: null,
   roleManagementList: [],
+  roleManagementCount: 0,
   currentRoleHolders: [],
 }
 
@@ -30,7 +32,10 @@ export const RoleManagementStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return roleManagementApiService.getRoleManagementList(filter).pipe(
           tap((res) => {
-            patchState(store, { roleManagementList: res.body || [] });
+            // Handle both array and paginated response
+            const data = Array.isArray(res.body) ? res.body : (res.body as any)?.data || [];
+            const count = Array.isArray(res.body) ? data.length : (res.body as any)?.pagination?.totalCount || data.length;
+            patchState(store, { roleManagementList: data, roleManagementCount: count });
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error fetching role management list' });
