@@ -5,7 +5,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { RoleManagementFilterService } from '../../services/role-management-filter/role-management-filter-service';
 import { debounceTime, Subject, switchMap } from 'rxjs';
-import { UsersLookupsStore } from 'src/app/shared/stores/users/users-lookups.store';
+import { UsersLookupsStore } from 'src/app/shared/stores/system-employees/users-lookups.store';
 import { MultiSelectModule } from "primeng/multiselect";
 import { ButtonModule } from 'primeng/button';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
@@ -20,12 +20,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-role-management-filters',
   imports: [
-    IconFieldModule, 
-    InputIconModule, 
-    InputTextModule, 
-    FormsModule, 
-    MultiSelectModule, 
-    ButtonModule, 
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    FormsModule,
+    MultiSelectModule,
+    ButtonModule,
     TranslatePipe,
     DatePickerModule
   ],
@@ -43,7 +43,7 @@ export class RoleManagementFilters implements OnInit {
   i18nService = inject(I18nService);
   roleStore = inject(RolesStore);
   userRoleMapper = new UserRoleMapper(this.i18nService);
-  userRoles = computed(() => 
+  userRoles = computed(() =>
     this.roleStore.list().map(role => ({
       label: this.userRoleMapper.getTranslatedRole(role.code),
       value: role.id
@@ -53,7 +53,7 @@ export class RoleManagementFilters implements OnInit {
   userStatuses = this.userStatusMapper.getMappedStatusList();
 
   ngOnInit() {
-    this.listenToSearchTextInputs();    
+    this.listenToSearchTextInputs();
     this.roleStore.getUserRoles().subscribe();
   }
 

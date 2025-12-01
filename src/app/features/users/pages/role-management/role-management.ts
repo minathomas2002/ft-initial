@@ -1,17 +1,17 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
-import { UsersLookupsStore } from 'src/app/shared/stores/users/users-lookups.store';
+import { UsersLookupsStore } from 'src/app/shared/stores/system-employees/users-lookups.store';
 import { RoleManagementFilters } from '../../components/role-management-filters/role-management-filters';
 import {
   ITableHeaderItem,
   IRoleManagementRecord,
   TRoleManagementSortingKeys,
 } from 'src/app/shared/interfaces';
-import { UsersStore } from 'src/app/shared/stores/users/users.store';
+import { UsersStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
 import { RoleManagementFilterService } from '../../services/role-management-filter/role-management-filter-service';
-import { EUserStatus } from 'src/app/shared/enums/users.enum';
+import { EUserStatus } from 'src/app/shared/enums/system-employee.enum';
 import { UserStatusMapper } from '../../classes/user-status-mapper';
 import { UserRoleMapper } from '../../classes/user-role-mapper';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
@@ -59,7 +59,7 @@ export class RoleManagement implements OnInit {
       },
       {
         label: this.i18nService.translate('users.table.role') || 'Role',
-        isSortable: false      
+        isSortable: false
       },
       {
         label: this.i18nService.translate('users.table.assignedBy') || 'Assigned BY',
@@ -72,8 +72,8 @@ export class RoleManagement implements OnInit {
       },
       {
         label: this.i18nService.translate('users.table.status') || 'Status',
-        isSortable: false      
-      }      
+        isSortable: false
+      }
     ];
   });
   rows = computed<IRoleManagementRecord[]>(() => this.usersStore.roleManagementList());
@@ -86,7 +86,7 @@ export class RoleManagement implements OnInit {
   ngOnInit(): void {
     this.filterService.applyFilter();
   }
-  
+
   getUserStatus(status: string) {
     // Convert string status to enum (e.g., "Active" -> "active")
     const statusLower = status.toLowerCase() as EUserStatus;
