@@ -30,6 +30,7 @@ import { ERoles } from 'src/app/shared/enums';
 import { ButtonModule } from 'primeng/button';
 import { AddEditEmployeeDialog } from "../../components/add-edit-employee-dialog/add-edit-employee-dialog";
 import { RolesStore } from 'src/app/shared/stores/roles/roles.store';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-employee-list',
@@ -106,7 +107,7 @@ export class EmployeeList implements OnInit {
       },
     ];
   });
-  CreateEmpDialogVisible = signal<boolean>(false);
+ 
   EditEmpDialogVisible = signal<boolean>(false);
   rows = computed<IUserRecord[]>(() => this.usersStore.list());
   filterService = inject(UsersFilterService);
@@ -171,15 +172,11 @@ export class EmployeeList implements OnInit {
     //   }))
     //   .subscribe();
   }
-  onAddEmployee() {
-    this.roleStore.getFilteredRoles().subscribe();
-    this.CreateEmpDialogVisible.set(true);
-  }
+ 
 
   onUpdateEmployee(item:IUserRecord){
     this.user.set(item);
-    
-    this.roleStore.getFilteredRoles().subscribe();
+    this.roleStore.getFilteredRoles().pipe(take(1)).subscribe();
     this.EditEmpDialogVisible.set(true);
   }
 }

@@ -99,14 +99,6 @@
   (confirmed)="onDeleteConfirm()"
 ></app-general-confirmation-dialog>
 
-@if(CreateEmpDialogVisible()){
-<app-add-edit-employee-dialog
-  [(dialogVisible)]="CreateEmpDialogVisible"
-  [isEditMode]="false"
->
-</app-add-edit-employee-dialog>
-}
-
 @if(EditEmpDialogVisible()){
 <app-add-edit-employee-dialog
   [(dialogVisible)]="EditEmpDialogVisible"
