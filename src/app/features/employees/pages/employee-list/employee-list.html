@@ -1,0 +1,110 @@
+<app-table-layout>
+  <ng-container ngProjectAs="table-filters">
+    <app-employees-filter></app-employees-filter>
+  </ng-container>
+
+  <ng-container ngProjectAs="table-body">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="systemEmployeesStore.isLoading()"
+    >
+      <app-data-table
+        [columns]="headers()"
+        [rows]="rows()"
+        [(filter)]="filterService.filter"
+        [totalRecords]="totalRecords()"
+        (filterChange)="filterService.applyFilterWithPaging()"
+      >
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
+          <!-- Employee ID -->
+          <td>
+            {{ item.employeeID }}
+          </td>
+
+          <!-- Employee arabic name -->
+          <td>
+            {{ item.nameAr }}
+          </td>
+
+          <!-- Employee Eng name  -->
+          <td>
+            {{ item.nameEn }}
+          </td>
+
+          <!-- Employee Email -->
+          <td>
+            <p
+              class="text-sm text-gray-600 max-w-[200px] truncate"
+              [pTooltip]="item.email"
+              tooltipPosition="top"
+              [innerHTML]="item.email"
+            ></p>
+          </td>
+
+          <td>
+            {{ item.phoneNumber }}
+          </td>
+
+          <!-- Role -->
+          <td>
+            {{ getUserTranslatedRole(item.roleCode) }}
+          </td>
+
+          <!-- Role -->
+          <td>
+            {{ item.joinDate | date : 'dd/MM/yyyy' }}
+          </td>
+
+          <!-- Assessment Status -->
+          <td>
+            @let status = getUserStatus(item.status);
+            <app-base-tag
+              [color]="status.color"
+              [value]="status.title"
+            />
+          </td>
+          <!-- Action -->
+          <td>
+            @if(item.actions.length>0){
+            <app-employees-action-menu
+              [actions]="item.actions"
+              (onChangeRole)="onChangeRole(item)"
+              (onDelete)="onDelete(item)"
+              (onEdit)="onUpdateEmployee(item)"
+            ></app-employees-action-menu>
+            }@else{
+            <div class="text-center">-</div>
+            }
+          </td>
+        </ng-template>
+      </app-data-table>
+    </app-table-skeleton>
+  </ng-container>
+</app-table-layout>
+
+<app-change-role-dialog
+  [(visible)]="changeRoleDialogVisible"
+  (onConfirm)="onChangeRoleConfirm()"
+></app-change-role-dialog>
+
+<app-general-confirmation-dialog
+  [(visible)]="deleteDialogVisible"
+  (onConfirm)="onDeleteConfirm()"
+  [icon]="'icon-trash-2'"
+  [title]="'users.dialog.delete.title' | translate"
+  [description]="'users.dialog.delete.description' | translate"
+  (confirmed)="onDeleteConfirm()"
+></app-general-confirmation-dialog>
+
+@if(EditEmpDialogVisible()){
+<app-add-edit-employee-dialog
+  [(dialogVisible)]="EditEmpDialogVisible"
+  [isEditMode]="true"
+  (onSuccess)="filterService.applyFilter()"
+  [SelectedItem]="employee() ?? null"
+>
+</app-add-edit-employee-dialog>
+}

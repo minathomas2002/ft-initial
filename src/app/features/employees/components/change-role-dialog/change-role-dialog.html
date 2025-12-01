@@ -1,0 +1,44 @@
+<app-base-dialog
+  [(visible)]="visible"
+  icon="icon-user-edit"
+  [confirmLabel]="'users.dialog.changeRole.confirmButton' | translate"
+  [isConfirmationDisabled]="formService.form.invalid"
+  (onConfirm)="onConfirm.emit()"
+  (onClose)="resetForm()"
+  [isLoading]="isProcessing()"
+>
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{ 'users.dialog.changeRole.title' | translate }}</p>
+    <p class="text-sm text-gray-600">{{ 'users.dialog.changeRole.description' | translate }}</p>
+  </div>
+
+  <div class="">
+    <app-base-label
+      [title]="'users.dialog.changeRole.roleLabel' | translate"
+      [required]="true"
+    />
+    <p-select
+      [options]="userRoles()"
+      [loading]="isProcessing()"
+      [loadingIcon]="'icon-transfer'"
+      [formControl]="formService.role"
+      appendTo="body"
+      optionLabel="label"
+      optionValue="value"
+      [placeholder]="'users.dialog.changeRole.rolePlaceholder' | translate"
+      dropdownIcon="icon-chevron-down"
+      fluid
+    />
+    <div>
+      @if(formService.role.dirty && formService.role.errors){
+      @if(formService.role.hasError('required')){
+      <p-message
+        severity="error"
+        variant="simple"
+        size="small"
+      >{{ 'users.dialog.changeRole.roleRequired' | translate }}</p-message>
+      }
+      }
+    </div>
+  </div>
+</app-base-dialog>

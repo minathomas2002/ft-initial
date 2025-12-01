@@ -2,10 +2,10 @@ import { Filter } from "src/app/shared/classes/filter";
 import { Pagination } from "src/app/shared/classes/pagination";
 import { Sorting } from "src/app/shared/classes/sorting";
 import { ESortingOrder } from "src/app/shared/enums";
-import { ISystemEmployeeFilterRequest, TSystemEmployeeSortingKeys } from "src/app/shared/interfaces";
+import { ISystemEmployeeFilter, TSystemEmployeeSortingKeys } from "src/app/shared/interfaces";
 
 export class EmployeesFilter extends Filter<
-	ISystemEmployeeFilterRequest,
+	ISystemEmployeeFilter,
 	TSystemEmployeeSortingKeys
 > {
 	constructor() {

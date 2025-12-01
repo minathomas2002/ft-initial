@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model, output } from '@angular/core';
+import { Component, computed, inject, input, model, OnInit, output } from '@angular/core';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { AddEmployeeFormService } from '../../services/add-employee-form/add-employee-form-service';
@@ -25,13 +25,12 @@ import { EUserStatus } from 'src/app/shared/enums';
     Select,
     Message,
     BaseLabelComponent,
-    InputTextModule,
-    RolesStore
+    InputTextModule
   ],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
 })
-export class AddEditEmployeeDialog {
+export class AddEditEmployeeDialog implements OnInit {
 
   dialogVisible = model<boolean>(false);
   isEditMode = input<boolean>(false);
@@ -43,41 +42,60 @@ export class AddEditEmployeeDialog {
   employeeRoleMapper = new EmployeeRoleMapper(this.i18nService);
   SelectedItem = model<ISystemEmployeeRecord | null>();
   onSuccess = output<void>();
-  employeeRoles = computed(() => {
+
+  isProcessing = computed(() => this.employeeStore.isProcessing());
+
+  userRoles = computed(() => {
     const roles = this.roleStore.allRoles();
     const selected = this.SelectedItem();
-    let list = roles.map(role => ({
-      label: role.name, //this.employeeRoleMapper.getTranslatedRole(role.code),
+    let list = roles.map((role: any) => ({
+      label: role.name,
       value: role.id
     }));
     // If user exists AND their role is not in the list → add it
-    // if (selected && selected?.roleId && !list.some(r => r.value === selected?.roleId)) {
-    //   list = [
-    //     ...list,
-    //     {
-    //       label: selected?.roleName ?? 'Unknown Role', // fallback name
-    //       value: selected?.roleId ?? ''
-    //     }
-    //   ];
-    // }
+    if (selected && selected?.roleCode && !list.some((r: any) => r.value === selected?.roleCode)) {
+      list = [
+        ...list,
+        {
+          label: selected?.role ?? 'Unknown Role',
+          value: selected?.roleCode ?? ''
+        }
+      ];
+    }
     return list;
-  }
-  );
+  });
 
 
   ngOnInit() {
+    this.roleStore.getAllRoles().subscribe();
     this.formService.ResetFormFields();
     if (!this.isEditMode()) {
       this.formService.job.valueChanges
         .pipe(
           debounceTime(500),
           distinctUntilChanged(),
+          filter(() => !!this.formService.employeeID.value),
           switchMap(() => this.employeeStore.getEmployeeDateFromHR(this.formService.employeeID.value!))
         )
-        .subscribe();
+        .subscribe({
+          next: (res) => {
+            if (res.body) {
+              this.formService.form.patchValue({
+                nameAr: res.body.nameAr,
+                nameEn: res.body.nameEn,
+                email: res.body.email,
+                phoneNumber: res.body.phoneNumber,
+              });
+            }
+          }
+        });
     } else {
       this.LoadEmployeeDetails();
     }
+  }
+
+  resetForm() {
+    this.formService.ResetFormFields();
   }
 
 
@@ -114,11 +132,18 @@ export class AddEditEmployeeDialog {
       )
       .subscribe({
         next: (res) => {
-          this.toasterService.success('Employee Added Successfully');
-          this.formService.ResetFormFields();
-          this.dialogVisible.set(false);
-          this.onSuccess.emit(); // update table
+          if (res.success) {
+            this.toasterService.success('Employee Added Successfully');
+            this.formService.ResetFormFields();
+            this.dialogVisible.set(false);
+            this.onSuccess.emit(); // update table
+          } else {
+            this.toasterService.error(res.message?.join(', ') || 'Failed to add employee');
+          }
         },
+        error: (error) => {
+          this.toasterService.error(error.error?.message?.join(', ') || 'Failed to add employee');
+        }
       }
       );
   }
@@ -145,11 +170,18 @@ export class AddEditEmployeeDialog {
       )
       .subscribe({
         next: (res) => {
-          this.toasterService.success('Employee Updated Successfully');
-          this.formService.ResetFormFields();
-          this.dialogVisible.set(false);
-          this.onSuccess.emit(); // update table
+          if (res.success) {
+            this.toasterService.success('Employee Updated Successfully');
+            this.formService.ResetFormFields();
+            this.dialogVisible.set(false);
+            this.onSuccess.emit(); // update table
+          } else {
+            this.toasterService.error(res.message?.join(', ') || 'Failed to update employee');
+          }
         },
+        error: (error) => {
+          this.toasterService.error(error.error?.message?.join(', ') || 'Failed to update employee');
+        }
       });
   }
 
@@ -159,10 +191,14 @@ export class AddEditEmployeeDialog {
     this.employeeStore.getSystemEmployeeDetails(selectedId).subscribe({
       next: (res) => {
         const employee = res.body;
-        if (employee) this.formService.patchForm(employee, this.isEditMode());
+        if (employee) {
+          this.formService.patchForm(employee, this.isEditMode());
+        }
+      },
+      error: (error) => {
+        this.toasterService.error('Failed to load employee details');
       }
     });
-
   }
 
   GetEmployeeDateFromHR() {
