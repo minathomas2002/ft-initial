@@ -4,7 +4,7 @@
   [confirmLabel]="isEditMode() 
   ? ('users.dialog.edit.confirmedit' | translate) 
   : ('users.dialog.Add.confirmAdd' | translate)"
-  [isConfirmationDisabled]="false"
+  [isConfirmationDisabled]="formService.form.invalid"
   (onConfirm)="onConfirm()"
   (onClose)="resetForm()"
   [isLoading]="isProcessing()"
@@ -52,13 +52,9 @@
         fluid
       />
       <div>
-        @if(formService.nameEn.dirty && formService.nameEn.errors){
+        @if(formService.nameEn.touched && formService.nameEn.errors){
         @if(formService.nameEn.hasError('required')){
-        <p-message
-          severity="error"
-          variant="simple"
-          size="small"
-        >{{ 'users.dialog.Add.nameEnRequired' | translate }}</p-message>
+        <small class="text-red-500">{{ 'users.dialog.Add.nameEnRequired' | translate }}</small>
         }
         }
       </div>
@@ -73,13 +69,9 @@
         fluid
       />
       <div>
-        @if(formService.nameAr.dirty && formService.nameAr.errors){
+        @if(formService.nameAr.touched && formService.nameAr.errors){
         @if(formService.nameAr.hasError('required')){
-        <p-message
-          severity="error"
-          variant="simple"
-          size="small"
-        >{{ 'users.dialog.Add.nameArRequired' | translate }}</p-message>
+        <small class="text-red-500">{{ 'users.dialog.Add.nameArRequired' | translate }}</small>
         }
         }
       </div>
@@ -105,13 +97,9 @@
         fluid
       />
       <div>
-        @if(formService.email.dirty && formService.email.errors){
+        @if(formService.email.touched && formService.email.errors){
         @if(formService.email.hasError('required')){
-        <p-message
-          severity="error"
-          variant="simple"
-          size="small"
-        >{{ 'users.dialog.Add.emailRequired' | translate }}</p-message>
+        <small class="text-red-500">{{ 'users.dialog.Add.emailRequired' | translate }}</small>
         }
         }
       </div>
@@ -128,13 +116,9 @@
         fluid
       />
       <div>
-        @if(formService.phoneNumber.dirty && formService.phoneNumber.errors){
+        @if(formService.phoneNumber.touched && formService.phoneNumber.errors){
         @if(formService.phoneNumber.hasError('required')){
-        <p-message
-          severity="error"
-          variant="simple"
-          size="small"
-        >{{ 'users.dialog.Add.phoneRequired' | translate }}</p-message>
+        <small class="text-red-500">{{ 'users.dialog.Add.phoneRequired' | translate }}</small>
         }
         }
       </div>
@@ -156,18 +140,12 @@
         fluid
       />
       <div>
-        @if(formService.roleId.dirty && formService.roleId.errors){
+        @if(formService.roleId.touched && formService.roleId.errors){
         @if(formService.roleId.hasError('required')){
-        <p-message
-          severity="error"
-          variant="simple"
-          size="small"
-        >{{ 'users.dialog.changeRole.roleRequired' | translate }}</p-message>
+        <small class="text-red-500">{{ 'users.dialog.changeRole.roleRequired' | translate }}</small>
         }
         }
       </div>
     </div>
-
   </div>
-
 </app-base-dialog>

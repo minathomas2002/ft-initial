@@ -173,4 +173,8 @@ export class EmployeeList implements OnInit {
     this.employee.set(item);
     this.EditEmpDialogVisible.set(true);
   }
+
+  onUpdateEmployeeSuccess() {
+    console.log('onUpdateEmployeeSuccess');
+  }
 }

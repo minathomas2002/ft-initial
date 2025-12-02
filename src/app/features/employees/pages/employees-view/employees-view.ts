@@ -21,7 +21,6 @@ export class EmployeesView {
   createEmpDialogVisible = signal<boolean>(false);
 
   onAddEmployee() {
-    this.roleStore.getFilteredRoles().pipe(take(1)).subscribe();
     this.createEmpDialogVisible.set(true);
   }
 }

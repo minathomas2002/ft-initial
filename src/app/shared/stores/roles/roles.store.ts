@@ -84,6 +84,13 @@ export const RolesStore = signalStore(
         patchState(store, { allRoles: [] });
       },
     }
+  }),
+  withMethods((store) => {
+    return {
+      addRoleToFilteredRoles(role: IRole) {
+        patchState(store, { filteredRoles: [...store.filteredRoles(), role] });
+      },
+    }
   })
 );
 

@@ -8,12 +8,12 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { Select } from "primeng/select";
 import { Message } from "primeng/message";
 import { ReactiveFormsModule } from '@angular/forms';
-import { catchError, debounceTime, distinctUntilChanged, filter, of, skip, switchMap, take, tap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, forkJoin, of, skip, switchMap, take, tap } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
-import { ICreateSystemEmployeeRequest, ISystemEmployeeRecord, IUpdateSystemEmployeeRequest } from 'src/app/shared/interfaces';
+import { ICreateSystemEmployeeRequest, IRole, ISystemEmployeeRecord, IUpdateSystemEmployeeRequest } from 'src/app/shared/interfaces';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -54,8 +54,12 @@ export class AddEditEmployeeDialog implements OnInit {
   userRoles = this.roleStore.filteredRoles;
 
   ngOnInit() {
-    this.formService.ResetFormFields();
+    forkJoin(
+      [this.roleStore.getFilteredRoles(),
+      this.roleStore.getSystemRoles()])
+      .pipe(take(1)).subscribe();
 
+    this.formService.ResetFormFields();
     if (!this.isEditMode()) {
       this.listenToJobIdChanges();
     } else {
@@ -72,18 +76,24 @@ export class AddEditEmployeeDialog implements OnInit {
       debounceTime(500),
       distinctUntilChanged(),
       takeUntilDestroyed(this.destroyRef),
-      tap(() => this.jobIdErrorMessage.set(null)), // Clear error when new value is entered
+      tap(() => {
+        this.jobIdErrorMessage.set(null);
+      }), // Clear error when new value is entered
       switchMap(() => {
-
         if (!this.formService.job.value) {
-          this.resetForm()
-          this.jobIdErrorMessage.set('Job No. is required');
           return of(null);
         }
         return this.employeeStore.getEmployeeDateFromHR(this.formService.job.value!).pipe(
           catchError((error) => {
             // Handle error gracefully without crashing
             this.jobIdErrorMessage.set('Invalid Job No. Please enter a valid employee Job No.');
+            this.formService.form.patchValue({
+              nameAr: null,
+              nameEn: null,
+              email: null,
+              phoneNumber: null,
+              roleId: null,
+            })
             return of(null);
           })
         )
@@ -104,13 +114,21 @@ export class AddEditEmployeeDialog implements OnInit {
     });
   }
 
+  handelEmployFilterList(roleId: string) {
+    const roles = this.roleStore.filteredRoles();
+    const filteredRole = roles.find((r: IRole) => r.id === roleId);
+    if (!filteredRole) {
+      const role = this.roleStore.systemRoles().find((r: IRole) => r.id === roleId);
+      this.roleStore.addRoleToFilteredRoles(role!);
+    }
+  }
+
   onConfirm() {
     // check if create or edit 
     if (this.isEditMode())
       this.UpdateExistingEmployee();
     else
       this.SubmitNEwEmployee();
-
   }
 
   // case Create New User
@@ -140,8 +158,8 @@ export class AddEditEmployeeDialog implements OnInit {
           if (res.success) {
             this.toasterService.success('Employee Added Successfully');
             this.formService.ResetFormFields();
-            this.dialogVisible.set(false);
             this.onSuccess.emit(); // update table
+            this.dialogVisible.set(false);
           } else {
             this.toasterService.error(res.message?.join(', ') || 'Failed to add employee');
           }
@@ -197,6 +215,7 @@ export class AddEditEmployeeDialog implements OnInit {
       next: (res) => {
         const employee = res.body;
         if (employee) {
+          this.handelEmployFilterList(employee.roleId);
           this.formService.patchForm(employee, this.isEditMode());
         }
       },
