@@ -29,7 +29,7 @@ export const API_ENDPOINTS = {
     getActiveEmployees: `${SystemEmployees}/GetActiveEmployees`,
     getEmployeeDetails: `${SystemEmployees}/GetEmployeeDetails`,
     createSystemEmployee: `${SystemEmployees}/CreateSystemEmployee`,
-    getSystemEmployeeList: `${SystemEmployees}/GetSystemEmployeeList`,
+    getSystemEmployeesList: `${SystemEmployees}/GetSystemEmployeesList`,
     updateSystemEmployee: `${SystemEmployees}/UpdateSystemEmployee`,
     toggleEmployeeStatus: `${SystemEmployees}/ToggleEmployeeStatus`,
     RoleManagement: {

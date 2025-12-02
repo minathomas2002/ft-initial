@@ -22,7 +22,7 @@ export class EmployeesFilterService extends AbstractServiceFilter<ISystemEmploye
 
   performFilter$() {
     this.resetPagination();
-    return this.store.getSystemEmployeeList(this.adaptedFilter());
+    return this.store.getSystemEmployeesList(this.adaptedFilter());
   }
 
   clearAllFilters() {
@@ -43,7 +43,7 @@ export class EmployeesFilterService extends AbstractServiceFilter<ISystemEmploye
   applyFilterWithPaging() {
     this.updateFilterSignal();
     this.store
-      .getSystemEmployeeList(this.adaptedFilter())
+      .getSystemEmployeesList(this.adaptedFilter())
       .pipe(take(1))
       .subscribe();
   }

@@ -4,7 +4,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { RoleManagementFilterService } from '../../services/role-management-filter/role-management-filter-service';
-import { debounceTime, Subject, switchMap } from 'rxjs';
+import { debounceTime, Subject, switchMap, take } from 'rxjs';
 import { MultiSelectModule } from "primeng/multiselect";
 import { ButtonModule } from 'primeng/button';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
@@ -44,7 +44,7 @@ export class RoleManagementFilters implements OnInit {
   employeeRoles = computed(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
-    return this.roleStore.allRoles().map((role: any) => ({
+    return this.roleStore.systemRoles().map((role: any) => ({
       label: role.name || this.roleMapper.getTranslatedRole(role.code as any),
       value: role.id
     })).filter((option: any) => option.value !== undefined);
@@ -59,7 +59,7 @@ export class RoleManagementFilters implements OnInit {
 
   ngOnInit() {
     this.listenToSearchTextInputs();
-    this.roleStore.getAllRoles().subscribe();
+    this.roleStore.getSystemRoles().pipe(take(1)).subscribe();
   }
 
   listenToSearchTextInputs() {

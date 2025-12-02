@@ -4,7 +4,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { EmployeesFilterService } from '../../services/empolyees-filter/employee-filter-service';
-import { debounceTime, Subject, switchMap } from 'rxjs';
+import { debounceTime, Subject, switchMap, take } from 'rxjs';
 import { MultiSelectModule } from "primeng/multiselect";
 import { ButtonModule } from 'primeng/button';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
@@ -33,7 +33,7 @@ export class EmployeesFilter {
   userStatusMapper = new UserStatusMapper(this.i18nService);
 
   employeeRoles = computed(() =>
-    this.roleStore.allRoles().map((role: any) => ({
+    this.roleStore.systemRoles().map((role: any) => ({
       label: role.name,
       value: role.id
     })).filter((option: any) => option.value !== undefined)
@@ -43,7 +43,7 @@ export class EmployeesFilter {
 
   ngOnInit() {
     this.listenToSearchTextInputs();
-    this.roleStore.getAllRoles().subscribe();
+    this.roleStore.getSystemRoles().pipe(take(1)).subscribe();
   }
 
   listenToSearchTextInputs() {

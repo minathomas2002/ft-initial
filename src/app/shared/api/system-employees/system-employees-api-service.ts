@@ -36,8 +36,8 @@ export class SystemEmployeesApiService {
     return this.baseHttpService.post<void, ICreateSystemEmployeeRequest, unknown>(API_ENDPOINTS.systemEmployees.createSystemEmployee, employee);
   }
 
-  getSystemEmployeeList(filter: ISystemEmployeeFilterRequest): Observable<IBaseApiResponse<IApiPaginatedResponse<ISystemEmployeeRecord[]>>> {
-    return this.baseHttpService.get<IApiPaginatedResponse<ISystemEmployeeRecord[]>, unknown>(API_ENDPOINTS.systemEmployees.getSystemEmployeeList, filter);
+  getSystemEmployeesList(filter: ISystemEmployeeFilterRequest): Observable<IBaseApiResponse<IApiPaginatedResponse<ISystemEmployeeRecord[]>>> {
+    return this.baseHttpService.get<IApiPaginatedResponse<ISystemEmployeeRecord[]>, unknown>(API_ENDPOINTS.systemEmployees.getSystemEmployeesList, filter);
   }
 
   updateSystemEmployee(employee: IUpdateSystemEmployeeRequest): Observable<IBaseApiResponse<void>> {

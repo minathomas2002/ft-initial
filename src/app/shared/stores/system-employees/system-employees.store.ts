@@ -39,9 +39,9 @@ export const SystemEmployeesStore = signalStore(
     const systemEmployeesApiService = inject(SystemEmployeesApiService);
     return {
       /* Get System Employee List */
-      getSystemEmployeeList(filter: ISystemEmployeeFilterRequest) {
+      getSystemEmployeesList(filter: ISystemEmployeeFilterRequest) {
         patchState(store, { isLoading: true, error: null });
-        return systemEmployeesApiService.getSystemEmployeeList(filter).pipe(
+        return systemEmployeesApiService.getSystemEmployeesList(filter).pipe(
           tap((res) => {
             patchState(store, { list: res.body?.data || [] });
             patchState(store, { count: res.body?.pagination.totalCount || 0 });
