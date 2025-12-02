@@ -6,7 +6,9 @@ import { ISystemEmployeeFilter, ISystemEmployeeFilterRequest, TSystemEmployeeSor
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { EUserStatus } from 'src/app/shared/enums';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EmployeesFilterService extends AbstractServiceFilter<ISystemEmployeeFilter> {
   store = inject(SystemEmployeesStore);
   filterClass = new EmployeesFilter();
