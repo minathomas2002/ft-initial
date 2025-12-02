@@ -5,3 +5,4 @@ export * from './roles.enum';
 export * from './opportunities.enum';
 export * from './view-mode.enum';
 export * from './system-employee.enum';
+export * from './role-management.enum';
