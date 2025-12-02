@@ -175,6 +175,6 @@ export class EmployeeList implements OnInit {
   }
 
   onUpdateEmployeeSuccess() {
-    console.log('onUpdateEmployeeSuccess');
+    this.filterService.applyFilterWithPaging();
   }
 }

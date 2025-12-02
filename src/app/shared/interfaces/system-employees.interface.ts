@@ -77,8 +77,8 @@ export interface ISystemEmployeeFilterRequest extends IFilterBase<TSystemEmploye
 
 export interface IUpdateSystemEmployeeRequest {
   id: string;
-  nameAr: string;
-  nameEn: string;
+  name_Ar: string;
+  name_En: string;
   phoneNumber: string;
   roleId: string;
 }

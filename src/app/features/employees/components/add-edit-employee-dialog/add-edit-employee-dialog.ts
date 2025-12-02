@@ -160,12 +160,7 @@ export class AddEditEmployeeDialog implements OnInit {
             this.formService.ResetFormFields();
             this.onSuccess.emit(); // update table
             this.dialogVisible.set(false);
-          } else {
-            this.toasterService.error(res.message?.join(', ') || 'Failed to add employee');
           }
-        },
-        error: (error) => {
-          this.toasterService.error(error.error?.message?.join(', ') || 'Failed to add employee');
         }
       }
       );
@@ -175,8 +170,8 @@ export class AddEditEmployeeDialog implements OnInit {
     const form = this.formService.form;
     const req: IUpdateSystemEmployeeRequest = {
       id: this.SelectedItem()?.id ?? '',
-      nameAr: form.controls.nameAr.value!,
-      nameEn: form.controls.nameEn.value!,
+      name_Ar: form.controls.nameAr.value!,
+      name_En: form.controls.nameEn.value!,
       phoneNumber: form.controls.phoneNumber.value!,
       roleId: String(form.controls.roleId.value!),
     };
@@ -185,6 +180,7 @@ export class AddEditEmployeeDialog implements OnInit {
       .pipe(
         tap((res) => {
           if (res.errors) {
+            this.onSuccess.emit();
             this.dialogVisible.set(false);
             return;
           }
@@ -198,13 +194,8 @@ export class AddEditEmployeeDialog implements OnInit {
             this.formService.ResetFormFields();
             this.dialogVisible.set(false);
             this.onSuccess.emit(); // update table
-          } else {
-            this.toasterService.error(res.message?.join(', ') || 'Failed to update employee');
           }
         },
-        error: (error) => {
-          this.toasterService.error(error.error?.message?.join(', ') || 'Failed to update employee');
-        }
       });
   }
 
@@ -219,9 +210,6 @@ export class AddEditEmployeeDialog implements OnInit {
           this.formService.patchForm(employee, this.isEditMode());
         }
       },
-      error: (error) => {
-        this.toasterService.error('Failed to load employee details');
-      }
     });
   }
 
