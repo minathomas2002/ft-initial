@@ -23,16 +23,24 @@
 
     <div class="col-span-12 md:col-span-12">
 
-      <app-base-label [title]="'users.dialog.Add.job' | translate">
+      <app-base-label [title]="'Job No.'">
       </app-base-label>
-      <input
-        class="w-full"
-        type="text"
-        pInputText
-        [placeholder]="'users.dialog.Add.jobPlaceHolder' | translate"
-        [formControl]="formService.job"
-      />
-
+      <p-iconfield>
+        <input
+          class="w-full"
+          type="text"
+          pInputText
+          [placeholder]="'Enter Job No.'"
+          [formControl]="formService.job"
+          [maxlength]="20"
+        />
+        @if(isLoadingDetails()){
+        <p-inputicon class="spinner" />
+        }
+      </p-iconfield>
+      @if(jobIdErrorMessage()){
+      <small class="text-red-500">{{ jobIdErrorMessage() }}</small>
+      }
     </div>
     <div class="col-span-12 md:col-span-6">
       <app-base-label [title]="'users.dialog.Add.enName' | translate">
@@ -141,8 +149,8 @@
         [loadingIcon]="'icon-transfer'"
         [formControl]="formService.roleId"
         appendTo="body"
-        optionLabel="label"
-        optionValue="value"
+        optionLabel="name"
+        optionValue="id"
         [placeholder]="'users.dialog.changeRole.rolePlaceholder' | translate"
         dropdownIcon="icon-chevron-down"
         fluid

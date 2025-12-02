@@ -15,6 +15,7 @@ import {
 
 const initialState: {
   isLoading: boolean;
+  isLoadingDetails: boolean;
   isProcessing: boolean;
   error: string | null;
   count: number;
@@ -24,6 +25,7 @@ const initialState: {
   activeEmployees: IActiveEmployee[] | null;
 } = {
   isLoading: false,
+  isLoadingDetails: false,
   isProcessing: false,
   error: null,
   count: 0,
@@ -127,18 +129,21 @@ export const SystemEmployeesStore = signalStore(
 
       /* Get Employee Date From HR */
       getEmployeeDateFromHR(employeeID: string) {
-        patchState(store, { isLoading: true, error: null });
+        patchState(store, { isLoadingDetails: true, error: null });
         return systemEmployeesApiService.getEmployeeDateFromHR(employeeID).pipe(
           tap((res) => {
             patchState(store, { isLoading: false });
             patchState(store, { employeeDateFromHR: res.body || null });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error getting employee date from HR' });
+            patchState(store, {
+              error: error.errorMessage || 'Error getting employee date from HR',
+              employeeDateFromHR: null
+            });
             return throwError(() => new Error('Error getting employee date from HR'));
           }),
           finalize(() => {
-            patchState(store, { isLoading: false });
+            patchState(store, { isLoadingDetails: false });
           }),
         );
       },

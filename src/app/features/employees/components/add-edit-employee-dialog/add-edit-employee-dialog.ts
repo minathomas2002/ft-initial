@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model, OnInit, output } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { AddEmployeeFormService } from '../../services/add-employee-form/add-employee-form-service';
@@ -8,13 +8,15 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { Select } from "primeng/select";
 import { Message } from "primeng/message";
 import { ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, filter, skip, switchMap, take, tap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, of, skip, switchMap, take, tap } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
 import { ICreateSystemEmployeeRequest, ISystemEmployeeRecord, IUpdateSystemEmployeeRequest } from 'src/app/shared/interfaces';
-import { EUserStatus } from 'src/app/shared/enums';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-edit-employee-dialog',
@@ -25,7 +27,9 @@ import { EUserStatus } from 'src/app/shared/enums';
     Select,
     Message,
     BaseLabelComponent,
-    InputTextModule
+    InputTextModule,
+    IconFieldModule,
+    InputIconModule
   ],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
@@ -42,53 +46,18 @@ export class AddEditEmployeeDialog implements OnInit {
   employeeRoleMapper = new EmployeeRoleMapper(this.i18nService);
   SelectedItem = model<ISystemEmployeeRecord | null>();
   onSuccess = output<void>();
+  destroyRef = inject(DestroyRef);
+  isProcessing = this.employeeStore.isProcessing;
+  isLoadingDetails = this.employeeStore.isLoadingDetails;
+  jobIdErrorMessage = signal<string | null>(null);
 
-  isProcessing = computed(() => this.employeeStore.isProcessing());
-
-  userRoles = computed(() => {
-    const roles = this.roleStore.allRoles();
-    const selected = this.SelectedItem();
-    let list = roles.map((role: any) => ({
-      label: role.name,
-      value: role.id
-    }));
-    // If user exists AND their role is not in the list → add it
-    if (selected && selected?.roleCode && !list.some((r: any) => r.value === selected?.roleCode)) {
-      list = [
-        ...list,
-        {
-          label: selected?.role ?? 'Unknown Role',
-          value: selected?.roleCode ?? ''
-        }
-      ];
-    }
-    return list;
-  });
-
+  userRoles = this.roleStore.filteredRoles;
 
   ngOnInit() {
-    this.roleStore.getAllRoles().subscribe();
     this.formService.ResetFormFields();
+
     if (!this.isEditMode()) {
-      this.formService.job.valueChanges
-        .pipe(
-          debounceTime(500),
-          distinctUntilChanged(),
-          filter(() => !!this.formService.employeeID.value),
-          switchMap(() => this.employeeStore.getEmployeeDateFromHR(this.formService.employeeID.value!))
-        )
-        .subscribe({
-          next: (res) => {
-            if (res.body) {
-              this.formService.form.patchValue({
-                nameAr: res.body.nameAr,
-                nameEn: res.body.nameEn,
-                email: res.body.email,
-                phoneNumber: res.body.phoneNumber,
-              });
-            }
-          }
-        });
+      this.listenToJobIdChanges();
     } else {
       this.LoadEmployeeDetails();
     }
@@ -98,6 +67,42 @@ export class AddEditEmployeeDialog implements OnInit {
     this.formService.ResetFormFields();
   }
 
+  listenToJobIdChanges() {
+    this.formService.job.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef),
+      tap(() => this.jobIdErrorMessage.set(null)), // Clear error when new value is entered
+      switchMap(() => {
+
+        if (!this.formService.job.value) {
+          this.resetForm()
+          this.jobIdErrorMessage.set('Job No. is required');
+          return of(null);
+        }
+        return this.employeeStore.getEmployeeDateFromHR(this.formService.job.value!).pipe(
+          catchError((error) => {
+            // Handle error gracefully without crashing
+            this.jobIdErrorMessage.set('Invalid Job No. Please enter a valid employee Job No.');
+            return of(null);
+          })
+        )
+      }
+      )
+    ).subscribe({
+      next: (res) => {
+        if (res?.body) {
+          this.jobIdErrorMessage.set(null); // Clear error on success
+          this.formService.form.patchValue({
+            nameAr: res.body.nameAr,
+            nameEn: res.body.nameEn,
+            email: res.body.email,
+            phoneNumber: res.body.phoneNumber,
+          });
+        }
+      },
+    });
+  }
 
   onConfirm() {
     // check if create or edit 
@@ -201,23 +206,4 @@ export class AddEditEmployeeDialog implements OnInit {
     });
   }
 
-  GetEmployeeDateFromHR() {
-    const form = this.formService.form;
-    this.employeeStore
-      .getEmployeeDateFromHR(form.controls.employeeID.value!)
-      .pipe(
-        tap((res) => {
-          if (res.errors) {
-            this.dialogVisible.set(false);
-            return;
-          }
-        }),
-        take(1),
-      )
-      .subscribe({
-        next: (res) => {
-          this.formService.form.patchValue(res.body);
-        },
-      });
-  }
 }
