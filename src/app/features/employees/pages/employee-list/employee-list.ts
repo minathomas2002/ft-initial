@@ -29,6 +29,7 @@ import { EmployeesFilterService } from '../../services/empolyees-filter/employee
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
 import { ERoles } from 'src/app/shared/enums';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-employee-list',
@@ -111,10 +112,13 @@ export class EmployeeList implements OnInit {
   filter = this.filterService.filter;
   totalRecords = computed(() => this.systemEmployeesStore.count());
   employeeRoleMapper = new EmployeeRoleMapper(this.i18nService);
+  userStatusMapper = new UserStatusMapper(this.i18nService);
   changeRoleDialogVisible = signal<boolean>(false);
   changeRoleFormService = inject(ChangeRoleFormService);
   ToasterService = inject(ToasterService);
   deleteDialogVisible = signal<boolean>(false);
+  deactivateDialogVisible = signal<boolean>(false);
+  isProcessing = this.systemEmployeesStore.isProcessing;
 
   ngOnInit(): void {
     this.filterService.applyFilter();
@@ -125,13 +129,7 @@ export class EmployeeList implements OnInit {
   }
 
   getUserStatus(status: string) {
-    const statusMapper = new UserStatusMapper(this.i18nService);
-    const statusMap = statusMapper.mapUserStatusColor();
-    const statusKey = status.toUpperCase() as EUserStatus;
-    return statusMap[statusKey] || {
-      title: status,
-      color: 'gray' as const,
-    };
+    return this.userStatusMapper.getStatus(status);
   }
   onChangeRole(item: ISystemEmployeeRecord) {
     //this.selectedUser.set(item);
@@ -168,6 +166,10 @@ export class EmployeeList implements OnInit {
     //   .subscribe();
   }
 
+  onDeactivate(item: ISystemEmployeeRecord) {
+    this.employee.set(item);
+    this.deactivateDialogVisible.set(true);
+  }
 
   onUpdateEmployee(item: ISystemEmployeeRecord) {
     this.employee.set(item);
@@ -176,5 +178,17 @@ export class EmployeeList implements OnInit {
 
   onUpdateEmployeeSuccess() {
     this.filterService.applyFilterWithPaging();
+  }
+
+  onDeactivateConfirm() {
+    this.deactivateDialogVisible.set(false);
+    this.systemEmployeesStore.toggleSystemEmployeeStatus(this.employee()?.id!)
+      .pipe(take(1))
+      .subscribe(res => {
+        this.ToasterService.success('User deactivated successfully');
+        this.filterService.applyFilter();
+        this.employee.set(null);
+        this.deactivateDialogVisible.set(false);
+      });
   }
 }

@@ -5,8 +5,8 @@ import { ISelectItem } from "./select-item.interface";
 export interface IRoleManagementAssignmentRecord {
   id: string;
   jobId: string;
-  nameEn: string;
-  nameAr: string;
+  name_En: string;
+  name_Ar: string;
   email: string;
   phoneNumber: string;
   role: string;
@@ -39,8 +39,8 @@ export interface IRoleManagementAssignmentFilterRequest extends IFilterBase<TRol
 export interface ICurrentRoleHolders {
   employeeId: string;
   userId: string;
-  nameEn: string;
-  nameAr: string;
+  name_En: string;
+  name_Ar: string;
   email: string;
   role: string;
   roleCode: ERoles;

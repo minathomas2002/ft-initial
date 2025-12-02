@@ -45,6 +45,6 @@ export class SystemEmployeesApiService {
   }
 
   toggleSystemEmployeeStatus(id: string): Observable<IBaseApiResponse<void>> {
-    return this.baseHttpService.put<void, string, unknown>(API_ENDPOINTS.systemEmployees.toggleEmployeeStatus + '/' + id);
+    return this.baseHttpService.post<void, unknown, string>(API_ENDPOINTS.systemEmployees.toggleEmployeeStatus + '/' + id, {});
   }
 }

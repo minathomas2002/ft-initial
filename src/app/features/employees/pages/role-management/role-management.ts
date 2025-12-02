@@ -44,7 +44,7 @@ export class RoleManagement implements OnInit {
       {
         label: this.i18nService.translate('users.table.name') || 'Name',
         isSortable: true,
-        sortingKey: 'nameEn',
+        sortingKey: 'name_En',
       },
       {
         label: this.i18nService.translate('users.table.jobNo') || 'Job No.',
@@ -103,7 +103,7 @@ export class RoleManagement implements OnInit {
   getUserName(item: IRoleManagementAssignmentRecord): string {
     // Return name based on current language
     const currentLang = this.i18nService.currentLanguage();
-    return currentLang === 'ar' ? item.nameAr : item.nameEn;
+    return currentLang === 'ar' ? item.name_Ar : item.name_En;
   }
 }
 

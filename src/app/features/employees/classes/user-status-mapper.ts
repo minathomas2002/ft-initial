@@ -44,4 +44,13 @@ export class UserStatusMapper {
       }
     ]
   }
+
+  getStatus(status: string): { title: string; color: TColors } {
+    const statusMap = this.mapUserStatusColor();
+    const statusKey = status.toLowerCase() as EUserStatus;
+    return statusMap[statusKey] || {
+      title: status,
+      color: 'gray' as const,
+    };
+  }
 }

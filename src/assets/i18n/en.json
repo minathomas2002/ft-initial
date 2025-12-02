@@ -275,7 +275,7 @@
       "delete": "Delete",
       "edit": "Edit",
       "view": "View",
-      "deactivate": "Deactivate"
+      "deactivate": "Deactivate Employee"
     },
     "roles": {
       "admin": "Admin",

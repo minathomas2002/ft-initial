@@ -4,14 +4,21 @@
   </ng-container>
 
   <ng-container ngProjectAs="table-body">
-    <app-table-skeleton [headers]="headers()" [isLoading]="roleManagementStore.isLoading()">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="roleManagementStore.isLoading()"
+    >
       <app-data-table
         [columns]="headers()"
         [rows]="rows()"
         [(filter)]="filterService.filter"
         [totalRecords]="totalRecords()"
-        (filterChange)="filterService.applyFilterWithPaging()">
-        <ng-template #itemsTemplate let-item="item">
+        (filterChange)="filterService.applyFilterWithPaging()"
+      >
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
           <!-- Name -->
           <td>
             {{ getUserName(item) }}
@@ -34,7 +41,7 @@
 
           <!-- Role -->
           <td>
-            {{ getUserTranslatedRole(item.roleCode) }}
+            {{item.role}}
           </td>
 
           <!-- Assigned BY -->
@@ -49,7 +56,10 @@
           <!-- Status -->
           <td>
             @let status = getUserStatus(item.status);
-            <app-base-tag [color]="status.color" [value]="status.title" />
+            <app-base-tag
+              [color]="status.color"
+              [value]="status.title"
+            />
           </td>
         </ng-template>
       </app-data-table>

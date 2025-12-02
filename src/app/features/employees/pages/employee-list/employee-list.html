@@ -74,6 +74,7 @@
               (onChangeRole)="onChangeRole(item)"
               (onDelete)="onDelete(item)"
               (onEdit)="onUpdateEmployee(item)"
+              (onDeactivate)="onDeactivate(item)"
             ></app-employees-action-menu>
             }@else{
             <div class="text-center">-</div>
@@ -97,6 +98,15 @@
   [title]="'users.dialog.delete.title' | translate"
   [description]="'users.dialog.delete.description' | translate"
   (confirmed)="onDeleteConfirm()"
+></app-general-confirmation-dialog>
+
+<app-general-confirmation-dialog
+  [(visible)]="deactivateDialogVisible"
+  [isLoading]="isProcessing()"
+  (onConfirm)="onDeactivateConfirm()"
+  [icon]="'icon-trash-2'"
+  [title]="'Are you sure you want to deactivate this user?'"
+  (confirmed)="onDeactivateConfirm()"
 ></app-general-confirmation-dialog>
 
 @if(EditEmpDialogVisible()){
