@@ -19,7 +19,6 @@ import { BaseTagComponent } from 'src/app/shared/components/base-components/base
 import { EmployeesActionMenu } from '../../components/employees-action-menu/employees-action-menu';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
-import { ChangeRoleDialog } from '../../components/change-role-dialog/change-role-dialog';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ButtonModule } from 'primeng/button';
@@ -42,7 +41,6 @@ import { take } from 'rxjs';
     DataTableComponent,
     TooltipModule,
     EmployeesActionMenu,
-    ChangeRoleDialog,
     DatePipe,
     GeneralConfirmationDialogComponent,
     TranslatePipe,
@@ -51,7 +49,6 @@ import { take } from 'rxjs';
   ],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
-  providers: [EmployeesFilterService],
 })
 export class EmployeeList implements OnInit {
   systemEmployeesStore = inject(SystemEmployeesStore);
@@ -185,7 +182,7 @@ export class EmployeeList implements OnInit {
     this.systemEmployeesStore.toggleSystemEmployeeStatus(this.employee()?.id!)
       .pipe(take(1))
       .subscribe(res => {
-        this.ToasterService.success('User deactivated successfully');
+        this.ToasterService.success(this.i18nService.translate('users.messages.deactivateSuccess'));
         this.filterService.applyFilter();
         this.employee.set(null);
         this.deactivateDialogVisible.set(false);

@@ -86,11 +86,6 @@
   </ng-container>
 </app-table-layout>
 
-<app-change-role-dialog
-  [(visible)]="changeRoleDialogVisible"
-  (onConfirm)="onChangeRoleConfirm()"
-></app-change-role-dialog>
-
 <app-general-confirmation-dialog
   [(visible)]="deleteDialogVisible"
   (onConfirm)="onDeleteConfirm()"
@@ -105,7 +100,8 @@
   [isLoading]="isProcessing()"
   (onConfirm)="onDeactivateConfirm()"
   [icon]="'icon-trash-2'"
-  [title]="'Are you sure you want to deactivate this user?'"
+  [title]="'users.dialog.deactivate.title' | translate"
+  [description]="'users.dialog.deactivate.description' | translate"
   (confirmed)="onDeactivateConfirm()"
 ></app-general-confirmation-dialog>
 
