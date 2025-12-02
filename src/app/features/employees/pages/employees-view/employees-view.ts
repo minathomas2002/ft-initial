@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { AddEditEmployeeDialog } from '../../components/add-edit-employee-dialog/add-edit-employee-dialog';
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { RolesStore } from 'src/app/shared/stores/roles/roles.store';
-import { take } from 'rxjs';
+import { EmployeesFilterService } from '../../services/empolyees-filter/employee-filter-service';
 
 @Component({
   selector: 'app-employees-view',
@@ -19,8 +19,13 @@ export class EmployeesView {
   usersStore = inject(SystemEmployeesStore);
   roleStore = inject(RolesStore);
   createEmpDialogVisible = signal<boolean>(false);
+  filterService = inject(EmployeesFilterService);
 
   onAddEmployee() {
     this.createEmpDialogVisible.set(true);
+  }
+
+  onAddEmployeeSuccess() {
+    this.filterService.applyFilter()
   }
 }

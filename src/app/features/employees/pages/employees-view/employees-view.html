@@ -42,6 +42,7 @@
 <app-add-edit-employee-dialog
   [(dialogVisible)]="createEmpDialogVisible"
   [isEditMode]="false"
+  (onSuccess)="onAddEmployeeSuccess()"
 >
 </app-add-edit-employee-dialog>
 }
