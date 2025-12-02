@@ -12,19 +12,19 @@ export class EmployeesActionsMapper {
 
   private _actionDefinitions: Record<EAdminUserActions, TActionDefinition> = {
     [EAdminUserActions.CHANGE_ROLE]: {
-      labelKey: "employees.actions.changeRole",
+      labelKey: "users.actions.changeRole",
     },
     [EAdminUserActions.DELETE]: {
-      labelKey: "employees.actions.delete",
+      labelKey: "users.actions.delete",
     },
     [EAdminUserActions.EDIT]: {
-      labelKey: "employees.actions.edit",
+      labelKey: "users.actions.edit",
     },
     [EAdminUserActions.VIEW]: {
-      labelKey: "employees.actions.view",
+      labelKey: "users.actions.view",
     },
     [EAdminUserActions.DEACTIVATE]: {
-      labelKey: "employees.actions.deactivate",
+      labelKey: "users.actions.deactivate",
     },
   };
 
