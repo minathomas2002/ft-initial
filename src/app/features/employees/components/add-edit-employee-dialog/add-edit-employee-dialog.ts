@@ -51,6 +51,7 @@ export class AddEditEmployeeDialog implements OnInit {
   isLoadingDetails = this.employeeStore.isLoadingDetails;
   jobIdErrorMessage = signal<string | null>(null);
 
+
   userRoles = this.roleStore.filteredRoles;
 
   ngOnInit() {
@@ -86,7 +87,7 @@ export class AddEditEmployeeDialog implements OnInit {
         return this.employeeStore.getEmployeeDateFromHR(this.formService.job.value!).pipe(
           catchError((error) => {
             // Handle error gracefully without crashing
-            this.jobIdErrorMessage.set('Invalid Job No. Please enter a valid employee Job No.');
+            this.jobIdErrorMessage.set(this.i18nService.translate('users.dialog.Add.invalidJobNo'));
             this.formService.form.patchValue({
               nameAr: null,
               nameEn: null,
@@ -147,6 +148,7 @@ export class AddEditEmployeeDialog implements OnInit {
       .pipe(
         tap((res) => {
           if (res.errors) {
+            this.onSuccess.emit()
             this.dialogVisible.set(false);
             return;
           }
@@ -156,7 +158,7 @@ export class AddEditEmployeeDialog implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.success) {
-            this.toasterService.success('Employee Added Successfully');
+            this.toasterService.success(this.i18nService.translate('users.messages.employeeAddedSuccess'));
             this.formService.ResetFormFields();
             this.onSuccess.emit(); // update table
             this.dialogVisible.set(false);
@@ -190,7 +192,7 @@ export class AddEditEmployeeDialog implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.success) {
-            this.toasterService.success('Employee Updated Successfully');
+            this.toasterService.success(this.i18nService.translate('users.messages.employeeUpdatedSuccess'));
             this.formService.ResetFormFields();
             this.dialogVisible.set(false);
             this.onSuccess.emit(); // update table

@@ -23,14 +23,14 @@
 
     <div class="col-span-12 md:col-span-12">
 
-      <app-base-label [title]="'Job No.'">
+      <app-base-label [title]="'users.dialog.Add.jobLabel' | translate">
       </app-base-label>
       <p-iconfield>
         <input
           class="w-full"
           type="text"
           pInputText
-          [placeholder]="'Enter Job No.'"
+          [placeholder]="'users.dialog.Add.jobPlaceHolder' | translate"
           [formControl]="formService.job"
           [maxlength]="20"
         />
