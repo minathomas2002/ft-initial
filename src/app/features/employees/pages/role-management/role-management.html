@@ -24,11 +24,6 @@
             {{ getUserName(item) }}
           </td>
 
-          <!-- Job No. -->
-          <td>
-            {{ item.jobId }}
-          </td>
-
           <!-- Email -->
           <td>
             <p
@@ -61,8 +56,23 @@
               [value]="status.title"
             />
           </td>
+
+          <td class="flex justify-center">
+            <!-- Actions -->
+            @if(item.isActive){
+            <app-role-management-actions (onTransfer)="onTransfer(item)"></app-role-management-actions>
+            }
+          </td>
+
         </ng-template>
       </app-data-table>
     </app-table-skeleton>
   </ng-container>
 </app-table-layout>
+
+@if(transferRoleDialogVisible()){
+<app-transfer-role-dialog
+  [(visible)]="transferRoleDialogVisible"
+  (onConfirm)="onConfirmTransferRole()"
+></app-transfer-role-dialog>
+}
