@@ -39,6 +39,10 @@ export class AuthApiService {
     return this.http.post<any>(`${this.baseUrl}/${API_ENDPOINTS.auth.register}`, registerRequest);
   }
 
+  getUserProfile() {
+    return this.http.get<any>(`${this.baseUrl}/${API_ENDPOINTS.auth.getUserProfile}`);
+  }
+
   forgotPassword(email: string): Observable<IBaseApiResponse<void>> {
     return this.http.post<IBaseApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.auth.forgotPassword}`, {
       email,
@@ -59,5 +63,7 @@ export class AuthApiService {
     return this.http.get<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.verifyEmail}?token=${token}`);
   }
 
-  logout() {}
+  logout() {
+    
+  }
 }

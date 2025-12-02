@@ -119,6 +119,8 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "profile": "Profile",
+    "viewProfile": "View profile",
+    "signOut": "Sign out",
     "settings": "Settings",
     "help": "Help",
     "users": "Employees",

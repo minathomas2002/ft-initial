@@ -58,7 +58,8 @@ export const API_ENDPOINTS = {
     resetPassword: `${Auth}/reset-password`,
     forgotPassword: `${Auth}/forget-password`,
     verifyEmail: `${Auth}/verify-email`,
-    resendVerifyEmail: `${Auth}/resend-verification-email`
+    resendVerifyEmail: `${Auth}/resend-verification-email`,
+    getUserProfile: `${Auth}/profile`,
   },
   roles: {
     getRoles: `${Roles}`,
