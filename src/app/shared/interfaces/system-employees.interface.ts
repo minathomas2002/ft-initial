@@ -22,8 +22,8 @@ export interface IActiveEmployee {
 export interface ISystemEmployeeDetails {
   id: string;
   employeeID: string;
-  nameEn: string;
-  nameAr: string;
+  name_En: string;
+  name_Ar: string;
   email: string;
   phoneNumber: string;
   department: string;

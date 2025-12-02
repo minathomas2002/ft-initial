@@ -117,7 +117,7 @@ export class AddEditEmployeeDialog implements OnInit {
   SubmitNEwEmployee() {
     const form = this.formService.form;
     const req: ICreateSystemEmployeeRequest = {
-      employeeID: form.controls.employeeID.value!,
+      employeeID: form.controls.job.value!,
       nameAr: form.controls.nameAr.value!,
       nameEn: form.controls.nameEn.value!,
       email: form.controls.email.getRawValue() ?? '',  // since it's disabled

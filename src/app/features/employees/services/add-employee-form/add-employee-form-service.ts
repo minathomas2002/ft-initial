@@ -45,7 +45,7 @@ export class AddEmployeeFormService {
       Validators.minLength(3),
       Validators.maxLength(20),
       Validators.pattern(AddEmployeeFormService.ARABIC_REGEX)
-      
+
     ]),
 
     nameEn: this.fb.control<string | null>({ value: null, disabled: true }, [
@@ -61,7 +61,7 @@ export class AddEmployeeFormService {
     ])
   });
 
-  
+
   get roleId() { return this.form.controls.roleId; }
   get job() { return this.form.controls.job; }
   get employeeID() { return this.form.controls.employeeID; }
@@ -71,34 +71,34 @@ export class AddEmployeeFormService {
   get phoneNumber() { return this.form.controls.phoneNumber; }
 
   patchForm(user: ISystemEmployeeDetails, isEditMode: boolean = false) {
-  this.form.patchValue({
-    roleId: user.roleId,
-    job: user.employeeID,
-    employeeID: user.employeeID,
-    email: user.email,
-    nameAr: user.nameAr,
-    nameEn: user.nameEn,
-    phoneNumber: user.phoneNumber,
-  });
+    this.form.patchValue({
+      roleId: user.roleId,
+      job: user.employeeID,
+      employeeID: user.employeeID,
+      email: user.email,
+      nameAr: user.name_Ar,
+      nameEn: user.name_En,
+      phoneNumber: user.phoneNumber,
+    });
 
-  if (isEditMode) {
-    this.enableEditableFields();
+    if (isEditMode) {
+      this.enableEditableFields();
+    }
   }
-}
 
-enableEditableFields() {
-  this.nameAr.enable();
-  this.nameEn.enable();
-  this.phoneNumber.enable();
-  this.job.disable();
-}
+  enableEditableFields() {
+    this.nameAr.enable();
+    this.nameEn.enable();
+    this.phoneNumber.enable();
+    this.job.disable();
+  }
 
-ResetFormFields() {
-  this.form.reset();
-  this.nameAr.disable();
-  this.nameEn.disable();
-  this.phoneNumber.disable();
-  this.job.enable();
-}
+  ResetFormFields() {
+    this.form.reset();
+    this.nameAr.disable();
+    this.nameEn.disable();
+    this.phoneNumber.disable();
+    this.job.enable();
+  }
 
 }
