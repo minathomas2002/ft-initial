@@ -17,7 +17,7 @@ export class RoleManagementFilter extends Filter<IRoleManagementAssignmentFilter
       ...pagination,
       ...sorting,
       searchText: '',
-      roleCodes: undefined,
+      roleIds: undefined,
       statusFilters: undefined,
       assignedDate: null
     };

@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { RoleManagementFilters } from '../../components/role-management-filters/role-management-filters';
@@ -48,6 +48,11 @@ export class RoleManagement implements OnInit {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
     return [
+      {
+        label: 'Job ID',
+        isSortable: false,
+        sortingKey: 'jobId',
+      },
       {
         label: this.i18nService.translate('users.table.name') || 'Name',
         isSortable: true,

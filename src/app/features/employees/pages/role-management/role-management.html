@@ -19,6 +19,11 @@
           #itemsTemplate
           let-item="item"
         >
+          <!-- Job ID -->
+          <td>
+            {{ item.jobId }}
+          </td>
+
           <!-- Name -->
           <td>
             {{ getUserName(item) }}
@@ -59,9 +64,10 @@
 
           <td class="flex justify-center">
             <!-- Actions -->
-            @if(item.isActive){
-            <app-role-management-actions (onTransfer)="onTransfer(item)"></app-role-management-actions>
-            }
+            <app-role-management-actions
+              (onTransfer)="onTransfer(item)"
+              [disabled]="!item.isActive"
+            ></app-role-management-actions>
           </td>
 
         </ng-template>
