@@ -1,4 +1,4 @@
-import { Component, computed, inject, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { EAdminUserActions } from 'src/app/shared/enums';
@@ -40,6 +40,7 @@ class ERoleManagementActionsMapper {
 })
 export class RoleManagementActions {
 
+  disabled = input<boolean>(false);
   selectedItem = signal<string | null>(null);
   private readonly _i18n = inject(I18nService);
 

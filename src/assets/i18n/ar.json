@@ -275,7 +275,8 @@
 			"delete": "حذف",
 			"edit": "تعديل",
 			"view": "عرض",
-			"deactivate": "إلغاء التفعيل"
+			"deactivate": "إلغاء التفعيل",
+			"transfer": "استبدال / نقل"
 		},
 		"roles": {
 			"admin": "مدير",
