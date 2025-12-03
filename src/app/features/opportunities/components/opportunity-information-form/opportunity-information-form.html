@@ -217,7 +217,17 @@
           optionValue="id"
           [placeholder]="'opportunity.form.select' | translate"
           class="md:w-[50%]"
-        />
+        >
+          <ng-template
+            pTemplate="item"
+            let-item
+          >
+            <div class="flex items-center gap-2">
+              <i [class]="item.icon"></i>
+              {{ item.name }}
+            </div>
+          </ng-template>
+        </p-select>
         @if(getControl('opportunityCategory').invalid && getControl('opportunityCategory').dirty){
         <small class="text-red-500">
           {{ 'opportunity.form.opportunityCategoryRequired' | translate }}
