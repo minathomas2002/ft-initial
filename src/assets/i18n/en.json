@@ -323,7 +323,7 @@
       "roleManagement": "Role Management"
     },
     "filter": {
-      "searchPlaceholder": "Search by Username, Job ID, Phone, Email or Join Date",
+      "searchPlaceholder": "Search by name or email or ID or phone",
       "roleManagementSearchPlaceholder": "Search by Username, Job ID, Phone, Email",
       "rolePlaceholder": "Role",
       "statusPlaceholder": "Status",

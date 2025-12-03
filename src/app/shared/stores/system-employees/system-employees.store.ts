@@ -1,7 +1,7 @@
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
 import { SystemEmployeesApiService } from "../../api/system-employees/system-employees-api-service";
 import { inject } from "@angular/core";
-import { catchError, finalize, tap, throwError } from "rxjs";
+import { catchError, finalize, map, tap, throwError } from "rxjs";
 import {
   IActiveEmployee,
   ICreateSystemEmployeeRequest,
@@ -11,6 +11,7 @@ import {
   ISystemEmployeeRecord,
   IUpdateSystemEmployeeRequest,
 } from "../../interfaces";
+import { EAdminUserActions } from "../../enums";
 
 
 const initialState: {
@@ -44,6 +45,13 @@ export const SystemEmployeesStore = signalStore(
       getSystemEmployeesList(filter: ISystemEmployeeFilterRequest) {
         patchState(store, { isLoading: true, error: null });
         return systemEmployeesApiService.getSystemEmployeesList(filter).pipe(
+          map((res)=> {
+             res.body.data = res.body.data.map((item: ISystemEmployeeRecord) => ({
+                ...item,
+                actions: item.actions?.filter(action => action !== EAdminUserActions.VIEW) || []
+              }));
+            return res;
+          }),
           tap((res) => {
             patchState(store, { list: res.body?.data || [] });
             patchState(store, { count: res.body?.pagination.totalCount || 0 });
