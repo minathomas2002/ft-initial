@@ -52,12 +52,20 @@
         pInputText
         [formControl]="formService.nameEn"
         [placeholder]="'users.dialog.add.nameEnPlaceHolder' | translate"
+        minlength="3"
+        maxlength="100"
         fluid
       />
       <div>
         @if(formService.nameEn.touched && formService.nameEn.errors){
         @if(formService.nameEn.hasError('required')){
         <small class="text-red-500">{{ 'users.dialog.add.nameEnRequired' | translate }}</small>
+        }
+        @if(formService.nameEn.hasError('minlength') || formService.nameEn.hasError('maxLength')){
+        <small class="text-red-500">{{ 'users.dialog.add.nameEnglishInvalidLength' | translate }}</small>
+        }
+        @if(formService.nameEn.hasError('pattern')){
+        <small class="text-red-500">{{ 'users.dialog.add.nameEnglishInvalid' | translate }}</small>
         }
         }
       </div>
@@ -76,18 +84,13 @@
         @if(formService.nameAr.hasError('required')){
         <small class="text-red-500">{{ 'users.dialog.add.nameArRequired' | translate }}</small>
         }
+        @if(formService.nameAr.hasError('minlength') || formService.nameAr.hasError('maxLength')){
+        <small class="text-red-500">{{ 'users.dialog.add.nameArabicInvalidLength' | translate }}</small>
         }
-      </div>
-      <div>
-        <!-- add min $ max validation with translation -->
-        @if(formService.nameAr.errors?.['pattern']){
-        <p-message
-          severity="error"
-          variant="simple"
-          size="small"
-        >{{ 'users.dialog.add.nameArRequired' | translate }}</p-message>
+        @if(formService.nameAr.hasError('pattern')){
+        <small class="text-red-500">{{ 'users.dialog.add.nameArabicInvalid' | translate }}</small>
         }
-
+        }
       </div>
     </div>
     <div class="col-span-12 md:col-span-12">
@@ -123,6 +126,12 @@
         @if(formService.phoneNumber.hasError('required')){
         <small class="text-red-500">{{ 'users.dialog.add.phoneRequired' | translate }}</small>
         }
+        @if(formService.phoneNumber.hasError('minlength') || formService.phoneNumber.hasError('maxLength')){
+        <small class="text-red-500">{{ 'users.dialog.add.phoneInvalidLenhtg' | translate }}</small>
+        }
+        @if(formService.phoneNumber.hasError('pattern')){
+        <small class="text-red-500">{{ 'users.dialog.add.phoneInvalid' | translate }}</small>
+        }
         }
       </div>
     </div>
@@ -138,14 +147,14 @@
         appendTo="body"
         optionLabel="name"
         optionValue="id"
-        [placeholder]="'users.dialog.changeRole.rolePlaceholder' | translate"
+        [placeholder]="'users.dialog.add.rolePlaceHolder' | translate"
         dropdownIcon="icon-chevron-down"
         fluid
       />
       <div>
         @if(formService.roleId.touched && formService.roleId.errors){
         @if(formService.roleId.hasError('required')){
-        <small class="text-red-500">{{ 'users.dialog.changeRole.roleRequired' | translate }}</small>
+        <small class="text-red-500">{{ 'users.dialog.add.roleRequired' | translate }}</small>
         }
         }
       </div>

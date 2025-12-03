@@ -66,12 +66,12 @@ export type TSystemEmployeeSortingKeys = keyof ISystemEmployeeRecord;
 export interface ISystemEmployeeFilter extends IFilterBase<TSystemEmployeeSortingKeys> {
   searchText?: string;
   roleIds?: string[];
-  statusFilters?: ISelectItem[];
+  statusFilters?: boolean[];
 }
 
 export interface ISystemEmployeeFilterRequest extends IFilterBase<TSystemEmployeeSortingKeys> {
   searchText?: string;
-  roleIds?: number[];
+  roleIds?: string[];
   statusFilters?: boolean[];
 }
 
