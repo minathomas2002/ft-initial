@@ -112,6 +112,15 @@ export const AdminOpportunitiesStore = signalStore(
         )
       },
 
+      updateOpportunity(opportunity: FormData) {
+        patchState(store, { isProcessing: true });
+        return opportunitiesApiService.updateOpportunity(opportunity).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false, error: null });
+          })
+        )
+      },
+
       deleteOpportunity(opportunityId: string) {
         patchState(store, { isProcessing: true });
         return opportunitiesApiService.deleteOpportunity(opportunityId).pipe(

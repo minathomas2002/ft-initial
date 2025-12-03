@@ -267,6 +267,11 @@
 			"opportunityLocalization": "توطين الفرصة",
 			"opportunityLocalizationDescription": "أدخل تفاصيل توطين الفرصة",
 			"keyActivity": "النشاط الرئيسي"
+		},
+		"messages": {
+			"savedAsDraft": "تم حفظ الفرصة كمسودة",
+			"createdSuccessfully": "تم إنشاء الفرصة بنجاح",
+			"updatedSuccessfully": "تم تحديث الفرصة بنجاح"
 		}
 	},
 	"users": {

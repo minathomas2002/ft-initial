@@ -259,6 +259,7 @@
     },
     "wizard": {
       "createOpportunity": "Create Opportunity",
+      "editOpportunity": "Edit Opportunity",
       "addOpportunity": "Add Opportunity",
       "saveAsDraft": "Save a draft",
       "back": "Back",
@@ -269,6 +270,11 @@
       "opportunityLocalization": "Opportunity Localization",
       "opportunityLocalizationDescription": "Enter Opportunity localization details",
       "keyActivity": "Key Activity"
+    },
+    "messages": {
+      "savedAsDraft": "Opportunity saved as draft",
+      "createdSuccessfully": "Opportunity is created successfully",
+      "updatedSuccessfully": "Opportunity is updated successfully"
     }
   },
   "users": {

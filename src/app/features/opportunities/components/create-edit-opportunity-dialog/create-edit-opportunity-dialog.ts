@@ -37,6 +37,8 @@ export class CreateEditOpportunityDialog implements OnInit {
   toasterService = inject(ToasterService);
   i18nService = inject(I18nService);
   opportunityFilterService = inject(OpportunitiesFilterService);
+  viewMode = this.adminOpportunitiesStore.viewMode;
+
   steps = computed<IWizardStepState[]>(() => [
     {
       title: this.i18nService.translate('opportunity.wizard.opportunityInformation'),
@@ -53,12 +55,12 @@ export class CreateEditOpportunityDialog implements OnInit {
   ])
   activeStep = signal<number>(1);
   onSuccess = output<void>();
-  wizardTitle = computed(() => this.i18nService.translate('opportunity.wizard.createOpportunity'));
+  wizardTitle = computed(() => (this.viewMode() === EViewMode.Edit ? this.i18nService.translate('opportunity.wizard.editOpportunity') : this.i18nService.translate('opportunity.wizard.createOpportunity')));
 
   ngOnInit() {
     this.opportunityFormService.resetForm();
 
-    if (this.adminOpportunitiesStore.viewMode() === EViewMode.Edit && this.adminOpportunitiesStore.selectedOpportunityId()) {
+    if (this.viewMode() === EViewMode.Edit && this.adminOpportunitiesStore.selectedOpportunityId()) {
       this.opportunitiesStore.getOpportunityDetails(this.adminOpportunitiesStore.selectedOpportunityId()!).subscribe({
         next: async (res) => {
           await this.opportunityFormService.setFormValue(res.body);
@@ -91,7 +93,7 @@ export class CreateEditOpportunityDialog implements OnInit {
       formData
     ).subscribe({
       next: (res) => {
-        this.toasterService.success('Opportunity saved as draft');
+        this.toasterService.success(this.i18nService.translate('opportunity.messages.savedAsDraft'));
         this.opportunityFormService.resetForm();
         this.activeStep.set(1);
         this.visible.set(false);
@@ -110,15 +112,27 @@ export class CreateEditOpportunityDialog implements OnInit {
     const formValue = this.opportunityFormService.formValue();
     const opportunityInformationFormValue = await new OpportunityRequestsAdapter().toOpportunityRequest(formValue);
     const formData = new Utilities().objToFormData(opportunityInformationFormValue);
-    this.adminOpportunitiesStore.createOpportunity(formData).subscribe({
-      next: (res) => {
-        this.toasterService.success('Opportunity created successfully');
-        this.opportunityFormService.resetForm();
-        this.activeStep.set(1);
-        this.visible.set(false);
-        this.onSuccess.emit();
-      },
-    });
+    if (this.viewMode() === EViewMode.Edit) {
+      this.adminOpportunitiesStore.updateOpportunity(formData).subscribe({
+        next: (res) => {
+          this.toasterService.success(this.i18nService.translate('opportunity.messages.updatedSuccessfully'));
+          this.opportunityFormService.resetForm();
+          this.activeStep.set(1);
+          this.visible.set(false);
+          this.onSuccess.emit();
+        },
+      });
+    } else {
+      this.adminOpportunitiesStore.createOpportunity(formData).subscribe({
+        next: (res) => {
+          this.toasterService.success(this.i18nService.translate('opportunity.messages.createdSuccessfully'));
+          this.opportunityFormService.resetForm();
+          this.activeStep.set(1);
+          this.visible.set(false);
+          this.onSuccess.emit();
+        },
+      });
+    }
   }
 
   onClose() {
