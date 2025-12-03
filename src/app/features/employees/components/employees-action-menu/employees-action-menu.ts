@@ -15,6 +15,7 @@ import { EmployeesActionsMapper } from "../../classes/employee-actions-mapper";
 })
 export class EmployeesActionMenu {
   actions = input.required<EAdminUserActions[]>();
+  disabled = input<boolean>(false);
   selectedItem = signal<string | null>(null);
   private readonly _i18n = inject(I18nService);
   employeesActionsMapper = new EmployeesActionsMapper(this._i18n);
