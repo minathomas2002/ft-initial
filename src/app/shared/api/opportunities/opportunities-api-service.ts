@@ -1,7 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable } from 'rxjs';
-import { IApiPaginatedResponse, IBaseApiResponse, IDashboardResponse, IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityDraftRequest, IAdminOpportunitiesFilterRequest, IAdminOpportunity } from '../../interfaces';
+import {
+  IApiPaginatedResponse,
+  IBaseApiResponse,
+  IDashboardResponse,
+  IOpportunitiesFilterRequest,
+  IOpportunity,
+  IOpportunityDetails,
+  IAdminOpportunitiesFilterRequest,
+  IAdminOpportunity
+} from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { EOpportunityStatus } from '../../enums';
 

@@ -1,0 +1,40 @@
+<app-base-dialog
+  [(visible)]="visible"
+  icon="icon-user-edit"
+  [confirmLabel]="'users.dialog.replaceTransfer.confirmButton' | translate"
+  [isConfirmationDisabled]="transferRoleService.form.invalid"
+  (onConfirm)="onConfirm.emit()"
+  (onClose)="resetForm()"
+  [isLoading]="isProcessing()"
+>
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{ 'users.dialog.replaceTransfer.title' | translate }}</p>
+    <p class="text-sm text-gray-600">{{ 'users.dialog.replaceTransfer.description' | translate }}</p>
+  </div>
+
+  <div class="">
+    <app-base-label
+      [title]="'users.dialog.replaceTransfer.employeeLabel' | translate"
+      [required]="true"
+    />
+    <p-select
+      [options]="activeSystemEmployees()"
+      [loading]="isLoading()"
+      [loadingIcon]="'icon-transfer'"
+      appendTo="body"
+      optionLabel="name_En"
+      optionValue="userId"
+      [formControl]="transferRoleService.employee"
+      [placeholder]="'users.dialog.replaceTransfer.employeePlaceholder' | translate"
+      dropdownIcon="icon-chevron-down"
+      fluid
+    />
+    <div>
+      @if(transferRoleService.employee.dirty && transferRoleService.employee.errors){
+      @if(transferRoleService.employee.hasError('required')){
+      <small class="text-red-500">{{ 'users.dialog.replaceTransfer.employeeRequired' | translate }}</small>
+      }
+      }
+    </div>
+  </div>
+</app-base-dialog>

@@ -8,6 +8,7 @@ const Investors = "Investors";
 const AdminOpportunities = "Opportunities/admin";
 const SystemEmployees = "SystemEmployees";
 const Roles = "Roles";
+const RoleManagement = "RoleManagement";
 
 const Auth = "Auth";
 
@@ -16,15 +17,27 @@ export const API_ENDPOINTS = {
   dashboard: {
     getHelloWorld: `${Dashboard}/hello-world`,
   },
-  users: {
-    getEmployees: `${SystemEmployees}/getSystemEmployeesList`,
+  investors: {
     getInvestors: `${Investors}`,
-    createEmployee:`${SystemEmployees}/CreateSystemEmployee`,
-    updateEmployee:`${SystemEmployees}/UpdateSystemEmployee`,
-    getEmployeeByHrId:`${SystemEmployees}/hr`,
-    toggleStatus:`${SystemEmployees}/ToggleEmployeeStatus`,
-    getEmployeeDetails:`${SystemEmployees}/GetEmployeeDetails`,
-    getRoleManagementList: `${SystemEmployees}/RoleManagement/GetList`,
+  },
+  users: {
+    getAllUsers: `${Users}`,
+    createNewUser: `${Users}/create-user`,
+  },
+  systemEmployees: {
+    getEmployeeDataFromHr: `${SystemEmployees}/hr`,
+    getActiveEmployees: `${SystemEmployees}/GetActiveEmployees`,
+    getEmployeeDetails: `${SystemEmployees}/GetEmployeeDetails`,
+    createSystemEmployee: `${SystemEmployees}/CreateSystemEmployee`,
+    getSystemEmployeesList: `${SystemEmployees}/GetSystemEmployeesList`,
+    updateSystemEmployee: `${SystemEmployees}/UpdateSystemEmployee`,
+    toggleEmployeeStatus: `${SystemEmployees}/ToggleEmployeeStatus`,
+    RoleManagement: {
+      getRoleManagementList: `${SystemEmployees}/${RoleManagement}/GetList`,
+      getCurrentHolders: `${SystemEmployees}/${RoleManagement}/GetCurrentHolders`,
+      transferRole: `${SystemEmployees}/${RoleManagement}/Transfer`,
+    }
+
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,
@@ -45,11 +58,14 @@ export const API_ENDPOINTS = {
     resetPassword: `${Auth}/reset-password`,
     forgotPassword: `${Auth}/forget-password`,
     verifyEmail: `${Auth}/verify-email`,
-    resendVerifyEmail: `${Auth}/resend-verification-email`
+    resendVerifyEmail: `${Auth}/resend-verification-email`,
+    getUserProfile: `${Auth}/profile`,
   },
   roles: {
     getRoles: `${Roles}`,
-    getUserRoles: `${Roles}/system`,
+    getSystemRoles: `${Roles}/system`,
     getFilteredRoles: `${Roles}/filtered`,
+    getRoleById: `${Roles}`,
+    assignRoleToUser: `${Roles}/assign`,
   },
 };

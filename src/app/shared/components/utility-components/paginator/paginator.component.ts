@@ -1,13 +1,10 @@
-import { filter } from 'rxjs/operators';
 import {
 	Component,
 	input,
 	model,
 	computed,
 	viewChild,
-	effect,
-	OnChanges,
-	SimpleChanges,
+
 } from '@angular/core';
 import { PaginatorModule } from 'primeng/paginator';
 import type { PaginatorState } from 'primeng/paginator';

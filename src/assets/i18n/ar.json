@@ -118,6 +118,8 @@
 		"home": "الرئيسية",
 		"dashboard": "لوحة التحكم",
 		"profile": "الملف الشخصي",
+		"viewProfile": "عرض الملف الشخصي",
+		"signOut": "تسجيل الخروج",
 		"settings": "الإعدادات",
 		"help": "مساعدة",
 		"users": "المستخدمين",
@@ -330,7 +332,49 @@
 			"delete": {
 				"title": "حذف المستخدم",
 				"description": "هل أنت متأكد من أنك تريد حذف هذا المستخدم؟"
+			},
+			"deactivate": {
+				"title": "إلغاء تفعيل المستخدم",
+				"description": "هل أنت متأكد من أنك تريد إلغاء تفعيل هذا المستخدم؟"
+			},
+			"Add": {
+				"title": "إضافة موظف",
+				"job": "رقم الوظيفة",
+				"jobLabel": "رقم الوظيفة",
+				"enName": "الاسم الإنجليزي",
+				"arName": "الاسم العربي",
+				"email": "البريد الإلكتروني",
+				"phone": "الهاتف",
+				"role": "الدور",
+				"confirmAdd": "إضافة موظف",
+				"JobRequired": "رقم الوظيفة مطلوب",
+				"jobPlaceHolder": "أدخل رقم الوظيفة",
+				"invalidJobNo": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة موظف صالح.",
+				"nameEnPlaceHolder": "أدخل الاسم الإنجليزي.",
+				"nameEnRequired": "الاسم الإنجليزي مطلوب",
+				"nameArPlaceholder": "أدخل الاسم العربي.",
+				"nameArRequired": "الاسم العربي مطلوب",
+				"emailPlaceholder": "أدخل البريد الإلكتروني.",
+				"emailRequired": "البريد الإلكتروني مطلوب",
+				"phonePlaceholder": "أدخل الهاتف",
+				"phoneRequired": "الهاتف مطلوب"
+			},
+			"edit": {
+				"confirmedit": "تعديل موظف",
+				"title": "x"
+			},
+			"transferRole": {
+				"employeeLabel": "الموظف",
+				"employeePlaceholder": "اختر الموظف",
+				"employeeRequired": "الموظف مطلوب",
+				"transferRoleSuccess": "تم نقل الدور بنجاح"
 			}
+		},
+		"messages": {
+			"employeeAddedSuccess": "تم إضافة الموظف بنجاح",
+			"employeeUpdatedSuccess": "تم تحديث الموظف بنجاح",
+			"deactivateSuccess": "تم إلغاء تفعيل المستخدم بنجاح",
+			"transferRoleSuccess": "تم نقل الدور بنجاح"
 		}
 	},
 	"investors": {

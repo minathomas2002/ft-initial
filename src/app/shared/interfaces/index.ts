@@ -1,7 +1,6 @@
 export * from './auth.interface';
 export * from './filter.interface';
 export * from './colors.interface';
-export * from './users.interface';
 export * from './filterAdapter.interface';
 export * from './select-item.interface';
 export * from './table-header-item.interface';
@@ -11,3 +10,5 @@ export * from './opportunities.interface';
 export * from './admin-opportunities.interface';
 export * from './investors.interface';
 export * from './roles.interface';
+export * from './system-employees.interface';
+export * from './role-managements.interface';

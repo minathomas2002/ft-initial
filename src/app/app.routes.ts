@@ -17,10 +17,10 @@ const MAIN_LAYOUT_ROUTES: Routes = [
         data: { animation: ERoutes.dashboard },
       },
       {
-        path: ERoutes.users,
-        loadChildren: () => import('./features/users/users.routes').then((c) => c.USERS_ROUTES),
+        path: ERoutes.employees,
+        loadChildren: () => import('./features/employees/employees.routes').then((c) => c.EMPLOYEES_ROUTES),
         canActivate: [adminGuard],
-        data: { animation: ERoutes.users },
+        data: { animation: ERoutes.employees },
       },
       {
         path: ERoutes.opportunities,
@@ -29,6 +29,12 @@ const MAIN_LAYOUT_ROUTES: Routes = [
             (m) => m.LOGGED_IN_OPPORTUNITIES_ROUTES
           ),
         data: { animation: ERoutes.opportunities },
+      },
+      {
+        path: ERoutes.investors,
+        loadChildren: () => import('./features/investors/investors.routes').then((c) => c.INVESTORS_ROUTES),
+        canActivate: [adminGuard],
+        data: { animation: ERoutes.investors },
       }
     ],
     canActivate: [authGuard],

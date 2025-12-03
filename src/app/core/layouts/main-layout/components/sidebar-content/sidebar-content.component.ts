@@ -45,13 +45,13 @@ export class SidebarContentComponent {
       {
         label: this.i18nService.translate('navigation.users'),
         icon: 'icon-users',
-        routerLink: ERoutes.users + '/' + ERoutes.employees,
+        routerLink: ERoutes.employees,
         show: this.permissionService.canAccessUsers()
       },
       {
         label: this.i18nService.translate('navigation.investors'),
         icon: 'icon-users',
-        routerLink: ERoutes.users + '/' + ERoutes.investors,
+        routerLink: ERoutes.investors,
         show: this.permissionService.canAccessInvestors()
       },
       {

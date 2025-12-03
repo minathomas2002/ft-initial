@@ -6,3 +6,8 @@ export interface IRole {
   code: ERoles;
   createdDate?: string;
 }
+
+export interface IAssignRoleToUserRequest {
+  userId: string;
+  roleId: string;
+}

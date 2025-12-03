@@ -50,6 +50,25 @@ export interface IJwtUserDetails {
   jti: string;
 }
 
+export interface IUserProfile {
+    userId: string;
+    nameAR: string;
+    nameEN: string;
+    userType: string;
+    roleIds: string[];
+    roleNames: string[];
+    roleCodes: ERoles[];
+    phoneNumber: string;
+    otherPhone: string | null;
+    countryCode: string | null;
+    photoURL: string | null;
+    isEmailVerified: boolean | null;
+    employeeID: string | null;
+    investorCode: string | null;
+    department: string | null;
+    active: boolean | null;
+}
+
 export interface IRefreshTokenRequest {
   accessToken: string;
   refreshToken: string;

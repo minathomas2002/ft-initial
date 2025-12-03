@@ -8,7 +8,6 @@ export abstract class AbstractServiceFilter<
 > {
 	abstract filterClass: Filter<IFilter, unknown>;
 	abstract filter: WritableSignal<IFilter>;
-	abstract showClearAll: Signal<boolean>;
 
 	abstract clearAllFilters(): void;
 	abstract applyFilterWithPaging(): void;

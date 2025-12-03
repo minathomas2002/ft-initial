@@ -119,6 +119,8 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "profile": "Profile",
+    "viewProfile": "View profile",
+    "signOut": "Sign out",
     "settings": "Settings",
     "help": "Help",
     "users": "Employees",
@@ -275,7 +277,7 @@
       "delete": "Delete",
       "edit": "Edit",
       "view": "View",
-      "deactivate": "Deactivate"
+      "deactivate": "Deactivate Employee"
     },
     "roles": {
       "admin": "Admin",
@@ -322,21 +324,26 @@
       "selectJoinDate": "Select join date"
     },
     "dialog": {
-      "changeRole": {
-        "title": "Change Role",
-        "description": "Select a new role for this employee",
-        "roleLabel": "Role",
-        "rolePlaceholder": "Select Role",
-        "roleRequired": "Role is required.",
-        "confirmButton": "Change"
+      "replaceTransfer": {
+        "title": "Replace / Transfer",
+        "description": "Please select the employee to",
+        "employeeLabel": "Employee",
+        "employeePlaceholder": "Select Employee",
+        "employeeRequired": "Employee is required.",
+        "confirmButton": "Confirm"
       },
       "delete": {
         "title": "Delete User",
         "description": "Are you sure you want to delete this user?"
       },
+      "deactivate": {
+        "title": "Deactivate User",
+        "description": "Are you sure you want to deactivate this user?"
+      },
       "Add":{
         "title":"Add Employee",
         "job": "Job No.",
+        "jobLabel": "Job No.",
         "enName":"English Name",
         "arName": "Arabic Name",
         "email": "Email",
@@ -345,6 +352,7 @@
         "confirmAdd": "Add Employee",
         "JobRequired": "Job No. is required",
         "jobPlaceHolder": "Enter Job No.",
+        "invalidJobNo": "Invalid Job No. Please enter a valid employee Job No.",
         "nameEnPlaceHolder": "Enter English  Name.",
         "nameEnRequired": "Name English is required",
         "nameArPlaceholder": "Enter Arabic Name.",
@@ -362,8 +370,19 @@
       "edit":{
         "confirmedit": "Edit Employee",
         "title" : "x"
+      },
+      "transferRole": {
+        "employeeLabel": "Employee",
+        "employeePlaceholder": "Select Employee",
+        "employeeRequired": "Employee is required",
+        "transferRoleSuccess": "Role has been successfully transferred to the selected user."
       }
-
+    },
+    "messages": {
+      "employeeAddedSuccess": "Employee Added Successfully",
+      "employeeUpdatedSuccess": "Employee Updated Successfully",
+      "deactivateSuccess": "User deactivated successfully",
+      "transferRoleSuccess": "Role has been successfully transferred to the selected user."
     }
   },
   "investors": {
