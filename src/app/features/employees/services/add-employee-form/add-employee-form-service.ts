@@ -13,7 +13,7 @@ export class AddEmployeeFormService {
     /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF ]+$/;
 
   static readonly ENGLISH_REGEX =
-    /^[A-Za-z]+( [A-Za-z]+)*$/;
+   /^\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s*$/;
 
   static readonly PHONE_REGEX =
     /^\+?[0-9]{8,15}$/;
@@ -41,7 +41,7 @@ export class AddEmployeeFormService {
     nameAr: this.fb.control<string | null>(null, [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(20),
+      Validators.maxLength(100),
       Validators.pattern(AddEmployeeFormService.ARABIC_REGEX)
 
     ]),
@@ -55,6 +55,8 @@ export class AddEmployeeFormService {
 
     phoneNumber: this.fb.control<string | null>(null, [
       Validators.required,
+       Validators.minLength(8),
+      Validators.maxLength(15),
       Validators.pattern(AddEmployeeFormService.PHONE_REGEX)
     ])
   });
