@@ -77,6 +77,7 @@ export class AddEditEmployeeDialog implements OnInit {
       debounceTime(500),
       distinctUntilChanged(),
       takeUntilDestroyed(this.destroyRef),
+      filter(() => (this.formService.job.value?.length ?? 0) >= 6 && (this.formService.job.value?.length ?? 0) != 0),
       tap(() => {
         this.jobIdErrorMessage.set(null);
       }), // Clear error when new value is entered
@@ -87,7 +88,7 @@ export class AddEditEmployeeDialog implements OnInit {
         return this.employeeStore.getEmployeeDateFromHR(this.formService.job.value!).pipe(
           catchError((error) => {
             // Handle error gracefully without crashing
-            this.jobIdErrorMessage.set(this.i18nService.translate('users.dialog.Add.invalidJobNo'));
+            this.jobIdErrorMessage.set(this.i18nService.translate('users.dialog.add.invalidJobNo'));
             this.formService.form.patchValue({
               nameAr: null,
               nameEn: null,

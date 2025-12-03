@@ -340,7 +340,7 @@
         "title": "Deactivate User",
         "description": "Are you sure you want to deactivate this user?"
       },
-      "Add":{
+      "add":{
         "title":"Add Employee",
         "job": "Job No.",
         "jobLabel": "Job No.",
