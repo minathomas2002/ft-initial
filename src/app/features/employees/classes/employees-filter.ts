@@ -17,6 +17,9 @@ export class EmployeesFilter extends Filter<
 		this.filter = {
 			...pagination,
 			...sorting,
+			searchText: '',
+			roleIds: [],
+			statusFilters: [],
 		};
 
 		this.initialState = structuredClone(this.filter);

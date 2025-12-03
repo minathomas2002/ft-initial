@@ -16,9 +16,10 @@ export class EmployeesFilterService extends AbstractServiceFilter<ISystemEmploye
 
   adaptedFilter = computed<ISystemEmployeeFilterRequest>(() => {
     return {
-      ...this.filterClass.filter,
-      roleIds: this.filterClass.filter.roleIds?.map(Number) ?? [],
-      statusFilters: this.filterClass.filter.statusFilters?.map((item: any) => item.value === true) ?? [],
+      ...this.filter(),
+      searchText: this.filter().searchText?.trim() ?? '',
+      roleIds: this.filter().roleIds ?? [],
+      statusFilters: this.filter().statusFilters ?? []
     };
   });
 
