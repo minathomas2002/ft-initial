@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { DatePipe } from '@angular/common';
@@ -9,6 +9,7 @@ import { BaseTagComponent } from '../../base-components/base-tag/base-tag.compon
 import { OpportunityDetailItem } from '../opportunity-detail-item/opportunity-detail-item';
 import { OpportunityActionMenuComponent } from '../opportunity-action-menu/opportunity-action-menu.component';
 import { TColors } from 'src/app/shared/interfaces';
+import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 
 @Component({
   selector: 'app-admin-opportunity-card',
@@ -28,20 +29,14 @@ export class AdminOpportunityCard {
   opportunity = input.required<IAdminOpportunity>();
   onViewDetails = output<IAdminOpportunity>();
   onAction = output<{ opportunity: IAdminOpportunity; action: EOpportunityAction }>();
+  private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
 
   EOpportunityStatus = EOpportunityStatus;
   EOpportunityState = EOpportunityState;
   EOpportunityAction = EOpportunityAction;
 
   getOpportunityIcon(): string {
-    switch (this.opportunity().opportunityType) {
-      case 1:
-        return 'icon-flag';
-      case 2:
-        return 'icon-idea';
-      default:
-        return 'icon-search';
-    }
+    return this.adminOpportunitiesStore.getIconByOpportunityCategory(this.opportunity().opportunityCategory?.toString() ?? 1);
   }
 
   getStatusConfig(): { label: string; color: TColors } {

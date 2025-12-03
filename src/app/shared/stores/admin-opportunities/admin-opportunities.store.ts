@@ -39,16 +39,23 @@ const initialState: {
     id: '2',
     name: 'Product',
   }],
-  opportunityCategories: [{
-    id: '1',
-    name: 'Category 1',
-    icon: 'icon-bell'
-  },
-  {
-    id: '2',
-    name: 'Category 2',
-    icon: 'icon-home'
-  }],
+  opportunityCategories: [
+    {
+      id: '1',
+      name: 'Bell Icon',
+      icon: 'icon-bell'
+    },
+    {
+      id: '2',
+      name: 'Idea Icon',
+      icon: 'icon-idea'
+    },
+    {
+      id: '3',
+      name: 'Data Icon',
+      icon: 'icon-data'
+    }
+  ],
   statusOptions: [
     { id: EOpportunityStatus.PUBLISHED.toString(), name: 'opportunity.status.published' },
     { id: EOpportunityStatus.DRAFT.toString(), name: 'opportunity.status.draft' },
@@ -147,6 +154,10 @@ export const AdminOpportunitiesStore = signalStore(
             patchState(store, { isProcessing: false, error: null });
           })
         )
+      },
+
+      getIconByOpportunityCategory(categoryId: string) {
+        return store.opportunityCategories().find((category) => category.id === categoryId)?.icon ?? '';
       }
     }
   }),
