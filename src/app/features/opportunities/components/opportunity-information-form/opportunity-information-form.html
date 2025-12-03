@@ -380,8 +380,15 @@
         />
         @if(getControl('dateRange').invalid && getControl('dateRange').dirty){
         <small class="text-red-500">
-          {{ getControl('dateRange').hasError('required') ? ('opportunity.form.dateRangeRequired' | translate) :
-          ('opportunity.form.dateRangeInvalid' | translate) }}
+          @if(getControl('dateRange').hasError('required')){
+          {{ 'opportunity.form.dateRangeRequired' | translate }}
+          } @else if(getControl('dateRange').hasError('startDateRestriction')){
+          {{ 'opportunity.form.startDateRestriction' | translate }}
+          } @else if(getControl('dateRange').hasError('endDateRestriction')){
+          {{ 'opportunity.form.endDateRestriction' | translate }}
+          } @else {
+          {{ 'opportunity.form.dateRangeInvalid' | translate }}
+          }
         </small>
         }
       </div>
