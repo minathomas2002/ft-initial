@@ -14,7 +14,7 @@ import { ERoutes } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
-
+import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 @Component({
   selector: 'app-register',
   imports: [
@@ -27,6 +27,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
     PasswordPolicy,
     BaseLabelComponent,
     TranslatePipe,
+    PhoneInputComponent,
   ],
   providers: [RegisterFormService],
   templateUrl: './register.html',
