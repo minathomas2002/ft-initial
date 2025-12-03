@@ -54,7 +54,6 @@ export interface IOpportunityDetails {
   createdDate: string;
   updatedDate: string | null;
   actions: number[];
-  spendSARFormatted: string;
   minQuantityFormatted: string;
   maxQuantityFormatted: string;
   localSuppliersFormatted: string;

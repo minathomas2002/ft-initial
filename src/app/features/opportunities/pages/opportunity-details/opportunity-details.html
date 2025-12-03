@@ -68,7 +68,7 @@
                 icon="icon-currency-dollar-circle"
                 [cardTitle]="'opportunity.details.spendSAR' | translate"
                 cardClass="bg-white"
-                cardDescription="{{opportunitiesStore.details()?.spendSARFormatted}}"
+                cardDescription="{{opportunitiesStore.details()?.spendSAR ?? '-'}}"
               >
               </app-base-card>
               <app-base-card
@@ -87,14 +87,14 @@
                 icon="icon-flag"
                 [cardTitle]="'opportunity.details.local' | translate"
                 cardClass="bg-white"
-                cardDescription="{{opportunitiesStore.details()?.localSuppliersFormatted}}"
+                cardDescription="{{opportunitiesStore.details()?.localSuppliersFormatted ?? '-'}}"
               >
               </app-base-card>
               <app-base-card
                 icon="icon-glop-04"
                 [cardTitle]="'opportunity.details.global' | translate"
                 cardClass="bg-white"
-                cardDescription="{{opportunitiesStore.details()?.globalSuppliersFormatted}}"
+                cardDescription="{{opportunitiesStore.details()?.globalSuppliersFormatted ?? '-'}}"
               >
               </app-base-card>
             </div>
