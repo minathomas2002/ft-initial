@@ -1,12 +1,11 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DashboardView } from "./features/dashboard/pages/dashboard-view/dashboard-view";
 import { ToastModule } from 'primeng/toast';
 import { I18nService } from './shared/services/i18n/i18n.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,ToastModule],
+  imports: [RouterOutlet, ToastModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
