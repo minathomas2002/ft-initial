@@ -42,10 +42,12 @@ const initialState: {
   opportunityCategories: [{
     id: '1',
     name: 'Category 1',
+    icon: 'icon-bell'
   },
   {
     id: '2',
     name: 'Category 2',
+    icon: 'icon-home'
   }],
   statusOptions: [
     { id: EOpportunityStatus.PUBLISHED.toString(), name: 'opportunity.status.published' },
@@ -106,6 +108,15 @@ export const AdminOpportunitiesStore = signalStore(
       createOpportunity(opportunity: FormData) {
         patchState(store, { isProcessing: true });
         return opportunitiesApiService.createOpportunity(opportunity).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false, error: null });
+          })
+        )
+      },
+
+      updateOpportunity(opportunity: FormData) {
+        patchState(store, { isProcessing: true });
+        return opportunitiesApiService.updateOpportunity(opportunity).pipe(
           finalize(() => {
             patchState(store, { isProcessing: false, error: null });
           })

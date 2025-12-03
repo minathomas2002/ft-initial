@@ -179,6 +179,7 @@
         <input
           type="text"
           pInputText
+          [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
           [placeholder]="'opportunity.form.enterOpportunityTitle' | translate"
           [formControl]="getControl('title')"
         />
@@ -194,7 +195,7 @@
         <app-base-label [title]="'opportunity.form.shortDescription' | translate" />
         <textarea
           pTextarea
-          [rows]="4"
+          [rows]="2"
           [placeholder]="'opportunity.form.enterShortDescription' | translate"
           [formControl]="getControl('shortDescription')"
         >
@@ -217,7 +218,17 @@
           optionValue="id"
           [placeholder]="'opportunity.form.select' | translate"
           class="md:w-[50%]"
-        />
+        >
+          <ng-template
+            pTemplate="item"
+            let-item
+          >
+            <div class="flex items-center gap-2">
+              <i [class]="item.icon"></i>
+              {{ item.name }}
+            </div>
+          </ng-template>
+        </p-select>
         @if(getControl('opportunityCategory').invalid && getControl('opportunityCategory').dirty){
         <small class="text-red-500">
           {{ 'opportunity.form.opportunityCategoryRequired' | translate }}
@@ -233,6 +244,7 @@
           [options]="opportunityTypes()"
           optionLabel="name"
           optionValue="id"
+          [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
           [placeholder]="'opportunity.form.select' | translate"
           class="md:w-[50%]"
         />
@@ -368,8 +380,15 @@
         />
         @if(getControl('dateRange').invalid && getControl('dateRange').dirty){
         <small class="text-red-500">
-          {{ getControl('dateRange').hasError('required') ? ('opportunity.form.dateRangeRequired' | translate) :
-          ('opportunity.form.dateRangeInvalid' | translate) }}
+          @if(getControl('dateRange').hasError('required')){
+          {{ 'opportunity.form.dateRangeRequired' | translate }}
+          } @else if(getControl('dateRange').hasError('startDateRestriction')){
+          {{ 'opportunity.form.startDateRestriction' | translate }}
+          } @else if(getControl('dateRange').hasError('endDateRestriction')){
+          {{ 'opportunity.form.endDateRestriction' | translate }}
+          } @else {
+          {{ 'opportunity.form.dateRangeInvalid' | translate }}
+          }
         </small>
         }
       </div>

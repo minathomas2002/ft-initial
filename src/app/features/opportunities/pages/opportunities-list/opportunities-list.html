@@ -10,7 +10,7 @@
   <ng-container ngProjectAs="page-body">
     <app-cards-skeleton [isLoading]="opportunitiesStore.loading()">
       <app-data-cards
-        [items]="[]"
+        [items]="opportunitiesStore.list()"
         [totalRecords]="opportunitiesStore.count()"
         [(filter)]="filter"
         (filterChange)="filterService.applyFilterWithPaging()"

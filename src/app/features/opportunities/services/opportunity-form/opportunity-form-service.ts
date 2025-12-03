@@ -59,6 +59,10 @@ export class OpportunityFormService {
 
   private fb = inject(FormBuilder);
 
+  // Store original date range for validation when plans are linked
+  private originalDateRange: [Date, Date] | null = null;
+  private hasActivePlans: boolean = false;
+
   constructor() {
     this.initializeForms();
   }
@@ -204,6 +208,10 @@ export class OpportunityFormService {
     this.resetFormArray('assemblyTestings');
     this.resetFormArray('afterSalesServices');
 
+    // Reset original date range and hasActivePlans
+    this.originalDateRange = null;
+    this.hasActivePlans = false;
+
     this.opportunityForm.updateValueAndValidity();
     this.opportunityInformationForm.updateValueAndValidity();
     this.opportunityLocalizationForm.updateValueAndValidity();
@@ -235,7 +243,7 @@ export class OpportunityFormService {
     this.opportunityInformationForm.patchValue({ dateRange });
   }
 
-  handleDateRangeChange(event: any) {
+  handleDateRangeChange(event: any, hasActivePlans: boolean = false) {
     // Handle date range selection from PrimeNG DatePicker
     // PrimeNG DatePicker emits different formats depending on selection state
     if (event === null || event === undefined) {
@@ -273,10 +281,59 @@ export class OpportunityFormService {
         // Validate dates are not invalid (NaN)
         if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
           const normalizedDates: [Date, Date] = [startDate, endDate];
-          // Update the form field value
-          this.updateDateRange(normalizedDates);
+          const dateRangeControl = this.opportunityInformationForm.get('dateRange');
+
+          // Validate date changes if plans are linked
+          if (hasActivePlans && this.originalDateRange) {
+            const [originalStart, originalEnd] = this.originalDateRange;
+            let hasError = false;
+            const restrictionErrors: any = {};
+
+            // Start Date validation: Can only be moved earlier (not later)
+            if (startDate > originalStart) {
+              restrictionErrors.startDateRestriction = {
+                message: 'Start date can only be changed to an earlier date when plans are linked'
+              };
+              hasError = true;
+            }
+
+            // End Date validation: Can only be moved later (not earlier)
+            if (endDate < originalEnd) {
+              restrictionErrors.endDateRestriction = {
+                message: 'End date can only be changed to a later date when plans are linked'
+              };
+              hasError = true;
+            }
+
+            if (hasError) {
+              // Update the date range first (so datepicker shows user's selection)
+              this.updateDateRange(normalizedDates);
+              // Then set errors on the control (preserving existing errors from dateRangeValidator)
+              const existingErrors = dateRangeControl?.errors || {};
+              // Remove any existing restriction errors before adding new ones
+              const cleanedErrors = { ...existingErrors };
+              delete cleanedErrors['startDateRestriction'];
+              delete cleanedErrors['endDateRestriction'];
+              dateRangeControl?.setErrors({ ...cleanedErrors, ...restrictionErrors });
+              dateRangeControl?.markAsTouched();
+            } else {
+              // Clear date restriction errors if validation passes
+              if (dateRangeControl?.errors) {
+                const errors = { ...dateRangeControl.errors };
+                delete errors['startDateRestriction'];
+                delete errors['endDateRestriction'];
+                dateRangeControl.setErrors(Object.keys(errors).length > 0 ? errors : null);
+              }
+              // Update the form field value
+              this.updateDateRange(normalizedDates);
+            }
+          } else {
+            // No restrictions, update normally
+            this.updateDateRange(normalizedDates);
+          }
+
           // Mark the field as touched
-          this.opportunityInformationForm.get('dateRange')?.markAsTouched();
+          dateRangeControl?.markAsTouched();
         }
       } else if (event.length === 1 && event[0] != null) {
         // Only start date selected, don't update yet (wait for end date)
@@ -298,13 +355,21 @@ export class OpportunityFormService {
       ? [new Date(value.startDate), new Date(value.endDate)]
       : null;
 
+    // Store original date range and hasActivePlans for validation
+    this.originalDateRange = dateRange;
+    this.hasActivePlans = value.hasActivePlans ?? false;
+
     // Get image from attachments (first attachment if available) and convert to File
     let image: File | null = null;
-    if (value.attachments && value.attachments.length > 0) {
-      const fileUrl = value.attachments[0].fileUrl;
-      const fileName = value.attachments[0].fileName || 'image';
-      image = await this.createFileFromUrl(fileUrl, fileName);
-    }
+    // For now, use placeholder image
+    image = await this.createFileFromUrl('/assets/images/opportunity-placeholder.png', 'opportunity-placeholder.png');
+    // if (value.attachments && value.attachments.length > 0) {
+    //   const fileUrl = value.attachments[0].fileUrl;
+    //   const fileName = value.attachments[0].fileName || 'image';
+    //   image = await this.createFileFromUrl(fileUrl, fileName);
+    // }
+
+
 
     this.opportunityInformationForm.patchValue({
       id: value.id,

@@ -67,6 +67,7 @@ export class AdminOpportunitiesView implements OnInit, OnDestroy {
     // Handle actions (Edit, Delete, MoveToDraft, Publish)
     switch (event.action) {
       case EOpportunityAction.Edit:
+
         // Open edit dialog
         this.adminOpportunitiesStore.setSelectedOpportunityId(event.opportunity.id);
         this.adminOpportunitiesStore.setViewMode(EViewMode.Edit);

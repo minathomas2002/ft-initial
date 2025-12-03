@@ -65,4 +65,5 @@ export interface IOpportunityDetails {
   afterSalesServices: IOpportunityActivity[];
   attachments: IOpportunityAttachment[];
   linkedPlans: number;
+  hasActivePlans: boolean;
 }
