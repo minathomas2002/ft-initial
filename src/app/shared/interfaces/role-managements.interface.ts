@@ -23,14 +23,14 @@ export type TRoleManagementAssignmentSortingKeys = keyof IRoleManagementAssignme
 
 export interface IRoleManagementAssignmentFilter extends IFilterBase<TRoleManagementAssignmentSortingKeys> {
   searchText?: string;
-  roleCodes?: ISelectItem[];
-  statusFilters?: ISelectItem[];
+  roleIds?: string[];
+  statusFilters?: boolean[];
   assignedDate: Date[] | null;
 }
 
 export interface IRoleManagementAssignmentFilterRequest extends IFilterBase<TRoleManagementAssignmentSortingKeys> {
   searchText?: string;
-  roleCodes?: number[];
+  roleIds?: string[];
   statusFilters?: boolean[];
   assignedDateFrom?: string | null;
   assignedDateTo?: string | null;
