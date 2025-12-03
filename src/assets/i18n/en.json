@@ -349,27 +349,30 @@
         "email": "Email",
         "phone": "Phone",
         "role": "Role",
+        "rolePlaceHolder": "Select Role",
+        "roleRequired": "Role is required, Please select a valid role.",
         "confirmAdd": "Add Employee",
         "JobRequired": "Job No. is required",
         "jobPlaceHolder": "Enter Job No.",
         "invalidJobNo": "Invalid Job No. Please enter a valid employee Job No.",
-        "nameEnPlaceHolder": "Enter English  Name.",
-        "nameEnRequired": "Name English is required",
+        "nameEnPlaceHolder": "Enter English Name.",
+        "nameEnRequired": "English name is required.",
         "nameArPlaceholder": "Enter Arabic Name.",
-        "nameArRequired": "Name Arabic is required",
+        "nameArRequired": "Arabic name is required.",
         "emailPlaceholder": "Enter Email.",
         "emailRequired": "Email is required",
         "phonePlaceholder": "Enter Phone",
-        "phoneRequired": "Phone is required",
+        "phoneRequired": "Phone number is required.",
         "jobInvalid": "Invalid Job ID. Please enter a valid employee Job ID.",
         "nameArabicInvalid":"Arabic name must contain Arabic letters only.",
         "nameArabicInvalidLength":"Arabic name must be between 3 and 100 characters.",
-        "nameEnglishInvalid" : "Invalid English name. Use letters only (max 50 characters).",
-        "phoneInvalid":"Invalid phone number. Include country code and numbers only."
+        "nameEnglishInvalid" : "English name must contain English letters only.",
+        "nameEnglishInvalidLength":"English name must be between 3 and 100 characters.",
+        "phoneInvalidLenhtg": "Phone number must be between 8 and 15 digits",
+        "phoneInvalid":"Phone number must contain digits only."
       },
       "edit":{
-        "confirmedit": "Edit Employee",
-        "title" : "x"
+        "confirmedit": "Edit Employee"
       },
       "transferRole": {
         "employeeLabel": "Employee",

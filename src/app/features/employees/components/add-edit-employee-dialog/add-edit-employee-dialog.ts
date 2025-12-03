@@ -25,7 +25,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TranslatePipe,
     ReactiveFormsModule,
     Select,
-    Message,
     BaseLabelComponent,
     InputTextModule,
     IconFieldModule,
@@ -138,7 +137,7 @@ export class AddEditEmployeeDialog implements OnInit {
     const req: ICreateSystemEmployeeRequest = {
       employeeID: form.controls.job.value!,
       nameAr: form.controls.nameAr.value!,
-      nameEn: form.controls.nameEn.value!,
+      nameEn: form.controls.nameEn.value!.trim(),
       email: form.controls.email.getRawValue() ?? '',  // since it's disabled
       phoneNumber: form.controls.phoneNumber.value!,
       roleId: String(form.controls.roleId.value!),  // convert enum/number to string
@@ -173,7 +172,7 @@ export class AddEditEmployeeDialog implements OnInit {
     const req: IUpdateSystemEmployeeRequest = {
       id: this.SelectedItem()?.id ?? '',
       name_Ar: form.controls.nameAr.value!,
-      name_En: form.controls.nameEn.value!,
+      name_En: form.controls.nameEn.value!.trim(),
       phoneNumber: form.controls.phoneNumber.value!,
       roleId: String(form.controls.roleId.value!),
     };
@@ -214,5 +213,6 @@ export class AddEditEmployeeDialog implements OnInit {
       },
     });
   }
+
 
 }
