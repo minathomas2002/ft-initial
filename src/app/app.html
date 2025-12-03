@@ -10,5 +10,56 @@
       }
     }"
     ariaLabel="Notification messages"
-  />
+    styleClass="custom-toast"
+  >
+    <ng-template
+      let-message
+      pTemplate="message"
+    >
+      <div class="custom-toast-content">
+        <div
+          class="custom-toast-icon-wrapper"
+          [class.custom-toast-icon-wrapper-success]="message.severity === 'success'"
+          [class.custom-toast-icon-wrapper-error]="message.severity === 'error'"
+          [class.custom-toast-icon-wrapper-warn]="message.severity === 'warn'"
+          [class.custom-toast-icon-wrapper-info]="message.severity === 'info'"
+        >
+          <div
+            class="custom-toast-icon-ring"
+            [class.custom-toast-icon-ring-success]="message.severity === 'success'"
+            [class.custom-toast-icon-ring-error]="message.severity === 'error'"
+            [class.custom-toast-icon-ring-warn]="message.severity === 'warn'"
+            [class.custom-toast-icon-ring-info]="message.severity === 'info'"
+          ></div>
+          <div
+            class="custom-toast-icon-ring custom-toast-icon-ring-2"
+            [class.custom-toast-icon-ring-success]="message.severity === 'success'"
+            [class.custom-toast-icon-ring-error]="message.severity === 'error'"
+            [class.custom-toast-icon-ring-warn]="message.severity === 'warn'"
+            [class.custom-toast-icon-ring-info]="message.severity === 'info'"
+          ></div>
+          <div
+            class="custom-toast-icon"
+            [class.custom-toast-icon-success]="message.severity === 'success'"
+            [class.custom-toast-icon-error]="message.severity === 'error'"
+            [class.custom-toast-icon-warn]="message.severity === 'warn'"
+            [class.custom-toast-icon-info]="message.severity === 'info'"
+          >
+            @if (message.severity === 'success') {
+            <i class="icon-check-circle"></i>
+            } @else if (message.severity === 'error') {
+            <i class="custom-toast-exclamation">!</i>
+            } @else if (message.severity === 'warn') {
+            <span class="custom-toast-exclamation">!</span>
+            } @else {
+            <i class="icon-info"></i>
+            }
+          </div>
+        </div>
+        <div class="text-sm font-semibold text-gray-900">
+          {{ message.summary }}
+        </div>
+      </div>
+    </ng-template>
+  </p-toast>
 </div>
