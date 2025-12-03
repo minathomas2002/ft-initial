@@ -12,9 +12,12 @@ import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interfa
 import { ButtonModule } from 'primeng/button';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
-import { EViewMode } from 'src/app/shared/enums';
+import { EOpportunityStatus, EViewMode } from 'src/app/shared/enums';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
+import { IOpportunityDetails } from 'src/app/shared/interfaces/opportunities.interface';
+import { TColors } from 'src/app/shared/interfaces/colors.interface';
+import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -24,7 +27,8 @@ import { OpportunitiesFilterService } from '../../services/opportunities-filter/
     OpportunityInformationForm,
     OpportunityLocalizationForm,
     ButtonModule,
-    TranslatePipe
+    TranslatePipe,
+    BaseTagComponent
   ],
   templateUrl: './create-edit-opportunity-dialog.html',
   styleUrl: './create-edit-opportunity-dialog.scss',
@@ -38,7 +42,7 @@ export class CreateEditOpportunityDialog implements OnInit {
   i18nService = inject(I18nService);
   opportunityFilterService = inject(OpportunitiesFilterService);
   viewMode = this.adminOpportunitiesStore.viewMode;
-
+  opportunity = signal<IOpportunityDetails | null>(null);
   steps = computed<IWizardStepState[]>(() => [
     {
       title: this.i18nService.translate('opportunity.wizard.opportunityInformation'),
@@ -63,6 +67,7 @@ export class CreateEditOpportunityDialog implements OnInit {
     if (this.viewMode() === EViewMode.Edit && this.adminOpportunitiesStore.selectedOpportunityId()) {
       this.opportunitiesStore.getOpportunityDetails(this.adminOpportunitiesStore.selectedOpportunityId()!).subscribe({
         next: async (res) => {
+          this.opportunity.set(res.body);
           await this.opportunityFormService.setFormValue(res.body);
         },
       });
@@ -75,6 +80,30 @@ export class CreateEditOpportunityDialog implements OnInit {
   previousStep = () => {
     this.activeStep.set(this.activeStep() - 1);
   }
+
+
+  get EOpportunityStatus(): typeof EOpportunityStatus {
+    return EOpportunityStatus
+  }
+
+  getStatusConfig(): { label: string; color: TColors } {
+    const status = this.opportunity()?.status;
+    if (status === EOpportunityStatus.PUBLISHED) {
+      return { label: 'opportunity.status.published', color: 'green' as const };
+    } else {
+      return { label: 'opportunity.status.draft', color: 'gray' as const };
+    }
+  }
+
+  getStateConfig(): { label: string; color: TColors } {
+    const isActive = this.opportunity()?.isActive;
+    if (isActive) {
+      return { label: 'opportunity.state.active', color: 'green' as const };
+    } else {
+      return { label: 'opportunity.state.inactive', color: 'red' as const };
+    }
+  }
+
   async saveAsDraft() {
     const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.get('title');
     // Check if the field is invalid
