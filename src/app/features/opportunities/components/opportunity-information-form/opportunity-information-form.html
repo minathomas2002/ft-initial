@@ -179,6 +179,7 @@
         <input
           type="text"
           pInputText
+          [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
           [placeholder]="'opportunity.form.enterOpportunityTitle' | translate"
           [formControl]="getControl('title')"
         />
@@ -233,6 +234,7 @@
           [options]="opportunityTypes()"
           optionLabel="name"
           optionValue="id"
+          [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
           [placeholder]="'opportunity.form.select' | translate"
           class="md:w-[50%]"
         />
