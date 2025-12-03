@@ -68,17 +68,15 @@
           </td>
           <!-- Action -->
           <td>
-            @if(item.actions.length>0){
             <app-employees-action-menu
               [actions]="item.actions"
+              [disabled]="item.actions.length == 0"
               (onChangeRole)="onChangeRole(item)"
               (onDelete)="onDelete(item)"
               (onEdit)="onUpdateEmployee(item)"
               (onDeactivate)="onDeactivate(item)"
             ></app-employees-action-menu>
-            }@else{
-            <div class="text-center">-</div>
-            }
+
           </td>
         </ng-template>
       </app-data-table>

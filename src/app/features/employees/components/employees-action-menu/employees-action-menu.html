@@ -1,5 +1,6 @@
 <p-button
   (click)="menu.toggle($event)"
+  [disabled]="disabled()"
   severity="secondary"
   text
   plain
