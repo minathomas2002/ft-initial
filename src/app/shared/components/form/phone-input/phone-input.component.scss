@@ -1,0 +1,166 @@
+.phone-input-container {
+	width: 100%;
+
+	.unified-phone-input {
+		display: flex;
+		align-items: center;
+		border: 1px solid var(--p-input-border-color, #e5e7eb);
+		border-radius: 8px;
+		background: var(--p-input-background, #ffffff);
+		overflow: hidden;
+		transition: border-color 0.2s;
+		height: 44px;
+		box-shadow: 0px 1px 2px 0px #0A0D120D;
+
+		&:hover {
+			border-color: var(--p-input-hover-border-color, #d1d5db);
+		}
+
+		&:focus-within {
+			border-color: var(--p-input-focus-border-color, #9ca3af);
+			box-shadow: none;
+		}
+
+		.country-selector-wrapper {
+			flex-shrink: 0;
+			border-right: 1px solid var(--p-input-border-color, #e5e7eb);
+			background: transparent;
+			min-width: 100px;
+			position: relative;
+			border: 0;
+
+			.country-select {
+				width: 100%;
+				border: 0;
+				::ng-deep {
+					.p-select {
+						border: none;
+						box-shadow: none;
+						background: transparent;
+						width: 100%;
+
+						&:hover {
+							border: none;
+							box-shadow: none;
+						}
+
+						&:focus {
+							border: none;
+							box-shadow: none;
+						}
+					}
+
+					.p-select-dropdown{
+						width: 20px;
+					}
+
+					.p-select-label {
+						padding: 0.625rem 0.75rem;
+						display: flex;
+						align-items: center;
+						gap: 0.5rem;
+						height: 100%;
+						width: 100%;
+						padding-inline-end: 0;
+					}
+
+					.p-select-trigger {
+						border: none;
+						background: transparent;
+						width: 100%;
+					}
+
+					.p-select-trigger-icon {
+						margin-left: auto;
+						flex-shrink: 0;
+					}
+				}
+			}
+
+			.country-display {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				width: 100%;
+
+				.flag-icon {
+					width: 20px;
+					height: 15px;
+					object-fit: cover;
+					border-radius: 2px;
+					flex-shrink: 0;
+				}
+
+				.dial-code {
+					font-size: 0.875rem;
+					font-weight: 500;
+					color: var(--p-text-color, #111827);
+					white-space: nowrap;
+				}
+			}
+		}
+
+		.phone-input-wrapper {
+			flex: 1;
+			min-width: 0;
+
+			.phone-number-input {
+				border: none;
+				box-shadow: none;
+				width: 100%;
+				padding: 0.625rem 1rem;
+				height: 100%;
+				font-size: 0.875rem;
+
+				&:focus {
+					border: none;
+					box-shadow: none;
+					outline: none;
+				}
+
+				&:hover {
+					border: none;
+					box-shadow: none;
+				}
+			}
+		}
+	}
+}
+
+:host::ng-deep {
+	.phone-input-container {
+		.p-select-overlay {
+			z-index: 1000;
+
+			.p-select-list {
+				.p-select-item {
+					.country-option {
+						display: flex;
+						align-items: center;
+						gap: 0.75rem;
+						padding: 0.5rem 0.75rem;
+						width: 100%;
+
+						.flag-icon {
+							width: 20px;
+							height: 15px;
+							object-fit: cover;
+							border-radius: 2px;
+							flex-shrink: 0;
+						}
+
+						.country-name {
+							font-size: 0.875rem;
+							color: var(--p-text-color, #111827);
+						}
+
+						.dial-code {
+							font-size: 0.875rem;
+							color: var(--p-text-muted-color, #6b7280);
+						}
+					}
+				}
+			}
+		}
+	}
+}

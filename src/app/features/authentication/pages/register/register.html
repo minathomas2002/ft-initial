@@ -3,13 +3,24 @@
     <h1 class="text-3xl font-semibold text-gray-900">{{ 'auth.signUp' | translate }}</h1>
     <p class="text-gray-600">{{ 'auth.welcomeMessage' | translate }}</p>
   </div>
-  <form autocomplete="off" [formGroup]="registerForm" id="registerForm" (ngSubmit)="onSubmit()" class="w-full my-5">
+  <form
+    autocomplete="off"
+    [formGroup]="registerForm"
+    id="registerForm"
+    (ngSubmit)="onSubmit()"
+    class="w-full my-5"
+  >
     <div class="flex flex-col gap-3">
       <!-- Name -->
       <div class="field">
         <app-base-label [title]="'auth.name' | translate"></app-base-label>
-        <input type="text" pInputText [formControl]="registerFormService.fullName"
-          [placeholder]="'auth.enterYourName' | translate" fluid />
+        <input
+          type="text"
+          pInputText
+          [formControl]="registerFormService.fullName"
+          [placeholder]="'auth.enterYourName' | translate"
+          fluid
+        />
         @if (registerFormService.fullName.touched && registerFormService.fullName.invalid) {
         <small class="text-red-500">
           {{ registerFormService.fullName.hasError('required') ? ('auth.nameRequired' | translate) :
@@ -21,8 +32,13 @@
       <!-- Email -->
       <div class="field">
         <app-base-label [title]="'auth.email' | translate"></app-base-label>
-        <input type="email" pInputText [formControl]="registerFormService.email"
-          [placeholder]="'auth.enterYourEmail' | translate" fluid />
+        <input
+          type="email"
+          pInputText
+          [formControl]="registerFormService.email"
+          [placeholder]="'auth.enterYourEmail' | translate"
+          fluid
+        />
         @if (registerFormService.email.touched && registerFormService.email.invalid) {
         <small class="text-red-500">
           {{ registerFormService.email.hasError('required') ? ('auth.emailRequired' | translate) :
@@ -34,10 +50,11 @@
       <!-- Phone -->
       <div class="field">
         <app-base-label [title]="'auth.phone' | translate"></app-base-label>
-        <ngx-intl-tel-input class="w-full" [cssClass]="'p-inputtext w-full'" [preferredCountries]="['sa']"
+        <!-- <ngx-intl-tel-input class="w-full" [cssClass]="'p-inputtext w-full'" [preferredCountries]="['sa']"
           [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
           [separateDialCode]="true" [searchCountryField]="[searchCountryField.DialCode, searchCountryField.Name]"
-          [maxLength]="15" [formControl]="registerFormService.phone"></ngx-intl-tel-input>
+          [maxLength]="15" [formControl]="registerFormService.phone"></ngx-intl-tel-input> -->
+        <app-phone-input [formControl]="registerFormService.phone"></app-phone-input>
         @if (registerFormService.phone.touched && registerFormService.phone.invalid) {
         <small class="text-red-500">
           {{ registerFormService.phone.hasError('required') ? ('auth.phoneRequired' | translate) :
@@ -54,8 +71,13 @@
       <!-- Confirm Password -->
       <div class="field">
         <app-base-label [title]="'auth.register.confirmPassword' | translate"></app-base-label>
-        <p-password [formControl]="registerFormService.confirmPassword" [feedback]="false" class="w-full"
-          [placeholder]="'auth.register.enterYourConfirmPassword' | translate" inputStyleClass="w-full"></p-password>
+        <p-password
+          [formControl]="registerFormService.confirmPassword"
+          [feedback]="false"
+          class="w-full"
+          [placeholder]="'auth.register.enterYourConfirmPassword' | translate"
+          inputStyleClass="w-full"
+        ></p-password>
         @if (registerFormService.confirmPassword.touched && registerFormService.confirmPassword.invalid) {
         <small class="text-red-500">
           {{
@@ -67,15 +89,23 @@
         }
       </div>
 
-
       <!-- Submit -->
-      <p-button [label]="'auth.getStarted' | translate" fluid [disabled]="registerForm.invalid || authStore.loading()"
-        type="submit"></p-button>
+      <p-button
+        [label]="'auth.getStarted' | translate"
+        fluid
+        [disabled]="registerForm.invalid || authStore.loading()"
+        type="submit"
+      ></p-button>
     </div>
   </form>
   <div class="flex justify-center items-center">
     <p class="text-gray-600">{{ 'auth.alreadyHaveAccount' | translate }}</p>
     <!-- TODO: set link -->
-    <p-button class="ms-2" variant="text" [label]="'auth.signIn' | translate" [routerLink]="['/auth/login']" />
+    <p-button
+      class="ms-2"
+      variant="text"
+      [label]="'auth.signIn' | translate"
+      [routerLink]="['/auth/login']"
+    />
   </div>
 </div>
