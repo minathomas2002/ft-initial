@@ -1,8 +1,9 @@
 <div class="flex justify-between items-center">
   <div>
-    <h4 class="font-semibold xl:text-2xl text-lg">{{ 'users.list.subtitle' | translate }}</h4>
+    <h4 class="font-semibold xl:text-2xl text-lg">{{ 'users.tabs.employees' | translate }}</h4>
     <h4 class="xl:text-md text-sm text-gray-600">{{ 'users.list.subtitle' | translate }}</h4>
   </div>
+  @if(activeTab() === '0'){
   <p-button
     [label]="'users.list.addEmployee' | translate"
     severity="primary"
@@ -11,9 +12,10 @@
     icon="icon-plus"
     (onClick)="onAddEmployee()"
   />
+  }
 </div>
 <p-tabs
-  value="0"
+  [(value)]="activeTab"
   class="mt-10"
 >
   <p-tablist>

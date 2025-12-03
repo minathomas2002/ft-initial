@@ -20,6 +20,7 @@ export class EmployeesView {
   roleStore = inject(RolesStore);
   createEmpDialogVisible = signal<boolean>(false);
   filterService = inject(EmployeesFilterService);
+  activeTab = signal<string>('0');
 
   onAddEmployee() {
     this.createEmpDialogVisible.set(true);
