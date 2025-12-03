@@ -12,7 +12,7 @@ export class RoleManagement {
   private readonly baseHttpService = inject(BaseHttpService);
 
   getRoleManagementList(filter: IRoleManagementAssignmentFilterRequest): Observable<IBaseApiResponse<IRoleManagementAssignmentRecord[]>> {
-    return this.baseHttpService.get<IRoleManagementAssignmentRecord[], unknown>(API_ENDPOINTS.systemEmployees.RoleManagement.getRoleManagementList, filter);
+    return this.baseHttpService.post<IRoleManagementAssignmentRecord[], IRoleManagementAssignmentFilterRequest, unknown>(API_ENDPOINTS.systemEmployees.RoleManagement.getRoleManagementList, filter);
   }
 
   getCurrentRoleHolders(): Observable<IBaseApiResponse<ICurrentRoleHolders[]>> {

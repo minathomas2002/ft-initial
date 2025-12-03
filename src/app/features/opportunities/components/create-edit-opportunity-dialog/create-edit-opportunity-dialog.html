@@ -10,6 +10,26 @@
   [isLoading]="adminOpportunitiesStore.isLoading()"
   [isProcessing]="adminOpportunitiesStore.isProcessing()"
 >
+
+  <ng-container ngProjectAs="status">
+    @if(opportunity()){
+    <div class="flex gap-2 mt-2">
+      <!-- Status Badge (Published/Draft) -->
+      @if(opportunity()?.status === EOpportunityStatus.DRAFT){ @let statusConfig = getStatusConfig();
+      <app-base-tag
+        [color]="statusConfig.color"
+        [value]="statusConfig.label | translate"
+      />
+      } @else{ @let stateConfig = getStateConfig();
+      <app-base-tag
+        [color]="stateConfig.color"
+        [value]="stateConfig.label | translate"
+      />
+      }
+    </div>
+    }
+  </ng-container>
+
   <ng-template [appStepContent]="1">
     <app-opportunity-information-form></app-opportunity-information-form>
   </ng-template>
