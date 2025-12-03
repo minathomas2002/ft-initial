@@ -89,7 +89,8 @@ export class OpportunityInformationForm implements OnInit {
   }
 
   onDateRangeChange(event: any) {
-    this.opportunityFormService.handleDateRangeChange(event);
+    const hasActivePlans = this.opportunitiesStore.details()?.hasActivePlans ?? false;
+    this.opportunityFormService.handleDateRangeChange(event, hasActivePlans);
   }
 
   // Helper methods to get FormControls with proper typing
