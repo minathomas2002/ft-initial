@@ -57,7 +57,7 @@ export class AddEditEmployeeDialog implements OnInit {
 
   ngOnInit() {
     forkJoin(
-      [this.roleStore.getFilteredRoles(),
+      [this.roleStore.getFilteredRoles(this.isEditMode() ? this.SelectedItem()?.id ?? '' : ''),
       this.roleStore.getSystemRoles()])
       .pipe(take(1)).subscribe();
 
@@ -115,15 +115,6 @@ export class AddEditEmployeeDialog implements OnInit {
         }
       },
     });
-  }
-
-  handelEmployFilterList(roleId: string) {
-    const roles = this.roleStore.filteredRoles();
-    const filteredRole = roles.find((r: IRole) => r.id === roleId);
-    if (!filteredRole) {
-      const role = this.roleStore.systemRoles().find((r: IRole) => r.id === roleId);
-      this.roleStore.addRoleToFilteredRoles(role!);
-    }
   }
 
   onConfirm() {
@@ -210,7 +201,6 @@ export class AddEditEmployeeDialog implements OnInit {
       next: (res) => {
         const employee = res.body;
         if (employee) {
-          this.handelEmployFilterList(employee.roleId);
           this.formService.patchForm(employee, this.isEditMode());
         }
       },

@@ -40,9 +40,9 @@ export const RolesStore = signalStore(
           }),
         );
       },
-      getFilteredRoles() {
+      getFilteredRoles(employeeId: string) {
         patchState(store, { loading: true, error: null });
-        return rolesApiService.getFilteredRoles().pipe(
+        return rolesApiService.getFilteredRoles(employeeId).pipe(
           tap((res) => {
             patchState(store, { filteredRoles: res.body || [] });
           }),
