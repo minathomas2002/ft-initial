@@ -13,6 +13,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoutes } from 'src/app/shared/enums';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
     RouterModule,
     BaseLabelComponent,
     TranslatePipe,
+    TrimOnBlurDirective,
   ],
   providers: [LoginFormService],
   templateUrl: './login.html',

@@ -17,6 +17,7 @@ import { ICreateSystemEmployeeRequest, IRole, ISystemEmployeeRecord, IUpdateSyst
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 
 @Component({
   selector: 'app-add-edit-employee-dialog',
@@ -28,7 +29,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     BaseLabelComponent,
     InputTextModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    TrimOnBlurDirective
   ],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
