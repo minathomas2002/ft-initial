@@ -12,3 +12,4 @@ export * from './investors.interface';
 export * from './roles.interface';
 export * from './system-employees.interface';
 export * from './role-managements.interface';
+export * from './phone-input.interface';

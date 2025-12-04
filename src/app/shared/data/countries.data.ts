@@ -1,4 +1,4 @@
-import { ICountry } from './phone-input.interface';
+import { ICountry } from '../interfaces';
 
 // Helper function to get flag URL from country code
 const getFlagUrl = (code: string): string => {

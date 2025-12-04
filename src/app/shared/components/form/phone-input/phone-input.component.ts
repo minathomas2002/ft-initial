@@ -2,8 +2,8 @@ import { Component, input, computed, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
-import { IPhoneValue, ICountry } from './phone-input.interface';
-import { COUNTRIES } from './countries.data';
+import { IPhoneValue, ICountry } from '../../../interfaces';
+import { COUNTRIES } from '../../../data/countries.data';
 
 @Component({
 	selector: 'app-phone-input',
@@ -49,8 +49,8 @@ export class PhoneInputComponent implements ControlValueAccessor {
 	filteredCountries = computed(() => this.countries);
 
 	// ControlValueAccessor implementation
-	private onChange = (value: IPhoneValue | null) => {};
-	private onTouched = () => {};
+	private onChange = (value: IPhoneValue | null) => { };
+	private onTouched = () => { };
 	_isDisabled = false;
 	_touched = false;
 	_dirty = false;
@@ -89,7 +89,7 @@ export class PhoneInputComponent implements ControlValueAccessor {
 	private updateValue() {
 		const country = this.selectedCountry();
 		const phone = this.phoneNumber();
-		
+
 		// If phone number is empty, send null to trigger required validator
 		if (!phone || phone.trim() === '') {
 			this.onChange(null);
