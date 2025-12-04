@@ -371,6 +371,8 @@
         "phonePlaceholder": "Enter Phone",
         "phoneRequired": "Phone number is required.",
         "jobInvalid": "Invalid Job ID. Please enter a valid employee Job ID.",
+        "jobInvalidLength": "Job No. must be between 6 and 20 characters.",
+        "jobRequired": "Job No. is required.",
         "nameArabicInvalid":"Arabic name must contain Arabic letters only.",
         "nameArabicInvalidLength":"Arabic name must be between 3 and 100 characters.",
         "nameEnglishInvalid" : "English name must contain English letters only.",

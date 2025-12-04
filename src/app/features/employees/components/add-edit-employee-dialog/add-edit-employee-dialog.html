@@ -41,8 +41,13 @@
         <p-inputicon class="spinner" />
         }
       </p-iconfield>
-      @if(jobIdErrorMessage()){
-      <small class="text-red-500">{{ jobIdErrorMessage() }}</small>
+      @if(formService.job.touched && formService.job.errors){
+      @if(formService.job.hasError('required')){
+      <small class="text-red-500">{{ 'users.dialog.add.jobRequired' | translate }}</small>
+      }
+      @if(formService.job.hasError('minlength') || formService.job.hasError('maxLength')){
+      <small class="text-red-500">{{ 'users.dialog.add.jobInvalidLength' | translate }}</small>
+      }
       }
     </div>
     <div class="col-span-12 md:col-span-6">
