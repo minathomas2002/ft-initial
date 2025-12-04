@@ -10,7 +10,7 @@
         <th class="p-3 border border-gray-200 w-[48px]"></th>
       </tr>
     </thead>
-    <tbody>
+    <tbody #tableBody>
       @for (object of objects(); track $index; let index = $index) {
       <tr>
         @if (itemTemplate) {

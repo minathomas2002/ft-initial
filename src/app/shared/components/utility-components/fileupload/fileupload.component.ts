@@ -18,7 +18,7 @@ import { ImageErrorDirective } from "../../../directives/image-error.directive";
   providers: [MessageService],
 })
 export class FileuploadComponent {
-  maxFileSize = input<number>(1024 * 1024 * 5); // 5MB default
+  maxFileSize = input<number>(1024 * 1024 * 10); // 10MB default
   acceptedFileTypes = input<string>("*/*");
   files = model<File[]>([]);
   placeholder = input("SVG, PNG, JPG, PDF, DOCX, MP4");

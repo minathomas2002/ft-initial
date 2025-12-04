@@ -1,12 +1,13 @@
-import { Component, input, TemplateRef, ContentChild, computed, signal, effect, inject } from '@angular/core';
+import { Component, input, TemplateRef, ContentChild, computed, signal, effect, ViewChild, ElementRef } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { TrimOnBlurDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-form-array-input',
-  imports: [ButtonModule, NgTemplateOutlet, TranslatePipe],
+  imports: [ButtonModule, NgTemplateOutlet, TranslatePipe, TrimOnBlurDirective],
   templateUrl: './form-array-input.html',
   styleUrl: './form-array-input.scss',
 })
@@ -26,6 +27,8 @@ export class FormArrayInput {
     index: number;
     itemValue: any;
   }>;
+
+  @ViewChild('tableBody', { read: ElementRef }) tableBody?: ElementRef<HTMLTableSectionElement>;
 
   // Signal to track FormArray changes for reactivity
   private updateTrigger = signal(0);
@@ -102,5 +105,49 @@ export class FormArrayInput {
     formArray.push(newItem);
     // Trigger update to refresh computed signal
     this.updateTrigger.update(v => v + 1);
+
+    // Focus the first input in the newly added row after DOM update
+    this.focusFirstInputInLastRow();
+  }
+
+  private focusFirstInputInLastRow() {
+    // Use setTimeout to wait for Angular's change detection to complete
+    // This ensures the DOM is updated before trying to focus
+    setTimeout(() => {
+      if (!this.tableBody?.nativeElement) return;
+
+      const rows = this.tableBody.nativeElement.querySelectorAll('tr');
+      if (rows.length === 0) return;
+
+      // Get the last row (newly added)
+      const lastRow = rows[rows.length - 1];
+
+      // Find the first focusable input element (input, textarea, select, or PrimeNG input wrapper)
+      const firstInput = lastRow.querySelector<HTMLElement>(
+        'input:not([type="hidden"]):not([disabled]), ' +
+        'textarea:not([disabled]), ' +
+        'select:not([disabled]), ' +
+        '.p-inputtext input, ' +
+        '.p-textarea textarea, ' +
+        '.p-select .p-select-trigger, ' +
+        '.p-autocomplete input, ' +
+        '.p-dropdown .p-dropdown-trigger, ' +
+        '.p-datepicker input, ' +
+        '.p-inputnumber input'
+      );
+
+      if (firstInput) {
+        // For PrimeNG components, focus the actual input element inside
+        const actualInput = firstInput.tagName === 'INPUT' || firstInput.tagName === 'TEXTAREA'
+          ? firstInput
+          : firstInput.querySelector<HTMLElement>('input, textarea');
+
+        if (actualInput) {
+          actualInput.focus();
+        } else {
+          firstInput.focus();
+        }
+      }
+    }, 10);
   }
 }

@@ -182,6 +182,7 @@
           [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
           [placeholder]="'opportunity.form.enterOpportunityTitle' | translate"
           [formControl]="getControl('title')"
+          [maxlength]="150"
         />
         @if(getControl('title').invalid && getControl('title').dirty){
         <small class="text-red-500">
@@ -198,6 +199,7 @@
           [rows]="2"
           [placeholder]="'opportunity.form.enterShortDescription' | translate"
           [formControl]="getControl('shortDescription')"
+          [maxlength]="255"
         >
         </textarea>
         @if(getControl('shortDescription').invalid && getControl('shortDescription').dirty){
