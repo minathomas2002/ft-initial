@@ -18,8 +18,8 @@ export class RolesApiService {
     return this.baseHttpService.get<IRole[], unknown>(API_ENDPOINTS.roles.getSystemRoles);
   }
 
-  getFilteredRoles(): Observable<IBaseApiResponse<IRole[]>> {
-    return this.baseHttpService.get<IRole[], unknown>(API_ENDPOINTS.roles.getFilteredRoles);
+  getFilteredRoles(employeeId: string): Observable<IBaseApiResponse<IRole[]>> {
+    return this.baseHttpService.get<IRole[], unknown>(`${API_ENDPOINTS.roles.getFilteredRoles}?employeeId=${employeeId}`);
   }
 
   getRoleById(id: string): Observable<IBaseApiResponse<IRole>> {
