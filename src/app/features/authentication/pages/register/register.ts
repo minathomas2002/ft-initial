@@ -62,8 +62,12 @@ export class Register {
           }
         },
         error: (error) => {
-          if (error.statusCode === 500) {
+          if (error.status === 500) {
             this.toast.error(this.i18nService.translate('auth.register.generalError'));
+          }else if (error.status === 400) {
+            //route to login page when email already exists
+            //TODO: enhance this error, currently it depends on bad request which may be diffrenet error
+            this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
           }
         },
       });
