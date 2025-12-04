@@ -57,7 +57,7 @@ export class AddEditEmployeeDialog implements OnInit {
 
   ngOnInit() {
     forkJoin(
-      [this.roleStore.getFilteredRoles(this.isEditMode() ? this.SelectedItem()?.id ?? '' : ''),
+      [this.roleStore.getFilteredRoles(this.isEditMode() ? this.SelectedItem()?.userId ?? '' : ''),
       this.roleStore.getSystemRoles()])
       .pipe(take(1)).subscribe();
 
