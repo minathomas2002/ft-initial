@@ -4,7 +4,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { Router, RouterModule } from '@angular/router';
-import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { PasswordPolicy } from '../../components/password-policy/password-policy';
 import { RegisterFormService } from '../../services/register-form/register-form';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
@@ -23,7 +22,6 @@ import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/
     PasswordModule,
     ButtonModule,
     RouterModule,
-    NgxIntlTelInputModule,
     PasswordPolicy,
     BaseLabelComponent,
     TranslatePipe,
@@ -40,20 +38,18 @@ export class Register {
   router = inject(Router);
   toast = inject(ToasterService);
   i18nService = inject(I18nService);
-  //enum
-  searchCountryField = SearchCountryField;
-  countryISO = CountryISO;
 
   onSubmit() {
     if (this.registerForm.valid) {
       var formValue = this.registerForm.value;
+      console.log(formValue);
       var request: IRegisterRequest = {
         fullName: formValue.fullName!,
         email: formValue.email!,
         password: formValue.password!,
         confirmPassword: formValue.password!,
-        countryCode: formValue.phone?.dialCode!,
-        phoneNumber: formValue.phone?.nationalNumber?.replace(/\s/g, '') || '',
+        countryCode: formValue.phone?.countryCode!,
+        phoneNumber: formValue.phone?.phoneNumber?.replace(/\s/g, '') || '',
       };
       this.authStore.register(request).subscribe({
         next: (response) => {
