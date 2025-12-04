@@ -74,7 +74,10 @@ export class PhoneInputComponent implements ControlValueAccessor {
 
 	onPhoneNumberChange(phone: string) {
 		this.phoneNumber.set(phone);
-		this._dirty = true;
+		// Mark as dirty when user changes the value (even if clearing it)
+		if (!this._dirty) {
+			this._dirty = true;
+		}
 		this.updateValue();
 	}
 
@@ -86,11 +89,17 @@ export class PhoneInputComponent implements ControlValueAccessor {
 	private updateValue() {
 		const country = this.selectedCountry();
 		const phone = this.phoneNumber();
-		const newValue: IPhoneValue = {
-			countryCode: country.dialCode,
-			phoneNumber: phone,
-		};
-		this.onChange(newValue);
+		
+		// If phone number is empty, send null to trigger required validator
+		if (!phone || phone.trim() === '') {
+			this.onChange(null);
+		} else {
+			const newValue: IPhoneValue = {
+				countryCode: country.dialCode,
+				phoneNumber: phone,
+			};
+			this.onChange(newValue);
+		}
 	}
 
 	// ControlValueAccessor methods
@@ -101,8 +110,23 @@ export class PhoneInputComponent implements ControlValueAccessor {
 				this.selectedCountry.set(country);
 			}
 			this.phoneNumber.set(value.phoneNumber || '');
+		} else if (value === null) {
+			// When value is null (user cleared the field or form reset)
+			// If field was already dirty/touched, user cleared it - keep those states
+			// If field was not dirty/touched, it's a programmatic reset - reset to default
+			if (!this._dirty && !this._touched) {
+				// Programmatic reset - reset to default country
+				this.selectedCountry.set(this.getDefaultCountry());
+				this.phoneNumber.set('');
+				this._dirty = false;
+				this._touched = false;
+			} else {
+				// User cleared the field - keep dirty/touched, just clear phone number
+				this.phoneNumber.set('');
+				// Keep the current country selection
+			}
 		} else {
-			// Reset to default country (Saudi Arabia) when value is null or empty
+			// Value is undefined - full reset
 			this.selectedCountry.set(this.getDefaultCountry());
 			this.phoneNumber.set('');
 			this._dirty = false;
