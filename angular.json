@@ -68,7 +68,7 @@
                 }
               ]
             },
-            "development": {
+            "testing": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
