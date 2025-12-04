@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -28,7 +29,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     FormsModule,
     ReactiveFormsModule,
     TranslatePipe,
-    SkeletonModule
+    SkeletonModule,
+    TrimOnBlurDirective
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',

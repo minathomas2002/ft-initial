@@ -14,6 +14,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
+import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 @Component({
   selector: 'app-register',
   imports: [
@@ -26,6 +27,7 @@ import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/
     BaseLabelComponent,
     TranslatePipe,
     PhoneInputComponent,
+    TrimOnBlurDirective,
   ],
   providers: [RegisterFormService],
   templateUrl: './register.html',

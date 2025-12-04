@@ -12,6 +12,7 @@ import { MessageModule } from 'primeng/message';
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 
 
 @Component({
@@ -26,6 +27,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     MessageModule,
     TranslatePipe,
     SkeletonModule,
+    TrimOnBlurDirective,
   ],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',
