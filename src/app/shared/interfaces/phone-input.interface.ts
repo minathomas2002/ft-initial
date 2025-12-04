@@ -6,6 +6,7 @@ export interface IPhoneValue {
 export interface ICountry {
 	code: string;
 	name: string;
+	nameAr: string;
 	dialCode: string;
 	flagUrl: string;
 }

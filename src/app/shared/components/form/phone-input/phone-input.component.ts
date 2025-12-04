@@ -3,7 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModu
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { IPhoneValue, ICountry } from '../../../interfaces';
-import { COUNTRIES } from '../../../data/countries.data';
+import { getCountriesWithPreferred, getCountryByCode } from '../../../data/countries.data';
 
 @Component({
 	selector: 'app-phone-input',
@@ -20,11 +20,11 @@ import { COUNTRIES } from '../../../data/countries.data';
 	styleUrl: './phone-input.component.scss',
 })
 export class PhoneInputComponent implements ControlValueAccessor {
-	countries = COUNTRIES;
+	countries = getCountriesWithPreferred(['SA']);
 	placeholder = input<string>('Enter your phone');
 	disabled = input<boolean>(false);
 	styleClass = input<string>('');
-	defaultCountryCode = input<string>('+966'); // Default to Saudi Arabia
+	defaultCountryCode = input<string>(getCountryByCode('SA')?.dialCode || ''); // Default to Saudi Arabia
 
 	// Internal state
 	selectedCountry = signal<ICountry>(this.getDefaultCountry());
