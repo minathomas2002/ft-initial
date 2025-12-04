@@ -84,9 +84,9 @@ export class OpportunityFormService {
     this.opportunityForm = this.fb.group({
       opportunityInformation: this.fb.group({
         id: [null],
-        title: ['', [Validators.required, Validators.maxLength(100)]],
+        title: ['', [Validators.required, Validators.maxLength(150)]],
         opportunityType: [null, Validators.required],
-        shortDescription: ['', [Validators.required, Validators.maxLength(250)]],
+        shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
         opportunityCategory: ['', Validators.required],
         spendSAR: ['', Validators.required],
         minQuantity: ['', [Validators.required, Validators.min(0)]],
