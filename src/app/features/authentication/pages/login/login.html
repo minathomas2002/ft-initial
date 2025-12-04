@@ -8,13 +8,25 @@
   </div>
 
   <div class="mt-5 mb-5">
-    <form autocomplete="off" id="login" [formGroup]="loginForm" (ngSubmit)="publicLogin()" class="w-full">
+    <form
+      autocomplete="off"
+      id="login"
+      [formGroup]="loginForm"
+      (ngSubmit)="publicLogin()"
+      class="w-full"
+    >
       <div class="flex flex-col gap-3">
         <!-- Email -->
         <div class="field">
           <app-base-label [title]="'auth.login.email' | translate"></app-base-label>
-          <input autocomplete="new-field" type="email" pInputText [formControl]="loginFormService.email"
-            [placeholder]="'auth.login.enterYourEmail' | translate" fluid />
+          <input
+            autocomplete="new-field"
+            type="email"
+            pInputText
+            [formControl]="loginFormService.email"
+            [placeholder]="'auth.login.enterYourEmail' | translate"
+            fluid
+          />
           @if (loginFormService.email.touched && loginFormService.email.invalid) {
           <small class="text-red-500">
             {{ loginFormService.email.hasError('required') ? ('auth.login.emailRequired' | translate) :
@@ -26,9 +38,14 @@
         <!-- Password -->
         <div class="field">
           <app-base-label [title]="'auth.login.password' | translate"></app-base-label>
-          <p-password autocomplete="new-password" [formControl]="loginFormService.password" [feedback]="false"
-            class="w-full" [placeholder]="'auth.login.enterYourPassword' | translate"
-            inputStyleClass="w-full"></p-password>
+          <p-password
+            autocomplete="new-password"
+            [formControl]="loginFormService.password"
+            [feedback]="false"
+            class="w-full"
+            [placeholder]="'auth.login.enterYourPassword' | translate"
+            inputStyleClass="w-full"
+          ></p-password>
           @if(loginFormService.password.touched && loginFormService.password.invalid) {
           <small class="text-red-500">
             {{ loginFormService.password.hasError('required') ? ('auth.login.passwordRequired' | translate) :
@@ -38,20 +55,31 @@
         </div>
 
         <div class="flex items-center">
-          <p-button variant="text" [label]="'auth.login.forgotPassword' | translate"
-            routerLink="/auth/forgot-password" />
+          <p-button
+            variant="text"
+            [label]="'auth.login.forgotPassword' | translate"
+            routerLink="/auth/forgot-password"
+          />
         </div>
 
         <!-- Submit -->
-        <p-button [label]="'auth.login.signIn' | translate" fluid [disabled]="loginForm.invalid || authStore.loading()"
-          type="submit"></p-button>
+        <p-button
+          [label]="'auth.login.signIn' | translate"
+          fluid
+          [disabled]="loginForm.invalid || authStore.loading()"
+          type="submit"
+        ></p-button>
       </div>
 
       <div class="flex justify-center items-center mt-2">
         <p class="text-gray-600">{{ 'auth.login.dontHaveAccount' | translate }}</p>
         <!-- TODO: set link -->
-        <p-button class="ms-2" variant="text" [label]="'auth.login.signUp' | translate"
-          [routerLink]="['/auth/register']" />
+        <p-button
+          class="ms-2"
+          variant="text"
+          [label]="'auth.login.signUp' | translate"
+          [routerLink]="['/auth/register']"
+        />
       </div>
     </form>
   </div>
@@ -64,10 +92,20 @@
     <h2>Dev Only</h2>
     <div class="field">
       <app-base-label title='Job Number'></app-base-label>
-      <input placeholder="Enter your job number" type="userName" pInputText #usernameInput fluid />
+      <input
+        placeholder="Enter your job number"
+        type="userName"
+        pInputText
+        #usernameInput
+        fluid
+      />
     </div>
     <!-- Submit -->
-    <p-button label="Login" fluid (onClick)="fakeLogin(usernameInput.value)"></p-button>
+    <p-button
+      label="Login"
+      fluid
+      (onClick)="fakeLogin(usernameInput.value)"
+    ></p-button>
   </div>
 </div>
 
