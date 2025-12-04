@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { IPhoneNumberControl } from 'src/app/shared/interfaces';
+import { IPhoneValue } from 'src/app/shared/interfaces';
 import { onlyTextValidator } from 'src/app/shared/validators/only-text.validator';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 import { passwordMatchValidator } from '../../validators/password-match-validator';
@@ -13,7 +13,7 @@ export class RegisterFormService {
     email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
     password: ['', [Validators.required]],
     confirmPassword: ['', [Validators.required]],
-    phone: this.fb.control<IPhoneNumberControl | null>(null, [Validators.required, phoneNumberPatternValidator()])
+    phone: this.fb.control<IPhoneValue | null>(null, [Validators.required, phoneNumberPatternValidator()])
   }, { validators: passwordMatchValidator });
 
   get fullName(): FormControl<string | null> {
