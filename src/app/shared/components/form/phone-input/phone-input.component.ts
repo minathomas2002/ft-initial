@@ -21,7 +21,7 @@ import { COUNTRIES } from '../../../data/countries.data';
 })
 export class PhoneInputComponent implements ControlValueAccessor {
 	countries = COUNTRIES;
-	placeholder = input<string>('Enter phone number');
+	placeholder = input<string>('Enter your phone');
 	disabled = input<boolean>(false);
 	styleClass = input<string>('');
 	defaultCountryCode = input<string>('+966'); // Default to Saudi Arabia
