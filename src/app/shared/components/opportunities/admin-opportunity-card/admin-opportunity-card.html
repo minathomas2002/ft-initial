@@ -1,6 +1,4 @@
-<div
-  class="p-[24px] flex flex-col gap-[24px] rounded-2xl border-1 border-gray-200 bg-white min-h-[400px]"
->
+<div class="p-[24px] flex flex-col gap-[24px] rounded-2xl border-1 border-gray-200 bg-white min-h-[400px]">
   <!-- Warning Message -->
   @if(shouldShowWarning()) {
   <div class="flex items-center gap-2 p-3 rounded-lg bg-yellow-50 border-1 border-yellow-200">
@@ -12,18 +10,22 @@
   }
 
   <div class="flex items-center justify-between gap-2 items-start">
-    <div
-      class="w-[40px] h-[40px] rounded-xl bg-orange-500 flex justify-between border-1 border-gray-200 items-center justify-center"
-    >
+    <div class="w-[40px] h-[40px] rounded-xl bg-orange-500 flex justify-between border-1 border-gray-200 items-center justify-center">
       <i class="{{ getOpportunityIcon() }} text-white text-xl"></i>
     </div>
     @if(!opportunity().isOtherOpportunity){
     <div class="flex justify-end gap-2">
       <!-- Status Badge (Published/Draft) -->
       @if(opportunity().status === EOpportunityStatus.DRAFT){ @let statusConfig = getStatusConfig();
-      <app-base-tag [color]="statusConfig.color" [value]="statusConfig.label | translate" />
+      <app-base-tag
+        [color]="statusConfig.color"
+        [value]="statusConfig.label | translate"
+      />
       } @else{ @let stateConfig = getStateConfig();
-      <app-base-tag [color]="stateConfig.color" [value]="stateConfig.label | translate" />
+      <app-base-tag
+        [color]="stateConfig.color"
+        [value]="stateConfig.label | translate"
+      />
       }
     </div>
     }
@@ -60,6 +62,7 @@
   </div>
 
   <div class="flex gap-4">
+    @if(!opportunity().isOtherOpportunity){
     <p-button
       [label]="'opportunity.list.viewDetails' | translate"
       severity="secondary"
@@ -75,6 +78,7 @@
       (onMoveToDraft)="handleAction(EOpportunityAction.MoveToDraft)"
       (onPublish)="handleAction(EOpportunityAction.Publish)"
     />
+    }
     }
   </div>
 </div>
