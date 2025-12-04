@@ -1,3 +1,15 @@
+:host {
+	display: block;
+	width: 100%;
+
+	&.ng-invalid.ng-dirty,
+	&.ng-invalid.ng-touched {
+		.unified-phone-input {
+			border-color: var(--p-danger-color, #ef4444);
+		}
+	}
+}
+
 .phone-input-container {
 	width: 100%;
 

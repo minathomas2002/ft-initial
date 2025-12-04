@@ -9,12 +9,15 @@
         [options]="filteredCountries()"
         [ngModel]="selectedCountry()"
         (ngModelChange)="onCountryChange($event)"
+        (onHide)="onCountrySelectBlur()"
         optionLabel="name"
         [disabled]="disabled() || _isDisabled"
         [filter]="true"
         filterPlaceholder="Search country..."
         [showClear]="false"
         [appendTo]="'body'"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]="38"
         class="country-select"
       >
         <ng-template
@@ -59,6 +62,7 @@
         [placeholder]="placeholder()"
         [ngModel]="phoneNumber()"
         (ngModelChange)="onPhoneNumberChange($event)"
+        (blur)="onPhoneInputBlur()"
         [disabled]="disabled() || _isDisabled"
         class="phone-number-input"
       />

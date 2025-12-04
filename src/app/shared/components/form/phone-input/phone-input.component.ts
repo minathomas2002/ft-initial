@@ -36,6 +36,15 @@ export class PhoneInputComponent implements ControlValueAccessor {
 		return country || this.countries.find((c) => c.code === 'SA') || this.countries[0];
 	}
 
+	// Validation state getters
+	get isDirty(): boolean {
+		return this._dirty;
+	}
+
+	get isTouched(): boolean {
+		return this._touched;
+	}
+
 	// Computed values
 	filteredCountries = computed(() => this.countries);
 
@@ -43,6 +52,8 @@ export class PhoneInputComponent implements ControlValueAccessor {
 	private onChange = (value: IPhoneValue | null) => {};
 	private onTouched = () => {};
 	_isDisabled = false;
+	_touched = false;
+	_dirty = false;
 
 	onCountryChange(country: ICountry | null) {
 		if (country) {
@@ -50,14 +61,26 @@ export class PhoneInputComponent implements ControlValueAccessor {
 			const countryFromArray = this.countries.find((c) => c.code === country.code);
 			if (countryFromArray) {
 				this.selectedCountry.set(countryFromArray);
+				this._dirty = true;
 				this.updateValue();
 			}
 		}
 	}
 
+	onCountrySelectBlur() {
+		this._touched = true;
+		this.onTouched();
+	}
+
 	onPhoneNumberChange(phone: string) {
 		this.phoneNumber.set(phone);
+		this._dirty = true;
 		this.updateValue();
+	}
+
+	onPhoneInputBlur() {
+		this._touched = true;
+		this.onTouched();
 	}
 
 	private updateValue() {
@@ -68,21 +91,22 @@ export class PhoneInputComponent implements ControlValueAccessor {
 			phoneNumber: phone,
 		};
 		this.onChange(newValue);
-		this.onTouched();
 	}
 
 	// ControlValueAccessor methods
 	writeValue(value: IPhoneValue | null): void {
-		if (value) {
+		if (value && value.countryCode && value.phoneNumber) {
 			const country = this.countries.find((c) => c.dialCode === value.countryCode);
 			if (country) {
 				this.selectedCountry.set(country);
 			}
 			this.phoneNumber.set(value.phoneNumber || '');
 		} else {
-			// Reset to default country when value is null
+			// Reset to default country (Saudi Arabia) when value is null or empty
 			this.selectedCountry.set(this.getDefaultCountry());
 			this.phoneNumber.set('');
+			this._dirty = false;
+			this._touched = false;
 		}
 	}
 
