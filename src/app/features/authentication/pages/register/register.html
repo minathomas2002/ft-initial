@@ -50,10 +50,6 @@
       <!-- Phone -->
       <div class="field">
         <app-base-label [title]="'auth.phone' | translate"></app-base-label>
-        <!-- <ngx-intl-tel-input class="w-full" [cssClass]="'p-inputtext w-full'" [preferredCountries]="['sa']"
-          [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
-          [separateDialCode]="true" [searchCountryField]="[searchCountryField.DialCode, searchCountryField.Name]"
-          [maxLength]="15" [formControl]="registerFormService.phone"></ngx-intl-tel-input> -->
         <app-phone-input [formControl]="registerFormService.phone"></app-phone-input>
         @if (registerFormService.phone.touched && registerFormService.phone.invalid) {
         <small class="text-red-500">
