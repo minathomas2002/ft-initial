@@ -32,8 +32,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/intl-tel-input/build/css/intlTelInput.css"
+              "src/styles.scss"
             ]
           },
           "configurations": {
@@ -68,7 +67,7 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
-            },
+            }
           },
           "defaultConfiguration": "production"
         },
@@ -80,7 +79,7 @@
             },
             "development": {
               "buildTarget": "benaa:build:development"
-            },
+            }
           },
           "defaultConfiguration": "development"
         },
@@ -101,8 +100,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/intl-tel-input/build/css/intlTelInput.css"
+              "src/styles.scss"
             ]
           }
         }
