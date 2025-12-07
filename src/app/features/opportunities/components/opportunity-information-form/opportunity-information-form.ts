@@ -16,6 +16,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -32,7 +33,8 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     ReactiveFormsModule,
     TranslatePipe,
     SkeletonModule,
-    TrimOnBlurDirective
+    TrimOnBlurDirective,
+    InputNumberModule
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',
