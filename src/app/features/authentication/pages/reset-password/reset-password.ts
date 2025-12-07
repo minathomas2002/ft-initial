@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -40,7 +40,8 @@ export class ResetPassword implements OnInit {
   router = inject(Router);
   toast = inject(ToasterService);
   i18nService = inject(I18nService);
-  
+  isValidToken = signal(false);
+
   ngOnInit() {
     // Read token from URL query params and set it in the form
     this.route.queryParams.subscribe((params) => {
@@ -51,6 +52,19 @@ export class ResetPassword implements OnInit {
       } else {
         // Set token in hidden form field
         this.resetPasswordFormService.token.setValue(token);
+        this.authStore.passwordResetTokenExpiry(token).subscribe({
+          next: (response) => {
+            if (response.success && response.body !== true) {
+              this.toast.error(this.i18nService.translate('auth.reset.tokenExpired'));
+              this.router.navigate(['/', ERoutes.auth, ERoutes.forgotPassword]);
+            } else {
+              this.isValidToken.set(true);
+            }
+          },
+          error: (error) => {
+            this.router.navigate(['/', ERoutes.auth, ERoutes.forgotPassword]);
+          },
+        });
       }
     });
   }

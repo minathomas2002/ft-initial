@@ -96,7 +96,8 @@
       "passwordMismatch": "Passwords do not match",
       "buttonLabel": "Reset password",
       "backButtonLabel": "Back to login",
-      "success": "Your password has been successfully reset. Please log in."
+      "success": "Your password has been successfully reset. Please log in.",
+      "tokenExpired": "Invalid or expired reset link. Please request a new password reset."
     },
     "register": {
       "confirmPassword": "Confirm password",

@@ -66,4 +66,10 @@ export class AuthApiService {
   logout() {
     
   }
+
+  passwordResetTokenExpiry(token: string): Observable<IBaseApiResponse<boolean>> {
+    return this.http.post<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.passwordResetTokenExpiry}`, {
+      token,
+    });
+  }
 }

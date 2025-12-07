@@ -147,6 +147,15 @@ export const AuthStore = signalStore(
           })
         );
       },
+
+      passwordResetTokenExpiry(token: string): Observable<IBaseApiResponse<boolean>> {
+        patchState(store, { loading: true });
+        return authApiService.passwordResetTokenExpiry(token).pipe(
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
+      },
     };
   }),
   //Load user from localstorage automatically
