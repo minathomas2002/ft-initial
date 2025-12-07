@@ -288,7 +288,7 @@
               <p-inputnumber
                 [placeholder]="'opportunity.form.enterMaxQuantity' | translate"
                 [formControl]="getControl('maxQuantity')"
-              />>
+              />
               @if(getControl('maxQuantity').invalid && getControl('maxQuantity').dirty){
               <app-base-error [message]="getControl('maxQuantity').hasError('required') ? ('opportunity.form.maxQuantityRequired' | translate) :
                 getControl('maxQuantity').hasError('min') ? ('opportunity.form.maxQuantityCannotBeNegative' | translate) :
