@@ -396,6 +396,74 @@ export class OpportunityFormService {
     this.formUpdated.next();
   }
 
+  enableDraftValidators() {
+    const infoGroup = this.opportunityForm.get('opportunityInformation') as FormGroup;
+    const locGroup = this.opportunityForm.get('opportunityLocalization') as FormGroup;
+
+    Object.values(infoGroup.controls).forEach(control => {
+      control.clearValidators();
+      control.updateValueAndValidity({ emitEvent: false });
+    });
+
+    infoGroup.clearValidators();
+    infoGroup.updateValueAndValidity({ emitEvent: false });
+
+    Object.values(locGroup.controls).forEach(control => {
+      control.clearValidators(); // removes keyActivityArrayValidator
+      control.updateValueAndValidity({ emitEvent: false });
+    });
+    infoGroup.get('title')?.setValidators([Validators.required]);
+    infoGroup.get('title')?.updateValueAndValidity({ emitEvent: false });
+
+    this.opportunityForm.updateValueAndValidity({ emitEvent: false });
+  }
+
+  enableFullValidators() {
+   const infoGroup = this.opportunityForm.get('opportunityInformation') as FormGroup;
+  const locGroup = this.opportunityForm.get('opportunityLocalization') as FormGroup;
+
+  // -------- Opportunity Information --------
+  infoGroup.get('title')?.setValidators([Validators.required, Validators.maxLength(150)]);
+  infoGroup.get('opportunityType')?.setValidators([Validators.required]);
+  infoGroup.get('shortDescription')?.setValidators([Validators.required, Validators.maxLength(255)]);
+  infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
+  infoGroup.get('spendSAR')?.setValidators([Validators.required]);
+  infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.min(0)]);
+  infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.min(0)]);
+  infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(0)]);
+  infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(0)]);
+  infoGroup.get('dateRange')?.setValidators([Validators.required, this.dateRangeValidator]);
+  infoGroup.get('image')?.setValidators([Validators.required]);
+
+  //Group-level validator
+  infoGroup.setValidators([this.quantityRangeValidator]);
+
+  // -------- Opportunity Localization Arrays --------
+  const arrays = [
+    'designEngineerings',
+    'sourcings',
+    'manufacturings',
+    'assemblyTestings',
+    'afterSalesServices'
+  ];
+
+  arrays.forEach(key => {
+    const arr = locGroup.get(key);
+    arr?.setValidators([
+      this.keyActivityArrayValidator(`${key} is required`)
+    ]);
+    arr?.updateValueAndValidity({ emitEvent: false });
+  });
+
+  //  Update validation for all controls
+  Object.values(infoGroup.controls).forEach(control => {
+    control.updateValueAndValidity({ emitEvent: false });
+  });
+
+  infoGroup.updateValueAndValidity({ emitEvent: false });
+ 
+  }
+
   private async createFileFromUrl(
     fileUrl: string,
     fileName: string = "image.jpg"

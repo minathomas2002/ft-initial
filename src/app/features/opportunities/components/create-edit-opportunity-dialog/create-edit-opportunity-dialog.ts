@@ -105,10 +105,12 @@ export class CreateEditOpportunityDialog implements OnInit {
   }
 
   async saveAsDraft() {
+    this.opportunityFormService.enableDraftValidators();
     const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.get('title');
     // Check if the field is invalid
     if (opportunityTitleField?.invalid) {
       // Mark as touched to show validation errors
+      this.toasterService.error("Title field is required.")
       opportunityTitleField.markAsTouched();
       return;
     }
@@ -132,10 +134,11 @@ export class CreateEditOpportunityDialog implements OnInit {
   }
 
   async publishOpportunity() {
+  
     this.opportunityFormService.markAsDirty();
-
+    this.opportunityFormService.enableFullValidators();
     if (this.opportunityFormService.opportunityForm.invalid) {
-      console.log(this.opportunityFormService.opportunityForm);
+      //this.opportunityFormService.opportunityForm.markAllAsTouched();  // show errors
       return;
     }
     const formValue = this.opportunityFormService.formValue();
