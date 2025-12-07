@@ -22,7 +22,7 @@ export interface IApiPaginatedResponse<T> {
 export interface IDashboardResponse<T> extends IApiPaginatedResponse<T> {
   counts: {
     totalOpportunities: number;
-    activeOpportunities: number;
+    activePublishedOpportunities: number;
     inactiveOpportunities: number;
     draftOpportunities: number;
   };

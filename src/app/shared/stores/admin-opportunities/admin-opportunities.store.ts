@@ -19,7 +19,7 @@ const initialState: {
   stateOptions: ISelectItem[];
   counts: {
     totalOpportunities: number;
-    activeOpportunities: number;
+    activePublishedOpportunities: number;
     inactiveOpportunities: number;
     draftOpportunities: number;
   };
@@ -70,7 +70,7 @@ const initialState: {
   ],
   counts: {
     totalOpportunities: 0,
-    activeOpportunities: 0,
+    activePublishedOpportunities: 0,
     inactiveOpportunities: 0,
     draftOpportunities: 0,
   },
@@ -91,7 +91,7 @@ export const AdminOpportunitiesStore = signalStore(
             const totalCount = res.body.pagination?.totalCount ?? 0;
             const counts = res.body.counts || {
               totalOpportunities: 0,
-              activeOpportunities: 0,
+              activePublishedOpportunities: 0,
               inactiveOpportunities: 0,
               draftOpportunities: 0,
             };
