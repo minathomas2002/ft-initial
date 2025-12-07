@@ -17,5 +17,5 @@ export class GeneralConfirmationDialogComponent {
   confirmed = output();
   closed = output();
   isLoading = input(false)
-  classes = input('max-w-[20rem]')
+  classes = input('max-w-[25rem]')
 }
