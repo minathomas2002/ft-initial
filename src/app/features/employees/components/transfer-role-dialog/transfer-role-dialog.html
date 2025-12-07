@@ -32,7 +32,7 @@
     <div>
       @if(transferRoleService.employee.dirty && transferRoleService.employee.errors){
       @if(transferRoleService.employee.hasError('required')){
-      <small class="text-red-500">{{ 'users.dialog.replaceTransfer.employeeRequired' | translate }}</small>
+      <app-base-error [message]="'users.dialog.replaceTransfer.employeeRequired' | translate" />
       }
       }
     </div>

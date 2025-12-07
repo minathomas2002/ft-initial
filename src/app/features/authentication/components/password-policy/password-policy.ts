@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { InputTextModule } from 'primeng/inputtext';
 
@@ -15,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
     ReactiveFormsModule,
     NgClass,
     BaseLabelComponent,
+    BaseErrorComponent,
     TranslatePipe,
     InputTextModule
   ],

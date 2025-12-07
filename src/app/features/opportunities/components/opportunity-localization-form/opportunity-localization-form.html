@@ -91,9 +91,7 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('designEngineerings').invalid && getFormArray('designEngineerings').dirty){
-        <small class="text-red-500">
-          {{ 'opportunity.form.designEngineeringRequired' | translate }}
-        </small>
+        <app-base-error [message]="'opportunity.form.designEngineeringRequired' | translate" />
         }
       </div>
 
@@ -125,9 +123,7 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('sourcings').invalid && getFormArray('sourcings').dirty){
-        <small class="text-red-500">
-          {{ 'opportunity.form.sourcingRequired' | translate }}
-        </small>
+        <app-base-error [message]="'opportunity.form.sourcingRequired' | translate" />
         }
       </div>
 
@@ -159,9 +155,7 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('manufacturings').invalid && getFormArray('manufacturings').dirty){
-        <small class="text-red-500">
-          {{ 'opportunity.form.manufacturingRequired' | translate }}
-        </small>
+        <app-base-error [message]="'opportunity.form.manufacturingRequired' | translate" />
         }
       </div>
 
@@ -193,9 +187,7 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('assemblyTestings').invalid && getFormArray('assemblyTestings').dirty){
-        <small class="text-red-500">
-          {{ 'opportunity.form.assemblyTestingRequired' | translate }}
-        </small>
+        <app-base-error [message]="'opportunity.form.assemblyTestingRequired' | translate" />
         }
       </div>
 
@@ -227,9 +219,7 @@
           </ng-template>
         </app-form-array-input>
         @if(getFormArray('afterSalesServices').invalid && getFormArray('afterSalesServices').dirty){
-        <small class="text-red-500">
-          {{ 'opportunity.form.afterSalesServicesRequired' | translate }}
-        </small>
+        <app-base-error [message]="'opportunity.form.afterSalesServicesRequired' | translate" />
         }
       </div>
     </div>

@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { LoginFormService } from '../../services/login-form/login-form';
 import { environment } from 'src/environments/environment';
@@ -25,6 +26,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     CheckboxModule,
     RouterModule,
     BaseLabelComponent,
+    BaseErrorComponent,
     TranslatePipe,
     TrimOnBlurDirective,
   ],

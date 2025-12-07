@@ -7,6 +7,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoutes } from 'src/app/shared/enums';
@@ -23,6 +24,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     CheckboxModule,
     RouterModule,
     BaseLabelComponent,
+    BaseErrorComponent,
     TranslatePipe,
   ],
   providers: [ForgotPasswordFormService],

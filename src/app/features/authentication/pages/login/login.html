@@ -28,10 +28,8 @@
             fluid
           />
           @if (loginFormService.email.touched && loginFormService.email.invalid) {
-          <small class="text-red-500">
-            {{ loginFormService.email.hasError('required') ? ('auth.login.emailRequired' | translate) :
-            ('auth.login.invalidEmailFormat' | translate) }}
-          </small>
+          <app-base-error [message]="loginFormService.email.hasError('required') ? ('auth.login.emailRequired' | translate) :
+            ('auth.login.invalidEmailFormat' | translate)" />
           }
         </div>
 
@@ -47,10 +45,8 @@
             inputStyleClass="w-full"
           ></p-password>
           @if(loginFormService.password.touched && loginFormService.password.invalid) {
-          <small class="text-red-500">
-            {{ loginFormService.password.hasError('required') ? ('auth.login.passwordRequired' | translate) :
-            ('auth.login.invalidPasswordFormat' | translate) }}
-          </small>
+          <app-base-error [message]="loginFormService.password.hasError('required') ? ('auth.login.passwordRequired' | translate) :
+            ('auth.login.invalidPasswordFormat' | translate)" />
           }
         </div>
 

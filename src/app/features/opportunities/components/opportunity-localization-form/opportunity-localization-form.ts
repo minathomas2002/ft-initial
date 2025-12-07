@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
@@ -21,6 +22,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     CardModule,
     ButtonModule,
     BaseLabelComponent,
+    BaseErrorComponent,
     FormArrayInput,
     InputTextModule,
     ReactiveFormsModule,

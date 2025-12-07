@@ -22,10 +22,8 @@
           fluid
         />
         @if (registerFormService.fullName.touched && registerFormService.fullName.invalid) {
-        <small class="text-red-500">
-          {{ registerFormService.fullName.hasError('required') ? ('auth.nameRequired' | translate) :
-          ('auth.invalidFullName' | translate) }}
-        </small>
+        <app-base-error [message]="registerFormService.fullName.hasError('required') ? ('auth.nameRequired' | translate) :
+          ('auth.invalidFullName' | translate)" />
         }
       </div>
 
@@ -40,10 +38,8 @@
           fluid
         />
         @if (registerFormService.email.touched && registerFormService.email.invalid) {
-        <small class="text-red-500">
-          {{ registerFormService.email.hasError('required') ? ('auth.emailRequired' | translate) :
-          ('auth.register.invalidEmailFormat' | translate) }}
-        </small>
+        <app-base-error [message]="registerFormService.email.hasError('required') ? ('auth.emailRequired' | translate) :
+          ('auth.register.invalidEmailFormat' | translate)" />
         }
       </div>
 
@@ -52,10 +48,8 @@
         <app-base-label [title]="'auth.phone' | translate"></app-base-label>
         <app-phone-input [formControl]="registerFormService.phone"></app-phone-input>
         @if (registerFormService.phone.touched && registerFormService.phone.invalid) {
-        <small class="text-red-500">
-          {{ registerFormService.phone.hasError('required') ? ('auth.phoneRequired' | translate) :
-          ('auth.invalidPhoneNumber' | translate) }}
-        </small>
+        <app-base-error [message]="registerFormService.phone.hasError('required') ? ('auth.phoneRequired' | translate) :
+          ('auth.invalidPhoneNumber' | translate)" />
         }
       </div>
 
@@ -75,13 +69,9 @@
           inputStyleClass="w-full"
         ></p-password>
         @if (registerFormService.confirmPassword.touched && registerFormService.confirmPassword.invalid) {
-        <small class="text-red-500">
-          {{
-          registerFormService.confirmPassword.hasError('required')
+        <app-base-error [message]="registerFormService.confirmPassword.hasError('required')
           ? ('auth.register.confirmPasswordRequired' | translate)
-          : ('auth.register.passwordMismatch' | translate)
-          }}
-        </small>
+          : ('auth.register.passwordMismatch' | translate)" />
         }
       </div>
 

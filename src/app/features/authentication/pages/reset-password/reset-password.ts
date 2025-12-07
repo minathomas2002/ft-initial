@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { PasswordPolicy } from '../../components/password-policy/password-policy';
 import { ResetPasswordFormService } from '../../services/reset-password-form/reset-password-form';
@@ -23,6 +24,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     PasswordModule,
     InputTextModule,
     BaseLabelComponent,
+    BaseErrorComponent,
     TranslatePipe,
     PasswordPolicy,
   ],

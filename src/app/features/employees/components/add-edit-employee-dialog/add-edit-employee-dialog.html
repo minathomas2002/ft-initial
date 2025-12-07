@@ -43,10 +43,10 @@
       </p-iconfield>
       @if(formService.job.touched && formService.job.errors){
       @if(formService.job.hasError('required')){
-      <small class="text-red-500">{{ 'users.dialog.add.jobRequired' | translate }}</small>
+      <app-base-error [message]="'users.dialog.add.jobRequired' | translate" />
       }
       @if(formService.job.hasError('minlength') || formService.job.hasError('maxLength')){
-      <small class="text-red-500">{{ 'users.dialog.add.jobInvalidLength' | translate }}</small>
+      <app-base-error [message]="'users.dialog.add.jobInvalidLength' | translate" />
       }
       }
     </div>
@@ -64,13 +64,13 @@
       <div>
         @if(formService.nameEn.touched && formService.nameEn.errors){
         @if(formService.nameEn.hasError('required')){
-        <small class="text-red-500">{{ 'users.dialog.add.nameEnRequired' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.nameEnRequired' | translate" />
         }
         @if(formService.nameEn.hasError('minlength') || formService.nameEn.hasError('maxLength')){
-        <small class="text-red-500">{{ 'users.dialog.add.nameEnglishInvalidLength' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.nameEnglishInvalidLength' | translate" />
         }
         @if(formService.nameEn.hasError('pattern')){
-        <small class="text-red-500">{{ 'users.dialog.add.nameEnglishInvalid' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.nameEnglishInvalid' | translate" />
         }
         }
       </div>
@@ -87,13 +87,13 @@
       <div>
         @if(formService.nameAr.touched && formService.nameAr.errors){
         @if(formService.nameAr.hasError('required')){
-        <small class="text-red-500">{{ 'users.dialog.add.nameArRequired' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.nameArRequired' | translate" />
         }
         @if(formService.nameAr.hasError('minlength') || formService.nameAr.hasError('maxLength')){
-        <small class="text-red-500">{{ 'users.dialog.add.nameArabicInvalidLength' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.nameArabicInvalidLength' | translate" />
         }
         @if(formService.nameAr.hasError('pattern')){
-        <small class="text-red-500">{{ 'users.dialog.add.nameArabicInvalid' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.nameArabicInvalid' | translate" />
         }
         }
       </div>
@@ -110,7 +110,7 @@
       <div>
         @if(formService.email.touched && formService.email.errors){
         @if(formService.email.hasError('required')){
-        <small class="text-red-500">{{ 'users.dialog.add.emailRequired' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.emailRequired' | translate" />
         }
         }
       </div>
@@ -129,13 +129,13 @@
       <div>
         @if(formService.phoneNumber.touched && formService.phoneNumber.errors){
         @if(formService.phoneNumber.hasError('required')){
-        <small class="text-red-500">{{ 'users.dialog.add.phoneRequired' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.phoneRequired' | translate" />
         }
         @if(formService.phoneNumber.hasError('minlength') || formService.phoneNumber.hasError('maxLength')){
-        <small class="text-red-500">{{ 'users.dialog.add.phoneInvalidLenhtg' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.phoneInvalidLenhtg' | translate" />
         }
         @if(formService.phoneNumber.hasError('pattern')){
-        <small class="text-red-500">{{ 'users.dialog.add.phoneInvalid' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.phoneInvalid' | translate" />
         }
         }
       </div>
@@ -159,7 +159,7 @@
       <div>
         @if(formService.roleId.touched && formService.roleId.errors){
         @if(formService.roleId.hasError('required')){
-        <small class="text-red-500">{{ 'users.dialog.add.roleRequired' | translate }}</small>
+        <app-base-error [message]="'users.dialog.add.roleRequired' | translate" />
         }
         }
       </div>

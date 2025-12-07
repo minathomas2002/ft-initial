@@ -8,6 +8,7 @@ import { Select } from 'primeng/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BaseDialogComponent } from 'src/app/shared/components/base-components/base-dialog/base-dialog.component';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { RoleManagementStore } from 'src/app/shared/stores/system-employees/role-management-store';
 
 @Component({
@@ -18,6 +19,7 @@ import { RoleManagementStore } from 'src/app/shared/stores/system-employees/role
     ReactiveFormsModule,
     BaseDialogComponent,
     BaseLabelComponent,
+    BaseErrorComponent,
   ],
   templateUrl: './transfer-role-dialog.html',
   styleUrl: './transfer-role-dialog.scss',

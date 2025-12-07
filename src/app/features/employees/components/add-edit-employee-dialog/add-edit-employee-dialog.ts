@@ -3,6 +3,7 @@ import { BaseDialogComponent } from "src/app/shared/components/base-components/b
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { AddEmployeeFormService } from '../../services/add-employee-form/add-employee-form-service';
 import { BaseLabelComponent } from "src/app/shared/components/base-components/base-label/base-label.component";
+import { BaseErrorComponent } from "src/app/shared/components/base-components/base-error/base-error.component";
 import { RolesStore } from 'src/app/shared/stores/roles/roles.store'
 import { I18nService } from 'src/app/shared/services/i18n';
 import { Select } from "primeng/select";
@@ -27,6 +28,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     ReactiveFormsModule,
     Select,
     BaseLabelComponent,
+    BaseErrorComponent,
     InputTextModule,
     IconFieldModule,
     InputIconModule,
