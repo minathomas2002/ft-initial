@@ -139,7 +139,7 @@
       "inactive": "Inactive"
     },
     "warning": {
-      "draftAfterStartDate": "This draft opportunity has a start date that has already passed."
+      "draftAfterStartDate": "Application period is active, but the opportunity is still a draft."
     },
     "action": {
       "edit": "Edit",

@@ -37,7 +37,7 @@ const initialState: {
   },
   {
     id: '2',
-    name: 'Product',
+    name: 'Material',
   }],
   opportunityCategories: [
     {
@@ -61,7 +61,7 @@ const initialState: {
     { id: EOpportunityStatus.DRAFT.toString(), name: 'opportunity.status.draft' },
   ],
   opportunityTypeOptions: [
-    { id: EOpportunityType.SERVICES.toString(), name: 'opportunity.type.services' },
+    { id: EOpportunityType.SERVICES.toString(), name: 'opportunity.type.service' },
     { id: EOpportunityType.MATERIAL.toString(), name: 'opportunity.type.material' },
   ],
   stateOptions: [
