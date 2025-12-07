@@ -26,6 +26,23 @@ export class FormUtilityService {
         if (control.dirty && control.errors) {
           errorCount += Object.keys(control.errors).length;
         }
+        // If it's a nested FormGroup, recursively count its errors
+        if (control instanceof FormGroup) {
+          errorCount += this.countFormErrors(control);
+        }
+        // If it's a FormArray, recursively count errors in each control
+        else if (control instanceof FormArray) {
+          control.controls.forEach((arrayControl: AbstractControl) => {
+            // Only count errors if the array control is dirty
+            if (arrayControl.dirty && arrayControl.errors) {
+              errorCount += Object.keys(arrayControl.errors).length;
+            }
+            // If the array control is a FormGroup, recursively count its errors
+            if (arrayControl instanceof FormGroup) {
+              errorCount += this.countFormErrors(arrayControl);
+            }
+          });
+        }
       }
     });
 

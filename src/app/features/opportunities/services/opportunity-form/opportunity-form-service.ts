@@ -375,8 +375,8 @@ export class OpportunityFormService {
       id: value.id,
       title: value.title,
       shortDescription: value.shortDescription,
-      opportunityType: value.opportunityType.toString(),
-      opportunityCategory: value.opportunityCategory.toString(), // TODO: Remove this once the API is updated
+      opportunityType: value.opportunityType?.toString(),
+      opportunityCategory: value.opportunityCategory?.toString(), // TODO: Remove this once the API is updated
       spendSAR: value.spendSAR?.toString() || '',
       minQuantity: value.minQuantity?.toString() || '',
       maxQuantity: value.maxQuantity?.toString() || '',
