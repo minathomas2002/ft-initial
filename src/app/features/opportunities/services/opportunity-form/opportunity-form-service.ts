@@ -174,11 +174,6 @@ export class OpportunityFormService {
     };
   };
 
-  // Helper function to validate a single array
-  private validateKeyActivityArray = (array: IKeyActivityRecord[]): boolean => {
-    return array.every(item => item.keyActivity && item.keyActivity.trim() !== '');
-  };
-
   // Create a FormGroup for a single key activity record
   createKeyActivityControl(): FormGroup {
     return this.fb.group({
@@ -421,49 +416,49 @@ export class OpportunityFormService {
   }
 
   enableFullValidators() {
-   const infoGroup = this.opportunityForm.get('opportunityInformation') as FormGroup;
-  const locGroup = this.opportunityForm.get('opportunityLocalization') as FormGroup;
+    const infoGroup = this.opportunityForm.get('opportunityInformation') as FormGroup;
+    const locGroup = this.opportunityForm.get('opportunityLocalization') as FormGroup;
 
-  // -------- Opportunity Information --------
-  infoGroup.get('title')?.setValidators([Validators.required, Validators.maxLength(150)]);
-  infoGroup.get('opportunityType')?.setValidators([Validators.required]);
-  infoGroup.get('shortDescription')?.setValidators([Validators.required, Validators.maxLength(255)]);
-  infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
-  infoGroup.get('spendSAR')?.setValidators([Validators.required]);
-  infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.min(0)]);
-  infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.min(0)]);
-  infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(0)]);
-  infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(0)]);
-  infoGroup.get('dateRange')?.setValidators([Validators.required, this.dateRangeValidator]);
-  infoGroup.get('image')?.setValidators([Validators.required]);
+    // -------- Opportunity Information --------
+    infoGroup.get('title')?.setValidators([Validators.required, Validators.maxLength(150)]);
+    infoGroup.get('opportunityType')?.setValidators([Validators.required]);
+    infoGroup.get('shortDescription')?.setValidators([Validators.required, Validators.maxLength(255)]);
+    infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
+    infoGroup.get('spendSAR')?.setValidators([Validators.required]);
+    infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.min(0)]);
+    infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.min(0)]);
+    infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(0)]);
+    infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(0)]);
+    infoGroup.get('dateRange')?.setValidators([Validators.required, this.dateRangeValidator]);
+    infoGroup.get('image')?.setValidators([Validators.required]);
 
-  //Group-level validator
-  infoGroup.setValidators([this.quantityRangeValidator]);
+    //Group-level validator
+    infoGroup.setValidators([this.quantityRangeValidator]);
 
-  // -------- Opportunity Localization Arrays --------
-  const arrays = [
-    'designEngineerings',
-    'sourcings',
-    'manufacturings',
-    'assemblyTestings',
-    'afterSalesServices'
-  ];
+    // -------- Opportunity Localization Arrays --------
+    const arrays = [
+      'designEngineerings',
+      'sourcings',
+      'manufacturings',
+      'assemblyTestings',
+      'afterSalesServices'
+    ];
 
-  arrays.forEach(key => {
-    const arr = locGroup.get(key);
-    arr?.setValidators([
-      this.keyActivityArrayValidator(`${key} is required`)
-    ]);
-    arr?.updateValueAndValidity({ emitEvent: false });
-  });
+    arrays.forEach(key => {
+      const arr = locGroup.get(key);
+      arr?.setValidators([
+        this.keyActivityArrayValidator(`${key} is required`)
+      ]);
+      arr?.updateValueAndValidity({ emitEvent: false });
+    });
 
-  //  Update validation for all controls
-  Object.values(infoGroup.controls).forEach(control => {
-    control.updateValueAndValidity({ emitEvent: false });
-  });
+    //  Update validation for all controls
+    Object.values(infoGroup.controls).forEach(control => {
+      control.updateValueAndValidity({ emitEvent: false });
+    });
 
-  infoGroup.updateValueAndValidity({ emitEvent: false });
- 
+    infoGroup.updateValueAndValidity({ emitEvent: false });
+
   }
 
   private async createFileFromUrl(
