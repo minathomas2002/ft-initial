@@ -45,7 +45,7 @@
       @if(formService.job.hasError('required')){
       <app-base-error [message]="'users.dialog.add.jobRequired' | translate" />
       }
-      @if(formService.job.hasError('minlength') || formService.job.hasError('maxLength')){
+      @if(formService.job.hasError('minlength') || formService.job.hasError('maxlength')){
       <app-base-error [message]="'users.dialog.add.jobInvalidLength' | translate" />
       }
       }
@@ -66,7 +66,7 @@
         @if(formService.nameEn.hasError('required')){
         <app-base-error [message]="'users.dialog.add.nameEnRequired' | translate" />
         }
-        @if(formService.nameEn.hasError('minlength') || formService.nameEn.hasError('maxLength')){
+        @if(formService.nameEn.hasError('minlength') || formService.nameEn.hasError('maxlength')){
         <app-base-error [message]="'users.dialog.add.nameEnglishInvalidLength' | translate" />
         }
         @if(formService.nameEn.hasError('pattern')){
@@ -82,6 +82,8 @@
         pInputText
         [formControl]="formService.nameAr"
         [placeholder]="'users.dialog.add.nameArPlaceholder' | translate"
+        minlength="3"
+        maxlength="100"
         fluid
       />
       <div>
@@ -89,7 +91,7 @@
         @if(formService.nameAr.hasError('required')){
         <app-base-error [message]="'users.dialog.add.nameArRequired' | translate" />
         }
-        @if(formService.nameAr.hasError('minlength') || formService.nameAr.hasError('maxLength')){
+        @if(formService.nameAr.hasError('minlength') || formService.nameAr.hasError('maxlength')){
         <app-base-error [message]="'users.dialog.add.nameArabicInvalidLength' | translate" />
         }
         @if(formService.nameAr.hasError('pattern')){
