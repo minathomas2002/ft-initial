@@ -4,20 +4,11 @@
   [popup]="true"
   (onShow)="isOpen.set(true)"
   (onHide)="isOpen.set(false)"
-  styleClass="!min-w-[250px] -translate-x-[20px]"
->
-  <ng-template #start>
-  </ng-template>
-  <ng-template
-    #items
-    let-item
-  >
-  </ng-template>
-</p-menu>
+/>
+
 <button
-  pRipple
   (click)="menu.toggle($event)"
-  class="relative overflow-hidden w-full border-0 text-start bg-transparent rounded-none cursor-pointer transition-colors duration-200"
+  class="w-full border-0 text-start bg-transparent rounded-none"
 >
   <div class="items-center md:!flex hidden text-sm">
     <app-identify-user
