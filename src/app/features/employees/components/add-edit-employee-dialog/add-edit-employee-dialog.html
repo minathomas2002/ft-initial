@@ -131,8 +131,8 @@
         @if(formService.phoneNumber.hasError('required')){
         <app-base-error [message]="'users.dialog.add.phoneRequired' | translate" />
         }
-        @if(formService.phoneNumber.hasError('minlength') || formService.phoneNumber.hasError('maxLength')){
-        <app-base-error [message]="'users.dialog.add.phoneInvalidLenhtg' | translate" />
+        @if(formService.phoneNumber.hasError('minlength') || formService.phoneNumber.hasError('maxlength')){
+        <app-base-error [message]="'users.dialog.add.phoneInvalidLength' | translate" />
         }
         @if(formService.phoneNumber.hasError('pattern')){
         <app-base-error [message]="'users.dialog.add.phoneInvalid' | translate" />
