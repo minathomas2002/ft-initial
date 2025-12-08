@@ -456,10 +456,10 @@ const MENU_COMPONENT = {
 };
 const CHECKBOX_COMPONENT = {
   checkbox: {
-    width: "20px",
-    height: "20px",
+    width: "16px",
+    height: "16px",
     iconSize: "12px",
-    borderRadius: "6px",
+    borderRadius: "4px",
   },
 };
 const PANEL_COMPONENT = {
@@ -524,6 +524,7 @@ const MY_PRESET = definePreset(Lara, {
     ...INPUTTEXT_COMPONENT,
     ...TOOLTIP_COMPONENT,
     ...TABS_COMPONENT,
+    ...CHECKBOX_COMPONENT
   },
   semantic: {
     gray: {
