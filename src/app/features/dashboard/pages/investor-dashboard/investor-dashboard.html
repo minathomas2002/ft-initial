@@ -6,9 +6,14 @@
     <p-button
       [label]="'Submit New Plan'"
       [icon]="'icon-plus'"
-      [severity]="'primary'"
-      [rounded]="true"
       [size]="'small'"
+      (onClick)="planTermsAndConditionsDialogVisibility.set(true)"
     />
   </ng-container>
 </app-table-layout>
+
+<app-plan-terms-and-conditions-dialog
+  [(visibility)]="planTermsAndConditionsDialogVisibility"
+  (onConfirm)="onUserReadAndApproved()"
+  (onCancel)="onUserCancelTermsAndConditionsDialog()"
+/>
