@@ -9,16 +9,18 @@ import { RoleService } from 'src/app/shared/services/role/role-service';
   imports: [],
   templateUrl: './dashboard-view.html',
   styleUrl: './dashboard-view.scss',
-  providers:[]
+  providers: []
 })
 export class DashboardView implements OnInit {
-  
+
   private readonly roleService = inject(RoleService);
   router = inject(Router);
 
   ngOnInit(): void {
-    if(this.roleService.hasAnyRoleSignal([ERoles.ADMIN])()) {
+    if (this.roleService.hasAnyRoleSignal([ERoles.ADMIN])()) {
       this.router.navigate([ERoutes.opportunities, ERoutes.admin]);
+    } else if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
+      this.router.navigate([ERoutes.dashboard, ERoutes.investors]);
     }
   }
 }

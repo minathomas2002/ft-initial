@@ -1,0 +1,14 @@
+<app-table-layout
+  [tableTitle]="'Dashboard'"
+  [tableSubTitle]="'Track and manage your submitted localization plans and their review status'"
+>
+  <ng-container ngProjectAs="table-actions">
+    <p-button
+      [label]="'Submit New Plan'"
+      [icon]="'icon-plus'"
+      [severity]="'primary'"
+      [rounded]="true"
+      [size]="'small'"
+    />
+  </ng-container>
+</app-table-layout>
