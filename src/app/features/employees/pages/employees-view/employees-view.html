@@ -24,17 +24,21 @@
   </p-tablist>
   <p-tabpanels>
     <p-tabpanel value="0">
+      @if(activeTab() === '0'){
       @defer (on viewport) {
       <app-employee-list></app-employee-list>
       } @placeholder {
       <div></div>
       }
+      }
     </p-tabpanel>
     <p-tabpanel value="1">
+      @if(activeTab() === '1'){
       @defer (on viewport) {
       <app-role-management></app-role-management>
       } @placeholder {
       <div></div>
+      }
       }
     </p-tabpanel>
   </p-tabpanels>
