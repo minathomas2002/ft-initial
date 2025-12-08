@@ -362,7 +362,9 @@ export class OpportunityFormService {
     // Get image from attachments (first attachment if available) and convert to File
     let image: File | null = null;
     // For now, use placeholder image
-    image = await this.createFileFromUrl('/assets/images/opportunity-placeholder.png', 'opportunity-placeholder.png');
+    if (value.attachments && value.attachments.length > 0) {
+      image = await this.createFileFromUrl('/assets/images/opportunity-placeholder.png', 'opportunity-placeholder.png');
+    }
     // if (value.attachments && value.attachments.length > 0) {
     //   const fileUrl = value.attachments[0].fileUrl;
     //   const fileName = value.attachments[0].fileName || 'image';
