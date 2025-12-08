@@ -20,7 +20,7 @@
       : ('users.dialog.add.confirmAdd' | translate)
       }}</p>
   </div>
-
+  @if(!roleStore.loading()){
   <div class="grid grid-cols-12 gap-4">
 
     <div class="col-span-12 md:col-span-12">
@@ -167,4 +167,5 @@
       </div>
     </div>
   </div>
+}
 </app-base-dialog>
