@@ -1,0 +1,124 @@
+<app-base-dialog
+  [(visible)]="visibility"
+  [confirmLabel]="'Next'"
+  [isConfirmationDisabled]="!isUserReadAndApproved()"
+  [icon]="'icon-info'"
+  [confirmButtonClass]="'w-[100px]  button:bg-gray-200'"
+  [cancelButtonClass]="'w-content'"
+  (onConfirm)="onConfirm.emit()"
+  (onCancel)="onCancel.emit()"
+>
+  <ng-container ngProjectAs="content">
+    <div class="content flex flex-col gap-5 max-w-[960px]">
+      <div class="header">
+        <h2 class="text-lg font-semibold text-gray-900 mb-[2px]">Localization Plan Guidelines</h2>
+        <p class="text-sm text-gray-600">
+          SEC follows the below process to evaluate ‘Localization Plan’ and invite suppliers to join the BENA Journey:
+        </p>
+      </div>
+
+      <div class="procedure-steps grid grid-cols-5 gap-4">
+        <div class="step-item">
+          <div class="step-item-header">
+            <span>1</span>
+          </div>
+          <div class="step-item-content">
+            <h3>Request Submission</h3>
+            <p>Choose the product and submit basic details..</p>
+          </div>
+        </div>
+
+        <div class="step-item items-center text-center">
+          <div class="step-item-header">
+            <span>2</span>
+          </div>
+          <div class="step-item-content">
+            <h3>Eligibility Review</h3>
+            <p>SEC team checks eligibility and priority.</p>
+          </div>
+        </div>
+
+        <div class="step-item items-center text-center">
+          <div class="step-item-header">
+            <span>3</span>
+          </div>
+          <div class="step-item-content">
+            <h3>Technical Qualification</h3>
+            <p>Register as supplier and qualify the product.</p>
+          </div>
+        </div>
+
+        <div class="step-item items-center text-center">
+          <div class="step-item-header">
+            <span>4</span>
+          </div>
+          <div class="step-item-content">
+            <h3>Plan Approval</h3>
+            <p>SEC reviews and approves your localization plan.</p>
+          </div>
+        </div>
+
+        <div class="step-item items-end text-end">
+          <div class="step-item-header ">
+            <span>5</span>
+          </div>
+          <div class="step-item-content">
+            <h3>Welcome to BENA</h3>
+            <p>Get a Relationship Manager to support your journey.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-gray-200 border-1"></div>
+
+      <div class="flex flex-col gap-3">
+        <h2 class="text-md font-semibold text-gray-900">Key instructions to fill the provided ‘Localization Plan’ template:</h2>
+        <div class="flex flex-col gap-4">
+          <div class="flex gap-3">
+            <i class="icon-check-circle text-primary-500 mt-1"></i>
+            <p>All information requested in the template are mandatory and should be filled to the best of your ability and knowledge.</p>
+          </div>
+          <div class="flex gap-3">
+            <i class="icon-check-circle text-primary-500 mt-1"></i>
+            <p>Each tab of the document is provided with ‘Instructions’ on the top. Please read these carefully while filling the tab.</p>
+          </div>
+          <div class="flex gap-3">
+            <i class="icon-check-circle text-primary-500 mt-1"></i>
+            <p>
+              ‘Cover Page’ and ‘Overview’ pages are for information only and should not be modified in any manner.
+            </p>
+          </div>
+          <div class="flex gap-3">
+            <i class="icon-check-circle text-primary-500 mt-1"></i>
+            <p>
+              Localization Plan must be filled for each ‘product’ individually. However, multiple specifications of the same product can be covered within the same ‘Localization Plan’, with all specifications listed in the ‘2. Product & Plant Overview’ tab Second field.
+            </p>
+          </div>
+          <div class="flex gap-3">
+            <i class="icon-check-circle text-primary-500 mt-1"></i>
+            <p>The signature disclaimer is displayed at the end of the template, and must signed it before submitting the plan.</p>
+          </div>
+          <div class="flex gap-3">
+            <i class="icon-check-circle text-primary-500 mt-1"></i>
+            <p>It’s important for SEC to know that the product you are targeting to localize is purchased directly by SEC, or it’s approved suppliers. Please provide this information carefully in the ‘Targeted Customer’ section of the ‘2. Product & Plant Overview’ tab page.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container ngProjectAs="footerMessage">
+    <div class="flex gap-2">
+      <p-checkbox
+        [(ngModel)]="isUserReadAndApproved"
+        [binary]="true"
+        [inputId]="'isAgreed'"
+        size="small"
+      ></p-checkbox>
+      <label
+        for="isAgreed"
+        class="text-sm font-medium text-gray-700"
+      >Read and approved</label>
+    </div>
+  </ng-container>
+</app-base-dialog>
