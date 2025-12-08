@@ -43,7 +43,7 @@ export class RoleManagementFilterService extends AbstractServiceFilter<IRoleMana
 
   applyFilterWithPaging() {
     this.updateFilterSignal();
-    this.performFilter$()
+    this.store.getRoleManagementList(this.adaptedFilter())
       .pipe(take(1))
       .subscribe();
   }
