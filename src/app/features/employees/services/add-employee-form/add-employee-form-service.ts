@@ -13,7 +13,7 @@ export class AddEmployeeFormService {
     /^\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s*$/;
 
   static readonly PHONE_REGEX =
-    /^\+?[0-9]{8,15}$/;
+    /^\+?[0-9]+$/;
 
   private fb = inject(FormBuilder);
 

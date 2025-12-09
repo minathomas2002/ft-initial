@@ -378,7 +378,7 @@
         "nameArabicInvalidLength":"Arabic name must be between 3 and 100 characters.",
         "nameEnglishInvalid" : "English name must contain English letters only.",
         "nameEnglishInvalidLength":"English name must be between 3 and 100 characters.",
-        "phoneInvalidLenhtg": "Phone number must be between 8 and 15 digits",
+        "phoneInvalidLength": "Phone number must be between 8 and 15 digits",
         "phoneInvalid":"Phone number must contain digits only."
       },
       "edit":{
