@@ -7,6 +7,7 @@ const Opportunities = "Opportunities";
 const Investors = "Investors";
 const AdminOpportunities = "Opportunities/admin";
 const SystemEmployees = "SystemEmployees";
+const Settings = "Settings";
 const Roles = "Roles";
 const RoleManagement = "RoleManagement";
 
@@ -38,6 +39,12 @@ export const API_ENDPOINTS = {
       transferRole: `${SystemEmployees}/${RoleManagement}/Transfer`,
     }
 
+  },
+  settings: {
+    getSlaSetting:`${Settings}/getSlaSetting`,
+    editSlaSetting:`${Settings}/editSlaSetting`,
+    getAutoAssignSetting:`${Settings}/getAutoAssignSetting`,
+    editAutoAssignSetting:`${Settings}/editAutoAssignSetting`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,
