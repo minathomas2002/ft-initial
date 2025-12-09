@@ -54,6 +54,7 @@ export const API_ENDPOINTS = {
     getAdminOpportunities: `${AdminOpportunities}`,
     editOpportunity: `${Opportunities}/edit-opportunity`,
     deleteOpportunity: `${Opportunities}`,
+    getActiveOpportunityLookUps: `${Opportunities}/GetActiveOpportunityLookUps`,
     changeStatus: `${Opportunities}/change-status`,
   },
   auth: {
