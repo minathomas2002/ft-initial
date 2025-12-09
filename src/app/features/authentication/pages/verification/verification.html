@@ -1,4 +1,4 @@
-<div class="pt-10 px-10 w-full">
+<div class="pt-10 px-10 w-full flex flex-col gap-3">
 
     <div class="flex flex-col gap-3">
         <!-- Success Icon -->
@@ -9,22 +9,23 @@
         <h1 class="text-3xl font-semibold text-gray-900">{{ 'auth.verification.title' | translate }}</h1>
         <p class="text-gray-600">{{ 'auth.verification.subtitle' | translate }}</p>
     </div>
-    <div class="text-sm text-gray-700 mt-6">
-        <div class="flex justify-between gap-1 items-center">
+    <div class="text-sm text-gray-700">
+        <div class="flex justify-center gap-1 items-center">
             <span>{{ 'auth.verification.didntReceiveEmail' | translate }}</span>
-            <span
-                class="cursor-pointer text-primary-600 text-sm font-semibold"
-                (onClick)="resendVerificationEmail()"
-            >{{ 'auth.verification.clickToResend' | translate}}</span>
+            <p-button
+                (click)="resendVerificationEmail()"
+                [label]="'auth.verification.clickToResend' | translate"
+                text
+            ></p-button>
         </div>
     </div>
 
     <p-button
-        class="flex w-full mt-8"
+        class="flex w-full"
         [label]="'auth.verifyEmail.backToLogin' | translate"
         fluid
         severity="primary"
-        (onClick)="onBackToLogin()"
+        (click)="onBackToLogin()"
     ></p-button>
 
 </div>

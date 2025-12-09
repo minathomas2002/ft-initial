@@ -232,7 +232,7 @@
       "addManufacturingItem": "Add Manufacturing Item",
       "addAssemblyTestingItem": "Add Assembly & Testing Item",
       "addAfterSalesServicesItem": "Add After Sales Services Item",
-      "fileUploadPlaceholder": "jpg, png, pdf, docx and video, max file size (10 MB)",
+      "fileUploadPlaceholder": "jpg, png and jpeg, max file size (10 MB)",
       "titleRequired": "Opportunity title is required",
       "shortDescriptionRequired": "Short description is required",
       "maxLengthExceeded": "Maximum length exceeded",

@@ -50,7 +50,6 @@ export class OpportunityInformationForm implements OnInit {
   isLoading = this.opportunitiesStore.loading;
 
   files = signal<File[]>([]);
-  acceptedFileTypes = ".jpg,.png,.pdf,.docx,video/*";
   placeholder = computed(() => this.i18nService.translate('opportunity.form.fileUploadPlaceholder'));
 
   invalidSelectedFile = signal(false);
