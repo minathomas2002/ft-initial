@@ -1,0 +1,27 @@
+<div class="p-[24px] flex flex-col gap-[24px] rounded-2xl border-1 border-gray-200 bg-white min-h-[400px] h-full">
+
+  <div class="flex items-center justify-between gap-2 items-start">
+    <div class="w-[40px] h-[40px] rounded-xl bg-orange-500 flex justify-between border-1 border-gray-200 items-center justify-center">
+      <i class="icon-calender text-white text-xl"></i>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1 flex-1">
+    <h5
+      class="text-xl font-semibold text-gray-900 line-clamp-1"
+      [pTooltip]="title()"
+    >
+      {{title()}}
+    </h5>
+    <p class="
+          text-opportunity
+          text-gray-600
+          overflow-y-auto
+          break-all
+          max-h-[110px]">
+      {{description()}}
+    </p>
+  </div>
+
+  <!-- add link -->
+</div>

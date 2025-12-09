@@ -1,0 +1,16 @@
+import { Component, input, signal } from '@angular/core';
+import { Tooltip } from "primeng/tooltip";
+
+@Component({
+  selector: 'app-setting-card',
+  imports: [Tooltip],
+  templateUrl: './setting-card.html',
+  styleUrl: './setting-card.scss',
+})
+export class SettingCard {
+
+  title= input.required<string>();
+  description= input.required<string>();
+  linkText= input.required<string>();
+  icon= input.required<string>();
+}

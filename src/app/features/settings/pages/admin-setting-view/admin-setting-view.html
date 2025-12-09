@@ -1,1 +1,39 @@
-<p>admin-setting-view works!</p>
+<app-cards-page-layout
+  [pageTitle]="'setting.title' | translate"
+  [pageSubTitle]="'setting.subTitle' | translate"
+  pageTitleClass="text-[24px] font-semibold"
+  pageSubTitleClass="text-md text-gray-600"
+>
+
+  <ng-container ngProjectAs="page-body">
+    <app-cards-skeleton [isLoading]="false">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pb-[64px] border-b-1 border-b-gray-200">
+        <app-setting-card
+          [title]="('setting.AdminView.slaCardTitle' | translate)"
+          [icon]="'icon-calender'"
+          [linkText]="('setting.AdminView.slaCardLink' | translate)"
+          [description]="('setting.AdminView.slaCardDesc' | translate)"
+        >
+        </app-setting-card>
+
+        <app-setting-card
+          [title]="('setting.AdminView.autoAssignCardTitle' | translate)"
+          [icon]="'icon-cursor-click-01'"
+          [linkText]="('setting.AdminView.autoAssignCardLink' | translate)"
+          [description]="('setting.AdminView.autoAssignCardDesc' | translate)"
+        >
+        </app-setting-card>
+
+        <app-setting-card
+          [title]="('setting.AdminView.notificationCardTitle' | translate)"
+          [icon]="'icon-bell'"
+          [linkText]="('setting.AdminView.notificationCardLink' | translate)"
+          [description]="('setting.AdminView.notificationCardDesc' | translate)"
+        >
+        </app-setting-card>
+
+      </div>
+
+    </app-cards-skeleton>
+  </ng-container>
+</app-cards-page-layout>
