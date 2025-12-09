@@ -9,26 +9,29 @@
     <app-cards-skeleton [isLoading]="false">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pb-[64px] border-b-1 border-b-gray-200">
         <app-setting-card
-          [title]="('setting.AdminView.slaCardTitle' | translate)"
+          [title]="('setting.adminView.slaCardTitle' | translate)"
           [icon]="'icon-calender'"
-          [linkText]="('setting.AdminView.slaCardLink' | translate)"
-          [description]="('setting.AdminView.slaCardDesc' | translate)"
+          [linkText]="('setting.adminView.slaCardLink' | translate)"
+          [description]="('setting.adminView.slaCardDesc' | translate)"
+          (onClick)="onSLAClick()"
         >
         </app-setting-card>
 
         <app-setting-card
-          [title]="('setting.AdminView.autoAssignCardTitle' | translate)"
+          [title]="('setting.adminView.autoAssignCardTitle' | translate)"
           [icon]="'icon-cursor-click-01'"
-          [linkText]="('setting.AdminView.autoAssignCardLink' | translate)"
-          [description]="('setting.AdminView.autoAssignCardDesc' | translate)"
+          [linkText]="('setting.adminView.autoAssignCardLink' | translate)"
+          [description]="('setting.adminView.autoAssignCardDesc' | translate)"
+          (onClick)="onAutoAssigenClick()"
         >
         </app-setting-card>
 
         <app-setting-card
-          [title]="('setting.AdminView.notificationCardTitle' | translate)"
+          [title]="('setting.adminView.notificationCardTitle' | translate)"
           [icon]="'icon-bell'"
-          [linkText]="('setting.AdminView.notificationCardLink' | translate)"
-          [description]="('setting.AdminView.notificationCardDesc' | translate)"
+          [linkText]="('setting.adminView.notificationCardLink' | translate)"
+          [description]="('setting.adminView.notificationCardDesc' | translate)"
+          (onClick)="onNotificationClick()"
         >
         </app-setting-card>
 
@@ -37,3 +40,7 @@
     </app-cards-skeleton>
   </ng-container>
 </app-cards-page-layout>
+
+@if(viewSlaDialog()){
+<app-admin-sla-dialog [dialogVisible]="viewSlaDialog()"></app-admin-sla-dialog>
+}

@@ -1,8 +1,11 @@
-<div class="p-[24px] flex flex-col gap-[24px] rounded-2xl border-1 border-gray-200 bg-white min-h-[400px] h-full">
+<div
+  class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+  (click)="onClick.emit()"
+>
 
   <div class="flex items-center justify-between gap-2 items-start">
     <div class="w-[40px] h-[40px] rounded-xl bg-orange-500 flex justify-between border-1 border-gray-200 items-center justify-center">
-      <i class="icon-calender text-white text-xl"></i>
+      <i class="{{icon()}} text-white text-xl"></i>
     </div>
   </div>
 
@@ -24,4 +27,11 @@
   </div>
 
   <!-- add link -->
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{linkText()}}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+
 </div>

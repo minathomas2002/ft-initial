@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { Tooltip } from "primeng/tooltip";
 
 @Component({
@@ -13,4 +13,6 @@ export class SettingCard {
   description= input.required<string>();
   linkText= input.required<string>();
   icon= input.required<string>();
+  
+  onClick = output();
 }
