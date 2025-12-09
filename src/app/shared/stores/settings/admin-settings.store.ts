@@ -1,0 +1,70 @@
+import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
+import { ISettingAutoAssign, ISettingSla, ISettingSlaReq } from "../../interfaces/ISetting";
+import { SettingsApiService } from "../../api/settings/settings-api-service";
+import { inject } from "@angular/core";
+import { catchError, finalize, tap, throwError } from "rxjs";
+
+
+const initialState: {
+  isLoading: boolean;
+  isProcessing: boolean;
+  error: string | null;
+  settingAutoAssign: ISettingAutoAssign | null;
+  settingSla: ISettingSla | null;
+} = {
+  isLoading: false,
+  isProcessing: false,
+  error: null,
+  settingAutoAssign: null,
+  settingSla: null,
+}
+
+
+export const adminSettingsStore = signalStore(
+  { providedIn: "root" },
+  withState(initialState),
+  withMethods((store) => {
+
+     const settingApiService = inject(SettingsApiService);
+    return {
+      /* Get Sla setting*/
+      getSlaSetting() {
+        patchState(store, { isLoading: true, error: null });
+        return settingApiService.getSLASetting().pipe(
+          tap((res) => {
+            patchState(store, { isLoading: false });
+            patchState(store, { settingSla: res.body || null });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error getting sla setting',
+              settingSla: null
+            });
+            return throwError(() => new Error('Error getting sla setting'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          }),
+        );
+      },
+
+    /* Update Sla setting*/
+          updateSlaSetting(req: ISettingSlaReq) {
+            patchState(store, { isProcessing: true, error: null });
+            return settingApiService.updateSLASetting(req).pipe(
+              tap((res) => {
+                patchState(store, { isProcessing: false });
+              }),
+              catchError((error) => {
+                patchState(store, { error: error.errorMessage || 'Error updating sla setting' });
+                return throwError(() => new Error('Error updating sla setting'));
+              }),
+              finalize(() => {
+                patchState(store, { isProcessing: false });
+              }),
+            );
+          },
+
+  }
+  })
+);
