@@ -12,8 +12,16 @@
   </ng-container>
 </app-table-layout>
 
+@if(planTermsAndConditionsDialogVisibility()){
 <app-plan-terms-and-conditions-dialog
   [(visibility)]="planTermsAndConditionsDialogVisibility"
   (onConfirm)="onUserReadAndApproved()"
-  (onCancel)="onUserCancelTermsAndConditionsDialog()"
 />
+}
+
+@if(newPlanDialogVisibility()){
+<app-new-plan-dialog
+  [(visibility)]="newPlanDialogVisibility"
+  (onConfirm)="onUserConfirmNewPlanDialog()"
+/>
+}
