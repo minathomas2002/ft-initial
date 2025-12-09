@@ -1,0 +1,109 @@
+<app-base-dialog
+  [(visible)]="visibility"
+  [confirmLabel]="'Next'"
+  [icon]="'icon-bar-chart'"
+  [confirmButtonClass]="'w-[100px]  button:bg-gray-200'"
+  [cancelButtonClass]="'w-content'"
+  (onConfirm)="savePlanBasicData()"
+  (onCancel)="onCancel.emit()"
+  [isConfirmationDisabled]="!canGoNext()"
+>
+  <ng-container ngProjectAs="content">
+    <div class="content flex flex-col gap-5 max-w-[640px]">
+      <div class="header">
+        <h2 class="text-lg font-semibold text-gray-900 mb-[2px]">New Opportunity</h2>
+        <p class="text-sm text-gray-600">
+          Enter basic details to start your localization plan
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col">
+            <app-base-label [title]="'Plan Title'" />
+            <input
+              type="text"
+              pInputText
+              placeholder="Enter your plan title"
+              [(ngModel)]="newPlanTitle"
+              maxlength="150"
+              required
+              #planTitle="ngModel"
+            />
+            @if (planTitle.touched && planTitle.invalid && planTitle.hasError('required')) {
+            <app-base-error [message]="'Plan title is required'" />
+            }
+          </div>
+          <div class="flex flex-col">
+            <app-base-label [title]="'Opportunity Type'" />
+            <div class="flex gap-5">
+              <div class="flex flex-col gap-3">
+                <div
+                  class="rounded-xl opportunity-image-container"
+                  [class.selected]="newPlanOpportunityType() === EOpportunityType.SERVICES"
+                >
+                  <label for="service-type">
+                    <img
+                      src="assets/images/services.png"
+                      alt="services"
+                      class="w-full"
+                    />
+                  </label>
+                </div>
+                <div class="flex justify-between">
+                  <div>
+                    <label
+                      for="services-typee"
+                      class="text-sm font-semibold"
+                    >Services</label>
+                    <p class="text-xs text-gray-600">Localize operational or support services</p>
+                  </div>
+                  <p-radiobutton
+                    name="opportunity-type"
+                    [value]="EOpportunityType.SERVICES"
+                    [(ngModel)]="newPlanOpportunityType"
+                    inputId="service-type"
+                    size="small"
+                    [disabled]="disableChangingOpportunityType()"
+                  />
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-3">
+                <div
+                  class="rounded-xl opportunity-image-container"
+                  [class.selected]="newPlanOpportunityType() === EOpportunityType.MATERIAL"
+                >
+                  <label for="materials-type">
+                    <img
+                      src="assets/images/materials.png"
+                      alt="materials"
+                      class="w-full"
+                    />
+                  </label>
+                </div>
+                <div class="flex justify-between">
+                  <div>
+                    <label
+                      for="materials-type"
+                      class="text-sm font-semibold"
+                    >Materials</label>
+                    <p class="text-xs text-gray-600">Localize products, parts, or equipment</p>
+                  </div>
+                  <p-radiobutton
+                    name="opportunity-type"
+                    [value]="EOpportunityType.MATERIAL"
+                    [(ngModel)]="newPlanOpportunityType"
+                    inputId="materials-type"
+                    size="small"
+                    [disabled]="disableChangingOpportunityType()"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-base-dialog>
