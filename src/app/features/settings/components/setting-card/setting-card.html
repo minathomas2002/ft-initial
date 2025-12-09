@@ -1,0 +1,37 @@
+<div
+  class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+  (click)="onClick.emit()"
+>
+
+  <div class="flex items-center justify-between gap-2 items-start">
+    <div class="w-[40px] h-[40px] rounded-xl bg-orange-500 flex justify-between border-1 border-gray-200 items-center justify-center">
+      <i class="{{icon()}} text-white text-xl"></i>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1 flex-1">
+    <h5
+      class="text-xl font-semibold text-gray-900 line-clamp-1"
+      [pTooltip]="title()"
+    >
+      {{title()}}
+    </h5>
+    <p class="
+          text-opportunity
+          text-gray-600
+          overflow-y-auto
+          break-all
+          max-h-[110px]">
+      {{description()}}
+    </p>
+  </div>
+
+  <!-- add link -->
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{linkText()}}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+
+</div>

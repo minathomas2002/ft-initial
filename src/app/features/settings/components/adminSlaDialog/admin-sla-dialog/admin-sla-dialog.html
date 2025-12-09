@@ -1,0 +1,71 @@
+<app-base-dialog
+  [(visible)]="dialogVisible"
+  icon="icon-calender"
+  [confirmLabel]="'setting.confirmButton' | translate"
+  [confirmButtonClass]="'w-fit'"
+  [cancelButtonClass]="'w-fit'"
+  [isConfirmationDisabled]="formService.form.invalid"
+  (onConfirm)="onConfirm()"
+  (onClose)="resetForm()"
+  [isLoading]="false"
+>
+
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{ ('setting.adminView.slaCardTitle' | translate) }}</p>
+  </div>
+  <!-- @if(!roleStore.loading()){ -->
+  <div class="grid grid-cols-12 gap-4">
+
+    <div class="col-span-12 md:col-span-12">
+
+      <app-base-label [title]="'setting.adminView.dialog.internalCycleLabel' | translate">
+      </app-base-label>
+      <input
+        class="w-full"
+        type="number"
+        pInputText
+        [placeholder]="'setting.adminView.dialog.internalCycleLabel' | translate"
+        [formControl]="formService.internalCycleTime"
+        max="365"
+        min="1"
+      />
+
+      @if(formService.internalCycleTime.touched && formService.internalCycleTime.errors){
+      @if(formService.internalCycleTime.hasError('required')){
+      <app-base-error [message]="'setting.adminView.dialog.internalCycleRequired' | translate" />
+      }
+      @if(formService.internalCycleTime.hasError('max') || formService.internalCycleTime.hasError('max') ||
+      formService.internalCycleTime.hasError('min') || formService.internalCycleTime.hasError('min')){
+      <app-base-error [message]="'setting.adminView.dialog.internalCycleValidNumber' | translate" />
+      }
+      }
+    </div>
+    <div class="col-span-12 md:col-span-12">
+      <app-base-label [title]="'setting.adminView.dialog.investorReplyTimeLabel' | translate">
+      </app-base-label>
+      <input
+        class="w-full"
+        type="number"
+        pInputText
+        [formControl]="formService.investorReplyTime"
+        [placeholder]="'setting.adminView.dialog.investorReplyTimeLabel' | translate"
+        min="1"
+        max="365"
+        fluid
+      />
+      <div>
+        @if(formService.investorReplyTime.touched && formService.investorReplyTime.errors){
+        @if(formService.investorReplyTime.hasError('required')){
+        <app-base-error [message]="'setting.adminView.dialog.investorReplyTimeRequired' | translate" />
+        }
+        @if(formService.investorReplyTime.hasError('min') || formService.investorReplyTime.hasError('max')){
+        <!-- to do add minmum value -->
+        <app-base-error [message]="'setting.adminView.dialog.investorReplyTimeValidNumber' | translate " />
+        }
+        }
+      </div>
+    </div>
+
+  </div>
+  <!-- } -->
+</app-base-dialog>

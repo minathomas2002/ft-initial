@@ -1,0 +1,46 @@
+<app-cards-page-layout
+  [pageTitle]="'setting.title' | translate"
+  [pageSubTitle]="'setting.subTitle' | translate"
+  pageTitleClass="text-[24px] font-semibold"
+  pageSubTitleClass="text-md text-gray-600"
+>
+
+  <ng-container ngProjectAs="page-body">
+    <app-cards-skeleton [isLoading]="false">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pb-[64px] border-b-1 border-b-gray-200">
+        <app-setting-card
+          [title]="('setting.adminView.slaCardTitle' | translate)"
+          [icon]="'icon-calender'"
+          [linkText]="('setting.adminView.slaCardLink' | translate)"
+          [description]="('setting.adminView.slaCardDesc' | translate)"
+          (onClick)="onSLAClick()"
+        >
+        </app-setting-card>
+
+        <app-setting-card
+          [title]="('setting.adminView.autoAssignCardTitle' | translate)"
+          [icon]="'icon-cursor-click-01'"
+          [linkText]="('setting.adminView.autoAssignCardLink' | translate)"
+          [description]="('setting.adminView.autoAssignCardDesc' | translate)"
+          (onClick)="onAutoAssigenClick()"
+        >
+        </app-setting-card>
+
+        <app-setting-card
+          [title]="('setting.adminView.notificationCardTitle' | translate)"
+          [icon]="'icon-bell'"
+          [linkText]="('setting.adminView.notificationCardLink' | translate)"
+          [description]="('setting.adminView.notificationCardDesc' | translate)"
+          (onClick)="onNotificationClick()"
+        >
+        </app-setting-card>
+
+      </div>
+
+    </app-cards-skeleton>
+  </ng-container>
+</app-cards-page-layout>
+
+@if(viewSlaDialog()){
+<app-admin-sla-dialog [dialogVisible]="viewSlaDialog()"></app-admin-sla-dialog>
+}

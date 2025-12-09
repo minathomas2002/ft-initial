@@ -419,5 +419,31 @@
       "submittedPlans": "Submitted Plans",
       "joinDate": "Join Date"
     }
+  },
+  "setting":{
+    "title": "Settings",
+    "subTitle": "Control account and application settings",
+    "confirmButton": "Update",
+    "adminView":{
+      "slaCardTitle": "SLA Time",
+      "slaCardDesc": "Modify the SLA time to match your service requirements.",
+      "slaCardLink": "Change SLA Time",
+      "autoAssignCardTitle": "Auto-Assign",
+      "autoAssignCardDesc": "Distribute requests automatically without manual assignment.",
+      "autoAssignCardLink": "Activate/ Deactivate",
+      "notificationCardTitle": "Notification",
+      "notificationCardDesc": "Manage which notifications you want to receive. ",
+      "notificationCardLink": "Activate/ Deactivate",
+      "dialog":{
+        "internalCycleLabel":"Internal cycle time",
+        "investorReplyTimeLabel" : "Investor reply time",
+        "days": "Days",
+        "internalCycleRequired": "Internal cycle time cannot be empty",
+        "internalCycleValidNumber": "Internal cycle time must be numeric, max 365, min 1 ",
+        "investorReplyTimeRequired" : "Investor reply time cannot be empty",
+        "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min"
+      }
+
+    }
   }
 }

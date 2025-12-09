@@ -35,7 +35,13 @@ const MAIN_LAYOUT_ROUTES: Routes = [
         loadChildren: () => import('./features/investors/investors.routes').then((c) => c.INVESTORS_ROUTES),
         canActivate: [adminGuard],
         data: { animation: ERoutes.investors },
-      }
+      },
+      {
+        path: ERoutes.settings,
+        loadChildren: () => import('./features/settings/settings.routes').then((c) => c.setting_ROUTES),
+        canActivate: [adminGuard],
+        data: { animation: ERoutes.settings },
+      },
     ],
     canActivate: [authGuard],
   },
