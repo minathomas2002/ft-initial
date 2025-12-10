@@ -468,7 +468,29 @@
         "internalPlanSLAReminderDesc":"Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminder": "Investor Plan SLA Reminder",
         "investorPlanSLAReminderDesc": "Sent 5 days and 2 days before investor SLA expires.",
-        "investor": "Investor"
+        "investor": "Investor",
+        "overdueInternalPlan": "Overdue Internal Plan",
+        "overdueInternalPlanDesc": "Sent immediately when an internal plan exceeds the SLA",
+        "finalApprovalRejectionNotification":"Final Approval / Rejection Notification",
+        "finalApprovalRejectionNotificationDesc": "Sent when the employee submits final approval or rejection.",
+        "finalApprovalRejectionNotificationDescCons":"Sent when the plan rejected automatic.",
+        "opportunityNotifications": "Opportunity Notifications",
+        "inactiveOpportunityAlert":"Inactive Opportunity Alert",
+        "inactiveOpportunityAlertDesc":"Sent one day before an opportunity becomes inactive.",
+        "admins":"Admins",
+        "draftOpportunityReminder": "Draft Opportunity Reminder",
+        "draftOpportunityReminderDesc": "Sent for active draft opportunities pending publication.",
+        "opportunityUpdateNotification": "Opportunity Update Notification",
+        "opportunityUpdateNotificationDesc": "Sent when admin updates an opportunity linked with submitted or drafted plan (InProgress)",
+        "newOpportunityCreatedNotification": "New Opportunity Created Notification",
+        "newOpportunityCreatedNotificationDesc": "Sent automatically whenever a new active and published Opportunity is created in the system.",
+        "accessNotifications": "Access Notifications",
+        "impersonationAccessAlert" :"Impersonation Access Alert",
+        "impersonationAccessAlertDesc": "Sent when a user impersonates another user in the system.",
+        "userBeingImpersonated": "User Being Impersonated",
+        "userperformingImpersonation": "User Performing Impersonation"
+
+
       }
 
     }

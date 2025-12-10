@@ -44,4 +44,34 @@ export interface ISettingAdminNotification {
     investor: FormControl<boolean>;
   }>;
 
+  overdueInternalPlan: FormGroup<{
+    employee: FormControl<boolean>;
+    dvManager: FormControl<boolean>;
+    departmentManager: FormControl<boolean>;
+  }>;
+
+   finalApprovalRejectionNotification: FormGroup<{
+    investor: FormControl<boolean>;
+  }>;
+
+  inactiveOpportunityAlert:FormGroup<{
+    admins: FormControl<boolean>;
+  }>;
+
+  draftOpportunityReminder:FormGroup<{
+      admins: FormControl<boolean>;
+  }>;
+  opportunityUpdateNotification:FormGroup<{
+      investor: FormControl<boolean>;
+  }>;
+
+  newOpportunityCreatedNotification:FormGroup<{
+      investor: FormControl<boolean>;
+  }>;
+
+  impersonationAccessAlert:FormGroup<{
+      userBeingImpersonated: FormControl<boolean>;
+      userperformingImpersonation: FormControl<boolean>;
+  }>;
+
 }
