@@ -1,4 +1,4 @@
-<app-table-layout tableTitle="Investors" tableSubTitle="Manage Investors Information and plans">
+<app-table-layout [tableTitle]="'investors.list.title' | translate" [tableSubTitle]="'investors.list.subtitle' | translate">
   <ng-container ngProjectAs="table-filters">
     <app-investors-filter></app-investors-filter>
   </ng-container>
@@ -7,7 +7,7 @@
     <app-table-skeleton [headers]="headers()" [isLoading]="isLoading()">
       <app-data-table [columns]="headers()" [rows]="rows()" [(filter)]="filterService.filter"
         [totalRecords]="totalRecords()" (filterChange)="filterService.applyFilterWithPaging()"
-        messageTitle="No Investors Found" [showCheckBox]="false" [rowsCheckable]="false">
+        [messageTitle]="'investors.list.noInvestorsFound' | translate" [showCheckBox]="false" [rowsCheckable]="false">
         <ng-template #itemsTemplate let-item="item">
           <td>
             {{ item.code }}

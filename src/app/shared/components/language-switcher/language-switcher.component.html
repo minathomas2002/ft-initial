@@ -5,6 +5,6 @@
   optionValue="value"
   (ngModelChange)="onLanguageChange($event)"
   [style]="{ width: '150px' }"
-  placeholder="Language"
+  [placeholder]="'common.language' | translate"
 >
 </p-select>

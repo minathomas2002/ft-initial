@@ -8,6 +8,7 @@ import { TrimOnBlurDirective } from '../../../directives/trim-on-blur.directive'
 import { RadioButton } from 'primeng/radiobutton';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { TranslatePipe } from '../../../pipes';
 
 @Component({
   selector: 'app-new-plan-dialog',
@@ -18,7 +19,8 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
     BaseLabelComponent,
     BaseErrorComponent,
     TrimOnBlurDirective,
-    RadioButton
+    RadioButton,
+    TranslatePipe
   ],
   templateUrl: './new-plan-dialog.html',
   styleUrl: './new-plan-dialog.scss',

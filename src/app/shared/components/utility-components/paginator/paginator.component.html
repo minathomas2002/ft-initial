@@ -5,7 +5,7 @@
       styleClass="col-span-1 !py-2 !w-full !text-sm"
       icon="icon-arrow-left"
       [raised]="true"
-      label="Previous"
+      [label]="'common.previous' | translate"
       [disabled]="prevIsDisabled()"
       (onClick)="goToPage(filter().pageNumber - 1)"
       fluid
@@ -21,7 +21,7 @@
       [pageLinkSize]="3"
       (onPageChange)="pageChanged($event)"
       [showCurrentPageReport]="true"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+      [currentPageReportTemplate]="paginatorTemplate()"
       #paginator
     />
   </div>
@@ -31,7 +31,7 @@
       styleClass="col-span-1 !py-2 !w-full !text-sm"
       icon="icon-arrow-right"
       [raised]="true"
-      label="Next"
+      [label]="'common.next' | translate"
       iconPos="right"
       [disabled]="nextIsDisabled()"
       (onClick)="goToPage(filter().pageNumber + 1)"

@@ -1,10 +1,10 @@
 <app-table-layout
-  [tableTitle]="'Dashboard'"
-  [tableSubTitle]="'Track and manage your submitted localization plans and their review status'"
+  [tableTitle]="'dashboard.title' | translate"
+  [tableSubTitle]="'dashboard.subtitle' | translate"
 >
   <ng-container ngProjectAs="table-actions">
     <p-button
-      [label]="'Submit New Plan'"
+      [label]="'dashboard.submitNewPlan' | translate"
       [icon]="'icon-plus'"
       [size]="'small'"
       (onClick)="planTermsAndConditionsDialogVisibility.set(true)"

@@ -5,7 +5,7 @@
         type="text"
         pInputText
         name="investorSearch"
-        placeholder="Search by Name, Phone Number, Email"
+        [placeholder]="'investors.filter.searchPlaceholder' | translate"
         [ngModel]="filter().searchText ?? ''"
         (ngModelChange)="onSearchTextChange($event)"
       />
@@ -24,7 +24,7 @@
         [showIcon]="true"
         [showButtonBar]="true"
         [iconDisplay]="'input'"
-        placeholder="Select join date"
+        [placeholder]="'investors.filter.selectJoinDate' | translate"
         appendTo="body"
       ></p-datepicker>
     </div>

@@ -2,9 +2,10 @@ import { Component, input, model, output, viewChild } from "@angular/core";
 import { ButtonModule } from "primeng/button";
 import { type Dialog, DialogModule } from "primeng/dialog";
 import { DividerModule } from "primeng/divider";
+import { TranslatePipe } from '../../../pipes';
 @Component({
   selector: "app-base-dialog",
-  imports: [DialogModule, ButtonModule, DividerModule],
+  imports: [DialogModule, ButtonModule, DividerModule, TranslatePipe],
   templateUrl: "./base-dialog.component.html",
   styleUrl: "./base-dialog.component.scss",
 })

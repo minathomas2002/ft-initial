@@ -5,6 +5,7 @@ import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/n
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-investor-dashboard',
@@ -12,7 +13,8 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
     TableLayoutComponent,
     ButtonModule,
     PlanTermsAndConditionsDialog,
-    NewPlanDialog
+    NewPlanDialog,
+    TranslatePipe
   ],
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
