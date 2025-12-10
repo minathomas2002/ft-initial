@@ -46,13 +46,6 @@
             />
             }
           </div>
-          @if(opportunityActionsService.canApplyOnDetails(opportunitiesStore.details()!)) {
-          <p-button
-            [label]="'opportunity.list.apply' | translate"
-            severity="primary"
-            (onClick)="onApply()"
-          />
-          }
         </div>
         <p class="text-md text-gray-600 break-word mb-1">
           {{ opportunitiesStore.details()?.shortDescription }}
