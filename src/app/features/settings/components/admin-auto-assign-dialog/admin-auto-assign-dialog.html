@@ -15,7 +15,6 @@
     <p class="text-sm mb-1 text-gray-60  max-h-[400px]">{{ ('setting.adminView.autoAssign.autoAssignDesc' | translate) }} </p>
 
   </div>
-  <!-- @if(!roleStore.loading()){ -->
   <div class="grid grid-cols-12 gap-4 ">
 
     <div class="col-span-12 md:col-span-12 mt-6">
@@ -27,9 +26,7 @@
           (ngModelChange)="settingAdminStore.settingAutoAssign()!.isAssign = $event"
         />
       </div>
-      <!-- [(ngModel)]="settingAdminStore.settingAutoAssign()?.isAssign" -->
-    </div>
 
+    </div>
   </div>
-  <!-- } -->
 </app-base-dialog>

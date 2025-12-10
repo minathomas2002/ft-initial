@@ -14,7 +14,7 @@
     <p class="text-lg font-semibold text-gray-900 mb-1">{{ ('setting.adminView.slaCardTitle' | translate) }}</p>
     <p class="text-sm mb-1 text-gray-60  max-h-[400px]">{{ ('setting.adminView.slaCardDesc' | translate) }} </p>
   </div>
-  <!-- @if(!roleStore.loading()){ -->
+  @if(!settingAdminStore.isLoading()){
   <div class="grid grid-cols-12 gap-4">
 
     <div class="col-span-12 md:col-span-12">
@@ -79,5 +79,5 @@
     </div>
 
   </div>
-  <!-- } -->
+  }
 </app-base-dialog>
