@@ -47,23 +47,59 @@ export const adminSettingsStore = signalStore(
           }),
         );
       },
-
     /* Update Sla setting*/
-          updateSlaSetting(req: ISettingSlaReq) {
-            patchState(store, { isProcessing: true, error: null });
-            return settingApiService.updateSLASetting(req).pipe(
-              tap((res) => {
-                patchState(store, { isProcessing: false });
-              }),
-              catchError((error) => {
-                patchState(store, { error: error.errorMessage || 'Error updating sla setting' });
-                return throwError(() => new Error('Error updating sla setting'));
-              }),
-              finalize(() => {
-                patchState(store, { isProcessing: false });
-              }),
-            );
-          },
+      updateSlaSetting(req: ISettingSlaReq) {
+        patchState(store, { isProcessing: true, error: null });
+        return settingApiService.updateSLASetting(req).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error updating sla setting' });
+            return throwError(() => new Error('Error updating sla setting'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+
+      /* Get Sla setting*/
+      getAutoAssignSetting() {
+        patchState(store, { isLoading: true, error: null });
+        return settingApiService.getAutoAssignSetting().pipe(
+          tap((res) => {
+            patchState(store, { isLoading: false });
+            patchState(store, { settingAutoAssign: res.body || null });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error getting auto assign setting',
+              settingAutoAssign: null
+            });
+            return throwError(() => new Error('Error getting auto assign setting'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          }),
+        );
+      },
+    /* Update Sla setting*/
+      updateAutoAssignSetting(req: ISettingAutoAssign) {
+        patchState(store, { isProcessing: true, error: null });
+        return settingApiService.updateAutoAssignSetting(req).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error updating auto assign setting' });
+            return throwError(() => new Error('Error updating auto assign setting'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
 
   }
   })
