@@ -461,7 +461,14 @@
         "employee":"Employee",
         "departmentManager":"Department Manager",
         "planReassignment": "Plan Reassignment",
-        "planReassignmentDesc":"Notify when a plan is reassigned from one user to another" 
+        "planReassignmentDesc":"Notify when a plan is reassigned from one user to another",
+        "employeeReassignee": "Employee (Ressigene)",
+        "employeePrev": "Employee (Previous one)",
+        "internalPlanSLAReminder": "Internal Plan SLA Reminder",
+        "internalPlanSLAReminderDesc":"Sent 5 days and 2 days before the internal SLA expires.",
+        "investorPlanSLAReminder": "Investor Plan SLA Reminder",
+        "investorPlanSLAReminderDesc": "Sent 5 days and 2 days before investor SLA expires.",
+        "investor": "Investor"
       }
 
     }

@@ -1,0 +1,234 @@
+<div class=" flex flex-col pb-10">
+
+  <!-- category Plan Workflow Notifications -->
+  <div class="">
+    <div class="mb-1">
+      <p class="text-lg font-semibold text-gray-900 mb-1">{{ ('setting.adminView.notification.planWorkflowTitle' | translate) }}</p>
+      <p class="text-sm mb-1 text-gray-60  max-h-[400px]">{{ ('setting.adminView.notification.countNotification' | translate) }} </p>
+    </div>
+
+    <!-- unassigned plan alert -->
+    <div class="bg-white rounded-xl border-1 border-gray-200 p-6 hover:shadow-md transition-shadow">
+      <div class="flex flex-col gap-1 flex-1">
+        <h5
+          class="text-xl font-semibold text-gray-900 line-clamp-1"
+          [pTooltip]="'setting.adminView.notification.unAssignedAlert' | translate"
+        >
+          {{('setting.adminView.notification.unAssignedAlert' | translate)}}
+        </h5>
+        <p class="text-gray-600 overflow-y-auto max-h-[110px]">
+          {{('setting.adminView.notification.unAssignedAlertDesc' | translate)}}
+        </p>
+      </div>
+
+      <p-divider />
+      <!-- add switch -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.dvManager' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().unassignedPlanAlert.controls.dvManager.value"
+            (ngModelChange)="formService().unassignedPlanAlert.controls.dvManager.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+    </div>
+
+    <!-- plan assigned for review -->
+    <div class="bg-white rounded-xl border-1 border-gray-200 p-6 hover:shadow-md transition-shadow mt-6">
+      <div class="flex flex-col gap-1 flex-1">
+        <h5
+          class="text-xl font-semibold text-gray-900 line-clamp-1"
+          [pTooltip]="'setting.adminView.notification.planAssignedReview' | translate"
+        >
+          {{('setting.adminView.notification.planAssignedReview' | translate)}}
+        </h5>
+        <p class="text-gray-600 overflow-y-auto max-h-[110px]">
+          {{('setting.adminView.notification.planAssignedReviewDesc' | translate)}}
+        </p>
+      </div>
+
+      <!-- divider for employee -->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.employee' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().planAssignedForReview.controls.employee.value"
+            (ngModelChange)="formService().planAssignedForReview.controls.employee.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+      <!-- divider for dv manager -->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.dvManager' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().planAssignedForReview.controls.dvManager.value"
+            (ngModelChange)="formService().planAssignedForReview.controls.dvManager.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+
+      <!-- divider for dv manager -->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.departmentManager' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().planAssignedForReview.controls.departmentManager.value"
+            (ngModelChange)="formService().planAssignedForReview.controls.departmentManager.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- plan reAssignments -->
+    <div class="bg-white rounded-xl border-1 border-gray-200 p-6 hover:shadow-md transition-shadow mt-6">
+      <div class="flex flex-col gap-1 flex-1">
+        <h5
+          class="text-xl font-semibold text-gray-900 line-clamp-1"
+          [pTooltip]="'setting.adminView.notification.planReassignment' | translate"
+        >
+          {{('setting.adminView.notification.planReassignment' | translate)}}
+        </h5>
+        <p class=" text-gray-600  overflow-y-auto max-h-[110px]">
+          {{('setting.adminView.notification.planReassignmentDesc' | translate)}}
+        </p>
+      </div>
+
+      <!-- divider for employee  reassignee-->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.employeeReassignee' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().planReassignment.controls.employeeReassignee.value"
+            (ngModelChange)="formService().planReassignment.controls.employeeReassignee.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+      <!-- divider for dv employee previous one -->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.employeePrev' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().planReassignment.controls.employeePrevious.value"
+            (ngModelChange)="formService().planReassignment.controls.employeePrevious.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+    </div>
+
+    <!-- Internal Plan SLA Reminder -->
+    <div class="bg-white rounded-xl border-1 border-gray-200 p-6 hover:shadow-md transition-shadow mt-6">
+      <div class="flex flex-col gap-1 flex-1">
+        <h5
+          class="text-xl font-semibold text-gray-900 line-clamp-1"
+          [pTooltip]="'setting.adminView.notification.internalPlanSLAReminder' | translate"
+        >
+          {{('setting.adminView.notification.internalPlanSLAReminder' | translate)}}
+        </h5>
+        <p class=" text-gray-600  overflow-y-auto max-h-[110px]">
+          {{('setting.adminView.notification.internalPlanSLAReminderDesc' | translate)}}
+        </p>
+      </div>
+
+      <!-- divider for employee -->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.employee' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().internalPlanSLAReminder.controls.employee.value"
+            (ngModelChange)="formService().internalPlanSLAReminder.controls.employee.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+      <!-- divider for dv manager -->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.dvManager' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().internalPlanSLAReminder.controls.dvManager.value"
+            (ngModelChange)="formService().internalPlanSLAReminder.controls.dvManager.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+
+      <!-- divider for dv manager -->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.departmentManager' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().internalPlanSLAReminder.controls.departmentManager.value"
+            (ngModelChange)="formService().internalPlanSLAReminder.controls.departmentManager.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Investor Plan SLA Reminder -->
+    <div class="bg-white rounded-xl border-1 border-gray-200 p-6 hover:shadow-md transition-shadow mt-6">
+      <div class="flex flex-col gap-1 flex-1">
+        <h5
+          class="text-xl font-semibold text-gray-900 line-clamp-1"
+          [pTooltip]="'setting.adminView.notification.investorPlanSLAReminder' | translate"
+        >
+          {{('setting.adminView.notification.investorPlanSLAReminder' | translate)}}
+        </h5>
+        <p class="text-gray-600 overflow-y-auto max-h-[110px]">
+          {{('setting.adminView.notification.investorPlanSLAReminderDesc' | translate)}}
+        </p>
+      </div>
+      <!-- divider for employee -->
+      <p-divider />
+      <!-- add switch  -->
+      <div class="col-span-12 md:col-span-12 mt-6">
+        <div class="justify-between items-center flex">
+          <app-base-label [title]="'setting.adminView.notification.investor' | translate">
+          </app-base-label>
+          <p-toggleswitch
+            [ngModel]="formService().investorPlanSLAReminder.controls.investor.value"
+            (ngModelChange)="formService().investorPlanSLAReminder.controls.investor.setValue($event)"
+          >
+          </p-toggleswitch>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

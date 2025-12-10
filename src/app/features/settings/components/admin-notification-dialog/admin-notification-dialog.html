@@ -24,10 +24,14 @@
       <p-tab value="1">{{ 'setting.adminView.notification.emailTab' | translate }}</p-tab>
     </p-tablist>
     <p-tabpanels>
-      <p-tabpanel value="0">
+
+      <p-tabpanel
+        value="0"
+        class="px-12"
+      >
         @if(activeTab() === '0'){
         @defer (on viewport) {
-        <app-admin-notification-form />
+        <app-admin-notification-form [formService]="systemTabformService"></app-admin-notification-form>
         } @placeholder {
         <div></div>
         }
@@ -36,7 +40,7 @@
       <p-tabpanel value="1">
         @if(activeTab() === '1'){
         @defer (on viewport) {
-        <app-admin-notification-form />
+        <app-admin-notification-form [formService]="emailTabformService"></app-admin-notification-form>
         } @placeholder {
         <div></div>
         }

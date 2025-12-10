@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminNotificationForm } from './admin-notification-form';
+import { AdminNotificationForm } from './admin-notification-system-form';
 
 describe('AdminNotificationForm', () => {
   let component: AdminNotificationForm;
