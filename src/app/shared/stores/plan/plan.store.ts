@@ -2,14 +2,14 @@ import { inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
 import { EOpportunityType } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { ISelectItem } from "../../interfaces";
-import { finalize, take } from "rxjs";
+import { IBaseApiResponse, ISelectItem } from "../../interfaces";
+import { finalize, Observable, of, take, tap } from "rxjs";
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null,
   isPresetSelected: boolean,
   newPlanTitle: string,
-  availableOpportunities: ISelectItem[] | null,
+  availableOpportunities: ISelectItem[],
   isLoadingAvailableOpportunities: boolean,
 } = {
   newPlanOpportunityType: null,
@@ -47,17 +47,14 @@ export const PlanStore = signalStore(
   withMethods((store) => {
     const opportunitiesApiService = inject(OpportunitiesApiService);
     return {
-      getActiveOpportunityLookUps(): void {
-        if (!store.newPlanOpportunityType()) return;
+      getActiveOpportunityLookUps(): Observable<IBaseApiResponse<ISelectItem[]>> {
+        if (!store.newPlanOpportunityType()) return of({} as IBaseApiResponse<ISelectItem[]>);
         patchState(store, { isLoadingAvailableOpportunities: true });
-        opportunitiesApiService.getActiveOpportunityLookUps(store.newPlanOpportunityType()!)
+        return opportunitiesApiService.getActiveOpportunityLookUps(store.newPlanOpportunityType()!)
           .pipe(
             finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
-            take(1)
+            tap((response) => patchState(store, { availableOpportunities: response.body }))
           )
-          .subscribe((response) => {
-            patchState(store, { availableOpportunities: response.body });
-          });
       }
     }
   }),
