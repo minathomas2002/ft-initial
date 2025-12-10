@@ -193,7 +193,7 @@
             cardClass="bg-white md:min-h-[260px]"
           >
             <ng-container ngProjectAs="base-card-info">
-              <div class="flex flex-col overflow-y-auto h-30 wrap break-all gap-1">
+              <div class="flex flex-col overflow-y-auto h-30 wrap break-word gap-1">
                 @for(item of opportunitiesStore.details()?.afterSalesServices; track item.id){
                 <app-opportunity-details-card-info-item
                   icon="icon-check-circle"
