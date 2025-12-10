@@ -26,6 +26,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-bar-chart:before {
+  content: "\e926";
+}
+
 .icon-chevron-selector-vertical:before {
   content: "\e924";
 }

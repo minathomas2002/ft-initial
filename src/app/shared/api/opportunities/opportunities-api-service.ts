@@ -9,10 +9,11 @@ import {
   IOpportunity,
   IOpportunityDetails,
   IAdminOpportunitiesFilterRequest,
-  IAdminOpportunity
+  IAdminOpportunity,
+  ISelectItem
 } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { EOpportunityStatus } from '../../enums';
+import { EOpportunityStatus, EOpportunityType } from '../../enums';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,12 @@ export class OpportunitiesApiService {
 
   deleteOpportunity(opportunityId: string): Observable<IBaseApiResponse<void>> {
     return this.baseHttpService.delete<void, never>(`${API_ENDPOINTS.opportunities.deleteOpportunity}/${opportunityId}`);
+  }
+
+  getActiveOpportunityLookUps(opportunityType: EOpportunityType): Observable<IBaseApiResponse<ISelectItem[]>> {
+    return this.baseHttpService.post<ISelectItem[], {
+      opportunityType: EOpportunityType,
+    }, unknown>(API_ENDPOINTS.opportunities.getActiveOpportunityLookUps, { opportunityType });
   }
 
   changeOpportunityStatus(opportunityId: string, status: EOpportunityStatus): Observable<IBaseApiResponse<IOpportunity>> {
