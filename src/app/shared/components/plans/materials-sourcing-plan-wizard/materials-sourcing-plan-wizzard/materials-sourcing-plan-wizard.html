@@ -1,0 +1,27 @@
+<app-base-wizard-dialog
+  [(visible)]="visibility"
+  [(activeStep)]="activeStep"
+  [steps]="steps()"
+  [wizardTitle]="wizardTitle()"
+  (onNextStep)="nextStep()"
+  (onPreviousStep)="previousStep()"
+  (onSaveAsDraft)="saveAsDraft()"
+  [isLoading]="isLoading()"
+  [isProcessing]="isProcessing()"
+>
+
+  <ng-container ngProjectAs="status">
+    <app-base-tag
+      [color]="'gray'"
+      [value]="'Draft'"
+    />
+  </ng-container>
+
+  <ng-template [appStepContent]="1">
+    <app-overview-company-information-form />
+  </ng-template>
+
+  <ng-container ngProjectAs="final-step-action">
+    <p-button [label]="'Submit'"></p-button>
+  </ng-container>
+</app-base-wizard-dialog>
