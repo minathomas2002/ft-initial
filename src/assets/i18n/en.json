@@ -442,6 +442,10 @@
         "internalCycleValidNumber": "Internal cycle time must be numeric, max 365, min 1 ",
         "investorReplyTimeRequired" : "Investor reply time cannot be empty",
         "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min"
+      },
+      "autoAssign":{
+        "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",
+        "enableAutoAssign": "Enable Auto-Assign"
       }
 
     }

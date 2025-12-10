@@ -4,10 +4,11 @@ import { CardsPageLayout } from 'src/app/shared/components/layout-components/car
 import { CardsSkeleton } from "src/app/shared/components/skeletons/cards-skeleton/cards-skeleton";
 import { SettingCard } from "../../components/setting-card/setting-card";
 import { AdminSlaDialog } from "../../components/adminSlaDialog/admin-sla-dialog/admin-sla-dialog";
+import { AdminAutoAssignDialog } from "../../components/admin-auto-assign-dialog/admin-auto-assign-dialog";
 
 @Component({
   selector: 'app-admin-setting-view',
-  imports: [TranslatePipe, CardsPageLayout, CardsSkeleton, SettingCard, AdminSlaDialog],
+  imports: [TranslatePipe, CardsPageLayout, CardsSkeleton, SettingCard, AdminSlaDialog, AdminAutoAssignDialog],
   templateUrl: './admin-setting-view.html',
   styleUrl: './admin-setting-view.scss',
 })

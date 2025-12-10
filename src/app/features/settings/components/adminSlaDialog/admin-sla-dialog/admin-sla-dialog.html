@@ -7,7 +7,7 @@
   [isConfirmationDisabled]="formService.form.invalid"
   (onConfirm)="onConfirm()"
   (onClose)="resetForm()"
-  [isLoading]="false"
+  [isLoading]="settingAdminStore.isProcessing()"
 >
 
   <div class="mb-5">
