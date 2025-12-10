@@ -9,7 +9,7 @@
 >
   <ng-template #header>
     <div class="flex items-center">
-      <div class="inline-flex items-center w-[440px] bg-gray-50 ps-5 pt-6 border-e-1 border-gray-200">
+      <div class="inline-flex items-center w-[300px] bg-gray-50 ps-5 pt-6 border-e-1 border-gray-200">
         <img
           src="assets/images/long-logo.svg"
           alt="logo"
@@ -24,7 +24,7 @@
     </div>
   </ng-template>
   <div class="flex h-full">
-    <div class="steps-container w-[440px] bg-gray-50 ps-5 py-6  border-e-1 border-gray-200">
+    <div class="steps-container w-[300px] bg-gray-50 ps-5 py-6  border-e-1 border-gray-200">
       <div class="flex flex-col h-full bg-gray-50">
         <p-stepper
           [(value)]="activeStep"
@@ -34,7 +34,7 @@
           <p-step-item [value]="i + 1">
             <p-step
               [value]="i + 1"
-              class="flex flex-row flex-auto gap-2"
+              class="flex flex-row flex-auto gap-2 w-full max-w-full min-w-0"
             >
               <ng-template
                 #content
@@ -42,7 +42,7 @@
                 let-value="value"
               >
                 <button
-                  class="bg-transparent border-0 inline-flex flex-col gap-2"
+                  class="bg-transparent border-0 flex flex-col gap-2 w-full max-w-full"
                   (click)="activateCallback()"
                 >
                   <app-wizard-step-state [stepState]="step" />
