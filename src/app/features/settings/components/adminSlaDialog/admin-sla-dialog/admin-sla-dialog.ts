@@ -22,6 +22,8 @@ export class AdminSlaDialog {
 
 
   ngOnInit(){
+    console.log(this.dialogVisible());
+    
     this.loadSlaSetting();
   }
 
@@ -30,8 +32,9 @@ export class AdminSlaDialog {
   }
   
   resetForm() {
-    this.formService.ResetFormFields();
     this.dialogVisible.set(false);
+    this.formService.ResetFormFields();
+    
   }
 
   onConfirm(){
