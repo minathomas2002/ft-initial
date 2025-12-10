@@ -12,11 +12,15 @@ const Roles = "Roles";
 const RoleManagement = "RoleManagement";
 
 const Auth = "Auth";
+const Plans = "Plans";
 
 export const API_ENDPOINTS = {
   baseUrl: baseUrl,
   dashboard: {
     getHelloWorld: `${Dashboard}/hello-world`,
+  },
+  dashboardPlans: {
+    getPlans: `${Plans}/get-investor-dashboard-plans`
   },
   investors: {
     getInvestors: `${Investors}`,

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
   IApiPaginatedResponse,
   IBaseApiResponse,
-  IDashboardResponse,
+  IOpportunitiesDashboardResponse,
   IOpportunitiesFilterRequest,
   IOpportunity,
   IOpportunityDetails,
@@ -25,8 +25,8 @@ export class OpportunitiesApiService {
     return this.baseHttpService.get<IApiPaginatedResponse<IOpportunity[]>, IOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getOpportunities, filter);
   }
 
-  getAdminOpportunities(filter: IAdminOpportunitiesFilterRequest): Observable<IBaseApiResponse<IDashboardResponse<IAdminOpportunity[]>>> {
-    return this.baseHttpService.get<IDashboardResponse<IAdminOpportunity[]>, IAdminOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getAdminOpportunities, filter);
+  getAdminOpportunities(filter: IAdminOpportunitiesFilterRequest): Observable<IBaseApiResponse<IOpportunitiesDashboardResponse<IAdminOpportunity[]>>> {
+    return this.baseHttpService.get<IOpportunitiesDashboardResponse<IAdminOpportunity[]>, IAdminOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getAdminOpportunities, filter);
   }
 
   draftOpportunity(opportunity: FormData): Observable<IBaseApiResponse<IOpportunity>> {

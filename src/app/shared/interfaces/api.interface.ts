@@ -18,12 +18,3 @@ export interface IApiPaginatedResponse<T> {
     hasPrevious: boolean;
   };
 }
-
-export interface IDashboardResponse<T> extends IApiPaginatedResponse<T> {
-  counts: {
-    totalOpportunities: number;
-    activePublishedOpportunities: number;
-    inactiveOpportunities: number;
-    draftOpportunities: number;
-  };
-}

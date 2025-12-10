@@ -18,7 +18,14 @@
     "info": "Info",
     "noDataFound": "No data found",
     "clearAll": "Clear all",
-    "paginatorTemplate": "Showing {first} to {last} of {totalRecords}"
+    "paginatorTemplate": "Showing {first} to {last} of {totalRecords}",
+    "filter": "Filter",
+    "previous": "Previous",
+    "next": "Next",
+    "language": "Language",
+    "searchCountry": "Search country...",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
@@ -88,7 +95,9 @@
       "invalidEmailFormat": "Invalid email format",
       "buttonLabel": "Reset password",
       "backButtonLabel": "Back to login",
-      "success": "You will receive a password reset link shortly"
+      "success": "You will receive a password reset link shortly",
+      "didntReceiveEmail": "Didn't receive the email?",
+      "clickToResend": "Click to resend"
     },
     "reset": {
       "title": "Set new password",
@@ -198,7 +207,8 @@
       "sourcing": "Sourcing",
       "manufacturing": "Manufacturing",
       "assemblyTesting": "Assembly & Testing",
-      "afterSalesServices": "After Sales Services"
+      "afterSalesServices": "After Sales Services",
+      "apply": "Apply"
     },
     "form": {
       "basicInformation": "Basic Information",
@@ -503,25 +513,51 @@
     "draft": "Draft",
     "publish": "Publish"
   },
-  "auth": {
-    "forgot": {
-      "didntReceiveEmail": "Didn't receive the email?",
-      "clickToResend": "Click to resend"
+  "plans": {
+    "filter": {
+      "searchPlaceholder": "Search by Plan ID or Title",
+      "selectPlanType": "Select Plan Type",
+      "selectStatus": "Select Status",
+      "selectSubmissionDate": "Select Submission Date",
+      "allTypes": "All Types",
+      "service": "Service",
+      "material": "Material",
+      "allStatuses": "All Statuses"
+    },
+    "status": {
+      "submitted": "Submitted",
+      "pending": "Pending",
+      "underReview": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "type": {
+      "services": "Services",
+      "materials": "Materials"
+    },
+    "table": {
+      "planId": "Plan ID",
+      "planTitle": "Plan Title",
+      "planType": "Plan Type",
+      "submissionDate": "Submission Date",
+      "slaCountdown": "SLA Countdown",
+      "currentStatus": "Current Status",
+      "actions": "Actions",
+      "daysRemaining": "days remaining"
+    },
+    "statistics": {
+      "totalPlans": "Total Plans",
+      "plansUnderReview": "Plans Under Review",
+      "approvedPlans": "Approved Plans",
+      "rejectedPlans": "Rejected Plans"
+    },
+    "list": {
+      "noPlansFound": "No Plans Found"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "download": "Download"
     }
-  },
-  "opportunity": {
-    "details": {
-      "apply": "Apply"
-    }
-  },
-  "common": {
-    "filter": "Filter",
-    "save": "Save",
-    "previous": "Previous",
-    "next": "Next",
-    "language": "Language",
-    "searchCountry": "Search country...",
-    "signIn": "Sign in",
-    "signUp": "Sign up"
   }
 }
