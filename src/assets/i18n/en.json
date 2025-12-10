@@ -446,6 +446,22 @@
       "autoAssign":{
         "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",
         "enableAutoAssign": "Enable Auto-Assign"
+      },
+      "notification": {
+        "notificationDesc": "Enable or disable system and email notifications for all user roles.",
+        "systemTab": "System Notifications",
+        "emailTab": "Email Notifications",
+        "planWorkflowTitle": "Plan Workflow Notifications",
+        "countNotification": "7 notifications",
+        "unAssignedAlert": "Unassigned Plan Alert",
+        "unAssignedAlertDesc": "Notify when a plan is submitted but not yet assigned to any reviewer",
+        "dvManager": " DV Manager",
+        "planAssignedReview": "Plan Assigned for Review",
+        "planAssignedReviewDesc": "Notify when a plan is assigned to a user for review",
+        "employee":"Employee",
+        "departmentManager":"Department Manager",
+        "planReassignment": "Plan Reassignment",
+        "planReassignmentDesc":"Notify when a plan is reassigned from one user to another" 
       }
 
     }
