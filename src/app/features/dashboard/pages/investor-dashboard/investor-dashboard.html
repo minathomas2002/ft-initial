@@ -25,3 +25,7 @@
   (onConfirm)="onUserConfirmNewPlanDialog()"
 />
 }
+
+@if(materialsSourcingPlanWizardVisibility()){
+<app-materials-sourcing-plan-wizard [(visibility)]="materialsSourcingPlanWizardVisibility" />
+}
