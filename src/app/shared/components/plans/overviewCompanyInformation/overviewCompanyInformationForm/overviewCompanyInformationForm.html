@@ -1,0 +1,53 @@
+<div class="flex flex-col gap-[32px] px-8 pb-10">
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Basic Information</h2>
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Plan Title'" />
+        <input
+          pInputText
+          placeholder="Enter your plan title"
+          [formControl]="basicInformationFormGroupControls.planTitle"
+          fluid
+        />
+        @if(basicInformationFormGroupControls.planTitle.touched && basicInformationFormGroupControls.planTitle.hasError('required')){
+        <app-base-error [message]="'Plan title is required'" />
+        }
+        @else if(basicInformationFormGroupControls.planTitle.touched && basicInformationFormGroupControls.planTitle.hasError('maxlength')){
+        <app-base-error [message]="'Plan title must be less than 150 characters'" />
+        }
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Opportunity Type'" />
+        <p-select
+          [options]="opportunityTypes"
+          [formControl]="basicInformationFormGroupControls.opportunityType"
+          optionLabel="name"
+          optionValue="id"
+          fluid
+        />
+      </div>
+    </div>
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Opportunity'" />
+        <p-select
+          [options]="availableOpportunities()"
+          [formControl]="basicInformationFormGroupControls.opportunity"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Select opportunity"
+          [loading]="isLoadingAvailableOpportunities()"
+          fluid
+        />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Submission Date'" />
+        <p-datepicker
+          fluid
+          [formControl]="basicInformationFormGroupControls.submissionDate"
+        />
+      </div>
+    </div>
+  </div>
+</div>
