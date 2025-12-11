@@ -173,7 +173,7 @@
     },
     "filter": {
       "search": "Search",
-      "searchByOpportunityName": "Search by opportunity name",
+      "searchByOpportunityName": "Search by opportunity name or description",
       "status": "Opportunity Status",
       "state": "Opportunity State",
       "type": "Opportunity Type",

@@ -1,54 +1,56 @@
-<div class="flex justify-between items-center">
-  <div>
-    <h4 class="font-semibold xl:text-2xl text-lg">{{ 'users.tabs.employees' | translate }}</h4>
-    <h4 class="xl:text-md text-sm text-gray-600">{{ 'users.list.subtitle' | translate }}</h4>
+<div class="cards-page-layout px-[32px] py-[24px]">
+  <div class="flex justify-between items-center">
+    <div>
+      <h4 class="font-semibold xl:text-2xl text-lg">{{ 'users.tabs.employees' | translate }}</h4>
+      <h4 class="xl:text-md text-sm text-gray-600">{{ 'users.list.subtitle' | translate }}</h4>
+    </div>
+    @if(activeTab() === '0'){
+    <p-button
+      [label]="'users.list.addEmployee' | translate"
+      severity="primary"
+      class="flex"
+      fluid
+      icon="icon-plus"
+      (onClick)="onAddEmployee()"
+    />
+    }
   </div>
-  @if(activeTab() === '0'){
-  <p-button
-    [label]="'users.list.addEmployee' | translate"
-    severity="primary"
-    class="flex"
-    fluid
-    icon="icon-plus"
-    (onClick)="onAddEmployee()"
-  />
+  <p-tabs
+    [(value)]="activeTab"
+    class="mt-10"
+  >
+    <p-tablist>
+      <p-tab value="0">{{ 'users.tabs.employees' | translate }}</p-tab>
+      <p-tab value="1">{{ 'users.tabs.roleManagement' | translate }}</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        @if(activeTab() === '0'){
+        @defer (on viewport) {
+        <app-employee-list></app-employee-list>
+        } @placeholder {
+        <div></div>
+        }
+        }
+      </p-tabpanel>
+      <p-tabpanel value="1">
+        @if(activeTab() === '1'){
+        @defer (on viewport) {
+        <app-role-management></app-role-management>
+        } @placeholder {
+        <div></div>
+        }
+        }
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+  
+  @if(createEmpDialogVisible()){
+  <app-add-edit-employee-dialog
+    [(dialogVisible)]="createEmpDialogVisible"
+    [isEditMode]="false"
+    (onSuccess)="onAddEmployeeSuccess()"
+  >
+  </app-add-edit-employee-dialog>
   }
 </div>
-<p-tabs
-  [(value)]="activeTab"
-  class="mt-10"
->
-  <p-tablist>
-    <p-tab value="0">{{ 'users.tabs.employees' | translate }}</p-tab>
-    <p-tab value="1">{{ 'users.tabs.roleManagement' | translate }}</p-tab>
-  </p-tablist>
-  <p-tabpanels>
-    <p-tabpanel value="0">
-      @if(activeTab() === '0'){
-      @defer (on viewport) {
-      <app-employee-list></app-employee-list>
-      } @placeholder {
-      <div></div>
-      }
-      }
-    </p-tabpanel>
-    <p-tabpanel value="1">
-      @if(activeTab() === '1'){
-      @defer (on viewport) {
-      <app-role-management></app-role-management>
-      } @placeholder {
-      <div></div>
-      }
-      }
-    </p-tabpanel>
-  </p-tabpanels>
-</p-tabs>
-
-@if(createEmpDialogVisible()){
-<app-add-edit-employee-dialog
-  [(dialogVisible)]="createEmpDialogVisible"
-  [isEditMode]="false"
-  (onSuccess)="onAddEmployeeSuccess()"
->
-</app-add-edit-employee-dialog>
-}
