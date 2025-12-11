@@ -38,12 +38,12 @@ export class SlaForm {
     this.form.reset();
   }
 
-  patchForm(slaSetting : ISettingSla){
+  patchForm(slaSetting : ISettingSla | null){
     this.form.patchValue({
-      internalCycle: slaSetting.internalCycle,
-      investorReply: slaSetting.investorReply,
+      internalCycle: slaSetting?.internalCycle,
+      investorReply: slaSetting?.investorReply,
     });
-    this.form.controls.investorReply.addValidators(Validators.min(slaSetting.remainingDaysValidation));
+    this.form.controls.investorReply.addValidators(Validators.min(slaSetting?.remainingDaysValidation?? 1));
     this.form.controls.investorReply.updateValueAndValidity();
 
   }

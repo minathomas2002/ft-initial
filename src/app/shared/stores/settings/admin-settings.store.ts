@@ -2,7 +2,7 @@ import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
 import { ISettingAutoAssign, ISettingSla, ISettingSlaReq } from "../../interfaces/ISetting";
 import { SettingsApiService } from "../../api/settings/settings-api-service";
 import { inject } from "@angular/core";
-import { catchError, finalize, tap, throwError } from "rxjs";
+import { catchError, finalize, map, tap, throwError } from "rxjs";
 
 
 const initialState: {
@@ -31,6 +31,10 @@ export const adminSettingsStore = signalStore(
       getSlaSetting() {
         patchState(store, { isLoading: true, error: null });
         return settingApiService.getSLASetting().pipe(
+          map((res)=>{
+            res.body.remainingDaysValidation = (res.body.remainingDaysValidation == 0)? 1 : res.body.remainingDaysValidation;
+            return res;
+          }),
           tap((res) => {
             patchState(store, { isLoading: false });
             patchState(store, { settingSla: res.body || null });

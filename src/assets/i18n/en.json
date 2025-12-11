@@ -441,7 +441,8 @@
         "internalCycleRequired": "Internal cycle time cannot be empty",
         "internalCycleValidNumber": "Internal cycle time must be numeric, max 365, min 1 ",
         "investorReplyTimeRequired" : "Investor reply time cannot be empty",
-        "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min"
+        "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min {{days}} ",
+        "slaSuccessUpdate": "SLA updated Successfully."
       },
       "autoAssign":{
         "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",
@@ -496,6 +497,7 @@
         "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
         "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA."
+        
 
       }
 

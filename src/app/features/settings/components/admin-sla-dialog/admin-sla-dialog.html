@@ -72,8 +72,8 @@
         }
         @if(formService.investorReply.hasError('min') || formService.investorReply.hasError('max')){
         <!-- to do add minmum value -->
-        <app-base-error [message]="'setting.adminView.dialog.investorReplyTimeValidNumber'+ settingAdminStore.settingSla()?.remainingDaysValidation| translate " />
-        }
+        <app-base-error [message]="'setting.adminView.dialog.investorReplyTimeValidNumber' 
+                | translate:{ days: settingAdminStore.settingSla()?.remainingDaysValidation }" /> }
         }
       </div>
     </div>
