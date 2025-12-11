@@ -1,4 +1,5 @@
 import { FormControl, FormGroup } from "@angular/forms";
+import { EHolidaysManagementActions } from "../enums/holidays-management.enum";
 
 export interface ISettingSlaReq {
   internalCycle : number;
@@ -6,21 +7,16 @@ export interface ISettingSlaReq {
 }
 
 export interface ISettingSla extends ISettingSlaReq {
- 
   remainingDaysValidation : number;
-
 }
 
 export interface ISettingAutoAssign{
- 
   isEnabled : boolean;
-
 }
 
 export interface ISettingAutoAssignResponse{
   haveActiveUsers : boolean;
 }
-
 
 export interface ISettingAdminNotification {
     unassignedPlanAlert: FormGroup<{
@@ -113,4 +109,20 @@ export interface ISettingAdminEmailNotification {
     investor: FormControl<boolean>;
   }>;
 
+  
+
 }
+
+export interface IHolidaysManagementRecord {
+  id: string;
+  holidayName: string;
+  type: string;
+  startDate: Date;
+  endDate: Date;
+  numberOfDays: string;
+  createdBy: string;
+  lastUpdated: Date;
+  actions: EHolidaysManagementActions[];
+}
+
+export type THolidaysManagementRecordKeys = keyof IHolidaysManagementRecord;

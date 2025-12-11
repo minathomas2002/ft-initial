@@ -502,7 +502,22 @@
         "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
         "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA."
-        
+      },
+      "holidays": {
+        "goBack": "Back to settings",
+        "title": "Holidays Management",
+        "subTitle":"Add official holidays or days off to exclude them from SLA calculations.",
+        "addHoliday":"Create New Holiday",
+        "table": {
+          "holidayName": "Holiday Name",
+          "type": "Type",
+          "startDate": "Start Date",
+          "endDate": "end Date",
+          "numberOfDay": "Number Of Days",
+          "createdBy": "Created By",
+          "lastUpdated": "Last Updated",
+          "actions":"Actions"
+        }
 
       }
 

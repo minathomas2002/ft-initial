@@ -13,5 +13,6 @@ export enum ERoutes {
   anonymous = 'public',
   admin = 'admin',
   investors = 'investors',
-  settings = 'settings'
+  settings = 'settings',
+  holidaysManagement = 'holidays-management'
 }
