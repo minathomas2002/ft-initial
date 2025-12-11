@@ -29,11 +29,16 @@ export class SidebarContentComponent {
     var opportunitiesLink = this.permissionService.canAccessOnOpportunityAdmin()
       ? ERoutes.opportunities + '/' + ERoutes.admin
       : ERoutes.opportunities;
+
+    var dashboardLink = this.permissionService.canAccessInvestorDashboard()
+      ? ERoutes.dashboard + '/' + ERoutes.investors
+      : ERoutes.dashboard;
+      
     return [
       {
         label: this.i18nService.translate('navigation.dashboard'),
         icon: 'icon-home',
-        routerLink: ERoutes.dashboard,
+        routerLink: dashboardLink,
         show: this.permissionService.canAccessDashboard()
       },
       {
