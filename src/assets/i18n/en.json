@@ -488,8 +488,14 @@
         "impersonationAccessAlert" :"Impersonation Access Alert",
         "impersonationAccessAlertDesc": "Sent when a user impersonates another user in the system.",
         "userBeingImpersonated": "User Being Impersonated",
-        "userperformingImpersonation": "User Performing Impersonation"
-
+        "userperformingImpersonation": "User Performing Impersonation",
+        "unAssignedAlertEmailDesc": "Sent when a plan stays 5 days unassigned after submitted.",
+        "planReassignmenEmailDesc": "Sent when a plan is reassigned from employee to another",
+        "reminderOnPlanAssignedforReview": "Reminder on Plan Assigned for Review",
+        "reminderOnPlanAssignedforReviewDesc": "Sent when a plan is assigned to a reviewer.",
+        "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
+        "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
+        "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA."
 
       }
 

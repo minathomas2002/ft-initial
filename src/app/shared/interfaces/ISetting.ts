@@ -40,7 +40,7 @@ export interface ISettingAdminNotification {
     departmentManager: FormControl<boolean>;
   }>;
 
-   investorPlanSLAReminder: FormGroup<{
+  investorPlanSLAReminder: FormGroup<{
     investor: FormControl<boolean>;
   }>;
 
@@ -50,7 +50,7 @@ export interface ISettingAdminNotification {
     departmentManager: FormControl<boolean>;
   }>;
 
-   finalApprovalRejectionNotification: FormGroup<{
+  finalApprovalRejectionNotification: FormGroup<{
     investor: FormControl<boolean>;
   }>;
 
@@ -72,6 +72,41 @@ export interface ISettingAdminNotification {
   impersonationAccessAlert:FormGroup<{
       userBeingImpersonated: FormControl<boolean>;
       userperformingImpersonation: FormControl<boolean>;
+  }>;
+
+}
+
+export interface ISettingAdminEmailNotification {
+  unassignedPlanAlert: FormGroup<{
+    dvManager: FormControl<boolean>;
+  }>;
+
+  planReassignment: FormGroup<{
+    employeePrevious: FormControl<boolean>;
+  }>;
+
+  reminderOnPlanAssignedforReview : FormGroup<{
+    employee: FormControl<boolean>;
+  }>;
+
+   internalPlanSLAReminder: FormGroup<{
+    employee: FormControl<boolean>;
+    dvManager: FormControl<boolean>;
+    departmentManager: FormControl<boolean>;
+  }>;
+
+  investorPlanSLAReminder: FormGroup<{
+    investor: FormControl<boolean>;
+  }>;
+
+  overdueInternalPlan: FormGroup<{
+    employee: FormControl<boolean>;
+    dvManager: FormControl<boolean>;
+    departmentManager: FormControl<boolean>;
+  }>;
+
+  finalApprovalRejectionNotification: FormGroup<{
+    investor: FormControl<boolean>;
   }>;
 
 }
