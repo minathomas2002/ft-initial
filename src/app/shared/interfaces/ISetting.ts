@@ -17,6 +17,10 @@ export interface ISettingAutoAssign{
 
 }
 
+export interface ISettingAutoAssignResponse{
+  haveActiveUsers : boolean;
+}
+
 
 export interface ISettingAdminNotification {
     unassignedPlanAlert: FormGroup<{

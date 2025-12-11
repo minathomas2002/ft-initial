@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
-import { ISettingAutoAssign, ISettingSla, ISettingSlaReq } from '../../interfaces/ISetting';
+import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq } from '../../interfaces/ISetting';
 import { IBaseApiResponse } from '../../interfaces';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
@@ -29,7 +29,7 @@ export class SettingsApiService {
     }
 
   // update sla setting
-    updateAutoAssignSetting(req: ISettingAutoAssign): Observable<IBaseApiResponse<boolean>> {
-      return this.baseHttpService.post <boolean, ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.editAutoAssignSetting, req);
+    updateAutoAssignSetting(req: ISettingAutoAssign): Observable<IBaseApiResponse<ISettingAutoAssignResponse>> {
+      return this.baseHttpService.post <ISettingAutoAssignResponse, ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.editAutoAssignSetting, req);
     }
 }

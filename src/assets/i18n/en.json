@@ -446,7 +446,8 @@
         "investorReplyTimeRequired" : "Investor reply time cannot be empty",
         "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min {{days}} ",
         "slaSuccessUpdate": "SLA updated Successfully.",
-        "autoAssignSuccessUpdate": "Auto - assign updated Successfully."
+        "autoAssignSuccessUpdate": "Auto - assign updated Successfully.",
+        "autoAssignWarningUpdate": "No active employees available for assignment."
       },
       "autoAssign":{
         "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",

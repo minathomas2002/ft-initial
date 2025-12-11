@@ -43,7 +43,11 @@ export class AdminAutoAssignDialog {
       .subscribe({
         next: (res) => {
           if (res.success) {
-            this.toasterService.success(this.i18nService.translate('setting.adminView.dialog.autoAssignSuccessUpdate'));
+             if(res.body.haveActiveUsers)
+                this.toasterService.success(this.i18nService.translate('setting.adminView.dialog.autoAssignSuccessUpdate'));
+              else
+                this.toasterService.warn(this.i18nService.translate('setting.adminView.dialog.autoAssignWarningUpdate'));
+
             this.dialogVisible.set(false);
           }
         },
