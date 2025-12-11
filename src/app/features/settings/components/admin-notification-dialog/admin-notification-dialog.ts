@@ -5,10 +5,12 @@ import { BaseDialogComponent } from "src/app/shared/components/base-components/b
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "primeng/tabs";
 import { AdminNotificationForm } from "../admin-notification-system-form/admin-notification-system-form";
 import { NotificationFormService } from '../../services/notification-form-service';
+import { AdminNotificationEmailForm } from "../admin-notification-email-form/admin-notification-email-form";
+import { EmailNotificationFormService } from '../../services/email-notification-form-service';
 
 @Component({
   selector: 'app-admin-notification-dialog',
-  imports: [TranslatePipe, BaseDialogComponent, Tabs, TabList, Tab, TabPanels, TabPanel, AdminNotificationForm],
+  imports: [TranslatePipe, BaseDialogComponent, Tabs, TabList, Tab, TabPanels, TabPanel, AdminNotificationForm, AdminNotificationEmailForm],
   templateUrl: './admin-notification-dialog.html',
   styleUrl: './admin-notification-dialog.scss',
 })
@@ -18,7 +20,7 @@ export class AdminNotificationDialog {
   dialogVisible = model<boolean>(false);
   activeTab = signal<string>('0');
   systemTabformService = inject(NotificationFormService);
-  emailTabformService = inject(NotificationFormService);
+  emailTabformService = inject(EmailNotificationFormService);
 
    onConfirm(){
     this.dialogVisible.set(false);
@@ -29,5 +31,7 @@ export class AdminNotificationDialog {
 
    onClose(){
     this.dialogVisible.set(false);
+    this.systemTabformService.ResetFormFields();
+    this.emailTabformService.ResetFormFields();
    }
 }

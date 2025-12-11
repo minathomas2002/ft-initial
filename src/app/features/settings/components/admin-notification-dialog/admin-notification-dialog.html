@@ -40,7 +40,7 @@
       <p-tabpanel value="1">
         @if(activeTab() === '1'){
         @defer (on viewport) {
-        <app-admin-notification-form [formService]="emailTabformService"></app-admin-notification-form>
+        <app-admin-notification-email-form [formService]="emailTabformService"></app-admin-notification-email-form>
         } @placeholder {
         <div></div>
         }
