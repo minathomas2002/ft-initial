@@ -53,12 +53,12 @@ export class InvestorDashboard implements OnInit {
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
     this.i18nService.currentLanguage();
     return [
-      { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planId' },
-      { label: this.i18nService.translate('plans.table.planTitle'), isSortable: true, sortingKey: 'planTitle' },
+      { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
+      { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
       { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'planType' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
-      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountdown' },
-      { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'currentStatus' },
+      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
+      { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
       { label: this.i18nService.translate('plans.table.actions'), isSortable: false },
     ];
   });
@@ -108,9 +108,9 @@ export class InvestorDashboard implements OnInit {
 
   getStatusBadgeClass(status: EPlanStatus): string {
     const classMap = {
-      [EPlanStatus.SUBMITTED]: 'bg-blue-50 text-blue-700 border-blue-200',
+      [EPlanStatus.SUBMITTED]: 'bg-primary-50 text-primary-700 border-primary-200',
       [EPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-      [EPlanStatus.UNDER_REVIEW]: 'bg-orange-50 text-orange-700 border-orange-200',
+      [EPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
       [EPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
       [EPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
     };

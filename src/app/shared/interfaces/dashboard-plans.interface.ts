@@ -13,11 +13,12 @@ export enum EPlanStatus {
 export interface IPlanRecord {
   id: string;
   planId: string;
-  planTitle: string;
+  planCode: string;
+  title: string;
   planType: EOpportunityType;
   submissionDate: string;
-  slaCountdown: number; // days remaining
-  currentStatus: EPlanStatus;
+  slaCountDown: number; // days remaining
+  status: EPlanStatus;
 }
 
 export type TPlansSortingKeys = keyof IPlanRecord;
