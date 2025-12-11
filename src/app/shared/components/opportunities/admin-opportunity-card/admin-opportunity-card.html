@@ -33,8 +33,7 @@
 
   <div class="flex flex-col gap-1 flex-1">
     <h5
-      class="text-xl font-semibold text-gray-900 line-clamp-1"
-      pTooltip="{{ opportunity().title }}"
+      class="text-xl font-semibold text-gray-900 line-clamp-1"      
     >
       {{ opportunity().title }}
     </h5>
@@ -56,7 +55,7 @@
     } @if(opportunity().startDate && opportunity().endDate) {
     <app-opportunity-detail-item
       [label]="'opportunity.list.applicationPeriod' | translate"
-      [value]="`${opportunity().startDate | date:'dd MMM'} - ${opportunity().endDate | date:'dd MMM'}`"
+      [value]="`${opportunity().startDate | date:'dd MMM yyyy'} - ${opportunity().endDate | date:'dd MMM yyyy'}`"
     />
     }
   </div>

@@ -301,7 +301,7 @@
       "all": "All"
     },
     "table": {
-      "id": "Job ID",
+      "id": "Job No",
       "name": "Name",
       "nameArabic": "Name (Arabic)",
       "nameEnglish": "Name (English)",
@@ -325,8 +325,8 @@
       "roleManagement": "Role Management"
     },
     "filter": {
-      "searchPlaceholder": "Search by name or email or ID or phone",
-      "roleManagementSearchPlaceholder": "Search by Username, Job ID, Phone, Email",
+      "searchPlaceholder": "Search by name or email or job no or phone",
+      "roleManagementSearchPlaceholder": "Search by Username, Job No, Phone, Email",
       "rolePlaceholder": "Role",
       "statusPlaceholder": "Status",
       "selectJoinDate": "Select join date"
@@ -371,7 +371,7 @@
         "emailRequired": "Email is required",
         "phonePlaceholder": "Enter Phone",
         "phoneRequired": "Phone number is required.",
-        "jobInvalid": "Invalid Job ID. Please enter a valid employee Job ID.",
+        "jobInvalid": "Invalid Job No. Please enter a valid employee Job No.",
         "jobInvalidLength": "Job No. must be between 6 and 20 characters.",
         "jobRequired": "Job No. is required.",
         "nameArabicInvalid":"Arabic name must contain Arabic letters only.",
