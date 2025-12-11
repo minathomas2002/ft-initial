@@ -434,6 +434,9 @@
       "notificationCardTitle": "Notification",
       "notificationCardDesc": "Manage which notifications you want to receive. ",
       "notificationCardLink": "Activate/ Deactivate",
+      "holidaysCardTitle": "Holidays Management",
+      "holidaysCardDesc": "Add official holidays or days off to exclude them from SLA calculations.",
+      "holidaysCardLink": "View Holidays",
       "dialog":{
         "internalCycleLabel":"Internal cycle time",
         "investorReplyTimeLabel" : "Investor reply time",
@@ -442,7 +445,8 @@
         "internalCycleValidNumber": "Internal cycle time must be numeric, max 365, min 1 ",
         "investorReplyTimeRequired" : "Investor reply time cannot be empty",
         "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min {{days}} ",
-        "slaSuccessUpdate": "SLA updated Successfully."
+        "slaSuccessUpdate": "SLA updated Successfully.",
+        "autoAssignSuccessUpdate": "Auto - assign updated Successfully."
       },
       "autoAssign":{
         "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",

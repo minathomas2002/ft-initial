@@ -49,30 +49,30 @@ export class AdminSlaDialog {
 
   onConfirm(){
     const form = this.formService.form;
-        const req: ISettingSlaReq = {
-          internalCycle: form.controls.internalCycle.value!,
-          investorReply: form.controls.investorReply.value!,
-         
-        };
-        this.settingAdminStore
-          .updateSlaSetting(req)
-          .pipe(
-            tap((res) => {
-              if (res.errors) {
-                this.dialogVisible.set(false);
-                return;
-              }
-            }),
-            take(1),
-          )
-          .subscribe({
-            next: (res) => {
-              if (res.success) {
-                this.toasterService.success(this.i18nService.translate('setting.adminView.dialog.slaSuccessUpdate'));
-                this.formService.ResetFormFields();
-                this.dialogVisible.set(false);
-              }
-            },
-          });
+    const req: ISettingSlaReq = {
+      internalCycle: form.controls.internalCycle.value!,
+      investorReply: form.controls.investorReply.value!,
+      
+    };
+    this.settingAdminStore
+      .updateSlaSetting(req)
+      .pipe(
+        tap((res) => {
+          if (res.errors) {
+            this.dialogVisible.set(false);
+            return;
+          }
+        }),
+        take(1),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.toasterService.success(this.i18nService.translate('setting.adminView.dialog.slaSuccessUpdate'));
+            this.formService.ResetFormFields();
+            this.dialogVisible.set(false);
+          }
+        },
+      });
   }
 }

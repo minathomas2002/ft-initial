@@ -9,13 +9,14 @@ const initialState: {
   isLoading: boolean;
   isProcessing: boolean;
   error: string | null;
-  settingAutoAssign: ISettingAutoAssign | null;
+  settingAutoAssign: ISettingAutoAssign;
   settingSla: ISettingSla | null;
+
 } = {
   isLoading: false,
   isProcessing: false,
   error: null,
-  settingAutoAssign: null,
+  settingAutoAssign: { isEnabled: false } as ISettingAutoAssign,
   settingSla: null,
 }
 
@@ -74,12 +75,12 @@ export const adminSettingsStore = signalStore(
         return settingApiService.getAutoAssignSetting().pipe(
           tap((res) => {
             patchState(store, { isLoading: false });
-            patchState(store, { settingAutoAssign: res.body || null });
+            patchState(store, { settingAutoAssign : res.body });
           }),
           catchError((error) => {
             patchState(store, {
               error: error.errorMessage || 'Error getting auto assign setting',
-              settingAutoAssign: null
+              settingAutoAssign: { isEnabled: false } as ISettingAutoAssign
             });
             return throwError(() => new Error('Error getting auto assign setting'));
           }),

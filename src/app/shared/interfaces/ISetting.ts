@@ -13,7 +13,7 @@ export interface ISettingSla extends ISettingSlaReq {
 
 export interface ISettingAutoAssign{
  
-  isAssign : boolean;
+  isEnabled : boolean;
 
 }
 

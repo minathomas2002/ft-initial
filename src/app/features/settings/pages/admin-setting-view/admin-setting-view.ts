@@ -18,14 +18,13 @@ export class AdminSettingView {
 viewSlaDialog = signal<boolean>(false);
 viewAutoAssignDialog = signal<boolean>(false);
 viewNotificationDialog = signal<boolean>(false);
+viewHolidaysDialog = signal<boolean>(false);
+
   onSLAClick(){
-    console.log("onSLAClick");
-    
     this.viewSlaDialog.set(true);
   }
 
   onAutoAssigenClick(){
-    console.log("onAutoAssigenClick");
     this.viewAutoAssignDialog.set(true);
 
   }
@@ -33,6 +32,12 @@ viewNotificationDialog = signal<boolean>(false);
   onNotificationClick(){
     console.log("onNotificationClick");
     this.viewNotificationDialog.set(true);
+
+  }
+
+  onHolidaysClick(){
+    console.log("onHolidaysClick");
+    this.viewHolidaysDialog.set(true);
 
   }
 }

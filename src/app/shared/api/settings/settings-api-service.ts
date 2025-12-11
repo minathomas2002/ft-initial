@@ -28,8 +28,8 @@ export class SettingsApiService {
       return this.baseHttpService.get<ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.getAutoAssignSetting);
     }
 
-  //// update sla setting
-    updateAutoAssignSetting(req: ISettingAutoAssign): Observable<IBaseApiResponse<ISettingAutoAssign>> {
-      return this.baseHttpService.post <ISettingAutoAssign, ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.editAutoAssignSetting, req);
+  // update sla setting
+    updateAutoAssignSetting(req: ISettingAutoAssign): Observable<IBaseApiResponse<boolean>> {
+      return this.baseHttpService.post <boolean, ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.editAutoAssignSetting, req);
     }
 }
