@@ -301,7 +301,7 @@
       "all": "All"
     },
     "table": {
-      "id": "Job ID",
+      "id": "Job No",
       "name": "Name",
       "nameArabic": "Name (Arabic)",
       "nameEnglish": "Name (English)",
@@ -325,8 +325,8 @@
       "roleManagement": "Role Management"
     },
     "filter": {
-      "searchPlaceholder": "Search by name or email or ID or phone",
-      "roleManagementSearchPlaceholder": "Search by Username, Job ID, Phone, Email",
+      "searchPlaceholder": "Search by name or email or job no or phone",
+      "roleManagementSearchPlaceholder": "Search by Username, Job No, Phone, Email",
       "rolePlaceholder": "Role",
       "statusPlaceholder": "Status",
       "selectJoinDate": "Select join date"
@@ -371,7 +371,7 @@
         "emailRequired": "Email is required",
         "phonePlaceholder": "Enter Phone",
         "phoneRequired": "Phone number is required.",
-        "jobInvalid": "Invalid Job ID. Please enter a valid employee Job ID.",
+        "jobInvalid": "Invalid Job No. Please enter a valid employee Job No.",
         "jobInvalidLength": "Job No. must be between 6 and 20 characters.",
         "jobRequired": "Job No. is required.",
         "nameArabicInvalid":"Arabic name must contain Arabic letters only.",
@@ -442,6 +442,61 @@
         "internalCycleValidNumber": "Internal cycle time must be numeric, max 365, min 1 ",
         "investorReplyTimeRequired" : "Investor reply time cannot be empty",
         "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min"
+      },
+      "autoAssign":{
+        "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",
+        "enableAutoAssign": "Enable Auto-Assign"
+      },
+      "notification": {
+        "notificationDesc": "Enable or disable system and email notifications for all user roles.",
+        "systemTab": "System Notifications",
+        "emailTab": "Email Notifications",
+        "planWorkflowTitle": "Plan Workflow Notifications",
+        "countNotification": "7 notifications",
+        "unAssignedAlert": "Unassigned Plan Alert",
+        "unAssignedAlertDesc": "Notify when a plan is submitted but not yet assigned to any reviewer",
+        "dvManager": " DV Manager",
+        "planAssignedReview": "Plan Assigned for Review",
+        "planAssignedReviewDesc": "Notify when a plan is assigned to a user for review",
+        "employee":"Employee",
+        "departmentManager":"Department Manager",
+        "planReassignment": "Plan Reassignment",
+        "planReassignmentDesc":"Notify when a plan is reassigned from one user to another",
+        "employeeReassignee": "Employee (Ressigene)",
+        "employeePrev": "Employee (Previous one)",
+        "internalPlanSLAReminder": "Internal Plan SLA Reminder",
+        "internalPlanSLAReminderDesc":"Sent 5 days and 2 days before the internal SLA expires.",
+        "investorPlanSLAReminder": "Investor Plan SLA Reminder",
+        "investorPlanSLAReminderDesc": "Sent 5 days and 2 days before investor SLA expires.",
+        "investor": "Investor",
+        "overdueInternalPlan": "Overdue Internal Plan",
+        "overdueInternalPlanDesc": "Sent immediately when an internal plan exceeds the SLA",
+        "finalApprovalRejectionNotification":"Final Approval / Rejection Notification",
+        "finalApprovalRejectionNotificationDesc": "Sent when the employee submits final approval or rejection.",
+        "finalApprovalRejectionNotificationDescCons":"Sent when the plan rejected automatic.",
+        "opportunityNotifications": "Opportunity Notifications",
+        "inactiveOpportunityAlert":"Inactive Opportunity Alert",
+        "inactiveOpportunityAlertDesc":"Sent one day before an opportunity becomes inactive.",
+        "admins":"Admins",
+        "draftOpportunityReminder": "Draft Opportunity Reminder",
+        "draftOpportunityReminderDesc": "Sent for active draft opportunities pending publication.",
+        "opportunityUpdateNotification": "Opportunity Update Notification",
+        "opportunityUpdateNotificationDesc": "Sent when admin updates an opportunity linked with submitted or drafted plan (InProgress)",
+        "newOpportunityCreatedNotification": "New Opportunity Created Notification",
+        "newOpportunityCreatedNotificationDesc": "Sent automatically whenever a new active and published Opportunity is created in the system.",
+        "accessNotifications": "Access Notifications",
+        "impersonationAccessAlert" :"Impersonation Access Alert",
+        "impersonationAccessAlertDesc": "Sent when a user impersonates another user in the system.",
+        "userBeingImpersonated": "User Being Impersonated",
+        "userperformingImpersonation": "User Performing Impersonation",
+        "unAssignedAlertEmailDesc": "Sent when a plan stays 5 days unassigned after submitted.",
+        "planReassignmenEmailDesc": "Sent when a plan is reassigned from employee to another",
+        "reminderOnPlanAssignedforReview": "Reminder on Plan Assigned for Review",
+        "reminderOnPlanAssignedforReviewDesc": "Sent when a plan is assigned to a reviewer.",
+        "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
+        "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
+        "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA."
+
       }
 
     }

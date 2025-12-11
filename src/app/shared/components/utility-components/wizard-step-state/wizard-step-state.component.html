@@ -1,6 +1,6 @@
-<div class="flex items-center justify-between w-100">
-  <div class="flex items-center gap-4">
-    <span class="p-step-number flex items-center justify-center ">
+<div class="flex items-center justify-between w-full min-w-0">
+  <div class="flex items-center gap-4 min-w-0 flex-1">
+    <span class="p-step-number flex items-center justify-center flex-shrink-0">
       @switch (status()) {
       @case (EWizardStepState.Incomplete) {
       <i
@@ -17,13 +17,13 @@
       }
     </span>
     <!-- Name and description -->
-    <div class="flex flex-col items-start">
+    <div class="flex flex-col items-start min-w-0 flex-1">
       <h3
         class="text-md font-semibold"
         [class.text-primary-700]="stepState().isActive"
       >{{stepState().title}}</h3>
       <h4
-        class="text-sm"
+        class="text-sm text-start"
         [class.text-primary-600]="stepState().isActive"
       >
         {{stepState().description}}

@@ -48,7 +48,6 @@ export class ForgotPassword {
           if (response.statusCode === 200 || response.statusCode === 201) {
             this.toast.success(this.i18nService.translate('auth.forgot.success'));
             // Redirect to login on success
-            this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
           }
         },
         error: (error) => {
