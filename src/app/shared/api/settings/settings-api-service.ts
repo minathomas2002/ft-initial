@@ -16,20 +16,20 @@ export class SettingsApiService {
 
   // get sla setting
     getSLASetting(): Observable<IBaseApiResponse<ISettingSla>> {
-      return this.baseHttpService.get<ISettingSla, unknown>(API_ENDPOINTS.settings.getSlaSetting);
+      return this.baseHttpService.get<ISettingSla, unknown>(API_ENDPOINTS.AdminSettings.getSlaSetting);
     }
 
   //// update sla setting
     updateSLASetting(req: ISettingSlaReq): Observable<IBaseApiResponse<boolean>> {
-      return this.baseHttpService.post<boolean, ISettingSlaReq,unknown>(API_ENDPOINTS.settings.editSlaSetting, req);
+      return this.baseHttpService.post<boolean, ISettingSlaReq,unknown>(API_ENDPOINTS.AdminSettings.editSlaSetting, req);
     }
      // get sla setting
     getAutoAssignSetting(): Observable<IBaseApiResponse<ISettingAutoAssign>> {
-      return this.baseHttpService.get<ISettingAutoAssign, unknown>(API_ENDPOINTS.settings.getAutoAssignSetting);
+      return this.baseHttpService.get<ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.getAutoAssignSetting);
     }
 
   //// update sla setting
     updateAutoAssignSetting(req: ISettingAutoAssign): Observable<IBaseApiResponse<ISettingAutoAssign>> {
-      return this.baseHttpService.post <ISettingAutoAssign, ISettingAutoAssign, unknown>(API_ENDPOINTS.settings.editAutoAssignSetting, req);
+      return this.baseHttpService.post <ISettingAutoAssign, ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.editAutoAssignSetting, req);
     }
 }

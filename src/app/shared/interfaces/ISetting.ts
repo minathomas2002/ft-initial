@@ -1,13 +1,13 @@
 import { FormControl, FormGroup } from "@angular/forms";
 
 export interface ISettingSlaReq {
-  internalCycleTime : number;
-  investorReplyTime: number; 
+  internalCycle : number;
+  investorReply: number; 
 }
 
 export interface ISettingSla extends ISettingSlaReq {
  
-  minInvestorReplyTime : number;
+  remainingDaysValidation : number;
 
 }
 

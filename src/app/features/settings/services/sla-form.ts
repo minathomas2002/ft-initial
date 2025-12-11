@@ -40,10 +40,10 @@ export class SlaForm {
 
   patchForm(slaSetting : ISettingSla){
     this.form.patchValue({
-      internalCycleTime: slaSetting.internalCycleTime,
-      investorReplyTime: slaSetting.investorReplyTime,
+      internalCycleTime: slaSetting.internalCycle,
+      investorReplyTime: slaSetting.investorReply,
     });
-    this.form.controls.investorReplyTime.addValidators(Validators.min(slaSetting.minInvestorReplyTime));
+    this.form.controls.investorReplyTime.addValidators(Validators.min(slaSetting.remainingDaysValidation));
     this.form.controls.investorReplyTime.updateValueAndValidity();
 
   }

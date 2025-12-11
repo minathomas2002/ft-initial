@@ -7,7 +7,7 @@ const Opportunities = "Opportunities";
 const Investors = "Investors";
 const AdminOpportunities = "Opportunities/admin";
 const SystemEmployees = "SystemEmployees";
-const Settings = "Settings";
+const AdminSettings = "AdminSettings";
 const Roles = "Roles";
 const RoleManagement = "RoleManagement";
 
@@ -40,11 +40,11 @@ export const API_ENDPOINTS = {
     }
 
   },
-  settings: {
-    getSlaSetting:`${Settings}/getSlaSetting`,
-    editSlaSetting:`${Settings}/editSlaSetting`,
-    getAutoAssignSetting:`${Settings}/getAutoAssignSetting`,
-    editAutoAssignSetting:`${Settings}/editAutoAssignSetting`,
+  AdminSettings: {
+    getSlaSetting:`${AdminSettings}/get-sla-setting`,
+    editSlaSetting:`${AdminSettings}/update-sla`,
+    getAutoAssignSetting:`${AdminSettings}/getAutoAssignSetting`,
+    editAutoAssignSetting:`${AdminSettings}/editAutoAssignSetting`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,
