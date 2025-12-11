@@ -24,7 +24,10 @@
           [hasLabel]="true"
         />
         } }@else{
-        <p-button label="Apply"></p-button>
+        <p-button
+          label="Apply"
+          (click)="onApply()"
+        ></p-button>
         }
       </div>
 
