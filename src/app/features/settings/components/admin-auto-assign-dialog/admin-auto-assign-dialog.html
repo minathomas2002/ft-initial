@@ -1,1 +1,32 @@
-<p>admin-auto-assign-dialog works!</p>
+<app-base-dialog
+  [(visible)]="dialogVisible"
+  icon="icon-cursor-click-01"
+  [confirmLabel]="'setting.confirmButton' | translate"
+  [confirmButtonClass]="'w-fit'"
+  [cancelButtonClass]="'w-fit'"
+  [isConfirmationDisabled]="false"
+  (onConfirm)="onConfirm()"
+  (onClose)="onClose()"
+  [isLoading]="settingAdminStore.isProcessing()"
+>
+
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{ ('setting.adminView.autoAssignCardTitle' | translate) }}</p>
+    <p class="text-sm mb-1 text-gray-60  max-h-[400px]">{{ ('setting.adminView.autoAssign.autoAssignDesc' | translate) }} </p>
+
+  </div>
+  <div class="grid grid-cols-12 gap-4 ">
+
+    <div class="col-span-12 md:col-span-12 mt-6">
+      <div class="justify-between items-center flex">
+        <app-base-label [title]="'setting.adminView.autoAssign.enableAutoAssign' | translate">
+        </app-base-label>
+        <p-toggleswitch
+          [ngModel]="settingAdminStore.settingAutoAssign()?.isAssign ?? false"
+          (ngModelChange)="settingAdminStore.settingAutoAssign()!.isAssign = $event"
+        />
+      </div>
+
+    </div>
+  </div>
+</app-base-dialog>

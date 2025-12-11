@@ -42,5 +42,13 @@
 </app-cards-page-layout>
 
 @if(viewSlaDialog()){
-<app-admin-sla-dialog [dialogVisible]="viewSlaDialog()"></app-admin-sla-dialog>
+<app-admin-sla-dialog [(dialogVisible)]="viewSlaDialog"></app-admin-sla-dialog>
+}
+
+@if(viewAutoAssignDialog()){
+<app-admin-auto-assign-dialog [(dialogVisible)]="viewAutoAssignDialog"></app-admin-auto-assign-dialog>
+}
+
+@if(viewNotificationDialog()){
+<app-admin-notification-dialog [(dialogVisible)]="viewNotificationDialog"></app-admin-notification-dialog>
 }

@@ -1,0 +1,56 @@
+<app-base-dialog
+  [(visible)]="dialogVisible"
+  icon="icon-bell"
+  [confirmLabel]="'setting.confirmButton' | translate"
+  [confirmButtonClass]="'w-fit'"
+  [cancelButtonClass]="'w-fit'"
+  [isConfirmationDisabled]="false"
+  (onConfirm)="onConfirm()"
+  (onClose)="onClose()"
+  [isLoading]="settingAdminStore.isProcessing()"
+>
+
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{ ('setting.adminView.notificationCardTitle' | translate) }}</p>
+    <p class="text-sm mb-1 text-gray-60  max-h-[400px]">{{ ('setting.adminView.notification.notificationDesc' | translate) }} </p>
+  </div>
+
+  <p-tabs
+    [(value)]="activeTab"
+    class="mt-10"
+  >
+    <p-tablist>
+      <p-tab value="0">{{ 'setting.adminView.notification.systemTab' | translate }}</p-tab>
+      <p-tab value="1">{{ 'setting.adminView.notification.emailTab' | translate }}</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+
+      <p-tabpanel
+        value="0"
+        class="px-4"
+      >
+        @if(activeTab() === '0'){
+        @defer (on viewport) {
+        <app-admin-notification-form [formService]="systemTabformService"></app-admin-notification-form>
+        } @placeholder {
+        <div></div>
+        }
+        }
+      </p-tabpanel>
+      <p-tabpanel
+        value="1"
+        class="px-4"
+      >
+        @if(activeTab() === '1'){
+        @defer (on viewport) {
+        <app-admin-notification-email-form [formService]="emailTabformService"></app-admin-notification-email-form>
+        } @placeholder {
+        <div></div>
+        }
+        }
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+
+  <!-- body -->
+</app-base-dialog>

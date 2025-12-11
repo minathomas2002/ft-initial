@@ -6,29 +6,35 @@
   [cancelButtonClass]="'w-fit'"
   [isConfirmationDisabled]="formService.form.invalid"
   (onConfirm)="onConfirm()"
-  (onClose)="resetForm()"
-  [isLoading]="false"
+  (onClose)="onClose()"
+  [isLoading]="settingAdminStore.isProcessing()"
 >
 
   <div class="mb-5">
     <p class="text-lg font-semibold text-gray-900 mb-1">{{ ('setting.adminView.slaCardTitle' | translate) }}</p>
+    <p class="text-sm mb-1 text-gray-60  max-h-[400px]">{{ ('setting.adminView.slaCardDesc' | translate) }} </p>
   </div>
-  <!-- @if(!roleStore.loading()){ -->
+  @if(!settingAdminStore.isLoading()){
   <div class="grid grid-cols-12 gap-4">
 
     <div class="col-span-12 md:col-span-12">
 
       <app-base-label [title]="'setting.adminView.dialog.internalCycleLabel' | translate">
       </app-base-label>
-      <input
-        class="w-full"
-        type="number"
-        pInputText
-        [placeholder]="'setting.adminView.dialog.internalCycleLabel' | translate"
-        [formControl]="formService.internalCycleTime"
-        max="365"
-        min="1"
-      />
+      <div class="relative w-full">
+        <input
+          class="w-full"
+          type="number"
+          pInputText
+          [placeholder]="'setting.adminView.dialog.internalCycleLabel' | translate"
+          [formControl]="formService.internalCycleTime"
+          max="365"
+          min="1"
+        />
+        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+          {{('setting.adminView.dialog.days' | translate)}}
+        </span>
+      </div>
 
       @if(formService.internalCycleTime.touched && formService.internalCycleTime.errors){
       @if(formService.internalCycleTime.hasError('required')){
@@ -43,16 +49,22 @@
     <div class="col-span-12 md:col-span-12">
       <app-base-label [title]="'setting.adminView.dialog.investorReplyTimeLabel' | translate">
       </app-base-label>
-      <input
-        class="w-full"
-        type="number"
-        pInputText
-        [formControl]="formService.investorReplyTime"
-        [placeholder]="'setting.adminView.dialog.investorReplyTimeLabel' | translate"
-        min="1"
-        max="365"
-        fluid
-      />
+      <div class="relative w-full">
+        <input
+          class="w-full"
+          type="number"
+          pInputText
+          [formControl]="formService.investorReplyTime"
+          [placeholder]="'setting.adminView.dialog.investorReplyTimeLabel' | translate"
+          min="1"
+          max="365"
+          fluid
+        />
+        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+          {{('setting.adminView.dialog.days' | translate)}}
+        </span>
+      </div>
+
       <div>
         @if(formService.investorReplyTime.touched && formService.investorReplyTime.errors){
         @if(formService.investorReplyTime.hasError('required')){
@@ -67,5 +79,5 @@
     </div>
 
   </div>
-  <!-- } -->
+  }
 </app-base-dialog>
