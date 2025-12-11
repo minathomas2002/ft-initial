@@ -43,11 +43,7 @@ export class MaterialsFormService {
       hasComment: [false],
       value: this._fb.control('', [Validators.maxLength(100)]),
     }),
-    doYouCurrentlyHaveLocalAgentInKSA: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control(false, [Validators.required]),
-    }),
-
+    doYouCurrentlyHaveLocalAgentInKSA: this._fb.control<boolean | null>(null, [Validators.required])
   });
 
   localAgentInformationFormGroup = this._fb.group({
