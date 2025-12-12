@@ -13,6 +13,7 @@ import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { pipe } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-overview-company-information-form',
@@ -55,15 +56,15 @@ export class OverviewCompanyInformationForm {
   }
 
   getHasCommentControl(formGroup: FormGroup): FormControl<boolean> {
-    return formGroup.get('hasComment') as FormControl<boolean>;
+    return formGroup.get(EMaterialsFormControls.hasComment) as FormControl<boolean>;
   }
 
   getValueControl(formGroup: FormGroup): FormControl<string | null> {
-    return formGroup.get('value') as FormControl<string | null>;
+    return formGroup.get(EMaterialsFormControls.value) as FormControl<string | null>;
   }
 
   listenToDoYouCurrentlyHaveLocalAgentInKSAValueChanges(): void {
-    this.locationInformationFormGroupControls.doYouCurrentlyHaveLocalAgentInKSA.valueChanges.
+    this.locationInformationFormGroupControls[EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA].valueChanges.
       pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: boolean | null) => {
         if (value) {

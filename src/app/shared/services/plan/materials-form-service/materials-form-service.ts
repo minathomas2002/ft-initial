@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { EOpportunityType } from 'src/app/shared/enums';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { Step1OverviewFormBuilder } from './steps/step1-overview.form-builder';
 
 @Injectable({
   providedIn: 'root'
@@ -11,92 +11,48 @@ export class MaterialsFormService {
   private readonly _fb = inject(FormBuilder);
   private readonly _planStore = inject(PlanStore);
 
-  /* overview company information */
-  basicInformationFormGroup = this._fb.group({
-    planTitle: [this._planStore.newPlanTitle(), [Validators.required, Validators.maxLength(150)]],
-    opportunityType: this._fb.control({ value: EOpportunityType.MATERIAL.toString(), disabled: true }, [Validators.required]),
-    opportunity: [null, [Validators.required]],
-    submissionDate: this._fb.control({ value: new Date(), disabled: true }),
-  });
+  // Step builders
+  private readonly _step1Builder = new Step1OverviewFormBuilder(this._fb, this._planStore.newPlanTitle());
+  // TODO: Add step 2, 3, 4 builders when implemented
+  // private readonly _step2Builder = new Step2FormBuilder(this._fb, this._planStore);
+  // private readonly _step3Builder = new Step3FormBuilder(this._fb, this._planStore);
+  // private readonly _step4Builder = new Step4FormBuilder(this._fb, this._planStore);
 
-  companyInformationFormGroup = this._fb.group({
-    companyName: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control('', [Validators.required, Validators.maxLength(100)]),
-    }),
-    ceoName: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control('', [Validators.required, Validators.maxLength(100)]),
-    }),
-    ceoEmailID: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control('', [Validators.required, Validators.email]),
-    })
-  });
+  // Step 1: Overview Company Information
+  private readonly _step1FormGroup = this._step1Builder.buildStep1FormGroup();
 
-  locationInformationFormGroup = this._fb.group({
-    globalHQLocation: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control('', [Validators.required, Validators.maxLength(250)]),
-    }),
-    registeredVendorIDwithSEC: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control('', [Validators.maxLength(100)]),
-    }),
-    doYouCurrentlyHaveLocalAgentInKSA: this._fb.control<boolean | null>(null, [Validators.required])
-  });
+  // Expose step 1 form group
+  step1_overviewCompanyInformation = this._step1FormGroup;
 
-  localAgentInformationFormGroup = this._fb.group({
-    localAgentName: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control(''),
-    }),
-    contactPersonName: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control(''),
-    }),
-    emailID: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control(''),
-    }),
-    contactNumber: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control(''),
-    }),
-    companyHQLocation: this._fb.group({
-      hasComment: [false],
-      value: this._fb.control(''),
-    }),
-  });
+  // Alias for backward compatibility
+  overviewCompanyInformation = this._step1FormGroup;
 
-  toggleLocalAgentInformValidation(value: boolean): void {
-    if (value) {
-      this.localAgentInformationFormGroup.controls.localAgentName.setValidators([Validators.required, Validators.maxLength(100)]);
-      this.localAgentInformationFormGroup.controls.contactPersonName.setValidators([Validators.required]);
-      this.localAgentInformationFormGroup.controls.emailID.setValidators([Validators.required, Validators.email]);
-      this.localAgentInformationFormGroup.controls.contactNumber.setValidators([Validators.required, phoneNumberPatternValidator()]);
-      this.localAgentInformationFormGroup.controls.companyHQLocation.setValidators([Validators.required, Validators.maxLength(200)]);
-    } else {
-      this.localAgentInformationFormGroup.controls.localAgentName.clearValidators();
-      this.localAgentInformationFormGroup.controls.contactPersonName.clearValidators();
-      this.localAgentInformationFormGroup.controls.emailID.clearValidators();
-      this.localAgentInformationFormGroup.controls.contactNumber.clearValidators();
-      this.localAgentInformationFormGroup.controls.companyHQLocation.clearValidators();
-    }
-    this.localAgentInformationFormGroup.controls.localAgentName.updateValueAndValidity();
-    this.localAgentInformationFormGroup.controls.contactPersonName.updateValueAndValidity();
-    this.localAgentInformationFormGroup.controls.emailID.updateValueAndValidity();
-    this.localAgentInformationFormGroup.controls.contactNumber.updateValueAndValidity();
-    this.localAgentInformationFormGroup.controls.companyHQLocation.updateValueAndValidity();
+  // Expose sub-form groups for backward compatibility and convenience
+  get basicInformationFormGroup(): FormGroup {
+    return this._step1FormGroup.get(EMaterialsFormControls.basicInformationFormGroup) as FormGroup;
   }
 
-  overviewCompanyInformation = this._fb.group({
-    basicInformationFormGroup: this.basicInformationFormGroup,
-    companyInformationFormGroup: this.companyInformationFormGroup,
-    locationInformationFormGroup: this.locationInformationFormGroup,
-    localAgentInformationFormGroup: this.localAgentInformationFormGroup,
-    comment: this._fb.control(''),
-  });
+  get companyInformationFormGroup(): FormGroup {
+    return this._step1FormGroup.get(EMaterialsFormControls.companyInformationFormGroup) as FormGroup;
+  }
+
+  get locationInformationFormGroup(): FormGroup {
+    return this._step1FormGroup.get(EMaterialsFormControls.locationInformationFormGroup) as FormGroup;
+  }
+
+  get localAgentInformationFormGroup(): FormGroup {
+    return this._step1FormGroup.get(EMaterialsFormControls.localAgentInformationFormGroup) as FormGroup;
+  }
+
+  // Step-specific methods delegate to builders
+  toggleLocalAgentInformValidation(value: boolean): void {
+    this._step1Builder.toggleLocalAgentInformValidation(this._step1FormGroup, value);
+  }
+
+  // TODO: Add step 2, 3, 4 form groups when implemented
+  // step2_... = this._step2Builder.buildStep2FormGroup();
+  // step3_... = this._step3Builder.buildStep3FormGroup();
+  // step4_... = this._step4Builder.buildStep4FormGroup();
 
   /* ------------------------------------------------ */
 }
