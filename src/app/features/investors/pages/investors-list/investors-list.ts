@@ -20,7 +20,6 @@ import { TranslatePipe } from 'src/app/shared/pipes';
     DatePipe,
     InvestorsFilter,
     AvatarModule,
-    TranslatePipe
   ],
   templateUrl: './investors-list.html',
   styleUrl: './investors-list.scss',

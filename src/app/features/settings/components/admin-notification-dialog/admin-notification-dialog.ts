@@ -4,9 +4,9 @@ import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "primeng/tabs";
 import { AdminNotificationForm } from "../admin-notification-system-form/admin-notification-system-form";
-import { NotificationFormService } from '../../services/notification-form-service';
+import { NotificationFormService } from '../../services/notification-form/notification-form-service';
 import { AdminNotificationEmailForm } from "../admin-notification-email-form/admin-notification-email-form";
-import { EmailNotificationFormService } from '../../services/email-notification-form-service';
+import { EmailNotificationFormService } from '../../services/email-notification-form/email-notification-form-service';
 
 @Component({
   selector: 'app-admin-notification-dialog',

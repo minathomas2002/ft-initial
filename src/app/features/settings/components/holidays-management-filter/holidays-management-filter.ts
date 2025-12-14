@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { IconField } from "primeng/iconfield";
 import { InputIconModule } from "primeng/inputicon";
 import { InputTextModule } from "primeng/inputtext";
-import { HolidayManagedFilter } from '../../services/holiday-managed-filter';
+import { HolidayManagedFilter } from '../../services/holiday-managed-filter/holiday-managed-filter';
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';

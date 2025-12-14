@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { EmailNotificationFormService } from '../../services/email-notification-form-service';
+import { EmailNotificationFormService } from '../../services/email-notification-form/email-notification-form-service';
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { Tooltip } from "primeng/tooltip";
 import { Divider } from "primeng/divider";
