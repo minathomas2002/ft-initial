@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angu
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { MaterialsFormService } from 'src/app/shared/services/plan/materials-form-service/materials-form-service';
-import { OverviewCompanyInformationForm } from '../../overviewCompanyInformation/overviewCompanyInformationForm';
-import { ProductPlantOverviewForm } from '../../productPlantOverview/productPlantOverviewForm';
+import { Step01OverviewCompanyInformationForm } from '../../overviewCompanyInformation/step-01-overviewCompanyInformationForm';
+import { Step02ProductPlantOverviewForm } from '../../productPlantOverview/step-02-productPlantOverviewForm';
 import { ValueChainForm } from '../../valueChain/valueChainForm';
 import { SaudizationForm } from '../../saudization/saudizationForm';
 import { ButtonModule } from 'primeng/button';
@@ -14,8 +14,8 @@ import { StepContentDirective } from 'src/app/shared/directives';
   selector: 'app-materials-sourcing-plan-wizard',
   imports: [
     BaseWizardDialog,
-    OverviewCompanyInformationForm,
-    ProductPlantOverviewForm,
+    Step01OverviewCompanyInformationForm,
+    Step02ProductPlantOverviewForm,
     ValueChainForm,
     SaudizationForm,
     ButtonModule,
