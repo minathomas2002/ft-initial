@@ -41,9 +41,9 @@ export const API_ENDPOINTS = {
 
   },
   AdminSettings: {
-    getSlaSetting:`${AdminSettings}/get-sla-setting`,
+    getSlaSetting:`${AdminSettings}/get-sla`,
     editSlaSetting:`${AdminSettings}/update-sla`,
-    getAutoAssignSetting:`${AdminSettings}/get-auto-assign-setting`,
+    getAutoAssignSetting:`${AdminSettings}/get-auto-assign`,
     editAutoAssignSetting:`${AdminSettings}/update-auto-assign`,
   },
   opportunities: {
