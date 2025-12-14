@@ -17,12 +17,12 @@ export class SlaForm {
     investorReply: FormControl<number | null>;
    
   }> = this.fb.group({
-    internalCycle: this.fb.control<number | null>(14, 
+    internalCycle: this.fb.control<number | null>(0, 
       [Validators.required,
         Validators.min(1),
         Validators.max(365)
     ]),
-    investorReply: this.fb.control<number | null>(14, [
+    investorReply: this.fb.control<number | null>(0, [
       Validators.required,
       Validators.min(1),
       Validators.max(365),

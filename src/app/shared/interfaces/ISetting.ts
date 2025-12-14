@@ -13,6 +13,7 @@ export interface ISettingSla extends ISettingSlaReq {
 
 export interface ISettingAutoAssign{
   isEnabled : boolean;
+  haveActiveUsers : boolean;
 }
 
 export interface ISettingAutoAssignResponse{

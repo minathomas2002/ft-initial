@@ -465,7 +465,8 @@
       },
       "autoAssign":{
         "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",
-        "enableAutoAssign": "Enable Auto-Assign"
+        "enableAutoAssign": "Enable Auto-Assign",
+        "noActiveUsersWarning": "No active employees available for assignment."
       },
       "notification": {
         "notificationDesc": "Enable or disable system and email notifications for all user roles.",

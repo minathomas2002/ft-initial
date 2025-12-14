@@ -11,7 +11,7 @@ import { take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-auto-assign-dialog',
-  imports: [BaseLabelComponent, TranslatePipe, ToggleSwitchModule,FormsModule, BaseDialogComponent],
+  imports: [BaseLabelComponent, TranslatePipe, ToggleSwitchModule, FormsModule, BaseDialogComponent],
   templateUrl: './admin-auto-assign-dialog.html',
   styleUrl: './admin-auto-assign-dialog.scss',
 })
@@ -23,11 +23,11 @@ export class AdminAutoAssignDialog {
   i18nService = inject(I18nService);
   toasterService = inject(ToasterService);
 
-  ngOnInit(){
+  ngOnInit() {
     this.loadAutoAssignDefaultValues();
   }
 
-   onConfirm(){
+  onConfirm() {
     const req = this.settingAdminStore.settingAutoAssign()!;
     this.settingAdminStore
       .updateAutoAssignSetting(req)
@@ -43,24 +43,20 @@ export class AdminAutoAssignDialog {
       .subscribe({
         next: (res) => {
           if (res.success) {
-             if(res.body.haveActiveUsers)
-                this.toasterService.success(this.i18nService.translate('setting.adminView.dialog.autoAssignSuccessUpdate'));
-              else
-                this.toasterService.warn(this.i18nService.translate('setting.adminView.dialog.autoAssignWarningUpdate'));
-
+            this.toasterService.success(this.i18nService.translate('setting.adminView.dialog.autoAssignSuccessUpdate'));
             this.dialogVisible.set(false);
           }
         },
       });
 
-   }
+  }
 
-   loadAutoAssignDefaultValues(){
-  // load data and 
+  loadAutoAssignDefaultValues() {
+    // load data and 
     this.settingAdminStore.getAutoAssignSetting().subscribe();
-  
-   }
-   onClose(){
+
+  }
+  onClose() {
     this.dialogVisible.set(false);
-   }
+  }
 }
