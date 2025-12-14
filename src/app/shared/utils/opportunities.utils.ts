@@ -8,9 +8,9 @@ export function getOpportunityTypeConfig(opportunityType: number): { label: stri
         label: 'opportunity.type.services',
         color: 'primary'
       };
-    case EOpportunityType.MATERIAL:
+    case EOpportunityType.PRODUCT:
       return {
-        label: 'opportunity.type.materials',
+        label: 'opportunity.type.product',
         color: 'orange'
       };
     default:

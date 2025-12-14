@@ -60,7 +60,7 @@
         <div class="col-span-1 flex flex-col gap-[24px]">
           <div>
             <h5 class="text-[20px] font-semibold mb-2">
-              {{ 'opportunity.details.forecastedDemand' | translate }}
+              {{ forecastedDemand() }}
             </h5>
             <p class="text-md text-gray-600 mb-4">
               {{ 'opportunity.details.demandNote' | translate }}
@@ -70,7 +70,7 @@
                 icon="icon-currency-dollar-circle"
                 [cardTitle]="'opportunity.details.spendSAR' | translate"
                 cardClass="bg-white"
-                cardDescription="{{ opportunitiesStore.details()?.spendSAR ?? '-' }}"
+                cardDescription="{{ (opportunitiesStore.details()?.spendSAR) ? (opportunitiesStore.details()?.spendSAR + ' B') : '-' }}"
               >
               </app-base-card>
               <app-base-card

@@ -17,6 +17,8 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -34,6 +36,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TranslatePipe,
     SkeletonModule,
     TrimOnBlurDirective,
+    InputGroupModule,
+    InputGroupAddonModule,
     InputNumberModule
   ],
   templateUrl: './opportunity-information-form.html',
@@ -57,6 +61,9 @@ export class OpportunityInformationForm implements OnInit {
 
   // Today's date for minDate validation in datepicker
   today = new Date();
+  forecastedDemand = computed(() => {
+    return `Forecasted SEC Demand (${this.today.getFullYear()}–${this.today.getFullYear() + 5})`
+  })
 
   ngOnInit() {
     // Initialize files signal from form service when component is created

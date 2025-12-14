@@ -12,7 +12,6 @@ import {
   TSystemEmployeeSortingKeys,
 } from 'src/app/shared/interfaces';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
-import { EUserStatus } from 'src/app/shared/enums/system-employee.enum';
 import { UserStatusMapper } from '../../classes/user-status-mapper';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';

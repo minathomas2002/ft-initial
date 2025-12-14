@@ -7,6 +7,10 @@ export interface IRole {
   createdDate?: string;
 }
 
+export interface IRoleLocalized extends IRole {
+  nameAr: string;
+}
+
 export interface IAssignRoleToUserRequest {
   userId: string;
   roleId: string;

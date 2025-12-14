@@ -4,7 +4,9 @@
 @use './vendors/primeng-custom' as *;
 @use './vendors/animation' as *;
 
-
+.sar{
+    font-family: 'Arshid', sans-serif;
+}
 
 html{
   font-family: $font-family;
