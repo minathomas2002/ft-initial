@@ -152,8 +152,7 @@
     "type": {
       "service": "Service",
       "services": "Services",
-      "material": "Material",
-      "materials": "Materials"
+      "product": "Product"
     },
     "list": {
       "title": "Opportunities",
