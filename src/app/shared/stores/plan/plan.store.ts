@@ -1,9 +1,10 @@
 import { inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { EOpportunityType } from "../../enums";
+import { EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { IBaseApiResponse, ISelectItem } from "../../interfaces";
+import { IBaseApiResponse, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { finalize, Observable, of, take, tap } from "rxjs";
+import { DashboardPlansApiService } from "../../api/dashboard-plans/dashboard-plans-api-service";
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null,
@@ -11,12 +12,33 @@ const initialState: {
   newPlanTitle: string,
   availableOpportunities: ISelectItem[],
   isLoadingAvailableOpportunities: boolean,
+  loading: boolean,
+  error: string | null,
+  count: number,
+  list: IPlanRecord[],
+  statistics: IPlansDashboardStatistics | null,
+  targetedCustomerOptions: ISelectItem[],
+  productManufacturingExperienceOptions: ISelectItem[]
+
 } = {
   newPlanOpportunityType: null,
   isPresetSelected: false,
   newPlanTitle: '',
   availableOpportunities: [],
   isLoadingAvailableOpportunities: false,
+  loading: false,
+  error: null,
+  count: 0,
+  list: [],
+  statistics: null,
+  targetedCustomerOptions: [
+    { id: ETargetedCustomer.SEC.toString(), name: 'SEC' },
+    { id: ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString(), name: 'SEC\'s approved local suppliers' }
+  ],
+  productManufacturingExperienceOptions: [
+    { id: EProductManufacturingExperience.YES.toString(), name: 'Yes' },
+    { id: EProductManufacturingExperience.NO.toString(), name: 'No' }
+  ]
 }
 
 export const PlanStore = signalStore(
