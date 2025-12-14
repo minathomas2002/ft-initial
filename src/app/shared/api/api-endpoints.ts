@@ -19,8 +19,8 @@ export const API_ENDPOINTS = {
   dashboard: {
     getHelloWorld: `${Dashboard}/hello-world`,
   },
-  dashboardPlans: {
-    getPlans: `${Plans}/get-investor-dashboard-plans`
+  plans: {
+    getInvestorDashboardPlans: `${Plans}/get-investor-dashboard-plans`
   },
   investors: {
     getInvestors: `${Investors}`,
@@ -45,10 +45,10 @@ export const API_ENDPOINTS = {
 
   },
   AdminSettings: {
-    getSlaSetting:`${AdminSettings}/get-sla`,
-    editSlaSetting:`${AdminSettings}/update-sla`,
-    getAutoAssignSetting:`${AdminSettings}/get-auto-assign`,
-    editAutoAssignSetting:`${AdminSettings}/update-auto-assign`,
+    getSlaSetting: `${AdminSettings}/get-sla`,
+    editSlaSetting: `${AdminSettings}/update-sla`,
+    getAutoAssignSetting: `${AdminSettings}/get-auto-assign`,
+    editAutoAssignSetting: `${AdminSettings}/update-auto-assign`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,
