@@ -1,7 +1,11 @@
 <div class="flex flex-col gap-[32px] px-8 pb-10">
   <!-- Basic Information -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Basic Information</h2>
+    <h2 class="text-lg font-semibold text-gray-900">Basic Information <span><i
+          class="icon-info text-sm ms-2 text-gray-400"
+          pTooltip="Supplier contact information provided here will serve as the primary contact for SEC throughout the entire BENA program."
+          tooltipPosition="top"
+        ></i></span></h2>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
         <app-base-label [title]="'Plan Title'" />
@@ -27,7 +31,20 @@
           optionLabel="name"
           optionValue="id"
           fluid
-        />
+        >
+          <ng-template
+            pTemplate="item"
+            let-item
+          >
+            {{ item.name | translate }}
+          </ng-template>
+          <ng-template
+            pTemplate="selectedItem"
+            let-item
+          >
+            {{ item.name | translate }}
+          </ng-template>
+        </p-select>
       </div>
     </div>
     <div class="flex flex-col gap-4 md:flex-row">
