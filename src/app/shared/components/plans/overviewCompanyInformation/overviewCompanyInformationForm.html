@@ -8,14 +8,14 @@
         <input
           pInputText
           placeholder="Enter your plan title"
-          [formControl]="basicInformationFormGroupControls.planTitle"
+          [formControl]="getFormControl(basicInformationFormGroupControls['planTitle'])"
           fluid
           maxlength="150"
         />
-        @if(basicInformationFormGroupControls.planTitle.touched && basicInformationFormGroupControls.planTitle.hasError('required')){
+        @if(getFormControl(basicInformationFormGroupControls['planTitle']).touched && getFormControl(basicInformationFormGroupControls['planTitle']).hasError('required')){
         <app-base-error [message]="'Plan title is required'" />
         }
-        @else if(basicInformationFormGroupControls.planTitle.touched && basicInformationFormGroupControls.planTitle.hasError('maxlength')){
+        @else if(getFormControl(basicInformationFormGroupControls['planTitle']).touched && getFormControl(basicInformationFormGroupControls['planTitle']).hasError('maxlength')){
         <app-base-error [message]="'Plan title must be less than 150 characters'" />
         }
       </div>
@@ -23,7 +23,7 @@
         <app-base-label [title]="'Opportunity Type'" />
         <p-select
           [options]="opportunityTypes"
-          [formControl]="basicInformationFormGroupControls.opportunityType"
+          [formControl]="getFormControl(basicInformationFormGroupControls['opportunityType'])"
           optionLabel="name"
           optionValue="id"
           fluid
@@ -35,7 +35,7 @@
         <app-base-label [title]="'Opportunity'" />
         <p-select
           [options]="availableOpportunities()"
-          [formControl]="basicInformationFormGroupControls.opportunity"
+          [formControl]="getFormControl(basicInformationFormGroupControls['opportunity'])"
           optionLabel="name"
           optionValue="id"
           placeholder="Select opportunity"
@@ -47,7 +47,7 @@
         <app-base-label [title]="'Submission Date'" />
         <p-datepicker
           fluid
-          [formControl]="basicInformationFormGroupControls.submissionDate"
+          [formControl]="getFormControl(basicInformationFormGroupControls['submissionDate'])"
         />
       </div>
     </div>
@@ -61,7 +61,7 @@
         <app-base-label [title]="'Company Name'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls.companyName)"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['companyName'])"
         >
           <input
             type="text"
@@ -69,13 +69,13 @@
             fluid
             placeholder="Enter company name"
             maxlength="100"
-            [formControl]="getValueControl(companyInformationFormGroupControls.companyName)"
+            [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
           />
         </app-group-input-with-checkbox>
-        @if(getValueControl(companyInformationFormGroupControls.companyName).touched && getValueControl(companyInformationFormGroupControls.companyName).hasError('required')){
+        @if(getValueControl(companyInformationFormGroupControls['companyName']).touched && getValueControl(companyInformationFormGroupControls['companyName']).hasError('required')){
         <app-base-error [message]="'Company name is required'" />
         }
-        @else if(getValueControl(companyInformationFormGroupControls.companyName).touched && getValueControl(companyInformationFormGroupControls.companyName).hasError('maxlength')){
+        @else if(getValueControl(companyInformationFormGroupControls['companyName']).touched && getValueControl(companyInformationFormGroupControls['companyName']).hasError('maxlength')){
         <app-base-error [message]="'Company name must be less than 100 characters'" />
         }
       </div>
@@ -85,7 +85,7 @@
         <app-base-label [title]="'CEO Name'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls.ceoName)"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
         >
           <input
             type="text"
@@ -93,13 +93,13 @@
             fluid
             placeholder="Enter CEO name"
             maxlength="100"
-            [formControl]="getValueControl(companyInformationFormGroupControls.ceoName)"
+            [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
           />
         </app-group-input-with-checkbox>
-        @if(getValueControl(companyInformationFormGroupControls.ceoName).touched && getValueControl(companyInformationFormGroupControls.ceoName).hasError('required')){
+        @if(getValueControl(companyInformationFormGroupControls['ceoName']).touched && getValueControl(companyInformationFormGroupControls['ceoName']).hasError('required')){
         <app-base-error [message]="'CEO name is required'" />
         }
-        @else if(getValueControl(companyInformationFormGroupControls.ceoName).touched && getValueControl(companyInformationFormGroupControls.ceoName).hasError('maxlength')){
+        @else if(getValueControl(companyInformationFormGroupControls['ceoName']).touched && getValueControl(companyInformationFormGroupControls['ceoName']).hasError('maxlength')){
         <app-base-error [message]="'CEO name must be less than 100 characters'" />
         }
       </div>
@@ -107,7 +107,7 @@
         <app-base-label [title]="'CEO Email'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls.ceoEmailID)"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoEmailID'])"
         >
           <input
             type="email"
@@ -115,13 +115,13 @@
             fluid
             placeholder="Enter CEO email"
             maxlength="100"
-            [formControl]="getValueControl(companyInformationFormGroupControls.ceoEmailID)"
+            [formControl]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
           />
         </app-group-input-with-checkbox>
-        @if(getValueControl(companyInformationFormGroupControls.ceoEmailID).touched && getValueControl(companyInformationFormGroupControls.ceoEmailID).hasError('required')){
+        @if(getValueControl(companyInformationFormGroupControls['ceoEmailID']).touched && getValueControl(companyInformationFormGroupControls['ceoEmailID']).hasError('required')){
         <app-base-error [message]="'CEO email is required'" />
         }
-        @else if(getValueControl(companyInformationFormGroupControls.ceoEmailID).touched && getValueControl(companyInformationFormGroupControls.ceoEmailID).hasError('email')){
+        @else if(getValueControl(companyInformationFormGroupControls['ceoEmailID']).touched && getValueControl(companyInformationFormGroupControls['ceoEmailID']).hasError('email')){
         <app-base-error [message]="'CEO email is invalid'" />
         }
       </div>
@@ -136,7 +136,7 @@
         <app-base-label [title]="'Global HQ Location'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls.globalHQLocation)"
+          [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])"
         >
           <input
             type="text"
@@ -144,13 +144,13 @@
             fluid
             placeholder="Enter global HQ location"
             maxlength="250"
-            [formControl]="getValueControl(locationInformationFormGroupControls.globalHQLocation)"
+            [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
           />
         </app-group-input-with-checkbox>
-        @if(getValueControl(locationInformationFormGroupControls.globalHQLocation).touched && getValueControl(locationInformationFormGroupControls.globalHQLocation).hasError('required')){
+        @if(getValueControl(locationInformationFormGroupControls['globalHQLocation']).touched && getValueControl(locationInformationFormGroupControls['globalHQLocation']).hasError('required')){
         <app-base-error [message]="'Global HQ location is required'" />
         }
-        @else if(getValueControl(locationInformationFormGroupControls.globalHQLocation).touched && getValueControl(locationInformationFormGroupControls.globalHQLocation).hasError('maxlength')){
+        @else if(getValueControl(locationInformationFormGroupControls['globalHQLocation']).touched && getValueControl(locationInformationFormGroupControls['globalHQLocation']).hasError('maxlength')){
         <app-base-error [message]="'Global HQ location must be less than 250 characters'" />
         }
       </div>
@@ -158,14 +158,14 @@
         <app-base-label [title]="'Registered Vendor ID with SEC'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls.registeredVendorIDwithSEC)"
+          [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
         >
           <input
             type="text"
             pInputText
             fluid
             placeholder="Enter global HQ location"
-            [formControl]="getValueControl(locationInformationFormGroupControls.registeredVendorIDwithSEC)"
+            [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
           />
         </app-group-input-with-checkbox>
       </div>
@@ -181,7 +181,7 @@
             <p-radiobutton
               name="doYouCurrentlyHaveLocalAgentInKSA"
               [value]="true"
-              [formControl]="locationInformationFormGroupControls.doYouCurrentlyHaveLocalAgentInKSA"
+              [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
               inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
               size="small"
             />
@@ -191,7 +191,7 @@
             <p-radiobutton
               name="doYouCurrentlyHaveLocalAgentInKSA"
               [value]="false"
-              [formControl]="locationInformationFormGroupControls.doYouCurrentlyHaveLocalAgentInKSA"
+              [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
               inputId="doYouCurrentlyHaveLocalAgentInKSANo"
               size="small"
             />
@@ -201,7 +201,7 @@
         <div>
 
         </div>
-        @if(locationInformationFormGroupControls.doYouCurrentlyHaveLocalAgentInKSA.touched && locationInformationFormGroupControls.doYouCurrentlyHaveLocalAgentInKSA.hasError('required')){
+        @if(getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']).touched && getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']).hasError('required')){
         <app-base-error [message]="'This field is required'" />
         }
       </div>
@@ -218,7 +218,7 @@
           <app-base-label [title]="'Local Agent Name'" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls.localAgentName)"
+            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])"
           >
             <input
               type="text"
@@ -226,13 +226,13 @@
               fluid
               placeholder="Enter local agent name"
               maxlength="100"
-              [formControl]="getValueControl(localAgentInformationFormGroupControls.localAgentName)"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
             />
           </app-group-input-with-checkbox>
-          @if(getValueControl(localAgentInformationFormGroupControls.localAgentName).touched && getValueControl(localAgentInformationFormGroupControls.localAgentName).hasError('required')){
+          @if(getValueControl(localAgentInformationFormGroupControls['localAgentName']).touched && getValueControl(localAgentInformationFormGroupControls['localAgentName']).hasError('required')){
           <app-base-error [message]="'Local agent name is required'" />
           }
-          @else if(getValueControl(localAgentInformationFormGroupControls.localAgentName).touched && getValueControl(localAgentInformationFormGroupControls.localAgentName).hasError('maxlength')){
+          @else if(getValueControl(localAgentInformationFormGroupControls['localAgentName']).touched && getValueControl(localAgentInformationFormGroupControls['localAgentName']).hasError('maxlength')){
           <app-base-error [message]="'Local agent name must be less than 100 characters'" />
           }
         </div>
@@ -240,17 +240,17 @@
           <app-base-label [title]="'Contact Person Name'" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls.contactPersonName)"
+            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])"
           >
             <input
               type="text"
               pInputText
               fluid
               placeholder="Enter contact person name"
-              [formControl]="getValueControl(localAgentInformationFormGroupControls.contactPersonName)"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
             />
           </app-group-input-with-checkbox>
-          @if(getValueControl(localAgentInformationFormGroupControls.contactPersonName).touched && getValueControl(localAgentInformationFormGroupControls.contactPersonName).hasError('required')){
+          @if(getValueControl(localAgentInformationFormGroupControls['contactPersonName']).touched && getValueControl(localAgentInformationFormGroupControls['contactPersonName']).hasError('required')){
           <app-base-error [message]="'Contact person name is required'" />
           }
         </div>
@@ -260,20 +260,20 @@
           <app-base-label [title]="'Email ID'" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls.emailID)"
+            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['emailID'])"
           >
             <input
               type="text"
               pInputText
               fluid
               placeholder="Enter email ID"
-              [formControl]="getValueControl(localAgentInformationFormGroupControls.emailID)"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
             />
           </app-group-input-with-checkbox>
-          @if(getValueControl(localAgentInformationFormGroupControls.emailID).touched && getValueControl(localAgentInformationFormGroupControls.emailID).hasError('required')){
+          @if(getValueControl(localAgentInformationFormGroupControls['emailID']).touched && getValueControl(localAgentInformationFormGroupControls['emailID']).hasError('required')){
           <app-base-error [message]="'Email ID is required'" />
           }
-          @else if(getValueControl(localAgentInformationFormGroupControls.emailID).touched && getValueControl(localAgentInformationFormGroupControls.emailID).hasError('email')){
+          @else if(getValueControl(localAgentInformationFormGroupControls['emailID']).touched && getValueControl(localAgentInformationFormGroupControls['emailID']).hasError('email')){
           <app-base-error [message]="'Email ID is invalid'" />
           }
         </div>
@@ -281,20 +281,20 @@
           <app-base-label [title]="'Contact Number'" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls.contactNumber)"
+            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactNumber'])"
           >
             <input
               type="text"
               pInputText
               fluid
               placeholder="Enter contact number"
-              [formControl]="getValueControl(localAgentInformationFormGroupControls.contactNumber)"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
             />
           </app-group-input-with-checkbox>
-          @if(getValueControl(localAgentInformationFormGroupControls.contactNumber).touched && getValueControl(localAgentInformationFormGroupControls.contactNumber).hasError('required')){
+          @if(getValueControl(localAgentInformationFormGroupControls['contactNumber']).touched && getValueControl(localAgentInformationFormGroupControls['contactNumber']).hasError('required')){
           <app-base-error [message]="'Contact number is required'" />
           }
-          @else if(getValueControl(localAgentInformationFormGroupControls.contactNumber).touched && getValueControl(localAgentInformationFormGroupControls.contactNumber).hasError('phoneNumber')){
+          @else if(getValueControl(localAgentInformationFormGroupControls['contactNumber']).touched && getValueControl(localAgentInformationFormGroupControls['contactNumber']).hasError('phoneNumber')){
           <app-base-error [message]="'Contact number is invalid'" />
           }
         </div>
@@ -305,7 +305,7 @@
             <app-base-label [title]="'Company HQ Location'" />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
-              [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls.companyHQLocation)"
+              [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
             >
               <input
                 type="text"
@@ -313,13 +313,13 @@
                 fluid
                 maxlength="200"
                 placeholder="Enter company HQ location"
-                [formControl]="getValueControl(localAgentInformationFormGroupControls.companyHQLocation)"
+                [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
               />
             </app-group-input-with-checkbox>
-            @if(getValueControl(localAgentInformationFormGroupControls.companyHQLocation).touched && getValueControl(localAgentInformationFormGroupControls.companyHQLocation).hasError('required')){
+            @if(getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).touched && getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).hasError('required')){
             <app-base-error [message]="'Company HQ location is required'" />
             }
-            @else if(getValueControl(localAgentInformationFormGroupControls.companyHQLocation).touched && getValueControl(localAgentInformationFormGroupControls.companyHQLocation).hasError('maxlength')){
+            @else if(getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).touched && getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).hasError('maxlength')){
             <app-base-error [message]="'Company HQ location must be less than 200 characters'" />
             }
           </div>
