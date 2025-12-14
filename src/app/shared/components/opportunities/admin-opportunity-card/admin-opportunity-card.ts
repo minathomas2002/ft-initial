@@ -58,14 +58,7 @@ export class AdminOpportunityCard {
   }
 
   shouldShowWarning(): boolean {
-    const opp = this.opportunity();
-    if (opp.status === EOpportunityStatus.DRAFT && opp.startDate) {
-      const startDate = new Date(opp.startDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return today >= startDate;
-    }
-    return false;
+    return this.opportunity().isActive && this.opportunity().status === EOpportunityStatus.DRAFT;
   }
 
   handleAction(action: EOpportunityAction) {

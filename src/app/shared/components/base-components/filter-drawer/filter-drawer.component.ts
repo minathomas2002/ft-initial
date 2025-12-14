@@ -4,10 +4,11 @@ import { ButtonModule } from "primeng/button";
 import type { IFilterBase } from "../../../interfaces";
 import { BaseDrawerComponent } from "../base-drawer/base-drawer.component";
 import { AbstractServiceFilter } from "../../../classes/abstract-service-filter";
+import { TranslatePipe } from '../../../pipes';
 
 @Component({
 	selector: "app-filter-drawer",
-	imports: [BaseDrawerComponent, ButtonModule],
+	imports: [BaseDrawerComponent, ButtonModule, TranslatePipe],
 	templateUrl: "./filter-drawer.component.html",
 })
 export class FilterDrawerComponent {

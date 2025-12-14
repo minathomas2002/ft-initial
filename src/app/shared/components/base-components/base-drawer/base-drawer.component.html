@@ -27,7 +27,7 @@
           <span
             class="text-red-600 cursor-pointer font-semibold"
             (click)="onClearAll.emit()"
-          >Clear all</span>
+          >{{ 'common.clearAll' | translate }}</span>
           }
           <span>
             <p-button
@@ -52,7 +52,7 @@
       <div class="mt-auto border-t-1 border-t-gray-200">
         <div class="flex justify-end py-[16px] px-[24px]">
           <p-button
-            label="Cancel"
+            [label]="'dialog.cancel' | translate"
             variant="outlined"
             type="button"
             severity="secondary"

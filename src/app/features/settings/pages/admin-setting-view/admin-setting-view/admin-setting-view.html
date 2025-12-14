@@ -35,6 +35,15 @@
         >
         </app-setting-card>
 
+        <app-setting-card
+          [title]="('setting.adminView.holidaysCardTitle' | translate)"
+          [icon]="'icon-umbrella'"
+          [linkText]="('setting.adminView.holidaysCardLink' | translate)"
+          [description]="('setting.adminView.holidaysCardDesc' | translate)"
+          (onClick)="onHolidaysClick()"
+        >
+        </app-setting-card>
+
       </div>
 
     </app-cards-skeleton>

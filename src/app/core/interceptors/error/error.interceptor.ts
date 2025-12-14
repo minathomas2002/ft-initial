@@ -26,8 +26,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (response.error?.success === false) {
         response.error?.errors?.forEach((error: string) => {
           toaster.error(error);
-        });
+        });        
+      }else if(response.status === 403) {
+        toaster.error('You are not authorized to access this resource or your user is not active');
       }
+      
       return throwError(() => response);
     })
   );

@@ -13,7 +13,7 @@
         optionLabel="name"
         [disabled]="disabled() || _isDisabled"
         [filter]="true"
-        filterPlaceholder="Search country..."
+        [filterPlaceholder]="'common.searchCountry' | translate"
         [showClear]="false"
         [appendTo]="'body'"
         class="country-select"

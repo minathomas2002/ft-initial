@@ -60,6 +60,12 @@ export class OpportunityDetails implements OnInit {
     return EOpportunityAction;
   }
 
+  today = new Date();
+
+  forecastedDemand = computed(() => {
+    return `Forecasted SEC Demand (${this.today.getFullYear()}–${this.today.getFullYear() + 5})`
+  })
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {

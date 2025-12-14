@@ -25,7 +25,7 @@
         />
         } }@else{
         <p-button
-          label="Apply"
+          [label]="'opportunity.details.apply' | translate"
           (click)="onApply()"
         ></p-button>
         }
@@ -60,7 +60,7 @@
         <div class="col-span-1 flex flex-col gap-[24px]">
           <div>
             <h5 class="text-[20px] font-semibold mb-2">
-              {{ 'opportunity.details.forecastedDemand' | translate }}
+              {{ forecastedDemand() }}
             </h5>
             <p class="text-md text-gray-600 mb-4">
               {{ 'opportunity.details.demandNote' | translate }}
@@ -70,7 +70,7 @@
                 icon="icon-currency-dollar-circle"
                 [cardTitle]="'opportunity.details.spendSAR' | translate"
                 cardClass="bg-white"
-                cardDescription="{{ opportunitiesStore.details()?.spendSAR ?? '-' }}"
+                cardDescription="{{ (opportunitiesStore.details()?.spendSAR) ? (opportunitiesStore.details()?.spendSAR + ' B') : '-' }}"
               >
               </app-base-card>
               <app-base-card
@@ -221,11 +221,9 @@
 
 <app-general-confirmation-dialog
   [(visible)]="deleteConfirmDialogVisible"
-  [title]="'Are you sure you want to delete this opportunity?'"
-  [description]="
-    'This action cannot be undone. Once deleted, all related data will be permanently removed.'
-  "
-  [confirmationLabel]="'Delete'"
+  [title]="'dialog.deleteOpportunity' | translate"
+  [description]="'dialog.deleteOpportunityDescription' | translate"
+  [confirmationLabel]="'dialog.delete' | translate"
   [icon]="'icon-trash-2'"
   (confirmed)="deleteOpportunity()"
   [confirmButtonSeverity]="'danger'"
@@ -234,8 +232,8 @@
 
 <app-general-confirmation-dialog
   [(visible)]="moveToDraftConfirmDialogVisible"
-  [title]="'Are you sure you want to move this opportunity to draft?'"
-  [confirmationLabel]="'Draft'"
+  [title]="'dialog.moveToDraft' | translate"
+  [confirmationLabel]="'dialog.draft' | translate"
   [icon]="'icon-save'"
   (confirmed)="moveToDraftOpportunity()"
   [isLoading]="adminOpportunitiesStore.isProcessing()"
@@ -243,8 +241,8 @@
 
 <app-general-confirmation-dialog
   [(visible)]="publishConfirmDialogVisible"
-  [title]="'Are you sure you want to publish this opportunity?'"
-  [confirmationLabel]="'Publish'"
+  [title]="'dialog.publishOpportunity' | translate"
+  [confirmationLabel]="'dialog.publish' | translate"
   [icon]="'icon-cloud-upload'"
   (confirmed)="publishOpportunity()"
   [isLoading]="adminOpportunitiesStore.isProcessing()"

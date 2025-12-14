@@ -16,7 +16,16 @@
     "success": "Success",
     "warning": "Warning",
     "info": "Info",
-    "noDataFound": "No data found"
+    "noDataFound": "No data found",
+    "clearAll": "Clear all",
+    "paginatorTemplate": "Showing {first} to {last} of {totalRecords}",
+    "filter": "Filter",
+    "previous": "Previous",
+    "next": "Next",
+    "language": "Language",
+    "searchCountry": "Search country...",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
@@ -66,7 +75,10 @@
       "dontHaveAccount": "Don't have an account?",
       "signUp": "Sign up",
       "resendVerificationSuccess": "A new verification link has been sent to your email.",
-      "generalError": "Login failed. Please try again later."
+      "generalError": "Login failed. Please try again later.",
+      "devEnvironmentTitle": "Development Environment Only (Simulate Login for SEC Employees)",
+      "jobNumber": "Job Number",
+      "enterJobNumber": "Enter your job number"
     },
     "verification": {
       "didntReceiveEmail": "Didn't receive the email?",
@@ -83,7 +95,9 @@
       "invalidEmailFormat": "Invalid email format",
       "buttonLabel": "Reset password",
       "backButtonLabel": "Back to login",
-      "success": "You will receive a password reset link shortly"
+      "success": "You will receive a password reset link shortly",
+      "didntReceiveEmail": "Didn't receive the email?",
+      "clickToResend": "Click to resend"
     },
     "reset": {
       "title": "Set new password",
@@ -152,8 +166,7 @@
     "type": {
       "service": "Service",
       "services": "Services",
-      "material": "Material",
-      "materials": "Materials"
+      "product": "Product"
     },
     "list": {
       "title": "Opportunities",
@@ -173,7 +186,7 @@
     },
     "filter": {
       "search": "Search",
-      "searchByOpportunityName": "Search by opportunity name",
+      "searchByOpportunityName": "Search by opportunity name or description",
       "status": "Opportunity Status",
       "state": "Opportunity State",
       "type": "Opportunity Type",
@@ -193,7 +206,8 @@
       "sourcing": "Sourcing",
       "manufacturing": "Manufacturing",
       "assemblyTesting": "Assembly & Testing",
-      "afterSalesServices": "After Sales Services"
+      "afterSalesServices": "After Sales Services",
+      "apply": "Apply"
     },
     "form": {
       "basicInformation": "Basic Information",
@@ -206,7 +220,7 @@
       "shortDescription": "Short Description",
       "opportunityCategory": "Opportunity Category",
       "opportunityType": "Opportunity Type",
-      "spendSAR": "Spend (SAR)",
+      "spendSAR": "Spend (SAR) in billions",
       "quantityUnits": "Quantity (Units)",
       "localSuppliers": "Local Suppliers",
       "globalSuppliers": "Global Suppliers",
@@ -301,11 +315,11 @@
       "all": "All"
     },
     "table": {
-      "id": "Job No",
+      "id": "ID",
       "name": "Name",
       "nameArabic": "Name (Arabic)",
       "nameEnglish": "Name (English)",
-      "jobNo": "Job No.",
+      "jobNo": "ID",
       "email": "Email",
       "phoneNumber": "Phone Number",
       "role": "Role",
@@ -325,8 +339,8 @@
       "roleManagement": "Role Management"
     },
     "filter": {
-      "searchPlaceholder": "Search by name or email or job no or phone",
-      "roleManagementSearchPlaceholder": "Search by Username, Job No, Phone, Email",
+      "searchPlaceholder": "Search by name or email or ID or phone",
+      "roleManagementSearchPlaceholder": "Search by Username, ID, Phone, Email",
       "rolePlaceholder": "Role",
       "statusPlaceholder": "Status",
       "selectJoinDate": "Select join date"
@@ -350,8 +364,10 @@
       },
       "add":{
         "title":"Add Employee",
-        "job": "Job No.",
-        "jobLabel": "Job No.",
+        "employeeId": "ID",
+        "employeeIdPlaceholder": "Enter Employee ID",
+        "employeeIdRequired": "Employee ID is required",
+        "employeeIdInvalidLength": "Employee ID must be between 6 and 20 characters",
         "enName":"English Name",
         "arName": "Arabic Name",
         "email": "Email",
@@ -360,20 +376,17 @@
         "rolePlaceHolder": "Select Role",
         "roleRequired": "Role is required, Please select a valid role.",
         "confirmAdd": "Add Employee",
-        "JobRequired": "Job No. is required",
-        "jobPlaceHolder": "Enter Job No.",
-        "invalidJobNo": "Invalid Job No. Please enter a valid employee Job No.",
-        "nameEnPlaceHolder": "Enter English Name.",
+        "nameEnPlaceHolder": "Enter English Name",
         "nameEnRequired": "English name is required.",
-        "nameArPlaceholder": "Enter Arabic Name.",
+        "nameArPlaceholder": "Enter Arabic Name",
         "nameArRequired": "Arabic name is required.",
         "emailPlaceholder": "Enter Email.",
         "emailRequired": "Email is required",
         "phonePlaceholder": "Enter Phone",
         "phoneRequired": "Phone number is required.",
-        "jobInvalid": "Invalid Job No. Please enter a valid employee Job No.",
-        "jobInvalidLength": "Job No. must be between 6 and 20 characters.",
-        "jobRequired": "Job No. is required.",
+        "jobInvalid": "Invalid ID. Please enter a valid employee ID.",
+        "jobInvalidLength": "ID. must be between 6 and 20 characters.",
+        "jobRequired": "ID is required.",
         "nameArabicInvalid":"Arabic name must contain Arabic letters only.",
         "nameArabicInvalidLength":"Arabic name must be between 3 and 100 characters.",
         "nameEnglishInvalid" : "English name must contain English letters only.",
@@ -411,7 +424,7 @@
       "selectJoinDate": "Select join date"
     },
     "table": {
-      "id": "ID",
+      "BenaID": "BENA ID",
       "name": "Name",
       "email": "Email",
       "phoneNumber": "Phone Number",
@@ -434,6 +447,9 @@
       "notificationCardTitle": "Notification",
       "notificationCardDesc": "Manage which notifications you want to receive. ",
       "notificationCardLink": "Activate/ Deactivate",
+      "holidaysCardTitle": "Holidays Management",
+      "holidaysCardDesc": "Add official holidays or days off to exclude them from SLA calculations.",
+      "holidaysCardLink": "View Holidays",
       "dialog":{
         "internalCycleLabel":"Internal cycle time",
         "investorReplyTimeLabel" : "Investor reply time",
@@ -441,7 +457,10 @@
         "internalCycleRequired": "Internal cycle time cannot be empty",
         "internalCycleValidNumber": "Internal cycle time must be numeric, max 365, min 1 ",
         "investorReplyTimeRequired" : "Investor reply time cannot be empty",
-        "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min"
+        "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min {{days}} ",
+        "slaSuccessUpdate": "SLA updated Successfully.",
+        "autoAssignSuccessUpdate": "Auto - assign updated Successfully.",
+        "autoAssignWarningUpdate": "No active employees available for assignment."
       },
       "autoAssign":{
         "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",
@@ -496,9 +515,134 @@
         "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
         "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA."
+      },
+      "holidays": {
+        "goBack": "Back to settings",
+        "title": "Holidays Management",
+        "subTitle":"Add official holidays or days off to exclude them from SLA calculations.",
+        "addHoliday":"Create New Holiday",
+        "table": {
+          "holidayName": "Holiday Name",
+          "type": "Type",
+          "startDate": "Start Date",
+          "endDate": "end Date",
+          "numberOfDay": "Number Of Days",
+          "createdBy": "Created By",
+          "lastUpdated": "Last Updated",
+          "actions":"Actions",
+          "filter":{
+          "searchKeyPlaceHolder": "Search by Holiday Name",
+          "year": "Year",
+          "dateRangePlaceHolder":"Date Range"
+          },
+          "typeMapper":{
+            "dayOff":"Day Off",
+            "officialHoliday": "Official Holiday"
+          }
+          
+        }
 
       }
 
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Track and manage your submitted localization plans and their review status",
+    "submitNewPlan": "Submit New Plan"
+  },
+  "plan": {
+    "newPlan": {
+      "title": "New Opportunity",
+      "description": "Enter basic details to start your localization plan",
+      "planTitle": "Plan Title",
+      "planTitlePlaceholder": "Enter your plan title",
+      "planTitleRequired": "Plan title is required",
+      "opportunityType": "Opportunity Type",
+      "services": "Services",
+      "servicesDescription": "Localize operational or support services",
+      "materials": "Materials",
+      "materialsDescription": "Localize products, parts, or equipment",
+      "next": "Next"
+    },
+    "termsAndConditions": {
+      "title": "Localization Plan Guidelines",
+      "description": "SEC follows the below process to evaluate 'Localization Plan' and invite suppliers to join the BENA Journey:",
+      "step1Title": "Request Submission",
+      "step1Description": "Choose the product and submit basic details..",
+      "step2Title": "Eligibility Review",
+      "step2Description": "SEC team checks eligibility and priority.",
+      "step3Title": "Technical Qualification",
+      "step3Description": "Register as supplier and qualify the product.",
+      "step4Title": "Plan Approval",
+      "step4Description": "SEC reviews and approves your localization plan.",
+      "step5Title": "Welcome to BENA",
+      "step5Description": "Get a Relationship Manager to support your journey.",
+      "instructionsTitle": "Key instructions to fill the provided 'Localization Plan' template:",
+      "instruction1": "All information requested in the template are mandatory and should be filled to the best of your ability and knowledge.",
+      "instruction2": "Each tab of the document is provided with 'Instructions' on the top. Please read these carefully while filling the tab.",
+      "instruction3": "'Cover Page' and 'Overview' pages are for information only and should not be modified in any manner.",
+      "instruction4": "Localization Plan must be filled for each 'product' individually. However, multiple specifications of the same product can be covered within the same 'Localization Plan', with all specifications listed in the '2. Product & Plant Overview' tab Second field.",
+      "instruction5": "The signature disclaimer is displayed at the end of the template, and must signed it before submitting the plan.",
+      "instruction6": "It's important for SEC to know that the product you are targeting to localize is purchased directly by SEC, or it's approved suppliers. Please provide this information carefully in the 'Targeted Customer' section of the '2. Product & Plant Overview' tab page.",
+      "readAndApproved": "Read and approved"
+    }
+  },
+  "dialog": {
+    "cancel": "Cancel",
+    "deleteOpportunity": "Are you sure you want to delete this opportunity?",
+    "deleteOpportunityDescription": "This action cannot be undone. Once deleted, all related data will be permanently removed.",
+    "moveToDraft": "Are you sure you want to move this opportunity to draft?",
+    "publishOpportunity": "Are you sure you want to publish this opportunity?",
+    "delete": "Delete",
+    "draft": "Draft",
+    "publish": "Publish"
+  },
+  "plans": {
+    "filter": {
+      "searchPlaceholder": "Search by Plan ID or Title",
+      "selectPlanType": "Select Plan Type",
+      "selectStatus": "Select Status",
+      "selectSubmissionDate": "Select Submission Date",
+      "allTypes": "All Types",
+      "service": "Service",
+      "material": "Material",
+      "allStatuses": "All Statuses"
+    },
+    "status": {
+      "submitted": "Submitted",
+      "pending": "Pending",
+      "underReview": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "type": {
+      "services": "Services",
+      "materials": "Materials"
+    },
+    "table": {
+      "planId": "Plan ID",
+      "planTitle": "Plan Title",
+      "planType": "Plan Type",
+      "submissionDate": "Submission Date",
+      "slaCountdown": "SLA Countdown",
+      "currentStatus": "Current Status",
+      "actions": "Actions",
+      "daysRemaining": "days remaining"
+    },
+    "statistics": {
+      "totalPlans": "Total Plans",
+      "plansUnderReview": "Plans Under Review",
+      "approvedPlans": "Approved Plans",
+      "rejectedPlans": "Rejected Plans"
+    },
+    "list": {
+      "noPlansFound": "No Plans Found"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "download": "Download"
     }
   }
 }

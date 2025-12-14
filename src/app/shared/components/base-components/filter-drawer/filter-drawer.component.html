@@ -1,7 +1,7 @@
 <app-base-drawer
   id="drawer"
   icon="icon-filter-lines"
-  title="Filter"
+  [title]="'common.filter' | translate"
   [(visible)]="drawerVisible"
   (onClearAll)="filterService().clearAll()"
   (onShow)="handleShow()"
@@ -11,7 +11,7 @@
 
   <ng-container ngProjectAs="drawer-actions">
     <p-button
-      label="Save"
+      [label]="'common.save' | translate"
       type="button"
       severity="primary"
       class="ms-2 min-w-[100px]"

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable } from 'rxjs';
-import { IAssignRoleToUserRequest, IBaseApiResponse, IRole } from '../../interfaces';
+import { IAssignRoleToUserRequest, IBaseApiResponse, IRole, IRoleLocalized } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 
 @Injectable({
@@ -10,20 +10,20 @@ import { API_ENDPOINTS } from '../api-endpoints';
 export class RolesApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
-  getAllRoles(): Observable<IBaseApiResponse<IRole[]>> {
-    return this.baseHttpService.get<IRole[], unknown>(API_ENDPOINTS.roles.getRoles);
+  getAllRoles(): Observable<IBaseApiResponse<IRoleLocalized[]>> {
+    return this.baseHttpService.get<IRoleLocalized[], unknown>(API_ENDPOINTS.roles.getRoles);
   }
 
-  getSystemRoles(): Observable<IBaseApiResponse<IRole[]>> {
-    return this.baseHttpService.get<IRole[], unknown>(API_ENDPOINTS.roles.getSystemRoles);
+  getSystemRoles(): Observable<IBaseApiResponse<IRoleLocalized[]>> {
+    return this.baseHttpService.get<IRoleLocalized[], unknown>(API_ENDPOINTS.roles.getSystemRoles);
   }
 
-  getFilteredRoles(employeeId: string): Observable<IBaseApiResponse<IRole[]>> {
-    return this.baseHttpService.get<IRole[], unknown>(`${API_ENDPOINTS.roles.getFilteredRoles}?employeeId=${employeeId}`);
+  getFilteredRoles(employeeId: string): Observable<IBaseApiResponse<IRoleLocalized[]>> {
+    return this.baseHttpService.get<IRoleLocalized[], unknown>(`${API_ENDPOINTS.roles.getFilteredRoles}?employeeId=${employeeId}`);
   }
 
-  getRoleById(id: string): Observable<IBaseApiResponse<IRole>> {
-    return this.baseHttpService.get<IRole, unknown>(`${API_ENDPOINTS.roles.getRoleById}/${id}`);
+  getRoleById(id: string): Observable<IBaseApiResponse<IRoleLocalized>> {
+    return this.baseHttpService.get<IRoleLocalized, unknown>(`${API_ENDPOINTS.roles.getRoleById}/${id}`);
   }
 
   assignRoleToUser(request: IAssignRoleToUserRequest): Observable<IBaseApiResponse<void>> {

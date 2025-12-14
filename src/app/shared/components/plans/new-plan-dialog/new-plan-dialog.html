@@ -1,6 +1,6 @@
 <app-base-dialog
   [(visible)]="visibility"
-  [confirmLabel]="'Next'"
+  [confirmLabel]="'plan.newPlan.next' | translate"
   [icon]="'icon-bar-chart'"
   [confirmButtonClass]="'w-[100px]  button:bg-gray-200'"
   [cancelButtonClass]="'w-content'"
@@ -11,31 +11,31 @@
   <ng-container ngProjectAs="content">
     <div class="content flex flex-col gap-5 max-w-[640px]">
       <div class="header">
-        <h2 class="text-lg font-semibold text-gray-900 mb-[2px]">New Opportunity</h2>
+        <h2 class="text-lg font-semibold text-gray-900 mb-[2px]">{{ 'plan.newPlan.title' | translate }}</h2>
         <p class="text-sm text-gray-600">
-          Enter basic details to start your localization plan
+          {{ 'plan.newPlan.description' | translate }}
         </p>
       </div>
 
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-4">
           <div class="flex flex-col">
-            <app-base-label [title]="'Plan Title'" />
+            <app-base-label [title]="'plan.newPlan.planTitle' | translate" />
             <input
               type="text"
               pInputText
-              placeholder="Enter your plan title"
+              [placeholder]="'plan.newPlan.planTitlePlaceholder' | translate"
               [(ngModel)]="newPlanTitle"
               maxlength="150"
               required
               #planTitle="ngModel"
             />
             @if (planTitle.touched && planTitle.invalid && planTitle.hasError('required')) {
-            <app-base-error [message]="'Plan title is required'" />
+            <app-base-error [message]="'plan.newPlan.planTitleRequired' | translate" />
             }
           </div>
           <div class="flex flex-col">
-            <app-base-label [title]="'Opportunity Type'" />
+            <app-base-label [title]="'plan.newPlan.opportunityType' | translate" />
             <div class="flex gap-5">
               <div class="flex flex-col gap-3">
                 <div
@@ -55,8 +55,8 @@
                     <label
                       for="services-typee"
                       class="text-sm font-semibold"
-                    >Services</label>
-                    <p class="text-xs text-gray-600">Localize operational or support services</p>
+                    >{{ 'plan.newPlan.services' | translate }}</label>
+                    <p class="text-xs text-gray-600">{{ 'plan.newPlan.servicesDescription' | translate }}</p>
                   </div>
                   <p-radiobutton
                     name="opportunity-type"
@@ -72,7 +72,7 @@
               <div class="flex flex-col gap-3">
                 <div
                   class="rounded-xl opportunity-image-container"
-                  [class.selected]="newPlanOpportunityType() === EOpportunityType.MATERIAL"
+                  [class.selected]="newPlanOpportunityType() === EOpportunityType.PRODUCT"
                 >
                   <label for="materials-type">
                     <img
@@ -87,12 +87,12 @@
                     <label
                       for="materials-type"
                       class="text-sm font-semibold"
-                    >Materials</label>
-                    <p class="text-xs text-gray-600">Localize products, parts, or equipment</p>
+                    >{{ 'plan.newPlan.materials' | translate }}</label>
+                    <p class="text-xs text-gray-600">{{ 'plan.newPlan.materialsDescription' | translate }}</p>
                   </div>
                   <p-radiobutton
                     name="opportunity-type"
-                    [value]="EOpportunityType.MATERIAL"
+                    [value]="EOpportunityType.PRODUCT"
                     [(ngModel)]="newPlanOpportunityType"
                     inputId="materials-type"
                     size="small"

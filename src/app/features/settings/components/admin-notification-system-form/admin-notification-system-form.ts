@@ -1,5 +1,5 @@
 import { Component,input } from '@angular/core';
-import { NotificationFormService } from '../../services/notification-form-service';
+import { NotificationFormService } from '../../services/notification-form/notification-form-service';
 import { ToggleSwitch } from "primeng/toggleswitch";
 import { FormsModule } from '@angular/forms';
 import { Tooltip } from "primeng/tooltip";

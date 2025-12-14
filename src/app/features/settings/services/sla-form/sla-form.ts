@@ -13,16 +13,16 @@ export class SlaForm {
   
   /**  declare Strongly-typed form */
   readonly form: FormGroup<{
-    internalCycleTime: FormControl<number | null>;
-    investorReplyTime: FormControl<number | null>;
+    internalCycle: FormControl<number | null>;
+    investorReply: FormControl<number | null>;
    
   }> = this.fb.group({
-    internalCycleTime: this.fb.control<number | null>(14, 
+    internalCycle: this.fb.control<number | null>(14, 
       [Validators.required,
         Validators.min(1),
         Validators.max(365)
     ]),
-    investorReplyTime: this.fb.control<number | null>(14, [
+    investorReply: this.fb.control<number | null>(14, [
       Validators.required,
       Validators.min(1),
       Validators.max(365),
@@ -31,20 +31,20 @@ export class SlaForm {
   });
 
 
-  get internalCycleTime() { return this.form.controls.internalCycleTime; }
-  get investorReplyTime() { return this.form.controls.investorReplyTime; }
+  get internalCycle() { return this.form.controls.internalCycle; }
+  get investorReply() { return this.form.controls.investorReply; }
   
    ResetFormFields() {
     this.form.reset();
   }
 
-  patchForm(slaSetting : ISettingSla){
+  patchForm(slaSetting : ISettingSla | null){
     this.form.patchValue({
-      internalCycleTime: slaSetting.internalCycleTime,
-      investorReplyTime: slaSetting.investorReplyTime,
+      internalCycle: slaSetting?.internalCycle,
+      investorReply: slaSetting?.investorReply,
     });
-    this.form.controls.investorReplyTime.addValidators(Validators.min(slaSetting.minInvestorReplyTime));
-    this.form.controls.investorReplyTime.updateValueAndValidity();
+    this.form.controls.investorReply.addValidators(Validators.min(slaSetting?.remainingDaysValidation?? 1));
+    this.form.controls.investorReply.updateValueAndValidity();
 
   }
 }

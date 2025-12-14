@@ -9,6 +9,7 @@ import { InvestorsFilterService } from '../../services/investors-filter/investor
 import { InvestorsFilter } from '../../components/investors-filter/investors-filter';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { AvatarModule } from 'primeng/avatar';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-investors-list',
@@ -18,7 +19,7 @@ import { AvatarModule } from 'primeng/avatar';
     DataTableComponent,
     DatePipe,
     InvestorsFilter,
-    AvatarModule
+    AvatarModule,
   ],
   templateUrl: './investors-list.html',
   styleUrl: './investors-list.scss',
@@ -33,7 +34,7 @@ export class InvestorsList implements OnInit {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
     return [
-      { label: this.i18nService.translate('investors.table.id'), isSortable: false, sortingKey: 'code' },
+      { label: this.i18nService.translate('investors.table.BenaID'), isSortable: false, sortingKey: 'code' },
       { label: this.i18nService.translate('investors.table.name'), isSortable: true, sortingKey: 'fullName' },
       { label: this.i18nService.translate('investors.table.email'), isSortable: false, sortingKey: 'email' },
       { label: this.i18nService.translate('investors.table.phoneNumber'), isSortable: false, sortingKey: 'phoneNumber' },

@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, model, output, signal } from '@angu
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '../../../pipes';
 
 @Component({
   selector: 'app-plan-terms-and-conditions-dialog',
-  imports: [BaseDialogComponent, CheckboxModule, FormsModule],
+  imports: [BaseDialogComponent, CheckboxModule, FormsModule, TranslatePipe],
   templateUrl: './plan-terms-and-conditions-dialog.html',
   styleUrls: ['./plan-terms-and-conditions-dialog.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -2,20 +2,21 @@ import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
 import { ISettingAutoAssign, ISettingSla, ISettingSlaReq } from "../../interfaces/ISetting";
 import { SettingsApiService } from "../../api/settings/settings-api-service";
 import { inject } from "@angular/core";
-import { catchError, finalize, tap, throwError } from "rxjs";
+import { catchError, finalize, map, tap, throwError } from "rxjs";
 
 
 const initialState: {
   isLoading: boolean;
   isProcessing: boolean;
   error: string | null;
-  settingAutoAssign: ISettingAutoAssign | null;
+  settingAutoAssign: ISettingAutoAssign;
   settingSla: ISettingSla | null;
+
 } = {
   isLoading: false,
   isProcessing: false,
   error: null,
-  settingAutoAssign: null,
+  settingAutoAssign: { isEnabled: false } as ISettingAutoAssign,
   settingSla: null,
 }
 
@@ -31,6 +32,10 @@ export const adminSettingsStore = signalStore(
       getSlaSetting() {
         patchState(store, { isLoading: true, error: null });
         return settingApiService.getSLASetting().pipe(
+          map((res)=>{
+            res.body.remainingDaysValidation = (res.body.remainingDaysValidation == 0)? 1 : res.body.remainingDaysValidation;
+            return res;
+          }),
           tap((res) => {
             patchState(store, { isLoading: false });
             patchState(store, { settingSla: res.body || null });
@@ -70,12 +75,12 @@ export const adminSettingsStore = signalStore(
         return settingApiService.getAutoAssignSetting().pipe(
           tap((res) => {
             patchState(store, { isLoading: false });
-            patchState(store, { settingAutoAssign: res.body || null });
+            patchState(store, { settingAutoAssign : res.body });
           }),
           catchError((error) => {
             patchState(store, {
               error: error.errorMessage || 'Error getting auto assign setting',
-              settingAutoAssign: null
+              settingAutoAssign: { isEnabled: false } as ISettingAutoAssign
             });
             return throwError(() => new Error('Error getting auto assign setting'));
           }),

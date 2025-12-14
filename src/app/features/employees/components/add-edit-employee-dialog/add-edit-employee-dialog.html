@@ -25,14 +25,14 @@
 
     <div class="col-span-12 md:col-span-12">
 
-      <app-base-label [title]="'users.dialog.add.jobLabel' | translate">
+      <app-base-label [title]="'users.dialog.add.employeeId' | translate">
       </app-base-label>
       <p-iconfield>
         <input
           class="w-full"
           type="text"
           pInputText
-          [placeholder]="'users.dialog.add.jobPlaceHolder' | translate"
+          [placeholder]="'users.dialog.add.employeeIdPlaceholder' | translate"
           [formControl]="formService.job"
           [maxlength]="20"
           [minlength]="6"
@@ -43,10 +43,10 @@
       </p-iconfield>
       @if(formService.job.touched && formService.job.errors){
       @if(formService.job.hasError('required')){
-      <app-base-error [message]="'users.dialog.add.jobRequired' | translate" />
+      <app-base-error [message]="'users.dialog.add.employeeIdRequired' | translate" />
       }
       @if(formService.job.hasError('minlength') || formService.job.hasError('maxlength')){
-      <app-base-error [message]="'users.dialog.add.jobInvalidLength' | translate" />
+      <app-base-error [message]="'users.dialog.add.employeeIdInvalidLength' | translate" />
       }
       }
     </div>
@@ -167,5 +167,5 @@
       </div>
     </div>
   </div>
-}
+  }
 </app-base-dialog>

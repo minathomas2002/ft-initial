@@ -7,16 +7,20 @@ const Opportunities = "Opportunities";
 const Investors = "Investors";
 const AdminOpportunities = "Opportunities/admin";
 const SystemEmployees = "SystemEmployees";
-const Settings = "Settings";
+const AdminSettings = "AdminSettings";
 const Roles = "Roles";
 const RoleManagement = "RoleManagement";
 
 const Auth = "Auth";
+const Plans = "Plans";
 
 export const API_ENDPOINTS = {
   baseUrl: baseUrl,
   dashboard: {
     getHelloWorld: `${Dashboard}/hello-world`,
+  },
+  dashboardPlans: {
+    getPlans: `${Plans}/get-investor-dashboard-plans`
   },
   investors: {
     getInvestors: `${Investors}`,
@@ -40,11 +44,11 @@ export const API_ENDPOINTS = {
     }
 
   },
-  settings: {
-    getSlaSetting:`${Settings}/getSlaSetting`,
-    editSlaSetting:`${Settings}/editSlaSetting`,
-    getAutoAssignSetting:`${Settings}/getAutoAssignSetting`,
-    editAutoAssignSetting:`${Settings}/editAutoAssignSetting`,
+  AdminSettings: {
+    getSlaSetting:`${AdminSettings}/get-sla`,
+    editSlaSetting:`${AdminSettings}/update-sla`,
+    getAutoAssignSetting:`${AdminSettings}/get-auto-assign`,
+    editAutoAssignSetting:`${AdminSettings}/update-auto-assign`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,
