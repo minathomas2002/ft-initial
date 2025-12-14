@@ -32,9 +32,7 @@
   </div>
 
   <div class="flex flex-col gap-1 flex-1">
-    <h5
-      class="text-xl font-semibold text-gray-900 line-clamp-1"      
-    >
+    <h5 class="text-xl font-semibold text-gray-900 line-clamp-1">
       {{ opportunity().title }}
     </h5>
     <p class="text-opportunity text-gray-600 overflow-y-auto break-word max-h-[110px]">
@@ -49,7 +47,7 @@
       [value]="
         opportunity().opportunityType === 1
           ? ('opportunity.type.service' | translate)
-          : ('opportunity.type.material' | translate)
+          : ('opportunity.type.product' | translate)
       "
     />
     } @if(opportunity().startDate && opportunity().endDate) {

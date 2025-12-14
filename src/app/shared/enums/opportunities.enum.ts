@@ -5,7 +5,7 @@ export enum EOpportunityStatus {
 
 export enum EOpportunityType {
   SERVICES = 1,
-  MATERIAL = 2,
+  PRODUCT = 2,
 }
 
 export enum EOpportunityState {

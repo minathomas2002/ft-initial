@@ -2,7 +2,8 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { IRole } from '../../interfaces';
 import { RolesApiService } from '../../api/roles/roles-api-service';
 import { inject } from '@angular/core';
-import { catchError, finalize, tap, throwError } from 'rxjs';
+import { catchError, finalize, map, tap, throwError } from 'rxjs';
+import { I18nService } from '../../services/i18n';
 
 const initialState: {
   loading: boolean;
@@ -23,11 +24,20 @@ export const RolesStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const rolesApiService = inject(RolesApiService);
-
+    const i18nService = inject(I18nService);
     return {
       getSystemRoles() {
         patchState(store, { loading: true, error: null });
         return rolesApiService.getSystemRoles().pipe(
+          map((res) => {
+            const currentLang = i18nService.currentLanguage();
+            const body = res.body?.map((role) => ({
+              ...role,
+              name: currentLang === 'ar' ? role.nameAr : role.name,
+            }));
+            res.body = body;
+            return res;
+          }),
           tap((res) => {
             patchState(store, { systemRoles: res.body || [] });
           }),
@@ -43,6 +53,15 @@ export const RolesStore = signalStore(
       getFilteredRoles(employeeId: string) {
         patchState(store, { loading: true, error: null });
         return rolesApiService.getFilteredRoles(employeeId).pipe(
+          map((res) => {
+            const currentLang = i18nService.currentLanguage();
+            const body = res.body?.map((role) => ({
+              ...role,
+              name: currentLang === 'ar' ? role.nameAr : role.name,
+            }));
+            res.body = body;
+            return res;
+          }),
           tap((res) => {
             patchState(store, { filteredRoles: res.body || [] });
           }),
@@ -58,6 +77,15 @@ export const RolesStore = signalStore(
       getAllRoles() {
         patchState(store, { loading: true, error: null });
         return rolesApiService.getAllRoles().pipe(
+          map((res) => {
+            const currentLang = i18nService.currentLanguage();
+            const body = res.body?.map((role) => ({
+              ...role,
+              name: currentLang === 'ar' ? role.nameAr : role.name,
+            }));
+            res.body = body;
+            return res;
+          }),
           tap((res) => {
             patchState(store, { allRoles: res.body || [] });
           }),

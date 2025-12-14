@@ -164,8 +164,7 @@
 		"type": {
 			"service": "خدمة",
 			"services": "خدمات",
-			"material": "مادة",
-			"materials": "مواد"
+			"product": "منتج"
 		},
 		"list": {
 			"title": "الفرص",

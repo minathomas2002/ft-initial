@@ -15,8 +15,7 @@
     <p class="text-sm mb-1 text-gray-60  max-h-[400px]">{{ ('setting.adminView.autoAssign.autoAssignDesc' | translate) }} </p>
 
   </div>
-  @if(!settingAdminStore.isLoading()){
-  <div class="grid grid-cols-12 gap-4 ">
+  <div class="grid grid-cols-12 gap-4" [style.visibility]="!settingAdminStore.isLoading()">
 
     <div class="col-span-12 md:col-span-12 mt-6">
       <div class="justify-between items-center flex">
@@ -30,6 +29,4 @@
 
     </div>
   </div>
-  }
-
 </app-base-dialog>

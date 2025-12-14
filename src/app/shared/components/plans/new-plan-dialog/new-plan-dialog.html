@@ -72,7 +72,7 @@
               <div class="flex flex-col gap-3">
                 <div
                   class="rounded-xl opportunity-image-container"
-                  [class.selected]="newPlanOpportunityType() === EOpportunityType.MATERIAL"
+                  [class.selected]="newPlanOpportunityType() === EOpportunityType.PRODUCT"
                 >
                   <label for="materials-type">
                     <img
@@ -92,7 +92,7 @@
                   </div>
                   <p-radiobutton
                     name="opportunity-type"
-                    [value]="EOpportunityType.MATERIAL"
+                    [value]="EOpportunityType.PRODUCT"
                     [(ngModel)]="newPlanOpportunityType"
                     inputId="materials-type"
                     size="small"

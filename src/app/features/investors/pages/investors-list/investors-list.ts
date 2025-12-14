@@ -34,7 +34,7 @@ export class InvestorsList implements OnInit {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
     return [
-      { label: this.i18nService.translate('investors.table.id'), isSortable: false, sortingKey: 'code' },
+      { label: this.i18nService.translate('investors.table.BenaID'), isSortable: false, sortingKey: 'code' },
       { label: this.i18nService.translate('investors.table.name'), isSortable: true, sortingKey: 'fullName' },
       { label: this.i18nService.translate('investors.table.email'), isSortable: false, sortingKey: 'email' },
       { label: this.i18nService.translate('investors.table.phoneNumber'), isSortable: false, sortingKey: 'phoneNumber' },

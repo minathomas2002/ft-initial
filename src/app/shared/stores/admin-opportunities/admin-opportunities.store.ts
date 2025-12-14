@@ -32,12 +32,12 @@ const initialState: {
   count: 0,
   list: [],
   opportunityTypes: [{
-    id: '1',
-    name: 'Service',
+    id: EOpportunityType.SERVICES.toString(),
+    name: 'opportunity.type.service',
   },
   {
-    id: '2',
-    name: 'Material',
+    id: EOpportunityType.PRODUCT.toString(),
+    name: 'opportunity.type.product',
   }],
   opportunityCategories: [
     {
@@ -62,7 +62,7 @@ const initialState: {
   ],
   opportunityTypeOptions: [
     { id: EOpportunityType.SERVICES.toString(), name: 'opportunity.type.service' },
-    { id: EOpportunityType.MATERIAL.toString(), name: 'opportunity.type.material' },
+    { id: EOpportunityType.PRODUCT.toString(), name: 'opportunity.type.product' },
   ],
   stateOptions: [
     { id: EOpportunityState.ACTIVE.toString(), name: 'opportunity.state.active' },

@@ -34,7 +34,7 @@ export class DashboardPlansFilter {
     return [
       { label: this.i18nService.translate('plans.filter.allTypes'), value: null },
       { label: this.i18nService.translate('plans.filter.service'), value: EOpportunityType.SERVICES },
-      { label: this.i18nService.translate('plans.filter.material'), value: EOpportunityType.MATERIAL },
+      { label: this.i18nService.translate('plans.filter.material'), value: EOpportunityType.PRODUCT },
     ];
   });
 
