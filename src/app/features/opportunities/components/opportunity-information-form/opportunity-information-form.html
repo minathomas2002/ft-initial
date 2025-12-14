@@ -253,19 +253,30 @@
 
   <!-- Forecasted SEC Demand (2024–2030) -->
   <div>
-    <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.forecastedDemand' | translate }}</h3>
+    <h3 class="text-lg font-semibold mb-4">{{forecastedDemand()}}</h3>
     <div class="flex flex-col gap-4">
       <!-- Min Quantity -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div class="flex flex-col">
           <app-base-label [title]="'opportunity.form.spendSAR' | translate" />
-          <input
-            type="text"
+          <!-- <input
+            type="number"
             pInputText
-            [maxlength]="50"
             [placeholder]="'opportunity.form.enterSpendSAR' | translate"
             [formControl]="getControl('spendSAR')"
-          />
+          /> -->
+
+          <p-inputgroup class="w-full md:!w-[30rem]">
+            <p-inputnumber
+              mode="decimal"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="6"
+              [placeholder]="'opportunity.form.enterSpendSAR' | translate"
+              [formControl]="getControl('spendSAR')"
+            />
+            <p-inputgroup-addon class="sar">$</p-inputgroup-addon>
+          </p-inputgroup>
+
           @if(getControl('spendSAR').invalid && getControl('spendSAR').dirty){
           <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
           }

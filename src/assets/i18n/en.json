@@ -206,7 +206,7 @@
       "shortDescription": "Short Description",
       "opportunityCategory": "Opportunity Category",
       "opportunityType": "Opportunity Type",
-      "spendSAR": "Spend (SAR)",
+      "spendSAR": "Spend (SAR) in billions",
       "quantityUnits": "Quantity (Units)",
       "localSuppliers": "Local Suppliers",
       "globalSuppliers": "Global Suppliers",
