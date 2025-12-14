@@ -1,0 +1,584 @@
+<div class="flex flex-col gap-[32px] px-8 pb-10">
+  <!-- Overview Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Overview</h2>
+
+    <div class="flex flex-col gap-4">
+      <!-- Product Name -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Product Name (i.e. Product Targeted for Localization)'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter product name"
+            maxlength="100"
+            [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName]).hasError('required')){
+        <app-base-error [message]="'Product name is required'" />
+        }
+        @else if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName]).hasError('maxlength')){
+        <app-base-error [message]="'Product name must be less than 100 characters'" />
+        }
+      </div>
+
+      <!-- Product Specifications -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Product Specifications (incl. voltage ratings) targeted for Localization'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
+        >
+          <textarea
+            pInputTextarea
+            fluid
+            placeholder="Enter product specifications"
+            maxlength="500"
+            rows="4"
+            [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
+          ></textarea>
+        </app-group-input-with-checkbox>
+        @if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications]).hasError('required')){
+        <app-base-error [message]="'Product specifications is required'" />
+        }
+        @else if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications]).hasError('maxlength')){
+        <app-base-error [message]="'Product specifications must be less than 500 characters'" />
+        }
+      </div>
+
+      <!-- Targeted Annual Plant Capacity -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Targeted Annual Plant Capacity (Mention Unit of Measurement)'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter targeted annual plant capacity"
+            [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]).hasError('required')){
+        <app-base-error [message]="'Targeted annual plant capacity is required'" />
+        }
+      </div>
+
+      <!-- Time Required to Setup Factory -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Time Required to Setup Factory (Once Localization Plan is Approved)'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter time required to setup factory"
+            [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory]).hasError('required')){
+        <app-base-error [message]="'Time required to setup factory is required'" />
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Expected CAPEX Investment Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Expected CAPEX Investment</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Land Percentage -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Land (%)'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage])"
+        >
+          <input
+            type="number"
+            pInputText
+            fluid
+            placeholder="Enter land"
+            min="0"
+            max="100"
+            [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage])"
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage]).touched && getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage]).hasError('required')){
+        <app-base-error [message]="'Land percentage is required'" />
+        }
+        @else if(getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage]).touched && (getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage]).hasError('min') || getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage]).hasError('max'))){
+        <app-base-error [message]="'Land percentage must be between 0 and 100'" />
+        }
+      </div>
+
+      <!-- Building Percentage -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Building (%)'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage])"
+        >
+          <input
+            type="number"
+            pInputText
+            fluid
+            placeholder="Enter building"
+            min="0"
+            max="100"
+            [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage])"
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage]).touched && getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage]).hasError('required')){
+        <app-base-error [message]="'Building percentage is required'" />
+        }
+        @else if(getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage]).touched && (getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage]).hasError('min') || getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage]).hasError('max'))){
+        <app-base-error [message]="'Building percentage must be between 0 and 100'" />
+        }
+      </div>
+
+      <!-- Machinery / Equipment Percentage -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Machinery / Equipment (%)'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage])"
+        >
+          <input
+            type="number"
+            pInputText
+            fluid
+            placeholder="Enter machinery / equipment"
+            min="0"
+            max="100"
+            [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage])"
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage]).touched && getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage]).hasError('required')){
+        <app-base-error [message]="'Machinery / Equipment percentage is required'" />
+        }
+        @else if(getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage]).touched && (getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage]).hasError('min') || getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage]).hasError('max'))){
+        <app-base-error [message]="'Machinery / Equipment percentage must be between 0 and 100'" />
+        }
+      </div>
+
+      <!-- Others Percentage -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Others (%) (Kindly mention details)'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage])"
+        >
+          <input
+            type="number"
+            pInputText
+            fluid
+            placeholder="Enter others"
+            min="0"
+            max="100"
+            [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage])"
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage]).touched && (getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage]).hasError('min') || getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage]).hasError('max'))){
+        <app-base-error [message]="'Others percentage must be between 0 and 100'" />
+        }
+      </div>
+    </div>
+
+    <!-- Others Description (conditional) -->
+    @if(showOthersDescription()){
+    <div class="flex flex-col gap-2">
+      <app-base-label [title]="'Others Description'" />
+      <app-group-input-with-checkbox
+        [showCheckbox]="showCheckbox()"
+        [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
+      >
+        <textarea
+          pInputTextarea
+          fluid
+          placeholder="Enter others description"
+          rows="3"
+          [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
+        ></textarea>
+      </app-group-input-with-checkbox>
+      @if(getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]).touched && getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]).hasError('required')){
+      <app-base-error [message]="'Others description is required when Others percentage is greater than 0'" />
+      }
+    </div>
+    }
+  </div>
+
+  <!-- Target Customers Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Target Customers</h2>
+
+    <div class="flex flex-col gap-4">
+      <!-- Targeted Customer -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Targeted Customer'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+        >
+          <p-select
+            [options]="targetedCustomerOptions"
+            [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select targeted customer"
+            [multiple]="true"
+            fluid
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer]).touched && getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer]).hasError('required')){
+        <app-base-error [message]="'Targeted customer is required'" />
+        }
+      </div>
+
+      <!-- Conditional fields for SEC's approved local suppliers -->
+      @if(showTargetedSuppliersFields()){
+      <div class="flex flex-col gap-4 pl-4 border-l-2 border-gray-200">
+        <p class="text-sm text-gray-600 font-medium">If Targeting "SEC's approved local suppliers", mention the following:</p>
+
+        <!-- Names of Targeted Suppliers -->
+        <div class="flex flex-col gap-2">
+          <app-base-label [title]="'Provide names of targeted SEC\'s approved local suppliers'" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
+          >
+            <textarea
+              pInputTextarea
+              fluid
+              placeholder="Enter provide names of targeted SEC's"
+              rows="3"
+              [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
+            ></textarea>
+          </app-group-input-with-checkbox>
+          @if(getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]).touched && getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]).hasError('required')){
+          <app-base-error [message]="'Names of targeted suppliers is required'" />
+          }
+        </div>
+
+        <!-- Products Utilize Targeted Product -->
+        <div class="flex flex-col gap-2">
+          <app-base-label [title]="'Which product(s) manufactured by SEC\'s approved local suppliers will utilize your \'Targeted Product\'" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
+          >
+            <textarea
+              pInputTextarea
+              fluid
+              placeholder="Enter product(s)"
+              rows="3"
+              [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
+            ></textarea>
+          </app-group-input-with-checkbox>
+          @if(getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]).touched && getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]).hasError('required')){
+          <app-base-error [message]="'Products utilize targeted product is required'" />
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Product Manufacturing Experience Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Product Manufacturing Experience</h2>
+
+    <div class="flex flex-col gap-4">
+      <!-- Product Manufacturing Experience Dropdown -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Product Manufacturing Experience'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
+        >
+          <p-select
+            [options]="productManufacturingExperienceOptions"
+            [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select product manufacturing experience"
+            fluid
+          />
+        </app-group-input-with-checkbox>
+        @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience]).hasError('required')){
+        <app-base-error [message]="'Product manufacturing experience is required'" />
+        }
+      </div>
+
+      <!-- Do you currently provide this product to SEC? -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Do you currently provide this product to SEC?'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
+        >
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <p-radiobutton
+                name="provideToSEC"
+                [value]="true"
+                [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
+                inputId="provideToSECYes"
+                size="small"
+              />
+              <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <p-radiobutton
+                name="provideToSEC"
+                [value]="false"
+                [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
+                inputId="provideToSECNo"
+                size="small"
+              />
+              <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+            </label>
+          </div>
+        </app-group-input-with-checkbox>
+        @if(getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC]).touched && getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC]).hasError('required')){
+        <app-base-error [message]="'This field is required'" />
+        }
+      </div>
+
+      <!-- Conditional SEC fields -->
+      @if(showSECFields()){
+      <div class="flex flex-col gap-4 pl-4 border-l-2 border-gray-200">
+        <p class="text-sm text-gray-600 font-medium">If 'Yes', provide the following:</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Qualified Plant Location (By SEC) -->
+          <div class="flex flex-col gap-2">
+            <app-base-label [title]="'Qualified Plant Location (By SEC)'" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter qualified plant location"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
+              />
+            </app-group-input-with-checkbox>
+            @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC]).hasError('required')){
+            <app-base-error [message]="'Qualified plant location is required'" />
+            }
+          </div>
+
+          <!-- Approved Vendor ID (with SEC) -->
+          <div class="flex flex-col gap-2">
+            <app-base-label [title]="'Approved Vendor ID (with SEC)'" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter approved vendor ID"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
+              />
+            </app-group-input-with-checkbox>
+            @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC]).hasError('required')){
+            <app-base-error [message]="'Approved vendor ID is required'" />
+            }
+          </div>
+
+          <!-- Years of Experience (with SEC) -->
+          <div class="flex flex-col gap-2">
+            <app-base-label [title]="'Years of Experience (with SEC)'" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
+            >
+              <input
+                type="number"
+                pInputText
+                fluid
+                placeholder="Enter years of experience"
+                min="0"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
+              />
+            </app-group-input-with-checkbox>
+            @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC]).hasError('required')){
+            <app-base-error [message]="'Years of experience is required'" />
+            }
+            @else if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC]).hasError('pattern')){
+            <app-base-error [message]="'Years of experience must be a valid number'" />
+            }
+          </div>
+
+          <!-- Total Quantities provided to SEC -->
+          <div class="flex flex-col gap-2">
+            <app-base-label [title]="'Total Quantities provided to SEC (2019 onwards)'" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
+            >
+              <input
+                type="number"
+                pInputText
+                fluid
+                placeholder="Enter total quantities provided to SEC"
+                min="0"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
+              />
+            </app-group-input-with-checkbox>
+            @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC]).hasError('required')){
+            <app-base-error [message]="'Total quantities is required'" />
+            }
+            @else if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC]).hasError('pattern')){
+            <app-base-error [message]="'Total quantities must be a valid number'" />
+            }
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Do you currently provide this product to SEC's approved local suppliers? -->
+      <div class="flex flex-col gap-2">
+        <app-base-label [title]="'Do you currently provide this product to SEC\'s approved local suppliers?'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
+        >
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <p-radiobutton
+                name="provideToLocalSuppliers"
+                [value]="true"
+                [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
+                inputId="provideToLocalSuppliersYes"
+                size="small"
+              />
+              <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <p-radiobutton
+                name="provideToLocalSuppliers"
+                [value]="false"
+                [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
+                inputId="provideToLocalSuppliersNo"
+                size="small"
+              />
+              <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+            </label>
+          </div>
+        </app-group-input-with-checkbox>
+        @if(getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers]).touched && getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers]).hasError('required')){
+        <app-base-error [message]="'This field is required'" />
+        }
+      </div>
+
+      <!-- Conditional Local Suppliers fields -->
+      @if(showLocalSuppliersFields()){
+      <div class="flex flex-col gap-4 pl-4 border-l-2 border-gray-200">
+        <p class="text-sm text-gray-600 font-medium">If 'Yes', provide the following:</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Name(s) of SEC approved local supplier(s) -->
+          <div class="flex flex-col gap-2">
+            <app-base-label [title]="'Name(s) of SEC approved local supplier(s)'" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
+            >
+              <textarea
+                pInputTextarea
+                fluid
+                placeholder="Enter name(s) of SEC approved local supplier(s)"
+                rows="3"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
+              ></textarea>
+            </app-group-input-with-checkbox>
+            @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers]).hasError('required')){
+            <app-base-error [message]="'Names of SEC approved local suppliers is required'" />
+            }
+          </div>
+
+          <!-- Qualified Plant Location -->
+          <div class="flex flex-col gap-2">
+            <app-base-label [title]="'Qualified Plant Location'" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter qualified plant location"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
+              />
+            </app-group-input-with-checkbox>
+            @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation]).hasError('required')){
+            <app-base-error [message]="'Qualified plant location is required'" />
+            }
+          </div>
+
+          <!-- Years of Experience -->
+          <div class="flex flex-col gap-2">
+            <app-base-label [title]="'Years of Experience'" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
+            >
+              <input
+                type="number"
+                pInputText
+                fluid
+                placeholder="Enter years of experience"
+                min="0"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
+              />
+            </app-group-input-with-checkbox>
+            @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience]).hasError('required')){
+            <app-base-error [message]="'Years of experience is required'" />
+            }
+          </div>
+
+          <!-- Total quantities provided to all approved local suppliers -->
+          <div class="flex flex-col gap-2">
+            <app-base-label [title]="'Total quantities provided to all approved local suppliers (2019 onwards)'" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
+            >
+              <input
+                type="number"
+                pInputText
+                fluid
+                placeholder="Enter total quantities provided"
+                min="0"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
+              />
+            </app-group-input-with-checkbox>
+            @if(getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities]).touched && getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities]).hasError('required')){
+            <app-base-error [message]="'Total quantities is required'" />
+            }
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
