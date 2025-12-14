@@ -33,11 +33,11 @@ const initialState: {
   list: [],
   opportunityTypes: [{
     id: '1',
-    name: 'Service',
+    name: 'opportunity.type.service',
   },
   {
     id: '2',
-    name: 'Material',
+    name: 'opportunity.type.product',
   }],
   opportunityCategories: [
     {

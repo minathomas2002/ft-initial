@@ -243,7 +243,20 @@
           [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
           [placeholder]="'opportunity.form.select' | translate"
           class="md:w-[50%]"
-        />
+        >
+          <ng-template
+            pTemplate="item"
+            let-item
+          >
+            {{ item.name | translate }}
+          </ng-template>
+          <ng-template
+            pTemplate="selectedItem"
+            let-item
+          >
+            {{ item.name | translate }}
+          </ng-template>
+        </p-select>
         @if(getControl('opportunityType').invalid && getControl('opportunityType').dirty){
         <app-base-error [message]="'opportunity.form.opportunityTypeRequired' | translate" />
         }
@@ -259,17 +272,10 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div class="flex flex-col">
           <app-base-label [title]="'opportunity.form.spendSAR' | translate" />
-          <!-- <input
-            type="number"
-            pInputText
-            [placeholder]="'opportunity.form.enterSpendSAR' | translate"
-            [formControl]="getControl('spendSAR')"
-          /> -->
-
           <p-inputgroup class="w-full">
             <p-inputnumber
               mode="decimal"
-              [maxlength]="10"
+              [maxlength]="13"
               [minFractionDigits]="0"
               [maxFractionDigits]="3"
               [placeholder]="'opportunity.form.enterSpendSAR' | translate"
