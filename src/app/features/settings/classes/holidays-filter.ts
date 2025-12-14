@@ -22,7 +22,7 @@ readonly currentYear = new Date().getFullYear();
         searchText: '',
         year: this.currentYear,
         dateRange: new Date(),
-        type:1,
+        type:'',
       };
   
       this.initialState = structuredClone(this.filter);
