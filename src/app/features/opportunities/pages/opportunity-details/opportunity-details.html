@@ -70,7 +70,7 @@
                 icon="icon-currency-dollar-circle"
                 [cardTitle]="'opportunity.details.spendSAR' | translate"
                 cardClass="bg-white"
-                cardDescription="{{ opportunitiesStore.details()?.spendSAR ?? '-' }}"
+                cardDescription="{{ (opportunitiesStore.details()?.spendSAR) ? (opportunitiesStore.details()?.spendSAR + ' B') : '-' }}"
               >
               </app-base-card>
               <app-base-card
