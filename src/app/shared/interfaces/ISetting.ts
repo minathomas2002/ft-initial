@@ -114,13 +114,7 @@ export interface ISettingAdminEmailNotification {
 
 }
 
-export interface IHolidaysManagementRecord {
-  id: string;
-  holidayName: string;
-  type: string;
-  startDate: Date;
-  endDate: Date;
-  numberOfDays: string;
+export interface IHolidaysManagementRecord extends IHolidayCreating {
   createdBy: string;
   lastUpdated: Date;
   actions: EHolidaysManagementActions[];
@@ -133,4 +127,13 @@ export interface IHolidayManagementFilter extends IFilterBase<THolidaysManagemen
   type?: String ;
   year?: number;
   dateRange? : Date;
+}
+
+export interface IHolidayCreating {
+  id: string;
+  holidayName: string;
+  type: string;
+  startDate: Date;
+  endDate: Date;
+  numberOfDays: number;
 }
