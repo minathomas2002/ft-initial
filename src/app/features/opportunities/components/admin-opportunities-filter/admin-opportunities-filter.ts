@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, model, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -24,6 +24,7 @@ import { AdminOpportunitiesFilterService } from '../../services/admin-opportunit
   ],
   templateUrl: './admin-opportunities-filter.html',
   styleUrl: './admin-opportunities-filter.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminOpportunitiesFilter {
   protected readonly adminOpportunitiesFilterService = inject(AdminOpportunitiesFilterService);

@@ -1,6 +1,6 @@
 import { ChangeRoleFormService } from './../../services/change-role-form/change-role-form-service';
 import { TooltipModule } from 'primeng/tooltip';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { EmployeesFilter } from '../../components/employees-filter/employees-filter';
@@ -48,6 +48,7 @@ import { take } from 'rxjs';
   ],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeList implements OnInit {
   systemEmployeesStore = inject(SystemEmployeesStore);

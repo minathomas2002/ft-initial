@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, model, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, model, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -28,6 +28,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './employees-filter.html',
   styleUrl: './employees-filter.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeesFilter {
   filterDrawerVisible = model<boolean>(false);

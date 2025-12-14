@@ -1,4 +1,4 @@
-import { Component, input, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, computed, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,6 +19,7 @@ import { TranslatePipe } from '../../../pipes';
 	],
 	templateUrl: './phone-input.component.html',
 	styleUrl: './phone-input.component.scss',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhoneInputComponent implements ControlValueAccessor {
 	countries = getCountriesWithPreferred(['SA']);

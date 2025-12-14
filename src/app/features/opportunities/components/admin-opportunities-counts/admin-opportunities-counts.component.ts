@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
@@ -11,6 +11,7 @@ import { SkeletonModule } from 'primeng/skeleton';
   imports: [TranslatePipe, SkeletonModule],
   templateUrl: './admin-opportunities-counts.component.html',
   styleUrl: './admin-opportunities-counts.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminOpportunitiesCounts {
   protected readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);

@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -30,6 +30,7 @@ import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
   ],
   templateUrl: './role-management-filters.html',
   styleUrl: './role-management-filters.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoleManagementFilters implements OnInit {
   private readonly destroyRef = inject(DestroyRef);

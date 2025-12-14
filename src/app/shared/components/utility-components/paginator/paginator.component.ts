@@ -1,4 +1,5 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
 	input,
 	model,
@@ -19,13 +20,14 @@ import { TranslatePipe } from '../../../pipes';
 	imports: [PaginatorModule, ButtonModule, TranslatePipe],
 	templateUrl: './paginator.component.html',
 	styleUrl: './paginator.component.scss',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginatorComponent {
 	private readonly i18nService = inject(I18nService);
 	paginator = viewChild<Paginator>('paginator');
 	filter = model.required<IFilterBase<unknown>>();
 	totalRecords = input.required<number>();
-	
+
 	paginatorTemplate = computed(() => this.i18nService.translate('common.paginatorTemplate'));
 	maxPageLinkNumber = computed(() => {
 		return Math.ceil(this.totalRecords() / this.filter().pageSize) || 1;

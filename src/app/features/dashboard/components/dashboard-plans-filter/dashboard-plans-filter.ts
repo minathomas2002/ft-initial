@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -21,6 +21,7 @@ interface IDropdownOption {
   imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe],
   templateUrl: './dashboard-plans-filter.html',
   styleUrl: './dashboard-plans-filter.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPlansFilter {
   private readonly destroyRef = inject(DestroyRef);

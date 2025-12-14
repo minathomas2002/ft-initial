@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
@@ -33,6 +33,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
   ],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpportunityLocalizationForm {
   opportunityFormService = inject(OpportunityFormService);

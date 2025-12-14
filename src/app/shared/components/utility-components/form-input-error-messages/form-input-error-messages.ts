@@ -1,4 +1,4 @@
-import { Component, input, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, computed } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 
@@ -11,6 +11,7 @@ interface ErrorMessage {
   imports: [MessageModule],
   templateUrl: './form-input-error-messages.html',
   styleUrl: './form-input-error-messages.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormInputErrorMessages {
   control = input.required<AbstractControl>();

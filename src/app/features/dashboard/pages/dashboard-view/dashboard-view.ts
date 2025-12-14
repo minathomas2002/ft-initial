@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
@@ -9,7 +9,8 @@ import { RoleService } from 'src/app/shared/services/role/role-service';
   imports: [],
   templateUrl: './dashboard-view.html',
   styleUrl: './dashboard-view.scss',
-  providers: []
+  providers: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardView implements OnInit {
 

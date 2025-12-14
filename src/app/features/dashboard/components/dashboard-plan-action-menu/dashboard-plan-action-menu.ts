@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import type { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
@@ -10,6 +10,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
   imports: [MenuModule, ButtonModule],
   templateUrl: './dashboard-plan-action-menu.html',
   styleUrl: './dashboard-plan-action-menu.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPlanActionMenu {
   plan = input.required<IPlanRecord>();

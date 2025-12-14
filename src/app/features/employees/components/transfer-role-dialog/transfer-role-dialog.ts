@@ -1,4 +1,4 @@
-import { Component, inject, input, model, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, model, OnInit, output } from '@angular/core';
 import { TransferRoleService } from '../../services/transfer-role/transfer-role-service';
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
@@ -23,6 +23,7 @@ import { RoleManagementStore } from 'src/app/shared/stores/system-employees/role
   ],
   templateUrl: './transfer-role-dialog.html',
   styleUrl: './transfer-role-dialog.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransferRoleDialog implements OnInit {
   visible = model<boolean>(false);

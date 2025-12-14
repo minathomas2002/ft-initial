@@ -1,5 +1,6 @@
 import {
 	AfterViewInit,
+	ChangeDetectionStrategy,
 	Component,
 	OnInit,
 	ViewChild,
@@ -26,6 +27,7 @@ import { ERoutes } from "../../../../../shared/enums";
 	],
 	templateUrl: "./navbar-notifications.component.html",
 	styleUrl: "./navbar-notifications.component.scss",
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarNotificationsComponent implements OnInit, AfterViewInit {
 

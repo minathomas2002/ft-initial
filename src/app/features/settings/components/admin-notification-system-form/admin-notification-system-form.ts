@@ -1,4 +1,4 @@
-import { Component,input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { NotificationFormService } from '../../services/notification-form/notification-form-service';
 import { ToggleSwitch } from "primeng/toggleswitch";
 import { FormsModule } from '@angular/forms';
@@ -12,11 +12,12 @@ import { BaseLabelComponent } from "src/app/shared/components/base-components/ba
   imports: [ToggleSwitch, FormsModule, Tooltip, TranslatePipe, Divider, BaseLabelComponent],
   templateUrl: './admin-notification-system-form.html',
   styleUrl: './admin-notification-system-form.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminNotificationForm {
 
   formService = input.required<NotificationFormService>();
 
-   
+
 
 }

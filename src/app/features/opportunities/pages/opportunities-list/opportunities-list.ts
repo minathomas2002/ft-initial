@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
@@ -32,6 +32,7 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpportunitiesList implements OnInit {
   readonly permissionService = inject(PermissionService);

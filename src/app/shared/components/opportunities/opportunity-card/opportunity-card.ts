@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
@@ -8,6 +8,7 @@ import { TooltipModule } from 'primeng/tooltip';
   ],
   templateUrl: './opportunity-card.html',
   styleUrl: './opportunity-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpportunityCard {
   icon = input<string>('');

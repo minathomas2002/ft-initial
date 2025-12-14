@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ForgotPasswordFormService } from '../../services/forgot-password-form/forgot-password-form';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -30,6 +30,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
   providers: [ForgotPasswordFormService],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForgotPassword {
   forgotPasswordFormService = inject(ForgotPasswordFormService);

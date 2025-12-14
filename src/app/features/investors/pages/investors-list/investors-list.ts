@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
@@ -24,6 +24,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   templateUrl: './investors-list.html',
   styleUrl: './investors-list.scss',
   providers: [InvestorsFilterService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvestorsList implements OnInit {
   private readonly investorsStore = inject(InvestorsStore);

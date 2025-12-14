@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -31,6 +31,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
   providers: [ResetPasswordFormService],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPassword implements OnInit {
   resetPasswordFormService = inject(ResetPasswordFormService);

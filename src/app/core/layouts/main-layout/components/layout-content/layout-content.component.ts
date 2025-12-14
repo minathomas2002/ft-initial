@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 
 
@@ -11,5 +11,6 @@ import { slideInOutAnimation } from "../../../../animations/animations.animation
 	templateUrl: "./layout-content.component.html",
 	styleUrl: "./layout-content.component.scss",
 	animations: [slideInOutAnimation],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayoutContentComponent extends AnimationsContext {}
+export class LayoutContentComponent extends AnimationsContext { }

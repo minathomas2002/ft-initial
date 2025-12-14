@@ -1,10 +1,11 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-cards-page-layout',
   imports: [],
   templateUrl: './cards-page-layout.html',
   styleUrl: './cards-page-layout.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardsPageLayout {
   pageTitle = input.required<string>();

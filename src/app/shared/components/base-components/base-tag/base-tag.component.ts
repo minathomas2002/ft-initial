@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TagModule } from 'primeng/tag';
 import type { TColors } from '../../../interfaces';
 
@@ -7,6 +7,7 @@ import type { TColors } from '../../../interfaces';
 	imports: [TagModule],
 	templateUrl: './base-tag.component.html',
 	styleUrl: './base-tag.component.scss',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseTagComponent {
 	color = input<TColors>('red');

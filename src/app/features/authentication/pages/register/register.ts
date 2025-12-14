@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -34,6 +34,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
   providers: [RegisterFormService],
   templateUrl: './register.html',
   styleUrl: './register.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Register {
   registerFormService = inject(RegisterFormService);
@@ -66,7 +67,7 @@ export class Register {
         error: (error) => {
           if (error.status === 500) {
             this.toast.error(this.i18nService.translate('auth.register.generalError'));
-          }else if (error.status === 400) {
+          } else if (error.status === 400) {
             //route to login page when email already exists
             //TODO: enhance this error, currently it depends on bad request which may be diffrenet error
             this.router.navigate(['/', ERoutes.auth, ERoutes.login]);

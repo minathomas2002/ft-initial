@@ -1,4 +1,4 @@
-import { Component, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 
 @Component({
@@ -6,6 +6,7 @@ import { BaseDialogComponent } from '../../base-components/base-dialog/base-dial
   imports: [BaseDialogComponent],
   templateUrl: './general-confirmation-dialog.component.html',
   styleUrl: './general-confirmation-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GeneralConfirmationDialogComponent {
   title = input<string>('Are you sure you want to proceed with this update?');

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardsPageLayout } from 'src/app/shared/components/layout-components/cards-page-layout/cards-page-layout';
 import { TranslatePipe } from 'src/app/shared/pipes';
@@ -34,6 +34,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
   ],
   templateUrl: './admin-opportunities-view.html',
   styleUrl: './admin-opportunities-view.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminOpportunitiesView implements OnInit, OnDestroy {
   protected readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);

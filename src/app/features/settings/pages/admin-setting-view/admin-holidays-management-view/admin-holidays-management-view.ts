@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Button } from "primeng/button";
 import { ERoutes, ESortingOrder } from 'src/app/shared/enums';
@@ -18,29 +18,30 @@ import { HolidaysManagementFilter } from "../../../components/holidays-managemen
     DatePipe, HolidaysManagementFilter],
   templateUrl: './admin-holidays-management-view.html',
   styleUrl: './admin-holidays-management-view.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminHolidaysManagementView {
 
-router = inject(Router);
-i18nService = inject(I18nService);
-filter : IFilterBase<unknown>= {
-  pageSize: 0,
-  pageNumber: 0,
-  sortField: undefined,
-  sortOrder: ESortingOrder.asc
-};
+  router = inject(Router);
+  i18nService = inject(I18nService);
+  filter: IFilterBase<unknown> = {
+    pageSize: 0,
+    pageNumber: 0,
+    sortField: undefined,
+    sortOrder: ESortingOrder.asc
+  };
 
   headers = computed<ITableHeaderItem<THolidaysManagementRecordKeys>[]>(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
     return [
-       {
+      {
         label: this.i18nService.translate('setting.adminView.holidays.table.holidayName'),
         isSortable: true,
         sortingKey: 'holidayName',
       },
       {
-        label: this.i18nService.translate('setting.adminView.holidays.table.type'), 
+        label: this.i18nService.translate('setting.adminView.holidays.table.type'),
         isSortable: true,
         sortingKey: 'type',
       },
@@ -75,15 +76,15 @@ filter : IFilterBase<unknown>= {
       },
     ];
   });
-  
 
 
-  goBack(){
+
+  goBack() {
     this.router.navigate([`/${ERoutes.settings}`]);
   }
 
-  onAddHoliday(){
-    
+  onAddHoliday() {
+
   }
 }
 

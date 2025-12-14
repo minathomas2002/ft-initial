@@ -1,4 +1,4 @@
-import { Component, input, model, output, viewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, model, output, viewChild } from "@angular/core";
 import { ButtonModule } from "primeng/button";
 import { type Dialog, DialogModule } from "primeng/dialog";
 import { DividerModule } from "primeng/divider";
@@ -8,6 +8,7 @@ import { TranslatePipe } from '../../../pipes';
   imports: [DialogModule, ButtonModule, DividerModule, TranslatePipe],
   templateUrl: "./base-dialog.component.html",
   styleUrl: "./base-dialog.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseDialogComponent {
   visible = model<boolean>(false);

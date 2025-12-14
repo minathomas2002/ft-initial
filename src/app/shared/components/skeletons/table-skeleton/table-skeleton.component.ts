@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { SkeletonModule } from 'primeng/skeleton';
 import { NgTemplateOutlet } from '@angular/common';
@@ -8,6 +8,7 @@ import type { ITableHeaderItem } from '../../../interfaces';
   imports: [TableModule, SkeletonModule, NgTemplateOutlet],
   templateUrl: './table-skeleton.component.html',
   styleUrl: './table-skeleton.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableSkeletonComponent {
   headers = input<ITableHeaderItem<unknown>[]>([]);

@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, input, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { AddEmployeeFormService } from '../../services/add-employee-form/add-employee-form-service';
@@ -36,6 +36,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
   ],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEditEmployeeDialog implements OnInit {
 

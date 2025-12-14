@@ -1,4 +1,4 @@
-import { Component, inject, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
 import { adminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
@@ -13,6 +13,7 @@ import { EmailNotificationFormService } from '../../services/email-notification-
   imports: [TranslatePipe, BaseDialogComponent, Tabs, TabList, Tab, TabPanels, TabPanel, AdminNotificationForm, AdminNotificationEmailForm],
   templateUrl: './admin-notification-dialog.html',
   styleUrl: './admin-notification-dialog.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminNotificationDialog {
 
@@ -22,16 +23,16 @@ export class AdminNotificationDialog {
   systemTabformService = inject(NotificationFormService);
   emailTabformService = inject(EmailNotificationFormService);
 
-   onConfirm(){
+  onConfirm() {
     this.dialogVisible.set(false);
     console.log(this.systemTabformService.getPayload());
     console.log(this.emailTabformService.getPayload());
-   }
+  }
 
 
-   onClose(){
+  onClose() {
     this.dialogVisible.set(false);
     this.systemTabformService.ResetFormFields();
     this.emailTabformService.ResetFormFields();
-   }
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -18,6 +18,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
   ],
   templateUrl: './verify-email.html',
   styleUrl: './verify-email.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifyEmail implements OnInit {
   route = inject(ActivatedRoute);

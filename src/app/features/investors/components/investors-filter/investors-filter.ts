@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -12,6 +12,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   imports: [FormsModule, InputTextModule, DatePickerModule, TranslatePipe],
   templateUrl: './investors-filter.html',
   styleUrl: './investors-filter.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvestorsFilter {
   private readonly destroyRef = inject(DestroyRef);

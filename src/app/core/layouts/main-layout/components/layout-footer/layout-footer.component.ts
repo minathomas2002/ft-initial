@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
 import { RouterLink } from '@angular/router';
 
@@ -6,7 +6,8 @@ import { RouterLink } from '@angular/router';
   selector: 'app-layout-footer',
   imports: [RouterLink],
   templateUrl: './layout-footer.component.html',
-  styleUrl: './layout-footer.component.scss'
+  styleUrl: './layout-footer.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutFooterComponent {
   private readonly i18nService = inject(I18nService);

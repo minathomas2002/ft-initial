@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ERoutes } from 'src/app/shared/enums';
@@ -12,6 +12,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
   imports: [ButtonModule, TranslatePipe],
   templateUrl: './verification.html',
   styleUrl: './verification.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Verification implements OnInit {
   authStore = inject(AuthStore);

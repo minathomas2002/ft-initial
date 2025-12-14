@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
 import { EmployeeList } from '../employee-list/employee-list';
 import { RoleManagement } from '../role-management/role-management';
@@ -14,6 +14,7 @@ import { EmployeesFilterService } from '../../services/empolyees-filter/employee
   imports: [TabsModule, EmployeeList, RoleManagement, TranslatePipe, ButtonModule, AddEditEmployeeDialog],
   templateUrl: './employees-view.html',
   styleUrl: './employees-view.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeesView {
   usersStore = inject(SystemEmployeesStore);

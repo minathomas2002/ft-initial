@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { DatePipe } from '@angular/common';
@@ -24,6 +24,7 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
   ],
   templateUrl: './admin-opportunity-card.html',
   styleUrl: './admin-opportunity-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminOpportunityCard {
   opportunity = input.required<IAdminOpportunity>();

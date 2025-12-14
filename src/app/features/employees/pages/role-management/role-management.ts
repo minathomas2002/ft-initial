@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { RoleManagementFilters } from '../../components/role-management-filters/role-management-filters';
@@ -40,6 +40,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
   templateUrl: './role-management.html',
   styleUrl: './role-management.scss',
   providers: [RoleManagementFilterService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoleManagement implements OnInit {
   roleManagementStore = inject(RoleManagementStore);

@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tooltip } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
@@ -38,6 +38,7 @@ import { ImageErrorDirective } from 'src/app/shared/directives/image-error.direc
   ],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpportunityDetails implements OnInit {
   router = inject(Router);

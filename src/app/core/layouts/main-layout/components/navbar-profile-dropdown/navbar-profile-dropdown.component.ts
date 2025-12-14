@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MenuModule } from 'primeng/menu';
 import { AvatarModule } from 'primeng/avatar';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
   imports: [MenuModule, IdentifyUserComponent, AvatarModule],
   templateUrl: './navbar-profile-dropdown.component.html',
   styleUrl: './navbar-profile-dropdown.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarProfileDropdownComponent {
   authStore = inject(AuthStore);

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   OutputEmitterRef,
   computed,
@@ -21,6 +22,7 @@ import { I18nService } from '../../../services/i18n/i18n.service';
   imports: [MenuModule, ButtonModule],
   templateUrl: './opportunity-action-menu.component.html',
   styleUrl: './opportunity-action-menu.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpportunityActionMenuComponent {
   actions = input.required<EOpportunityAction[]>();

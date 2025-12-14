@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, model, viewChild, afterNextRender } from "@angular/core";
+import { ChangeDetectionStrategy, Component, effect, inject, input, model, viewChild, afterNextRender } from "@angular/core";
 import { MessageService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import {
@@ -16,6 +16,7 @@ import { ImageErrorDirective } from "../../../directives/image-error.directive";
   templateUrl: "./fileupload.component.html",
   styleUrl: "./fileupload.component.scss",
   providers: [MessageService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileuploadComponent {
   maxFileSize = input<number>(1024 * 1024 * 10); // 10MB default

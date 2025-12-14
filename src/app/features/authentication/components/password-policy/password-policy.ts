@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnInit } from '@angular/core';
 import { ControlContainer, FormGroupDirective, FormControl } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -23,13 +23,14 @@ import { InputTextModule } from 'primeng/inputtext';
   templateUrl: './password-policy.html',
   styleUrl: './password-policy.scss',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordPolicy implements OnInit {
   formControl = input.required<FormControl>({
     alias: 'passwordFormControl',
   });
 
-  constructor(private controlContainer: ControlContainer) {}
+  constructor(private controlContainer: ControlContainer) { }
 
   ngOnInit() {
     // Add validator dynamically

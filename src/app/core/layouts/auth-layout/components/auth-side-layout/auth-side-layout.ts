@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 
 @Component({
@@ -6,6 +6,7 @@ import { ImageErrorDirective } from 'src/app/shared/directives/image-error.direc
   imports: [ImageErrorDirective],
   templateUrl: './auth-side-layout.html',
   styleUrl: './auth-side-layout.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthSideLayout {
 

@@ -1,4 +1,4 @@
-import { Component, input, model, output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input, model, output } from "@angular/core";
 import { ButtonModule } from "primeng/button";
 
 import type { IFilterBase } from "../../../interfaces";
@@ -10,6 +10,7 @@ import { TranslatePipe } from '../../../pipes';
 	selector: "app-filter-drawer",
 	imports: [BaseDrawerComponent, ButtonModule, TranslatePipe],
 	templateUrl: "./filter-drawer.component.html",
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDrawerComponent {
 	drawerVisible = model<boolean>(false);

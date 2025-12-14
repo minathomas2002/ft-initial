@@ -1,4 +1,4 @@
-import { Component, input, TemplateRef, ContentChild, computed, signal, effect, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, TemplateRef, ContentChild, computed, signal, effect, ViewChild, ElementRef } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
@@ -9,6 +9,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
   imports: [ButtonModule, NgTemplateOutlet, TranslatePipe],
   templateUrl: './form-array-input.html',
   styleUrl: './form-array-input.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormArrayInput {
   // Accept FormArray instead of FieldTree

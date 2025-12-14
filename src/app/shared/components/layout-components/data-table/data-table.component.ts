@@ -1,6 +1,7 @@
 import { NgClass, NgTemplateOutlet } from "@angular/common";
 import type { TemplateRef } from "@angular/core";
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   contentChild,
@@ -27,10 +28,11 @@ import { I18nService } from "src/app/shared/services/i18n";
   ],
   templateUrl: "./data-table.component.html",
   styleUrl: "./data-table.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableComponent<T> {
   private readonly i18nService = inject(I18nService);
-  
+
   rowsCheckable = input<boolean>(false);
   itemsTemplate = contentChild.required<TemplateRef<unknown>>("itemsTemplate");
   columns = input.required<ITableHeaderItem<unknown>[]>();
@@ -61,7 +63,7 @@ export class DataTableComponent<T> {
   }
 
   setSortingKey(column: ITableHeaderItem<unknown>) {
-    if(column.isSortable) {
+    if (column.isSortable) {
       let key = column.sortingKey;
       this.filter.update((res) => {
         const isSameKey = res.sortField === key;
@@ -70,13 +72,13 @@ export class DataTableComponent<T> {
             ? ESortingOrder.desc
             : ESortingOrder.asc
           : ESortingOrder.asc;
-  
+
         return {
           ...res,
           sortField: key,
           sortOrder: newSortOrder,
         };
       });
-    }    
+    }
   }
 }

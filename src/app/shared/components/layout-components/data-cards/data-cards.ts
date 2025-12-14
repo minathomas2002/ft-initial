@@ -1,4 +1,4 @@
-import { Component, contentChild, inject, input, model, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, contentChild, inject, input, model, TemplateRef } from '@angular/core';
 import { Paginator } from 'primeng/paginator';
 import { PaginatorComponent } from '../../utility-components/paginator/paginator.component';
 import { IFilterBase } from 'src/app/shared/interfaces';
@@ -12,6 +12,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
   imports: [PaginatorComponent, EmptyRecordsComponent, NgTemplateOutlet],
   templateUrl: './data-cards.html',
   styleUrl: './data-cards.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataCards {
   totalRecords = input.required<number>();

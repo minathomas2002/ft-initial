@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, output, signal } from '@angular/core';
 import { BaseWizardDialog } from 'src/app/shared/components/base-components/base-wizard-dialog/base-wizard-dialog';
 import { StepContentDirective } from 'src/app/shared/directives/step-content.directive';
 import { OpportunityInformationForm } from '../opportunity-information-form/opportunity-information-form';
@@ -32,6 +32,7 @@ import { BaseTagComponent } from 'src/app/shared/components/base-components/base
   ],
   templateUrl: './create-edit-opportunity-dialog.html',
   styleUrl: './create-edit-opportunity-dialog.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateEditOpportunityDialog implements OnInit {
   visible = model<boolean>(false);
@@ -134,7 +135,7 @@ export class CreateEditOpportunityDialog implements OnInit {
   }
 
   async publishOpportunity() {
-  
+
     this.opportunityFormService.markAsDirty();
     this.opportunityFormService.enableFullValidators();
     if (this.opportunityFormService.opportunityForm.invalid) {

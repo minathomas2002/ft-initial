@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, output, signal } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
@@ -41,6 +41,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
   providers: [DashboardPlansFilterService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvestorDashboard implements OnInit {
   planTermsAndConditionsDialogVisibility = signal(false);

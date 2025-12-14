@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -22,12 +22,13 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   ],
   templateUrl: './opportunities-filters.html',
   styleUrl: './opportunities-filters.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpportunitiesFilters {
   filterService = inject(OpportunitiesFilterService);
   destroyRef = inject(DestroyRef);
 
-  
+
   filter = this.filterService.filter;
   searchSubject = new Subject<string>();
 

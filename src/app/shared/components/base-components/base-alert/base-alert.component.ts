@@ -1,5 +1,5 @@
 
-import { Component, computed, input, output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, input, output } from "@angular/core";
 import type { TColors } from "../../../interfaces";
 
 @Component({
@@ -8,6 +8,7 @@ import type { TColors } from "../../../interfaces";
 	imports: [],
 	templateUrl: "./base-alert.component.html",
 	styleUrls: ["./base-alert.component.scss"],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseAlertComponent {
 	title = input<string>("");

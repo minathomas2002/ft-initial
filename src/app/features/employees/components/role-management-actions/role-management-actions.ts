@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { EAdminUserActions } from 'src/app/shared/enums';
@@ -37,6 +37,7 @@ class ERoleManagementActionsMapper {
   imports: [MenuModule, ButtonModule],
   templateUrl: './role-management-actions.html',
   styleUrl: './role-management-actions.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoleManagementActions {
 

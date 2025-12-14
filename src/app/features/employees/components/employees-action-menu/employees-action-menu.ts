@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from "@angular/core";
 import type { MenuItem } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { MenuModule } from "primeng/menu";
@@ -12,6 +12,7 @@ import { EmployeesActionsMapper } from "../../classes/employee-actions-mapper";
   imports: [MenuModule, ButtonModule],
   templateUrl: "./employees-action-menu.html",
   styleUrl: "./employees-action-menu.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeesActionMenu {
   actions = input.required<EAdminUserActions[]>();
