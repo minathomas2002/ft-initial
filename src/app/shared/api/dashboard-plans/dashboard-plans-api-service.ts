@@ -19,7 +19,7 @@ export class DashboardPlansApiService {
   getInvestorDashboardPlans(
     filter: IPlanFilterRequest
   ): Observable<IBaseApiResponse<IPlansDashboardResponse<IPlanRecord[]>>> {
-    return this.baseHttpService.post(API_ENDPOINTS.dashboardPlans.getPlans, filter);
+    return this.baseHttpService.post(API_ENDPOINTS.plans.getInvestorDashboardPlans, filter);
   }
 }
 
