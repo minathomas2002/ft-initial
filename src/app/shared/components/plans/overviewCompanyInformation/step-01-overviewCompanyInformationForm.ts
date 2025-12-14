@@ -11,12 +11,13 @@ import { BaseErrorComponent } from '../../base-components/base-error/base-error.
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { pipe } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { TooltipModule } from 'primeng/tooltip';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
-  selector: 'app-overview-company-information-form',
+  selector: 'app-step-01-overview-company-information-form',
   imports: [
     BaseLabelComponent,
     InputTextModule,
@@ -26,13 +27,15 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
     BaseErrorComponent,
     TrimOnBlurDirective,
     GroupInputWithCheckbox,
-    RadioButtonModule
+    RadioButtonModule,
+    TooltipModule,
+    TranslatePipe,
   ],
-  templateUrl: './overviewCompanyInformationForm.html',
-  styleUrl: './overviewCompanyInformationForm.scss',
+  templateUrl: './step-01-overviewCompanyInformationForm.html',
+  styleUrl: './step-01-overviewCompanyInformationForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OverviewCompanyInformationForm {
+export class Step01OverviewCompanyInformationForm {
   private readonly materialsFormService = inject(MaterialsFormService);
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly planStore = inject(PlanStore);
