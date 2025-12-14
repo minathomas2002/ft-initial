@@ -7,3 +7,4 @@ export * from './view-mode.enum';
 export * from './system-employee.enum';
 export * from './role-management.enum';
 export * from './materials-form-controls.enum';
+export * from './plan.enum';
