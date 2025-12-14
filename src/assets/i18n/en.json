@@ -516,7 +516,17 @@
           "numberOfDay": "Number Of Days",
           "createdBy": "Created By",
           "lastUpdated": "Last Updated",
-          "actions":"Actions"
+          "actions":"Actions",
+          "filter":{
+          "searchKeyPlaceHolder": "Search by Holiday Name",
+          "year": "Year",
+          "dateRangePlaceHolder":"Date Range"
+          },
+          "typeMapper":{
+            "dayOff":"Day Off",
+            "officialHoliday": "Official Holiday"
+          }
+          
         }
 
       }

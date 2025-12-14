@@ -1,5 +1,6 @@
 import { FormControl, FormGroup } from "@angular/forms";
 import { EHolidaysManagementActions } from "../enums/holidays-management.enum";
+import { IFilterBase } from "./filter.interface";
 
 export interface ISettingSlaReq {
   internalCycle : number;
@@ -126,3 +127,10 @@ export interface IHolidaysManagementRecord {
 }
 
 export type THolidaysManagementRecordKeys = keyof IHolidaysManagementRecord;
+
+export interface IHolidayManagementFilter extends IFilterBase<THolidaysManagementRecordKeys> {
+  searchText?: string;
+  type?: String ;
+  year?: number;
+  dateRange? : Date;
+}
