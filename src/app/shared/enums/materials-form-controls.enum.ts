@@ -73,5 +73,38 @@ export enum EMaterialsFormControls {
   qualifiedPlantLocation = 'qualifiedPlantLocation',
   yearsOfExperience = 'yearsOfExperience',
   totalQuantities = 'totalQuantities',
+
+  // Step 3 - Main Form Groups
+  valueChainFormGroup = 'valueChainFormGroup',
+  designEngineeringFormGroup = 'designEngineeringFormGroup',
+  sourcingFormGroup = 'sourcingFormGroup',
+  manufacturingFormGroup = 'manufacturingFormGroup',
+  assemblyTestingFormGroup = 'assemblyTestingFormGroup',
+  afterSalesFormGroup = 'afterSalesFormGroup',
+
+  // Step 3 - Value Chain Item Controls (used in FormArray items)
+  expenseHeader = 'expenseHeader',
+  inHouseOrProcured = 'inHouseOrProcured',
+  costPercentage = 'costPercentage',
+  year1 = 'year1',
+  year2 = 'year2',
+  year3 = 'year3',
+  year4 = 'year4',
+  year5 = 'year5',
+  year6 = 'year6',
+  year7 = 'year7',
+
+  // Step 4 - Main Form Groups
+  saudizationFormGroup = 'saudizationFormGroup',
+  attachmentsFormGroup = 'attachmentsFormGroup',
+
+  // Step 4 - Saudization Controls (Fixed rows)
+  annualHeadcount = 'annualHeadcount',
+  saudizationPercentage = 'saudizationPercentage',
+  annualTotalCompensation = 'annualTotalCompensation',
+  saudiCompensationPercentage = 'saudiCompensationPercentage',
+
+  // Step 4 - Attachments Controls
+  attachments = 'attachments',
 }
 

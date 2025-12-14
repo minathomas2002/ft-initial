@@ -4,48 +4,117 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 export class Step2ProductPlantOverviewFormBuilder {
   constructor(
     private readonly fb: FormBuilder
-  ) {}
+  ) { }
 
   buildOverviewFormGroup(): FormGroup {
     return this.fb.group({
-      [EMaterialsFormControls.productName]: ['', [Validators.required, Validators.maxLength(100)]],
-      [EMaterialsFormControls.productSpecifications]: ['', [Validators.required, Validators.maxLength(500)]],
-      [EMaterialsFormControls.targetedAnnualPlantCapacity]: ['', [Validators.required]],
-      [EMaterialsFormControls.timeRequiredToSetupFactory]: ['', [Validators.required]],
+      [EMaterialsFormControls.productName]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
+      }),
+      [EMaterialsFormControls.productSpecifications]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(500)]],
+      }),
+      [EMaterialsFormControls.targetedAnnualPlantCapacity]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.required]],
+      }),
+      [EMaterialsFormControls.timeRequiredToSetupFactory]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.required]],
+      }),
     });
   }
 
   buildExpectedCAPEXInvestmentFormGroup(): FormGroup {
     return this.fb.group({
-      [EMaterialsFormControls.landPercentage]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
-      [EMaterialsFormControls.buildingPercentage]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
-      [EMaterialsFormControls.machineryEquipmentPercentage]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
-      [EMaterialsFormControls.othersPercentage]: [null, [Validators.min(0), Validators.max(100)]],
-      [EMaterialsFormControls.othersDescription]: [''],
+      [EMaterialsFormControls.landPercentage]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      }),
+      [EMaterialsFormControls.buildingPercentage]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      }),
+      [EMaterialsFormControls.machineryEquipmentPercentage]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      }),
+      [EMaterialsFormControls.othersPercentage]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100)]],
+      }),
+      [EMaterialsFormControls.othersDescription]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [''],
+      }),
     });
   }
 
   buildTargetCustomersFormGroup(): FormGroup {
     return this.fb.group({
-      [EMaterialsFormControls.targetedCustomer]: [[], [Validators.required]],
-      [EMaterialsFormControls.namesOfTargetedSuppliers]: [''],
-      [EMaterialsFormControls.productsUtilizeTargetedProduct]: [''],
+      [EMaterialsFormControls.targetedCustomer]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [[], [Validators.required]],
+      }),
+      [EMaterialsFormControls.namesOfTargetedSuppliers]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [''],
+      }),
+      [EMaterialsFormControls.productsUtilizeTargetedProduct]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [''],
+      }),
     });
   }
 
   buildProductManufacturingExperienceFormGroup(): FormGroup {
     return this.fb.group({
-      [EMaterialsFormControls.productManufacturingExperience]: [null, [Validators.required]],
-      [EMaterialsFormControls.provideToSEC]: [null, [Validators.required]],
-      [EMaterialsFormControls.qualifiedPlantLocationSEC]: [''],
-      [EMaterialsFormControls.approvedVendorIDSEC]: [''],
-      [EMaterialsFormControls.yearsOfExperienceSEC]: [null],
-      [EMaterialsFormControls.totalQuantitiesSEC]: [null],
-      [EMaterialsFormControls.provideToLocalSuppliers]: [null, [Validators.required]],
-      [EMaterialsFormControls.namesOfSECApprovedSuppliers]: [''],
-      [EMaterialsFormControls.qualifiedPlantLocation]: [''],
-      [EMaterialsFormControls.yearsOfExperience]: [null],
-      [EMaterialsFormControls.totalQuantities]: [null],
+      [EMaterialsFormControls.productManufacturingExperience]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required]],
+      }),
+      [EMaterialsFormControls.provideToSEC]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required]],
+      }),
+      [EMaterialsFormControls.qualifiedPlantLocationSEC]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [''],
+      }),
+      [EMaterialsFormControls.approvedVendorIDSEC]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [''],
+      }),
+      [EMaterialsFormControls.yearsOfExperienceSEC]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null],
+      }),
+      [EMaterialsFormControls.totalQuantitiesSEC]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null],
+      }),
+      [EMaterialsFormControls.provideToLocalSuppliers]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required]],
+      }),
+      [EMaterialsFormControls.namesOfSECApprovedSuppliers]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [''],
+      }),
+      [EMaterialsFormControls.qualifiedPlantLocation]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [''],
+      }),
+      [EMaterialsFormControls.yearsOfExperience]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null],
+      }),
+      [EMaterialsFormControls.totalQuantities]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null],
+      }),
     });
   }
 
@@ -63,27 +132,27 @@ export class Step2ProductPlantOverviewFormBuilder {
    */
   toggleSECFieldsValidation(formGroup: FormGroup, provideToSEC: boolean): void {
     const experienceFormGroup = formGroup.get(EMaterialsFormControls.productManufacturingExperienceFormGroup) as FormGroup;
-    
+
     if (!experienceFormGroup) {
       return;
     }
 
     if (provideToSEC) {
-      experienceFormGroup.controls[EMaterialsFormControls.qualifiedPlantLocationSEC].setValidators([Validators.required]);
-      experienceFormGroup.controls[EMaterialsFormControls.approvedVendorIDSEC].setValidators([Validators.required]);
-      experienceFormGroup.controls[EMaterialsFormControls.yearsOfExperienceSEC].setValidators([Validators.required, Validators.pattern(/^\d+$/)]);
-      experienceFormGroup.controls[EMaterialsFormControls.totalQuantitiesSEC].setValidators([Validators.required, Validators.pattern(/^\d+$/)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.pattern(/^\d+$/)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.pattern(/^\d+$/)]);
     } else {
-      experienceFormGroup.controls[EMaterialsFormControls.qualifiedPlantLocationSEC].clearValidators();
-      experienceFormGroup.controls[EMaterialsFormControls.approvedVendorIDSEC].clearValidators();
-      experienceFormGroup.controls[EMaterialsFormControls.yearsOfExperienceSEC].clearValidators();
-      experienceFormGroup.controls[EMaterialsFormControls.totalQuantitiesSEC].clearValidators();
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
+      experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
     }
 
-    experienceFormGroup.controls[EMaterialsFormControls.qualifiedPlantLocationSEC].updateValueAndValidity();
-    experienceFormGroup.controls[EMaterialsFormControls.approvedVendorIDSEC].updateValueAndValidity();
-    experienceFormGroup.controls[EMaterialsFormControls.yearsOfExperienceSEC].updateValueAndValidity();
-    experienceFormGroup.controls[EMaterialsFormControls.totalQuantitiesSEC].updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
   }
 
   /**
@@ -91,27 +160,27 @@ export class Step2ProductPlantOverviewFormBuilder {
    */
   toggleLocalSuppliersFieldsValidation(formGroup: FormGroup, provideToLocalSuppliers: boolean): void {
     const experienceFormGroup = formGroup.get(EMaterialsFormControls.productManufacturingExperienceFormGroup) as FormGroup;
-    
+
     if (!experienceFormGroup) {
       return;
     }
 
     if (provideToLocalSuppliers) {
-      experienceFormGroup.controls[EMaterialsFormControls.namesOfSECApprovedSuppliers].setValidators([Validators.required]);
-      experienceFormGroup.controls[EMaterialsFormControls.qualifiedPlantLocation].setValidators([Validators.required]);
-      experienceFormGroup.controls[EMaterialsFormControls.yearsOfExperience].setValidators([Validators.required]);
-      experienceFormGroup.controls[EMaterialsFormControls.totalQuantities].setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
     } else {
-      experienceFormGroup.controls[EMaterialsFormControls.namesOfSECApprovedSuppliers].clearValidators();
-      experienceFormGroup.controls[EMaterialsFormControls.qualifiedPlantLocation].clearValidators();
-      experienceFormGroup.controls[EMaterialsFormControls.yearsOfExperience].clearValidators();
-      experienceFormGroup.controls[EMaterialsFormControls.totalQuantities].clearValidators();
+      experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.clearValidators();
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.clearValidators();
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.clearValidators();
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.clearValidators();
     }
 
-    experienceFormGroup.controls[EMaterialsFormControls.namesOfSECApprovedSuppliers].updateValueAndValidity();
-    experienceFormGroup.controls[EMaterialsFormControls.qualifiedPlantLocation].updateValueAndValidity();
-    experienceFormGroup.controls[EMaterialsFormControls.yearsOfExperience].updateValueAndValidity();
-    experienceFormGroup.controls[EMaterialsFormControls.totalQuantities].updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
   }
 
   /**
@@ -119,18 +188,18 @@ export class Step2ProductPlantOverviewFormBuilder {
    */
   toggleOthersDescriptionValidation(formGroup: FormGroup, othersPercentage: number | null): void {
     const capexFormGroup = formGroup.get(EMaterialsFormControls.expectedCAPEXInvestmentFormGroup) as FormGroup;
-    
+
     if (!capexFormGroup) {
       return;
     }
 
     if (othersPercentage !== null && othersPercentage > 0) {
-      capexFormGroup.controls[EMaterialsFormControls.othersDescription].setValidators([Validators.required]);
+      capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
     } else {
-      capexFormGroup.controls[EMaterialsFormControls.othersDescription].clearValidators();
+      capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`)?.clearValidators();
     }
 
-    capexFormGroup.controls[EMaterialsFormControls.othersDescription].updateValueAndValidity();
+    capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
   }
 
   /**
@@ -138,7 +207,7 @@ export class Step2ProductPlantOverviewFormBuilder {
    */
   toggleTargetedSuppliersFieldsValidation(formGroup: FormGroup, targetedCustomers: string[]): void {
     const targetCustomersFormGroup = formGroup.get(EMaterialsFormControls.targetCustomersFormGroup) as FormGroup;
-    
+
     if (!targetCustomersFormGroup) {
       return;
     }
@@ -146,15 +215,15 @@ export class Step2ProductPlantOverviewFormBuilder {
     const hasLocalSuppliers = targetedCustomers.includes('SEC\'s approved local suppliers');
 
     if (hasLocalSuppliers) {
-      targetCustomersFormGroup.controls[EMaterialsFormControls.namesOfTargetedSuppliers].setValidators([Validators.required]);
-      targetCustomersFormGroup.controls[EMaterialsFormControls.productsUtilizeTargetedProduct].setValidators([Validators.required]);
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
     } else {
-      targetCustomersFormGroup.controls[EMaterialsFormControls.namesOfTargetedSuppliers].clearValidators();
-      targetCustomersFormGroup.controls[EMaterialsFormControls.productsUtilizeTargetedProduct].clearValidators();
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.clearValidators();
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.clearValidators();
     }
 
-    targetCustomersFormGroup.controls[EMaterialsFormControls.namesOfTargetedSuppliers].updateValueAndValidity();
-    targetCustomersFormGroup.controls[EMaterialsFormControls.productsUtilizeTargetedProduct].updateValueAndValidity();
+    targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
   }
 }
 

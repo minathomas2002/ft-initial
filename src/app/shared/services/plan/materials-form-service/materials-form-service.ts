@@ -1,9 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { Step1OverviewFormBuilder } from './steps/step1-overview.form-builder';
 import { Step2ProductPlantOverviewFormBuilder } from './steps/step2-product-plant-overview.form-builder';
+import { Step3ValueChainFormBuilder } from './steps/step3-value-chain.form-builder';
+import { Step4SaudizationFormBuilder } from './steps/step4-saudization.form-builder';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +17,8 @@ export class MaterialsFormService {
   // Step builders
   private readonly _step1Builder = new Step1OverviewFormBuilder(this._fb, this._planStore.newPlanTitle());
   private readonly _step2Builder = new Step2ProductPlantOverviewFormBuilder(this._fb);
-  // TODO: Add step 3, 4 builders when implemented
-  // private readonly _step3Builder = new Step3FormBuilder(this._fb, this._planStore);
-  // private readonly _step4Builder = new Step4FormBuilder(this._fb, this._planStore);
+  private readonly _step3Builder = new Step3ValueChainFormBuilder(this._fb);
+  private readonly _step4Builder = new Step4SaudizationFormBuilder(this._fb);
 
   // Step 1: Overview Company Information
   private readonly _step1FormGroup = this._step1Builder.buildStep1FormGroup();
@@ -25,11 +26,23 @@ export class MaterialsFormService {
   // Step 2: Product & Plant Overview
   private readonly _step2FormGroup = this._step2Builder.buildStep2FormGroup();
 
+  // Step 3: Value Chain
+  private readonly _step3FormGroup = this._step3Builder.buildStep3FormGroup();
+
+  // Step 4: Saudization
+  private readonly _step4FormGroup = this._step4Builder.buildStep4FormGroup();
+
   // Expose step 1 form group
   step1_overviewCompanyInformation = this._step1FormGroup;
 
   // Expose step 2 form group
   step2_productPlantOverview = this._step2FormGroup;
+
+  // Expose step 3 form group
+  step3_valueChain = this._step3FormGroup;
+
+  // Expose step 4 form group
+  step4_saudization = this._step4FormGroup;
 
   // Alias for backward compatibility
   overviewCompanyInformation = this._step1FormGroup;
@@ -90,9 +103,69 @@ export class MaterialsFormService {
     return this._step2FormGroup.get(EMaterialsFormControls.productManufacturingExperienceFormGroup) as FormGroup;
   }
 
-  // TODO: Add step 3, 4 form groups when implemented
-  // step3_... = this._step3Builder.buildStep3FormGroup();
-  // step4_... = this._step4Builder.buildStep4FormGroup();
+  // Expose Step 3 sub-form groups for convenience
+  get designEngineeringFormGroup(): FormGroup {
+    return this._step3FormGroup.get(EMaterialsFormControls.designEngineeringFormGroup) as FormGroup;
+  }
+
+  get sourcingFormGroup(): FormGroup {
+    return this._step3FormGroup.get(EMaterialsFormControls.sourcingFormGroup) as FormGroup;
+  }
+
+  get manufacturingFormGroup(): FormGroup {
+    return this._step3FormGroup.get(EMaterialsFormControls.manufacturingFormGroup) as FormGroup;
+  }
+
+  get assemblyTestingFormGroup(): FormGroup {
+    return this._step3FormGroup.get(EMaterialsFormControls.assemblyTestingFormGroup) as FormGroup;
+  }
+
+  get afterSalesFormGroup(): FormGroup {
+    return this._step3FormGroup.get(EMaterialsFormControls.afterSalesFormGroup) as FormGroup;
+  }
+
+  // Step 3 methods
+  addValueChainItem(sectionName: string, includeYears: boolean = true): void {
+    this._step3Builder.addItemToSection(this._step3FormGroup, sectionName, includeYears);
+  }
+
+  removeValueChainItem(sectionName: string, index: number): void {
+    this._step3Builder.removeItemFromSection(this._step3FormGroup, sectionName, index);
+  }
+
+  getValueChainSectionFormArray(sectionName: string): FormArray | null {
+    return this._step3Builder.getSectionFormArray(this._step3FormGroup, sectionName);
+  }
+
+  calculateYearTotalLocalization(year: number): number {
+    return this._step3Builder.calculateYearTotalLocalization(this._step3FormGroup, year);
+  }
+
+  calculateSectionTotalCostPercentage(sectionName: string): number {
+    return this._step3Builder.calculateSectionTotalCostPercentage(this._step3FormGroup, sectionName);
+  }
+
+  // Expose Step 4 sub-form groups for convenience
+  get saudizationFormGroup(): FormGroup {
+    return this._step4FormGroup.get(EMaterialsFormControls.saudizationFormGroup) as FormGroup;
+  }
+
+  get attachmentsFormGroup(): FormGroup {
+    return this._step4FormGroup.get(EMaterialsFormControls.attachmentsFormGroup) as FormGroup;
+  }
+
+  // Step 4 methods
+  getYearFormGroup(year: number): FormGroup | null {
+    return this._step4Builder.getYearFormGroup(this.saudizationFormGroup, year);
+  }
+
+  getRowValueForYear(year: number, rowName: string): any {
+    return this._step4Builder.getRowValueForYear(this.saudizationFormGroup, year, rowName);
+  }
+
+  setRowValueForYear(year: number, rowName: string, value: any): void {
+    this._step4Builder.setRowValueForYear(this.saudizationFormGroup, year, rowName, value);
+  }
 
   /* ------------------------------------------------ */
 }
