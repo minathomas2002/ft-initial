@@ -21,6 +21,18 @@
     <app-overview-company-information-form />
   </ng-template>
 
+  <ng-template [appStepContent]="2">
+    <app-product-plant-overview-form />
+  </ng-template>
+
+  <ng-template [appStepContent]="3">
+    <app-value-chain-form />
+  </ng-template>
+
+  <ng-template [appStepContent]="4">
+    <app-saudization-form />
+  </ng-template>
+
   <ng-container ngProjectAs="final-step-action">
     <p-button [label]="'Submit'"></p-button>
   </ng-container>
