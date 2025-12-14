@@ -15,13 +15,23 @@ import { ImageErrorDirective } from '../../../directives/image-error.directive';
 
 @Component({
   selector: 'app-base-wizard-dialog',
-  imports: [Dialog, StepperModule, ButtonModule, CommonModule, ScrollPanelModule, WizardStepStateComponent, TranslatePipe, ImageErrorDirective],
+  imports: [
+    Dialog,
+    StepperModule,
+    ButtonModule,
+    CommonModule,
+    ScrollPanelModule,
+    WizardStepStateComponent,
+    TranslatePipe,
+    ImageErrorDirective
+  ],
   templateUrl: './base-wizard-dialog.html',
   styleUrl: './base-wizard-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseWizardDialog {
   private i18nService = inject(I18nService);
+  activeStep = model<number>(1);
   visible = model<boolean>(false);
   finalStepLabel = input<string>('Submit');
   isFinalStep = computed(() => this.activeStep() === this.steps().length);
@@ -46,7 +56,6 @@ export class BaseWizardDialog {
       class: '!ps-0 h-full !pb-0',
     }
   }
-  activeStep = model.required<number>();
   steps = input.required<IWizardStepState[]>();
 
   stepContents = contentChildren<StepContentDirective>(StepContentDirective);
@@ -55,10 +64,14 @@ export class BaseWizardDialog {
   scrollPanel = viewChild.required<ScrollPanel>('scrollPanel');
 
   constructor() {
+
     // Reset scroll position when activeStep changes
     effect(() => {
       // Access activeStep to make effect reactive
       const step = this.activeStep();
+      if (!step) {
+        return;
+      }
       // Use setTimeout to ensure DOM is updated before scrolling
       // This runs after the current change detection cycle
       setTimeout(() => {
