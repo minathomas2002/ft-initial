@@ -2,9 +2,10 @@ import { Component, input, model, output, viewChild } from "@angular/core";
 import { ButtonModule } from "primeng/button";
 import { type Drawer, DrawerModule } from "primeng/drawer";
 import { TooltipModule } from "primeng/tooltip";
+import { TranslatePipe } from '../../../pipes';
 @Component({
 	selector: "app-base-drawer",
-	imports: [DrawerModule, ButtonModule, TooltipModule],
+	imports: [DrawerModule, ButtonModule, TooltipModule, TranslatePipe],
 	templateUrl: "./base-drawer.component.html",
 	styleUrl: "./base-drawer.component.scss",
 })

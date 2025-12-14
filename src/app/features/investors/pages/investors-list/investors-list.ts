@@ -9,6 +9,7 @@ import { InvestorsFilterService } from '../../services/investors-filter/investor
 import { InvestorsFilter } from '../../components/investors-filter/investors-filter';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { AvatarModule } from 'primeng/avatar';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-investors-list',
@@ -18,7 +19,8 @@ import { AvatarModule } from 'primeng/avatar';
     DataTableComponent,
     DatePipe,
     InvestorsFilter,
-    AvatarModule
+    AvatarModule,
+    TranslatePipe
   ],
   templateUrl: './investors-list.html',
   styleUrl: './investors-list.scss',

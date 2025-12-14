@@ -1,4 +1,5 @@
 import { EOpportunityType } from "../enums/opportunities.enum";
+import { IApiPaginatedResponse } from "./api.interface";
 import { IFilterBase } from "./filter.interface";
 
 export interface IOpportunity {
@@ -66,4 +67,13 @@ export interface IOpportunityDetails {
   attachments: IOpportunityAttachment[];
   linkedPlans: number;
   hasActivePlans: boolean;
+}
+
+export interface IOpportunitiesDashboardResponse<T> extends IApiPaginatedResponse<T> {
+  counts: {
+    totalOpportunities: number;
+    activePublishedOpportunities: number;
+    inactiveOpportunities: number;
+    draftOpportunities: number;
+  };
 }

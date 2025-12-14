@@ -4,11 +4,12 @@ import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { IPhoneValue, ICountry } from '../../../interfaces';
 import { getCountriesWithPreferred, getCountryByCode } from '../../../data/countries.data';
+import { TranslatePipe } from '../../../pipes';
 
 @Component({
 	selector: 'app-phone-input',
 	standalone: true,
-	imports: [SelectModule, InputTextModule, FormsModule, ReactiveFormsModule],
+	imports: [SelectModule, InputTextModule, FormsModule, ReactiveFormsModule, TranslatePipe],
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,

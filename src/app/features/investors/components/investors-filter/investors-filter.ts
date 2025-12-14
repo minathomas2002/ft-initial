@@ -5,10 +5,11 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InvestorsFilterService } from '../../services/investors-filter/investors-filter-service';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-investors-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule],
+  imports: [FormsModule, InputTextModule, DatePickerModule, TranslatePipe],
   templateUrl: './investors-filter.html',
   styleUrl: './investors-filter.scss',
 })
