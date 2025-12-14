@@ -1,3 +1,4 @@
+<div class="px-[32px] py-[24px]">
 <p-button
   [label]="'setting.adminView.holidays.goBack' | translate"
   icon="icon-arrow-left"
@@ -30,43 +31,49 @@
   <ng-container ngProjectAs="table-body">
     <app-table-skeleton
       [headers]="headers()"
-      [isLoading]="false"
+      [isLoading]="adminSettingsStore.isLoading()"
     >
       <app-data-table
         [columns]="headers()"
-        [rows]="[]"
+        [rows]="adminSettingsStore.holidaysList()"
         [(filter)]="filter"
-        [totalRecords]="0"
-        (filterChange)="goBack()"
+        [totalRecords]="adminSettingsStore.holidaysTotalCount()"
+        (filterChange)="onSuccessActions()"
       >
         <ng-template
           #itemsTemplate
           let-item="item"
         >
           <td>
-            {{ item.holidayName }}
+            {{ item.name }}
           </td>
 
           <td>
-            {{ item.type }}
+            {{ holidaysTypeMapper.getTypeLabel(item.typeId) }}
           </td>
 
           <td>
-            {{ item.startDate| date : 'dd/MM/yyyy' }}
+            {{ item.dateFrom| date : 'dd MMM yyyy' }}
           </td>
 
           <td>
-            {{item.endDate | date : 'dd/MM/yyyy'}}
+            {{item.dateTo | date : 'dd MMM yyyy'}}
           </td>
 
           <td>
             {{ item.numberOfDays }}
           </td>
           <td>
+            {{ item.createdDate | date : 'dd MMM yyyy' }}
+          </td>
+          <td>
             {{item.createdBy}}
           </td>
           <td>
-            {{ item.lastUpdated | date : 'dd/MM/yyyy' }}
+            {{ item.updatedDate | date : 'dd MMM yyyy' }}
+          </td>
+          <td>
+            {{ item.updatedBy }}
           </td>
 
           <!-- Action -->
@@ -85,3 +92,4 @@
   (onSuccess)="onSuccessActions()"
 ></app-add-edit-holiday-dialog>
 }
+</div>

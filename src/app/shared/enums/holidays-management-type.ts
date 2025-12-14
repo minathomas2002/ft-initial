@@ -1,5 +1,5 @@
 export enum EHolidaysType 
 {
-DAYOFF= "dayoff",
-OFFICIALHOLIDAY = "officialHoliday"
+DAYOFF= 1,
+OFFICIALHOLIDAY = 2
 }

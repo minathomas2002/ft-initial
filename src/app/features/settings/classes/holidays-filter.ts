@@ -9,27 +9,28 @@ export class HolidaysFilter extends Filter<
   THolidaysManagementRecordKeys
 > {
 
-readonly currentYear = new Date().getFullYear();
-    constructor() {
-      super();
-      const pagination = new Pagination(10);
-      const sorting = new Sorting<THolidaysManagementRecordKeys>();
-      sorting.sortField = 'startDate';
-      sorting.sortOrder = ESortingOrder.asc;
-      this.filter = {
-        ...pagination,
-        ...sorting,
-        searchText: '',
-        year: this.currentYear,
-        dateRange: new Date(),
-        type:'',
-      };
-  
-      this.initialState = structuredClone(this.filter);
-    }
+  constructor() {
+    super();
+    const pagination = new Pagination(10);
+    const sorting = new Sorting<THolidaysManagementRecordKeys>();
+    sorting.sortField = 'dateFrom';
+    sorting.sortOrder = ESortingOrder.asc;
+    this.filter = {
+      ...pagination,
+      ...sorting,
+      searchText: '',
+      year: null,
+      dateRange: null,
+      typeIds: [],
+    };
 
-  override clearFilter(filter?: Partial<IHolidayManagementFilter> | undefined): void {
-    throw new Error("Method not implemented.");
+    this.initialState = structuredClone(this.filter);
   }
 
+  clearFilter(filter?: Partial<IHolidayManagementFilter> | undefined): void {
+    this.filter = structuredClone({
+      ...this.initialState,
+      ...(filter ? filter : {}),
+    });
+  }
 }

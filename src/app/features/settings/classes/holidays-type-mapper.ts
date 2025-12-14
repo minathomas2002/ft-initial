@@ -13,13 +13,19 @@ export class HolidaysTypeMapper {
       return [
         {
           label: this.i18nService.translate(this._typeTranslationMap[EHolidaysType.DAYOFF]),
-          value: true
+          value: EHolidaysType.DAYOFF
         },
         {
           label: this.i18nService.translate(this._typeTranslationMap[EHolidaysType.OFFICIALHOLIDAY]),
-          value: false
+          value: EHolidaysType.OFFICIALHOLIDAY
         }
       ]
     }
+
+  getTypeLabel(typeId: string | number): string {
+    const type = typeof typeId === 'string' ? parseInt(typeId) : typeId;
+    const translationKey = this._typeTranslationMap[type as EHolidaysType];
+    return translationKey ? this.i18nService.translate(translationKey) : typeId?.toString() || '';
+  }
 }
 

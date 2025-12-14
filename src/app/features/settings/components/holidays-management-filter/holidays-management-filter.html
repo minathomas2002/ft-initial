@@ -21,14 +21,14 @@
   <div class="col-span-12 md:col-span-3">
     <p-multiselect
       [options]="holidayTypes()"
-      [(ngModel)]="filter().type"
+      [(ngModel)]="filter().typeIds"
       optionLabel="label"
       optionValue="value"
       [placeholder]="'setting.adminView.holidays.table.type' | translate"
       display="chip"
       dropdownIcon="icon-chevron-down"
       fluid
-      (ngModelChange)="holidaysManagementService.applyFilterWithPaging()"
+      (ngModelChange)="holidaysFilterService.applyFilterWithPaging()"
     >
     </p-multiselect>
   </div>
@@ -38,7 +38,7 @@
       [showIcon]="true"
       [showTime]="false"
       [(ngModel)]="filter().dateRange"
-      (ngModelChange)="holidaysManagementService.applyFilterWithPaging()"
+      (ngModelChange)="onPickerChange($event)"
       [selectionMode]="'range'"
       [placeholder]="'setting.adminView.holidays.table.filter.dateRangePlaceHolder' | translate"
       [dateFormat]="'dd M yy'"
@@ -46,13 +46,12 @@
       fluid
     />
   </div>
-
   <div class="col-span-12 md:col-span-3">
     <p-datepicker
       [showIcon]="true"
       [showTime]="false"
-      [(ngModel)]="filter().dateRange"
-      (ngModelChange)="holidaysManagementService.applyFilterWithPaging()"
+      [(ngModel)]="filter().year"
+      (ngModelChange)="holidaysFilterService.applyFilterWithPaging()"
       [placeholder]="'setting.adminView.holidays.table.filter.year' | translate"
       view="year"
       dateFormat="yy"

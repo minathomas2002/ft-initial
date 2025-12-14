@@ -1,5 +1,5 @@
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
-import { ISettingAutoAssign, ISettingSla, ISettingSlaReq } from "../../interfaces/ISetting";
+import { ISettingAutoAssign, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating } from "../../interfaces/ISetting";
 import { SettingsApiService } from "../../api/settings/settings-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, map, tap, throwError } from "rxjs";
@@ -11,13 +11,16 @@ const initialState: {
   error: string | null;
   settingAutoAssign: ISettingAutoAssign;
   settingSla: ISettingSla | null;
-
+  holidaysList: IHolidaysManagementRecord[];
+  holidaysTotalCount: number;
 } = {
   isLoading: false,
   isProcessing: false,
   error: null,
   settingAutoAssign: { isEnabled: false } as ISettingAutoAssign,
   settingSla: null,
+  holidaysList: [],
+  holidaysTotalCount: 0
 }
 
 
@@ -26,14 +29,14 @@ export const adminSettingsStore = signalStore(
   withState(initialState),
   withMethods((store) => {
 
-     const settingApiService = inject(SettingsApiService);
+    const settingApiService = inject(SettingsApiService);
     return {
       /* Get Sla setting*/
       getSlaSetting() {
         patchState(store, { isLoading: true, error: null });
         return settingApiService.getSLASetting().pipe(
-          map((res)=>{
-            res.body.remainingDaysValidation = (res.body.remainingDaysValidation == 0)? 1 : res.body.remainingDaysValidation;
+          map((res) => {
+            res.body.remainingDaysValidation = (res.body.remainingDaysValidation == 0) ? 1 : res.body.remainingDaysValidation;
             return res;
           }),
           tap((res) => {
@@ -52,7 +55,7 @@ export const adminSettingsStore = signalStore(
           }),
         );
       },
-    /* Update Sla setting*/
+      /* Update Sla setting*/
       updateSlaSetting(req: ISettingSlaReq) {
         patchState(store, { isProcessing: true, error: null });
         return settingApiService.updateSLASetting(req).pipe(
@@ -75,7 +78,7 @@ export const adminSettingsStore = signalStore(
         return settingApiService.getAutoAssignSetting().pipe(
           tap((res) => {
             patchState(store, { isLoading: false });
-            patchState(store, { settingAutoAssign : res.body });
+            patchState(store, { settingAutoAssign: res.body });
           }),
           catchError((error) => {
             patchState(store, {
@@ -89,7 +92,7 @@ export const adminSettingsStore = signalStore(
           }),
         );
       },
-    /* Update Sla setting*/
+      /* Update Sla setting*/
       updateAutoAssignSetting(req: ISettingAutoAssign) {
         patchState(store, { isProcessing: true, error: null });
         return settingApiService.updateAutoAssignSetting(req).pipe(
@@ -106,6 +109,90 @@ export const adminSettingsStore = signalStore(
         );
       },
 
-  }
+      /* Get Holidays List*/
+      getHolidaysList(filter: IHolidayManagementFilter) {
+        patchState(store, { isLoading: true, error: null });
+        return settingApiService.getHolidaysList(filter).pipe(
+          tap((res) => {
+            const msPerDay = 1000 * 60 * 60 * 24;
+            var resData = res.body.data.map((item: IHolidaysManagementRecord) => {
+              item.numberOfDays =
+                Math.floor(
+                  (new Date(item.dateTo).getTime() - new Date(item.dateFrom).getTime()) / msPerDay
+                ) + 1;
+              return item;
+            });
+            patchState(store, {
+              isLoading: false,
+              holidaysList: resData || [],
+              holidaysTotalCount: res.body.pagination?.totalCount || 0
+            });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error getting holidays list',
+              holidaysList: [],
+              holidaysTotalCount: 0
+            });
+            return throwError(() => new Error('Error getting holidays list'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          }),
+        );
+      },
+
+      /* Create Holiday*/
+      createHoliday(req: IHolidayCreating) {
+        patchState(store, { isProcessing: true, error: null });
+        return settingApiService.createHoliday(req).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error creating holiday' });
+            return throwError(() => new Error('Error creating holiday'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+
+      /* Update Holiday*/
+      updateHoliday(req: IHolidayCreating) {
+        patchState(store, { isProcessing: true, error: null });
+        return settingApiService.updateHoliday(req).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error updating holiday' });
+            return throwError(() => new Error('Error updating holiday'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+
+      /* Delete Holiday*/
+      deleteHoliday(id: string) {
+        patchState(store, { isProcessing: true, error: null });
+        return settingApiService.deleteHoliday(id).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error deleting holiday' });
+            return throwError(() => new Error('Error deleting holiday'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+
+    }
   })
 );
