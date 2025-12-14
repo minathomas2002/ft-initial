@@ -86,7 +86,7 @@ export class InvestorDashboard implements OnInit {
   onUserConfirmNewPlanDialog() {
     this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
     this.newPlanDialogVisibility.set(false);
-    if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.MATERIAL) {
+    if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
       this.materialsSourcingPlanWizardVisibility.set(true);
     } else {
       console.log('service');
