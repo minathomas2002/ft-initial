@@ -1,0 +1,63 @@
+<div class="grid grid-cols-12 gap-4">
+
+  <div class="col-span-12 md:col-span-3">
+    <p-iconfield>
+      <p-inputicon
+        inputId="users-search"
+        class="icon-search"
+      />
+      <input
+        class="w-full"
+        type="text"
+        pInputText
+        [disabled]="disableFilterInputs()"
+        [placeholder]="'setting.adminView.holidays.table.filter.searchKeyPlaceHolder' | translate"
+        [(ngModel)]="filter().searchText"
+        (ngModelChange)="holidaySearchSubject.next(filter().searchText??'')"
+      />
+    </p-iconfield>
+  </div>
+
+  <div class="col-span-12 md:col-span-3">
+    <p-multiselect
+      [options]="holidayTypes()"
+      [(ngModel)]="filter().type"
+      optionLabel="label"
+      optionValue="value"
+      [placeholder]="'setting.adminView.holidays.table.type' | translate"
+      display="chip"
+      dropdownIcon="icon-chevron-down"
+      fluid
+      (ngModelChange)="holidaysManagementService.applyFilterWithPaging()"
+    >
+    </p-multiselect>
+  </div>
+
+  <div class="col-span-12 md:col-span-3">
+    <p-datepicker
+      [showIcon]="true"
+      [showTime]="false"
+      [(ngModel)]="filter().dateRange"
+      (ngModelChange)="holidaysManagementService.applyFilterWithPaging()"
+      [selectionMode]="'range'"
+      [placeholder]="'setting.adminView.holidays.table.filter.dateRangePlaceHolder' | translate"
+      [dateFormat]="'dd M yy'"
+      [minDate]="today"
+      fluid
+    />
+  </div>
+
+  <div class="col-span-12 md:col-span-3">
+    <p-datepicker
+      [showIcon]="true"
+      [showTime]="false"
+      [(ngModel)]="filter().dateRange"
+      (ngModelChange)="holidaysManagementService.applyFilterWithPaging()"
+      [placeholder]="'setting.adminView.holidays.table.filter.year' | translate"
+      view="year"
+      dateFormat="yy"
+      [minDate]="today"
+      fluid
+    />
+  </div>
+</div>

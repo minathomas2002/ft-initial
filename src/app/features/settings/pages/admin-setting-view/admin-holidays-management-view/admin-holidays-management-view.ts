@@ -10,12 +10,12 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { TableSkeletonComponent } from "src/app/shared/components/skeletons/table-skeleton/table-skeleton.component";
 import { DataTableComponent } from "src/app/shared/components/layout-components/data-table/data-table.component";
 import { DatePipe } from '@angular/common';
+import { HolidaysManagementFilter } from "../../../components/holidays-management-filter/holidays-management-filter";
 
 @Component({
   selector: 'app-admin-holidays-management-view',
   imports: [Button, TranslatePipe, TableLayoutComponent, TableSkeletonComponent, DataTableComponent,
-    DatePipe
-  ],
+    DatePipe, HolidaysManagementFilter],
   templateUrl: './admin-holidays-management-view.html',
   styleUrl: './admin-holidays-management-view.scss',
 })
