@@ -61,7 +61,7 @@
           </td>
 
           <td>
-            {{ item.numberOfDays }}
+            {{ (item.numberOfDays)? (item.numberOfDays + ' ' + ('common.days' | translate)) : '-' }}
           </td>
           <td>
             {{ item.createdDate | date : 'dd MMM yyyy' }}

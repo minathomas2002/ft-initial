@@ -25,7 +25,8 @@
     "language": "Language",
     "searchCountry": "Search country...",
     "signIn": "Sign in",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "days": "day(s)"
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
