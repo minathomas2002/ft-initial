@@ -10,9 +10,13 @@ import { BaseErrorComponent } from '../../base-components/base-error/base-error.
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { TextareaModule } from 'primeng/textarea';
+import { TooltipModule } from 'primeng/tooltip';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
-  selector: 'app-product-plant-overview-form',
+  selector: 'app-step-02-product-plant-overview-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -22,15 +26,19 @@ import { MultiSelectModule } from 'primeng/multiselect';
     MultiSelectModule,
     RadioButtonModule,
     GroupInputWithCheckbox,
-    BaseErrorComponent
+    BaseErrorComponent,
+    TextareaModule,
+    TooltipModule,
+    InputNumberModule
   ],
-  templateUrl: './productPlantOverviewForm.html',
-  styleUrl: './productPlantOverviewForm.scss',
+  templateUrl: './step-02-productPlantOverviewForm.html',
+  styleUrl: './step-02-productPlantOverviewForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductPlantOverviewForm {
+export class Step02ProductPlantOverviewForm {
   private readonly materialsFormService = inject(MaterialsFormService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly planStore = inject(PlanStore)
 
   // Expose enum to template
   readonly EMaterialsFormControls = EMaterialsFormControls;
@@ -130,14 +138,7 @@ export class ProductPlantOverviewForm {
   }
 
   // Dropdown options
-  targetedCustomerOptions = [
-    { label: "SEC's approved local suppliers", value: "SEC's approved local suppliers" },
-    { label: 'Other', value: 'Other' }
-  ];
-
-  productManufacturingExperienceOptions = [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' }
-  ];
+  targetedCustomerOptions = this.planStore.targetedCustomerOptions();
+  productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptions();
 }
 

@@ -1,12 +1,29 @@
 <div class="flex flex-col gap-[32px] px-8 pb-10">
   <!-- Overview Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Overview</h2>
+    <h2 class="text-lg font-semibold text-gray-900">Overview <span><i
+          class="icon-info text-sm ms-2 text-gray-400"
+          tooltipPosition="top"
+          [pTooltip]="tooltipContent"
+        ></i>
+        <ng-template #tooltipContent>
+          <div class="flex flex-col gap-2 text-center">
+            <p>
+              Please note, supplier is required to complete this template independently for each product intended for localization. However, specifications of the same product should be consolidated.
+            </p>
+            <p>
+              For e.g., If targeted product is "HV Transformer", kindly fill this localization template specifically for "HV Transformer" only and do not include any other product. However all specifications of HV Transformer should be covered as part of the same template.
+            </p>
+          </div>
+        </ng-template>
+      </span></h2>
 
     <div class="flex flex-col gap-4">
       <!-- Product Name -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Product Name (i.e. Product Targeted for Localization)'" />
+        <div>
+          <app-base-label [title]="'Product Name'" /> <span class="text-sm text-gray-700"> (i.e. Product Targeted for Localization)</span>
+        </div>
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
@@ -30,13 +47,16 @@
 
       <!-- Product Specifications -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Product Specifications (incl. voltage ratings) targeted for Localization'" />
+        <div>
+          <app-base-label [title]="'Product Specifications'" />
+          <span class="text-sm text-gray-700"> (incl. voltage ratings) targeted for Localization</span>
+        </div>
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
         >
           <textarea
-            pInputTextarea
+            pTextarea
             fluid
             placeholder="Enter product specifications"
             maxlength="500"
@@ -52,44 +72,50 @@
         }
       </div>
 
-      <!-- Targeted Annual Plant Capacity -->
-      <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Targeted Annual Plant Capacity (Mention Unit of Measurement)'" />
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
-        >
-          <input
-            type="text"
-            pInputText
-            fluid
-            placeholder="Enter targeted annual plant capacity"
-            [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
-          />
-        </app-group-input-with-checkbox>
-        @if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]).hasError('required')){
-        <app-base-error [message]="'Targeted annual plant capacity is required'" />
-        }
-      </div>
+      <div class="flex flex-col gap-4 md:flex-row">
+        <!-- Targeted Annual Plant Capacity -->
+        <div class="flex flex-col gap-2 flex-1">
+          <div>
+            <app-base-label [title]="'Targeted Annual Plant Capacity'" /> <span class="text-sm text-gray-700 ms-2">(Mention Unit of Measurement)</span>
+          </div>
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder="Enter targeted annual plant capacity"
+              [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
+            />
+          </app-group-input-with-checkbox>
+          @if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]).hasError('required')){
+          <app-base-error [message]="'Targeted annual plant capacity is required'" />
+          }
+        </div>
 
-      <!-- Time Required to Setup Factory -->
-      <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Time Required to Setup Factory (Once Localization Plan is Approved)'" />
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
-        >
-          <input
-            type="text"
-            pInputText
-            fluid
-            placeholder="Enter time required to setup factory"
-            [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
-          />
-        </app-group-input-with-checkbox>
-        @if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory]).hasError('required')){
-        <app-base-error [message]="'Time required to setup factory is required'" />
-        }
+        <!-- Time Required to Setup Factory -->
+        <div class="flex flex-col gap-2 flex-1">
+          <div>
+            <app-base-label [title]="'Time Required to Setup Factory'" /> <span class="text-sm text-gray-700 ms-2">(Once Localization Plan is Approved)</span>
+          </div>
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder="Enter time required to setup factory"
+              [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
+            />
+          </app-group-input-with-checkbox>
+          @if(getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory]).touched && getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory]).hasError('required')){
+          <app-base-error [message]="'Time required to setup factory is required'" />
+          }
+        </div>
       </div>
     </div>
   </div>
@@ -106,13 +132,16 @@
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage])"
         >
-          <input
-            type="number"
-            pInputText
+          <p-inputnumber
             fluid
             placeholder="Enter land"
-            min="0"
-            max="100"
+            [min]="0"
+            [max]="100"
+            mode="decimal"
+            prefix="%"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
+            [maxlength]="5"
             [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage])"
           />
         </app-group-input-with-checkbox>
@@ -131,13 +160,16 @@
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage])"
         >
-          <input
-            type="number"
-            pInputText
+          <p-inputnumber
             fluid
             placeholder="Enter building"
-            min="0"
-            max="100"
+            [min]="0"
+            [max]="100"
+            mode="decimal"
+            [maxlength]="5"
+            prefix="%"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
             [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage])"
           />
         </app-group-input-with-checkbox>
@@ -156,13 +188,16 @@
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage])"
         >
-          <input
-            type="number"
-            pInputText
+          <p-inputnumber
             fluid
             placeholder="Enter machinery / equipment"
-            min="0"
-            max="100"
+            [min]="0"
+            [max]="100"
+            [maxlength]="5"
+            mode="decimal"
+            prefix="%"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
             [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage])"
           />
         </app-group-input-with-checkbox>
@@ -181,13 +216,16 @@
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage])"
         >
-          <input
-            type="number"
-            pInputText
+          <p-inputnumber
             fluid
             placeholder="Enter others"
-            min="0"
-            max="100"
+            [min]="0"
+            [max]="100"
+            [maxlength]="5"
+            mode="decimal"
+            prefix="%"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
             [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage])"
           />
         </app-group-input-with-checkbox>
