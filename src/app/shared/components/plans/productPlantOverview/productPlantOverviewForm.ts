@@ -9,6 +9,7 @@ import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/gro
 import { BaseErrorComponent } from '../../base-components/base-error/base-error.component';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-product-plant-overview-form',
@@ -18,16 +19,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     BaseLabelComponent,
     InputTextModule,
     SelectModule,
+    MultiSelectModule,
     RadioButtonModule,
     GroupInputWithCheckbox,
     BaseErrorComponent
   ],
-  //templateUrl: './productPlantOverviewForm.html',
-  template: `
-    <div>
-      <h1>Product Plant Overview</h1>
-    </div>
-  `,
+  templateUrl: './productPlantOverviewForm.html',
   styleUrl: './productPlantOverviewForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

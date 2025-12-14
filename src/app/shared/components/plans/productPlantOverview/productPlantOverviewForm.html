@@ -232,13 +232,12 @@
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
         >
-          <p-select
+          <p-multiselect
             [options]="targetedCustomerOptions"
             [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
             optionLabel="label"
             optionValue="value"
             placeholder="Select targeted customer"
-            [multiple]="true"
             fluid
           />
         </app-group-input-with-checkbox>
