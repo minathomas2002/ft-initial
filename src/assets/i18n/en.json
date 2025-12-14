@@ -304,7 +304,7 @@
       "name": "Name",
       "nameArabic": "Name (Arabic)",
       "nameEnglish": "Name (English)",
-      "jobNo": "Job No.",
+      "jobNo": "ID",
       "email": "Email",
       "phoneNumber": "Phone Number",
       "role": "Role",
@@ -324,8 +324,8 @@
       "roleManagement": "Role Management"
     },
     "filter": {
-      "searchPlaceholder": "Search by name or email or job no or phone",
-      "roleManagementSearchPlaceholder": "Search by Username, Job No, Phone, Email",
+      "searchPlaceholder": "Search by name or email or ID or phone",
+      "roleManagementSearchPlaceholder": "Search by Username, ID, Phone, Email",
       "rolePlaceholder": "Role",
       "statusPlaceholder": "Status",
       "selectJoinDate": "Select join date"
@@ -369,9 +369,9 @@
         "emailRequired": "Email is required",
         "phonePlaceholder": "Enter Phone",
         "phoneRequired": "Phone number is required.",
-        "jobInvalid": "Invalid Job No. Please enter a valid employee Job No.",
-        "jobInvalidLength": "Job No. must be between 6 and 20 characters.",
-        "jobRequired": "Job No. is required.",
+        "jobInvalid": "Invalid ID. Please enter a valid employee ID.",
+        "jobInvalidLength": "ID. must be between 6 and 20 characters.",
+        "jobRequired": "ID is required.",
         "nameArabicInvalid":"Arabic name must contain Arabic letters only.",
         "nameArabicInvalidLength":"Arabic name must be between 3 and 100 characters.",
         "nameEnglishInvalid" : "English name must contain English letters only.",
@@ -409,7 +409,7 @@
       "selectJoinDate": "Select join date"
     },
     "table": {
-      "BenaID": "BenaID",
+      "BenaID": "BENA ID",
       "name": "Name",
       "email": "Email",
       "phoneNumber": "Phone Number",
