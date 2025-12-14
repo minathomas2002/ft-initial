@@ -542,6 +542,20 @@
             "officialHoliday": "Official Holiday"
           }
           
+        },
+        "dialog":{
+          "confirm": "submit",
+          "addTitle": "Create New Holiday",
+          "editTitle": "Edit New Holiday",
+          "subTitle": "Add a new holiday or day off",
+          "holidayNamePlaceHolder": "Enter Holiday Name",
+          "holidayNameRequired": "Holiday name is required.",
+          "holidayNameLength": "Holiday name must be between 3 and 100 characters.",
+          "typeRequired": "Type is required.",
+          "endtDatePlaceHolder":"Select End Date",
+          "startDatePlaceHolder":"Select start Date",
+          "startDateRequired": "Start Date is required.",
+          "endDateValidation": "End Date must be greater than start date."
         }
 
       }

@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { disabled } from '@angular/forms/signals';
 import { IHolidayCreating } from 'src/app/shared/interfaces/ISetting';
 
 @Injectable({
@@ -36,10 +37,7 @@ export class AddHolidayFormService {
     endDate: this.fb.control<Date | null>(null, [
       Validators.required,
     ]),
-    numberOfDays: this.fb.control<number | null>(null, [
-      Validators.required,
-      Validators.min(1),
-    ])
+    numberOfDays: this.fb.control<number | null>({ value: null, disabled: true })
   });
   get type(){return this.form.controls.type;}
   get holidayName(){return this.form.controls.holidayName;}
