@@ -16,7 +16,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
-import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
@@ -38,7 +38,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     TrimOnBlurDirective,
     InputGroupModule,
     InputGroupAddonModule,
-    InputNumber
+    InputNumberModule
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',

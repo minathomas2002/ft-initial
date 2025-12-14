@@ -269,8 +269,9 @@
           <p-inputgroup class="w-full">
             <p-inputnumber
               mode="decimal"
+              [maxlength]="10"
               [minFractionDigits]="0"
-              [maxFractionDigits]="6"
+              [maxFractionDigits]="3"
               [placeholder]="'opportunity.form.enterSpendSAR' | translate"
               [formControl]="getControl('spendSAR')"
             />
