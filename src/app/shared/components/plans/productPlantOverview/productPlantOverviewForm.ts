@@ -22,7 +22,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     GroupInputWithCheckbox,
     BaseErrorComponent
   ],
-  templateUrl: './productPlantOverviewForm.html',
+  //templateUrl: './productPlantOverviewForm.html',
+  template: `
+    <div>
+      <h1>Product Plant Overview</h1>
+    </div>
+  `,
   styleUrl: './productPlantOverviewForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
