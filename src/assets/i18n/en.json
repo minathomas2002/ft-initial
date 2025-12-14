@@ -301,7 +301,7 @@
       "all": "All"
     },
     "table": {
-      "id": "Job No",
+      "id": "ID",
       "name": "Name",
       "nameArabic": "Name (Arabic)",
       "nameEnglish": "Name (English)",
@@ -411,7 +411,7 @@
       "selectJoinDate": "Select join date"
     },
     "table": {
-      "id": "ID",
+      "BenaID": "BenaID",
       "name": "Name",
       "email": "Email",
       "phoneNumber": "Phone Number",
