@@ -1,6 +1,6 @@
 <app-base-wizard-dialog
   [(visible)]="visibility"
-  [(activeStep)]="activeStep"
+  [activeStep]="activeStep()"
   [steps]="steps()"
   [wizardTitle]="wizardTitle()"
   (onNextStep)="nextStep()"
@@ -18,11 +18,11 @@
   </ng-container>
 
   <ng-template [appStepContent]="1">
-    <app-overview-company-information-form />
+    <app-step-01-overview-company-information-form />
   </ng-template>
 
   <ng-template [appStepContent]="2">
-    <app-product-plant-overview-form />
+    <app-step-02-product-plant-overview-form />
   </ng-template>
 
   <ng-template [appStepContent]="3">
