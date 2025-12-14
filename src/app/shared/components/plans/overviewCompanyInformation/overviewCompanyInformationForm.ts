@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { MaterialsFormService } from 'src/app/shared/services/plan/materials-form-service/materials-form-service';
-import { BaseLabelComponent } from '../../../base-components/base-label/base-label.component';
+import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { BaseErrorComponent } from '../../../base-components/base-error/base-error.component';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BaseErrorComponent } from '../../base-components/base-error/base-error.component';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
-import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
+import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { pipe } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -55,12 +55,20 @@ export class OverviewCompanyInformationForm {
     this.listenToDoYouCurrentlyHaveLocalAgentInKSAValueChanges();
   }
 
-  getHasCommentControl(formGroup: FormGroup): FormControl<boolean> {
-    return formGroup.get(EMaterialsFormControls.hasComment) as FormControl<boolean>;
+  getHasCommentControl(control: AbstractControl): FormControl<boolean> {
+    const formGroup = control as FormGroup;
+    const hasCommentControl = formGroup.get(EMaterialsFormControls.hasComment);
+    return hasCommentControl as unknown as FormControl<boolean>;
   }
 
-  getValueControl(formGroup: FormGroup): FormControl<string | null> {
-    return formGroup.get(EMaterialsFormControls.value) as FormControl<string | null>;
+  getValueControl(control: AbstractControl): FormControl<string | null> {
+    const formGroup = control as FormGroup;
+    const valueControl = formGroup.get(EMaterialsFormControls.value);
+    return valueControl as unknown as FormControl<string | null>;
+  }
+
+  getFormControl(control: AbstractControl): FormControl<any> {
+    return control as unknown as FormControl<any>;
   }
 
   listenToDoYouCurrentlyHaveLocalAgentInKSAValueChanges(): void {
