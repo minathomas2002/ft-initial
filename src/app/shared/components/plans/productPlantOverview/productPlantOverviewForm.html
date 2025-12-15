@@ -325,33 +325,28 @@
       <!-- Do you currently provide this product to SEC? -->
       <div class="flex flex-col gap-2">
         <app-base-label [title]="'Do you currently provide this product to SEC?'" />
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
-        >
-          <div class="flex gap-4">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <p-radiobutton
-                name="provideToSEC"
-                [value]="true"
-                [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
-                inputId="provideToSECYes"
-                size="small"
-              />
-              <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <p-radiobutton
-                name="provideToSEC"
-                [value]="false"
-                [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
-                inputId="provideToSECNo"
-                size="small"
-              />
-              <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
-            </label>
-          </div>
-        </app-group-input-with-checkbox>
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <p-radiobutton
+              name="provideToSEC"
+              [value]="true"
+              [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
+              inputId="provideToSECYes"
+              size="small"
+            />
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <p-radiobutton
+              name="provideToSEC"
+              [value]="false"
+              [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
+              inputId="provideToSECNo"
+              size="small"
+            />
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+          </label>
+        </div>
         @if(getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC]).touched && getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC]).hasError('required')){
         <app-base-error [message]="'This field is required'" />
         }
@@ -457,33 +452,28 @@
       <!-- Do you currently provide this product to SEC's approved local suppliers? -->
       <div class="flex flex-col gap-2">
         <app-base-label [title]="'Do you currently provide this product to SEC\'s approved local suppliers?'" />
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
-        >
-          <div class="flex gap-4">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <p-radiobutton
-                name="provideToLocalSuppliers"
-                [value]="true"
-                [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
-                inputId="provideToLocalSuppliersYes"
-                size="small"
-              />
-              <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <p-radiobutton
-                name="provideToLocalSuppliers"
-                [value]="false"
-                [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
-                inputId="provideToLocalSuppliersNo"
-                size="small"
-              />
-              <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
-            </label>
-          </div>
-        </app-group-input-with-checkbox>
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <p-radiobutton
+              name="provideToLocalSuppliers"
+              [value]="true"
+              [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
+              inputId="provideToLocalSuppliersYes"
+              size="small"
+            />
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <p-radiobutton
+              name="provideToLocalSuppliers"
+              [value]="false"
+              [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
+              inputId="provideToLocalSuppliersNo"
+              size="small"
+            />
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+          </label>
+        </div>
         @if(getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers]).touched && getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers]).hasError('required')){
         <app-base-error [message]="'This field is required'" />
         }
