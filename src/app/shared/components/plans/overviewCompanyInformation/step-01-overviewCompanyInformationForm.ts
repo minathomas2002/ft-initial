@@ -15,6 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
 
 @Component({
   selector: 'app-step-01-overview-company-information-form',
@@ -30,6 +31,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
     RadioButtonModule,
     TooltipModule,
     TranslatePipe,
+    BaseErrorMessages
   ],
   templateUrl: './step-01-overviewCompanyInformationForm.html',
   styleUrl: './step-01-overviewCompanyInformationForm.scss',
