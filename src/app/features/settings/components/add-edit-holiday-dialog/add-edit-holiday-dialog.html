@@ -1,1 +1,137 @@
-<p>add-edit-holiday-dialog works!</p>
+<app-base-dialog
+  [(visible)]="dialogVisible"
+  icon="icon-umbrella"
+  [confirmLabel]="'setting.adminView.holidays.dialog.confirm' | translate"
+  [confirmButtonClass]="'w-fit'"
+  [cancelButtonClass]="'w-fit'"
+  [isConfirmationDisabled]="formService.form.invalid"
+  (onConfirm)="onConfirm()"
+  (onClose)="resetForm()"
+  [isLoading]="false"
+>
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{
+      isEditMode()
+      ? ('setting.adminView.holidays.dialog.editTitle' | translate)
+      : ('setting.adminView.holidays.dialog.addTitle' | translate)
+      }}</p>
+    <h4 class="xl:text-md text-sm text-gray-600">{{ 'setting.adminView.holidays.dialog.subTitle' | translate }}</h4>
+
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+
+    <div class="col-span-12 md:col-span-12">
+
+      <app-base-label [title]="'setting.adminView.holidays.table.holidayName' | translate">
+      </app-base-label>
+
+      <input
+        class="w-full"
+        type="text"
+        pInputText
+        [placeholder]="'setting.adminView.holidays.dialog.holidayNamePlaceHolder' | translate"
+        [formControl]="formService.name"
+        [maxlength]="100"
+        [minlength]="3"
+      />
+      @if(formService.name.touched && formService.name.errors){
+      @if(formService.name.hasError('required')){
+      <app-base-error [message]="'setting.adminView.holidays.dialog.holidayNameRequired' | translate" />
+      }
+      @if(formService.name.hasError('minlength') || formService.name.hasError('maxlength')){
+      <app-base-error [message]="'setting.adminView.holidays.dialog.holidayNameLength' | translate" />
+      }
+      @if(formService.name.hasError('pattern') ){
+      <app-base-error [message]="'setting.adminView.holidays.dialog.holidayNamePattern' | translate" />
+      }
+      }
+    </div>
+    <div class="col-span-12 md:col-span-12">
+      <app-base-label [title]="'setting.adminView.holidays.table.type' | translate">
+      </app-base-label>
+      <p-select
+        [options]="holidayTypes()"
+        [loadingIcon]="'icon-transfer'"
+        [formControl]="formService.type"
+        appendTo="body"
+        optionLabel="label"
+        optionValue="value"
+        [placeholder]="'setting.adminView.holidays.table.type' | translate"
+        dropdownIcon="icon-chevron-down"
+        fluid
+      >
+      </p-select>
+      <div>
+        @if(formService.type.touched && formService.type.errors){
+        @if(formService.type.hasError('required')){
+        <app-base-error [message]="'setting.adminView.holidays.dialog.typeRequired' | translate" />
+        }
+        }
+      </div>
+    </div>
+    <div class="col-span-12 md:col-span-6">
+      <app-base-label [title]="'setting.adminView.holidays.table.startDate' | translate">
+      </app-base-label>
+      <p-datepicker
+        [showIcon]="true"
+        [showTime]="false"
+        [formControl]="formService.fromDate"
+        [placeholder]="'setting.adminView.holidays.dialog.startDatePlaceHolder' | translate"
+        [dateFormat]="'dd M yy'"
+        [minDate]="today"
+        fluid
+      />
+      <div>
+
+        @if(formService.fromDate.touched && formService.fromDate.errors){
+        @if(formService.fromDate.hasError('required')){
+        <app-base-error [message]="'setting.adminView.holidays.dialog.startDateRequired' | translate" />
+        }
+        }
+      </div>
+    </div>
+    <div class="col-span-12 md:col-span-6">
+      <app-base-label [title]="'setting.adminView.holidays.table.endDate' | translate">
+      </app-base-label>
+      <p-datepicker
+        [showIcon]="true"
+        [showTime]="false"
+        [formControl]="formService.toDate"
+        [placeholder]="'setting.adminView.holidays.dialog.endtDatePlaceHolder' | translate"
+        [dateFormat]="'dd M yy'"
+        [minDate]="today"
+        fluid
+      />
+      <div>
+        @if(formService.form.hasError("dateRangeInvalid") &&
+        (formService.form.get('dateTo')?.touched ||
+        formService.form.get('dateFrom')?.touched)){
+        <app-base-error [message]="'setting.adminView.holidays.dialog.endDateValidateDateRange' | translate" />
+        }
+        @if(formService.toDate.touched && formService.toDate.errors){
+        @if(formService.toDate.hasError('required')){
+        <app-base-error [message]="'setting.adminView.holidays.dialog.endDateValidation' | translate" />
+        }
+        }
+      </div>
+    </div>
+
+    <div class="col-span-12 md:col-span-12">
+      <app-base-label [title]="'setting.adminView.holidays.table.numberOfDay' | translate">
+      </app-base-label>
+      <input
+        type="text"
+        pInputText
+        [placeholder]="'setting.adminView.holidays.table.numberOfDay' | translate"
+        [formControl]="formService.numberOfDays"
+        fluid
+      />
+      <div>
+
+      </div>
+    </div>
+
+  </div>
+
+</app-base-dialog>

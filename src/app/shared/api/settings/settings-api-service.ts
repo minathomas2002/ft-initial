@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
-import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq } from '../../interfaces/ISetting';
-import { IBaseApiResponse } from '../../interfaces';
+import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating } from '../../interfaces/ISetting';
+import { IBaseApiResponse, IApiPaginatedResponse } from '../../interfaces';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
 
@@ -31,5 +31,22 @@ export class SettingsApiService {
   // update sla setting
     updateAutoAssignSetting(req: ISettingAutoAssign): Observable<IBaseApiResponse<ISettingAutoAssignResponse>> {
       return this.baseHttpService.post <ISettingAutoAssignResponse, ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.editAutoAssignSetting, req);
+    }
+
+  // Holidays management
+    getHolidaysList(filter: IHolidayManagementFilter): Observable<IBaseApiResponse<IApiPaginatedResponse<IHolidaysManagementRecord[]>>> {
+      return this.baseHttpService.post<IApiPaginatedResponse<IHolidaysManagementRecord[]>, IHolidayManagementFilter, unknown>(API_ENDPOINTS.AdminSettings.getHolidaysList, filter);
+    }
+
+    createHoliday(req: IHolidayCreating): Observable<IBaseApiResponse<IHolidaysManagementRecord>> {
+      return this.baseHttpService.post<IHolidaysManagementRecord, IHolidayCreating, unknown>(API_ENDPOINTS.AdminSettings.createHoliday, req);
+    }
+
+    updateHoliday(req: IHolidayCreating): Observable<IBaseApiResponse<IHolidaysManagementRecord>> {
+      return this.baseHttpService.put<IHolidaysManagementRecord, IHolidayCreating, unknown>(API_ENDPOINTS.AdminSettings.updateHoliday, req);
+    }
+
+    deleteHoliday(id: string): Observable<IBaseApiResponse<boolean>> {
+      return this.baseHttpService.delete<boolean, unknown>(`${API_ENDPOINTS.AdminSettings.deleteHoliday}/${id}`);
     }
 }

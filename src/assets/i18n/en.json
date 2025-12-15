@@ -25,7 +25,8 @@
     "language": "Language",
     "searchCountry": "Search country...",
     "signIn": "Sign in",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "days": "day(s)"
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
@@ -464,7 +465,8 @@
       },
       "autoAssign":{
         "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",
-        "enableAutoAssign": "Enable Auto-Assign"
+        "enableAutoAssign": "Enable Auto-Assign",
+        "noActiveUsersWarning": "No active employees available for assignment."
       },
       "notification": {
         "notificationDesc": "Enable or disable system and email notifications for all user roles.",
@@ -525,10 +527,13 @@
           "holidayName": "Holiday Name",
           "type": "Type",
           "startDate": "Start Date",
-          "endDate": "end Date",
+          "endDate": "End Date",
           "numberOfDay": "Number Of Days",
           "createdBy": "Created By",
           "lastUpdated": "Last Updated",
+          "createdDate": "Created Date",
+          "updatedDate": "Updated Date",
+          "updatedBy": "Updated By",
           "actions":"Actions",
           "filter":{
           "searchKeyPlaceHolder": "Search by Holiday Name",
@@ -540,6 +545,24 @@
             "officialHoliday": "Official Holiday"
           }
           
+        },
+        "dialog":{
+          "confirm": "submit",
+          "addTitle": "Create New Holiday",
+          "editTitle": "Edit New Holiday",
+          "subTitle": "Add a new holiday or day off",
+          "holidayNamePlaceHolder": "Enter Holiday Name",
+          "holidayNameRequired": "Holiday name is required.",
+          "holidayNameLength": "Holiday name must be between 3 and 100 characters.",
+          "holidayNamePattern": "Holiday name must be english and arabic letters without special character.",
+          "typeRequired": "Type is required.",
+          "endtDatePlaceHolder":"Select End Date",
+          "startDatePlaceHolder":"Select start Date",
+          "startDateRequired": "Start Date is required.",
+          "endDateValidation": "End Date must be greater than start date.",
+          "endDateValidateDateRange": "End date must be after or equal to start date.",
+          "createdSuccessfully": "Holiday has been added successfully.",
+          "updatedSuccessfully": "Holiday has been updated successfully.!"
         }
 
       }

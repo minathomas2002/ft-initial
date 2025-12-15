@@ -49,6 +49,10 @@ export const API_ENDPOINTS = {
     editSlaSetting: `${AdminSettings}/update-sla`,
     getAutoAssignSetting: `${AdminSettings}/get-auto-assign`,
     editAutoAssignSetting: `${AdminSettings}/update-auto-assign`,
+    getHolidaysList: `${AdminSettings}/holidays/list`,
+    createHoliday: `${AdminSettings}/holidays/create`,
+    updateHoliday: `${AdminSettings}/holidays/update`,
+    deleteHoliday: `${AdminSettings}/holidays`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,
