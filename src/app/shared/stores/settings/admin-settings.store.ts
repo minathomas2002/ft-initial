@@ -24,7 +24,7 @@ const initialState: {
 }
 
 
-export const adminSettingsStore = signalStore(
+export const AdminSettingsStore = signalStore(
   { providedIn: "root" },
   withState(initialState),
   withMethods((store) => {

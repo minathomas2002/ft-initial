@@ -2,14 +2,14 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { AbstractServiceFilter } from "src/app/shared/classes/abstract-service-filter";
 import { IHolidayManagementFilter } from "src/app/shared/interfaces/ISetting";
 import { HolidaysFilter } from "../../classes/holidays-filter";
-import { adminSettingsStore } from "src/app/shared/stores/settings/admin-settings.store";
+import { AdminSettingsStore } from "src/app/shared/stores/settings/admin-settings.store";
 import { take } from "rxjs";
 
 @Injectable({
   providedIn: 'root',
 })
 export class HolidaysFilterService extends AbstractServiceFilter<IHolidayManagementFilter> {
-  store = inject(adminSettingsStore);
+  store = inject(AdminSettingsStore);
   filterClass = new HolidaysFilter();
   filter = signal(this.filterClass.filter);
 
