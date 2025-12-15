@@ -97,7 +97,7 @@ export class Step02ProductPlantOverviewForm {
       });
 
     // Listen to targetedCustomer changes
-    const targetedCustomerControl = this.getFormControl(
+    const targetedCustomerControl = this.getValueControl(
       this.targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer]
     );
     targetedCustomerControl.valueChanges
@@ -109,7 +109,7 @@ export class Step02ProductPlantOverviewForm {
       });
 
     // Listen to othersPercentage changes
-    const othersPercentageControl = this.getFormControl(
+    const othersPercentageControl = this.getValueControl(
       this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage]
     );
     othersPercentageControl.valueChanges
@@ -121,20 +121,25 @@ export class Step02ProductPlantOverviewForm {
   }
 
   // Helper methods
-  getHasCommentControl(control: AbstractControl): FormControl<boolean> {
-    const formGroup = control as FormGroup;
-    const hasCommentControl = formGroup.get(EMaterialsFormControls.hasComment);
-    return hasCommentControl as unknown as FormControl<boolean>;
+  getHasCommentControl(formGroup: AbstractControl): FormControl<boolean> {
+    if (formGroup instanceof FormGroup) {
+      return formGroup.controls[EMaterialsFormControls.hasComment] as FormControl<boolean>;
+    }
+    throw new Error('Form group is not a valid form group');
   }
 
-  getValueControl(control: AbstractControl): FormControl<any> {
-    const formGroup = control as FormGroup;
-    const valueControl = formGroup.get(EMaterialsFormControls.value);
-    return valueControl as unknown as FormControl<any>;
+  getValueControl(formGroup: AbstractControl): FormControl<any> {
+    if (formGroup instanceof FormGroup) {
+      return formGroup.controls[EMaterialsFormControls.value] as FormControl<any>;
+    }
+    throw new Error('Form group is not a valid form group');
   }
 
-  getFormControl(control: AbstractControl): FormControl<any> {
-    return control as unknown as FormControl<any>;
+  getFormControl(formControl: AbstractControl): FormControl<any> {
+    if (formControl instanceof FormControl) {
+      return formControl as FormControl<any>;
+    }
+    throw new Error('Form control is not a valid form control');
   }
 
   // Dropdown options
