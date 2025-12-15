@@ -1,5 +1,5 @@
 import { Component, inject, model, signal } from '@angular/core';
-import { adminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
+import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "primeng/tabs";
@@ -16,7 +16,7 @@ import { EmailNotificationFormService } from '../../services/email-notification-
 })
 export class AdminNotificationDialog {
 
-  settingAdminStore = inject(adminSettingsStore);
+  settingAdminStore = inject(AdminSettingsStore);
   dialogVisible = model<boolean>(false);
   activeTab = signal<string>('0');
   systemTabformService = inject(NotificationFormService);

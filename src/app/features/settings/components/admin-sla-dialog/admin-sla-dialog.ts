@@ -6,7 +6,7 @@ import { BaseLabelComponent } from "src/app/shared/components/base-components/ba
 import { BaseErrorComponent } from "src/app/shared/components/base-components/base-error/base-error.component";
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { adminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
+import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
 import { filter, take, tap } from 'rxjs';
 import { ISettingSla, ISettingSlaReq } from 'src/app/shared/interfaces/ISetting';
 import { I18nService } from 'src/app/shared/services/i18n';
@@ -22,7 +22,7 @@ export class AdminSlaDialog {
 
   dialogVisible = model<boolean>(false);
   formService = inject(SlaForm);
-  settingAdminStore = inject(adminSettingsStore);
+  settingAdminStore = inject(AdminSettingsStore);
   i18nService = inject(I18nService);
   toasterService = inject(ToasterService);
 

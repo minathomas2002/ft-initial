@@ -554,11 +554,15 @@
           "holidayNamePlaceHolder": "Enter Holiday Name",
           "holidayNameRequired": "Holiday name is required.",
           "holidayNameLength": "Holiday name must be between 3 and 100 characters.",
+          "holidayNamePattern": "Holiday name must be english and arabic letters without special character.",
           "typeRequired": "Type is required.",
           "endtDatePlaceHolder":"Select End Date",
           "startDatePlaceHolder":"Select start Date",
           "startDateRequired": "Start Date is required.",
-          "endDateValidation": "End Date must be greater than start date."
+          "endDateValidation": "End Date must be greater than start date.",
+          "endDateValidateDateRange": "End date must be after or equal to start date.",
+          "createdSuccessfully": "Holiday has been added successfully.",
+          "updatedSuccessfully": "Holiday has been updated successfully.!"
         }
 
       }

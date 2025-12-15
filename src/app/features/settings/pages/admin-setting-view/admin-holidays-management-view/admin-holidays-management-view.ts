@@ -12,7 +12,7 @@ import { DataTableComponent } from "src/app/shared/components/layout-components/
 import { DatePipe } from '@angular/common';
 import { HolidaysManagementFilter } from "../../../components/holidays-management-filter/holidays-management-filter";
 import { AddEditHolidayDialog } from "../../../components/add-edit-holiday-dialog/add-edit-holiday-dialog";
-import { adminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
+import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
 import { HolidaysFilterService } from '../../../services/holidays-filter/holidays-filter-service';
 import { HolidaysTypeMapper } from '../../../classes/holidays-type-mapper';
 
@@ -27,7 +27,7 @@ export class AdminHolidaysManagementView implements OnInit {
 
   router = inject(Router);
   i18nService = inject(I18nService);
-  adminSettingsStore = inject(adminSettingsStore);
+  adminSettingsStore = inject(AdminSettingsStore);
   holidaysFilterService = inject(HolidaysFilterService);
   holidaysTypeMapper = new HolidaysTypeMapper(this.i18nService);
   viewCreateDialog = signal<boolean>(false);
