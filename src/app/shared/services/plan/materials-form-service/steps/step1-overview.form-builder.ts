@@ -38,11 +38,11 @@ export class Step1OverviewFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.globalHQLocation]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(250)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(50)]),
       }),
       [EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]: this.fb.control(null, [Validators.required])
     });
@@ -92,10 +92,10 @@ export class Step1OverviewFormBuilder {
 
     if (value) {
       localAgentFormGroup.controls[EMaterialsFormControls.localAgentName].setValidators([Validators.required, Validators.maxLength(100)]);
-      localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName].setValidators([Validators.required]);
+      localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName].setValidators([Validators.required, Validators.maxLength(100)]);
       localAgentFormGroup.controls[EMaterialsFormControls.emailID].setValidators([Validators.required, Validators.email]);
-      localAgentFormGroup.controls[EMaterialsFormControls.contactNumber].setValidators([Validators.required, phoneNumberPatternValidator()]);
-      localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation].setValidators([Validators.required, Validators.maxLength(200)]);
+      localAgentFormGroup.controls[EMaterialsFormControls.contactNumber].setValidators([Validators.required, phoneNumberPatternValidator(), Validators.maxLength(15)]);
+      localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation].setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       localAgentFormGroup.controls[EMaterialsFormControls.localAgentName].clearValidators();
       localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName].clearValidators();
