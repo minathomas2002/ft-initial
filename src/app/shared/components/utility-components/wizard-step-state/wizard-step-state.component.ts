@@ -1,10 +1,9 @@
 import { Component, computed, inject, input, effect, signal, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
 import { EWizardStepState } from 'src/app/shared/enums/wizard-step-state.enum';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
-import { merge, interval, startWith } from 'rxjs';
+import { merge, startWith, distinctUntilChanged } from 'rxjs';
 import { map } from 'rxjs';
 
 export type StepState = 'empty' | 'in-progress' | 'valid' | 'error';
@@ -37,19 +36,23 @@ export class WizardStepStateComponent {
       // Update initial state
       this.updateFormState(form);
 
-      // Merge form observables with periodic checks to catch programmatic changes
+      // Merge form observables - only update when actual changes occur
       const formStateObservable = merge(
         form.statusChanges.pipe(startWith(null)),
-        form.valueChanges.pipe(startWith(null)),
-        // Check every 100ms to catch programmatic changes quickly
-        interval(100).pipe(startWith(0))
+        form.valueChanges.pipe(startWith(null))
       ).pipe(
         map(() => ({
           valid: form.valid,
           invalid: form.invalid,
           dirty: form.dirty,
           touched: form.touched,
-        }))
+        })),
+        distinctUntilChanged((prev, curr) =>
+          prev.valid === curr.valid &&
+          prev.invalid === curr.invalid &&
+          prev.dirty === curr.dirty &&
+          prev.touched === curr.touched
+        )
       );
 
       // Subscribe to form state changes
@@ -75,15 +78,16 @@ export class WizardStepStateComponent {
 
   errorsNumber = computed(() => {
     // Read both signals to ensure reactivity
-    const form = this.formState();
     const state = this.formStateSignal();
 
-    // Show errors if form is invalid and (dirty or touched)
-    if (state.invalid && (state.dirty || state.touched)) {
-      const errorCount = this.formUtilityService.countFormErrors(form);
-      return errorCount;
+    // Early return if no errors should be shown
+    if (!state.invalid || (!state.dirty && !state.touched)) {
+      return 0;
     }
-    return 0;
+
+    // Only calculate error count when necessary
+    const form = this.formState();
+    return this.formUtilityService.countFormErrors(form);
   });
 
   status = computed(() => {
