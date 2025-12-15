@@ -17,11 +17,14 @@ import { HolidaysFilterService } from '../../../services/holidays-filter/holiday
 import { HolidaysTypeMapper } from '../../../classes/holidays-type-mapper';
 import { AdminSettingMenuAction } from "../../../components/admin-setting-menu-action/admin-setting-menu-action";
 import { ThemeProvider } from 'primeng/config';
+import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
+import { take } from 'rxjs';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-admin-holidays-management-view',
   imports: [Button, TranslatePipe, TableLayoutComponent, TableSkeletonComponent, DataTableComponent,
-    DatePipe, HolidaysManagementFilter, AddEditHolidayDialog, AdminSettingMenuAction],
+    DatePipe, HolidaysManagementFilter, AddEditHolidayDialog, AdminSettingMenuAction, GeneralConfirmationDialogComponent],
   templateUrl: './admin-holidays-management-view.html',
   styleUrl: './admin-holidays-management-view.scss',
 })
@@ -34,6 +37,9 @@ export class AdminHolidaysManagementView implements OnInit {
   holidaysTypeMapper = new HolidaysTypeMapper(this.i18nService);
   viewCreateDialog = signal<boolean>(false);
   viewUpdateDialog = signal<boolean>(false);
+  viewDeleteDialog = signal<boolean>(false);
+  toasterService = inject(ToasterService);
+
   isEditMode = signal<boolean>(false);
   selectedItem = signal<IHolidaysManagementRecord|null>(null);
 
@@ -120,8 +126,19 @@ export class AdminHolidaysManagementView implements OnInit {
   }
 
   onDelete(item:IHolidaysManagementRecord){
-    console.log("delete clicked");
-    
+    this.viewDeleteDialog.set(true);
+    this.selectedItem.set(item);
+  }
+
+  confirmDelete(){
+     this.adminSettingsStore.deleteHoliday(this.selectedItem()?.id!)
+          .pipe(take(1))
+          .subscribe(res => {
+            this.toasterService.success(this.i18nService.translate('setting.adminView.holidays.dialog.deleteSuccessMessage'));
+            this.applyFilter() ;
+            this.selectedItem.set(null);
+            this.viewDeleteDialog.set(false);
+          });
   }
 }
 
