@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MaterialsFormService } from 'src/app/shared/services/plan/materials-form-service/materials-form-service';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -10,8 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SaudizationForm {
-  private readonly materialsFormService = inject(MaterialsFormService);
+  private readonly productPlanFormService = inject(ProductPlanFormService);
 
-  formGroup = this.materialsFormService.step4_saudization;
+  formGroup = this.productPlanFormService.step4_saudization;
 }
 

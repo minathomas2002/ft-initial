@@ -187,13 +187,16 @@ export class Step2ProductPlantOverviewFormBuilder {
       return;
     }
 
+    const othersDescriptionControl = capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`);
+
     if (othersPercentage !== null && othersPercentage > 0) {
-      capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      othersDescriptionControl?.setValidators([Validators.required]);
     } else {
-      capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`)?.clearValidators();
+      othersDescriptionControl?.clearValidators();
+      othersDescriptionControl?.reset();
     }
 
-    capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    othersDescriptionControl?.updateValueAndValidity();
   }
 
   /**

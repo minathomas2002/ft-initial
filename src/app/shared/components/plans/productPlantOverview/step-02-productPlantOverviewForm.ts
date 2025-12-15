@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
-import { MaterialsFormService } from 'src/app/shared/services/plan/materials-form-service/materials-form-service';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
+import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { BaseErrorComponent } from '../../base-components/base-error/base-error.component';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TextareaModule } from 'primeng/textarea';
@@ -36,31 +36,31 @@ import { InputNumberModule } from 'primeng/inputnumber';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Step02ProductPlantOverviewForm {
-  private readonly materialsFormService = inject(MaterialsFormService);
+  private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly planStore = inject(PlanStore)
 
   // Expose enum to template
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
-  formGroup = this.materialsFormService.step2_productPlantOverview;
+  formGroup = this.productPlanFormService.step2_productPlantOverview;
   showCheckbox = signal(false);
 
   // Form group accessors
   get overviewFormGroupControls() {
-    return this.materialsFormService.overviewFormGroup.controls;
+    return this.productPlanFormService.overviewFormGroup.controls;
   }
 
   get expectedCAPEXInvestmentFormGroupControls() {
-    return this.materialsFormService.expectedCAPEXInvestmentFormGroup.controls;
+    return this.productPlanFormService.expectedCAPEXInvestmentFormGroup.controls;
   }
 
   get targetCustomersFormGroupControls() {
-    return this.materialsFormService.targetCustomersFormGroup.controls;
+    return this.productPlanFormService.targetCustomersFormGroup.controls;
   }
 
   get productManufacturingExperienceFormGroupControls() {
-    return this.materialsFormService.productManufacturingExperienceFormGroup.controls;
+    return this.productPlanFormService.productManufacturingExperienceFormGroup.controls;
   }
 
   // Conditional visibility signals
@@ -82,7 +82,7 @@ export class Step02ProductPlantOverviewForm {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: boolean | null) => {
         this.showSECFields.set(value === true);
-        this.materialsFormService.toggleSECFieldsValidation(value === true);
+        this.productPlanFormService.toggleSECFieldsValidation(value === true);
       });
 
     // Listen to provideToLocalSuppliers changes
@@ -93,7 +93,7 @@ export class Step02ProductPlantOverviewForm {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: boolean | null) => {
         this.showLocalSuppliersFields.set(value === true);
-        this.materialsFormService.toggleLocalSuppliersFieldsValidation(value === true);
+        this.productPlanFormService.toggleLocalSuppliersFieldsValidation(value === true);
       });
 
     // Listen to targetedCustomer changes
@@ -103,9 +103,9 @@ export class Step02ProductPlantOverviewForm {
     targetedCustomerControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: string[] | null) => {
-        const hasLocalSuppliers = value?.includes("SEC's approved local suppliers") || false;
+        const hasLocalSuppliers = value?.includes(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString()) || false;
         this.showTargetedSuppliersFields.set(hasLocalSuppliers);
-        this.materialsFormService.toggleTargetedSuppliersFieldsValidation(value || []);
+        this.productPlanFormService.toggleTargetedSuppliersFieldsValidation(value || []);
       });
 
     // Listen to othersPercentage changes
@@ -116,30 +116,21 @@ export class Step02ProductPlantOverviewForm {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: number | null) => {
         this.showOthersDescription.set(value !== null && value > 0);
-        this.materialsFormService.toggleOthersDescriptionValidation(value);
+        this.productPlanFormService.toggleOthersDescriptionValidation(value);
       });
   }
 
-  // Helper methods
+  // Helper methods - delegate to service
   getHasCommentControl(formGroup: AbstractControl): FormControl<boolean> {
-    if (formGroup instanceof FormGroup) {
-      return formGroup.controls[EMaterialsFormControls.hasComment] as FormControl<boolean>;
-    }
-    throw new Error('Form group is not a valid form group');
+    return this.productPlanFormService.getHasCommentControl(formGroup);
   }
 
   getValueControl(formGroup: AbstractControl): FormControl<any> {
-    if (formGroup instanceof FormGroup) {
-      return formGroup.controls[EMaterialsFormControls.value] as FormControl<any>;
-    }
-    throw new Error('Form group is not a valid form group');
+    return this.productPlanFormService.getValueControl(formGroup);
   }
 
   getFormControl(formControl: AbstractControl): FormControl<any> {
-    if (formControl instanceof FormControl) {
-      return formControl as FormControl<any>;
-    }
-    throw new Error('Form control is not a valid form control');
+    return this.productPlanFormService.getFormControl(formControl);
   }
 
   // Dropdown options

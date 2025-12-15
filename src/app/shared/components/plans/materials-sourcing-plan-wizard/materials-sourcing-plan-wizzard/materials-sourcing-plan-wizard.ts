@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
-import { MaterialsFormService } from 'src/app/shared/services/plan/materials-form-service/materials-form-service';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { Step01OverviewCompanyInformationForm } from '../../overviewCompanyInformation/step-01-overviewCompanyInformationForm';
 import { Step02ProductPlantOverviewForm } from '../../productPlantOverview/step-02-productPlantOverviewForm';
 import { ValueChainForm } from '../../valueChain/valueChainForm';
@@ -27,7 +27,7 @@ import { StepContentDirective } from 'src/app/shared/directives';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaterialsSourcingPlanWizard {
-  materialsFormService = inject(MaterialsFormService);
+  productPlanFormService = inject(ProductPlanFormService);
   visibility = model(false);
   activeStep = signal<number>(1);
   steps = signal<IWizardStepState[]>([
@@ -35,25 +35,25 @@ export class MaterialsSourcingPlanWizard {
       title: 'Overview & Company Information',
       description: 'Enter basic plan details and company information',
       isActive: true,
-      formState: this.materialsFormService.overviewCompanyInformation
+      formState: this.productPlanFormService.overviewCompanyInformation
     },
     {
       title: 'Product & Plant Overview',
       description: 'Enter product details and plant information',
       isActive: false,
-      formState: this.materialsFormService.step2_productPlantOverview
+      formState: this.productPlanFormService.step2_productPlantOverview
     },
     {
       title: 'Value Chain',
       description: 'Define value chain components and localization',
       isActive: false,
-      formState: this.materialsFormService.step3_valueChain
+      formState: this.productPlanFormService.step3_valueChain
     },
     {
       title: 'Saudization',
       description: 'Enter saudization projections and attachments',
       isActive: false,
-      formState: this.materialsFormService.step4_saudization
+      formState: this.productPlanFormService.step4_saudization
     }
   ]);
   wizardTitle = signal('Material Sourcing Plan – Cables');

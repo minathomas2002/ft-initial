@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
-import { MaterialsFormService } from 'src/app/shared/services/plan/materials-form-service/materials-form-service';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
@@ -36,7 +36,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Step01OverviewCompanyInformationForm {
-  private readonly materialsFormService = inject(MaterialsFormService);
+  private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly planStore = inject(PlanStore);
   private readonly destroyRef = inject(DestroyRef);
@@ -44,15 +44,15 @@ export class Step01OverviewCompanyInformationForm {
   showCheckbox = signal(false);
   showLocalAgentInformation = signal(false);
 
-  formGroup = this.materialsFormService.overviewCompanyInformation;
+  formGroup = this.productPlanFormService.overviewCompanyInformation;
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes();
   availableOpportunities = this.planStore.availableOpportunities;
   isLoadingAvailableOpportunities = this.planStore.isLoadingAvailableOpportunities;
 
-  basicInformationFormGroupControls = this.materialsFormService.basicInformationFormGroup.controls;
-  companyInformationFormGroupControls = this.materialsFormService.companyInformationFormGroup.controls;
-  locationInformationFormGroupControls = this.materialsFormService.locationInformationFormGroup.controls;
-  localAgentInformationFormGroupControls = this.materialsFormService.localAgentInformationFormGroup.controls;
+  basicInformationFormGroupControls = this.productPlanFormService.basicInformationFormGroup.controls;
+  companyInformationFormGroupControls = this.productPlanFormService.companyInformationFormGroup.controls;
+  locationInformationFormGroupControls = this.productPlanFormService.locationInformationFormGroup.controls;
+  localAgentInformationFormGroupControls = this.productPlanFormService.localAgentInformationFormGroup.controls;
 
   ngOnInit(): void {
     this.listenToDoYouCurrentlyHaveLocalAgentInKSAValueChanges();
@@ -80,10 +80,10 @@ export class Step01OverviewCompanyInformationForm {
       .subscribe((value: boolean | null) => {
         if (value) {
           this.showLocalAgentInformation.set(true);
-          this.materialsFormService.toggleLocalAgentInformValidation(true);
+          this.productPlanFormService.toggleLocalAgentInformValidation(true);
         } else {
           this.showLocalAgentInformation.set(false);
-          this.materialsFormService.toggleLocalAgentInformValidation(false);
+          this.productPlanFormService.toggleLocalAgentInformValidation(false);
         }
       });
   }

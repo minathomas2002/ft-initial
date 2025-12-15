@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MaterialsFormService } from 'src/app/shared/services/plan/materials-form-service/materials-form-service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 
 @Component({
   selector: 'app-value-chain-form',
@@ -10,8 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ValueChainForm {
-  private readonly materialsFormService = inject(MaterialsFormService);
+  private readonly productPlanFormService = inject(ProductPlanFormService);
 
-  formGroup = this.materialsFormService.step3_valueChain;
+  formGroup = this.productPlanFormService.step3_valueChain;
 }
 
