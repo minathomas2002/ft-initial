@@ -16,10 +16,10 @@
           fluid
           maxlength="150"
         />
-        @if(getFormControl(basicInformationFormGroupControls['planTitle']).touched && getFormControl(basicInformationFormGroupControls['planTitle']).hasError('required')){
+        @if(getFormControl(basicInformationFormGroupControls['planTitle']).dirty && getFormControl(basicInformationFormGroupControls['planTitle']).hasError('required')){
         <app-base-error [message]="'Plan title is required'" />
         }
-        @else if(getFormControl(basicInformationFormGroupControls['planTitle']).touched && getFormControl(basicInformationFormGroupControls['planTitle']).hasError('maxlength')){
+        @else if(getFormControl(basicInformationFormGroupControls['planTitle']).dirty && getFormControl(basicInformationFormGroupControls['planTitle']).hasError('maxlength')){
         <app-base-error [message]="'Plan title must be less than 150 characters'" />
         }
       </div>
@@ -64,6 +64,7 @@
         <app-base-label [title]="'Submission Date'" />
         <p-datepicker
           fluid
+          dateFormat="dd M yy"
           [formControl]="getFormControl(basicInformationFormGroupControls['submissionDate'])"
         />
       </div>
@@ -89,10 +90,10 @@
             [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
           />
         </app-group-input-with-checkbox>
-        @if(getValueControl(companyInformationFormGroupControls['companyName']).touched && getValueControl(companyInformationFormGroupControls['companyName']).hasError('required')){
+        @if(getValueControl(companyInformationFormGroupControls['companyName']).dirty && getValueControl(companyInformationFormGroupControls['companyName']).hasError('required')){
         <app-base-error [message]="'Company name is required'" />
         }
-        @else if(getValueControl(companyInformationFormGroupControls['companyName']).touched && getValueControl(companyInformationFormGroupControls['companyName']).hasError('maxlength')){
+        @else if(getValueControl(companyInformationFormGroupControls['companyName']).dirty && getValueControl(companyInformationFormGroupControls['companyName']).hasError('maxlength')){
         <app-base-error [message]="'Company name must be less than 100 characters'" />
         }
       </div>
@@ -113,10 +114,10 @@
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
           />
         </app-group-input-with-checkbox>
-        @if(getValueControl(companyInformationFormGroupControls['ceoName']).touched && getValueControl(companyInformationFormGroupControls['ceoName']).hasError('required')){
+        @if(getValueControl(companyInformationFormGroupControls['ceoName']).dirty && getValueControl(companyInformationFormGroupControls['ceoName']).hasError('required')){
         <app-base-error [message]="'CEO name is required'" />
         }
-        @else if(getValueControl(companyInformationFormGroupControls['ceoName']).touched && getValueControl(companyInformationFormGroupControls['ceoName']).hasError('maxlength')){
+        @else if(getValueControl(companyInformationFormGroupControls['ceoName']).dirty && getValueControl(companyInformationFormGroupControls['ceoName']).hasError('maxlength')){
         <app-base-error [message]="'CEO name must be less than 100 characters'" />
         }
       </div>
@@ -135,10 +136,10 @@
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
           />
         </app-group-input-with-checkbox>
-        @if(getValueControl(companyInformationFormGroupControls['ceoEmailID']).touched && getValueControl(companyInformationFormGroupControls['ceoEmailID']).hasError('required')){
+        @if(getValueControl(companyInformationFormGroupControls['ceoEmailID']).dirty && getValueControl(companyInformationFormGroupControls['ceoEmailID']).hasError('required')){
         <app-base-error [message]="'CEO email is required'" />
         }
-        @else if(getValueControl(companyInformationFormGroupControls['ceoEmailID']).touched && getValueControl(companyInformationFormGroupControls['ceoEmailID']).hasError('email')){
+        @else if(getValueControl(companyInformationFormGroupControls['ceoEmailID']).dirty && getValueControl(companyInformationFormGroupControls['ceoEmailID']).hasError('email')){
         <app-base-error [message]="'CEO email is invalid'" />
         }
       </div>
@@ -164,10 +165,10 @@
             [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
           />
         </app-group-input-with-checkbox>
-        @if(getValueControl(locationInformationFormGroupControls['globalHQLocation']).touched && getValueControl(locationInformationFormGroupControls['globalHQLocation']).hasError('required')){
+        @if(getValueControl(locationInformationFormGroupControls['globalHQLocation']).dirty && getValueControl(locationInformationFormGroupControls['globalHQLocation']).hasError('required')){
         <app-base-error [message]="'Global HQ location is required'" />
         }
-        @else if(getValueControl(locationInformationFormGroupControls['globalHQLocation']).touched && getValueControl(locationInformationFormGroupControls['globalHQLocation']).hasError('maxlength')){
+        @else if(getValueControl(locationInformationFormGroupControls['globalHQLocation']).dirty && getValueControl(locationInformationFormGroupControls['globalHQLocation']).hasError('maxlength')){
         <app-base-error [message]="'Global HQ location must be less than 250 characters'" />
         }
       </div>
@@ -218,7 +219,7 @@
         <div>
 
         </div>
-        @if(getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']).touched && getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']).hasError('required')){
+        @if(getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']).dirty && getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']).hasError('required')){
         <app-base-error [message]="'This field is required'" />
         }
       </div>
@@ -246,10 +247,10 @@
               [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
             />
           </app-group-input-with-checkbox>
-          @if(getValueControl(localAgentInformationFormGroupControls['localAgentName']).touched && getValueControl(localAgentInformationFormGroupControls['localAgentName']).hasError('required')){
+          @if(getValueControl(localAgentInformationFormGroupControls['localAgentName']).dirty && getValueControl(localAgentInformationFormGroupControls['localAgentName']).hasError('required')){
           <app-base-error [message]="'Local agent name is required'" />
           }
-          @else if(getValueControl(localAgentInformationFormGroupControls['localAgentName']).touched && getValueControl(localAgentInformationFormGroupControls['localAgentName']).hasError('maxlength')){
+          @else if(getValueControl(localAgentInformationFormGroupControls['localAgentName']).dirty && getValueControl(localAgentInformationFormGroupControls['localAgentName']).hasError('maxlength')){
           <app-base-error [message]="'Local agent name must be less than 100 characters'" />
           }
         </div>
@@ -267,7 +268,7 @@
               [formControl]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
             />
           </app-group-input-with-checkbox>
-          @if(getValueControl(localAgentInformationFormGroupControls['contactPersonName']).touched && getValueControl(localAgentInformationFormGroupControls['contactPersonName']).hasError('required')){
+          @if(getValueControl(localAgentInformationFormGroupControls['contactPersonName']).dirty && getValueControl(localAgentInformationFormGroupControls['contactPersonName']).hasError('required')){
           <app-base-error [message]="'Contact person name is required'" />
           }
         </div>
@@ -287,10 +288,10 @@
               [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
             />
           </app-group-input-with-checkbox>
-          @if(getValueControl(localAgentInformationFormGroupControls['emailID']).touched && getValueControl(localAgentInformationFormGroupControls['emailID']).hasError('required')){
+          @if(getValueControl(localAgentInformationFormGroupControls['emailID']).dirty && getValueControl(localAgentInformationFormGroupControls['emailID']).hasError('required')){
           <app-base-error [message]="'Email ID is required'" />
           }
-          @else if(getValueControl(localAgentInformationFormGroupControls['emailID']).touched && getValueControl(localAgentInformationFormGroupControls['emailID']).hasError('email')){
+          @else if(getValueControl(localAgentInformationFormGroupControls['emailID']).dirty && getValueControl(localAgentInformationFormGroupControls['emailID']).hasError('email')){
           <app-base-error [message]="'Email ID is invalid'" />
           }
         </div>
@@ -308,10 +309,10 @@
               [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
             />
           </app-group-input-with-checkbox>
-          @if(getValueControl(localAgentInformationFormGroupControls['contactNumber']).touched && getValueControl(localAgentInformationFormGroupControls['contactNumber']).hasError('required')){
+          @if(getValueControl(localAgentInformationFormGroupControls['contactNumber']).dirty && getValueControl(localAgentInformationFormGroupControls['contactNumber']).hasError('required')){
           <app-base-error [message]="'Contact number is required'" />
           }
-          @else if(getValueControl(localAgentInformationFormGroupControls['contactNumber']).touched && getValueControl(localAgentInformationFormGroupControls['contactNumber']).hasError('phoneNumber')){
+          @else if(getValueControl(localAgentInformationFormGroupControls['contactNumber']).dirty && getValueControl(localAgentInformationFormGroupControls['contactNumber']).hasError('phoneNumber')){
           <app-base-error [message]="'Contact number is invalid'" />
           }
         </div>
@@ -333,10 +334,10 @@
                 [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
               />
             </app-group-input-with-checkbox>
-            @if(getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).touched && getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).hasError('required')){
+            @if(getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).dirty && getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).hasError('required')){
             <app-base-error [message]="'Company HQ location is required'" />
             }
-            @else if(getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).touched && getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).hasError('maxlength')){
+            @else if(getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).dirty && getValueControl(localAgentInformationFormGroupControls['companyHQLocation']).hasError('maxlength')){
             <app-base-error [message]="'Company HQ location must be less than 200 characters'" />
             }
           </div>
