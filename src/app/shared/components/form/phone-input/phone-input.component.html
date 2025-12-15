@@ -57,6 +57,7 @@
       <input
         type="tel"
         pInputText
+        [maxlength]="15"
         [placeholder]="placeholder()"
         [ngModel]="phoneNumber()"
         (ngModelChange)="onPhoneNumberChange($event)"
