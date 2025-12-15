@@ -9,13 +9,13 @@ export type SupportedLanguage = 'en' | 'ar';
 export class I18nService {
 	private readonly _currentLanguage = signal<SupportedLanguage>('en');
 	public readonly currentLanguage = this._currentLanguage.asReadonly();
-	
+
 	public readonly translations = signal<Record<string, any>>({});
-	
+
 	constructor(private translateService: TranslateService) {
 		// Load initial language
 		this.loadLanguage(this._currentLanguage());
-		
+
 		// Load language when it changes
 		effect(() => {
 			const lang = this._currentLanguage();
@@ -45,11 +45,11 @@ export class I18nService {
 			console.warn(`Translation key not found: ${key}`);
 			return key;
 		}
-		
+
 		if (params) {
 			return this.interpolate(translation, params);
 		}
-		
+
 		return translation;
 	}
 
@@ -78,7 +78,7 @@ export class I18nService {
 	private getNestedTranslation(key: string): string | null {
 		const keys = key.split('.');
 		let value: any = this.translations();
-		
+
 		for (const k of keys) {
 			if (value && typeof value === 'object' && k in value) {
 				value = value[k];
@@ -86,7 +86,7 @@ export class I18nService {
 				return null;
 			}
 		}
-		
+
 		return typeof value === 'string' ? value : null;
 	}
 
@@ -110,16 +110,17 @@ export class I18nService {
 				return;
 			}
 		}
-		
-		// Try to detect from browser
-		if (typeof window !== 'undefined' && window.navigator) {
-			const browserLang = navigator.language.split('-')[0];
-			if (browserLang === 'ar') {
-				this.setLanguage('ar');
-				return;
-			}
-		}
-		
+
+		// TODO: Uncomment this when finishing all localization work
+		// Try to detect from browser 
+		// if (typeof window !== 'undefined' && window.navigator) {
+		// 	const browserLang = navigator.language.split('-')[0];
+		// 	if (browserLang === 'ar') {
+		// 		this.setLanguage('ar');
+		// 		return;
+		// 	}
+		// }
+
 		// Default to English
 		this.setLanguage('en');
 	}

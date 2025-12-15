@@ -22,10 +22,9 @@ export class FormUtilityService {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
       if (control) {
-        // Only count errors if the control is dirty
-        if (control.dirty && control.errors) {
-          errorCount += Object.keys(control.errors).length;
-        }        
+        if (control.dirty && control.invalid) {
+          errorCount++;
+        }
       }
     });
 

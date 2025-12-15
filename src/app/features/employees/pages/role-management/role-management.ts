@@ -49,7 +49,7 @@ export class RoleManagement implements OnInit {
     this.i18nService.currentLanguage();
     return [
       {
-        label: 'Job ID',
+        label: 'ID',
         isSortable: false,
         sortingKey: 'jobId',
       },
