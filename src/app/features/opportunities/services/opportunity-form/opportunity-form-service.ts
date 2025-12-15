@@ -88,11 +88,11 @@ export class OpportunityFormService {
         opportunityType: [null, Validators.required],
         shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
         opportunityCategory: ['', Validators.required],
-        spendSAR: ['', Validators.required],
+        spendSAR: ['', [Validators.required, Validators.max(10), Validators.min(0.001)]],
         minQuantity: ['', [Validators.required, Validators.min(0)]],
         maxQuantity: ['', [Validators.required, Validators.min(0)]],
-        localSuppliers: ['', [Validators.required, Validators.min(0)]],
-        globalSuppliers: ['', [Validators.required, Validators.min(0)]],
+        localSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(2147483647)]],
+        globalSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(2147483647)]],
         dateRange: [null, [Validators.required, this.dateRangeValidator]],
         image: [null, Validators.required],
       }, { validators: [this.quantityRangeValidator] }),
@@ -177,7 +177,7 @@ export class OpportunityFormService {
   // Create a FormGroup for a single key activity record
   createKeyActivityControl(): FormGroup {
     return this.fb.group({
-      keyActivity: ['', Validators.required]
+      keyActivity: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(500)]]
     });
   }
 
@@ -424,11 +424,11 @@ export class OpportunityFormService {
     infoGroup.get('opportunityType')?.setValidators([Validators.required]);
     infoGroup.get('shortDescription')?.setValidators([Validators.required, Validators.maxLength(255)]);
     infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
-    infoGroup.get('spendSAR')?.setValidators([Validators.required]);
+    infoGroup.get('spendSAR')?.setValidators([Validators.required, Validators.max(10), Validators.min(0.001)]);
     infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.min(0)]);
     infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.min(0)]);
-    infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(0)]);
-    infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(0)]);
+    infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(2147483647)]);
+    infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(2147483647)]);
     infoGroup.get('dateRange')?.setValidators([Validators.required, this.dateRangeValidator]);
     infoGroup.get('image')?.setValidators([Validators.required]);
 
