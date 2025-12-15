@@ -549,7 +549,7 @@
         "dialog":{
           "confirm": "submit",
           "addTitle": "Create New Holiday",
-          "editTitle": "Edit New Holiday",
+          "editTitle": "Edit Holiday",
           "subTitle": "Add a new holiday or day off",
           "holidayNamePlaceHolder": "Enter Holiday Name",
           "holidayNameRequired": "Holiday name is required.",

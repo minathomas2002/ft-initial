@@ -55,6 +55,8 @@ export class AddHolidayFormService {
       dateTo: holiday.dateTo,
       typeId: holiday.typeId
     });
+    this.fromDate.setValue(holiday.dateFrom);
+    this.toDate.setValue(holiday.dateTo);
     //const numberOfDays = this.getAbsoluteDaysDifference(holiday.dateFrom,holiday.dateTo);
    // this.numberOfDays.setValue((numberOfDays <0)? 0 : numberOfDays);
   }
@@ -64,8 +66,18 @@ export class AddHolidayFormService {
   }
 
   loadData(){
-    return this.form.getRawValue();
+    const payload = {
+        ...this.form.getRawValue(),
+        dateFrom: this.fromDate.getRawValue(), //this.formatDateOnly(this.form.controls.dateFrom.value!),
+        dateTo: this.formatDateOnly(this.form.controls.dateTo.value!),
+      };
+    return payload;
   }
+
+  private formatDateOnly(date: Date | null): string | null {
+  if (!date) return null;
+  return date.toISOString().split('T')[0];
+}
 
    listenToFormChanges(){
     // validate date to must be grater or equal from
@@ -97,6 +109,7 @@ export class AddHolidayFormService {
     // to enhance remove weekly holidays
     d1.setHours(0, 0, 0, 0);
     d2.setHours(0, 0, 0, 0);
+    
 
     const diffMs = d2.getTime() - d1.getTime();
     return Math.floor(diffMs / (1000 * 60 * 60 * 24)) +1;
