@@ -5,7 +5,7 @@ import { ERoutes } from 'src/app/shared/enums';
 import { TranslatePipe } from "../../../../../shared/pipes/translate.pipe";
 import { TableLayoutComponent } from "src/app/shared/components/layout-components/table-layout/table-layout.component";
 import { ITableHeaderItem } from 'src/app/shared/interfaces';
-import { THolidaysManagementRecordKeys } from 'src/app/shared/interfaces/ISetting';
+import { IHolidaysManagementRecord, THolidaysManagementRecordKeys } from 'src/app/shared/interfaces/ISetting';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { TableSkeletonComponent } from "src/app/shared/components/skeletons/table-skeleton/table-skeleton.component";
 import { DataTableComponent } from "src/app/shared/components/layout-components/data-table/data-table.component";
@@ -15,11 +15,13 @@ import { AddEditHolidayDialog } from "../../../components/add-edit-holiday-dialo
 import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
 import { HolidaysFilterService } from '../../../services/holidays-filter/holidays-filter-service';
 import { HolidaysTypeMapper } from '../../../classes/holidays-type-mapper';
+import { AdminSettingMenuAction } from "../../../components/admin-setting-menu-action/admin-setting-menu-action";
+import { ThemeProvider } from 'primeng/config';
 
 @Component({
   selector: 'app-admin-holidays-management-view',
   imports: [Button, TranslatePipe, TableLayoutComponent, TableSkeletonComponent, DataTableComponent,
-    DatePipe, HolidaysManagementFilter, AddEditHolidayDialog],
+    DatePipe, HolidaysManagementFilter, AddEditHolidayDialog, AdminSettingMenuAction],
   templateUrl: './admin-holidays-management-view.html',
   styleUrl: './admin-holidays-management-view.scss',
 })
@@ -31,6 +33,10 @@ export class AdminHolidaysManagementView implements OnInit {
   holidaysFilterService = inject(HolidaysFilterService);
   holidaysTypeMapper = new HolidaysTypeMapper(this.i18nService);
   viewCreateDialog = signal<boolean>(false);
+  viewUpdateDialog = signal<boolean>(false);
+  isEditMode = signal<boolean>(false);
+  selectedItem = signal<IHolidaysManagementRecord|null>(null);
+
   filter = this.holidaysFilterService.filter;
 
   headers = computed<ITableHeaderItem<THolidaysManagementRecordKeys>[]>(() => {
@@ -106,6 +112,17 @@ export class AdminHolidaysManagementView implements OnInit {
   applyFilter() {
     this.holidaysFilterService.applyFilterWithPaging();
   }  
+  onUpdate(item:IHolidaysManagementRecord){
+    console.log("edit clicked");
+    this.viewUpdateDialog.set(true);
+    this.isEditMode.set(true);
+    this.selectedItem.set(item);
+  }
+
+  onDelete(item:IHolidaysManagementRecord){
+    console.log("delete clicked");
+    
+  }
 }
 
 

@@ -11,7 +11,6 @@ export const dateRangeValidator: ValidatorFn = (
 
   const fromDate = new Date(from);
   const toDate = new Date(to);
-console.log(toDate,fromDate,"dddddd");
 
   return toDate >= fromDate
     ? null

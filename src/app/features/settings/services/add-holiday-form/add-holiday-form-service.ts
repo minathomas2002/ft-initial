@@ -47,14 +47,18 @@ export class AddHolidayFormService {
   get numberOfDays() { return this.form.controls.numberOfDays; }
 
   patchForm(holiday: IHolidayCreating) {
+   // holiday.dateFrom = new Date(holiday.dateFrom);
+   // holiday.dateTo = new Date(holiday.dateTo);
     this.form.patchValue({
       name: holiday.name,
-      dateFrom: holiday.dateFrom,
-      dateTo: holiday.dateTo,
+      dateFrom: new Date(holiday.dateFrom),
+      dateTo: new Date(holiday.dateTo),
       typeId: holiday.typeId
     });
-    const numberOfDays = this.getAbsoluteDaysDifference(holiday.dateFrom,holiday.dateTo);
-    this.numberOfDays.setValue((numberOfDays <0)? 0 : numberOfDays);
+    this.fromDate.setValue(new Date(holiday.dateFrom));
+    this.toDate.setValue(new Date(holiday.dateTo));
+    //const numberOfDays = this.getAbsoluteDaysDifference(holiday.dateFrom,holiday.dateTo);
+   // this.numberOfDays.setValue((numberOfDays <0)? 0 : numberOfDays);
   }
 
   ResetFormFields() {
@@ -62,7 +66,12 @@ export class AddHolidayFormService {
   }
 
   loadData(){
-    return this.form.getRawValue();
+    const payload = {
+        ...this.form.getRawValue(),
+        dateFrom: this.form.controls.dateFrom.value!.toLocaleDateString("en-CA"), //this.formatDateOnly(this.form.controls.dateFrom.value!),
+        dateTo: this.form.controls.dateTo.value!.toLocaleDateString("en-CA") ,
+      };
+    return payload;
   }
 
    listenToFormChanges(){
@@ -91,13 +100,18 @@ export class AddHolidayFormService {
     });
   }
 
-  getAbsoluteDaysDifference(d1: Date, d2: Date): number {
-    // to enhance remove weekly holidays
-    d1.setHours(0, 0, 0, 0);
-    d2.setHours(0, 0, 0, 0);
+  getAbsoluteDaysDifference(from: Date, to: Date): number {
+    if (!from || !to) {
+    return 0; // or 0 depending on your business rule
+  }
+const fromDate = new Date(from);
+  const toDate = new Date(to);
 
-    const diffMs = d2.getTime() - d1.getTime();
-    return Math.floor(diffMs / (1000 * 60 * 60 * 24)) +1;
+  fromDate.setHours(0, 0, 0, 0);
+  toDate.setHours(0, 0, 0, 0);
+
+  const diffTime = Math.abs(toDate.getTime() - fromDate.getTime());
+  return diffTime / (1000 * 60 * 60 * 24) + 1;
   }
 
 }
