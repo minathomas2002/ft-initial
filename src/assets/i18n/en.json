@@ -560,7 +560,7 @@
           
         },
         "dialog":{
-          "confirm": "submit",
+          "confirm": "Submit",
           "addTitle": "Create New Holiday",
           "editTitle": "Edit New Holiday",
           "subTitle": "Add a new holiday or day off",
@@ -570,7 +570,7 @@
           "holidayNamePattern": "Holiday name must be english and arabic letters without special character.",
           "typeRequired": "Type is required.",
           "endtDatePlaceHolder":"Select End Date",
-          "startDatePlaceHolder":"Select start Date",
+          "startDatePlaceHolder":"Select Start Date",
           "startDateRequired": "Start Date is required.",
           "endDateValidation": "End Date must be greater than start date.",
           "endDateValidateDateRange": "End date must be after or equal to start date.",
