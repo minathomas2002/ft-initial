@@ -560,8 +560,9 @@
           "startDatePlaceHolder":"Select start Date",
           "startDateRequired": "Start Date is required.",
           "endDateValidation": "End Date must be greater than start date.",
-          "createdSuccessfully": "Holiday created successfully!",
-          "updatedSuccessfully": "Holiday updated successfully!"
+          "endDateValidateDateRange": "End date must be after or equal to start date.",
+          "createdSuccessfully": "Holiday has been added successfully.",
+          "updatedSuccessfully": "Holiday has been updated successfully.!"
         }
 
       }

@@ -83,6 +83,7 @@
         fluid
       />
       <div>
+
         @if(formService.fromDate.touched && formService.fromDate.errors){
         @if(formService.fromDate.hasError('required')){
         <app-base-error [message]="'setting.adminView.holidays.dialog.startDateRequired' | translate" />
@@ -103,6 +104,11 @@
         fluid
       />
       <div>
+        @if(formService.form.hasError("dateRangeInvalid") &&
+        (formService.form.get('dateTo')?.touched ||
+        formService.form.get('dateFrom')?.touched)){
+        <app-base-error [message]="'setting.adminView.holidays.dialog.endDateValidateDateRange' | translate" />
+        }
         @if(formService.toDate.touched && formService.toDate.errors){
         @if(formService.toDate.hasError('required')){
         <app-base-error [message]="'setting.adminView.holidays.dialog.endDateValidation' | translate" />

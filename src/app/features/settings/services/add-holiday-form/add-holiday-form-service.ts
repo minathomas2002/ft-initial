@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IHolidayCreating } from 'src/app/shared/interfaces/ISetting';
+import { dateRangeValidator } from 'src/app/shared/validators/date-range-validator';
 
 @Injectable({
   providedIn: 'root',
@@ -32,9 +33,13 @@ export class AddHolidayFormService {
     dateFrom: this.fb.control<Date | null>(null, [
       Validators.required,
     ]),
-    dateTo: this.fb.control<Date | null>(null),
+    dateTo: this.fb.control<Date | null>(null, [
+      Validators.required,
+    ]),
     numberOfDays: this.fb.control<number | null>({ value: null, disabled: true })
-  });
+  },
+  { validators: dateRangeValidator }
+);
   get type() { return this.form.controls.typeId; }
   get name() { return this.form.controls.name; }
   get fromDate() { return this.form.controls.dateFrom; }
@@ -62,8 +67,10 @@ export class AddHolidayFormService {
     // validate date to must be grater or equal from
     this.fromDate.valueChanges.subscribe(() => {
       const toDate = this.toDate.value;
-      if(toDate ===null)
+      if(toDate ===null){
+        this.toDate.setValue(this.fromDate.value);
         this.numberOfDays.setValue(1);
+      }
       else{
         const diffDays = this.getAbsoluteDaysDifference(this.fromDate.value!, this.toDate.value!);
         this.numberOfDays.setValue(diffDays);
@@ -76,12 +83,14 @@ export class AddHolidayFormService {
         this.numberOfDays.setValue(1);
       else{
         const diffDays = this.getAbsoluteDaysDifference(this.fromDate.value!, this.toDate.value!);
-        this.numberOfDays.setValue(diffDays);
+        
+        this.numberOfDays.setValue((diffDays <0)? 0 : diffDays);
       }
     });
   }
 
   getAbsoluteDaysDifference(d1: Date, d2: Date): number {
+    // to enhance remove weekly holidays
     d1.setHours(0, 0, 0, 0);
     d2.setHours(0, 0, 0, 0);
 

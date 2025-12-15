@@ -54,15 +54,7 @@ export class AddEditHolidayDialog {
   UpdateExistingHoliday(){
     // remeber to add id into object
   }
-
-  // :IHolidayCreating {
-  //     name: form.name,
-  //     typeId: form.typeId,
-  //     dateFrom: form.dateFrom, 
-  //     dateTo: form.dateTo
-      
-  //   };
-
+  
   SubmitNewHoliday(){
     const request = this.formService.loadData() as unknown as IHolidayCreating;
      this.adminSettingsStore
