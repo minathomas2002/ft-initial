@@ -1,95 +1,121 @@
 <div class="px-[32px] py-[24px]">
-<p-button
-  [label]="'setting.adminView.holidays.goBack' | translate"
-  icon="icon-arrow-left"
-  styleClass="!px-0 mb-[16px]"
-  link
-  (onClick)="goBack()"
-/>
-<div class="flex justify-between items-center">
-  <div>
-    <h4 class="font-semibold xl:text-2xl text-lg">{{ 'setting.adminView.holidays.title' | translate }}</h4>
-    <h4 class="xl:text-md text-sm text-gray-600">{{ 'setting.adminView.holidays.subTitle' | translate }}</h4>
+  <p-button
+    [label]="'setting.adminView.holidays.goBack' | translate"
+    icon="icon-arrow-left"
+    styleClass="!px-0 mb-[16px]"
+    link
+    (onClick)="goBack()"
+  />
+  <div class="flex justify-between items-center">
+    <div>
+      <h4 class="font-semibold xl:text-2xl text-lg">{{ 'setting.adminView.holidays.title' | translate }}</h4>
+      <h4 class="xl:text-md text-sm text-gray-600">{{ 'setting.adminView.holidays.subTitle' | translate }}</h4>
+    </div>
+
+    <p-button
+      [label]="'setting.adminView.holidays.addHoliday' | translate"
+      severity="primary"
+      class="flex"
+      fluid
+      icon="icon-plus"
+      (onClick)="onAddHoliday()"
+    />
+
   </div>
 
-  <p-button
-    [label]="'setting.adminView.holidays.addHoliday' | translate"
-    severity="primary"
-    class="flex"
-    fluid
-    icon="icon-plus"
-    (onClick)="onAddHoliday()"
-  />
+  <app-table-layout>
+    <ng-container ngProjectAs="table-filters">
+      <app-holidays-management-filter></app-holidays-management-filter>
+    </ng-container>
 
-</div>
-
-<app-table-layout>
-  <ng-container ngProjectAs="table-filters">
-    <app-holidays-management-filter></app-holidays-management-filter>
-  </ng-container>
-
-  <ng-container ngProjectAs="table-body">
-    <app-table-skeleton
-      [headers]="headers()"
-      [isLoading]="adminSettingsStore.isLoading()"
-    >
-      <app-data-table
-        [columns]="headers()"
-        [rows]="adminSettingsStore.holidaysList()"
-        [(filter)]="filter"
-        [totalRecords]="adminSettingsStore.holidaysTotalCount()"
-        (filterChange)="onSuccessActions()"
+    <ng-container ngProjectAs="table-body">
+      <app-table-skeleton
+        [headers]="headers()"
+        [isLoading]="adminSettingsStore.isLoading()"
       >
-        <ng-template
-          #itemsTemplate
-          let-item="item"
+        <app-data-table
+          [columns]="headers()"
+          [rows]="adminSettingsStore.holidaysList()"
+          [(filter)]="filter"
+          [totalRecords]="adminSettingsStore.holidaysTotalCount()"
+          (filterChange)="onSuccessActions()"
         >
-          <td>
-            {{ item.name }}
-          </td>
+          <ng-template
+            #itemsTemplate
+            let-item="item"
+          >
+            <td>
+              {{ item.name }}
+            </td>
 
-          <td>
-            {{ holidaysTypeMapper.getTypeLabel(item.typeId) }}
-          </td>
+            <td>
+              {{ holidaysTypeMapper.getTypeLabel(item.typeId) }}
+            </td>
 
-          <td>
-            {{ item.dateFrom| date : 'dd MMM yyyy' }}
-          </td>
+            <td>
+              {{ item.dateFrom| date : 'dd MMM yyyy' }}
+            </td>
 
-          <td>
-            {{item.dateTo | date : 'dd MMM yyyy'}}
-          </td>
+            <td>
+              {{item.dateTo | date : 'dd MMM yyyy'}}
+            </td>
 
-          <td>
-            {{ (item.numberOfDays)? (item.numberOfDays + ' ' + ('common.days' | translate)) : '-' }}
-          </td>
-          <td>
-            {{ item.createdDate | date : 'dd MMM yyyy' }}
-          </td>
-          <td>
-            {{item.createdBy}}
-          </td>
-          <td>
-            {{ item.updatedDate | date : 'dd MMM yyyy' }}
-          </td>
-          <td>
-            {{ item.updatedBy }}
-          </td>
+            <td>
+              {{ (item.numberOfDays)? (item.numberOfDays + ' ' + ('common.days' | translate)) : '-' }}
+            </td>
+            <td>
+              {{ item.createdDate | date : 'dd MMM yyyy' }}
+            </td>
+            <td>
+              {{item.createdBy}}
+            </td>
+            <td>
+              {{ item.updatedDate | date : 'dd MMM yyyy' }}
+            </td>
+            <td>
+              {{ item.updatedBy }}
+            </td>
 
-          <!-- Action -->
-          <td>
-            <!-- Action menu component-->
-          </td>
-        </ng-template>
-      </app-data-table>
-    </app-table-skeleton>
-  </ng-container>
-</app-table-layout>
+            <!-- Action -->
+            <td>
+              <app-admin-setting-menu-action
+                [holidayRecord]="item"
+                (onDelete)="onDelete(item)"
+                (onEdit)="onUpdate(item)"
+              ></app-admin-setting-menu-action>
+            </td>
+          </ng-template>
+        </app-data-table>
+      </app-table-skeleton>
+    </ng-container>
+  </app-table-layout>
 
-@if(viewCreateDialog()){
-<app-add-edit-holiday-dialog
-  [(dialogVisible)]="viewCreateDialog"
-  (onSuccess)="onSuccessActions()"
-></app-add-edit-holiday-dialog>
-}
+  @if(viewCreateDialog()){
+  <app-add-edit-holiday-dialog
+    [(dialogVisible)]="viewCreateDialog"
+    (onSuccess)="onSuccessActions()"
+    [isEditMode]="false"
+  ></app-add-edit-holiday-dialog>
+  }
+
+  @if(viewUpdateDialog()){
+  <app-add-edit-holiday-dialog
+    [(dialogVisible)]="viewUpdateDialog"
+    (onSuccess)="onSuccessActions()"
+    [isEditMode]="isEditMode()"
+    [holidayRecord]="selectedItem()?? null"
+  ></app-add-edit-holiday-dialog>
+  }
+
+  <app-general-confirmation-dialog
+    [(visible)]="viewDeleteDialog"
+    (onConfirm)="confirmDelete()"
+    [confirmButtonSeverity]="'danger'"
+    [icon]="'icon-trash-2'"
+    [title]="'setting.adminView.holidays.dialog.deleteTitle' | translate"
+    [description]="'setting.adminView.holidays.dialog.deleteDescription' | translate"
+    (confirmed)="confirmDelete()"
+    [confirmationLabel]="'setting.adminView.holidays.actions.delete' | translate"
+  ></app-general-confirmation-dialog>
+
 </div>

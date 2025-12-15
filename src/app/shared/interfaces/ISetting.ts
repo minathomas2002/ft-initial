@@ -137,6 +137,6 @@ export interface IHolidayCreating {
   id: string;
   name: string;
   typeId: string;
-  dateFrom: Date;
-  dateTo: Date;
+  dateFrom: string;
+  dateTo: string;
 }

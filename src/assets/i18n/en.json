@@ -254,6 +254,7 @@
       "opportunityCategoryRequired": "Opportunity category is required",
       "opportunityTypeRequired": "Opportunity type is required",
       "spendSARRequired": "Spend (SAR) is required",
+      "spendSARCannotBeGreaterThan10": "Spend (SAR) cannot be greater than 10 billion",
       "minQuantityRequired": "Min quantity is required",
       "minQuantityCannotBeNegative": "Min quantity cannot be negative",
       "minQuantityMustBeLessThanMax": "Min quantity must be less than max quantity",
@@ -262,16 +263,28 @@
       "maxQuantityMustBeGreaterThanMin": "Max quantity must be greater than min quantity",
       "localSuppliersRequired": "Local suppliers is required",
       "localSuppliersCannotBeNegative": "Local suppliers cannot be negative",
+      "localSuppliersInvalid": "Local suppliers value is invalid",
       "globalSuppliersRequired": "Global suppliers is required",
       "globalSuppliersCannotBeNegative": "Global suppliers cannot be negative",
+      "globalSuppliersInvalid": "Global suppliers value is invalid",
       "dateRangeRequired": "Date range is required",
       "dateRangeInvalid": "You should select a date range",
       "imageRequired": "Image is required",
       "designEngineeringRequired": "Design & Engineering is required",
+      "designEngineeringMinLength": "Design & Engineering item must be at least 3 characters",
+      "designEngineeringMaxLength": "Design & Engineering item must not exceed 500 characters",
       "sourcingRequired": "Sourcing is required",
+      "sourcingMinLength": "Sourcing item must be at least 3 characters",
+      "sourcingMaxLength": "Sourcing item must not exceed 500 characters",
       "manufacturingRequired": "Manufacturing is required",
+      "manufacturingMinLength": "Manufacturing item must be at least 3 characters",
+      "manufacturingMaxLength": "Manufacturing item must not exceed 500 characters",
       "assemblyTestingRequired": "Assembly & Testing is required",
-      "afterSalesServicesRequired": "After sales services is required"
+      "assemblyTestingMinLength": "Assembly & Testing item must be at least 3 characters",
+      "assemblyTestingMaxLength": "Assembly & Testing item must not exceed 500 characters",
+      "afterSalesServicesRequired": "After sales services is required",
+      "afterSalesServicesMinLength": "After sales services item must be at least 3 characters",
+      "afterSalesServicesMaxLength": "After sales services item must not exceed 500 characters"
     },
     "wizard": {
       "createOpportunity": "Create Opportunity",
@@ -341,7 +354,7 @@
     },
     "filter": {
       "searchPlaceholder": "Search by name or email or ID or phone",
-      "roleManagementSearchPlaceholder": "Search by Username, ID, Phone, Email",
+      "roleManagementSearchPlaceholder": "Search by Username, ID, Email",
       "rolePlaceholder": "Role",
       "statusPlaceholder": "Status",
       "selectJoinDate": "Select join date"
@@ -547,9 +560,9 @@
           
         },
         "dialog":{
-          "confirm": "submit",
+          "confirm": "Submit",
           "addTitle": "Create New Holiday",
-          "editTitle": "Edit New Holiday",
+          "editTitle": "Edit Holiday",
           "subTitle": "Add a new holiday or day off",
           "holidayNamePlaceHolder": "Enter Holiday Name",
           "holidayNameRequired": "Holiday name is required.",
@@ -557,12 +570,19 @@
           "holidayNamePattern": "Holiday name must be english and arabic letters without special character.",
           "typeRequired": "Type is required.",
           "endtDatePlaceHolder":"Select End Date",
-          "startDatePlaceHolder":"Select start Date",
+          "startDatePlaceHolder":"Select Start Date",
           "startDateRequired": "Start Date is required.",
           "endDateValidation": "End Date must be greater than start date.",
           "endDateValidateDateRange": "End date must be after or equal to start date.",
           "createdSuccessfully": "Holiday has been added successfully.",
-          "updatedSuccessfully": "Holiday has been updated successfully.!"
+          "updatedSuccessfully": "Holiday has been updated successfully.",
+          "deleteTitle": "Are you sure you want to delete this holiday? ",
+          "deleteDescription": "This action cannot be undone. Once deleted, all related data will be permanently removed.",
+          "deleteSuccessMessage": "Holiday has been deleted successfully."
+        },
+        "actions":{
+          "edit":"Edit",
+          "delete": "Delete"
         }
 
       }

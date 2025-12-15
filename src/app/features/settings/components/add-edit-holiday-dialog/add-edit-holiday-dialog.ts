@@ -11,7 +11,7 @@ import { BaseErrorComponent } from "src/app/shared/components/base-components/ba
 import { Select } from "primeng/select";
 import { DatePicker } from "primeng/datepicker";
 import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
-import { IHolidayCreating } from 'src/app/shared/interfaces/ISetting';
+import { IHolidayCreating, IHolidaysManagementRecord } from 'src/app/shared/interfaces/ISetting';
 import { take, tap } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
@@ -33,15 +33,24 @@ export class AddEditHolidayDialog {
   toasterService = inject(ToasterService);
   today = new Date();
   onSuccess = output<void>();
+  holidayRecord = model<IHolidaysManagementRecord | null>(null);
 
   ngOnInit() {
     this.formService.listenToFormChanges();
+    this.resetForm();
     if (this.isEditMode())
       this.loadHolidayDetails();
   }
 
   loadHolidayDetails() {
-
+    const holidayRecordToPatch: IHolidayCreating = {
+      id: this.holidayRecord()?.id!,
+      name: this.holidayRecord()?.name!,
+      dateFrom: this.holidayRecord()?.dateFrom!,
+      dateTo: this.holidayRecord()?.dateTo!,
+      typeId: this.holidayRecord()?.typeId!
+    };
+    this.formService.patchForm(holidayRecordToPatch);
   }
 
   onConfirm() {
@@ -53,7 +62,32 @@ export class AddEditHolidayDialog {
   }
 
   UpdateExistingHoliday() {
-    // remeber to add id into object
+    const request = this.formService.loadData() as unknown as IHolidayCreating;
+    request.id = this.holidayRecord()?.id!;
+    this.adminSettingsStore
+      .updateHoliday(request)
+      .pipe(
+        tap((res) => {
+          if (res.errors) {
+            this.onSuccess.emit()
+            //this.toasterService.error(res.message[0]);
+            this.dialogVisible.set(false);
+            return;
+          }
+        }),
+        take(1),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.toasterService.success(this.i18nService.translate('setting.adminView.holidays.dialog.updatedSuccessfully'));
+            this.formService.ResetFormFields();
+            this.onSuccess.emit(); // update table
+            this.dialogVisible.set(false);
+          }
+        }
+      }
+      );
   }
 
   SubmitNewHoliday() {
@@ -63,9 +97,9 @@ export class AddEditHolidayDialog {
       .pipe(
         tap((res) => {
           if (res.errors) {
-            // this.onSuccess.emit()
-            this.toasterService.error(res.message[0]);
-            //this.dialogVisible.set(false);
+            this.onSuccess.emit()
+            //this.toasterService.error(res.message[0]);
+            this.dialogVisible.set(false);
             return;
           }
         }),

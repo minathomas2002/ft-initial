@@ -83,10 +83,21 @@
                 type="text"
                 pInputText
                 class="w-full"
+                [minlength]="3"
+                [maxlength]="500"
                 [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['required']){
+              <app-base-error [message]="'opportunity.form.designEngineeringRequired' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['minlength']){
+              <app-base-error [message]="'opportunity.form.designEngineeringMinLength' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['maxlength']){
+              <app-base-error [message]="'opportunity.form.designEngineeringMaxLength' | translate" />
+              }
             </td>
           </ng-template>
         </app-form-array-input>
@@ -115,10 +126,21 @@
                 type="text"
                 pInputText
                 class="w-full"
+                [minlength]="3"
+                [maxlength]="500"
                 [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['required']){
+              <app-base-error [message]="'opportunity.form.sourcingRequired' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['minlength']){
+              <app-base-error [message]="'opportunity.form.sourcingMinLength' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['maxlength']){
+              <app-base-error [message]="'opportunity.form.sourcingMaxLength' | translate" />
+              }
             </td>
           </ng-template>
         </app-form-array-input>
@@ -147,10 +169,21 @@
                 type="text"
                 pInputText
                 class="w-full"
+                [minlength]="3"
+                [maxlength]="500"
                 [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['required']){
+              <app-base-error [message]="'opportunity.form.manufacturingRequired' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['minlength']){
+              <app-base-error [message]="'opportunity.form.manufacturingMinLength' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['maxlength']){
+              <app-base-error [message]="'opportunity.form.manufacturingMaxLength' | translate" />
+              }
             </td>
           </ng-template>
         </app-form-array-input>
@@ -179,10 +212,21 @@
                 type="text"
                 pInputText
                 class="w-full"
+                [minlength]="3"
+                [maxlength]="500"
                 [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['required']){
+              <app-base-error [message]="'opportunity.form.assemblyTestingRequired' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['minlength']){
+              <app-base-error [message]="'opportunity.form.assemblyTestingMinLength' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['maxlength']){
+              <app-base-error [message]="'opportunity.form.assemblyTestingMaxLength' | translate" />
+              }
             </td>
           </ng-template>
         </app-form-array-input>
@@ -211,10 +255,21 @@
                 type="text"
                 pInputText
                 class="w-full"
+                [minlength]="3"
+                [maxlength]="500"
                 [placeholder]="'opportunity.form.enterKeyActivities' | translate"
                 [formControl]="getKeyActivityControl(itemControl)!"
                 (blur)="getKeyActivityControl(itemControl)?.markAsTouched()"
               />
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['required']){
+              <app-base-error [message]="'opportunity.form.afterSalesServicesRequired' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['minlength']){
+              <app-base-error [message]="'opportunity.form.afterSalesServicesMinLength' | translate" />
+              }
+              @if(getKeyActivityControl(itemControl)?.touched && getKeyActivityControl(itemControl)?.errors?.['maxlength']){
+              <app-base-error [message]="'opportunity.form.afterSalesServicesMaxLength' | translate" />
+              }
             </td>
           </ng-template>
         </app-form-array-input>
