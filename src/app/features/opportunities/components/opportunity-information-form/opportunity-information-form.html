@@ -275,7 +275,7 @@
           <p-inputgroup class="w-full">
             <p-inputnumber
               mode="decimal"
-              [maxlength]="13"
+              [maxlength]="6"
               [minFractionDigits]="0"
               [maxFractionDigits]="3"
               [placeholder]="'opportunity.form.enterSpendSAR' | translate"
@@ -285,8 +285,16 @@
           </p-inputgroup>
 
           @if(getControl('spendSAR').invalid && getControl('spendSAR').dirty){
-          <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
-          }
+            @if(getControl('spendSAR').errors?.['required']){
+              <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
+            }
+            @if(getControl('spendSAR').errors?.['max']){
+              <app-base-error [message]="'opportunity.form.spendSARCannotBeGreaterThan10' | translate" />
+            }
+            @if(getControl('spendSAR').errors?.['min']){
+              <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
+            }
+          }          
         </div>
         <div>
           <app-base-label [title]="'opportunity.form.quantityUnits' | translate" />
@@ -334,7 +342,7 @@
           />
           @if(getControl('localSuppliers').invalid && getControl('localSuppliers').dirty){
           <app-base-error [message]="getControl('localSuppliers').hasError('required') ? ('opportunity.form.localSuppliersRequired' | translate) :
-            ('opportunity.form.localSuppliersCannotBeNegative' | translate)" />
+            ('opportunity.form.localSuppliersInvalid' | translate)" />
           }
         </div>
         <div class="flex flex-col">
@@ -345,7 +353,7 @@
           />
           @if(getControl('globalSuppliers').invalid && getControl('globalSuppliers').dirty){
           <app-base-error [message]="getControl('globalSuppliers').hasError('required') ? ('opportunity.form.globalSuppliersRequired' | translate) :
-            ('opportunity.form.globalSuppliersCannotBeNegative' | translate)" />
+            ('opportunity.form.globalSuppliersInvalid' | translate)" />
           }
         </div>
       </div>
