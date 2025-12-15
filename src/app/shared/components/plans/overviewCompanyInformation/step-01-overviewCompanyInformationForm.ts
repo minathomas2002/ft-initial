@@ -25,7 +25,6 @@ import { BaseErrorMessages } from '../../base-components/base-error-messages/bas
     DatePickerModule,
     SelectModule,
     ReactiveFormsModule,
-    BaseErrorComponent,
     TrimOnBlurDirective,
     GroupInputWithCheckbox,
     RadioButtonModule,
