@@ -275,7 +275,7 @@
           <p-inputgroup class="w-full">
             <p-inputnumber
               mode="decimal"
-              [maxlength]="6"
+              [maxlength]="5"
               [minFractionDigits]="0"
               [maxFractionDigits]="3"
               [placeholder]="'opportunity.form.enterSpendSAR' | translate"
@@ -285,16 +285,16 @@
           </p-inputgroup>
 
           @if(getControl('spendSAR').invalid && getControl('spendSAR').dirty){
-            @if(getControl('spendSAR').errors?.['required']){
-              <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
-            }
-            @if(getControl('spendSAR').errors?.['max']){
-              <app-base-error [message]="'opportunity.form.spendSARCannotBeGreaterThan10' | translate" />
-            }
-            @if(getControl('spendSAR').errors?.['min']){
-              <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
-            }
-          }          
+          @if(getControl('spendSAR').errors?.['required']){
+          <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
+          }
+          @if(getControl('spendSAR').errors?.['max']){
+          <app-base-error [message]="'opportunity.form.spendSARCannotBeGreaterThan10' | translate" />
+          }
+          @if(getControl('spendSAR').errors?.['min']){
+          <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
+          }
+          }
         </div>
         <div>
           <app-base-label [title]="'opportunity.form.quantityUnits' | translate" />
@@ -339,6 +339,7 @@
           <p-inputnumber
             [placeholder]="'opportunity.form.enterLocalSuppliersNumber' | translate"
             [formControl]="getControl('localSuppliers')"
+            [maxlength]="10"
           />
           @if(getControl('localSuppliers').invalid && getControl('localSuppliers').dirty){
           <app-base-error [message]="getControl('localSuppliers').hasError('required') ? ('opportunity.form.localSuppliersRequired' | translate) :
@@ -350,6 +351,7 @@
           <p-inputnumber
             [placeholder]="'opportunity.form.enterGlobalSuppliersNumber' | translate"
             [formControl]="getControl('globalSuppliers')"
+            [maxlength]="10"
           />
           @if(getControl('globalSuppliers').invalid && getControl('globalSuppliers').dirty){
           <app-base-error [message]="getControl('globalSuppliers').hasError('required') ? ('opportunity.form.globalSuppliersRequired' | translate) :
