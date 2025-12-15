@@ -575,7 +575,10 @@
           "endDateValidation": "End Date must be greater than start date.",
           "endDateValidateDateRange": "End date must be after or equal to start date.",
           "createdSuccessfully": "Holiday has been added successfully.",
-          "updatedSuccessfully": "Holiday has been updated successfully."
+          "updatedSuccessfully": "Holiday has been updated successfully.",
+          "deleteTitle": "Are you sure you want to delete this holiday? ",
+          "deleteDescription": "This action cannot be undone. Once deleted, all related data will be permanently removed.",
+          "deleteSuccessMessage": "Holiday has been deleted successfully."
         },
         "actions":{
           "edit":"Edit",
