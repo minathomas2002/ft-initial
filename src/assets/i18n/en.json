@@ -562,7 +562,7 @@
           "endDateValidation": "End Date must be greater than start date.",
           "endDateValidateDateRange": "End date must be after or equal to start date.",
           "createdSuccessfully": "Holiday has been added successfully.",
-          "updatedSuccessfully": "Holiday has been updated successfully.!"
+          "updatedSuccessfully": "Holiday has been updated successfully."
         },
         "actions":{
           "edit":"Edit",

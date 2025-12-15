@@ -14,7 +14,6 @@ import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-setting
 import { IHolidayCreating, IHolidaysManagementRecord } from 'src/app/shared/interfaces/ISetting';
 import { take, tap } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { item } from '@primeuix/themes/aura/breadcrumb';
 
 @Component({
   selector: 'app-add-edit-holiday-dialog',
@@ -64,8 +63,6 @@ export class AddEditHolidayDialog {
   UpdateExistingHoliday(){
     const request = this.formService.loadData() as unknown as IHolidayCreating;
     request.id = this.holidayRecord()?.id!;
-    console.log(request);
-    
      this.adminSettingsStore
       .updateHoliday(request)
       .pipe(
@@ -92,9 +89,7 @@ export class AddEditHolidayDialog {
       );
   }
   
-  SubmitNewHoliday(){
-    console.log(this.formService.loadData());
-    
+  SubmitNewHoliday(){    
   const request = this.formService.loadData() as unknown as IHolidayCreating;
   this.adminSettingsStore
       .createHoliday(request)
