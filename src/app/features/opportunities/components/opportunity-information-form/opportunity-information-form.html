@@ -339,7 +339,7 @@
           <p-inputnumber
             [placeholder]="'opportunity.form.enterLocalSuppliersNumber' | translate"
             [formControl]="getControl('localSuppliers')"
-            [maxlength]="10"
+            [maxlength]="9"
           />
           @if(getControl('localSuppliers').invalid && getControl('localSuppliers').dirty){
           <app-base-error [message]="getControl('localSuppliers').hasError('required') ? ('opportunity.form.localSuppliersRequired' | translate) :
@@ -351,7 +351,7 @@
           <p-inputnumber
             [placeholder]="'opportunity.form.enterGlobalSuppliersNumber' | translate"
             [formControl]="getControl('globalSuppliers')"
-            [maxlength]="10"
+            [maxlength]="9"
           />
           @if(getControl('globalSuppliers').invalid && getControl('globalSuppliers').dirty){
           <app-base-error [message]="getControl('globalSuppliers').hasError('required') ? ('opportunity.form.globalSuppliersRequired' | translate) :
