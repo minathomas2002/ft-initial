@@ -9,20 +9,20 @@ export class Step2ProductPlantOverviewFormBuilder {
   buildOverviewFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.productName]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
       }),
       [EMaterialsFormControls.productSpecifications]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(500)]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(500)]),
       }),
       [EMaterialsFormControls.targetedAnnualPlantCapacity]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]),
       }),
       [EMaterialsFormControls.timeRequiredToSetupFactory]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]),
       }),
     });
   }
@@ -30,24 +30,24 @@ export class Step2ProductPlantOverviewFormBuilder {
   buildExpectedCAPEXInvestmentFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.landPercentage]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.min(0), Validators.max(100)]),
       }),
       [EMaterialsFormControls.buildingPercentage]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.min(0), Validators.max(100)]),
       }),
       [EMaterialsFormControls.machineryEquipmentPercentage]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.min(0), Validators.max(100)]),
       }),
       [EMaterialsFormControls.othersPercentage]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.min(0), Validators.max(100)]),
       }),
       [EMaterialsFormControls.othersDescription]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [''],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(''),
       }),
     });
   }
@@ -55,16 +55,16 @@ export class Step2ProductPlantOverviewFormBuilder {
   buildTargetCustomersFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.targetedCustomer]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [[], [Validators.required]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control([], [Validators.required]),
       }),
       [EMaterialsFormControls.namesOfTargetedSuppliers]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [''],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.productsUtilizeTargetedProduct]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [''],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(''),
       }),
     });
   }
@@ -72,48 +72,42 @@ export class Step2ProductPlantOverviewFormBuilder {
   buildProductManufacturingExperienceFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.productManufacturingExperience]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]),
       }),
-      [EMaterialsFormControls.provideToSEC]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]],
-      }),
+      [EMaterialsFormControls.provideToSEC]: this.fb.control(null, [Validators.required]),
       [EMaterialsFormControls.qualifiedPlantLocationSEC]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [''],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.approvedVendorIDSEC]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [''],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.yearsOfExperienceSEC]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null),
       }),
       [EMaterialsFormControls.totalQuantitiesSEC]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null),
       }),
-      [EMaterialsFormControls.provideToLocalSuppliers]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]],
-      }),
+      [EMaterialsFormControls.provideToLocalSuppliers]: this.fb.control(null, [Validators.required]),
       [EMaterialsFormControls.namesOfSECApprovedSuppliers]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [''],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.qualifiedPlantLocation]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [''],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.yearsOfExperience]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null),
       }),
       [EMaterialsFormControls.totalQuantities]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null),
       }),
     });
   }
