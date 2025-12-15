@@ -80,6 +80,7 @@
         [placeholder]="'setting.adminView.holidays.dialog.startDatePlaceHolder' | translate"
         [dateFormat]="'dd M yy'"
         [minDate]="today"
+        appendTo="body"
         fluid
       />
       <div>
@@ -98,6 +99,7 @@
         [showIcon]="true"
         [showTime]="false"
         [formControl]="formService.toDate"
+        appendTo="body"
         [placeholder]="'setting.adminView.holidays.dialog.endtDatePlaceHolder' | translate"
         [dateFormat]="'dd M yy'"
         [minDate]="today"
