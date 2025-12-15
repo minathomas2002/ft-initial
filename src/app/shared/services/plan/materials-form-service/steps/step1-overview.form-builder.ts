@@ -1,7 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EOpportunityType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
-import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 export class Step1OverviewFormBuilder {
   constructor(
@@ -21,15 +20,15 @@ export class Step1OverviewFormBuilder {
   buildCompanyInformationFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.companyName]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
       }),
       [EMaterialsFormControls.ceoName]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
       }),
       [EMaterialsFormControls.ceoEmailID]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.email]),
       })
     });
@@ -38,37 +37,37 @@ export class Step1OverviewFormBuilder {
   buildLocationInformationFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.globalHQLocation]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(250)]),
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(100)]),
       }),
-      [EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]: this.fb.control<boolean | null>(null, [Validators.required])
+      [EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]: this.fb.control(null, [Validators.required])
     });
   }
 
   buildLocalAgentInformationFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.localAgentName]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.contactPersonName]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.emailID]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.contactNumber]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(''),
       }),
       [EMaterialsFormControls.companyHQLocation]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(''),
       }),
     });
