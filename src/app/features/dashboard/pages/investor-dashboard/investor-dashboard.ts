@@ -3,7 +3,7 @@ import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
-import { MaterialsSourcingPlanWizard } from 'src/app/shared/components/plans/materials-sourcing-plan-wizard/materials-sourcing-plan-wizzard/materials-sourcing-plan-wizard';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
 import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
@@ -30,7 +30,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
     MenuModule,
     PlanTermsAndConditionsDialog,
     NewPlanDialog,
-    MaterialsSourcingPlanWizard,
+    ProductLocalizationPlanWizard,
     DashboardPlansFilter,
     DashboardPlanActionMenu,
     DatePipe,
@@ -46,7 +46,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 export class InvestorDashboard implements OnInit {
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
-  materialsSourcingPlanWizardVisibility = signal(false);
+  productLocalizationPlanWizardVisibility = signal(false);
 
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
@@ -88,7 +88,7 @@ export class InvestorDashboard implements OnInit {
     this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
     this.newPlanDialogVisibility.set(false);
     if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
-      this.materialsSourcingPlanWizardVisibility.set(true);
+      this.productLocalizationPlanWizardVisibility.set(true);
     } else {
       console.log('service');
     }

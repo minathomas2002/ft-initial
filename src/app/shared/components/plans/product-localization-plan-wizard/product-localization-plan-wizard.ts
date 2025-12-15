@@ -1,17 +1,17 @@
-import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
-import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
-import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
-import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
-import { Step01OverviewCompanyInformationForm } from '../../overviewCompanyInformation/step-01-overviewCompanyInformationForm';
-import { Step02ProductPlantOverviewForm } from '../../productPlantOverview/step-02-productPlantOverviewForm';
-import { ValueChainForm } from '../../valueChain/valueChainForm';
-import { SaudizationForm } from '../../saudization/saudizationForm';
-import { ButtonModule } from 'primeng/button';
-import { BaseTagComponent } from '../../../base-components/base-tag/base-tag.component';
-import { StepContentDirective } from 'src/app/shared/directives';
+import { ChangeDetectionStrategy, Component, inject, model, signal } from "@angular/core";
+import { BaseWizardDialog } from "../../base-components/base-wizard-dialog/base-wizard-dialog";
+import { Step01OverviewCompanyInformationForm } from "../overviewCompanyInformation/step-01-overviewCompanyInformationForm";
+import { Step02ProductPlantOverviewForm } from "../productPlantOverview/step-02-productPlantOverviewForm";
+import { ValueChainForm } from "../valueChain/valueChainForm";
+import { SaudizationForm } from "../saudization/saudizationForm";
+import { ButtonModule } from "primeng/button";
+import { BaseTagComponent } from "../../base-components/base-tag/base-tag.component";
+import { StepContentDirective } from "src/app/shared/directives";
+import { ProductPlanFormService } from "src/app/shared/services/plan/materials-form-service/product-plan-form-service";
+import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
 
 @Component({
-  selector: 'app-materials-sourcing-plan-wizard',
+  selector: 'app-product-localization-plan-wizard',
   imports: [
     BaseWizardDialog,
     Step01OverviewCompanyInformationForm,
@@ -22,11 +22,11 @@ import { StepContentDirective } from 'src/app/shared/directives';
     BaseTagComponent,
     StepContentDirective
   ],
-  templateUrl: './materials-sourcing-plan-wizard.html',
-  styleUrl: './materials-sourcing-plan-wizard.scss',
+  templateUrl: './product-localization-plan-wizard.html',
+  styleUrl: './product-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MaterialsSourcingPlanWizard {
+export class ProductLocalizationPlanWizard {
   productPlanFormService = inject(ProductPlanFormService);
   visibility = model(false);
   activeStep = signal<number>(1);
@@ -56,7 +56,7 @@ export class MaterialsSourcingPlanWizard {
       formState: this.productPlanFormService.step4_saudization
     }
   ]);
-  wizardTitle = signal('Material Sourcing Plan – Cables');
+  wizardTitle = signal('Product Localization Plan'); // TODO: Translate
   isLoading = signal(false);
   isProcessing = signal(false);
 

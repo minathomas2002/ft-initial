@@ -9,7 +9,7 @@
 >
   <ng-template #header>
     <div class="flex items-center">
-      <div class="inline-flex items-center w-[300px] bg-gray-50 ps-5 pt-6 border-e-1 border-gray-200">
+      <div class="inline-flex items-center w-[300px] bg-gray-50 ps-5 py-6 border-e-1 border-gray-200">
         <img
           src="assets/images/long-logo.svg"
           alt="logo"
@@ -18,7 +18,7 @@
         >
       </div>
       <div class="header ps-8">
-        <h3 class="text-2xl font-semibold">{{wizardTitle()}}</h3>
+        <h3 class="text-2xl font-semibold pt-5">{{wizardTitle()}}</h3>
         <ng-content select="status"></ng-content>
       </div>
     </div>

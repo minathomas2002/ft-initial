@@ -9,7 +9,7 @@
       [label]="'dashboard.submitNewPlan' | translate"
       [icon]="'icon-plus'"
       [size]="'small'"
-      (onClick)="materialsSourcingPlanWizardVisibility.set(true)"
+      (onClick)="productLocalizationPlanWizardVisibility.set(true)"
     />
   </ng-container>
 
@@ -184,6 +184,6 @@
 />
 }
 
-@if(materialsSourcingPlanWizardVisibility()){
-<app-materials-sourcing-plan-wizard [(visibility)]="materialsSourcingPlanWizardVisibility" />
+@if(productLocalizationPlanWizardVisibility()){
+<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" />
 }
