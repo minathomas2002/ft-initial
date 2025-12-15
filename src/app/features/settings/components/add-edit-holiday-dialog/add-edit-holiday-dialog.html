@@ -32,8 +32,8 @@
         pInputText
         [placeholder]="'setting.adminView.holidays.dialog.holidayNamePlaceHolder' | translate"
         [formControl]="formService.name"
-        [maxlength]="20"
-        [minlength]="6"
+        [maxlength]="100"
+        [minlength]="3"
       />
       @if(formService.name.touched && formService.name.errors){
       @if(formService.name.hasError('required')){
@@ -41,6 +41,9 @@
       }
       @if(formService.name.hasError('minlength') || formService.name.hasError('maxlength')){
       <app-base-error [message]="'setting.adminView.holidays.dialog.holidayNameLength' | translate" />
+      }
+      @if(formService.name.hasError('pattern') ){
+      <app-base-error [message]="'setting.adminView.holidays.dialog.holidayNamePattern' | translate" />
       }
       }
     </div>
