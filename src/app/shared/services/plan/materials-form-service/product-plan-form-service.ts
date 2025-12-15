@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { Step1OverviewFormBuilder } from './steps/step1-overview.form-builder';
@@ -10,7 +10,7 @@ import { Step4SaudizationFormBuilder } from './steps/step4-saudization.form-buil
 @Injectable({
   providedIn: 'root'
 })
-export class MaterialsFormService {
+export class ProductPlanFormService {
   private readonly _fb = inject(FormBuilder);
   private readonly _planStore = inject(PlanStore);
 
@@ -165,6 +165,28 @@ export class MaterialsFormService {
 
   setRowValueForYear(year: number, rowName: string, value: any): void {
     this._step4Builder.setRowValueForYear(this.saudizationFormGroup, year, rowName, value);
+  }
+
+  // Helper methods
+  getHasCommentControl(formGroup: AbstractControl): FormControl<boolean> {
+    if (formGroup instanceof FormGroup) {
+      return formGroup.controls[EMaterialsFormControls.hasComment] as FormControl<boolean>;
+    }
+    throw new Error('Form group is not a valid form group');
+  }
+
+  getValueControl(formGroup: AbstractControl): FormControl<any> {
+    if (formGroup instanceof FormGroup) {
+      return formGroup.controls[EMaterialsFormControls.value] as FormControl<any>;
+    }
+    throw new Error('Form group is not a valid form group');
+  }
+
+  getFormControl(formControl: AbstractControl): FormControl<any> {
+    if (formControl instanceof FormControl) {
+      return formControl as FormControl<any>;
+    }
+    throw new Error('Form control is not a valid form control');
   }
 
   /* ------------------------------------------------ */
