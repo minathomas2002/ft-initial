@@ -16,6 +16,7 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
+import { PhoneInputComponent } from '../../form/phone-input/phone-input.component';
 
 @Component({
   selector: 'app-step-01-overview-company-information-form',
@@ -30,7 +31,8 @@ import { BaseErrorMessages } from '../../base-components/base-error-messages/bas
     RadioButtonModule,
     TooltipModule,
     TranslatePipe,
-    BaseErrorMessages
+    BaseErrorMessages,
+    PhoneInputComponent
   ],
   templateUrl: './step-01-overviewCompanyInformationForm.html',
   styleUrl: './step-01-overviewCompanyInformationForm.scss',

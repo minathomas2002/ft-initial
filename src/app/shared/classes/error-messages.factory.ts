@@ -1,6 +1,10 @@
 import { AbstractControl } from "@angular/forms";
 
 export const VALIDATION_MESSAGES = {
+
+  expectedLength: (label: string, error: { expectedLength: string }) =>
+    `${label} must be ${error.expectedLength} digits`,
+
   required: (label: string) =>
     `${label} is required`,
 
@@ -9,6 +13,9 @@ export const VALIDATION_MESSAGES = {
 
   minlength: (label: string, error: any) =>
     `${label} must be at least ${error.requiredLength} characters`,
+
+  invalidPhoneNumber: (label: string, error: any) =>
+    `Please enter a valid ${label}`,
 
   email: (label: string) =>
     `${label} is invalid`,
@@ -43,12 +50,11 @@ export class ErrorMessagesFactory {
     errorValue: any,
     label: string
   ): string | null {
+    if (['expectedLength', 'description'].includes(errorKey)) {
+      return null;
+    }
     if (this.isValidationMessageKey(errorKey)) {
       return this.getValidationMessage(errorKey, errorValue, label);
-    }
-
-    if (this.hasMessageProperty(errorValue)) {
-      return errorValue.message;
     }
 
     return this.getFallbackMessage();
@@ -81,16 +87,6 @@ export class ErrorMessagesFactory {
     }
 
     return messageFactory(label, errorValue);
-  }
-
-  private static hasMessageProperty(
-    errorValue: any
-  ): errorValue is ErrorWithMessage {
-    return (
-      errorValue &&
-      typeof errorValue === "object" &&
-      "message" in errorValue
-    );
   }
 
   private static getFallbackMessage(): string {

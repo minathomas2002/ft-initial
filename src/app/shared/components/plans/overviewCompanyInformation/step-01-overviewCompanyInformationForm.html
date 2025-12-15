@@ -258,6 +258,7 @@
               type="text"
               pInputText
               fluid
+              [maxlength]="15"
               placeholder="Enter contact person name"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
             />
@@ -294,13 +295,7 @@
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactNumber'])"
           >
-            <input
-              type="text"
-              pInputText
-              fluid
-              placeholder="Enter contact number"
-              [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
-            />
+            <app-phone-input [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"></app-phone-input>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"

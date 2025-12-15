@@ -154,7 +154,7 @@ export function phoneNumberPatternValidator(): (control: AbstractControl) => Val
 			const mobilePattern = /^[0-9]{7,15}$/;
 
 			if (!mobilePattern.test(trimmedPhone)) {
-				return { invalidPhoneNumber: true, message: 'Invalid phone number' };
+				return { invalidPhoneNumber: true };
 			}
 		}
 
