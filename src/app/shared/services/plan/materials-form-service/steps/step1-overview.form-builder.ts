@@ -91,24 +91,29 @@ export class Step1OverviewFormBuilder {
     }
 
     if (value) {
-      localAgentFormGroup.controls[EMaterialsFormControls.localAgentName].setValidators([Validators.required, Validators.maxLength(100)]);
-      localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName].setValidators([Validators.required, Validators.maxLength(100)]);
-      localAgentFormGroup.controls[EMaterialsFormControls.emailID].setValidators([Validators.required, Validators.email]);
-      localAgentFormGroup.controls[EMaterialsFormControls.contactNumber].setValidators([Validators.required, phoneNumberPatternValidator(), Validators.maxLength(15)]);
-      localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation].setValidators([Validators.required, Validators.maxLength(255)]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100)]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100)]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.email]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, phoneNumberPatternValidator(), Validators.maxLength(15)]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(255)]);
     } else {
-      localAgentFormGroup.controls[EMaterialsFormControls.localAgentName].clearValidators();
-      localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName].clearValidators();
-      localAgentFormGroup.controls[EMaterialsFormControls.emailID].clearValidators();
-      localAgentFormGroup.controls[EMaterialsFormControls.contactNumber].clearValidators();
-      localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation].clearValidators();
+      (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].reset();
+      (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].reset();
+      (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].reset();
+      (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].reset();
+      (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].reset();
+      (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
+      (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
+      (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
+      (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
+      (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
     }
 
-    localAgentFormGroup.controls[EMaterialsFormControls.localAgentName].updateValueAndValidity();
-    localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName].updateValueAndValidity();
-    localAgentFormGroup.controls[EMaterialsFormControls.emailID].updateValueAndValidity();
-    localAgentFormGroup.controls[EMaterialsFormControls.contactNumber].updateValueAndValidity();
-    localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation].updateValueAndValidity();
+    (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
+    (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
+    (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
+    (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
+    (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
   }
 }
 
