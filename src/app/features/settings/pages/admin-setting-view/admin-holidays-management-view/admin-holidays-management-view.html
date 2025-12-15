@@ -110,6 +110,7 @@
   <app-general-confirmation-dialog
     [(visible)]="viewDeleteDialog"
     (onConfirm)="confirmDelete()"
+    [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     [title]="'setting.adminView.holidays.dialog.deleteTitle' | translate"
     [description]="'setting.adminView.holidays.dialog.deleteDescription' | translate"
