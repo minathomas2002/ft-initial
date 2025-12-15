@@ -12,7 +12,8 @@
     "primeuix",
     "radiobutton",
     "Saudization",
-    "Sourcings"
+    "Sourcings",
+    "toggleswitch"
   ],
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "typescript.suggest.autoImports": true,
