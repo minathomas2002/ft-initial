@@ -108,7 +108,7 @@ export function phoneNumberPatternValidator(): (control: AbstractControl) => Val
 		// Handle both IPhoneValue and IPhoneNumberControl structures
 		let phoneNumber: string | null = null;
 		let countryCode: string | null = null;
-		
+
 		if (value.phoneNumber !== undefined) {
 			// IPhoneValue structure: {countryCode, phoneNumber}
 			phoneNumber = value.phoneNumber;
@@ -131,7 +131,7 @@ export function phoneNumberPatternValidator(): (control: AbstractControl) => Val
 		if (countryPattern) {
 			// Validate with country-specific pattern
 			const length = trimmedPhone.length;
-			
+
 			if (length < countryPattern.minLength || length > countryPattern.maxLength) {
 				return {
 					invalidPhoneNumber: true,
@@ -154,7 +154,7 @@ export function phoneNumberPatternValidator(): (control: AbstractControl) => Val
 			const mobilePattern = /^[0-9]{7,15}$/;
 
 			if (!mobilePattern.test(trimmedPhone)) {
-				return { invalidPhoneNumber: true };
+				return { invalidPhoneNumber: true, message: 'Invalid phone number' };
 			}
 		}
 
