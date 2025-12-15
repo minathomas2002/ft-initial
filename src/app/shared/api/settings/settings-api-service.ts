@@ -23,14 +23,14 @@ export class SettingsApiService {
     updateSLASetting(req: ISettingSlaReq): Observable<IBaseApiResponse<boolean>> {
       return this.baseHttpService.post<boolean, ISettingSlaReq,unknown>(API_ENDPOINTS.AdminSettings.editSlaSetting, req);
     }
-     // get sla setting
+     // get AutoAssign setting
     getAutoAssignSetting(): Observable<IBaseApiResponse<ISettingAutoAssign>> {
       return this.baseHttpService.get<ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.getAutoAssignSetting);
     }
 
-  // update sla setting
-    updateAutoAssignSetting(req: ISettingAutoAssign): Observable<IBaseApiResponse<ISettingAutoAssignResponse>> {
-      return this.baseHttpService.post <ISettingAutoAssignResponse, ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.editAutoAssignSetting, req);
+  // update AutoAssign setting
+    updateAutoAssignSetting(req: ISettingAutoAssign): Observable<IBaseApiResponse<boolean>> {
+      return this.baseHttpService.post <boolean, ISettingAutoAssign, unknown>(API_ENDPOINTS.AdminSettings.editAutoAssignSetting, req);
     }
 
   // Holidays management

@@ -72,7 +72,7 @@ export const adminSettingsStore = signalStore(
         );
       },
 
-      /* Get Sla setting*/
+      /* Get AutoAssign setting*/
       getAutoAssignSetting() {
         patchState(store, { isLoading: true, error: null });
         return settingApiService.getAutoAssignSetting().pipe(
