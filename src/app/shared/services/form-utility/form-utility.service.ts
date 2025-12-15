@@ -26,24 +26,8 @@ export class FormUtilityService {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
       if (control) {
-        // Only count errors if the control is dirty
-        if (control.dirty && control.errors) {
-          errorCount += Object.keys(control.errors).length;
-        }
-
-        // Recursively handle nested FormGroups
-        if (control instanceof FormGroup) {
-          errorCount += this.countFormErrors(control);
-        }
-        // Recursively handle FormArrays
-        else if (control instanceof FormArray) {
-          control.controls.forEach((arrayControl) => {
-            if (arrayControl instanceof FormGroup) {
-              errorCount += this.countFormErrors(arrayControl);
-            } else if (arrayControl.dirty && arrayControl.errors) {
-              errorCount += Object.keys(arrayControl.errors).length;
-            }
-          });
+        if (control.dirty && control.invalid) {
+          errorCount++;
         }
       }
     });

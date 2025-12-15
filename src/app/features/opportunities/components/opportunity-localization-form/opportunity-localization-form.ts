@@ -14,6 +14,7 @@ import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/for
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
+import { JsonPipe } from '@angular/common';
 
 
 @Component({
@@ -29,8 +30,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     MessageModule,
     TranslatePipe,
     SkeletonModule,
-    TrimOnBlurDirective,
-  ],
+    TrimOnBlurDirective,],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
