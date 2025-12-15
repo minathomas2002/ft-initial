@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, model, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, model, OnDestroy, signal } from "@angular/core";
 import { BaseWizardDialog } from "../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { Step01OverviewCompanyInformationForm } from "../overviewCompanyInformation/step-01-overviewCompanyInformationForm";
 import { Step02ProductPlantOverviewForm } from "../productPlantOverview/step-02-productPlantOverviewForm";
@@ -26,7 +26,7 @@ import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interfa
   styleUrl: './product-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductLocalizationPlanWizard {
+export class ProductLocalizationPlanWizard implements OnDestroy {
   productPlanFormService = inject(ProductPlanFormService);
   visibility = model(false);
   activeStep = signal<number>(1);
@@ -65,4 +65,8 @@ export class ProductLocalizationPlanWizard {
   nextStep(): void { }
 
   saveAsDraft(): void { }
+
+  ngOnDestroy(): void {
+    // TODO: Reset the whole from
+  }
 }
