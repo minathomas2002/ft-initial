@@ -13,7 +13,7 @@ export class HolidaysFilter extends Filter<
     super();
     const pagination = new Pagination(10);
     const sorting = new Sorting<THolidaysManagementRecordKeys>();
-    sorting.sortField = 'dateFrom';
+    sorting.sortField = 'createdDate';
     sorting.sortOrder = ESortingOrder.asc;
     this.filter = {
       ...pagination,
