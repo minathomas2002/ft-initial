@@ -589,6 +589,7 @@
 
     }
   },
+  
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Track and manage your submitted localization plans and their review status",
@@ -642,6 +643,7 @@
     "publish": "Publish"
   },
   "plans": {
+    "assign": "Assign",
     "filter": {
       "searchPlaceholder": "Search by Plan ID or Title",
       "selectPlanType": "Select Plan Type",
