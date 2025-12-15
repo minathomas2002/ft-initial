@@ -14,5 +14,6 @@ export enum ERoutes {
   admin = 'admin',
   investors = 'investors',
   settings = 'settings',
-  holidaysManagement = 'holidays-management'
+  holidaysManagement = 'holidays-management',
+  plans = 'plans'
 }

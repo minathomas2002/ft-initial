@@ -45,8 +45,8 @@ const MAIN_LAYOUT_ROUTES: Routes = [
       {
         path: ERoutes.plans,
         loadChildren: () => import('./features/plans/plans.route').then((c) => c.plans_ROUTES),
-        canActivate: [adminGuard],
         data: { animation: ERoutes.plans },
+        // dvManager gaurd
       },
 
     ],
