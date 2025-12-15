@@ -79,6 +79,7 @@
             <!-- Action -->
             <td>
               <app-admin-setting-menu-action
+                [holidayRecord]="item"
                 (onDelete)="onDelete(item)"
                 (onEdit)="onUpdate(item)"
               ></app-admin-setting-menu-action>
@@ -93,6 +94,7 @@
   <app-add-edit-holiday-dialog
     [(dialogVisible)]="viewCreateDialog"
     (onSuccess)="onSuccessActions()"
+    [isEditMode]="false"
   ></app-add-edit-holiday-dialog>
   }
 

@@ -1,4 +1,4 @@
-import { Component, computed, inject, output, signal } from '@angular/core';
+import { Component, computed, inject, model, output, signal } from '@angular/core';
 import { Menu } from "primeng/menu";
 import { Button } from "primeng/button";
 import { I18nService } from 'src/app/shared/services/i18n';
@@ -6,6 +6,7 @@ import { HolidaySettingActionsMapper } from '../../classes/holiday-setting-actio
 import { computeMsgId } from '@angular/compiler';
 import { MenuItem } from 'primeng/api';
 import { EHolidaysManagementActions } from 'src/app/shared/enums/holidays-management.enum';
+import { IHolidaysManagementRecord } from 'src/app/shared/interfaces/ISetting';
 
 @Component({
   selector: 'app-admin-setting-menu-action',
@@ -15,11 +16,12 @@ import { EHolidaysManagementActions } from 'src/app/shared/enums/holidays-manage
 })
 export class AdminSettingMenuAction {
    
-    selectedItem = signal<string | null>(null);
+    holidayRecord = model<IHolidaysManagementRecord|null>(null);
+
     private readonly _i18n = inject(I18nService);
     holidaySettingActionsMapper = new HolidaySettingActionsMapper(this._i18n);
 
-     actions = computed(() => this.holidaySettingActionsMapper.getMappedActions());
+     actions = computed(() => this.holidaySettingActionsMapper.getMappedActions(this.holidayRecord()!));
 //actions = signal<EHolidaysManagementActions[]>([EHolidaysManagementActions.DELETE]);
 
 onDelete= output();

@@ -37,6 +37,7 @@ export class AddEditHolidayDialog {
 
    ngOnInit(){
     this.formService.listenToFormChanges();
+    this.resetForm();
     if (this.isEditMode())
       this.loadHolidayDetails();
    }
@@ -61,35 +62,64 @@ export class AddEditHolidayDialog {
   }
 
   UpdateExistingHoliday(){
-    // remeber to add id into object
+    const request = this.formService.loadData() as unknown as IHolidayCreating;
+    request.id = this.holidayRecord()?.id!;
+    console.log(request);
+    
+     this.adminSettingsStore
+      .updateHoliday(request)
+      .pipe(
+        tap((res) => {
+          if (res.errors) {
+            this.onSuccess.emit()
+            //this.toasterService.error(res.message[0]);
+            this.dialogVisible.set(false);
+            return;
+          }
+        }),
+        take(1),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.toasterService.success(this.i18nService.translate('setting.adminView.holidays.dialog.updatedSuccessfully'));
+            this.formService.ResetFormFields();
+            this.onSuccess.emit(); // update table
+            this.dialogVisible.set(false);
+          }
+        }
+      }
+      );
   }
   
   SubmitNewHoliday(){
-    const request = this.formService.loadData() as unknown as IHolidayCreating;
-     this.adminSettingsStore
-          .createHoliday(request)
-          .pipe(
-            tap((res) => {
-              if (res.errors) {
-                this.onSuccess.emit()
-                //this.toasterService.error(res.message[0]);
-                this.dialogVisible.set(false);
-                return;
-              }
-            }),
-            take(1),
-          )
-          .subscribe({
-            next: (res) => {
-              if (res.success) {
-                this.toasterService.success(this.i18nService.translate('setting.adminView.holidays.dialog.createdSuccessfully'));
-                this.formService.ResetFormFields();
-                this.onSuccess.emit(); // update table
-                this.dialogVisible.set(false);
-              }
-            }
+    console.log(this.formService.loadData());
+    
+  const request = this.formService.loadData() as unknown as IHolidayCreating;
+  this.adminSettingsStore
+      .createHoliday(request)
+      .pipe(
+        tap((res) => {
+          if (res.errors) {
+            this.onSuccess.emit()
+            //this.toasterService.error(res.message[0]);
+            this.dialogVisible.set(false);
+            return;
           }
-          );
+        }),
+        take(1),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.toasterService.success(this.i18nService.translate('setting.adminView.holidays.dialog.createdSuccessfully'));
+            this.formService.ResetFormFields();
+            this.onSuccess.emit(); // update table
+            this.dialogVisible.set(false);
+          }
+        }
+      }
+      );
   }
 
 
