@@ -1,3 +1,4 @@
+import { date } from "@primeuix/themes/aura/datepicker";
 import { EHolidaysManagementActions } from "src/app/shared/enums/holidays-management.enum";
 import { IActionMenuItem } from "src/app/shared/interfaces";
 import { IHolidaysManagementRecord } from "src/app/shared/interfaces/ISetting";
@@ -22,12 +23,13 @@ export class HolidaySettingActionsMapper {
     },
   };
 
-  getMappedActions():EHolidaysManagementActions[]{
-
-    return [
-        EHolidaysManagementActions.EDIT,
-        EHolidaysManagementActions.DELETE
-         ]
+  getMappedActions(item :IHolidaysManagementRecord):EHolidaysManagementActions[]{
+    const actions: EHolidaysManagementActions[] = [];
+    const today = new Date();
+    if (new Date(item.dateTo) >= today) 
+      actions.push(EHolidaysManagementActions.EDIT);
+    actions.push(EHolidaysManagementActions.DELETE);
+    return actions;
 
   }
   getActions(
