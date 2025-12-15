@@ -3,10 +3,11 @@ import { Button } from "primeng/button";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { EPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
+import { AssignReassignMaualeEmployee } from "../../components/assign-reassign-mauale-employee/assign-reassign-mauale-employee";
 
 @Component({
   selector: 'app-plans-list',
-  imports: [Button, TranslatePipe],
+  imports: [Button, TranslatePipe, AssignReassignMaualeEmployee],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
 })
@@ -30,5 +31,10 @@ export class PlansList implements OnInit {
   onAssign(item: IPlanRecord){
     this.viewAssignDialog.set(true);
     this.planItem= item;
+  }
+
+  ApplyFilter()
+  {
+    
   }
 }

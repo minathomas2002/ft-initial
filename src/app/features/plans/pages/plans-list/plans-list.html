@@ -8,3 +8,14 @@
   icon="icon-plus"
   (onClick)="onAssign(planItem)"
 />
+
+@if (viewAssignDialog()) {
+<app-assign-reassign-mauale-employee
+  [(dialogVisible)]="viewAssignDialog"
+  [isReassignMode]="false"
+  [planRecord]="planItem"
+  (onSuccess)="ApplyFilter()"
+>
+
+</app-assign-reassign-mauale-employee>
+}
