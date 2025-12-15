@@ -53,6 +53,8 @@ export class AddHolidayFormService {
       dateTo: holiday.dateTo,
       typeId: holiday.typeId
     });
+    const numberOfDays = this.getAbsoluteDaysDifference(holiday.dateFrom,holiday.dateTo);
+    this.numberOfDays.setValue((numberOfDays <0)? 0 : numberOfDays);
   }
 
   ResetFormFields() {
