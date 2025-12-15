@@ -47,14 +47,16 @@ export class AddHolidayFormService {
   get numberOfDays() { return this.form.controls.numberOfDays; }
 
   patchForm(holiday: IHolidayCreating) {
+    holiday.dateFrom = new Date(holiday.dateFrom);
+    holiday.dateTo = new Date(holiday.dateTo);
     this.form.patchValue({
       name: holiday.name,
       dateFrom: holiday.dateFrom,
       dateTo: holiday.dateTo,
       typeId: holiday.typeId
     });
-    const numberOfDays = this.getAbsoluteDaysDifference(holiday.dateFrom,holiday.dateTo);
-    this.numberOfDays.setValue((numberOfDays <0)? 0 : numberOfDays);
+    //const numberOfDays = this.getAbsoluteDaysDifference(holiday.dateFrom,holiday.dateTo);
+   // this.numberOfDays.setValue((numberOfDays <0)? 0 : numberOfDays);
   }
 
   ResetFormFields() {

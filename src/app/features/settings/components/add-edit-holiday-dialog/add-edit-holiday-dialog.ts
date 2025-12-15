@@ -11,9 +11,10 @@ import { BaseErrorComponent } from "src/app/shared/components/base-components/ba
 import { Select } from "primeng/select";
 import { DatePicker } from "primeng/datepicker";
 import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
-import { IHolidayCreating } from 'src/app/shared/interfaces/ISetting';
+import { IHolidayCreating, IHolidaysManagementRecord } from 'src/app/shared/interfaces/ISetting';
 import { take, tap } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { item } from '@primeuix/themes/aura/breadcrumb';
 
 @Component({
   selector: 'app-add-edit-holiday-dialog',
@@ -31,7 +32,8 @@ export class AddEditHolidayDialog {
   holidayTypes = computed(() => this.holidaysTypeMapper.getMappedTypesList());
   toasterService = inject(ToasterService);
   today = new Date();
-   onSuccess = output<void>();
+  onSuccess = output<void>();
+  holidayRecord = model<IHolidaysManagementRecord|null>(null);
 
    ngOnInit(){
     this.formService.listenToFormChanges();
@@ -40,7 +42,14 @@ export class AddEditHolidayDialog {
    }
 
   loadHolidayDetails(){
-
+    const holidayRecordToPatch : IHolidayCreating ={
+      id: this.holidayRecord()?.id!,
+      name : this.holidayRecord()?.name!,
+      dateFrom : this.holidayRecord()?.dateFrom!,
+      dateTo: this.holidayRecord()?.dateTo!,
+      typeId: this.holidayRecord()?.typeId!
+    };
+    this.formService.patchForm(holidayRecordToPatch);
   }
 
   onConfirm() {

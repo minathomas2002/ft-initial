@@ -563,6 +563,10 @@
           "endDateValidateDateRange": "End date must be after or equal to start date.",
           "createdSuccessfully": "Holiday has been added successfully.",
           "updatedSuccessfully": "Holiday has been updated successfully.!"
+        },
+        "actions":{
+          "edit":"Edit",
+          "delete": "Delete"
         }
 
       }
