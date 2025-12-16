@@ -84,7 +84,7 @@
               [showCheckbox]="showCheckbox()"
             >
               <p-select
-                [options]="localizationStatusOptions()"
+                [options]="inHouseOrProcuredOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
@@ -160,8 +160,8 @@
               <p-select
                 [options]="localizationStatusOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
-                optionLabel="label"
-                optionValue="value"
+                optionLabel="name"
+                optionValue="id"
                 placeholder="Select"
                 fluid
                 [appendTo]="'body'"
@@ -176,8 +176,8 @@
               <p-select
                 [options]="localizationStatusOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
-                optionLabel="label"
-                optionValue="value"
+                optionLabel="name"
+                optionValue="id"
                 placeholder="Select"
                 fluid
                 [appendTo]="'body'"
@@ -192,8 +192,8 @@
               <p-select
                 [options]="localizationStatusOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
-                optionLabel="label"
-                optionValue="value"
+                optionLabel="name"
+                optionValue="id"
                 placeholder="Select"
                 fluid
                 [appendTo]="'body'"
@@ -208,8 +208,8 @@
               <p-select
                 [options]="localizationStatusOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
-                optionLabel="label"
-                optionValue="value"
+                optionLabel="name"
+                optionValue="id"
                 placeholder="Select"
                 fluid
                 [appendTo]="'body'"
@@ -224,8 +224,8 @@
               <p-select
                 [options]="localizationStatusOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
-                optionLabel="label"
-                optionValue="value"
+                optionLabel="name"
+                optionValue="id"
                 placeholder="Select"
                 fluid
                 [appendTo]="'body'"
@@ -279,7 +279,7 @@
               [showCheckbox]="showCheckbox()"
             >
               <p-select
-                [options]="localizationStatusOptions()"
+                [options]="inHouseOrProcuredOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
@@ -323,15 +323,15 @@
               <p-select
                 [options]="localizationStatusOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
-                optionLabel="label"
-                optionValue="value"
+                optionLabel="name"
+                optionValue="id"
                 placeholder="Select"
                 fluid
                 [appendTo]="'body'"
               />
             </app-group-input-with-checkbox>
           </td>
-          <td class="p-3 border border-gray-200">
+          <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
               [showCheckbox]="showCheckbox()"
@@ -340,14 +340,14 @@
                 [options]="localizationStatusOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
-                optionValue="value"
+                optionValue="id"
                 placeholder="Select"
                 fluid
                 [appendTo]="'body'"
               />
             </app-group-input-with-checkbox>
           </td>
-          <td class="p-3 border border-gray-200">
+          <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [showCheckbox]="showCheckbox()"
@@ -407,6 +407,7 @@
                 optionValue="id"
                 placeholder="Select"
                 fluid
+                [appendTo]="'body'"
               />
             </app-group-input-with-checkbox>
           </td>
@@ -473,7 +474,7 @@
               [showCheckbox]="showCheckbox()"
             >
               <p-select
-                [options]="localizationStatusOptions()"
+                [options]="inHouseOrProcuredOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
@@ -553,6 +554,7 @@
                 optionValue="id"
                 placeholder="Select"
                 fluid
+                [appendTo]="'body'"
               />
             </app-group-input-with-checkbox>
           </td>
@@ -667,7 +669,7 @@
               [showCheckbox]="showCheckbox()"
             >
               <p-select
-                [options]="localizationStatusOptions()"
+                [options]="inHouseOrProcuredOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
@@ -747,6 +749,7 @@
                 optionValue="id"
                 placeholder="Select"
                 fluid
+                [appendTo]="'body'"
               />
             </app-group-input-with-checkbox>
           </td>
@@ -861,7 +864,7 @@
               [showCheckbox]="showCheckbox()"
             >
               <p-select
-                [options]="localizationStatusOptions()"
+                [options]="inHouseOrProcuredOptions()"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
