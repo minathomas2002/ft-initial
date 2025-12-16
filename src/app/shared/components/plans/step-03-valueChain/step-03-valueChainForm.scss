@@ -1,2 +1,48 @@
 // Value Chain Form Styles
 
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.summary-card-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.summary-card-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+// Ensure table responsiveness
+:host ::ng-deep {
+  .form-array-input {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 100%;
+  }
+}
+
+// Tooltip styling
+:host ::ng-deep {
+  .p-tooltip {
+    max-width: 500px;
+  }
+}
+

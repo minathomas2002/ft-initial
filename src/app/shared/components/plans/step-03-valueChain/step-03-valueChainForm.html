@@ -1,0 +1,1019 @@
+<div class="flex flex-col gap-[32px] px-8 pb-10">
+  <!-- Value Chain Components Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">
+      Value Chain Components
+      <span>
+        <i
+          class="icon-info text-sm ms-2 text-gray-400"
+          tooltipPosition="top"
+          [pTooltip]="tooltipContent"
+          [tooltipStyleClass]="'min-w-[450px]'"
+        ></i>
+        <ng-template #tooltipContent>
+          <div class="flex flex-col gap-2 text-center">
+            <p>
+              Please provide a detailed breakdown of all expenses within each component of the value chain, including the following information for each expense
+            </p>
+            <p>
+              <strong>A)</strong> Specify whether the expense will be handled "in-house" or "procured" from third parties.
+            </p>
+            <p>
+              <strong>B)</strong> Indicate the cost % of each expense as a % of total cost
+            </p>
+            <p>
+              <strong>C)</strong> For expenses marked as "procured," please clarify if sourcing will be from within KSA or from foreign suppliers (on yearly basis):
+            </p>
+            <p>
+              <strong>C.i)</strong> if 100% procured from local (KSA) supplier - "Yes"
+            </p>
+            <p>
+              <strong>C.ii)</strong> if >0% and <100%
+                procured
+                from
+                local
+                (KSA)
+                supplier
+                - "Partial"
+                </p
+              >
+                <p>
+                  <strong>C.iii)</strong> if 0% procured from local (KSA) supplier (i.e. imported) - "No"
+                </p>
+          </div>
+        </ng-template>
+      </span>
+    </h2>
+
+    <!-- Design & Engineering Section -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-base font-semibold text-gray-900">Design & Engineering</h3>
+      <app-form-array-input
+        [ft]="getDesignEngineeringFormArray()!"
+        [addButtonMessage]="'Add Design & Engineering Item'"
+        [createNewItem]="createDesignEngineeringItem"
+        [maxItems]="20"
+      >
+        <ng-template
+          #itemTemplate
+          let-itemControl
+          let-index="index"
+        >
+          <td class="p-3 border border-gray-200 min-w-[300px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter expense item name"
+                [maxlength]="100"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [label]="'Expense Header'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[270px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Enter In-house / Procured"
+                [appendTo]="'body'"
+                fluid
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [label]="'In-house / Procured'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-inputnumber
+                fluid
+                placeholder="Enter cost"
+                [min]="0"
+                [max]="100"
+                mode="decimal"
+                prefix="%"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="2"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [label]="'Cost %'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+        </ng-template>
+      </app-form-array-input>
+      <app-base-error-messages
+        [control]="getDesignEngineeringFormArray()!"
+        [label]="'Design & Engineering'"
+      />
+    </div>
+
+    <!-- Sourcing Section -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-base font-semibold text-gray-900">Sourcing</h3>
+      <app-form-array-input
+        [ft]="getSourcingFormArray()!"
+        [addButtonMessage]="'Add Sourcing Item'"
+        [createNewItem]="createSourcingItem"
+        [maxItems]="20"
+      >
+        <ng-template
+          #itemTemplate
+          let-itemControl
+          let-index="index"
+        >
+          <td class="p-3 border border-gray-200 min-w-[300px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter expense item name"
+                [maxlength]="100"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [label]="'Expense Header'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[270px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [label]="'In-house / Procured'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-inputnumber
+                fluid
+                placeholder="Enter cost"
+                [min]="0"
+                [max]="100"
+                mode="decimal"
+                prefix="%"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="2"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [label]="'Cost %'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+                optionLabel="name"
+                optionValue="value"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+        </ng-template>
+      </app-form-array-input>
+      <app-base-error-messages
+        [control]="getSourcingFormArray()!"
+        [label]="'Sourcing'"
+      />
+    </div>
+
+    <!-- Manufacturing Section (NO years) -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-base font-semibold text-gray-900">Assembly & Testing</h3>
+      <app-form-array-input
+        [ft]="getManufacturingFormArray()!"
+        [addButtonMessage]="'Add Manufacturing Item'"
+        [createNewItem]="createManufacturingItem"
+        [maxItems]="20"
+      >
+        <ng-template
+          #itemTemplate
+          let-itemControl
+          let-index="index"
+        >
+          <td class="p-3 border border-gray-200 min-w-[300px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter expense item name"
+                [maxlength]="100"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [label]="'Expense Header'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[270px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [label]="'In-house / Procured'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-inputnumber
+                fluid
+                placeholder="Enter cost"
+                [min]="0"
+                [max]="100"
+                mode="decimal"
+                prefix="%"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="2"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [label]="'Cost %'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+        </ng-template>
+      </app-form-array-input>
+      <app-base-error-messages
+        [control]="getManufacturingFormArray()!"
+        [label]="'Assembly & Testing'"
+      />
+    </div>
+
+    <!-- Assembly & Testing Section -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-base font-semibold text-gray-900">Assembly & Testing</h3>
+      <app-form-array-input
+        [ft]="getAssemblyTestingFormArray()!"
+        [addButtonMessage]="'Add Assembly & Testing Item'"
+        [createNewItem]="createAssemblyTestingItem"
+        [maxItems]="20"
+      >
+        <ng-template
+          #itemTemplate
+          let-itemControl
+          let-index="index"
+        >
+          <td class="p-3 border border-gray-200 min-w-[300px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter expense item name"
+                [maxlength]="100"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [label]="'Expense Header'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[270px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [label]="'In-house / Procured'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-inputnumber
+                fluid
+                placeholder="Enter cost"
+                [min]="0"
+                [max]="100"
+                mode="decimal"
+                prefix="%"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="2"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [label]="'Cost %'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+        </ng-template>
+      </app-form-array-input>
+      <app-base-error-messages
+        [control]="getAssemblyTestingFormArray()!"
+        [label]="'Assembly & Testing'"
+      />
+    </div>
+
+    <!-- After-Sales Section -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-base font-semibold text-gray-900">After-Sales</h3>
+      <app-form-array-input
+        [ft]="getAfterSalesFormArray()!"
+        [addButtonMessage]="'Add After-Sales Item'"
+        [createNewItem]="createAfterSalesItem"
+        [maxItems]="20"
+      >
+        <ng-template
+          #itemTemplate
+          let-itemControl
+          let-index="index"
+        >
+          <td class="p-3 border border-gray-200 min-w-[300px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter expense item name"
+                [maxlength]="100"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
+              [label]="'Expense Header'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[270px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [label]="'In-house / Procured'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-inputnumber
+                fluid
+                placeholder="Enter cost"
+                [min]="0"
+                [max]="100"
+                mode="decimal"
+                prefix="%"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="2"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
+              [label]="'Cost %'"
+            />
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [showCheckbox]="showCheckbox()"
+            >
+              <p-select
+                [options]="localizationStatusOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+        </ng-template>
+      </app-form-array-input>
+      <app-base-error-messages
+        [control]="getAfterSalesFormArray()!"
+        [label]="'After-Sales'"
+      />
+    </div>
+    <app-value-chain-summary></app-value-chain-summary>
+  </div>
