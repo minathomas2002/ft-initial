@@ -1,5 +1,6 @@
 :host ::ng-deep {
- .p-checkbox-checked .p-checkbox-box{
+  .has-comment-checkbox{
+     .p-checkbox-checked .p-checkbox-box{
     border-color: var(--p-orange-500);
     background: var(--p-orange-500);
     &:hover {
@@ -19,5 +20,6 @@
  .p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box {
     background: var(--p-orange-500);
     border-color: var(--p-orange-500);
+  }
   }
 }
