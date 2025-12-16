@@ -48,3 +48,8 @@ export interface IPlansDashboardStatistics {
 export interface IPlansDashboardResponse <T> extends IApiPaginatedResponse<T> {
     counts: IPlansDashboardStatistics;
 }  
+
+export interface IAssignRequest{
+  planId: string;
+  employeeId: string; 
+}
