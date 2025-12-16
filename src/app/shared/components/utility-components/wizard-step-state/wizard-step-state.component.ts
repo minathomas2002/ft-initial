@@ -6,8 +6,6 @@ import { FormUtilityService } from 'src/app/shared/services/form-utility/form-ut
 import { merge, startWith, distinctUntilChanged } from 'rxjs';
 import { map } from 'rxjs';
 
-export type StepState = 'empty' | 'in-progress' | 'valid' | 'error';
-
 @Component({
   selector: 'app-wizard-step-state',
   imports: [BadgeModule],
