@@ -912,6 +912,7 @@
                 optionValue="id"
                 placeholder="Select"
                 fluid
+                [appendTo]="'body'"
               />
             </app-group-input-with-checkbox>
           </td>
@@ -1019,4 +1020,8 @@
       />
     </div>
     <app-value-chain-summary></app-value-chain-summary>
+    <app-base-error-messages
+      [control]="formGroup"
+      [label]="'Total Cost Percentage'"
+    />
   </div>
