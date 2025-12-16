@@ -8,8 +8,19 @@ export enum EProductManufacturingExperience {
   NO = 2
 }
 
-export enum EExperienceRangeEnum {
+export enum EExperienceRange {
   Years_5 = 1,
   Years_5_10 = 2,
   Years_10 = 3
+}
+
+export enum EInHouseProcuredType {
+  InHouse = 1,
+  Procured = 2
+}
+
+export enum ELocalizationStatusType {
+  Yes = 1,
+  No = 2,
+  Partial = 3
 }

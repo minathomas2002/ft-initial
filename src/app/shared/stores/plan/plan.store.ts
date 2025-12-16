@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { EExperienceRangeEnum, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
+import { EExperienceRange, EInHouseProcuredType, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { IBaseApiResponse, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { finalize, Observable, of, take, tap } from "rxjs";
@@ -18,7 +18,9 @@ const initialState: {
   list: IPlanRecord[],
   statistics: IPlansDashboardStatistics | null,
   targetedCustomerOptions: ISelectItem[],
-  productManufacturingExperienceOptions: ISelectItem[]
+  productManufacturingExperienceOptions: ISelectItem[],
+  inHouseProcuredOptions: ISelectItem[],
+  localizationStatusOptions: ISelectItem[]
 
 } = {
   newPlanOpportunityType: null,
@@ -36,9 +38,18 @@ const initialState: {
     { id: ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString(), name: 'SEC\'s approved local suppliers' }
   ],
   productManufacturingExperienceOptions: [
-    { id: EExperienceRangeEnum.Years_5.toString(), name: '5 Years' },
-    { id: EExperienceRangeEnum.Years_5_10.toString(), name: '5 - 10 Years' },
-    { id: EExperienceRangeEnum.Years_10.toString(), name: '10 Years' }
+    { id: EExperienceRange.Years_5.toString(), name: '5 Years' },
+    { id: EExperienceRange.Years_5_10.toString(), name: '5 - 10 Years' },
+    { id: EExperienceRange.Years_10.toString(), name: '10 Years' }
+  ],
+  inHouseProcuredOptions: [
+    { id: EInHouseProcuredType.InHouse.toString(), name: 'In-house' },
+    { id: EInHouseProcuredType.Procured.toString(), name: 'Procured' }
+  ],
+  localizationStatusOptions: [
+    { id: ELocalizationStatusType.Yes.toString(), name: 'Yes' },
+    { id: ELocalizationStatusType.No.toString(), name: 'No' },
+    { id: ELocalizationStatusType.Partial.toString(), name: 'Partial' }
   ]
 }
 
