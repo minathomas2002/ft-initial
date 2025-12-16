@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
-import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating } from '../../interfaces/ISetting';
+import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating, INotificationSettingResponse, INotificationSettingUpdateRequest } from '../../interfaces/ISetting';
 import { IBaseApiResponse, IApiPaginatedResponse } from '../../interfaces';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
@@ -48,5 +48,13 @@ export class SettingsApiService {
 
     deleteHoliday(id: string): Observable<IBaseApiResponse<boolean>> {
       return this.baseHttpService.delete<boolean, unknown>(`${API_ENDPOINTS.AdminSettings.deleteHoliday}/${id}`);
+    }
+
+    getNotificationSetting(channelId: number):Observable<IBaseApiResponse<INotificationSettingResponse[]>>{
+      return this.baseHttpService.get<INotificationSettingResponse[], unknown>(API_ENDPOINTS.AdminSettings.getNotificationSetting+channelId);
+    }
+
+    updateNotificationSetting(req: INotificationSettingUpdateRequest[]): Observable<IBaseApiResponse<boolean>> {
+      return this.baseHttpService.put<boolean, INotificationSettingUpdateRequest[], unknown>(API_ENDPOINTS.AdminSettings.editNotificationSetting, req);
     }
 }

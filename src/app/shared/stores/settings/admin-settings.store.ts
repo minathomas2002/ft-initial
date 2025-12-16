@@ -1,8 +1,9 @@
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
-import { ISettingAutoAssign, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating } from "../../interfaces/ISetting";
+import { ISettingAutoAssign, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating, INotificationSettingResponse, INotificationSettingUpdateRequest } from "../../interfaces/ISetting";
 import { SettingsApiService } from "../../api/settings/settings-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, map, tap, throwError } from "rxjs";
+import { ENotificationChannel } from "../../enums/notificationSetting.enum";
 
 
 const initialState: {
@@ -13,6 +14,8 @@ const initialState: {
   settingSla: ISettingSla | null;
   holidaysList: IHolidaysManagementRecord[];
   holidaysTotalCount: number;
+  systemNotification: INotificationSettingResponse[];
+  emailNotification: INotificationSettingResponse[];
 } = {
   isLoading: false,
   isProcessing: false,
@@ -20,7 +23,9 @@ const initialState: {
   settingAutoAssign: { isEnabled: false } as ISettingAutoAssign,
   settingSla: null,
   holidaysList: [],
-  holidaysTotalCount: 0
+  holidaysTotalCount: 0,
+  systemNotification:[],
+  emailNotification: []
 }
 
 
@@ -192,6 +197,42 @@ export const AdminSettingsStore = signalStore(
           }),
         );
       },
+
+      getNotificationSetting( channel: ENotificationChannel,stateKey: 'systemNotification' | 'emailNotification') {
+        patchState(store, { isLoading: true, error: null });
+        return settingApiService.getNotificationSetting(channel).pipe(
+          tap((res) => {
+            patchState(store, { isLoading: false });
+            patchState(store, { [stateKey] : res.body });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error getting notification setting',
+              [stateKey]: []
+            });
+            return throwError(() => new Error('Error getting notification setting'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          }),
+        );
+      },
+      updateNotificationSetting(req: INotificationSettingUpdateRequest[]) {
+        patchState(store, { isProcessing: true, error: null });
+        return settingApiService.updateNotificationSetting(req).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error updating notification' });
+            return throwError(() => new Error('Error updating notification'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+
 
     }
   })
