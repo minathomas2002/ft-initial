@@ -486,7 +486,7 @@
         "systemTab": "System Notifications",
         "emailTab": "Email Notifications",
         "planWorkflowTitle": "Plan Workflow Notifications",
-        "countNotification": "7 notifications",
+        "countNotification": " notifications",
         "unAssignedAlert": "Unassigned Plan Alert",
         "unAssignedAlertDesc": "Notify when a plan is submitted but not yet assigned to any reviewer",
         "dvManager": " DV Manager",
