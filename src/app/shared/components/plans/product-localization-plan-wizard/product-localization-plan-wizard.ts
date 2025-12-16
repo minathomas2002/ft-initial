@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, model, OnDestroy, signal } from "@angular/core";
 import { BaseWizardDialog } from "../../base-components/base-wizard-dialog/base-wizard-dialog";
-import { Step01OverviewCompanyInformationForm } from "../overviewCompanyInformation/step-01-overviewCompanyInformationForm";
-import { Step02ProductPlantOverviewForm } from "../productPlantOverview/step-02-productPlantOverviewForm";
-import { ValueChainForm } from "../valueChain/valueChainForm";
-import { SaudizationForm } from "../saudization/saudizationForm";
+import { Step01OverviewCompanyInformationForm } from "../step-01-overviewCompanyInformation/step-01-overviewCompanyInformationForm";
+import { Step02ProductPlantOverviewForm } from "../step-02-productPlantOverview/step-02-productPlantOverviewForm";
+import { Step03ValueChainForm } from "../step-03-valueChain/step-03-valueChainForm";
+import { Step04SaudizationForm } from "../step-04-saudization/step-04-saudizationForm";
 import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../base-components/base-tag/base-tag.component";
 import { StepContentDirective } from "src/app/shared/directives";
@@ -16,8 +16,8 @@ import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interfa
     BaseWizardDialog,
     Step01OverviewCompanyInformationForm,
     Step02ProductPlantOverviewForm,
-    ValueChainForm,
-    SaudizationForm,
+    Step03ValueChainForm,
+    Step04SaudizationForm,
     ButtonModule,
     BaseTagComponent,
     StepContentDirective
