@@ -15,8 +15,8 @@ export interface GroupInputWithCheckboxFormGroup {
       @if(showCheckbox()){
       <p-checkbox
         [formControl]="hasCommentControl()"
-          [binary]="true"
-          
+        [binary]="true"
+        class="has-comment-checkbox"
         />
       }
       <ng-content></ng-content>
