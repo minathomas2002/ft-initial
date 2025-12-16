@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
+import { EExperienceRangeEnum, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { IBaseApiResponse, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { finalize, Observable, of, take, tap } from "rxjs";
@@ -36,8 +36,9 @@ const initialState: {
     { id: ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString(), name: 'SEC\'s approved local suppliers' }
   ],
   productManufacturingExperienceOptions: [
-    { id: EProductManufacturingExperience.YES.toString(), name: 'Yes' },
-    { id: EProductManufacturingExperience.NO.toString(), name: 'No' }
+    { id: EExperienceRangeEnum.Years_5.toString(), name: '5 Years' },
+    { id: EExperienceRangeEnum.Years_5_10.toString(), name: '5 - 10 Years' },
+    { id: EExperienceRangeEnum.Years_10.toString(), name: '10 Years' }
   ]
 }
 

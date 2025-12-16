@@ -18,7 +18,7 @@ export class Step2ProductPlantOverviewFormBuilder {
       }),
       [EMaterialsFormControls.targetedAnnualPlantCapacity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(50)]),
       }),
       [EMaterialsFormControls.timeRequiredToSetupFactory]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -132,9 +132,9 @@ export class Step2ProductPlantOverviewFormBuilder {
     }
 
     if (provideToSEC) {
-      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(500)]);
-      experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(500)]);
-      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.min(1)]);
       experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
     } else {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
