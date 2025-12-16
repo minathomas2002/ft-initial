@@ -140,3 +140,12 @@ export interface IHolidayCreating {
   dateFrom: string;
   dateTo: string;
 }
+
+export interface IWorkingDay {
+  id: string;
+  nameEn: string;
+  nameAr: string;
+  isWorkingDay: boolean;
+}
+
+export type TWorkingDayKeys = keyof IWorkingDay;

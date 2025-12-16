@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
-import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating } from '../../interfaces/ISetting';
+import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating, IWorkingDay } from '../../interfaces/ISetting';
 import { IBaseApiResponse, IApiPaginatedResponse } from '../../interfaces';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
@@ -48,5 +48,10 @@ export class SettingsApiService {
 
     deleteHoliday(id: string): Observable<IBaseApiResponse<boolean>> {
       return this.baseHttpService.delete<boolean, unknown>(`${API_ENDPOINTS.AdminSettings.deleteHoliday}/${id}`);
+    }
+
+  // Working Days management
+    getWorkingDays(): Observable<IBaseApiResponse<IWorkingDay[]>> {
+      return this.baseHttpService.get<IWorkingDay[], unknown>(API_ENDPOINTS.AdminSettings.getWorkingDays);
     }
 }

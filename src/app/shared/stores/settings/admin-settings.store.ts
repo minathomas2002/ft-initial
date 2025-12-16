@@ -1,5 +1,5 @@
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
-import { ISettingAutoAssign, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating } from "../../interfaces/ISetting";
+import { ISettingAutoAssign, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating, IWorkingDay } from "../../interfaces/ISetting";
 import { SettingsApiService } from "../../api/settings/settings-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, map, tap, throwError } from "rxjs";
@@ -13,6 +13,7 @@ const initialState: {
   settingSla: ISettingSla | null;
   holidaysList: IHolidaysManagementRecord[];
   holidaysTotalCount: number;
+  workingDaysList: IWorkingDay[];
 } = {
   isLoading: false,
   isProcessing: false,
@@ -20,7 +21,8 @@ const initialState: {
   settingAutoAssign: { isEnabled: false } as ISettingAutoAssign,
   settingSla: null,
   holidaysList: [],
-  holidaysTotalCount: 0
+  holidaysTotalCount: 0,
+  workingDaysList: []
 }
 
 
@@ -189,6 +191,29 @@ export const AdminSettingsStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+
+      /* Get Working Days List*/
+      getWorkingDays() {
+        patchState(store, { isLoading: true, error: null });
+        return settingApiService.getWorkingDays().pipe(
+          tap((res) => {
+            patchState(store, {
+              isLoading: false,
+              workingDaysList: res.body || []
+            });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error getting working days list',
+              workingDaysList: []
+            });
+            return throwError(() => new Error('Error getting working days list'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
           }),
         );
       },

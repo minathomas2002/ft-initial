@@ -1,28 +1,5 @@
 <div class="px-[32px] py-[24px]">
-  <p-button
-    [label]="'setting.adminView.holidays.goBack' | translate"
-    icon="icon-arrow-left"
-    styleClass="!px-0 mb-[16px]"
-    link
-    (onClick)="goBack()"
-  />
-  <div class="flex justify-between items-center">
-    <div>
-      <h4 class="font-semibold xl:text-2xl text-lg">{{ 'setting.adminView.holidays.title' | translate }}</h4>
-      <h4 class="xl:text-md text-sm text-gray-600">{{ 'setting.adminView.holidays.subTitle' | translate }}</h4>
-    </div>
-
-    <p-button
-      [label]="'setting.adminView.holidays.addHoliday' | translate"
-      severity="primary"
-      class="flex"
-      fluid
-      icon="icon-plus"
-      (onClick)="onAddHoliday()"
-    />
-
-  </div>
-
+  
   <app-table-layout>
     <ng-container ngProjectAs="table-filters">
       <app-holidays-management-filter></app-holidays-management-filter>
@@ -90,14 +67,6 @@
     </ng-container>
   </app-table-layout>
 
-  @if(viewCreateDialog()){
-  <app-add-edit-holiday-dialog
-    [(dialogVisible)]="viewCreateDialog"
-    (onSuccess)="onSuccessActions()"
-    [isEditMode]="false"
-  ></app-add-edit-holiday-dialog>
-  }
-
   @if(viewUpdateDialog()){
   <app-add-edit-holiday-dialog
     [(dialogVisible)]="viewUpdateDialog"
@@ -119,3 +88,4 @@
   ></app-general-confirmation-dialog>
 
 </div>
+

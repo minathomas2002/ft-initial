@@ -1,8 +1,6 @@
 import { Component, computed, inject, signal, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Button } from "primeng/button";
-import { ERoutes } from 'src/app/shared/enums';
-import { TranslatePipe } from "../../../../../shared/pipes/translate.pipe";
+import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { TableLayoutComponent } from "src/app/shared/components/layout-components/table-layout/table-layout.component";
 import { ITableHeaderItem } from 'src/app/shared/interfaces';
 import { IHolidaysManagementRecord, THolidaysManagementRecordKeys } from 'src/app/shared/interfaces/ISetting';
@@ -10,32 +8,33 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { TableSkeletonComponent } from "src/app/shared/components/skeletons/table-skeleton/table-skeleton.component";
 import { DataTableComponent } from "src/app/shared/components/layout-components/data-table/data-table.component";
 import { DatePipe } from '@angular/common';
-import { HolidaysManagementFilter } from "../../../components/holidays-management-filter/holidays-management-filter";
-import { AddEditHolidayDialog } from "../../../components/add-edit-holiday-dialog/add-edit-holiday-dialog";
+import { HolidaysManagementFilter } from "../holidays-management-filter/holidays-management-filter";
+import { AddEditHolidayDialog } from "../add-edit-holiday-dialog/add-edit-holiday-dialog";
 import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
-import { HolidaysFilterService } from '../../../services/holidays-filter/holidays-filter-service';
-import { HolidaysTypeMapper } from '../../../classes/holidays-type-mapper';
-import { AdminSettingMenuAction } from "../../../components/admin-setting-menu-action/admin-setting-menu-action";
-import { ThemeProvider } from 'primeng/config';
+import { HolidaysFilterService } from '../../services/holidays-filter/holidays-filter-service';
+import { HolidaysTypeMapper } from '../../classes/holidays-type-mapper';
+import { AdminSettingMenuAction } from "../admin-setting-menu-action/admin-setting-menu-action";
 import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { take } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-admin-holidays-management-view',
-  imports: [Button, TranslatePipe, TableLayoutComponent, TableSkeletonComponent, DataTableComponent,
+  imports: [
+    TranslatePipe,
+    TableLayoutComponent,
+    TableSkeletonComponent,
+    DataTableComponent,
     DatePipe, HolidaysManagementFilter, AddEditHolidayDialog, AdminSettingMenuAction, GeneralConfirmationDialogComponent],
   templateUrl: './admin-holidays-management-view.html',
   styleUrl: './admin-holidays-management-view.scss',
 })
 export class AdminHolidaysManagementView implements OnInit {
 
-  router = inject(Router);
   i18nService = inject(I18nService);
   adminSettingsStore = inject(AdminSettingsStore);
   holidaysFilterService = inject(HolidaysFilterService);
   holidaysTypeMapper = new HolidaysTypeMapper(this.i18nService);
-  viewCreateDialog = signal<boolean>(false);
   viewUpdateDialog = signal<boolean>(false);
   viewDeleteDialog = signal<boolean>(false);
   toasterService = inject(ToasterService);
@@ -102,14 +101,6 @@ export class AdminHolidaysManagementView implements OnInit {
     this.applyFilter()
   }
 
-  goBack() {
-    this.router.navigate([`/${ERoutes.settings}`]);
-  }
-
-  onAddHoliday() {
-    this.viewCreateDialog.set(true);
-  }
-
   onSuccessActions() {
     // Reload holidays list after successful create/update/delete
     this.applyFilter();
@@ -141,5 +132,4 @@ export class AdminHolidaysManagementView implements OnInit {
           });
   }
 }
-
 

@@ -56,6 +56,7 @@ export const API_ENDPOINTS = {
     createHoliday:`${AdminSettings}/holidays/create`,
     updateHoliday:`${AdminSettings}/holidays/update`,
     deleteHoliday:`${AdminSettings}/holidays`,
+    getWorkingDays:`${AdminSettings}/working-days`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,

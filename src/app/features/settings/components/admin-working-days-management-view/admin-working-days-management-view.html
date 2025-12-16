@@ -1,0 +1,35 @@
+<app-table-layout>
+  <ng-container ngProjectAs="table-body">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="adminSettingsStore.isLoading()"
+    >
+      <app-data-table
+        [columns]="headers()"
+        [hasPaginator]="false"
+        [rows]="adminSettingsStore.workingDaysList()"
+        [(filter)]="filter"
+        [totalRecords]="adminSettingsStore.workingDaysList().length"
+        (filterChange)="onFilterChange()"
+      >
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
+          <td>
+            {{ item.nameEn }}
+          </td>
+
+          <td>
+            {{ item.nameAr }}
+          </td>
+
+          <td>
+            {{ item.isWorkingDay ? ('common.yes' | translate) : ('common.no' | translate) }}
+          </td>
+        </ng-template>
+      </app-data-table>
+    </app-table-skeleton>
+  </ng-container>
+</app-table-layout>
+
