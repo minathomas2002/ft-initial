@@ -26,7 +26,7 @@ const initialState: {
   holidaysList: [],
   holidaysTotalCount: 0,
   systemNotification:[],
-  emailNotification: []
+  emailNotification: [],
   workingDaysList: []
 }
 
