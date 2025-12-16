@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { ELocalizationStatusType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { hasIncompleteControl } from 'src/app/shared/validators/form-control-helpers';
 
 export class Step3ValueChainFormBuilder {
@@ -112,6 +112,8 @@ export class Step3ValueChainFormBuilder {
       [EMaterialsFormControls.manufacturingFormGroup]: this.buildManufacturingFormGroup(),
       [EMaterialsFormControls.assemblyTestingFormGroup]: this.buildAssemblyTestingFormGroup(),
       [EMaterialsFormControls.afterSalesFormGroup]: this.buildAfterSalesFormGroup(),
+    }, {
+      validators: [this.validateTotalCostPercentage()]
     });
   }
 
@@ -191,13 +193,13 @@ export class Step3ValueChainFormBuilder {
 
         const costPercentage = costPercentageControl?.value ?? 0;
         const yearValue = yearControl?.value;
-        const inHouseOrProcured = inHouseOrProcuredControl?.value;
 
+        const inHouseOrProcured = inHouseOrProcuredControl?.value;
         // Calculation logic based on truth table
-        if (yearValue === 'Yes') {
+        if (yearValue === ELocalizationStatusType.Yes.toString()) {
           // Case 1 & 3: In-house + Yes OR Procured + Yes = Add Cost %
           total += costPercentage;
-        } else if (yearValue === 'Partial') {
+        } else if (yearValue === ELocalizationStatusType.Partial.toString()) {
           // Case 5: Any + Partial = Add (Cost % × 50%)
           total += costPercentage * 0.5;
         }
@@ -205,7 +207,7 @@ export class Step3ValueChainFormBuilder {
       });
     });
 
-    return Math.min(total, 100); // Cap at 100%
+    return total
   }
 
   /**
@@ -282,30 +284,34 @@ export class Step3ValueChainFormBuilder {
   /**
    * Validate total cost percentage across all sections
    */
-  validateTotalCostPercentage(formGroup: FormGroup): ValidationErrors | null {
-    const sections = [
-      EMaterialsFormControls.designEngineeringFormGroup,
-      EMaterialsFormControls.sourcingFormGroup,
-      EMaterialsFormControls.manufacturingFormGroup,
-      EMaterialsFormControls.assemblyTestingFormGroup,
-      EMaterialsFormControls.afterSalesFormGroup,
-    ];
+  private validateTotalCostPercentage() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const formGroup = control as FormGroup;
+      if (!formGroup) {
+        return null;
+      }
 
-    let grandTotal = 0;
-    sections.forEach(sectionName => {
-      grandTotal += this.calculateSectionTotalCostPercentage(formGroup, sectionName);
-    });
+      const sections = [
+        EMaterialsFormControls.designEngineeringFormGroup,
+        EMaterialsFormControls.sourcingFormGroup,
+        EMaterialsFormControls.manufacturingFormGroup,
+        EMaterialsFormControls.assemblyTestingFormGroup,
+        EMaterialsFormControls.afterSalesFormGroup,
+      ];
 
-    if (grandTotal > 100) {
-      return {
-        totalExceeds100: {
-          message: 'Total cost percentage across all sections cannot exceed 100%',
-          total: grandTotal
-        }
-      };
-    }
+      let grandTotal = 0;
+      sections.forEach(sectionName => {
+        grandTotal += this.calculateSectionTotalCostPercentage(formGroup, sectionName);
+      });
 
-    return null;
+      if (grandTotal > 100) {
+        return {
+          totalExceeds100: true
+        };
+      }
+
+      return null;
+    };
   }
 }
 
