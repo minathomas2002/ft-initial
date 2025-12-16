@@ -125,8 +125,8 @@ export class ProductPlanFormService {
   }
 
   // Step 3 methods
-  addValueChainItem(sectionName: string, includeYears: boolean = true): void {
-    this._step3Builder.addItemToSection(this._step3FormGroup, sectionName, includeYears);
+  addValueChainItem(sectionName: string): void {
+    this._step3Builder.addItemToSection(this._step3FormGroup, sectionName);
   }
 
   removeValueChainItem(sectionName: string, index: number): void {
@@ -145,8 +145,8 @@ export class ProductPlanFormService {
     return this._step3Builder.calculateSectionTotalCostPercentage(this._step3FormGroup, sectionName);
   }
 
-  createValueChainItem(includeYears: boolean = true): FormGroup {
-    return this._step3Builder.createValueChainItemFormGroup(includeYears);
+  createValueChainItem(): FormGroup {
+    return this._step3Builder.createValueChainItemFormGroup();
   }
 
   // Expose Step 4 sub-form groups for convenience
