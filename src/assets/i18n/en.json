@@ -689,5 +689,14 @@
       "edit": "Edit",
       "download": "Download"
     }
+  },
+  "assign": {
+    "assign": "Assign",
+    "reassign": " Reassign",
+    "assignDesc":"Please select the employee for plan(s) assignment",
+    "reassignDesc":"Please select the employee for plan(s) reassignment",
+    "employeeLabel":"Employee",
+    "employeePlaceholder":"Select Employee",
+    "employeeRequired":"Employee is required"
   }
 }
