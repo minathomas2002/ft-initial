@@ -136,7 +136,7 @@ export class Step02ProductPlantOverviewForm {
   }
 
   // Dropdown options
-  targetedCustomerOptions = this.planStore.targetedCustomerOptions();
-  productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptions();
+  targetedCustomerOptions = this.planStore.targetedCustomerOptions;
+  productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptions;
 }
 

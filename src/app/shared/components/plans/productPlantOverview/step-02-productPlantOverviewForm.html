@@ -273,31 +273,35 @@
 
     <div class="flex flex-col gap-4">
       <!-- Targeted Customer -->
-      <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Targeted Customer'" />
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
-        >
-          <p-multiselect
-            [options]="targetedCustomerOptions"
-            [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select targeted customer"
-            fluid
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2 col-span-1">
+          <app-base-label [title]="'Targeted Customer'" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+          >
+            <p-multiselect
+              [options]="targetedCustomerOptions()"
+              [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+              optionLabel="name"
+              optionValue="id"
+              display="chip"
+              dropdownIcon="icon-chevron-down"
+              fluid
+              placeholder="Select targeted customer"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+            [label]="'Targeted Customer'"
           />
-        </app-group-input-with-checkbox>
-        <app-base-error-messages
-          [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
-          [label]="'Targeted Customer'"
-        />
+        </div>
       </div>
 
       <!-- Conditional fields for SEC's approved local suppliers -->
       @if(showTargetedSuppliersFields()){
-      <div class="flex flex-col gap-4 pl-4 border-l-2 border-gray-200">
-        <p class="text-sm text-gray-600 font-medium">If Targeting "SEC's approved local suppliers", mention the following:</p>
+      <div class="flex flex-col gap-4">
+        <p class="text-sm text-gray-900 font-semibold">If Targeting "SEC's approved local suppliers", mention the following:</p>
 
         <!-- Names of Targeted Suppliers -->
         <div class="flex flex-col gap-2">
@@ -317,7 +321,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
-            [label]="'Provide names of targeted SEC\'s approved local suppliers'"
+            [label]="'Names of targeted SEC\'s approved local suppliers'"
           />
         </div>
 
@@ -352,68 +356,83 @@
     <h2 class="text-lg font-semibold text-gray-900">Product Manufacturing Experience</h2>
 
     <div class="flex flex-col gap-4">
-      <!-- Product Manufacturing Experience Dropdown -->
-      <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Product Manufacturing Experience'" />
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
-        >
-          <p-select
-            [options]="productManufacturingExperienceOptions"
-            [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Select product manufacturing experience"
-            fluid
+      <div class="flex flex-col gap-4 md:flex-row">
+        <!-- Product Manufacturing Experience Dropdown -->
+        <div class="flex flex-col gap-2 flex-1">
+          <app-base-label [title]="'Product Manufacturing Experience'" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
+          >
+            <p-select
+              [options]="productManufacturingExperienceOptions()"
+              [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
+              optionLabel="name"
+              optionValue="id"
+              dropdownIcon="icon-chevron-down"
+              placeholder="Select product manufacturing experience"
+              fluid
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
+            [label]="'Product Manufacturing Experience'"
           />
-        </app-group-input-with-checkbox>
-        <app-base-error-messages
-          [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
-          [label]="'Product Manufacturing Experience'"
-        />
-      </div>
-
-      <!-- Do you currently provide this product to SEC? -->
-      <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Do you currently provide this product to SEC?'" />
-        <div class="flex gap-4">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <p-radiobutton
-              name="provideToSEC"
-              [value]="true"
-              [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
-              inputId="provideToSECYes"
-              size="small"
-            />
-            <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <p-radiobutton
-              name="provideToSEC"
-              [value]="false"
-              [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
-              inputId="provideToSECNo"
-              size="small"
-            />
-            <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
-          </label>
         </div>
-        <app-base-error-messages
-          [control]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
-          [label]="'This field'"
-        />
+
+        <!-- Do you currently provide this product to SEC? -->
+        <div class="flex flex-col gap-2 flex-1">
+          <div>
+            <app-base-label
+              [title]="'Do you currently provide this product to SEC?'"
+              [styleClass]="'!mb-[2px]'"
+            />
+            <span class="text-sm text-gray-700 block text-xs">If “Yes” , provide the following:</span>
+
+            <div class="flex gap-4 min-h-[40px] mt-1">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <p-radiobutton
+                  name="provideToSEC"
+                  [value]="true"
+                  [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
+                  inputId="provideToSECYes"
+                  size="small"
+                />
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <p-radiobutton
+                  name="provideToSEC"
+                  [value]="false"
+                  [formControl]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
+                  inputId="provideToSECNo"
+                  size="small"
+                />
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+              </label>
+            </div>
+          </div>
+
+          <app-base-error-messages
+            [control]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
+            [label]="'This field'"
+          />
+        </div>
       </div>
 
       <!-- Conditional SEC fields -->
       @if(showSECFields()){
-      <div class="flex flex-col gap-4 pl-4 border-l-2 border-gray-200">
-        <p class="text-sm text-gray-600 font-medium">If 'Yes', provide the following:</p>
-
+      <div
+        class="flex flex-col gap-4 animated"
+        animate.enter="fadeIn"
+      >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Qualified Plant Location (By SEC) -->
           <div class="flex flex-col gap-2">
-            <app-base-label [title]="'Qualified Plant Location (By SEC)'" />
+            <app-base-label
+              [title]="'Qualified Plant Location'"
+              secondaryTitle="(By SEC)"
+            />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
@@ -435,7 +454,10 @@
 
           <!-- Approved Vendor ID (with SEC) -->
           <div class="flex flex-col gap-2">
-            <app-base-label [title]="'Approved Vendor ID (with SEC)'" />
+            <app-base-label
+              [title]="'Approved Vendor ID'"
+              secondaryTitle="(with SEC)"
+            />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
@@ -457,7 +479,10 @@
 
           <!-- Years of Experience (with SEC) -->
           <div class="flex flex-col gap-2">
-            <app-base-label [title]="'Years of Experience (with SEC)'" />
+            <app-base-label
+              [title]="'Years of Experience'"
+              secondaryTitle="(with SEC)"
+            />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
@@ -465,6 +490,7 @@
               <p-inputnumber
                 fluid
                 placeholder="Enter years of experience"
+                [maxlength]="2"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
               />
             </app-group-input-with-checkbox>
@@ -476,7 +502,10 @@
 
           <!-- Total Quantities provided to SEC -->
           <div class="flex flex-col gap-2">
-            <app-base-label [title]="'Total Quantities provided to SEC (2019 onwards)'" />
+            <app-base-label
+              [title]="'Total Quantities provided to SEC'"
+              secondaryTitle="(2019 onwards)"
+            />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
@@ -498,7 +527,10 @@
 
       <!-- Do you currently provide this product to SEC's approved local suppliers? -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Do you currently provide this product to SEC\'s approved local suppliers?'" />
+        <div>
+          <app-base-label [title]="'Do you currently provide this product to SEC\'s approved local suppliers?'" />
+          <span class="text-sm text-gray-700 block text-xs">If 'Yes', provide the following:</span>
+        </div>
         <div class="flex gap-4">
           <label class="flex items-center gap-2 cursor-pointer">
             <p-radiobutton
@@ -531,9 +563,10 @@
 
       <!-- Conditional Local Suppliers fields -->
       @if(showLocalSuppliersFields()){
-      <div class="flex flex-col gap-4 pl-4 border-l-2 border-gray-200">
-        <p class="text-sm text-gray-600 font-medium">If 'Yes', provide the following:</p>
-
+      <div
+        class="flex flex-col gap-4 animated"
+        animate.enter="fadeIn"
+      >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Name(s) of SEC approved local supplier(s) -->
           <div class="flex flex-col gap-2">
@@ -542,14 +575,14 @@
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
             >
-              <textarea
-                pInputTextarea
+              <input
+                type="text"
+                pInputText
                 fluid
                 placeholder="Enter name(s) of SEC approved local supplier(s)"
-                [rows]="4"
-                [maxlength]="500"
+                [maxlength]="255"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
-              ></textarea>
+              />
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
@@ -588,6 +621,7 @@
             >
               <p-inputnumber
                 fluid
+                [maxlength]="2"
                 placeholder="Enter years of experience"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
               />
