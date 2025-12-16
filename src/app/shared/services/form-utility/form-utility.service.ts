@@ -17,7 +17,6 @@ export class FormUtilityService {
     if (formGroup.dirty && formGroup.errors) {
       errorCount += Object.keys(formGroup.errors).length;
     }
-
     // Recursively count errors in all controls
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
