@@ -1,5 +1,6 @@
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { hasIncompleteControl } from 'src/app/shared/validators/form-control-helpers';
 
 export class Step3ValueChainFormBuilder {
   constructor(
@@ -41,7 +42,7 @@ export class Step3ValueChainFormBuilder {
       yearControls.forEach(yearControl => {
         itemGroup[yearControl] = this.fb.group({
           [EMaterialsFormControls.hasComment]: [false],
-          [EMaterialsFormControls.value]: [null],
+          [EMaterialsFormControls.value]: [null, Validators.required],
         });
       });
     }
@@ -56,7 +57,7 @@ export class Step3ValueChainFormBuilder {
   buildSectionFormArray(includeYears: boolean = true): FormArray {
     return this.fb.array(
       [this.createValueChainItemFormGroup(includeYears)],
-      [this.costPercentageArrayValidator()]
+      [this.costPercentageArrayValidator(), this.incompleteFormArrayValidator()]
     );
   }
 
@@ -254,6 +255,28 @@ export class Step3ValueChainFormBuilder {
             total: total
           }
         };
+      }
+
+      return null;
+    };
+  }
+
+  /**
+   * Validator to check if any control in the form array is dirty, invalid, and has a required error
+   * Returns {inComplete: true} if such a control is found
+   */
+  private incompleteFormArrayValidator() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const formArray = control as FormArray;
+      if (!formArray || formArray.length === 0) {
+        return null;
+      }
+
+      // Check each item in the form array
+      for (const itemControl of formArray.controls) {
+        if (hasIncompleteControl(itemControl)) {
+          return { inComplete: true };
+        }
       }
 
       return null;
