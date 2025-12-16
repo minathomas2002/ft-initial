@@ -145,6 +145,10 @@ export class ProductPlanFormService {
     return this._step3Builder.calculateSectionTotalCostPercentage(this._step3FormGroup, sectionName);
   }
 
+  createValueChainItem(includeYears: boolean = true): FormGroup {
+    return this._step3Builder.createValueChainItemFormGroup(includeYears);
+  }
+
   // Expose Step 4 sub-form groups for convenience
   get saudizationFormGroup(): FormGroup {
     return this._step4FormGroup.get(EMaterialsFormControls.saudizationFormGroup) as FormGroup;
