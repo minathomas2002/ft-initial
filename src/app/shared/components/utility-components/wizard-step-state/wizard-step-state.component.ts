@@ -21,18 +21,18 @@ export class WizardStepStateComponent {
   formState = computed(() => this.stepState().formState);
 
   // Signal to track form state - updated reactively
-  private formStateSignal = signal<{ valid: boolean; invalid: boolean; dirty: boolean; touched: boolean }>({
+  private formStateSignal = signal<{ valid: boolean; invalid: boolean; dirty: boolean; touched: boolean; value: any }>({
     valid: false,
     invalid: false,
     dirty: false,
     touched: false,
+    value: null,
   });
 
   constructor() {
     // Set up reactive form state tracking using effect
     effect(() => {
       const form = this.formState();
-
       // Update initial state
       this.updateFormState(form);
 
@@ -46,18 +46,21 @@ export class WizardStepStateComponent {
           invalid: form.invalid,
           dirty: form.dirty,
           touched: form.touched,
+          value: form.value,
         })),
         distinctUntilChanged((prev, curr) =>
           prev.valid === curr.valid &&
           prev.invalid === curr.invalid &&
           prev.dirty === curr.dirty &&
-          prev.touched === curr.touched
+          prev.touched === curr.touched &&
+          prev.value === curr.value
         )
       );
 
       // Subscribe to form state changes
-      const subscription = formStateObservable.subscribe((state) => {
-        this.formStateSignal.set(state);
+      const subscription = formStateObservable.subscribe(() => {
+        // Update form state whenever status or values change
+        this.updateFormState(form);
       });
 
       // Cleanup
@@ -73,6 +76,7 @@ export class WizardStepStateComponent {
       invalid: form.invalid,
       dirty: form.dirty,
       touched: form.touched,
+      value: form.value,
     });
   }
 
