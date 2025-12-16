@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 
 export class Step2ProductPlantOverviewFormBuilder {
   constructor(
@@ -22,7 +22,7 @@ export class Step2ProductPlantOverviewFormBuilder {
       }),
       [EMaterialsFormControls.timeRequiredToSetupFactory]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(50)]),
       }),
     });
   }
@@ -132,15 +132,20 @@ export class Step2ProductPlantOverviewFormBuilder {
     }
 
     if (provideToSEC) {
-      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
-      experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
-      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.pattern(/^\d+$/)]);
-      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.pattern(/^\d+$/)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(500)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(500)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
     } else {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
+
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.reset();
+      experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.reset();
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.reset();
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.reset();
     }
 
     experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
@@ -160,8 +165,8 @@ export class Step2ProductPlantOverviewFormBuilder {
     }
 
     if (provideToLocalSuppliers) {
-      experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
-      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
       experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
     } else {
@@ -169,6 +174,11 @@ export class Step2ProductPlantOverviewFormBuilder {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.clearValidators();
+
+      experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.reset();
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.reset();
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.reset();
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.reset();
     }
 
     experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
@@ -190,7 +200,7 @@ export class Step2ProductPlantOverviewFormBuilder {
     const othersDescriptionControl = capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`);
 
     if (othersPercentage !== null && othersPercentage > 0) {
-      othersDescriptionControl?.setValidators([Validators.required]);
+      othersDescriptionControl?.setValidators([Validators.required, Validators.maxLength(500)]);
     } else {
       othersDescriptionControl?.clearValidators();
       othersDescriptionControl?.reset();
@@ -209,14 +219,16 @@ export class Step2ProductPlantOverviewFormBuilder {
       return;
     }
 
-    const hasLocalSuppliers = targetedCustomers.includes('SEC\'s approved local suppliers');
+    const hasLocalSuppliers = targetedCustomers.includes(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString());
 
     if (hasLocalSuppliers) {
-      targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
-      targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.clearValidators();
       targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.clearValidators();
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.reset();
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.reset();
     }
 
     targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
