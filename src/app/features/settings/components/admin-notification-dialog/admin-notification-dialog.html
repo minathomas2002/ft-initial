@@ -32,7 +32,7 @@
       >
         @if(activeTab() === '0'){
         @defer (on viewport) {
-        <app-admin-notification-form [formService]="systemTabformService"></app-admin-notification-form>
+        <app-admin-notification-form [changesArray]="systemNotification"></app-admin-notification-form>
         } @placeholder {
         <div></div>
         }
@@ -44,7 +44,7 @@
       >
         @if(activeTab() === '1'){
         @defer (on viewport) {
-        <app-admin-notification-email-form [formService]="emailTabformService"></app-admin-notification-email-form>
+        <app-admin-notification-email-form [changesArray]="emailNotification"></app-admin-notification-email-form>
         } @placeholder {
         <div></div>
         }

@@ -7,6 +7,7 @@ import { AdminNotificationForm } from "../admin-notification-system-form/admin-n
 import { NotificationFormService } from '../../services/notification-form/notification-form-service';
 import { AdminNotificationEmailForm } from "../admin-notification-email-form/admin-notification-email-form";
 import { EmailNotificationFormService } from '../../services/email-notification-form/email-notification-form-service';
+import { INotificationSettingUpdateRequest } from 'src/app/shared/interfaces/ISetting';
 
 @Component({
   selector: 'app-admin-notification-dialog',
@@ -19,19 +20,19 @@ export class AdminNotificationDialog {
   settingAdminStore = inject(AdminSettingsStore);
   dialogVisible = model<boolean>(false);
   activeTab = signal<string>('0');
-  systemTabformService = inject(NotificationFormService);
-  emailTabformService = inject(EmailNotificationFormService);
+  systemNotification :INotificationSettingUpdateRequest[] = [];
+  emailNotification :INotificationSettingUpdateRequest[] = [];
+  
 
    onConfirm(){
     this.dialogVisible.set(false);
-    console.log(this.systemTabformService.getPayload());
-    console.log(this.emailTabformService.getPayload());
+    console.log(this.systemNotification);
+    console.log(this.emailNotification);
    }
 
 
-   onClose(){
+  onClose(){
     this.dialogVisible.set(false);
-    this.systemTabformService.ResetFormFields();
-    this.emailTabformService.ResetFormFields();
-   }
+    //
+  }
 }
