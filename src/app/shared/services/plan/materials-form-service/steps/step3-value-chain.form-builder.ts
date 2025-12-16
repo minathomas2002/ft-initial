@@ -9,9 +9,8 @@ export class Step3ValueChainFormBuilder {
 
   /**
    * Create a FormGroup for a single value chain item (row in the table)
-   * @param includeYears - Whether to include year columns (Year 1-7). Manufacturing section doesn't have years.
    */
-  createValueChainItemFormGroup(includeYears: boolean = true): FormGroup {
+  createValueChainItemFormGroup(): FormGroup {
     const itemGroup: any = {
       [EMaterialsFormControls.expenseHeader]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -27,36 +26,33 @@ export class Step3ValueChainFormBuilder {
       }),
     };
 
-    // Add year columns only if includeYears is true
-    if (includeYears) {
-      const yearControls = [
-        EMaterialsFormControls.year1,
-        EMaterialsFormControls.year2,
-        EMaterialsFormControls.year3,
-        EMaterialsFormControls.year4,
-        EMaterialsFormControls.year5,
-        EMaterialsFormControls.year6,
-        EMaterialsFormControls.year7,
-      ];
+    // Add year columns (Year 1-7)
+    const yearControls = [
+      EMaterialsFormControls.year1,
+      EMaterialsFormControls.year2,
+      EMaterialsFormControls.year3,
+      EMaterialsFormControls.year4,
+      EMaterialsFormControls.year5,
+      EMaterialsFormControls.year6,
+      EMaterialsFormControls.year7,
+    ];
 
-      yearControls.forEach(yearControl => {
-        itemGroup[yearControl] = this.fb.group({
-          [EMaterialsFormControls.hasComment]: [false],
-          [EMaterialsFormControls.value]: [null, Validators.required],
-        });
+    yearControls.forEach(yearControl => {
+      itemGroup[yearControl] = this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, Validators.required],
       });
-    }
+    });
 
     return this.fb.group(itemGroup);
   }
 
   /**
    * Build FormArray for a specific section
-   * @param includeYears - Whether to include year columns
    */
-  buildSectionFormArray(includeYears: boolean = true): FormArray {
+  buildSectionFormArray(): FormArray {
     return this.fb.array(
-      [this.createValueChainItemFormGroup(includeYears)],
+      [this.createValueChainItemFormGroup()],
       [this.costPercentageArrayValidator(), this.incompleteFormArrayValidator()]
     );
   }
@@ -66,7 +62,7 @@ export class Step3ValueChainFormBuilder {
    */
   buildDesignEngineeringFormGroup(): FormGroup {
     return this.fb.group({
-      items: this.buildSectionFormArray(true), // Includes years
+      items: this.buildSectionFormArray(),
     });
   }
 
@@ -75,16 +71,16 @@ export class Step3ValueChainFormBuilder {
    */
   buildSourcingFormGroup(): FormGroup {
     return this.fb.group({
-      items: this.buildSectionFormArray(true), // Includes years
+      items: this.buildSectionFormArray(),
     });
   }
 
   /**
-   * Build Manufacturing section (NO years)
+   * Build Manufacturing section
    */
   buildManufacturingFormGroup(): FormGroup {
     return this.fb.group({
-      items: this.buildSectionFormArray(false), // No years
+      items: this.buildSectionFormArray(),
     });
   }
 
@@ -93,7 +89,7 @@ export class Step3ValueChainFormBuilder {
    */
   buildAssemblyTestingFormGroup(): FormGroup {
     return this.fb.group({
-      items: this.buildSectionFormArray(true), // Includes years
+      items: this.buildSectionFormArray(),
     });
   }
 
@@ -102,7 +98,7 @@ export class Step3ValueChainFormBuilder {
    */
   buildAfterSalesFormGroup(): FormGroup {
     return this.fb.group({
-      items: this.buildSectionFormArray(true), // Includes years
+      items: this.buildSectionFormArray(),
     });
   }
 
@@ -122,14 +118,14 @@ export class Step3ValueChainFormBuilder {
   /**
    * Add a new item to a section's FormArray
    */
-  addItemToSection(formGroup: FormGroup, sectionName: string, includeYears: boolean = true): void {
+  addItemToSection(formGroup: FormGroup, sectionName: string): void {
     const sectionFormGroup = formGroup.get(sectionName) as FormGroup;
     if (!sectionFormGroup) return;
 
     const itemsArray = sectionFormGroup.get('items') as FormArray;
     if (!itemsArray) return;
 
-    itemsArray.push(this.createValueChainItemFormGroup(includeYears));
+    itemsArray.push(this.createValueChainItemFormGroup());
   }
 
   /**
@@ -148,8 +144,7 @@ export class Step3ValueChainFormBuilder {
     } else {
       // Keep at least one item with empty values
       itemsArray.clear();
-      const includeYears = sectionName !== EMaterialsFormControls.manufacturingFormGroup;
-      itemsArray.push(this.createValueChainItemFormGroup(includeYears));
+      itemsArray.push(this.createValueChainItemFormGroup());
     }
   }
 
@@ -175,15 +170,16 @@ export class Step3ValueChainFormBuilder {
 
     let total = 0;
 
-    // Sections that include years
-    const sectionsWithYears = [
+    // All sections include years
+    const sections = [
       EMaterialsFormControls.designEngineeringFormGroup,
       EMaterialsFormControls.sourcingFormGroup,
+      EMaterialsFormControls.manufacturingFormGroup,
       EMaterialsFormControls.assemblyTestingFormGroup,
       EMaterialsFormControls.afterSalesFormGroup,
     ];
 
-    sectionsWithYears.forEach(sectionName => {
+    sections.forEach(sectionName => {
       const itemsArray = this.getSectionFormArray(formGroup, sectionName);
       if (!itemsArray) return;
 
