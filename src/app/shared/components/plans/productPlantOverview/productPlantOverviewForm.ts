@@ -1,12 +1,9 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { MaterialsFormService } from 'src/app/shared/services/plan/materials-form-service/materials-form-service';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
-import { BaseErrorComponent } from '../../base-components/base-error/base-error.component';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -15,12 +12,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    BaseLabelComponent,
     InputTextModule,
     SelectModule,
     RadioButtonModule,
-    GroupInputWithCheckbox,
-    BaseErrorComponent
   ],
   //templateUrl: './productPlantOverviewForm.html',
   template: `

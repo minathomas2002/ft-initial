@@ -1,9 +1,8 @@
 import { Component, input, output, signal } from '@angular/core';
-import { Tooltip } from "primeng/tooltip";
 
 @Component({
   selector: 'app-setting-card',
-  imports: [Tooltip],
+  imports: [],
   templateUrl: './setting-card.html',
   styleUrl: './setting-card.scss',
 })
