@@ -14,6 +14,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
 
 @Component({
   selector: 'app-step-02-product-plant-overview-form',
@@ -26,10 +27,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
     MultiSelectModule,
     RadioButtonModule,
     GroupInputWithCheckbox,
-    BaseErrorComponent,
+    BaseErrorMessages,
     TextareaModule,
     TooltipModule,
-    InputNumberModule
+    InputNumberModule,
+    BaseErrorMessages
   ],
   templateUrl: './step-02-productPlantOverviewForm.html',
   styleUrl: './step-02-productPlantOverviewForm.scss',
