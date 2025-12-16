@@ -11,14 +11,11 @@ export class AssignReassignFormService {
 
   //declare strongly form
   readonly form  : FormGroup<{
-    planId: FormControl<string | null>,
     employeeId: FormControl<string | null>
   }> = this.fb.group({
-    planId: this.fb.control<string | null>( null,[Validators.required]),
     employeeId: this.fb.control<string | null> (null, [Validators.required])
   });
 
-  get planId(){return this.form.controls.planId}
   get employeeId() { return this.form.controls.employeeId};
   
 
