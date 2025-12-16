@@ -38,7 +38,6 @@ export class ErrorMessagesFactory {
       return [];
     }
 
-    console.log(control!.errors!);
     return Object.entries(control!.errors!)
       .map(([errorKey, errorValue]) =>
         this.buildErrorMessage(errorKey, errorValue, label)
