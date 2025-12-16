@@ -1,0 +1,189 @@
+<div class="flex flex-col gap-[32px] px-8 pb-10">
+  <!-- Saudization Projection Matrix Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Saudization</h2>
+
+    <div class="overflow-x-auto max-w-[1110px]">
+      <table class="w-full border-collapse bg-white rounded-lg border border-gray-200">
+        <thead>
+          <tr>
+            <th class="p-3 border border-gray-200 text-left bg-gray-50 min-w-[250px]">
+              <span class="text-sm font-semibold text-gray-900">Row Label</span>
+            </th>
+            <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
+              <span class="text-sm font-semibold text-gray-900">Year 1</span>
+            </th>
+            <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
+              <span class="text-sm font-semibold text-gray-900">Year 2</span>
+            </th>
+            <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
+              <span class="text-sm font-semibold text-gray-900">Year 3</span>
+            </th>
+            <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
+              <span class="text-sm font-semibold text-gray-900">Year 4</span>
+            </th>
+            <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
+              <span class="text-sm font-semibold text-gray-900">Year 5</span>
+            </th>
+            <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
+              <span class="text-sm font-semibold text-gray-900">Year 6</span>
+            </th>
+            <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
+              <span class="text-sm font-semibold text-gray-900">Year 7</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row 1: Annual Headcount (#) -->
+          <tr>
+            <td class="p-3 border border-gray-200 bg-gray-50">
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-gray-900">Annual Headcount (#)</span>
+              </div>
+            </td>
+            @for(year of [1,2,3,4,5,6,7]; track year) {
+            <td class="p-3 border border-gray-200">
+              <app-group-input-with-checkbox
+                [hasCommentControl]="getHasCommentControl(getRowControl(year, EMaterialsFormControls.annualHeadcount)!)"
+                [showCheckbox]="showCheckbox()"
+              >
+                <p-inputnumber
+                  fluid
+                  placeholder="Enter number"
+                  [min]="0"
+                  mode="integer"
+                  [formControl]="getValueControl(getRowControl(year, EMaterialsFormControls.annualHeadcount)!)"
+                />
+              </app-group-input-with-checkbox>
+              <app-base-error-messages
+                [control]="getValueControl(getRowControl(year, EMaterialsFormControls.annualHeadcount)!)"
+                [label]="'Annual Headcount'"
+              />
+            </td>
+            }
+          </tr>
+
+          <!-- Row 2: Saudization % -->
+          <tr>
+            <td class="p-3 border border-gray-200 bg-gray-50">
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-gray-900">Saudization %</span>
+                <span class="text-xs text-gray-500 mt-1">(No. of Saudi employees / Total employees)</span>
+              </div>
+            </td>
+            @for(year of [1,2,3,4,5,6,7]; track year) {
+            <td class="p-3 border border-gray-200">
+              <app-group-input-with-checkbox
+                [hasCommentControl]="getHasCommentControl(getRowControl(year, EMaterialsFormControls.saudizationPercentage)!)"
+                [showCheckbox]="showCheckbox()"
+              >
+                <p-inputnumber
+                  fluid
+                  placeholder="Enter percentage"
+                  [min]="0"
+                  [max]="100"
+                  mode="decimal"
+                  prefix="%"
+                  [minFractionDigits]="0"
+                  [maxFractionDigits]="2"
+                  [formControl]="getValueControl(getRowControl(year, EMaterialsFormControls.saudizationPercentage)!)"
+                />
+              </app-group-input-with-checkbox>
+              <app-base-error-messages
+                [control]="getValueControl(getRowControl(year, EMaterialsFormControls.saudizationPercentage)!)"
+                [label]="'Saudization %'"
+              />
+            </td>
+            }
+          </tr>
+
+          <!-- Row 3: Annual Total Compensation (SAR) -->
+          <tr>
+            <td class="p-3 border border-gray-200 bg-gray-50">
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-gray-900">Annual Total Compensation (SAR)</span>
+              </div>
+            </td>
+            @for(year of [1,2,3,4,5,6,7]; track year) {
+            <td class="p-3 border border-gray-200">
+              <app-group-input-with-checkbox
+                [hasCommentControl]="getHasCommentControl(getRowControl(year, EMaterialsFormControls.annualTotalCompensation)!)"
+                [showCheckbox]="showCheckbox()"
+              >
+                <p-inputnumber
+                  fluid
+                  placeholder="Enter cost"
+                  [min]="0"
+                  mode="decimal"
+                  [minFractionDigits]="0"
+                  [maxFractionDigits]="2"
+                  [formControl]="getValueControl(getRowControl(year, EMaterialsFormControls.annualTotalCompensation)!)"
+                />
+              </app-group-input-with-checkbox>
+              <app-base-error-messages
+                [control]="getValueControl(getRowControl(year, EMaterialsFormControls.annualTotalCompensation)!)"
+                [label]="'Annual Total Compensation'"
+              />
+            </td>
+            }
+          </tr>
+
+          <!-- Row 4: Saudi Compensation % -->
+          <tr>
+            <td class="p-3 border border-gray-200 bg-gray-50">
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-gray-900">Saudi Compensation %</span>
+                <span class="text-xs text-gray-500 mt-1">(Saudi compensation / Total compensation)</span>
+              </div>
+            </td>
+            @for(year of [1,2,3,4,5,6,7]; track year) {
+            <td class="p-3 border border-gray-200">
+              <app-group-input-with-checkbox
+                [hasCommentControl]="getHasCommentControl(getRowControl(year, EMaterialsFormControls.saudiCompensationPercentage)!)"
+                [showCheckbox]="showCheckbox()"
+              >
+                <p-inputnumber
+                  fluid
+                  placeholder="Enter percentage"
+                  [min]="0"
+                  [max]="100"
+                  mode="decimal"
+                  prefix="%"
+                  [minFractionDigits]="0"
+                  [maxFractionDigits]="2"
+                  [formControl]="getValueControl(getRowControl(year, EMaterialsFormControls.saudiCompensationPercentage)!)"
+                />
+              </app-group-input-with-checkbox>
+              <app-base-error-messages
+                [control]="getValueControl(getRowControl(year, EMaterialsFormControls.saudiCompensationPercentage)!)"
+                [label]="'Saudi Compensation %'"
+              />
+            </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Attachments Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Attachments (Optional)</h2>
+
+    <app-group-input-with-checkbox
+      [hasCommentControl]="getHasCommentControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
+      [showCheckbox]="showCheckbox()"
+    >
+      <app-fileupload
+        [acceptedFileTypes]="'.pdf, .png, .jpg, .jpeg, .zip, .rar'"
+        [(files)]="files"
+        class="w-full"
+        [placeholder]="'You can upload any file type (images, documents, archives).'"
+      />
+    </app-group-input-with-checkbox>
+    <app-base-error-messages
+      [control]="getValueControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
+      [label]="'Attachments'"
+    />
+  </div>
+</div>
