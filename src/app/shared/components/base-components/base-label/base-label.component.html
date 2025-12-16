@@ -1,4 +1,5 @@
 <label class="font-medium text-sm capitalize mb-[6px] inline-block text-gray-700 {{styleClass()}}">
   {{title()}}
+  @if(secondaryTitle()){ <span class="ms-1 !font-normal">{{secondaryTitle()}}</span> }
   @if(required()){ <span class="text-red-700"> *</span> }
 </label>

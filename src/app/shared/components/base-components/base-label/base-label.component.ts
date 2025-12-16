@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 })
 export class BaseLabelComponent {
 	title = input<string>();
+	secondaryTitle = input<string>();
 	styleClass = input<string>('');
 	required = input<boolean>();
 }
