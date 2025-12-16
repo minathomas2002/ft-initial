@@ -23,6 +23,9 @@ export const VALIDATION_MESSAGES = {
   inComplete: (label: string) =>
     `${label} has missing or invalid fields`,
 
+  totalExceeds100: (label: string) =>
+    `${label} can not exceed 100%`,
+
   invalidPhoneNumber: (label: string, error: any) =>
     `Please enter a valid ${label}`,
 
