@@ -20,6 +20,9 @@ export const VALIDATION_MESSAGES = {
   min: (label: string, error: any) =>
     `${label} must be greater than ${error.min}`,
 
+  inComplete: (label: string) =>
+    `${label} has missing or invalid fields`,
+
   invalidPhoneNumber: (label: string, error: any) =>
     `Please enter a valid ${label}`,
 
