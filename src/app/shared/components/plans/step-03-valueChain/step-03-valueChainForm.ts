@@ -5,8 +5,8 @@ import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-f
 @Component({
   selector: 'app-value-chain-form',
   imports: [ReactiveFormsModule],
-  templateUrl: './valueChainForm.html',
-  styleUrl: './valueChainForm.scss',
+  templateUrl: './step-03-valueChainForm.html',
+  styleUrl: './step-03-valueChainForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ValueChainForm {

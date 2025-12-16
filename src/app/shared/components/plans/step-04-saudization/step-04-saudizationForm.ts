@@ -5,8 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-saudization-form',
   imports: [ReactiveFormsModule],
-  templateUrl: './saudizationForm.html',
-  styleUrl: './saudizationForm.scss',
+  templateUrl: './step-04-saudizationForm.html',
+  styleUrl: './step-04-saudizationForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SaudizationForm {
