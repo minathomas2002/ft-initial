@@ -586,6 +586,14 @@
           "delete": "Delete"
         }
 
+      },
+      "workingDays": {
+        "title": "Working Days Management",
+        "table": {
+          "nameEn": "Name (English)",
+          "nameAr": "Name (Arabic)",
+          "isWorkingDay": "Is Working Day"
+        }
       }
 
     }

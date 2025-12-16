@@ -58,6 +58,7 @@ export const API_ENDPOINTS = {
     deleteHoliday:`${AdminSettings}/holidays`,
     getNotificationSetting:`${AdminSettings}/get-notification?channel=`,
     editNotificationSetting:`${AdminSettings}/update-notification`,
+    getWorkingDays:`${AdminSettings}/working-days`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,

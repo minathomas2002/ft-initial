@@ -1,13 +1,13 @@
 import { Component, inject, signal, Signal } from '@angular/core';
-import { TranslatePipe } from "../../../../../shared/pipes/translate.pipe";
 import { CardsPageLayout } from 'src/app/shared/components/layout-components/cards-page-layout/cards-page-layout';
 import { CardsSkeleton } from "src/app/shared/components/skeletons/cards-skeleton/cards-skeleton";
-import { SettingCard } from "../../../components/setting-card/setting-card";
-import { AdminSlaDialog } from "../../../components/admin-sla-dialog/admin-sla-dialog";
-import { AdminAutoAssignDialog } from "../../../components/admin-auto-assign-dialog/admin-auto-assign-dialog";
-import { AdminNotificationDialog } from "../../../components/admin-notification-dialog/admin-notification-dialog";
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
+import { TranslatePipe } from 'src/app/shared/pipes';
+import { AdminAutoAssignDialog } from '../../components/admin-auto-assign-dialog/admin-auto-assign-dialog';
+import { AdminNotificationDialog } from '../../components/admin-notification-dialog/admin-notification-dialog';
+import { AdminSlaDialog } from '../../components/admin-sla-dialog/admin-sla-dialog';
+import { SettingCard } from '../../components/setting-card/setting-card';
 
 @Component({
   selector: 'app-admin-setting-view',

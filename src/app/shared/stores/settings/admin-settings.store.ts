@@ -1,5 +1,5 @@
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
-import { ISettingAutoAssign, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating, INotificationSettingResponse, INotificationSettingUpdateRequest } from "../../interfaces/ISetting";
+import { ISettingAutoAssign, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating,IWorkingDay, INotificationSettingResponse, INotificationSettingUpdateRequest } from "../../interfaces/ISetting";
 import { SettingsApiService } from "../../api/settings/settings-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, map, tap, throwError } from "rxjs";
@@ -16,6 +16,7 @@ const initialState: {
   holidaysTotalCount: number;
   systemNotification: INotificationSettingResponse[];
   emailNotification: INotificationSettingResponse[];
+  workingDaysList: IWorkingDay[];
 } = {
   isLoading: false,
   isProcessing: false,
@@ -26,6 +27,7 @@ const initialState: {
   holidaysTotalCount: 0,
   systemNotification:[],
   emailNotification: []
+  workingDaysList: []
 }
 
 
@@ -212,6 +214,28 @@ export const AdminSettingsStore = signalStore(
               [stateKey]: []
             });
             return throwError(() => new Error('Error getting notification setting'));
+            }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+      /* Get Working Days List*/
+      getWorkingDays() {
+        patchState(store, { isLoading: true, error: null });
+        return settingApiService.getWorkingDays().pipe(
+          tap((res) => {
+            patchState(store, {
+              isLoading: false,
+              workingDaysList: res.body || []
+            });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error getting working days list',
+              workingDaysList: []
+            });
+            return throwError(() => new Error('Error getting working days list'));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });

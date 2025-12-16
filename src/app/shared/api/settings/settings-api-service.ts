@@ -1,6 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
+<<<<<<< HEAD
 import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating, INotificationSettingResponse, INotificationSettingUpdateRequest } from '../../interfaces/ISetting';
+=======
+import { ISettingAutoAssign, ISettingAutoAssignResponse, ISettingSla, ISettingSlaReq, IHolidaysManagementRecord, IHolidayManagementFilter, IHolidayCreating, IWorkingDay } from '../../interfaces/ISetting';
+>>>>>>> sprint-2
 import { IBaseApiResponse, IApiPaginatedResponse } from '../../interfaces';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
@@ -56,5 +60,9 @@ export class SettingsApiService {
 
     updateNotificationSetting(req: INotificationSettingUpdateRequest): Observable<IBaseApiResponse<boolean>> {
       return this.baseHttpService.post<boolean, INotificationSettingUpdateRequest, unknown>(API_ENDPOINTS.AdminSettings.editNotificationSetting, req);
+    }
+      // Working Days management
+    getWorkingDays(): Observable<IBaseApiResponse<IWorkingDay[]>> {
+      return this.baseHttpService.get<IWorkingDay[], unknown>(API_ENDPOINTS.AdminSettings.getWorkingDays);
     }
 }

@@ -1,0 +1,59 @@
+<div class="cards-page-layout px-[32px] py-[24px]">
+  <div class="flex justify-between items-baseline">
+  <p-button
+    [label]="'setting.adminView.holidays.goBack' | translate"
+    icon="icon-arrow-left"
+    styleClass="!px-0 mb-[16px]"
+    link
+    (onClick)="goBack()"
+  />
+  <p-button
+      [label]="'setting.adminView.holidays.addHoliday' | translate"
+      severity="primary"
+      class="flex"
+      fluid
+      icon="icon-plus"
+      (onClick)="onAddHoliday()"
+    />
+  </div>
+  <div class="flex justify-between items-center">
+    <div>
+      <h4 class="font-semibold xl:text-2xl text-lg">
+        {{ 'setting.adminView.holidays.title' | translate }}
+      </h4>
+      <h4 class="xl:text-md text-sm text-gray-600">
+        {{ 'setting.adminView.holidays.subTitle' | translate }}
+      </h4>
+    </div>    
+  </div>
+  <p-tabs [(value)]="activeTab" class="mt-10">
+    <p-tablist>
+      <p-tab value="0">{{ 'setting.adminView.holidays.title' | translate }}</p-tab>
+      <p-tab value="1">{{ 'setting.adminView.workingDays.title' | translate }}</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        @if(activeTab() === '0'){ @defer (on viewport) {
+        <app-admin-holidays-management-view></app-admin-holidays-management-view>
+        } @placeholder {
+        <div></div>
+        } }
+      </p-tabpanel>
+      <p-tabpanel value="1">
+        @if(activeTab() === '1'){ @defer (on viewport) {
+        <app-admin-working-days-management-view></app-admin-working-days-management-view>
+        } @placeholder {
+        <div></div>
+        } }
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>
+
+@if(viewCreateDialog()){
+<app-add-edit-holiday-dialog
+  [(dialogVisible)]="viewCreateDialog"
+  (onSuccess)="applyFilter()"
+  [isEditMode]="false"
+></app-add-edit-holiday-dialog>
+}
