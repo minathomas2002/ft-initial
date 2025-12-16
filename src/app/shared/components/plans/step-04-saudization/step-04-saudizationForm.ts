@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
   selector: 'app-step-04-saudization-form',
   imports: [ReactiveFormsModule],
   templateUrl: './step-04-saudizationForm.html',
-  styleUrl: './step-04-saudizationForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Step04SaudizationForm {
