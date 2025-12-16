@@ -14,6 +14,12 @@ export const VALIDATION_MESSAGES = {
   minlength: (label: string, error: any) =>
     `${label} must be at least ${error.requiredLength} characters`,
 
+  max: (label: string, error: any) =>
+    `${label} must be less than ${error.max}`,
+
+  min: (label: string, error: any) =>
+    `${label} must be greater than ${error.min}`,
+
   invalidPhoneNumber: (label: string, error: any) =>
     `Please enter a valid ${label}`,
 
@@ -23,8 +29,6 @@ export const VALIDATION_MESSAGES = {
 
 type ValidationMessageKey = keyof typeof VALIDATION_MESSAGES;
 type ValidationMessageFactory = typeof VALIDATION_MESSAGES[ValidationMessageKey];
-type ErrorWithMessage = { message: string };
-
 export class ErrorMessagesFactory {
   static getErrorMessages(
     control: AbstractControl | null,
@@ -34,6 +38,7 @@ export class ErrorMessagesFactory {
       return [];
     }
 
+    console.log(control!.errors!);
     return Object.entries(control!.errors!)
       .map(([errorKey, errorValue]) =>
         this.buildErrorMessage(errorKey, errorValue, label)
