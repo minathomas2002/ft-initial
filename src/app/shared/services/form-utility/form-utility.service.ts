@@ -27,6 +27,9 @@ export class FormUtilityService {
       if (control && control instanceof FormGroup) {
         errorCount += this.countFormErrors(control);
       }
+      else if (control && control instanceof FormArray) {
+        errorCount += Object.keys(control.errors ?? {}).length ?? 0;
+      }
       else if (control && control.dirty && control.invalid) {
         errorCount++
       }
