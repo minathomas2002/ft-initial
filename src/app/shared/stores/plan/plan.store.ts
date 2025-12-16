@@ -2,8 +2,9 @@ import { inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
 import { EOpportunityType } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { IBaseApiResponse, ISelectItem } from "../../interfaces";
-import { finalize, Observable, of, take, tap } from "rxjs";
+import { IActiveEmployee, IAssignRequest, IBaseApiResponse, ISelectItem } from "../../interfaces";
+import { catchError, finalize, Observable, of, take, tap, throwError } from "rxjs";
+import { PlanApiService } from "../../api/plans/plan-api-service";
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null,
@@ -11,12 +12,23 @@ const initialState: {
   newPlanTitle: string,
   availableOpportunities: ISelectItem[],
   isLoadingAvailableOpportunities: boolean,
+  activeEmployees: IActiveEmployee[] | null;
+  isLoading: boolean;
+  isProcessing:boolean;
+  error: string | null;
+
+
 } = {
   newPlanOpportunityType: null,
   isPresetSelected: false,
   newPlanTitle: '',
   availableOpportunities: [],
   isLoadingAvailableOpportunities: false,
+  activeEmployees: null,
+  isLoading: false,
+  error: null,
+  isProcessing: false
+
 }
 
 export const PlanStore = signalStore(
@@ -46,6 +58,7 @@ export const PlanStore = signalStore(
   }),
   withMethods((store) => {
     const opportunitiesApiService = inject(OpportunitiesApiService);
+    const planApiService = inject(PlanApiService);
     return {
       getActiveOpportunityLookUps(): Observable<IBaseApiResponse<ISelectItem[]>> {
         if (!store.newPlanOpportunityType()) return of({} as IBaseApiResponse<ISelectItem[]>);
@@ -55,7 +68,58 @@ export const PlanStore = signalStore(
             finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
             tap((response) => patchState(store, { availableOpportunities: response.body }))
           )
-      }
+      },
+      
+       /* Get Active Employees  For plans*/
+      getActiveEmployeesForPlans(planId: string) {
+        patchState(store, { isLoading: true, error: null });
+        return planApiService.getActiveEmployeesForPlans(planId).pipe(
+          tap((res) => {
+            patchState(store, { isLoading: false });
+            patchState(store, { activeEmployees: res.body || [] });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error getting active employees' });
+            return throwError(() => new Error('Error getting active employees'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          }),
+        );
+      },
+      /* assign Employee  For plan*/
+      assignEmployeeToPlan(request: IAssignRequest) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.assignEmployeeToPlan(request).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error assigning system employee' });
+            return throwError(() => new Error('Error assigning system employee'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+      /* reassign Employee  For plan*/
+      reassignEmployeeToPlan(request: IAssignRequest) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.reassignEmployeeToPlan(request).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error assigning system employee' });
+            return throwError(() => new Error('Error assigning system employee'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+
     }
   }),
   withMethods((store) => {

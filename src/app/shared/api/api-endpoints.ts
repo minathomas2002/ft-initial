@@ -29,6 +29,11 @@ export const API_ENDPOINTS = {
     getAllUsers: `${Users}`,
     createNewUser: `${Users}/create-user`,
   },
+  plans:{
+    getActiveEmployeesWithPlans: `${SystemEmployees}/active-employees?planId=`,
+    assign  : `${SystemEmployees}/assign`,
+    reassign  : `${SystemEmployees}/reassign`,
+  },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,
     getActiveEmployees: `${SystemEmployees}/GetActiveEmployees`,
@@ -37,7 +42,6 @@ export const API_ENDPOINTS = {
     getSystemEmployeesList: `${SystemEmployees}/GetSystemEmployeesList`,
     updateSystemEmployee: `${SystemEmployees}/UpdateSystemEmployee`,
     toggleEmployeeStatus: `${SystemEmployees}/ToggleEmployeeStatus`,
-    getActiveEmployeesWithPlans: `${SystemEmployees}/getActiveEmployeesWithPlans`,
 
 
     RoleManagement: {
