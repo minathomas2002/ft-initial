@@ -159,8 +159,12 @@ export interface INotificationSettingResponse {
   items : INotificationSettingItem[];
 }
 
-export interface INotificationSettingUpdateRequest {
+export interface INotificationSettingUpdateRequestBody{
   id: string;
   channel : number;
   isEnabled: boolean;
+}
+export interface INotificationSettingUpdateRequest {
+  requests: INotificationSettingUpdateRequestBody[];
+  
 }

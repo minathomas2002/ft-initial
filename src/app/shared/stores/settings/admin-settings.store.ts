@@ -199,6 +199,7 @@ export const AdminSettingsStore = signalStore(
       },
 
       getNotificationSetting( channel: ENotificationChannel,stateKey: 'systemNotification' | 'emailNotification') {
+        
         patchState(store, { isLoading: true, error: null });
         return settingApiService.getNotificationSetting(channel).pipe(
           tap((res) => {
@@ -217,11 +218,13 @@ export const AdminSettingsStore = signalStore(
           }),
         );
       },
-      updateNotificationSetting(req: INotificationSettingUpdateRequest[]) {
+      updateNotificationSetting(req: INotificationSettingUpdateRequest) {
         patchState(store, { isProcessing: true, error: null });
         return settingApiService.updateNotificationSetting(req).pipe(
           tap((res) => {
             patchState(store, { isProcessing: false });
+            patchState(store, { systemNotification : [], emailNotification : [] });
+           
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error updating notification' });

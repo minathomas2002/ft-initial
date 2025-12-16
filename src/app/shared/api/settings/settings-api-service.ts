@@ -54,7 +54,7 @@ export class SettingsApiService {
       return this.baseHttpService.get<INotificationSettingResponse[], unknown>(API_ENDPOINTS.AdminSettings.getNotificationSetting+channelId);
     }
 
-    updateNotificationSetting(req: INotificationSettingUpdateRequest[]): Observable<IBaseApiResponse<boolean>> {
-      return this.baseHttpService.put<boolean, INotificationSettingUpdateRequest[], unknown>(API_ENDPOINTS.AdminSettings.editNotificationSetting, req);
+    updateNotificationSetting(req: INotificationSettingUpdateRequest): Observable<IBaseApiResponse<boolean>> {
+      return this.baseHttpService.post<boolean, INotificationSettingUpdateRequest, unknown>(API_ENDPOINTS.AdminSettings.editNotificationSetting, req);
     }
 }

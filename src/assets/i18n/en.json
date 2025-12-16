@@ -529,7 +529,8 @@
         "reminderOnPlanAssignedforReviewDesc": "Sent when a plan is assigned to a reviewer.",
         "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
-        "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA."
+        "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA.",
+        "notificationSuccessMessage":"Notification updated successfully"
       },
       "holidays": {
         "goBack": "Back to settings",
