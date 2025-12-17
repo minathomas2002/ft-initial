@@ -21,6 +21,7 @@ import {
   ContactInfo
 } from '../interfaces/plans.interface';
 import { EMaterialsFormControls } from '../enums/product-localization-form-controls.enum';
+import { IPhoneValue } from '../interfaces/phone-input.interface';
 
 /**
  * Section type mapping for value chain sections
@@ -96,6 +97,20 @@ function mapOverviewCompanyInfo(formService: ProductPlanFormService): OverviewCo
 
   const hasLocalAgent = getFormBooleanValue(locationInfoForm, EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA);
 
+  // Combine phone code and number into one string
+  const phoneValue = hasLocalAgent ? getFormValue(localAgentForm, EMaterialsFormControls.contactNumber) : null;
+  let localAgentContactNumber: string | null = null;
+  if (phoneValue && typeof phoneValue === 'object' && 'countryCode' in phoneValue && 'phoneNumber' in phoneValue) {
+    const phone = phoneValue as IPhoneValue;
+    if (phone.countryCode && phone.phoneNumber) {
+      localAgentContactNumber = `${phone.countryCode}${phone.phoneNumber}`;
+    } else if (phone.phoneNumber) {
+      localAgentContactNumber = phone.phoneNumber;
+    }
+  } else if (phoneValue && typeof phoneValue === 'string') {
+    localAgentContactNumber = phoneValue;
+  }
+
   const locationInfo: LocationInfo = {
     globalHQLocation: getFormValue(locationInfoForm, EMaterialsFormControls.globalHQLocation) ?? null,
     vendorIdWithSEC: getFormValue(locationInfoForm, EMaterialsFormControls.registeredVendorIDwithSEC) ?? null,
@@ -103,7 +118,7 @@ function mapOverviewCompanyInfo(formService: ProductPlanFormService): OverviewCo
     localAgentName: hasLocalAgent ? (getFormValue(localAgentForm, EMaterialsFormControls.localAgentName) ?? null) : null,
     contactPersonName: hasLocalAgent ? (getFormValue(localAgentForm, EMaterialsFormControls.contactPersonName) ?? null) : null,
     localAgentEmail: hasLocalAgent ? (getFormValue(localAgentForm, EMaterialsFormControls.emailID) ?? null) : null,
-    localAgentContactNumber: hasLocalAgent ? (getFormValue(localAgentForm, EMaterialsFormControls.contactNumber) ?? null) : null,
+    localAgentContactNumber: hasLocalAgent ? localAgentContactNumber : null,
     companyHQLocation: hasLocalAgent ? (getFormValue(localAgentForm, EMaterialsFormControls.companyHQLocation) ?? null) : null,
   } as any; // Allow null values for FormData conversion
 
@@ -139,10 +154,19 @@ function mapProductPlantOverview(formService: ProductPlanFormService): ProductPl
     othersDescription: getFormValue(capexForm, EMaterialsFormControls.othersDescription) ?? null,
   } as any; // Allow null values for FormData conversion
 
-  const targetedCustomers = getFormValue(targetCustomersForm, EMaterialsFormControls.targetedCustomer) as string[] ?? null;
+  const targetedCustomers = getFormValue(targetCustomersForm, EMaterialsFormControls.targetedCustomer) as string[] | null;
+  // Only set targetSEC to true/false if targetedCustomers is not null/undefined and is an array
+  // If it's null/undefined, keep it as null. If it's an empty array, set to false.
+  const targetSEC = targetedCustomers === null || targetedCustomers === undefined
+    ? null
+    : targetedCustomers
+  const targetLocalSuppliers = targetedCustomers === null || targetedCustomers === undefined
+    ? null
+    : (targetedCustomers.length > 0 ? targetedCustomers.includes('2') : false);
+
   const targetCustomers: TargetCustomers = {
-    targetSEC: targetedCustomers ? targetedCustomers.includes('1') : null,
-    targetLocalSuppliers: targetedCustomers ? targetedCustomers.includes('2') : null,
+    targetSEC,
+    targetLocalSuppliers,
     targetedLocalSupplierNames: getFormValue(targetCustomersForm, EMaterialsFormControls.namesOfTargetedSuppliers) ?? null,
     productsUtilizingTargetProduct: getFormValue(targetCustomersForm, EMaterialsFormControls.productsUtilizeTargetedProduct) ?? null,
   } as any; // Allow null values for FormData conversion
@@ -151,8 +175,11 @@ function mapProductPlantOverview(formService: ProductPlanFormService): ProductPl
   const provideToLocalSuppliers = getFormBooleanValue(manufacturingExpForm, EMaterialsFormControls.provideToLocalSuppliers);
 
   const experienceRangeValue = getFormValue(manufacturingExpForm, EMaterialsFormControls.productManufacturingExperience);
+  // Extract the id from the experience range value (should be a string that can be parsed to int)
+  const experienceRangeId = experienceRangeValue?.id ?? experienceRangeValue ?? null;
+
   const manufacturingExperience: ManufacturingExperience = {
-    experienceRange: experienceRangeValue?.id ?? null,
+    experienceRange: experienceRangeId,
     provideToSEC: provideToSEC ?? null,
     qualifiedPlantLocation_SEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.qualifiedPlantLocationSEC) ?? null) : null,
     approvedVendorId_SEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.approvedVendorIDSEC) ?? null) : null,
@@ -223,9 +250,25 @@ function mapValueChainStep(formService: ProductPlanFormService): ValueChainStep 
     });
   });
 
+  // Calculate total localization percentage (sum of all year totals)
+  // This is the value used in the beLess100 validator
+  // Use the form service's calculateYearTotalLocalization method
+  let valueChainSummary = '';
+  try {
+    let total = 0;
+    for (let year = 1; year <= 7; year++) {
+      const yearTotal = formService.calculateYearTotalLocalization(year);
+      total += yearTotal;
+    }
+    valueChainSummary = total.toString();
+  } catch (error) {
+    // If calculation fails, leave as empty string
+    valueChainSummary = '';
+  }
+
   return {
     valueChainRows,
-    valueChainSummary: null, // Can be computed or left empty for draft
+    valueChainSummary,
   } as any as ValueChainStep; // Allow null values for FormData conversion
 }
 
@@ -280,22 +323,33 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
     });
   }
 
-  // Map attachments
+  // Map attachments - files are stored as File[] in the form control
   const attachments: Attachment[] = [];
   if (attachmentsFormGroup) {
-    const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
     const attachmentsValue = getFormValue(attachmentsFormGroup, EMaterialsFormControls.attachments);
 
-    // Handle file attachments - adjust based on actual file structure
+    // Handle file attachments - files are File objects
     if (attachmentsValue && Array.isArray(attachmentsValue)) {
-      attachmentsValue.forEach((file: any) => {
-        attachments.push({
-          id: file.id ?? '',
-          fileName: file.name ?? '',
-          fileExtension: file.name?.split('.').pop() ?? '',
-          fileUrl: file.url ?? '',
-          file: file.base64 ?? file.data ?? '',
-        });
+      attachmentsValue.forEach((file: File | any) => {
+        if (file instanceof File) {
+          // File object - store file reference (actual file will be appended in FormData)
+          attachments.push({
+            id: '',
+            fileName: file.name,
+            fileExtension: file.name.split('.').pop() ?? '',
+            fileUrl: '',
+            file: file as any as string, // Store File object reference, will be handled in FormData conversion
+          } as any as Attachment);
+        } else if (file && typeof file === 'object') {
+          // Already processed attachment object
+          attachments.push({
+            id: file.id ?? '',
+            fileName: file.name ?? file.fileName ?? '',
+            fileExtension: file.name?.split('.').pop() ?? file.fileExtension ?? '',
+            fileUrl: file.url ?? file.fileUrl ?? '',
+            file: file.base64 ?? file.data ?? file.file ?? file,
+          });
+        }
       });
     }
   }
@@ -414,7 +468,7 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
 
   // TargetCustomers - Convert boolean to integer for API (null stays null)
   const targetSECValue = productPlan.productPlantOverview.targetCustomers.targetSEC;
-  appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetSEC', targetSECValue === null ? null : (targetSECValue ? 1 : 0));
+  appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetSEC', targetSECValue === null ? null : 2); // ToDo: pass the correct value form the form after BE Fixed
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetedLocalSupplierNames', productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.ProductsUtilizingTargetProduct', productPlan.productPlantOverview.targetCustomers.productsUtilizingTargetProduct);
 
@@ -476,9 +530,12 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
 
       if (!fileValue) return;
 
-      // Check if it's a File object (using duck typing)
-      if (typeof fileValue === 'object' && 'size' in fileValue && 'type' in fileValue && 'name' in fileValue) {
-        // Likely a File object
+      // Check if it's a File object
+      if (fileValue instanceof File) {
+        // File object - append directly
+        formData.append(`ProductPlan.Saudization.Attachments[${index}]`, fileValue);
+      } else if (typeof fileValue === 'object' && 'size' in fileValue && 'type' in fileValue && 'name' in fileValue) {
+        // Duck typing for File-like object
         formData.append(`ProductPlan.Saudization.Attachments[${index}]`, fileValue as File);
       } else if (typeof fileValue === 'string') {
         // If file is base64 string, convert to blob

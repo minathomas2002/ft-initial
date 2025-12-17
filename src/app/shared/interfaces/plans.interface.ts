@@ -1,3 +1,5 @@
+import { ETargetedCustomer } from "../enums"
+
 export interface IProductLocalizationPlanRequest {
   productPlan: ProductPlan
   signature: Signature
@@ -64,7 +66,7 @@ export interface ExpectedCapex {
 }
 
 export interface TargetCustomers {
-  targetSEC: boolean
+  targetSEC: ETargetedCustomer[],
   targetLocalSuppliers: boolean
   targetedLocalSupplierNames: string
   productsUtilizingTargetProduct: string
