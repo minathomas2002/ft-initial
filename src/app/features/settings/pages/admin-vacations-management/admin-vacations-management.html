@@ -1,13 +1,13 @@
 <div class="cards-page-layout px-[32px] py-[24px]">
   <div class="flex justify-between items-baseline">
-  <p-button
-    [label]="'setting.adminView.holidays.goBack' | translate"
-    icon="icon-arrow-left"
-    styleClass="!px-0 mb-[16px]"
-    link
-    (onClick)="goBack()"
-  />
-  <p-button
+    <p-button
+      [label]="'setting.adminView.holidays.goBack' | translate"
+      icon="icon-arrow-left"
+      styleClass="!px-0 mb-[16px]"
+      link
+      (onClick)="goBack()"
+    />
+    <p-button
       [label]="'setting.adminView.holidays.addHoliday' | translate"
       severity="primary"
       class="flex"
@@ -24,9 +24,10 @@
       <h4 class="xl:text-md text-sm text-gray-600">
         {{ 'setting.adminView.holidays.subTitle' | translate }}
       </h4>
-    </div>    
+    </div>
   </div>
-  <p-tabs [(value)]="activeTab" class="mt-10">
+  <app-admin-holidays-management-view class="mt-10"></app-admin-holidays-management-view>
+  <!-- <p-tabs [(value)]="activeTab" class="mt-10">
     <p-tablist>
       <p-tab value="0">{{ 'setting.adminView.holidays.title' | translate }}</p-tab>
       <p-tab value="1">{{ 'setting.adminView.workingDays.title' | translate }}</p-tab>
@@ -47,7 +48,7 @@
         } }
       </p-tabpanel>
     </p-tabpanels>
-  </p-tabs>
+  </p-tabs> -->
 </div>
 
 @if(viewCreateDialog()){
