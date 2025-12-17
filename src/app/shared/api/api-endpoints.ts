@@ -31,6 +31,7 @@ export const API_ENDPOINTS = {
     getActiveEmployeesWithPlans: `${SystemEmployees}/active-employees?planId=`,
     assign: `${SystemEmployees}/assign`,
     reassign: `${SystemEmployees}/reassign`,
+    saveAsDraftProductLocalizationPlan: `${Plans}/saveAsDraft-productPlan`,
   },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,
