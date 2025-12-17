@@ -10,12 +10,12 @@
 />
 
 @if (viewAssignDialog()) {
-<app-assign-reassign-mauale-employee
+<app-assign-reassign-manual-employee
   [(dialogVisible)]="viewAssignDialog"
   [isReassignMode]="false"
   [planRecord]="planItem"
   (onSuccess)="ApplyFilter()"
 >
 
-</app-assign-reassign-mauale-employee>
+</app-assign-reassign-manual-employee>
 }

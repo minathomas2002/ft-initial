@@ -3,38 +3,37 @@ import { Button } from "primeng/button";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { EPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
-import { AssignReassignMaualeEmployee } from "../../components/assign-reassign-mauale-employee/assign-reassign-mauale-employee";
+import { AssignReassignManualEmployee } from "../../components/assign-reassign-manual-employee/assign-reassign-manual-employee";
 
 @Component({
   selector: 'app-plans-list',
-  imports: [Button, TranslatePipe, AssignReassignMaualeEmployee],
+  imports: [Button, TranslatePipe, AssignReassignManualEmployee],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
 })
 export class PlansList implements OnInit {
-  planItem: IPlanRecord= {
+  planItem: IPlanRecord = {
     id: '',
-      planId: '',
-      planCode: '#334',
-      title: 'plan B',
-      planType: EOpportunityType.PRODUCT,
-      submissionDate: '2025-12-31',
-      slaCountDown: 10, // days remaining
-      status: EPlanStatus.PENDING,
+    planId: '',
+    planCode: '#334',
+    title: 'plan B',
+    planType: EOpportunityType.PRODUCT,
+    submissionDate: '2025-12-31',
+    slaCountDown: 10, // days remaining
+    status: EPlanStatus.PENDING,
   };
- viewAssignDialog= signal<boolean>(false);
+  viewAssignDialog = signal<boolean>(false);
 
   ngOnInit() {
   }
 
 
-  onAssign(item: IPlanRecord){
+  onAssign(item: IPlanRecord) {
     this.viewAssignDialog.set(true);
-    this.planItem= item;
+    this.planItem = item;
   }
 
-  ApplyFilter()
-  {
-    
+  ApplyFilter() {
+
   }
 }

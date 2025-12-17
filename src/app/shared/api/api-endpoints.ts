@@ -19,9 +19,6 @@ export const API_ENDPOINTS = {
   dashboard: {
     getHelloWorld: `${Dashboard}/hello-world`,
   },
-  plans: {
-    getInvestorDashboardPlans: `${Plans}/get-investor-dashboard-plans`
-  },
   investors: {
     getInvestors: `${Investors}`,
   },
@@ -29,10 +26,11 @@ export const API_ENDPOINTS = {
     getAllUsers: `${Users}`,
     createNewUser: `${Users}/create-user`,
   },
-  plans:{
+  plans: {
+    getInvestorDashboardPlans: `${Plans}/get-investor-dashboard-plans`,
     getActiveEmployeesWithPlans: `${SystemEmployees}/active-employees?planId=`,
-    assign  : `${SystemEmployees}/assign`,
-    reassign  : `${SystemEmployees}/reassign`,
+    assign: `${SystemEmployees}/assign`,
+    reassign: `${SystemEmployees}/reassign`,
   },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,
