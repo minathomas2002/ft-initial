@@ -23,6 +23,7 @@ export class FileuploadComponent {
   acceptedFileTypes = input<string>("*/*");
   files = model<File[]>([]);
   placeholder = input("SVG, PNG, JPG, PDF, DOCX, MP4");
+  multiple = input<boolean>(false);
 
   private fileupload = viewChild<FileUpload>("fileupload");
   private toasterService = inject(ToasterService);
