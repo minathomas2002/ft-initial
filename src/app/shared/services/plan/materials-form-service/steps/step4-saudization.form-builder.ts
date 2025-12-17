@@ -4,7 +4,7 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 export class Step4SaudizationFormBuilder {
   constructor(
     private readonly fb: FormBuilder
-  ) {}
+  ) { }
 
   /**
    * Create a FormGroup for a single year column (Year 1-7)
@@ -14,7 +14,7 @@ export class Step4SaudizationFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.annualHeadcount]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.pattern(/^\d+$/)]], // Integer only, >= 0
+        [EMaterialsFormControls.value]: [null, [Validators.min(0)]], // Integer only, >= 0
       }),
       [EMaterialsFormControls.saudizationPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
