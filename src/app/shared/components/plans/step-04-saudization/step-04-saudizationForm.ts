@@ -4,9 +4,8 @@ import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-f
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { FileuploadComponent } from '../../utility-components/fileupload/fileupload.component';
+import { SaudizationMatrixComponent } from './saudization-matrix/saudization-matrix.component';
 
 @Component({
   selector: 'app-step-04-saudization-form',
@@ -14,8 +13,8 @@ import { FileuploadComponent } from '../../utility-components/fileupload/fileupl
     ReactiveFormsModule,
     BaseErrorMessages,
     GroupInputWithCheckbox,
-    InputNumberModule,
     FileuploadComponent,
+    SaudizationMatrixComponent,
   ],
   templateUrl: './step-04-saudizationForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,33 +32,34 @@ export class Step04SaudizationForm {
   files = signal<File[]>([]);
 
   // Helper methods - delegate to ProductPlanFormService
-  getValueControl(formGroup: AbstractControl): FormControl<any> {
+  // Using arrow functions to preserve 'this' context when passed to child components
+  getValueControl = (formGroup: AbstractControl): FormControl<any> => {
     return this.productPlanFormService.getValueControl(formGroup);
-  }
+  };
 
-  getHasCommentControl(formGroup: AbstractControl): FormControl<boolean> {
+  getHasCommentControl = (formGroup: AbstractControl): FormControl<boolean> => {
     return this.productPlanFormService.getHasCommentControl(formGroup);
-  }
+  };
 
   // Get form groups
-  getSaudizationFormGroup(): FormGroup {
+  getSaudizationFormGroup = (): FormGroup => {
     return this.productPlanFormService.saudizationFormGroup;
-  }
+  };
 
-  getAttachmentsFormGroup(): FormGroup {
+  getAttachmentsFormGroup = (): FormGroup => {
     return this.productPlanFormService.attachmentsFormGroup;
-  }
+  };
 
   // Get year form group
-  getYearFormGroup(year: number): FormGroup | null {
+  getYearFormGroup = (year: number): FormGroup | null => {
     return this.productPlanFormService.getYearFormGroup(year);
-  }
+  };
 
   // Get row control for a specific year
-  getRowControl(year: number, rowName: string): AbstractControl | null {
+  getRowControl = (year: number, rowName: string): AbstractControl | null => {
     const yearGroup = this.getYearFormGroup(year);
     return yearGroup?.get(rowName) || null;
-  }
+  };
 
   constructor() {
     // Initialize files from form control value
