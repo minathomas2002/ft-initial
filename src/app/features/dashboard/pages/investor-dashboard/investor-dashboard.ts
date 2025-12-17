@@ -137,4 +137,8 @@ export class InvestorDashboard implements OnInit {
     // TODO: Implement download
     console.log('Download plan:', plan);
   }
+
+  applyFilter() {
+    this.filterService.applyFilter();
+  }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, model, OnDestroy, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject, model, OnDestroy, output, signal } from "@angular/core";
 import { BaseWizardDialog } from "../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { Step01OverviewCompanyInformationForm } from "../step-01-overviewCompanyInformation/step-01-overviewCompanyInformationForm";
 import { Step02ProductPlantOverviewForm } from "../step-02-productPlantOverview/step-02-productPlantOverviewForm";
@@ -14,6 +14,7 @@ import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData } fro
 import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
+import { EMaterialsFormControls } from "src/app/shared/enums";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -38,6 +39,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   destroyRef = inject(DestroyRef);
   visibility = model(false);
   activeStep = signal<number>(1);
+  doRefresh = output<void>();
   steps = computed<IWizardStepState[]>(() => [
     {
       title: 'Overview & Company Information',
@@ -76,6 +78,17 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   }
 
   saveAsDraft(): void {
+    // Access nested form controls correctly
+    const basicInfoFormGroup = this.productPlanFormService.basicInformationFormGroup;
+    const planTitle = basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.value;
+    const opportunity = basicInfoFormGroup?.get(EMaterialsFormControls.opportunity)?.value;
+
+    // Check if plan title and opportunity are selected
+    if (!planTitle || !opportunity) {
+      this.toasterService.error('Please select a plan title and opportunity');
+      return;
+    }
+
     // Map form values to request structure
     const request = mapProductLocalizationPlanFormToRequest(this.productPlanFormService);
 
@@ -88,6 +101,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       .subscribe({
         next: () => {
           this.toasterService.success('Product localization plan saved as draft successfully');
+          this.doRefresh.emit();
+          this.visibility.set(false);
         },
         error: (error) => {
           this.isProcessing.set(false);
