@@ -1,7 +1,9 @@
 <div class="flex flex-col gap-[32px] px-8 pb-10">
   <!-- Overview Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Overview <span><i
+    <h2 class="text-lg font-semibold text-gray-900">
+      Overview
+      <span><i
           class="icon-info text-sm ms-2 text-gray-400"
           tooltipPosition="top"
           [pTooltip]="tooltipContent"
@@ -17,12 +19,16 @@
             </p>
           </div>
         </ng-template>
-      </span></h2>
+      </span>
+    </h2>
 
     <div class="flex flex-col gap-4">
       <!-- Product Name -->
       <div class="flex flex-col gap-2">
-        <app-base-label [title]="'Product Name'" /> <span class="text-sm text-gray-700"> (i.e. Product Targeted for Localization)</span>
+        <app-base-label
+          [title]="'Product Name'"
+          [secondaryTitle]="'(i.e. Product Targeted for Localization)'"
+        />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
