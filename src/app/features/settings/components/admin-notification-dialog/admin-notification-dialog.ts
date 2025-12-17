@@ -10,10 +10,22 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ENotificationChannel } from 'src/app/shared/enums/notificationSetting.enum';
 import { take, tap } from 'rxjs';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-admin-notification-dialog',
-  imports: [TranslatePipe, BaseDialogComponent, Tabs, TabList, Tab, TabPanels, TabPanel, AdminNotificationForm, AdminNotificationEmailForm],
+  imports: [
+    TranslatePipe,
+    BaseDialogComponent,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanels,
+    TabPanel,
+    AdminNotificationForm,
+    AdminNotificationEmailForm,
+    ProgressSpinner
+  ],
   templateUrl: './admin-notification-dialog.html',
   styleUrl: './admin-notification-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,13 +42,11 @@ export class AdminNotificationDialog {
   i18nService = inject(I18nService);
   toasterService = inject(ToasterService);
 
-
   ngOnInit() {
     this.settingAdminStore.getNotificationSetting(ENotificationChannel.System, 'systemNotification').subscribe();
     this.settingAdminStore.getNotificationSetting(ENotificationChannel.Email, 'emailNotification').subscribe();
-
-
   }
+
   onConfirm() {
     this.dialogVisible.set(false);
     const body: INotificationSettingUpdateRequestBody[] = [
@@ -69,7 +79,6 @@ export class AdminNotificationDialog {
   }
 
   onClose() {
-    this.dialogVisible.set(false);
-    //
+    this.dialogVisible.set(false);    
   }
 }

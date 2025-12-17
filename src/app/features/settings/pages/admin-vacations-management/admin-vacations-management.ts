@@ -5,7 +5,6 @@ import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
 import { AddEditHolidayDialog } from '../../components/add-edit-holiday-dialog/add-edit-holiday-dialog';
-import { AdminWorkingDaysManagementView } from '../../components/admin-working-days-management-view/admin-working-days-management-view';
 import { HolidaysFilterService } from '../../services/holidays-filter/holidays-filter-service';
 import { AdminHolidaysManagementView } from '../../components/admin-holidays-management-view/admin-holidays-management-view';
 
@@ -14,7 +13,6 @@ import { AdminHolidaysManagementView } from '../../components/admin-holidays-man
   imports: [
     TabsModule,
     TranslatePipe,
-    AdminWorkingDaysManagementView,
     AddEditHolidayDialog,
     ButtonModule,
     AdminHolidaysManagementView
