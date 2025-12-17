@@ -6,5 +6,5 @@ export * from './opportunities.enum';
 export * from './view-mode.enum';
 export * from './system-employee.enum';
 export * from './role-management.enum';
-export * from './materials-form-controls.enum';
+export * from './product-localization-form-controls.enum';
 export * from './plan.enum';
