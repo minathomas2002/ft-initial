@@ -1,161 +1,70 @@
-<div class="overflow-x-auto max-w-[1110px]">
-  <table class="w-full bg-white border-collapse rounded-lg border border-gray-200">
-    <thead>
+<div class="rounded-lg  border border-gray-200 card max-w-[1110px]">
+  <p-table
+    class="w-full bg-white rounded-lg"
+    [value]="
+    tableRows"
+    [columns]="years"
+    [scrollable]="true"
+  >
+    <ng-template pTemplate="header">
       <tr>
-        <th class="p-3 border border-gray-200 text-left bg-gray-50 min-w-[300px]">
-          <span class="text-sm font-semibold text-gray-900">Row Label</span>
+        <th
+          class="p-3 !border !border-gray-200 text-left !bg-gray-50 min-w-[300px]"
+          pFrozenColumn
+        >
+          <span class="text-sm font-semibold text-gray-900"></span>
         </th>
-        <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
-          <span class="text-sm font-semibold text-gray-900">Year 1</span>
+        @for(year of years; track year) {
+        <th class="p-3 !border !border-gray-200 text-center !bg-gray-50 min-w-[200px]">
+          <span class="text-sm font-semibold text-gray-900">Year {{ year }}</span>
         </th>
-        <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
-          <span class="text-sm font-semibold text-gray-900">Year 2</span>
-        </th>
-        <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
-          <span class="text-sm font-semibold text-gray-900">Year 3</span>
-        </th>
-        <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
-          <span class="text-sm font-semibold text-gray-900">Year 4</span>
-        </th>
-        <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
-          <span class="text-sm font-semibold text-gray-900">Year 5</span>
-        </th>
-        <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
-          <span class="text-sm font-semibold text-gray-900">Year 6</span>
-        </th>
-        <th class="p-3 border border-gray-200 text-center bg-gray-50 min-w-[150px]">
-          <span class="text-sm font-semibold text-gray-900">Year 7</span>
-        </th>
+        }
       </tr>
-    </thead>
-    <tbody>
-      <!-- Row 1: Annual Headcount (#) -->
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-row
+    >
       <tr>
-        <td class="p-3 border border-gray-200 bg-gray-50">
+        <td
+          class="p-3 !border !border-gray-200 !bg-gray-50 z-10000000"
+          pFrozenColumn
+        >
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">Annual Headcount (#)</span>
+            <span class="text-sm font-medium text-gray-900">{{ row.label }}</span>
+            @if(row.subtitle) {
+            <span class="text-xs text-gray-500 mt-1">{{ row.subtitle }}</span>
+            }
           </div>
         </td>
-        @for(year of [1,2,3,4,5,6,7]; track year) {
-        <td class="p-3 border border-gray-200 text-center">
+        @for(year of years; track year) {
+        <td
+          class="p-3 !border !border-gray-200"
+          [ngClass]="row.alignBaseline ? 'align-baseline' : 'text-center'"
+        >
           <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl()(getRowControl()(year, EMaterialsFormControls.annualHeadcount)!)"
+            [hasCommentControl]="getHasCommentControl()(getRowControl()(year, row.controlName)!)"
             [showCheckbox]="showCheckbox()"
           >
             <p-inputnumber
               fluid
-              placeholder="Enter number"
-              [min]="0"
-              mode="integer"
-              [formControl]="getValueControl()(getRowControl()(year, EMaterialsFormControls.annualHeadcount)!)"
+              [placeholder]="row.placeholder"
+              [min]="row.min"
+              [max]="row.max"
+              [mode]="row.mode"
+              [prefix]="row.prefix"
+              [minFractionDigits]="row.minFractionDigits"
+              [maxFractionDigits]="row.maxFractionDigits"
+              [formControl]="getValueControl()(getRowControl()(year, row.controlName)!)"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
-            [control]="getValueControl()(getRowControl()(year, EMaterialsFormControls.annualHeadcount)!)"
-            [label]="'Annual Headcount'"
+            [control]="getValueControl()(getRowControl()(year, row.controlName)!)"
+            [label]="row.label"
           />
         </td>
         }
       </tr>
-
-      <!-- Row 2: Saudization % -->
-      <tr>
-        <td class="p-3 border border-gray-200 bg-gray-50">
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">Saudization %</span>
-            <span class="text-xs text-gray-500 mt-1">(No. of Saudi employees / Total employees)</span>
-          </div>
-        </td>
-        @for(year of [1,2,3,4,5,6,7]; track year) {
-        <td class="p-3 border border-gray-200">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl()(getRowControl()(year, EMaterialsFormControls.saudizationPercentage)!)"
-            [showCheckbox]="showCheckbox()"
-          >
-            <p-inputnumber
-              fluid
-              placeholder="Enter percentage"
-              [min]="0"
-              [max]="100"
-              mode="decimal"
-              prefix="%"
-              [minFractionDigits]="0"
-              [maxFractionDigits]="2"
-              [formControl]="getValueControl()(getRowControl()(year, EMaterialsFormControls.saudizationPercentage)!)"
-            />
-          </app-group-input-with-checkbox>
-          <app-base-error-messages
-            [control]="getValueControl()(getRowControl()(year, EMaterialsFormControls.saudizationPercentage)!)"
-            [label]="'Saudization %'"
-          />
-        </td>
-        }
-      </tr>
-
-      <!-- Row 3: Annual Total Compensation (SAR) -->
-      <tr>
-        <td class="p-3 border border-gray-200 bg-gray-50">
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">Annual Total Compensation (SAR)</span>
-          </div>
-        </td>
-        @for(year of [1,2,3,4,5,6,7]; track year) {
-        <td class="p-3 border border-gray-200">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl()(getRowControl()(year, EMaterialsFormControls.annualTotalCompensation)!)"
-            [showCheckbox]="showCheckbox()"
-          >
-            <p-inputnumber
-              fluid
-              placeholder="Enter cost"
-              [min]="0"
-              mode="decimal"
-              [minFractionDigits]="0"
-              [maxFractionDigits]="2"
-              [formControl]="getValueControl()(getRowControl()(year, EMaterialsFormControls.annualTotalCompensation)!)"
-            />
-          </app-group-input-with-checkbox>
-          <app-base-error-messages
-            [control]="getValueControl()(getRowControl()(year, EMaterialsFormControls.annualTotalCompensation)!)"
-            [label]="'Annual Total Compensation'"
-          />
-        </td>
-        }
-      </tr>
-
-      <!-- Row 4: Saudi Compensation % -->
-      <tr>
-        <td class="p-3 border border-gray-200 bg-gray-50">
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">Saudi Compensation %</span>
-            <span class="text-xs text-gray-500 mt-1">(Saudi compensation / Total compensation)</span>
-          </div>
-        </td>
-        @for(year of [1,2,3,4,5,6,7]; track year) {
-        <td class="p-3 border border-gray-200">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl()(getRowControl()(year, EMaterialsFormControls.saudiCompensationPercentage)!)"
-            [showCheckbox]="showCheckbox()"
-          >
-            <p-inputnumber
-              fluid
-              placeholder="Enter percentage"
-              [min]="0"
-              [max]="100"
-              mode="decimal"
-              prefix="%"
-              [minFractionDigits]="0"
-              [maxFractionDigits]="2"
-              [formControl]="getValueControl()(getRowControl()(year, EMaterialsFormControls.saudiCompensationPercentage)!)"
-            />
-          </app-group-input-with-checkbox>
-          <app-base-error-messages
-            [control]="getValueControl()(getRowControl()(year, EMaterialsFormControls.saudiCompensationPercentage)!)"
-            [label]="'Saudi Compensation %'"
-          />
-        </td>
-        }
-      </tr>
-    </tbody>
-  </table>
+    </ng-template>
+  </p-table>
 </div>
