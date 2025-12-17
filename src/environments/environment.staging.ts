@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
-  baseUrl: 'http://10.15.1.68/api',
+  baseUrl: 'https://rmt-itweb-shr01/bena/api',
   apiVersion: 'v1',
-  appName: 'Benaa',
+  appName: 'BENA - STAGING',
   enableDebug: true,
   secDomain: 'http://localhost:4200'//should be updated with sec internal domain
 };
