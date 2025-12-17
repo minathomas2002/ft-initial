@@ -40,6 +40,7 @@ export class DataTableComponent<T> {
   rowDataKey = input<string>("id");
   totalRecords = input.required<number>();
   isLoading = input<boolean>(false);
+  hasPaginator = input<boolean>(true);
   filter = model.required<IFilterBase<unknown>>();
   showCheckBox = input<boolean>(false);
   ESortingOrder = ESortingOrder;

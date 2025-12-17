@@ -1,6 +1,7 @@
 import { FormControl, FormGroup } from "@angular/forms";
 import { EHolidaysManagementActions } from "../enums/holidays-management.enum";
 import { IFilterBase } from "./filter.interface";
+import { ENotificationCategory, ENotificationRecipient, ENotificationType } from "../enums/notificationSetting.enum";
 
 export interface ISettingSlaReq {
   internalCycle : number;
@@ -140,3 +141,38 @@ export interface IHolidayCreating {
   dateFrom: string;
   dateTo: string;
 }
+
+export interface INotificationSettingItem {
+  notificationType : ENotificationType;
+  description: string; 
+  recipientToggles : IRecipientToggle[];
+}
+
+export interface IRecipientToggle{
+  settingId: string; 
+  recipient : ENotificationRecipient;
+  isEnabled: boolean
+}
+
+export interface INotificationSettingResponse {
+  category :ENotificationCategory;
+  items : INotificationSettingItem[];
+}
+
+export interface INotificationSettingUpdateRequestBody{
+  id: string;
+  channel : number;
+  isEnabled: boolean;
+}
+export interface INotificationSettingUpdateRequest {
+  requests: INotificationSettingUpdateRequestBody[];
+  
+}
+export interface IWorkingDay {
+  id: string;
+  nameEn: string;
+  nameAr: string;
+  isWorkingDay: boolean;
+}
+
+export type TWorkingDayKeys = keyof IWorkingDay;

@@ -21,3 +21,4 @@ describe('AdminHolidaysManagementView', () => {
     expect(component).toBeTruthy();
   });
 });
+

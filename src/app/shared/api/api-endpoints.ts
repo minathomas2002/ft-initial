@@ -37,6 +37,9 @@ export const API_ENDPOINTS = {
     getSystemEmployeesList: `${SystemEmployees}/GetSystemEmployeesList`,
     updateSystemEmployee: `${SystemEmployees}/UpdateSystemEmployee`,
     toggleEmployeeStatus: `${SystemEmployees}/ToggleEmployeeStatus`,
+    getActiveEmployeesWithPlans: `${SystemEmployees}/getActiveEmployeesWithPlans`,
+
+
     RoleManagement: {
       getRoleManagementList: `${SystemEmployees}/${RoleManagement}/GetList`,
       getCurrentHolders: `${SystemEmployees}/${RoleManagement}/GetCurrentHolders`,
@@ -53,6 +56,9 @@ export const API_ENDPOINTS = {
     createHoliday: `${AdminSettings}/holidays/create`,
     updateHoliday: `${AdminSettings}/holidays/update`,
     deleteHoliday: `${AdminSettings}/holidays`,
+    getNotificationSetting: `${AdminSettings}/get-notification?channel=`,
+    editNotificationSetting: `${AdminSettings}/update-notification`,
+    getWorkingDays: `${AdminSettings}/working-days`,
   },
   opportunities: {
     createOpportunity: `${Opportunities}/create-opportunity`,

@@ -1,12 +1,10 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
-import { BaseErrorComponent } from '../../base-components/base-error/base-error.component';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -21,7 +19,6 @@ import { BaseErrorMessages } from '../../base-components/base-error-messages/bas
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    BaseLabelComponent,
     InputTextModule,
     SelectModule,
     MultiSelectModule,

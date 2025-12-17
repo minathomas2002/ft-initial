@@ -174,6 +174,25 @@ export const SystemEmployeesStore = signalStore(
         );
       },
 
+       /* Get Active Employees  For plans*/
+      getActiveEmployeesForPlans(planId: string) {
+        patchState(store, { isLoading: true, error: null });
+        return systemEmployeesApiService.getActiveEmployeesForPlans(planId).pipe(
+          tap((res) => {
+            patchState(store, { isLoading: false });
+            patchState(store, { activeEmployees: res.body || [] });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error getting active employees' });
+            return throwError(() => new Error('Error getting active employees'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          }),
+        );
+      },
+
+
 
     }
   }),

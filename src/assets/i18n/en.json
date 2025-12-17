@@ -486,7 +486,7 @@
         "systemTab": "System Notifications",
         "emailTab": "Email Notifications",
         "planWorkflowTitle": "Plan Workflow Notifications",
-        "countNotification": "7 notifications",
+        "countNotification": " notifications",
         "unAssignedAlert": "Unassigned Plan Alert",
         "unAssignedAlertDesc": "Notify when a plan is submitted but not yet assigned to any reviewer",
         "dvManager": " DV Manager",
@@ -529,7 +529,8 @@
         "reminderOnPlanAssignedforReviewDesc": "Sent when a plan is assigned to a reviewer.",
         "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
-        "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA."
+        "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA.",
+        "notificationSuccessMessage":"Notification updated successfully"
       },
       "holidays": {
         "goBack": "Back to settings",
@@ -585,10 +586,19 @@
           "delete": "Delete"
         }
 
+      },
+      "workingDays": {
+        "title": "Working Days Management",
+        "table": {
+          "nameEn": "Name (English)",
+          "nameAr": "Name (Arabic)",
+          "isWorkingDay": "Is Working Day"
+        }
       }
 
     }
   },
+  
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Track and manage your submitted localization plans and their review status",
@@ -642,6 +652,7 @@
     "publish": "Publish"
   },
   "plans": {
+    "assign": "Assign",
     "filter": {
       "searchPlaceholder": "Search by Plan ID or Title",
       "selectPlanType": "Select Plan Type",
@@ -687,5 +698,14 @@
       "edit": "Edit",
       "download": "Download"
     }
+  },
+  "assign": {
+    "assign": "Assign",
+    "reassign": " Reassign",
+    "assignDesc":"Please select the employee for plan(s) assignment",
+    "reassignDesc":"Please select the employee for plan(s) reassignment",
+    "employeeLabel":"Employee",
+    "employeePlaceholder":"Select Employee",
+    "employeeRequired":"Employee is required"
   }
 }

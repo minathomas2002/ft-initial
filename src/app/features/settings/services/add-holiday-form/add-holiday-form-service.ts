@@ -100,11 +100,11 @@ export class AddHolidayFormService {
     });
   }
 
-  getAbsoluteDaysDifference(from: Date, to: Date): number {
+  getDaysDifferenceExcludeWeekend(from: Date, to: Date): number {
     if (!from || !to) {
     return 0; // or 0 depending on your business rule
   }
-const fromDate = new Date(from);
+  const fromDate = new Date(from);
   const toDate = new Date(to);
 
   fromDate.setHours(0, 0, 0, 0);
@@ -113,5 +113,31 @@ const fromDate = new Date(from);
   const diffTime = Math.abs(toDate.getTime() - fromDate.getTime());
   return diffTime / (1000 * 60 * 60 * 24) + 1;
   }
+
+  getAbsoluteDaysDifference(from: Date, to: Date): number {
+  if (!from || !to) {
+    return 0;
+  }
+
+  const start = new Date(from);
+  const end = new Date(to);
+
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+
+  let daysCount = 0;
+  const current = new Date(start);
+
+  while (current <= end) {
+    const day = current.getDay(); 
+    // Friday = 5, Saturday = 6
+    if (day !== 5 && day !== 6) {
+      daysCount++;
+    }
+    current.setDate(current.getDate() + 1);
+  }
+
+  return daysCount;
+}
 
 }

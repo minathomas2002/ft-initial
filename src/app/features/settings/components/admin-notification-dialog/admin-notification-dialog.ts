@@ -4,9 +4,12 @@ import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "primeng/tabs";
 import { AdminNotificationForm } from "../admin-notification-system-form/admin-notification-system-form";
-import { NotificationFormService } from '../../services/notification-form/notification-form-service';
 import { AdminNotificationEmailForm } from "../admin-notification-email-form/admin-notification-email-form";
-import { EmailNotificationFormService } from '../../services/email-notification-form/email-notification-form-service';
+import { INotificationSettingUpdateRequest, INotificationSettingUpdateRequestBody } from 'src/app/shared/interfaces/ISetting';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { ENotificationChannel } from 'src/app/shared/enums/notificationSetting.enum';
+import { take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-notification-dialog',
@@ -19,20 +22,54 @@ export class AdminNotificationDialog {
 
   settingAdminStore = inject(AdminSettingsStore);
   dialogVisible = model<boolean>(false);
+  systemTabClicked = model<number>(1);
+  emailTabClicked = model<number>(1);
   activeTab = signal<string>('0');
-  systemTabFormService = inject(NotificationFormService);
-  emailTabFormService = inject(EmailNotificationFormService);
+  systemNotification: INotificationSettingUpdateRequestBody[] = [];
+  emailNotification: INotificationSettingUpdateRequestBody[] = [];
+  i18nService = inject(I18nService);
+  toasterService = inject(ToasterService);
 
+
+  ngOnInit() {
+    this.settingAdminStore.getNotificationSetting(ENotificationChannel.System, 'systemNotification').subscribe();
+    this.settingAdminStore.getNotificationSetting(ENotificationChannel.Email, 'emailNotification').subscribe();
+
+
+  }
   onConfirm() {
     this.dialogVisible.set(false);
-    console.log(this.systemTabFormService.getPayload());
-    console.log(this.emailTabFormService.getPayload());
+    const body: INotificationSettingUpdateRequestBody[] = [
+      ...this.systemNotification,
+      ...this.emailNotification
+    ];
+    const request: INotificationSettingUpdateRequest = {
+      requests: body
+    };
+    this.settingAdminStore
+      .updateNotificationSetting(request)
+      .pipe(
+        tap((res) => {
+          if (res.errors) {
+            this.dialogVisible.set(false);
+            return;
+          }
+        }),
+        take(1),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.toasterService.success(this.i18nService.translate('setting.adminView.notification.notificationSuccessMessage'));
+            this.dialogVisible.set(false);
+          }
+        }
+      }
+      );
   }
-
 
   onClose() {
     this.dialogVisible.set(false);
-    this.systemTabFormService.ResetFormFields();
-    this.emailTabFormService.ResetFormFields();
+    //
   }
 }
