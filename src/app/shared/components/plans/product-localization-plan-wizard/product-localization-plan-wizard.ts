@@ -95,12 +95,20 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     // Convert request to FormData
     const formData = convertRequestToFormData(request);
 
+    // Set processing state
+    this.isProcessing.set(true);
+
     // Call store method to save as draft
     this.planStore.saveAsDraftProductLocalizationPlan(formData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
+          this.isProcessing.set(false);
           this.toasterService.success('Product localization plan saved as draft successfully');
+          // Reset all forms after successful save
+          this.productPlanFormService.resetAllForms();
+          // Reset wizard state
+          this.activeStep.set(1);
           this.doRefresh.emit();
           this.visibility.set(false);
         },

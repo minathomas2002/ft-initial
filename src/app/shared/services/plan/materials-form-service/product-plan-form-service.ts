@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { Step1OverviewFormBuilder } from './steps/step1-overview.form-builder';
 import { Step2ProductPlantOverviewFormBuilder } from './steps/step2-product-plant-overview.form-builder';
 import { Step3ValueChainFormBuilder } from './steps/step3-value-chain.form-builder';
@@ -191,6 +191,84 @@ export class ProductPlanFormService {
       return formControl as FormControl<any>;
     }
     throw new Error('Form control is not a valid form control');
+  }
+
+  /**
+   * Reset all form controls to their initial state
+   */
+  resetAllForms(): void {
+    // Get current plan title from store
+    const currentPlanTitle = this._planStore.newPlanTitle();
+
+    // Reset Step 1: Overview Company Information
+    this._step1FormGroup.reset();
+
+    // Update plan title from store after reset
+    if (currentPlanTitle) {
+      const basicInfoFormGroup = this.basicInformationFormGroup;
+      if (basicInfoFormGroup) {
+        const planTitleControl = basicInfoFormGroup.get(EMaterialsFormControls.planTitle);
+        if (planTitleControl) {
+          planTitleControl.setValue(currentPlanTitle);
+        }
+      }
+    }
+
+    // Ensure disabled controls maintain their disabled state
+    const basicInfo = this.basicInformationFormGroup;
+    if (basicInfo) {
+      const opportunityTypeControl = basicInfo.get(EMaterialsFormControls.opportunityType);
+      if (opportunityTypeControl && !opportunityTypeControl.disabled) {
+        opportunityTypeControl.disable();
+        opportunityTypeControl.setValue(EOpportunityType.PRODUCT.toString());
+      }
+      const submissionDateControl = basicInfo.get(EMaterialsFormControls.submissionDate);
+      if (submissionDateControl && !submissionDateControl.disabled) {
+        submissionDateControl.disable();
+        submissionDateControl.setValue(new Date());
+      }
+    }
+
+    // Reset Step 2: Product & Plant Overview
+    this._step2FormGroup.reset();
+
+    // Reset Step 3: Value Chain
+    // Need to clear FormArrays and add back initial items
+    const step3Sections = [
+      EMaterialsFormControls.designEngineeringFormGroup,
+      EMaterialsFormControls.sourcingFormGroup,
+      EMaterialsFormControls.manufacturingFormGroup,
+      EMaterialsFormControls.assemblyTestingFormGroup,
+      EMaterialsFormControls.afterSalesFormGroup,
+    ];
+
+    step3Sections.forEach(sectionName => {
+      const sectionFormGroup = this._step3FormGroup.get(sectionName) as FormGroup;
+      if (sectionFormGroup) {
+        const itemsArray = sectionFormGroup.get('items') as FormArray;
+        if (itemsArray) {
+          // Clear all items
+          while (itemsArray.length > 0) {
+            itemsArray.removeAt(0);
+          }
+          // Add back one empty item
+          itemsArray.push(this._step3Builder.createValueChainItemFormGroup());
+        }
+      }
+    });
+
+    // Reset Step 4: Saudization
+    this._step4FormGroup.reset();
+
+    // Mark all forms as pristine and untouched
+    this._step1FormGroup.markAsPristine();
+    this._step1FormGroup.markAsUntouched();
+    this._step2FormGroup.markAsPristine();
+    this._step2FormGroup.markAsUntouched();
+    this._step3FormGroup.markAsPristine();
+    this._step3FormGroup.markAsUntouched();
+    this._step4FormGroup.markAsPristine();
+    this._step4FormGroup.markAsUntouched();
   }
 
   /* ------------------------------------------------ */
