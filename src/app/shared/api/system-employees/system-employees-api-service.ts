@@ -48,9 +48,6 @@ export class SystemEmployeesApiService {
     return this.baseHttpService.post<void, unknown, string>(API_ENDPOINTS.systemEmployees.toggleEmployeeStatus + '/' + id, {});
   }
 
-  // To do change endpoint name 
-  getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IActiveEmployee[]>> {
-    return this.baseHttpService.get<IActiveEmployee[], string>(API_ENDPOINTS.systemEmployees.getActiveEmployeesWithPlans+ '/' + planId);
-  }
+
 
 }
