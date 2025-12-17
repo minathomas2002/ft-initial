@@ -1,6 +1,6 @@
 <app-base-wizard-dialog
   [(visible)]="visibility"
-  [activeStep]="activeStep()"
+  [(activeStep)]="activeStep"
   [steps]="steps()"
   [wizardTitle]="wizardTitle()"
   (onNextStep)="nextStep()"
