@@ -5,6 +5,7 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { IActiveEmployee, IAssignRequest, IBaseApiResponse, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
+import { IProductLocalizationPlanRequest } from "../../interfaces/plans.interface";
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null,
@@ -150,6 +151,22 @@ export const PlanStore = signalStore(
         );
       },
 
+      /* save As Draft Product Localization Plan*/
+      saveAsDraftProductLocalizationPlan(request: FormData) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.saveAsDraftProductLocalizationPlan(request).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error saving product localization plan' });
+            return throwError(() => new Error('Error saving product localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
     }
   }),
   withMethods((store) => {
