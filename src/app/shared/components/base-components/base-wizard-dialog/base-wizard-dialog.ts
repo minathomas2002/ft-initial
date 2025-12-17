@@ -53,7 +53,7 @@ export class BaseWizardDialog {
       class: '!ps-0 !pt-0 !pb-0',
     },
     content: {
-      class: '!ps-0 h-full !pb-0',
+      class: '!ps-0 !pe-[1px] h-full !pb-0',
     }
   }
   steps = input.required<IWizardStepState[]>();
