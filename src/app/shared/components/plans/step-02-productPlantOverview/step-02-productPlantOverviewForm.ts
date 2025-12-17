@@ -13,6 +13,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
+import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 
 @Component({
   selector: 'app-step-02-product-plant-overview-form',
@@ -28,7 +29,8 @@ import { BaseErrorMessages } from '../../base-components/base-error-messages/bas
     TextareaModule,
     TooltipModule,
     InputNumberModule,
-    BaseErrorMessages
+    BaseErrorMessages,
+    BaseLabelComponent
   ],
   templateUrl: './step-02-productPlantOverviewForm.html',
   styleUrl: './step-02-productPlantOverviewForm.scss',

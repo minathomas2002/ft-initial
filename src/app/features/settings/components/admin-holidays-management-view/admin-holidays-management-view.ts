@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { TableLayoutComponent } from "src/app/shared/components/layout-components/table-layout/table-layout.component";
 import { ITableHeaderItem } from 'src/app/shared/interfaces';
