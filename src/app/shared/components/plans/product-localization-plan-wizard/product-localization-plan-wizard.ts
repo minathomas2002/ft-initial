@@ -9,6 +9,11 @@ import { BaseTagComponent } from "../../base-components/base-tag/base-tag.compon
 import { StepContentDirective } from "src/app/shared/directives";
 import { ProductPlanFormService } from "src/app/shared/services/plan/materials-form-service/product-plan-form-service";
 import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
+import { PlanStore } from "src/app/shared/stores/plan/plan.store";
+import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData } from "src/app/shared/utils/product-localization-plan.mapper";
+import { DestroyRef } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -28,6 +33,9 @@ import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interfa
 })
 export class ProductLocalizationPlanWizard implements OnDestroy {
   productPlanFormService = inject(ProductPlanFormService);
+  toasterService = inject(ToasterService);
+  planStore = inject(PlanStore);
+  destroyRef = inject(DestroyRef);
   visibility = model(false);
   activeStep = signal<number>(1);
   steps = computed<IWizardStepState[]>(() => [
@@ -67,7 +75,28 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     this.activeStep.set(this.activeStep() + 1);
   }
 
-  saveAsDraft(): void { }
+  saveAsDraft(): void {
+    // Map form values to request structure
+    const request = mapProductLocalizationPlanFormToRequest(this.productPlanFormService);
+
+    // Convert request to FormData
+    const formData = convertRequestToFormData(request);
+
+    // Call store method to save as draft
+    this.planStore.saveAsDraftProductLocalizationPlan(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toasterService.success('Product localization plan saved as draft successfully');
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          // TODO: Show error message
+          console.error('Error saving draft:', error);
+        }
+      });
+  }
+
 
   ngOnDestroy(): void {
     // TODO: Reset the whole from
