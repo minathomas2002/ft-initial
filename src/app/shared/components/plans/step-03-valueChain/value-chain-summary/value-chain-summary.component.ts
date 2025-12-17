@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, DestroyRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-value-chain-summary',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './value-chain-summary.component.html',
   styleUrl: './value-chain-summary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
