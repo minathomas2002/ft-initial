@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormArray, AbstractControl } from '@angular/forms';
+import { FormGroup, FormArray, AbstractControl, FormControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -27,10 +27,10 @@ export class FormUtilityService {
       if (control && control instanceof FormGroup) {
         errorCount += this.countFormErrors(control);
       }
-      else if (control && control instanceof FormArray) {
-        errorCount += Object.keys(control.errors ?? {}).length ?? 0;
+      else if (control && control instanceof FormArray && control.invalid && control.dirty && control.errors) {
+        errorCount++
       }
-      else if (control && control.dirty && control.invalid) {
+      else if (control && control instanceof FormControl && control.dirty && control.invalid) {
         errorCount++
       }
     });
