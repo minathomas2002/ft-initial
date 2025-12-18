@@ -3,11 +3,12 @@ import { EOpportunityType } from '../enums';
 import { IApiPaginatedResponse } from './api.interface';
 
 export enum EPlanStatus {
-  SUBMITTED = 1,
-  PENDING = 2,
-  UNDER_REVIEW = 3,
-  APPROVED = 4,
-  REJECTED = 5,
+  APPROVED = 1,
+  DRAFT = 2,
+  PENDING = 3,
+  REJECTED = 4,
+  SUBMITTED = 5,
+  UNDER_REVIEW = 6
 }
 
 export interface IPlanRecord {
@@ -44,12 +45,12 @@ export interface IPlansDashboardStatistics {
   approvedPlans: number;
   rejectedPlans: number;
 }
-  
-export interface IPlansDashboardResponse <T> extends IApiPaginatedResponse<T> {
-    counts: IPlansDashboardStatistics;
-}  
 
-export interface IAssignRequest{
+export interface IPlansDashboardResponse<T> extends IApiPaginatedResponse<T> {
+  counts: IPlansDashboardStatistics;
+}
+
+export interface IAssignRequest {
   planId: string;
-  employeeId: string; 
+  employeeId: string;
 }

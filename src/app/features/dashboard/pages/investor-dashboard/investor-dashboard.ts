@@ -107,6 +107,7 @@ export class InvestorDashboard implements OnInit {
       [EPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
       [EPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
       [EPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
+      [EPlanStatus.DRAFT]: this.i18nService.translate('plans.status.draft'),
     };
     return statusMap[status] || '';
   }
@@ -118,6 +119,7 @@ export class InvestorDashboard implements OnInit {
       [EPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
       [EPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
       [EPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+      [EPlanStatus.DRAFT]: 'bg-gray-50 text-gray-700 border-gray-200',
     };
     return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200';
   }
