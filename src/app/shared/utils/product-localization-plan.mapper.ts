@@ -435,7 +435,7 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
   // BasicInfo
   appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.PlanTitle', productPlan.overviewCompanyInfo.basicInfo.planTitle);
   appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.OpportunityType', productPlan.overviewCompanyInfo.basicInfo.opportunityType);
-  appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.OpportunityTilte', productPlan.overviewCompanyInfo.basicInfo.opportunityTilte);
+  appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.OpportunityTitle', productPlan.overviewCompanyInfo.basicInfo.opportunityTilte);
   appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.OpportunityId', productPlan.overviewCompanyInfo.basicInfo.opportunityId);
 
   // CompanyInfo
@@ -468,7 +468,7 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
 
   // TargetCustomers - Convert boolean to integer for API (null stays null)
   const targetSECValue = productPlan.productPlantOverview.targetCustomers.targetSEC;
-  appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetSEC', targetSECValue === null ? null : 2); // ToDo: pass the correct value form the form after BE Fixed
+  appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetSEC', targetSECValue);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetedLocalSupplierNames', productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.ProductsUtilizingTargetProduct', productPlan.productPlantOverview.targetCustomers.productsUtilizingTargetProduct);
 
