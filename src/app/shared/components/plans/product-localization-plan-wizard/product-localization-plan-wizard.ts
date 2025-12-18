@@ -83,8 +83,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         title: 'Summary',
         description: 'Review your localization plan before final submission',
         isActive: this.activeStep() === 5,
-        formState: this.productPlanFormService.step1_overviewCompanyInformation, // Dummy form group for summary
-        hasErrors: false // Summary step itself doesn't have errors
+        formState: null,
+        hasErrors: false
       }
     ];
   });

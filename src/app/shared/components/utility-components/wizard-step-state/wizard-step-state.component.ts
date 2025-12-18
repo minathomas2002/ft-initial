@@ -30,7 +30,8 @@ export class WizardStepStateComponent {
   constructor() {
     // Set up reactive form state tracking using effect
     effect(() => {
-      const form = this.formState();
+      if (!this.formState()) return;
+      const form = this.formState()!;
       // Update initial state
       this.updateFormState(form);
 
@@ -88,7 +89,8 @@ export class WizardStepStateComponent {
     }
 
     // Only calculate error count when necessary
-    const form = this.formState();
+    if (!this.formState()) return 0;
+    const form = this.formState()!;
     return this.stepState().hasErrors ? this.formUtilityService.countFormErrors(form) : 0;
   });
 
