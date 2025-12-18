@@ -91,6 +91,11 @@ export class Step01OverviewCompanyInformationForm {
       });
   }
 
+  checkLocalAgentVisibility(): void {
+    const doYouCurrentlyHaveLocalAgentInKSA = this.locationInformationFormGroupControls[EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA].value;
+    this.showLocalAgentInformation.set(doYouCurrentlyHaveLocalAgentInKSA);
+  }
+
   save(): void {
     console.log(this.formGroup.value);
   }
