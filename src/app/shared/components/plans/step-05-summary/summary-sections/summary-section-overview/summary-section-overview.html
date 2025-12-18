@@ -1,0 +1,123 @@
+<div class="flex flex-col gap-6 bg-white">
+  <!-- Basic Information -->
+  <div class="flex flex-col gap-4">
+    <app-summary-section-header
+      [title]="'Overview & Company Information'"
+      (onEdit)="onEditClick()"
+    />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        [label]="'Plan Title'"
+        [value]="planTitle()"
+        [hasError]="hasFieldError('basicInformationFormGroup.planTitle')"
+        [isEmpty]="!planTitle()"
+      />
+      <app-summary-field
+        [label]="'Plan Type'"
+        [value]="opportunityType()"
+        [isEmpty]="!opportunityType()"
+      />
+      <app-summary-field
+        [label]="'Opportunity'"
+        [value]="opportunity()"
+        [hasError]="hasFieldError('basicInformationFormGroup.opportunity')"
+        [isEmpty]="!opportunity()"
+      />
+      <app-summary-field
+        [label]="'Submission Date'"
+        [value]="submissionDate()"
+        [isDate]="true"
+        [isEmpty]="!submissionDate()"
+      />
+    </div>
+  </div>
+
+  <!-- Company Information -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Company Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        [label]="'Company Name'"
+        [value]="companyName()"
+        [hasError]="hasFieldError('companyInformationFormGroup.companyName.value')"
+        [isEmpty]="!companyName()"
+      />
+      <app-summary-field
+        [label]="'CEO Name'"
+        [value]="ceoName()"
+        [hasError]="hasFieldError('companyInformationFormGroup.ceoName.value')"
+        [isEmpty]="!ceoName()"
+      />
+      <app-summary-field
+        [label]="'CEO Email ID'"
+        [value]="ceoEmailID()"
+        [hasError]="hasFieldError('companyInformationFormGroup.ceoEmailID.value')"
+        [isEmpty]="!ceoEmailID()"
+      />
+    </div>
+  </div>
+
+  <!-- Location Information -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Location Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        [label]="'Global HQ Location'"
+        [value]="globalHQLocation()"
+        [hasError]="hasFieldError('locationInformationFormGroup.globalHQLocation.value')"
+        [isEmpty]="!globalHQLocation()"
+      />
+      <app-summary-field
+        [label]="'Registered Vendor ID with SEC (if available)'"
+        [value]="registeredVendorID()"
+        [hasError]="hasFieldError('locationInformationFormGroup.registeredVendorIDwithSEC.value')"
+        [isEmpty]="!registeredVendorID()"
+      />
+      <app-summary-field
+        [label]="'Do you currently have local Agent in KSA?'"
+        [value]="hasLocalAgent()"
+        [isBoolean]="true"
+        [hasError]="hasFieldError('locationInformationFormGroup.doYouCurrentlyHaveLocalAgentInKSA')"
+        [isEmpty]="hasLocalAgent() === null"
+      />
+    </div>
+
+    @if (hasLocalAgent() === true) {
+    <div class="flex flex-col gap-4 mt-4 pt-4 border-t border-gray-200">
+      <h4 class="text-sm font-semibold text-gray-700">Local Agent Information</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-summary-field
+          [label]="'Contact Person Name'"
+          [value]="contactPersonName()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.contactPersonName.value')"
+          [isEmpty]="!contactPersonName()"
+        />
+        <app-summary-field
+          [label]="'Local Agent Name'"
+          [value]="localAgentName()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.localAgentName.value')"
+          [isEmpty]="!localAgentName()"
+        />
+        <app-summary-field
+          [label]="'Contact Number'"
+          [value]="contactNumber()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.contactNumber.value')"
+          [isEmpty]="!contactNumber()"
+        />
+        <app-summary-field
+          [label]="'Email ID'"
+          [value]="emailID()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.emailID.value')"
+          [isEmpty]="!emailID()"
+        />
+        <app-summary-field
+          [label]="'Company HQ Location'"
+          [value]="companyHQLocation()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.companyHQLocation.value')"
+          [isEmpty]="!companyHQLocation()"
+        />
+      </div>
+    </div>
+    }
+  </div>
+</div>

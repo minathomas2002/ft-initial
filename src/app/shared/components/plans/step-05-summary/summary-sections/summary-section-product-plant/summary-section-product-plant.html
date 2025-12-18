@@ -1,0 +1,168 @@
+<div class="flex flex-col gap-6 bg-white">
+  <app-summary-section-header
+    [title]="'Product & Plant Overview'"
+    (onEdit)="onEditClick()"
+  />
+
+  <!-- Overview -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Overview</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        [label]="'Product Name (i.e. Product Targeted for Localization)'"
+        [value]="productName()"
+        [hasError]="hasFieldError('overviewFormGroup.productName.value')"
+        [isEmpty]="!productName()"
+      />
+      <app-summary-field
+        [label]="'Product Specifications (incl. voltage ratings) targeted for Localization)'"
+        [value]="productSpecifications()"
+        [hasError]="hasFieldError('overviewFormGroup.productSpecifications.value')"
+        [isEmpty]="!productSpecifications()"
+      />
+      <app-summary-field
+        [label]="'Targeted Annual Plant Capacity (Mention Unit of Measurement)'"
+        [value]="targetedAnnualPlantCapacity()"
+        [hasError]="hasFieldError('overviewFormGroup.targetedAnnualPlantCapacity.value')"
+        [isEmpty]="!targetedAnnualPlantCapacity()"
+      />
+      <app-summary-field
+        [label]="'Time Required to Setup Factory (Once Localization Plan is Approved)'"
+        [value]="timeRequiredToSetupFactory()"
+        [hasError]="hasFieldError('overviewFormGroup.timeRequiredToSetupFactory.value')"
+        [isEmpty]="!timeRequiredToSetupFactory()"
+      />
+    </div>
+  </div>
+
+  <!-- Expected CAPEX Investment -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Expected CAPEX Investment</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        [label]="'Land (%)'"
+        [value]="landPercentage()"
+        [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.landPercentage.value')"
+        [isEmpty]="landPercentage() === null || landPercentage() === undefined"
+      />
+      <app-summary-field
+        [label]="'Building (%)'"
+        [value]="buildingPercentage()"
+        [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.buildingPercentage.value')"
+        [isEmpty]="buildingPercentage() === null || buildingPercentage() === undefined"
+      />
+      <app-summary-field
+        [label]="'Machinery / Equipment (%)'"
+        [value]="machineryEquipmentPercentage()"
+        [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.machineryEquipmentPercentage.value')"
+        [isEmpty]="machineryEquipmentPercentage() === null || machineryEquipmentPercentage() === undefined"
+      />
+      <app-summary-field
+        [label]="'Others (%) (Kindly mention details)'"
+        [value]="othersPercentage() ? othersPercentage() + (othersDescription() ? ' (' + othersDescription() + ')' : '') : null"
+        [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.othersPercentage.value')"
+        [isEmpty]="othersPercentage() === null || othersPercentage() === undefined"
+      />
+    </div>
+  </div>
+
+  <!-- Target Customers -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Target Customers</h3>
+    <div class="flex flex-col gap-4">
+      <app-summary-field
+        [label]="'Targeted Customer'"
+        [value]="targetedCustomer()"
+        [hasError]="hasFieldError('targetCustomersFormGroup.targetedCustomer.value')"
+        [isEmpty]="!targetedCustomer()"
+      />
+      <app-summary-field
+        [label]="targetedSuppliersLabel"
+        [value]="namesOfTargetedSuppliers()"
+        [hasError]="hasFieldError('targetCustomersFormGroup.namesOfTargetedSuppliers.value')"
+        [isEmpty]="!namesOfTargetedSuppliers()"
+      />
+      <app-summary-field
+        [label]="productsUtilizeLabel"
+        [value]="productsUtilizeTargetedProduct()"
+        [hasError]="hasFieldError('targetCustomersFormGroup.productsUtilizeTargetedProduct.value')"
+        [isEmpty]="!productsUtilizeTargetedProduct()"
+      />
+    </div>
+  </div>
+
+  <!-- Product Manufacturing Experience -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Product Manufacturing Experience</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        [label]="'Product Manufacturing Experience'"
+        [value]="productManufacturingExperience()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.productManufacturingExperience.value')"
+        [isEmpty]="!productManufacturingExperience()"
+      />
+      <app-summary-field
+        [label]="'Qualified Plant Location (By SEC)'"
+        [value]="qualifiedPlantLocationSEC()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.qualifiedPlantLocationSEC.value')"
+        [isEmpty]="!qualifiedPlantLocationSEC()"
+      />
+      <app-summary-field
+        [label]="'Years of Experience (with SEC)'"
+        [value]="yearsOfExperienceSEC()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.yearsOfExperienceSEC.value')"
+        [isEmpty]="!yearsOfExperienceSEC()"
+      />
+      <app-summary-field
+        [label]="provideToLocalSuppliersLabel"
+        [value]="provideToLocalSuppliers()"
+        [isBoolean]="true"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.provideToLocalSuppliers')"
+        [isEmpty]="provideToLocalSuppliers() === null"
+      />
+      <app-summary-field
+        [label]="'Do you currently provide this product to SEC?'"
+        [value]="provideToSEC()"
+        [isBoolean]="true"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.provideToSEC')"
+        [isEmpty]="provideToSEC() === null"
+      />
+      <app-summary-field
+        [label]="'Approved Vendor ID (with SEC)'"
+        [value]="approvedVendorIDSEC()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.approvedVendorIDSEC.value')"
+        [isEmpty]="!approvedVendorIDSEC()"
+      />
+      <app-summary-field
+        [label]="'Total Quantities provided to SEC (2019 onwards)'"
+        [value]="totalQuantitiesSEC()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.totalQuantitiesSEC.value')"
+        [isEmpty]="!totalQuantitiesSEC()"
+      />
+      <app-summary-field
+        [label]="'Name(s) of SEC approved local supplier(s)'"
+        [value]="namesOfSECApprovedSuppliers()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.namesOfSECApprovedSuppliers.value')"
+        [isEmpty]="!namesOfSECApprovedSuppliers()"
+      />
+      <app-summary-field
+        [label]="'Years of Experience'"
+        [value]="yearsOfExperience()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.yearsOfExperience.value')"
+        [isEmpty]="!yearsOfExperience()"
+      />
+      <app-summary-field
+        [label]="'Qualified Plant Location'"
+        [value]="qualifiedPlantLocation()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.qualifiedPlantLocation.value')"
+        [isEmpty]="!qualifiedPlantLocation()"
+      />
+      <app-summary-field
+        [label]="'Total quantities provided to all approved local suppliers (2019 onwards)'"
+        [value]="totalQuantities()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.totalQuantities.value')"
+        [isEmpty]="!totalQuantities()"
+      />
+    </div>
+  </div>
+</div>

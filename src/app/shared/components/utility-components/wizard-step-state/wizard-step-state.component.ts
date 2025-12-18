@@ -89,7 +89,7 @@ export class WizardStepStateComponent {
 
     // Only calculate error count when necessary
     const form = this.formState();
-    return this.formUtilityService.countFormErrors(form);
+    return this.stepState().hasErrors ? this.formUtilityService.countFormErrors(form) : 0;
   });
 
   status = computed(() => {

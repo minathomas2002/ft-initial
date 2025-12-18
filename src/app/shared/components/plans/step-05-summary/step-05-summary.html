@@ -1,0 +1,33 @@
+<div class="flex flex-col gap-8 px-8 pb-10">
+  <!-- Step 1: Overview & Company Information -->
+  <app-summary-section-overview
+    [formGroup]="step1FormGroup"
+    [validationErrors]="getStepErrors(1)"
+    [hasErrors]="hasStep1Errors()"
+    (onEdit)="onEditStepClick(1)"
+  />
+
+  <!-- Step 2: Product & Plant Overview -->
+  <app-summary-section-product-plant
+    [formGroup]="step2FormGroup"
+    [validationErrors]="getStepErrors(2)"
+    [hasErrors]="hasStep2Errors()"
+    (onEdit)="onEditStepClick(2)"
+  />
+
+  <!-- Step 3: Value Chain -->
+  <app-summary-section-value-chain
+    [formGroup]="step3FormGroup"
+    [validationErrors]="getStepErrors(3)"
+    [hasErrors]="hasStep3Errors()"
+    (onEdit)="onEditStepClick(3)"
+  />
+
+  <!-- Step 4: Saudization -->
+  <app-summary-section-saudization
+    [formGroup]="step4FormGroup"
+    [validationErrors]="getStepErrors(4)"
+    [hasErrors]="hasStep4Errors()"
+    (onEdit)="onEditStepClick(4)"
+  />
+</div>

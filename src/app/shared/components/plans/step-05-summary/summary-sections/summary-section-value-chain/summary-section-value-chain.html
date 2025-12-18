@@ -1,0 +1,156 @@
+<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-gray-200">
+  <app-summary-section-header
+    [title]="'Value Chain'"
+    (onEdit)="onEditClick()"
+  />
+
+  <!-- Design & Engineering -->
+  @if (designEngineeringItems().length > 0) {
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Design & Engineering</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Expense Header</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">In-house / Procured</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Cost % (or Cost Amount)</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Year 1</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of designEngineeringItems(); track $index) {
+          <tr>
+            <td class="border border-gray-200 p-3">
+              <span [class.text-red-500]="hasFieldError('designEngineeringFormGroup.items[' + $index + '].expenseHeader.value')">
+                {{ formatValue(getValue(item, EMaterialsFormControls.expenseHeader)) }}
+              </span>
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.inHouseOrProcured)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.costPercentage)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.year1)) }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+
+  <!-- Sourcing -->
+  @if (sourcingItems().length > 0) {
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Sourcing</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Expense Header</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">In-house / Procured</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Cost % (or Cost Amount)</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Year 1</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of sourcingItems(); track $index) {
+          <tr>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.expenseHeader)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.inHouseOrProcured)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.costPercentage)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.year1)) }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+
+  <!-- Manufacturing -->
+  @if (manufacturingItems().length > 0) {
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Manufacturing</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Expense Header</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">In-house / Procured</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Cost % (or Cost Amount)</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Year 1</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of manufacturingItems(); track $index) {
+          <tr>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.expenseHeader)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.inHouseOrProcured)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.costPercentage)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.year1)) }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+
+  <!-- Assembly & Testing -->
+  @if (assemblyTestingItems().length > 0) {
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Assembly & Testing</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Expense Header</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">In-house / Procured</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Cost % (or Cost Amount)</th>
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold">Year 1</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of assemblyTestingItems(); track $index) {
+          <tr>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.expenseHeader)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.inHouseOrProcured)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.costPercentage)) }}
+            </td>
+            <td class="border border-gray-200 p-3">
+              {{ formatValue(getValue(item, EMaterialsFormControls.year1)) }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+</div>

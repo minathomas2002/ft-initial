@@ -1,0 +1,84 @@
+<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-gray-200">
+  <app-summary-section-header
+    [title]="'Saudization'"
+    (onEdit)="onEditClick()"
+  />
+
+  <!-- Saudization Matrix Table -->
+  <div class="flex flex-col gap-4">
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="border border-gray-200 p-3 text-left text-sm font-semibold"></th>
+            @for (year of years; track year) {
+            <th class="border border-gray-200 p-3 text-center text-sm font-semibold">Year {{ year }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Annual Headcount -->
+          <tr>
+            <td class="border border-gray-200 p-3 text-sm font-medium">Annual Headcount (#)</td>
+            @for (year of years; track year) {
+            <td class="border border-gray-200 p-3 text-center">
+              {{ formatValue(getRowValueForYear(year, EMaterialsFormControls.annualHeadcount)) }}
+            </td>
+            }
+          </tr>
+          <!-- Saudization % -->
+          <tr>
+            <td class="border border-gray-200 p-3 text-sm font-medium">
+              Saudization % (No. of Saudi employees / Total employees)
+            </td>
+            @for (year of years; track year) {
+            <td class="border border-gray-200 p-3 text-center">
+              {{ formatPercentage(getRowValueForYear(year, EMaterialsFormControls.saudizationPercentage)) }}
+            </td>
+            }
+          </tr>
+          <!-- Annual Total Compensation -->
+          <tr>
+            <td class="border border-gray-200 p-3 text-sm font-medium">Annual Total Compensation (SAR)</td>
+            @for (year of years; track year) {
+            <td class="border border-gray-200 p-3 text-center">
+              {{ formatValue(getRowValueForYear(year, EMaterialsFormControls.annualTotalCompensation)) }}
+            </td>
+            }
+          </tr>
+          <!-- Saudi Compensation % -->
+          <tr>
+            <td class="border border-gray-200 p-3 text-sm font-medium">
+              Saudi Compensation % (Saudi compensation / Total compensation)
+            </td>
+            @for (year of years; track year) {
+            <td class="border border-gray-200 p-3 text-center">
+              {{ formatPercentage(getRowValueForYear(year, EMaterialsFormControls.saudiCompensationPercentage)) }}
+            </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Attachments -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-md font-semibold text-gray-900">Attachments</h3>
+    @if (hasAttachments()) {
+    <div class="flex flex-col gap-2">
+      @for (file of attachments(); track $index) {
+      <div class="flex items-center gap-2 p-3 bg-gray-50 rounded border border-gray-200">
+        <i class="icon-file-pdf text-red-500"></i>
+        <span class="text-sm text-gray-700">{{ file.name || 'File ' + ($index + 1) }}</span>
+        @if (file.size) {
+        <span class="text-xs text-gray-500">({{ (file.size / 1024).toFixed(0) }} KB)</span>
+        }
+      </div>
+      }
+    </div>
+    } @else {
+    <span class="text-sm text-gray-500">-</span>
+    }
+  </div>
+</div>

@@ -5,4 +5,5 @@ export interface IWizardStepState {
   description: string;
   isActive: boolean;
   formState: FormGroup;
+  hasErrors?: boolean; // Optional flag to indicate if step has validation errors
 }

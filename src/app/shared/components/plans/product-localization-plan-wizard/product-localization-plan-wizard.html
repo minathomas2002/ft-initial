@@ -33,7 +33,21 @@
     <app-step-04-saudization-form />
   </ng-template>
 
+  <ng-template [appStepContent]="5">
+    <app-step-05-summary
+      #summaryComponent
+      (onEditStep)="navigateToStep($event)"
+      (onSubmit)="handleSubmit()"
+      (onValidationErrorsChange)="updateValidationErrors($event)"
+    />
+  </ng-template>
+
   <ng-container ngProjectAs="final-step-action">
-    <p-button [label]="'Submit'"></p-button>
+    @if (activeStep() === 5) {
+    <p-button
+      [label]="'Submit'"
+      (click)="onSummarySubmitClick()"
+    ></p-button>
+    }
   </ng-container>
 </app-base-wizard-dialog>
