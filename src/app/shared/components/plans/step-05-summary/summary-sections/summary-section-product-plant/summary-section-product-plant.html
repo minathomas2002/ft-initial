@@ -58,17 +58,25 @@
         [isEmpty]="machineryEquipmentPercentage() === null || machineryEquipmentPercentage() === undefined"
       />
       <app-summary-field
-        [label]="'Others (%) (Kindly mention details)'"
-        [value]="othersPercentage() ? othersPercentage() + (othersDescription() ? ' (' + othersDescription() + ')' : '') : null"
+        [label]="'Others (%)'"
+        [value]="othersPercentage()"
         [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.othersPercentage.value')"
         [isEmpty]="othersPercentage() === null || othersPercentage() === undefined"
       />
+      @if(othersPercentage()){
+      <app-summary-field
+        [label]="'Others Description'"
+        [value]="othersDescription()"
+        [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.othersDescription.value')"
+        [isEmpty]="othersDescription() === null || othersDescription() === undefined"
+      />
+      }
     </div>
   </div>
 
   <!-- Target Customers -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-md font-semibold text-gray-900">Target Customers</h3>
+    <h3 class="text-lg font-semibold text-gray-900">Target Customers</h3>
     <div class="flex flex-col gap-4">
       <app-summary-field
         [label]="'Targeted Customer'"
@@ -76,8 +84,11 @@
         [hasError]="hasFieldError('targetCustomersFormGroup.targetedCustomer.value')"
         [isEmpty]="!targetedCustomer()"
       />
+
+      <h3 class="text-sm font-semibold text-gray-900">If Targeting "SEC's approved local suppliers", mention the following:</h3>
+
       <app-summary-field
-        [label]="targetedSuppliersLabel"
+        [label]="'Provide names of targeted SEC\'s approved local suppliers'"
         [value]="namesOfTargetedSuppliers()"
         [hasError]="hasFieldError('targetCustomersFormGroup.namesOfTargetedSuppliers.value')"
         [isEmpty]="!namesOfTargetedSuppliers()"
@@ -93,7 +104,7 @@
 
   <!-- Product Manufacturing Experience -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-md font-semibold text-gray-900">Product Manufacturing Experience</h3>
+    <h3 class="text-lg font-semibold text-gray-900">Product Manufacturing Experience</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <app-summary-field
         [label]="'Product Manufacturing Experience'"
@@ -102,30 +113,18 @@
         [isEmpty]="!productManufacturingExperience()"
       />
       <app-summary-field
-        [label]="'Qualified Plant Location (By SEC)'"
-        [value]="qualifiedPlantLocationSEC()"
-        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.qualifiedPlantLocationSEC.value')"
-        [isEmpty]="!qualifiedPlantLocationSEC()"
-      />
-      <app-summary-field
-        [label]="'Years of Experience (with SEC)'"
-        [value]="yearsOfExperienceSEC()"
-        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.yearsOfExperienceSEC.value')"
-        [isEmpty]="!yearsOfExperienceSEC()"
-      />
-      <app-summary-field
-        [label]="provideToLocalSuppliersLabel"
-        [value]="provideToLocalSuppliers()"
-        [isBoolean]="true"
-        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.provideToLocalSuppliers')"
-        [isEmpty]="provideToLocalSuppliers() === null"
-      />
-      <app-summary-field
         [label]="'Do you currently provide this product to SEC?'"
         [value]="provideToSEC()"
         [isBoolean]="true"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.provideToSEC')"
         [isEmpty]="provideToSEC() === null"
+      />
+      @if(provideToSEC()){
+      <app-summary-field
+        [label]="'Qualified Plant Location (By SEC)'"
+        [value]="qualifiedPlantLocationSEC()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.qualifiedPlantLocationSEC.value')"
+        [isEmpty]="!qualifiedPlantLocationSEC()"
       />
       <app-summary-field
         [label]="'Approved Vendor ID (with SEC)'"
@@ -134,22 +133,32 @@
         [isEmpty]="!approvedVendorIDSEC()"
       />
       <app-summary-field
+        [label]="'Years of Experience (with SEC)'"
+        [value]="yearsOfExperienceSEC()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.yearsOfExperienceSEC.value')"
+        [isEmpty]="!yearsOfExperienceSEC()"
+      />
+      <app-summary-field
         [label]="'Total Quantities provided to SEC (2019 onwards)'"
         [value]="totalQuantitiesSEC()"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.totalQuantitiesSEC.value')"
         [isEmpty]="!totalQuantitiesSEC()"
       />
+      }
+      <app-summary-field
+        class="col-span-2"
+        [label]="provideToLocalSuppliersLabel"
+        [value]="provideToLocalSuppliers()"
+        [isBoolean]="true"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.provideToLocalSuppliers')"
+        [isEmpty]="provideToLocalSuppliers() === null"
+      />
+      @if(provideToLocalSuppliers()){
       <app-summary-field
         [label]="'Name(s) of SEC approved local supplier(s)'"
         [value]="namesOfSECApprovedSuppliers()"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.namesOfSECApprovedSuppliers.value')"
         [isEmpty]="!namesOfSECApprovedSuppliers()"
-      />
-      <app-summary-field
-        [label]="'Years of Experience'"
-        [value]="yearsOfExperience()"
-        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.yearsOfExperience.value')"
-        [isEmpty]="!yearsOfExperience()"
       />
       <app-summary-field
         [label]="'Qualified Plant Location'"
@@ -158,11 +167,18 @@
         [isEmpty]="!qualifiedPlantLocation()"
       />
       <app-summary-field
+        [label]="'Years of Experience'"
+        [value]="yearsOfExperience()"
+        [hasError]="hasFieldError('productManufacturingExperienceFormGroup.yearsOfExperience.value')"
+        [isEmpty]="!yearsOfExperience()"
+      />
+      <app-summary-field
         [label]="'Total quantities provided to all approved local suppliers (2019 onwards)'"
         [value]="totalQuantities()"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.totalQuantities.value')"
         [isEmpty]="!totalQuantities()"
       />
+      }
     </div>
   </div>
 </div>

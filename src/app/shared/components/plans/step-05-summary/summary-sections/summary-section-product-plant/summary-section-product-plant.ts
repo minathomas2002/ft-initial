@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
 import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { SummaryField } from '../../shared/summary-field/summary-field';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
   selector: 'app-summary-section-product-plant',
@@ -17,6 +18,9 @@ export class SummarySectionProductPlant {
   validationErrors = input<IStepValidationErrors | undefined>();
   hasErrors = input<boolean>(false);
   onEdit = output<void>();
+  private readonly planStore = inject(PlanStore);
+  targetedCustomerOptions = this.planStore.targetedCustomerOptions;
+  productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptions;
 
   // Form group accessors
   overviewFormGroup = computed(() => {
@@ -47,10 +51,22 @@ export class SummarySectionProductPlant {
   }
 
   hasFieldError(fieldPath: string): boolean {
-    if (!this.validationErrors()) {
-      return false;
+    const parts = fieldPath.split('.');
+    let control: any = this.formGroup();
+
+    for (const part of parts) {
+      if (control instanceof FormGroup) {
+        control = control.get(part);
+      } else {
+        return false;
+      }
     }
-    return this.validationErrors()!.fieldErrors.has(fieldPath);
+
+    if (control && control.invalid && control.dirty) {
+      return true;
+    }
+
+    return false;
   }
 
   onEditClick(): void {
@@ -72,9 +88,10 @@ export class SummarySectionProductPlant {
   targetedCustomer = computed(() => {
     const control = this.targetCustomersFormGroup()?.get(EMaterialsFormControls.targetedCustomer);
     if (control instanceof FormGroup) {
-      return this.getValue(control, EMaterialsFormControls.value);
+      const value = this.getValue(control, EMaterialsFormControls.value);
+      return value ? value.map((i: any) => this.targetedCustomerOptions().find((option: any) => option.id === i)?.name).join(', ') : null;
     }
-    return control?.value ?? null;
+    return null;
   });
 
   namesOfTargetedSuppliers = computed(() => {
@@ -93,7 +110,14 @@ export class SummarySectionProductPlant {
     return control?.value ?? null;
   });
 
-  productManufacturingExperience = computed(() => this.getValue(this.productManufacturingExperienceFormGroup(), EMaterialsFormControls.productManufacturingExperience));
+  productManufacturingExperience = computed(() => {
+    const control = this.productManufacturingExperienceFormGroup()?.get(EMaterialsFormControls.productManufacturingExperience);
+    if (control instanceof FormGroup) {
+      const value = this.getValue(control, EMaterialsFormControls.value);
+      return value ? this.productManufacturingExperienceOptions().find((option: any) => option.id === value)?.name : null;
+    }
+    return null;
+  });
   provideToSEC = computed(() => this.getValue(this.productManufacturingExperienceFormGroup(), EMaterialsFormControls.provideToSEC));
   qualifiedPlantLocationSEC = computed(() => this.getValue(this.productManufacturingExperienceFormGroup(), EMaterialsFormControls.qualifiedPlantLocationSEC));
   approvedVendorIDSEC = computed(() => this.getValue(this.productManufacturingExperienceFormGroup(), EMaterialsFormControls.approvedVendorIDSEC));
@@ -106,7 +130,6 @@ export class SummarySectionProductPlant {
   totalQuantities = computed(() => this.getValue(this.productManufacturingExperienceFormGroup(), EMaterialsFormControls.totalQuantities));
 
   // Computed labels for complex strings
-  targetedSuppliersLabel = 'If Targeting "SEC\'s approved local suppliers", mention the following: Provide names of targeted SEC\'s approved local suppliers';
   productsUtilizeLabel = 'Which product(s) manufactured by SEC\'s approved local suppliers will utilize your "Targeted Product"';
   provideToLocalSuppliersLabel = 'Do you currently provide this product to SEC\'s approved local suppliers?';
 }
