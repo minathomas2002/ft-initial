@@ -141,4 +141,8 @@ export class InvestorDashboard implements OnInit {
   applyFilter() {
     this.filterService.applyFilter();
   }
+
+  onSubmitProductLocalizationPlanWizard() {
+    console.log('Submit product localization plan wizard');
+  }
 }

@@ -1,0 +1,41 @@
+<div class="signature-pad-container">
+  @if (existingSignature() && !showCanvas()) {
+  <div class="existing-signature-container">
+    <img
+      [src]="existingSignature()!"
+      alt="Signature"
+      class="existing-signature-image"
+    />
+    <p-button
+      label="Change"
+      severity="secondary"
+      (onClick)="changeSignature()"
+      [outlined]="true"
+    />
+  </div>
+  } @else {
+  <div class="signature-canvas-container">
+    <div class="canvas-wrapper">
+      <canvas
+        #canvas
+        class="signature-canvas"
+        (mousedown)="onMouseDown($event)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp()"
+        (mouseleave)="onMouseUp()"
+        (touchstart)="onTouchStart($event)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd()"
+      ></canvas>
+    </div>
+    <p class="signature-placeholder">Draw your signature using your mouse</p>
+    <p-button
+      label="Clear"
+      severity="secondary"
+      (onClick)="clearSignature()"
+      [outlined]="true"
+      [disabled]="!currentSignature()"
+    />
+  </div>
+  }
+</div>

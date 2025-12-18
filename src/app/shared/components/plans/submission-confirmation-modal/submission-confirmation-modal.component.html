@@ -1,0 +1,145 @@
+<app-base-dialog
+  [(visible)]="visible"
+  [showCloseButton]="true"
+  [showConfirmButton]="true"
+  [isConfirmationDisabled]="!formService.isFormValid()"
+  [contentStyleClass]="'p-6'"
+  (onClose)="onDialogClose()"
+  (onConfirm)="onSubmitClick()"
+>
+  <div class="modal-content-wrapper max-w-[600px]">
+    <!-- Disclaimer Message - appears right after title -->
+    <div class="disclaimer-container">
+      <h2 class="text-lg font-semibold text-gray-900">Are you sure you want to submit this plan?</h2>
+      <p class="text-sm text-gray-600">
+        I hereby confirm that I have thoroughly reviewed this document and acknowledge that the approval of this localization plan does not constitute, nor imply, any guarantee of current or future business with SEC or any of its approved suppliers. I further affirm that all information provided within this plan (including all sections) is, to the best of my knowledge, true, accurate, and complete. I understand that failure to comply with the submitted timeline may result in the revocation of my qualification by SEC at any time.
+      </p>
+    </div>
+
+    <div class="submission-form">
+      <!-- Two Column Grid for Input Fields -->
+      <div class="form-grid">
+        <!-- Name Field -->
+        <div class="form-field">
+          <label
+            for="name"
+            class="form-label"
+          >
+            Name <span class="required">*</span>
+          </label>
+          <input
+            id="name"
+            type="text"
+            pInputText
+            [formControl]="formService.nameControl"
+            placeholder="Enter Name"
+            class="w-full"
+          />
+          <app-base-error-messages
+            [control]="formService.nameControl"
+            [label]="'Name'"
+          />
+        </div>
+
+        <!-- Job Title Field -->
+        <div class="form-field">
+          <label
+            for="jobTitle"
+            class="form-label"
+          >
+            Job Title <span class="required">*</span>
+          </label>
+          <input
+            id="jobTitle"
+            type="text"
+            pInputText
+            [formControl]="formService.jobTitleControl"
+            placeholder="Enter Job title"
+            class="w-full"
+          />
+          <app-base-error-messages
+            [control]="formService.jobTitleControl"
+            [label]="'Job Title'"
+          />
+        </div>
+
+        <!-- Contact Number Field -->
+        <div class="form-field">
+          <label
+            for="contactNumber"
+            class="form-label"
+          >
+            Contact number <span class="required">*</span>
+          </label>
+          <input
+            id="contactNumber"
+            type="tel"
+            pInputText
+            [formControl]="formService.contactNumberControl"
+            placeholder="Enter Contact number"
+            class="w-full"
+          />
+          <app-base-error-messages
+            [control]="formService.contactNumberControl"
+            [label]="'Contact number'"
+          />
+        </div>
+
+        <!-- Email ID Field -->
+        <div class="form-field">
+          <label
+            for="emailId"
+            class="form-label"
+          >
+            Email ID <span class="required">*</span>
+          </label>
+          <input
+            id="emailId"
+            type="email"
+            pInputText
+            [formControl]="formService.emailIdControl"
+            placeholder="Enter Email ID"
+            class="w-full"
+          />
+          <app-base-error-messages
+            [control]="formService.emailIdControl"
+            [label]="'Email ID'"
+          />
+        </div>
+      </div>
+
+      <!-- Signature Field -->
+      <div class="form-field signature-field">
+        <label class="form-label">
+          Draw your signature <span class="required">*</span>
+        </label>
+        <app-signature-pad
+          [existingSignature]="existingSignature()"
+          (onSignatureChange)="onSignatureChange($event)"
+        />
+        <app-base-error-messages
+          [control]="formService.signatureControl"
+          [label]="'Signature'"
+        />
+      </div>
+    </div>
+  </div>
+
+  <ng-template #footerButtons>
+    <p-button
+      label="Back"
+      severity="secondary"
+      (onClick)="onBackClick()"
+      [disabled]="isSubmitting()"
+      class="flex-initial"
+    />
+    <p-button
+      label="Submit"
+      severity="primary"
+      (onClick)="onSubmitClick()"
+      [disabled]="isSubmitDisabled()"
+      [loading]="isSubmitting()"
+      class="flex-initial"
+    />
+  </ng-template>
+</app-base-dialog>

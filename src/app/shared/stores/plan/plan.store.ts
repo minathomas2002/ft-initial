@@ -177,6 +177,23 @@ export const PlanStore = signalStore(
           }),
         );
       },
+
+      /* Submit Product Localization Plan*/
+      submitProductLocalizationPlan(request: FormData) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.submitProductLocalizationPlan(request).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error submitting product localization plan' });
+            return throwError(() => new Error('Error submitting product localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
     }
   }),
   withMethods((store) => {

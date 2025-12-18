@@ -22,6 +22,7 @@ import {
 } from '../interfaces/plans.interface';
 import { EMaterialsFormControls } from '../enums/product-localization-form-controls.enum';
 import { IPhoneValue } from '../interfaces/phone-input.interface';
+import { ELocalizationStatusType, ETargetedCustomer } from '../enums';
 
 /**
  * Section type mapping for value chain sections
@@ -155,11 +156,11 @@ function mapProductPlantOverview(formService: ProductPlanFormService): ProductPl
   } as any; // Allow null values for FormData conversion
 
   const targetedCustomers = getFormValue(targetCustomersForm, EMaterialsFormControls.targetedCustomer) as string[] | null;
-  // Only set targetSEC to true/false if targetedCustomers is not null/undefined and is an array
-  // If it's null/undefined, keep it as null. If it's an empty array, set to false.
-  const targetSEC = targetedCustomers === null || targetedCustomers === undefined
+  // targetSEC should be an array of ETargetedCustomer enum values
+  // Convert string array to number array (ETargetedCustomer enum values)
+  const targetSEC: ETargetedCustomer[] | null = targetedCustomers === null || targetedCustomers === undefined
     ? null
-    : targetedCustomers
+    : targetedCustomers.map(customer => parseInt(customer, 10) as ETargetedCustomer);
   const targetLocalSuppliers = targetedCustomers === null || targetedCustomers === undefined
     ? null
     : (targetedCustomers.length > 0 ? targetedCustomers.includes('2') : false);
@@ -381,7 +382,8 @@ function createPlaceholderSignature(): Signature {
  */
 export function mapProductLocalizationPlanFormToRequest(
   formService: ProductPlanFormService,
-  planId: string = ''
+  planId: string = '',
+  signature?: Signature
 ): IProductLocalizationPlanRequest {
   const productPlan: ProductPlan = {
     id: planId,
@@ -391,11 +393,11 @@ export function mapProductLocalizationPlanFormToRequest(
     saudization: mapSaudization(formService),
   };
 
-  const signature = createPlaceholderSignature();
+  const signatureData = signature || createPlaceholderSignature();
 
   return {
     productPlan,
-    signature,
+    signature: signatureData,
   };
 }
 
@@ -412,6 +414,15 @@ function appendFormDataValue(formData: FormData, key: string, value: any): void 
   if (value === null) {
     // Append null as the string "null"
     formData.append(key, 'null');
+  } else if (Array.isArray(value)) {
+    // Handle arrays - append each element with indexed key
+    if (value.length === 0) {
+      formData.append(key, 'null');
+    } else {
+      value.forEach((item, index) => {
+        formData.append(`${key}[${index}]`, item);
+      });
+    }
   } else if (typeof value === 'boolean') {
     formData.append(key, value ? 'true' : 'false');
   } else if (typeof value === 'number') {
@@ -435,7 +446,7 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
   // BasicInfo
   appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.PlanTitle', productPlan.overviewCompanyInfo.basicInfo.planTitle);
   appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.OpportunityType', productPlan.overviewCompanyInfo.basicInfo.opportunityType);
-  appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.OpportunityTitle', productPlan.overviewCompanyInfo.basicInfo.opportunityTilte);
+  appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.OpportunityTitle', productPlan.overviewCompanyInfo.basicInfo.opportunityTitle);
   appendFormDataValue(formData, 'ProductPlan.OverviewCompanyInfo.BasicInfo.OpportunityId', productPlan.overviewCompanyInfo.basicInfo.opportunityId);
 
   // CompanyInfo
@@ -498,13 +509,13 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
       appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].ExpenseHeader`, row.expenseHeader);
       appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].InHouseOrProcured`, row.inHouseOrProcured);
       appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].CostPercent`, row.costPercent);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year1`, row.year1);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year2`, row.year2);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year3`, row.year3);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year4`, row.year4);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year5`, row.year5);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year6`, row.year6);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year7`, row.year7);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year1`, row.year1 || ELocalizationStatusType.No);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year2`, row.year2 || ELocalizationStatusType.No);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year3`, row.year3 || ELocalizationStatusType.No);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year4`, row.year4 || ELocalizationStatusType.No);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year5`, row.year5 || ELocalizationStatusType.No || 0);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year6`, row.year6 || ELocalizationStatusType.No || 0);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year7`, row.year7 || ELocalizationStatusType.No || 0);
     });
   }
 
@@ -564,6 +575,20 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
         }
       }
     });
+  }
+
+  // Signature
+  const { signature } = request;
+  if (signature) {
+    appendFormDataValue(formData, 'Signature.Id', signature.id);
+    appendFormDataValue(formData, 'Signature.SignatureValue', signature.signatureValue);
+
+    if (signature.contactInfo) {
+      appendFormDataValue(formData, 'Signature.ContactInfo.Name', signature.contactInfo.name);
+      appendFormDataValue(formData, 'Signature.ContactInfo.JobTitle', signature.contactInfo.jobTitle);
+      appendFormDataValue(formData, 'Signature.ContactInfo.ContactNumber', signature.contactInfo.contactNumber);
+      appendFormDataValue(formData, 'Signature.ContactInfo.EmailId', signature.contactInfo.emailId);
+    }
   }
 
   return formData;

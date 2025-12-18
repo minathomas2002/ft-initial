@@ -17,6 +17,8 @@ import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls } from "src/app/shared/enums";
+import { SubmissionConfirmationModalComponent } from "../submission-confirmation-modal/submission-confirmation-modal.component";
+import { Signature } from "src/app/shared/interfaces/plans.interface";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -29,7 +31,8 @@ import { EMaterialsFormControls } from "src/app/shared/enums";
     Step05Summary,
     ButtonModule,
     BaseTagComponent,
-    StepContentDirective
+    StepContentDirective,
+    SubmissionConfirmationModalComponent
   ],
   templateUrl: './product-localization-plan-wizard.html',
   styleUrl: './product-localization-plan-wizard.scss',
@@ -95,6 +98,10 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Reference to Step 5 Summary component
   summaryComponent = viewChild<Step05Summary>('summaryComponent');
 
+  // Submission confirmation modal
+  showSubmissionModal = signal(false);
+  existingSignature = signal<string | null>(null);
+
   previousStep(): void {
     this.activeStep.set(this.activeStep() - 1);
   }
@@ -114,10 +121,78 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   }
 
   onSummarySubmitClick(): void {
-    const summary = this.summaryComponent();
-    if (summary) {
-      summary.onSubmitClick();
-    }
+    // Check if all forms are valid
+    // if (!this.productPlanFormService.areAllFormsValid()) {
+    //   // Mark all controls as dirty to show validation errors
+    //   this.productPlanFormService.markAllControlsAsDirty();
+    //   this.toasterService.error('Please fix all validation errors before submitting');
+    //   return;
+    // }
+
+    // Mark all controls as dirty
+    this.productPlanFormService.markAllControlsAsDirty();
+
+    // Open submission confirmation modal
+    this.showSubmissionModal.set(true);
+  }
+
+  onSubmissionConfirm(data: {
+    name: string;
+    jobTitle: string;
+    contactNumber: string;
+    emailId: string;
+    signature: string;
+  }): void {
+    // Create signature object
+    const signature: Signature = {
+      id: '',
+      signatureValue: data.signature,
+      contactInfo: {
+        name: data.name,
+        jobTitle: data.jobTitle,
+        contactNumber: data.contactNumber,
+        emailId: data.emailId,
+      },
+    };
+
+    // Map form values to request structure with signature
+    const request = mapProductLocalizationPlanFormToRequest(
+      this.productPlanFormService,
+      '',
+      signature
+    );
+
+    // Convert request to FormData
+    const formData = convertRequestToFormData(request);
+
+    // Set processing state
+    this.isProcessing.set(true);
+
+    // Call store method to submit plan
+    this.planStore.submitProductLocalizationPlan(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.toasterService.success('Product localization plan submitted successfully');
+          // Reset all forms after successful submission
+          this.productPlanFormService.resetAllForms();
+          // Reset wizard state
+          this.activeStep.set(1);
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.showSubmissionModal.set(false);
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error submitting plan. Please try again.');
+          console.error('Error submitting plan:', error);
+        }
+      });
+  }
+
+  onSubmissionCancel(): void {
+    this.showSubmissionModal.set(false);
   }
 
   /**

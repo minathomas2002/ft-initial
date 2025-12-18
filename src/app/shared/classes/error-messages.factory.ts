@@ -31,6 +31,15 @@ export const VALIDATION_MESSAGES = {
 
   email: (label: string) =>
     `${label} is invalid`,
+
+  alphabetsAndSpacesOnly: (label: string) =>
+    `Please enter a valid ${label} containing only letters.`,
+
+  invalidJobTitle: (label: string) =>
+    `Please enter a valid ${label}.`,
+
+  invalidContactNumber: (label: string) =>
+    `Please enter a valid mobile number (e.g., 05XXXXXXXX).`,
 } as const;
 
 type ValidationMessageKey = keyof typeof VALIDATION_MESSAGES;

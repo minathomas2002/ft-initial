@@ -27,4 +27,8 @@ export class PlanApiService {
     return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.saveAsDraftProductLocalizationPlan, req);
   }
 
+  submitProductLocalizationPlan(req: FormData): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.submitProductLocalizationPlan, req);
+  }
+
 }

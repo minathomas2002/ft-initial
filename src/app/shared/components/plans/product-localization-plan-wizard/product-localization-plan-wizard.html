@@ -51,3 +51,11 @@
     }
   </ng-container>
 </app-base-wizard-dialog>
+
+<!-- Submission Confirmation Modal -->
+<app-submission-confirmation-modal
+  [(visible)]="showSubmissionModal"
+  [(existingSignature)]="existingSignature"
+  (onConfirm)="onSubmissionConfirm($event)"
+  (onCancel)="onSubmissionCancel()"
+/>

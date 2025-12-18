@@ -22,7 +22,7 @@ export interface OverviewCompanyInfo {
 export interface BasicInfo {
   planTitle: string
   opportunityType: number
-  opportunityTilte: string
+  opportunityTitle: string
   opportunityId: string
 }
 

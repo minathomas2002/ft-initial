@@ -198,6 +198,44 @@ export class ProductPlanFormService {
   }
 
   /**
+   * Mark all form controls as dirty recursively
+   */
+  markAllControlsAsDirty(): void {
+    this.markControlAsDirty(this._step1FormGroup);
+    this.markControlAsDirty(this._step2FormGroup);
+    this.markControlAsDirty(this._step3FormGroup);
+    this.markControlAsDirty(this._step4FormGroup);
+  }
+
+  /**
+   * Recursively mark a control and all its nested controls as dirty
+   */
+  private markControlAsDirty(control: AbstractControl): void {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        this.markControlAsDirty(control.controls[key]);
+      });
+    } else if (control instanceof FormArray) {
+      control.controls.forEach(arrayControl => {
+        this.markControlAsDirty(arrayControl);
+      });
+    } else if (control instanceof FormControl) {
+      control.markAsDirty();
+      control.updateValueAndValidity();
+    }
+  }
+
+  /**
+   * Check if all forms are valid
+   */
+  areAllFormsValid(): boolean {
+    return this._step1FormGroup.valid &&
+      this._step2FormGroup.valid &&
+      this._step3FormGroup.valid &&
+      this._step4FormGroup.valid;
+  }
+
+  /**
    * Reset all form controls to their initial state
    */
   resetAllForms(): void {
