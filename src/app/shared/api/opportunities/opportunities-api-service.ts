@@ -67,4 +67,9 @@ export class OpportunitiesApiService {
       }
     );
   }
+  checkApplyOpportunity(req: { opportunityId: string }): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, unknown, {
+      opportunityId: string,
+    }>(`${API_ENDPOINTS.opportunities.checkApply_Opportunity}`, req);
+  }
 }

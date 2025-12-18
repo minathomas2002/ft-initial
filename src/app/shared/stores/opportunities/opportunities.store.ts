@@ -9,13 +9,15 @@ const initialState: {
   error: string | null;
   count: number;
   list: IOpportunity[];
+  isCheckingApplyOpportunity: boolean;
   details: IOpportunityDetails | null;
 } = {
   loading: false,
   error: null,
   count: 0,
   list: [],
-  details: null
+  details: null,
+  isCheckingApplyOpportunity: false
 };
 export const OpportunitiesStore = signalStore(
   { providedIn: 'root' },
@@ -49,6 +51,14 @@ export const OpportunitiesStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { loading: false });
+          })
+        )
+      },
+      checkApplyOpportunity(opportunityId: string) {
+        patchState(store, { isCheckingApplyOpportunity: true });
+        return opportunitiesApiService.checkApplyOpportunity({ opportunityId }).pipe(
+          finalize(() => {
+            patchState(store, { isCheckingApplyOpportunity: false });
           })
         )
       }

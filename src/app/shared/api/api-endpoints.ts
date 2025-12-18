@@ -73,6 +73,7 @@ export const API_ENDPOINTS = {
     deleteOpportunity: `${Opportunities}`,
     getActiveOpportunityLookUps: `${Opportunities}/GetActiveOpportunityLookUps`,
     changeStatus: `${Opportunities}/change-status`,
+    checkApply_Opportunity: `${Opportunities}/checkApply_Opportunity`,
   },
   auth: {
     investorLogin: `${Auth}/investor-login`,
