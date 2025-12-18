@@ -1,12 +1,11 @@
-<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-gray-200">
+<div class="flex flex-col gap-6 bg-white">
   <app-summary-section-header
     [title]="'Saudization'"
     (onEdit)="onEditClick()"
   />
-
   <!-- Saudization Matrix Table -->
   <div class="flex flex-col gap-4">
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto rounded-lg">
       <table class="w-full border-collapse border border-gray-200">
         <thead>
           <tr class="bg-gray-50">
@@ -22,7 +21,10 @@
             <td class="border border-gray-200 p-3 text-sm font-medium">Annual Headcount (#)</td>
             @for (year of years; track year) {
             <td class="border border-gray-200 p-3 text-center">
-              {{ formatValue(getRowValueForYear(year, EMaterialsFormControls.annualHeadcount)) }}
+              <app-summary-table-cell
+                [value]="formatValue(getRowValueForYear(year, EMaterialsFormControls.annualHeadcount))"
+                [hasError]="getRowHasErrorForYear(year, EMaterialsFormControls.annualHeadcount)"
+              />
             </td>
             }
           </tr>
@@ -33,7 +35,10 @@
             </td>
             @for (year of years; track year) {
             <td class="border border-gray-200 p-3 text-center">
-              {{ formatPercentage(getRowValueForYear(year, EMaterialsFormControls.saudizationPercentage)) }}
+              <app-summary-table-cell
+                [value]="formatValue(getRowValueForYear(year, EMaterialsFormControls.saudizationPercentage))"
+                [hasError]="getRowHasErrorForYear(year, EMaterialsFormControls.saudizationPercentage)"
+              />
             </td>
             }
           </tr>
@@ -42,7 +47,10 @@
             <td class="border border-gray-200 p-3 text-sm font-medium">Annual Total Compensation (SAR)</td>
             @for (year of years; track year) {
             <td class="border border-gray-200 p-3 text-center">
-              {{ formatValue(getRowValueForYear(year, EMaterialsFormControls.annualTotalCompensation)) }}
+              <app-summary-table-cell
+                [value]="formatValue(getRowValueForYear(year, EMaterialsFormControls.annualTotalCompensation))"
+                [hasError]="getRowHasErrorForYear(year, EMaterialsFormControls.annualTotalCompensation)"
+              />
             </td>
             }
           </tr>
@@ -53,7 +61,10 @@
             </td>
             @for (year of years; track year) {
             <td class="border border-gray-200 p-3 text-center">
-              {{ formatPercentage(getRowValueForYear(year, EMaterialsFormControls.saudiCompensationPercentage)) }}
+              <app-summary-table-cell
+                [value]="formatValue(getRowValueForYear(year, EMaterialsFormControls.saudiCompensationPercentage))"
+                [hasError]="getRowHasErrorForYear(year, EMaterialsFormControls.saudiCompensationPercentage)"
+              />
             </td>
             }
           </tr>
@@ -66,14 +77,16 @@
   <div class="flex flex-col gap-4">
     <h3 class="text-md font-semibold text-gray-900">Attachments</h3>
     @if (hasAttachments()) {
-    <div class="flex flex-col gap-2">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
       @for (file of attachments(); track $index) {
-      <div class="flex items-center gap-2 p-3 bg-gray-50 rounded border border-gray-200">
-        <i class="icon-file-pdf text-red-500"></i>
-        <span class="text-sm text-gray-700">{{ file.name || 'File ' + ($index + 1) }}</span>
-        @if (file.size) {
-        <span class="text-xs text-gray-500">({{ (file.size / 1024).toFixed(0) }} KB)</span>
-        }
+      <div class="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+        <i class="icon-edit text-red-500"></i>
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-700">{{ file.name || 'File ' + ($index + 1) }}</span>
+          @if (file.size) {
+          <span class="text-xs text-gray-500">({{ (file.size / 1024).toFixed(0) }} KB)</span>
+          }
+        </div>
       </div>
       }
     </div>

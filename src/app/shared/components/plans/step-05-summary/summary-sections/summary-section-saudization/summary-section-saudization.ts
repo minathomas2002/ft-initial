@@ -5,10 +5,11 @@ import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/p
 import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { CommonModule } from '@angular/common';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
+import { SummaryTableCell } from '../../shared/summary-table-cell/summary-table-cell';
 
 @Component({
   selector: 'app-summary-section-saudization',
-  imports: [SummarySectionHeader, CommonModule],
+  imports: [SummarySectionHeader, CommonModule, SummaryTableCell],
   templateUrl: './summary-section-saudization.html',
   styleUrl: './summary-section-saudization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,7 +26,7 @@ export class SummarySectionSaudization {
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
   // Years array for table columns
-  readonly years = [1, 2, 3];
+  readonly years = [1, 2, 3, 4, 5, 6, 7];
 
   // Form group accessors
   saudizationFormGroup = computed(() => {
@@ -40,6 +41,11 @@ export class SummarySectionSaudization {
   getRowValueForYear(year: number, rowName: string): any {
     return this.formService.getRowValueForYear(year, rowName);
   }
+
+  getRowHasErrorForYear(year: number, rowName: string): any {
+    return this.formService.getRowHasErrorForYear(year, rowName);
+  }
+
 
   // Helper method to format value
   formatValue(value: any): string {

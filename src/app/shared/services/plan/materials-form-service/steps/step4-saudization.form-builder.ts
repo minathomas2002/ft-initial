@@ -97,6 +97,16 @@ export class Step4SaudizationFormBuilder {
     return rowFormGroup.get(EMaterialsFormControls.value)?.value;
   }
 
+
+  getRowHasErrorForYear(
+    saudizationFormGroup: FormGroup,
+    year: number,
+    rowName: string
+  ): any {
+    const yearFormGroup = this.getYearFormGroup(saudizationFormGroup, year);
+    if (!yearFormGroup) return null;
+    return yearFormGroup.get(rowName)?.invalid && yearFormGroup.get(rowName)?.dirty;
+  }
   /**
    * Set a specific row value for a specific year
    */

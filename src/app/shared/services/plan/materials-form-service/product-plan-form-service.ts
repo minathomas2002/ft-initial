@@ -167,6 +167,10 @@ export class ProductPlanFormService {
     return this._step4Builder.getRowValueForYear(this.saudizationFormGroup, year, rowName);
   }
 
+  getRowHasErrorForYear(year: number, rowName: string): any {
+    return this._step4Builder.getRowHasErrorForYear(this.saudizationFormGroup, year, rowName);
+  }
+
   setRowValueForYear(year: number, rowName: string, value: any): void {
     this._step4Builder.setRowValueForYear(this.saudizationFormGroup, year, rowName, value);
   }
