@@ -122,12 +122,12 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
   onSummarySubmitClick(): void {
     // Check if all forms are valid
-    // if (!this.productPlanFormService.areAllFormsValid()) {
-    //   // Mark all controls as dirty to show validation errors
-    //   this.productPlanFormService.markAllControlsAsDirty();
-    //   this.toasterService.error('Please fix all validation errors before submitting');
-    //   return;
-    // }
+    if (!this.productPlanFormService.areAllFormsValid()) {
+      // Mark all controls as dirty to show validation errors
+      this.productPlanFormService.markAllControlsAsDirty();
+      this.toasterService.error('Please fix all validation errors before submitting');
+      return;
+    }
 
     // Mark all controls as dirty
     this.productPlanFormService.markAllControlsAsDirty();
