@@ -33,6 +33,7 @@ export const API_ENDPOINTS = {
     reassign: `${SystemEmployees}/reassign`,
     saveAsDraftProductLocalizationPlan: `${Plans}/saveAsDraft-productPlan`,
     submitProductLocalizationPlan: `${Plans}/submit-productPlan`,
+    getProductPlan: `${Plans}/get-productPlan`,
   },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,
