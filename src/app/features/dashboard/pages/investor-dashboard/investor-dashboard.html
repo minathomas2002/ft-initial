@@ -187,6 +187,8 @@
 @if(productLocalizationPlanWizardVisibility()){
 <app-product-localization-plan-wizard
   [(visibility)]="productLocalizationPlanWizardVisibility"
+  [mode]="wizardMode()"
+  [planId]="selectedPlanId()"
   (doRefresh)="applyFilter()"
 />
 }

@@ -2,6 +2,7 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { ProductPlanFormService } from '../services/plan/materials-form-service/product-plan-form-service';
 import {
   IProductLocalizationPlanRequest,
+  IProductPlanResponse,
   ProductPlan,
   OverviewCompanyInfo,
   BasicInfo,
@@ -22,7 +23,7 @@ import {
 } from '../interfaces/plans.interface';
 import { EMaterialsFormControls } from '../enums/product-localization-form-controls.enum';
 import { IPhoneValue } from '../interfaces/phone-input.interface';
-import { ELocalizationStatusType, ETargetedCustomer } from '../enums';
+import { ELocalizationStatusType, ETargetedCustomer, EOpportunityType } from '../enums';
 
 /**
  * Section type mapping for value chain sections
@@ -86,7 +87,7 @@ function mapOverviewCompanyInfo(formService: ProductPlanFormService): OverviewCo
   const basicInfo: BasicInfo = {
     planTitle: getFormValue(basicInfoForm, EMaterialsFormControls.planTitle) ?? null,
     opportunityType: opportunityTypeValue ? parseInt(opportunityTypeValue, 10) : null,
-    opportunityTilte: opportunityValue?.name ?? null,
+    opportunityTitle: opportunityValue?.name ?? null,
     opportunityId: opportunityValue?.id ?? null,
   } as any; // Allow null values for FormData conversion
 
@@ -375,6 +376,313 @@ function createPlaceholderSignature(): Signature {
       emailId: '',
     },
   };
+}
+
+/**
+ * Helper function to set value in a FormGroup with hasComment/value pattern
+ */
+function setFormGroupValue(formGroup: FormGroup | null, controlName: string, value: any): void {
+  if (!formGroup) return;
+  const control = formGroup.get(controlName);
+  if (control instanceof FormGroup) {
+    const valueControl = control.get(EMaterialsFormControls.value);
+    if (valueControl) {
+      valueControl.setValue(value ?? '');
+    }
+  }
+}
+
+/**
+ * Helper function to set phone number value (handles string format)
+ */
+function setPhoneValue(formGroup: FormGroup | null, controlName: string, phoneString: string | null): void {
+  if (!formGroup || !phoneString) return;
+  const control = formGroup.get(controlName);
+  if (control instanceof FormGroup) {
+    const valueControl = control.get(EMaterialsFormControls.value);
+    if (valueControl) {
+      // Try to parse phone string (format: countryCode+number or just number)
+      // For now, set as string - components can handle parsing
+      valueControl.setValue(phoneString);
+    }
+  }
+}
+
+/**
+ * Map API response to form structure
+ */
+export function mapProductPlanResponseToForm(
+  response: IProductPlanResponse,
+  formService: ProductPlanFormService
+): void {
+  const { productPlan, signature } = response;
+
+  // Step 1: Overview & Company Information
+  const step1Form = formService.step1_overviewCompanyInformation;
+  const basicInfoForm = formService.basicInformationFormGroup;
+  const companyInfoForm = formService.companyInformationFormGroup;
+  const locationInfoForm = formService.locationInformationFormGroup;
+  const localAgentForm = formService.localAgentInformationFormGroup;
+
+  // Basic Info
+  if (basicInfoForm && productPlan.overviewCompanyInfo?.basicInfo) {
+    const basicInfo = productPlan.overviewCompanyInfo.basicInfo;
+    basicInfoForm.get(EMaterialsFormControls.planTitle)?.setValue(basicInfo.planTitle ?? '');
+    basicInfoForm.get(EMaterialsFormControls.opportunityType)?.setValue(basicInfo.opportunityType?.toString() ?? EOpportunityType.PRODUCT.toString());
+
+    // Set opportunity object (needs to match the select item format)
+    if (basicInfo.opportunityId && basicInfo.opportunityTitle) {
+      basicInfoForm.get(EMaterialsFormControls.opportunity)?.setValue({
+        id: basicInfo.opportunityId,
+        name: basicInfo.opportunityTitle
+      });
+    }
+  }
+
+  // Company Info
+  if (companyInfoForm && productPlan.overviewCompanyInfo?.companyInfo) {
+    const companyInfo = productPlan.overviewCompanyInfo.companyInfo;
+    setFormGroupValue(companyInfoForm, EMaterialsFormControls.companyName, companyInfo.companyName);
+    setFormGroupValue(companyInfoForm, EMaterialsFormControls.ceoName, companyInfo.ceoName);
+    setFormGroupValue(companyInfoForm, EMaterialsFormControls.ceoEmailID, companyInfo.ceoEmail);
+  }
+
+  // Location Info
+  if (locationInfoForm && productPlan.overviewCompanyInfo?.locationInfo) {
+    const locationInfo = productPlan.overviewCompanyInfo.locationInfo;
+    setFormGroupValue(locationInfoForm, EMaterialsFormControls.globalHQLocation, locationInfo.globalHQLocation);
+    setFormGroupValue(locationInfoForm, EMaterialsFormControls.registeredVendorIDwithSEC, locationInfo.vendorIdWithSEC);
+    locationInfoForm.get(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA)?.setValue(locationInfo.hasLocalAgent ?? null);
+
+    // Toggle local agent validation based on hasLocalAgent
+    if (locationInfo.hasLocalAgent !== undefined) {
+      formService.toggleLocalAgentInformValidation(locationInfo.hasLocalAgent);
+    }
+
+    // Local Agent Info (only if hasLocalAgent is true)
+    if (locationInfo.hasLocalAgent && localAgentForm) {
+      setFormGroupValue(localAgentForm, EMaterialsFormControls.localAgentName, locationInfo.localAgentName);
+      setFormGroupValue(localAgentForm, EMaterialsFormControls.contactPersonName, locationInfo.contactPersonName);
+      setFormGroupValue(localAgentForm, EMaterialsFormControls.emailID, locationInfo.localAgentEmail);
+      setPhoneValue(localAgentForm, EMaterialsFormControls.contactNumber, locationInfo.localAgentContactNumber);
+      setFormGroupValue(localAgentForm, EMaterialsFormControls.companyHQLocation, locationInfo.companyHQLocation);
+    }
+  }
+
+  // Step 2: Product & Plant Overview
+  const step2Form = formService.step2_productPlantOverview;
+  const overviewForm = formService.overviewFormGroup;
+  const capexForm = formService.expectedCAPEXInvestmentFormGroup;
+  const targetCustomersForm = formService.targetCustomersFormGroup;
+  const manufacturingExpForm = formService.productManufacturingExperienceFormGroup;
+
+  // Overview
+  if (overviewForm && productPlan.productPlantOverview?.overview) {
+    const overview = productPlan.productPlantOverview.overview;
+    setFormGroupValue(overviewForm, EMaterialsFormControls.productName, overview.productName);
+    setFormGroupValue(overviewForm, EMaterialsFormControls.productSpecifications, overview.productSpecifications);
+    setFormGroupValue(overviewForm, EMaterialsFormControls.targetedAnnualPlantCapacity, overview.targetedAnnualPlantCapacity);
+    setFormGroupValue(overviewForm, EMaterialsFormControls.timeRequiredToSetupFactory, overview.timeRequiredToSetupFactory);
+  }
+
+  // Expected CAPEX
+  if (capexForm && productPlan.productPlantOverview?.expectedCapex) {
+    const capex = productPlan.productPlantOverview.expectedCapex;
+    setFormGroupValue(capexForm, EMaterialsFormControls.landPercentage, capex.landPercent);
+    setFormGroupValue(capexForm, EMaterialsFormControls.buildingPercentage, capex.buildingPercent);
+    setFormGroupValue(capexForm, EMaterialsFormControls.machineryEquipmentPercentage, capex.machineryPercent);
+    setFormGroupValue(capexForm, EMaterialsFormControls.othersPercentage, capex.othersPercent);
+    setFormGroupValue(capexForm, EMaterialsFormControls.othersDescription, capex.othersDescription);
+  }
+
+  // Target Customers
+  if (targetCustomersForm && productPlan.productPlantOverview?.targetCustomers) {
+    const targetCustomers = productPlan.productPlantOverview.targetCustomers;
+    // Convert targetSEC array to string array for form
+    const targetSECArray = targetCustomers.targetSEC?.map(sec => sec.toString()) ?? [];
+    // If targetLocalSuppliers is true, add '2' to the array
+    if (targetCustomers.targetLocalSuppliers) {
+      if (!targetSECArray.includes('2')) {
+        targetSECArray.push('2');
+      }
+    }
+    targetCustomersForm.get(EMaterialsFormControls.targetedCustomer)?.setValue(targetSECArray);
+    setFormGroupValue(targetCustomersForm, EMaterialsFormControls.namesOfTargetedSuppliers, targetCustomers.targetedLocalSupplierNames);
+    setFormGroupValue(targetCustomersForm, EMaterialsFormControls.productsUtilizeTargetedProduct, targetCustomers.productsUtilizingTargetProduct);
+  }
+
+  // Manufacturing Experience
+  if (manufacturingExpForm && productPlan.productPlantOverview?.manufacturingExperience) {
+    const mfgExp = productPlan.productPlantOverview.manufacturingExperience;
+    // Set experience range (should be an object with id property or just the id string)
+    if (mfgExp.experienceRange) {
+      const expValue = typeof mfgExp.experienceRange === 'string'
+        ? { id: mfgExp.experienceRange, name: '' }
+        : mfgExp.experienceRange;
+      manufacturingExpForm.get(EMaterialsFormControls.productManufacturingExperience)?.setValue(expValue);
+    }
+
+    manufacturingExpForm.get(EMaterialsFormControls.provideToSEC)?.setValue(mfgExp.provideToSEC ?? false);
+    manufacturingExpForm.get(EMaterialsFormControls.provideToLocalSuppliers)?.setValue(mfgExp.provideToLocalSuppliers ?? false);
+
+    // Toggle validations
+    if (mfgExp.provideToSEC !== undefined) {
+      formService.toggleSECFieldsValidation(mfgExp.provideToSEC);
+    }
+    if (mfgExp.provideToLocalSuppliers !== undefined) {
+      formService.toggleLocalSuppliersFieldsValidation(mfgExp.provideToLocalSuppliers);
+    }
+
+    // SEC fields
+    if (mfgExp.provideToSEC) {
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.qualifiedPlantLocationSEC, mfgExp.qualifiedPlantLocation_SEC);
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.approvedVendorIDSEC, mfgExp.approvedVendorId_SEC);
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.yearsOfExperienceSEC, mfgExp.yearsExperience_SEC);
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.totalQuantitiesSEC, mfgExp.totalQuantitiesToSEC);
+    }
+
+    // Local Suppliers fields
+    if (mfgExp.provideToLocalSuppliers) {
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.namesOfSECApprovedSuppliers, mfgExp.localSupplierNames);
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.qualifiedPlantLocation, mfgExp.qualifiedPlantLocation_LocalSupplier);
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.yearsOfExperience, mfgExp.yearsExperience_LocalSupplier);
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.totalQuantities, mfgExp.totalQuantitiesToLocalSuppliers);
+    }
+  }
+
+  // Step 3: Value Chain
+  const step3Form = formService.step3_valueChain;
+  if (step3Form && productPlan.valueChainStep?.valueChainRows) {
+    const valueChainRows = productPlan.valueChainStep.valueChainRows;
+
+    // Group rows by section type
+    const rowsBySection: Record<number, ValueChainRow[]> = {};
+    valueChainRows.forEach(row => {
+      if (!rowsBySection[row.sectionType]) {
+        rowsBySection[row.sectionType] = [];
+      }
+      rowsBySection[row.sectionType].push(row);
+    });
+
+    // Map section types to form group names
+    const sectionMap: Record<number, string> = {
+      1: EMaterialsFormControls.designEngineeringFormGroup,
+      2: EMaterialsFormControls.sourcingFormGroup,
+      3: EMaterialsFormControls.manufacturingFormGroup,
+      4: EMaterialsFormControls.assemblyTestingFormGroup,
+      5: EMaterialsFormControls.afterSalesFormGroup,
+    };
+
+    // Populate each section
+    Object.keys(rowsBySection).forEach(sectionTypeStr => {
+      const sectionType = parseInt(sectionTypeStr, 10);
+      const sectionName = sectionMap[sectionType];
+      if (!sectionName) return;
+
+      const sectionFormGroup = step3Form.get(sectionName) as FormGroup;
+      if (!sectionFormGroup) return;
+
+      const itemsArray = sectionFormGroup.get('items') as FormArray;
+      if (!itemsArray) return;
+
+      // Clear existing items
+      while (itemsArray.length > 0) {
+        itemsArray.removeAt(0);
+      }
+
+      // Add rows
+      rowsBySection[sectionType].forEach(row => {
+        const itemFormGroup = formService.createValueChainItem();
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.expenseHeader, row.expenseHeader);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.inHouseOrProcured, row.inHouseOrProcured);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.costPercentage, row.costPercent);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year1, row.year1);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year2, row.year2);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year3, row.year3);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year4, row.year4);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year5, row.year5);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year6, row.year6);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year7, row.year7);
+        itemsArray.push(itemFormGroup);
+      });
+    });
+  }
+
+  // Step 4: Saudization
+  const step4Form = formService.step4_saudization;
+  const saudizationFormGroup = formService.saudizationFormGroup;
+
+  if (saudizationFormGroup && productPlan.saudization?.saudizationRows) {
+    const saudizationRows = productPlan.saudization.saudizationRows;
+
+    // Group rows by saudization type
+    const rowsByType: Record<number, SaudizationRow> = {};
+    saudizationRows.forEach(row => {
+      rowsByType[row.saudizationType] = row;
+    });
+
+    // Map saudization types to row names
+    const typeMap: Record<number, string> = {
+      1: EMaterialsFormControls.annualHeadcount,
+      2: EMaterialsFormControls.saudizationPercentage,
+      3: EMaterialsFormControls.annualTotalCompensation,
+      4: EMaterialsFormControls.saudiCompensationPercentage,
+    };
+
+    // Populate each year
+    for (let year = 1; year <= 7; year++) {
+      const yearFormGroup = formService.getYearFormGroup(year);
+      if (!yearFormGroup) continue;
+
+      Object.keys(rowsByType).forEach(typeStr => {
+        const type = parseInt(typeStr, 10);
+        const rowName = typeMap[type];
+        if (!rowName) return;
+
+        const row = rowsByType[type];
+        const rowFormGroup = yearFormGroup.get(rowName) as FormGroup;
+        if (rowFormGroup) {
+          const valueControl = rowFormGroup.get(EMaterialsFormControls.value);
+          if (valueControl) {
+            const yearValue = (row as any)[`year${year}`];
+            valueControl.setValue(yearValue ?? null);
+          }
+        }
+      });
+    }
+  }
+
+  // Attachments
+  const attachmentsFormGroup = formService.attachmentsFormGroup;
+  if (attachmentsFormGroup && productPlan.saudization?.attachments) {
+    const attachments = productPlan.saudization.attachments;
+    const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
+
+    if (attachmentsControl instanceof FormGroup) {
+      const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
+      if (valueControl && attachments.length > 0) {
+        // Convert attachment URLs to File objects if needed
+        // For now, store as array of attachment objects
+        const attachmentFiles = attachments.map(att => {
+          // If fileUrl exists, we might need to fetch it
+          // For now, store the attachment info
+          return {
+            id: att.id,
+            fileName: att.fileName,
+            fileUrl: att.fileUrl,
+            fileExtension: att.fileExtension
+          };
+        });
+        valueControl.setValue(attachmentFiles);
+      }
+    }
+  }
+
+  // Store signature if present (for later use in submission modal)
+  if (signature && signature.signatureValue) {
+    // Signature will be handled by the wizard component
+    // Store it in a way that can be accessed later
+  }
 }
 
 /**

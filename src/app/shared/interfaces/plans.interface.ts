@@ -143,3 +143,8 @@ export interface ContactInfo {
   contactNumber: string
   emailId: string
 }
+
+export interface IProductPlanResponse {
+  productPlan: ProductPlan
+  signature: Signature
+}

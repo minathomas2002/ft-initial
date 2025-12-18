@@ -4,6 +4,7 @@ import { EExperienceRange, EInHouseProcuredType, ELocalizationStatusType, EOppor
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { IActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IProductPlanResponse } from "../../interfaces/plans.interface";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
 
 const initialState: {
@@ -191,6 +192,20 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
+          }),
+        );
+      },
+
+      /* Get Product Plan*/
+      getProductPlan(planId: string): Observable<IBaseApiResponse<IProductPlanResponse>> {
+        patchState(store, { isLoading: true, error: null });
+        return planApiService.getProductPlan({ planId }).pipe(
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error loading product plan' });
+            return throwError(() => new Error('Error loading product plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
           }),
         );
       },

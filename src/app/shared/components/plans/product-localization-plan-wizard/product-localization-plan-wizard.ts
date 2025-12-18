@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, model, OnDestroy, output, signal, viewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, OnDestroy, output, signal, viewChild } from "@angular/core";
 import { BaseWizardDialog } from "../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { Step01OverviewCompanyInformationForm } from "../step-01-overviewCompanyInformation/step-01-overviewCompanyInformationForm";
 import { Step02ProductPlantOverviewForm } from "../step-02-productPlantOverview/step-02-productPlantOverviewForm";
@@ -12,7 +12,7 @@ import { ProductPlanFormService } from "src/app/shared/services/plan/materials-f
 import { ProductPlanValidationService } from "src/app/shared/services/plan/validation/product-plan-validation.service";
 import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
-import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData } from "src/app/shared/utils/product-localization-plan.mapper";
+import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
 import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
@@ -47,6 +47,10 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
+
+  // Mode and plan ID inputs
+  mode = input<'create' | 'edit' | 'view'>('create');
+  planId = input<string | null>(null);
 
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
@@ -91,9 +95,15 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       }
     ];
   });
-  wizardTitle = signal('Product Localization Plan'); // TODO: Translate
+  wizardTitle = computed(() => {
+    const currentMode = this.mode();
+    if (currentMode === 'edit') return 'Edit Plan';
+    if (currentMode === 'view') return 'View Plan';
+    return 'Product Localization Plan';
+  });
   isLoading = signal(false);
   isProcessing = signal(false);
+  isLoadingPlan = signal(false);
 
   // Reference to Step 5 Summary component
   summaryComponent = viewChild<Step05Summary>('summaryComponent');
@@ -101,6 +111,21 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Submission confirmation modal
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
+
+  // Computed signal for view mode
+  isViewMode = computed(() => this.mode() === 'view');
+
+  constructor() {
+    // Effect to load plan data when planId and mode are set
+    effect(() => {
+      const currentPlanId = this.planId();
+      const currentMode = this.mode();
+
+      if (currentPlanId && (currentMode === 'edit' || currentMode === 'view') && this.visibility()) {
+        this.loadPlanData(currentPlanId);
+      }
+    });
+  }
 
   previousStep(): void {
     this.activeStep.set(this.activeStep() - 1);
@@ -136,6 +161,51 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     this.showSubmissionModal.set(true);
   }
 
+  loadPlanData(planId: string): void {
+    this.isLoadingPlan.set(true);
+    this.planStore.getProductPlan(planId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response.body) {
+            // Map response to form
+            mapProductPlanResponseToForm(response.body, this.productPlanFormService);
+
+            // Store existing signature if present
+            if (response.body.signature?.signatureValue) {
+              this.existingSignature.set(response.body.signature.signatureValue);
+            }
+
+            // Disable forms if in view mode
+            if (this.isViewMode()) {
+              this.disableAllForms();
+            }
+          }
+          this.isLoadingPlan.set(false);
+        },
+        error: (error) => {
+          this.isLoadingPlan.set(false);
+          this.toasterService.error('Error loading plan data. Please try again.');
+          console.error('Error loading plan:', error);
+          this.visibility.set(false);
+        }
+      });
+  }
+
+  disableAllForms(): void {
+    this.productPlanFormService.step1_overviewCompanyInformation.disable();
+    this.productPlanFormService.step2_productPlantOverview.disable();
+    this.productPlanFormService.step3_valueChain.disable();
+    this.productPlanFormService.step4_saudization.disable();
+  }
+
+  enableAllForms(): void {
+    this.productPlanFormService.step1_overviewCompanyInformation.enable();
+    this.productPlanFormService.step2_productPlantOverview.enable();
+    this.productPlanFormService.step3_valueChain.enable();
+    this.productPlanFormService.step4_saudization.enable();
+  }
+
   onSubmissionConfirm(data: {
     name: string;
     jobTitle: string;
@@ -155,10 +225,13 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       },
     };
 
+    // Get plan ID if in edit mode
+    const currentPlanId = this.mode() === 'edit' ? (this.planId() ?? '') : '';
+
     // Map form values to request structure with signature
     const request = mapProductLocalizationPlanFormToRequest(
       this.productPlanFormService,
-      '',
+      currentPlanId,
       signature
     );
 
@@ -218,8 +291,12 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       return;
     }
 
+    // Get plan ID if in edit mode
+    const currentPlanId = this.mode() === 'edit' ? (this.planId() ?? '') : '';
+    const isEditMode = this.mode() === 'edit';
+
     // Map form values to request structure
-    const request = mapProductLocalizationPlanFormToRequest(this.productPlanFormService);
+    const request = mapProductLocalizationPlanFormToRequest(this.productPlanFormService, currentPlanId);
 
     // Convert request to FormData
     const formData = convertRequestToFormData(request);
@@ -233,17 +310,23 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.toasterService.success('Product localization plan saved as draft successfully');
-          // Reset all forms after successful save
-          this.productPlanFormService.resetAllForms();
-          // Reset wizard state
-          this.activeStep.set(1);
+          const successMessage = isEditMode
+            ? 'Draft updated successfully.'
+            : 'Product localization plan saved as draft successfully';
+          this.toasterService.success(successMessage);
+
+          // Only reset forms if not in edit mode (to preserve data)
+          if (!isEditMode) {
+            this.productPlanFormService.resetAllForms();
+            this.activeStep.set(1);
+          }
+
           this.doRefresh.emit();
           this.visibility.set(false);
         },
         error: (error) => {
           this.isProcessing.set(false);
-          // TODO: Show error message
+          this.toasterService.error('Error saving draft. Please try again.');
           console.error('Error saving draft:', error);
         }
       });
@@ -251,6 +334,9 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
 
   ngOnDestroy(): void {
-    // TODO: Reset the whole from
+    // Reset forms when component is destroyed
+    if (this.mode() === 'create') {
+      this.productPlanFormService.resetAllForms();
+    }
   }
 }

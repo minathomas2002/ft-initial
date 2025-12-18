@@ -6,8 +6,9 @@
   (onNextStep)="nextStep()"
   (onPreviousStep)="previousStep()"
   (onSaveAsDraft)="saveAsDraft()"
-  [isLoading]="isLoading()"
+  [isLoading]="isLoading() || isLoadingPlan()"
   [isProcessing]="isProcessing()"
+  [hideSaveAsDraft]="isViewMode()"
 >
 
   <ng-container ngProjectAs="status">
@@ -43,7 +44,7 @@
   </ng-template>
 
   <ng-container ngProjectAs="final-step-action">
-    @if (activeStep() === 5) {
+    @if (activeStep() === 5 && !isViewMode()) {
     <p-button
       [label]="'Submit'"
       (click)="onSummarySubmitClick()"

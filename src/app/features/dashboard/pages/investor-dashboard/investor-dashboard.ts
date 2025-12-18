@@ -48,6 +48,10 @@ export class InvestorDashboard implements OnInit {
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
 
+  // Wizard mode and plan ID signals
+  selectedPlanId = signal<string | null>(null);
+  wizardMode = signal<'create' | 'edit' | 'view'>('create');
+
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
   readonly filterService = inject(DashboardPlansFilterService);
@@ -88,6 +92,9 @@ export class InvestorDashboard implements OnInit {
     this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
     this.newPlanDialogVisibility.set(false);
     if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
+      // Reset mode and plan ID for new plan
+      this.wizardMode.set('create');
+      this.selectedPlanId.set(null);
       this.productLocalizationPlanWizardVisibility.set(true);
     } else {
       console.log('service');
@@ -126,13 +133,24 @@ export class InvestorDashboard implements OnInit {
 
 
   onViewDetails(plan: IPlanRecord) {
-    // TODO: Implement view details
-    console.log('View details for plan:', plan);
+    // Set mode to view and plan ID
+    this.wizardMode.set('view');
+    this.selectedPlanId.set(plan.id);
+    this.productLocalizationPlanWizardVisibility.set(true);
   }
 
   onEdit(plan: IPlanRecord) {
-    // TODO: Implement edit
-    console.log('Edit plan:', plan);
+    // Check if plan status allows editing (Draft or Pending)
+    if (plan.status === EPlanStatus.DRAFT || plan.status === EPlanStatus.PENDING) {
+      // Set mode to edit and plan ID
+      this.wizardMode.set('edit');
+      this.selectedPlanId.set(plan.id);
+      this.productLocalizationPlanWizardVisibility.set(true);
+    } else {
+      this.i18nService.translate('plans.errors.cannotEdit');
+      // Could show error message here
+      console.warn('Plan cannot be edited. Status:', plan.status);
+    }
   }
 
   onDownload(plan: IPlanRecord) {

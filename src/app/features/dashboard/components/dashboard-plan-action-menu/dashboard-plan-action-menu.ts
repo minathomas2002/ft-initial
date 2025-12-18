@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import type { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { IPlanRecord } from 'src/app/shared/interfaces';
+import { EPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 @Component({
@@ -22,23 +22,30 @@ export class DashboardPlanActionMenu {
 
   menuItems = computed<MenuItem[]>(() => {
     const plan = this.plan();
-    return [
+    const items: MenuItem[] = [
       {
         label: this.i18nService.translate('plans.actions.viewDetails'),
         icon: 'icon-eye',
         command: () => this.onViewDetails.emit(plan),
       },
-      {
+    ];
+
+    // Only show edit action for Draft and Pending statuses
+    if (plan.status === EPlanStatus.DRAFT || plan.status === EPlanStatus.PENDING) {
+      items.push({
         label: this.i18nService.translate('plans.actions.edit'),
         icon: 'icon-edit',
         command: () => this.onEdit.emit(plan),
-      },
-      {
-        label: this.i18nService.translate('plans.actions.download'),
-        icon: 'icon-download',
-        command: () => this.onDownload.emit(plan),
-      },
-    ];
+      });
+    }
+
+    items.push({
+      label: this.i18nService.translate('plans.actions.download'),
+      icon: 'icon-download',
+      command: () => this.onDownload.emit(plan),
+    });
+
+    return items;
   });
 }
 

@@ -92,6 +92,7 @@
       </div>
       <div class="actions flex justify-between items-center py-[16px] px-[1.5rem] border-t border-gray-200">
         <div class="flex-1">
+          @if (!hideSaveAsDraft()) {
           <p-button
             text
             icon="icon-save"
@@ -101,6 +102,7 @@
             [disabled]="isProcessing()"
             [loading]="isProcessing()"
           />
+          }
         </div>
         <div class="flex gap-4">
           @if (!isFirstStep()) {

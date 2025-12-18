@@ -3,7 +3,7 @@ import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable } from 'rxjs';
 import { IActiveEmployee, IAssignRequest, IBaseApiResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IProductLocalizationPlanRequest } from '../../interfaces/plans.interface';
+import { IProductLocalizationPlanRequest, IProductPlanResponse } from '../../interfaces/plans.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +29,10 @@ export class PlanApiService {
 
   submitProductLocalizationPlan(req: FormData): Observable<IBaseApiResponse<boolean>> {
     return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.submitProductLocalizationPlan, req);
+  }
+
+  getProductPlan(req: { planId: string }): Observable<IBaseApiResponse<IProductPlanResponse>> {
+    return this.baseHttpService.post<IProductPlanResponse, { planId: string }, unknown>(API_ENDPOINTS.plans.getProductPlan, req);
   }
 
 }

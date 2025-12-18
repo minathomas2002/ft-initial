@@ -44,6 +44,7 @@ export class BaseWizardDialog {
   isLoading = input<boolean>(false);
   isProcessing = input<boolean>(false);
   wizardTitle = input<string>('Create Opportunity');
+  hideSaveAsDraft = input<boolean>(false);
 
   // Computed to get current language for icon direction
   currentLanguage = computed(() => this.i18nService.currentLanguage());
