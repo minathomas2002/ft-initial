@@ -11,14 +11,18 @@
   [isLoading]="settingAdminStore.isProcessing()"
 >
 
-  <div class="mb-5">
-    <p class="text-lg font-semibold text-gray-900 mb-1">{{ ('setting.adminView.notificationCardTitle' | translate) }}</p>
-    <p class="text-sm mb-1 text-gray-60  max-h-[400px]">{{ ('setting.adminView.notification.notificationDesc' | translate) }} </p>
+  <div class="mb-4">
+    <p class="text-lg font-semibold text-gray-900">{{ ('setting.adminView.notificationCardTitle' | translate) }}</p>
+    <p class="text-sm text-gray-60 max-h-[400px]">{{ ('setting.adminView.notification.notificationDesc' | translate) }} </p>
   </div>
 
+  @if(settingAdminStore.isLoading()){
+  <div class="flex justify-center items-center h-full">
+    <p-progress-spinner mode="indeterminate" styleClass="w-10 h-[50vh]"></p-progress-spinner>
+  </div>
+  } @else {
   <p-tabs
-    [(value)]="activeTab"
-    class="mt-10"
+    [(value)]="activeTab"    
   >
     <p-tablist>
       <p-tab value="0">{{ 'setting.adminView.notification.systemTab' | translate }}</p-tab>
@@ -52,6 +56,6 @@
       </p-tabpanel>
     </p-tabpanels>
   </p-tabs>
-
+  }
   <!-- body -->
 </app-base-dialog>
