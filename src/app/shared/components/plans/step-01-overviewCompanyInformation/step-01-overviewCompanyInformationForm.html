@@ -55,6 +55,7 @@
           optionLabel="name"
           placeholder="Select opportunity"
           [loading]="isLoadingAvailableOpportunities()"
+          [disabled]="isOpportunityDisabled()"
           fluid
         />
         <app-base-error-messages

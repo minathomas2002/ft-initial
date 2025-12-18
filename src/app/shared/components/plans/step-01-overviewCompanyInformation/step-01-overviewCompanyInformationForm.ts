@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,7 +11,7 @@ import { BaseErrorComponent } from '../../base-components/base-error/base-error.
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
@@ -42,8 +42,6 @@ export class Step01OverviewCompanyInformationForm {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly planStore = inject(PlanStore);
-  private readonly destroyRef = inject(DestroyRef);
-
 
   showCheckbox = signal(false);
 
@@ -70,11 +68,28 @@ export class Step01OverviewCompanyInformationForm {
     return this.doYouHaveLocalAgentInKSASignal() === true;
   });
 
+  // Computed signal for opportunity disabled state
+  isOpportunityDisabled = computed(() => {
+    return this.planStore.appliedOpportunity() !== null;
+  });
+
   constructor() {
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
       this.productPlanFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
     });
+
+    // Initialize opportunity value based on appliedOpportunity
+    const opportunityControl = this.getFormControl(
+      this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]
+    );
+    console.log(opportunityControl);
+
+
+    const appliedOpportunity = this.planStore.appliedOpportunity();
+    if (appliedOpportunity) {
+      opportunityControl.setValue(this.planStore.availableOpportunities()[0]);
+    }
   }
 
   getHasCommentControl(control: AbstractControl): FormControl<boolean> {

@@ -62,3 +62,7 @@
     </app-cards-skeleton>
   </ng-container>
 </app-cards-page-layout>
+
+@if(productLocalizationPlanWizardVisibility()){
+<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" />
+}

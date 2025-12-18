@@ -16,6 +16,8 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { OpportunitiesFilters } from '../../components/opportunities-filter/opportunities-filters';
 import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.utils';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -28,7 +30,8 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
     CardsSkeleton,
     TranslatePipe,
     BaseTagComponent,
-    OpportunitiesFilters
+    OpportunitiesFilters,
+    ProductLocalizationPlanWizard
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
@@ -37,6 +40,7 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
 export class OpportunitiesList implements OnInit {
   readonly permissionService = inject(PermissionService);
   filterService = inject(OpportunitiesFilterService);
+  private readonly planStore = inject(PlanStore);
   router = inject(Router);
   authStore = inject(AuthStore);
   route = inject(ActivatedRoute);
@@ -46,6 +50,8 @@ export class OpportunitiesList implements OnInit {
   filter = this.filterService.filter;
   opportunitiesStore = this.filterService.store;
   isAnonymous = signal<boolean>(false);
+
+  productLocalizationPlanWizardVisibility = signal<boolean>(false);
 
   ngOnInit(): void {
     const isAnonymousData = this.route.snapshot.data['isAnonymous'];
@@ -69,7 +75,14 @@ export class OpportunitiesList implements OnInit {
 
   onApply(opportunity: IOpportunity) {
     if (this.authStore.isAuthenticated()) {
-      this.toast.success('Not implemented in this sprint');
+      this.opportunitiesStore.checkApplyOpportunity(opportunity.id).subscribe((res) => {
+        if (res.body) {
+          this.applyOpportunity(opportunity);
+        } else {
+          this.toast.warn('Application is not allowed while an in-progress plan exists for the selected opportunity.');
+        }
+      });
+
     } else {
       this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
     }
@@ -87,4 +100,10 @@ export class OpportunitiesList implements OnInit {
   }
 
   getOpportunityTypeConfig = getOpportunityTypeConfig;
+
+  applyOpportunity(opportunity: IOpportunity) {
+    this.planStore.setAvailableOpportunities({ id: opportunity.id, name: opportunity.title });
+    this.planStore.setAppliedOpportunity(opportunity);
+    this.productLocalizationPlanWizardVisibility.set(true);
+  }
 }

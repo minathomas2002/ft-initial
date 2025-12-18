@@ -3,12 +3,12 @@ import { OpportunitiesApiService } from "../../api/opportunities/opportunities-a
 import { EExperienceRange, EInHouseProcuredType, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
-import { IActiveEmployee, IAssignRequest, IBaseApiResponse, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
-import { IProductLocalizationPlanRequest } from "../../interfaces/plans.interface";
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null,
+  appliedOpportunity: IOpportunity | null,
   isPresetSelected: boolean,
   newPlanTitle: string,
   availableOpportunities: ISelectItem[],
@@ -29,6 +29,7 @@ const initialState: {
 
 } = {
   newPlanOpportunityType: null,
+  appliedOpportunity: null,
   isPresetSelected: false,
   newPlanTitle: '',
   availableOpportunities: [],
@@ -84,6 +85,15 @@ export const PlanStore = signalStore(
       },
       resetNewPlanTitle(): void {
         patchState(store, { newPlanTitle: '' });
+      },
+      setAppliedOpportunity(opportunity: IOpportunity): void {
+        patchState(store, { appliedOpportunity: opportunity });
+      },
+      resetAppliedOpportunity(): void {
+        patchState(store, { appliedOpportunity: null });
+      },
+      setAvailableOpportunities(opportunity: ISelectItem): void {
+        patchState(store, { availableOpportunities: [opportunity] });
       }
     }
   }),
