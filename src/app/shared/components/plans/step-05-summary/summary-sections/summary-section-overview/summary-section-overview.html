@@ -34,9 +34,10 @@
 
   <!-- Company Information -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-md font-semibold text-gray-900">Company Information</h3>
+    <h3 class="text-lg font-semibold text-gray-900">Company Information</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <app-summary-field
+        class="col-span-2"
         [label]="'Company Name'"
         [value]="companyName()"
         [hasError]="hasFieldError('companyInformationFormGroup.companyName.value')"
@@ -59,7 +60,7 @@
 
   <!-- Location Information -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-md font-semibold text-gray-900">Location Information</h3>
+    <h3 class="text-lg font-semibold text-gray-900">Location Information</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <app-summary-field
         [label]="'Global HQ Location'"
@@ -83,8 +84,8 @@
     </div>
 
     @if (hasLocalAgent() === true) {
-    <div class="flex flex-col gap-4 mt-4 pt-4 border-t border-gray-200">
-      <h4 class="text-sm font-semibold text-gray-700">Local Agent Information</h4>
+    <div class="flex flex-col gap-4">
+      <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <app-summary-field
           [label]="'Contact Person Name'"
@@ -92,23 +93,25 @@
           [hasError]="hasFieldError('localAgentInformationFormGroup.contactPersonName.value')"
           [isEmpty]="!contactPersonName()"
         />
+
         <app-summary-field
           [label]="'Local Agent Name'"
           [value]="localAgentName()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.localAgentName.value')"
           [isEmpty]="!localAgentName()"
         />
-        <app-summary-field
-          [label]="'Contact Number'"
-          [value]="contactNumber()"
-          [hasError]="hasFieldError('localAgentInformationFormGroup.contactNumber.value')"
-          [isEmpty]="!contactNumber()"
-        />
+
         <app-summary-field
           [label]="'Email ID'"
           [value]="emailID()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.emailID.value')"
           [isEmpty]="!emailID()"
+        />
+        <app-summary-field
+          [label]="'Contact Number'"
+          [value]="contactNumber()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.contactNumber.value')"
+          [isEmpty]="!contactNumber()"
         />
         <app-summary-field
           [label]="'Company HQ Location'"

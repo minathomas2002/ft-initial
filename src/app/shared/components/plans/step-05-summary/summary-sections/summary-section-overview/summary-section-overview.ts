@@ -5,6 +5,7 @@ import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/p
 import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { SummaryField } from '../../shared/summary-field/summary-field';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-summary-section-overview',
@@ -61,10 +62,22 @@ export class SummarySectionOverview {
   }
 
   hasFieldError(fieldPath: string): boolean {
-    if (!this.validationErrors()) {
-      return false;
+    const parts = fieldPath.split('.');
+    let control: any = this.formGroup();
+
+    for (const part of parts) {
+      if (control instanceof FormGroup) {
+        control = control.get(part);
+      } else {
+        return false;
+      }
     }
-    return this.validationErrors()!.fieldErrors.has(fieldPath);
+
+    if (control && control.invalid && control.dirty) {
+      return true;
+    }
+
+    return false;
   }
 
   onEditClick(): void {
@@ -160,7 +173,8 @@ export class SummarySectionOverview {
     const localAgentInfo = this.localAgentInformationFormGroup();
     const contactNumberControl = localAgentInfo?.get(EMaterialsFormControls.contactNumber);
     if (contactNumberControl instanceof FormGroup) {
-      return contactNumberControl.get(EMaterialsFormControls.value)?.value;
+      const value = contactNumberControl.get(EMaterialsFormControls.value)?.value;
+      return value ? value['countryCode'] + value['phoneNumber'] : null;
     }
     return null;
   });
