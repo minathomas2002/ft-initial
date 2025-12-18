@@ -84,6 +84,7 @@ export class SubmissionConfirmationModalComponent {
   }
 
   onDialogClose(): void {
+    this.formService.resetForm()
     this.onCancel.emit();
   }
 }
