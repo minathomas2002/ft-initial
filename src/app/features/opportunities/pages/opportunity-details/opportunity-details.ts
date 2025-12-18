@@ -11,7 +11,7 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { EOpportunityAction, ERoutes, EViewMode } from 'src/app/shared/enums';
+import { EOpportunityAction, ERoutes, EViewMode, EOpportunityType } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { OpportunityActionsService } from '../../services/opportunity-actions/opportunity-actions-service';
 import { take } from 'rxjs';
@@ -20,6 +20,9 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { CreateEditOpportunityDialog } from '../../components/create-edit-opportunity-dialog/create-edit-opportunity-dialog';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
+import { IOpportunity } from 'src/app/shared/interfaces';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
 
 @Component({
   selector: 'app-opportunity-details',
@@ -34,7 +37,8 @@ import { ImageErrorDirective } from 'src/app/shared/directives/image-error.direc
     OpportunityActionMenuComponent,
     GeneralConfirmationDialogComponent,
     CreateEditOpportunityDialog,
-    ImageErrorDirective
+    ImageErrorDirective,
+    ProductLocalizationPlanWizard
   ],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
@@ -45,6 +49,7 @@ export class OpportunityDetails implements OnInit {
   route = inject(ActivatedRoute);
   opportunitiesStore = inject(OpportunitiesStore);
   permissionService = inject(PermissionService);
+  planStore = inject(PlanStore);
   authStore = inject(AuthStore);
   toast = inject(ToasterService);
   getOpportunityTypeConfig = getOpportunityTypeConfig;
@@ -56,7 +61,7 @@ export class OpportunityDetails implements OnInit {
   moveToDraftConfirmDialogVisible = signal<boolean>(false);
   publishConfirmDialogVisible = signal<boolean>(false);
   opportunityId = signal<string | null>(null);
-
+  productLocalizationPlanWizardVisibility = signal<boolean>(false);
   get EOpportunityAction() {
     return EOpportunityAction;
   }
@@ -93,11 +98,19 @@ export class OpportunityDetails implements OnInit {
 
   onApply() {
     if (this.authStore.isAuthenticated()) {
-      this.toast.success('Not implemented in this sprint');
+      this.opportunitiesStore.checkApplyOpportunity(this.opportunityId()!).subscribe((res) => {
+        if (res.body) {
+          this.applyOpportunity(this.opportunityId()!, this.opportunitiesStore.details()?.title ?? '');
+        } else {
+          this.toast.warn('Application is not allowed while an in-progress plan exists for the selected opportunity.');
+        }
+      });
+
     } else {
       this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
     }
   }
+
 
   onAction(action: EOpportunityAction) {
     // Handle actions (Edit, Delete, MoveToDraft, Publish)
@@ -164,5 +177,19 @@ export class OpportunityDetails implements OnInit {
           this.getOpportunityDetails();
         }
       });
+  }
+
+  applyOpportunity(opportunityId: string, opportunityTitle: string) {
+    this.planStore.setAvailableOpportunities({ id: opportunityId, name: opportunityTitle });
+    this.planStore.setAppliedOpportunity({
+      id: opportunityId,
+      title: opportunityTitle,
+      shortDescription: '',
+      opportunityType: this.opportunitiesStore.details()?.opportunityType!,
+      isApplied: false,
+      isOtherOpportunity: false,
+      icon: ''
+    });
+    this.productLocalizationPlanWizardVisibility.set(true);
   }
 }

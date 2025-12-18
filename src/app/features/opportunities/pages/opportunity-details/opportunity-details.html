@@ -253,3 +253,7 @@
   (confirmed)="publishOpportunity()"
   [isLoading]="adminOpportunitiesStore.isProcessing()"
 />
+
+@if(productLocalizationPlanWizardVisibility()){
+<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" />
+}
