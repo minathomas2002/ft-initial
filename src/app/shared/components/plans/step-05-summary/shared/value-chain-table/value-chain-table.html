@@ -1,0 +1,50 @@
+<div class="overflow-x-auto rounded-lg">
+  <p-table
+    [value]="tableData()"
+    [scrollable]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700">Expense Header</th>
+        <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700">In-house / Procured</th>
+        <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700">Cost %</th>
+        @for (year of years; track year) {
+        <th class="p-3 !border !border-gray-200 text-center text-sm font-semibold !bg-gray-50 !text-gray-700">Year {{ year }}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-rowData
+    >
+      <tr>
+        <td class="p-3 !border !border-gray-200">
+          <app-summary-table-cell
+            [value]="rowData.expenseHeader"
+            [hasError]="rowData.expenseHeaderHasError"
+          />
+        </td>
+        <td class="p-3 !border !border-gray-200">
+          <app-summary-table-cell
+            [value]="rowData.inHouseOrProcured"
+            [hasError]="rowData.inHouseOrProcuredHasError"
+          />
+        </td>
+        <td class="p-3 !border !border-gray-200">
+          <app-summary-table-cell
+            [value]="rowData.costPercentage"
+            [hasError]="rowData.costPercentageHasError"
+          />
+        </td>
+        @for (year of years; track year) {
+        <td class="p-3 !border !border-gray-200 text-center">
+          <app-summary-table-cell
+            [value]="rowData['year' + year]"
+            [hasError]="rowData['year' + year + 'HasError']"
+          />
+        </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

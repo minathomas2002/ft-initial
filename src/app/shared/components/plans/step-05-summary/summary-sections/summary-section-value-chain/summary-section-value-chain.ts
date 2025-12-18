@@ -1,13 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
 import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { CommonModule } from '@angular/common';
+import { ValueChainTable } from '../../shared/value-chain-table/value-chain-table';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ValueChainSummaryComponent } from '../../../step-03-valueChain/value-chain-summary/value-chain-summary.component';
 
 @Component({
   selector: 'app-summary-section-value-chain',
-  imports: [SummarySectionHeader, CommonModule],
+  imports: [SummarySectionHeader, CommonModule, ValueChainTable, ValueChainSummaryComponent],
   templateUrl: './summary-section-value-chain.html',
   styleUrl: './summary-section-value-chain.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,6 +20,9 @@ export class SummarySectionValueChain {
   validationErrors = input<IStepValidationErrors | undefined>();
   hasErrors = input<boolean>(false);
   onEdit = output<void>();
+  private readonly planStore = inject(PlanStore);
+  inHouseOrProcuredOptions = this.planStore.inHouseProcuredOptions;
+  localizationStatusOptions = this.planStore.localizationStatusOptions;
 
   // Expose enum to template
   readonly EMaterialsFormControls = EMaterialsFormControls;
@@ -74,11 +80,13 @@ export class SummarySectionValueChain {
     return String(value);
   }
 
-  hasFieldError(fieldPath: string): boolean {
-    if (!this.validationErrors()) {
-      return false;
+  hasFieldError(formGroup: FormGroup, controlName: string): boolean {
+    const control = formGroup.get(controlName);
+    if (control instanceof FormGroup) {
+      const valueControl = control.get(EMaterialsFormControls.value);
+      return valueControl ? (valueControl.invalid && valueControl.dirty) : (control.invalid && control.dirty);
     }
-    return this.validationErrors()!.fieldErrors.has(fieldPath);
+    return (control?.invalid && control?.dirty) ?? false;
   }
 
   onEditClick(): void {
@@ -91,4 +99,94 @@ export class SummarySectionValueChain {
   manufacturingItems = computed(() => this.getSectionItems(this.manufacturingFormGroup()));
   assemblyTestingItems = computed(() => this.getSectionItems(this.assemblyTestingFormGroup()));
   afterSalesItems = computed(() => this.getSectionItems(this.afterSalesFormGroup()));
+
+  // Years array for columns
+  readonly years = [1, 2, 3, 4, 5, 6, 7];
+
+  // Helper to get year value from item
+  getYearValue(item: FormGroup, year: number): any {
+    const yearControlName = `year${year}`;
+    // Map year number to enum value
+    const yearControlMap: Record<number, string> = {
+      1: EMaterialsFormControls.year1,
+      2: EMaterialsFormControls.year2,
+      3: EMaterialsFormControls.year3,
+      4: EMaterialsFormControls.year4,
+      5: EMaterialsFormControls.year5,
+      6: EMaterialsFormControls.year6,
+      7: EMaterialsFormControls.year7,
+    };
+    return this.getLocalizationStatusName(this.getValue(item, yearControlMap[year]));
+  }
+
+  getInHouseOrProcuredName(value: string): string {
+    return this.inHouseOrProcuredOptions().find(option => option.id === value)?.name ?? '-';
+  }
+  getLocalizationStatusName(value: string): string {
+    return this.localizationStatusOptions().find(option => option.id === value)?.name ?? '-';
+  }
+
+  getYearHasError(item: FormGroup, year: number): any {
+    const yearControlName = `year${year}`;
+    // Map year number to enum value
+    const yearControlMap: Record<number, string> = {
+      1: EMaterialsFormControls.year1,
+      2: EMaterialsFormControls.year2,
+      3: EMaterialsFormControls.year3,
+      4: EMaterialsFormControls.year4,
+      5: EMaterialsFormControls.year5,
+      6: EMaterialsFormControls.year6,
+      7: EMaterialsFormControls.year7,
+    };
+    return this.hasFieldError(item, yearControlMap[year]);
+  }
+
+  // Helper to create table data structure
+  getTableData(items: FormGroup[], sectionName: string): any[] {
+    return items.map((item, index) => {
+      const row: any = {
+        expenseHeader: this.getValue(item, EMaterialsFormControls.expenseHeader),
+        inHouseOrProcured: this.getInHouseOrProcuredName(this.getValue(item, EMaterialsFormControls.inHouseOrProcured)),
+        costPercentage: this.getValue(item, EMaterialsFormControls.costPercentage),
+        expenseHeaderHasError: this.hasFieldError(item, EMaterialsFormControls.expenseHeader),
+        inHouseOrProcuredHasError: this.hasFieldError(item, EMaterialsFormControls.inHouseOrProcured),
+        costPercentageHasError: this.hasFieldError(item, EMaterialsFormControls.costPercentage),
+      };
+
+      // Add all 7 years with error checking
+      this.years.forEach(year => {
+        const yearControlMap: Record<number, string> = {
+          1: EMaterialsFormControls.year1,
+          2: EMaterialsFormControls.year2,
+          3: EMaterialsFormControls.year3,
+          4: EMaterialsFormControls.year4,
+          5: EMaterialsFormControls.year5,
+          6: EMaterialsFormControls.year6,
+          7: EMaterialsFormControls.year7,
+        };
+        row[`year${year}`] = this.getYearValue(item, year);
+        row[`year${year}HasError`] = this.getYearHasError(item, year);
+      });
+
+      return row;
+    });
+  }
+
+  // Computed table data for each section
+  designEngineeringTableData = computed(() =>
+    this.getTableData(this.designEngineeringItems(), 'designEngineeringFormGroup')
+  );
+  sourcingTableData = computed(() =>
+    this.getTableData(this.sourcingItems(), 'sourcingFormGroup')
+  );
+  manufacturingTableData = computed(() =>
+    this.getTableData(this.manufacturingItems(), 'manufacturingFormGroup')
+  );
+  assemblyTestingTableData = computed(() =>
+    this.getTableData(this.assemblyTestingItems(), 'assemblyTestingFormGroup')
+  );
+  afterSalesTableData = computed(() =>
+    this.getTableData(this.afterSalesItems(), 'afterSalesFormGroup')
+  );
+
 }

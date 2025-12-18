@@ -64,10 +64,22 @@ export class SummarySectionSaudization {
   }
 
   hasFieldError(fieldPath: string): boolean {
-    if (!this.validationErrors()) {
-      return false;
+    const parts = fieldPath.split('.');
+    let control: any = this.formGroup();
+
+    for (const part of parts) {
+      if (control instanceof FormGroup) {
+        control = control.get(part);
+      } else {
+        return false;
+      }
     }
-    return this.validationErrors()!.fieldErrors.has(fieldPath);
+
+    if (control && control.invalid && control.dirty) {
+      return true;
+    }
+
+    return false;
   }
 
   onEditClick(): void {
