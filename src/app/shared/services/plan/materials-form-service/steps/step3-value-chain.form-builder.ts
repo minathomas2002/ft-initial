@@ -40,7 +40,7 @@ export class Step3ValueChainFormBuilder {
     yearControls.forEach(yearControl => {
       itemGroup[yearControl] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null],
+        [EMaterialsFormControls.value]: [null, Validators.required],
       });
     });
 
