@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -6,7 +6,7 @@ import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
@@ -38,7 +38,6 @@ import { BaseLabelComponent } from '../../base-components/base-label/base-label.
 })
 export class Step02ProductPlantOverviewForm {
   private readonly productPlanFormService = inject(ProductPlanFormService);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly planStore = inject(PlanStore)
 
   // Expose enum to template
@@ -64,61 +63,87 @@ export class Step02ProductPlantOverviewForm {
     return this.productPlanFormService.productManufacturingExperienceFormGroup.controls;
   }
 
-  // Conditional visibility signals
-  showSECFields = signal(false);
-  showLocalSuppliersFields = signal(false);
-  showTargetedSuppliersFields = signal(false);
-  showOthersDescription = signal(false);
+  // Form control signals
+  private provideToSECControl = this.getFormControl(
+    this.productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC]
+  );
+  private provideToSECSignal = toSignal(
+    this.provideToSECControl.valueChanges,
+    {
+      initialValue: this.provideToSECControl.value
+    }
+  );
 
-  ngOnInit(): void {
-    this.setupConditionalValidations();
-  }
+  private provideToLocalSuppliersControl = this.getFormControl(
+    this.productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers]
+  );
+  private provideToLocalSuppliersSignal = toSignal(
+    this.provideToLocalSuppliersControl.valueChanges,
+    {
+      initialValue: this.provideToLocalSuppliersControl.value
+    }
+  );
 
-  setupConditionalValidations(): void {
-    // Listen to provideToSEC changes
-    const provideToSECControl = this.getFormControl(
-      this.productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC]
-    );
-    provideToSECControl.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: boolean | null) => {
-        this.showSECFields.set(value === true);
-        this.productPlanFormService.toggleSECFieldsValidation(value === true);
-      });
+  private targetedCustomerControl = this.getValueControl(
+    this.targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer]
+  );
+  private targetedCustomerSignal = toSignal(
+    this.targetedCustomerControl.valueChanges,
+    {
+      initialValue: this.targetedCustomerControl.value
+    }
+  );
 
-    // Listen to provideToLocalSuppliers changes
-    const provideToLocalSuppliersControl = this.getFormControl(
-      this.productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers]
-    );
-    provideToLocalSuppliersControl.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: boolean | null) => {
-        this.showLocalSuppliersFields.set(value === true);
-        this.productPlanFormService.toggleLocalSuppliersFieldsValidation(value === true);
-      });
+  private othersPercentageControl = this.getValueControl(
+    this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage]
+  );
+  private othersPercentageSignal = toSignal(
+    this.othersPercentageControl.valueChanges,
+    {
+      initialValue: this.othersPercentageControl.value
+    }
+  );
 
-    // Listen to targetedCustomer changes
-    const targetedCustomerControl = this.getValueControl(
-      this.targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer]
-    );
-    targetedCustomerControl.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: string[] | null) => {
-        const hasLocalSuppliers = value?.includes(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString()) || false;
-        this.showTargetedSuppliersFields.set(hasLocalSuppliers);
-        this.productPlanFormService.toggleTargetedSuppliersFieldsValidation(value || []);
-      });
+  // Conditional visibility computed signals
+  showSECFields = computed(() => {
+    return this.provideToSECSignal() === true;
+  });
 
-    // Listen to othersPercentage changes
-    const othersPercentageControl = this.getValueControl(
-      this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage]
-    );
-    othersPercentageControl.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: number | null) => {
-        this.showOthersDescription.set(value !== null && value > 0);
-        this.productPlanFormService.toggleOthersDescriptionValidation(value);
-      });
+  showLocalSuppliersFields = computed(() => {
+    return this.provideToLocalSuppliersSignal() === true;
+  });
+
+  showTargetedSuppliersFields = computed(() => {
+    const value = this.targetedCustomerSignal();
+    return value?.includes(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString()) || false;
+  });
+
+  showOthersDescription = computed(() => {
+    const value = this.othersPercentageSignal();
+    return value !== null && value > 0;
+  });
+
+  constructor() {
+    // Effect to handle validation toggles
+    effect(() => {
+      const provideToSECValue = this.provideToSECSignal();
+      this.productPlanFormService.toggleSECFieldsValidation(provideToSECValue === true);
+    });
+
+    effect(() => {
+      const provideToLocalSuppliersValue = this.provideToLocalSuppliersSignal();
+      this.productPlanFormService.toggleLocalSuppliersFieldsValidation(provideToLocalSuppliersValue === true);
+    });
+
+    effect(() => {
+      const targetedCustomerValue = this.targetedCustomerSignal();
+      this.productPlanFormService.toggleTargetedSuppliersFieldsValidation(targetedCustomerValue || []);
+    });
+
+    effect(() => {
+      const othersPercentageValue = this.othersPercentageSignal();
+      this.productPlanFormService.toggleOthersDescriptionValidation(othersPercentageValue);
+    });
   }
 
   // Helper methods - delegate to service

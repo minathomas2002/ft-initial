@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,7 +11,7 @@ import { BaseErrorComponent } from '../../base-components/base-error/base-error.
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
@@ -44,8 +44,8 @@ export class Step01OverviewCompanyInformationForm {
   private readonly planStore = inject(PlanStore);
   private readonly destroyRef = inject(DestroyRef);
 
+
   showCheckbox = signal(false);
-  showLocalAgentInformation = signal(false);
 
   formGroup = this.productPlanFormService.overviewCompanyInformation;
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes();
@@ -57,8 +57,24 @@ export class Step01OverviewCompanyInformationForm {
   locationInformationFormGroupControls = this.productPlanFormService.locationInformationFormGroup.controls;
   localAgentInformationFormGroupControls = this.productPlanFormService.localAgentInformationFormGroup.controls;
 
-  ngOnInit(): void {
-    this.listenToDoYouCurrentlyHaveLocalAgentInKSAValueChanges();
+  private doYouCurrentlyHaveLocalAgentInKSAControl = this.locationInformationFormGroupControls[
+    EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA
+  ]
+  private doYouHaveLocalAgentInKSASignal = toSignal(
+    this.doYouCurrentlyHaveLocalAgentInKSAControl.valueChanges,
+    {
+      initialValue: this.doYouCurrentlyHaveLocalAgentInKSAControl.value
+    }
+  );
+  showLocalAgentInformation = computed(() => {
+    return this.doYouHaveLocalAgentInKSASignal() === true;
+  });
+
+  constructor() {
+    effect(() => {
+      const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
+      this.productPlanFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+    });
   }
 
   getHasCommentControl(control: AbstractControl): FormControl<boolean> {
@@ -77,24 +93,6 @@ export class Step01OverviewCompanyInformationForm {
     return control as unknown as FormControl<any>;
   }
 
-  listenToDoYouCurrentlyHaveLocalAgentInKSAValueChanges(): void {
-    this.locationInformationFormGroupControls[EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA].valueChanges.
-      pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: boolean | null) => {
-        if (value) {
-          this.showLocalAgentInformation.set(true);
-          this.productPlanFormService.toggleLocalAgentInformValidation(true);
-        } else {
-          this.showLocalAgentInformation.set(false);
-          this.productPlanFormService.toggleLocalAgentInformValidation(false);
-        }
-      });
-  }
-
-  checkLocalAgentVisibility(): void {
-    const doYouCurrentlyHaveLocalAgentInKSA = this.locationInformationFormGroupControls[EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA].value;
-    this.showLocalAgentInformation.set(doYouCurrentlyHaveLocalAgentInKSA);
-  }
 
   save(): void {
     console.log(this.formGroup.value);
