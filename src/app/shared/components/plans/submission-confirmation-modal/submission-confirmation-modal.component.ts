@@ -7,6 +7,8 @@ import { SubmissionConfirmationModalFormService } from './submission-confirmatio
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { TextareaModule } from 'primeng/textarea';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
+import { PhoneInputComponent } from '../../form/phone-input/phone-input.component';
+import { IPhoneValue } from '../../../interfaces';
 
 @Component({
   selector: 'app-submission-confirmation-modal',
@@ -18,7 +20,8 @@ import { BaseErrorMessages } from '../../base-components/base-error-messages/bas
     FormsModule,
     ReactiveFormsModule,
     SignaturePadComponent,
-    BaseErrorMessages
+    BaseErrorMessages,
+    PhoneInputComponent
   ],
   providers: [SubmissionConfirmationModalFormService],
   templateUrl: './submission-confirmation-modal.component.html',
@@ -40,6 +43,7 @@ export class SubmissionConfirmationModalComponent {
   formService = inject(SubmissionConfirmationModalFormService);
 
   isSubmitting = signal(false);
+  phoneInputValue = signal<IPhoneValue | null>(null);
 
   isSubmitDisabled = computed(() => {
     return !this.formService.isFormValid() || this.isSubmitting();
@@ -52,6 +56,21 @@ export class SubmissionConfirmationModalComponent {
       this.formService.signatureControl.markAsDirty();
     } else {
       this.formService.signatureControl.markAsDirty();
+    }
+  }
+
+  onPhoneNumberChange(phoneValue: IPhoneValue | null): void {
+    this.phoneInputValue.set(phoneValue);
+    if (phoneValue && phoneValue.countryCode && phoneValue.phoneNumber) {
+      // Combine country code and phone number as a string
+      const combinedPhone = `${phoneValue.countryCode}${phoneValue.phoneNumber}`;
+      this.formService.contactNumberControl.setValue(combinedPhone);
+      this.formService.contactNumberControl.markAsTouched();
+      this.formService.contactNumberControl.markAsDirty();
+    } else {
+      // Clear the control if phone value is null
+      this.formService.contactNumberControl.setValue('');
+      this.formService.contactNumberControl.markAsDirty();
     }
   }
 
@@ -84,7 +103,8 @@ export class SubmissionConfirmationModalComponent {
   }
 
   onDialogClose(): void {
-    this.formService.resetForm()
+    this.formService.resetForm();
+    this.phoneInputValue.set(null);
     this.onCancel.emit();
   }
 }

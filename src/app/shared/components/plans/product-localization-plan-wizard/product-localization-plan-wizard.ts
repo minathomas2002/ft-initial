@@ -109,7 +109,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   summaryComponent = viewChild<Step05Summary>('summaryComponent');
 
   // Submission confirmation modal
-  showSubmissionModal = signal(false);
+  showSubmissionModal = signal(true);
   existingSignature = signal<string | null>(null);
 
   // Computed signal for view mode

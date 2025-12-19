@@ -2,6 +2,7 @@
   [(visible)]="visible"
   [showCloseButton]="true"
   [showConfirmButton]="true"
+  icon="icon-check-circle"
   [isConfirmationDisabled]="!formService.isFormValid()"
   [contentStyleClass]="'p-6'"
   (onClose)="onDialogClose()"
@@ -71,11 +72,10 @@
           >
             Contact number <span class="required">*</span>
           </label>
-          <input
+          <app-phone-input
             id="contactNumber"
-            type="tel"
-            pInputText
-            [formControl]="formService.contactNumberControl"
+            [ngModel]="phoneInputValue()"
+            (ngModelChange)="onPhoneNumberChange($event)"
             placeholder="Enter Contact number"
             class="w-full"
           />
