@@ -39,35 +39,50 @@ export class FormArrayInput {
 
   @ViewChild('tableWrapper', { read: ElementRef }) tableWrapper?: ElementRef<HTMLDivElement>;
 
-  // Signal to track FormArray changes for reactivity
-  private updateTrigger = signal(0);
+  // Signal to track FormArray structure changes (length changes) for reactivity
+  private structureUpdateTrigger = signal(0);
+  // Track the current length to detect structure changes
+  private currentLength = 0;
+  // Stable array reference - only recreated when structure changes
+  private stableRowsArray: any[] = [];
 
   constructor() {
-    // Track FormArray changes to trigger computed updates
+    // Initialize stable rows array when formArray input changes
     effect(() => {
       const formArray = this.formArray();
       if (formArray) {
-        // Subscribe to valueChanges to detect mutations
-        const subscription = formArray.valueChanges.subscribe(() => {
-          this.updateTrigger.update(v => v + 1);
-        });
-        // Initial trigger
-        this.updateTrigger.update(v => v + 1);
-        // Cleanup subscription when effect re-runs or component is destroyed
-        return () => subscription.unsubscribe();
+        // Initial setup - create stable array reference
+        this.currentLength = formArray.length;
+        this.stableRowsArray = formArray.value || [];
+        this.structureUpdateTrigger.update(v => v + 1);
       }
-      return undefined;
     });
   }
 
-  // Get the array value from FormArray
-  // Reading updateTrigger signal makes the computed reactive to FormArray mutations
+  // Helper method to update stable rows array when structure changes
+  private updateStableRowsArray() {
+    const formArray = this.formArray();
+    if (!formArray) return;
+    const newLength = formArray.length;
+    if (newLength !== this.currentLength) {
+      this.currentLength = newLength;
+      // Recreate array reference when structure changes
+      this.stableRowsArray = formArray.value || [];
+      this.structureUpdateTrigger.update(v => v + 1);
+    }
+  }
+
+  // Get array value from FormArray
+  // Returns a stable array reference that only changes when structure (length) changes
+  // This prevents PrimeNG table from re-rendering rows when form control values change
   rows = computed(() => {
     const formArray = this.formArray();
     if (!formArray) return [];
-    // Read the signal to make computed reactive
-    this.updateTrigger();
-    return formArray.value || [];
+    // Read the signal to make computed reactive to structure changes
+    this.structureUpdateTrigger();
+    // Return stable array reference - only changes when structure changes
+    // Note: The objects inside will have updated values, but the array reference stays stable
+    return this.stableRowsArray;
   });
 
   keys = computed(() => {
@@ -100,8 +115,8 @@ export class FormArrayInput {
       const newItem = this.createNewItem()();
       formArray.push(newItem);
     }
-    // Trigger update to refresh computed signal
-    this.updateTrigger.update(v => v + 1);
+    // Update stable rows array when structure changes
+    this.updateStableRowsArray();
   }
 
   onAddHandler() {
@@ -112,8 +127,8 @@ export class FormArrayInput {
 
     const newItem = this.createNewItem()();
     formArray.push(newItem);
-    // Trigger update to refresh computed signal
-    this.updateTrigger.update(v => v + 1);
+    // Update stable rows array when structure changes
+    this.updateStableRowsArray();
 
     // Focus the first input in the newly added row after DOM update
     this.focusFirstInputInLastRow();
