@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, contentChildren, inject, input, model, output, viewChild, effect, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, contentChildren, inject, input, model, output, viewChild, effect, signal, ChangeDetectionStrategy, ElementRef } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Dialog, DialogPassThrough } from 'primeng/dialog';
 import { StepperModule } from 'primeng/stepper';
@@ -61,8 +61,11 @@ export class BaseWizardDialog {
 
   stepContents = contentChildren<StepContentDirective>(StepContentDirective);
 
-  // Reference to the ScrollPanel component
-  scrollPanel = viewChild.required<ScrollPanel>('scrollPanel');
+  // Reference to the ScrollPanel component (optional since it may not exist)
+  scrollPanel = viewChild<ScrollPanel>('scrollPanel');
+
+  // Reference to the scrollable content div (fallback when ScrollPanel is not used)
+  scrollableContent = viewChild<ElementRef<HTMLDivElement>>('scrollableContent');
 
   constructor() {
 
@@ -82,38 +85,46 @@ export class BaseWizardDialog {
   }
 
   /**
-   * Resets the scroll position of the ScrollPanel to the top
+   * Resets the scroll position of the ScrollPanel or scrollable content area to the top
    */
   private resetScrollPosition(): void {
-    const panel = this.scrollPanel();
-    if (!panel) return;
-
-    // Try multiple approaches to find and reset the scroll container
     try {
-      // Approach 1: Access ScrollPanel's contentViewChild
-      const contentElement = (panel as any).contentViewChild?.nativeElement;
-      if (contentElement) {
-        // Find the scrollable content div (has class 'p-scrollpanel-content')
-        const scrollableContent = contentElement.querySelector('.p-scrollpanel-content');
-        if (scrollableContent) {
-          scrollableContent.scrollTop = 0;
-          return;
+      const panel = this.scrollPanel();
+
+      // If ScrollPanel component exists, use it
+      if (panel) {
+        // Approach 1: Access ScrollPanel's contentViewChild
+        const contentElement = (panel as any).contentViewChild?.nativeElement;
+        if (contentElement) {
+          // Find the scrollable content div (has class 'p-scrollpanel-content')
+          const scrollableContent = contentElement.querySelector('.p-scrollpanel-content');
+          if (scrollableContent) {
+            scrollableContent.scrollTop = 0;
+            return;
+          }
+          // Fallback: try scrolling the content element itself
+          if (contentElement.scrollTop !== undefined) {
+            contentElement.scrollTop = 0;
+            return;
+          }
         }
-        // Fallback: try scrolling the content element itself
-        if (contentElement.scrollTop !== undefined) {
-          contentElement.scrollTop = 0;
-          return;
+
+        // Approach 2: Query the DOM directly for ScrollPanel content
+        const panelElement = (panel as any).el?.nativeElement;
+        if (panelElement) {
+          const scrollableContent = panelElement.querySelector('.p-scrollpanel-content');
+          if (scrollableContent) {
+            scrollableContent.scrollTop = 0;
+            return;
+          }
         }
       }
 
-      // Approach 2: Query the DOM directly for ScrollPanel content
-      const panelElement = (panel as any).el?.nativeElement;
-      if (panelElement) {
-        const scrollableContent = panelElement.querySelector('.p-scrollpanel-content');
-        if (scrollableContent) {
-          scrollableContent.scrollTop = 0;
-          return;
-        }
+      // Fallback: Use the scrollable content div reference (when ScrollPanel is not used)
+      const scrollableArea = this.scrollableContent();
+      if (scrollableArea?.nativeElement) {
+        scrollableArea.nativeElement.scrollTop = 0;
+        return;
       }
     } catch (error) {
       console.warn('Failed to reset scroll position:', error);

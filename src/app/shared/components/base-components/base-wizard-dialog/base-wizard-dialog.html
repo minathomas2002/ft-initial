@@ -71,7 +71,10 @@
         <h3 class="text-2xl font-semibold pt-5">{{wizardTitle()}}</h3>
         <ng-content select="status"></ng-content>
       </div>
-      <div class="flex-1 py-6 overflow-auto max-w-full">
+      <div
+        class="flex-1 py-6 overflow-auto max-w-full"
+        #scrollableContent
+      >
         @for (step of steps(); track step.title; let i = $index) {
         @if (activeStep() === i + 1) {
         @for (content of stepContents(); track content.stepNumber) {
