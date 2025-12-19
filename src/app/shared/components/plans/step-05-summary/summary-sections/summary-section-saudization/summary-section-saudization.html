@@ -6,70 +6,51 @@
   <!-- Saudization Matrix Table -->
   <div class="flex flex-col gap-4">
     <div class="overflow-x-auto rounded-lg">
-      <table class="w-full border-collapse border border-gray-200">
-        <thead>
-          <tr class="bg-gray-50">
-            <th class="border border-gray-200 p-3 text-left text-sm font-semibold"></th>
+      <p-table
+        [value]="tableRows()"
+        [scrollable]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap rounded-tl-xl"></th>
             @for (year of years; track year) {
-            <th class="border border-gray-200 p-3 text-center text-sm font-semibold">Year {{ year }}</th>
+            <th
+              class="p-3 !border !border-gray-200 text-center text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap"
+              [class.rounded-tr-xl]="year === years[years.length - 1]"
+            >Year {{ year }}</th>
             }
           </tr>
-        </thead>
-        <tbody>
-          <!-- Annual Headcount -->
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-rowData
+        >
           <tr>
-            <td class="border border-gray-200 p-3 text-sm font-medium">Annual Headcount (#)</td>
+            <td
+              class="p-3 !border !border-gray-200 text-sm font-medium"
+              [class.rounded-bl-xl]="rowData.controlName === EMaterialsFormControls.saudiCompensationPercentage"
+            >
+              <div class="flex flex-col">
+                <span>{{ rowData.label }}</span>
+                @if (rowData.subtitle) {
+                <span class="text-xs text-gray-500">{{ rowData.subtitle }}</span>
+                }
+              </div>
+            </td>
             @for (year of years; track year) {
-            <td class="border border-gray-200 p-3 text-center">
+            <td
+              class="p-3 !border !border-gray-200 text-center"
+              [class.rounded-br-xl]="year === years[years.length - 1] && rowData.controlName === EMaterialsFormControls.saudiCompensationPercentage"
+            >
               <app-summary-table-cell
-                [value]="formatValue(getRowValueForYear(year, EMaterialsFormControls.annualHeadcount))"
-                [hasError]="getRowHasErrorForYear(year, EMaterialsFormControls.annualHeadcount)"
+                [value]="formatValue(rowData['year' + year])"
+                [hasError]="rowData['year' + year + 'HasError']"
               />
             </td>
             }
           </tr>
-          <!-- Saudization % -->
-          <tr>
-            <td class="border border-gray-200 p-3 text-sm font-medium">
-              Saudization % (No. of Saudi employees / Total employees)
-            </td>
-            @for (year of years; track year) {
-            <td class="border border-gray-200 p-3 text-center">
-              <app-summary-table-cell
-                [value]="formatValue(getRowValueForYear(year, EMaterialsFormControls.saudizationPercentage))"
-                [hasError]="getRowHasErrorForYear(year, EMaterialsFormControls.saudizationPercentage)"
-              />
-            </td>
-            }
-          </tr>
-          <!-- Annual Total Compensation -->
-          <tr>
-            <td class="border border-gray-200 p-3 text-sm font-medium">Annual Total Compensation (SAR)</td>
-            @for (year of years; track year) {
-            <td class="border border-gray-200 p-3 text-center">
-              <app-summary-table-cell
-                [value]="formatValue(getRowValueForYear(year, EMaterialsFormControls.annualTotalCompensation))"
-                [hasError]="getRowHasErrorForYear(year, EMaterialsFormControls.annualTotalCompensation)"
-              />
-            </td>
-            }
-          </tr>
-          <!-- Saudi Compensation % -->
-          <tr>
-            <td class="border border-gray-200 p-3 text-sm font-medium">
-              Saudi Compensation % (Saudi compensation / Total compensation)
-            </td>
-            @for (year of years; track year) {
-            <td class="border border-gray-200 p-3 text-center">
-              <app-summary-table-cell
-                [value]="formatValue(getRowValueForYear(year, EMaterialsFormControls.saudiCompensationPercentage))"
-                [hasError]="getRowHasErrorForYear(year, EMaterialsFormControls.saudiCompensationPercentage)"
-              />
-            </td>
-            }
-          </tr>
-        </tbody>
-      </table>
+        </ng-template>
+      </p-table>
     </div>
   </div>
 
