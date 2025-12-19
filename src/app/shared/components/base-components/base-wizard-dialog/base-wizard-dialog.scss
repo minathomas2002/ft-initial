@@ -1,4 +1,7 @@
 :host::ng-deep {
+  .p-dialog-header {
+    display: none
+  }
   .p-step-active .p-step-number::before{
     content: '';
     position: absolute;

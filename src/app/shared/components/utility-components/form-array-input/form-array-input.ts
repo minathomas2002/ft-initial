@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, TemplateRef, ContentChild, computed, signal, effect, ViewChild, ElementRef } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
@@ -9,6 +10,7 @@ import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
   selector: 'app-form-array-input',
   imports: [
     ButtonModule,
+    TableModule,
     NgTemplateOutlet,
     TranslatePipe,
     CamelCaseToWordPipe,
@@ -20,9 +22,10 @@ import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
 export class FormArrayInput {
   // Accept FormArray instead of FieldTree
   // Using input instead of model since FormArray is mutable and changes are reflected automatically
-  ft = input.required<FormArray>();
+  formArray = input.required<FormArray>({ alias: 'ft' });
   addButtonMessage = input<string>('Add');
   maxItems = input<number>(10);
+  scrollHeight = input<string>('400px');
   // Function to create a new empty item when adding (returns FormGroup)
   createNewItem = input<() => FormGroup>(() => {
     throw new Error('createNewItem must be provided');
@@ -34,7 +37,7 @@ export class FormArrayInput {
     itemValue: any;
   }>;
 
-  @ViewChild('tableBody', { read: ElementRef }) tableBody?: ElementRef<HTMLTableSectionElement>;
+  @ViewChild('tableWrapper', { read: ElementRef }) tableWrapper?: ElementRef<HTMLDivElement>;
 
   // Signal to track FormArray changes for reactivity
   private updateTrigger = signal(0);
@@ -42,7 +45,7 @@ export class FormArrayInput {
   constructor() {
     // Track FormArray changes to trigger computed updates
     effect(() => {
-      const formArray = this.ft();
+      const formArray = this.formArray();
       if (formArray) {
         // Subscribe to valueChanges to detect mutations
         const subscription = formArray.valueChanges.subscribe(() => {
@@ -59,8 +62,8 @@ export class FormArrayInput {
 
   // Get the array value from FormArray
   // Reading updateTrigger signal makes the computed reactive to FormArray mutations
-  objects = computed(() => {
-    const formArray = this.ft();
+  rows = computed(() => {
+    const formArray = this.formArray();
     if (!formArray) return [];
     // Read the signal to make computed reactive
     this.updateTrigger();
@@ -68,7 +71,7 @@ export class FormArrayInput {
   });
 
   keys = computed(() => {
-    const objectsArray = this.objects();
+    const objectsArray = this.rows();
     if (!objectsArray || objectsArray.length === 0) return [];
 
     const firstObject = objectsArray[0];
@@ -79,13 +82,13 @@ export class FormArrayInput {
 
   // Get FormControl/FormGroup for a specific index
   getItemControl(index: number): AbstractControl | undefined {
-    const formArray = this.ft();
+    const formArray = this.formArray();
     if (!formArray) return undefined;
     return formArray.at(index);
   }
 
   onDeleteHandler(index: number) {
-    const formArray = this.ft();
+    const formArray = this.formArray();
     if (!formArray) return;
 
     const currentLength = formArray.length;
@@ -102,7 +105,7 @@ export class FormArrayInput {
   }
 
   onAddHandler() {
-    const formArray = this.ft();
+    const formArray = this.formArray();
     if (!formArray) return;
 
     if (formArray.length >= this.maxItems()) return;
@@ -120,9 +123,13 @@ export class FormArrayInput {
     // Use setTimeout to wait for Angular's change detection to complete
     // This ensures the DOM is updated before trying to focus
     setTimeout(() => {
-      if (!this.tableBody?.nativeElement) return;
+      if (!this.tableWrapper?.nativeElement) return;
 
-      const rows = this.tableBody.nativeElement.querySelectorAll('tr');
+      // Query the table body within the p-table component
+      const tableElement = this.tableWrapper.nativeElement.querySelector('.p-datatable-tbody');
+      if (!tableElement) return;
+
+      const rows = tableElement.querySelectorAll('tr');
       if (rows.length === 0) return;
 
       // Get the last row (newly added)

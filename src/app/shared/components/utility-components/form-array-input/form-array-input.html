@@ -1,53 +1,66 @@
-<div class="flex flex-col rounded-md overflow-x-auto max-w-[1110px]">
-  <table class="w-full border-collapse">
-    <thead>
+<div
+  class="rounded-xl"
+  #tableWrapper
+>
+  <p-table
+    [value]="rows()"
+    [scrollable]="true"
+    [scrollHeight]="scrollHeight()"
+    class="rounded-xl"
+  >
+    <ng-template pTemplate="header">
       <tr class="bg-gray-50">
         @for (key of keys(); track key) {
-        <th class="p-3 border border-gray-200 text-left font-semibold whitespace-nowrap min-w-[115px]">
+        <th
+          class="p-3 !border !border-gray-200 !text-left !font-semibold !whitespace-nowrap !bg-gray-50 !text-gray-700"
+          [class.rounded-tl-xl]="$index === 0"
+        >
           <span>{{ key === 'keyActivity' ? ('opportunity.wizard.keyActivity' | translate) : key | camelCaseToWord }}</span>
         </th>
         }
-        <th class="p-3 border border-gray-200 w-[48px]"></th>
+        <th class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700 rounded-tr-xl"></th>
       </tr>
-    </thead>
-    <tbody #tableBody>
-      @for (object of objects(); track $index; let index = $index) {
-      <tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-object
+      let-rowIndex="rowIndex"
+    >
+      <tr #tableRow>
         @if (itemTemplate) {
         <ng-container *ngTemplateOutlet="itemTemplate; context: { 
-          $implicit: getItemControl(index)!, 
-          index: index,
+          $implicit: getItemControl(rowIndex)!, 
+          index: rowIndex,
           itemValue: object
         }"></ng-container>
-        <td class="p-3 border border-gray-200 text-center">
-          @if(index > 0 || objects().length > 1){
+        <td class="!p-3 !border !border-gray-200 !text-center">
+          @if(rowIndex > 0 || rows().length > 1){
           <p-button
             severity="danger"
             [icon]="'icon-trash-2'"
             text
-            (onClick)="onDeleteHandler(index)"
+            (onClick)="onDeleteHandler(rowIndex)"
           />
           }
         </td>
         }
       </tr>
-      }
-    </tbody>
-    <tfoot>
+    </ng-template>
+    <ng-template pTemplate="footer">
       <tr>
         <td
           [attr.colspan]="keys().length + 1"
-          class="p-3 border border-gray-200"
+          class="!p-3 !border !border-gray-200 !rounded-br-xl !rounded-bl-xl"
         >
           <p-button
             text
             [icon]="'icon-plus'"
             [label]="addButtonMessage()"
             (onClick)="onAddHandler()"
-            [disabled]="objects().length >= maxItems()"
+            [disabled]="rows().length >= maxItems()"
           />
         </td>
       </tr>
-    </tfoot>
-  </table>
+    </ng-template>
+  </p-table>
 </div>

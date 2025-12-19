@@ -1,0 +1,5 @@
+:host::ng-deep {
+  .p-datatable-tbody > tr > td {
+    border: 1px solid var(--p-gray-200) !important;
+  }
+}
