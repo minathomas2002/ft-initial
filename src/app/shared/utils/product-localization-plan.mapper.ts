@@ -817,13 +817,13 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
       appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].ExpenseHeader`, row.expenseHeader);
       appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].InHouseOrProcured`, row.inHouseOrProcured);
       appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].CostPercent`, row.costPercent);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year1`, row.year1 || ELocalizationStatusType.No);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year2`, row.year2 || ELocalizationStatusType.No);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year3`, row.year3 || ELocalizationStatusType.No);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year4`, row.year4 || ELocalizationStatusType.No);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year5`, row.year5 || ELocalizationStatusType.No || 0);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year6`, row.year6 || ELocalizationStatusType.No || 0);
-      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year7`, row.year7 || ELocalizationStatusType.No || 0);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year1`, row.year1);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year2`, row.year2);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year3`, row.year3);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year4`, row.year4);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year5`, row.year5);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year6`, row.year6);
+      appendFormDataValue(formData, `ProductPlan.ValueChainStep.ValueChainRows[${index}].Year7`, row.year7);
     });
   }
 
