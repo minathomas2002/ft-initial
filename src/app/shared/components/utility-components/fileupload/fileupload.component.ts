@@ -132,7 +132,13 @@ export class FileuploadComponent {
       validFiles.push(file);
     }
 
-    this.files.set(validFiles);
+    // If multiple is true and there are existing files, append new files instead of replacing
+    if (this.multiple() && this.files().length > 0) {
+      const existingFiles = this.files();
+      this.files.set([...existingFiles, ...validFiles]);
+    } else {
+      this.files.set(validFiles);
+    }
 
     // prevent PrimeNG from showing error messages in the UI
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
