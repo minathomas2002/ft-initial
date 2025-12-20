@@ -15,8 +15,6 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 })
 export class SummarySectionProductPlant {
   formGroup = input.required<FormGroup>();
-  validationErrors = input<IStepValidationErrors | undefined>();
-  hasErrors = input<boolean>(false);
   onEdit = output<void>();
   private readonly planStore = inject(PlanStore);
   targetedCustomerOptions = this.planStore.targetedCustomerOptions;
@@ -38,6 +36,7 @@ export class SummarySectionProductPlant {
   productManufacturingExperienceFormGroup = computed(() => {
     return this.formGroup().get(EMaterialsFormControls.productManufacturingExperienceFormGroup) as FormGroup;
   });
+
 
   // Helper method to get value from nested form group
   getValue(formGroup: FormGroup | null, controlName: string): any {

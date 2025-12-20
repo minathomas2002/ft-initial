@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, inject, effect } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { EMaterialsFormControls, EOpportunityStatus, EOpportunityType } from 'src/app/shared/enums';
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
@@ -15,11 +15,8 @@ import { DatePipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionOverview {
-  private readonly formService = inject(ProductPlanFormService);
 
   formGroup = input.required<FormGroup>();
-  validationErrors = input<IStepValidationErrors | undefined>();
-  hasErrors = input<boolean>(false);
   onEdit = output<void>();
 
   // Form group accessors
