@@ -670,12 +670,27 @@
       "approved": "Approved",
       "rejected": "Rejected"
     },
+    "employee_status": {
+      "pending": "Pending",
+      "underReview": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "unassigned": "Unassigned",
+      "deptApproved": "Department Approved",
+      "deptRejected": "Department Rejected",
+      "dvApproved": "DV Approved",
+      "dvRejected": "DV Rejected",
+      "dvRejectionAcknowledged": "DV Rejection Acknowledged",
+      "employeeApproved": "Employee Approved",
+      "employeeRejected": "Employee Rejected"
+    },
     "type": {
       "services": "Services",
       "materials": "Materials"
     },
     "table": {
       "planId": "Plan ID",
+      "investorName": "Investor Name",
       "planTitle": "Plan Title",
       "planType": "Plan Type",
       "submissionDate": "Submission Date",
@@ -686,6 +701,7 @@
     },
     "statistics": {
       "totalPlans": "Total Plans",
+      "unAssignedPlans": "Unassigned Plans",
       "plansUnderReview": "Plans Under Review",
       "approvedPlans": "Approved Plans",
       "rejectedPlans": "Rejected Plans"

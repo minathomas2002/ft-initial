@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, Signal } from '@angular/core';
 import { Button } from "primeng/button";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
-import { EPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
+import { EInvestorPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { AssignReassignManualEmployee } from "../../components/assign-reassign-manual-employee/assign-reassign-manual-employee";
 
@@ -20,7 +20,7 @@ export class PlansList implements OnInit {
     planType: EOpportunityType.PRODUCT,
     submissionDate: '2025-12-31',
     slaCountDown: 10, // days remaining
-    status: EPlanStatus.PENDING,
+    status: EInvestorPlanStatus.PENDING,
   };
   viewAssignDialog = signal<boolean>(false);
 

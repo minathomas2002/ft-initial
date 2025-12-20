@@ -3,58 +3,48 @@ import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
-import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
 import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
-import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
-import { EInvestorPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import { EEmployeePlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
-import { DashboardPlansFilterService } from '../../services/dashboard-plans-filter/dashboard-plans-filter-service';
-import { InvestorDashboardPlansFilter } from '../../components/investor-dashboard-plans-filter/investor-dashboard-plans-filter';
-import { InvestorDashboardPlanActionMenu } from '../../components/investor-dashboard-plan-action-menu/investor-dashboard-plan-action-menu';
+import { DvManagerDashboardPlansFilterService } from '../../services/dv-manager-dashboard-plans-filter/dv-manager-dashboard-plans-filter-service';
+import { DvManagerDashboardPlansFilter } from '../../components/dv-manager-dashboard-plans-filter/dv-manager-dashboard-plans-filter';
+import { DvManagerDashboardPlanActionMenu } from '../../components/dv-manager-dashboard-plan-action-menu/dv-manager-dashboard-plan-action-menu';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
-  selector: 'app-investor-dashboard',
+  selector: 'app-dv-manager-dashboard',
   imports: [
     TableLayoutComponent,
     TableSkeletonComponent,
     DataTableComponent,
     ButtonModule,
     MenuModule,
-    PlanTermsAndConditionsDialog,
-    NewPlanDialog,
-    ProductLocalizationPlanWizard,
-    InvestorDashboardPlansFilter,
-    InvestorDashboardPlanActionMenu,
+    DvManagerDashboardPlansFilter,
+    DvManagerDashboardPlanActionMenu,
     DatePipe,
     NgClass,
     SkeletonModule,
     TranslatePipe
   ],
-  templateUrl: './investor-dashboard.html',
-  styleUrl: './investor-dashboard.scss',
-  providers: [DashboardPlansFilterService],
+  templateUrl: './dv-manager-dashboard.html',
+  styleUrl: './dv-manager-dashboard.scss',
+  providers: [DvManagerDashboardPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InvestorDashboard implements OnInit {
-  planTermsAndConditionsDialogVisibility = signal(false);
-  newPlanDialogVisibility = signal(false);
-  productLocalizationPlanWizardVisibility = signal(false);
-
+export class DvManagerDashboard implements OnInit {
   // Wizard mode and plan ID signals
   selectedPlanId = signal<string | null>(null);
   wizardMode = signal<'create' | 'edit' | 'view'>('create');
 
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
-  readonly filterService = inject(DashboardPlansFilterService);
+  readonly filterService = inject(DvManagerDashboardPlansFilterService);
   private readonly i18nService = inject(I18nService);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
@@ -63,6 +53,7 @@ export class InvestorDashboard implements OnInit {
     this.i18nService.currentLanguage();
     return [
       { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
+      { label: this.i18nService.translate('plans.table.investorName'), isSortable: true, sortingKey: 'investorName' },
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
       { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'planType' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
@@ -83,19 +74,15 @@ export class InvestorDashboard implements OnInit {
   }
 
   onUserReadAndApproved() {
-    this.planTermsAndConditionsDialogVisibility.set(false);
-    this.planStore.resetNewPlanOpportunityType();
-    this.newPlanDialogVisibility.set(true);
+    this.planStore.resetNewPlanOpportunityType();    
   }
 
   onUserConfirmNewPlanDialog() {
-    this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
-    this.newPlanDialogVisibility.set(false);
+    this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();    
     if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
       // Reset mode and plan ID for new plan
       this.wizardMode.set('create');
-      this.selectedPlanId.set(null);
-      this.productLocalizationPlanWizardVisibility.set(true);
+      this.selectedPlanId.set(null);      
     } else {
       console.log('service');
     }
@@ -107,26 +94,38 @@ export class InvestorDashboard implements OnInit {
       : this.i18nService.translate('Product');
   }
 
-  getStatusLabel(status: EInvestorPlanStatus): string {
+  getStatusLabel(status: EEmployeePlanStatus): string {
     const statusMap = {
-      [EInvestorPlanStatus.SUBMITTED]: this.i18nService.translate('plans.status.submitted'),
-      [EInvestorPlanStatus.PENDING]: this.i18nService.translate('plans.status.pending'),
-      [EInvestorPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
-      [EInvestorPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
-      [EInvestorPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
-      [EInvestorPlanStatus.DRAFT]: this.i18nService.translate('Draft'),
+      [EEmployeePlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pending'),
+      [EEmployeePlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.employee_status.underReview'),
+      [EEmployeePlanStatus.APPROVED]: this.i18nService.translate('plans.employee_status.approved'),
+      [EEmployeePlanStatus.REJECTED]: this.i18nService.translate('plans.employee_status.rejected'),
+      [EEmployeePlanStatus.UNASSIGNED]: this.i18nService.translate('plans.employee_status.unassigned'),
+      [EEmployeePlanStatus.DEPT_APPROVED]: this.i18nService.translate('plans.employee_status.deptApproved'),
+      [EEmployeePlanStatus.DEPT_REJECTED]: this.i18nService.translate('plans.employee_status.deptRejected'),
+      [EEmployeePlanStatus.DV_APPROVED]: this.i18nService.translate('plans.employee_status.dvApproved'),
+      [EEmployeePlanStatus.DV_REJECTED]: this.i18nService.translate('plans.employee_status.dvRejected'),
+      [EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
+      [EEmployeePlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
+      [EEmployeePlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
     };
     return statusMap[status] || '';
   }
 
-  getStatusBadgeClass(status: EInvestorPlanStatus): string {
+  getStatusBadgeClass(status: EEmployeePlanStatus): string {
     const classMap = {
-      [EInvestorPlanStatus.SUBMITTED]: 'bg-primary-50 text-primary-700 border-primary-200',
-      [EInvestorPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-      [EInvestorPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
-      [EInvestorPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-      [EInvestorPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-      [EInvestorPlanStatus.DRAFT]: 'bg-gray-50 text-gray-700 border-gray-200',
+      [EEmployeePlanStatus.EMPLOYEE_APPROVED]: 'bg-primary-50 text-primary-700 border-primary-200',
+      [EEmployeePlanStatus.UNASSIGNED]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+      [EEmployeePlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
+      [EEmployeePlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
+      [EEmployeePlanStatus.DEPT_APPROVED]: 'bg-green-50 text-green-700 border-green-200',      
+      [EEmployeePlanStatus.DEPT_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+      [EEmployeePlanStatus.DV_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
+      [EEmployeePlanStatus.DV_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+      [EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED]: 'bg-red-50 text-red-700 border-red-200',
+      [EEmployeePlanStatus.EMPLOYEE_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+      [EEmployeePlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+      [EEmployeePlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
     };
     return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200';
   }
@@ -135,22 +134,7 @@ export class InvestorDashboard implements OnInit {
   onViewDetails(plan: IPlanRecord) {
     // Set mode to view and plan ID
     this.wizardMode.set('view');
-    this.selectedPlanId.set(plan.id);
-    this.productLocalizationPlanWizardVisibility.set(true);
-  }
-
-  onEdit(plan: IPlanRecord) {
-    // Check if plan status allows editing (Draft or Pending)
-    if (plan.status === EInvestorPlanStatus.DRAFT || plan.status === EInvestorPlanStatus.PENDING) {
-      // Set mode to edit and plan ID
-      this.wizardMode.set('edit');
-      this.selectedPlanId.set(plan.id);
-      this.productLocalizationPlanWizardVisibility.set(true);
-    } else {
-      this.i18nService.translate('plans.errors.cannotEdit');
-      // Could show error message here
-      console.warn('Plan cannot be edited. Status:', plan.status);
-    }
+    this.selectedPlanId.set(plan.id);    
   }
 
   onDownload(plan: IPlanRecord) {
@@ -166,3 +150,4 @@ export class InvestorDashboard implements OnInit {
     console.log('Submit product localization plan wizard');
   }
 }
+

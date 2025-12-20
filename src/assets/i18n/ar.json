@@ -515,12 +515,27 @@
 			"approved": "موافق عليها",
 			"rejected": "مرفوضة"
 		},
+		"employee_status": {
+			"pending": "قيد الانتظار",
+			"underReview": "قيد المراجعة",
+			"approved": "موافق عليها",
+			"rejected": "مرفوضة",
+			"unassigned": "غير معينة",
+			"deptApproved": "موافق عليها من القسم",
+			"deptRejected": "مرفوضة من القسم",
+			"dvApproved": "موافق عليها من مدير DV",
+			"dvRejected": "مرفوضة من مدير DV",
+			"dvRejectionAcknowledged": "تم الاعتراف برفض مدير DV",
+			"employeeApproved": "موافق عليها من الموظف",
+			"employeeRejected": "مرفوضة من الموظف"
+		},
 		"type": {
 			"services": "الخدمات",
 			"materials": "المواد"
 		},
 		"table": {
 			"planId": "معرف الخطة",
+			"investorName": "اسم المستثمر",
 			"planTitle": "عنوان الخطة",
 			"planType": "نوع الخطة",
 			"submissionDate": "تاريخ التقديم",
@@ -531,6 +546,7 @@
 		},
 		"statistics": {
 			"totalPlans": "إجمالي الخطط",
+			"unAssignedPlans": "الخطط غير المعينة",
 			"plansUnderReview": "الخطط قيد المراجعة",
 			"approvedPlans": "الخطط الموافق عليها",
 			"rejectedPlans": "الخطط المرفوضة"

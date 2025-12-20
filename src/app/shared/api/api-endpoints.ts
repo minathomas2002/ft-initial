@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
   },
   plans: {
     getInvestorDashboardPlans: `${Plans}/get-investor-dashboard-plans`,
+    getDvManagerDashboardPlans: `${Plans}/get-dvmanager-dashboard-plans`,
     getActiveEmployeesWithPlans: `${SystemEmployees}/active-employees?planId=`,
     assign: `${SystemEmployees}/assign`,
     reassign: `${SystemEmployees}/reassign`,

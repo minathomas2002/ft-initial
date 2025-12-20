@@ -40,6 +40,21 @@ export const DashboardPlansStore = signalStore(
             patchState(store, { loading: false });
           })
         );
+      },
+
+      getDvManagerDashboardPlans(filter: IPlanFilterRequest) {
+        patchState(store, { loading: true });
+        return dashboardPlansApiService.getDvManagerDashboardPlans(filter).pipe(
+          tap((res) => {
+            const plans = res.body.data || [];
+            const totalCount = res.body.pagination?.totalCount ?? plans.length;
+            patchState(store, { list: plans, count: totalCount });
+            patchState(store, { statistics: res.body.counts });
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
       }
     };
   })

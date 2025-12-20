@@ -13,4 +13,9 @@ export const DASHBOARD_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/investor-dashboard/investor-dashboard').then((m) => m.InvestorDashboard),
   },
+  {
+    path: ERoutes.dvManager,
+    loadComponent: () =>
+      import('./pages/dv-manager-dashboard/dv-manager-dashboard').then((m) => m.DvManagerDashboard),
+  },
 ];

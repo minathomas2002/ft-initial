@@ -7,23 +7,23 @@ import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DashboardPlansFilterService } from '../../services/dashboard-plans-filter/dashboard-plans-filter-service';
 import { TranslatePipe } from 'src/app/shared/pipes';
-import { EPlanStatus } from 'src/app/shared/interfaces';
+import { EInvestorPlanStatus } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 interface IDropdownOption {
   label: string;
-  value: EOpportunityType | EPlanStatus | null;
+  value: EOpportunityType | EInvestorPlanStatus | null;
 }
 
 @Component({
-  selector: 'app-dashboard-plans-filter',
+  selector: 'app-investor-dashboard-plans-filter',
   imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe],
-  templateUrl: './dashboard-plans-filter.html',
-  styleUrl: './dashboard-plans-filter.scss',
+  templateUrl: './investor-dashboard-plans-filter.html',
+  styleUrl: './investor-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardPlansFilter {
+export class InvestorDashboardPlansFilter implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly searchSubject = new Subject<string>();
   readonly filterService = inject(DashboardPlansFilterService);
@@ -43,11 +43,11 @@ export class DashboardPlansFilter {
     this.i18nService.currentLanguage();
     return [
       { label: this.i18nService.translate('plans.filter.allStatuses'), value: null },
-      { label: this.i18nService.translate('plans.status.submitted'), value: EPlanStatus.SUBMITTED },
-      { label: this.i18nService.translate('plans.status.pending'), value: EPlanStatus.PENDING },
-      { label: this.i18nService.translate('plans.status.underReview'), value: EPlanStatus.UNDER_REVIEW },
-      { label: this.i18nService.translate('plans.status.approved'), value: EPlanStatus.APPROVED },
-      { label: this.i18nService.translate('plans.status.rejected'), value: EPlanStatus.REJECTED },
+      { label: this.i18nService.translate('plans.status.submitted'), value: EInvestorPlanStatus.SUBMITTED },
+      { label: this.i18nService.translate('plans.status.pending'), value: EInvestorPlanStatus.PENDING },
+      { label: this.i18nService.translate('plans.status.underReview'), value: EInvestorPlanStatus.UNDER_REVIEW },
+      { label: this.i18nService.translate('plans.status.approved'), value: EInvestorPlanStatus.APPROVED },
+      { label: this.i18nService.translate('plans.status.rejected'), value: EInvestorPlanStatus.REJECTED },
     ];
   });
 
@@ -65,7 +65,7 @@ export class DashboardPlansFilter {
     this.filterService.applyFilterWithPaging();
   }
 
-  onStatusChange(value: EPlanStatus | null) {
+  onStatusChange(value: EInvestorPlanStatus | null) {
     this.filterService.updateFilterSignal({ status: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }

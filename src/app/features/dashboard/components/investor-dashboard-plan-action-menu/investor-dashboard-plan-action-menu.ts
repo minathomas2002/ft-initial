@@ -2,17 +2,17 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import type { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { EPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
+import { EInvestorPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 @Component({
-  selector: 'app-dashboard-plan-action-menu',
+  selector: 'app-investor-dashboard-plan-action-menu',
   imports: [MenuModule, ButtonModule],
-  templateUrl: './dashboard-plan-action-menu.html',
-  styleUrl: './dashboard-plan-action-menu.scss',
+  templateUrl: './investor-dashboard-plan-action-menu.html',
+  styleUrl: './investor-dashboard-plan-action-menu.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardPlanActionMenu {
+export class InvestorDashboardPlanActionMenu {
   plan = input.required<IPlanRecord>();
   private readonly i18nService = inject(I18nService);
 
@@ -31,7 +31,7 @@ export class DashboardPlanActionMenu {
     ];
 
     // Only show edit action for Draft and Pending statuses
-    if (plan.status === EPlanStatus.DRAFT || plan.status === EPlanStatus.PENDING) {
+    if (plan.status === EInvestorPlanStatus.DRAFT || plan.status === EInvestorPlanStatus.PENDING) {
       items.push({
         label: this.i18nService.translate('plans.actions.edit'),
         icon: 'icon-edit',
