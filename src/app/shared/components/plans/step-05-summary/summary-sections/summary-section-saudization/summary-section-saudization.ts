@@ -19,8 +19,6 @@ export class SummarySectionSaudization {
   private readonly formService = inject(ProductPlanFormService);
 
   formGroup = input.required<FormGroup>();
-  validationErrors = input<IStepValidationErrors | undefined>();
-  hasErrors = input<boolean>(false);
   onEdit = output<void>();
 
   // Expose enum to template

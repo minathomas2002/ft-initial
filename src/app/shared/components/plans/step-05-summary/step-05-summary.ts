@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, output, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { ProductPlanValidationService, IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
@@ -23,6 +23,7 @@ export class Step05Summary {
   private readonly formService = inject(ProductPlanFormService);
   private readonly validationService = inject(ProductPlanValidationService);
   private readonly toasterService = inject(ToasterService);
+  private readonly changeDetectionRef = inject(ChangeDetectorRef);
 
   onEditStep = output<number>();
   onSubmit = output<void>();
@@ -63,7 +64,6 @@ export class Step05Summary {
    */
   onEditStepClick(stepNumber: number): void {
     // Mark the step's form as touched to show errors when navigating
-    this.markStepAsTouched(stepNumber);
     this.onEditStep.emit(stepNumber);
   }
 
@@ -81,35 +81,17 @@ export class Step05Summary {
     // Notify parent component of validation errors for stepper indicators
     this.onValidationErrorsChange.emit(errors);
 
+    // Trigger change detection to update the DOM with validation errors
+    this.changeDetectionRef.markForCheck();
+
     // Check if there are any errors
     if (this.validationService.hasAnyErrors(errors)) {
       // Block submission and show error message
       this.toasterService.error('Please correct the highlighted sections before submitting.');
       return;
     }
-
     // If no errors, proceed with submission
     this.onSubmit.emit();
-  }
-
-  /**
-   * Marks a specific step's form as touched
-   */
-  private markStepAsTouched(stepNumber: number): void {
-    switch (stepNumber) {
-      case 1:
-        this.markFormGroupAsTouched(this.step1FormGroup);
-        break;
-      case 2:
-        this.markFormGroupAsTouched(this.step2FormGroup);
-        break;
-      case 3:
-        this.markFormGroupAsTouched(this.step3FormGroup);
-        break;
-      case 4:
-        this.markFormGroupAsTouched(this.step4FormGroup);
-        break;
-    }
   }
 
   /**
@@ -134,10 +116,4 @@ export class Step05Summary {
     formGroup.markAsTouched();
   }
 
-  /**
-   * Gets validation errors for a specific step
-   */
-  getStepErrors(stepNumber: number): IStepValidationErrors | undefined {
-    return this.validationService.getStepErrors(this.validationErrors(), stepNumber);
-  }
 }

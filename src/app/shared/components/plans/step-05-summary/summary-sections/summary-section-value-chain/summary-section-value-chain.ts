@@ -17,8 +17,6 @@ import { ValueChainSummaryComponent } from '../../../step-03-valueChain/value-ch
 })
 export class SummarySectionValueChain {
   formGroup = input.required<FormGroup>();
-  validationErrors = input<IStepValidationErrors | undefined>();
-  hasErrors = input<boolean>(false);
   onEdit = output<void>();
   private readonly planStore = inject(PlanStore);
   inHouseOrProcuredOptions = this.planStore.inHouseProcuredOptions;
