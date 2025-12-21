@@ -53,13 +53,8 @@ export class DvManagerDashboardPlanActionMenu {
 
         //TODO check this logic
         if (![EEmployeePlanStatus.APPROVED,
-        EEmployeePlanStatus.EMPLOYEE_APPROVED,
-        EEmployeePlanStatus.REJECTED,
-        EEmployeePlanStatus.DV_APPROVED,
-        EEmployeePlanStatus.DV_REJECTED,
-        EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED,
-        EEmployeePlanStatus.DEPT_APPROVED,
-        EEmployeePlanStatus.DEPT_REJECTED
+            EEmployeePlanStatus.REJECTED,
+            EEmployeePlanStatus.UNASSIGNED
         ].includes(plan.status as EEmployeePlanStatus)) {
             items.push({
                 label: this.i18nService.translate('plans.actions.reAssign'),

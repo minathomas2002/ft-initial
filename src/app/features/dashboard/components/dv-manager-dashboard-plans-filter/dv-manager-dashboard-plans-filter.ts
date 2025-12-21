@@ -44,16 +44,8 @@ export class DvManagerDashboardPlansFilter implements OnInit {
     return [
       { label: this.i18nService.translate('plans.filter.allStatuses'), value: null },
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EEmployeePlanStatus.EMPLOYEE_APPROVED },
-      { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EEmployeePlanStatus.DEPT_APPROVED },
       { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EEmployeePlanStatus.DEPT_REJECTED },
-      { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EEmployeePlanStatus.DV_APPROVED },
-      { label: this.i18nService.translate('plans.employee_status.dvRejected'), value: EEmployeePlanStatus.DV_REJECTED },
-      { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED },
-      { label: this.i18nService.translate('plans.employee_status.employeeRejected'), value: EEmployeePlanStatus.EMPLOYEE_REJECTED },
-      { label: this.i18nService.translate('plans.employee_status.pending'), value: EEmployeePlanStatus.PENDING },
-      { label: this.i18nService.translate('plans.employee_status.rejected'), value: EEmployeePlanStatus.REJECTED },
-      { label: this.i18nService.translate('plans.employee_status.unassigned'), value: EEmployeePlanStatus.UNASSIGNED },
-      { label: this.i18nService.translate('plans.employee_status.underReview'), value: EEmployeePlanStatus.UNDER_REVIEW }
+      { label: this.i18nService.translate('plans.employee_status.unassigned'), value: EEmployeePlanStatus.UNASSIGNED }
     ];
   });
 
