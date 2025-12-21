@@ -19,6 +19,7 @@ import { ToasterService } from "src/app/shared/services/toaster/toaster.service"
 import { EMaterialsFormControls } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../submission-confirmation-modal/submission-confirmation-modal.component";
 import { Signature } from "src/app/shared/interfaces/plans.interface";
+import { ConfirmLeaveDialogComponent } from "../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -32,13 +33,14 @@ import { Signature } from "src/app/shared/interfaces/plans.interface";
     ButtonModule,
     BaseTagComponent,
     StepContentDirective,
+    ConfirmLeaveDialogComponent,
     SubmissionConfirmationModalComponent
   ],
   templateUrl: './product-localization-plan-wizard.html',
   styleUrl: './product-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductLocalizationPlanWizard implements OnDestroy {
+export class ProductLocalizationPlanWizard {
   productPlanFormService = inject(ProductPlanFormService);
   toasterService = inject(ToasterService);
   planStore = inject(PlanStore);
@@ -47,6 +49,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
+  isSubmitted = signal<boolean>(false);
 
   // Mode and plan ID inputs
   mode = input<'create' | 'edit' | 'view'>('create');
@@ -111,7 +114,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Submission confirmation modal
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
-
+  showConfirmLeaveDialog = model(false);
   // Computed signal for view mode
   isViewMode = computed(() => this.mode() === 'view');
 
@@ -255,6 +258,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
           this.doRefresh.emit();
           this.visibility.set(false);
           this.showSubmissionModal.set(false);
+          this.isSubmitted.set(true);
         },
         error: (error) => {
           this.isProcessing.set(false);
@@ -323,6 +327,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
           this.doRefresh.emit();
           this.visibility.set(false);
+          this.isSubmitted.set(true);
         },
         error: (error) => {
           this.isProcessing.set(false);
@@ -332,11 +337,32 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       });
   }
 
+  onConfirmLeave(): void {
+    this.showConfirmLeaveDialog.set(false);
+    this.productPlanFormService.resetAllForms();
+    this.activeStep.set(1);
+    this.doRefresh.emit();
+    this.visibility.set(false);
+    this.isSubmitted.set(false);
+  }
 
-  ngOnDestroy(): void {
-    // Reset forms when component is destroyed
-    if (this.mode() === 'create') {
+  onContinueEditing(): void {
+    this.showConfirmLeaveDialog.set(false);
+  }
+
+  onClose(): void {
+    if (this.mode() === 'create' || this.mode() === 'edit') {
+      if (!this.isSubmitted()) {
+        // Keep the wizard open and show confirmation dialog
+        this.visibility.set(true);
+        this.showConfirmLeaveDialog.set(true);
+        return;
+      }
       this.productPlanFormService.resetAllForms();
+      this.activeStep.set(1);
+      this.doRefresh.emit();
+      this.isSubmitted.set(false);
     }
+
   }
 }

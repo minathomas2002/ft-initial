@@ -9,6 +9,7 @@
   [isLoading]="isLoading() || isLoadingPlan()"
   [isProcessing]="isProcessing()"
   [hideSaveAsDraft]="isViewMode()"
+  (onClose)="onClose()"
 >
 
   <ng-container ngProjectAs="status">
@@ -59,4 +60,11 @@
   [(existingSignature)]="existingSignature"
   (onConfirm)="onSubmissionConfirm($event)"
   (onCancel)="onSubmissionCancel()"
+/>
+
+<!-- Confirm Leave Dialog -->
+<app-confirm-leave-dialog
+  [(visible)]="showConfirmLeaveDialog"
+  (onLeave)="onConfirmLeave()"
+  (onContinueEditing)="onContinueEditing()"
 />

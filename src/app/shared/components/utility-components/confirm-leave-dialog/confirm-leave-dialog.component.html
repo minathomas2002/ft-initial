@@ -1,0 +1,33 @@
+<app-base-dialog
+  [(visible)]="visible"
+  icon="icon-alert-triangle"
+  [showCloseButton]="false"
+  [showConfirmButton]="false"
+  dialogTitle="Confirm Leave"
+  (onClose)="handleClose()"
+  contentStyleClass="p-6"
+>
+  <div class="max-w-[500px]">
+    <p class="text-base font-semibold text-gray-900 mb-2">
+      Are you sure you want to leave?
+    </p>
+    <p class="text-sm text-gray-600">
+      All the changes will be discarded.
+    </p>
+  </div>
+
+  <ng-template #footerButtons>
+    <p-button
+      label="Continue Editing"
+      severity="secondary"
+      (onClick)="handleContinueEditing()"
+      class="flex-initial"
+    />
+    <p-button
+      label="Leave"
+      severity="danger"
+      (onClick)="handleLeave()"
+      class="flex-initial"
+    />
+  </ng-template>
+</app-base-dialog>
