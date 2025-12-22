@@ -144,12 +144,17 @@
           </td>
           <td>{{ item.submissionDate | date: 'dd/MM/yyyy' }}</td>
           <td>
+            @if(item.status == eEmployeePlanStatus.PENDING) {
+
             <span
               class="text-sm font-medium"
               [ngClass]="item.slaCountDown >= 5 ? 'text-green-500' : item.slaCountDown > 2 ? 'text-orange-500' : 'text-red-600'"
             >
               {{ item.slaCountDown }} {{ 'plans.table.daysRemaining' | translate }}
             </span>
+            } @else {
+              <span class="text-sm font-medium text-center">-</span>
+            }
           </td>
           <td>
             <span class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl {{ getStatusBadgeClass(item.status) }}">

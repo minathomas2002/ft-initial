@@ -10,7 +10,7 @@ import { DataTableComponent } from 'src/app/shared/components/layout-components/
 import { SkeletonModule } from 'primeng/skeleton';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
-import { EInvestorPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import { EEmployeePlanStatus, EInvestorPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
@@ -47,6 +47,8 @@ export class InvestorDashboard implements OnInit {
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
+
+  eEmployeePlanStatus = EEmployeePlanStatus;
 
   // Wizard mode and plan ID signals
   selectedPlanId = signal<string | null>(null);
