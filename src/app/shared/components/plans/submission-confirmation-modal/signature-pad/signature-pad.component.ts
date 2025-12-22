@@ -1,9 +1,10 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, model, output, signal, viewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-signature-pad',
-  imports: [ButtonModule],
+  imports: [ButtonModule, TranslatePipe],
   templateUrl: './signature-pad.component.html',
   styleUrl: './signature-pad.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

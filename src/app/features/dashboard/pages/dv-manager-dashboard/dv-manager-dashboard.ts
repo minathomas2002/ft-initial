@@ -90,8 +90,8 @@ export class DvManagerDashboard implements OnInit {
 
   getPlanTypeLabel(planType: EOpportunityType): string {
     return planType === EOpportunityType.SERVICES
-      ? this.i18nService.translate('Services')
-      : this.i18nService.translate('Product');
+      ? this.i18nService.translate('opportunity.type.services')
+      : this.i18nService.translate('opportunity.type.product');
   }
 
   getStatusLabel(status: EEmployeePlanStatus): string {

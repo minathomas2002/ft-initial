@@ -1,36 +1,36 @@
 <div class="flex flex-col gap-6 bg-white">
   <app-summary-section-header
-    [title]="'Value Chain'"
+    [title]="'plans.wizard.step3.title' | translate"
     (onEdit)="onEditClick()"
   />
 
   <!-- Design & Engineering -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-lg font-semibold text-gray-900">Design & Engineering</h3>
+    <h3 class="text-lg font-semibold text-gray-900">{{ 'plans.summary.valueChain.designEngineering' | translate }}</h3>
     <app-value-chain-table [tableData]="designEngineeringTableData()" />
   </div>
 
   <!-- Sourcing -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-lg font-semibold text-gray-900">Sourcing</h3>
+    <h3 class="text-lg font-semibold text-gray-900">{{ 'plans.summary.valueChain.sourcing' | translate }}</h3>
     <app-value-chain-table [tableData]="sourcingTableData()" />
   </div>
 
   <!-- Manufacturing -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-lg font-semibold text-gray-900">Manufacturing</h3>
+    <h3 class="text-lg font-semibold text-gray-900">{{ 'plans.summary.valueChain.manufacturing' | translate }}</h3>
     <app-value-chain-table [tableData]="manufacturingTableData()" />
   </div>
 
   <!-- Assembly & Testing -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-lg font-semibold text-gray-900">Assembly & Testing</h3>
+    <h3 class="text-lg font-semibold text-gray-900">{{ 'plans.summary.valueChain.assemblyTesting' | translate }}</h3>
     <app-value-chain-table [tableData]="assemblyTestingTableData()" />
   </div>
 
   <!-- After Sales -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-lg font-semibold text-gray-900">After Sales</h3>
+    <h3 class="text-lg font-semibold text-gray-900">{{ 'plans.summary.valueChain.afterSales' | translate }}</h3>
     <app-value-chain-table [tableData]="afterSalesTableData()" />
   </div>
 

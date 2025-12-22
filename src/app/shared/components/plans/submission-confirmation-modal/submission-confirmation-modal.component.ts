@@ -9,6 +9,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
 import { PhoneInputComponent } from '../../form/phone-input/phone-input.component';
 import { IPhoneValue } from '../../../interfaces';
+import { TranslatePipe } from '../../../pipes';
 
 @Component({
   selector: 'app-submission-confirmation-modal',
@@ -21,7 +22,8 @@ import { IPhoneValue } from '../../../interfaces';
     ReactiveFormsModule,
     SignaturePadComponent,
     BaseErrorMessages,
-    PhoneInputComponent
+    PhoneInputComponent,
+    TranslatePipe
   ],
   providers: [SubmissionConfirmationModalFormService],
   templateUrl: './submission-confirmation-modal.component.html',

@@ -26,7 +26,10 @@
     "searchCountry": "Search country...",
     "signIn": "Sign in",
     "signUp": "Sign up",
-    "days": "day(s)"
+    "days": "day(s)",
+    "files": "Files",
+    "clickToUpload": "Click to upload",
+    "dragAndDrop": "or drag and drop"
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
@@ -654,6 +657,17 @@
   },
   "plans": {
     "assign": "Assign",
+    "status": {
+      "submitted": "Submitted",
+      "pending": "Pending",
+      "underReview": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "draft": "Draft"
+    },
+    "errors": {
+      "cannotEdit": "Plan cannot be edited in this status"
+    },
     "filter": {
       "searchPlaceholder": "Search by Plan ID or Title",
       "selectPlanType": "Select Plan Type",
@@ -664,12 +678,97 @@
       "material": "Material",
       "allStatuses": "All Statuses"
     },
-    "status": {
-      "submitted": "Submitted",
-      "pending": "Pending",
-      "underReview": "Under Review",
-      "approved": "Approved",
-      "rejected": "Rejected"
+    "wizard": {
+      "step1": {
+        "title": "Overview & Company Information",
+        "description": "Enter basic plan details and company information"
+      },
+      "step2": {
+        "title": "Product & Plant Overview",
+        "description": "Enter product details and plant information"
+      },
+      "step3": {
+        "title": "Value Chain",
+        "description": "Define value chain components and localization"
+      },
+      "step4": {
+        "title": "Saudization",
+        "description": "Enter saudization projections and attachments"
+      },
+      "step5": {
+        "title": "Summary",
+        "description": "Review your localization plan before final submission"
+      },
+      "title": {
+        "edit": "Edit Plan",
+        "view": "View Plan",
+        "create": "Product Localization Plan"
+      },
+      "messages": {
+        "fixValidationErrors": "Please fix all validation errors before submitting",
+        "errorLoadingPlan": "Error loading plan data. Please try again.",
+        "submitSuccess": "Product localization plan submitted successfully",
+        "submitError": "Error submitting plan. Please try again.",
+        "selectPlanTitleAndOpportunity": "Please select a plan title and opportunity",
+        "draftUpdatedSuccess": "Draft updated successfully.",
+        "draftSavedSuccess": "Product localization plan saved as draft successfully",
+        "draftError": "Error saving draft. Please try again.",
+        "fixHighlightedSections": "Please correct the highlighted sections before submitting."
+      }
+    },
+    "submission": {
+      "confirmTitle": "Are you sure you want to submit this plan?",
+      "disclaimer": "I hereby confirm that I have thoroughly reviewed this document and acknowledge that the approval of this localization plan does not constitute, nor imply, any guarantee of current or future business with SEC or any of its approved suppliers. I further affirm that all information provided within this plan (including all sections) is, to the best of my knowledge, true, accurate, and complete. I understand that failure to comply with the submitted timeline may result in the revocation of my qualification by SEC at any time.",
+      "name": "Name",
+      "namePlaceholder": "Enter Name",
+      "jobTitle": "Job Title",
+      "jobTitlePlaceholder": "Enter Job title",
+      "contactNumber": "Contact number",
+      "contactNumberPlaceholder": "Enter Contact number",
+      "emailId": "Email ID",
+      "emailIdPlaceholder": "Enter Email ID",
+      "signature": "Signature",
+      "drawSignature": "Draw your signature",
+      "signaturePlaceholder": "Draw your signature using your mouse",
+      "change": "Change",
+      "clear": "Clear",
+      "back": "Back",
+      "submit": "Submit"
+    },
+    "summary": {
+      "productPlantOverview": "Product & Plant Overview",
+      "overview": "Overview",
+      "expectedCAPEXInvestment": "Expected CAPEX Investment",
+      "targetCustomers": "Target Customers",
+      "targetingLocalSuppliersNote": "If Targeting \"SEC's approved local suppliers\", mention the following:",
+      "productManufacturingExperience": "Product Manufacturing Experience",
+      "attachments": "Attachments",
+      "saudization": {
+        "annualHeadcount": "Annual Headcount (#)",
+        "saudizationPercentage": "Saudization %",
+        "saudizationSubtitle": "(No. of Saudi employees / Total employees)",
+        "annualTotalCompensation": "Annual Total Compensation (SAR)",
+        "saudiCompensationPercentage": "Saudi Compensation %",
+        "saudiCompensationSubtitle": "(Saudi compensation / Total compensation)"
+      },
+      "valueChain": {
+        "designEngineering": "Design & Engineering",
+        "sourcing": "Sourcing",
+        "manufacturing": "Manufacturing",
+        "assemblyTesting": "Assembly & Testing",
+        "afterSales": "After Sales",
+        "expenseHeader": "Expense Header",
+        "inHouseProcured": "In-house / Procured",
+        "costPercentage": "Cost %"
+      },
+      "year": "Year",
+      "summary": "Summary",
+      "year1": "Year 1",
+      "year2": "Year 2",
+      "year3": "Year 3",
+      "year4": "Year 4",
+      "year5": "Year 5",
+      "year6": "Year 6"
     },
     "employee_status": {
       "pending": "Pending",

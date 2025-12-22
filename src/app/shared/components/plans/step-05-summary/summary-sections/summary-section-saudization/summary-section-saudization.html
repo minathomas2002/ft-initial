@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-6 bg-white">
   <app-summary-section-header
-    [title]="'Saudization'"
+    [title]="'plans.wizard.step4.title' | translate"
     (onEdit)="onEditClick()"
   />
   <!-- Saudization Matrix Table -->
@@ -17,7 +17,7 @@
             <th
               class="p-3 !border !border-gray-200 text-center text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap"
               [class.rounded-tr-xl]="year === years[years.length - 1]"
-            >Year {{ year }}</th>
+            >{{ 'plans.summary.year' | translate }} {{ year }}</th>
             }
           </tr>
         </ng-template>
@@ -56,7 +56,7 @@
 
   <!-- Attachments -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-md font-semibold text-gray-900">Attachments</h3>
+    <h3 class="text-md font-semibold text-gray-900">{{ 'plans.summary.attachments' | translate }}</h3>
     @if (hasAttachments()) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
       @for (file of attachments(); track $index) {

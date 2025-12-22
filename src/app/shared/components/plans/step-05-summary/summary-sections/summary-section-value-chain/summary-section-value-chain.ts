@@ -7,10 +7,11 @@ import { CommonModule } from '@angular/common';
 import { ValueChainTable } from '../../shared/value-chain-table/value-chain-table';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ValueChainSummaryComponent } from '../../../step-03-valueChain/value-chain-summary/value-chain-summary.component';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-summary-section-value-chain',
-  imports: [SummarySectionHeader, CommonModule, ValueChainTable, ValueChainSummaryComponent],
+  imports: [SummarySectionHeader, CommonModule, ValueChainTable, ValueChainSummaryComponent, TranslatePipe],
   templateUrl: './summary-section-value-chain.html',
   styleUrl: './summary-section-value-chain.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

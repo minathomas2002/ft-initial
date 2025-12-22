@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { ProductPlanValidationService, IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { SummarySectionOverview } from './summary-sections/summary-section-overview/summary-section-overview';
 import { SummarySectionProductPlant } from './summary-sections/summary-section-product-plant/summary-section-product-plant';
 import { SummarySectionValueChain } from './summary-sections/summary-section-value-chain/summary-section-value-chain';
@@ -24,6 +25,7 @@ export class Step05Summary {
   private readonly validationService = inject(ProductPlanValidationService);
   private readonly toasterService = inject(ToasterService);
   private readonly changeDetectionRef = inject(ChangeDetectorRef);
+  private readonly i18nService = inject(I18nService);
 
   onEditStep = output<number>();
   onSubmit = output<void>();
@@ -87,7 +89,7 @@ export class Step05Summary {
     // Check if there are any errors
     if (this.validationService.hasAnyErrors(errors)) {
       // Block submission and show error message
-      this.toasterService.error('Please correct the highlighted sections before submitting.');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.fixHighlightedSections'));
       return;
     }
     // If no errors, proceed with submission

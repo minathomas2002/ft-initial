@@ -9,10 +9,11 @@ import {
 import { ToastModule } from "primeng/toast";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { ImageErrorDirective } from "../../../directives/image-error.directive";
+import { TranslatePipe } from "../../../pipes";
 
 @Component({
   selector: "app-fileupload",
-  imports: [FileUploadModule, ButtonModule, ToastModule, ImageErrorDirective],
+  imports: [FileUploadModule, ButtonModule, ToastModule, ImageErrorDirective, TranslatePipe],
   templateUrl: "./fileupload.component.html",
   styleUrl: "./fileupload.component.scss",
   providers: [MessageService],

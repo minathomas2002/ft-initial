@@ -38,7 +38,7 @@
     <div class="flex flex-col">
       @if(files?.length > 0){
       <div>
-        <h5>Files</h5>
+        <h5>{{ 'common.files' | translate }}</h5>
         <div class="flex flex-wrap gap-4">
           @for(file of files; track file.name; let i = $index){
           <div class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full">
@@ -84,7 +84,7 @@
         <span
           class="text-primary-600 cursor-pointer"
           (click)="chooseFiles()"
-        >Click to upload</span> or drag and drop
+        >{{ 'common.clickToUpload' | translate }}</span> {{ 'common.dragAndDrop' | translate }}
       </p>
       <p class="text-sm">{{ placeholder() }}</p>
     </div>

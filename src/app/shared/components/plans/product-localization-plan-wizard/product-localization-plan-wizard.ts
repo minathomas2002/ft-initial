@@ -20,6 +20,7 @@ import { EMaterialsFormControls } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../submission-confirmation-modal/submission-confirmation-modal.component";
 import { Signature } from "src/app/shared/interfaces/plans.interface";
 import { ConfirmLeaveDialogComponent } from "../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component";
+import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -46,6 +47,7 @@ export class ProductLocalizationPlanWizard {
   planStore = inject(PlanStore);
   destroyRef = inject(DestroyRef);
   validationService = inject(ProductPlanValidationService);
+  private readonly i18nService = inject(I18nService);
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
@@ -60,38 +62,39 @@ export class ProductLocalizationPlanWizard {
 
   steps = computed<IWizardStepState[]>(() => {
     const errors = this.validationErrors();
+    this.i18nService.currentLanguage();
     return [
       {
-        title: 'Overview & Company Information',
-        description: 'Enter basic plan details and company information',
+        title: this.i18nService.translate('plans.wizard.step1.title'),
+        description: this.i18nService.translate('plans.wizard.step1.description'),
         isActive: this.activeStep() === 1,
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: true
       },
       {
-        title: 'Product & Plant Overview',
-        description: 'Enter product details and plant information',
+        title: this.i18nService.translate('plans.wizard.step2.title'),
+        description: this.i18nService.translate('plans.wizard.step2.description'),
         isActive: this.activeStep() === 2,
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: true
       },
       {
-        title: 'Value Chain',
-        description: 'Define value chain components and localization',
+        title: this.i18nService.translate('plans.wizard.step3.title'),
+        description: this.i18nService.translate('plans.wizard.step3.description'),
         isActive: this.activeStep() === 3,
         formState: this.productPlanFormService.step3_valueChain,
         hasErrors: true
       },
       {
-        title: 'Saudization',
-        description: 'Enter saudization projections and attachments',
+        title: this.i18nService.translate('plans.wizard.step4.title'),
+        description: this.i18nService.translate('plans.wizard.step4.description'),
         isActive: this.activeStep() === 4,
         formState: this.productPlanFormService.step4_saudization,
         hasErrors: true
       },
       {
-        title: 'Summary',
-        description: 'Review your localization plan before final submission',
+        title: this.i18nService.translate('plans.wizard.step5.title'),
+        description: this.i18nService.translate('plans.wizard.step5.description'),
         isActive: this.activeStep() === 5,
         formState: null,
         hasErrors: false
@@ -100,9 +103,10 @@ export class ProductLocalizationPlanWizard {
   });
   wizardTitle = computed(() => {
     const currentMode = this.mode();
-    if (currentMode === 'edit') return 'Edit Plan';
-    if (currentMode === 'view') return 'View Plan';
-    return 'Product Localization Plan';
+    this.i18nService.currentLanguage();
+    if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
+    if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
+    return this.i18nService.translate('plans.wizard.title.create');
   });
   isLoading = signal(false);
   isProcessing = signal(false);
@@ -153,7 +157,7 @@ export class ProductLocalizationPlanWizard {
     if (!this.productPlanFormService.areAllFormsValid()) {
       // Mark all controls as dirty to show validation errors
       this.productPlanFormService.markAllControlsAsDirty();
-      this.toasterService.error('Please fix all validation errors before submitting');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.fixValidationErrors'));
       return;
     }
 
@@ -188,7 +192,7 @@ export class ProductLocalizationPlanWizard {
         },
         error: (error) => {
           this.isLoadingPlan.set(false);
-          this.toasterService.error('Error loading plan data. Please try again.');
+          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.errorLoadingPlan'));
           console.error('Error loading plan:', error);
           this.visibility.set(false);
         }
@@ -250,7 +254,7 @@ export class ProductLocalizationPlanWizard {
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.toasterService.success('Product localization plan submitted successfully');
+          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.submitSuccess'));
           // Reset all forms after successful submission
           this.productPlanFormService.resetAllForms();
           // Reset wizard state
@@ -262,7 +266,7 @@ export class ProductLocalizationPlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error submitting plan. Please try again.');
+          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
           console.error('Error submitting plan:', error);
         }
       });
@@ -291,7 +295,7 @@ export class ProductLocalizationPlanWizard {
 
     // Check if plan title and opportunity are selected
     if (!planTitle || !opportunity) {
-      this.toasterService.error('Please select a plan title and opportunity');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.selectPlanTitleAndOpportunity'));
       return;
     }
 
@@ -315,8 +319,8 @@ export class ProductLocalizationPlanWizard {
         next: () => {
           this.isProcessing.set(false);
           const successMessage = isEditMode
-            ? 'Draft updated successfully.'
-            : 'Product localization plan saved as draft successfully';
+            ? this.i18nService.translate('plans.wizard.messages.draftUpdatedSuccess')
+            : this.i18nService.translate('plans.wizard.messages.draftSavedSuccess');
           this.toasterService.success(successMessage);
 
           // Only reset forms if not in edit mode (to preserve data)
@@ -331,7 +335,7 @@ export class ProductLocalizationPlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error saving draft. Please try again.');
+          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.draftError'));
           console.error('Error saving draft:', error);
         }
       });

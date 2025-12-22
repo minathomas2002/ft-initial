@@ -7,7 +7,7 @@
       class="existing-signature-image"
     />
     <p-button
-      label="Change"
+      [label]="'plans.submission.change' | translate"
       severity="secondary"
       (onClick)="changeSignature()"
       [outlined]="true"
@@ -28,9 +28,9 @@
         (touchend)="onTouchEnd()"
       ></canvas>
     </div>
-    <p class="signature-placeholder">Draw your signature using your mouse</p>
+    <p class="signature-placeholder">{{ 'plans.submission.signaturePlaceholder' | translate }}</p>
     <p-button
-      label="Clear"
+      [label]="'plans.submission.clear' | translate"
       severity="secondary"
       (onClick)="clearSignature()"
       [outlined]="true"

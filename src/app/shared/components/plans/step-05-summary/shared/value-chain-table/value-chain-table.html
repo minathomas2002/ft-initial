@@ -4,14 +4,14 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap rounded-tl-xl">Expense Header</th>
-      <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap">In-house / Procured</th>
-      <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap">Cost %</th>
+      <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap rounded-tl-xl">{{ 'plans.summary.valueChain.expenseHeader' | translate }}</th>
+      <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap">{{ 'plans.summary.valueChain.inHouseProcured' | translate }}</th>
+      <th class="p-3 !border !border-gray-200 text-left text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap">{{ 'plans.summary.valueChain.costPercentage' | translate }}</th>
       @for (year of years; track year) {
       <th
         class="p-3 !border !border-gray-200 text-center text-sm font-semibold !bg-gray-50 !text-gray-700 !whitespace-nowrap"
         [class.rounded-tr-xl]="year === years[years.length - 1]"
-      >Year {{ year }}</th>
+      >{{ 'plans.summary.year' | translate }} {{ year }}</th>
       }
     </tr>
   </ng-template>

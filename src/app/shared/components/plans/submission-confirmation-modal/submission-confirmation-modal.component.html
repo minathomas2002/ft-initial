@@ -11,9 +11,9 @@
   <div class="modal-content-wrapper max-w-[600px]">
     <!-- Disclaimer Message - appears right after title -->
     <div class="disclaimer-container">
-      <h2 class="text-lg font-semibold text-gray-900">Are you sure you want to submit this plan?</h2>
+      <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.submission.confirmTitle' | translate }}</h2>
       <p class="text-sm text-gray-600">
-        I hereby confirm that I have thoroughly reviewed this document and acknowledge that the approval of this localization plan does not constitute, nor imply, any guarantee of current or future business with SEC or any of its approved suppliers. I further affirm that all information provided within this plan (including all sections) is, to the best of my knowledge, true, accurate, and complete. I understand that failure to comply with the submitted timeline may result in the revocation of my qualification by SEC at any time.
+        {{ 'plans.submission.disclaimer' | translate }}
       </p>
     </div>
 
@@ -26,19 +26,19 @@
             for="name"
             class="form-label"
           >
-            Name <span class="required">*</span>
+            {{ 'plans.submission.name' | translate }} <span class="required">*</span>
           </label>
           <input
             id="name"
             type="text"
             pInputText
             [formControl]="formService.nameControl"
-            placeholder="Enter Name"
+            [placeholder]="'plans.submission.namePlaceholder' | translate"
             class="w-full"
           />
           <app-base-error-messages
             [control]="formService.nameControl"
-            [label]="'Name'"
+            [label]="'plans.submission.name' | translate"
           />
         </div>
 
@@ -48,19 +48,19 @@
             for="jobTitle"
             class="form-label"
           >
-            Job Title <span class="required">*</span>
+            {{ 'plans.submission.jobTitle' | translate }} <span class="required">*</span>
           </label>
           <input
             id="jobTitle"
             type="text"
             pInputText
             [formControl]="formService.jobTitleControl"
-            placeholder="Enter Job title"
+            [placeholder]="'plans.submission.jobTitlePlaceholder' | translate"
             class="w-full"
           />
           <app-base-error-messages
             [control]="formService.jobTitleControl"
-            [label]="'Job Title'"
+            [label]="'plans.submission.jobTitle' | translate"
           />
         </div>
 
@@ -70,18 +70,18 @@
             for="contactNumber"
             class="form-label"
           >
-            Contact number <span class="required">*</span>
+            {{ 'plans.submission.contactNumber' | translate }} <span class="required">*</span>
           </label>
           <app-phone-input
             id="contactNumber"
             [ngModel]="phoneInputValue()"
             (ngModelChange)="onPhoneNumberChange($event)"
-            placeholder="Enter Contact number"
+            [placeholder]="'plans.submission.contactNumberPlaceholder' | translate"
             class="w-full"
           />
           <app-base-error-messages
             [control]="formService.contactNumberControl"
-            [label]="'Contact number'"
+            [label]="'plans.submission.contactNumber' | translate"
           />
         </div>
 
@@ -91,19 +91,19 @@
             for="emailId"
             class="form-label"
           >
-            Email ID <span class="required">*</span>
+            {{ 'plans.submission.emailId' | translate }} <span class="required">*</span>
           </label>
           <input
             id="emailId"
             type="email"
             pInputText
             [formControl]="formService.emailIdControl"
-            placeholder="Enter Email ID"
+            [placeholder]="'plans.submission.emailIdPlaceholder' | translate"
             class="w-full"
           />
           <app-base-error-messages
             [control]="formService.emailIdControl"
-            [label]="'Email ID'"
+            [label]="'plans.submission.emailId' | translate"
           />
         </div>
       </div>
@@ -111,7 +111,7 @@
       <!-- Signature Field -->
       <div class="form-field signature-field">
         <label class="form-label">
-          Draw your signature <span class="required">*</span>
+          {{ 'plans.submission.drawSignature' | translate }} <span class="required">*</span>
         </label>
         <app-signature-pad
           [existingSignature]="existingSignature()"
@@ -119,7 +119,7 @@
         />
         <app-base-error-messages
           [control]="formService.signatureControl"
-          [label]="'Signature'"
+          [label]="'plans.submission.signature' | translate"
         />
       </div>
     </div>
@@ -127,14 +127,14 @@
 
   <ng-template #footerButtons>
     <p-button
-      label="Back"
+      [label]="'plans.submission.back' | translate"
       severity="secondary"
       (onClick)="onBackClick()"
       [disabled]="isSubmitting()"
       class="flex-initial"
     />
     <p-button
-      label="Submit"
+      [label]="'plans.submission.submit' | translate"
       severity="primary"
       (onClick)="onSubmitClick()"
       [disabled]="isSubmitDisabled()"

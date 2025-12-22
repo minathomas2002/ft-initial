@@ -7,16 +7,19 @@ import { CommonModule } from '@angular/common';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { SummaryTableCell } from '../../shared/summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-summary-section-saudization',
-  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, TableModule],
+  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, TableModule, TranslatePipe],
   templateUrl: './summary-section-saudization.html',
   styleUrl: './summary-section-saudization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionSaudization {
   private readonly formService = inject(ProductPlanFormService);
+  private readonly i18nService = inject(I18nService);
 
   formGroup = input.required<FormGroup>();
   onEdit = output<void>();
@@ -109,9 +112,10 @@ export class SummarySectionSaudization {
 
   // Table rows data for PrimeNG table
   tableRows = computed(() => {
+    this.i18nService.currentLanguage();
     return [
       {
-        label: 'Annual Headcount (#)',
+        label: this.i18nService.translate('plans.summary.saudization.annualHeadcount'),
         controlName: EMaterialsFormControls.annualHeadcount,
         year1: this.getRowValueForYear(1, EMaterialsFormControls.annualHeadcount),
         year1HasError: this.getRowHasErrorForYear(1, EMaterialsFormControls.annualHeadcount),
@@ -129,8 +133,8 @@ export class SummarySectionSaudization {
         year7HasError: this.getRowHasErrorForYear(7, EMaterialsFormControls.annualHeadcount),
       },
       {
-        label: 'Saudization %',
-        subtitle: '(No. of Saudi employees / Total employees)',
+        label: this.i18nService.translate('plans.summary.saudization.saudizationPercentage'),
+        subtitle: this.i18nService.translate('plans.summary.saudization.saudizationSubtitle'),
         controlName: EMaterialsFormControls.saudizationPercentage,
         year1: this.getRowValueForYear(1, EMaterialsFormControls.saudizationPercentage),
         year1HasError: this.getRowHasErrorForYear(1, EMaterialsFormControls.saudizationPercentage),
@@ -148,7 +152,7 @@ export class SummarySectionSaudization {
         year7HasError: this.getRowHasErrorForYear(7, EMaterialsFormControls.saudizationPercentage),
       },
       {
-        label: 'Annual Total Compensation (SAR)',
+        label: this.i18nService.translate('plans.summary.saudization.annualTotalCompensation'),
         controlName: EMaterialsFormControls.annualTotalCompensation,
         year1: this.getRowValueForYear(1, EMaterialsFormControls.annualTotalCompensation),
         year1HasError: this.getRowHasErrorForYear(1, EMaterialsFormControls.annualTotalCompensation),
@@ -166,8 +170,8 @@ export class SummarySectionSaudization {
         year7HasError: this.getRowHasErrorForYear(7, EMaterialsFormControls.annualTotalCompensation),
       },
       {
-        label: 'Saudi Compensation %',
-        subtitle: '(Saudi compensation / Total compensation)',
+        label: this.i18nService.translate('plans.summary.saudization.saudiCompensationPercentage'),
+        subtitle: this.i18nService.translate('plans.summary.saudization.saudiCompensationSubtitle'),
         controlName: EMaterialsFormControls.saudiCompensationPercentage,
         year1: this.getRowValueForYear(1, EMaterialsFormControls.saudiCompensationPercentage),
         year1HasError: this.getRowHasErrorForYear(1, EMaterialsFormControls.saudiCompensationPercentage),

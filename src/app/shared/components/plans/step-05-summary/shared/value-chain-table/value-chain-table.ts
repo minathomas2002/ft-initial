@@ -2,10 +2,11 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { SummaryTableCell } from '../summary-table-cell/summary-table-cell';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-value-chain-table',
-  imports: [CommonModule, TableModule, SummaryTableCell],
+  imports: [CommonModule, TableModule, SummaryTableCell, TranslatePipe],
   templateUrl: './value-chain-table.html',
   styleUrl: './value-chain-table.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

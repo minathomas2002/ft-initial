@@ -105,8 +105,8 @@ export class InvestorDashboard implements OnInit {
 
   getPlanTypeLabel(planType: EOpportunityType): string {
     return planType === EOpportunityType.SERVICES
-      ? this.i18nService.translate('Services')
-      : this.i18nService.translate('Product');
+      ? this.i18nService.translate('opportunity.type.services')
+      : this.i18nService.translate('opportunity.type.product');
   }
 
   getStatusLabel(status: EInvestorPlanStatus): string {
@@ -116,7 +116,7 @@ export class InvestorDashboard implements OnInit {
       [EInvestorPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
       [EInvestorPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
       [EInvestorPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
-      [EInvestorPlanStatus.DRAFT]: this.i18nService.translate('Draft'),
+      [EInvestorPlanStatus.DRAFT]: this.i18nService.translate('plans.status.draft'),
     };
     return statusMap[status] || '';
   }
