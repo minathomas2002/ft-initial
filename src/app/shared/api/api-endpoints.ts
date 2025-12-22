@@ -29,9 +29,9 @@ export const API_ENDPOINTS = {
   plans: {
     getInvestorDashboardPlans: `${Plans}/get-investor-dashboard-plans`,
     getDvManagerDashboardPlans: `${Plans}/get-dvmanager-dashboard-plans`,
-    getActiveEmployeesWithPlans: `${SystemEmployees}/active-employees?planId=`,
-    assign: `${SystemEmployees}/assign`,
-    reassign: `${SystemEmployees}/reassign`,
+    getActiveEmployeesWithPlans: `${Plans}/active-employees?planId=`,
+    assign: `${Plans}/assign`,
+    reassign: `${Plans}/reassign`,
     saveAsDraftProductLocalizationPlan: `${Plans}/saveAsDraft-productPlan`,
     submitProductLocalizationPlan: `${Plans}/submit-productPlan`,
     getProductPlan: `${Plans}/get-productPlan`,

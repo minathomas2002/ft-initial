@@ -16,6 +16,8 @@ import { DvManagerDashboardPlansFilter } from '../../components/dv-manager-dashb
 import { DvManagerDashboardPlanActionMenu } from '../../components/dv-manager-dashboard-plan-action-menu/dv-manager-dashboard-plan-action-menu';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { AssignReassignManualEmployee } from 'src/app/features/plans/components/assign-reassign-manual-employee/assign-reassign-manual-employee';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
 
 @Component({
   selector: 'app-dv-manager-dashboard',
@@ -30,7 +32,9 @@ import { TranslatePipe } from 'src/app/shared/pipes';
     DatePipe,
     NgClass,
     SkeletonModule,
-    TranslatePipe
+    TranslatePipe,
+    AssignReassignManualEmployee,
+    ProductLocalizationPlanWizard
   ],
   templateUrl: './dv-manager-dashboard.html',
   styleUrl: './dv-manager-dashboard.scss',
@@ -41,6 +45,9 @@ export class DvManagerDashboard implements OnInit {
   // Wizard mode and plan ID signals
   selectedPlanId = signal<string | null>(null);
   wizardMode = signal<'create' | 'edit' | 'view'>('create');
+  productLocalizationPlanWizardVisibility = signal(false);
+
+  EEmployeePlanStatus = EEmployeePlanStatus;
 
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
@@ -48,7 +55,9 @@ export class DvManagerDashboard implements OnInit {
   private readonly i18nService = inject(I18nService);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
-
+  viewAssignDialog = signal<boolean>(false);
+  isReassignMode = signal<boolean>(false);
+  planItem = signal<IPlanRecord | null>(null);
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
     this.i18nService.currentLanguage();
     return [
@@ -134,7 +143,8 @@ export class DvManagerDashboard implements OnInit {
   onViewDetails(plan: IPlanRecord) {
     // Set mode to view and plan ID
     this.wizardMode.set('view');
-    this.selectedPlanId.set(plan.id);    
+    this.selectedPlanId.set(plan.id);
+    this.productLocalizationPlanWizardVisibility.set(true);
   }
 
   onDownload(plan: IPlanRecord) {
@@ -148,6 +158,22 @@ export class DvManagerDashboard implements OnInit {
 
   onSubmitProductLocalizationPlanWizard() {
     console.log('Submit product localization plan wizard');
+  }
+
+  onViewTimeline(plan: IPlanRecord) {
+    console.log('View timeline:', plan);
+  }
+
+  onAssignToEmployee(plan: IPlanRecord) {
+    this.viewAssignDialog.set(true);
+    this.planItem.set(plan);
+    this.isReassignMode.set(false);
+  }
+
+  onReAssign(plan: IPlanRecord) {
+    this.viewAssignDialog.set(true);
+    this.planItem.set(plan);
+    this.isReassignMode.set(true);
   }
 }
 

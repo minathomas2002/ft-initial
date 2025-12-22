@@ -1,6 +1,6 @@
 <app-base-dialog
   [(visible)]="visibility"
-  [confirmLabel]="'plan.newPlan.next' | translate"
+  [confirmLabel]="'plans.newPlan.next' | translate"
   [isConfirmationDisabled]="!isUserReadAndApproved()"
   [icon]="'icon-info'"
   [confirmButtonClass]="'w-[100px]  button:bg-gray-200'"
@@ -11,9 +11,9 @@
   <ng-container ngProjectAs="content">
     <div class="content flex flex-col gap-5 max-w-[960px]">
       <div class="header">
-        <h2 class="text-lg font-semibold text-gray-900 mb-[2px]">{{ 'plan.termsAndConditions.title' | translate }}</h2>
+        <h2 class="text-lg font-semibold text-gray-900 mb-[2px]">{{ 'plans.termsAndConditions.title' | translate }}</h2>
         <p class="text-sm text-gray-600">
-          {{ 'plan.termsAndConditions.description' | translate }}
+          {{ 'plans.termsAndConditions.description' | translate }}
         </p>
       </div>
 
@@ -23,8 +23,8 @@
             <span>1</span>
           </div>
           <div class="step-item-content">
-            <h3>{{ 'plan.termsAndConditions.step1Title' | translate }}</h3>
-            <p>{{ 'plan.termsAndConditions.step1Description' | translate }}</p>
+            <h3>{{ 'plans.termsAndConditions.step1Title' | translate }}</h3>
+            <p>{{ 'plans.termsAndConditions.step1Description' | translate }}</p>
           </div>
         </div>
 
@@ -33,8 +33,8 @@
             <span>2</span>
           </div>
           <div class="step-item-content">
-            <h3>{{ 'plan.termsAndConditions.step2Title' | translate }}</h3>
-            <p>{{ 'plan.termsAndConditions.step2Description' | translate }}</p>
+            <h3>{{ 'plans.termsAndConditions.step2Title' | translate }}</h3>
+            <p>{{ 'plans.termsAndConditions.step2Description' | translate }}</p>
           </div>
         </div>
 
@@ -43,8 +43,8 @@
             <span>3</span>
           </div>
           <div class="step-item-content">
-            <h3>{{ 'plan.termsAndConditions.step3Title' | translate }}</h3>
-            <p>{{ 'plan.termsAndConditions.step3Description' | translate }}</p>
+            <h3>{{ 'plans.termsAndConditions.step3Title' | translate }}</h3>
+            <p>{{ 'plans.termsAndConditions.step3Description' | translate }}</p>
           </div>
         </div>
 
@@ -53,8 +53,8 @@
             <span>4</span>
           </div>
           <div class="step-item-content">
-            <h3>{{ 'plan.termsAndConditions.step4Title' | translate }}</h3>
-            <p>{{ 'plan.termsAndConditions.step4Description' | translate }}</p>
+            <h3>{{ 'plans.termsAndConditions.step4Title' | translate }}</h3>
+            <p>{{ 'plans.termsAndConditions.step4Description' | translate }}</p>
           </div>
         </div>
 
@@ -63,8 +63,8 @@
             <span>5</span>
           </div>
           <div class="step-item-content">
-            <h3>{{ 'plan.termsAndConditions.step5Title' | translate }}</h3>
-            <p>{{ 'plan.termsAndConditions.step5Description' | translate }}</p>
+            <h3>{{ 'plans.termsAndConditions.step5Title' | translate }}</h3>
+            <p>{{ 'plans.termsAndConditions.step5Description' | translate }}</p>
           </div>
         </div>
       </div>
@@ -72,35 +72,35 @@
       <div class="border-gray-200 border-1"></div>
 
       <div class="flex flex-col gap-3">
-        <h2 class="text-md font-semibold text-gray-900">{{ 'plan.termsAndConditions.instructionsTitle' | translate }}</h2>
+        <h2 class="text-md font-semibold text-gray-900">{{ 'plans.termsAndConditions.instructionsTitle' | translate }}</h2>
         <div class="flex flex-col gap-4">
           <div class="flex gap-3">
             <i class="icon-check-circle text-primary-500 mt-1"></i>
-            <p>{{ 'plan.termsAndConditions.instruction1' | translate }}</p>
+            <p>{{ 'plans.termsAndConditions.instruction1' | translate }}</p>
           </div>
           <div class="flex gap-3">
             <i class="icon-check-circle text-primary-500 mt-1"></i>
-            <p>{{ 'plan.termsAndConditions.instruction2' | translate }}</p>
+            <p>{{ 'plans.termsAndConditions.instruction2' | translate }}</p>
           </div>
           <div class="flex gap-3">
             <i class="icon-check-circle text-primary-500 mt-1"></i>
             <p>
-              {{ 'plan.termsAndConditions.instruction3' | translate }}
+              {{ 'plans.termsAndConditions.instruction3' | translate }}
             </p>
           </div>
           <div class="flex gap-3">
             <i class="icon-check-circle text-primary-500 mt-1"></i>
             <p>
-              {{ 'plan.termsAndConditions.instruction4' | translate }}
+              {{ 'plans.termsAndConditions.instruction4' | translate }}
             </p>
           </div>
           <div class="flex gap-3">
             <i class="icon-check-circle text-primary-500 mt-1"></i>
-            <p>{{ 'plan.termsAndConditions.instruction5' | translate }}</p>
+            <p>{{ 'plans.termsAndConditions.instruction5' | translate }}</p>
           </div>
           <div class="flex gap-3">
             <i class="icon-check-circle text-primary-500 mt-1"></i>
-            <p>{{ 'plan.termsAndConditions.instruction6' | translate }}</p>
+            <p>{{ 'plans.termsAndConditions.instruction6' | translate }}</p>
           </div>
         </div>
       </div>
@@ -118,7 +118,7 @@
       <label
         for="isAgreed"
         class="text-sm font-medium text-gray-700"
-      >{{ 'plan.termsAndConditions.readAndApproved' | translate }}</label>
+      >{{ 'plans.termsAndConditions.readAndApproved' | translate }}</label>
     </div>
   </ng-container>
 </app-base-dialog>

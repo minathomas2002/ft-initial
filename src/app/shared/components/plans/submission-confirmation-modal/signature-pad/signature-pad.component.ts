@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, model, output, signal, viewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, model, OnDestroy, output, signal, viewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TranslatePipe } from 'src/app/shared/pipes';
 
@@ -9,7 +9,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   styleUrl: './signature-pad.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignaturePadComponent implements AfterViewInit {
+export class SignaturePadComponent implements AfterViewInit, OnDestroy {
   canvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
   existingSignature = input<string | null>(null);
   onSignatureChange = output<string | null>();
@@ -22,6 +22,8 @@ export class SignaturePadComponent implements AfterViewInit {
   private initRetryCount = 0;
   private readonly MAX_RETRIES = 10;
   private viewInitialized = false;
+  private documentMouseMoveHandler?: (e: MouseEvent) => void;
+  private documentMouseUpHandler?: () => void;
 
   constructor() {
     effect(() => {
@@ -126,43 +128,70 @@ export class SignaturePadComponent implements AfterViewInit {
     }
   }
 
-  private getCanvasCoordinates(event: MouseEvent | Touch): { x: number; y: number } {
-    const canvas = this.canvasRef().nativeElement;
-    const rect = canvas.getBoundingClientRect();
+  private getCanvasCoordinates(event: MouseEvent | Touch): { x: number; y: number } | null {
+    try {
+      const canvas = this.canvasRef().nativeElement;
+      if (!canvas) return null;
+      
+      const rect = canvas.getBoundingClientRect();
 
-    // Get client coordinates (works for both MouseEvent and Touch)
-    const clientX = event.clientX;
-    const clientY = event.clientY;
+      // Get client coordinates (works for both MouseEvent and Touch)
+      const clientX = event.clientX;
+      const clientY = event.clientY;
 
-    // Calculate coordinates relative to canvas top-left corner
-    let x = clientX - rect.left;
-    let y = clientY - rect.top;
+      // Calculate coordinates relative to canvas top-left corner
+      let x = clientX - rect.left;
+      let y = clientY - rect.top;
 
-    // Scale coordinates to match canvas internal dimensions
-    // This accounts for any difference between display size and internal size
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    x *= scaleX;
-    y *= scaleY;
+      // Clamp coordinates to canvas bounds (important when using document-level listeners)
+      x = Math.max(0, Math.min(x, rect.width));
+      y = Math.max(0, Math.min(y, rect.height));
 
-    return { x, y };
+      // Scale coordinates to match canvas internal dimensions
+      // This accounts for any difference between display size and internal size
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      x *= scaleX;
+      y *= scaleY;
+
+      return { x, y };
+    } catch (error) {
+      console.error('Error getting canvas coordinates:', error);
+      return null;
+    }
   }
 
   onMouseDown(event: MouseEvent): void {
-    if (!this.ctx) return;
+    if (!this.ctx) {
+      // Try to initialize if context is not available
+      this.initializeCanvas();
+      if (!this.ctx) return;
+    }
     event.preventDefault();
+    event.stopPropagation();
     this.isDrawing.set(true);
-    const { x, y } = this.getCanvasCoordinates(event);
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
+    const coords = this.getCanvasCoordinates(event);
+    if (coords) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(coords.x, coords.y);
+    }
+    
+    // Add document-level listeners to handle mouse movement outside canvas
+    this.documentMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
+    this.documentMouseUpHandler = () => this.onMouseUp();
+    document.addEventListener('mousemove', this.documentMouseMoveHandler);
+    document.addEventListener('mouseup', this.documentMouseUpHandler);
   }
 
   onMouseMove(event: MouseEvent): void {
     if (!this.isDrawing() || !this.ctx) return;
     event.preventDefault();
-    const { x, y } = this.getCanvasCoordinates(event);
-    this.ctx.lineTo(x, y);
-    this.ctx.stroke();
+    event.stopPropagation();
+    const coords = this.getCanvasCoordinates(event);
+    if (coords) {
+      this.ctx.lineTo(coords.x, coords.y);
+      this.ctx.stroke();
+    }
   }
 
   onMouseUp(): void {
@@ -170,25 +199,48 @@ export class SignaturePadComponent implements AfterViewInit {
       this.isDrawing.set(false);
       this.saveSignature();
     }
+    // Remove document-level listeners
+    if (this.documentMouseMoveHandler) {
+      document.removeEventListener('mousemove', this.documentMouseMoveHandler);
+      this.documentMouseMoveHandler = undefined;
+    }
+    if (this.documentMouseUpHandler) {
+      document.removeEventListener('mouseup', this.documentMouseUpHandler);
+      this.documentMouseUpHandler = undefined;
+    }
   }
 
   onTouchStart(event: TouchEvent): void {
     event.preventDefault();
-    if (!this.ctx) return;
+    event.stopPropagation();
+    if (!this.ctx) {
+      // Try to initialize if context is not available
+      this.initializeCanvas();
+      if (!this.ctx) return;
+    }
     this.isDrawing.set(true);
     const touch = event.touches[0];
-    const { x, y } = this.getCanvasCoordinates(touch);
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
+    if (touch) {
+      const coords = this.getCanvasCoordinates(touch);
+      if (coords) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(coords.x, coords.y);
+      }
+    }
   }
 
   onTouchMove(event: TouchEvent): void {
     event.preventDefault();
+    event.stopPropagation();
     if (!this.isDrawing() || !this.ctx) return;
     const touch = event.touches[0];
-    const { x, y } = this.getCanvasCoordinates(touch);
-    this.ctx.lineTo(x, y);
-    this.ctx.stroke();
+    if (touch) {
+      const coords = this.getCanvasCoordinates(touch);
+      if (coords) {
+        this.ctx.lineTo(coords.x, coords.y);
+        this.ctx.stroke();
+      }
+    }
   }
 
   onTouchEnd(): void {
@@ -248,5 +300,15 @@ export class SignaturePadComponent implements AfterViewInit {
       }
     };
     img.src = dataUrl;
+  }
+
+  ngOnDestroy(): void {
+    // Clean up document-level event listeners
+    if (this.documentMouseMoveHandler) {
+      document.removeEventListener('mousemove', this.documentMouseMoveHandler);
+    }
+    if (this.documentMouseUpHandler) {
+      document.removeEventListener('mouseup', this.documentMouseUpHandler);
+    }
   }
 }

@@ -11,32 +11,18 @@
       <!-- Skeleton Loading State -->
       @for (item of [1, 2, 3, 4, 5]; track item) {
       <div class="bg-white rounded-xl border-1 border-gray-200 p-6">
-        <p-skeleton
-          width="120px"
-          height="16px"
-          class="mb-2"
-        />
-        <p-skeleton
-          width="60px"
-          height="32px"
-          class="mb-4"
-        />
+        <p-skeleton width="120px" height="16px" class="mb-2" />
+        <p-skeleton width="60px" height="32px" class="mb-4" />
         <div class="flex items-center gap-1">
-          <p-skeleton
-            width="100px"
-            height="16px"
-          />
-          <p-skeleton
-            width="16px"
-            height="16px"
-            shape="circle"
-          />
+          <p-skeleton width="100px" height="16px" />
+          <p-skeleton width="16px" height="16px" shape="circle" />
         </div>
       </div>
-      }
-      } @else {
+      } } @else {
       <!-- Total Plans -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.totalPlans' | translate }}
         </p>
@@ -52,7 +38,9 @@
       </div>
 
       <!-- Unsigned Plans -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.unAssignedPlans' | translate }}
         </p>
@@ -68,7 +56,9 @@
       </div>
 
       <!-- Plans Under Review -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.plansUnderReview' | translate }}
         </p>
@@ -84,7 +74,9 @@
       </div>
 
       <!-- Approved Plans -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.approvedPlans' | translate }}
         </p>
@@ -100,7 +92,9 @@
       </div>
 
       <!-- Rejected Plans -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.rejectedPlans' | translate }}
         </p>
@@ -122,10 +116,7 @@
   </ng-container>
 
   <ng-container ngProjectAs="table-body">
-    <app-table-skeleton
-      [headers]="headers()"
-      [isLoading]="isLoading()"
-    >
+    <app-table-skeleton [headers]="headers()" [isLoading]="isLoading()">
       <app-data-table
         [columns]="headers()"
         [rows]="rows()"
@@ -136,12 +127,9 @@
         [showCheckBox]="false"
         [rowsCheckable]="false"
       >
-        <ng-template
-          #itemsTemplate
-          let-item="item"
-        >
+        <ng-template #itemsTemplate let-item="item">
           <td>
-            {{ '#'+item.planCode }}
+            {{ '#' + item.planCode }}
           </td>
           <td>
             <p class="text-sm text-gray-900 font-medium">{{ item.investorName ?? '-' }}</p>
@@ -152,25 +140,42 @@
           <td>
             <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
           </td>
-          <td>{{ item.submissionDate | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ item.submissionDate | date : 'dd/MM/yyyy' }}</td>
           <td>
+            @if(item.status !== EEmployeePlanStatus.UNASSIGNED) {
             <span
               class="text-sm font-medium"
-              [ngClass]="item.slaCountDown >= 5 ? 'text-green-500' : item.slaCountDown > 2 ? 'text-orange-500' : 'text-red-600'"
+              [ngClass]="
+                item.slaCountDown >= 5
+                  ? 'text-green-500'
+                  : item.slaCountDown > 2
+                  ? 'text-orange-500'
+                  : 'text-red-600'
+              "
             >
               {{ item.slaCountDown }} {{ 'plans.table.daysRemaining' | translate }}
             </span>
+            } @else {
+            <span class="text-sm font-medium">-</span>
+            }
           </td>
           <td>
-            <span class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl {{ getStatusBadgeClass(item.status) }}">
+            <span
+              class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl {{
+                getStatusBadgeClass(item.status)
+              }}"
+            >
               {{ getStatusLabel(item.status) }}
             </span>
           </td>
           <td>
             <app-dv-manager-dashboard-plan-action-menu
               [plan]="item"
-              (onViewDetails)="onViewDetails($event)"              
-              (onDownload)="onDownload($event)"              
+              (onViewDetails)="onViewDetails($event)"
+              (onDownload)="onDownload($event)"
+              (onViewTimeline)="onViewTimeline($event)"
+              (onAssignToEmployee)="onAssignToEmployee($event)"
+              (onReAssign)="onReAssign($event)"
             />
           </td>
         </ng-template>
@@ -178,3 +183,21 @@
     </app-table-skeleton>
   </ng-container>
 </app-table-layout>
+
+@if (viewAssignDialog()) {
+<app-assign-reassign-manual-employee
+  [(dialogVisible)]="viewAssignDialog"
+  [isReassignMode]="isReassignMode()"
+  [planRecord]="planItem()"
+  (onSuccess)="applyFilter()"
+></app-assign-reassign-manual-employee>
+} 
+
+@if(productLocalizationPlanWizardVisibility()){
+<app-product-localization-plan-wizard
+  [(visibility)]="productLocalizationPlanWizardVisibility"
+  [mode]="wizardMode()"
+  [planId]="selectedPlanId()"
+  (doRefresh)="applyFilter()"
+/>
+}

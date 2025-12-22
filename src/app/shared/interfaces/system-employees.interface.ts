@@ -19,6 +19,16 @@ export interface IActiveEmployee {
   nameEn: string;
 }
 
+export interface IAssignActiveEmployee {
+  id: string;
+  name: string;  
+}
+
+export interface IAssignReassignActiveEmployee {
+  activeEmployees: IAssignActiveEmployee[];
+  currentEmployee?: IAssignActiveEmployee;
+}
+
 export interface ISystemEmployeeDetails {
   id: string;
   employeeID: string;

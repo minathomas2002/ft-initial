@@ -31,14 +31,12 @@ export class AssignReassignManualEmployee {
   i18nService = inject(I18nService);
   toasterService = inject(ToasterService);
 
-
-
   ngOnInit() {
     this.loadActiveEmployees();
   }
 
   onConfirm() {
-    const employeeName = this.activeSystemEmployees()?.find(x => x.userId === this.formService.employeeId.value)?.nameEn;
+    const employeeName = this.activeSystemEmployees()?.find(x => x.id === this.formService.employeeId.value)?.name;
     if (this.isReassignMode())
       this.reAssignEmployee(employeeName!);
     else {
@@ -86,6 +84,7 @@ export class AssignReassignManualEmployee {
       );
 
   }
+
   reAssignEmployee(employeeName: string) {
     const request: IAssignRequest = {
       planId: this.planRecord()?.id!,

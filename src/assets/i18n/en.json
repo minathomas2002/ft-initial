@@ -608,7 +608,18 @@
     "subTitleDvManager": "Track and manage submitted localization plans that require your action",
     "submitNewPlan": "Submit New Plan"
   },
-  "plan": {
+  "dialog": {
+    "cancel": "Cancel",
+    "deleteOpportunity": "Are you sure you want to delete this opportunity?",
+    "deleteOpportunityDescription": "This action cannot be undone. Once deleted, all related data will be permanently removed.",
+    "moveToDraft": "Are you sure you want to move this opportunity to draft?",
+    "publishOpportunity": "Are you sure you want to publish this opportunity?",
+    "delete": "Delete",
+    "draft": "Draft",
+    "publish": "Publish"
+  },
+  "plans": {
+    "assign": "Assign",
     "newPlan": {
       "title": "New Opportunity",
       "description": "Enter basic details to start your localization plan",
@@ -643,20 +654,7 @@
       "instruction5": "The signature disclaimer is displayed at the end of the template, and must signed it before submitting the plan.",
       "instruction6": "It's important for SEC to know that the product you are targeting to localize is purchased directly by SEC, or it's approved suppliers. Please provide this information carefully in the 'Targeted Customer' section of the '2. Product & Plant Overview' tab page.",
       "readAndApproved": "Read and approved"
-    }
-  },
-  "dialog": {
-    "cancel": "Cancel",
-    "deleteOpportunity": "Are you sure you want to delete this opportunity?",
-    "deleteOpportunityDescription": "This action cannot be undone. Once deleted, all related data will be permanently removed.",
-    "moveToDraft": "Are you sure you want to move this opportunity to draft?",
-    "publishOpportunity": "Are you sure you want to publish this opportunity?",
-    "delete": "Delete",
-    "draft": "Draft",
-    "publish": "Publish"
-  },
-  "plans": {
-    "assign": "Assign",
+    },
     "status": {
       "submitted": "Submitted",
       "pending": "Pending",
@@ -812,7 +810,10 @@
     "actions": {
       "viewDetails": "View Details",
       "edit": "Edit",
-      "download": "Download"
+      "download": "Download",
+      "viewTimeline": "View Timeline",
+      "assignToEmployee": "Assign to Employee",
+      "reAssign": "Reassign"
     }
   },
   "assign": {
@@ -823,7 +824,8 @@
     "employeeLabel":"Employee",
     "employeePlaceholder":"Select Employee",
     "employeeRequired":"Employee is required",
-    "assignSuccessMsg": "Plan has been successfully assigned to the {employee}.",
-    "reassignSuccessMsg": "Plan has been reassigned successfully to the {employee}."
+    "assignSuccessMsg": "Plan has been successfully assigned to the {{employee}}.",
+    "reassignSuccessMsg": "Plan has been reassigned successfully to the {{employee}}.",
+    "currentEmployee": "Current Employee"
   }
 }

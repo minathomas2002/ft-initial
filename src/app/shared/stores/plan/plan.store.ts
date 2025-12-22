@@ -3,7 +3,7 @@ import { OpportunitiesApiService } from "../../api/opportunities/opportunities-a
 import { EExperienceRange, EInHouseProcuredType, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
-import { IActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IActiveEmployee, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { IProductPlanResponse } from "../../interfaces/plans.interface";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
 
@@ -23,7 +23,8 @@ const initialState: {
   productManufacturingExperienceOptions: ISelectItem[],
   inHouseProcuredOptions: ISelectItem[],
   localizationStatusOptions: ISelectItem[]
-  activeEmployees: IActiveEmployee[] | null;
+  activeEmployees: IAssignActiveEmployee[] | null;
+  currentEmployee: IAssignActiveEmployee | null;
   isLoading: boolean;
   isProcessing: boolean;
 
@@ -59,6 +60,7 @@ const initialState: {
     { id: ELocalizationStatusType.Partial.toString(), name: 'Partial' }
   ],
   activeEmployees: null,
+  currentEmployee: null,
   isLoading: false,
   isProcessing: false
 
@@ -118,7 +120,8 @@ export const PlanStore = signalStore(
         return planApiService.getActiveEmployeesForPlans(planId).pipe(
           tap((res) => {
             patchState(store, { isLoading: false });
-            patchState(store, { activeEmployees: res.body || [] });
+            patchState(store, { activeEmployees: res.body.activeEmployees || [] });
+            patchState(store, { currentEmployee: res.body.currentEmployee || null });
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error getting active employees' });

@@ -34,7 +34,7 @@ export class DvManagerDashboardPlanActionMenu {
 
         items.push({
             label: this.i18nService.translate('plans.actions.download'),
-            icon: 'icon-download',
+            icon: 'icon-data',
             command: () => this.onDownload.emit(plan),
         });
 

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable } from 'rxjs';
-import { IActiveEmployee, IAssignRequest, IBaseApiResponse } from '../../interfaces';
+import { IActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { IProductLocalizationPlanRequest, IProductPlanResponse } from '../../interfaces/plans.interface';
 
@@ -11,8 +11,8 @@ import { IProductLocalizationPlanRequest, IProductPlanResponse } from '../../int
 export class PlanApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
-  getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IActiveEmployee[]>> {
-    return this.baseHttpService.get<IActiveEmployee[], string>(API_ENDPOINTS.plans.getActiveEmployeesWithPlans + planId);
+  getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IAssignReassignActiveEmployee>> {
+    return this.baseHttpService.get<IAssignReassignActiveEmployee, string>(API_ENDPOINTS.plans.getActiveEmployeesWithPlans + planId);
   }
 
   assignEmployeeToPlan(req: IAssignRequest): Observable<IBaseApiResponse<boolean>> {

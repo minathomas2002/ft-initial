@@ -1,9 +1,9 @@
 <app-base-dialog
   [(visible)]="dialogVisible"
   icon="icon-user-plus"
-  [confirmLabel]="isReassignMode() 
-  ? ('assign.reassign' | translate) 
-  : ('assign.assign' | translate)"
+  [confirmLabel]="
+    isReassignMode() ? ('assign.reassign' | translate) : ('assign.assign' | translate)
+  "
   [confirmButtonClass]="'w-fit'"
   [cancelButtonClass]="'w-fit'"
   [isConfirmationDisabled]="formService.form.invalid"
@@ -11,32 +11,31 @@
   (onClose)="resetForm()"
   [isLoading]="false"
 >
-
   <div class="mb-5">
-    <p class="text-lg font-semibold text-gray-900 mb-1">{{
-      isReassignMode()
-      ? ('assign.reassign' | translate)
-      : ('assign.assign' | translate)
-      }}</p>
-    <h4 class="xl:text-md text-sm text-gray-600">{{
-      isReassignMode()
-      ? ('assign.reassignDesc' | translate)
-      : ('assign.assignDesc' | translate)
-      }}</h4>
+    <p class="text-lg font-semibold text-gray-900 mb-1">
+      {{ isReassignMode() ? ('assign.reassign' | translate) : ('assign.assign' | translate) }}
+    </p>
+    @if(isReassignMode()){
+      <div class="xl:text-md text-sm text-gray-600 my-4">
+        <span>{{ 'assign.currentEmployee' | translate }}: </span>
+        <span class="text-gray-900">{{ planStore.currentEmployee()?.name }}</span>
+      </div>      
+    }
+    <h4 class="xl:text-md text-sm text-gray-600">
+      {{
+        isReassignMode() ? ('assign.reassignDesc' | translate) : ('assign.assignDesc' | translate)
+      }}
+    </h4>
   </div>
   @if(!planStore.loading()){
   <div class="grid grid-cols-12 gap-4">
-
     <div class="col-span-12 md:col-span-12">
-      <app-base-label
-        [title]="'assign.employeeLabel' | translate"
-        [required]="true"
-      />
+      <app-base-label [title]="'assign.employeeLabel' | translate" [required]="true" />
       <p-select
         [options]="activeSystemEmployees()"
         appendTo="body"
-        optionLabel="name_En"
-        optionValue="userId"
+        optionLabel="name"
+        optionValue="id"
         [formControl]="formService.employeeId"
         [placeholder]="'assign.employeePlaceholder' | translate"
         dropdownIcon="icon-chevron-down"
@@ -46,12 +45,9 @@
         @if(formService.employeeId.dirty && formService.employeeId.errors){
         @if(formService.employeeId.hasError('required')){
         <app-base-error [message]="'assign.employeeRequired' | translate" />
-        }
-        }
+        } }
       </div>
-
     </div>
-
   </div>
   }
 </app-base-dialog>
