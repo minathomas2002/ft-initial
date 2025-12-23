@@ -20,8 +20,9 @@
       [showCheckbox]="showCheckbox()"
     >
       <app-fileupload
+        [isViewMode]="isViewMode()"
         [acceptedFileTypes]="'.pdf, .png, .jpg, .jpeg, .zip, .rar'"
-        [(files)]="files"
+        [(files)]="files"        
         class="w-full"
         [placeholder]="'You can upload any file type (images, documents, archives).'"
         [multiple]="true"

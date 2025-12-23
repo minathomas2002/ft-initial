@@ -20,6 +20,7 @@ import { TranslatePipe } from "../../../pipes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileuploadComponent {
+  isViewMode = input<boolean>(false);
   maxFileSize = input<number>(1024 * 1024 * 10); // 10MB default
   acceptedFileTypes = input<string>("*/*");
   files = model<File[]>([]);

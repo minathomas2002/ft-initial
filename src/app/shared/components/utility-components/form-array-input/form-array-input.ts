@@ -20,6 +20,8 @@ import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormArrayInput {
+
+  hideAddButton = input<boolean>(false);
   // Accept FormArray instead of FieldTree
   // Using input instead of model since FormArray is mutable and changes are reflected automatically
   formArray = input.required<FormArray>({ alias: 'ft' });

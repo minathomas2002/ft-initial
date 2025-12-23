@@ -9,7 +9,7 @@
       [label]="'dashboard.submitNewPlan' | translate"
       [icon]="'icon-plus'"
       [size]="'small'"
-      (onClick)="planTermsAndConditionsDialogVisibility.set(true)"
+      (onClick)="createNewPlan()"
     />
   </ng-container>
 
@@ -177,7 +177,6 @@
 
 @if(planTermsAndConditionsDialogVisibility()){
 <app-plan-terms-and-conditions-dialog
-  [(visibility)]="planTermsAndConditionsDialogVisibility"
   (onConfirm)="onUserReadAndApproved()"
 />
 }

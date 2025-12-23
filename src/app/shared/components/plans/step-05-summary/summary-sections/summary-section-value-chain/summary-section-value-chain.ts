@@ -17,6 +17,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionValueChain {
+  isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   onEdit = output<void>();
   private readonly planStore = inject(PlanStore);

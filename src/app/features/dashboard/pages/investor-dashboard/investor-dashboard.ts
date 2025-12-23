@@ -167,4 +167,11 @@ export class InvestorDashboard implements OnInit {
   onSubmitProductLocalizationPlanWizard() {
     console.log('Submit product localization plan wizard');
   }
+
+  createNewPlan() {
+    // Set mode to view and plan ID
+    this.wizardMode.set('create');    
+    this.selectedPlanId.set(null);
+    this.productLocalizationPlanWizardVisibility.set(true);
+  }
 }

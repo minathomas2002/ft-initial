@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
@@ -34,9 +34,11 @@ import { JsonPipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Step03ValueChainForm {
+  
+  isViewMode = input<boolean>(false);
   private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly planStore = inject(PlanStore);
-
+  
   formGroup = this.productPlanFormService.step3_valueChain;
   readonly EMaterialsFormControls = EMaterialsFormControls;
 

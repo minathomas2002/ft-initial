@@ -196,10 +196,10 @@ export class Step3ValueChainFormBuilder {
 
         const inHouseOrProcured = inHouseOrProcuredControl?.value;
         // Calculation logic based on truth table
-        if (yearValue === ELocalizationStatusType.Yes.toString()) {
+        if (yearValue == ELocalizationStatusType.Yes.toString()) {
           // Case 1 & 3: In-house + Yes OR Procured + Yes = Add Cost %
           total += costPercentage;
-        } else if (yearValue === ELocalizationStatusType.Partial.toString()) {
+        } else if (yearValue == ELocalizationStatusType.Partial.toString()) {
           // Case 5: Any + Partial = Add (Cost % × 50%)
           total += costPercentage * 0.5;
         }

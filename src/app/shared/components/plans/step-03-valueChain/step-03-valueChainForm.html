@@ -50,6 +50,7 @@
       <h3 class="text-base font-semibold text-gray-900">Design & Engineering</h3>
       <app-form-array-input
         [ft]="getDesignEngineeringFormArray()!"
+        [hideAddButton]="isViewMode()"
         [addButtonMessage]="'Add Design & Engineering Item'"
         [createNewItem]="createDesignEngineeringItem"
         [maxItems]="20"
@@ -243,6 +244,7 @@
       <h3 class="text-base font-semibold text-gray-900">Sourcing</h3>
       <app-form-array-input
         [ft]="getSourcingFormArray()!"
+        [hideAddButton]="isViewMode()"
         [addButtonMessage]="'Add Sourcing Item'"
         [createNewItem]="createSourcingItem"
         [maxItems]="20"
@@ -436,6 +438,7 @@
       <h3 class="text-base font-semibold text-gray-900">Manufacturing</h3>
       <app-form-array-input
         [ft]="getManufacturingFormArray()!"
+        [hideAddButton]="isViewMode()"
         [addButtonMessage]="'Add Manufacturing Item'"
         [createNewItem]="createManufacturingItem"
         [maxItems]="20"
@@ -629,6 +632,7 @@
       <h3 class="text-base font-semibold text-gray-900">Assembly & Testing</h3>
       <app-form-array-input
         [ft]="getAssemblyTestingFormArray()!"
+        [hideAddButton]="isViewMode()"
         [addButtonMessage]="'Add Assembly & Testing Item'"
         [createNewItem]="createAssemblyTestingItem"
         [maxItems]="20"
@@ -822,6 +826,7 @@
       <h3 class="text-base font-semibold text-gray-900">After-Sales</h3>
       <app-form-array-input
         [ft]="getAfterSalesFormArray()!"
+        [hideAddButton]="isViewMode()"
         [addButtonMessage]="'Add After-Sales Item'"
         [createNewItem]="createAfterSalesItem"
         [maxItems]="20"

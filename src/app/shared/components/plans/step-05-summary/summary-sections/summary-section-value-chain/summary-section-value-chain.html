@@ -1,6 +1,7 @@
 <div class="flex flex-col gap-6 bg-white">
   <app-summary-section-header
     [title]="'plans.wizard.step3.title' | translate"
+    [isViewMode]="isViewMode()"
     (onEdit)="onEditClick()"
   />
 

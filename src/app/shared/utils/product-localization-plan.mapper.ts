@@ -506,7 +506,14 @@ export function mapProductPlanResponseToForm(
         targetSECArray.push('2');
       }
     }
-    targetCustomersForm.get(EMaterialsFormControls.targetedCustomer)?.setValue(targetSECArray);
+    // Set value on the nested 'value' control within the targetedCustomer FormGroup
+    const targetedCustomerControl = targetCustomersForm.get(EMaterialsFormControls.targetedCustomer);
+    if (targetedCustomerControl instanceof FormGroup) {
+      const valueControl = targetedCustomerControl.get(EMaterialsFormControls.value);
+      if (valueControl) {
+        valueControl.setValue(targetSECArray ?? []);
+      }
+    }
     setFormGroupValue(targetCustomersForm, EMaterialsFormControls.namesOfTargetedSuppliers, targetCustomers.targetedLocalSupplierNames);
     setFormGroupValue(targetCustomersForm, EMaterialsFormControls.productsUtilizeTargetedProduct, targetCustomers.productsUtilizingTargetProduct);
   }
@@ -519,7 +526,14 @@ export function mapProductPlanResponseToForm(
       const expValue = typeof mfgExp.experienceRange === 'string'
         ? { id: mfgExp.experienceRange, name: '' }
         : mfgExp.experienceRange;
-      manufacturingExpForm.get(EMaterialsFormControls.productManufacturingExperience)?.setValue(expValue);
+      // Set value on the nested 'value' control within the productManufacturingExperience FormGroup
+      const experienceControl = manufacturingExpForm.get(EMaterialsFormControls.productManufacturingExperience);
+      if (experienceControl instanceof FormGroup) {
+        const valueControl = experienceControl.get(EMaterialsFormControls.value);
+        if (valueControl) {
+          valueControl.setValue(expValue);
+        }
+      }
     }
 
     manufacturingExpForm.get(EMaterialsFormControls.provideToSEC)?.setValue(mfgExp.provideToSEC ?? false);

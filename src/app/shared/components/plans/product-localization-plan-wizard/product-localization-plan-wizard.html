@@ -29,15 +29,16 @@
   </ng-template>
 
   <ng-template [appStepContent]="3">
-    <app-step-03-valueChain-form />
+    <app-step-03-valueChain-form [isViewMode]="isViewMode()"/>
   </ng-template>
 
   <ng-template [appStepContent]="4">
-    <app-step-04-saudization-form />
+    <app-step-04-saudization-form [isViewMode]="isViewMode()"/>
   </ng-template>
 
   <ng-template [appStepContent]="5">
     <app-step-05-summary
+      [isViewMode]="isViewMode()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onSubmit)="handleSubmit()"

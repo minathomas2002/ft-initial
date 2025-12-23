@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
@@ -20,6 +20,7 @@ import { SaudizationMatrixComponent } from './saudization-matrix/saudization-mat
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Step04SaudizationForm {
+  isViewMode = input<boolean>(false);
   private readonly productPlanFormService = inject(ProductPlanFormService);
 
   formGroup = this.productPlanFormService.step4_saudization;

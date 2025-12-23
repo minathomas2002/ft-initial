@@ -128,7 +128,7 @@ export class ProductLocalizationPlanWizard {
       const currentPlanId = this.planId();
       const currentMode = this.mode();
 
-      if (currentPlanId && (currentMode === 'edit' || currentMode === 'view') && this.visibility()) {
+      if (currentPlanId && (currentMode === 'edit' || currentMode === 'view')) {
         this.loadPlanData(currentPlanId);
       }
     });
