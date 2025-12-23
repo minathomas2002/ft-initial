@@ -20,12 +20,14 @@ export class SlaForm {
     internalCycle: this.fb.control<number | null>(0, 
       [Validators.required,
         Validators.min(1),
-        Validators.max(365)
+        Validators.max(365),
+        Validators.pattern(/^[0-9]+$/)
     ]),
     investorReply: this.fb.control<number | null>(0, [
       Validators.required,
       Validators.min(1),
       Validators.max(365),
+      Validators.pattern(/^[0-9]+$/)
     ]),
 
   });

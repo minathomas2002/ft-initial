@@ -472,6 +472,7 @@
         "investorReplyTimeLabel" : "Investor reply time",
         "days": "Days",
         "internalCycleRequired": "Internal cycle time cannot be empty",
+        "numbersOnlyError":"Numbers only (decimal numbers not allowed)",
         "internalCycleValidNumber": "Internal cycle time must be numeric, max 365, min 1 ",
         "investorReplyTimeRequired" : "Investor reply time cannot be empty",
         "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min {{days}} ",
