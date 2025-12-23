@@ -1,0 +1,41 @@
+<app-timeline [events]="events()">
+  <ng-template
+    #timelineTemplate
+    let-item="item"
+  >
+    <!-- status and date -->
+    <div class="flex justify-between flex-row-reverse py-4">
+      <div>
+        <i class="pi pi-times"></i>
+        <span class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl">{{item.item.timestamp | date:'EEEE, MMMM d • h:mm a'}}</span>
+        @if (item.item.daysAfterPreviousAction) {
+        <span class="text-sm font-normal text-gray-600">{{item.item.daysAfterPreviousAction}}{{'timeline.remaningDays' | translate}}</span>
+        }
+
+      </div>
+
+      <span class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl {{ getStatusBadgeClass(item.item.status) }}">
+        {{ getStatusLabel(item.item.status) }}
+      </span>
+
+    </div>
+    <!-- user card -->
+    <div class=" bg-white p-[12px] mb-[8px]">
+      <app-user-identify
+        [userAvatar]="item.item.profilePicURL"
+        [userName]="item.item.actionByNameEn"
+        [userRole]="getUserTranslatedRole(item.item.actorRole)"
+      ></app-user-identify>
+    </div>
+
+    <!-- Action -->
+    <div class="">
+      <p class="text-sm font-normal text-gray-600">{{'timeline.action' | translate}}</p>
+      <span class="font-sm text-gray-900">{{getUserTranslatedAction(item.item.actionType)}}</span>
+
+    </div>
+
+    <!-- comment div -->
+
+  </ng-template>
+</app-timeline>
