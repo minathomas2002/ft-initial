@@ -1,8 +1,9 @@
 export enum EActionPlanTimeLine {
-  SUBMITED = 1,
-  ASSIGNED = 2,
-  REASSIGNED = 3 , 
-  APPROVED, 
-  REJECTED,
-  SUBMITECOMMENT
+  SUBMITED = 4,
+  ASSIGNED = 5,
+  REASSIGNED = 6 , 
+  SUBMITECOMMENT= 7,
+  APPROVED =9, 
+  REJECTED = 10,
+  
 }

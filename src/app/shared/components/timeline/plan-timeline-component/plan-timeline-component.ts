@@ -15,7 +15,7 @@ import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.e
 
 @Component({
   selector: 'app-plan-timeline-component',
-  imports: [Timeline, UserIdentify,DatePipe,TranslatePipe],
+  imports: [Timeline, UserIdentify, DatePipe, TranslatePipe, Divider],
   templateUrl: './plan-timeline-component.html',
   styleUrl: './plan-timeline-component.scss',
 })
