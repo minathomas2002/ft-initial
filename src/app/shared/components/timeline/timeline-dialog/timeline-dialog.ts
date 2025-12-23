@@ -1,39 +1,32 @@
-import { Component, model } from '@angular/core';
+import { Component, inject, model } from '@angular/core';
 import { IPlanRecord } from 'src/app/shared/interfaces';
-import { BaseDialogComponent } from "../../base-components/base-dialog/base-dialog.component";
 import { TimelineSkeleton } from "../../skeletons/timeline-skeleton/timeline-skeleton";
-import { Timeline } from 'primeng/timeline';
-import { Card } from "primeng/card";
-
-interface EventItem {
-    status?: string;
-    date?: string;
-    icon?: string;
-    color?: string;
-    image?: string;
-}
-
+import { BaseDrawerComponent } from "../../base-components/base-drawer/base-drawer.component";
+import { TranslatePipe } from "../../../pipes/translate.pipe";
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { take } from 'rxjs';
+import { TimelineComponent } from "../plan-timeline-component/plan-timeline-component";
 
 @Component({
   selector: 'app-timeline-dialog',
-  imports: [BaseDialogComponent, TimelineSkeleton, Timeline, Card],
+  imports: [TimelineSkeleton, BaseDrawerComponent, TranslatePipe, TimelineComponent],
   templateUrl: './timeline-dialog.html',
   styleUrl: './timeline-dialog.scss',
 })
 export class TimelineDialog {
   dialogVisible = model<boolean>(false);
   selectedPlan = model<IPlanRecord | null>();
+  planStore = inject(PlanStore);
+  timeLineEvents = this.planStore.timeLineList;
 
+  ngOnInit(){
+    this.loadtimelineData();
+  }
 
-  events: EventItem[];
-
-    constructor() {
-        this.events = [
-            { status: 'Ordered', date: '15/10/2020 10:30', icon: 'pi pi-shopping-cart', color: '#9C27B0', image: 'game-controller.jpg' },
-            { status: 'Processing', date: '15/10/2020 14:00', icon: 'pi pi-cog', color: '#673AB7' },
-            { status: 'Shipped', date: '15/10/2020 16:15', icon: 'pi pi-shopping-cart', color: '#FF9800' },
-            { status: 'Delivered', date: '16/10/2020 10:00', icon: 'pi pi-check', color: '#607D8B' }
-        ];
-    }
+  loadtimelineData(){
+    this.planStore.getTimelinePlan(this.selectedPlan()?.id!)
+      .pipe(take(1))
+      .subscribe();
+  }
 
 }

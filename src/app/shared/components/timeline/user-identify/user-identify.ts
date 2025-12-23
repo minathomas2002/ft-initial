@@ -11,7 +11,7 @@ import { Tooltip } from "primeng/tooltip";
 export class UserIdentify {
 
   userAvatar = input<string>(
-		"https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png",
+		"assets/images/user_placeholder.png",
 	);
 	avatarClass = input<string>("!w-[40px] !h-[40px]");
 	titleClass = input<string>("font-medium text-gray-900");
