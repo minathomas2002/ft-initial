@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, output, Signal, signal } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
@@ -19,6 +19,7 @@ import { InvestorDashboardPlansFilter } from '../../components/investor-dashboar
 import { InvestorDashboardPlanActionMenu } from '../../components/investor-dashboard-plan-action-menu/investor-dashboard-plan-action-menu';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
 
 @Component({
   selector: 'app-investor-dashboard',
@@ -36,8 +37,9 @@ import { TranslatePipe } from 'src/app/shared/pipes';
     DatePipe,
     NgClass,
     SkeletonModule,
-    TranslatePipe
-  ],
+    TranslatePipe,
+    TimelineDialog
+],
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
   providers: [DashboardPlansFilterService],
@@ -47,7 +49,8 @@ export class InvestorDashboard implements OnInit {
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
-
+  timelineVisibility = signal(false);
+  selectedPlan =signal<IPlanRecord| null>(null);
   eEmployeePlanStatus = EEmployeePlanStatus;
 
   // Wizard mode and plan ID signals
@@ -158,6 +161,11 @@ export class InvestorDashboard implements OnInit {
   onDownload(plan: IPlanRecord) {
     // TODO: Implement download
     console.log('Download plan:', plan);
+  }
+
+  onViewTimeline(plan: IPlanRecord) {
+    this.timelineVisibility.set(true);
+    this.selectedPlan.set(plan);
   }
 
   applyFilter() {
