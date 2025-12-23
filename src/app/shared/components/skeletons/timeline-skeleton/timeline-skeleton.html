@@ -1,0 +1,35 @@
+@if(isLoading()){
+
+<ul class="m-0 p-0 list-none">
+  @for(item of items; track $index){
+  <li class="mb-4">
+    <div class="flex">
+      <p-skeleton
+        shape="circle"
+        size="1.5rem"
+        styleClass="mr-2"
+      />
+      <div
+        class="self-center"
+        style="flex: 1"
+      >
+        <p-skeleton
+          width="100%"
+          height="4rem"
+          styleClass="mb-2"
+        />
+        <p-skeleton
+          width="90%"
+          height="2rem"
+          styleClass="mb-2"
+        />
+      </div>
+    </div>
+  </li>
+  }
+</ul>
+}
+
+@else{
+<ng-content></ng-content>
+}
