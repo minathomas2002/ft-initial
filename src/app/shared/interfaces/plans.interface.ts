@@ -148,3 +148,31 @@ export interface IProductPlanResponse {
   productPlan: ProductPlan
   signature: Signature
 }
+
+export interface IComentFields{
+  name: string;
+  id : string;
+
+}
+export interface ITimelineComment{
+  pageTitle: string;
+  text: string;
+  fields :IComentFields [];
+
+}
+        
+export interface ITimeLineResponse{
+  actionType: number;
+  status : number;
+  actionByNameEn: string;
+  actionByNameAr : string;
+  actorRole: number;
+  targetUserNameEn: string;
+  targetUserNameAr: string;
+  timestamp: string; 
+  daysAfterPreviousAction: number;
+  comments : ITimelineComment[];
+
+
+}
+
