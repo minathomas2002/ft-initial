@@ -10,5 +10,5 @@ import { Skeleton } from "primeng/skeleton";
 export class TimelineSkeleton {
 
   isLoading = input<boolean>(false);
-	items = Array.from({ length: 3 });
+	items = Array.from({ length: 5 });
 }
