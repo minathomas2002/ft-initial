@@ -323,7 +323,8 @@
       "employee": "Employee",
       "manager": "Manager",
       "departmentManager": "Department Manager",
-      "investor": "DV Manager"
+      "investor": "Investor",
+      "dvManager": "DV Manager"
     },
     "status": {
       "active": "Active",
@@ -816,6 +817,20 @@
       "assignToEmployee": "Assign to Employee",
       "reAssign": "Reassign"
     }
+  },
+  "timeline":{
+    "title": "Plan timeline",
+    "remaningDays":" days after previous action",
+    "action": "Action",
+    "actions":{
+      "created": "Submit plan",
+      "assign": "Assign plan",
+      "reassign": "Reassign plan",
+      "submitComment": "Submit Comment",
+      "rejected" : "Rejected",
+      "approved": "Approved"
+    }
+
   },
   "assign": {
     "assign": "Assign",

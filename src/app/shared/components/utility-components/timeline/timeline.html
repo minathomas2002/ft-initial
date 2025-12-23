@@ -1,0 +1,27 @@
+<p-timeline
+  [value]="events()"
+  class="p-timeline-hidden-opposite"
+>
+  <!-- Custom Marker Template -->
+  <ng-template
+    pTemplate="marker"
+    let-item
+  >
+    <span class="flex w-[24px] h-[24px] border-[1.5px] {{getBadgeClasses(item.color).border}} items-center justify-center bg-white rounded-full">
+      <i class="w-[8px] h-[8px] rounded-full inline-block {{getBadgeClasses(item.color).circle}}"></i>
+    </span>
+  </ng-template>
+
+  <!-- Custom Content Template -->
+  <ng-template
+    pTemplate="content"
+    let-item
+  >
+    <div class="mb-[24px]">
+      <ng-container
+        [ngTemplateOutletContext]="{ item: item }"
+        [ngTemplateOutlet]="timelineTemplate()"
+      ></ng-container>
+    </div>
+  </ng-template>
+</p-timeline>

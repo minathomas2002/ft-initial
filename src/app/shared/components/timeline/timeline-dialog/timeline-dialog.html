@@ -1,66 +1,17 @@
-<app-base-dialog
+<app-base-drawer
   [(visible)]="dialogVisible"
-  [showConfirmButton]="false"
-  [cancelButtonClass]="'w-fit'"
+  [title]="'timeline.title' | translate"
   icon="icon-timeline"
-  [position]="'topright'"
 >
 
-  <app-timeline-skeleton [isLoading]="false">
+  <app-timeline-skeleton [isLoading]="planStore.isLoading() || !timeLineEvents()">
 
-    <!-- <app-broadcasting-timeline
-    [request]="requestTimeline()!"
-    [announcementType]="requestOverview()!.type"
-  ></app-broadcasting-timeline> -->
+    @if(timeLineEvents()){
+    <app-plan-timeline-component [timelineRequests]="timeLineEvents()">
 
-    <p-timeline
-      [value]="events"
-      [align]="'alt'"
-      class="customized-timeline"
-    >
-      <ng-template
-        #marker
-        let-event
-      >
-        <span
-          class="flex w-8 h-8 items-center justify-center text-white rounded-full z-10 shadow-sm"
-          [style]="{ 'background-color': event.color }"
-        >
-          <i [class]="event.icon"></i>
-        </span>
-      </ng-template>
-      <ng-template
-        #content
-        let-event
-      >
-        <p-card
-          [header]="event.status"
-          [subheader]="event.date"
-        >
-          <img
-            [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + event.image"
-            [alt]="event.name"
-            width="200"
-            class="shadow"
-          />
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
-            neque quas!
-          </p>
-
-        </p-card>
-      </ng-template>
-    </p-timeline>
+    </app-plan-timeline-component>
+    }
 
   </app-timeline-skeleton>
 
-  <!-- <app-timeline-skeleton [isLoading]="broadcastingStore.isLoadingRequest() || !requestTimeline()">
-  @if(requestTimeline() && requestOverview()){
-  <app-broadcasting-timeline
-    [request]="requestTimeline()!"
-    [announcementType]="requestOverview()!.type"
-  ></app-broadcasting-timeline>
-  }
-</app-timeline-skeleton> -->
-
-</app-base-dialog>
+</app-base-drawer>
