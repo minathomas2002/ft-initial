@@ -239,13 +239,17 @@ export class ProductLocalizationPlanWizard {
       this.existingSignature.set(response.signature.signatureValue);
     }
 
-    // Disable forms if in view mode
-    if (this.isViewMode()) {
-      this.disableAllForms();
-    }
+    const currentMode = this.planStore.wizardMode();
 
-    // Disable opportunity input in edit mode
-    if (this.planStore.wizardMode() === 'edit') {
+    // Handle forms based on mode
+    if (currentMode === 'view') {
+      // Disable all forms in view mode
+      this.disableAllForms();
+    } else if (currentMode === 'edit') {
+      // Enable all forms in edit mode without resetting read-only field values
+      this.enableAllFormsWithoutResettingReadOnly();
+
+      // Disable opportunity input in edit mode (but keep other fields enabled)
       const basicInfoForm = this.productPlanFormService.basicInformationFormGroup;
       const opportunityControl = basicInfoForm?.get(EMaterialsFormControls.opportunity);
       if (opportunityControl) {
@@ -270,7 +274,21 @@ export class ProductLocalizationPlanWizard {
     this.productPlanFormService.step4_saudization.enable();
 
     // Re-disable opportunityType and submissionDate after enabling all forms
-    this.disableReadOnlyFields();
+    // Only set values if they're not already set (for create mode)
+    this.disableReadOnlyFields(false);
+  }
+
+  /**
+   * Enable all forms without resetting read-only field values (for edit mode)
+   */
+  private enableAllFormsWithoutResettingReadOnly(): void {
+    this.productPlanFormService.step1_overviewCompanyInformation.enable();
+    this.productPlanFormService.step2_productPlantOverview.enable();
+    this.productPlanFormService.step3_valueChain.enable();
+    this.productPlanFormService.step4_saudization.enable();
+
+    // Disable read-only fields without resetting their values
+    this.disableReadOnlyFields(true);
   }
 
   /**
@@ -320,19 +338,24 @@ export class ProductLocalizationPlanWizard {
   }
 
   /**
-   * Disable read-only fields that should always be disabled in create mode
+   * Disable read-only fields that should always be disabled
+   * @param preserveValues If true, only disable without resetting values (for edit mode). If false, set default values (for create mode).
    */
-  private disableReadOnlyFields(): void {
+  private disableReadOnlyFields(preserveValues: boolean = false): void {
     const basicInfo = this.productPlanFormService.basicInformationFormGroup;
     if (basicInfo) {
       const opportunityTypeControl = basicInfo.get(EMaterialsFormControls.opportunityType);
       if (opportunityTypeControl) {
-        opportunityTypeControl.setValue(EOpportunityType.PRODUCT.toString());
+        if (!preserveValues) {
+          opportunityTypeControl.setValue(EOpportunityType.PRODUCT.toString());
+        }
         opportunityTypeControl.disable({ emitEvent: false });
       }
       const submissionDateControl = basicInfo.get(EMaterialsFormControls.submissionDate);
       if (submissionDateControl) {
-        submissionDateControl.setValue(new Date());
+        if (!preserveValues) {
+          submissionDateControl.setValue(new Date());
+        }
         submissionDateControl.disable({ emitEvent: false });
       }
     }
