@@ -23,6 +23,7 @@ export class BaseDialogComponent {
   isLoading = input<boolean>(false);
   contentStyleClass = input<string>("");
   styleClass = input<string>("");
+  position= input<DialogPosition> ('center');
   dialogRef = viewChild.required<Dialog>("dialogRef");
   isConfirmationDisabled = input(false);
   confirmButtonClass = input("w-[50%]");

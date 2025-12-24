@@ -16,7 +16,10 @@ export class IdentifyUserComponent {
 	titleClass = input<string>("font-medium text-gray-900");
 	subTitleClass = input<string>("text-sm font-normal text-gray-600");
 	departmentClass = input<string>("text-sm font-normal text-gray-600");
+	roleClass = input<string>("text-sm font-normal text-gray-600");
+
 	userName = input<string>("User User");
-	userTitle = input<string>("user title");
+	userTitle = input<string>("");
 	userDepartment = input<string>("");
+	userRole = input<string>("");
 }

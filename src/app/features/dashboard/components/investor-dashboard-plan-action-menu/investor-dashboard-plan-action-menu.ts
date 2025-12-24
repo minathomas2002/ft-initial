@@ -19,6 +19,7 @@ export class InvestorDashboardPlanActionMenu {
   onViewDetails = output<IPlanRecord>();
   onEdit = output<IPlanRecord>();
   onDownload = output<IPlanRecord>();
+  onViewTimeLine= output<IPlanRecord>();
 
   menuItems = computed<MenuItem[]>(() => {
     const plan = this.plan();
@@ -27,6 +28,10 @@ export class InvestorDashboardPlanActionMenu {
         label: this.i18nService.translate('plans.actions.viewDetails'),
         icon: 'icon-eye',
         command: () => this.onViewDetails.emit(plan),
+      },
+      {
+        label: this.i18nService.translate('plans.actions.viewTimeline'),
+        command: () => this.onViewTimeLine.emit(plan),
       },
     ];
 

@@ -3,9 +3,9 @@ import { OpportunitiesApiService } from "../../api/opportunities/opportunities-a
 import { EExperienceRange, EInHouseProcuredType, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
-import { IActiveEmployee, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
-import { IProductPlanResponse } from "../../interfaces/plans.interface";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
+import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IProductPlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null,
@@ -22,6 +22,7 @@ const initialState: {
   targetedCustomerOptions: ISelectItem[],
   productManufacturingExperienceOptions: ISelectItem[],
   inHouseProcuredOptions: ISelectItem[],
+  timeLineList: ITimeLineResponse[],
   localizationStatusOptions: ISelectItem[]
   activeEmployees: IAssignActiveEmployee[] | null;
   currentEmployee: IAssignActiveEmployee | null;
@@ -41,6 +42,7 @@ const initialState: {
   error: null,
   count: 0,
   list: [],
+  timeLineList: [],
   statistics: null,
   targetedCustomerOptions: [
     { id: ETargetedCustomer.SEC.toString(), name: 'SEC' },
@@ -251,7 +253,27 @@ export const PlanStore = signalStore(
           }),
         );
       },
+      /* Get timeline list*/
+      getTimelinePlan(planId: string): Observable<IBaseApiResponse<ITimeLineResponse[]>> {
+        patchState(store, { isLoading: true, error: null });
+        return planApiService.getTimeLine({ planId }).pipe(
+          tap((res) => {
+            patchState(store, { isLoading: false });
+            patchState(store, { timeLineList: res.body || [] });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error loading timeline data' });
+            return throwError(() => new Error('Error loading plan timeline'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          }),
+        );
+      },
+
     }
+
+
   }),
   withMethods((store) => {
     return {

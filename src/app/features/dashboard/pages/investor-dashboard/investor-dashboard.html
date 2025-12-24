@@ -167,6 +167,7 @@
               (onViewDetails)="onViewDetails($event)"
               (onEdit)="onEdit($event)"
               (onDownload)="onDownload($event)"
+              (onViewTimeLine)="onViewTimeline($event)"
             />
           </td>
         </ng-template>
@@ -193,5 +194,12 @@
 <app-product-localization-plan-wizard
   [(visibility)]="productLocalizationPlanWizardVisibility"
   (doRefresh)="applyFilter()"
+/>
+}
+
+@if(timelineVisibility()){
+<app-timeline-dialog
+  [(dialogVisible)]="timelineVisibility"
+  [(selectedPlan)]="selectedPlan"
 />
 }

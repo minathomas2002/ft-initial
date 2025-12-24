@@ -208,3 +208,10 @@
   (doRefresh)="applyFilter()"
 />
 }
+
+@if(timelineVisibility()){
+<app-timeline-dialog
+  [(dialogVisible)]="timelineVisibility"
+  [(selectedPlan)]="planItem"
+/>
+}
