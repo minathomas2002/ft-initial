@@ -5,5 +5,5 @@ export enum EActionPlanTimeLine {
   SUBMITECOMMENT= 7,
   APPROVED =9, 
   REJECTED = 10,
-  AUTOASSIGN = 15
+  AUTOASSIGN = 19
 }
