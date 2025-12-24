@@ -99,6 +99,7 @@ InvestorPlanStatus = EInvestorPlanStatus;
   }
 
   getStatusLabel(status: EStatusPlanTimeLine): string {
+    console.log(status);;
        const statusMap = {
               [EStatusPlanTimeLine.PendingOnInvestor]: this.i18nService.translate('plans.employee_status.pendingOnInvestor'),
               [EStatusPlanTimeLine.UnderReview]: this.i18nService.translate('plans.employee_status.underReview'),
