@@ -12,6 +12,8 @@ export class Step3ValueChainFormBuilder {
    */
   createValueChainItemFormGroup(): FormGroup {
     const itemGroup: any = {
+      // Hidden control to store the row ID (for edit mode)
+      rowId: [null],
       [EMaterialsFormControls.expenseHeader]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
