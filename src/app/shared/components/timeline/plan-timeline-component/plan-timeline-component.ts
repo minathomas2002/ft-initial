@@ -39,7 +39,7 @@ InvestorPlanStatus = EInvestorPlanStatus;
 
     return requestData.map((detail) => {
       const color: TColors =
-        detail.status === EInvestorPlanStatus.APPROVED ? 'green' : 'blue';
+        detail.status === EStatusPlanTimeLine.Rejected ? 'red' : 'blue';
 
       return {
         color: color,
@@ -58,13 +58,13 @@ InvestorPlanStatus = EInvestorPlanStatus;
     var param = '';
     switch(item.actionType){
       case EActionPlanTimeLine.AUTOASSIGN:
-        param = item.actionByNameEn;
+        param = item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.ASSIGNED:
-        param = item.actionByNameEn;
+        param = item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.REASSIGNED:
-        param = item.actionByNameEn;
+        param = item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.SUBMITED:
         param = (item.planType == EOpportunityType.SERVICES)? this.i18nService.translate('opportunity.type.service') : this.i18nService.translate('opportunity.type.product');
@@ -114,7 +114,7 @@ InvestorPlanStatus = EInvestorPlanStatus;
               [EStatusPlanTimeLine.EmployeeApproved]: this.i18nService.translate('plans.employee_status.employeeApproved'),
               [EStatusPlanTimeLine.Reassigned]: this.i18nService.translate('plans.employee_status.reassigned'),
               [EStatusPlanTimeLine.assigned]: this.i18nService.translate('plans.employee_status.assigned'),
-              [EStatusPlanTimeLine.Submitted]: this.i18nService.translate('plans.employee_status.Submitted'),
+              [EStatusPlanTimeLine.Submitted]: this.i18nService.translate('plans.employee_status.submitted'),
             };
             return statusMap[status] || '';
   }
