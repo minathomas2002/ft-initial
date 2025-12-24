@@ -27,14 +27,12 @@ export class DvManagerDashboardPlanActionMenu {
         const items: MenuItem[] = [
             {
                 label: this.i18nService.translate('plans.actions.viewDetails'),
-                icon: 'icon-eye',
                 command: () => this.onViewDetails.emit(plan),
             },
         ];
 
         items.push({
             label: this.i18nService.translate('plans.actions.download'),
-            icon: 'icon-data',
             command: () => this.onDownload.emit(plan),
         });
 
