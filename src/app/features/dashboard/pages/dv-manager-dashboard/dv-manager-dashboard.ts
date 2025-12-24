@@ -18,6 +18,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { AssignReassignManualEmployee } from 'src/app/features/plans/components/assign-reassign-manual-employee/assign-reassign-manual-employee';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
 
 @Component({
   selector: 'app-dv-manager-dashboard',
@@ -34,8 +35,9 @@ import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/p
     SkeletonModule,
     TranslatePipe,
     AssignReassignManualEmployee,
-    ProductLocalizationPlanWizard
-  ],
+    ProductLocalizationPlanWizard,
+    TimelineDialog
+],
   templateUrl: './dv-manager-dashboard.html',
   styleUrl: './dv-manager-dashboard.scss',
   providers: [DvManagerDashboardPlansFilterService],
@@ -58,6 +60,7 @@ export class DvManagerDashboard implements OnInit {
   viewAssignDialog = signal<boolean>(false);
   isReassignMode = signal<boolean>(false);
   planItem = signal<IPlanRecord | null>(null);
+  timelineVisibility = signal(false);
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
     this.i18nService.currentLanguage();
     return [
@@ -161,7 +164,8 @@ export class DvManagerDashboard implements OnInit {
   }
 
   onViewTimeline(plan: IPlanRecord) {
-    console.log('View timeline:', plan);
+    this.timelineVisibility.set(true);
+    this.planItem.set(plan);
   }
 
   onAssignToEmployee(plan: IPlanRecord) {
