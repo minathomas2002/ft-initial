@@ -14,8 +14,8 @@
 
       <!-- Date & days -->
       <div class="">
-        <div class="flex items-center justify-end gap-2 text-sm text-gray-700">
-          <i class="pi pi-clock text-gray-500"></i>
+        <div class="flex items-center justify-end gap-2 text-xs text-gray-700">
+          <i class="icon-calender text-gray-500"></i>
           <span>
             {{ item.item.timestamp | date:'EEEE, MMMM d • h:mm a' }}
           </span>
@@ -37,13 +37,7 @@
         [userName]="item.item.actionByNameEn"
         [userRole]="getUserTranslatedRole(item.item.actorRole)"
       >
-
       </app-identify-user>
-      <!-- <app-user-identify
-        [userAvatar]="item.item.profilePicURL"
-        [userName]="item.item.actionByNameEn"
-        [userRole]="getUserTranslatedRole(item.item.actorRole)"
-      ></app-user-identify> -->
     </div>
 
     <!-- Action -->
