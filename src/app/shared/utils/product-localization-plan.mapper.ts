@@ -232,10 +232,14 @@ function mapValueChainStep(formService: ProductPlanFormService): ValueChainStep 
       const inHouseOrProcured = getFormValue(itemFormGroup, EMaterialsFormControls.inHouseOrProcured);
       const costPercent = getFormValue(itemFormGroup, EMaterialsFormControls.costPercentage);
 
+      // Get the row ID if it exists (for edit mode)
+      const rowIdControl = itemFormGroup.get('rowId');
+      const rowId = rowIdControl?.value ?? null;
+
       // Only add row if it has at least an expense header
       if (expenseHeader) {
         valueChainRows.push({
-          id: null,
+          id: rowId,
           sectionType,
           expenseHeader: expenseHeader ?? null,
           inHouseOrProcured: inHouseOrProcured ?? null,
@@ -306,7 +310,8 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
         saudizationType,
       } as any as SaudizationRow; // Allow null values for FormData conversion
 
-      // Extract values for each year
+      // Extract values for each year and get row ID (same for all years)
+      let rowId: string | null = null;
       for (let year = 1; year <= 7; year++) {
         const yearControl = `year${year}` as keyof typeof EMaterialsFormControls;
         const yearControlName = EMaterialsFormControls[yearControl];
@@ -315,11 +320,20 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
         if (yearFormGroup) {
           const rowFormGroup = yearFormGroup.get(rowType) as FormGroup;
           if (rowFormGroup) {
+            // Get the row ID from the first year (it's the same for all years)
+            if (year === 1) {
+              const rowIdControl = rowFormGroup.get('rowId');
+              rowId = rowIdControl?.value ?? null;
+            }
+
             const value = getFormValue(rowFormGroup, EMaterialsFormControls.value);
             (row as any)[`year${year}`] = value ?? null;
           }
         }
       }
+
+      // Set the row ID (can be null for new rows in edit mode)
+      (row as any).id = rowId;
 
       saudizationRows.push(row);
     });
@@ -607,6 +621,11 @@ export function mapProductPlanResponseToForm(
       // Add rows
       rowsBySection[sectionType].forEach(row => {
         const itemFormGroup = formService.createValueChainItem();
+        // Store the row ID for edit mode
+        const rowIdControl = itemFormGroup.get('rowId');
+        if (rowIdControl && row.id) {
+          rowIdControl.setValue(row.id);
+        }
         setFormGroupValue(itemFormGroup, EMaterialsFormControls.expenseHeader, row.expenseHeader);
         // Convert numeric values to strings to match select option IDs (which use .toString() on enum values)
         setFormGroupValue(itemFormGroup, EMaterialsFormControls.inHouseOrProcured, row.inHouseOrProcured != null ? String(row.inHouseOrProcured) : null);
@@ -657,6 +676,12 @@ export function mapProductPlanResponseToForm(
         const row = rowsByType[type];
         const rowFormGroup = yearFormGroup.get(rowName) as FormGroup;
         if (rowFormGroup) {
+          // Store the row ID for edit mode (same ID for all years of the same row type)
+          const rowIdControl = rowFormGroup.get('rowId');
+          if (rowIdControl && row.id) {
+            rowIdControl.setValue(row.id);
+          }
+
           const valueControl = rowFormGroup.get(EMaterialsFormControls.value);
           if (valueControl) {
             const yearValue = (row as any)[`year${year}`];
