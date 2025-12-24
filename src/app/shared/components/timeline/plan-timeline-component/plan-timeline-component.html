@@ -5,23 +5,25 @@
   >
     <!-- status and date -->
     <div class="flex justify-between items-start">
+
       <!-- Status -->
-      <span class="text-xs inline-block border px-3 py-1 rounded-xl {{
+      <span class="text-xs font-medium px-3 py-1 rounded-full {{
                 getStatusBadgeClass(item.item.status)
               }}">
         {{ getStatusLabel(item.item.status) }}
       </span>
-      <!-- Date & days -->
+
+      <!-- Date & Days -->
       <div class="">
-        <div class="flex items-center justify-end gap-2 text-xs text-gray-700">
-          <i class="icon-clock text-gray-500"></i>
+        <div class="flex items-center justify-end text-xs text-gray-700 whitespace-nowrap">
+          <i class="icon-clock text-gray-400"></i>
           <span>
             {{ item.item.timestamp | date:'EEEE, MMMM d • h:mm a' }}
           </span>
         </div>
 
         @if (item.item.daysAfterPreviousAction) {
-        <p class="text-xs text-gray-500 mt-1 px-[10px] py-[2px]">
+        <p class="text-xs text-gray-400 mt-1">
           {{ item.item.daysAfterPreviousAction }}
           {{ 'timeline.remaningDays' | translate }}
         </p>
