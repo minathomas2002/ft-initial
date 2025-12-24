@@ -1,0 +1,17 @@
+<app-base-drawer
+  [(visible)]="dialogVisible"
+  [title]="'timeline.title' | translate"
+  icon="icon-timeline"
+>
+
+  <app-timeline-skeleton [isLoading]="planStore.isLoading() || !timeLineEvents()">
+
+    @if(timeLineEvents()){
+    <app-plan-timeline-component [timelineRequests]="timeLineEvents()">
+
+    </app-plan-timeline-component>
+    }
+
+  </app-timeline-skeleton>
+
+</app-base-drawer>

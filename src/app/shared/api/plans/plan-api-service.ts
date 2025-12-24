@@ -3,7 +3,7 @@ import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { Observable } from 'rxjs';
 import { IActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IProductLocalizationPlanRequest, IProductPlanResponse } from '../../interfaces/plans.interface';
+import { IProductLocalizationPlanRequest, IProductPlanResponse, ITimeLineResponse } from '../../interfaces/plans.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +33,10 @@ export class PlanApiService {
 
   getProductPlan(req: { planId: string }): Observable<IBaseApiResponse<IProductPlanResponse>> {
     return this.baseHttpService.post<IProductPlanResponse, { planId: string }, unknown>(API_ENDPOINTS.plans.getProductPlan, req);
+  }
+
+  getTimeLine(req: { planId: string }): Observable<IBaseApiResponse<ITimeLineResponse[]>> {
+    return this.baseHttpService.post<ITimeLineResponse[], { planId: string }, unknown>(API_ENDPOINTS.plans.getTimelinePlan, req);
   }
 
 }

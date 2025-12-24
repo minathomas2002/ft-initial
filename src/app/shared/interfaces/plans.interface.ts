@@ -1,4 +1,5 @@
 import { ETargetedCustomer } from "../enums"
+import { EInvestorPlanStatus } from "./dashboard-plans.interface"
 
 export interface IProductLocalizationPlanRequest {
   productPlan: ProductPlan
@@ -148,3 +149,38 @@ export interface IProductPlanResponse {
   productPlan: ProductPlan
   signature: Signature
 }
+
+export interface IComentFields{
+  name: string;
+  id : string;
+
+}
+export interface ITimelineComment{
+  pageTitle: string;
+  text: string;
+  fields :IComentFields [];
+
+}
+        
+export interface ITimeLineResponse{
+  actionType: number;
+  status : number;
+  actionByNameEn: string;
+  actionByNameAr : string;
+  actorRole: number;
+  targetUserNameEn: string;
+  targetUserNameAr: string;
+  timestamp: string; 
+  profilePicURL: string; 
+  daysAfterPreviousAction: number;
+  comments : ITimelineComment[];
+
+
+}
+
+export interface IPlanStatus{
+  getStatusLabel(status: number): string ;
+  getStatusBadgeClass(status: number): string ;
+
+}
+

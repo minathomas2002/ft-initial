@@ -35,6 +35,7 @@ export const API_ENDPOINTS = {
     saveAsDraftProductLocalizationPlan: `${Plans}/saveAsDraft-productPlan`,
     submitProductLocalizationPlan: `${Plans}/submit-productPlan`,
     getProductPlan: `${Plans}/get-productPlan`,
+    getTimelinePlan: `${Plans}/get-timeLine`,
   },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,
