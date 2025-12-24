@@ -13,10 +13,11 @@ import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.e
 import { HandlePlanStatusFactory } from 'src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory';
 import { IdentifyUserComponent } from "../../utility-components/identify-user/identify-user.component";
 import { EStatusPlanTimeLine } from 'src/app/shared/enums/status-plan-timline.enum';
+import { BaseTagComponent } from "../../base-components/base-tag/base-tag.component";
 
 @Component({
   selector: 'app-plan-timeline-component',
-  imports: [Timeline, DatePipe, TranslatePipe, Divider, IdentifyUserComponent],
+  imports: [Timeline, DatePipe, TranslatePipe, Divider, IdentifyUserComponent, BaseTagComponent],
   templateUrl: './plan-timeline-component.html',
   styleUrl: './plan-timeline-component.scss',
 })

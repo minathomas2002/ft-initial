@@ -6,16 +6,15 @@
     <!-- status and date -->
     <div class="flex justify-between items-start">
       <!-- Status -->
-      <span class="text-sm inline-block border px-3 py-1 rounded-xl {{
+      <span class="text-xs inline-block border px-3 py-1 rounded-xl {{
                 getStatusBadgeClass(item.item.status)
               }}">
         {{ getStatusLabel(item.item.status) }}
       </span>
-
       <!-- Date & days -->
       <div class="">
         <div class="flex items-center justify-end gap-2 text-xs text-gray-700">
-          <i class="icon-calender text-gray-500"></i>
+          <i class="icon-calenderr text-gray-500"></i>
           <span>
             {{ item.item.timestamp | date:'EEEE, MMMM d • h:mm a' }}
           </span>
