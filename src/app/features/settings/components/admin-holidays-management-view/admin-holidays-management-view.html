@@ -46,10 +46,18 @@
               {{item.createdBy}}
             </td>
             <td>
+              @if(item.updatedDate){
               {{ item.updatedDate | date : 'dd MMM yyyy' }}
+              }@else{
+              <div class="text-center">-</div>
+              }
             </td>
             <td>
+              @if(item.updatedBy){
               {{ item.updatedBy }}
+              }@else{
+              <div class="text-center">-</div>
+              }
             </td>
 
             <!-- Action -->
@@ -87,4 +95,3 @@
   ></app-general-confirmation-dialog>
 
 </div>
-
