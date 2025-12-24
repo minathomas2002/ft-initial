@@ -782,7 +782,11 @@
       "dvRejected": "DV Rejected",
       "dvRejectionAcknowledged": "DV Rejection Acknowledged",
       "employeeApproved": "Employee Approved",
-      "employeeRejected": "Employee Rejected"
+      "employeeRejected": "Employee Rejected",
+      "assigned": "Assigned",
+      "reassigned":"Reassign",
+      "submitted": "Submitted",
+      "pendingOnInvestor":"Pending on investor"
     },
     "type": {
       "services": "Services",
@@ -823,10 +827,11 @@
     "remaningDays":" days after previous action",
     "action": "Action",
     "actions":{
-      "created": "Submit plan",
-      "assign": "Assign plan",
-      "reassign": "Reassign plan",
-      "submitComment": "Submit Comment",
+      "created": "Submit new {{param}} Plan ",
+      "assign": "Assigned plan to employee {{param}} ",
+      "autoassign": "Auto assignment plan to employee {{param}} ",
+      "reassign": "Reassigned plan to employee {{param}}",
+      "submitComment": "Submit comment on the plan and send back to investor ",
       "rejected" : "Rejected",
       "approved": "Approved"
     }

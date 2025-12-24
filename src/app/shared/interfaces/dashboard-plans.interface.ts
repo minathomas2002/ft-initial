@@ -23,7 +23,8 @@ export enum EEmployeePlanStatus {
   PENDING = 9,
   REJECTED = 10,
   UNASSIGNED = 11,
-  UNDER_REVIEW = 12
+  UNDER_REVIEW = 12,
+  ASSIGNED =13
 }
 
 export interface IPlanRecord {

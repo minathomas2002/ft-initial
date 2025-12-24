@@ -9,18 +9,19 @@ export class ActionPlanMapper {
     [EActionPlanTimeLine.APPROVED]: 'timeline.actions.approved',
     [EActionPlanTimeLine.REJECTED]: 'timeline.actions.rejected',
     [EActionPlanTimeLine.SUBMITECOMMENT]: 'timeline.actions.submitComment',
+    [EActionPlanTimeLine.AUTOASSIGN]: 'timeline.actions.autoassign',
 
   };
 
   constructor(private i18nService: I18nService) { }
 
 
-  getTranslatedAction(actionCode: EActionPlanTimeLine): string {
+  getTranslatedAction(actionCode: EActionPlanTimeLine, additionalParam : any): string {
     // Try to find translation key for the role
     const translationKey = this._roleTranslationMap[actionCode];
     
     if (translationKey) {
-      const translated = this.i18nService.translate(translationKey);
+      const translated = this.i18nService.translate(translationKey, { param: additionalParam });
       // If translation exists (not the same as key), return it
       if (translated !== translationKey) {
         return translated;

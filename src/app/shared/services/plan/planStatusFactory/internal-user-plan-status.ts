@@ -6,11 +6,12 @@ import { I18nService } from '../../i18n';
 @Injectable({
   providedIn: 'root',
 })
-export class ManagerPlanStatus implements IPlanStatus{
+export class InternalUserPlanStatus implements IPlanStatus{
 i18nService = inject(I18nService);
 
 
    getStatusLabel(status: EEmployeePlanStatus): string {
+    
       const statusMap = {
         [EEmployeePlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pending'),
         [EEmployeePlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.employee_status.underReview'),
@@ -24,6 +25,7 @@ i18nService = inject(I18nService);
         [EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
         [EEmployeePlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
         [EEmployeePlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
+        [EEmployeePlanStatus.ASSIGNED]: this.i18nService.translate('plans.employee_status.assigned'),
       };
       return statusMap[status] || '';
     }
@@ -42,6 +44,7 @@ i18nService = inject(I18nService);
         [EEmployeePlanStatus.EMPLOYEE_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
         [EEmployeePlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
         [EEmployeePlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+        [EEmployeePlanStatus.ASSIGNED]: 'bg-orange-50 text-orange-700 border-red-200'
       };
       return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200';
     }

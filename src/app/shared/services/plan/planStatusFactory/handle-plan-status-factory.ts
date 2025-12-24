@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ManagerPlanStatus } from './manager-plan-status';
+import { InternalUserPlanStatus } from './internal-user-plan-status';
 import { InvestorPlanStatus } from './investor-plan-status';
 import { IPlanStatus } from 'src/app/shared/interfaces/plans.interface';
 import { RoleService } from '../../role/role-service';
@@ -12,7 +12,7 @@ export class HandlePlanStatusFactory {
    roleService = inject(RoleService);
    Investor;
   constructor(
-		private managerPlanStatus: ManagerPlanStatus,
+		private managerPlanStatus: InternalUserPlanStatus,
 		private investorPlanStatus: InvestorPlanStatus,
 	) {
 
