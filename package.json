@@ -30,6 +30,7 @@
     "@angular/localize": "^20.0.0",
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
+    "@microsoft/signalr": "^10.0.0",
     "@ngrx/signals": "^20.1.0",
     "@primeuix/themes": "^1.2.5",
     "@tailwindcss/postcss": "^4.1.16",
