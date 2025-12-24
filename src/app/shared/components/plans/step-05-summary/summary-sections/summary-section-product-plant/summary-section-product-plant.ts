@@ -14,6 +14,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionProductPlant {
+  isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   onEdit = output<void>();
   private readonly planStore = inject(PlanStore);

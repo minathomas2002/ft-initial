@@ -44,9 +44,6 @@ import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dial
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DvManagerDashboard implements OnInit {
-  // Wizard mode and plan ID signals
-  selectedPlanId = signal<string | null>(null);
-  wizardMode = signal<'create' | 'edit' | 'view'>('create');
   productLocalizationPlanWizardVisibility = signal(false);
 
   EEmployeePlanStatus = EEmployeePlanStatus;
@@ -86,15 +83,17 @@ export class DvManagerDashboard implements OnInit {
   }
 
   onUserReadAndApproved() {
-    this.planStore.resetNewPlanOpportunityType();    
+    this.planStore.resetNewPlanOpportunityType();
   }
 
   onUserConfirmNewPlanDialog() {
-    this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();    
+    this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
     if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
+      // Creating new plan from scratch - clear applied opportunity
+      this.planStore.resetAppliedOpportunity();
       // Reset mode and plan ID for new plan
-      this.wizardMode.set('create');
-      this.selectedPlanId.set(null);      
+      this.planStore.setWizardMode('create');
+      this.planStore.setSelectedPlanId(null);
     } else {
       console.log('service');
     }
@@ -131,7 +130,7 @@ export class DvManagerDashboard implements OnInit {
       [EEmployeePlanStatus.UNASSIGNED]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
       [EEmployeePlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
       [EEmployeePlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-      [EEmployeePlanStatus.DEPT_APPROVED]: 'bg-green-50 text-green-700 border-green-200',      
+      [EEmployeePlanStatus.DEPT_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
       [EEmployeePlanStatus.DEPT_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
       [EEmployeePlanStatus.DV_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
       [EEmployeePlanStatus.DV_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
@@ -147,8 +146,8 @@ export class DvManagerDashboard implements OnInit {
 
   onViewDetails(plan: IPlanRecord) {
     // Set mode to view and plan ID
-    this.wizardMode.set('view');
-    this.selectedPlanId.set(plan.id);
+    this.planStore.setWizardMode('view');
+    this.planStore.setSelectedPlanId(plan.id);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
 

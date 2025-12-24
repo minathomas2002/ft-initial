@@ -104,6 +104,8 @@ export class OpportunitiesList implements OnInit {
   applyOpportunity(opportunity: IOpportunity) {
     this.planStore.setAvailableOpportunities({ id: opportunity.id, name: opportunity.title });
     this.planStore.setAppliedOpportunity(opportunity);
+    this.planStore.setWizardMode('create');
+    this.planStore.setSelectedPlanId(null);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
 }

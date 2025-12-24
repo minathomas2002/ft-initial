@@ -21,10 +21,12 @@ export class DvManagerDashboardPlansFilterService extends AbstractServiceFilter<
 
   showClearAll = computed(() => {
     const current = this.filter();
-    return Boolean(current.searchText?.trim()) || 
-           current.planType !== null || 
-           current.status !== null || 
-           Boolean(current.submissionDate);
+    return (
+      Boolean(current.searchText?.trim()) ||
+      current.planType !== null ||
+      current.status !== null ||
+      Boolean(current.submissionDate)
+    );
   });
 
   performFilter$() {
@@ -46,4 +48,3 @@ export class DvManagerDashboardPlansFilterService extends AbstractServiceFilter<
     this.store.getDvManagerDashboardPlans(this.adpatedFilter()).pipe(take(1)).subscribe();
   }
 }
-

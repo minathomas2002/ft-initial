@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, output, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
@@ -39,7 +39,7 @@ import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dial
     SkeletonModule,
     TranslatePipe,
     TimelineDialog
-],
+  ],
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
   providers: [DashboardPlansFilterService],
@@ -50,12 +50,9 @@ export class InvestorDashboard implements OnInit {
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
   timelineVisibility = signal(false);
-  selectedPlan =signal<IPlanRecord| null>(null);
+  selectedPlan = signal<IPlanRecord | null>(null);
   eEmployeePlanStatus = EEmployeePlanStatus;
 
-  // Wizard mode and plan ID signals
-  selectedPlanId = signal<string | null>(null);
-  wizardMode = signal<'create' | 'edit' | 'view'>('create');
 
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
@@ -83,6 +80,14 @@ export class InvestorDashboard implements OnInit {
   readonly statistics = computed(() => this.dashboardPlansStore.statistics());
   readonly isStatisticsLoading = computed(() => this.dashboardPlansStore.loading() || this.statistics() === null);
 
+  constructor() {
+    effect(() => {
+      if (!this.productLocalizationPlanWizardVisibility()) {
+        this.resetProductLocalizationPlanWizard();
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.filterService.applyFilter();
   }
@@ -97,9 +102,11 @@ export class InvestorDashboard implements OnInit {
     this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
     this.newPlanDialogVisibility.set(false);
     if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
+      // Creating new plan from scratch - clear applied opportunity
+      this.planStore.resetAppliedOpportunity();
       // Reset mode and plan ID for new plan
-      this.wizardMode.set('create');
-      this.selectedPlanId.set(null);
+      this.planStore.setWizardMode('create');
+      this.planStore.setSelectedPlanId(null);
       this.productLocalizationPlanWizardVisibility.set(true);
     } else {
       console.log('service');
@@ -139,8 +146,8 @@ export class InvestorDashboard implements OnInit {
 
   onViewDetails(plan: IPlanRecord) {
     // Set mode to view and plan ID
-    this.wizardMode.set('view');
-    this.selectedPlanId.set(plan.id);
+    this.planStore.setWizardMode('view');
+    this.planStore.setSelectedPlanId(plan.id);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
 
@@ -148,8 +155,8 @@ export class InvestorDashboard implements OnInit {
     // Check if plan status allows editing (Draft or Pending)
     if (plan.status === EInvestorPlanStatus.DRAFT || plan.status === EInvestorPlanStatus.PENDING) {
       // Set mode to edit and plan ID
-      this.wizardMode.set('edit');
-      this.selectedPlanId.set(plan.id);
+      this.planStore.setWizardMode('edit');
+      this.planStore.setSelectedPlanId(plan.id);
       this.productLocalizationPlanWizardVisibility.set(true);
     } else {
       this.i18nService.translate('plans.errors.cannotEdit');
@@ -174,5 +181,19 @@ export class InvestorDashboard implements OnInit {
 
   onSubmitProductLocalizationPlanWizard() {
     console.log('Submit product localization plan wizard');
+  }
+
+  createNewPlan() {
+    // Set mode to create and plan ID
+    // Clear applied opportunity when creating from scratch
+    this.planStore.resetAppliedOpportunity();
+    this.planStore.setWizardMode('create');
+    this.planStore.setSelectedPlanId(null);
+    this.planTermsAndConditionsDialogVisibility.set(true);
+  }
+
+  resetProductLocalizationPlanWizard() {
+    console.log('resetProductLocalizationPlanWizard');
+    this.planStore.resetWizardState();
   }
 }

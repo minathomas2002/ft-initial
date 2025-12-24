@@ -12,6 +12,8 @@ export class Step3ValueChainFormBuilder {
    */
   createValueChainItemFormGroup(): FormGroup {
     const itemGroup: any = {
+      // Hidden control to store the row ID (for edit mode)
+      rowId: [null],
       [EMaterialsFormControls.expenseHeader]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
@@ -196,10 +198,10 @@ export class Step3ValueChainFormBuilder {
 
         const inHouseOrProcured = inHouseOrProcuredControl?.value;
         // Calculation logic based on truth table
-        if (yearValue === ELocalizationStatusType.Yes.toString()) {
+        if (yearValue == ELocalizationStatusType.Yes.toString()) {
           // Case 1 & 3: In-house + Yes OR Procured + Yes = Add Cost %
           total += costPercentage;
-        } else if (yearValue === ELocalizationStatusType.Partial.toString()) {
+        } else if (yearValue == ELocalizationStatusType.Partial.toString()) {
           // Case 5: Any + Partial = Add (Cost % × 50%)
           total += costPercentage * 0.5;
         }

@@ -18,6 +18,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionSaudization {
+  isViewMode = input<boolean>(false);
   private readonly formService = inject(ProductPlanFormService);
   private readonly i18nService = inject(I18nService);
 

@@ -13,18 +13,22 @@ export class Step4SaudizationFormBuilder {
   createYearFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.annualHeadcount]: this.fb.group({
+        rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0)]], // Integer only, >= 0
       }),
       [EMaterialsFormControls.saudizationPercentage]: this.fb.group({
+        rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]], // Range: 0-100%
       }),
       [EMaterialsFormControls.annualTotalCompensation]: this.fb.group({
+        rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0)]], // Decimal allowed, >= 0
       }),
       [EMaterialsFormControls.saudiCompensationPercentage]: this.fb.group({
+        rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]], // Range: 0-100%
       }),

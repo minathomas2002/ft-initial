@@ -190,6 +190,8 @@ export class OpportunityDetails implements OnInit {
       isOtherOpportunity: false,
       icon: ''
     });
+    this.planStore.setWizardMode('create');
+    this.planStore.setSelectedPlanId(null);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
 }

@@ -11,6 +11,7 @@
     />
   </div>
 
+  @if((isViewMode() && files().length > 0) || !isViewMode()) {
   <!-- Attachments Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Attachments (Optional)</h2>
@@ -20,6 +21,7 @@
       [showCheckbox]="showCheckbox()"
     >
       <app-fileupload
+        [isViewMode]="isViewMode()"
         [acceptedFileTypes]="'.pdf, .png, .jpg, .jpeg, .zip, .rar'"
         [(files)]="files"
         class="w-full"
@@ -32,4 +34,5 @@
       [label]="'Attachments'"
     />
   </div>
+  }
 </div>

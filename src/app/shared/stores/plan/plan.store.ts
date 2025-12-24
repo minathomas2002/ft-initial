@@ -3,9 +3,9 @@ import { OpportunitiesApiService } from "../../api/opportunities/opportunities-a
 import { EExperienceRange, EInHouseProcuredType, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
-import { IActiveEmployee, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
-import { IProductPlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
+import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IProductPlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null,
@@ -28,7 +28,8 @@ const initialState: {
   currentEmployee: IAssignActiveEmployee | null;
   isLoading: boolean;
   isProcessing: boolean;
-
+  wizardMode: 'create' | 'edit' | 'view';
+  selectedPlanId: string | null;
 
 } = {
   newPlanOpportunityType: null,
@@ -64,7 +65,9 @@ const initialState: {
   activeEmployees: null,
   currentEmployee: null,
   isLoading: false,
-  isProcessing: false
+  isProcessing: false,
+  wizardMode: 'create',
+  selectedPlanId: null
 
 }
 
@@ -99,6 +102,15 @@ export const PlanStore = signalStore(
       },
       setAvailableOpportunities(opportunity: ISelectItem): void {
         patchState(store, { availableOpportunities: [opportunity] });
+      },
+      setWizardMode(mode: 'create' | 'edit' | 'view'): void {
+        patchState(store, { wizardMode: mode });
+      },
+      setSelectedPlanId(planId: string | null): void {
+        patchState(store, { selectedPlanId: planId });
+      },
+      resetWizardState(): void {
+        patchState(store, { wizardMode: 'create', selectedPlanId: null });
       }
     }
   }),
@@ -113,6 +125,33 @@ export const PlanStore = signalStore(
           .pipe(
             finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
             tap((response) => patchState(store, { availableOpportunities: response.body }))
+          )
+      },
+
+      /**
+       * Get opportunity details by ID and update availableOpportunities
+       * Used in edit mode to populate the opportunity dropdown with the existing opportunity
+       */
+      getOpportunityDetailsAndUpdateOptions(opportunityId: string): Observable<IBaseApiResponse<IOpportunityDetails>> {
+        patchState(store, { isLoadingAvailableOpportunities: true });
+        return opportunitiesApiService.getOpportunityById(opportunityId)
+          .pipe(
+            finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
+            tap((response) => {
+              if (response.body) {
+                // Convert IOpportunityDetails to ISelectItem format
+                const opportunityItem: ISelectItem = {
+                  id: response.body.id,
+                  name: response.body.title
+                };
+                // Update availableOpportunities with the single opportunity
+                patchState(store, { availableOpportunities: [opportunityItem] });
+              }
+            }),
+            catchError((error) => {
+              patchState(store, { error: error.errorMessage || 'Error loading opportunity details' });
+              return throwError(() => new Error('Error loading opportunity details'));
+            })
           )
       },
 
@@ -214,7 +253,7 @@ export const PlanStore = signalStore(
           }),
         );
       },
-          /* Get timeline list*/
+      /* Get timeline list*/
       getTimelinePlan(planId: string): Observable<IBaseApiResponse<ITimeLineResponse[]>> {
         patchState(store, { isLoading: true, error: null });
         return planApiService.getTimeLine({ planId }).pipe(
@@ -231,10 +270,10 @@ export const PlanStore = signalStore(
           }),
         );
       },
-    
+
     }
 
-  
+
   }),
   withMethods((store) => {
     return {

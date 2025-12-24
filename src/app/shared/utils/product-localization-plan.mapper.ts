@@ -232,10 +232,14 @@ function mapValueChainStep(formService: ProductPlanFormService): ValueChainStep 
       const inHouseOrProcured = getFormValue(itemFormGroup, EMaterialsFormControls.inHouseOrProcured);
       const costPercent = getFormValue(itemFormGroup, EMaterialsFormControls.costPercentage);
 
+      // Get the row ID if it exists (for edit mode)
+      const rowIdControl = itemFormGroup.get('rowId');
+      const rowId = rowIdControl?.value ?? null;
+
       // Only add row if it has at least an expense header
       if (expenseHeader) {
         valueChainRows.push({
-          id: null,
+          id: rowId,
           sectionType,
           expenseHeader: expenseHeader ?? null,
           inHouseOrProcured: inHouseOrProcured ?? null,
@@ -306,7 +310,8 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
         saudizationType,
       } as any as SaudizationRow; // Allow null values for FormData conversion
 
-      // Extract values for each year
+      // Extract values for each year and get row ID (same for all years)
+      let rowId: string | null = null;
       for (let year = 1; year <= 7; year++) {
         const yearControl = `year${year}` as keyof typeof EMaterialsFormControls;
         const yearControlName = EMaterialsFormControls[yearControl];
@@ -315,11 +320,20 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
         if (yearFormGroup) {
           const rowFormGroup = yearFormGroup.get(rowType) as FormGroup;
           if (rowFormGroup) {
+            // Get the row ID from the first year (it's the same for all years)
+            if (year === 1) {
+              const rowIdControl = rowFormGroup.get('rowId');
+              rowId = rowIdControl?.value ?? null;
+            }
+
             const value = getFormValue(rowFormGroup, EMaterialsFormControls.value);
             (row as any)[`year${year}`] = value ?? null;
           }
         }
       }
+
+      // Set the row ID (can be null for new rows in edit mode)
+      (row as any).id = rowId;
 
       saudizationRows.push(row);
     });
@@ -506,7 +520,14 @@ export function mapProductPlanResponseToForm(
         targetSECArray.push('2');
       }
     }
-    targetCustomersForm.get(EMaterialsFormControls.targetedCustomer)?.setValue(targetSECArray);
+    // Set value on the nested 'value' control within the targetedCustomer FormGroup
+    const targetedCustomerControl = targetCustomersForm.get(EMaterialsFormControls.targetedCustomer);
+    if (targetedCustomerControl instanceof FormGroup) {
+      const valueControl = targetedCustomerControl.get(EMaterialsFormControls.value);
+      if (valueControl) {
+        valueControl.setValue(targetSECArray ?? []);
+      }
+    }
     setFormGroupValue(targetCustomersForm, EMaterialsFormControls.namesOfTargetedSuppliers, targetCustomers.targetedLocalSupplierNames);
     setFormGroupValue(targetCustomersForm, EMaterialsFormControls.productsUtilizeTargetedProduct, targetCustomers.productsUtilizingTargetProduct);
   }
@@ -519,7 +540,14 @@ export function mapProductPlanResponseToForm(
       const expValue = typeof mfgExp.experienceRange === 'string'
         ? { id: mfgExp.experienceRange, name: '' }
         : mfgExp.experienceRange;
-      manufacturingExpForm.get(EMaterialsFormControls.productManufacturingExperience)?.setValue(expValue);
+      // Set value on the nested 'value' control within the productManufacturingExperience FormGroup
+      const experienceControl = manufacturingExpForm.get(EMaterialsFormControls.productManufacturingExperience);
+      if (experienceControl instanceof FormGroup) {
+        const valueControl = experienceControl.get(EMaterialsFormControls.value);
+        if (valueControl) {
+          valueControl.setValue(expValue);
+        }
+      }
     }
 
     manufacturingExpForm.get(EMaterialsFormControls.provideToSEC)?.setValue(mfgExp.provideToSEC ?? false);
@@ -593,16 +621,22 @@ export function mapProductPlanResponseToForm(
       // Add rows
       rowsBySection[sectionType].forEach(row => {
         const itemFormGroup = formService.createValueChainItem();
+        // Store the row ID for edit mode
+        const rowIdControl = itemFormGroup.get('rowId');
+        if (rowIdControl && row.id) {
+          rowIdControl.setValue(row.id);
+        }
         setFormGroupValue(itemFormGroup, EMaterialsFormControls.expenseHeader, row.expenseHeader);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.inHouseOrProcured, row.inHouseOrProcured);
+        // Convert numeric values to strings to match select option IDs (which use .toString() on enum values)
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.inHouseOrProcured, row.inHouseOrProcured != null ? String(row.inHouseOrProcured) : null);
         setFormGroupValue(itemFormGroup, EMaterialsFormControls.costPercentage, row.costPercent);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year1, row.year1);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year2, row.year2);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year3, row.year3);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year4, row.year4);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year5, row.year5);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year6, row.year6);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year7, row.year7);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year1, row.year1 != null ? String(row.year1) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year2, row.year2 != null ? String(row.year2) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year3, row.year3 != null ? String(row.year3) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year4, row.year4 != null ? String(row.year4) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year5, row.year5 != null ? String(row.year5) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year6, row.year6 != null ? String(row.year6) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year7, row.year7 != null ? String(row.year7) : null);
         itemsArray.push(itemFormGroup);
       });
     });
@@ -642,6 +676,12 @@ export function mapProductPlanResponseToForm(
         const row = rowsByType[type];
         const rowFormGroup = yearFormGroup.get(rowName) as FormGroup;
         if (rowFormGroup) {
+          // Store the row ID for edit mode (same ID for all years of the same row type)
+          const rowIdControl = rowFormGroup.get('rowId');
+          if (rowIdControl && row.id) {
+            rowIdControl.setValue(row.id);
+          }
+
           const valueControl = rowFormGroup.get(EMaterialsFormControls.value);
           if (valueControl) {
             const yearValue = (row as any)[`year${year}`];

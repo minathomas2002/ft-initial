@@ -10,7 +10,7 @@ import { LanguageSwitcherComponent } from '../../../../../shared/components/lang
 	selector: 'app-layout-navbar',
 	imports: [
 		NavbarProfileDropdownComponent,
-		//NavbarNotificationsComponent,
+		NavbarNotificationsComponent,
 		ButtonModule,
 		DrawerModule,
 		SidebarContentComponent,

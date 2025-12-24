@@ -9,7 +9,7 @@
       [label]="'dashboard.submitNewPlan' | translate"
       [icon]="'icon-plus'"
       [size]="'small'"
-      (onClick)="planTermsAndConditionsDialogVisibility.set(true)"
+      (onClick)="createNewPlan()"
     />
   </ng-container>
 
@@ -193,8 +193,6 @@
 @if(productLocalizationPlanWizardVisibility()){
 <app-product-localization-plan-wizard
   [(visibility)]="productLocalizationPlanWizardVisibility"
-  [mode]="wizardMode()"
-  [planId]="selectedPlanId()"
   (doRefresh)="applyFilter()"
 />
 }

@@ -52,6 +52,7 @@
           [attr.colspan]="keys().length + 1"
           class="!p-3 !border !border-gray-200 !rounded-br-xl !rounded-bl-xl"
         >
+          @if(!hideAddButton()){
           <p-button
             text
             [icon]="'icon-plus'"
@@ -59,6 +60,7 @@
             (onClick)="onAddHandler()"
             [disabled]="rows().length >= maxItems()"
           />
+          }
         </td>
       </tr>
     </ng-template>

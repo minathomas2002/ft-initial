@@ -15,7 +15,7 @@ import { DatePipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionOverview {
-
+  isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   onEdit = output<void>();
 

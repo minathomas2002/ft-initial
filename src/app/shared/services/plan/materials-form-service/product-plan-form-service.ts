@@ -256,18 +256,20 @@ export class ProductPlanFormService {
       }
     }
 
-    // Ensure disabled controls maintain their disabled state
+    // Ensure disabled controls maintain their disabled state and values
     const basicInfo = this.basicInformationFormGroup;
     if (basicInfo) {
       const opportunityTypeControl = basicInfo.get(EMaterialsFormControls.opportunityType);
-      if (opportunityTypeControl && !opportunityTypeControl.disabled) {
-        opportunityTypeControl.disable();
+      if (opportunityTypeControl) {
+        // Always set value and disable for create mode
         opportunityTypeControl.setValue(EOpportunityType.PRODUCT.toString());
+        opportunityTypeControl.disable({ emitEvent: false });
       }
       const submissionDateControl = basicInfo.get(EMaterialsFormControls.submissionDate);
-      if (submissionDateControl && !submissionDateControl.disabled) {
-        submissionDateControl.disable();
+      if (submissionDateControl) {
+        // Always set value and disable for create mode
         submissionDateControl.setValue(new Date());
+        submissionDateControl.disable({ emitEvent: false });
       }
     }
 
