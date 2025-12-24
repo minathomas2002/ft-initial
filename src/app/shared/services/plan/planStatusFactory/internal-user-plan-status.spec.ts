@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ManagerPlanStatus } from './manager-plan-status';
+import { InternalUserPlanStatus } from './internal-user-plan-status';
 
 describe('ManagerPlanStatus', () => {
-  let service: ManagerPlanStatus;
+  let service: InternalUserPlanStatus;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ManagerPlanStatus);
+    service = TestBed.inject(InternalUserPlanStatus);
   });
 
   it('should be created', () => {

@@ -782,7 +782,8 @@
       "dvRejected": "DV Rejected",
       "dvRejectionAcknowledged": "DV Rejection Acknowledged",
       "employeeApproved": "Employee Approved",
-      "employeeRejected": "Employee Rejected"
+      "employeeRejected": "Employee Rejected",
+      "assigned": "Assigned"
     },
     "type": {
       "services": "Services",

@@ -120,6 +120,7 @@ export class DvManagerDashboard implements OnInit {
       [EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
       [EEmployeePlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
       [EEmployeePlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
+    [EEmployeePlanStatus.ASSIGNED]: this.i18nService.translate('plans.employee_status.assigned'),
     };
     return statusMap[status] || '';
   }
@@ -138,6 +139,7 @@ export class DvManagerDashboard implements OnInit {
       [EEmployeePlanStatus.EMPLOYEE_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
       [EEmployeePlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
       [EEmployeePlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+      [EEmployeePlanStatus.ASSIGNED]: 'bg-orange-50 text-orange-700 border-red-200'
     };
     return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200';
   }
