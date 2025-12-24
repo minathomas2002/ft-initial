@@ -43,9 +43,7 @@
         <h5>{{ 'common.files' | translate }}</h5>
         <div class="flex flex-wrap gap-4">
           @for(file of files; track file.name; let i = $index){
-          <div
-            class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full"
-          >
+          <div class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full">
             <div>
               @if(file.type && file.type.startsWith('image/')){
               <img
@@ -55,8 +53,19 @@
                 width="50"
                 appImageError
               />
+              }@else if(getFileIcon(file)){
+              <img
+                role="presentation"
+                [alt]="file.name"
+                [src]="getFileIcon(file)"
+                width="50"
+                appImageError
+              />
               }@else{
-              <span class="pi pi-file" style="font-size: 2em"></span>
+              <span
+                class="pi pi-file"
+                style="font-size: 2em"
+              ></span>
               }
             </div>
             <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden">
@@ -83,9 +92,12 @@
     <div class="flex items-center justify-center flex-col">
       @if(!isViewMode()){
       <p class="text-sm">
-        <span class="text-primary-600 cursor-pointer" (click)="chooseFiles()">{{
+        <span
+          class="text-primary-600 cursor-pointer"
+          (click)="chooseFiles()"
+        >{{
           'common.clickToUpload' | translate
-        }}</span>
+          }}</span>
         {{ 'common.dragAndDrop' | translate }}
       </p>
       <p class="text-sm">{{ placeholder() }}</p>
