@@ -316,7 +316,7 @@
             <textarea
               pInputTextarea
               fluid
-              [maxlength]="500"
+              [maxlength]="255"
               placeholder="Enter provide names of targeted SEC's"
               [rows]="4"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
@@ -340,7 +340,7 @@
               fluid
               placeholder="Enter product(s)"
               [rows]="4"
-              [maxlength]="500"
+              [maxlength]="255"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
             ></textarea>
           </app-group-input-with-checkbox>
