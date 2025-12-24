@@ -325,7 +325,7 @@
       "departmentManager": "Department Manager",
       "investor": "Investor",
       "dvManager": "DV Manager",
-      "autoProcess":"System"
+      "autoProcess":"Automated Process"
     },
     "status": {
       "active": "Active",
