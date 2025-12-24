@@ -54,7 +54,6 @@ InvestorPlanStatus = EInvestorPlanStatus;
     }
 
   getUserTranslatedAction(item: ITimeLineResponse): string {
-    console.log(item);
     var param = '';
     switch(item.actionType){
       case EActionPlanTimeLine.AUTOASSIGN:
@@ -70,7 +69,7 @@ InvestorPlanStatus = EInvestorPlanStatus;
         param = (item.planType == EOpportunityType.SERVICES)? this.i18nService.translate('opportunity.type.service') : this.i18nService.translate('opportunity.type.product');
         break;
       default:
-        param ='';;
+        param ='';
         break;
     }
       return this.actionPlanMapper.getTranslatedAction(item.actionType as EActionPlanTimeLine,param);
