@@ -3,7 +3,7 @@ import { OpportunitiesApiService } from "../../api/opportunities/opportunities-a
 import { EExperienceRange, EInHouseProcuredType, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
-import { IActiveEmployee, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IActiveEmployee, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { IProductPlanResponse } from "../../interfaces/plans.interface";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
 
@@ -111,6 +111,33 @@ export const PlanStore = signalStore(
           .pipe(
             finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
             tap((response) => patchState(store, { availableOpportunities: response.body }))
+          )
+      },
+
+      /**
+       * Get opportunity details by ID and update availableOpportunities
+       * Used in edit mode to populate the opportunity dropdown with the existing opportunity
+       */
+      getOpportunityDetailsAndUpdateOptions(opportunityId: string): Observable<IBaseApiResponse<IOpportunityDetails>> {
+        patchState(store, { isLoadingAvailableOpportunities: true });
+        return opportunitiesApiService.getOpportunityById(opportunityId)
+          .pipe(
+            finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
+            tap((response) => {
+              if (response.body) {
+                // Convert IOpportunityDetails to ISelectItem format
+                const opportunityItem: ISelectItem = {
+                  id: response.body.id,
+                  name: response.body.title
+                };
+                // Update availableOpportunities with the single opportunity
+                patchState(store, { availableOpportunities: [opportunityItem] });
+              }
+            }),
+            catchError((error) => {
+              patchState(store, { error: error.errorMessage || 'Error loading opportunity details' });
+              return throwError(() => new Error('Error loading opportunity details'));
+            })
           )
       },
 

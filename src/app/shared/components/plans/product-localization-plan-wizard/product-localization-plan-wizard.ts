@@ -21,6 +21,7 @@ import { SubmissionConfirmationModalComponent } from "../submission-confirmation
 import { Signature } from "src/app/shared/interfaces/plans.interface";
 import { ConfirmLeaveDialogComponent } from "../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
+import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -188,20 +189,27 @@ export class ProductLocalizationPlanWizard {
       .subscribe({
         next: (response) => {
           if (response.body) {
-            // Map response to form
-            mapProductPlanResponseToForm(response.body, this.productPlanFormService);
-
-            // Store existing signature if present
-            if (response.body.signature?.signatureValue) {
-              this.existingSignature.set(response.body.signature.signatureValue);
-            }
-
-            // Disable forms if in view mode
-            if (this.isViewMode()) {
-              this.disableAllForms();
+            // Get opportunity details and update availableOpportunities for edit mode
+            const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
+            if (opportunityId && (this.mode() === 'edit' || this.mode() === 'view')) {
+              this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe({
+                  next: () => {
+                    // Map response to form after opportunity is loaded
+                    this.mapPlanDataToForm(response.body);
+                  },
+                  error: (error) => {
+                    console.error('Error loading opportunity details:', error);
+                    // Still map the form data even if opportunity loading fails
+                    this.mapPlanDataToForm(response.body);
+                  }
+                });
+            } else {
+              // Map response to form directly if no opportunity ID or not in edit/view mode
+              this.mapPlanDataToForm(response.body);
             }
           }
-          this.isLoadingPlan.set(false);
         },
         error: (error) => {
           this.isLoadingPlan.set(false);
@@ -210,6 +218,32 @@ export class ProductLocalizationPlanWizard {
           this.visibility.set(false);
         }
       });
+  }
+
+  private mapPlanDataToForm(response: IProductPlanResponse): void {
+    // Map response to form
+    mapProductPlanResponseToForm(response, this.productPlanFormService);
+
+    // Store existing signature if present
+    if (response.signature?.signatureValue) {
+      this.existingSignature.set(response.signature.signatureValue);
+    }
+
+    // Disable forms if in view mode
+    if (this.isViewMode()) {
+      this.disableAllForms();
+    }
+
+    // Disable opportunity input in edit mode
+    if (this.mode() === 'edit') {
+      const basicInfoForm = this.productPlanFormService.basicInformationFormGroup;
+      const opportunityControl = basicInfoForm?.get(EMaterialsFormControls.opportunity);
+      if (opportunityControl) {
+        opportunityControl.disable({ emitEvent: false });
+      }
+    }
+
+    this.isLoadingPlan.set(false);
   }
 
   disableAllForms(): void {
