@@ -32,6 +32,7 @@
             id="name"
             type="text"
             pInputText
+            [maxlength]="100"
             [formControl]="formService.nameControl"
             [placeholder]="'plans.submission.namePlaceholder' | translate"
             class="w-full"
@@ -54,6 +55,7 @@
             id="jobTitle"
             type="text"
             pInputText
+            [maxlength]="100"
             [formControl]="formService.jobTitleControl"
             [placeholder]="'plans.submission.jobTitlePlaceholder' | translate"
             class="w-full"
