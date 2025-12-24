@@ -176,7 +176,10 @@
 </app-table-layout>
 
 @if(planTermsAndConditionsDialogVisibility()){
-<app-plan-terms-and-conditions-dialog (onConfirm)="onUserReadAndApproved()" />
+<app-plan-terms-and-conditions-dialog
+  [(visibility)]="planTermsAndConditionsDialogVisibility"
+  (onConfirm)="onUserReadAndApproved()"
+/>
 }
 
 @if(newPlanDialogVisibility()){

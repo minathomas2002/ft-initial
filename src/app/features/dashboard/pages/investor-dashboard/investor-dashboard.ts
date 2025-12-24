@@ -180,7 +180,7 @@ export class InvestorDashboard implements OnInit {
     // Set mode to view and plan ID
     this.wizardMode.set('create');
     this.selectedPlanId.set(null);
-    this.productLocalizationPlanWizardVisibility.set(true);
+    this.planTermsAndConditionsDialogVisibility.set(true);
   }
 
   resetProductLocalizationPlanWizard() {

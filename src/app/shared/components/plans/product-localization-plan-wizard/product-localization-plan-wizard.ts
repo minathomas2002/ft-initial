@@ -144,6 +144,21 @@ export class ProductLocalizationPlanWizard {
         this.activeStep.set(1);
         this.isSubmitted.set(false);
         this.existingSignature.set(null);
+
+        // Load available opportunities for create mode
+        const opportunityType = this.planStore.newPlanOpportunityType();
+        if (opportunityType) {
+          this.planStore.getActiveOpportunityLookUps()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+              next: () => {
+                // Opportunities loaded successfully
+              },
+              error: (error) => {
+                console.error('Error loading available opportunities:', error);
+              }
+            });
+        }
       }
     });
   }
