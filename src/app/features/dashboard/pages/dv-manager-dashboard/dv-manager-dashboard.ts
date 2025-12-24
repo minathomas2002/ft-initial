@@ -37,7 +37,7 @@ import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dial
     AssignReassignManualEmployee,
     ProductLocalizationPlanWizard,
     TimelineDialog
-],
+  ],
   templateUrl: './dv-manager-dashboard.html',
   styleUrl: './dv-manager-dashboard.scss',
   providers: [DvManagerDashboardPlansFilterService],
@@ -115,7 +115,7 @@ export class DvManagerDashboard {
       [EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
       [EEmployeePlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
       [EEmployeePlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
-    [EEmployeePlanStatus.ASSIGNED]: this.i18nService.translate('plans.employee_status.assigned'),
+      [EEmployeePlanStatus.ASSIGNED]: this.i18nService.translate('plans.employee_status.assigned'),
     };
     return statusMap[status] || '';
   }
@@ -144,6 +144,7 @@ export class DvManagerDashboard {
     // Set mode to view and plan ID
     this.planStore.setWizardMode('view');
     this.planStore.setSelectedPlanId(plan.id);
+    this.planStore.setPlanStatus(plan.status);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
 

@@ -148,6 +148,7 @@ export class InvestorDashboard implements OnInit {
     // Set mode to view and plan ID
     this.planStore.setWizardMode('view');
     this.planStore.setSelectedPlanId(plan.id);
+    this.planStore.setPlanStatus(plan.status);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
 
@@ -157,6 +158,7 @@ export class InvestorDashboard implements OnInit {
       // Set mode to edit and plan ID
       this.planStore.setWizardMode('edit');
       this.planStore.setSelectedPlanId(plan.id);
+      this.planStore.setPlanStatus(plan.status);
       this.productLocalizationPlanWizardVisibility.set(true);
     } else {
       this.i18nService.translate('plans.errors.cannotEdit');

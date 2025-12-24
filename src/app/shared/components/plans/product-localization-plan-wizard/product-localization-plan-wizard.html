@@ -13,12 +13,14 @@
   (onClose)="onClose()"
 >
 
+  @if (shouldShowStatusTag()) {
   <ng-container ngProjectAs="status">
     <app-base-tag
-      [color]="'gray'"
-      [value]="'Draft'"
+      [value]="statusLabel()"
+      [styleClass]="statusBadgeClass()"
     />
   </ng-container>
+  }
 
   <ng-template [appStepContent]="1">
     <app-step-01-overview-company-information-form />
@@ -29,11 +31,11 @@
   </ng-template>
 
   <ng-template [appStepContent]="3">
-    <app-step-03-valueChain-form [isViewMode]="isViewMode()"/>
+    <app-step-03-valueChain-form [isViewMode]="isViewMode()" />
   </ng-template>
 
   <ng-template [appStepContent]="4">
-    <app-step-04-saudization-form [isViewMode]="isViewMode()"/>
+    <app-step-04-saudization-form [isViewMode]="isViewMode()" />
   </ng-template>
 
   <ng-template [appStepContent]="5">
