@@ -172,6 +172,7 @@ export interface ITimeLineResponse{
   targetUserNameAr: string;
   timestamp: string; 
   profilePicURL: string; 
+  planType: number;
   daysAfterPreviousAction: number;
   comments : ITimelineComment[];
 

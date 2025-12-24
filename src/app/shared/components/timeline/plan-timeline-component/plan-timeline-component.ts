@@ -5,7 +5,7 @@ import { EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
 import { Divider } from "primeng/divider";
 import { DatePipe } from '@angular/common';
 import { SystemEmployeeRoleMapper } from 'src/app/shared/classes/role.mapper';
-import { ERoles } from 'src/app/shared/enums';
+import { EOpportunityType, ERoles } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { ActionPlanMapper } from 'src/app/shared/classes/action-plan.mapper';
@@ -53,8 +53,27 @@ InvestorPlanStatus = EInvestorPlanStatus;
       return this.employeeRoleMapper.getTranslatedRole(roleCode as ERoles);
     }
 
-  getUserTranslatedAction(actionCode: number): string {
-      return this.actionPlanMapper.getTranslatedAction(actionCode as EActionPlanTimeLine);
+  getUserTranslatedAction(item: ITimeLineResponse): string {
+    console.log(item);
+    var param = '';
+    switch(item.actionType){
+      case EActionPlanTimeLine.AUTOASSIGN:
+        param = item.actionByNameEn;
+        break;
+      case EActionPlanTimeLine.ASSIGNED:
+        param = item.actionByNameEn;
+        break;
+      case EActionPlanTimeLine.REASSIGNED:
+        param = item.actionByNameEn;
+        break;
+      case EActionPlanTimeLine.SUBMITED:
+        param = (item.planType == EOpportunityType.SERVICES)? this.i18nService.translate('opportunity.type.service') : this.i18nService.translate('opportunity.type.product');
+        break;
+      default:
+        param ='';;
+        break;
+    }
+      return this.actionPlanMapper.getTranslatedAction(item.actionType as EActionPlanTimeLine,param);
     }
 
 
