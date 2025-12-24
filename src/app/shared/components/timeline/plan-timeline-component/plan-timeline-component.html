@@ -18,7 +18,7 @@
         <div class="flex items-center justify-end text-xs text-gray-700 whitespace-nowrap">
           <i class="icon-clock text-gray-400"></i>
           <span>
-            {{ item.item.timestamp | date:'EEEE, MMMM d • h:mm a' }}
+            {{ item.item.timestamp+'Z' | date:'EEEE, MMMM d • h:mm a' }}
           </span>
         </div>
 
