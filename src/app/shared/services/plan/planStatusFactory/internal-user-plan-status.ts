@@ -11,7 +11,6 @@ i18nService = inject(I18nService);
 
 
    getStatusLabel(status: EEmployeePlanStatus): string {
-    console.log(status);
     
       const statusMap = {
         [EEmployeePlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pending'),

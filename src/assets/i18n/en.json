@@ -783,7 +783,10 @@
       "dvRejectionAcknowledged": "DV Rejection Acknowledged",
       "employeeApproved": "Employee Approved",
       "employeeRejected": "Employee Rejected",
-      "assigned": "Assigned"
+      "assigned": "Assigned",
+      "reassigned":"Reassign",
+      "submitted": "Submitted",
+      "pendingOnInvestor":"Pending on investor"
     },
     "type": {
       "services": "Services",
