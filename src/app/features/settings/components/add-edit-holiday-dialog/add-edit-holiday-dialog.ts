@@ -102,14 +102,6 @@ export class AddEditHolidayDialog {
     this.adminSettingsStore
       .createHoliday(request)
       .pipe(
-        tap((res) => {
-          if (res.errors) {
-            this.onSuccess.emit()
-            //this.toasterService.error(res.message[0]);
-            this.dialogVisible.set(false);
-            return;
-          }
-        }),
         take(1),
       )
       .subscribe({
