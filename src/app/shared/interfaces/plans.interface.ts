@@ -1,4 +1,5 @@
 import { ETargetedCustomer } from "../enums"
+import { EInvestorPlanStatus } from "./dashboard-plans.interface"
 
 export interface IProductLocalizationPlanRequest {
   productPlan: ProductPlan
@@ -174,6 +175,12 @@ export interface ITimeLineResponse{
   daysAfterPreviousAction: number;
   comments : ITimelineComment[];
 
+
+}
+
+export interface IPlanStatus{
+  getStatusLabel(status: number): string ;
+  getStatusBadgeClass(status: number): string ;
 
 }
 
