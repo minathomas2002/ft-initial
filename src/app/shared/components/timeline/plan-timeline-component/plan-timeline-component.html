@@ -32,11 +32,18 @@
 
     <!-- user card -->
     <div class="mt-4 bg-white mb-2 py-2">
-      <app-user-identify
+      <app-identify-user
         [userAvatar]="item.item.profilePicURL"
         [userName]="item.item.actionByNameEn"
         [userRole]="getUserTranslatedRole(item.item.actorRole)"
-      ></app-user-identify>
+      >
+
+      </app-identify-user>
+      <!-- <app-user-identify
+        [userAvatar]="item.item.profilePicURL"
+        [userName]="item.item.actionByNameEn"
+        [userRole]="getUserTranslatedRole(item.item.actorRole)"
+      ></app-user-identify> -->
     </div>
 
     <!-- Action -->

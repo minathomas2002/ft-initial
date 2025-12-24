@@ -1,10 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { IPlanStatus, ITimeLineResponse } from 'src/app/shared/interfaces/plans.interface';
+import { ITimeLineResponse } from 'src/app/shared/interfaces/plans.interface';
 import { Timeline } from "../../utility-components/timeline/timeline";
 import { EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
-import { UserIdentify } from "../user-identify/user-identify";
 import { Divider } from "primeng/divider";
-import { BaseLabelComponent } from "../../base-components/base-label/base-label.component";
 import { DatePipe } from '@angular/common';
 import { SystemEmployeeRoleMapper } from 'src/app/shared/classes/role.mapper';
 import { ERoles } from 'src/app/shared/enums';
@@ -13,10 +11,11 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { ActionPlanMapper } from 'src/app/shared/classes/action-plan.mapper';
 import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.enum';
 import { HandlePlanStatusFactory } from 'src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory';
+import { IdentifyUserComponent } from "../../utility-components/identify-user/identify-user.component";
 
 @Component({
   selector: 'app-plan-timeline-component',
-  imports: [Timeline, UserIdentify, DatePipe, TranslatePipe, Divider],
+  imports: [Timeline, DatePipe, TranslatePipe, Divider, IdentifyUserComponent],
   templateUrl: './plan-timeline-component.html',
   styleUrl: './plan-timeline-component.scss',
 })
