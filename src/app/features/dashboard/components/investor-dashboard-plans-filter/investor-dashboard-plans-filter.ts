@@ -35,7 +35,7 @@ export class InvestorDashboardPlansFilter implements OnInit {
     return [
       { label: this.i18nService.translate('plans.filter.allTypes'), value: null },
       { label: this.i18nService.translate('plans.filter.service'), value: EOpportunityType.SERVICES },
-      { label: this.i18nService.translate('plans.filter.material'), value: EOpportunityType.PRODUCT },
+      { label: 'Product', value: EOpportunityType.PRODUCT },
     ];
   });
 
