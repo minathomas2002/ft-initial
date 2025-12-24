@@ -50,7 +50,8 @@ export class AdminHolidaysManagementView implements OnInit {
     return [
       {
         label: this.i18nService.translate('setting.adminView.holidays.table.holidayName'),
-        isSortable: false
+        isSortable: true,
+        sortingKey: 'name',
       },
       {
         label: this.i18nService.translate('setting.adminView.holidays.table.type'),
