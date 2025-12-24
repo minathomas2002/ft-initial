@@ -612,6 +612,7 @@
   },
   "dialog": {
     "cancel": "Cancel",
+    "close": "Close",
     "deleteOpportunity": "Are you sure you want to delete this opportunity?",
     "deleteOpportunityDescription": "This action cannot be undone. Once deleted, all related data will be permanently removed.",
     "moveToDraft": "Are you sure you want to move this opportunity to draft?",
