@@ -27,7 +27,8 @@ const initialState: {
   currentEmployee: IAssignActiveEmployee | null;
   isLoading: boolean;
   isProcessing: boolean;
-
+  wizardMode: 'create' | 'edit' | 'view';
+  selectedPlanId: string | null;
 
 } = {
   newPlanOpportunityType: null,
@@ -62,7 +63,9 @@ const initialState: {
   activeEmployees: null,
   currentEmployee: null,
   isLoading: false,
-  isProcessing: false
+  isProcessing: false,
+  wizardMode: 'create',
+  selectedPlanId: null
 
 }
 
@@ -97,6 +100,15 @@ export const PlanStore = signalStore(
       },
       setAvailableOpportunities(opportunity: ISelectItem): void {
         patchState(store, { availableOpportunities: [opportunity] });
+      },
+      setWizardMode(mode: 'create' | 'edit' | 'view'): void {
+        patchState(store, { wizardMode: mode });
+      },
+      setSelectedPlanId(planId: string | null): void {
+        patchState(store, { selectedPlanId: planId });
+      },
+      resetWizardState(): void {
+        patchState(store, { wizardMode: 'create', selectedPlanId: null });
       }
     }
   }),

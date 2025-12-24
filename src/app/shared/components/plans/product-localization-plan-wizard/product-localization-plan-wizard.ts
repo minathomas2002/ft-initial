@@ -54,9 +54,9 @@ export class ProductLocalizationPlanWizard {
   doRefresh = output<void>();
   isSubmitted = signal<boolean>(false);
 
-  // Mode and plan ID inputs
-  mode = input<'create' | 'edit' | 'view'>('create');
-  planId = input<string | null>(null);
+  // Mode and plan ID from store
+  mode = this.planStore.wizardMode;
+  planId = this.planStore.selectedPlanId;
 
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
@@ -103,7 +103,7 @@ export class ProductLocalizationPlanWizard {
     ];
   });
   wizardTitle = computed(() => {
-    const currentMode = this.mode();
+    const currentMode = this.planStore.wizardMode();
     this.i18nService.currentLanguage();
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
@@ -121,13 +121,13 @@ export class ProductLocalizationPlanWizard {
   existingSignature = signal<string | null>(null);
   showConfirmLeaveDialog = model(false);
   // Computed signal for view mode
-  isViewMode = computed(() => this.mode() === 'view');
+  isViewMode = computed(() => this.planStore.wizardMode() === 'view');
 
   constructor() {
     // Effect to load plan data when planId and mode are set
     effect(() => {
-      const currentPlanId = this.planId();
-      const currentMode = this.mode();
+      const currentPlanId = this.planStore.selectedPlanId();
+      const currentMode = this.planStore.wizardMode();
       const isVisible = this.visibility();
 
       // Only process when dialog is visible
@@ -145,19 +145,14 @@ export class ProductLocalizationPlanWizard {
         this.isSubmitted.set(false);
         this.existingSignature.set(null);
 
-        // Load available opportunities for create mode
-        const opportunityType = this.planStore.newPlanOpportunityType();
-        if (opportunityType) {
-          this.planStore.getActiveOpportunityLookUps()
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe({
-              next: () => {
-                // Opportunities loaded successfully
-              },
-              error: (error) => {
-                console.error('Error loading available opportunities:', error);
-              }
-            });
+        // Handle opportunity based on whether user is applying to an opportunity or creating from scratch
+        const appliedOpportunity = this.planStore.appliedOpportunity();
+        if (appliedOpportunity) {
+          // User is applying to an opportunity - use the opportunity from store and disable the field
+          this.initializeOpportunityFromApplied();
+        } else {
+          // User is creating new plan from scratch - load available opportunities and enable the field
+          this.loadAvailableOpportunities();
         }
       }
     });
@@ -206,7 +201,7 @@ export class ProductLocalizationPlanWizard {
           if (response.body) {
             // Get opportunity details and update availableOpportunities for edit mode
             const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-            if (opportunityId && (this.mode() === 'edit' || this.mode() === 'view')) {
+            if (opportunityId && (this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view')) {
               this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
                 .pipe(takeUntilDestroyed(this.destroyRef))
                 .subscribe({
@@ -250,7 +245,7 @@ export class ProductLocalizationPlanWizard {
     }
 
     // Disable opportunity input in edit mode
-    if (this.mode() === 'edit') {
+    if (this.planStore.wizardMode() === 'edit') {
       const basicInfoForm = this.productPlanFormService.basicInformationFormGroup;
       const opportunityControl = basicInfoForm?.get(EMaterialsFormControls.opportunity);
       if (opportunityControl) {
@@ -276,6 +271,52 @@ export class ProductLocalizationPlanWizard {
 
     // Re-disable opportunityType and submissionDate after enabling all forms
     this.disableReadOnlyFields();
+  }
+
+  /**
+   * Initialize opportunity from applied opportunity (when user applies to an opportunity)
+   */
+  private initializeOpportunityFromApplied(): void {
+    const appliedOpportunity = this.planStore.appliedOpportunity();
+    const availableOpportunities = this.planStore.availableOpportunities();
+
+    if (appliedOpportunity && availableOpportunities.length > 0) {
+      const basicInfoForm = this.productPlanFormService.basicInformationFormGroup;
+      const opportunityControl = basicInfoForm?.get(EMaterialsFormControls.opportunity);
+
+      if (opportunityControl) {
+        // Set the opportunity value from available opportunities
+        opportunityControl.setValue(availableOpportunities[0]);
+        // Disable the opportunity field
+        opportunityControl.disable({ emitEvent: false });
+      }
+    }
+  }
+
+  /**
+   * Load available opportunities for create mode (when creating from scratch)
+   */
+  private loadAvailableOpportunities(): void {
+    // Ensure opportunity field is enabled when creating from scratch
+    const basicInfoForm = this.productPlanFormService.basicInformationFormGroup;
+    const opportunityControl = basicInfoForm?.get(EMaterialsFormControls.opportunity);
+    if (opportunityControl && opportunityControl.disabled) {
+      opportunityControl.enable({ emitEvent: false });
+    }
+
+    const opportunityType = this.planStore.newPlanOpportunityType();
+    if (opportunityType) {
+      this.planStore.getActiveOpportunityLookUps()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            // Opportunities loaded successfully - opportunity field remains enabled
+          },
+          error: (error) => {
+            console.error('Error loading available opportunities:', error);
+          }
+        });
+    }
   }
 
   /**
@@ -317,7 +358,7 @@ export class ProductLocalizationPlanWizard {
     };
 
     // Get plan ID if in edit mode
-    const currentPlanId = this.mode() === 'edit' ? (this.planId() ?? '') : '';
+    const currentPlanId = this.planStore.wizardMode() === 'edit' ? (this.planStore.selectedPlanId() ?? '') : '';
 
     // Map form values to request structure with signature
     const request = mapProductLocalizationPlanFormToRequest(
@@ -347,6 +388,8 @@ export class ProductLocalizationPlanWizard {
           this.visibility.set(false);
           this.showSubmissionModal.set(false);
           this.isSubmitted.set(true);
+          // Reset wizard state in store
+          this.planStore.resetWizardState();
         },
         error: (error) => {
           this.isProcessing.set(false);
@@ -384,8 +427,8 @@ export class ProductLocalizationPlanWizard {
     }
 
     // Get plan ID if in edit mode
-    const currentPlanId = this.mode() === 'edit' ? (this.planId() ?? '') : '';
-    const isEditMode = this.mode() === 'edit';
+    const currentPlanId = this.planStore.wizardMode() === 'edit' ? (this.planStore.selectedPlanId() ?? '') : '';
+    const isEditMode = this.planStore.wizardMode() === 'edit';
 
     // Map form values to request structure
     const request = mapProductLocalizationPlanFormToRequest(this.productPlanFormService, currentPlanId);
@@ -411,6 +454,8 @@ export class ProductLocalizationPlanWizard {
           if (!isEditMode) {
             this.productPlanFormService.resetAllForms();
             this.activeStep.set(1);
+            // Reset wizard state in store for create mode
+            this.planStore.resetWizardState();
           }
 
           this.doRefresh.emit();
@@ -432,6 +477,8 @@ export class ProductLocalizationPlanWizard {
     this.doRefresh.emit();
     this.visibility.set(false);
     this.isSubmitted.set(false);
+    // Reset wizard state in store
+    this.planStore.resetWizardState();
   }
 
   onContinueEditing(): void {
@@ -439,7 +486,7 @@ export class ProductLocalizationPlanWizard {
   }
 
   onClose(): void {
-    if (this.mode() === 'create' || this.mode() === 'edit') {
+    if (this.planStore.wizardMode() === 'create' || this.planStore.wizardMode() === 'edit') {
       if (!this.isSubmitted()) {
         // Keep the wizard open and show confirmation dialog
         this.visibility.set(true);
@@ -450,6 +497,8 @@ export class ProductLocalizationPlanWizard {
       this.activeStep.set(1);
       this.doRefresh.emit();
       this.isSubmitted.set(false);
+      // Reset wizard state in store
+      this.planStore.resetWizardState();
     }
 
   }

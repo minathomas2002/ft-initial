@@ -50,9 +50,6 @@ export class InvestorDashboard implements OnInit {
 
   eEmployeePlanStatus = EEmployeePlanStatus;
 
-  // Wizard mode and plan ID signals
-  selectedPlanId = signal<string | null>(null);
-  wizardMode = signal<'create' | 'edit' | 'view'>('create');
 
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
@@ -102,9 +99,11 @@ export class InvestorDashboard implements OnInit {
     this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
     this.newPlanDialogVisibility.set(false);
     if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
+      // Creating new plan from scratch - clear applied opportunity
+      this.planStore.resetAppliedOpportunity();
       // Reset mode and plan ID for new plan
-      this.wizardMode.set('create');
-      this.selectedPlanId.set(null);
+      this.planStore.setWizardMode('create');
+      this.planStore.setSelectedPlanId(null);
       this.productLocalizationPlanWizardVisibility.set(true);
     } else {
       console.log('service');
@@ -144,8 +143,8 @@ export class InvestorDashboard implements OnInit {
 
   onViewDetails(plan: IPlanRecord) {
     // Set mode to view and plan ID
-    this.wizardMode.set('view');
-    this.selectedPlanId.set(plan.id);
+    this.planStore.setWizardMode('view');
+    this.planStore.setSelectedPlanId(plan.id);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
 
@@ -153,8 +152,8 @@ export class InvestorDashboard implements OnInit {
     // Check if plan status allows editing (Draft or Pending)
     if (plan.status === EInvestorPlanStatus.DRAFT || plan.status === EInvestorPlanStatus.PENDING) {
       // Set mode to edit and plan ID
-      this.wizardMode.set('edit');
-      this.selectedPlanId.set(plan.id);
+      this.planStore.setWizardMode('edit');
+      this.planStore.setSelectedPlanId(plan.id);
       this.productLocalizationPlanWizardVisibility.set(true);
     } else {
       this.i18nService.translate('plans.errors.cannotEdit');
@@ -177,15 +176,16 @@ export class InvestorDashboard implements OnInit {
   }
 
   createNewPlan() {
-    // Set mode to view and plan ID
-    this.wizardMode.set('create');
-    this.selectedPlanId.set(null);
+    // Set mode to create and plan ID
+    // Clear applied opportunity when creating from scratch
+    this.planStore.resetAppliedOpportunity();
+    this.planStore.setWizardMode('create');
+    this.planStore.setSelectedPlanId(null);
     this.planTermsAndConditionsDialogVisibility.set(true);
   }
 
   resetProductLocalizationPlanWizard() {
     console.log('resetProductLocalizationPlanWizard');
-    this.wizardMode.set('create');
-    this.selectedPlanId.set(null);
+    this.planStore.resetWizardState();
   }
 }
