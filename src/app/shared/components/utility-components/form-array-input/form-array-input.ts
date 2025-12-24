@@ -94,7 +94,8 @@ export class FormArrayInput {
     const firstObject = objectsArray[0];
     if (!firstObject || typeof firstObject !== 'object' || firstObject === null) return [];
 
-    return Object.keys(firstObject);
+    // Exclude 'rowId' from the keys to prevent it from being displayed as a column
+    return Object.keys(firstObject).filter(key => key !== 'rowId');
   });
 
   // Get FormControl/FormGroup for a specific index
