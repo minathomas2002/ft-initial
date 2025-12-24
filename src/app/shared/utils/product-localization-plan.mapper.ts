@@ -608,15 +608,16 @@ export function mapProductPlanResponseToForm(
       rowsBySection[sectionType].forEach(row => {
         const itemFormGroup = formService.createValueChainItem();
         setFormGroupValue(itemFormGroup, EMaterialsFormControls.expenseHeader, row.expenseHeader);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.inHouseOrProcured, row.inHouseOrProcured);
+        // Convert numeric values to strings to match select option IDs (which use .toString() on enum values)
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.inHouseOrProcured, row.inHouseOrProcured != null ? String(row.inHouseOrProcured) : null);
         setFormGroupValue(itemFormGroup, EMaterialsFormControls.costPercentage, row.costPercent);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year1, row.year1);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year2, row.year2);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year3, row.year3);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year4, row.year4);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year5, row.year5);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year6, row.year6);
-        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year7, row.year7);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year1, row.year1 != null ? String(row.year1) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year2, row.year2 != null ? String(row.year2) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year3, row.year3 != null ? String(row.year3) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year4, row.year4 != null ? String(row.year4) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year5, row.year5 != null ? String(row.year5) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year6, row.year6 != null ? String(row.year6) : null);
+        setFormGroupValue(itemFormGroup, EMaterialsFormControls.year7, row.year7 != null ? String(row.year7) : null);
         itemsArray.push(itemFormGroup);
       });
     });
