@@ -137,10 +137,8 @@ export class DvManagerDashboardPlansFilter implements OnInit {
       updates.searchText = queryParams['searchText'];
     }
 
-    if (Object.keys(updates).length > 0) {
-      this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-      this.filterService.applyFilterWithPaging();
-    }
+    this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
+    this.filterService.applyFilterWithPaging();    
   }
 
   private getStatusFromParam(param: string): EEmployeePlanStatus | null {

@@ -43,7 +43,7 @@ import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dial
   providers: [DvManagerDashboardPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DvManagerDashboard implements OnInit {
+export class DvManagerDashboard {
   productLocalizationPlanWizardVisibility = signal(false);
 
   EEmployeePlanStatus = EEmployeePlanStatus;
@@ -77,10 +77,6 @@ export class DvManagerDashboard implements OnInit {
   readonly isLoading = computed(() => this.dashboardPlansStore.loading());
   readonly statistics = computed(() => this.dashboardPlansStore.statistics());
   readonly isStatisticsLoading = computed(() => this.dashboardPlansStore.loading() || this.statistics() === null);
-
-  ngOnInit(): void {
-    this.filterService.applyFilter();
-  }
 
   onUserReadAndApproved() {
     this.planStore.resetNewPlanOpportunityType();
