@@ -17,7 +17,7 @@ import { BaseTagComponent } from "../../base-components/base-tag/base-tag.compon
 
 @Component({
   selector: 'app-plan-timeline-component',
-  imports: [Timeline, DatePipe, TranslatePipe, Divider, IdentifyUserComponent, BaseTagComponent],
+  imports: [Timeline, DatePipe, TranslatePipe, Divider, IdentifyUserComponent],
   templateUrl: './plan-timeline-component.html',
   styleUrl: './plan-timeline-component.scss',
 })
