@@ -10,6 +10,7 @@ const SystemEmployees = "SystemEmployees";
 const AdminSettings = "AdminSettings";
 const Roles = "Roles";
 const RoleManagement = "RoleManagement";
+const Notifications = "Notifications";
 
 const Auth = "Auth";
 const Plans = "Plans";
@@ -46,13 +47,11 @@ export const API_ENDPOINTS = {
     updateSystemEmployee: `${SystemEmployees}/UpdateSystemEmployee`,
     toggleEmployeeStatus: `${SystemEmployees}/ToggleEmployeeStatus`,
 
-
     RoleManagement: {
       getRoleManagementList: `${SystemEmployees}/${RoleManagement}/GetList`,
       getCurrentHolders: `${SystemEmployees}/${RoleManagement}/GetCurrentHolders`,
       transferRole: `${SystemEmployees}/${RoleManagement}/Transfer`,
-    }
-
+    },
   },
   AdminSettings: {
     getSlaSetting: `${AdminSettings}/get-sla`,
@@ -81,7 +80,7 @@ export const API_ENDPOINTS = {
   },
   auth: {
     investorLogin: `${Auth}/investor-login`,
-    windowsLogin: `${Auth}/WinLogin`,//production
+    windowsLogin: `${Auth}/WinLogin`, //production
     fakeWindowsLogin: `${Auth}/login`,
     refreshToken: `${Auth}/refresh-token`,
     register: `${Auth}/register-investor`,
@@ -98,5 +97,9 @@ export const API_ENDPOINTS = {
     getFilteredRoles: `${Roles}/filtered`,
     getRoleById: `${Roles}`,
     assignRoleToUser: `${Roles}/assign`,
+  },
+  notifications: {
+    getNotificationsPaginated: `${Notifications}/paginated`,
+    getUnreadNotifications: `${Notifications}/unread`,
   },
 };
