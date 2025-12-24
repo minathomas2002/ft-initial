@@ -107,6 +107,9 @@ export class SubmissionConfirmationModalComponent {
   onDialogClose(): void {
     this.formService.resetForm();
     this.phoneInputValue.set(null);
+    // Clear the signature when dialog closes
+    this.existingSignature.set(null);
+    this.onSignatureChange(null);
     this.onCancel.emit();
   }
 }

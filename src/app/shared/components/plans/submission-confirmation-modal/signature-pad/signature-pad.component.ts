@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, model, OnDestroy, output, signal, viewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, model, OnDestroy, OnInit, output, signal, viewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TranslatePipe } from 'src/app/shared/pipes';
 
@@ -25,6 +25,7 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
   private documentMouseMoveHandler?: (e: MouseEvent) => void;
   private documentMouseUpHandler?: () => void;
 
+
   constructor() {
     effect(() => {
       const existing = this.existingSignature();
@@ -32,8 +33,20 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
         this.currentSignature.set(existing);
         this.showCanvas.set(false);
       } else {
+        // When existing signature is cleared, reset the signature pad
         this.showCanvas.set(true);
         this.currentSignature.set(null);
+        this.onSignatureChange.emit(null);
+        // Clear the canvas if context is available
+        if (this.ctx) {
+          try {
+            const canvas = this.canvasRef().nativeElement;
+            this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+          } catch (error) {
+            // Canvas might not be initialized yet, ignore error
+          }
+        }
+        this.onSignatureChange.emit(null);
         // Only reinitialize if view is ready and canvas is visible
         if (this.viewInitialized && this.showCanvas()) {
           this.scheduleInitialization();
@@ -132,7 +145,7 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
     try {
       const canvas = this.canvasRef().nativeElement;
       if (!canvas) return null;
-      
+
       const rect = canvas.getBoundingClientRect();
 
       // Get client coordinates (works for both MouseEvent and Touch)
@@ -175,7 +188,7 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
       this.ctx.beginPath();
       this.ctx.moveTo(coords.x, coords.y);
     }
-    
+
     // Add document-level listeners to handle mouse movement outside canvas
     this.documentMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
     this.documentMouseUpHandler = () => this.onMouseUp();
@@ -262,8 +275,26 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
 
   changeSignature(): void {
     this.showCanvas.set(true);
+    this.currentSignature.set(null);
+    // Clear the canvas if context is available
+    if (this.ctx) {
+      const canvas = this.canvasRef().nativeElement;
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    this.onSignatureChange.emit(null);
     // Reinitialize canvas when it becomes visible
     this.scheduleInitialization();
+  }
+
+  resetSignature(): void {
+    this.currentSignature.set(null);
+    this.showCanvas.set(true);
+    // Clear the canvas if context is available
+    if (this.ctx) {
+      const canvas = this.canvasRef().nativeElement;
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    this.onSignatureChange.emit(null);
   }
 
   private saveSignature(): void {
@@ -310,5 +341,6 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
     if (this.documentMouseUpHandler) {
       document.removeEventListener('mouseup', this.documentMouseUpHandler);
     }
+    this.clearSignature();
   }
 }
