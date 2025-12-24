@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, output, signal } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
@@ -79,6 +79,14 @@ export class InvestorDashboard implements OnInit {
   readonly isLoading = computed(() => this.dashboardPlansStore.loading());
   readonly statistics = computed(() => this.dashboardPlansStore.statistics());
   readonly isStatisticsLoading = computed(() => this.dashboardPlansStore.loading() || this.statistics() === null);
+
+  constructor() {
+    effect(() => {
+      if (!this.productLocalizationPlanWizardVisibility()) {
+        this.resetProductLocalizationPlanWizard();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.filterService.applyFilter();
@@ -170,8 +178,14 @@ export class InvestorDashboard implements OnInit {
 
   createNewPlan() {
     // Set mode to view and plan ID
-    this.wizardMode.set('create');    
+    this.wizardMode.set('create');
     this.selectedPlanId.set(null);
     this.productLocalizationPlanWizardVisibility.set(true);
+  }
+
+  resetProductLocalizationPlanWizard() {
+    console.log('resetProductLocalizationPlanWizard');
+    this.wizardMode.set('create');
+    this.selectedPlanId.set(null);
   }
 }

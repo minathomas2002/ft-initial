@@ -16,7 +16,7 @@ import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapP
 import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
-import { EMaterialsFormControls } from "src/app/shared/enums";
+import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../submission-confirmation-modal/submission-confirmation-modal.component";
 import { Signature } from "src/app/shared/interfaces/plans.interface";
 import { ConfirmLeaveDialogComponent } from "../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component";
@@ -127,9 +127,22 @@ export class ProductLocalizationPlanWizard {
     effect(() => {
       const currentPlanId = this.planId();
       const currentMode = this.mode();
+      const isVisible = this.visibility();
+
+      // Only process when dialog is visible
+      if (!isVisible) {
+        return;
+      }
 
       if (currentPlanId && (currentMode === 'edit' || currentMode === 'view')) {
         this.loadPlanData(currentPlanId);
+      } else if (currentMode === 'create' && !currentPlanId) {
+        // Reset forms for create mode - this will set opportunityType and submissionDate
+        this.productPlanFormService.resetAllForms();
+        this.enableAllForms();
+        this.activeStep.set(1);
+        this.isSubmitted.set(false);
+        this.existingSignature.set(null);
       }
     });
   }
@@ -211,6 +224,28 @@ export class ProductLocalizationPlanWizard {
     this.productPlanFormService.step2_productPlantOverview.enable();
     this.productPlanFormService.step3_valueChain.enable();
     this.productPlanFormService.step4_saudization.enable();
+
+    // Re-disable opportunityType and submissionDate after enabling all forms
+    this.disableReadOnlyFields();
+  }
+
+  /**
+   * Disable read-only fields that should always be disabled in create mode
+   */
+  private disableReadOnlyFields(): void {
+    const basicInfo = this.productPlanFormService.basicInformationFormGroup;
+    if (basicInfo) {
+      const opportunityTypeControl = basicInfo.get(EMaterialsFormControls.opportunityType);
+      if (opportunityTypeControl) {
+        opportunityTypeControl.setValue(EOpportunityType.PRODUCT.toString());
+        opportunityTypeControl.disable({ emitEvent: false });
+      }
+      const submissionDateControl = basicInfo.get(EMaterialsFormControls.submissionDate);
+      if (submissionDateControl) {
+        submissionDateControl.setValue(new Date());
+        submissionDateControl.disable({ emitEvent: false });
+      }
+    }
   }
 
   onSubmissionConfirm(data: {
