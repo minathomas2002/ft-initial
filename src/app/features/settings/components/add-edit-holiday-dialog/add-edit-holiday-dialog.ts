@@ -38,8 +38,15 @@ export class AddEditHolidayDialog {
   ngOnInit() {
     this.formService.listenToFormChanges();
     this.resetForm();
-    if (this.isEditMode())
+    if (this.isEditMode()) {
       this.loadHolidayDetails();
+      this.formService.form.get('dateFrom')?.disable();
+      this.formService.form.get('dateTo')?.disable();
+    } else {
+      this.formService.form.get('dateFrom')?.enable();
+      this.formService.form.get('dateTo')?.enable();
+    }
+
   }
 
   loadHolidayDetails() {
