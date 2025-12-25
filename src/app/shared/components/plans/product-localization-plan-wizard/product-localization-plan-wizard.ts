@@ -177,6 +177,11 @@ export class ProductLocalizationPlanWizard {
           this.loadAvailableOpportunities();
         }
       }
+      if (currentMode === 'view') {
+        this.activeStep.set(5);
+      } else {
+        this.activeStep.set(1);
+      }
     });
   }
 
@@ -189,13 +194,6 @@ export class ProductLocalizationPlanWizard {
 
   navigateToStep(stepNumber: number): void {
     this.activeStep.set(stepNumber);
-  }
-
-  handleSubmit(): void {
-    // This will be called from Step 5 Summary component after validation passes
-    // For now, just log - actual submission logic can be added here
-    console.log('Submit clicked - validation passed');
-    // TODO: Open signature modal or proceed with submission
   }
 
   onSummarySubmitClick(): void {

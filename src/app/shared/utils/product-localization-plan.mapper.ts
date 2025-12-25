@@ -259,22 +259,25 @@ function mapValueChainStep(formService: ProductPlanFormService): ValueChainStep 
   // Calculate total localization percentage (sum of all year totals)
   // This is the value used in the beLess100 validator
   // Use the form service's calculateYearTotalLocalization method
-  let valueChainSummary = '';
-  try {
-    let total = 0;
-    for (let year = 1; year <= 7; year++) {
-      const yearTotal = formService.calculateYearTotalLocalization(year);
-      total += yearTotal;
-    }
-    valueChainSummary = total.toString();
-  } catch (error) {
-    // If calculation fails, leave as empty string
-    valueChainSummary = '';
+  const valueChainSummary = {
+    year1: 0,
+    year2: 0,
+    year3: 0,
+    year4: 0,
+    year5: 0,
+    year6: 0,
+    year7: 0,
+  };
+  for (let year = 1; year <= 7; year++) {
+    const yearKey = `year${year}` as keyof typeof valueChainSummary;
+    const yearTotal = formService.calculateYearTotalLocalization(year);
+    valueChainSummary[yearKey] = yearTotal;
   }
+
 
   return {
     valueChainRows,
-    valueChainSummary,
+    valueChainSummary: JSON.stringify(valueChainSummary),
   } as any as ValueChainStep; // Allow null values for FormData conversion
 }
 
