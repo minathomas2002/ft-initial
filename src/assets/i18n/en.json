@@ -847,8 +847,8 @@
     "employeeLabel":"Employee",
     "employeePlaceholder":"Select Employee",
     "employeeRequired":"Employee is required",
-    "assignSuccessMsg": "Plan has been successfully assigned to the {{employee}}.",
-    "reassignSuccessMsg": "Plan has been reassigned successfully to the {{employee}}.",
+    "assignSuccessMsg": "Plan has been successfully assigned to {{employee}}.",
+    "reassignSuccessMsg": "Plan has been reassigned successfully to {{employee}}.",
     "currentEmployee": "Current Employee"
   }
 }
