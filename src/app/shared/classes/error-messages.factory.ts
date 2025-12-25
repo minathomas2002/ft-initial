@@ -18,7 +18,7 @@ export const VALIDATION_MESSAGES = {
     `${label} must be less than ${error.max}`,
 
   min: (label: string, error: any) =>
-    `${label} must be greater than ${error.min}`,
+    `${label} must be greater than or equal to ${error.min}`,
 
   inComplete: (label: string) =>
     `${label} has missing or invalid fields`,

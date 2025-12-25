@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { INotification } from 'src/app/core/layouts/main-layout/models/notifications.interface';
 import { TimeAgoPipe } from '../../../../../shared/pipes/time-ago.pipe';
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   imports: [TimeAgoPipe, ProgressSpinnerModule],
   templateUrl: './navbar-notifications-tabs.html',
   styleUrl: './navbar-notifications-tabs.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarNotificationsTabs {
   private readonly router = inject(Router);
