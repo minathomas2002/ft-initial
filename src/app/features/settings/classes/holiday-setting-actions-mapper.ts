@@ -14,7 +14,7 @@ export class HolidaySettingActionsMapper {
   constructor(private readonly _i18n: I18nService) { }
 
   private _actionDefinitions: Record<EHolidaysManagementActions, TActionDefinition> = {
-    
+
     [EHolidaysManagementActions.DELETE]: {
       labelKey: "setting.adminView.holidays.actions.delete",
     },
@@ -23,10 +23,11 @@ export class HolidaySettingActionsMapper {
     },
   };
 
-  getMappedActions(item :IHolidaysManagementRecord):EHolidaysManagementActions[]{
+  getMappedActions(item: IHolidaysManagementRecord): EHolidaysManagementActions[] {
     const actions: EHolidaysManagementActions[] = [];
     const today = new Date();
-    if (new Date(item.dateTo) >= today) 
+    today.setHours(0, 0, 0, 0);
+    if (new Date(item.dateTo).getTime() >= today.getTime())
       actions.push(EHolidaysManagementActions.EDIT);
     actions.push(EHolidaysManagementActions.DELETE);
     return actions;
