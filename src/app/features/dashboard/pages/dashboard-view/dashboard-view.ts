@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
@@ -16,12 +16,16 @@ export class DashboardView implements OnInit {
 
   private readonly roleService = inject(RoleService);
   router = inject(Router);
-
+  showDashboard = signal(false);
   ngOnInit(): void {
     if (this.roleService.hasAnyRoleSignal([ERoles.ADMIN])()) {
       this.router.navigate([ERoutes.opportunities, ERoutes.admin]);
     } else if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
       this.router.navigate([ERoutes.dashboard, ERoutes.investors]);
+    } else if (this.roleService.hasAnyRoleSignal([ERoles.MANAGER])()) {
+      this.router.navigate([ERoutes.dashboard, ERoutes.dvManager]);
+    } else {
+      this.showDashboard.set(true);
     }
   }
 }
