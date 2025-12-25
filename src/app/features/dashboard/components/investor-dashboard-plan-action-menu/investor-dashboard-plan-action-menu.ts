@@ -26,7 +26,6 @@ export class InvestorDashboardPlanActionMenu {
     const items: MenuItem[] = [
       {
         label: this.i18nService.translate('plans.actions.viewDetails'),
-        icon: 'icon-eye',
         command: () => this.onViewDetails.emit(plan),
       },
       {
@@ -39,14 +38,12 @@ export class InvestorDashboardPlanActionMenu {
     if (plan.status === EInvestorPlanStatus.DRAFT || plan.status === EInvestorPlanStatus.PENDING) {
       items.push({
         label: this.i18nService.translate('plans.actions.edit'),
-        icon: 'icon-edit',
         command: () => this.onEdit.emit(plan),
       });
     }
 
     items.push({
       label: this.i18nService.translate('plans.actions.download'),
-      icon: 'icon-download',
       command: () => this.onDownload.emit(plan),
     });
 
