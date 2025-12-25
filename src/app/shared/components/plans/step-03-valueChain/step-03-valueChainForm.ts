@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { ValueChainSummaryComponent } from './value-chain-summary/value-chain-summary.component';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { JsonPipe } from '@angular/common';
+import { TrimOnBlurDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-step-03-valueChain-form',
@@ -28,17 +29,18 @@ import { JsonPipe } from '@angular/common';
     ButtonModule,
     ValueChainSummaryComponent,
     BaseErrorMessages,
+    TrimOnBlurDirective
   ],
   templateUrl: './step-03-valueChainForm.html',
   styleUrl: './step-03-valueChainForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Step03ValueChainForm {
-  
+
   isViewMode = input<boolean>(false);
   private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly planStore = inject(PlanStore);
-  
+
   formGroup = this.productPlanFormService.step3_valueChain;
   readonly EMaterialsFormControls = EMaterialsFormControls;
 

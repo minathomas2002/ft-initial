@@ -83,9 +83,10 @@ export class SummarySectionOverview {
 
   // Computed values for display
   planTitle = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.planTitle}`));
-  opportunityType = computed(() =>
-    EOpportunityType[this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.opportunityType}`)]?.toString().toLowerCase() ?? '-'
-  );
+  opportunityType = computed(() => {
+    const value = EOpportunityType[this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.opportunityType}`)]?.toString().toLowerCase() ?? '-';
+    return value === '-' ? '-' : value.charAt(0).toUpperCase() + value.slice(1);
+  });
   opportunity = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.opportunity}`));
   submissionDate = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`));
 

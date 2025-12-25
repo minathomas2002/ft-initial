@@ -6,6 +6,7 @@ import { BaseErrorMessages } from '../../base-components/base-error-messages/bas
 import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { FileuploadComponent } from '../../utility-components/fileupload/fileupload.component';
 import { SaudizationMatrixComponent } from './saudization-matrix/saudization-matrix.component';
+import { TrimOnBlurDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-step-04-saudization-form',

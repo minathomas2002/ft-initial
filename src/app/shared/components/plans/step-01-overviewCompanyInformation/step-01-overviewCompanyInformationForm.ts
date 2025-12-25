@@ -32,7 +32,7 @@ import { PhoneInputComponent } from '../../form/phone-input/phone-input.componen
     TooltipModule,
     TranslatePipe,
     BaseErrorMessages,
-    PhoneInputComponent
+    PhoneInputComponent,
   ],
   templateUrl: './step-01-overviewCompanyInformationForm.html',
   styleUrl: './step-01-overviewCompanyInformationForm.scss',

@@ -14,6 +14,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
+import { TrimOnBlurDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-step-02-product-plant-overview-form',
@@ -30,7 +31,8 @@ import { BaseLabelComponent } from '../../base-components/base-label/base-label.
     TooltipModule,
     InputNumberModule,
     BaseErrorMessages,
-    BaseLabelComponent
+    BaseLabelComponent,
+    TrimOnBlurDirective
   ],
   templateUrl: './step-02-productPlantOverviewForm.html',
   styleUrl: './step-02-productPlantOverviewForm.scss',

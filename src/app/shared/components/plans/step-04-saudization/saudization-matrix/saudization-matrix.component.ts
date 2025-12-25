@@ -5,7 +5,8 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { BaseErrorMessages } from '../../../base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { FrozenColumn, TableModule } from 'primeng/table';
+import { TableModule } from 'primeng/table';
+
 
 interface TableRow {
   label: string;
