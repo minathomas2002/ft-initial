@@ -35,6 +35,7 @@ export class PlanTimelineActionsMapper {
         param = '';
         break;
     }
+    return param;
   }
 
 
