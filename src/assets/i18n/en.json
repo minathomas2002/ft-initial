@@ -786,7 +786,7 @@
       "employeeApproved": "Employee Approved",
       "employeeRejected": "Employee Rejected",
       "assigned": "Assigned",
-      "reassigned":"Reassign",
+      "reassigned":"Reassigned",
       "submitted": "Submitted",
       "pendingOnInvestor":"Pending on investor"
     },
@@ -832,7 +832,7 @@
       "created": "Submit new {{param}} Plan ",
       "assign": "Assigned plan to employee {{param}} ",
       "autoAssign": "Auto assignment plan to employee {{param}} ",
-      "reassign": "Reassigned plan to employee {{param}}",
+      "reassigned": "Reassign plan to employee {{param}}",
       "submitComment": "Submit comment on the plan and send back to investor ",
       "rejected" : "Rejected",
       "approved": "Approved"

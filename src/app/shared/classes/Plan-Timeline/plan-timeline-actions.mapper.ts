@@ -7,7 +7,7 @@ export class PlanTimelineActionsMapper {
   private _roleTranslationMap: Record<string, string> = {
     [EActionPlanTimeLine.Submitted]: 'timeline.actions.created',
     [EActionPlanTimeLine.Assigned]: 'timeline.actions.assign',
-    [EActionPlanTimeLine.Reassigned]: 'timeline.actions.reassign',
+    [EActionPlanTimeLine.Reassigned]: 'timeline.actions.reassigned',
     [EActionPlanTimeLine.Approved]: 'timeline.actions.approved',
     [EActionPlanTimeLine.Rejected]: 'timeline.actions.rejected',
     [EActionPlanTimeLine.SubmittedComment]: 'timeline.actions.submitComment',
