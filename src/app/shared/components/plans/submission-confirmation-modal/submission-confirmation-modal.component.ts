@@ -10,6 +10,7 @@ import { BaseErrorMessages } from '../../base-components/base-error-messages/bas
 import { PhoneInputComponent } from '../../form/phone-input/phone-input.component';
 import { IPhoneValue } from '../../../interfaces';
 import { TranslatePipe } from '../../../pipes';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
   selector: 'app-submission-confirmation-modal',
@@ -43,6 +44,8 @@ export class SubmissionConfirmationModalComponent {
   onCancel = output<void>();
 
   formService = inject(SubmissionConfirmationModalFormService);
+  private readonly planStore = inject(PlanStore);
+  isProcessing = this.planStore.isProcessing;
 
   isSubmitting = signal(false);
   phoneInputValue = signal<IPhoneValue | null>(null);
