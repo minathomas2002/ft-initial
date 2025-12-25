@@ -7,7 +7,7 @@ import { OpportunityCard } from 'src/app/shared/components/opportunities/opportu
 import { CardsPageLayout } from 'src/app/shared/components/layout-components/cards-page-layout/cards-page-layout';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
-import { ERoutes } from 'src/app/shared/enums';
+import { EOpportunityType, ERoutes } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
@@ -102,6 +102,10 @@ export class OpportunitiesList implements OnInit {
   getOpportunityTypeConfig = getOpportunityTypeConfig;
 
   applyOpportunity(opportunity: IOpportunity) {
+    if (opportunity.opportunityType === EOpportunityType.SERVICES) {
+      this.toast.warn('Apply for services opportunity will be available soon');
+      return;
+    }
     this.planStore.setAvailableOpportunities({ id: opportunity.id, name: opportunity.title });
     this.planStore.setAppliedOpportunity(opportunity);
     this.planStore.setWizardMode('create');
