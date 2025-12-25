@@ -5,6 +5,7 @@
   icon="icon-check-circle"
   [isConfirmationDisabled]="!formService.isFormValid()"
   [contentStyleClass]="'p-6'"
+  [cancelLabel]="'Back'"
   (onClose)="onDialogClose()"
   (onConfirm)="onSubmitClick()"
 >
