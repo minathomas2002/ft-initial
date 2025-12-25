@@ -33,7 +33,7 @@
           <ng-content select="footerButtons"></ng-content>
           @if(showCloseButton()){
           <p-button
-            [label]="'dialog.cancel' | translate"
+            [label]="cancelLabel()"
             severity="secondary"
             class="{{cancelButtonClass()}} flex-initial"
             (onClick)="visible.set(false);"

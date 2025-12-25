@@ -6,6 +6,7 @@
   [isConfirmationDisabled]="!formService.isFormValid() || isProcessing()"
   [isLoading]="isProcessing()"
   [contentStyleClass]="'p-6'"
+  [cancelLabel]="'Back'"
   (onClose)="onDialogClose()"
   (onConfirm)="onSubmitClick()"
 >
