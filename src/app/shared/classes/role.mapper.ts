@@ -8,6 +8,7 @@ export class SystemEmployeeRoleMapper {
     [ERoles.MANAGER]: 'users.roles.manager',
     [ERoles.INVESTOR]: 'users.roles.investor',
     [ERoles.DEPARTMENT_MANAGER]: 'users.roles.departmentManager',
+    [ERoles.Autoprocess]: 'users.roles.autoProcess',
   };
 
   constructor(private i18nService: I18nService) { }

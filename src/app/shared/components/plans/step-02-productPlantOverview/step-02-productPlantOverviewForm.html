@@ -117,6 +117,7 @@
               type="text"
               pInputText
               fluid
+              maxlength="50"
               placeholder="Enter time required to setup factory"
               [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
             />
@@ -315,7 +316,7 @@
             <textarea
               pInputTextarea
               fluid
-              [maxlength]="500"
+              [maxlength]="255"
               placeholder="Enter provide names of targeted SEC's"
               [rows]="4"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
@@ -339,7 +340,7 @@
               fluid
               placeholder="Enter product(s)"
               [rows]="4"
-              [maxlength]="500"
+              [maxlength]="255"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
             ></textarea>
           </app-group-input-with-checkbox>
@@ -555,12 +556,10 @@
             <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
           </label>
         </div>
-        @if(getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers]).touched && getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers]).hasError('required')){
         <app-base-error-messages
           [control]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
           [label]="'This field'"
         />
-        }
       </div>
 
       <!-- Conditional Local Suppliers fields -->

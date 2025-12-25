@@ -88,6 +88,7 @@
             type="text"
             pInputText
             fluid
+            [maxlength]="100"
             placeholder="Enter company name"
             [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
           />
@@ -259,7 +260,7 @@
               type="text"
               pInputText
               fluid
-              [maxlength]="15"
+              [maxlength]="100"
               placeholder="Enter contact person name"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
             />
@@ -316,7 +317,7 @@
                 type="text"
                 pInputText
                 fluid
-                maxlength="200"
+                maxlength="255"
                 placeholder="Enter company HQ location"
                 [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
               />

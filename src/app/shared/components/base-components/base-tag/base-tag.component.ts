@@ -30,4 +30,9 @@ export class BaseTagComponent {
 
 		return colorMap[this.color()];
 	}
+
+	getEffectiveClasses(): string {
+		// If styleClass is provided, use it; otherwise use getBadgeClasses
+		return this.styleClass() || this.getBadgeClasses();
+	}
 }

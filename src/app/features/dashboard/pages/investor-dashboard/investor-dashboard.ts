@@ -66,7 +66,7 @@ export class InvestorDashboard implements OnInit {
     return [
       { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'planType' },
+      { label: 'Opportunity Type', isSortable: false, sortingKey: 'planType' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
       { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
       { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
@@ -148,6 +148,7 @@ export class InvestorDashboard implements OnInit {
     // Set mode to view and plan ID
     this.planStore.setWizardMode('view');
     this.planStore.setSelectedPlanId(plan.id);
+    this.planStore.setPlanStatus(plan.status);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
 
@@ -157,6 +158,7 @@ export class InvestorDashboard implements OnInit {
       // Set mode to edit and plan ID
       this.planStore.setWizardMode('edit');
       this.planStore.setSelectedPlanId(plan.id);
+      this.planStore.setPlanStatus(plan.status);
       this.productLocalizationPlanWizardVisibility.set(true);
     } else {
       this.i18nService.translate('plans.errors.cannotEdit');

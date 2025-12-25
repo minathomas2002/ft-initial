@@ -38,8 +38,15 @@ export class AddEditHolidayDialog {
   ngOnInit() {
     this.formService.listenToFormChanges();
     this.resetForm();
-    if (this.isEditMode())
+    if (this.isEditMode()) {
       this.loadHolidayDetails();
+      this.formService.form.get('dateFrom')?.disable();
+      this.formService.form.get('dateTo')?.disable();
+    } else {
+      this.formService.form.get('dateFrom')?.enable();
+      this.formService.form.get('dateTo')?.enable();
+    }
+
   }
 
   loadHolidayDetails() {
@@ -95,14 +102,6 @@ export class AddEditHolidayDialog {
     this.adminSettingsStore
       .createHoliday(request)
       .pipe(
-        tap((res) => {
-          if (res.errors) {
-            this.onSuccess.emit()
-            //this.toasterService.error(res.message[0]);
-            this.dialogVisible.set(false);
-            return;
-          }
-        }),
         take(1),
       )
       .subscribe({

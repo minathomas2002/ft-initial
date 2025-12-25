@@ -50,7 +50,8 @@ export class AdminHolidaysManagementView implements OnInit {
     return [
       {
         label: this.i18nService.translate('setting.adminView.holidays.table.holidayName'),
-        isSortable: false
+        isSortable: true,
+        sortingKey: 'name',
       },
       {
         label: this.i18nService.translate('setting.adminView.holidays.table.type'),
@@ -80,11 +81,11 @@ export class AdminHolidaysManagementView implements OnInit {
         isSortable: false
       },
       {
-        label: this.i18nService.translate('setting.adminView.holidays.table.updatedDate'),
+        label: 'Last Updated Date',
         isSortable: false
       },
       {
-        label: this.i18nService.translate('setting.adminView.holidays.table.updatedBy'),
+        label: 'Last Updated By',
         isSortable: false
       },
       {

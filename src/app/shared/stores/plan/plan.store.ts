@@ -30,6 +30,7 @@ const initialState: {
   isProcessing: boolean;
   wizardMode: 'create' | 'edit' | 'view';
   selectedPlanId: string | null;
+  planStatus: number | null;
 
 } = {
   newPlanOpportunityType: null,
@@ -67,7 +68,8 @@ const initialState: {
   isLoading: false,
   isProcessing: false,
   wizardMode: 'create',
-  selectedPlanId: null
+  selectedPlanId: null,
+  planStatus: null
 
 }
 
@@ -109,8 +111,11 @@ export const PlanStore = signalStore(
       setSelectedPlanId(planId: string | null): void {
         patchState(store, { selectedPlanId: planId });
       },
+      setPlanStatus(status: number | null): void {
+        patchState(store, { planStatus: status });
+      },
       resetWizardState(): void {
-        patchState(store, { wizardMode: 'create', selectedPlanId: null });
+        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null });
       }
     }
   }),

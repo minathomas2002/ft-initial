@@ -22,6 +22,7 @@ import { Signature } from "src/app/shared/interfaces/plans.interface";
 import { ConfirmLeaveDialogComponent } from "../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
+import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -49,6 +50,7 @@ export class ProductLocalizationPlanWizard {
   destroyRef = inject(DestroyRef);
   validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
+  private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
@@ -122,6 +124,26 @@ export class ProductLocalizationPlanWizard {
   showConfirmLeaveDialog = model(false);
   // Computed signal for view mode
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
+
+  // Computed signals for plan status tag
+  planStatus = computed(() => this.planStore.planStatus());
+  statusLabel = computed(() => {
+    const status = this.planStatus();
+    if (status === null) return '';
+    const statusService = this.planStatusFactory.handleValidateStatus();
+    return statusService.getStatusLabel(status);
+  });
+  statusBadgeClass = computed(() => {
+    const status = this.planStatus();
+    if (status === null) return 'bg-gray-50 text-gray-700 border-gray-200';
+    const statusService = this.planStatusFactory.handleValidateStatus();
+    return statusService.getStatusBadgeClass(status);
+  });
+  shouldShowStatusTag = computed(() => {
+    const mode = this.planStore.wizardMode();
+    const status = this.planStatus();
+    return (mode === 'view' || mode === 'edit') && status !== null;
+  });
 
   constructor() {
     // Effect to load plan data when planId and mode are set

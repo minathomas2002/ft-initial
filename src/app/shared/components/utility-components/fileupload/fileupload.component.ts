@@ -174,4 +174,25 @@ export class FileuploadComponent {
       return ext === acceptedType;
     });
   }
+
+  getFileIcon(file: File): string | null {
+    // Check for ZIP files
+    if (
+      file.name.toLowerCase().endsWith('.zip') ||
+      file.type === 'application/zip' ||
+      file.type === 'application/x-zip-compressed'
+    ) {
+      return 'assets/images/zip.png';
+    }
+
+    // Check for PDF files
+    if (
+      file.name.toLowerCase().endsWith('.pdf') ||
+      file.type === 'application/pdf'
+    ) {
+      return 'assets/images/pdf.png';
+    }
+
+    return null;
+  }
 }
