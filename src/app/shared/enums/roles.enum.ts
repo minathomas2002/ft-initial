@@ -4,7 +4,7 @@ export enum ERoles {
     EMPLOYEE = 3,
     MANAGER = 4,
     DEPARTMENT_MANAGER = 5,
-    Autoprocess = 6
+    AutoProcess = 6
 }
 
 export enum ERoleNames {

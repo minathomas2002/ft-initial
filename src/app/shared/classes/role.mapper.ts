@@ -8,7 +8,7 @@ export class SystemEmployeeRoleMapper {
     [ERoles.MANAGER]: 'users.roles.manager',
     [ERoles.INVESTOR]: 'users.roles.investor',
     [ERoles.DEPARTMENT_MANAGER]: 'users.roles.departmentManager',
-    [ERoles.Autoprocess]: 'users.roles.autoProcess',
+    [ERoles.AutoProcess]: 'users.roles.autoProcess',
   };
 
   constructor(private i18nService: I18nService) { }
@@ -21,7 +21,7 @@ export class SystemEmployeeRoleMapper {
   getTranslatedRole(roleCode: ERoles): string {
     // Try to find translation key for the role
     const translationKey = this._roleTranslationMap[roleCode];
-    
+
     if (translationKey) {
       const translated = this.i18nService.translate(translationKey);
       // If translation exists (not the same as key), return it
