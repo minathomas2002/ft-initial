@@ -14,7 +14,7 @@ import { HolidaysFilterService } from '../../services/holidays-filter/holidays-f
 import { HolidaysTypeMapper } from '../../classes/holidays-type-mapper';
 import { AdminSettingMenuAction } from "../admin-setting-menu-action/admin-setting-menu-action";
 import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
-import { take } from 'rxjs';
+import { finalize, take } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
@@ -124,12 +124,16 @@ export class AdminHolidaysManagementView implements OnInit {
 
   confirmDelete() {
     this.adminSettingsStore.deleteHoliday(this.selectedItem()?.id!)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.viewDeleteDialog.set(false);
+          this.selectedItem.set(null);
+        })
+      )
       .subscribe(res => {
         this.toasterService.success(this.i18nService.translate('setting.adminView.holidays.dialog.deleteSuccessMessage'));
         this.applyFilter();
-        this.selectedItem.set(null);
-        this.viewDeleteDialog.set(false);
       });
   }
 }
