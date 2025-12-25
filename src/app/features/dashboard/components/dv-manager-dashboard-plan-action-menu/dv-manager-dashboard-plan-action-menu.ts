@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { EEmployeePlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
     selector: 'app-dv-manager-dashboard-plan-action-menu',
@@ -15,6 +16,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 export class DvManagerDashboardPlanActionMenu {
     plan = input.required<IPlanRecord>();
     private readonly i18nService = inject(I18nService);
+    readonly planStore = inject(PlanStore);
 
     onViewDetails = output<IPlanRecord>();
     onDownload = output<IPlanRecord>();

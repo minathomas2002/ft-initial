@@ -1,15 +1,19 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { IActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { IProductLocalizationPlanRequest, IProductPlanResponse, ITimeLineResponse } from '../../interfaces/plans.interface';
+import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlanApiService {
   private readonly baseHttpService = inject(BaseHttpService);
+  private readonly http = inject(HttpClient);
 
   getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IAssignReassignActiveEmployee>> {
     return this.baseHttpService.get<IAssignReassignActiveEmployee, string>(API_ENDPOINTS.plans.getActiveEmployeesWithPlans + planId);
@@ -37,6 +41,24 @@ export class PlanApiService {
 
   getTimeLine(req: { planId: string }): Observable<IBaseApiResponse<ITimeLineResponse[]>> {
     return this.baseHttpService.post<ITimeLineResponse[], { planId: string }, unknown>(API_ENDPOINTS.plans.getTimelinePlan, req);
+  }
+
+  downloadPlan(planId: string): Observable<{ blob: Blob; filename: string }> {
+    return this.http
+      .get(`${API_ENDPOINTS.baseUrl}/${API_ENDPOINTS.plans.downloadPlan}${planId}`, {
+        responseType: 'blob',
+        observe: 'response'
+      })
+      .pipe(
+        map((response: HttpResponse<Blob>) => {
+          const filename = extractFilenameFromHeaders(response.headers, 'plan.pdf');
+          return {
+            blob: response.body!,
+            filename: filename
+          };
+        }),
+        catchError(handleBlobError('Error downloading plan'))
+      );
   }
 
 }
