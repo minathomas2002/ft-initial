@@ -57,13 +57,13 @@ export const NotificationsStore = signalStore(
         patchState(store, { loading: true });
         return notificationsApiService.getUnreadNotifications().pipe(
           tap((response: any) => {
-            if (response.success && response.body && response.body.success && response.body.data) {
-              console.log(response);
+
+            const unreadNotificationsList = response?.body?.data || [];
+
               patchState(store, {
-                notifications: response.body.data,
-                unreadCount: response.body.totalCount,
+                notifications: unreadNotificationsList,
+                unreadCount: response.body?.pagination?.totalCount || unreadNotificationsList?.length || 0,
               });
-            }
           }),
           finalize(() => {
             patchState(store, { loading: false });
