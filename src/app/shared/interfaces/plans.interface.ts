@@ -1,4 +1,5 @@
-import { ETargetedCustomer } from "../enums"
+import { EOpportunityType, EStatusPlanTimeLine, ETargetedCustomer } from "../enums"
+import { EActionPlanTimeLine } from "../enums/action-plan-timeline.enum"
 import { EInvestorPlanStatus } from "./dashboard-plans.interface"
 
 export interface IProductLocalizationPlanRequest {
@@ -150,38 +151,35 @@ export interface IProductPlanResponse {
   signature: Signature
 }
 
-export interface IComentFields{
+export interface ICommentFields {
   name: string;
-  id : string;
+  id: string;
 
 }
-export interface ITimelineComment{
+export interface ITimelineComment {
   pageTitle: string;
   text: string;
-  fields :IComentFields [];
+  fields: ICommentFields[];
 
 }
-        
-export interface ITimeLineResponse{
-  actionType: number;
-  status : number;
+
+export interface ITimeLineResponse {
+  actionType: EActionPlanTimeLine;
+  status: EStatusPlanTimeLine;
   actionByNameEn: string;
-  actionByNameAr : string;
+  actionByNameAr: string;
   actorRole: number;
   targetUserNameEn: string;
   targetUserNameAr: string;
-  timestamp: string; 
-  profilePicURL: string; 
-  planType: number;
+  timestamp: string;
+  profilePicURL: string;
+  planType: EOpportunityType;
   daysAfterPreviousAction: number;
-  comments : ITimelineComment[];
-
-
+  comments: ITimelineComment[];
 }
 
-export interface IPlanStatus{
-  getStatusLabel(status: number): string ;
-  getStatusBadgeClass(status: number): string ;
-
+export interface IPlanStatus {
+  getStatusLabel(status: number): string;
+  getStatusBadgeClass(status: number): string;
 }
 

@@ -826,12 +826,12 @@
   },
   "timeline":{
     "title": "Plan timeline",
-    "remaningDays":" days after previous action",
+    "remainingDays":" days after previous action",
     "action": "Action",
     "actions":{
       "created": "Submit new {{param}} Plan ",
       "assign": "Assigned plan to employee {{param}} ",
-      "autoassign": "Auto assignment plan to employee {{param}} ",
+      "autoAssign": "Auto assignment plan to employee {{param}} ",
       "reassign": "Reassigned plan to employee {{param}}",
       "submitComment": "Submit comment on the plan and send back to investor ",
       "rejected" : "Rejected",
