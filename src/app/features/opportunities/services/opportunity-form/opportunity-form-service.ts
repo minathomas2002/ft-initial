@@ -225,8 +225,29 @@ export class OpportunityFormService {
   createNewKeyActivity = () => ({ keyActivity: '' });
 
   markAsDirty() {
-    this.opportunityForm.markAllAsDirty();
-    this.opportunityForm.updateValueAndValidity();
+    this.markControlAsDirty(this.opportunityForm);
+  }
+
+  private markControlAsDirty(control: AbstractControl): void {
+    if (control instanceof FormControl) {
+      control.markAsDirty();
+      control.updateValueAndValidity();
+    } else if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        const childControl = control.get(key);
+        if (childControl) {
+          this.markControlAsDirty(childControl);
+        }
+      });
+      control.markAsDirty();
+      control.updateValueAndValidity();
+    } else if (control instanceof FormArray) {
+      control.controls.forEach(childControl => {
+        this.markControlAsDirty(childControl);
+      });
+      control.markAsDirty();
+      control.updateValueAndValidity();
+    }
   }
 
   updateImageField(image: File | null) {

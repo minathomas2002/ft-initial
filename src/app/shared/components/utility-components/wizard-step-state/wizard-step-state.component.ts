@@ -82,12 +82,10 @@ export class WizardStepStateComponent {
   errorsNumber = computed(() => {
     // Read both signals to ensure reactivity
     const state = this.formStateSignal();
-
     // Early return if no errors should be shown
     if (!state.invalid || (!state.dirty && !state.touched)) {
       return 0;
     }
-
     // Only calculate error count when necessary
     if (!this.formState()) return 0;
     const form = this.formState()!;

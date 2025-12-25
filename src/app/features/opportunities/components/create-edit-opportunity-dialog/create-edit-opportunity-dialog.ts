@@ -50,12 +50,14 @@ export class CreateEditOpportunityDialog implements OnInit {
       description: this.i18nService.translate('opportunity.wizard.opportunityInformationDescription'),
       isActive: this.activeStep() === 1,
       formState: this.opportunityFormService.opportunityInformationForm,
+      hasErrors: true,
     },
     {
       title: this.i18nService.translate('opportunity.wizard.opportunityLocalization'),
       description: this.i18nService.translate('opportunity.wizard.opportunityLocalizationDescription'),
       isActive: this.activeStep() === 2,
       formState: this.opportunityFormService.opportunityLocalizationForm,
+      hasErrors: true,
     },
   ])
   activeStep = signal<number>(1);
