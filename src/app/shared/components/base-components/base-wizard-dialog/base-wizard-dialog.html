@@ -98,6 +98,7 @@
             [loading]="isProcessing()"
           />
           }
+          <ng-content select="more-actions"></ng-content>
         </div>
         <div class="flex gap-4">
           @if (!isFirstStep()) {

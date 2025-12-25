@@ -23,6 +23,8 @@ import { ConfirmLeaveDialogComponent } from "../../utility-components/confirm-le
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
+import { TimelineDialog } from "../../timeline/timeline-dialog/timeline-dialog";
+import { IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -37,7 +39,8 @@ import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatus
     BaseTagComponent,
     StepContentDirective,
     ConfirmLeaveDialogComponent,
-    SubmissionConfirmationModalComponent
+    SubmissionConfirmationModalComponent,
+    TimelineDialog
   ],
   templateUrl: './product-localization-plan-wizard.html',
   styleUrl: './product-localization-plan-wizard.scss',
@@ -55,6 +58,9 @@ export class ProductLocalizationPlanWizard {
   activeStep = signal<number>(1);
   doRefresh = output<void>();
   isSubmitted = signal<boolean>(false);
+
+  timelineVisibility = signal(false);
+  selectedPlan = signal<IPlanRecord | null>(null);
 
   // Mode and plan ID from store
   mode = this.planStore.wizardMode;
@@ -176,11 +182,6 @@ export class ProductLocalizationPlanWizard {
           // User is creating new plan from scratch - load available opportunities and enable the field
           this.loadAvailableOpportunities();
         }
-      }
-      if (currentMode === 'view') {
-        this.activeStep.set(5);
-      } else {
-        this.activeStep.set(1);
       }
     });
   }

@@ -55,6 +55,17 @@
     ></p-button>
     }
   </ng-container>
+  <ng-container ngProjectAs="more-actions">
+    @if(visibility()){
+    <p-button
+      [label]="'Timeline'"
+      icon="icon-list"
+      text
+      severity="secondary"
+      (click)="timelineVisibility.set(true)"
+    ></p-button>
+    }
+  </ng-container>
 </app-base-wizard-dialog>
 }
 
@@ -73,4 +84,9 @@
   [(visible)]="showConfirmLeaveDialog"
   (onLeave)="onConfirmLeave()"
   (onContinueEditing)="onContinueEditing()"
+/>
+
+<app-timeline-dialog
+  [(dialogVisible)]="timelineVisibility"
+  [planId]="planId()"
 />

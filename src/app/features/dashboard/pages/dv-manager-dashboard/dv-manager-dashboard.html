@@ -212,6 +212,6 @@
 @if(timelineVisibility()){
 <app-timeline-dialog
   [(dialogVisible)]="timelineVisibility"
-  [(selectedPlan)]="planItem"
+  [planId]="planItem()?.id || null"
 />
 }
