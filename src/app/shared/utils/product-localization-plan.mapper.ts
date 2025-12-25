@@ -757,31 +757,30 @@ export function mapProductLocalizationPlanFormToRequest(
  * All fields are nullable, so null values are explicitly appended as "null"
  */
 function appendFormDataValue(formData: FormData, key: string, value: any): void {
-  if (value === undefined) {
-    // Skip undefined values
+  if (value === undefined || value === null) {
+    // Skip undefined and null values
     return;
   }
 
-  if (value === null) {
-    // Append null as the string "null"
-    formData.append(key, 'null');
-  } else if (Array.isArray(value)) {
+  if (Array.isArray(value)) {
     // Handle arrays - append each element with indexed key
     if (value.length === 0) {
-      formData.append(key, 'null');
-    } else {
-      value.forEach((item, index) => {
-        formData.append(`${key}[${index}]`, item);
-      });
+      return;
     }
-  } else if (typeof value === 'boolean') {
-    formData.append(key, value ? 'true' : 'false');
-  } else if (typeof value === 'number') {
-    formData.append(key, value.toString());
-  } else {
-    // For strings, only skip empty strings if they're not explicitly set
-    formData.append(key, value);
+
+    value.forEach((item, index) => {
+      if (item !== null && item !== undefined) {
+        formData.append(`${key}[${index}]`, item.toString());
+      }
+    });
   }
+
+  if (typeof value === 'boolean') {
+    formData.append(key, value ? 'true' : 'false');
+    return;
+  }
+
+  formData.append(key, value.toString());
 }
 
 /**

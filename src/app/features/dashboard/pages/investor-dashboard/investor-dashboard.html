@@ -148,7 +148,7 @@
 
             <span
               class="text-sm font-medium"
-              [ngClass]="item.slaCountDown >= 5 ? 'text-green-500' : item.slaCountDown > 2 ? 'text-orange-500' : 'text-red-600'"
+              [ngClass]="item.slaCountDown >= 5 ? 'text-[#067647]' : item.slaCountDown > 2 ? 'text-[#F78F3A]' : 'text-[#B42318]'"
             >
               {{ item.slaCountDown }} {{ 'plans.table.daysRemaining' | translate }}
             </span>

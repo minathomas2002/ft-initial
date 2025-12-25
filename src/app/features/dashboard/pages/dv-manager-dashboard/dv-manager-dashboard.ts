@@ -123,8 +123,11 @@ export class DvManagerDashboard {
   }
 
   onDownload(plan: IPlanRecord) {
-    // TODO: Implement download
-    console.log('Download plan:', plan);
+    this.planStore.downloadPlan(plan.id).pipe(take(1)).subscribe({
+      error: (error) => {
+        console.error('Error downloading plan:', error);        
+      }
+    });
   }
 
   applyFilter() {
