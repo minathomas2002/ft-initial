@@ -20,6 +20,7 @@ import { InvestorDashboardPlanActionMenu } from '../../components/investor-dashb
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-investor-dashboard',
@@ -79,7 +80,7 @@ export class InvestorDashboard implements OnInit {
   readonly isLoading = computed(() => this.dashboardPlansStore.loading());
   readonly statistics = computed(() => this.dashboardPlansStore.statistics());
   readonly isStatisticsLoading = computed(() => this.dashboardPlansStore.loading() || this.statistics() === null);
-
+  private readonly toastService = inject(ToasterService);
   constructor() {
     effect(() => {
       if (!this.productLocalizationPlanWizardVisibility()) {
@@ -109,7 +110,7 @@ export class InvestorDashboard implements OnInit {
       this.planStore.setSelectedPlanId(null);
       this.productLocalizationPlanWizardVisibility.set(true);
     } else {
-      console.log('service');
+      this.toastService.warn('this feature will be available soon')
     }
   }
 
