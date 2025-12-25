@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { RoleManagementFilters } from '../../components/role-management-filters/role-management-filters';
@@ -23,6 +23,7 @@ import { RoleManagementActions } from '../../components/role-management-actions/
 import { TransferRoleDialog } from '../../components/transfer-role-dialog/transfer-role-dialog';
 import { TransferRoleService } from '../../services/transfer-role/transfer-role-service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { pipe, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-role-management',
@@ -97,6 +98,7 @@ export class RoleManagement implements OnInit {
   transferRoleDialogVisible = signal<boolean>(false);
   transferRoleService = inject(TransferRoleService);
   toasterService = inject(ToasterService);
+  updateEmployees = output<void>();
 
   ngOnInit(): void {
     this.filterService.applyFilter();
@@ -134,15 +136,17 @@ export class RoleManagement implements OnInit {
       newUserId: this.transferRoleService.employee.value!,
       roleCode: this.selectedItem()?.roleCode!
     }
-    this.roleManagementStore.transferRole(request).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.filterService.applyFilter();
-          this.toasterService.success(this.i18nService.translate('users.messages.transferRoleSuccess'));
-          this.transferRoleDialogVisible.set(false);
+    this.roleManagementStore.transferRole(request)
+      .pipe(tap(() => this.updateEmployees.emit()))
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.filterService.applyFilter();
+            this.toasterService.success(this.i18nService.translate('users.messages.transferRoleSuccess'));
+            this.transferRoleDialogVisible.set(false);
+          }
         }
-      }
-    })
+      })
   }
 }
 

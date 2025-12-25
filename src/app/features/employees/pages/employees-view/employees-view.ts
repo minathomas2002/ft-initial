@@ -30,4 +30,8 @@ export class EmployeesView {
   onAddEmployeeSuccess() {
     this.filterService.applyFilter()
   }
+
+  onUpdateEmployees() {
+    this.filterService.applyFilter()
+  }
 }

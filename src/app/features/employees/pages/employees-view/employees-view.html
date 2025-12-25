@@ -36,7 +36,7 @@
       <p-tabpanel value="1">
         @if(activeTab() === '1'){
         @defer (on viewport) {
-        <app-role-management></app-role-management>
+        <app-role-management (updateEmployees)="onUpdateEmployees()"></app-role-management>
         } @placeholder {
         <div></div>
         }
@@ -44,7 +44,7 @@
       </p-tabpanel>
     </p-tabpanels>
   </p-tabs>
-  
+
   @if(createEmpDialogVisible()){
   <app-add-edit-employee-dialog
     [(dialogVisible)]="createEmpDialogVisible"
