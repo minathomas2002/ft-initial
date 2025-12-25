@@ -7,7 +7,7 @@ import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { EEmployeePlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import { EEmployeePlanStatus, IPlanRecord, ITableHeaderItem, TColors, TPlansSortingKeys } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
@@ -19,6 +19,8 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { AssignReassignManualEmployee } from 'src/app/features/plans/components/assign-reassign-manual-employee/assign-reassign-manual-employee';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
 import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
+import { EmployeePlanStatusMapper } from '../../classes/employee-plan-status.mapper';
+import { BaseTagComponent } from "src/app/shared/components/base-components/base-tag/base-tag.component";
 
 @Component({
   selector: 'app-dv-manager-dashboard',
@@ -36,7 +38,8 @@ import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dial
     TranslatePipe,
     AssignReassignManualEmployee,
     ProductLocalizationPlanWizard,
-    TimelineDialog
+    TimelineDialog,
+    BaseTagComponent
   ],
   templateUrl: './dv-manager-dashboard.html',
   styleUrl: './dv-manager-dashboard.scss',
@@ -52,6 +55,7 @@ export class DvManagerDashboard {
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
   readonly filterService = inject(DvManagerDashboardPlansFilterService);
   private readonly i18nService = inject(I18nService);
+  private readonly employeePlanStatusMapper = new EmployeePlanStatusMapper(this.i18nService);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
   viewAssignDialog = signal<boolean>(false);
@@ -102,41 +106,11 @@ export class DvManagerDashboard {
   }
 
   getStatusLabel(status: EEmployeePlanStatus): string {
-    const statusMap = {
-      [EEmployeePlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pending'),
-      [EEmployeePlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.employee_status.underReview'),
-      [EEmployeePlanStatus.APPROVED]: this.i18nService.translate('plans.employee_status.approved'),
-      [EEmployeePlanStatus.REJECTED]: this.i18nService.translate('plans.employee_status.rejected'),
-      [EEmployeePlanStatus.UNASSIGNED]: this.i18nService.translate('plans.employee_status.unassigned'),
-      [EEmployeePlanStatus.DEPT_APPROVED]: this.i18nService.translate('plans.employee_status.deptApproved'),
-      [EEmployeePlanStatus.DEPT_REJECTED]: this.i18nService.translate('plans.employee_status.deptRejected'),
-      [EEmployeePlanStatus.DV_APPROVED]: this.i18nService.translate('plans.employee_status.dvApproved'),
-      [EEmployeePlanStatus.DV_REJECTED]: this.i18nService.translate('plans.employee_status.dvRejected'),
-      [EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
-      [EEmployeePlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
-      [EEmployeePlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
-      [EEmployeePlanStatus.ASSIGNED]: this.i18nService.translate('plans.employee_status.assigned'),
-    };
-    return statusMap[status] || '';
+    return this.employeePlanStatusMapper.getStatusLabel(status);
   }
 
-  getStatusBadgeClass(status: EEmployeePlanStatus): string {
-    const classMap = {
-      [EEmployeePlanStatus.EMPLOYEE_APPROVED]: 'bg-primary-50 text-primary-700 border-primary-200',
-      [EEmployeePlanStatus.UNASSIGNED]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-      [EEmployeePlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
-      [EEmployeePlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-      [EEmployeePlanStatus.DEPT_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-      [EEmployeePlanStatus.DEPT_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-      [EEmployeePlanStatus.DV_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-      [EEmployeePlanStatus.DV_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-      [EEmployeePlanStatus.DV_REJECTION_ACKNOWLEDGED]: 'bg-red-50 text-red-700 border-red-200',
-      [EEmployeePlanStatus.EMPLOYEE_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-      [EEmployeePlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-      [EEmployeePlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-      [EEmployeePlanStatus.ASSIGNED]: 'bg-orange-50 text-orange-700 border-red-200'
-    };
-    return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200';
+  getStatusBadgeColor(status: EEmployeePlanStatus): TColors {
+    return this.employeePlanStatusMapper.getStatusBadgeColor(status);
   }
 
 

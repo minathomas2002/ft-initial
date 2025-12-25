@@ -157,7 +157,7 @@
             <span
               class="text-sm font-medium"
               [ngClass]="
-                item.slaCountDown >= 5
+                item.slaCountDown > 5
                   ? 'text-green-500'
                   : item.slaCountDown > 2
                   ? 'text-orange-500'
@@ -171,11 +171,10 @@
             }
           </td>
           <td>
-            <span class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl {{
-                getStatusBadgeClass(item.status)
-              }}">
-              {{ getStatusLabel(item.status) }}
-            </span>
+            <app-base-tag
+              [value]="getStatusLabel(item.status)"
+              [color]="getStatusBadgeColor(item.status)"
+            ></app-base-tag>
           </td>
           <td>
             <app-dv-manager-dashboard-plan-action-menu
