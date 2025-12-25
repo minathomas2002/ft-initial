@@ -8,7 +8,6 @@
   [cancelButtonClass]="'w-fit'"
   [isConfirmationDisabled]="formService.form.invalid"
   (onConfirm)="onConfirm()"
-  (onClose)="resetForm()"
   [isLoading]="false"
 >
   <div class="mb-5">
@@ -16,21 +15,24 @@
       {{ isReassignMode() ? ('assign.reassign' | translate) : ('assign.assign' | translate) }}
     </p>
     @if(isReassignMode()){
-      <div class="xl:text-md text-sm text-gray-600 my-4">
-        <span>{{ 'assign.currentEmployee' | translate }}: </span>
-        <span class="text-gray-900">{{ planStore.currentEmployee()?.name }}</span>
-      </div>      
+    <div class="xl:text-md text-sm text-gray-600 my-4">
+      <span>{{ 'assign.currentEmployee' | translate }}: </span>
+      <span class="text-gray-900">{{ planStore.currentEmployee()?.name }}</span>
+    </div>
     }
     <h4 class="xl:text-md text-sm text-gray-600">
       {{
-        isReassignMode() ? ('assign.reassignDesc' | translate) : ('assign.assignDesc' | translate)
+      isReassignMode() ? ('assign.reassignDesc' | translate) : ('assign.assignDesc' | translate)
       }}
     </h4>
   </div>
   @if(!planStore.loading()){
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12 md:col-span-12">
-      <app-base-label [title]="'assign.employeeLabel' | translate" [required]="true" />
+      <app-base-label
+        [title]="'assign.employeeLabel' | translate"
+        [required]="true"
+      />
       <p-select
         [options]="activeSystemEmployees()"
         appendTo="body"

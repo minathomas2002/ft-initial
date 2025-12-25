@@ -1,9 +1,8 @@
-import { Component, inject, input, model, output } from '@angular/core';
+import { Component, inject, input, model, OnDestroy, OnInit, output } from '@angular/core';
 import { IAssignRequest, IPlanRecord } from 'src/app/shared/interfaces';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { AssignReassignFormService } from '../../services/assign-reassign-form/assign-reassign-form-service';
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
-import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { take, tap } from 'rxjs';
 import { BaseLabelComponent } from "src/app/shared/components/base-components/base-label/base-label.component";
 import { Select } from "primeng/select";
@@ -15,11 +14,17 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 
 @Component({
   selector: 'app-assign-reassign-manual-employee',
-  imports: [BaseDialogComponent, TranslatePipe, BaseLabelComponent, Select, ReactiveFormsModule, BaseErrorComponent],
+  imports: [
+    BaseDialogComponent,
+    TranslatePipe,
+    BaseLabelComponent,
+    Select,
+    ReactiveFormsModule,
+    BaseErrorComponent
+  ],
   templateUrl: './assign-reassign-manual-employee.html',
-  styleUrl: './assign-reassign-manual-employee.html',
 })
-export class AssignReassignManualEmployee {
+export class AssignReassignManualEmployee implements OnInit, OnDestroy {
 
   dialogVisible = model<boolean>(false);
   onSuccess = output<void>();
@@ -33,6 +38,10 @@ export class AssignReassignManualEmployee {
 
   ngOnInit() {
     this.loadActiveEmployees();
+  }
+
+  ngOnDestroy() {
+    this.resetForm();
   }
 
   onConfirm() {
