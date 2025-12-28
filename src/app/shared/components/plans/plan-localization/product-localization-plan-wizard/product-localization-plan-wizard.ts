@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, model, output, signal, viewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, effect, inject, model, OnDestroy, output, signal, viewChild } from "@angular/core";
 import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../../base-components/base-tag/base-tag.component";
@@ -47,7 +47,7 @@ import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-
   styleUrl: './product-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductLocalizationPlanWizard {
+export class ProductLocalizationPlanWizard implements OnDestroy {
   productPlanFormService = inject(ProductPlanFormService);
   toasterService = inject(ToasterService);
   planStore = inject(PlanStore);
@@ -551,13 +551,15 @@ export class ProductLocalizationPlanWizard {
         this.showConfirmLeaveDialog.set(true);
         return;
       }
-      this.productPlanFormService.resetAllForms();
       this.activeStep.set(1);
       this.doRefresh.emit();
       this.isSubmitted.set(false);
       // Reset wizard state in store
       this.planStore.resetWizardState();
     }
+  }
 
+  ngOnDestroy(): void {
+    this.productPlanFormService.resetAllForms();
   }
 }
