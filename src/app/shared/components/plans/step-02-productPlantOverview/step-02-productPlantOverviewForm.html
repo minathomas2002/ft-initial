@@ -66,7 +66,12 @@
             [rows]="4"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
           ></textarea>
+          <!-- Character Counter -->
+
         </app-group-input-with-checkbox>
+        <div class="text-xs text-gray-500 text-right mt-1">
+          {{ getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications]).value?.length || 0 }} / 500
+        </div>
         <app-base-error-messages
           [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
           [label]="'Product Specifications'"
