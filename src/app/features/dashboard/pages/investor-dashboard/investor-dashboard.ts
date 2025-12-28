@@ -3,7 +3,7 @@ import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
-import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
@@ -171,7 +171,7 @@ export class InvestorDashboard implements OnInit {
   onDownload(plan: IPlanRecord) {
     this.planStore.downloadPlan(plan.id).pipe(take(1)).subscribe({
       error: (error) => {
-        console.error('Error downloading plan:', error);        
+        console.error('Error downloading plan:', error);
       }
     });
   }

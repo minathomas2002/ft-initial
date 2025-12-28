@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { BaseErrorMessages } from '../../../base-components/base-error-messages/base-error-messages';
-import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
+import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 

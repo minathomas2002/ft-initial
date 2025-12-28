@@ -17,7 +17,7 @@ import { DvManagerDashboardPlanActionMenu } from '../../components/dv-manager-da
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { AssignReassignManualEmployee } from 'src/app/features/plans/components/assign-reassign-manual-employee/assign-reassign-manual-employee';
-import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
 import { EmployeePlanStatusMapper } from '../../classes/employee-plan-status.mapper';
 import { BaseTagComponent } from "src/app/shared/components/base-components/base-tag/base-tag.component";
@@ -125,7 +125,7 @@ export class DvManagerDashboard {
   onDownload(plan: IPlanRecord) {
     this.planStore.downloadPlan(plan.id).pipe(take(1)).subscribe({
       error: (error) => {
-        console.error('Error downloading plan:', error);        
+        console.error('Error downloading plan:', error);
       }
     });
   }

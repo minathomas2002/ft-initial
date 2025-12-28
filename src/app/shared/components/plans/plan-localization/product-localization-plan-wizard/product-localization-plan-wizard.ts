@@ -1,12 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, model, output, signal, viewChild } from "@angular/core";
-import { BaseWizardDialog } from "../../base-components/base-wizard-dialog/base-wizard-dialog";
-import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
-import { PlanLocalizationStep02ProductPlantOverviewForm } from "../plan-localization-step-02-productPlantOverview/plan-localization-step-02-productPlantOverviewForm";
-import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-03-valueChain/plan-localization-step-03-valueChainForm";
-import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
-import { PlanLocalizationStep05Summary } from "../plan-localization-step-05-summary/plan-localization-step-05-summary";
+import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { ButtonModule } from "primeng/button";
-import { BaseTagComponent } from "../../base-components/base-tag/base-tag.component";
+import { BaseTagComponent } from "../../../base-components/base-tag/base-tag.component";
 import { StepContentDirective } from "src/app/shared/directives";
 import { ProductPlanFormService } from "src/app/shared/services/plan/materials-form-service/product-plan-form-service";
 import { ProductPlanValidationService } from "src/app/shared/services/plan/validation/product-plan-validation.service";
@@ -18,14 +13,19 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { switchMap, catchError, finalize, of, map } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
-import { SubmissionConfirmationModalComponent } from "../submission-confirmation-modal/submission-confirmation-modal.component";
+import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
 import { Signature } from "src/app/shared/interfaces/plans.interface";
-import { ConfirmLeaveDialogComponent } from "../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component";
+import { ConfirmLeaveDialogComponent } from "../../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
-import { TimelineDialog } from "../../timeline/timeline-dialog/timeline-dialog";
+import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
 import { IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
+import { PlanLocalizationStep05Summary } from "../plan-localization-step-05-summary/plan-localization-step-05-summary";
+import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
+import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
+import { PlanLocalizationStep02ProductPlantOverviewForm } from "../plan-localization-step-02-productPlantOverview/plan-localization-step-02-productPlantOverviewForm";
+import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-03-valueChain/plan-localization-step-03-valueChainForm";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',

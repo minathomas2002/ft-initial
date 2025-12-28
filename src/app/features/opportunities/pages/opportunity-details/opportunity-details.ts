@@ -22,7 +22,7 @@ import { CreateEditOpportunityDialog } from '../../components/create-edit-opport
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 import { IOpportunity } from 'src/app/shared/interfaces';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 
 @Component({
   selector: 'app-opportunity-details',

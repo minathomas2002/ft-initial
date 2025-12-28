@@ -16,7 +16,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { OpportunitiesFilters } from '../../components/opportunities-filter/opportunities-filters';
 import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.utils';
-import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({

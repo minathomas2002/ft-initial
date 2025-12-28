@@ -4,7 +4,7 @@ import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/form
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
+import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -12,8 +12,8 @@ import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
-import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
+import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 
 @Component({

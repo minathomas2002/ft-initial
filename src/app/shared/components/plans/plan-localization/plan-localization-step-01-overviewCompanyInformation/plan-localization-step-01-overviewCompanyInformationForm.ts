@@ -1,22 +1,21 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
-import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
+import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { BaseErrorComponent } from '../../base-components/base-error/base-error.component';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
-import { GroupInputWithCheckbox } from '../../form/group-input-with-checkbox/group-input-with-checkbox';
+import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
-import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
-import { PhoneInputComponent } from '../../form/phone-input/phone-input.component';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
+import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
