@@ -3,7 +3,7 @@
 /* ************************************************************* */
 export const environment = {
 	production: false,
-	baseUrl: 'https://localhost:7026/api',
+	baseUrl: 'https://localhost:44308/api',
 	apiVersion: 'v1',
 	appName: 'BENA - DEV',
 	enableDebug: true,
