@@ -66,9 +66,8 @@
             [rows]="4"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
           ></textarea>
-          <!-- Character Counter -->
-
         </app-group-input-with-checkbox>
+        <!-- Character Counter -->
         <div class="text-xs text-gray-500 text-right mt-1">
           {{ getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications]).value?.length || 0 }} / 500
         </div>
@@ -267,6 +266,10 @@
           [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
         ></textarea>
       </app-group-input-with-checkbox>
+      <!-- Character Counter -->
+      <div class="text-xs text-gray-500 text-right mt-1">
+        {{ getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]).value?.length || 0 }} / 500
+      </div>
       <app-base-error-messages
         [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
         [label]="'Others Description'"
@@ -327,6 +330,10 @@
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
             ></textarea>
           </app-group-input-with-checkbox>
+          <!-- Character Counter -->
+          <div class="text-xs text-gray-500 text-right mt-1">
+            {{ getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]).value?.length || 0 }} / 500
+          </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
             [label]="'Names of targeted SEC\'s approved local suppliers'"
@@ -349,6 +356,10 @@
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
             ></textarea>
           </app-group-input-with-checkbox>
+          <!-- Character Counter -->
+          <div class="text-xs text-gray-500 text-right mt-1">
+            {{ getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]).value?.length || 0 }} / 500
+          </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
             [label]="'product(s) manufactured'"
