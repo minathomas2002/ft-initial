@@ -2,7 +2,7 @@ import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, Validat
 import { ELocalizationStatusType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { hasIncompleteControl } from 'src/app/shared/validators/form-control-helpers';
 
-export class Step3ValueChainFormBuilder {
+export class PlanLocalizationStep3ValueChainFormBuilder {
   constructor(
     private readonly fb: FormBuilder
   ) { }

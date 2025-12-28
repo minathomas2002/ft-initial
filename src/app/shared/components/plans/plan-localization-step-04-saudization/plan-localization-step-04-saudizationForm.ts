@@ -9,7 +9,7 @@ import { SaudizationMatrixComponent } from './saudization-matrix/saudization-mat
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 
 @Component({
-  selector: 'app-step-04-saudization-form',
+  selector: 'app-plan-localization-step-04-saudization-form',
   imports: [
     ReactiveFormsModule,
     BaseErrorMessages,
@@ -17,10 +17,10 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives';
     FileuploadComponent,
     SaudizationMatrixComponent,
   ],
-  templateUrl: './step-04-saudizationForm.html',
+  templateUrl: './plan-localization-step-04-saudizationForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Step04SaudizationForm {
+export class PlanLocalizationStep04SaudizationForm {
   isViewMode = input<boolean>(false);
   private readonly productPlanFormService = inject(ProductPlanFormService);
 

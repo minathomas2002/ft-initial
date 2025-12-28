@@ -1,7 +1,7 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 
-export class Step4SaudizationFormBuilder {
+export class PlanLocalizationStep4SaudizationFormBuilder {
   constructor(
     private readonly fb: FormBuilder
   ) { }

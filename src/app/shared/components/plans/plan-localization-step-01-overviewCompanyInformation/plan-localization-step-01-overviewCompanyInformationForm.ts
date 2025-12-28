@@ -19,7 +19,7 @@ import { BaseErrorMessages } from '../../base-components/base-error-messages/bas
 import { PhoneInputComponent } from '../../form/phone-input/phone-input.component';
 
 @Component({
-  selector: 'app-step-01-overview-company-information-form',
+  selector: 'app-plan-localization-step-01-overview-company-information-form',
   imports: [
     BaseLabelComponent,
     InputTextModule,
@@ -34,11 +34,11 @@ import { PhoneInputComponent } from '../../form/phone-input/phone-input.componen
     BaseErrorMessages,
     PhoneInputComponent,
   ],
-  templateUrl: './step-01-overviewCompanyInformationForm.html',
-  styleUrl: './step-01-overviewCompanyInformationForm.scss',
+  templateUrl: './plan-localization-step-01-overviewCompanyInformationForm.html',
+  styleUrl: './plan-localization-step-01-overviewCompanyInformationForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Step01OverviewCompanyInformationForm {
+export class PlanLocalizationStep01OverviewCompanyInformationForm {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly planStore = inject(PlanStore);

@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, OnDestroy, output, signal, viewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, effect, inject, model, output, signal, viewChild } from "@angular/core";
 import { BaseWizardDialog } from "../../base-components/base-wizard-dialog/base-wizard-dialog";
-import { Step01OverviewCompanyInformationForm } from "../step-01-overviewCompanyInformation/step-01-overviewCompanyInformationForm";
-import { Step02ProductPlantOverviewForm } from "../step-02-productPlantOverview/step-02-productPlantOverviewForm";
-import { Step03ValueChainForm } from "../step-03-valueChain/step-03-valueChainForm";
-import { Step04SaudizationForm } from "../step-04-saudization/step-04-saudizationForm";
-import { Step05Summary } from "../step-05-summary/step-05-summary";
+import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
+import { PlanLocalizationStep02ProductPlantOverviewForm } from "../plan-localization-step-02-productPlantOverview/plan-localization-step-02-productPlantOverviewForm";
+import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-03-valueChain/plan-localization-step-03-valueChainForm";
+import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
+import { PlanLocalizationStep05Summary } from "../plan-localization-step-05-summary/plan-localization-step-05-summary";
 import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../base-components/base-tag/base-tag.component";
 import { StepContentDirective } from "src/app/shared/directives";
@@ -15,6 +15,7 @@ import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
 import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { switchMap, catchError, finalize, of, map } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../submission-confirmation-modal/submission-confirmation-modal.component";
@@ -30,11 +31,11 @@ import { IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface
   selector: 'app-product-localization-plan-wizard',
   imports: [
     BaseWizardDialog,
-    Step01OverviewCompanyInformationForm,
-    Step02ProductPlantOverviewForm,
-    Step03ValueChainForm,
-    Step04SaudizationForm,
-    Step05Summary,
+    PlanLocalizationStep01OverviewCompanyInformationForm,
+    PlanLocalizationStep02ProductPlantOverviewForm,
+    PlanLocalizationStep03ValueChainForm,
+    PlanLocalizationStep04SaudizationForm,
+    PlanLocalizationStep05Summary,
     ButtonModule,
     BaseTagComponent,
     StepContentDirective,
@@ -122,7 +123,7 @@ export class ProductLocalizationPlanWizard {
   isLoadingPlan = signal(false);
 
   // Reference to Step 5 Summary component
-  summaryComponent = viewChild<Step05Summary>('summaryComponent');
+  summaryComponent = viewChild<PlanLocalizationStep05Summary>('summaryComponent');
 
   // Submission confirmation modal
   showSubmissionModal = signal(false);
@@ -216,37 +217,46 @@ export class ProductLocalizationPlanWizard {
   loadPlanData(planId: string): void {
     this.isLoadingPlan.set(true);
     this.planStore.getProductPlan(planId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          if (response.body) {
-            // Get opportunity details and update availableOpportunities for edit mode
-            const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-            if (opportunityId && (this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view')) {
-              this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
-                .pipe(takeUntilDestroyed(this.destroyRef))
-                .subscribe({
-                  next: () => {
-                    // Map response to form after opportunity is loaded
-                    this.mapPlanDataToForm(response.body);
-                  },
-                  error: (error) => {
-                    console.error('Error loading opportunity details:', error);
-                    // Still map the form data even if opportunity loading fails
-                    this.mapPlanDataToForm(response.body);
-                  }
-                });
-            } else {
-              // Map response to form directly if no opportunity ID or not in edit/view mode
-              this.mapPlanDataToForm(response.body);
-            }
+      .pipe(
+        switchMap((response) => {
+          if (!response.body) {
+            return of(null);
           }
-        },
-        error: (error) => {
-          this.isLoadingPlan.set(false);
+
+          // Get opportunity details and update availableOpportunities for edit mode
+          const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
+          const isEditOrViewMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view';
+
+          if (opportunityId && isEditOrViewMode) {
+            // Chain opportunity details loading, catch errors to continue with form mapping
+            return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
+              .pipe(
+                map(() => response.body),
+                catchError((error) => {
+                  console.error('Error loading opportunity details:', error);
+                  // Return the response body so we can still map the form data even if opportunity loading fails
+                  return of(response.body);
+                })
+              );
+          } else {
+            // Map response to form directly if no opportunity ID or not in edit/view mode
+            return of(response.body);
+          }
+        }),
+        catchError((error) => {
           this.toasterService.error(this.i18nService.translate('plans.wizard.messages.errorLoadingPlan'));
           console.error('Error loading plan:', error);
           this.visibility.set(false);
+          return of(null);
+        }),
+        finalize(() => {
+          this.isLoadingPlan.set(false);
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((responseBody) => {
+        if (responseBody) {
+          this.mapPlanDataToForm(responseBody);
         }
       });
   }

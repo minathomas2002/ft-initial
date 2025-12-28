@@ -2,10 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
-import { Step1OverviewFormBuilder } from './steps/step1-overview.form-builder';
-import { Step2ProductPlantOverviewFormBuilder } from './steps/step2-product-plant-overview.form-builder';
-import { Step3ValueChainFormBuilder } from './steps/step3-value-chain.form-builder';
-import { Step4SaudizationFormBuilder } from './steps/step4-saudization.form-builder';
+import { PlanLocalizationStep1OverviewFormBuilder } from './steps/plan-localization-step1-overview.form-builder';
+import { PlanLocalizationStep2ProductPlantOverviewFormBuilder } from './steps/plan-localization-step2-product-plant-overview.form-builder';
+import { PlanLocalizationStep3ValueChainFormBuilder } from './steps/plan-localization-step3-value-chain.form-builder';
+import { PlanLocalizationStep4SaudizationFormBuilder } from './steps/plan-localization-step4-saudization.form-builder';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +15,10 @@ export class ProductPlanFormService {
   private readonly _planStore = inject(PlanStore);
 
   // Step builders
-  private readonly _step1Builder = new Step1OverviewFormBuilder(this._fb, this._planStore.newPlanTitle());
-  private readonly _step2Builder = new Step2ProductPlantOverviewFormBuilder(this._fb);
-  private readonly _step3Builder = new Step3ValueChainFormBuilder(this._fb);
-  private readonly _step4Builder = new Step4SaudizationFormBuilder(this._fb);
+  private readonly _step1Builder = new PlanLocalizationStep1OverviewFormBuilder(this._fb, this._planStore.newPlanTitle());
+  private readonly _step2Builder = new PlanLocalizationStep2ProductPlantOverviewFormBuilder(this._fb);
+  private readonly _step3Builder = new PlanLocalizationStep3ValueChainFormBuilder(this._fb);
+  private readonly _step4Builder = new PlanLocalizationStep4SaudizationFormBuilder(this._fb);
 
   // Step 1: Overview Company Information
   private readonly _step1FormGroup = this._step1Builder.buildStep1FormGroup();

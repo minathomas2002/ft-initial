@@ -2,7 +2,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EOpportunityType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 
-export class Step1OverviewFormBuilder {
+export class PlanLocalizationStep1OverviewFormBuilder {
   constructor(
     private readonly fb: FormBuilder,
     private readonly newPlanTitle: string

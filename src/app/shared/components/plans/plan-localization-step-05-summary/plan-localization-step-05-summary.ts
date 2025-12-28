@@ -9,18 +9,18 @@ import { SummarySectionValueChain } from './summary-sections/summary-section-val
 import { SummarySectionSaudization } from './summary-sections/summary-section-saudization/summary-section-saudization';
 
 @Component({
-  selector: 'app-step-05-summary',
+  selector: 'app-plan-localization-step-05-summary',
   imports: [
     SummarySectionOverview,
     SummarySectionProductPlant,
     SummarySectionValueChain,
     SummarySectionSaudization,
   ],
-  templateUrl: './step-05-summary.html',
-  styleUrl: './step-05-summary.scss',
+  templateUrl: './plan-localization-step-05-summary.html',
+  styleUrl: './plan-localization-step-05-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Step05Summary {
+export class PlanLocalizationStep05Summary {
   isViewMode = input<boolean>(false);
   private readonly formService = inject(ProductPlanFormService);
   private readonly validationService = inject(ProductPlanValidationService);

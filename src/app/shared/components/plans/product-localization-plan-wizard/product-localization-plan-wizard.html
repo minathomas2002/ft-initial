@@ -23,23 +23,23 @@
   }
 
   <ng-template [appStepContent]="1">
-    <app-step-01-overview-company-information-form />
+    <app-plan-localization-step-01-overview-company-information-form />
   </ng-template>
 
   <ng-template [appStepContent]="2">
-    <app-step-02-product-plant-overview-form />
+    <app-plan-localization-step-02-product-plant-overview-form />
   </ng-template>
 
   <ng-template [appStepContent]="3">
-    <app-step-03-valueChain-form [isViewMode]="isViewMode()" />
+    <app-plan-localization-step-03-valueChain-form [isViewMode]="isViewMode()" />
   </ng-template>
 
   <ng-template [appStepContent]="4">
-    <app-step-04-saudization-form [isViewMode]="isViewMode()" />
+    <app-plan-localization-step-04-saudization-form [isViewMode]="isViewMode()" />
   </ng-template>
 
   <ng-template [appStepContent]="5">
-    <app-step-05-summary
+    <app-plan-localization-step-05-summary
       [isViewMode]="isViewMode()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"

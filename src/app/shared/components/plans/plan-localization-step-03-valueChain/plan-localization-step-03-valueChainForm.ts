@@ -16,7 +16,7 @@ import { JsonPipe } from '@angular/common';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 
 @Component({
-  selector: 'app-step-03-valueChain-form',
+  selector: 'app-plan-localization-step-03-valueChain-form',
   imports: [
     ReactiveFormsModule,
     BaseErrorMessages,
@@ -31,11 +31,11 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives';
     BaseErrorMessages,
     TrimOnBlurDirective
   ],
-  templateUrl: './step-03-valueChainForm.html',
-  styleUrl: './step-03-valueChainForm.scss',
+  templateUrl: './plan-localization-step-03-valueChainForm.html',
+  styleUrl: './plan-localization-step-03-valueChainForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Step03ValueChainForm {
+export class PlanLocalizationStep03ValueChainForm {
 
   isViewMode = input<boolean>(false);
   private readonly productPlanFormService = inject(ProductPlanFormService);

@@ -17,7 +17,7 @@ import { BaseLabelComponent } from '../../base-components/base-label/base-label.
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 
 @Component({
-  selector: 'app-step-02-product-plant-overview-form',
+  selector: 'app-plan-localization-step-02-product-plant-overview-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -34,11 +34,11 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives';
     BaseLabelComponent,
     TrimOnBlurDirective
   ],
-  templateUrl: './step-02-productPlantOverviewForm.html',
-  styleUrl: './step-02-productPlantOverviewForm.scss',
+  templateUrl: './plan-localization-step-02-productPlantOverviewForm.html',
+  styleUrl: './plan-localization-step-02-productPlantOverviewForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Step02ProductPlantOverviewForm {
+export class PlanLocalizationStep02ProductPlantOverviewForm {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly planStore = inject(PlanStore)
 
