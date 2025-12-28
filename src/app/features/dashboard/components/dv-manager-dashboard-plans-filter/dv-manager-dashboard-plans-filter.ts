@@ -18,6 +18,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { EEmployeePlanStatus, IPlanFilter } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 interface IDropdownOption {
   label: string;
@@ -38,7 +39,6 @@ export class DvManagerDashboardPlansFilter implements OnInit {
   private readonly i18nService = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
   readonly filter = this.filterService.filter;
-
   planTypeOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
     return [
@@ -48,7 +48,7 @@ export class DvManagerDashboardPlansFilter implements OnInit {
         value: EOpportunityType.SERVICES,
       },
       {
-        label: this.i18nService.translate('plans.filter.material'),
+        label: 'Product',
         value: EOpportunityType.PRODUCT,
       },
     ];
@@ -138,7 +138,7 @@ export class DvManagerDashboardPlansFilter implements OnInit {
     }
 
     this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-    this.filterService.applyFilterWithPaging();    
+    this.filterService.applyFilterWithPaging();
   }
 
   private getStatusFromParam(param: string): EEmployeePlanStatus | null {
