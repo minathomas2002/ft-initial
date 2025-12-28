@@ -45,10 +45,11 @@ export class RoleManagementFilters implements OnInit {
   employeeRoles = computed(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
-    return this.roleStore.systemRoles().map((role: any) => ({
-      label: role.name || this.roleMapper.getTranslatedRole(role.code as any),
-      value: role.id
-    })).filter((option: any) => option.value !== undefined);
+    return this.roleStore.systemRoles()
+      .filter((option: any) => [4, 5].includes(option.code)).map((role: any) => ({
+        label: role.name || this.roleMapper.getTranslatedRole(role.code as any),
+        value: role.id
+      }));
   });
 
   userStatusMapper = new UserStatusMapper(this.i18nService);
