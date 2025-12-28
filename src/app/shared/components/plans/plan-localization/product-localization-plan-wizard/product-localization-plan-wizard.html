@@ -56,7 +56,7 @@
     }
   </ng-container>
   <ng-container ngProjectAs="more-actions">
-    @if(visibility()){
+    @if(visibility() && mode() !== 'create'){
     <p-button
       [label]="'Timeline'"
       icon="icon-list"
