@@ -18,6 +18,7 @@ import { OpportunitiesFilters } from '../../components/opportunities-filter/oppo
 import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.utils';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -31,7 +32,8 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
     TranslatePipe,
     BaseTagComponent,
     OpportunitiesFilters,
-    ProductLocalizationPlanWizard
+    ProductLocalizationPlanWizard,
+    ServiceLocalizationPlanWizard,
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
@@ -52,6 +54,7 @@ export class OpportunitiesList implements OnInit {
   isAnonymous = signal<boolean>(false);
 
   productLocalizationPlanWizardVisibility = signal<boolean>(false);
+  serviceLocalizationPlanWizardVisibility = signal<boolean>(false);
 
   ngOnInit(): void {
     const isAnonymousData = this.route.snapshot.data['isAnonymous'];
@@ -64,11 +67,11 @@ export class OpportunitiesList implements OnInit {
   onViewDetails(opportunity: IOpportunity) {
     if (this.isAnonymous()) {
       this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities, opportunity.id], {
-        queryParams: { from: 'list' }
+        queryParams: { from: 'list' },
       });
     } else {
       this.router.navigate(['/', ERoutes.opportunities, opportunity.id], {
-        queryParams: { from: 'list' }
+        queryParams: { from: 'list' },
       });
     }
   }
@@ -79,10 +82,11 @@ export class OpportunitiesList implements OnInit {
         if (res.body) {
           this.applyOpportunity(opportunity);
         } else {
-          this.toast.warn('Application is not allowed while an in-progress plan exists for the selected opportunity.');
+          this.toast.warn(
+            'Application is not allowed while an in-progress plan exists for the selected opportunity.'
+          );
         }
       });
-
     } else {
       this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
     }
@@ -102,14 +106,17 @@ export class OpportunitiesList implements OnInit {
   getOpportunityTypeConfig = getOpportunityTypeConfig;
 
   applyOpportunity(opportunity: IOpportunity) {
-    if (opportunity.opportunityType === EOpportunityType.SERVICES) {
-      this.toast.warn('Apply for services opportunity will be available soon');
-      return;
-    }
     this.planStore.setAvailableOpportunities({ id: opportunity.id, name: opportunity.title });
     this.planStore.setAppliedOpportunity(opportunity);
     this.planStore.setWizardMode('create');
     this.planStore.setSelectedPlanId(null);
-    this.productLocalizationPlanWizardVisibility.set(true);
+
+    if (opportunity.opportunityType === EOpportunityType.SERVICES) {
+      this.productLocalizationPlanWizardVisibility.set(true);
+    }
+
+    if (opportunity.opportunityType === EOpportunityType.PRODUCT) {
+      this.serviceLocalizationPlanWizardVisibility.set(true);
+    }
   }
 }

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
@@ -10,7 +18,13 @@ import { DataTableComponent } from 'src/app/shared/components/layout-components/
 import { SkeletonModule } from 'primeng/skeleton';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
-import { EEmployeePlanStatus, EInvestorPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import {
+  EEmployeePlanStatus,
+  EInvestorPlanStatus,
+  IPlanRecord,
+  ITableHeaderItem,
+  TPlansSortingKeys,
+} from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
@@ -19,8 +33,9 @@ import { InvestorDashboardPlansFilter } from '../../components/investor-dashboar
 import { InvestorDashboardPlanActionMenu } from '../../components/investor-dashboard-plan-action-menu/investor-dashboard-plan-action-menu';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
-import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
+import { TimelineDialog } from 'src/app/shared/components/timeline/timeline-dialog/timeline-dialog';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 
 @Component({
   selector: 'app-investor-dashboard',
@@ -39,7 +54,8 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     NgClass,
     SkeletonModule,
     TranslatePipe,
-    TimelineDialog
+    TimelineDialog,
+    ServiceLocalizationPlanWizard,
   ],
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
@@ -50,10 +66,10 @@ export class InvestorDashboard implements OnInit {
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
+  serviceLocalizationPlanWizardVisibility = signal(false);
   timelineVisibility = signal(false);
   selectedPlan = signal<IPlanRecord | null>(null);
   eEmployeePlanStatus = EEmployeePlanStatus;
-
 
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
@@ -65,12 +81,32 @@ export class InvestorDashboard implements OnInit {
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
     this.i18nService.currentLanguage();
     return [
-      { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
-      { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
+      {
+        label: this.i18nService.translate('plans.table.planId'),
+        isSortable: true,
+        sortingKey: 'planCode',
+      },
+      {
+        label: this.i18nService.translate('plans.table.planTitle'),
+        isSortable: false,
+        sortingKey: 'title',
+      },
       { label: 'Opportunity Type', isSortable: false, sortingKey: 'planType' },
-      { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
-      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
-      { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
+      {
+        label: this.i18nService.translate('plans.table.submissionDate'),
+        isSortable: true,
+        sortingKey: 'submissionDate',
+      },
+      {
+        label: this.i18nService.translate('plans.table.slaCountdown'),
+        isSortable: true,
+        sortingKey: 'slaCountDown',
+      },
+      {
+        label: this.i18nService.translate('plans.table.currentStatus'),
+        isSortable: false,
+        sortingKey: 'status',
+      },
       { label: this.i18nService.translate('plans.table.actions'), isSortable: false },
     ];
   });
@@ -79,12 +115,17 @@ export class InvestorDashboard implements OnInit {
   readonly totalRecords = computed(() => this.dashboardPlansStore.count());
   readonly isLoading = computed(() => this.dashboardPlansStore.loading());
   readonly statistics = computed(() => this.dashboardPlansStore.statistics());
-  readonly isStatisticsLoading = computed(() => this.dashboardPlansStore.loading() || this.statistics() === null);
+  readonly isStatisticsLoading = computed(
+    () => this.dashboardPlansStore.loading() || this.statistics() === null
+  );
   private readonly toastService = inject(ToasterService);
   constructor() {
     effect(() => {
-      if (!this.productLocalizationPlanWizardVisibility()) {
-        this.resetProductLocalizationPlanWizard();
+      if (
+        !this.productLocalizationPlanWizardVisibility() ||
+        !this.serviceLocalizationPlanWizardVisibility()
+      ) {
+        this.resetPlanWizard();
       }
     });
   }
@@ -102,16 +143,19 @@ export class InvestorDashboard implements OnInit {
   onUserConfirmNewPlanDialog() {
     this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
     this.newPlanDialogVisibility.set(false);
-    if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
-      // Creating new plan from scratch - clear applied opportunity
-      this.planStore.resetAppliedOpportunity();
-      // Reset mode and plan ID for new plan
-      this.planStore.setWizardMode('create');
-      this.planStore.setSelectedPlanId(null);
-      this.productLocalizationPlanWizardVisibility.set(true);
-    } else {
-      this.toastService.warn('this feature will be available soon')
-    }
+
+    if (!this.newPlanOpportunityType()) return;
+
+    // Creating new plan from scratch - clear applied opportunity
+    this.planStore.resetAppliedOpportunity();
+    // Reset mode and plan ID for new plan
+    this.planStore.setWizardMode('create');
+    this.planStore.setSelectedPlanId(null);
+
+    this.newPlanOpportunityType() === EOpportunityType.PRODUCT
+      ? this.productLocalizationPlanWizardVisibility.set(true)
+      : this.serviceLocalizationPlanWizardVisibility.set(true);
+    console.log(this.serviceLocalizationPlanWizardVisibility());
   }
 
   getPlanTypeLabel(planType: EOpportunityType): string {
@@ -144,13 +188,15 @@ export class InvestorDashboard implements OnInit {
     return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200';
   }
 
-
   onViewDetails(plan: IPlanRecord) {
     // Set mode to view and plan ID
     this.planStore.setWizardMode('view');
     this.planStore.setSelectedPlanId(plan.id);
     this.planStore.setPlanStatus(plan.status);
-    this.productLocalizationPlanWizardVisibility.set(true);
+
+    plan.planType === EOpportunityType.PRODUCT
+      ? this.productLocalizationPlanWizardVisibility.set(true)
+      : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
   onEdit(plan: IPlanRecord) {
@@ -160,7 +206,10 @@ export class InvestorDashboard implements OnInit {
       this.planStore.setWizardMode('edit');
       this.planStore.setSelectedPlanId(plan.id);
       this.planStore.setPlanStatus(plan.status);
-      this.productLocalizationPlanWizardVisibility.set(true);
+
+      plan.planType === EOpportunityType.PRODUCT
+        ? this.productLocalizationPlanWizardVisibility.set(true)
+        : this.serviceLocalizationPlanWizardVisibility.set(true);
     } else {
       this.i18nService.translate('plans.errors.cannotEdit');
       // Could show error message here
@@ -169,11 +218,14 @@ export class InvestorDashboard implements OnInit {
   }
 
   onDownload(plan: IPlanRecord) {
-    this.planStore.downloadPlan(plan.id).pipe(take(1)).subscribe({
-      error: (error) => {
-        console.error('Error downloading plan:', error);
-      }
-    });
+    this.planStore
+      .downloadPlan(plan.id)
+      .pipe(take(1))
+      .subscribe({
+        error: (error) => {
+          console.error('Error downloading plan:', error);
+        },
+      });
   }
 
   onViewTimeline(plan: IPlanRecord) {
@@ -198,8 +250,7 @@ export class InvestorDashboard implements OnInit {
     this.planTermsAndConditionsDialogVisibility.set(true);
   }
 
-  resetProductLocalizationPlanWizard() {
-    console.log('resetProductLocalizationPlanWizard');
+  resetPlanWizard() {
     this.planStore.resetWizardState();
   }
 }

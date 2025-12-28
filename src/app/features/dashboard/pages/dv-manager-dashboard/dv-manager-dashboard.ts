@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
@@ -7,7 +15,13 @@ import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { EEmployeePlanStatus, IPlanRecord, ITableHeaderItem, TColors, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import {
+  EEmployeePlanStatus,
+  IPlanRecord,
+  ITableHeaderItem,
+  TColors,
+  TPlansSortingKeys,
+} from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
@@ -18,9 +32,10 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { AssignReassignManualEmployee } from 'src/app/features/plans/components/assign-reassign-manual-employee/assign-reassign-manual-employee';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
-import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
+import { TimelineDialog } from 'src/app/shared/components/timeline/timeline-dialog/timeline-dialog';
 import { EmployeePlanStatusMapper } from '../../classes/employee-plan-status.mapper';
-import { BaseTagComponent } from "src/app/shared/components/base-components/base-tag/base-tag.component";
+import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
+import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 
 @Component({
   selector: 'app-dv-manager-dashboard',
@@ -39,7 +54,8 @@ import { BaseTagComponent } from "src/app/shared/components/base-components/base
     AssignReassignManualEmployee,
     ProductLocalizationPlanWizard,
     TimelineDialog,
-    BaseTagComponent
+    BaseTagComponent,
+    ServiceLocalizationPlanWizard,
   ],
   templateUrl: './dv-manager-dashboard.html',
   styleUrl: './dv-manager-dashboard.scss',
@@ -48,6 +64,7 @@ import { BaseTagComponent } from "src/app/shared/components/base-components/base
 })
 export class DvManagerDashboard {
   productLocalizationPlanWizardVisibility = signal(false);
+  serviceLocalizationPlanWizardVisibility = signal(false);
 
   EEmployeePlanStatus = EEmployeePlanStatus;
 
@@ -65,13 +82,41 @@ export class DvManagerDashboard {
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
     this.i18nService.currentLanguage();
     return [
-      { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
-      { label: this.i18nService.translate('plans.table.investorName'), isSortable: true, sortingKey: 'investorName' },
-      { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'planType' },
-      { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
-      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
-      { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
+      {
+        label: this.i18nService.translate('plans.table.planId'),
+        isSortable: true,
+        sortingKey: 'planCode',
+      },
+      {
+        label: this.i18nService.translate('plans.table.investorName'),
+        isSortable: true,
+        sortingKey: 'investorName',
+      },
+      {
+        label: this.i18nService.translate('plans.table.planTitle'),
+        isSortable: false,
+        sortingKey: 'title',
+      },
+      {
+        label: this.i18nService.translate('plans.table.planType'),
+        isSortable: false,
+        sortingKey: 'planType',
+      },
+      {
+        label: this.i18nService.translate('plans.table.submissionDate'),
+        isSortable: true,
+        sortingKey: 'submissionDate',
+      },
+      {
+        label: this.i18nService.translate('plans.table.slaCountdown'),
+        isSortable: true,
+        sortingKey: 'slaCountDown',
+      },
+      {
+        label: this.i18nService.translate('plans.table.currentStatus'),
+        isSortable: false,
+        sortingKey: 'status',
+      },
       { label: this.i18nService.translate('plans.table.actions'), isSortable: false },
     ];
   });
@@ -80,7 +125,9 @@ export class DvManagerDashboard {
   readonly totalRecords = computed(() => this.dashboardPlansStore.count());
   readonly isLoading = computed(() => this.dashboardPlansStore.loading());
   readonly statistics = computed(() => this.dashboardPlansStore.statistics());
-  readonly isStatisticsLoading = computed(() => this.dashboardPlansStore.loading() || this.statistics() === null);
+  readonly isStatisticsLoading = computed(
+    () => this.dashboardPlansStore.loading() || this.statistics() === null
+  );
 
   onUserReadAndApproved() {
     this.planStore.resetNewPlanOpportunityType();
@@ -88,7 +135,10 @@ export class DvManagerDashboard {
 
   onUserConfirmNewPlanDialog() {
     this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
-    if (this.newPlanOpportunityType() && this.newPlanOpportunityType()! === EOpportunityType.PRODUCT) {
+    if (
+      this.newPlanOpportunityType() &&
+      this.newPlanOpportunityType()! === EOpportunityType.PRODUCT
+    ) {
       // Creating new plan from scratch - clear applied opportunity
       this.planStore.resetAppliedOpportunity();
       // Reset mode and plan ID for new plan
@@ -113,21 +163,26 @@ export class DvManagerDashboard {
     return this.employeePlanStatusMapper.getStatusBadgeColor(status);
   }
 
-
   onViewDetails(plan: IPlanRecord) {
     // Set mode to view and plan ID
     this.planStore.setWizardMode('view');
     this.planStore.setSelectedPlanId(plan.id);
     this.planStore.setPlanStatus(plan.status);
-    this.productLocalizationPlanWizardVisibility.set(true);
+
+    plan.planType === EOpportunityType.PRODUCT
+      ? this.productLocalizationPlanWizardVisibility.set(true)
+      : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
   onDownload(plan: IPlanRecord) {
-    this.planStore.downloadPlan(plan.id).pipe(take(1)).subscribe({
-      error: (error) => {
-        console.error('Error downloading plan:', error);
-      }
-    });
+    this.planStore
+      .downloadPlan(plan.id)
+      .pipe(take(1))
+      .subscribe({
+        error: (error) => {
+          console.error('Error downloading plan:', error);
+        },
+      });
   }
 
   applyFilter() {
@@ -155,4 +210,3 @@ export class DvManagerDashboard {
     this.isReassignMode.set(true);
   }
 }
-
