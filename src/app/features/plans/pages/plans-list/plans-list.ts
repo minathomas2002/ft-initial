@@ -21,6 +21,7 @@ export class PlansList implements OnInit {
     submissionDate: '2025-12-31',
     slaCountDown: 10, // days remaining
     status: EInvestorPlanStatus.PENDING,
+    actions: []
   };
   viewAssignDialog = signal<boolean>(false);
 

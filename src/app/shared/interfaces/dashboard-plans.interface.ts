@@ -37,6 +37,7 @@ export interface IPlanRecord {
   submissionDate: string;
   slaCountDown: number; // days remaining
   status: EInvestorPlanStatus | EEmployeePlanStatus;
+  actions: number[];
 }
 
 export type TPlansSortingKeys = keyof IPlanRecord;
