@@ -1,7 +1,6 @@
 <app-base-drawer
   [(visible)]="dialogVisible"
   [title]="'Timeline'"
-  icon="icon-list"
 >
   <app-timeline-skeleton [isLoading]="planStore.isLoading() || !timeLineEvents()">
     @if(timeLineEvents()){
