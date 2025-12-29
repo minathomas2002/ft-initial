@@ -10,7 +10,7 @@ import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
 import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { switchMap, catchError, finalize, of, map } from "rxjs";
+import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
@@ -20,7 +20,7 @@ import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
-import { IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
+import { EEmployeePlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PlanLocalizationStep05Summary } from "../plan-localization-step-05-summary/plan-localization-step-05-summary";
 import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
 import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
@@ -133,7 +133,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
 
   // Computed signals for plan status tag
-  planStatus = computed(() => this.planStore.planStatus());
+  planStatus = signal<EEmployeePlanStatus | null>(null);
   statusLabel = computed(() => {
     const status = this.planStatus();
     if (status === null) return '';
@@ -173,6 +173,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         this.activeStep.set(1);
         this.isSubmitted.set(false);
         this.existingSignature.set(null);
+        this.planStatus.set(null);
 
         // Handle opportunity based on whether user is applying to an opportunity or creating from scratch
         const appliedOpportunity = this.planStore.appliedOpportunity();
@@ -256,6 +257,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       )
       .subscribe((responseBody) => {
         if (responseBody) {
+          this.planStatus.set(responseBody.productPlan.status ?? null);
           this.mapPlanDataToForm(responseBody);
         }
       });

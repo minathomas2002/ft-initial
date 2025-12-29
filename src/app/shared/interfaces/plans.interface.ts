@@ -1,6 +1,6 @@
 import { EOpportunityType, EStatusPlanTimeLine, ETargetedCustomer } from "../enums"
 import { EActionPlanTimeLine } from "../enums/action-plan-timeline.enum"
-import { EInvestorPlanStatus } from "./dashboard-plans.interface"
+import { EEmployeePlanStatus, EInvestorPlanStatus } from "./dashboard-plans.interface"
 
 export interface IProductLocalizationPlanRequest {
   productPlan: ProductPlan
@@ -8,7 +8,9 @@ export interface IProductLocalizationPlanRequest {
 }
 
 export interface ProductPlan {
-  id: string
+  id: string;
+  isDraft?: boolean;
+  status?: EEmployeePlanStatus;
   overviewCompanyInfo: OverviewCompanyInfo
   productPlantOverview: ProductPlantOverview
   valueChainStep: ValueChainStep
