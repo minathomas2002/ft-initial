@@ -538,11 +538,10 @@ export function mapProductPlanResponseToForm(
   // Manufacturing Experience
   if (manufacturingExpForm && productPlan.productPlantOverview?.manufacturingExperience) {
     const mfgExp = productPlan.productPlantOverview.manufacturingExperience;
-    // Set experience range (should be an object with id property or just the id string)
-    if (mfgExp.experienceRange) {
-      const expValue = typeof mfgExp.experienceRange === 'string'
-        ? { id: mfgExp.experienceRange, name: '' }
-        : mfgExp.experienceRange;
+    // Set experience range (should be a string to match option id format)
+    if (mfgExp.experienceRange !== null && mfgExp.experienceRange !== undefined) {
+      // Convert to string to match the option id format (options use id: EExperienceRange.Years_5.toString())
+      const expValue = String(mfgExp.experienceRange);
       // Set value on the nested 'value' control within the productManufacturingExperience FormGroup
       const experienceControl = manufacturingExpForm.get(EMaterialsFormControls.productManufacturingExperience);
       if (experienceControl instanceof FormGroup) {
