@@ -6,6 +6,7 @@
   (onSelect)="onSelectedFiles($event)"
   #fileupload
   [multiple]="multiple()"
+  [disabled]="isViewMode()"
 >
   <!-- Header Slot -->
   <ng-template
@@ -68,9 +69,10 @@
               ></span>
               }
             </div>
-            <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden">
+            <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden flex-1 text-center">
               {{ file.name }}
             </span>
+            @if(!isViewMode()){
             <p-button
               icon="icon-x-close"
               (onClick)="removeUploadedFile(i)"
@@ -78,6 +80,9 @@
               [rounded]="true"
               severity="danger"
             />
+            }@else {
+            <div class="w-[2.5rem]"></div>
+            }
           </div>
           }
         </div>

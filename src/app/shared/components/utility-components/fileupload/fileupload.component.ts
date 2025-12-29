@@ -88,6 +88,11 @@ export class FileuploadComponent {
   clear!: () => void;
 
   clearFiles() {
+    // Don't allow clearing in view mode
+    if (this.isViewMode()) {
+      return;
+    }
+
     this.fileupload()?.clear();
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     (this.fileupload() as any).msgs = []; // hide PrimeNG internal messages
@@ -102,6 +107,11 @@ export class FileuploadComponent {
   }
 
   removeUploadedFile(index: number) {
+    // Don't allow removal in view mode
+    if (this.isViewMode()) {
+      return;
+    }
+
     // Remove from your custom model
     const currentFiles = this.files().slice();
     currentFiles.splice(index, 1);
