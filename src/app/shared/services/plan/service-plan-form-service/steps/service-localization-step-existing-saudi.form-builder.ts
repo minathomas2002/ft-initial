@@ -137,11 +137,11 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach(yearControl => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0)]], // Required, Integer only
       });
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]], // Required, Percentage 0-100
       });
     });
 
@@ -166,15 +166,15 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(150)]],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(150)]], // Read-only, auto-populated from Step 1
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.maxLength(50)]],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(50)]], // Required, Quarter & Year
       }),
     };
 
-    // Add year columns 5 years for Saudization %
+    // Add year columns (5 years) for Expected Annual Headcount and Saudization %
     const yearControls = [
       EMaterialsFormControls.firstYear,
       EMaterialsFormControls.secondYear,
@@ -184,20 +184,28 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     ];
 
     yearControls.forEach(yearControl => {
+      // Expected Annual Headcount (required, integer only)
+      itemGroup[`${yearControl}_headcount`] = this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0)]], // Required, Integer only
+      });
+      // Y-o-Y Expected Saudization % (required, 0-100%)
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]], // Required, Percentage 0-100
       });
     });
 
-    itemGroup[EMaterialsFormControls.keyRoadblocksPains] = this.fb.group({
+    // Key Measures to Upskill Saudis (required)
+    itemGroup[EMaterialsFormControls.keyMeasuresToUpskillSaudis] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
-      [EMaterialsFormControls.value]: ['', [Validators.maxLength(1000)]],
+      [EMaterialsFormControls.value]: ['', [Validators.required]], // Required, Description of training/hiring plans
     });
 
+    // Mention Support Required from SEC (optional)
     itemGroup[EMaterialsFormControls.supportRequiredFromSECGDC] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
-      [EMaterialsFormControls.value]: ['', [Validators.maxLength(500)]],
+      [EMaterialsFormControls.value]: ['', [Validators.maxLength(500)]], // Optional, Max 500
     });
 
     return this.fb.group(itemGroup);

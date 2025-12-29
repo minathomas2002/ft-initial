@@ -171,8 +171,19 @@ export enum EMaterialsFormControls {
   serviceLevelFormGroup = 'serviceLevelFormGroup',
   keyRoadblocksPains = 'keyRoadblocksPains',
   supportRequiredFromSECGDC = 'supportRequiredFromSECGDC',
+  keyMeasuresToUpskillSaudis = 'keyMeasuresToUpskillSaudis',
 
   // Service Plan - Step 4 (Direct Localization) - Main Form Groups
   directLocalizationFormGroup = 'directLocalizationFormGroup',
+  localizationStrategyFormGroup = 'localizationStrategyFormGroup',
+
+  // Service Plan - Step 4 (Direct Localization) - Localization Strategy Controls
+  localizationApproach = 'localizationApproach',
+  localizationApproachOtherDetails = 'localizationApproachOtherDetails',
+  location = 'location',
+  locationOtherDetails = 'locationOtherDetails',
+  capexRequired = 'capexRequired',
+  willBeAnyProprietaryToolsSystems = 'willBeAnyProprietaryToolsSystems',
+  proprietaryToolsSystemsDetails = 'proprietaryToolsSystemsDetails',
 }
 

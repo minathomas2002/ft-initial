@@ -232,6 +232,18 @@ export class ServicePlanFormService {
     this._step4Builder.removeServiceLevelItem(this._step4FormGroup, index);
   }
 
+  toggleLocalizationApproachOtherDetailsValidation(localizationApproach: string | null, index: number): void {
+    this._step4Builder.toggleLocalizationApproachOtherDetailsValidation(this._step4FormGroup, localizationApproach, index);
+  }
+
+  toggleLocationOtherDetailsValidation(location: string | null, index: number): void {
+    this._step4Builder.toggleLocationOtherDetailsValidation(this._step4FormGroup, location, index);
+  }
+
+  toggleProprietaryToolsSystemsDetailsValidation(willBeAnyProprietaryToolsSystems: string | boolean | null, index: number): void {
+    this._step4Builder.toggleProprietaryToolsSystemsDetailsValidation(this._step4FormGroup, willBeAnyProprietaryToolsSystems, index);
+  }
+
   // Helper methods
   getHasCommentControl(formGroup: AbstractControl): FormControl<boolean> {
     if (formGroup instanceof FormGroup) {

@@ -27,11 +27,11 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     yearControls.forEach(yearControl => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0)]], // Required, Integer only
       });
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]], // Required, Percentage 0-100
       });
     });
 
@@ -56,38 +56,78 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(150)]], // Auto-populated, dimmed
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.maxLength(50)]],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(50)]], // Required, quarters and years only, future date
+      }),
+      [EMaterialsFormControls.localizationApproach]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required dropdown
+      }),
+      [EMaterialsFormControls.localizationApproachOtherDetails]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(250)]], // Conditional - if "Other"
+      }),
+      [EMaterialsFormControls.location]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required dropdown
+      }),
+      [EMaterialsFormControls.locationOtherDetails]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255)]], // Conditional - if "Other"
+      }),
+      [EMaterialsFormControls.capexRequired]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, numeric only
+      }),
+      [EMaterialsFormControls.supervisionOversightEntity]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255)]], // Optional
+      }),
+      [EMaterialsFormControls.willBeAnyProprietaryToolsSystems]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required dropdown Yes/No
+      }),
+      [EMaterialsFormControls.proprietaryToolsSystemsDetails]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255)]], // Conditional - if "Yes"
       }),
     };
 
-    // Add year columns (2025-2030) for Saudization %
+    // Add year columns (5 years) for Expected Annual Headcount and Saudization %
     const yearControls = [
-      EMaterialsFormControls.fifthYear,
+      EMaterialsFormControls.firstYear,
       EMaterialsFormControls.secondYear,
       EMaterialsFormControls.thirdYear,
       EMaterialsFormControls.fourthYear,
-      EMaterialsFormControls.firstYear,
+      EMaterialsFormControls.fifthYear,
     ];
 
     yearControls.forEach(yearControl => {
+      // Expected Annual Headcount (required, integer only)
+      itemGroup[`${yearControl}_headcount`] = this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0)]], // Required, Integer only
+      });
+      // Y-o-Y Expected Saudization % (required, 0-100%)
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]], // Required, Percentage 0-100
       });
     });
 
-    itemGroup[EMaterialsFormControls.keyRoadblocksPains] = this.fb.group({
+    // Key Measures to Upskill Saudis (required)
+    itemGroup[EMaterialsFormControls.keyMeasuresToUpskillSaudis] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
-      [EMaterialsFormControls.value]: ['', [Validators.maxLength(1000)]],
+      [EMaterialsFormControls.value]: ['', [Validators.required]], // Required, Description of training/hiring plans
     });
 
+    // Mention Support Required from SEC (optional)
     itemGroup[EMaterialsFormControls.supportRequiredFromSECGDC] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
-      [EMaterialsFormControls.value]: ['', [Validators.maxLength(500)]],
+      [EMaterialsFormControls.value]: ['', [Validators.maxLength(500)]], // Optional, Max 500
     });
 
     return this.fb.group(itemGroup);
@@ -188,6 +228,76 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       array.clear();
       array.push(this.createServiceLevelItem());
     }
+  }
+
+  /**
+   * Toggle validation for Localization Approach Other Details field based on localizationApproach value
+   * Required if "Other" is selected
+   */
+  toggleLocalizationApproachOtherDetailsValidation(formGroup: FormGroup, localizationApproach: string | null, index: number): void {
+    const array = this.getServiceLevelFormArray(formGroup);
+    if (!array || index >= array.length) return;
+
+    const itemFormGroup = array.at(index) as FormGroup;
+    const otherDetailsControl = itemFormGroup.get(`${EMaterialsFormControls.localizationApproachOtherDetails}.${EMaterialsFormControls.value}`);
+
+    if (!otherDetailsControl) return;
+
+    if (localizationApproach === 'Other') {
+      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(250)]);
+    } else {
+      otherDetailsControl.clearValidators();
+      otherDetailsControl.reset();
+    }
+
+    otherDetailsControl.updateValueAndValidity();
+  }
+
+  /**
+   * Toggle validation for Location Other Details field based on location value
+   * Required if "Other" is selected
+   */
+  toggleLocationOtherDetailsValidation(formGroup: FormGroup, location: string | null, index: number): void {
+    const array = this.getServiceLevelFormArray(formGroup);
+    if (!array || index >= array.length) return;
+
+    const itemFormGroup = array.at(index) as FormGroup;
+    const otherDetailsControl = itemFormGroup.get(`${EMaterialsFormControls.locationOtherDetails}.${EMaterialsFormControls.value}`);
+
+    if (!otherDetailsControl) return;
+
+    if (location === 'Other') {
+      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
+    } else {
+      otherDetailsControl.clearValidators();
+      otherDetailsControl.reset();
+    }
+
+    otherDetailsControl.updateValueAndValidity();
+  }
+
+  /**
+   * Toggle validation for Proprietary Tools/Systems Details field based on willBeAnyProprietaryToolsSystems value
+   * Required if "Yes" is selected
+   */
+  toggleProprietaryToolsSystemsDetailsValidation(formGroup: FormGroup, willBeAnyProprietaryToolsSystems: string | boolean | null, index: number): void {
+    const array = this.getServiceLevelFormArray(formGroup);
+    if (!array || index >= array.length) return;
+
+    const itemFormGroup = array.at(index) as FormGroup;
+    const detailsControl = itemFormGroup.get(`${EMaterialsFormControls.proprietaryToolsSystemsDetails}.${EMaterialsFormControls.value}`);
+
+    if (!detailsControl) return;
+
+    const isYes = willBeAnyProprietaryToolsSystems === 'Yes' || willBeAnyProprietaryToolsSystems === true || willBeAnyProprietaryToolsSystems === 'true';
+    if (isYes) {
+      detailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
+    } else {
+      detailsControl.clearValidators();
+      detailsControl.reset();
+    }
+
+    detailsControl.updateValueAndValidity();
   }
 }
 
