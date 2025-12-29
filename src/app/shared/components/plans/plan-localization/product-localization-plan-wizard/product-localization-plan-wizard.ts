@@ -20,7 +20,7 @@ import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
-import { EEmployeePlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
+import { EEmployeePlanStatus, EInvestorPlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PlanLocalizationStep05Summary } from "../plan-localization-step-05-summary/plan-localization-step-05-summary";
 import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
 import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
@@ -66,6 +66,11 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Mode and plan ID from store
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
+  timelineVisibality = computed(()=>{
+  
+    
+    return (this.visibility() && this.mode() == 'view' && this.planStatus() !== null)
+  })
 
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());

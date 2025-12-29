@@ -332,7 +332,7 @@
           </app-group-input-with-checkbox>
           <!-- Character Counter -->
           <div class="text-xs text-gray-500 text-right mt-1">
-            {{ getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]).value?.length || 0 }} / 500
+            {{ getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]).value?.length || 0 }} / 255
           </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
@@ -358,7 +358,7 @@
           </app-group-input-with-checkbox>
           <!-- Character Counter -->
           <div class="text-xs text-gray-500 text-right mt-1">
-            {{ getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]).value?.length || 0 }} / 500
+            {{ getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]).value?.length || 0 }} / 255
           </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
