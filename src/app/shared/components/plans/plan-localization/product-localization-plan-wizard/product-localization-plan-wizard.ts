@@ -136,7 +136,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   planStatus = signal<EEmployeePlanStatus | null>(null);
   statusLabel = computed(() => {
     const status = this.planStatus();
-    if (status === null) return '';
+    if (status === null) return 'Draft';
     const statusService = this.planStatusFactory.handleValidateStatus();
     return statusService.getStatusLabel(status);
   });
@@ -149,7 +149,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   shouldShowStatusTag = computed(() => {
     const mode = this.planStore.wizardMode();
     const status = this.planStatus();
-    return (mode === 'view' || mode === 'edit') && status !== null;
+    return (mode === 'view' || mode === 'edit');
   });
 
   constructor() {
