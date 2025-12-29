@@ -39,7 +39,11 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(50)]),
+        [EMaterialsFormControls.value]: this.fb.control(''), // Optional, disabled, auto-filled
+      }),
+      [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]), // Required, disabled, auto-filled
       }),
       [EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]: this.fb.control(null, [Validators.required]),
     });
@@ -47,6 +51,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
 
   buildLocalAgentInformationFormGroup(): FormGroup {
     return this.fb.group({
+      [EMaterialsFormControls.localAgentDetails]: this.fb.control(''), // Text area, conditional
       [EMaterialsFormControls.localAgentName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(''),
@@ -63,9 +68,9 @@ export class ServiceLocalizationStepOverviewFormBuilder {
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(''),
       }),
-      [EMaterialsFormControls.companyHQLocation]: this.fb.group({
+      [EMaterialsFormControls.companyLocation]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]), // Required, not conditional
       }),
     });
   }
@@ -78,7 +83,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),
       }),
       [EMaterialsFormControls.serviceType]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -90,11 +95,11 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.serviceDescription]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(500)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
       }),
       [EMaterialsFormControls.serviceProvidedTo]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]),
       }),
       [EMaterialsFormControls.serviceProvidedToCompanyNames]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -102,11 +107,11 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.totalBusinessDoneLast5Years]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(500)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),
       }),
       [EMaterialsFormControls.serviceTargetedForLocalization]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]),
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -114,7 +119,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.serviceLocalizationMethodology]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]),
       }),
     });
   }
@@ -187,29 +192,88 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     }
 
     if (value) {
+      // Text area for local agent details (conditional)
+      const localAgentDetailsControl = localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails);
+      if (localAgentDetailsControl) {
+        localAgentDetailsControl.addValidators([Validators.required]);
+      }
+
+      // Individual fields (conditional)
       (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100)]);
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100)]);
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.email]);
       (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, phoneNumberPatternValidator(), Validators.maxLength(15)]);
-      (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(255)]);
     } else {
+      // Reset and clear validators for conditional fields
+      const localAgentDetailsControl = localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails);
+      if (localAgentDetailsControl) {
+        localAgentDetailsControl.reset();
+        localAgentDetailsControl.clearValidators();
+        localAgentDetailsControl.updateValueAndValidity();
+      }
+
       (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].reset();
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].reset();
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].reset();
       (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].reset();
-      (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].reset();
       (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
       (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
-      (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
     }
 
+    // Update validity for conditional fields
     (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
     (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
     (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
     (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
-    (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
+  }
+
+  /**
+   * Toggle validation for Service Provided To Company Names field based on serviceProvidedTo value
+   * Required if "Others" is selected
+   */
+  toggleServiceProvidedToCompanyNamesValidation(formGroup: FormGroup, serviceProvidedTo: string | null, index: number): void {
+    const serviceDetailsArray = this.getServiceDetailsFormArray(formGroup);
+    if (!serviceDetailsArray || index >= serviceDetailsArray.length) return;
+
+    const itemFormGroup = serviceDetailsArray.at(index) as FormGroup;
+    const companyNamesControl = itemFormGroup.get(`${EMaterialsFormControls.serviceProvidedToCompanyNames}.${EMaterialsFormControls.value}`);
+
+    if (!companyNamesControl) return;
+
+    if (serviceProvidedTo === 'Others') {
+      companyNamesControl.setValidators([Validators.required, Validators.maxLength(255)]);
+    } else {
+      companyNamesControl.clearValidators();
+      companyNamesControl.reset();
+    }
+
+    companyNamesControl.updateValueAndValidity();
+  }
+
+  /**
+   * Toggle validation for Expected Localization Date field based on serviceTargetedForLocalization value
+   * Required if "Yes" is selected
+   */
+  toggleExpectedLocalizationDateValidation(formGroup: FormGroup, serviceTargetedForLocalization: string | boolean | null, index: number): void {
+    const serviceDetailsArray = this.getServiceDetailsFormArray(formGroup);
+    if (!serviceDetailsArray || index >= serviceDetailsArray.length) return;
+
+    const itemFormGroup = serviceDetailsArray.at(index) as FormGroup;
+    const expectedDateControl = itemFormGroup.get(`${EMaterialsFormControls.expectedLocalizationDate}.${EMaterialsFormControls.value}`);
+
+    if (!expectedDateControl) return;
+
+    const isYes = serviceTargetedForLocalization === 'Yes' || serviceTargetedForLocalization === true || serviceTargetedForLocalization === 'true';
+    if (isYes) {
+      expectedDateControl.setValidators([Validators.required, Validators.maxLength(50)]);
+    } else {
+      expectedDateControl.clearValidators();
+      expectedDateControl.reset();
+    }
+
+    expectedDateControl.updateValueAndValidity();
   }
 }
 

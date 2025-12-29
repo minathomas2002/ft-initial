@@ -24,14 +24,17 @@ export enum EMaterialsFormControls {
   // Location Information Controls
   globalHQLocation = 'globalHQLocation',
   registeredVendorIDwithSEC = 'registeredVendorIDwithSEC',
+  benaRegisteredVendorID = 'benaRegisteredVendorID',
   doYouCurrentlyHaveLocalAgentInKSA = 'doYouCurrentlyHaveLocalAgentInKSA',
 
   // Local Agent Information Controls
+  localAgentDetails = 'localAgentDetails',
   localAgentName = 'localAgentName',
   contactPersonName = 'contactPersonName',
   emailID = 'emailID',
   contactNumber = 'contactNumber',
-  companyHQLocation = 'companyHQLocation',
+  companyLocation = 'companyLocation',
+  companyHQLocation = 'companyHQLocation', // Keep for backward compatibility
 
   // Common nested controls (used in group-input-with-checkbox pattern)
   hasComment = 'hasComment',

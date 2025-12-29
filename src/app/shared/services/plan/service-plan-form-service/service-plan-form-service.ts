@@ -130,6 +130,14 @@ export class ServicePlanFormService {
     this._step2Builder.removeServiceDetailItem(this._step2FormGroup, index);
   }
 
+  toggleServiceProvidedToCompanyNamesValidation(serviceProvidedTo: string | null, index: number): void {
+    this._step2Builder.toggleServiceProvidedToCompanyNamesValidation(this._step2FormGroup, serviceProvidedTo, index);
+  }
+
+  toggleExpectedLocalizationDateValidation(serviceTargetedForLocalization: string | boolean | null, index: number): void {
+    this._step2Builder.toggleExpectedLocalizationDateValidation(this._step2FormGroup, serviceTargetedForLocalization, index);
+  }
+
   // Step 3 methods
   createSaudiCompanyDetailItem(): FormGroup {
     return this._step3Builder.createSaudiCompanyDetailItem();
