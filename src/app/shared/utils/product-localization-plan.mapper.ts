@@ -1,5 +1,5 @@
 import { FormGroup, FormArray } from '@angular/forms';
-import { ProductPlanFormService } from '../services/plan/materials-form-service/product-plan-form-service';
+import { ProductPlanFormService } from '../services/plan/product-plan-form-service/product-plan-form-service';
 import {
   IProductLocalizationPlanRequest,
   IProductPlanResponse,

@@ -106,5 +106,66 @@ export enum EMaterialsFormControls {
 
   // Step 4 - Attachments Controls
   attachments = 'attachments',
+
+  // Service Plan - Step 1 (Cover Page) - Main Form Groups
+  coverPageFormGroup = 'coverPageFormGroup',
+  coverPageCompanyInformationFormGroup = 'coverPageCompanyInformationFormGroup',
+  servicesFormGroup = 'servicesFormGroup',
+
+  // Service Plan - Step 1 (Cover Page) - Controls
+  serviceName = 'serviceName',
+
+  // Service Plan - Step 2 (Overview) - Main Form Groups
+  overviewCompanyInformationFormGroup = 'overviewCompanyInformationFormGroup',
+  serviceDetailsFormGroup = 'serviceDetailsFormGroup',
+
+  // Service Plan - Step 2 (Overview) - Service Details Controls
+  serviceType = 'serviceType',
+  serviceCategory = 'serviceCategory',
+  serviceDescription = 'serviceDescription',
+  serviceProvidedTo = 'serviceProvidedTo',
+  serviceProvidedToCompanyNames = 'serviceProvidedToCompanyNames',
+  totalBusinessDoneLast5Years = 'totalBusinessDoneLast5Years',
+  serviceTargetedForLocalization = 'serviceTargetedForLocalization',
+  expectedLocalizationDate = 'expectedLocalizationDate',
+  serviceLocalizationMethodology = 'serviceLocalizationMethodology',
+
+  // Service Plan - Step 3 (Existing Saudi Co.) - Main Form Groups
+  existingSaudiFormGroup = 'existingSaudiFormGroup',
+  saudiCompanyDetailsFormGroup = 'saudiCompanyDetailsFormGroup',
+  collaborationPartnershipFormGroup = 'collaborationPartnershipFormGroup',
+  entityLevelFormGroup = 'entityLevelFormGroup',
+
+  // Service Plan - Step 3 (Existing Saudi Co.) - Saudi Company Controls
+  saudiCompanyName = 'saudiCompanyName',
+  companyType = 'companyType',
+  qualificationStatus = 'qualificationStatus',
+  products = 'products',
+  companyOverview = 'companyOverview',
+
+  // Service Plan - Step 3 (Existing Saudi Co.) - Collaboration/Partnership Controls
+  agreementType = 'agreementType',
+  agreementOtherDetails = 'agreementOtherDetails',
+  agreementSigningDate = 'agreementSigningDate',
+  supervisionOversightEntity = 'supervisionOversightEntity',
+  whyChoseThisCompany = 'whyChoseThisCompany',
+  summaryOfKeyAgreementClauses = 'summaryOfKeyAgreementClauses',
+  agreementCopy = 'agreementCopy',
+
+  // Service Plan - Step 3 & 4 - Entity Level Controls
+  expectedAnnualHeadcount = 'expectedAnnualHeadcount',
+  firstYear = 'firstYear',
+  secondYear = 'secondYear',
+  thirdYear = 'thirdYear',
+  fourthYear = 'fourthYear',
+  fifthYear = 'fifthYear',
+
+  // Service Plan - Step 3 & 4 - Service Level Controls
+  serviceLevelFormGroup = 'serviceLevelFormGroup',
+  keyRoadblocksPains = 'keyRoadblocksPains',
+  supportRequiredFromSECGDC = 'supportRequiredFromSECGDC',
+
+  // Service Plan - Step 4 (Direct Localization) - Main Form Groups
+  directLocalizationFormGroup = 'directLocalizationFormGroup',
 }
 

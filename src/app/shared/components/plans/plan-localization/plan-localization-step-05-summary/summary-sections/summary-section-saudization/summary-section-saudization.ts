@@ -4,7 +4,7 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
 import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { CommonModule } from '@angular/common';
-import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { SummaryTableCell } from '../../shared/summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';

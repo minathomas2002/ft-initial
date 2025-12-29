@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { SaudizationMatrixComponent } from './saudization-matrix/saudization-matrix.component';
 import { BaseErrorMessages } from '../../../base-components/base-error-messages/base-error-messages';
