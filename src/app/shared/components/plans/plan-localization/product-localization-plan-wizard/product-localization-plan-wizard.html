@@ -57,7 +57,7 @@
   </ng-container>
 
   <ng-container ngProjectAs="more-actions">
-    @if(timelineVisibality()){
+    @if(canOpenTimeline()){
     <p> {{this.selectedPlan()?.id}}</p>
     <p-button
       [label]="'Timeline'"

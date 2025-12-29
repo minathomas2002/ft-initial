@@ -66,7 +66,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Mode and plan ID from store
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
-  timelineVisibality = computed(()=>{
+  canOpenTimeline = computed(() => {
     return (this.visibility() && this.mode() == 'view' && this.planStatus() !== null)
   })
 
