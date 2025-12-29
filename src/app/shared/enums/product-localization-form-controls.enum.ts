@@ -145,6 +145,10 @@ export enum EMaterialsFormControls {
   qualificationStatus = 'qualificationStatus',
   products = 'products',
   companyOverview = 'companyOverview',
+  keyProjectsExecutedByContractorForSEC = 'keyProjectsExecutedByContractorForSEC',
+  companyOverviewKeyProjectDetails = 'companyOverviewKeyProjectDetails',
+  companyOverviewOther = 'companyOverviewOther',
+  provideAgreementCopy = 'provideAgreementCopy',
 
   // Service Plan - Step 3 (Existing Saudi Co.) - Collaboration/Partnership Controls
   agreementType = 'agreementType',

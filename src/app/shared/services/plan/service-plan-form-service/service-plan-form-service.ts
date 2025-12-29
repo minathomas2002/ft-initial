@@ -187,16 +187,24 @@ export class ServicePlanFormService {
     this._step3Builder.removeServiceLevelItem(this._step3FormGroup, index);
   }
 
-  toggleProductsValidation(qualificationStatus: string | null, index: number): void {
-    this._step3Builder.toggleProductsValidation(this._step3FormGroup, qualificationStatus, index);
+  toggleCompanyTypeFieldsValidation(companyTypes: string[], index: number): void {
+    this._step3Builder.toggleCompanyTypeFieldsValidation(this._step3FormGroup, companyTypes, index);
   }
 
-  toggleCompanyOverviewValidation(qualificationStatus: string | null, index: number): void {
-    this._step3Builder.toggleCompanyOverviewValidation(this._step3FormGroup, qualificationStatus, index);
+  toggleProductsValidation(companyTypes: string[], qualificationStatus: string | null, index: number): void {
+    this._step3Builder.toggleProductsValidation(this._step3FormGroup, companyTypes, qualificationStatus, index);
+  }
+
+  toggleCompanyOverviewValidation(companyTypes: string[], qualificationStatus: string | null, index: number): void {
+    this._step3Builder.toggleCompanyOverviewValidation(this._step3FormGroup, companyTypes, qualificationStatus, index);
   }
 
   toggleAgreementOtherDetailsValidation(agreementType: string | null, index: number): void {
     this._step3Builder.toggleAgreementOtherDetailsValidation(this._step3FormGroup, agreementType, index);
+  }
+
+  toggleAgreementCopyValidation(provideAgreementCopy: string | boolean | null, index: number): void {
+    this._step3Builder.toggleAgreementCopyValidation(this._step3FormGroup, provideAgreementCopy, index);
   }
 
   // Step 4 methods

@@ -18,23 +18,39 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(50)]),
+        [EMaterialsFormControls.value]: this.fb.control(''), // Optional, auto-filled, dimmed
+      }),
+      [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]), // Required, auto-filled, dimmed
       }),
       [EMaterialsFormControls.companyType]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]),
+        [EMaterialsFormControls.value]: this.fb.control([], [Validators.required]), // Multi-select array
       }),
       [EMaterialsFormControls.qualificationStatus]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]),
+        [EMaterialsFormControls.value]: this.fb.control(null), // Conditional - only if Manufacturer selected
       }),
       [EMaterialsFormControls.products]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Manufacturer + Qualified/Under Pre-Qualification
       }),
       [EMaterialsFormControls.companyOverview]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(500)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Manufacturer + Not Qualified
+      }),
+      [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Contractor
+      }),
+      [EMaterialsFormControls.companyOverviewKeyProjectDetails]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Contractor
+      }),
+      [EMaterialsFormControls.companyOverviewOther]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Other
       }),
     });
   }
@@ -61,27 +77,31 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.agreementOtherDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(500)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(100)]), // Conditional - required if "Other"
       }),
       [EMaterialsFormControls.agreementSigningDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]), // Required, quarters and years only
       }),
       [EMaterialsFormControls.supervisionOversightEntity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(100)]), // Optional
       }),
       [EMaterialsFormControls.whyChoseThisCompany]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(500)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
       }),
       [EMaterialsFormControls.summaryOfKeyAgreementClauses]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(1000)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
+      }),
+      [EMaterialsFormControls.provideAgreementCopy]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]), // Dropdown Yes/No, required
       }),
       [EMaterialsFormControls.agreementCopy]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null), // File upload - optional
+        [EMaterialsFormControls.value]: this.fb.control(null), // File upload - conditional if provideAgreementCopy is Yes
       }),
     });
   }
@@ -146,7 +166,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(150)]],
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -334,10 +354,77 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
   }
 
   /**
-   * Toggle validation for Products field based on qualification status
-   * If qualified or under pre-qualification, Products is required
+   * Toggle validation and visibility for fields based on Company Type
+   * Company Type is multi-select, so we need to check if specific types are selected
    */
-  toggleProductsValidation(formGroup: FormGroup, qualificationStatus: string | null, index: number): void {
+  toggleCompanyTypeFieldsValidation(formGroup: FormGroup, companyTypes: string[], index: number): void {
+    const array = this.getSaudiCompanyDetailsFormArray(formGroup);
+    if (!array || index >= array.length) return;
+
+    const itemFormGroup = array.at(index) as FormGroup;
+    const hasManufacturer = companyTypes.includes('Manufacturer');
+    const hasContractor = companyTypes.includes('Contractor');
+    const hasOther = companyTypes.includes('Other');
+
+    // Qualification Status - only available if Manufacturer is selected
+    const qualificationStatusControl = itemFormGroup.get(`${EMaterialsFormControls.qualificationStatus}.${EMaterialsFormControls.value}`);
+    if (qualificationStatusControl) {
+      if (hasManufacturer) {
+        qualificationStatusControl.setValidators([Validators.required]);
+      } else {
+        qualificationStatusControl.clearValidators();
+        qualificationStatusControl.reset();
+      }
+      qualificationStatusControl.updateValueAndValidity();
+    }
+
+    // Products - only if Manufacturer + (Qualified or Under Pre-Qualification)
+    // This will be handled separately by toggleProductsValidation
+
+    // Company Overview (Manufacturer + Not Qualified) - handled separately
+
+    // Key Projects Executed by Contractor - only if Contractor is selected
+    const keyProjectsControl = itemFormGroup.get(`${EMaterialsFormControls.keyProjectsExecutedByContractorForSEC}.${EMaterialsFormControls.value}`);
+    if (keyProjectsControl) {
+      if (hasContractor) {
+        keyProjectsControl.setValidators([Validators.maxLength(255)]);
+      } else {
+        keyProjectsControl.clearValidators();
+        keyProjectsControl.reset();
+      }
+      keyProjectsControl.updateValueAndValidity();
+    }
+
+    // Company Overview Key Project Details - only if Contractor is selected
+    const companyOverviewKeyProjectControl = itemFormGroup.get(`${EMaterialsFormControls.companyOverviewKeyProjectDetails}.${EMaterialsFormControls.value}`);
+    if (companyOverviewKeyProjectControl) {
+      if (hasContractor) {
+        companyOverviewKeyProjectControl.setValidators([Validators.maxLength(255)]);
+      } else {
+        companyOverviewKeyProjectControl.clearValidators();
+        companyOverviewKeyProjectControl.reset();
+      }
+      companyOverviewKeyProjectControl.updateValueAndValidity();
+    }
+
+    // Company Overview Other - only if Other is selected
+    const companyOverviewOtherControl = itemFormGroup.get(`${EMaterialsFormControls.companyOverviewOther}.${EMaterialsFormControls.value}`);
+    if (companyOverviewOtherControl) {
+      if (hasOther) {
+        companyOverviewOtherControl.setValidators([Validators.required, Validators.maxLength(255)]);
+      } else {
+        companyOverviewOtherControl.clearValidators();
+        companyOverviewOtherControl.reset();
+      }
+      companyOverviewOtherControl.updateValueAndValidity();
+    }
+  }
+
+  /**
+   * Toggle validation for Products field based on qualification status
+   * Only available if Company Type includes 'Manufacturer' AND qualification status is 'Qualified' or 'Under Pre-Qualification'
+   */
+  toggleProductsValidation(formGroup: FormGroup, companyTypes: string[], qualificationStatus: string | null, index: number): void {
     const array = this.getSaudiCompanyDetailsFormArray(formGroup);
     if (!array || index >= array.length) return;
 
@@ -346,8 +433,10 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
 
     if (!productsControl) return;
 
-    // Assuming qualification status values: "Qualified" or "Under Pre-Qualification" require products
-    if (qualificationStatus === 'Qualified' || qualificationStatus === 'Under Pre-Qualification') {
+    const hasManufacturer = companyTypes.includes('Manufacturer');
+    const isQualifiedOrPreQualified = qualificationStatus === 'Qualified' || qualificationStatus === 'Under Pre-Qualification';
+
+    if (hasManufacturer && isQualifiedOrPreQualified) {
       productsControl.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       productsControl.clearValidators();
@@ -358,10 +447,10 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
   }
 
   /**
-   * Toggle validation for Company Overview field based on qualification status
-   * If not qualified, Company Overview is required
+   * Toggle validation for Company Overview field (Manufacturer + Not Qualified)
+   * Only available if Company Type includes 'Manufacturer' AND qualification status is 'Not Qualified'
    */
-  toggleCompanyOverviewValidation(formGroup: FormGroup, qualificationStatus: string | null, index: number): void {
+  toggleCompanyOverviewValidation(formGroup: FormGroup, companyTypes: string[], qualificationStatus: string | null, index: number): void {
     const array = this.getSaudiCompanyDetailsFormArray(formGroup);
     if (!array || index >= array.length) return;
 
@@ -370,8 +459,11 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
 
     if (!companyOverviewControl) return;
 
-    if (qualificationStatus === 'Not Qualified') {
-      companyOverviewControl.setValidators([Validators.required, Validators.maxLength(500)]);
+    const hasManufacturer = companyTypes.includes('Manufacturer');
+    const isNotQualified = qualificationStatus === 'Not Qualified';
+
+    if (hasManufacturer && isNotQualified) {
+      companyOverviewControl.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       companyOverviewControl.clearValidators();
       companyOverviewControl.reset();
@@ -394,13 +486,37 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     if (!otherDetailsControl) return;
 
     if (agreementType === 'Other') {
-      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(500)]);
+      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(100)]);
     } else {
       otherDetailsControl.clearValidators();
       otherDetailsControl.reset();
     }
 
     otherDetailsControl.updateValueAndValidity();
+  }
+
+  /**
+   * Toggle validation for Agreement Copy file upload based on provideAgreementCopy value
+   * Required if provideAgreementCopy is "Yes"
+   */
+  toggleAgreementCopyValidation(formGroup: FormGroup, provideAgreementCopy: string | boolean | null, index: number): void {
+    const array = this.getCollaborationPartnershipFormArray(formGroup);
+    if (!array || index >= array.length) return;
+
+    const itemFormGroup = array.at(index) as FormGroup;
+    const agreementCopyControl = itemFormGroup.get(`${EMaterialsFormControls.agreementCopy}.${EMaterialsFormControls.value}`);
+
+    if (!agreementCopyControl) return;
+
+    const isYes = provideAgreementCopy === 'Yes' || provideAgreementCopy === true || provideAgreementCopy === 'true';
+    if (isYes) {
+      agreementCopyControl.setValidators([Validators.required]);
+    } else {
+      agreementCopyControl.clearValidators();
+      agreementCopyControl.reset();
+    }
+
+    agreementCopyControl.updateValueAndValidity();
   }
 }
 
