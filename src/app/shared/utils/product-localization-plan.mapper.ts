@@ -78,7 +78,7 @@ function getFormBooleanValue(formGroup: FormGroup | null, controlName: string): 
  */
 function getMimeTypeFromExtension(extension: string | null | undefined): string {
   if (!extension) return 'application/octet-stream';
-  
+
   const ext = extension.toLowerCase().replace('.', '');
   const mimeTypes: Record<string, string> = {
     'pdf': 'application/pdf',
@@ -95,7 +95,7 @@ function getMimeTypeFromExtension(extension: string | null | undefined): string 
     'txt': 'text/plain',
     'csv': 'text/csv',
   };
-  
+
   return mimeTypes[ext] || 'application/octet-stream';
 }
 
@@ -378,18 +378,24 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
     if (attachmentsValue && Array.isArray(attachmentsValue)) {
       attachmentsValue.forEach((file: File | any) => {
         if (file instanceof File) {
-          // New File object - create Attachment object with all required fields
-          // Note: File object will be handled separately in FormData conversion as binary
-          // For now, store File reference - it will be converted during FormData building
+          // File object - could be new file or existing attachment converted to File
+          // Check if it has attachment metadata (from existing attachments)
+          const existingFile = file as any;
+          const attachmentId = existingFile.id || '';
+          const isExistingAttachment = existingFile.isExistingAttachment === true;
+
           const fileName = file.name;
-          const fileExtension = fileName.split('.').pop() ?? '';
+          const fileExtension = existingFile.fileExtension || (fileName.split('.').pop() ?? '');
+          const fileUrl = existingFile.fileUrl || '';
 
           attachments.push({
-            id: '',
+            id: attachmentId, // Preserve ID if it's an existing attachment
             fileName: fileName,
             fileExtension: fileExtension,
-            fileUrl: '',
-            file: file as any as string, // Store File object reference temporarily, will be handled in FormData conversion
+            fileUrl: fileUrl,
+            // For existing attachments without file changes, we might not need to send the file again
+            // But if the file was replaced, we need to send the new File object
+            file: isExistingAttachment && !existingFile.file ? '' : (file as any as string), // Store File object reference temporarily, will be handled in FormData conversion
           } as Attachment);
         } else if (file && typeof file === 'object') {
           // Already processed attachment object (from edit mode or existing attachments)
@@ -745,11 +751,11 @@ export function mapProductPlanResponseToForm(
           // We'll create an empty File object with the correct name and attach metadata
           const fileName = att.fileName + (att.fileExtension || '');
           const fileType = getMimeTypeFromExtension(att.fileExtension);
-          
+
           // Create a File object (empty blob) with the correct name
           const blob = new Blob([], { type: fileType });
           const file = new File([blob], fileName, { type: fileType });
-          
+
           // Construct full file URL if it's a relative path
           let fullFileUrl = att.fileUrl || '';
           if (fullFileUrl && !fullFileUrl.startsWith('http://') && !fullFileUrl.startsWith('https://')) {
@@ -757,13 +763,13 @@ export function mapProductPlanResponseToForm(
             const baseUrl = API_ENDPOINTS.baseUrl.replace('/api', ''); // Remove /api suffix if present
             fullFileUrl = baseUrl + (fullFileUrl.startsWith('/') ? fullFileUrl : '/' + fullFileUrl);
           }
-          
+
           // Attach attachment metadata as additional properties
           (file as any).id = att.id;
           (file as any).fileUrl = fullFileUrl;
           (file as any).fileExtension = att.fileExtension;
           (file as any).isExistingAttachment = true;
-          
+
           return file;
         });
         valueControl.setValue(attachmentFiles);
