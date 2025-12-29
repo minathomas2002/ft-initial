@@ -209,7 +209,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder {
       });
     });
 
-    return total
+    return Number(total.toFixed(2))
   }
 
   /**
