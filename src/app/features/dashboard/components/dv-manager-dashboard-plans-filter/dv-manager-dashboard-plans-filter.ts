@@ -71,22 +71,24 @@ export class DvManagerDashboardPlansFilter implements OnInit {
   }
 
   private listenToQueryParamChanges() {
+    debugger;
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params: Record<string, string | number | undefined>) => {
         // Only process if notificationAction is present (from notification navigation)
-        if (params['notificationAction']) {
-          const updates: Partial<IPlanFilter> = {};
+        const updates: Partial<IPlanFilter> = {};
 
+        if (params['notificationAction']) {
           if (params['status']) {
             const status = this.getStatusFromParam(params['status']);
             if (status !== null) updates.status = status;
           }
+        }
 
+        this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
+        this.filterService.applyFilterWithPaging();
+        if (params['notificationAction']) {
           if (Object.keys(updates).length > 0) {
-            this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-            this.filterService.applyFilterWithPaging();
-
             // Clean up query params after processing
             setTimeout(() => {
               this.router.navigate([], {
