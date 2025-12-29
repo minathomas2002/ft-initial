@@ -20,24 +20,22 @@
 
   <ng-template [appStepContent]="1">
     <app-service-localization-step-cover-page></app-service-localization-step-cover-page>
-    <!-- <app-plan-localization-step-01-overview-company-information-form /> -->
   </ng-template>
 
   <ng-template [appStepContent]="2">
     <app-service-localization-step-overview></app-service-localization-step-overview>
-    <!-- <app-plan-localization-step-02-product-plant-overview-form /> -->
   </ng-template>
-
-  <ng-template [appStepContent]="3">
+  @if (getStepIndex('Direct Localization')) {
+  <ng-template [appStepContent]="getStepIndex('Direct Localization')">
     <app-service-localization-step-direct-localization></app-service-localization-step-direct-localization>
   </ng-template>
-
-  <ng-template [appStepContent]="4">
+  } @if (getStepIndex('Existing Saudi Co.')) {
+  <ng-template [appStepContent]="getStepIndex('Existing Saudi Co.')">
     <app-service-localization-step-existing-saudi></app-service-localization-step-existing-saudi>
-    <!-- <app-plan-localization-step-04-saudization-form [isViewMode]="isViewMode()" /> -->
   </ng-template>
+  }
 
-  <ng-template [appStepContent]="5">
+  <ng-template [appStepContent]="getStepIndex('Summary')">
     <app-service-localization-step-summary
       [isViewMode]="isViewMode()"
       #summaryComponent

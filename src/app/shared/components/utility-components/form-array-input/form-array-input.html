@@ -1,47 +1,52 @@
-<div
-  class="rounded-xl"
-  #tableWrapper
->
-  <p-table
-    [value]="rows()"
-    [scrollable]="true"
-    [scrollHeight]="scrollHeight()"
-    class="rounded-xl"
-  >
+<div class="rounded-xl" #tableWrapper>
+  <p-table [value]="rows()" [scrollable]="true" [scrollHeight]="scrollHeight()" class="rounded-xl">
     <ng-template pTemplate="header">
       <tr class="bg-gray-50">
-        @for (key of keys(); track key) {
+        @if(showIndexColumn()){
         <th
           class="p-3 !border !border-gray-200 !text-left !font-semibold !whitespace-nowrap !bg-gray-50 !text-gray-700"
-          [class.rounded-tl-xl]="$index === 0"
         >
-          <span>{{ key === 'keyActivity' ? ('opportunity.wizard.keyActivity' | translate) : key | camelCaseToWord }}</span>
+          <span>{{ indexColumnLabel() }}</span>
+        </th>
+        } @for (key of keys(); track key) {
+        <th
+          class="p-3 !border !border-gray-200 !text-left !font-semibold !whitespace-nowrap !bg-gray-50 !text-gray-700"
+          [class.rounded-tl-xl]="$index === 0 && !showIndexColumn()"
+        >
+          <span>{{
+            key === 'keyActivity'
+              ? ('opportunity.wizard.keyActivity' | translate)
+              : (key | camelCaseToWord)
+          }}</span>
         </th>
         }
-        <th class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700 rounded-tr-xl"></th>
+        <th
+          class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700 rounded-tr-xl"
+        ></th>
       </tr>
     </ng-template>
-    <ng-template
-      pTemplate="body"
-      let-object
-      let-rowIndex="rowIndex"
-    >
+    <ng-template pTemplate="body" let-object let-rowIndex="rowIndex">
       <tr #tableRow>
         @if (itemTemplate) {
-        <ng-container *ngTemplateOutlet="itemTemplate; context: { 
-          $implicit: getItemControl(rowIndex)!, 
-          index: rowIndex,
-          itemValue: object
-        }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="
+            itemTemplate;
+            context: {
+              $implicit: getItemControl(rowIndex)!,
+              index: rowIndex,
+              itemValue: object
+            }
+          "
+        ></ng-container>
         <td class="!p-3 !border !border-gray-200 !text-center">
-          @if(rowIndex > 0 || rows().length > 1){
+          @if(!hideDeleteButton()){ @if(rowIndex > 0 || rows().length > 1){
           <p-button
             severity="danger"
             [icon]="'icon-trash-2'"
             text
             (onClick)="onDeleteHandler(rowIndex)"
           />
-          }
+          } }
         </td>
         }
       </tr>

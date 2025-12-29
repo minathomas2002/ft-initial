@@ -1,5 +1,4 @@
 <div class="flex flex-col gap-[32px] px-8 pb-10">
-  <!-- Company Information Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Company Information</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
@@ -30,40 +29,33 @@
     </div>
   </div>
 
-  <!-- Services Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Services</h2>
     <app-form-array-input
       [ft]="getServicesFormArray()"
       [addButtonMessage]="'Add Service'"
       [createNewItem]="createServiceItem"
-      [maxItems]="20"
     >
       <ng-template #itemTemplate let-itemControl let-index="index">
         <td class="p-3 border border-gray-200 min-w-[300px]">
-          <input
-            type="text"
-            pInputText
-            fluid
-            placeholder="Enter service name"
-            [maxlength]="100"
-            [formControl]="itemControl.get('serviceName')"
-            trimOnBlur
-          />
+          <app-group-input-with-checkbox
+            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceName')!)"
+            [showCheckbox]="showCheckbox()"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder="Enter service name"
+              [maxlength]="100"
+              [formControl]="getFormControl(itemControl.get('serviceName')!)"
+              trimOnBlur
+            />
+          </app-group-input-with-checkbox>
+
           <app-base-error-messages
-            [control]="itemControl.get('serviceName')"
+            [control]="getFormControl(itemControl.get('serviceName')!)"
             [label]="'Service Name'"
-          />
-        </td>
-        <td class="p-3 border border-gray-200 w-[50px]">
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            text
-            [disabled]="getServicesFormArray().length <= 1"
-            (onClick)="removeServiceItem(index)"
-            pTooltip="Remove service"
-            tooltipPosition="top"
           />
         </td>
       </ng-template>

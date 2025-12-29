@@ -26,6 +26,9 @@ export enum EMaterialsFormControls {
   registeredVendorIDwithSEC = 'registeredVendorIDwithSEC',
   doYouCurrentlyHaveLocalAgentInKSA = 'doYouCurrentlyHaveLocalAgentInKSA',
 
+  // Details of Service Provided (Overview)
+  detailsOfServices = 'detailsOfServices',
+
   // Local Agent Information Controls
   localAgentName = 'localAgentName',
   contactPersonName = 'contactPersonName',
@@ -107,4 +110,3 @@ export enum EMaterialsFormControls {
   // Step 4 - Attachments Controls
   attachments = 'attachments',
 }
-

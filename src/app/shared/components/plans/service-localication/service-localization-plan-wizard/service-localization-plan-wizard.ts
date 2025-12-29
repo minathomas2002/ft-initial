@@ -9,6 +9,8 @@ import {
   signal,
 } from '@angular/core';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ServiceLocalizationFormService } from 'src/app/shared/services/plan/materials-form-service/service-localization-form-service';
+import { ELocalizationMethodology } from 'src/app/shared/enums';
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { I18nService } from 'src/app/shared/services/i18n';
@@ -52,43 +54,56 @@ export class ServiceLocalizationPlanWizard {
 
   steps = computed<IWizardStepState[]>(() => {
     this.i18nService.currentLanguage();
-    return [
-      {
-        title: 'Cover Page',
-        description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
-        isActive: this.activeStep() === 1,
-        formState: null,
-        hasErrors: true,
-      },
-      {
-        title: 'Overview',
-        description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
-        isActive: this.activeStep() === 2,
-        formState: null,
-        hasErrors: true,
-      },
-      {
+    const list: IWizardStepState[] = [];
+
+    // Always present steps
+    list.push({
+      title: 'Cover Page',
+      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+      isActive: this.activeStep() === list.length + 1,
+      formState: null,
+      hasErrors: true,
+    });
+
+    list.push({
+      title: 'Overview',
+      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+      isActive: this.activeStep() === list.length + 1,
+      formState: null,
+      hasErrors: true,
+    });
+
+    // Conditional steps based on details of services methodology selection
+    if (this.showExistingSaudiStep()) {
+      list.push({
         title: 'Existing Saudi Co.',
         description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
-        isActive: this.activeStep() === 3,
+        isActive: this.activeStep() === list.length + 1,
         formState: null,
         hasErrors: true,
-      },
-      {
+      });
+    }
+
+    if (this.showDirectLocalizationStep()) {
+      list.push({
         title: 'Direct Localization',
         description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
-        isActive: this.activeStep() === 4,
+        isActive: this.activeStep() === list.length + 1,
         formState: null,
         hasErrors: true,
-      },
-      {
-        title: 'Summary',
-        description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
-        isActive: this.activeStep() === 5,
-        formState: null,
-        hasErrors: false,
-      },
-    ];
+      });
+    }
+
+    // Summary always last
+    list.push({
+      title: 'Summary',
+      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+      isActive: this.activeStep() === list.length + 1,
+      formState: null,
+      hasErrors: false,
+    });
+
+    return list;
   });
 
   wizardTitle = computed(() => {
@@ -96,7 +111,7 @@ export class ServiceLocalizationPlanWizard {
     this.i18nService.currentLanguage();
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
-    return this.i18nService.translate('plans.wizard.title.create');
+    return 'Service Localization Plan';
   });
 
   isLoadingPlan = signal(false);
@@ -123,6 +138,37 @@ export class ServiceLocalizationPlanWizard {
 
   validationErrors = signal<Map<number, boolean>>(new Map());
 
+  // Dynamically show/hide steps based on details of services selection
+  serviceLocalizationFormService = inject(ServiceLocalizationFormService);
+
+  // Keep a small signal with the current details array value; update on valueChanges
+  private readonly detailsItems = signal<any[]>(
+    this.serviceLocalizationFormService.getDetailsOfServicesFormArray().value ?? []
+  );
+
+  private readonly _detailsSubscription = (() => {
+    const detailsArray = this.serviceLocalizationFormService.getDetailsOfServicesFormArray();
+    detailsArray.valueChanges?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => {
+      this.detailsItems.set(v ?? []);
+    });
+  })();
+
+  // Computed flags derived from the details items (keeps logic simple and reactive)
+  showExistingSaudiStep = computed(() =>
+    this.detailsItems().some(
+      (it: any) =>
+        String(it?.serviceLocalizationMethodology) ===
+        ELocalizationMethodology.Collaboration.toString()
+    )
+  );
+
+  showDirectLocalizationStep = computed(() =>
+    this.detailsItems().some(
+      (it: any) =>
+        String(it?.serviceLocalizationMethodology) === ELocalizationMethodology.Direct.toString()
+    )
+  );
+
   previousStep(): void {
     this.activeStep.set(this.activeStep() - 1);
   }
@@ -132,6 +178,11 @@ export class ServiceLocalizationPlanWizard {
 
   navigateToStep(stepNumber: number): void {
     this.activeStep.set(stepNumber);
+  }
+
+  getStepIndex(title: string): number {
+    const idx = this.steps().findIndex((s) => s.title === title);
+    return idx >= 0 ? idx + 1 : 0;
   }
 
   updateValidationErrors(errors: Map<number, any>): void {

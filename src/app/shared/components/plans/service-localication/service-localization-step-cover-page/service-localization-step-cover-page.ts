@@ -28,33 +28,26 @@ import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/
 })
 export class ServiceLocalizationStepCoverPage {
   private readonly serviceLocalizationFormService = inject(ServiceLocalizationFormService);
-
   // Form groups from service
   formGroup = this.serviceLocalizationFormService.coverPageFormGroup;
   companyInformationFormGroup = this.serviceLocalizationFormService.companyInformationFormGroup;
   servicesFormGroup = this.serviceLocalizationFormService.servicesFormGroup;
-
   showCheckbox = signal(false);
-
   // Get services form array
   getServicesFormArray(): FormArray {
     return this.serviceLocalizationFormService.getServicesFormArray();
   }
-
   // Create service item (for form-array-input component)
   createServiceItem = (): FormGroup => {
     return this.serviceLocalizationFormService.createServiceItem();
   };
-
   // Remove service item
   removeServiceItem(index: number): void {
     this.serviceLocalizationFormService.removeServiceItem(index);
   }
-
   getFormControl(control: AbstractControl): FormControl<any> {
     return control as unknown as FormControl<any>;
   }
-
   getHasCommentControl(control: AbstractControl): FormControl<boolean> {
     const formGroup = control as FormGroup;
     const hasCommentControl = formGroup.get('hasComment');

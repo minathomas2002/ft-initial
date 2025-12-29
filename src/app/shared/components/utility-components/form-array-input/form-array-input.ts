@@ -1,4 +1,15 @@
-import { ChangeDetectionStrategy, Component, input, TemplateRef, ContentChild, computed, signal, effect, ViewChild, ElementRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  TemplateRef,
+  ContentChild,
+  computed,
+  signal,
+  effect,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { NgTemplateOutlet } from '@angular/common';
@@ -8,19 +19,12 @@ import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-form-array-input',
-  imports: [
-    ButtonModule,
-    TableModule,
-    NgTemplateOutlet,
-    TranslatePipe,
-    CamelCaseToWordPipe,
-  ],
+  imports: [ButtonModule, TableModule, NgTemplateOutlet, TranslatePipe, CamelCaseToWordPipe],
   templateUrl: './form-array-input.html',
   styleUrl: './form-array-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormArrayInput {
-
   hideAddButton = input<boolean>(false);
   // Accept FormArray instead of FieldTree
   // Using input instead of model since FormArray is mutable and changes are reflected automatically
@@ -28,10 +32,15 @@ export class FormArrayInput {
   addButtonMessage = input<string>('Add');
   maxItems = input<number>(10);
   scrollHeight = input<string>('400px');
+  hideDeleteButton = input<boolean>(false);
   // Function to create a new empty item when adding (returns FormGroup)
   createNewItem = input<() => FormGroup>(() => {
     throw new Error('createNewItem must be provided');
   });
+  // Optionally show an index column at the start of the table
+  showIndexColumn = input<boolean>(false);
+  // Label for the index column header
+  indexColumnLabel = input<string>('#');
 
   @ContentChild('itemTemplate', { read: TemplateRef }) itemTemplate?: TemplateRef<{
     $implicit: AbstractControl;
@@ -56,7 +65,7 @@ export class FormArrayInput {
         // Initial setup - create stable array reference
         this.currentLength = formArray.length;
         this.stableRowsArray = formArray.value || [];
-        this.structureUpdateTrigger.update(v => v + 1);
+        this.structureUpdateTrigger.update((v) => v + 1);
       }
     });
   }
@@ -70,7 +79,7 @@ export class FormArrayInput {
       this.currentLength = newLength;
       // Recreate array reference when structure changes
       this.stableRowsArray = formArray.value || [];
-      this.structureUpdateTrigger.update(v => v + 1);
+      this.structureUpdateTrigger.update((v) => v + 1);
     }
   }
 
@@ -95,7 +104,7 @@ export class FormArrayInput {
     if (!firstObject || typeof firstObject !== 'object' || firstObject === null) return [];
 
     // Exclude 'rowId' from the keys to prevent it from being displayed as a column
-    return Object.keys(firstObject).filter(key => key !== 'rowId');
+    return Object.keys(firstObject).filter((key) => key !== 'rowId');
   });
 
   // Get FormControl/FormGroup for a specific index
@@ -156,22 +165,23 @@ export class FormArrayInput {
       // Find the first focusable input element (input, textarea, select, or PrimeNG input wrapper)
       const firstInput = lastRow.querySelector<HTMLElement>(
         'input:not([type="hidden"]):not([disabled]), ' +
-        'textarea:not([disabled]), ' +
-        'select:not([disabled]), ' +
-        '.p-inputtext input, ' +
-        '.p-textarea textarea, ' +
-        '.p-select .p-select-trigger, ' +
-        '.p-autocomplete input, ' +
-        '.p-dropdown .p-dropdown-trigger, ' +
-        '.p-datepicker input, ' +
-        '.p-inputnumber input'
+          'textarea:not([disabled]), ' +
+          'select:not([disabled]), ' +
+          '.p-inputtext input, ' +
+          '.p-textarea textarea, ' +
+          '.p-select .p-select-trigger, ' +
+          '.p-autocomplete input, ' +
+          '.p-dropdown .p-dropdown-trigger, ' +
+          '.p-datepicker input, ' +
+          '.p-inputnumber input'
       );
 
       if (firstInput) {
         // For PrimeNG components, focus the actual input element inside
-        const actualInput = firstInput.tagName === 'INPUT' || firstInput.tagName === 'TEXTAREA'
-          ? firstInput
-          : firstInput.querySelector<HTMLElement>('input, textarea');
+        const actualInput =
+          firstInput.tagName === 'INPUT' || firstInput.tagName === 'TEXTAREA'
+            ? firstInput
+            : firstInput.querySelector<HTMLElement>('input, textarea');
 
         if (actualInput) {
           actualInput.focus();
