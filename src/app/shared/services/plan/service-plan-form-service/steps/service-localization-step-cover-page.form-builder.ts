@@ -23,7 +23,7 @@ export class ServiceLocalizationStepCoverPageFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),
       }),
     });
   }
