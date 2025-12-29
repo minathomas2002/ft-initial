@@ -56,12 +56,22 @@ export class FileuploadComponent {
           // Add files to PrimeNG's internal array with objectURL for preview
           modelFiles.forEach(file => {
             if (file instanceof File) {
-              // Create objectURL for file preview
-              const objectURL = URL.createObjectURL(file);
-              // Add file with objectURL to PrimeNG's files array
-              const fileWithUrl = Object.assign(file, { objectURL });
-              if (primeNgComponent.files) {
-                primeNgComponent.files.push(fileWithUrl);
+              // Check if this is an existing attachment with fileUrl
+              const existingFile = file as any;
+              if (existingFile.isExistingAttachment && existingFile.fileUrl) {
+                // For existing attachments, use the fileUrl from server instead of creating objectURL
+                const fileWithUrl = Object.assign(file, { objectURL: existingFile.fileUrl });
+                if (primeNgComponent.files) {
+                  primeNgComponent.files.push(fileWithUrl);
+                }
+              } else {
+                // Create objectURL for new file preview
+                const objectURL = URL.createObjectURL(file);
+                // Add file with objectURL to PrimeNG's files array
+                const fileWithUrl = Object.assign(file, { objectURL });
+                if (primeNgComponent.files) {
+                  primeNgComponent.files.push(fileWithUrl);
+                }
               }
             }
           });

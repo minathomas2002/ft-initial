@@ -24,6 +24,7 @@ import {
 import { EMaterialsFormControls } from '../enums/product-localization-form-controls.enum';
 import { IPhoneValue } from '../interfaces/phone-input.interface';
 import { ELocalizationStatusType, ETargetedCustomer, EOpportunityType } from '../enums';
+import { API_ENDPOINTS } from '../api/api-endpoints';
 
 /**
  * Section type mapping for value chain sections
@@ -70,6 +71,32 @@ function getFormBooleanValue(formGroup: FormGroup | null, controlName: string): 
   if (!formGroup) return null;
   const control = formGroup.get(controlName);
   return control?.value ?? null;
+}
+
+/**
+ * Helper function to get MIME type from file extension
+ */
+function getMimeTypeFromExtension(extension: string | null | undefined): string {
+  if (!extension) return 'application/octet-stream';
+  
+  const ext = extension.toLowerCase().replace('.', '');
+  const mimeTypes: Record<string, string> = {
+    'pdf': 'application/pdf',
+    'png': 'image/png',
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'gif': 'image/gif',
+    'zip': 'application/zip',
+    'rar': 'application/x-rar-compressed',
+    'doc': 'application/msword',
+    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'xls': 'application/vnd.ms-excel',
+    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'txt': 'text/plain',
+    'csv': 'text/csv',
+  };
+  
+  return mimeTypes[ext] || 'application/octet-stream';
 }
 
 /**
@@ -712,17 +739,32 @@ export function mapProductPlanResponseToForm(
     if (attachmentsControl instanceof FormGroup) {
       const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
       if (valueControl && attachments.length > 0) {
-        // Convert attachment URLs to File objects if needed
-        // For now, store as array of attachment objects
+        // Convert attachment objects to File-like objects that can be displayed
         const attachmentFiles = attachments.map(att => {
-          // If fileUrl exists, we might need to fetch it
-          // For now, store the attachment info
-          return {
-            id: att.id,
-            fileName: att.fileName,
-            fileUrl: att.fileUrl,
-            fileExtension: att.fileExtension
-          };
+          // Create a File-like object that includes attachment metadata
+          // We'll create an empty File object with the correct name and attach metadata
+          const fileName = att.fileName + (att.fileExtension || '');
+          const fileType = getMimeTypeFromExtension(att.fileExtension);
+          
+          // Create a File object (empty blob) with the correct name
+          const blob = new Blob([], { type: fileType });
+          const file = new File([blob], fileName, { type: fileType });
+          
+          // Construct full file URL if it's a relative path
+          let fullFileUrl = att.fileUrl || '';
+          if (fullFileUrl && !fullFileUrl.startsWith('http://') && !fullFileUrl.startsWith('https://')) {
+            // Prepend base URL if it's a relative path
+            const baseUrl = API_ENDPOINTS.baseUrl.replace('/api', ''); // Remove /api suffix if present
+            fullFileUrl = baseUrl + (fullFileUrl.startsWith('/') ? fullFileUrl : '/' + fullFileUrl);
+          }
+          
+          // Attach attachment metadata as additional properties
+          (file as any).id = att.id;
+          (file as any).fileUrl = fullFileUrl;
+          (file as any).fileExtension = att.fileExtension;
+          (file as any).isExistingAttachment = true;
+          
+          return file;
         });
         valueControl.setValue(attachmentFiles);
       }
