@@ -342,32 +342,41 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
     });
   }
 
-  // Map attachments - files are stored as File[] in the form control
+  // Map attachments - files are stored as File[] or Attachment[] in the form control
   const attachments: Attachment[] = [];
   if (attachmentsFormGroup) {
     const attachmentsValue = getFormValue(attachmentsFormGroup, EMaterialsFormControls.attachments);
 
-    // Handle file attachments - files are File objects
+    // Handle file attachments - files can be File objects or Attachment objects
     if (attachmentsValue && Array.isArray(attachmentsValue)) {
       attachmentsValue.forEach((file: File | any) => {
         if (file instanceof File) {
-          // File object - store file reference (actual file will be appended in FormData)
+          // New File object - create Attachment object with all required fields
+          // Note: File object will be handled separately in FormData conversion as binary
+          // For now, store File reference - it will be converted during FormData building
+          const fileName = file.name;
+          const fileExtension = fileName.split('.').pop() ?? '';
+
           attachments.push({
             id: '',
-            fileName: file.name,
-            fileExtension: file.name.split('.').pop() ?? '',
+            fileName: fileName,
+            fileExtension: fileExtension,
             fileUrl: '',
-            file: file as any as string, // Store File object reference, will be handled in FormData conversion
-          } as any as Attachment);
+            file: file as any as string, // Store File object reference temporarily, will be handled in FormData conversion
+          } as Attachment);
         } else if (file && typeof file === 'object') {
-          // Already processed attachment object
+          // Already processed attachment object (from edit mode or existing attachments)
+          // Ensure all Attachment interface fields are properly mapped
+          const fileName = file.fileName ?? file.name ?? '';
+          const fileExtension = file.fileExtension ?? (fileName ? fileName.split('.').pop() ?? '' : '');
+
           attachments.push({
             id: file.id ?? '',
-            fileName: file.name ?? file.fileName ?? '',
-            fileExtension: file.name?.split('.').pop() ?? file.fileExtension ?? '',
-            fileUrl: file.url ?? file.fileUrl ?? '',
-            file: file.base64 ?? file.data ?? file.file ?? file,
-          });
+            fileName: fileName,
+            fileExtension: fileExtension,
+            fileUrl: file.fileUrl ?? file.url ?? '',
+            file: file.file ?? file.base64 ?? file.data ?? '',
+          } as Attachment);
         }
       });
     }
@@ -883,44 +892,40 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
     });
   }
 
-  // Attachments - append files
+  // Attachments - append as structured objects with metadata and file
   if (productPlan.saudization.attachments && productPlan.saudization.attachments.length > 0) {
     productPlan.saudization.attachments.forEach((attachment, index) => {
+      // Append attachment metadata fields as structured object properties
+      appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].Id`, attachment.id);
+      appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].FileName`, attachment.fileName);
+      appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].FileExtension`, attachment.fileExtension);
+      appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].FileUrl`, attachment.fileUrl);
+
       const fileValue: any = attachment.file;
 
-      if (!fileValue) return;
-
-      // Check if it's a File object
-      if (fileValue instanceof File) {
-        // File object - append directly
-        formData.append(`ProductPlan.Saudization.Attachments[${index}]`, fileValue);
-      } else if (typeof fileValue === 'object' && 'size' in fileValue && 'type' in fileValue && 'name' in fileValue) {
-        // Duck typing for File-like object
-        formData.append(`ProductPlan.Saudization.Attachments[${index}]`, fileValue as File);
-      } else if (typeof fileValue === 'string') {
-        // If file is base64 string, convert to blob
-        if (fileValue.startsWith('data:')) {
-          // Base64 data URL
-          const base64Data = fileValue.split(',')[1];
-          const byteCharacters = atob(base64Data);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+      // Handle the file data
+      if (fileValue) {
+        // Check if it's a File object - append as binary with proper field name
+        if (fileValue instanceof File) {
+          // File object - append as binary with the structured field name
+          formData.append(`ProductPlan.Saudization.Attachments[${index}].File`, fileValue);
+        } else if (typeof fileValue === 'object' && 'size' in fileValue && 'type' in fileValue && 'name' in fileValue) {
+          // Duck typing for File-like object - append as binary
+          formData.append(`ProductPlan.Saudization.Attachments[${index}].File`, fileValue as File);
+        } else if (typeof fileValue === 'string') {
+          // If file is already a string (base64), append as string field
+          let fileStringValue: string = '';
+          if (fileValue.startsWith('data:')) {
+            // Base64 data URL - extract the base64 part
+            fileStringValue = fileValue.split(',')[1];
+          } else if (fileValue.trim() !== '') {
+            // Plain base64 string
+            fileStringValue = fileValue;
           }
-          const byteArray = new Uint8Array(byteNumbers);
-          const mimeType = fileValue.match(/data:([^;]+);/)?.[1] || 'application/octet-stream';
-          const blob = new Blob([byteArray], { type: mimeType });
-          formData.append(`ProductPlan.Saudization.Attachments[${index}]`, blob, attachment.fileName);
-        } else {
-          // Plain base64 string
-          const byteCharacters = atob(fileValue);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          // Append as string field (not binary)
+          if (fileStringValue) {
+            appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].File`, fileStringValue);
           }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray]);
-          formData.append(`ProductPlan.Saudization.Attachments[${index}]`, blob, attachment.fileName);
         }
       }
     });
