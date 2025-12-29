@@ -1,5 +1,7 @@
+import { EPlanAction } from "src/app/shared/enums";
+
 export interface INotification {
-  action: number;
+  action: EPlanAction;
   actionURL: string;
   body: string;
   createdDate: string;
@@ -10,4 +12,9 @@ export interface INotification {
   readDate: string | null;
   title: string;
   to: string;
+}
+
+export interface INotificationItem extends INotification {
+  route?: string[];
+  params?: Record<string, string>;
 }

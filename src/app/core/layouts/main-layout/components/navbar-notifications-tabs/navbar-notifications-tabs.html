@@ -7,7 +7,7 @@
     [style]="{ width: '20px', height: '20px' }"
   />
 </div>
-} @else if (!notifications()?.length) {
+} @else if (!notificationItems().length) {
 <div class="flex flex-col items-center justify-center py-12 text-gray-500">
   <i class="icon-bell text-3xl mb-3 opacity-40"></i>
   <p class="text-sm font-medium">No notifications</p>
@@ -15,10 +15,10 @@
 } @else {
 <div class="p-4 bg-white rounded-lg shadow-md">
   <div class="space-y-3">
-    @for (notification of notifications() || []; track notification.id) {
+    @for (notification of notificationItems() || []; track notification.id) {
     <div
       class="cursor-pointer hover:bg-gray-50 transition-colors relative p-4"
-      (click)="onNotificationClick()"
+      (click)="onNotificationClick(notification)"
     >
       @if (!notification.isRead) {
       <div class="absolute top-4 right-4 w-3 h-3 bg-[#067647] rounded-full"></div>

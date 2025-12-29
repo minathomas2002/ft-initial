@@ -24,3 +24,25 @@ export enum ELocalizationStatusType {
   No = 2,
   Partial = 3
 }
+
+export enum EPlanAction {
+  EditPlan = 1,
+  ViewDetails = 2,
+  DownloadPDF = 3,
+  Submitted = 4,
+  Assigned = 5,
+  Reassigned = 6,
+  CommentSubmitted = 7,
+  Resubmitted = 8,
+  Approved = 9,
+  Rejected = 10,
+  EmployeeApproved = 11,
+  DVApproved = 12,
+  DeptApproved = 13,
+  DVRejected = 14,
+  DeptRejected = 15,
+  DVRejectionAcknowledged = 16,
+  ReturnedForMoreInfo = 17,
+  ViewTimeLine = 18,
+  AutoAssign = 19,
+}

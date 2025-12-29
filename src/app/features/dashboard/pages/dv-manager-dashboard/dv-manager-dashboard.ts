@@ -46,7 +46,7 @@ import { BaseTagComponent } from "src/app/shared/components/base-components/base
   providers: [DvManagerDashboardPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DvManagerDashboard {
+export class DvManagerDashboard implements OnInit {
   productLocalizationPlanWizardVisibility = signal(false);
 
   EEmployeePlanStatus = EEmployeePlanStatus;
@@ -82,6 +82,9 @@ export class DvManagerDashboard {
   readonly statistics = computed(() => this.dashboardPlansStore.statistics());
   readonly isStatisticsLoading = computed(() => this.dashboardPlansStore.loading() || this.statistics() === null);
 
+  ngOnInit(): void {
+    // Filter component handles query params and cleanup
+  }
   onUserReadAndApproved() {
     this.planStore.resetNewPlanOpportunityType();
   }
