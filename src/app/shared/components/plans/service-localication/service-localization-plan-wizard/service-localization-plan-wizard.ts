@@ -96,7 +96,7 @@ export class ServiceLocalizationPlanWizard {
     this.i18nService.currentLanguage();
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
-    return this.i18nService.translate('plans.wizard.title.create');
+    return 'Service Localization Plan';
   });
 
   isLoadingPlan = signal(false);

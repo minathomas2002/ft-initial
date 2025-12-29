@@ -7,7 +7,7 @@ import { BaseLabelComponent } from 'src/app/shared/components/base-components/ba
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
-import { ServiceLocalizationFormService } from 'src/app/shared/services/plan/materials-form-service/service-localization-form-service';
+// import { ServiceLocalizationFormService } from 'src/app/shared/services/plan/materials-form-service/service-localization-form-service';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 
 @Component({
@@ -27,29 +27,30 @@ import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationStepCoverPage {
-  private readonly serviceLocalizationFormService = inject(ServiceLocalizationFormService);
+  // private readonly serviceLocalizationFormService = inject(ServiceLocalizationFormService);
 
-  // Form groups from service
-  formGroup = this.serviceLocalizationFormService.coverPageFormGroup;
-  companyInformationFormGroup = this.serviceLocalizationFormService.companyInformationFormGroup;
-  servicesFormGroup = this.serviceLocalizationFormService.servicesFormGroup;
+  // // Form groups from service
+  // formGroup = this.serviceLocalizationFormService.coverPageFormGroup;
+  // companyInformationFormGroup =
+  //   this.serviceLocalizationFormService.coverPageCompanyInformationFormGroup;
+  // servicesFormGroup = this.serviceLocalizationFormService.servicesFormGroup;
 
   showCheckbox = signal(false);
 
   // Get services form array
-  getServicesFormArray(): FormArray {
-    return this.serviceLocalizationFormService.getServicesFormArray();
-  }
+  // getServicesFormArray(): FormArray {
+  //   return this.serviceLocalizationFormService.getServicesFormArray();
+  // }
 
-  // Create service item (for form-array-input component)
-  createServiceItem = (): FormGroup => {
-    return this.serviceLocalizationFormService.createServiceItem();
-  };
+  // // Create service item (for form-array-input component)
+  // createServiceItem = (): FormGroup => {
+  //   return this.serviceLocalizationFormService.createServiceItem();
+  // };
 
-  // Remove service item
-  removeServiceItem(index: number): void {
-    this.serviceLocalizationFormService.removeServiceItem(index);
-  }
+  // // Remove service item
+  // removeServiceItem(index: number): void {
+  //   this.serviceLocalizationFormService.removeServiceItem(index);
+  // }
 
   getFormControl(control: AbstractControl): FormControl<any> {
     return control as unknown as FormControl<any>;
