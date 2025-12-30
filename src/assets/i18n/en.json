@@ -272,6 +272,8 @@
       "globalSuppliersInvalid": "Global suppliers value is invalid",
       "dateRangeRequired": "Date range is required",
       "dateRangeInvalid": "You should select a date range",
+      "startDateRestriction": "Start date can only be changed to an earlier date when plans are linked",
+      "endDateRestriction": "End date can only be changed to a later date when plans are linked",
       "imageRequired": "Image is required",
       "designEngineeringRequired": "Design & Engineering is required",
       "designEngineeringMinLength": "Design & Engineering item must be at least 3 characters",

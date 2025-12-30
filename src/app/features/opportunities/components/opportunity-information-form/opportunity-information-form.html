@@ -388,9 +388,12 @@
           fluid
         />
         @if(getControl('dateRange').invalid && getControl('dateRange').dirty){
-        <app-base-error [message]="getControl('dateRange').hasError('required') ? ('opportunity.form.dateRangeRequired' | translate) :
-          getControl('dateRange').hasError('startDateRestriction') ? ('opportunity.form.startDateRestriction' | translate) :
-          getControl('dateRange').hasError('endDateRestriction') ? ('opportunity.form.endDateRestriction' | translate) :
+        <app-base-error [message]="
+        getControl('dateRange').hasError('required') ? 
+        ('opportunity.form.dateRangeRequired' | translate) :
+          getControl('dateRange').hasError('startDateRestriction') ? 
+          ('opportunity.form.startDateRestriction' | translate) :getControl('dateRange').hasError('endDateRestriction') ?
+          ('opportunity.form.endDateRestriction' | translate) :
           ('opportunity.form.dateRangeInvalid' | translate)" />
         }
       </div>
