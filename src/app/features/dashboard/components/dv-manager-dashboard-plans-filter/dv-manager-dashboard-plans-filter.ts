@@ -71,7 +71,6 @@ export class DvManagerDashboardPlansFilter implements OnInit {
   }
 
   private listenToQueryParamChanges() {
-    debugger;
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params: Record<string, string | number | undefined>) => {

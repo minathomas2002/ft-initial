@@ -169,7 +169,7 @@ export class SummarySectionOverview {
 
   contactNumber = computed(() => {
     const localAgentInfo = this.localAgentInformationFormGroup();
-    const contactNumberControl = localAgentInfo?.get(EMaterialsFormControls.contactNumber);
+    const contactNumberControl = localAgentInfo?.get(EMaterialsFormControls.contactNumber);    
     if (contactNumberControl instanceof FormGroup) {
       const value = contactNumberControl.get(EMaterialsFormControls.value)?.value;
       return value ? value['countryCode'] + value['phoneNumber'] : null;
