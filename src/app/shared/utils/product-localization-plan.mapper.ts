@@ -898,7 +898,7 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
 
   // TargetCustomers - Convert boolean to integer for API (null stays null)
   const targetSECValue = productPlan.productPlantOverview.targetCustomers.targetSEC;
-  targetSECValue.forEach((value, i) => {
+  targetSECValue?.forEach((value, i) => {
     appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetSEC' + `[${i}]`, value);
   });
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetedLocalSupplierNames', productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames);
