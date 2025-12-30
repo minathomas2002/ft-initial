@@ -18,12 +18,12 @@ export class ImageErrorDirective {
    * Optional custom placeholder image path.
    * If not provided, defaults to 'http://localhost:4200/assets/images/image-placeholder.png'
    */
-  placeholder = input<string>('http://localhost:4200/assets/images/image-placeholder.png');
+  placeholder = input<string>('assets/images/image-placeholder.png');
 
-  private defaultPlaceholder = 'http://localhost:4200/assets/images/image-placeholder.png';
+  private defaultPlaceholder = 'assets/images/image-placeholder.png';
 
   // Fallback to relative path if absolute URL fails
-  private fallbackPlaceholder = '/assets/images/image-placeholder.png';
+  private fallbackPlaceholder = 'assets/images/image-placeholder.png';
   private hasErrored = false;
 
   constructor(private elementRef: ElementRef<HTMLImageElement>) { }
