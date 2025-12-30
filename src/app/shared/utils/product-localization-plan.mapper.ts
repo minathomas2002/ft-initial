@@ -496,6 +496,18 @@ export function mapProductPlanResponseToForm(
         name: basicInfo.opportunityTitle
       });
     }
+
+    // Set submissionDate from creationDate if available (for view/edit mode)
+    const submissionDateControl = basicInfoForm.get(EMaterialsFormControls.submissionDate);
+    if (submissionDateControl) {
+      // Check if creationDate exists in productPlan (it might be at the productPlan level)
+      const creationDate = new Date(productPlan.overviewCompanyInfo.basicInfo.createdDate);
+      if (creationDate) {
+        // Convert creationDate string to Date object if needed
+        const dateValue = creationDate instanceof Date ? creationDate : new Date(creationDate);
+        submissionDateControl.setValue(dateValue);
+      }
+    }
   }
 
   // Company Info
