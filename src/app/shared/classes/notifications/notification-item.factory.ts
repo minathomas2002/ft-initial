@@ -11,7 +11,7 @@ class BaseNotificationParams {
 export class NotificationItemFactory {
   static create(notification: INotification, userRole: ERoles): INotificationItem {
     const roleValue = Number(userRole);
-    if (roleValue === ERoles.MANAGER) {
+    if (roleValue === ERoles.Division_MANAGER) {
       const managerParams = new DivisionMangerNotificationParams(notification);
       return {
         ...notification,

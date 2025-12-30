@@ -5,7 +5,7 @@ export class EmployeeRoleMapper {
   private _roleTranslationMap: Record<string, string> = {
     [ERoles.ADMIN]: 'employees.roles.admin',
     [ERoles.EMPLOYEE]: 'employees.roles.employee',
-    [ERoles.MANAGER]: 'employees.roles.manager',
+    [ERoles.Division_MANAGER]: 'employees.roles.divisionManager',
     [ERoles.DEPARTMENT_MANAGER]: 'employees.roles.departmentManager',
   };
 
