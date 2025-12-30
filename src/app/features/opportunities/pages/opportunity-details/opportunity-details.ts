@@ -163,6 +163,9 @@ export class OpportunityDetails implements OnInit {
           this.toast.success('Opportunity moved to draft successfully');
           this.moveToDraftConfirmDialogVisible.set(false);
           this.getOpportunityDetails();
+        },
+        error: () => {
+          this.moveToDraftConfirmDialogVisible.set(false);
         }
       });
   }
