@@ -260,7 +260,7 @@
         <textarea
           pInputTextarea
           fluid
-          [maxlength]="500"
+          [maxlength]="255"
           placeholder="Enter others description"
           [rows]="4"
           [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
@@ -268,7 +268,7 @@
       </app-group-input-with-checkbox>
       <!-- Character Counter -->
       <div class="text-xs text-gray-500 text-right mt-1">
-        {{ getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]).value?.length || 0 }} / 500
+        {{ getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]).value?.length || 0 }} / 255
       </div>
       <app-base-error-messages
         [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
