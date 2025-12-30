@@ -22,7 +22,7 @@ export class DashboardView implements OnInit {
       this.router.navigate([ERoutes.opportunities, ERoutes.admin]);
     } else if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
       this.router.navigate([ERoutes.dashboard, ERoutes.investors]);
-    } else if (this.roleService.hasAnyRoleSignal([ERoles.MANAGER])()) {
+    } else if (this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER])()) {
       this.router.navigate([ERoutes.dashboard, ERoutes.dvManager]);
     } else {
       this.showDashboard.set(true);

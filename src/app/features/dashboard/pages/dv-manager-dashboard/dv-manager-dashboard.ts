@@ -102,6 +102,10 @@ export class DvManagerDashboard implements OnInit {
     }
   }
 
+  getSlaCountDownNoun(numberInDays: number): string {
+    return numberInDays > 1 ? 'days' : 'day';
+  }
+
   getPlanTypeLabel(planType: EOpportunityType): string {
     return planType === EOpportunityType.SERVICES
       ? this.i18nService.translate('opportunity.type.services')

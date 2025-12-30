@@ -150,5 +150,64 @@
   .p-datatable-thead > tr > th {
     background: var(--p-datatable-header-cell-background) !important;    
   }
+
+  // Scrollbar styling for p-table - target all possible scrollable containers
+  .p-datatable-wrapper,
+  .p-datatable-scrollable-body,
+  .p-datatable-scrollable-body-table,
+  .p-datatable-scrollable-header,
+  .p-datatable-scrollable-footer {
+    // Webkit browsers (Chrome, Safari, Edge)
+    &::-webkit-scrollbar {
+      width: 8px !important;
+      height: 8px !important;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #FAFAFA !important; // gray-50
+      border-radius: 4px !important;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #E5E7EB !important; // gray-200 for the thumb
+      border-radius: 4px !important;
+      
+      &:hover {
+        background: #D1D5DB !important; // gray-300 on hover
+      }
+    }
+
+    // Firefox
+    scrollbar-width: thin !important;
+    scrollbar-color: #E5E7EB #FAFAFA !important; // thumb color, track color
+  }
+}
+
+// Global scrollbar styling for all p-datatable scrollable elements
+.p-datatable {
+  // Target any scrollable element within p-datatable
+  * {
+    &::-webkit-scrollbar {
+      width: 8px !important;
+      height: 8px !important;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #FAFAFA !important; // gray-50
+      border-radius: 4px !important;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #E5E7EB !important; // gray-200 for the thumb
+      border-radius: 4px !important;
+      
+      &:hover {
+        background: #D1D5DB !important; // gray-300 on hover
+      }
+    }
+
+    scrollbar-width: thin !important;
+    scrollbar-color: #E5E7EB #FAFAFA !important;
+  }
 }
 // p-datatable end

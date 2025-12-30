@@ -200,7 +200,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder {
     const othersDescriptionControl = capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`);
 
     if (othersPercentage !== null && othersPercentage > 0) {
-      othersDescriptionControl?.setValidators([Validators.required, Validators.maxLength(500)]);
+      othersDescriptionControl?.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       othersDescriptionControl?.clearValidators();
       othersDescriptionControl?.reset();

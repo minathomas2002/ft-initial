@@ -11,35 +11,19 @@
     'width':'calc(100% - 50px)'
   }"
   >
-    <span
-      class="
+    <span class="
     {{titleClass()}}
-    truncate"
-      [pTooltip]="userName()"
-      tooltipPosition="top"
-    >{{userName()}}</span>
+    truncate">{{userName()}}</span>
     @if(userTitle()){
-    <span
-      class="{{subTitleClass()}} truncate"
-      [pTooltip]="userTitle()"
-      tooltipPosition="top"
-    >{{userTitle()}}</span>
+    <span class="{{subTitleClass()}} truncate max-w-[300px]">{{userTitle()}}</span>
     }
 
     @if(userDepartment()){
-    <span
-      class="{{departmentClass()}} truncate"
-      [pTooltip]="userDepartment()"
-      tooltipPosition="top"
-    >{{userDepartment()}}</span>
+    <span class="{{departmentClass()}} truncate max-w-[300px]">{{userDepartment()}}</span>
     }
 
     @if(userRole()){
-    <span
-      class="{{roleClass()}} truncate"
-      [pTooltip]="userRole()"
-      tooltipPosition="top"
-    >{{userRole()}}</span>
+    <span class="{{roleClass()}} truncate max-w-[300px]">{{userRole()}}</span>
     }
   </span>
 

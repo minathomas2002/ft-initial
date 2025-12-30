@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, model, OnInit } from '@angular/core';
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
-import { Tooltip } from "primeng/tooltip";
 import { Divider } from "primeng/divider";
 import { BaseLabelComponent } from "src/app/shared/components/base-components/base-label/base-label.component";
 import { ToggleSwitch } from "primeng/toggleswitch";
@@ -14,7 +13,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-notification-email-form',
-  imports: [TranslatePipe, Tooltip, Divider, BaseLabelComponent, ToggleSwitch, FormsModule, CommonModule],
+  imports: [TranslatePipe, Divider, BaseLabelComponent, ToggleSwitch, FormsModule, CommonModule],
   templateUrl: './admin-notification-email-form.html',
   styleUrl: './admin-notification-email-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
