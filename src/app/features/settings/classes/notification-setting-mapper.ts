@@ -26,6 +26,9 @@ export class notificationSettingMapper {
     [ENotificationRecipient.Admins]: 'setting.adminView.notification.admins',
     [ENotificationRecipient.UserBeingImpersonated]: 'setting.adminView.notification.userBeingImpersonated',
     [ENotificationRecipient.UserPerformingImpersonation]: 'setting.adminView.notification.userperformingImpersonation',
+    [ENotificationRecipient.EmployeePreviousOne]: 'setting.adminView.notification.employeePrev',
+    [ENotificationRecipient.EmployeeReassignee]: 'setting.adminView.notification.employeeReassignee',
+
 
   };
   getRecipientName(recipitiont: string | number): string {

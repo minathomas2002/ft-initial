@@ -22,7 +22,10 @@ export enum ENotificationChannel
 
      // Specific user targets for impersonation
      UserBeingImpersonated,
-     UserPerformingImpersonation
+     UserPerformingImpersonation,
+     // Specific user targets for reassignments
+    EmployeeReassignee,
+    EmployeePreviousOne
  }
 
  export enum ENotificationType
