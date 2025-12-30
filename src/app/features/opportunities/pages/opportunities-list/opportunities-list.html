@@ -59,6 +59,20 @@
   </ng-container>
 </app-cards-page-layout>
 
+@if(planTermsAndConditionsDialogVisibility()){
+<app-plan-terms-and-conditions-dialog
+  [(visibility)]="planTermsAndConditionsDialogVisibility"
+  (onConfirm)="onUserReadAndApproved()"
+/>
+}
+
+@if(newPlanDialogVisibility()){
+<app-new-plan-dialog
+  [(visibility)]="newPlanDialogVisibility"
+  (onConfirm)="onUserConfirmNewPlanDialog()"
+/>
+}
+
 @if(productLocalizationPlanWizardVisibility()){
 <app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" />
 } @if (serviceLocalizationPlanWizardVisibility()) {

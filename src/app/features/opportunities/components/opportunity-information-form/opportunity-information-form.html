@@ -200,6 +200,10 @@
           [maxlength]="255"
         >
         </textarea>
+        <!-- Character Counter -->
+        <div class="text-xs text-gray-500 text-right mt-1">
+          {{ getControl('shortDescription').value?.length || 0 }} / 255
+        </div>
         @if(getControl('shortDescription').invalid && getControl('shortDescription').dirty){
         <app-base-error [message]="getControl('shortDescription').hasError('required') ? ('opportunity.form.shortDescriptionRequired' | translate) :
           ('opportunity.form.maxLengthExceeded' | translate)" />

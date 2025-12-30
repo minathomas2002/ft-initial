@@ -82,8 +82,6 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
     const opportunityControl = this.getFormControl(
       this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]
     );
-    console.log(opportunityControl);
-
 
     const appliedOpportunity = this.planStore.appliedOpportunity();
     if (appliedOpportunity) {

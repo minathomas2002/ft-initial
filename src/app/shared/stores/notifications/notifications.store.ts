@@ -1,8 +1,7 @@
-import { computed, inject } from '@angular/core';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { type Observable, finalize, tap } from 'rxjs';
+import { inject } from '@angular/core';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { finalize, tap } from 'rxjs';
 import { INotification } from '../../../core/layouts/main-layout/models/notifications.interface';
-import { IBaseApiResponse } from '../../interfaces';
 import { NotificationsApiService } from '../../api/notifications/notifications-api-service';
 
 const initialState: {
@@ -60,10 +59,10 @@ export const NotificationsStore = signalStore(
 
             const unreadNotificationsList = response?.body?.data || [];
 
-              patchState(store, {
-                notifications: unreadNotificationsList,
-                unreadCount: response.body?.pagination?.totalCount || unreadNotificationsList?.length || 0,
-              });
+            patchState(store, {
+              notifications: unreadNotificationsList,
+              unreadCount: response.body?.pagination?.totalCount || unreadNotificationsList?.length || 0,
+            });
           }),
           finalize(() => {
             patchState(store, { loading: false });

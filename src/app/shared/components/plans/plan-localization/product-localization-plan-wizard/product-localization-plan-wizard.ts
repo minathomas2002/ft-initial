@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, model, output, signal, viewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, effect, inject, model, OnDestroy, output, signal, viewChild } from "@angular/core";
 import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../../base-components/base-tag/base-tag.component";
@@ -10,7 +10,7 @@ import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
 import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { switchMap, catchError, finalize, of, map } from "rxjs";
+import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
@@ -20,7 +20,7 @@ import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
-import { IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
+import { EEmployeePlanStatus, EInvestorPlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PlanLocalizationStep05Summary } from "../plan-localization-step-05-summary/plan-localization-step-05-summary";
 import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
 import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
@@ -47,7 +47,7 @@ import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-
   styleUrl: './product-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductLocalizationPlanWizard {
+export class ProductLocalizationPlanWizard implements OnDestroy {
   productPlanFormService = inject(ProductPlanFormService);
   toasterService = inject(ToasterService);
   planStore = inject(PlanStore);
@@ -66,6 +66,9 @@ export class ProductLocalizationPlanWizard {
   // Mode and plan ID from store
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
+  canOpenTimeline = computed(() => {
+    return (this.visibility() && this.mode() == 'view' && this.planStatus() !== null)
+  })
 
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
@@ -133,10 +136,10 @@ export class ProductLocalizationPlanWizard {
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
 
   // Computed signals for plan status tag
-  planStatus = computed(() => this.planStore.planStatus());
+  planStatus = signal<EEmployeePlanStatus | null>(null);
   statusLabel = computed(() => {
     const status = this.planStatus();
-    if (status === null) return '';
+    if (status === null) return 'Draft';
     const statusService = this.planStatusFactory.handleValidateStatus();
     return statusService.getStatusLabel(status);
   });
@@ -149,7 +152,7 @@ export class ProductLocalizationPlanWizard {
   shouldShowStatusTag = computed(() => {
     const mode = this.planStore.wizardMode();
     const status = this.planStatus();
-    return (mode === 'view' || mode === 'edit') && status !== null;
+    return (mode === 'view' || mode === 'edit');
   });
 
   constructor() {
@@ -173,6 +176,7 @@ export class ProductLocalizationPlanWizard {
         this.activeStep.set(1);
         this.isSubmitted.set(false);
         this.existingSignature.set(null);
+        this.planStatus.set(null);
 
         // Handle opportunity based on whether user is applying to an opportunity or creating from scratch
         const appliedOpportunity = this.planStore.appliedOpportunity();
@@ -256,6 +260,7 @@ export class ProductLocalizationPlanWizard {
       )
       .subscribe((responseBody) => {
         if (responseBody) {
+          this.planStatus.set(responseBody.productPlan.status ?? null);
           this.mapPlanDataToForm(responseBody);
         }
       });
@@ -551,13 +556,15 @@ export class ProductLocalizationPlanWizard {
         this.showConfirmLeaveDialog.set(true);
         return;
       }
-      this.productPlanFormService.resetAllForms();
       this.activeStep.set(1);
       this.doRefresh.emit();
       this.isSubmitted.set(false);
       // Reset wizard state in store
       this.planStore.resetWizardState();
     }
+  }
 
+  ngOnDestroy(): void {
+    this.productPlanFormService.resetAllForms();
   }
 }

@@ -24,6 +24,7 @@ import {
 import { EMaterialsFormControls } from '../enums/product-localization-form-controls.enum';
 import { IPhoneValue } from '../interfaces/phone-input.interface';
 import { ELocalizationStatusType, ETargetedCustomer, EOpportunityType } from '../enums';
+import { API_ENDPOINTS } from '../api/api-endpoints';
 
 /**
  * Section type mapping for value chain sections
@@ -70,6 +71,32 @@ function getFormBooleanValue(formGroup: FormGroup | null, controlName: string): 
   if (!formGroup) return null;
   const control = formGroup.get(controlName);
   return control?.value ?? null;
+}
+
+/**
+ * Helper function to get MIME type from file extension
+ */
+function getMimeTypeFromExtension(extension: string | null | undefined): string {
+  if (!extension) return 'application/octet-stream';
+
+  const ext = extension.toLowerCase().replace('.', '');
+  const mimeTypes: Record<string, string> = {
+    'pdf': 'application/pdf',
+    'png': 'image/png',
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'gif': 'image/gif',
+    'zip': 'application/zip',
+    'rar': 'application/x-rar-compressed',
+    'doc': 'application/msword',
+    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'xls': 'application/vnd.ms-excel',
+    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'txt': 'text/plain',
+    'csv': 'text/csv',
+  };
+
+  return mimeTypes[ext] || 'application/octet-stream';
 }
 
 /**
@@ -342,32 +369,47 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
     });
   }
 
-  // Map attachments - files are stored as File[] in the form control
+  // Map attachments - files are stored as File[] or Attachment[] in the form control
   const attachments: Attachment[] = [];
   if (attachmentsFormGroup) {
     const attachmentsValue = getFormValue(attachmentsFormGroup, EMaterialsFormControls.attachments);
 
-    // Handle file attachments - files are File objects
+    // Handle file attachments - files can be File objects or Attachment objects
     if (attachmentsValue && Array.isArray(attachmentsValue)) {
       attachmentsValue.forEach((file: File | any) => {
         if (file instanceof File) {
-          // File object - store file reference (actual file will be appended in FormData)
+          // File object - could be new file or existing attachment converted to File
+          // Check if it has attachment metadata (from existing attachments)
+          const existingFile = file as any;
+          const attachmentId = existingFile.id || '';
+          const isExistingAttachment = existingFile.isExistingAttachment === true;
+
+          const fileName = file.name;
+          const fileExtension = existingFile.fileExtension || (fileName.split('.').pop() ?? '');
+          const fileUrl = existingFile.fileUrl || '';
+
           attachments.push({
-            id: '',
-            fileName: file.name,
-            fileExtension: file.name.split('.').pop() ?? '',
-            fileUrl: '',
-            file: file as any as string, // Store File object reference, will be handled in FormData conversion
-          } as any as Attachment);
+            id: attachmentId, // Preserve ID if it's an existing attachment
+            fileName: fileName,
+            fileExtension: fileExtension,
+            fileUrl: fileUrl,
+            // For existing attachments without file changes, we might not need to send the file again
+            // But if the file was replaced, we need to send the new File object
+            file: isExistingAttachment && !existingFile.file ? '' : (file as any as string), // Store File object reference temporarily, will be handled in FormData conversion
+          } as Attachment);
         } else if (file && typeof file === 'object') {
-          // Already processed attachment object
+          // Already processed attachment object (from edit mode or existing attachments)
+          // Ensure all Attachment interface fields are properly mapped
+          const fileName = file.fileName ?? file.name ?? '';
+          const fileExtension = file.fileExtension ?? (fileName ? fileName.split('.').pop() ?? '' : '');
+
           attachments.push({
             id: file.id ?? '',
-            fileName: file.name ?? file.fileName ?? '',
-            fileExtension: file.name?.split('.').pop() ?? file.fileExtension ?? '',
-            fileUrl: file.url ?? file.fileUrl ?? '',
-            file: file.base64 ?? file.data ?? file.file ?? file,
-          });
+            fileName: fileName,
+            fileExtension: fileExtension,
+            fileUrl: file.fileUrl ?? file.url ?? '',
+            file: file.file ?? file.base64 ?? file.data ?? '',
+          } as Attachment);
         }
       });
     }
@@ -538,11 +580,10 @@ export function mapProductPlanResponseToForm(
   // Manufacturing Experience
   if (manufacturingExpForm && productPlan.productPlantOverview?.manufacturingExperience) {
     const mfgExp = productPlan.productPlantOverview.manufacturingExperience;
-    // Set experience range (should be an object with id property or just the id string)
-    if (mfgExp.experienceRange) {
-      const expValue = typeof mfgExp.experienceRange === 'string'
-        ? { id: mfgExp.experienceRange, name: '' }
-        : mfgExp.experienceRange;
+    // Set experience range (should be a string to match option id format)
+    if (mfgExp.experienceRange !== null && mfgExp.experienceRange !== undefined) {
+      // Convert to string to match the option id format (options use id: EExperienceRange.Years_5.toString())
+      const expValue = String(mfgExp.experienceRange);
       // Set value on the nested 'value' control within the productManufacturingExperience FormGroup
       const experienceControl = manufacturingExpForm.get(EMaterialsFormControls.productManufacturingExperience);
       if (experienceControl instanceof FormGroup) {
@@ -704,17 +745,32 @@ export function mapProductPlanResponseToForm(
     if (attachmentsControl instanceof FormGroup) {
       const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
       if (valueControl && attachments.length > 0) {
-        // Convert attachment URLs to File objects if needed
-        // For now, store as array of attachment objects
+        // Convert attachment objects to File-like objects that can be displayed
         const attachmentFiles = attachments.map(att => {
-          // If fileUrl exists, we might need to fetch it
-          // For now, store the attachment info
-          return {
-            id: att.id,
-            fileName: att.fileName,
-            fileUrl: att.fileUrl,
-            fileExtension: att.fileExtension
-          };
+          // Create a File-like object that includes attachment metadata
+          // We'll create an empty File object with the correct name and attach metadata
+          const fileName = att.fileName + (att.fileExtension || '');
+          const fileType = getMimeTypeFromExtension(att.fileExtension);
+
+          // Create a File object (empty blob) with the correct name
+          const blob = new Blob([], { type: fileType });
+          const file = new File([blob], fileName, { type: fileType });
+
+          // Construct full file URL if it's a relative path
+          let fullFileUrl = att.fileUrl || '';
+          if (fullFileUrl && !fullFileUrl.startsWith('http://') && !fullFileUrl.startsWith('https://')) {
+            // Prepend base URL if it's a relative path
+            const baseUrl = API_ENDPOINTS.baseUrl.replace('/api', ''); // Remove /api suffix if present
+            fullFileUrl = baseUrl + (fullFileUrl.startsWith('/') ? fullFileUrl : '/' + fullFileUrl);
+          }
+
+          // Attach attachment metadata as additional properties
+          (file as any).id = att.id;
+          (file as any).fileUrl = fullFileUrl;
+          (file as any).fileExtension = att.fileExtension;
+          (file as any).isExistingAttachment = true;
+
+          return file;
         });
         valueControl.setValue(attachmentFiles);
       }
@@ -884,44 +940,40 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
     });
   }
 
-  // Attachments - append files
+  // Attachments - append as structured objects with metadata and file
   if (productPlan.saudization.attachments && productPlan.saudization.attachments.length > 0) {
     productPlan.saudization.attachments.forEach((attachment, index) => {
+      // Append attachment metadata fields as structured object properties
+      appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].Id`, attachment.id);
+      appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].FileName`, attachment.fileName);
+      appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].FileExtension`, attachment.fileExtension);
+      appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].FileUrl`, attachment.fileUrl);
+
       const fileValue: any = attachment.file;
 
-      if (!fileValue) return;
-
-      // Check if it's a File object
-      if (fileValue instanceof File) {
-        // File object - append directly
-        formData.append(`ProductPlan.Saudization.Attachments[${index}]`, fileValue);
-      } else if (typeof fileValue === 'object' && 'size' in fileValue && 'type' in fileValue && 'name' in fileValue) {
-        // Duck typing for File-like object
-        formData.append(`ProductPlan.Saudization.Attachments[${index}]`, fileValue as File);
-      } else if (typeof fileValue === 'string') {
-        // If file is base64 string, convert to blob
-        if (fileValue.startsWith('data:')) {
-          // Base64 data URL
-          const base64Data = fileValue.split(',')[1];
-          const byteCharacters = atob(base64Data);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+      // Handle the file data
+      if (fileValue) {
+        // Check if it's a File object - append as binary with proper field name
+        if (fileValue instanceof File) {
+          // File object - append as binary with the structured field name
+          formData.append(`ProductPlan.Saudization.Attachments[${index}].File`, fileValue);
+        } else if (typeof fileValue === 'object' && 'size' in fileValue && 'type' in fileValue && 'name' in fileValue) {
+          // Duck typing for File-like object - append as binary
+          formData.append(`ProductPlan.Saudization.Attachments[${index}].File`, fileValue as File);
+        } else if (typeof fileValue === 'string') {
+          // If file is already a string (base64), append as string field
+          let fileStringValue: string = '';
+          if (fileValue.startsWith('data:')) {
+            // Base64 data URL - extract the base64 part
+            fileStringValue = fileValue.split(',')[1];
+          } else if (fileValue.trim() !== '') {
+            // Plain base64 string
+            fileStringValue = fileValue;
           }
-          const byteArray = new Uint8Array(byteNumbers);
-          const mimeType = fileValue.match(/data:([^;]+);/)?.[1] || 'application/octet-stream';
-          const blob = new Blob([byteArray], { type: mimeType });
-          formData.append(`ProductPlan.Saudization.Attachments[${index}]`, blob, attachment.fileName);
-        } else {
-          // Plain base64 string
-          const byteCharacters = atob(fileValue);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          // Append as string field (not binary)
+          if (fileStringValue) {
+            appendFormDataValue(formData, `ProductPlan.Saudization.Attachments[${index}].File`, fileStringValue);
           }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray]);
-          formData.append(`ProductPlan.Saudization.Attachments[${index}]`, blob, attachment.fileName);
         }
       }
     });

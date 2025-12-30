@@ -62,7 +62,7 @@ import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/s
   providers: [DvManagerDashboardPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DvManagerDashboard {
+export class DvManagerDashboard implements OnInit {
   productLocalizationPlanWizardVisibility = signal(false);
   serviceLocalizationPlanWizardVisibility = signal(false);
 
@@ -129,6 +129,9 @@ export class DvManagerDashboard {
     () => this.dashboardPlansStore.loading() || this.statistics() === null
   );
 
+  ngOnInit(): void {
+    // Filter component handles query params and cleanup
+  }
   onUserReadAndApproved() {
     this.planStore.resetNewPlanOpportunityType();
   }

@@ -7,11 +7,12 @@
         <app-base-label [title]="'Opportunity'" />
         <p-select
           [options]="availableOpportunities()"
-          [formControl]="getFormControl(basicInformationFormGroup.get('opportunity'))"
+          [formControl]="getFormControl(basicInformationFormGroupControls['opportunity'])"
           optionLabel="name"
           placeholder="Select opportunity"
           [loading]="isLoadingAvailableOpportunities()"
           fluid
+          [disabled]="isOpportunityDisabled()"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
@@ -19,7 +20,7 @@
         <p-datepicker
           fluid
           dateFormat="dd M yy"
-          [formControl]="getFormControl(basicInformationFormGroup.get('submissionDate'))"
+          [formControl]="getFormControl(basicInformationFormGroupControls['submissionDate'])"
         />
       </div>
     </div>
@@ -33,7 +34,7 @@
         <app-base-label [title]="'Company Name'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(companyInformationFormGroup.get('companyName'))"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['companyName'])"
         >
           <input
             type="text"
@@ -41,11 +42,11 @@
             fluid
             [maxlength]="100"
             placeholder="Enter company name"
-            [formControl]="getValueControl(companyInformationFormGroup.get('companyName'))"
+            [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getValueControl(companyInformationFormGroup.get('companyName'))"
+          [control]="getValueControl(companyInformationFormGroupControls['companyName'])"
           [label]="'Company Name'"
         />
       </div>
@@ -55,7 +56,7 @@
         <app-base-label [title]="'CEO Name'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(companyInformationFormGroup.get('ceoName'))"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
         >
           <input
             type="text"
@@ -63,11 +64,11 @@
             fluid
             placeholder="Enter CEO name"
             [maxlength]="100"
-            [formControl]="getValueControl(companyInformationFormGroup.get('ceoName'))"
+            [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getValueControl(companyInformationFormGroup.get('ceoName'))"
+          [control]="getValueControl(companyInformationFormGroupControls['ceoName'])"
           [label]="'CEO Name'"
         />
       </div>
@@ -75,7 +76,7 @@
         <app-base-label [title]="'CEO Email'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(companyInformationFormGroup.get('ceoEmailID'))"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoEmailID'])"
         >
           <input
             type="email"
@@ -83,11 +84,11 @@
             fluid
             placeholder="Enter CEO email ID"
             maxlength="100"
-            [formControl]="getValueControl(companyInformationFormGroup.get('ceoEmailID'))"
+            [formControl]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getValueControl(companyInformationFormGroup.get('ceoEmailID'))"
+          [control]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
           [label]="'CEO Email'"
         />
       </div>
@@ -103,7 +104,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="
-            getHasCommentControl(locationInformationFormGroup.get('globalHQLocation'))
+            getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])
           "
         >
           <input
@@ -112,11 +113,11 @@
             fluid
             placeholder="Enter global HQ location"
             [maxlength]="255"
-            [formControl]="getValueControl(locationInformationFormGroup.get('globalHQLocation'))"
+            [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getValueControl(locationInformationFormGroup.get('globalHQLocation'))"
+          [control]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
           [label]="'Global HQ Location'"
         />
       </div>
@@ -128,7 +129,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="
-            getHasCommentControl(locationInformationFormGroup.get('registeredVendorIDwithSEC'))
+            getHasCommentControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])
           "
         >
           <input
@@ -138,12 +139,12 @@
             placeholder="Enter registered vendor ID with SEC"
             [maxlength]="50"
             [formControl]="
-              getValueControl(locationInformationFormGroup.get('registeredVendorIDwithSEC'))
+              getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])
             "
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getValueControl(locationInformationFormGroup.get('registeredVendorIDwithSEC'))"
+          [control]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
           [label]="'Registered Vendor ID with SEC'"
         />
       </div>
@@ -165,7 +166,7 @@
               [value]="true"
               [formControl]="
                 getFormControl(
-                  locationInformationFormGroup.get('doYouCurrentlyHaveLocalAgentInKSA')
+                  locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']
                 )
               "
               inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
@@ -179,7 +180,7 @@
               [value]="false"
               [formControl]="
                 getFormControl(
-                  locationInformationFormGroup.get('doYouCurrentlyHaveLocalAgentInKSA')
+                  locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']
                 )
               "
               inputId="doYouCurrentlyHaveLocalAgentInKSANo"
@@ -190,7 +191,7 @@
         </div>
         <app-base-error-messages
           [control]="
-            getFormControl(locationInformationFormGroup.get('doYouCurrentlyHaveLocalAgentInKSA'))
+            getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])
           "
           [label]="'Do you currently have local Agent in KSA?'"
         />
@@ -205,7 +206,7 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="
-              getHasCommentControl(localAgentInformationFormGroup.get('localAgentName'))
+              getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])
             "
           >
             <input
@@ -214,11 +215,11 @@
               fluid
               placeholder="Enter local agent name"
               [maxlength]="100"
-              [formControl]="getValueControl(localAgentInformationFormGroup.get('localAgentName'))"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
-            [control]="getValueControl(localAgentInformationFormGroup.get('localAgentName'))"
+            [control]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
             [label]="'Local Agent Name'"
           />
         </div>
@@ -227,7 +228,7 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="
-              getHasCommentControl(localAgentInformationFormGroup.get('contactPersonName'))
+              getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])
             "
           >
             <input
@@ -237,12 +238,12 @@
               placeholder="Enter contact person name"
               [maxlength]="100"
               [formControl]="
-                getValueControl(localAgentInformationFormGroup.get('contactPersonName'))
+                getValueControl(localAgentInformationFormGroupControls['contactPersonName'])
               "
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
-            [control]="getValueControl(localAgentInformationFormGroup.get('contactPersonName'))"
+            [control]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
             [label]="'Contact Person Name'"
           />
         </div>
@@ -254,7 +255,7 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="
-              getHasCommentControl(localAgentInformationFormGroup.get('emailID'))
+              getHasCommentControl(localAgentInformationFormGroupControls['emailID'])
             "
           >
             <input
@@ -262,11 +263,11 @@
               pInputText
               fluid
               placeholder="Enter email ID"
-              [formControl]="getValueControl(localAgentInformationFormGroup.get('emailID'))"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
-            [control]="getValueControl(localAgentInformationFormGroup.get('emailID'))"
+            [control]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
             [label]="'Email ID'"
           />
         </div>
@@ -275,15 +276,15 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="
-              getHasCommentControl(localAgentInformationFormGroup.get('contactNumber'))
+              getHasCommentControl(localAgentInformationFormGroupControls['contactNumber'])
             "
           >
             <app-phone-input
-              [formControl]="getValueControl(localAgentInformationFormGroup.get('contactNumber'))"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
             ></app-phone-input>
           </app-group-input-with-checkbox>
           <app-base-error-messages
-            [control]="getValueControl(localAgentInformationFormGroup.get('contactNumber'))"
+            [control]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
             [label]="'Contact Number'"
           />
         </div>
@@ -293,7 +294,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="
-            getHasCommentControl(localAgentInformationFormGroup.get('companyHQLocation'))
+            getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])
           "
         >
           <input
@@ -301,11 +302,11 @@
             pInputText
             fluid
             placeholder="Enter Company HQ Location"
-            [formControl]="getValueControl(localAgentInformationFormGroup.get('companyHQLocation'))"
+            [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getValueControl(localAgentInformationFormGroup.get('companyHQLocation'))"
+          [control]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
           [label]="'Company HQ Location'"
         />
       </div>
@@ -322,6 +323,11 @@
       [hideDeleteButton]="true"
       [showIndexColumn]="true"
       [indexColumnLabel]="'# of Services'"
+      [excludeKeys]="['serviceProvidedToCompanyNames']"
+      [headerTooltips]="{
+        totalBusinessDoneLast5Years: 'Mention total business done in last 5 years with top 5 entities',
+        serviceLocalizationMethodology: 'Select “Yes” if the service is currently targeted for localization; otherwise, select “No'
+      }"
     >
       <ng-template #itemTemplate let-itemControl let-index="index">
         <td class="p-3 border border-gray-200 w-[48px] text-center">Service {{ index + 1 }}</td>
@@ -331,7 +337,7 @@
             type="text"
             pInputText
             fluid
-            [formControl]="itemControl.get('serviceName')"
+            [formControl]="getValueControl(itemControl.get('serviceName'))"
             readonly
             class="text-gray-400"
           />
@@ -342,7 +348,7 @@
             [options]="serviceTypeOptions()"
             optionLabel="name"
             optionValue="id"
-            [formControl]="itemControl.get('serviceType')"
+            [formControl]="getValueControl(itemControl.get('serviceType'))"
             placeholder="Select"
             fluid
             [appendTo]="'body'"
@@ -354,7 +360,7 @@
             [options]="serviceCategoryOptions()"
             optionLabel="name"
             optionValue="id"
-            [formControl]="itemControl.get('serviceCategory')"
+            [formControl]="getValueControl(itemControl.get('serviceCategory'))"
             placeholder="Select"
             fluid
             [appendTo]="'body'"
@@ -367,8 +373,8 @@
             pInputText
             fluid
             [maxlength]="255"
-            placeholder="Enter description"
-            [formControl]="itemControl.get('serviceDescription')"
+            placeholder="Brief description of the service"
+            [formControl]="getValueControl(itemControl.get('serviceDescription'))"
           />
         </td>
 
@@ -377,21 +383,39 @@
             [options]="serviceProvidedToOptions()"
             optionLabel="name"
             optionValue="id"
-            [formControl]="itemControl.get('serviceProvidedTo')"
+            [formControl]="getValueControl(itemControl.get('serviceProvidedTo'))"
+            (onChange)="onServiceProvidedToChange($event.value, index)"
             placeholder="Select"
             fluid
             [appendTo]="'body'"
           />
+
+          @if (getValueControl(itemControl.get('serviceProvidedTo'))?.value === serviceProvidedToOthersId || getValueControl(itemControl.get('serviceProvidedTo'))?.value === 'Others') {
+          <div class="mt-2">
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Please mention company names"
+              [formControl]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
+            />
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
+              [label]="'Company Names'"
+            />
+          </div>
+          }
         </td>
 
         <td class="p-3 border border-gray-200 min-w-[200px]">
-          <input
-            pInputText
+          <textarea
+            pTextarea
             fluid
             [maxlength]="150"
-            placeholder="Enter total business"
-            [formControl]="itemControl.get('totalBusinessLast5Years')"
-          />
+            placeholder="Company Name – Amount (Mn SAR) (From Year – To Year)"
+            [formControl]="getValueControl(itemControl.get('totalBusinessDoneLast5Years'))"
+          ></textarea>
         </td>
 
         <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -399,7 +423,7 @@
             [options]="yesNoOptions()"
             optionLabel="name"
             optionValue="id"
-            [formControl]="itemControl.get('serviceTargetedForLocalization')"
+            [formControl]="getValueControl(itemControl.get('serviceTargetedForLocalization'))"
             placeholder="Select"
             fluid
             [appendTo]="'body'"
@@ -411,7 +435,7 @@
             pInputText
             fluid
             placeholder="Enter expected localization date"
-            [formControl]="itemControl.get('expectedLocalizationDate')"
+            [formControl]="getValueControl(itemControl.get('expectedLocalizationDate'))"
           />
         </td>
 
@@ -420,7 +444,7 @@
             [options]="localizationMethodologyOptions()"
             optionLabel="name"
             optionValue="id"
-            [formControl]="itemControl.get('serviceLocalizationMethodology')"
+            [formControl]="getValueControl(itemControl.get('serviceLocalizationMethodology'))"
             placeholder="Select"
             fluid
             [appendTo]="'body'"

@@ -16,10 +16,11 @@ import { NgTemplateOutlet } from '@angular/common';
 import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-form-array-input',
-  imports: [ButtonModule, TableModule, NgTemplateOutlet, TranslatePipe, CamelCaseToWordPipe],
+  imports: [ButtonModule, TableModule, NgTemplateOutlet, TranslatePipe, CamelCaseToWordPipe, TooltipModule],
   templateUrl: './form-array-input.html',
   styleUrl: './form-array-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,6 +42,10 @@ export class FormArrayInput {
   showIndexColumn = input<boolean>(false);
   // Label for the index column header
   indexColumnLabel = input<string>('#');
+  // Keys to exclude from column headers
+  excludeKeys = input<string[]>([]);
+  // Header tooltips - map of key names to tooltip text
+  headerTooltips = input<Record<string, string>>({});
 
   @ContentChild('itemTemplate', { read: TemplateRef }) itemTemplate?: TemplateRef<{
     $implicit: AbstractControl;
@@ -103,8 +108,9 @@ export class FormArrayInput {
     const firstObject = objectsArray[0];
     if (!firstObject || typeof firstObject !== 'object' || firstObject === null) return [];
 
-    // Exclude 'rowId' from the keys to prevent it from being displayed as a column
-    return Object.keys(firstObject).filter((key) => key !== 'rowId');
+    // Exclude 'rowId' and any keys specified in excludeKeys input
+    const keysToExclude = ['rowId', ...this.excludeKeys()];
+    return Object.keys(firstObject).filter((key) => !keysToExclude.includes(key));
   });
 
   // Get FormControl/FormGroup for a specific index

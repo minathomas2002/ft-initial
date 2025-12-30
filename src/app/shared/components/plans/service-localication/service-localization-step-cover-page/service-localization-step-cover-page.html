@@ -8,13 +8,13 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="
-            getHasCommentControl(companyInformationFormGroup.get('companyName')!)
+            getHasCommentControl(coverPageCompanyInformationFormGroup.get('companyName'))
           "
         >
           <input
             pInputText
             placeholder="Enter company name"
-            [formControl]="getFormControl(companyInformationFormGroup.get('companyName')!)"
+            [formControl]="getValueControl(coverPageCompanyInformationFormGroup.get('companyName'))"
             fluid
             maxlength="100"
             trimOnBlur
@@ -22,7 +22,7 @@
         </app-group-input-with-checkbox>
 
         <app-base-error-messages
-          [control]="companyInformationFormGroup.get('companyName')!"
+          [control]="getValueControl(coverPageCompanyInformationFormGroup.get('companyName'))"
           [label]="'Company Name'"
         />
       </div>
@@ -39,7 +39,7 @@
       <ng-template #itemTemplate let-itemControl let-index="index">
         <td class="p-3 border border-gray-200 min-w-[300px]">
           <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceName')!)"
+            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceName'))"
             [showCheckbox]="showCheckbox()"
           >
             <input
@@ -48,18 +48,17 @@
               fluid
               placeholder="Enter service name"
               [maxlength]="100"
-              [formControl]="getFormControl(itemControl.get('serviceName')!)"
+              [formControl]="getValueControl(itemControl.get('serviceName'))"
               trimOnBlur
             />
           </app-group-input-with-checkbox>
 
           <app-base-error-messages
-            [control]="getFormControl(itemControl.get('serviceName')!)"
+            [control]="getValueControl(itemControl.get('serviceName'))"
             [label]="'Service Name'"
           />
         </td>
       </ng-template>
     </app-form-array-input>
-    <app-base-error-messages [control]="getServicesFormArray()" [label]="'Services'" />
   </div>
 </div>

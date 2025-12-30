@@ -83,7 +83,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),
+        [EMaterialsFormControls.value]: this.fb.control({value: '', disabled: true}, [Validators.required, Validators.maxLength(150)]),
       }),
       [EMaterialsFormControls.serviceType]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -274,6 +274,120 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     }
 
     expectedDateControl.updateValueAndValidity();
+  }
+
+  /**
+   * Sync services from cover page to overview details
+   * Creates a service detail row for each service entered in the cover page
+   * and pre-fills the service name
+   * Only syncs if the services have changed or are not yet initialized
+   */
+  syncServicesFromCoverPage(overviewFormGroup: FormGroup, servicesArray: FormArray): void {
+    const serviceDetailsArray = this.getServiceDetailsFormArray(overviewFormGroup);
+    if (!serviceDetailsArray) return;
+
+    // Get service names from cover page
+    const coverPageServiceNames = servicesArray.controls.map(control => {
+      const serviceFormGroup = control as FormGroup;
+      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
+      return serviceNameControl?.value || '';
+    });
+
+    // Get service names from overview details
+    const overviewServiceNames = serviceDetailsArray.controls.map(control => {
+      const serviceFormGroup = control as FormGroup;
+      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
+      return serviceNameControl?.value || '';
+    });
+
+    // Check if services match (same count and same names in order)
+    const servicesMatch = coverPageServiceNames.length === overviewServiceNames.length &&
+      coverPageServiceNames.every((name, index) => name === overviewServiceNames[index]);
+
+    if (servicesMatch) {
+      // Services already match, don't overwrite existing data
+      return;
+    }
+
+    // Services don't match, need to sync
+    // Save any existing data that can be matched by service name
+    const existingDataMap = new Map<string, any>();
+    serviceDetailsArray.controls.forEach(control => {
+      const serviceFormGroup = control as FormGroup;
+      const serviceName = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`)?.value;
+      if (serviceName) {
+        existingDataMap.set(serviceName, serviceFormGroup.getRawValue());
+      }
+    });
+
+    // Clear existing service details
+    serviceDetailsArray.clear();
+
+    // Create a service detail item for each service
+    servicesArray.controls.forEach((serviceControl) => {
+      const serviceFormGroup = serviceControl as FormGroup;
+      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
+      const serviceName = serviceNameControl?.value || '';
+
+      // Create new service detail item
+      const newServiceDetail = this.createServiceDetailItem();
+
+      // Pre-fill the service name (value only, not the comment)
+      const serviceNameValueControl = newServiceDetail.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
+      if (serviceNameValueControl) {
+        serviceNameValueControl.setValue(serviceName);
+      }
+
+      // Restore existing data if this service name was already present
+      const existingData = existingDataMap.get(serviceName);
+      if (existingData) {
+        // Restore all fields except serviceName
+        Object.keys(existingData).forEach(key => {
+          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName) {
+            const targetControl = newServiceDetail.get(key);
+            if (targetControl) {
+              targetControl.patchValue(existingData[key]);
+            }
+          }
+        });
+      }
+
+      // Add the new service detail to the array
+      serviceDetailsArray.push(newServiceDetail);
+    });
+
+    // Ensure at least one empty item if no services provided
+    if (serviceDetailsArray.length === 0) {
+      serviceDetailsArray.push(this.createServiceDetailItem());
+    }
+  }
+
+  /**
+   * Check if a service detail row is empty (no user input)
+   */
+  private isServiceDetailEmpty(serviceDetailFormGroup: FormGroup): boolean {
+    const fields = [
+      EMaterialsFormControls.serviceName,
+      EMaterialsFormControls.serviceType,
+      EMaterialsFormControls.serviceCategory,
+      EMaterialsFormControls.serviceDescription,
+      EMaterialsFormControls.serviceProvidedTo,
+      EMaterialsFormControls.serviceProvidedToCompanyNames,
+      EMaterialsFormControls.totalBusinessDoneLast5Years,
+      EMaterialsFormControls.serviceTargetedForLocalization,
+      EMaterialsFormControls.expectedLocalizationDate,
+      EMaterialsFormControls.serviceLocalizationMethodology,
+    ];
+
+    for (const field of fields) {
+      const control = serviceDetailFormGroup.get(`${field}.${EMaterialsFormControls.value}`);
+      if (control && control.value) {
+        // Has a value, not empty
+        return false;
+      }
+    }
+
+    return true;
   }
 }
 

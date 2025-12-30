@@ -56,12 +56,22 @@ export class FileuploadComponent {
           // Add files to PrimeNG's internal array with objectURL for preview
           modelFiles.forEach(file => {
             if (file instanceof File) {
-              // Create objectURL for file preview
-              const objectURL = URL.createObjectURL(file);
-              // Add file with objectURL to PrimeNG's files array
-              const fileWithUrl = Object.assign(file, { objectURL });
-              if (primeNgComponent.files) {
-                primeNgComponent.files.push(fileWithUrl);
+              // Check if this is an existing attachment with fileUrl
+              const existingFile = file as any;
+              if (existingFile.isExistingAttachment && existingFile.fileUrl) {
+                // For existing attachments, use the fileUrl from server instead of creating objectURL
+                const fileWithUrl = Object.assign(file, { objectURL: existingFile.fileUrl });
+                if (primeNgComponent.files) {
+                  primeNgComponent.files.push(fileWithUrl);
+                }
+              } else {
+                // Create objectURL for new file preview
+                const objectURL = URL.createObjectURL(file);
+                // Add file with objectURL to PrimeNG's files array
+                const fileWithUrl = Object.assign(file, { objectURL });
+                if (primeNgComponent.files) {
+                  primeNgComponent.files.push(fileWithUrl);
+                }
               }
             }
           });
@@ -78,6 +88,11 @@ export class FileuploadComponent {
   clear!: () => void;
 
   clearFiles() {
+    // Don't allow clearing in view mode
+    if (this.isViewMode()) {
+      return;
+    }
+
     this.fileupload()?.clear();
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     (this.fileupload() as any).msgs = []; // hide PrimeNG internal messages
@@ -92,6 +107,11 @@ export class FileuploadComponent {
   }
 
   removeUploadedFile(index: number) {
+    // Don't allow removal in view mode
+    if (this.isViewMode()) {
+      return;
+    }
+
     // Remove from your custom model
     const currentFiles = this.files().slice();
     currentFiles.splice(index, 1);

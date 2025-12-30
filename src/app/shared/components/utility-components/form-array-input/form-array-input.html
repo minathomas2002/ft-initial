@@ -18,6 +18,13 @@
               ? ('opportunity.wizard.keyActivity' | translate)
               : (key | camelCaseToWord)
           }}</span>
+          @if(headerTooltips()[key]){
+          <i
+            class="icon-info text-sm ms-2 text-gray-400"
+            [pTooltip]="headerTooltips()[key]"
+            tooltipPosition="top"
+          ></i>
+          }
         </th>
         }
         <th

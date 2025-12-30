@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
@@ -18,6 +18,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { EEmployeePlanStatus, IPlanFilter } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { PlanStore, IPlanTypeDropdownOption } from 'src/app/shared/stores/plan/plan.store';
 
 interface IDropdownOption {
   label: string;
@@ -37,21 +38,11 @@ export class DvManagerDashboardPlansFilter implements OnInit {
   readonly filterService = inject(DvManagerDashboardPlansFilterService);
   private readonly i18nService = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly planStore = inject(PlanStore);
   readonly filter = this.filterService.filter;
-
   planTypeOptions = computed<IDropdownOption[]>(() => {
-    this.i18nService.currentLanguage();
-    return [
-      { label: this.i18nService.translate('plans.filter.allTypes'), value: null },
-      {
-        label: this.i18nService.translate('plans.filter.service'),
-        value: EOpportunityType.SERVICES,
-      },
-      {
-        label: this.i18nService.translate('plans.filter.material'),
-        value: EOpportunityType.PRODUCT,
-      },
-    ];
+    return this.planStore.planTypeOptions() as IDropdownOption[];
   });
 
   statusOptions = computed<IDropdownOption[]>(() => {
@@ -76,6 +67,39 @@ export class DvManagerDashboardPlansFilter implements OnInit {
   ngOnInit() {
     this.listenToSearchChanges();
     this.prefillFiltersFromQueryParams();
+    this.listenToQueryParamChanges();
+  }
+
+  private listenToQueryParamChanges() {
+    debugger;
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params: Record<string, string | number | undefined>) => {
+        // Only process if notificationAction is present (from notification navigation)
+        const updates: Partial<IPlanFilter> = {};
+
+        if (params['notificationAction']) {
+          if (params['status']) {
+            const status = this.getStatusFromParam(params['status']);
+            if (status !== null) updates.status = status;
+          }
+        }
+
+        this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
+        this.filterService.applyFilterWithPaging();
+        if (params['notificationAction']) {
+          if (Object.keys(updates).length > 0) {
+            // Clean up query params after processing
+            setTimeout(() => {
+              this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: { notificationAction: null, status: null },
+                queryParamsHandling: 'merge',
+              });
+            }, 100);
+          }
+        }
+      });
   }
 
   onSearchTextChange(value: string) {
@@ -125,7 +149,7 @@ export class DvManagerDashboardPlansFilter implements OnInit {
 
     if (queryParams['status']) {
       const status = this.getStatusFromParam(queryParams['status']);
-      if (status) updates.status = status;
+      if (status !== null) updates.status = status;
     }
 
     if (queryParams['planType']) {
@@ -137,12 +161,22 @@ export class DvManagerDashboardPlansFilter implements OnInit {
       updates.searchText = queryParams['searchText'];
     }
 
-    this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-    this.filterService.applyFilterWithPaging();    
+    if (Object.keys(updates).length > 0) {
+      this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
+      this.filterService.applyFilterWithPaging();
+    }
   }
 
-  private getStatusFromParam(param: string): EEmployeePlanStatus | null {
-    switch (param.toLowerCase()) {
+  private getStatusFromParam(param: string | number): EEmployeePlanStatus | null {
+    // Handle numeric status values (from notifications)
+    const statusNum = Number(param);
+    if (!isNaN(statusNum) && Object.values(EEmployeePlanStatus).includes(statusNum as EEmployeePlanStatus)) {
+      return statusNum as EEmployeePlanStatus;
+    }
+
+    // Handle string-based status values
+    const paramStr = String(param).toLowerCase();
+    switch (paramStr) {
       case 'employee_approved':
         return EEmployeePlanStatus.EMPLOYEE_APPROVED;
       case 'dept_rejected':

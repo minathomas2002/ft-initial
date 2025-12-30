@@ -9,10 +9,11 @@ import { SummaryTableCell } from '../../shared/summary-table-cell/summary-table-
 import { TableModule } from 'primeng/table';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 
 @Component({
   selector: 'app-summary-section-saudization',
-  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, TableModule, TranslatePipe],
+  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, TableModule, TranslatePipe, ImageErrorDirective],
   templateUrl: './summary-section-saudization.html',
   styleUrl: './summary-section-saudization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -110,6 +111,30 @@ export class SummarySectionSaudization {
     const atts = this.attachments();
     return atts && Array.isArray(atts) && atts.length > 0;
   });
+
+  // Get file icon based on file type
+  getFileIcon(file: any): string | null {
+    if (!file) return null;
+
+    // Check for ZIP files
+    if (
+      file.name?.toLowerCase().endsWith('.zip') ||
+      file.type === 'application/zip' ||
+      file.type === 'application/x-zip-compressed'
+    ) {
+      return 'assets/images/zip.png';
+    }
+
+    // Check for PDF files
+    if (
+      file.name?.toLowerCase().endsWith('.pdf') ||
+      file.type === 'application/pdf'
+    ) {
+      return 'assets/images/pdf.png';
+    }
+
+    return null;
+  }
 
   // Table rows data for PrimeNG table
   tableRows = computed(() => {

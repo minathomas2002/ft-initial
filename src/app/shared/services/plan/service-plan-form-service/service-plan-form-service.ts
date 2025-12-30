@@ -12,7 +12,6 @@ import { ServiceLocalizationStepDirectLocalizationFormBuilder } from './steps/se
 })
 export class ServicePlanFormService {
   private readonly _fb = inject(FormBuilder);
-  private readonly _planStore = inject(PlanStore);
 
   // Step builders
   private readonly _step1Builder = new ServiceLocalizationStepCoverPageFormBuilder(this._fb);
@@ -138,6 +137,13 @@ export class ServicePlanFormService {
     this._step2Builder.toggleExpectedLocalizationDateValidation(this._step2FormGroup, serviceTargetedForLocalization, index);
   }
 
+  syncServicesFromCoverPageToOverview(): void {
+    const servicesArray = this.getServicesFormArray();
+    if (servicesArray) {
+      this._step2Builder.syncServicesFromCoverPage(this._step2FormGroup, servicesArray);
+    }
+  }
+
   // Step 3 methods
   createSaudiCompanyDetailItem(): FormGroup {
     return this._step3Builder.createSaudiCompanyDetailItem();
@@ -207,6 +213,13 @@ export class ServicePlanFormService {
     this._step3Builder.toggleAgreementCopyValidation(this._step3FormGroup, provideAgreementCopy, index);
   }
 
+  syncServicesFromCoverPageToExistingSaudi(): void {
+    const servicesArray = this.getServicesFormArray();
+    if (servicesArray) {
+      this._step3Builder.syncServicesFromCoverPage(this._step3FormGroup, servicesArray);
+    }
+  }
+
   // Step 4 methods
   createDirectLocalizationEntityLevelItem(): FormGroup {
     return this._step4Builder.createEntityLevelItem();
@@ -242,6 +255,13 @@ export class ServicePlanFormService {
 
   toggleProprietaryToolsSystemsDetailsValidation(willBeAnyProprietaryToolsSystems: string | boolean | null, index: number): void {
     this._step4Builder.toggleProprietaryToolsSystemsDetailsValidation(this._step4FormGroup, willBeAnyProprietaryToolsSystems, index);
+  }
+
+  syncServicesFromCoverPageToDirectLocalization(): void {
+    const servicesArray = this.getServicesFormArray();
+    if (servicesArray) {
+      this._step4Builder.syncServicesFromCoverPage(this._step4FormGroup, servicesArray);
+    }
   }
 
   // Helper methods

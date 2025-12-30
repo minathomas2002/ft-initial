@@ -5,17 +5,16 @@ import {
   DestroyRef,
   inject,
   model,
+  OnInit,
   output,
   signal,
 } from '@angular/core';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { ServiceLocalizationFormService } from 'src/app/shared/services/plan/materials-form-service/service-localization-form-service';
 import { ELocalizationMethodology } from 'src/app/shared/enums';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { I18nService } from 'src/app/shared/services/i18n';
-import { FormGroup } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseTagComponent } from '../../../base-components/base-tag/base-tag.component';
 import { HandlePlanStatusFactory } from 'src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory';
 import { StepContentDirective } from 'src/app/shared/directives';
@@ -24,6 +23,7 @@ import { ServiceLocalizationStepOverview } from '../service-localization-step-ov
 import { ServiceLocalizationStepExistingSaudi } from '../service-localization-step-existing-saudi/service-localization-step-existing-saudi';
 import { ServiceLocalizationStepSummary } from '../service-localization-step-summary/service-localization-step-summary';
 import { ServiceLocalizationStepDirectLocalization } from '../service-localization-step-direct-localization/service-localization-step-direct-localization';
+import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 
 @Component({
   selector: 'app-service-localization-plan-wizard',
@@ -41,10 +41,11 @@ import { ServiceLocalizationStepDirectLocalization } from '../service-localizati
   styleUrl: './service-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceLocalizationPlanWizard {
+export class ServiceLocalizationPlanWizard implements OnInit {
   planStore = inject(PlanStore);
   i18nService = inject(I18nService);
-  private readonly planStatusFactory = inject(HandlePlanStatusFactory);
+  planStatusFactory = inject(HandlePlanStatusFactory);
+  serviceLocalizationFormService = inject(ServicePlanFormService);
 
   visibility = model(false);
   doRefresh = output<void>();
@@ -73,7 +74,6 @@ export class ServiceLocalizationPlanWizard {
       hasErrors: true,
     });
 
-    // Conditional steps based on details of services methodology selection
     if (this.showExistingSaudiStep()) {
       list.push({
         title: 'Existing Saudi Co.',
@@ -138,36 +138,43 @@ export class ServiceLocalizationPlanWizard {
 
   validationErrors = signal<Map<number, boolean>>(new Map());
 
-  // Dynamically show/hide steps based on details of services selection
-  serviceLocalizationFormService = inject(ServiceLocalizationFormService);
+  // Conditional step flags - initialize as true so all steps are visible initially
+  showExistingSaudiStep = signal(true);
+  showDirectLocalizationStep = signal(true);
 
-  // Keep a small signal with the current details array value; update on valueChanges
-  private readonly detailsItems = signal<any[]>(
-    this.serviceLocalizationFormService.getDetailsOfServicesFormArray().value ?? []
-  );
+  ngOnInit(): void {
+    this.listenToConditionalSteps();
+  }
 
-  private readonly _detailsSubscription = (() => {
-    const detailsArray = this.serviceLocalizationFormService.getDetailsOfServicesFormArray();
-    detailsArray.valueChanges?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => {
-      this.detailsItems.set(v ?? []);
-    });
-  })();
+  // Initialize watcher on service details form array to set flags
+  private listenToConditionalSteps() {
+    const detailsArray = this.serviceLocalizationFormService.getServiceDetailsFormArray();
+    const evaluate = () => {
+      const items = detailsArray?.value ?? [];
 
-  // Computed flags derived from the details items (keeps logic simple and reactive)
-  showExistingSaudiStep = computed(() =>
-    this.detailsItems().some(
-      (it: any) =>
-        String(it?.serviceLocalizationMethodology) ===
-        ELocalizationMethodology.Collaboration.toString()
-    )
-  );
+      const getMethod = (it: any) => {
+        const v = it?.serviceLocalizationMethodology;
+        return !v?.value ? null : String(v?.value);
+      };
 
-  showDirectLocalizationStep = computed(() =>
-    this.detailsItems().some(
-      (it: any) =>
-        String(it?.serviceLocalizationMethodology) === ELocalizationMethodology.Direct.toString()
-    )
-  );
+      const allMethodologiesNull = items.every((it: any) => getMethod(it) === null);
+
+      if (allMethodologiesNull) {
+        this.showExistingSaudiStep.set(true);
+        this.showDirectLocalizationStep.set(true);
+      } else {
+        this.showExistingSaudiStep.set(
+          items.some((it: any) => getMethod(it) === ELocalizationMethodology.Collaboration.toString())
+        );
+        this.showDirectLocalizationStep.set(
+          items.some((it: any) => getMethod(it) === ELocalizationMethodology.Direct.toString())
+        );
+      }
+    };
+
+    // Only evaluate when user changes methodology, not on init
+    detailsArray?.valueChanges?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => evaluate());
+  };
 
   previousStep(): void {
     this.activeStep.set(this.activeStep() - 1);
@@ -194,20 +201,10 @@ export class ServiceLocalizationPlanWizard {
   }
 
   onClose(): void {
-    // if (this.planStore.wizardMode() === 'create' || this.planStore.wizardMode() === 'edit') {
-    //   if (!this.isSubmitted()) {
-    //     // Keep the wizard open and show confirmation dialog
-    //     this.visibility.set(true);
-    //     this.showConfirmLeaveDialog.set(true);
-    //     return;
-    //   }
-    //   this.productPlanFormService.resetAllForms();
-    //   this.activeStep.set(1);
-    //   this.doRefresh.emit();
-    //   this.isSubmitted.set(false);
-    //   // Reset wizard state in store
-    //   this.planStore.resetWizardState();
-    // }
+    // Reset active step to 1 when closing
+    this.activeStep.set(1);
+    // Reset wizard state in store
+    this.planStore.resetWizardState();
   }
 
   saveAsDraft(): void {

@@ -1,33 +1,18 @@
-import { inject } from '@angular/core';
-import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
-import {
-  EExperienceRange,
-  EInHouseProcuredType,
-  ELocalizationStatusType,
-  EOpportunityType,
-  EProductManufacturingExperience,
-  ETargetedCustomer,
-  EServiceType,
-  EServiceProvidedTo,
-  EServiceCategory,
-  ELocalizationMethodology,
-  EYesNo,
-} from '../../enums';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { PlanApiService } from '../../api/plans/plan-api-service';
-import { catchError, finalize, Observable, of, tap, throwError } from 'rxjs';
-import {
-  IAssignActiveEmployee,
-  IAssignRequest,
-  IBaseApiResponse,
-  IOpportunity,
-  IOpportunityDetails,
-  IPlanRecord,
-  IPlansDashboardStatistics,
-  ISelectItem,
-} from '../../interfaces';
-import { IProductPlanResponse, ITimeLineResponse } from '../../interfaces/plans.interface';
-import { downloadFileFromBlob } from '../../utils/file-download.utils';
+import { computed, inject } from "@angular/core";
+import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
+import { EExperienceRange, EInHouseProcuredType, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceType, ETargetedCustomer, EYesNo } from "../../enums";
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { PlanApiService } from "../../api/plans/plan-api-service";
+import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
+import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IProductPlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
+import { downloadFileFromBlob } from "../../utils/file-download.utils";
+import { I18nService } from "../../services/i18n/i18n.service";
+
+export interface IPlanTypeDropdownOption {
+  label: string;
+  value: EOpportunityType | null;
+}
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null;
@@ -135,6 +120,25 @@ const initialState: {
 export const PlanStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
+  withComputed((store) => {
+    const i18nService = inject(I18nService);
+    return {
+      planTypeOptions: computed<IPlanTypeDropdownOption[]>(() => {
+        i18nService.currentLanguage();
+        return [
+          { label: i18nService.translate('plans.filter.allTypes'), value: null },
+          {
+            label: i18nService.translate('plans.filter.service'),
+            value: EOpportunityType.SERVICES,
+          },
+          {
+            label: i18nService.translate('opportunity.type.product'),
+            value: EOpportunityType.PRODUCT,
+          },
+        ];
+      }),
+    };
+  }),
   withMethods((store) => {
     return {
       setNewPlanOpportunityType(opportunityType: EOpportunityType): void {

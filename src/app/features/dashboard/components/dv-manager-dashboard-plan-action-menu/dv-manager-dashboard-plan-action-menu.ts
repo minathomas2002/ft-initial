@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import type { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
+import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.enum';
 import { EEmployeePlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -38,12 +39,14 @@ export class DvManagerDashboardPlanActionMenu {
             command: () => this.onDownload.emit(plan),
         });
 
-        items.push({
-            label: this.i18nService.translate('plans.actions.viewTimeline'),
-            command: () => this.onViewTimeline.emit(plan),
-        });
+        if (plan.actions && plan.actions.includes(EActionPlanTimeLine.ViewTimeline)) {
+            items.push({
+                label: this.i18nService.translate('plans.actions.viewTimeline'),
+                command: () => this.onViewTimeline.emit(plan),
+            });
+        }
 
-        if (plan.status === EEmployeePlanStatus.UNASSIGNED) {
+        if (plan.actions && plan.actions.includes(EActionPlanTimeLine.Assigned)) {
             items.push({
                 label: this.i18nService.translate('plans.actions.assignToEmployee'),
                 command: () => this.onAssignToEmployee.emit(plan),
@@ -51,11 +54,7 @@ export class DvManagerDashboardPlanActionMenu {
         }
 
 
-        //TODO check this logic
-        if (![EEmployeePlanStatus.APPROVED,
-            EEmployeePlanStatus.REJECTED,
-            EEmployeePlanStatus.UNASSIGNED
-        ].includes(plan.status as EEmployeePlanStatus)) {
+        if (plan.actions && plan.actions.includes(EActionPlanTimeLine.Reassigned)) {
             items.push({
                 label: this.i18nService.translate('plans.actions.reAssign'),
                 command: () => this.onReAssign.emit(plan),

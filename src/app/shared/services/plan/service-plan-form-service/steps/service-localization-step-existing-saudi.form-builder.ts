@@ -526,5 +526,91 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
 
     agreementCopyControl.updateValueAndValidity();
   }
+
+  /**
+   * Sync services from cover page to service level
+   * Creates a service level row for each service entered in the cover page
+   * and pre-fills the service name
+   * Only syncs if the services have changed or are not yet initialized
+   */
+  syncServicesFromCoverPage(existingSaudiFormGroup: FormGroup, servicesArray: FormArray): void {
+    const serviceLevelArray = this.getServiceLevelFormArray(existingSaudiFormGroup);
+    if (!serviceLevelArray) return;
+
+    // Get service names from cover page
+    const coverPageServiceNames = servicesArray.controls.map(control => {
+      const serviceFormGroup = control as FormGroup;
+      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
+      return serviceNameControl?.value || '';
+    });
+
+    // Get service names from service level
+    const serviceLevelServiceNames = serviceLevelArray.controls.map(control => {
+      const serviceFormGroup = control as FormGroup;
+      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
+      return serviceNameControl?.value || '';
+    });
+
+    // Check if services match (same count and same names in order)
+    const servicesMatch = coverPageServiceNames.length === serviceLevelServiceNames.length &&
+      coverPageServiceNames.every((name, index) => name === serviceLevelServiceNames[index]);
+
+    if (servicesMatch) {
+      // Services already match, don't overwrite existing data
+      return;
+    }
+
+    // Services don't match, need to sync
+    // Save any existing data that can be matched by service name
+    const existingDataMap = new Map<string, any>();
+    serviceLevelArray.controls.forEach(control => {
+      const serviceFormGroup = control as FormGroup;
+      const serviceName = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`)?.value;
+      if (serviceName) {
+        existingDataMap.set(serviceName, serviceFormGroup.getRawValue());
+      }
+    });
+
+    // Clear existing service level items
+    serviceLevelArray.clear();
+
+    // Create a service level item for each service
+    servicesArray.controls.forEach((serviceControl) => {
+      const serviceFormGroup = serviceControl as FormGroup;
+      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
+      const serviceName = serviceNameControl?.value || '';
+
+      // Create new service level item
+      const newServiceLevel = this.createServiceLevelItem();
+
+      // Pre-fill the service name (value only, not the comment)
+      const serviceNameValueControl = newServiceLevel.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
+      if (serviceNameValueControl) {
+        serviceNameValueControl.setValue(serviceName);
+      }
+
+      // Restore existing data if this service name was already present
+      const existingData = existingDataMap.get(serviceName);
+      if (existingData) {
+        // Restore all fields except serviceName
+        Object.keys(existingData).forEach(key => {
+          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName) {
+            const targetControl = newServiceLevel.get(key);
+            if (targetControl) {
+              targetControl.patchValue(existingData[key]);
+            }
+          }
+        });
+      }
+
+      // Add the new service level to the array
+      serviceLevelArray.push(newServiceLevel);
+    });
+
+    // Ensure at least one empty item if no services provided
+    if (serviceLevelArray.length === 0) {
+      serviceLevelArray.push(this.createServiceLevelItem());
+    }
+  }
 }
 

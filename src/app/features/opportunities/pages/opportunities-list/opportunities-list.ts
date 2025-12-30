@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
@@ -19,6 +19,8 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
+import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
+import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -34,12 +36,14 @@ import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/s
     OpportunitiesFilters,
     ProductLocalizationPlanWizard,
     ServiceLocalizationPlanWizard,
+    PlanTermsAndConditionsDialog,
+    NewPlanDialog
   ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpportunitiesList implements OnInit {
+export class OpportunitiesList implements OnInit, OnDestroy {
   readonly permissionService = inject(PermissionService);
   filterService = inject(OpportunitiesFilterService);
   private readonly planStore = inject(PlanStore);
@@ -55,6 +59,8 @@ export class OpportunitiesList implements OnInit {
 
   productLocalizationPlanWizardVisibility = signal<boolean>(false);
   serviceLocalizationPlanWizardVisibility = signal<boolean>(false);
+  planTermsAndConditionsDialogVisibility = signal<boolean>(false);
+  newPlanDialogVisibility = signal<boolean>(false);
 
   ngOnInit(): void {
     const isAnonymousData = this.route.snapshot.data['isAnonymous'];
@@ -109,14 +115,25 @@ export class OpportunitiesList implements OnInit {
     this.planStore.setAvailableOpportunities({ id: opportunity.id, name: opportunity.title });
     this.planStore.setAppliedOpportunity(opportunity);
     this.planStore.setWizardMode('create');
-    this.planStore.setSelectedPlanId(null);
+    this.planStore.setIsPresetSelected(true);
+    this.planTermsAndConditionsDialogVisibility.set(true);
+    this.planStore.setNewPlanOpportunityType(opportunity.opportunityType);
+  }
 
-    if (opportunity.opportunityType === EOpportunityType.SERVICES) {
-      this.productLocalizationPlanWizardVisibility.set(true);
-    }
+  onUserReadAndApproved() {
+    this.planTermsAndConditionsDialogVisibility.set(false);
+    this.newPlanDialogVisibility.set(true);
+  }
 
-    if (opportunity.opportunityType === EOpportunityType.PRODUCT) {
-      this.serviceLocalizationPlanWizardVisibility.set(true);
-    }
+  onUserConfirmNewPlanDialog() {
+    this.newPlanDialogVisibility.set(false);
+    this.productLocalizationPlanWizardVisibility.set(true);
+  }
+
+  ngOnDestroy(): void {
+    this.planStore.resetIsPresetSelected();
+    this.planStore.resetNewPlanOpportunityType();
+    this.planStore.resetNewPlanTitle();
+    this.planStore.resetAppliedOpportunity();
   }
 }

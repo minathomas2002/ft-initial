@@ -159,9 +159,8 @@ export class InvestorDashboard implements OnInit {
   }
 
   getPlanTypeLabel(planType: EOpportunityType): string {
-    return planType === EOpportunityType.SERVICES
-      ? this.i18nService.translate('opportunity.type.services')
-      : this.i18nService.translate('opportunity.type.product');
+    const planTypeOption = this.planStore.planTypeOptions().find(option => option.value === planType);
+    return planTypeOption?.label ?? '';
   }
 
   getStatusLabel(status: EInvestorPlanStatus): string {

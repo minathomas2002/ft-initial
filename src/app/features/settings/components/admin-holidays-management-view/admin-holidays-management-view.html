@@ -24,15 +24,15 @@
               {{ item.name }}
             </td>
 
-            <td>
+            <td class="whitespace-nowrap">
               {{ holidaysTypeMapper.getTypeLabel(item.typeId) }}
             </td>
 
-            <td>
+            <td class="whitespace-nowrap">
               {{ item.dateFrom| date : 'dd MMM yyyy' }}
             </td>
 
-            <td>
+            <td class="whitespace-nowrap">
               {{item.dateTo | date : 'dd MMM yyyy'}}
             </td>
 
