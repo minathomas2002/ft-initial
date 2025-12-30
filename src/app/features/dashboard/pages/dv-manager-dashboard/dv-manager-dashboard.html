@@ -164,7 +164,7 @@
                   : 'text-red-600'
               "
             >
-              {{ item.slaCountDown }} {{ 'plans.table.daysRemaining' | translate }}
+              {{ item.slaCountDown }} {{getSlaCountDownNoun(item.slaCountDown)}}
             </span>
             } @else {
             <span class="text-sm font-medium">-</span>
