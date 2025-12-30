@@ -112,6 +112,10 @@ export class OpportunitiesList implements OnInit, OnDestroy {
       this.toast.warn('Apply for services opportunity will be available soon');
       return;
     }
+    if (opportunity.isOtherOpportunity) {
+      this.toast.warn('Apply for other opportunity will be available soon');
+      return;
+    }
     this.planStore.setAvailableOpportunities({ id: opportunity.id, name: opportunity.title });
     this.planStore.setAppliedOpportunity(opportunity);
     this.planStore.setWizardMode('create');
