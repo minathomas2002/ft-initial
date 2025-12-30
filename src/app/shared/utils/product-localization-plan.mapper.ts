@@ -25,6 +25,7 @@ import { EMaterialsFormControls } from '../enums/product-localization-form-contr
 import { IPhoneValue } from '../interfaces/phone-input.interface';
 import { ELocalizationStatusType, ETargetedCustomer, EOpportunityType } from '../enums';
 import { API_ENDPOINTS } from '../api/api-endpoints';
+import { parsePhoneNumber } from '../data/countries.data';
 
 /**
  * Section type mapping for value chain sections
@@ -462,7 +463,7 @@ function setPhoneValue(formGroup: FormGroup | null, controlName: string, phoneSt
     if (valueControl) {
       // Try to parse phone string (format: countryCode+number or just number)
       // For now, set as string - components can handle parsing
-      valueControl.setValue(phoneString);
+      valueControl.setValue(parsePhoneNumber(phoneString));
     }
   }
 }
@@ -518,6 +519,7 @@ export function mapProductPlanResponseToForm(
       formService.toggleLocalAgentInformValidation(locationInfo.hasLocalAgent);
     }
 
+    debugger;
     // Local Agent Info (only if hasLocalAgent is true)
     if (locationInfo.hasLocalAgent && localAgentForm) {
       setFormGroupValue(localAgentForm, EMaterialsFormControls.localAgentName, locationInfo.localAgentName);

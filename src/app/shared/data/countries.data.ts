@@ -246,3 +246,70 @@ export function getCountryByCode(code: string): ICountry | undefined {
 	}
 	return COUNTRIES.find(country => country.code === code.toUpperCase());
 }
+
+/**
+ * Parses a concatenated string of country dial code and phone number
+ * Intelligently extracts the country code and phone number by matching against known dial codes
+ * 
+ * @param phoneString - The concatenated string (e.g., "+966501234567", "966501234567", "00966501234567")
+ * @returns An object with countryCode (2-letter code) and phoneNumber, or null if parsing fails
+ * 
+ * @example
+ * parsePhoneNumber("+966501234567") // { countryCode: 'SA', phoneNumber: '501234567' }
+ * parsePhoneNumber("966501234567")  // { countryCode: 'SA', phoneNumber: '501234567' }
+ * parsePhoneNumber("00966501234567") // { countryCode: 'SA', phoneNumber: '501234567' }
+ */
+export function parsePhoneNumber(phoneString: string): { countryCode: string; phoneNumber: string } | null {
+	if (!phoneString || typeof phoneString !== 'string') {
+		return null;
+	}
+
+	// Normalize the input: remove spaces, remove leading +, remove leading 00
+	let normalized = phoneString.trim().replace(/^\+/, '').replace(/^00/, '');
+
+	// Remove all non-digit characters except for potential leading + or 00
+	normalized = normalized.replace(/\D/g, '');
+
+	if (!normalized || normalized.length < 4) {
+		// Too short to contain a valid dial code and phone number
+		return null;
+	}
+
+	// Create a map of dial codes to countries, sorted by length (longest first)
+	// This ensures we match longer codes before shorter ones (e.g., +966 before +9)
+	const dialCodeMap = new Map<string, ICountry[]>();
+	
+	for (const country of COUNTRIES) {
+		const dialCode = country.dialCode.replace(/^\+/, ''); // Remove + if present
+		if (!dialCodeMap.has(dialCode)) {
+			dialCodeMap.set(dialCode, []);
+		}
+		dialCodeMap.get(dialCode)!.push(country);
+	}
+
+	// Sort dial codes by length (longest first) to match more specific codes first
+	const sortedDialCodes = Array.from(dialCodeMap.keys()).sort((a, b) => b.length - a.length);
+
+	// Try to match dial codes from longest to shortest
+	for (const dialCode of sortedDialCodes) {
+		if (normalized.startsWith(dialCode)) {
+			const phoneNumber = normalized.substring(dialCode.length);
+			
+			// Validate that we have a phone number after the dial code
+			if (phoneNumber.length >= 4) {
+				// If multiple countries share the same dial code, prefer common ones
+				// You can customize this logic based on your needs
+				const countries = dialCodeMap.get(dialCode)!;
+				const country = countries[0]; // Use first match, or implement priority logic
+				
+				return {
+					countryCode: country.code,
+					phoneNumber: phoneNumber
+				};
+			}
+		}
+	}
+
+	// If no match found, return null
+	return null;
+}
