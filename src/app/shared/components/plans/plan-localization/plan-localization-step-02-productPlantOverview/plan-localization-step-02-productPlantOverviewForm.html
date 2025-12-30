@@ -531,6 +531,7 @@
             >
               <p-inputnumber
                 fluid
+                [maxlength]="10"
                 placeholder="Enter total quantities provided to SEC"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
               />
@@ -661,6 +662,7 @@
             >
               <p-inputnumber
                 fluid
+                [maxlength]="10"
                 placeholder="Enter total quantities provided"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
               />
