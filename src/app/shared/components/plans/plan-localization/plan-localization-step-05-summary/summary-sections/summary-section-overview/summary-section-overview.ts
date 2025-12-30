@@ -4,7 +4,7 @@ import { EMaterialsFormControls, EOpportunityStatus, EOpportunityType } from 'sr
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
 import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { SummaryField } from '../../shared/summary-field/summary-field';
-import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { DatePipe } from '@angular/common';
 
 @Component({

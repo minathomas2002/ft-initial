@@ -3,7 +3,7 @@ import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/ba
 import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../../base-components/base-tag/base-tag.component";
 import { StepContentDirective } from "src/app/shared/directives";
-import { ProductPlanFormService } from "src/app/shared/services/plan/materials-form-service/product-plan-form-service";
+import { ProductPlanFormService } from "src/app/shared/services/plan/product-plan-form-service/product-plan-form-service";
 import { ProductPlanValidationService } from "src/app/shared/services/plan/validation/product-plan-validation.service";
 import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";

@@ -7,7 +7,7 @@ import { BaseLabelComponent } from 'src/app/shared/components/base-components/ba
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
-import { ServiceLocalizationFormService } from 'src/app/shared/services/plan/materials-form-service/service-localization-form-service';
+// import { ServiceLocalizationFormService } from 'src/app/shared/services/plan/materials-form-service/service-localization-form-service';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 
 @Component({
@@ -16,11 +16,11 @@ import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
-    BaseLabelComponent,
-    BaseErrorMessages,
-    FormArrayInput,
-    TrimOnBlurDirective,
-    GroupInputWithCheckbox,
+    // BaseLabelComponent,
+    // BaseErrorMessages,
+    // FormArrayInput,
+    // TrimOnBlurDirective,
+    // GroupInputWithCheckbox,
   ],
   templateUrl: './service-localization-step-cover-page.html',
   styleUrl: './service-localization-step-cover-page.scss',
