@@ -112,14 +112,12 @@ export class OpportunitiesList implements OnInit, OnDestroy {
       this.toast.warn('Apply for services opportunity will be available soon');
       return;
     }
-    if (opportunity.isOtherOpportunity) {
-      this.toast.warn('Apply for other opportunity will be available soon');
-      return;
+    if (!opportunity.isOtherOpportunity) {
+      this.planStore.setIsPresetSelected(true);
     }
     this.planStore.setAvailableOpportunities({ id: opportunity.id, name: opportunity.title });
     this.planStore.setAppliedOpportunity(opportunity);
     this.planStore.setWizardMode('create');
-    this.planStore.setIsPresetSelected(true);
     this.planTermsAndConditionsDialogVisibility.set(true);
     this.planStore.setNewPlanOpportunityType(opportunity.opportunityType);
   }
@@ -130,6 +128,10 @@ export class OpportunitiesList implements OnInit, OnDestroy {
   }
 
   onUserConfirmNewPlanDialog() {
+    if (this.planStore.newPlanOpportunityType() === EOpportunityType.SERVICES) {
+      this.toast.warn('Apply for services opportunity will be available soon');
+      return;
+    }
     this.newPlanDialogVisibility.set(false);
     this.productLocalizationPlanWizardVisibility.set(true);
   }
