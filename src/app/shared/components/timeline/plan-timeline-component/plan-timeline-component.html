@@ -22,7 +22,7 @@
             </span>
           </div>
 
-          @if (item.item.daysAfterPreviousAction) {
+          @if (item.item.daysAfterPreviousAction !=null) {
           <p class="text-xs text-gray-400 mt-1">
             {{ item.item.daysAfterPreviousAction }}
             {{ 'timeline.remainingDays' | translate }}
