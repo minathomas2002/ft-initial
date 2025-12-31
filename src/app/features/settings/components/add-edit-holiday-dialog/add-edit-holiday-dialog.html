@@ -104,6 +104,7 @@
         [placeholder]="'setting.adminView.holidays.dialog.endtDatePlaceHolder' | translate"
         [dateFormat]="'dd M yy'"
         [minDate]="today"
+        [keepInvalid]="isEditMode()"
         fluid
       />
       <div>

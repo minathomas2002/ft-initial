@@ -115,7 +115,6 @@ export class AdminHolidaysManagementView implements OnInit {
     this.holidaysFilterService.applyFilterWithPaging();
   }
   onUpdate(item: IHolidaysManagementRecord) {
-    console.log("edit clicked");
     this.viewUpdateDialog.set(true);
     this.isEditMode.set(true);
     this.selectedItem.set(item);
