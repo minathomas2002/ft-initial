@@ -1,0 +1,10 @@
+<div class="flex items-center gap-2">
+  <span class="text-sm text-gray-900">{{ displayValue() }}</span>
+  @if (hasError()) {
+  <i
+    class="icon-info text-red-500 text-xs bg-red-50 p-1 rounded-full"
+    pTooltip="This field has validation errors"
+    tooltipPosition="top"
+  ></i>
+  }
+</div>

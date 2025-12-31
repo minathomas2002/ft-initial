@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, effect, input } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
@@ -13,6 +13,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
   imports: [
@@ -24,17 +25,21 @@ import { InputNumberModule } from 'primeng/inputnumber';
     BaseErrorMessages,
     GroupInputWithCheckbox,
     TextareaModule,
-    InputNumberModule
+    InputNumberModule,
+    FileuploadComponent
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationStepExistingSaudi {
+  isViewMode = input<boolean>(false);
+
   serviceForm = inject(ServicePlanFormService);
   planStore = inject(PlanStore);
 
   showCheckbox = signal(false);
+  files = signal<File[]>([]);
   EMaterialsFormControls = EMaterialsFormControls;
   EServiceProvidedTo = EServiceProvidedTo;
   EServiceQualificationStatus = EServiceQualificationStatus;
@@ -71,12 +76,60 @@ export class ServiceLocalizationStepExistingSaudi {
     EMaterialsFormControls.sixthYear,
   ];
 
+  // Generate header labels for service level year columns (show as numbers)
+  customHeadersLabels = computed(() => {
+    const labels: Record<string, string> = {};
+    const years = this.yearColumns();
+    this.yearControlKeys.forEach((key, idx) => {
+      if (years[idx]) {
+        labels[`${key}_saudization`] = String(years[idx]);
+      }
+    });
+
+    return labels;
+  });
+
+  // Grouped header cell for Service Level years
+  serviceLevelGroupHeader = computed(() => {
+    const yearCols = this.yearControlKeys.length;
+    // Structure: first two columns (Service name + Expected Localization Date), then yearCols, then two columns (Key Measures, Support), then delete button
+    return [
+      { label: '', colspan: 2 },
+      { label: 'Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)', colspan: yearCols },
+      { label: '', colspan: 2 },
+      { label: '', colspan: 1 }, // Delete button column
+    ];
+  });
+
   constructor() {
     // Sync services from cover page to service level on component initialization
     this.serviceForm.syncServicesFromCoverPageToExistingSaudi();
 
     // Setup conditional field enabling/disabling
     this.setupConditionalFields();
+
+    // Initialize files from form control value
+    const attachmentsControl = this.getAttachmentsFormGroup().get(EMaterialsFormControls.attachments);
+    if (attachmentsControl) {
+      const control = this.getValueControl(attachmentsControl);
+      const formValue = control.value;
+      if (Array.isArray(formValue)) {
+        this.files.set(formValue);
+      }
+    }
+
+    // Sync files signal changes to form control
+    effect(() => {
+      const filesValue = this.files();
+      const attachmentsControl = this.getAttachmentsFormGroup().get(EMaterialsFormControls.attachments);
+      if (attachmentsControl) {
+        const control = this.getValueControl(attachmentsControl);
+        // Only update if different to avoid infinite loops
+        if (control.value !== filesValue) {
+          control.setValue(filesValue, { emitEvent: false });
+        }
+      }
+    });
   }
 
   private setupConditionalFields(): void {
@@ -207,6 +260,19 @@ export class ServiceLocalizationStepExistingSaudi {
   getEntityLevelItem(): FormGroup {
     const formArray = this.getEntityLevelFormArray();
     return formArray.at(0) as FormGroup;
+  }
+
+  getServiceLevelFormArray(): FormArray {
+    return this.serviceForm.serviceLevelFormGroup!;
+  }
+
+  // Create new service level item for FormArrayInput
+  createServiceLevelItem = (): FormGroup => {
+    return this.serviceForm.createServiceLevelItem();
+  };
+
+  getAttachmentsFormGroup(): FormGroup {
+    return this.serviceForm.attachmentsFormGroup;
   }
 
   getHasCommentControl(control: any): FormControl<boolean> {

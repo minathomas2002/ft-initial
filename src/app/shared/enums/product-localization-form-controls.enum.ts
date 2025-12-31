@@ -174,7 +174,7 @@ export enum EMaterialsFormControls {
   // Service Plan - Step 3 & 4 - Service Level Controls
   serviceLevelFormGroup = 'serviceLevelFormGroup',
   keyRoadblocksPains = 'keyRoadblocksPains',
-  supportRequiredFromSECGDC = 'supportRequiredFromSECGDC',
+  mentionSupportRequiredFromSEC = 'mentionSupportRequiredFromSEC',
   keyMeasuresToUpskillSaudis = 'keyMeasuresToUpskillSaudis',
 
   // Service Plan - Step 4 (Direct Localization) - Main Form Groups

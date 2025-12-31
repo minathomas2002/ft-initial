@@ -1,15 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, inject, effect } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { EMaterialsFormControls, EOpportunityStatus, EOpportunityType } from 'src/app/shared/enums';
-import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
-import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
-import { DatePipe } from '@angular/common';
-import { SummaryField } from 'src/app/shared/components/plans/summary-field/summary-field';
-import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
+import { EMaterialsFormControls, EYesNo } from 'src/app/shared/enums';
+import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
+import { SummaryField } from '../../../../summary-field/summary-field';
+import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 
 @Component({
   selector: 'app-summary-section-overview',
-  imports: [SummarySectionHeader, SummaryField],
+  imports: [SummarySectionHeader, SummaryField, SummaryTableCell],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,13 +17,15 @@ export class SummarySectionOverview {
   formGroup = input.required<FormGroup>();
   onEdit = output<void>();
 
+  planYesOrNoEnum = EYesNo;
+
   // Form group accessors
   basicInformationFormGroup = computed(() => {
     return this.formGroup().get(EMaterialsFormControls.basicInformationFormGroup) as FormGroup;
   });
 
   companyInformationFormGroup = computed(() => {
-    return this.formGroup().get(EMaterialsFormControls.companyInformationFormGroup) as FormGroup;
+    return this.formGroup().get(EMaterialsFormControls.overviewCompanyInformationFormGroup) as FormGroup;
   });
 
   locationInformationFormGroup = computed(() => {
@@ -36,13 +36,17 @@ export class SummarySectionOverview {
     return this.formGroup().get(EMaterialsFormControls.localAgentInformationFormGroup) as FormGroup;
   });
 
-  // Helper methods to get values from nested form groups
+  serviceDetailsFormArray = computed(() => {
+    return this.formGroup().get(EMaterialsFormControls.serviceDetailsFormGroup) as FormArray;
+  });
+
+  // Helper method to get values
   getValue(controlPath: string): any {
     const parts = controlPath.split('.');
     let control: any = this.formGroup();
 
     for (const part of parts) {
-      if (control instanceof FormGroup) {
+      if (control instanceof FormGroup || control instanceof FormArray) {
         control = control.get(part);
       } else {
         return null;
@@ -63,7 +67,7 @@ export class SummarySectionOverview {
     let control: any = this.formGroup();
 
     for (const part of parts) {
-      if (control instanceof FormGroup) {
+      if (control instanceof FormGroup || control instanceof FormArray) {
         control = control.get(part);
       } else {
         return false;
@@ -81,15 +85,11 @@ export class SummarySectionOverview {
     this.onEdit.emit();
   }
 
-  // Computed values for display
-  planTitle = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.planTitle}`));
-  opportunityType = computed(() => {
-    const value = EOpportunityType[this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.opportunityType}`)]?.toString().toLowerCase() ?? '-';
-    return value === '-' ? '-' : value.charAt(0).toUpperCase() + value.slice(1);
-  });
+  // Basic Information
   opportunity = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.opportunity}`));
   submissionDate = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`));
 
+  // Company Information
   companyName = computed(() => {
     const companyInfo = this.companyInformationFormGroup();
     const companyNameControl = companyInfo?.get(EMaterialsFormControls.companyName);
@@ -117,6 +117,7 @@ export class SummarySectionOverview {
     return null;
   });
 
+  // Location Information
   globalHQLocation = computed(() => {
     const locationInfo = this.locationInformationFormGroup();
     const globalHQControl = locationInfo?.get(EMaterialsFormControls.globalHQLocation);
@@ -140,6 +141,7 @@ export class SummarySectionOverview {
     return locationInfo?.get(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA)?.value ?? null;
   });
 
+  // Local Agent Information
   localAgentName = computed(() => {
     const localAgentInfo = this.localAgentInformationFormGroup();
     const localAgentNameControl = localAgentInfo?.get(EMaterialsFormControls.localAgentName);
@@ -151,18 +153,18 @@ export class SummarySectionOverview {
 
   contactPersonName = computed(() => {
     const localAgentInfo = this.localAgentInformationFormGroup();
-    const contactPersonControl = localAgentInfo?.get(EMaterialsFormControls.contactPersonName);
-    if (contactPersonControl instanceof FormGroup) {
-      return contactPersonControl.get(EMaterialsFormControls.value)?.value;
+    const contactPersonNameControl = localAgentInfo?.get(EMaterialsFormControls.contactPersonName);
+    if (contactPersonNameControl instanceof FormGroup) {
+      return contactPersonNameControl.get(EMaterialsFormControls.value)?.value;
     }
     return null;
   });
 
   emailID = computed(() => {
     const localAgentInfo = this.localAgentInformationFormGroup();
-    const emailControl = localAgentInfo?.get(EMaterialsFormControls.emailID);
-    if (emailControl instanceof FormGroup) {
-      return emailControl.get(EMaterialsFormControls.value)?.value;
+    const emailIDControl = localAgentInfo?.get(EMaterialsFormControls.emailID);
+    if (emailIDControl instanceof FormGroup) {
+      return emailIDControl.get(EMaterialsFormControls.value)?.value;
     }
     return null;
   });
@@ -171,18 +173,50 @@ export class SummarySectionOverview {
     const localAgentInfo = this.localAgentInformationFormGroup();
     const contactNumberControl = localAgentInfo?.get(EMaterialsFormControls.contactNumber);
     if (contactNumberControl instanceof FormGroup) {
-      const value = contactNumberControl.get(EMaterialsFormControls.value)?.value;
-      return value ? value['countryCode'] + value['phoneNumber'] : null;
+      return contactNumberControl.get(EMaterialsFormControls.value)?.value;
     }
     return null;
   });
 
-  companyHQLocation = computed(() => {
+  companyLocation = computed(() => {
     const localAgentInfo = this.localAgentInformationFormGroup();
-    const companyHQControl = localAgentInfo?.get(EMaterialsFormControls.companyHQLocation);
-    if (companyHQControl instanceof FormGroup) {
-      return companyHQControl.get(EMaterialsFormControls.value)?.value;
+    const companyLocationControl = localAgentInfo?.get(EMaterialsFormControls.companyLocation);
+    if (companyLocationControl instanceof FormGroup) {
+      return companyLocationControl.get(EMaterialsFormControls.value)?.value;
     }
     return null;
   });
+
+  // Service Details
+  serviceDetails = computed(() => {
+    const detailsArray = this.serviceDetailsFormArray();
+    if (!detailsArray) return [];
+
+    return Array.from({ length: detailsArray.length }, (_, i) => {
+      const group = detailsArray.at(i) as FormGroup;
+      const getValueFromControl = (controlName: string) => {
+        const ctrl = group.get(controlName);
+        if (ctrl instanceof FormGroup) {
+          return ctrl.get(EMaterialsFormControls.value)?.value;
+        }
+        return ctrl?.value;
+      };
+
+      return {
+        serviceName: getValueFromControl(EMaterialsFormControls.serviceName),
+        serviceType: getValueFromControl(EMaterialsFormControls.serviceType),
+        serviceCategory: getValueFromControl(EMaterialsFormControls.serviceCategory),
+        serviceDescription: getValueFromControl(EMaterialsFormControls.serviceDescription),
+        serviceProvidedTo: getValueFromControl(EMaterialsFormControls.serviceProvidedTo),
+        totalBusinessDoneLast5Years: getValueFromControl(EMaterialsFormControls.totalBusinessDoneLast5Years),
+        serviceTargetedForLocalization: getValueFromControl(EMaterialsFormControls.serviceTargetedForLocalization),
+        expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.expectedLocalizationDate),
+        serviceLocalizationMethodology: getValueFromControl(EMaterialsFormControls.serviceLocalizationMethodology),
+      };
+    });
+  });
+
+  hasServiceDetailFieldError(index: number, controlName: string): boolean {
+    return this.hasFieldError(`serviceDetailsFormGroup.${index}.${controlName}.value`);
+  }
 }

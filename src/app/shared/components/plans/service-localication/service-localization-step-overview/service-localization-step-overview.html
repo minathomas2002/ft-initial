@@ -294,7 +294,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="
-            getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])
+            getHasCommentControl(localAgentInformationFormGroupControls['companyLocation'])
           "
         >
           <input
@@ -302,11 +302,11 @@
             pInputText
             fluid
             placeholder="Enter Company HQ Location"
-            [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
+            [formControl]="getValueControl(localAgentInformationFormGroupControls['companyLocation'])"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
+          [control]="getValueControl(localAgentInformationFormGroupControls['companyLocation'])"
           [label]="'Company HQ Location'"
         />
       </div>

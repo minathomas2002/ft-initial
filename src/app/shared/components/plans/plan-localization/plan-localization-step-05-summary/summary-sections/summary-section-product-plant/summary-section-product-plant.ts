@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { SummaryField } from 'src/app/shared/components/plans/summary-field/summary-field';
+import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
-import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
-import { SummaryField } from '../../shared/summary-field/summary-field';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({

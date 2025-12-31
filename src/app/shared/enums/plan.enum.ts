@@ -57,6 +57,18 @@ export enum EYesNo {
   No = 2,
 }
 
+export enum ELocalizationApproach {
+  EstablishSaudiEntity = 1,
+  EstablishLocalBranch = 2,
+  Other = 3,
+}
+
+export enum ELocation {
+  SaudiEntity = 1,
+  Branch = 2,
+  Other = 3,
+}
+
 export enum EPlanAction {
   EditPlan = 1,
   ViewDetails = 2,

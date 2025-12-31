@@ -1,6 +1,6 @@
 import { computed, inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { EExperienceRange, EInHouseProcuredType, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo } from "../../enums";
+import { EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
@@ -37,6 +37,8 @@ const initialState: {
   companyTypeOptions: ISelectItem[];
   qualificationStatusOptions: ISelectItem[];
   localizationMethodologyOptions: ISelectItem[];
+  localizationApproachOptions: ISelectItem[];
+  locationOptions: ISelectItem[];
   yesNoOptions: ISelectItem[];
   activeEmployees: IAssignActiveEmployee[] | null;
   currentEmployee: IAssignActiveEmployee | null;
@@ -115,6 +117,16 @@ const initialState: {
       id: ELocalizationMethodology.Direct.toString(),
       name: 'Direct Localization by Foreign Entity',
     },
+  ],
+  localizationApproachOptions: [
+    { id: ELocalizationApproach.EstablishSaudiEntity.toString(), name: 'Establish Saudi Entity' },
+    { id: ELocalizationApproach.EstablishLocalBranch.toString(), name: 'Establish Local Branch of Foreign Company' },
+    { id: ELocalizationApproach.Other.toString(), name: 'Other' },
+  ],
+  locationOptions: [
+    { id: ELocation.SaudiEntity.toString(), name: 'Saudi Entity' },
+    { id: ELocation.Branch.toString(), name: 'Branch' },
+    { id: ELocation.Other.toString(), name: 'Other' },
   ],
   yesNoOptions: [
     { id: EYesNo.Yes.toString(), name: 'Yes' },

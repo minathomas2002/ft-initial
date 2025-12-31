@@ -1,0 +1,314 @@
+<div class="flex flex-col gap-6 bg-white">
+  <!-- Section Header -->
+  <div class="flex flex-col gap-4">
+    <app-summary-section-header
+      [title]="'Existing Saudi Company'"
+      [isViewMode]="isViewMode()"
+      (onEdit)="onEditClick()"
+    />
+
+    <!-- Saudi Company Details -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-semibold text-gray-900">Saudi Company Details</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-gray-50">
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Saudi Company Name</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Vendor ID with SEC</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Bena Vendor ID</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Company Type</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Qualification Status</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Product(s)</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Company Overview</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Key Projects Executed</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Company Overview Key Project Details</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Company Overview (Other)</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (company of saudiCompanyDetails(); track $index) {
+                <tr>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.saudiCompanyName"
+                      [isEmpty]="!company.saudiCompanyName"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'saudiCompanyName')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.registeredVendorIDwithSEC"
+                      [isEmpty]="!company.registeredVendorIDwithSEC"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'registeredVendorIDwithSEC')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.benaRegisteredVendorID"
+                      [isEmpty]="!company.benaRegisteredVendorID"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'benaRegisteredVendorID')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.companyType"
+                      [isEmpty]="!company.companyType"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'companyType')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.qualificationStatus"
+                      [isEmpty]="!company.qualificationStatus"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'qualificationStatus')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.products"
+                      [isEmpty]="!company.products"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'products')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.companyOverview"
+                      [isEmpty]="!company.companyOverview"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'companyOverview')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.keyProjectsExecutedByContractorForSEC"
+                      [isEmpty]="!company.keyProjectsExecutedByContractorForSEC"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'keyProjectsExecutedByContractorForSEC')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.companyOverviewKeyProjectDetails"
+                      [isEmpty]="!company.companyOverviewKeyProjectDetails"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'companyOverviewKeyProjectDetails')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="company.companyOverviewOther"
+                      [isEmpty]="!company.companyOverviewOther"
+                      [hasError]="hasSaudiCompanyFieldError($index, 'companyOverviewOther')"
+                    />
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+    </div>
+
+    <!-- Collaboration/Partnership -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-semibold text-gray-900">Collaboration/Partnership</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-gray-50">
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Agreement Type</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Agreement Signing Date</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Supervision/Oversight Entity</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Why Chose This Company</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Summary of Key Agreement Clauses</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Provide Agreement Copy</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (partner of collaborationPartnership(); track $index) {
+                <tr>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="partner.agreementType"
+                      [isEmpty]="!partner.agreementType"
+                      [hasError]="hasCollaborationFieldError($index, 'agreementType')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="partner.agreementSigningDate"
+                      [isEmpty]="!partner.agreementSigningDate"
+                      [hasError]="hasCollaborationFieldError($index, 'agreementSigningDate')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="partner.supervisionOversight"
+                      [isEmpty]="!partner.supervisionOversight"
+                      [hasError]="hasCollaborationFieldError($index, 'supervisionOversightEntity')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="partner.whyChoseThisCompany"
+                      [isEmpty]="!partner.whyChoseThisCompany"
+                      [hasError]="hasCollaborationFieldError($index, 'whyChoseThisCompany')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="partner.summaryOfKeyAgreementClauses"
+                      [isEmpty]="!partner.summaryOfKeyAgreementClauses"
+                      [hasError]="hasCollaborationFieldError($index, 'summaryOfKeyAgreementClauses')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="partner.provideAgreementCopy"
+                      [isEmpty]="partner.provideAgreementCopy === null || partner.provideAgreementCopy === undefined"
+                      [hasError]="hasCollaborationFieldError($index, 'provideAgreementCopy')"
+                    />
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+    </div>
+
+    <!-- Entity Level -->
+    @if (entityLevel()) {
+      <div class="flex flex-col gap-4">
+        <h3 class="text-lg font-semibold text-gray-900">Entity Level</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-primary">
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-white" colspan="2"></th>
+                @for (year of yearColumns(); track $index) {
+                  <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-white">{{ year }}</th>
+                }
+              </tr>
+              <tr class="bg-gray-50">
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900" colspan="2">Headcount & Saudization %</th>
+                @for (year of yearColumns(); track $index) {
+                  <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">Year {{ $index + 1 }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold" colspan="2">Headcount</td>
+                @for (headcount of entityLevel()!.headcount; track $index) {
+                  <td class="border border-gray-300 px-4 py-2 text-center">
+                    <app-summary-table-cell
+                      [value]="headcount"
+                      [isEmpty]="!headcount && headcount !== 0"
+                    />
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold" colspan="2">Saudization %</td>
+                @for (saudization of entityLevel()!.saudization; track $index) {
+                  <td class="border border-gray-300 px-4 py-2 text-center">
+                    <app-summary-table-cell
+                      [value]="saudization"
+                      [isEmpty]="!saudization && saudization !== 0"
+                    />
+                  </td>
+                }
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- Service Level -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-semibold text-gray-900">Service Level</h3>
+      @if (serviceLevel().length > 0) {
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-gray-50">
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Service Name</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Expected Localization Date</th>
+                <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900" colspan="6">Mention Y-o-Y expected Saudization % (To be filled for the KSA based facility only)</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Key Measures to Upskill Saudis</th>
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Support Required from SEC</th>
+              </tr>
+              <tr class="bg-gray-50">
+                <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">Year</th>
+                @for (year of yearColumns(); track $index) {
+                  <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">{{ year }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (service of serviceLevel(); track $index) {
+                <tr>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="service.serviceName"
+                      [isEmpty]="!service.serviceName"
+                      [hasError]="hasServiceLevelFieldError(service.index, 'serviceName')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="service.expectedLocalizationDate"
+                      [isEmpty]="!service.expectedLocalizationDate"
+                      [hasError]="hasServiceLevelFieldError(service.index, 'expectedLocalizationDate')"
+                    />
+                  </td>
+                  @for (year of service.years; track $index) {
+                    <td class="border border-gray-300 px-4 py-2 text-center">
+                      <app-summary-table-cell
+                        [value]="year.value"
+                        [isEmpty]="!year.value && year.value !== 0"
+                        [hasError]="hasServiceLevelFieldError(service.index, year.controlName)"
+                      />
+                    </td>
+                  }
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="service.keyMeasuresToUpskillSaudis"
+                      [isEmpty]="!service.keyMeasuresToUpskillSaudis"
+                      [hasError]="hasServiceLevelFieldError(service.index, 'keyMeasuresToUpskillSaudis')"
+                    />
+                  </td>
+                  <td class="border border-gray-300 px-4 py-2">
+                    <app-summary-table-cell
+                      [value]="service.mentionSupportRequiredFromSEC"
+                      [isEmpty]="!service.mentionSupportRequiredFromSEC"
+                      [hasError]="hasServiceLevelFieldError(service.index, 'mentionSupportRequiredFromSEC')"
+                    />
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <p class="text-sm text-gray-500">No service level details added</p>
+      }
+    </div>
+
+    <!-- Attachments -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-semibold text-gray-900">Attachments</h3>
+      @if (attachments() && attachments().length > 0) {
+        <div class="flex flex-col gap-2">
+          @for (file of attachments(); track $index) {
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <i class="icon-file"></i>
+              <span>{{ file.name }}</span>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="text-sm text-gray-500">No attachments</p>
+      }
+    </div>
+  </div>
+</div>

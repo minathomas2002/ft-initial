@@ -1,8 +1,8 @@
 import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { SummaryTableCell } from '../summary-table-cell/summary-table-cell';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { SummaryTableCell } from 'src/app/shared/components/plans/summary-table-cell/summary-table-cell';
 
 @Component({
   selector: 'app-value-chain-table',

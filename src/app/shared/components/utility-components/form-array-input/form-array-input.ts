@@ -46,6 +46,12 @@ export class FormArrayInput {
   excludeKeys = input<string[]>([]);
   // Header tooltips - map of key names to tooltip text
   headerTooltips = input<Record<string, string>>({});
+  // Optional header labels override - map of key names to custom label text
+  customHeaderLabels = input<Record<string, string>>({});
+  // Optional grouped header row - array of {label, colspan}
+  groupHeader = input<Array<{ label: string; colspan: number }>>([]);
+  // Optional additional text beside headers - map of key names to text to display beside the header
+  customTextBesideHeaders = input<Record<string, string>>({});
 
   @ContentChild('itemTemplate', { read: TemplateRef }) itemTemplate?: TemplateRef<{
     $implicit: AbstractControl;

@@ -1,6 +1,13 @@
 <div class="rounded-xl" #tableWrapper>
   <p-table [value]="rows()" [scrollable]="true" [scrollHeight]="scrollHeight()" class="rounded-xl">
     <ng-template pTemplate="header">
+      @if(groupHeader().length > 0) {
+      <tr class="bg-gray-100">
+        @for (cell of groupHeader(); track cell) {
+        <th [attr.colspan]="cell.colspan" [class]="cell.label ? 'p-3 border border-gray-200 text-center font-normal! text-gray-700' : 'bg-white! border-0!'">{{ cell.label }}</th>
+        }
+      </tr>
+      }
       <tr class="bg-gray-50">
         @if(showIndexColumn()){
         <th
@@ -14,10 +21,12 @@
           [class.rounded-tl-xl]="$index === 0 && !showIndexColumn()"
         >
           <span>{{
-            key === 'keyActivity'
+            customHeaderLabels()[key]
+              ? customHeaderLabels()[key]
+              : key === 'keyActivity'
               ? ('opportunity.wizard.keyActivity' | translate)
               : (key | camelCaseToWord)
-          }}</span>
+          }}</span>@if(customTextBesideHeaders()[key]){<span class="font-light">{{ customTextBesideHeaders()[key] }}</span>}
           @if(headerTooltips()[key]){
           <i
             class="icon-info text-sm ms-2 text-gray-400"

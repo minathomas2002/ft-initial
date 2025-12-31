@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
-import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { CommonModule } from '@angular/common';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
-import { SummaryTableCell } from '../../shared/summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
+import { SummaryTableCell } from 'src/app/shared/components/plans/summary-table-cell/summary-table-cell';
+import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
 
 @Component({
   selector: 'app-summary-section-saudization',

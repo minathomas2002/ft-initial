@@ -167,7 +167,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(150)]], // Read-only, auto-populated from Step 1
+        [EMaterialsFormControls.value]: [{value:'',disabled: true}, [Validators.required, Validators.maxLength(150)]], // Read-only, auto-populated from Step 1
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -182,6 +182,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       EMaterialsFormControls.thirdYear,
       EMaterialsFormControls.fourthYear,
       EMaterialsFormControls.fifthYear,
+      EMaterialsFormControls.sixthYear,
     ];
 
     yearControls.forEach(yearControl => {
@@ -204,7 +205,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     });
 
     // Mention Support Required from SEC (optional)
-    itemGroup[EMaterialsFormControls.supportRequiredFromSECGDC] = this.fb.group({
+    itemGroup[EMaterialsFormControls.mentionSupportRequiredFromSEC] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
       [EMaterialsFormControls.value]: ['', [Validators.maxLength(500)]], // Optional, Max 500
     });

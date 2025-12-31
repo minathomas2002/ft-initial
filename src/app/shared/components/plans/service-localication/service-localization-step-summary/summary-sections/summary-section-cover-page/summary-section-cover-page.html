@@ -1,0 +1,50 @@
+<div class="flex flex-col gap-6 bg-white">
+  <!-- Cover Page Section -->
+  <div class="flex flex-col gap-4">
+    <app-summary-section-header
+      [title]="'Cover Page'"
+      [isViewMode]="isViewMode()"
+      (onEdit)="onEditClick()"
+    />
+
+    <!-- Company Information -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-semibold text-gray-900">Company Information</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-summary-field
+          [label]="'Company Name'"
+          [value]="companyName()"
+          [hasError]="hasFieldError('coverPageCompanyInformationFormGroup.companyName.value')"
+          [isEmpty]="!companyName()"
+        />
+      </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-semibold text-gray-900">Services</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-gray-50">
+                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Service Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (service of services(); track $index) {
+                <tr>
+                  <td class="border border-gray-300 p-4">
+                    <app-summary-table-cell
+                      [value]="service.serviceName"
+                      [isEmpty]="!service.serviceName"
+                      [hasError]="hasServiceItemFieldError($index, 'serviceName')"
+                    />
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
+</div>

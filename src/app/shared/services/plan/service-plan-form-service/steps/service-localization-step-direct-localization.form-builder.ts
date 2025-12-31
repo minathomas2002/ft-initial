@@ -125,7 +125,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     });
 
     // Mention Support Required from SEC (optional)
-    itemGroup[EMaterialsFormControls.supportRequiredFromSECGDC] = this.fb.group({
+    itemGroup[EMaterialsFormControls.mentionSupportRequiredFromSEC] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
       [EMaterialsFormControls.value]: ['', [Validators.maxLength(500)]], // Optional, Max 500
     });

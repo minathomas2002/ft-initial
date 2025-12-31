@@ -1,1 +1,430 @@
-<p>service-localization-step-direct-localization works!</p>
+<div class="flex flex-col gap-[32px] px-8 pb-10">
+  <!-- Localization Strategy Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Localization Strategy</h2>
+    <app-form-array-input
+      [ft]="getLocalizationStrategyFormArray()"
+      [hideAddButton]="true"
+      [hideDeleteButton]="true"
+      [createNewItem]="createLocalizationStrategyItem"
+      [scrollHeight]="'600px'"
+      [excludeKeys]="['localizationApproachOtherDetails', 'locationOtherDetails', 'proprietaryToolsSystemsDetails', 'firstYear_headcount', 'firstYear_saudization', 'secondYear_headcount', 'secondYear_saudization', 'thirdYear_headcount', 'thirdYear_saudization', 'fourthYear_headcount', 'fourthYear_saudization', 'fifthYear_headcount', 'fifthYear_saudization', 'keyMeasuresToUpskillSaudis', 'mentionSupportRequiredFromSEC']"
+    >
+      <ng-template #itemTemplate let-itemControl let-index="index">
+        <!-- Service Name -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.serviceName))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              readonly
+              placeholder=""
+              class="bg-gray-100 text-gray-500"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+            [label]="'Service Name'"
+          />
+        </td>
+
+        <!-- Expected Localization Date -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+          >
+            <p-select
+              [options]="serviceForm.getAvailableQuarters(5)"
+              optionLabel="name"
+              optionValue="id"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+              placeholder="Select quarter"
+              fluid
+              [appendTo]="'body'"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+            [label]="'Expected Localization Date'"
+          />
+        </td>
+
+        <!-- Localization Approach -->
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.localizationApproach))"
+          >
+            <div class="flex flex-col w-full">
+              <p-select
+                [options]="localizationApproachOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproach))"
+                placeholder="Select localization approach"
+                fluid
+                [appendTo]="'body'"
+              />
+              @if (isLocalizationApproachOther(itemControl)) {
+                <textarea
+                  pTextarea
+                  fluid
+                  rows="3"
+                  [maxlength]="250"
+                  placeholder="Please specify other localization approach"
+                  [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails))"
+                  class="mt-2"
+                ></textarea>
+              }
+            </div>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproach))"
+            [label]="'Localization Approach'"
+          />
+          @if (isLocalizationApproachOther(itemControl)) {
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails))"
+              [label]="'Other Localization Approach Details'"
+            />
+          }
+        </td>
+
+        <!-- Location -->
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.location))"
+          >
+            <div class="flex flex-col w-full">
+              <p-select
+                [options]="locationOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.location))"
+                placeholder="Select location"
+                fluid
+                [appendTo]="'body'"
+              />
+              @if (isLocationOther(itemControl)) {
+                <textarea
+                  pTextarea
+                  fluid
+                  rows="3"
+                  [maxlength]="255"
+                  placeholder="Please specify other location"
+                  [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails))"
+                  class="mt-2"
+                ></textarea>
+              }
+            </div>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.location))"
+            [label]="'Location'"
+          />
+          @if (isLocationOther(itemControl)) {
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails))"
+              [label]="'Other Location Details'"
+            />
+          }
+        </td>
+
+        <!-- CAPEX Required -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.capexRequired))"
+          >
+            <p-inputnumber
+              fluid
+              placeholder="Enter CAPEX amount"
+              [min]="0"
+              mode="decimal"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.capexRequired))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.capexRequired))"
+            [label]="'CAPEX Required'"
+          />
+        </td>
+
+        <!-- Supervision / Oversight by Government Entity -->
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
+          >
+            <textarea
+              pTextarea
+              fluid
+              rows="3"
+              [maxlength]="255"
+              placeholder="E.g., MoEn, PIF, etc."
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
+            ></textarea>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
+            [label]="'Supervision / Oversight'"
+          />
+        </td>
+
+        <!-- Will be any Proprietary Tools / Systems -->
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems))"
+          >
+            <div class="flex flex-col w-full">
+              <p-select
+                [options]="yesNoOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems))"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+              />
+              @if (isProprietaryToolsYes(itemControl)) {
+                <textarea
+                  pTextarea
+                  fluid
+                  rows="3"
+                  [maxlength]="255"
+                  placeholder="Please provide details about the proprietary tools/systems"
+                  [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails))"
+                  class="mt-2"
+                ></textarea>
+              }
+            </div>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems))"
+            [label]="'Proprietary Tools / Systems'"
+          />
+          @if (isProprietaryToolsYes(itemControl)) {
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails))"
+              [label]="'Proprietary Tools Details'"
+            />
+          }
+        </td>
+      </ng-template>
+    </app-form-array-input>
+  </div>
+
+  <!-- Entity Level Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
+    <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse">
+        <thead>
+          <!-- Top Header Row -->
+          <tr class="bg-primary text-white">
+            <th class="p-3 border border-gray-200 text-start font-normal">Metrics</th>
+            <th class="p-3 border border-gray-200 text-start font-normal" colspan="5">Years ({{ currentYear }}-{{ currentYear + 4 }})</th>
+          </tr>
+          <!-- Bottom Header Row -->
+          <tr class="bg-gray-50">
+            <th class="p-3 border border-gray-200 text-left font-semibold text-gray-700 min-w-[250px]">Category</th>
+            @for (year of yearColumns(); track year) {
+              <th class="p-3 border border-gray-200 text-left font-semibold text-gray-700 min-w-[200px]">{{ year }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Expected Annual Headcount Row -->
+          <tr>
+            <td class="p-3 border border-gray-200 font-medium text-gray-700">Expected Annual Headcount</td>
+            @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+              <td class="p-3 border border-gray-200">
+                <app-group-input-with-checkbox
+                  [showCheckbox]="showCheckbox()"
+                  [hasCommentControl]="getHasCommentControl(getEntityLevelItem().get(yearKey + '_headcount'))"
+                >
+                   <p-inputnumber
+                    fluid
+                    placeholder="Enter headcount"
+                    [min]="0"
+                    inputId="integeronly"
+                    [formControl]="getValueControl(getEntityLevelItem().get(yearKey + '_headcount'))"
+                  />
+                </app-group-input-with-checkbox>
+                <app-base-error-messages
+                  [control]="getValueControl(getEntityLevelItem().get(yearKey + '_headcount'))"
+                  [label]="'Headcount ' + yearColumns()[i]"
+                />
+              </td>
+            }
+          </tr>
+          <!-- Expected Saudization (%) Row -->
+          <tr>
+            <td class="p-3 border border-gray-200 font-medium text-gray-700">Expected Saudization (%)</td>
+            @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+              <td class="p-3 border border-gray-200">
+                <app-group-input-with-checkbox
+                  [showCheckbox]="showCheckbox()"
+                  [hasCommentControl]="getHasCommentControl(getEntityLevelItem().get(yearKey + '_saudization'))"
+                >
+                  <p-inputnumber
+                    fluid
+                    placeholder="Enter %"
+                    [min]="0"
+                    mode="decimal"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="2"
+                    [maxlength]="5"
+                    [formControl]="getValueControl(getEntityLevelItem().get(yearKey + '_saudization'))"
+                 />
+                </app-group-input-with-checkbox>
+                <app-base-error-messages
+                  [control]="getValueControl(getEntityLevelItem().get(yearKey + '_saudization'))"
+                  [label]="'Saudization % ' + yearColumns()[i]"
+                />
+              </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Service Level Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Service Level</h2>
+    <p>Details to be provided for the KSA based facility responsible for delivering all services. Provide details separately for each service you intend to localize</p>
+    <app-form-array-input
+      [ft]="getServiceLevelFormArray()"
+      [hideAddButton]="true"
+      [hideDeleteButton]="true"
+      [excludeKeys]="['firstYear_headcount', 'secondYear_headcount', 'thirdYear_headcount', 'fourthYear_headcount', 'fifthYear_headcount', 'localizationApproach', 'localizationApproachOtherDetails', 'location', 'locationOtherDetails', 'capexRequired', 'supervisionOversightEntity', 'willBeAnyProprietaryToolsSystems', 'proprietaryToolsSystemsDetails']"
+      [customHeaderLabels]="customHeadersLabels()"
+      [groupHeader]="serviceLevelGroupHeader()"
+      [scrollHeight]="'600px'"
+      [headerTooltips]="{'keyMeasuresToUpskillSaudis':'What key measures / plans will you execute to upskill Saudis and hire the relevant Saudi talent to deliver the service?'}"
+      [customTextBesideHeaders]="{'mentionSupportRequiredFromSEC':' (if any) '}"
+    >
+      <ng-template #itemTemplate let-itemControl let-index="index">
+        <!-- Service Name -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.serviceName))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              readonly
+              placeholder=""
+              class="bg-gray-100 text-gray-500"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+            [label]="'Service Name'"
+          />
+        </td>
+
+        <!-- Expected Localization Date -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+          >
+            <p-select
+              [options]="serviceForm.getAvailableQuarters(5)"
+              optionLabel="name"
+              optionValue="id"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+              placeholder="Select quarter"
+              fluid
+              [appendTo]="'body'"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+            [label]="'Expected Localization Date'"
+          />
+        </td>
+
+        <!-- Year Columns (Saudization %) -->
+        @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(itemControl.get(yearKey + '_saudization'))"
+            >
+              <p-inputnumber
+                fluid
+                [min]="0"
+                [max]="100"
+                mode="decimal"
+                placeholder="Enter %"
+                [maxFractionDigits]="2"
+                [maxlength]="5"
+                [formControl]="getValueControl(itemControl.get(yearKey + '_saudization'))"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(yearKey + '_saudization'))"
+              [label]="'Saudization % ' + yearColumns()[i]"
+            />
+          </td>
+        }
+
+        <!-- Key Measures to Upskill Saudis -->
+        <td class="p-3 border border-gray-200 min-w-[400px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
+          >
+            <textarea
+              pTextarea
+              fluid
+              rows="3"
+              placeholder="Enter key measures to upskill saudis"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
+            ></textarea>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
+            [label]="'Key Measures to Upskill Saudis'"
+          />
+        </td>
+
+        <!-- Support Required from SEC -->
+        <td class="p-3 border border-gray-200 min-w-[400px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
+          >
+            <textarea
+              pTextarea
+              fluid
+              rows="3"
+              [maxlength]="500"
+              placeholder="Mention Support required from SEC to localize the service (if any)"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
+            ></textarea>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
+            [label]="'Support Required from SEC'"
+          />
+        </td>
+      </ng-template>
+    </app-form-array-input>
+  </div>
+</div>
