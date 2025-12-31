@@ -425,6 +425,62 @@ export class ServicePlanFormService {
     this._step4FormGroup.markAsUntouched();
   }
 
-  /* ------------------------------------------------ */
+  /**
+   * Generate quarters for future years only (from current quarter onwards)
+   * @param yearsAhead Number of years to include in the future (default 5)
+   * @returns Array of quarter options with id and name
+   */
+  getAvailableQuarters(yearsAhead: number = 5): { id: string; name: string }[] {
+    const quarters: { id: string; name: string }[] = [];
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    const currentQuarter = Math.floor(currentMonth / 3) + 1;
+
+    for (let yearOffset = 0; yearOffset <= yearsAhead; yearOffset++) {
+      const year = currentYear + yearOffset;
+      const startQuarter = yearOffset === 0 ? currentQuarter : 1;
+
+      for (let quarter = startQuarter; quarter <= 4; quarter++) {
+        const quarterLabel = `Q${quarter} ${year}`;
+        quarters.push({
+          id: quarterLabel,
+          name: quarterLabel,
+        });
+      }
+    }
+
+    return quarters;
+  }
+
+  /**
+   * Generate quarters including past years
+   * @param yearsPast Number of past years to include (default 5)
+   * @param yearsFuture Number of future years to include (default 5)
+   * @returns Array of quarter options with id and name (sorted most recent first)
+   */
+  getAvailableQuartersWithPast(yearsPast: number = 5, yearsFuture: number = 5): { id: string; name: string }[] {
+    const quarters: { id: string; name: string }[] = [];
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    const currentQuarter = Math.floor(currentMonth / 3) + 1;
+
+    for (let yearOffset = -yearsPast; yearOffset <= yearsFuture; yearOffset++) {
+      const year = currentYear + yearOffset;
+      const startQuarter = 1;
+      const endQuarter = yearOffset === 0 ? currentQuarter : 4;
+
+      for (let quarter = startQuarter; quarter <= endQuarter; quarter++) {
+        const quarterLabel = `Q${quarter} ${year}`;
+        quarters.push({
+          id: quarterLabel,
+          name: quarterLabel,
+        });
+      }
+    }
+
+    return quarters.reverse();
+  }
 }
 

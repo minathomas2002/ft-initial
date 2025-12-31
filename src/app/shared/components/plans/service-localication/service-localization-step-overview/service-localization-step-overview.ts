@@ -98,6 +98,8 @@ export class ServiceLocalizationStepOverview {
     return this.planStore.appliedOpportunity() !== null;
   });
 
+  availableQuarters = computed(() => this.serviceForm.getAvailableQuarters(5));
+
   constructor() {
     // Sync services from cover page to overview details on component initialization
     this.serviceForm.syncServicesFromCoverPageToOverview();

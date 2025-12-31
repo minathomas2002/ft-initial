@@ -1,18 +1,234 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, effect } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
-
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
+import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
+import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
+import { TextareaModule } from 'primeng/textarea';
+import { InputNumberModule } from 'primeng/inputnumber';
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
-  imports: [],
+  imports: [
+    ReactiveFormsModule,
+    FormArrayInput,
+    InputTextModule,
+    SelectModule,
+    MultiSelectModule,
+    BaseErrorMessages,
+    GroupInputWithCheckbox,
+    TextareaModule,
+    InputNumberModule
+  ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationStepExistingSaudi {
-  private readonly serviceForm = inject(ServicePlanFormService);
+  serviceForm = inject(ServicePlanFormService);
+  planStore = inject(PlanStore);
+
+  showCheckbox = signal(false);
+  EMaterialsFormControls = EMaterialsFormControls;
+  EServiceProvidedTo = EServiceProvidedTo;
+  EServiceQualificationStatus = EServiceQualificationStatus;
+  EYesNo = EYesNo;
+  companyTypeOptions = this.planStore.companyTypeOptions;
+  qualificationStatusOptions = this.planStore.qualificationStatusOptions;
+  yesNoOptions = this.planStore.yesNoOptions;
+
+  agreementTypeOptions = [
+    { id: '1', name: 'Joint Venture' },
+    { id: '2', name: 'Special Purpose Vehicle' },
+    { id: '3', name: 'Technology Transfer Agreement' },
+    { id: '4', name: 'Knowledge Transfer Agreement' },
+    { id: '5', name: 'Other' },
+  ];
+
+  availableQuartersWithPast = computed(() => this.serviceForm.getAvailableQuartersWithPast(5, 5));
+
+  currentYear = new Date().getFullYear();
+  yearColumns = computed(() => {
+    const years: number[] = [];
+    for (let i = 0; i < 6; i++) {
+      years.push(this.currentYear + i);
+    }
+    return years;
+  });
+
+  yearControlKeys = [
+    EMaterialsFormControls.firstYear,
+    EMaterialsFormControls.secondYear,
+    EMaterialsFormControls.thirdYear,
+    EMaterialsFormControls.fourthYear,
+    EMaterialsFormControls.fifthYear,
+    EMaterialsFormControls.sixthYear,
+  ];
 
   constructor() {
     // Sync services from cover page to service level on component initialization
     this.serviceForm.syncServicesFromCoverPageToExistingSaudi();
+
+    // Setup conditional field enabling/disabling
+    this.setupConditionalFields();
+  }
+
+  private setupConditionalFields(): void {
+    const formArray = this.getSaudiCompanyDetailsFormArray();
+
+    // Subscribe to each row's company type and qualification status changes
+    formArray.controls.forEach((control) => {
+      this.setupRowConditionalFields(control as FormGroup);
+    });
+
+    // Watch for new rows being added
+    formArray.valueChanges.subscribe(() => {
+      formArray.controls.forEach((control) => {
+        this.setupRowConditionalFields(control as FormGroup);
+      });
+    });
+  }
+
+  private setupRowConditionalFields(rowControl: FormGroup): void {
+    const companyTypeControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyType));
+    const qualificationStatusControl = this.getValueControl(rowControl.get(EMaterialsFormControls.qualificationStatus));
+    const productsControl = this.getValueControl(rowControl.get(EMaterialsFormControls.products));
+    const companyOverviewControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverview));
+    const keyProjectsControl = this.getValueControl(rowControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC));
+    const companyOverviewKeyProjectControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails));
+    const companyOverviewOtherControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverviewOther));
+
+    // Function to update fields based on current selections
+    const updateFields = () => {
+      const companyTypes: string[] = companyTypeControl?.value || [];
+      const qualificationStatus = qualificationStatusControl?.value;
+
+      const isManufacturer = companyTypes.includes(EServiceProvidedTo.Manufacturers.toString());
+      const isContractor = companyTypes.includes(EServiceProvidedTo.Contractors.toString());
+      const isOther = companyTypes.includes(EServiceProvidedTo.Others.toString());
+
+      // Qualification Status - only for Manufacturer
+      if (isManufacturer) {
+        qualificationStatusControl?.enable({ emitEvent: false });
+      } else {
+        qualificationStatusControl?.disable({ emitEvent: false });
+        qualificationStatusControl?.setValue(null, { emitEvent: false });
+      }
+
+      // Products - Manufacturer + (Qualified or Under Pre-Qualification)
+      if (isManufacturer && (
+        qualificationStatus === EServiceQualificationStatus.Qualified.toString() ||
+        qualificationStatus === EServiceQualificationStatus.UnderPreQualification.toString()
+      )) {
+        productsControl?.enable({ emitEvent: false });
+      } else {
+        productsControl?.disable({ emitEvent: false });
+        productsControl?.setValue(null, { emitEvent: false });
+      }
+
+      // Company Overview - Manufacturer + Not Qualified
+      if (isManufacturer && qualificationStatus === EServiceQualificationStatus.NotQualified.toString()) {
+        companyOverviewControl?.enable({ emitEvent: false });
+      } else {
+        companyOverviewControl?.disable({ emitEvent: false });
+        companyOverviewControl?.setValue(null, { emitEvent: false });
+      }
+
+      // Key Projects Executed - Contractor
+      if (isContractor) {
+        keyProjectsControl?.enable({ emitEvent: false });
+      } else {
+        keyProjectsControl?.disable({ emitEvent: false });
+        keyProjectsControl?.setValue(null, { emitEvent: false });
+      }
+
+      // Company Overview, Key Project Details - Contractor
+      if (isContractor) {
+        companyOverviewKeyProjectControl?.enable({ emitEvent: false });
+      } else {
+        companyOverviewKeyProjectControl?.disable({ emitEvent: false });
+        companyOverviewKeyProjectControl?.setValue(null, { emitEvent: false });
+      }
+
+      // Company Overview - Other
+      if (isOther) {
+        companyOverviewOtherControl?.enable({ emitEvent: false });
+      } else {
+        companyOverviewOtherControl?.disable({ emitEvent: false });
+        companyOverviewOtherControl?.setValue(null, { emitEvent: false });
+      }
+    };
+
+    // Initial update
+    updateFields();
+
+    // Subscribe to changes
+    if (companyTypeControl) {
+      companyTypeControl.valueChanges.subscribe(() => updateFields());
+    }
+    if (qualificationStatusControl) {
+      qualificationStatusControl.valueChanges.subscribe(() => updateFields());
+    }
+  }
+
+  getSaudiCompanyDetailsFormArray(): FormArray {
+    return this.serviceForm.saudiCompanyDetailsFormGroup!;
+  }
+
+  // Create new Saudi company detail item for FormArrayInput
+  createSaudiCompanyDetailItem = (): FormGroup => {
+    return this.serviceForm.createSaudiCompanyDetailItem();
+  };
+
+  getCollaborationPartnershipFormArray(): FormArray {
+    return this.serviceForm.collaborationPartnershipFormGroup!;
+  }
+
+  // Create new collaboration/partnership item for FormArrayInput
+  createCollaborationPartnershipItem = (): FormGroup => {
+    return this.serviceForm.createCollaborationPartnershipItem();
+  };
+
+  isAgreementTypeOther(itemControl: AbstractControl): boolean {
+    const agreementTypeValue = this.getValueControl(itemControl.get(EMaterialsFormControls.agreementType))?.value;
+    return agreementTypeValue === '5'; // 'Other' has id '5'
+  }
+
+  getEntityLevelFormArray(): FormArray {
+    return this.serviceForm.entityLevelFormGroup!;
+  }
+
+  getEntityLevelItem(): FormGroup {
+    const formArray = this.getEntityLevelFormArray();
+    return formArray.at(0) as FormGroup;
+  }
+
+  getHasCommentControl(control: any): FormControl<boolean> {
+    if (!control) return new FormControl<boolean>(false, { nonNullable: true });
+    const formGroup = control;
+    return (
+      (formGroup.get(EMaterialsFormControls.hasComment)) ??
+      new FormControl<boolean>(false, { nonNullable: true })
+    );
+  }
+
+  getValueControl(control: any): FormControl<any> {
+    if (!control) return new FormControl('');
+    const formGroup = control as any;
+    return (formGroup.get(EMaterialsFormControls.value)) ?? new FormControl('');
+  }
+
+  getFormControl(control: AbstractControl) {
+    return control as unknown as FormControl;
+  }
+
+  onAddComment(): void {
+    this.showCheckbox.set(true);
   }
 }

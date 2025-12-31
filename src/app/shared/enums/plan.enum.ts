@@ -41,6 +41,12 @@ export enum EServiceCategory {
   CategoryB = 2,
 }
 
+export enum EServiceQualificationStatus {
+  Qualified = 1,
+  UnderPreQualification = 2,
+  NotQualified = 3,
+}
+
 export enum ELocalizationMethodology {
   Collaboration = 1,
   Direct = 2,

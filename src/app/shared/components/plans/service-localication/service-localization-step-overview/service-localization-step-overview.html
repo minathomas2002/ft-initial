@@ -323,10 +323,10 @@
       [hideDeleteButton]="true"
       [showIndexColumn]="true"
       [indexColumnLabel]="'# of Services'"
-      [excludeKeys]="['serviceProvidedToCompanyNames']"
+      [excludeKeys]="['serviceProvidedToCompanyNames', 'agreementCopy']"
       [headerTooltips]="{
         totalBusinessDoneLast5Years: 'Mention total business done in last 5 years with top 5 entities',
-        serviceLocalizationMethodology: 'Select “Yes” if the service is currently targeted for localization; otherwise, select “No'
+        serviceTargetedForLocalization: 'Select “Yes” if the service is currently targeted for localization; otherwise, select “No”'
       }"
     >
       <ng-template #itemTemplate let-itemControl let-index="index">
@@ -431,11 +431,14 @@
         </td>
 
         <td class="p-3 border border-gray-200 min-w-[150px]">
-          <input
-            pInputText
-            fluid
-            placeholder="Enter expected localization date"
+          <p-select
+            [options]="availableQuarters()"
+            optionLabel="name"
+            optionValue="id"
             [formControl]="getValueControl(itemControl.get('expectedLocalizationDate'))"
+            placeholder="Select quarter"
+            fluid
+            [appendTo]="'body'"
           />
         </td>
 

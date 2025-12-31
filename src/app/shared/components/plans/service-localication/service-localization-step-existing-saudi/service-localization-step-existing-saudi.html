@@ -1,1 +1,476 @@
-<p>service-localization-step-existing-saudi works!</p>
+<div class="flex flex-col gap-[32px] px-8 pb-10">
+  <!-- Saudi Company Details Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Saudi Company Details</h2>
+    <app-form-array-input
+      [ft]="getSaudiCompanyDetailsFormArray()"
+      [hideAddButton]="false"
+      [hideDeleteButton]="false"
+      [addButtonMessage]="'Add Saudi Company'"
+      [createNewItem]="createSaudiCompanyDetailItem"
+      [maxItems]="20"
+      [scrollHeight]="'600px'"
+      [headerTooltips]="{
+        'products':'If Manufacturer is Qualified / Under-Prequalification, specify the product(s)',
+        'companyOverview':'If Manufacturer is Not Qualified, provide Company Overview',
+        'keyProjectsExecutedByContractorForSEC':'If Company Type is Contractor, Mention few key projects executed by the Contractor for SEC',
+        'companyOverviewKeyProjectDetails':'If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.',
+        'companyOverviewOther':'If Company Type is Other Provide company overview',
+      }"
+    >
+      <ng-template #itemTemplate let-itemControl let-index="index">
+        <!-- Saudi Company Name -->
+        <td class="p-3 border border-gray-200 min-w-[250px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="100"
+              placeholder="Enter Saudi company name"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
+            [label]="'Saudi Company Name'"
+          />
+        </td>
+
+        <!-- Vendor ID with SEC (Readonly) -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder=""
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+              readonly
+              class="bg-gray-100 text-gray-500"
+            />
+          </app-group-input-with-checkbox>
+        </td>
+
+        <!-- Bena register Vendor ID (Readonly) -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder=""
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
+              readonly
+              class="bg-gray-100 text-gray-500"
+            />
+          </app-group-input-with-checkbox>
+        </td>
+
+        <!-- Company Type (Multi-select) -->
+        <td class="p-3 border border-gray-200 min-w-[250px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyType))"
+          >
+            <p-multiselect
+              [options]="companyTypeOptions()"
+              optionLabel="name"
+              optionValue="id"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
+              placeholder="Select company type(s)"
+              fluid
+              [appendTo]="'body'"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
+            [label]="'Company Type'"
+          />
+        </td>
+
+        <!-- Qualification Status with SEC (Enabled only if Manufacturer) -->
+        <td class="p-3 border border-gray-200 min-w-[250px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
+          >
+            <p-select
+              [options]="qualificationStatusOptions()"
+              optionLabel="name"
+              optionValue="id"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
+              placeholder="Select qualification status"
+              fluid
+              [appendTo]="'body'"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
+            [label]="'Qualification Status with SEC'"
+          />
+        </td>
+
+        <!-- Product(s) - Manufacturer + Qualified or Under Pre-Qualification -->
+        <td class="p-3 border border-gray-200 min-w-[250px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.products))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter specify the product(s)"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
+            [label]="'Product(s)'"
+          />
+        </td>
+
+        <!-- Company Overview - Manufacturer + Not Qualified -->
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverview))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter company overview"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
+            [label]="'Company Overview'"
+          />
+        </td>
+
+        <!-- Key Projects Executed - Contractor -->
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter key projects executed by contractor for SEC"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
+            [label]="'Key Projects Executed'"
+          />
+        </td>
+
+        <!-- Company Overview, Key Project Details - Contractor -->
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter company overview, key project details etc."
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
+            [label]="'Company Overview, Key Project Details'"
+          />
+        </td>
+
+        <!-- Company Overview - Other -->
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter company overview"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
+            [label]="'Company Overview'"
+          />
+        </td>
+      </ng-template>
+    </app-form-array-input>
+  </div>
+
+  <!-- Collaboration / Partnership Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Collaboration / Partnership with Saudi Company</h2>
+    <app-form-array-input
+      [ft]="getCollaborationPartnershipFormArray()"
+      [hideAddButton]="false"
+      [hideDeleteButton]="false"
+      [addButtonMessage]="'Add Collaboration/Partnership'"
+      [createNewItem]="createCollaborationPartnershipItem"
+      [maxItems]="20"
+      [scrollHeight]="'600px'"
+      [excludeKeys]="['agreementOtherDetails', 'agreementCopy']"
+      [headerTooltips]="{
+        'supervisionOversightEntity': 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.)',
+        'provideAgreementCopy': 'If “Yes”, please attach the agreement copy at the end of the plan in the Attachment section.',
+      }"
+    >
+      <ng-template #itemTemplate let-itemControl let-index="index">
+        <!-- Agreement Type -->
+        <td class="p-3 border border-gray-200 min-w-[250px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementType))"
+          >
+          <div class="flex flex-col">
+            <p-select
+              [options]="agreementTypeOptions"
+              optionLabel="name"
+              optionValue="id"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
+              placeholder="Select agreement type"
+              fluid
+              [appendTo]="'body'"
+            />
+            @if (isAgreementTypeOther(itemControl)) {
+                <input
+                  type="text"
+                  pInputText
+                  fluid
+                  [maxlength]="100"
+                  placeholder="Enter other agreement details"
+                  [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
+                  class="mt-2"
+                />
+            }
+          </div>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
+            [label]="'Agreement Type'"
+          />
+          @if (isAgreementTypeOther(itemControl)) {
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
+              [label]="'Other Agreement Details'"
+            />
+          }
+        </td>
+
+        <!-- Agreement Signing Date -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
+          >
+            <p-select
+              [options]="availableQuartersWithPast()"
+              optionLabel="name"
+              optionValue="id"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
+              placeholder="Select quarter"
+              fluid
+              [appendTo]="'body'"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
+            [label]="'Agreement Signing Date'"
+          />
+        </td>
+
+        <!-- Supervision / Oversight -->
+        <td class="p-3 border border-gray-200 min-w-[250px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="100"
+              placeholder="E.g., MoEn, PIF, etc."
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
+            [label]="'Supervision / Oversight'"
+          />
+        </td>
+
+        <!-- Why did you chose this particular Saudi Company -->
+        <td class="p-3 border border-gray-200 min-w-[350px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
+          >
+            <textarea
+              pTextarea
+              fluid
+              rows="3"
+              [maxlength]="255"
+              placeholder="Why did you chose this particular Saudi Company as your partner?"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
+            ></textarea>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
+            [label]="'Why Chose This Company'"
+          />
+        </td>
+
+        <!-- Summary of Key Agreement Clauses -->
+        <td class="p-3 border border-gray-200 min-w-[350px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
+          >
+            <textarea
+              pTextarea
+              fluid
+              rows="3"
+              [maxlength]="255"
+              placeholder="Brief summary ownership %, key responsibilities, technology / IP sharing etc.)"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
+            ></textarea>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
+            [label]="'Summary of Key Agreement Clauses'"
+          />
+        </td>
+
+        <!-- Provide Agreement Copy -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
+          >
+            <p-select
+              [options]="yesNoOptions()"
+              optionLabel="name"
+              optionValue="id"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
+              placeholder="Select"
+              fluid
+              [appendTo]="'body'"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
+            [label]="'Provide Agreement Copy'"
+          />
+        </td>
+      </ng-template>
+    </app-form-array-input>
+  </div>
+
+  <!-- Entity Level Section -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
+    <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse">
+        <thead>
+          <!-- Top Header Row -->
+          <tr class="bg-primary text-white">
+            <th class="p-3 border border-gray-200 text-center font-semibold">Metrics</th>
+            <th class="p-3 border border-gray-200 text-center font-semibold" colspan="6">Years ({{ currentYear }}-{{ currentYear + 4 }})</th>
+          </tr>
+          <!-- Bottom Header Row -->
+          <tr class="bg-gray-50">
+            <th class="p-3 border border-gray-200 text-left font-semibold text-gray-700">Category</th>
+            @for (year of yearColumns(); track year) {
+              <th class="p-3 border border-gray-200 text-left font-semibold text-gray-700 min-w-[150px]">{{ year }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Expected Annual Headcount Row -->
+          <tr>
+            <td class="p-3 border border-gray-200 font-medium text-gray-700">Expected Annual Headcount</td>
+            @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+              <td class="p-3 border border-gray-200">
+                <app-group-input-with-checkbox
+                  [showCheckbox]="showCheckbox()"
+                  [hasCommentControl]="getHasCommentControl(getEntityLevelItem().get(yearKey + '_headcount'))"
+                >
+                   <p-inputnumber
+                    fluid
+                    placeholder="Enter headcount"
+                    [min]="0"
+                    inputId="integeronly"
+                    [formControl]="getValueControl(getEntityLevelItem().get(yearKey + '_headcount'))"
+                  />
+                </app-group-input-with-checkbox>
+                <app-base-error-messages
+                  [control]="getValueControl(getEntityLevelItem().get(yearKey + '_headcount'))"
+                  [label]="'Headcount ' + yearColumns()[i]"
+                />
+              </td>
+            }
+          </tr>
+          <!-- Expected Saudization (%) Row -->
+          <tr>
+            <td class="p-3 border border-gray-200 font-medium text-gray-700">Expected Saudization (%)</td>
+            @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+              <td class="p-3 border border-gray-200">
+                <app-group-input-with-checkbox
+                  [showCheckbox]="showCheckbox()"
+                  [hasCommentControl]="getHasCommentControl(getEntityLevelItem().get(yearKey + '_saudization'))"
+                >
+                  <p-inputnumber
+                    fluid
+                    placeholder="Enter %"
+                    [min]="0"
+                    mode="decimal"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="2"
+                    [maxlength]="5"
+                    [formControl]="getValueControl(getEntityLevelItem().get(yearKey + '_saudization'))"
+                 />
+                </app-group-input-with-checkbox>
+                <app-base-error-messages
+                  [control]="getValueControl(getEntityLevelItem().get(yearKey + '_saudization'))"
+                  [label]="'Saudization % ' + yearColumns()[i]"
+                />
+              </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

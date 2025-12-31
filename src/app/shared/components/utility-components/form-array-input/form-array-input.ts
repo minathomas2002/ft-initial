@@ -102,6 +102,7 @@ export class FormArrayInput {
   });
 
   keys = computed(() => {
+    console.log(this.formArray())
     const objectsArray = this.rows();
     if (!objectsArray || objectsArray.length === 0) return [];
 
