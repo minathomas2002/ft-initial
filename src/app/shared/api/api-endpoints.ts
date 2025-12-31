@@ -102,5 +102,7 @@ export const API_ENDPOINTS = {
   notifications: {
     getNotificationsPaginated: `${Notifications}/paginated`,
     getUnreadNotifications: `${Notifications}/unread`,
+    markNotificationAsRead: `${Notifications}`,
+    markAllNotificationsAsRead: `${Notifications}/read-all`,
   },
 };

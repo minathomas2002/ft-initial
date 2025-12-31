@@ -74,6 +74,10 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
     this.notificationStore.getUnreadNotification().pipe(takeUntil(this.destroy$)).subscribe();
   }
 
+  markAllAsRead() {
+    this.notificationStore.markAllAsRead();
+  }
+
   onNotificationClick(popover: any) {
     popover.hide();
   }
