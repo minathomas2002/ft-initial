@@ -68,7 +68,7 @@ export class DvManagerDashboard implements OnInit {
       { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
       { label: this.i18nService.translate('plans.table.investorName'), isSortable: true, sortingKey: 'investorName' },
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'planType' },
+      { label: 'Opportunity Type', isSortable: false, sortingKey: 'planType' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
       { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
       { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
