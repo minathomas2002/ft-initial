@@ -78,7 +78,7 @@ const SELECT_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
   },
 };
@@ -118,7 +118,7 @@ const MULTISELECT_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
   },
 };
@@ -152,7 +152,7 @@ const TEXTAREA_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
   },
 };
@@ -186,7 +186,7 @@ const INPUTTEXT_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
   },
 };
@@ -244,7 +244,7 @@ const AUTOCOMPLETE_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
     option: {
       padding: "0.625rem 1rem",

@@ -1,5 +1,13 @@
 @use '../core/variables' as *;
 
+// Override disabled input background to gray-50 following PrimeNG CSS variable pattern
+// PrimeNG cascade: component-disabled-background -> form-field-disabled-background -> surface-200 -> zinc-200
+// We override at multiple levels to ensure it works regardless of the cascade
+:root {
+  // Override form field disabled background (used by all form components)
+  --p-form-field-disabled-background: var(--p-gray-50) !important;
+}
+
 @mixin primengInputsFontSize {
   font-size: 0.875rem !important;
 }
@@ -135,7 +143,7 @@
     font-family: $font-family;
     &.ql-disabled{
       .ql-editor{
-        background-color: var(--p-gray-100);
+        background-color: var(--p-gray-50);
       }
     }
   }

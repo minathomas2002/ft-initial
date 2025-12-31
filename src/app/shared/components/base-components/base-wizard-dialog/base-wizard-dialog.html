@@ -12,12 +12,12 @@
     (click)="visible.set(false)"
   ></span>
   <div class="flex !max-h-full h-full">
-    <div class="steps-container bg-gray-50 ps-5 py-6 border-e-1 border-gray-200 max-w-[300px]">
-      <div class="inline-flex items-center mb-[80px]">
+    <div class="steps-container bg-gray-50 py-6 px-5 border-e-1 border-gray-200 max-w-[400px] flex flex-col gap-[80px]">
+      <div class="inline-flex items-center">
         <img
           src="assets/images/long-logo.svg"
           alt="logo"
-          class="w-[156px]"
+          class="w-[125px] h-[40px]"
           appImageError
         >
       </div>
@@ -64,15 +64,13 @@
         }
       </div>
     </div>
-    <div class="flex flex-col overflow-hidden flex-1">
-      <div class="
-      header
-      ps-8">
-        <h3 class="text-2xl font-semibold pt-5">{{wizardTitle()}}</h3>
+    <div class="flex flex-col overflow-hidden flex-1 p-8 gap-[32px]">
+      <div class="header flex flex-col gap-2">
+        <h3 class="text-2xl font-semibold">{{wizardTitle()}}</h3>
         <ng-content select="status"></ng-content>
       </div>
       <div
-        class="flex-1 py-6 overflow-auto max-w-full"
+        class="flex-1 overflow-auto max-w-full"
         #scrollableContent
       >
         @for (step of steps(); track step.title; let i = $index) {
