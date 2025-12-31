@@ -103,7 +103,7 @@ export class DvManagerDashboard implements OnInit {
   }
 
   getSlaCountDownNoun(numberInDays: number): string {
-    return numberInDays > 1 ? 'days' : 'day';
+    return numberInDays > 1 ? 'Days' : 'Day';
   }
 
   getPlanTypeLabel(planType: EOpportunityType): string {
