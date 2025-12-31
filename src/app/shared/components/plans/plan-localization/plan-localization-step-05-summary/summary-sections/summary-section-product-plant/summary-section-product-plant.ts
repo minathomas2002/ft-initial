@@ -39,6 +39,9 @@ export class SummarySectionProductPlant {
   });
 
   showSECApprovedLocalSuppliersSection = computed(() => {
+    if (!this.targetedCustomer()) {
+      return false;
+    }
     return this.targetedCustomer().split(',')
       .some((customer: string) => customer.trim() === this.targetedCustomerOptions().find((option: any) => option.id === ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString())?.name);
   });
