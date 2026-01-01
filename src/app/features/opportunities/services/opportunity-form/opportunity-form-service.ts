@@ -91,8 +91,8 @@ export class OpportunityFormService {
         spendSAR: ['', [Validators.required, Validators.max(10), Validators.min(0.001)]],
         minQuantity: ['', [Validators.required, Validators.min(0)]],
         maxQuantity: ['', [Validators.required, Validators.min(0)]],
-        localSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(2147483647)]],
-        globalSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(2147483647)]],
+        localSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(10000000000)]],
+        globalSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(10000000000)]],
         dateRange: [null, [Validators.required, this.dateRangeValidator]],
         image: [null, Validators.required],
       }, { validators: [this.quantityRangeValidator] }),
@@ -448,8 +448,8 @@ export class OpportunityFormService {
     infoGroup.get('spendSAR')?.setValidators([Validators.required, Validators.max(10), Validators.min(0.001)]);
     infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.min(0)]);
     infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.min(0)]);
-    infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(2147483647)]);
-    infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(2147483647)]);
+    infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(10000000000)]);
+    infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(10000000000)]);
     infoGroup.get('dateRange')?.setValidators([Validators.required, this.dateRangeValidator]);
     infoGroup.get('image')?.setValidators([Validators.required]);
 
