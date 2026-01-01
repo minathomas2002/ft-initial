@@ -388,7 +388,13 @@ export class OpportunityFormService {
     // }
 
 
+// disable title if has active plans 
+    if(this.hasActivePlans){
+      this.opportunityInformationForm.get("title")?.disable({ emitEvent: false });
+    }else{
+        this.opportunityInformationForm.get("title")?.enable({ emitEvent: false });
 
+    }
     this.opportunityInformationForm.patchValue({
       id: value.id,
       title: value.title,
