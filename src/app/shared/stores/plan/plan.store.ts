@@ -57,9 +57,9 @@ const initialState: {
     { id: ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString(), name: 'SEC\'s approved local suppliers' }
   ],
   productManufacturingExperienceOptions: [
-    { id: EExperienceRange.Years_5.toString(), name: '5 Years' },
+    { id: EExperienceRange.Years_5.toString(), name: '5 Years or less' },
     { id: EExperienceRange.Years_5_10.toString(), name: '5 - 10 Years' },
-    { id: EExperienceRange.Years_10.toString(), name: '10 Years' }
+    { id: EExperienceRange.Years_10.toString(), name: '10 Years or more' }
   ],
   inHouseProcuredOptions: [
     { id: EInHouseProcuredType.InHouse.toString(), name: 'In-house' },

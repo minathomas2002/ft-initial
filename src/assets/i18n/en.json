@@ -675,6 +675,8 @@
     },
     "filter": {
       "searchPlaceholder": "Search by Plan ID or Title",
+      "dvsearchPlaceholder": "Search by Plan ID or Title or Investor Name",
+
       "selectPlanType": "Select Plan Type",
       "selectStatus": "Select Status",
       "selectSubmissionDate": "Select Submission Date",

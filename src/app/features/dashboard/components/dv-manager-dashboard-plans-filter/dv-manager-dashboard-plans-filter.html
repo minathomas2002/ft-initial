@@ -5,7 +5,7 @@
         type="text"
         pInputText
         name="planSearch"
-        [placeholder]="'plans.filter.searchPlaceholder' | translate"
+        [placeholder]="'plans.filter.dvsearchPlaceholder' | translate"
         [ngModel]="filter().searchText ?? ''"
         (ngModelChange)="onSearchTextChange($event)"
       />
@@ -61,4 +61,3 @@
     </div>
   </div>
 </div>
-
