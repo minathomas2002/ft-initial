@@ -19,7 +19,9 @@ export interface GroupInputWithCheckboxFormGroup {
         class="has-comment-checkbox"
         />
       }
-      <ng-content></ng-content>
+      <div class="flex-1 flex flex-col">
+        <ng-content></ng-content>
+      </div>
     </div>
   `,
   styleUrl: './group-input-with-checkbox.scss',

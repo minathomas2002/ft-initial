@@ -52,7 +52,6 @@
               fluid
               placeholder=""
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
-              readonly
               class="bg-gray-100 text-gray-500"
             />
           </app-group-input-with-checkbox>
@@ -70,7 +69,6 @@
               fluid
               placeholder=""
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
-              readonly
               class="bg-gray-100 text-gray-500"
             />
           </app-group-input-with-checkbox>
@@ -254,7 +252,7 @@
           >
           <div class="flex flex-col">
             <p-select
-              [options]="agreementTypeOptions"
+              [options]="agreementTypeOptions()"
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
@@ -344,6 +342,9 @@
               placeholder="Why did you chose this particular Saudi Company as your partner?"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
             ></textarea>
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany)).value?.length || 0 }} / 255
+            </div>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
@@ -365,6 +366,9 @@
               placeholder="Brief summary ownership %, key responsibilities, technology / IP sharing etc.)"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
             ></textarea>
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses)).value?.length || 0 }} / 255
+            </div>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
@@ -407,7 +411,7 @@
           <!-- Top Header Row -->
           <tr class="bg-primary text-white">
             <th class="p-3 border border-gray-200 text-start font-normal">Metrics</th>
-            <th class="p-3 border border-gray-200 text-start font-normal" colspan="6">Years ({{ currentYear }}-{{ currentYear + 5 }})</th>
+            <th class="p-3 border border-gray-200 text-start font-normal" colspan="6">Years ({{ yearColumns()[0] }}-{{ yearColumns()[4] }})</th>
           </tr>
           <!-- Bottom Header Row -->
           <tr class="bg-gray-50">
@@ -593,6 +597,9 @@
               placeholder="Mention Support required from SEC to localize the service (if any)"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
             ></textarea>
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).value?.length || 0 }} / 500
+            </div>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"

@@ -482,5 +482,18 @@ export class ServicePlanFormService {
 
     return quarters.reverse();
   }
+
+  /**
+   * Generate an array of upcoming years (inclusive of startYear)
+   * @param count Number of years to generate (default 5)
+   * @param startYear Starting year (default current year)
+   */
+  upcomingYears(count = 5, startYear = new Date().getFullYear()): number[] {
+    const years: number[] = [];
+    for (let i = 0; i < count; i++) {
+      years.push(startYear + i);
+    }
+    return years;
+  }
 }
 

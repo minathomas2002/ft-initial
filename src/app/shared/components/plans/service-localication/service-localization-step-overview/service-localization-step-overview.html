@@ -416,6 +416,9 @@
             placeholder="Company Name – Amount (Mn SAR) (From Year – To Year)"
             [formControl]="getValueControl(itemControl.get('totalBusinessDoneLast5Years'))"
           ></textarea>
+          <div class="text-xs text-gray-500 text-right mt-1">
+            {{ getValueControl(itemControl.get('totalBusinessDoneLast5Years')).value?.length || 0 }} / 150
+          </div>
         </td>
 
         <td class="p-3 border border-gray-200 min-w-[150px]">

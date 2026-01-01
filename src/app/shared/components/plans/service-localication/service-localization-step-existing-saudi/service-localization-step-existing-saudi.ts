@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, effect, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, effect, input, DestroyRef } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,6 +15,7 @@ import { EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
+
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
   imports: [
@@ -44,28 +46,16 @@ export class ServiceLocalizationStepExistingSaudi {
   EServiceProvidedTo = EServiceProvidedTo;
   EServiceQualificationStatus = EServiceQualificationStatus;
   EYesNo = EYesNo;
+
   companyTypeOptions = this.planStore.companyTypeOptions;
   qualificationStatusOptions = this.planStore.qualificationStatusOptions;
   yesNoOptions = this.planStore.yesNoOptions;
+  agreementTypeOptions = this.planStore.agreementTypeOptions;
 
-  agreementTypeOptions = [
-    { id: '1', name: 'Joint Venture' },
-    { id: '2', name: 'Special Purpose Vehicle' },
-    { id: '3', name: 'Technology Transfer Agreement' },
-    { id: '4', name: 'Knowledge Transfer Agreement' },
-    { id: '5', name: 'Other' },
-  ];
 
   availableQuartersWithPast = computed(() => this.serviceForm.getAvailableQuartersWithPast(5, 5));
 
-  currentYear = new Date().getFullYear();
-  yearColumns = computed(() => {
-    const years: number[] = [];
-    for (let i = 0; i < 6; i++) {
-      years.push(this.currentYear + i);
-    }
-    return years;
-  });
+  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -73,7 +63,6 @@ export class ServiceLocalizationStepExistingSaudi {
     EMaterialsFormControls.thirdYear,
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
-    EMaterialsFormControls.sixthYear,
   ];
 
   // Generate header labels for service level year columns (show as numbers)
@@ -101,9 +90,17 @@ export class ServiceLocalizationStepExistingSaudi {
     ];
   });
 
+  destroyRef = inject(DestroyRef);
+
   constructor() {
     // Sync services from cover page to service level on component initialization
     this.serviceForm.syncServicesFromCoverPageToExistingSaudi();
+
+    // Re-sync when services on cover page change
+    const servicesArray = this.serviceForm.getServicesFormArray();
+    servicesArray?.valueChanges?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.serviceForm.syncServicesFromCoverPageToExistingSaudi();
+    });
 
     // Setup conditional field enabling/disabling
     this.setupConditionalFields();
@@ -141,7 +138,7 @@ export class ServiceLocalizationStepExistingSaudi {
     });
 
     // Watch for new rows being added
-    formArray.valueChanges.subscribe(() => {
+    formArray.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       formArray.controls.forEach((control) => {
         this.setupRowConditionalFields(control as FormGroup);
       });
@@ -223,10 +220,10 @@ export class ServiceLocalizationStepExistingSaudi {
 
     // Subscribe to changes
     if (companyTypeControl) {
-      companyTypeControl.valueChanges.subscribe(() => updateFields());
+      companyTypeControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => updateFields());
     }
     if (qualificationStatusControl) {
-      qualificationStatusControl.valueChanges.subscribe(() => updateFields());
+      qualificationStatusControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => updateFields());
     }
   }
 

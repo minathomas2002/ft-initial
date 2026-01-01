@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls, EYesNo } from 'src/app/shared/enums';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -18,6 +19,7 @@ export class SummarySectionOverview {
   onEdit = output<void>();
 
   planYesOrNoEnum = EYesNo;
+  planStore = inject(PlanStore);
 
   // Form group accessors
   basicInformationFormGroup = computed(() => {
@@ -204,14 +206,34 @@ export class SummarySectionOverview {
 
       return {
         serviceName: getValueFromControl(EMaterialsFormControls.serviceName),
-        serviceType: getValueFromControl(EMaterialsFormControls.serviceType),
-        serviceCategory: getValueFromControl(EMaterialsFormControls.serviceCategory),
+        serviceType: ((): string | null => {
+          const raw = getValueFromControl(EMaterialsFormControls.serviceType);
+          const option = this.planStore.serviceTypeOptions().find(o => o.id === String(raw));
+          return option ? option.name : raw;
+        })(),
+        serviceCategory: ((): string | null => {
+          const raw = getValueFromControl(EMaterialsFormControls.serviceCategory);
+          const option = this.planStore.serviceCategoryOptions().find(o => o.id === String(raw));
+          return option ? option.name : raw;
+        })(),
         serviceDescription: getValueFromControl(EMaterialsFormControls.serviceDescription),
-        serviceProvidedTo: getValueFromControl(EMaterialsFormControls.serviceProvidedTo),
+        serviceProvidedTo: ((): string | null => {
+          const raw = getValueFromControl(EMaterialsFormControls.serviceProvidedTo);
+          const option = this.planStore.serviceProvidedToOptions().find(o => o.id === String(raw));
+          return option ? option.name : raw;
+        })(),
         totalBusinessDoneLast5Years: getValueFromControl(EMaterialsFormControls.totalBusinessDoneLast5Years),
-        serviceTargetedForLocalization: getValueFromControl(EMaterialsFormControls.serviceTargetedForLocalization),
+        serviceTargetedForLocalization: ((): string | null => {
+          const raw = getValueFromControl(EMaterialsFormControls.serviceTargetedForLocalization);
+          const option = this.planStore.yesNoOptions().find(o => o.id === String(raw));
+          return option ? option.name : raw;
+        })(),
         expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.expectedLocalizationDate),
-        serviceLocalizationMethodology: getValueFromControl(EMaterialsFormControls.serviceLocalizationMethodology),
+        serviceLocalizationMethodology: ((): string | null => {
+          const raw = getValueFromControl(EMaterialsFormControls.serviceLocalizationMethodology);
+          const option = this.planStore.localizationMethodologyOptions().find(o => o.id === String(raw));
+          return option ? option.name : raw;
+        })(),
       };
     });
   });

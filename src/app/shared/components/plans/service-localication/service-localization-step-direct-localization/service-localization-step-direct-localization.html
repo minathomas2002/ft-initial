@@ -81,6 +81,9 @@
                   [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails))"
                   class="mt-2"
                 ></textarea>
+                <div class="text-xs text-gray-500 text-right mt-1">
+                  {{ getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails)).value?.length || 0 }} / 250
+                </div>
               }
             </div>
           </app-group-input-with-checkbox>
@@ -122,6 +125,9 @@
                   [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails))"
                   class="mt-2"
                 ></textarea>
+                <div class="text-xs text-gray-500 text-right mt-1">
+                  {{ getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails)).value?.length || 0 }} / 255
+                </div>
               }
             </div>
           </app-group-input-with-checkbox>
@@ -171,6 +177,9 @@
               placeholder="E.g., MoEn, PIF, etc."
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
             ></textarea>
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity)).value?.length || 0 }} / 255
+            </div>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
@@ -204,6 +213,9 @@
                   [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails))"
                   class="mt-2"
                 ></textarea>
+                <div class="text-xs text-gray-500 text-right mt-1">
+                  {{ getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails)).value?.length || 0 }} / 255
+                </div>
               }
             </div>
           </app-group-input-with-checkbox>
@@ -232,7 +244,7 @@
           <!-- Top Header Row -->
           <tr class="bg-primary text-white">
             <th class="p-3 border border-gray-200 text-start font-normal">Metrics</th>
-            <th class="p-3 border border-gray-200 text-start font-normal" colspan="5">Years ({{ currentYear }}-{{ currentYear + 4 }})</th>
+            <th class="p-3 border border-gray-200 text-start font-normal" colspan="5">Years ({{ yearColumns()[0] }}-{{ yearColumns()[4] }})</th>
           </tr>
           <!-- Bottom Header Row -->
           <tr class="bg-gray-50">
@@ -418,6 +430,9 @@
               placeholder="Mention Support required from SEC to localize the service (if any)"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
             ></textarea>
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).value?.length || 0 }} / 500
+            </div>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"

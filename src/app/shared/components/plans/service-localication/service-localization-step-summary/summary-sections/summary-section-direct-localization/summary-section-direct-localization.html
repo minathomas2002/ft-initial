@@ -9,92 +9,94 @@
 
     <!-- Localization Strategy -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-lg font-semibold text-gray-900">Localization Strategy</h3>
+      <h3 class="text-lg font-semibold text-[#4A4E5A]">Localization Strategy</h3>
       @if (localizationStrategy().length > 0) {
         <div class="overflow-x-auto">
-          <table class="w-full border-collapse">
-            <thead>
-              <tr class="bg-gray-50">
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Service Name</th>
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Expected Localization Date</th>
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Localization Approach</th>
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Location</th>
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">CAPEX Required (SAR Million)</th>
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Supervision/Oversight</th>
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Proprietary Tools/Systems</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (strategy of localizationStrategy(); track $index) {
-                <tr>
-                  <td class="border border-gray-300 px-4 py-2">
-                    <app-summary-table-cell
-                      [value]="strategy.serviceName"
-                      [isEmpty]="!strategy.serviceName"
-                      [hasError]="hasLocalizationStrategyFieldError($index, 'serviceName')"
-                    />
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    <app-summary-table-cell
-                      [value]="strategy.expectedLocalizationDate"
-                      [isEmpty]="!strategy.expectedLocalizationDate"
-                      [hasError]="hasLocalizationStrategyFieldError($index, 'expectedLocalizationDate')"
-                    />
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    <app-summary-table-cell
-                      [value]="strategy.localizationApproach"
-                      [isEmpty]="!strategy.localizationApproach"
-                      [hasError]="hasLocalizationStrategyFieldError($index, 'localizationApproach')"
-                    />
-                    @if (strategy.localizationApproachOther) {
-                      <div class="mt-2 text-sm text-gray-600">
-                        <span class="font-semibold">Other: </span>{{ strategy.localizationApproachOther }}
-                      </div>
-                    }
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    <app-summary-table-cell
-                      [value]="strategy.location"
-                      [isEmpty]="!strategy.location"
-                      [hasError]="hasLocalizationStrategyFieldError($index, 'location')"
-                    />
-                    @if (strategy.locationOther) {
-                      <div class="mt-2 text-sm text-gray-600">
-                        <span class="font-semibold">Other: </span>{{ strategy.locationOther }}
-                      </div>
-                    }
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2 text-center">
-                    <app-summary-table-cell
-                      [value]="strategy.capexRequired"
-                      [isEmpty]="!strategy.capexRequired && strategy.capexRequired !== 0"
-                      [hasError]="hasLocalizationStrategyFieldError($index, 'capexRequired')"
-                    />
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    <app-summary-table-cell
-                      [value]="strategy.supervisionOversight"
-                      [isEmpty]="!strategy.supervisionOversight"
-                      [hasError]="hasLocalizationStrategyFieldError($index, 'supervisionOversightEntity')"
-                    />
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    <app-summary-table-cell
-                      [value]="strategy.proprietaryTools"
-                      [isEmpty]="!strategy.proprietaryTools"
-                      [hasError]="hasLocalizationStrategyFieldError($index, 'willBeAnyProprietaryToolsSystems')"
-                    />
-                    @if (strategy.proprietaryToolsExplanation) {
-                      <div class="mt-2 text-sm text-gray-600">
-                        <span class="font-semibold">Explanation: </span>{{ strategy.proprietaryToolsExplanation }}
-                      </div>
-                    }
-                  </td>
+          <div class="rounded-lg overflow-hidden border border-gray-300">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-[#F9FAFA]">
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Service Name</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Expected Localization Date</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Localization Approach</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Location</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">CAPEX Required (SAR Million)</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Supervision/Oversight</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Proprietary Tools/Systems</th>
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (strategy of localizationStrategy(); track $index) {
+                  <tr>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="strategy.serviceName"
+                        [isEmpty]="!strategy.serviceName"
+                        [hasError]="hasLocalizationStrategyFieldError($index, 'serviceName')"
+                      />
+                    </td>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="strategy.expectedLocalizationDate"
+                        [isEmpty]="!strategy.expectedLocalizationDate"
+                        [hasError]="hasLocalizationStrategyFieldError($index, 'expectedLocalizationDate')"
+                      />
+                    </td>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="strategy.localizationApproach"
+                        [isEmpty]="!strategy.localizationApproach"
+                        [hasError]="hasLocalizationStrategyFieldError($index, 'localizationApproach')"
+                      />
+                      @if (strategy.localizationApproachOther) {
+                        <div class="mt-2 text-sm text-gray-600">
+                          <span class="font-semibold">Other: </span>{{ strategy.localizationApproachOther }}
+                        </div>
+                      }
+                    </td>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="strategy.location"
+                        [isEmpty]="!strategy.location"
+                        [hasError]="hasLocalizationStrategyFieldError($index, 'location')"
+                      />
+                      @if (strategy.locationOther) {
+                        <div class="mt-2 text-sm text-gray-600">
+                          <span class="font-semibold">Other: </span>{{ strategy.locationOther }}
+                        </div>
+                      }
+                    </td>
+                    <td class="border-t border-gray-300 p-3 text-center">
+                      <app-summary-table-cell
+                        [value]="strategy.capexRequired"
+                        [isEmpty]="!strategy.capexRequired && strategy.capexRequired !== 0"
+                        [hasError]="hasLocalizationStrategyFieldError($index, 'capexRequired')"
+                      />
+                    </td>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="strategy.supervisionOversight"
+                        [isEmpty]="!strategy.supervisionOversight"
+                        [hasError]="hasLocalizationStrategyFieldError($index, 'supervisionOversightEntity')"
+                      />
+                    </td>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="strategy.proprietaryTools"
+                        [isEmpty]="!strategy.proprietaryTools"
+                        [hasError]="hasLocalizationStrategyFieldError($index, 'willBeAnyProprietaryToolsSystems')"
+                      />
+                      @if (strategy.proprietaryToolsExplanation) {
+                        <div class="mt-2 text-sm text-gray-600">
+                          <span class="font-semibold">Explanation: </span>{{ strategy.proprietaryToolsExplanation }}
+                        </div>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       } @else {
         <p class="text-sm text-gray-500">No localization strategy added</p>
@@ -104,97 +106,137 @@
     <!-- Entity Level -->
     @if (entityLevel()) {
       <div class="flex flex-col gap-4">
-        <h3 class="text-lg font-semibold text-gray-900">Entity Level</h3>
+        <h3 class="text-lg font-semibold text-[#4A4E5A]">Entity Level (i.e., local company responsible for delivering the services)</h3>
+        <p class="text-sm font-normal text-[#4A4E5A]">Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
         <div class="overflow-x-auto">
-          <table class="w-full border-collapse">
-            <thead>
-              <tr class="bg-primary">
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-white" colspan="2"></th>
-                @for (year of yearColumns(); track $index) {
-                  <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-white">{{ year }}</th>
-                }
-              </tr>
-              <tr class="bg-gray-50">
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900" colspan="2">Headcount & Saudization %</th>
-                @for (year of yearColumns(); track $index) {
-                  <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">Year {{ $index + 1 }}</th>
-                }
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold" colspan="2">Headcount</td>
-                @for (headcount of entityLevel()!.headcount; track $index) {
-                  <td class="border border-gray-300 px-4 py-2 text-center">
-                    <app-summary-table-cell
-                      [value]="headcount.value"
-                      [isEmpty]="!headcount.value && headcount.value !== 0"
-                      [hasError]="hasEntityFieldError(headcount.controlName)"
-                    />
-                  </td>
-                }
-              </tr>
-              <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold" colspan="2">Saudization %</td>
-                @for (saudization of entityLevel()!.saudization; track $index) {
-                  <td class="border border-gray-300 px-4 py-2 text-center">
-                    <app-summary-table-cell
-                      [value]="saudization.value"
-                      [isEmpty]="!saudization.value && saudization.value !== 0"
-                      [hasError]="hasEntityFieldError(saudization.controlName)"
-                    />
-                  </td>
-                }
-              </tr>
-            </tbody>
-          </table>
+          <div class="rounded-lg overflow-hidden border border-gray-300">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-primary">
+                  <th class="p-3 text-start text-sm font-medium text-white" colspan="5">Expected Annual Headcount & Saudization % (upto 2030) <span class="font-normal text-xs">(To be filled for the KSA based facility only)</span></th>
+                </tr>
+                <tr class="bg-[#F9FAFA]">
+                  @for (year of yearColumns(); track $index) {
+                    <th class="p-3 text-start text-sm font-medium text-[#4A4E5A]">{{ year }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  @for (headcount of entityLevel()!.headcount; track $index) {
+                    <td class="border-t border-gray-300 p-3 text-center">
+                      <app-summary-table-cell
+                        [value]="headcount.value"
+                        [isEmpty]="!headcount.value && headcount.value !== 0"
+                        [hasError]="hasEntityFieldError(headcount.controlName)"
+                      />
+                    </td>
+                  }
+                </tr>
+                <tr>
+                  @for (saudization of entityLevel()!.saudization; track $index) {
+                    <td class="border-t border-gray-300 p-3 text-center">
+                      <app-summary-table-cell
+                        [value]="saudization.value"
+                        [isEmpty]="!saudization.value && saudization.value !== 0"
+                        [hasError]="hasEntityFieldError(saudization.controlName)"
+                      />
+                    </td>
+                  }
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     }
 
     <!-- Service Level -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-lg font-semibold text-gray-900">Service Level</h3>
+      <h3 class="text-lg font-semibold text-[#4A4E5A]">Service Level</h3>
       @if (serviceLevel().length > 0) {
         <div class="overflow-x-auto">
-          <table class="w-full border-collapse">
-            <thead>
-              <tr class="bg-gray-50">
-                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900" rowspan="2">Service Name</th>
-                <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900" colspan="5">Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)</th>
-              </tr>
-              <tr class="bg-gray-50">
-                @for (year of yearColumns(); track $index) {
-                  <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">{{ year }}</th>
-                }
-              </tr>
-            </thead>
-            <tbody>
-              @for (service of serviceLevel(); track $index) {
-                <tr>
-                  <td class="border border-gray-300 px-4 py-2">
-                    <app-summary-table-cell
-                      [value]="service.serviceName"
-                      [isEmpty]="!service.serviceName"
-                      [hasError]="hasServiceLevelFieldError(service.index, 'serviceName')"
-                    />
-                  </td>
-                  @for (year of service.years; track $index) {
-                    <td class="border border-gray-300 px-4 py-2 text-center">
-                      <app-summary-table-cell
-                        [value]="year.value"
-                        [isEmpty]="!year.value && year.value !== 0"
-                        [hasError]="hasServiceLevelFieldError(service.index, year.controlName)"
-                      />
-                    </td>
+          <div class="rounded-lg overflow-hidden border border-gray-300">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-[#F9FAFA]">
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]" rowspan="2">Service Name</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]" rowspan="2">Expected Localization Date</th>
+                  <th class="p-3 text-center text-sm font-semibold text-[#4A4E5A]" colspan="5">Mention Y-o-Y expected Saudization % (To be filled for the KSA based facility only)</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]" rowspan="2">Key Measures to Upskill Saudis</th>
+                  <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]" rowspan="2">Support Required from SEC</th>
+                </tr>
+                <tr class="bg-[#F9FAFA]">
+                  @for (year of yearColumns(); track $index) {
+                    <th class="p-3 text-center text-sm font-semibold text-[#4A4E5A]">{{ year }}</th>
                   }
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (service of serviceLevel(); track $index) {
+                  <tr>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="service.serviceName"
+                        [isEmpty]="!service.serviceName"
+                        [hasError]="hasServiceLevelFieldError(service.index, 'serviceName')"
+                      />
+                    </td>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="service.expectedLocalizationDate"
+                        [isEmpty]="!service.expectedLocalizationDate"
+                        [hasError]="hasServiceLevelFieldError(service.index, 'expectedLocalizationDate')"
+                      />
+                    </td>
+                    @for (year of service.years; track $index) {
+                      <td class="border-t border-gray-300 p-3 text-center">
+                        <app-summary-table-cell
+                          [value]="year.value"
+                          [isEmpty]="!year.value && year.value !== 0"
+                          [hasError]="hasServiceLevelFieldError(service.index, year.controlName)"
+                        />
+                      </td>
+                    }
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="service.keyMeasuresToUpskillSaudis"
+                        [isEmpty]="!service.keyMeasuresToUpskillSaudis"
+                        [hasError]="hasServiceLevelFieldError(service.index, 'keyMeasuresToUpskillSaudis')"
+                      />
+                    </td>
+                    <td class="border-t border-gray-300 p-3">
+                      <app-summary-table-cell
+                        [value]="service.mentionSupportRequiredFromSEC"
+                        [isEmpty]="!service.mentionSupportRequiredFromSEC"
+                        [hasError]="hasServiceLevelFieldError(service.index, 'mentionSupportRequiredFromSEC')"
+                      />
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       } @else {
         <p class="text-sm text-gray-500">No service level details added</p>
+      }
+    </div>
+
+    <!-- Attachments -->
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-semibold text-[#4A4E5A]">Attachments</h3>
+      @if (attachments() && attachments().length > 0) {
+        <div class="flex flex-col gap-2">
+          @for (file of attachments(); track $index) {
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <i class="icon-file"></i>
+              <span>{{ file.name }}</span>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="text-sm text-gray-500">No attachments</p>
       }
     </div>
   </div>

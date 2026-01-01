@@ -57,6 +57,14 @@ export enum EYesNo {
   No = 2,
 }
 
+export enum AgreementType {
+  JointVenture = 1,
+  SpecialPurposeVehicle = 2,
+  TechnologyTransferAgreement = 3,
+  KnowledgeTransferAgreement = 4,
+  Other = 5,
+}
+
 export enum ELocalizationApproach {
   EstablishSaudiEntity = 1,
   EstablishLocalBranch = 2,

@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, inject } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -18,16 +19,9 @@ export class SummarySectionDirectLocalization {
   onEdit = output<void>();
 
   EMaterialsFormControls = EMaterialsFormControls;
-  currentYear = new Date().getFullYear();
-
   // Year columns for Entity Level and Service Level (5 years)
-  yearColumns = computed(() => {
-    const years: number[] = [];
-    for (let i = 0; i < 5; i++) {
-      years.push(this.currentYear + i);
-    }
-    return years;
-  });
+  serviceForm = inject(ServicePlanFormService);
+  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -48,6 +42,10 @@ export class SummarySectionDirectLocalization {
 
   serviceLevelFormArray = computed(() => {
     return this.formGroup().get(EMaterialsFormControls.serviceLevelFormGroup) as FormArray;
+  });
+
+  attachmentsFormGroup = computed(() => {
+    return this.formGroup().get(EMaterialsFormControls.attachmentsFormGroup) as FormGroup;
   });
 
   // Helper method to get values
@@ -172,7 +170,10 @@ export class SummarySectionDirectLocalization {
       return {
         index: i,
         serviceName: getValueFromControl(EMaterialsFormControls.serviceName),
+        expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.expectedLocalizationDate),
         years: this.yearControlKeys.map(key => ({ value: getValueFromControl(`${key}_saudization`), controlName: `${key}_saudization` })),
+        keyMeasuresToUpskillSaudis: getValueFromControl(EMaterialsFormControls.keyMeasuresToUpskillSaudis),
+        mentionSupportRequiredFromSEC: getValueFromControl(EMaterialsFormControls.mentionSupportRequiredFromSEC),
       };
     });
   });
@@ -180,4 +181,12 @@ export class SummarySectionDirectLocalization {
   hasServiceLevelFieldError(index: number, controlName: string): boolean {
     return this.hasFieldError(`serviceLevelFormGroup.${index}.${controlName}.value`);
   }
+
+  // Attachments
+  attachments = computed(() => {
+    const attachmentsGroup = this.attachmentsFormGroup();
+    if (!attachmentsGroup) return null;
+
+    return attachmentsGroup.get(EMaterialsFormControls.value)?.value;
+  });
 }

@@ -2,7 +2,7 @@
   <!-- Basic Information -->
   <div class="flex flex-col gap-4">
     <app-summary-section-header
-      [title]="'Overview & Company Information'"
+      [title]="'Overview'"
       [isViewMode]="isViewMode()"
       (onEdit)="onEditClick()"
     />
@@ -24,7 +24,7 @@
 
   <!-- Company Information -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-lg font-semibold text-gray-900">Company Information</h3>
+    <h3 class="text-lg font-semibold text-[#4A4E5A]">Company Information</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <app-summary-field
         class="col-span-2"
@@ -50,7 +50,7 @@
 
   <!-- Location Information -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-lg font-semibold text-gray-900">Location Information</h3>
+    <h3 class="text-lg font-semibold text-[#4A4E5A]">Location Information</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <app-summary-field
         [label]="'Global HQ Location'"
@@ -97,7 +97,7 @@
         />
         <app-summary-field
           [label]="'Contact Number'"
-          [value]="contactNumber()?.countryCode + contactNumber()?.phoneNumber"
+          [value]="contactNumber()?.countryCode + ' ' +contactNumber()?.phoneNumber"
           [hasError]="hasFieldError('localAgentInformationFormGroup.contactNumber.value')"
           [isEmpty]="!contactNumber()"
         />
@@ -114,62 +114,64 @@
 
   <!-- Service Details -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-lg font-semibold text-gray-900">Details of Service Provided</h3>
+    <h3 class="text-lg font-semibold text-[#4A4E5A]">Details of Service Provided</h3>
       <div class="overflow-x-auto">
+      <div class="rounded-lg border border-gray-300">
         <table class="w-full border-collapse">
           <thead>
-            <tr class="bg-gray-50">
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900"># of Services</th>
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Service Name</th>
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Service Type</th>
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Service Description</th>
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Service Provided to</th>
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Total Business Done (Last 5 Years)</th>
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Targeted for Localization</th>
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Expected Localization Date</th>
-              <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Service Localization Methodology</th>
+            <tr class="bg-[#F9FAFA]">
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]"># of Services</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[220px]">Service Name</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]">Service Type</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[360px]">Service Description</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[220px]">Service Provided to</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[240px]">Total Business Done (Last 5 Years)</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[160px]">Targeted for Localization</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[160px]">Expected Localization Date</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[260px]">Service Localization Methodology</th>
             </tr>
           </thead>
           <tbody>
             @for (service of serviceDetails(); track $index) {
               <tr>
-                <td class="border border-gray-300 px-4 py-2 text-center">Service {{ $index + 1 }}</td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border-t border-gray-300 p-4">{{ $index + 1 }}</td>
+
+                <td class="border-t border-gray-300 p-4 min-w-[220px]">
                   <app-summary-table-cell
                     [value]="service.serviceName"
                     [isEmpty]="!service.serviceName"
                     [hasError]="hasServiceDetailFieldError($index, 'serviceName')"
                     />
                   </td>
-                  <td class="border border-gray-300 px-4 py-2">
+                  <td class="border-t border-gray-300 p-4">
                     <app-summary-table-cell
                     [value]="service.serviceType"
                     [isEmpty]="!service.serviceType"
                     [hasError]="hasServiceDetailFieldError($index, 'serviceType')"
                     />
                   </td>
-                  <td class="border border-gray-300 px-4 py-2">
+                  <td class="border-t border-gray-300 p-4 min-w-[360px]">
                     <app-summary-table-cell
                     [value]="service.serviceDescription"
                     [isEmpty]="!service.serviceDescription"
                     [hasError]="hasServiceDetailFieldError($index, 'serviceDescription')"
                     />
                   </td>
-                  <td class="border border-gray-300 px-4 py-2">
+                  <td class="border-t border-gray-300 p-4 min-w-[220px]">
                     <app-summary-table-cell
                     [value]="service.serviceProvidedTo"
                     [isEmpty]="!service.serviceProvidedTo"
                     [hasError]="hasServiceDetailFieldError($index, 'serviceProvidedTo')"
                     />
                   </td>
-                  <td class="border border-gray-300 px-4 py-2">
+                  <td class="border-t border-gray-300 p-4 min-w-[240px]">
                     <app-summary-table-cell
                     [value]="service.totalBusinessDoneLast5Years"
                     [isEmpty]="!service.totalBusinessDoneLast5Years"
                     [hasError]="hasServiceDetailFieldError($index, 'totalBusinessDoneLast5Years')"
                     />
                   </td>
-                  <td class="border border-gray-300 px-4 py-2">
+                  <td class="border-t border-gray-300 p-4">
                     <app-summary-table-cell
                     [value]="service.serviceTargetedForLocalization"
                     [isBoolean]="true"
@@ -177,14 +179,14 @@
                     [hasError]="hasServiceDetailFieldError($index, 'serviceTargetedForLocalization')"
                   />
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border-t border-gray-300 p-4">
                   <app-summary-table-cell
                   [value]="service.expectedLocalizationDate"
                     [isBoolean]="true"
                     [isEmpty]="!service.expectedLocalizationDate"
                     [hasError]="hasServiceDetailFieldError($index, 'expectedLocalizationDate')"
                     />
-                    <td class="border border-gray-300 px-4 py-2">
+                    <td class="border-t border-gray-300 p-4">
                       <app-summary-table-cell
                       [value]="service.serviceLocalizationMethodology"
                       [isBoolean]="true"
@@ -197,5 +199,6 @@
           </tbody>
         </table>
       </div>
+    </div>
   </div>
 </div>

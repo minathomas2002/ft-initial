@@ -40,6 +40,7 @@ const initialState: {
   localizationApproachOptions: ISelectItem[];
   locationOptions: ISelectItem[];
   yesNoOptions: ISelectItem[];
+  agreementTypeOptions: ISelectItem[];
   activeEmployees: IAssignActiveEmployee[] | null;
   currentEmployee: IAssignActiveEmployee | null;
   isLoading: boolean;
@@ -131,6 +132,13 @@ const initialState: {
   yesNoOptions: [
     { id: EYesNo.Yes.toString(), name: 'Yes' },
     { id: EYesNo.No.toString(), name: 'No' },
+  ],
+  agreementTypeOptions: [
+    { id: '1', name: 'Joint Venture' },
+    { id: '2', name: 'Special Purpose Vehicle' },
+    { id: '3', name: 'Technology Transfer Agreement' },
+    { id: '4', name: 'Knowledge Transfer Agreement' },
+    { id: '5', name: 'Other' },
   ],
   activeEmployees: null,
   currentEmployee: null,

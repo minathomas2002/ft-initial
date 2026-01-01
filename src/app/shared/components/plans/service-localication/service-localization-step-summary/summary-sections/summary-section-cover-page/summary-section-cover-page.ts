@@ -2,12 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
-import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 
 @Component({
   selector: 'app-summary-section-cover-page',
-  imports: [SummarySectionHeader, SummaryField, SummaryTableCell],
+  imports: [SummarySectionHeader,  SummaryTableCell],
   templateUrl: './summary-section-cover-page.html',
   styleUrl: './summary-section-cover-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

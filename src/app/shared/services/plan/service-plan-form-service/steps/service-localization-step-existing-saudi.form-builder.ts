@@ -18,11 +18,11 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control({value:'', disabled:true}), // Optional, auto-filled, dimmed
+        [EMaterialsFormControls.value]: this.fb.control(''), // Optional, auto-filled, dimmed
       }),
       [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control({value:'', disabled:true}, [Validators.required]), // Required, auto-filled, dimmed
+        [EMaterialsFormControls.value]: this.fb.control(''), // Required, auto-filled, dimmed
       }),
       [EMaterialsFormControls.companyType]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -132,7 +132,6 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       EMaterialsFormControls.thirdYear,
       EMaterialsFormControls.fourthYear,
       EMaterialsFormControls.fifthYear,
-      EMaterialsFormControls.sixthYear,
     ];
 
     yearControls.forEach(yearControl => {
@@ -182,7 +181,6 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       EMaterialsFormControls.thirdYear,
       EMaterialsFormControls.fourthYear,
       EMaterialsFormControls.fifthYear,
-      EMaterialsFormControls.sixthYear,
     ];
 
     yearControls.forEach(yearControl => {

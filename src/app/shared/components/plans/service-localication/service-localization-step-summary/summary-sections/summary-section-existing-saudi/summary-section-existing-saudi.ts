@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, inject } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -18,16 +20,10 @@ export class SummarySectionExistingSaudi {
   onEdit = output<void>();
 
   EMaterialsFormControls = EMaterialsFormControls;
-  currentYear = new Date().getFullYear();
+  serviceForm = inject(ServicePlanFormService);
+  planStore = inject(PlanStore);
 
-  // Year columns for Entity Level and Service Level (6 years)
-  yearColumns = computed(() => {
-    const years: number[] = [];
-    for (let i = 0; i < 6; i++) {
-      years.push(this.currentYear + i);
-    }
-    return years;
-  });
+  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -35,7 +31,6 @@ export class SummarySectionExistingSaudi {
     EMaterialsFormControls.thirdYear,
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
-    EMaterialsFormControls.sixthYear,
   ];
 
   // Form group accessors
@@ -53,10 +48,6 @@ export class SummarySectionExistingSaudi {
 
   serviceLevelFormArray = computed(() => {
     return this.formGroup().get(EMaterialsFormControls.serviceLevelFormGroup) as FormArray;
-  });
-
-  attachmentsFormGroup = computed(() => {
-    return this.formGroup().get(EMaterialsFormControls.attachmentsFormGroup) as FormGroup;
   });
 
   // Helper method to get values
@@ -154,6 +145,7 @@ export class SummarySectionExistingSaudi {
 
       return {
         agreementType: getValueFromControl(EMaterialsFormControls.agreementType),
+        agreementOtherDetails: getValueFromControl(EMaterialsFormControls.agreementOtherDetails),
         agreementSigningDate: getValueFromControl(EMaterialsFormControls.agreementSigningDate),
         supervisionOversight: getValueFromControl(EMaterialsFormControls.supervisionOversightEntity),
         whyChoseThisCompany: getValueFromControl(EMaterialsFormControls.whyChoseThisCompany),
@@ -183,7 +175,6 @@ export class SummarySectionExistingSaudi {
 
     return {
       headcount: this.yearControlKeys.map(key => getValueFromControl(key)),
-      saudization: this.yearControlKeys.map(key => getValueFromControl(`${key}_saudization`)),
     };
   });
 
@@ -220,11 +211,29 @@ export class SummarySectionExistingSaudi {
     return this.hasFieldError(`serviceLevelFormGroup.${index}.${controlName}.value`);
   }
 
-  // Attachments
-  attachments = computed(() => {
-    const attachmentsGroup = this.attachmentsFormGroup();
-    if (!attachmentsGroup) return null;
+  /**
+   * Convert a company type id or list of ids to human-readable labels joined by comma
+   */
+  formatCompanyType(companyType: string) {
+    if (!companyType) return null;
+    const options = this.planStore.companyTypeOptions();
+    if (Array.isArray(companyType)) {
+      const labels = companyType
+        .map((id) => options.find((o) => String(o.id) === String(id))?.name ?? String(id))
+        .filter(Boolean);
+      return labels.join(', ');
+    }
+    const match = options.find((o) => String(o.id) === String(companyType));
+    return match ? match.name : String(companyType);
+  }
 
-    return attachmentsGroup.get(EMaterialsFormControls.value)?.value;
-  });
+  /**
+   * Convert qualification status id to label
+   */
+  formatQualificationStatus(statusId: string) {
+    if (!statusId) return null;
+    const options = this.planStore.qualificationStatusOptions();
+    const match = options.find((o) => String(o.id) === String(statusId));
+    return match ? match.name : String(statusId);
+  }
 }

@@ -12,6 +12,7 @@ import { ELocalizationApproach, ELocation, EYesNo } from 'src/app/shared/enums/p
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 
+
 @Component({
   selector: 'app-service-localization-step-direct-localization',
   imports: [
@@ -38,14 +39,7 @@ export class ServiceLocalizationStepDirectLocalization {
   localizationApproachOptions = this.planStore.localizationApproachOptions;
   locationOptions = this.planStore.locationOptions;
 
-  currentYear = new Date().getFullYear();
-  yearColumns = computed(() => {
-    const years: number[] = [];
-    for (let i = 0; i < 5; i++) {
-      years.push(this.currentYear + i);
-    }
-    return years;
-  });
+  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
