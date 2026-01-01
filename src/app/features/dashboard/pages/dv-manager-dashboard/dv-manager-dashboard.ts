@@ -102,8 +102,11 @@ export class DvManagerDashboard implements OnInit {
     }
   }
 
+   getSlaCountDownFactor(numberInDays: number): number {
+    return Math.abs(numberInDays);
+  }
   getSlaCountDownNoun(numberInDays: number): string {
-    return numberInDays > 1 ? 'Days' : 'Day';
+    return numberInDays > 1 ? 'Days' :(numberInDays < 1 )?'Day Overdue': 'Day';
   }
 
   getPlanTypeLabel(planType: EOpportunityType): string {

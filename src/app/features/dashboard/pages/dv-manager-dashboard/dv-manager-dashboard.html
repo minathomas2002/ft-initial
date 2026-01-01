@@ -159,12 +159,12 @@
               [ngClass]="
                 item.slaCountDown > 5
                   ? 'text-green-500'
-                  : item.slaCountDown > 2
+                  : item.slaCountDown > 0
                   ? 'text-orange-500'
                   : 'text-red-600'
               "
             >
-              {{ item.slaCountDown }} {{getSlaCountDownNoun(item.slaCountDown)}}
+              {{ getSlaCountDownFactor(item.slaCountDown) }} {{getSlaCountDownNoun(item.slaCountDown)}}
             </span>
             } @else {
             <span class="text-sm font-medium">-</span>
