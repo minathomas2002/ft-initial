@@ -22,6 +22,8 @@ import { SummarySectionDirectLocalization } from './summary-sections/summary-sec
 })
 export class ServiceLocalizationStepSummary {
   isViewMode = input<boolean>(false);
+  includeExistingSaudi = input<boolean>(true);
+  includeDirectLocalization = input<boolean>(true);
   private readonly formService = inject(ServicePlanFormService);
   private readonly validationService = inject(ServicePlanValidationService);
   private readonly toasterService = inject(ToasterService);

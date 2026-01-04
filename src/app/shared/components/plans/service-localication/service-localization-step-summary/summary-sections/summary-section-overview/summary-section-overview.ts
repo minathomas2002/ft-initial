@@ -5,10 +5,12 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
+import { TableModule } from 'primeng/table';
+import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 
 @Component({
   selector: 'app-summary-section-overview',
-  imports: [SummarySectionHeader, SummaryField, SummaryTableCell],
+  imports: [SummarySectionHeader, SummaryField, SummaryTableCell, TableModule],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,6 +22,12 @@ export class SummarySectionOverview {
 
   planYesOrNoEnum = EYesNo;
   planStore = inject(PlanStore);
+  serviceForm = inject(ServicePlanFormService);
+
+  constructor() {
+    // Ensure service names are synced even if the user never visited the step component
+    this.serviceForm.syncServicesFromCoverPageToOverview();
+  }
 
   // Form group accessors
   basicInformationFormGroup = computed(() => {
@@ -76,7 +84,7 @@ export class SummarySectionOverview {
       }
     }
 
-    if (control && control.invalid && control.dirty) {
+    if (control && control.invalid && (control.dirty || control.touched)) {
       return true;
     }
 

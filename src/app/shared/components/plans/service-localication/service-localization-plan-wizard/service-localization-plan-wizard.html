@@ -38,10 +38,55 @@
   <ng-template [appStepContent]="getStepIndex('Summary')">
     <app-service-localization-step-summary
       [isViewMode]="isViewMode()"
+      [includeExistingSaudi]="showExistingSaudiStep()"
+      [includeDirectLocalization]="showDirectLocalizationStep()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onValidationErrorsChange)="updateValidationErrors($event)"
     ></app-service-localization-step-summary>
   </ng-template>
+
+  <ng-container ngProjectAs="final-step-action">
+    @if (activeStep() === getStepIndex('Summary') && !isViewMode()) {
+    <p-button
+      [label]="'Submit'"
+      (click)="onSummarySubmitClick()"
+    ></p-button>
+    }
+  </ng-container>
+
+  <ng-container ngProjectAs="more-actions">
+    @if(canOpenTimeline()){
+    <p-button
+      [label]="'Timeline'"
+      icon="icon-list"
+      text
+      severity="secondary"
+      (click)="timelineVisibility.set(true)"
+    ></p-button>
+    }
+  </ng-container>
 </app-base-wizard-dialog>
 }
+
+@if(showSubmissionModal()){
+<!-- Submission Confirmation Modal -->
+<app-submission-confirmation-modal
+  [(visible)]="showSubmissionModal"
+  [(existingSignature)]="existingSignature"
+  (onConfirm)="onSubmissionConfirm($event)"
+  (onCancel)="onSubmissionCancel()"
+/>
+}
+
+<!-- Confirm Leave Dialog -->
+<app-confirm-leave-dialog
+  [(visible)]="showConfirmLeaveDialog"
+  (onLeave)="onConfirmLeave()"
+  (onContinueEditing)="onContinueEditing()"
+/>
+
+<app-timeline-dialog
+  [(dialogVisible)]="timelineVisibility"
+  [planId]="planId()"
+/>

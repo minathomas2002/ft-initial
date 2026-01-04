@@ -1,5 +1,6 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 
 export class ServiceLocalizationStepOverviewFormBuilder {
@@ -70,7 +71,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.companyLocation]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]), // Required, not conditional
+        [EMaterialsFormControls.value]: this.fb.control(''), // Required, not conditional
       }),
     });
   }
@@ -81,6 +82,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
   createServiceDetailItem(): FormGroup {
     return this.fb.group({
       rowId: [null], // Hidden control to store the row ID (for edit mode)
+      [EMaterialsFormControls.serviceId]: this.fb.control(''), // Service GUID from cover page
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control({value: '', disabled: true}, [Validators.required, Validators.maxLength(150)]),
@@ -196,6 +198,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       const localAgentDetailsControl = localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails);
       if (localAgentDetailsControl) {
         localAgentDetailsControl.addValidators([Validators.required]);
+        localAgentDetailsControl.updateValueAndValidity();
       }
 
       // Individual fields (conditional)
@@ -203,6 +206,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100)]);
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.email]);
       (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, phoneNumberPatternValidator(), Validators.maxLength(15)]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.companyLocation] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       // Reset and clear validators for conditional fields
       const localAgentDetailsControl = localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails);
@@ -220,6 +224,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
       (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
+      (localAgentFormGroup.controls[EMaterialsFormControls.companyLocation] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
     }
 
     // Update validity for conditional fields
@@ -242,7 +247,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
 
     if (!companyNamesControl) return;
 
-    if (serviceProvidedTo === 'Others') {
+    if (serviceProvidedTo === EServiceProvidedTo.Others.toString()) {
       companyNamesControl.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       companyNamesControl.clearValidators();
@@ -286,37 +291,64 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     const serviceDetailsArray = this.getServiceDetailsFormArray(overviewFormGroup);
     if (!serviceDetailsArray) return;
 
-    // Get service names from cover page
-    const coverPageServiceNames = servicesArray.controls.map(control => {
+    // Get service IDs and names from cover page
+    const coverPageServices = servicesArray.controls.map(control => {
       const serviceFormGroup = control as FormGroup;
+      const serviceIdControl = serviceFormGroup.get(EMaterialsFormControls.serviceId);
       const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
-      return serviceNameControl?.value || '';
+      return {
+        id: serviceIdControl?.value || '',
+        name: serviceNameControl?.value || ''
+      };
     });
 
-    // Get service names from overview details
-    const overviewServiceNames = serviceDetailsArray.controls.map(control => {
+    // Get service IDs from overview details
+    const overviewServiceIds = serviceDetailsArray.controls.map(control => {
       const serviceFormGroup = control as FormGroup;
-      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
-      return serviceNameControl?.value || '';
+      const serviceIdControl = serviceFormGroup.get(EMaterialsFormControls.serviceId);
+      return serviceIdControl?.value || '';
     });
 
-    // Check if services match (same count and same names in order)
-    const servicesMatch = coverPageServiceNames.length === overviewServiceNames.length &&
-      coverPageServiceNames.every((name, index) => name === overviewServiceNames[index]);
+    // Check if services match (same count and same IDs in order).
+    // If IDs are missing/empty (legacy data), force sync so service names are populated.
+    const idsAreValid =
+      coverPageServices.every((s) => !!s.id) &&
+      overviewServiceIds.every((id) => !!id);
+
+    const servicesMatch =
+      idsAreValid &&
+      coverPageServices.length === overviewServiceIds.length &&
+      coverPageServices.every((service, index) => service.id === overviewServiceIds[index]);
 
     if (servicesMatch) {
-      // Services already match, don't overwrite existing data
+      // Services already match: keep existing row data, but refresh service names
+      serviceDetailsArray.controls.forEach((control, index) => {
+        const serviceFormGroup = control as FormGroup;
+        const serviceNameValueControl = serviceFormGroup.get(
+          `${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`
+        );
+        if (serviceNameValueControl && coverPageServices[index]) {
+          const nextName = coverPageServices[index].name || '';
+          if (serviceNameValueControl.value !== nextName) {
+            serviceNameValueControl.setValue(nextName);
+          }
+        }
+      });
       return;
     }
 
     // Services don't match, need to sync
-    // Save any existing data that can be matched by service name
+    // Save any existing data that can be matched by service ID (and also keep index fallback)
     const existingDataMap = new Map<string, any>();
+    const existingDataByIndex = serviceDetailsArray.controls.map(control => {
+      const serviceFormGroup = control as FormGroup;
+      return serviceFormGroup.getRawValue();
+    });
     serviceDetailsArray.controls.forEach(control => {
       const serviceFormGroup = control as FormGroup;
-      const serviceName = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`)?.value;
-      if (serviceName) {
-        existingDataMap.set(serviceName, serviceFormGroup.getRawValue());
+      const serviceId = serviceFormGroup.get(EMaterialsFormControls.serviceId)?.value;
+      if (serviceId) {
+        existingDataMap.set(serviceId, serviceFormGroup.getRawValue());
       }
     });
 
@@ -324,26 +356,29 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     serviceDetailsArray.clear();
 
     // Create a service detail item for each service
-    servicesArray.controls.forEach((serviceControl) => {
-      const serviceFormGroup = serviceControl as FormGroup;
-      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
-      const serviceName = serviceNameControl?.value || '';
+    coverPageServices.forEach((service, index) => {
 
       // Create new service detail item
       const newServiceDetail = this.createServiceDetailItem();
 
+      // Set the service ID
+      const serviceIdControl = newServiceDetail.get(EMaterialsFormControls.serviceId);
+      if (serviceIdControl) {
+        serviceIdControl.setValue(service.id);
+      }
+
       // Pre-fill the service name (value only, not the comment)
       const serviceNameValueControl = newServiceDetail.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
       if (serviceNameValueControl) {
-        serviceNameValueControl.setValue(serviceName);
+        serviceNameValueControl.setValue(service.name);
       }
 
-      // Restore existing data if this service name was already present
-      const existingData = existingDataMap.get(serviceName);
+      // Restore existing data if this service ID was already present; otherwise fallback by index
+      const existingData = service.id ? existingDataMap.get(service.id) : existingDataByIndex[index];
       if (existingData) {
-        // Restore all fields except serviceName
+        // Restore all fields except serviceName and serviceId
         Object.keys(existingData).forEach(key => {
-          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName) {
+          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
             const targetControl = newServiceDetail.get(key);
             if (targetControl) {
               targetControl.patchValue(existingData[key]);

@@ -3,10 +3,11 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-summary-section-cover-page',
-  imports: [SummarySectionHeader,  SummaryTableCell],
+  imports: [SummarySectionHeader, SummaryTableCell, TableModule],
   templateUrl: './summary-section-cover-page.html',
   styleUrl: './summary-section-cover-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,7 +38,7 @@ export class SummarySectionCoverPage {
       }
     }
 
-    if (control && control.invalid && control.dirty) {
+    if (control && control.invalid && (control.dirty || control.touched)) {
       return true;
     }
 

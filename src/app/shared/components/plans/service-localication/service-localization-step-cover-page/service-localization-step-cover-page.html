@@ -35,6 +35,7 @@
       [ft]="getServicesFormArray()"
       [addButtonMessage]="'Add Service'"
       [createNewItem]="createServiceItem"
+      [excludeKeys]="['serviceId']"
     >
       <ng-template #itemTemplate let-itemControl let-index="index">
         <td class="p-3 border border-gray-200 min-w-[300px]">

@@ -6,10 +6,11 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-summary-section-existing-saudi',
-  imports: [SummarySectionHeader, SummaryTableCell],
+  imports: [SummarySectionHeader, SummaryTableCell, TableModule],
   templateUrl: './summary-section-existing-saudi.html',
   styleUrl: './summary-section-existing-saudi.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,11 @@ export class SummarySectionExistingSaudi {
   EMaterialsFormControls = EMaterialsFormControls;
   serviceForm = inject(ServicePlanFormService);
   planStore = inject(PlanStore);
+
+  constructor() {
+    // Ensure service names are synced even if the user never visited the step component
+    this.serviceForm.syncServicesFromCoverPageToExistingSaudi();
+  }
 
   yearColumns = computed(() => this.serviceForm.upcomingYears(5));
 
@@ -83,7 +89,7 @@ export class SummarySectionExistingSaudi {
       }
     }
 
-    if (control && control.invalid && control.dirty) {
+    if (control && control.invalid && (control.dirty || control.touched)) {
       return true;
     }
 
@@ -174,9 +180,17 @@ export class SummarySectionExistingSaudi {
     };
 
     return {
-      headcount: this.yearControlKeys.map(key => getValueFromControl(key)),
+      headcount: this.yearControlKeys.map((key) => ({
+        value: getValueFromControl(`${key}_headcount`),
+        controlName: `${key}_headcount`,
+      })),
     };
   });
+
+  hasEntityFieldError(controlName: string): boolean {
+    // entity array only has one item at index 0
+    return this.hasFieldError(`entityLevelFormGroup.0.${controlName}.value`);
+  }
 
   // Service Level data
   serviceLevel = computed(() => {
@@ -197,6 +211,10 @@ export class SummarySectionExistingSaudi {
         index: i,
         serviceName: getValueFromControl(EMaterialsFormControls.serviceName),
         expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.expectedLocalizationDate),
+        headcountYears: this.yearControlKeys.map((key) => ({
+          value: getValueFromControl(`${key}_headcount`),
+          controlName: `${key}_headcount`,
+        })),
         years: this.yearControlKeys.map(key => ({
           value: getValueFromControl(`${key}_saudization`),
           controlName: `${key}_saudization`,

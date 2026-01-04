@@ -54,6 +54,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
   createServiceLevelItem(): FormGroup {
     const itemGroup: any = {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
+      [EMaterialsFormControls.serviceId]: this.fb.control(''), // Service GUID from cover page
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(150)]], // Auto-populated, dimmed
@@ -105,16 +106,19 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       EMaterialsFormControls.fifthYear,
     ];
 
-    yearControls.forEach(yearControl => {
-      // Expected Annual Headcount (required, integer only)
+    // Expected Annual Headcount (required, integer only)
+    yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0)]], // Required, Integer only
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0)]],
       });
-      // Y-o-Y Expected Saudization % (required, 0-100%)
+    });
+
+    // Y-o-Y Expected Saudization % (required, 0-100%)
+    yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]], // Required, Percentage 0-100
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
       });
     });
 
@@ -310,37 +314,64 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     const serviceLevelArray = this.getServiceLevelFormArray(directLocalizationFormGroup);
     if (!serviceLevelArray) return;
 
-    // Get service names from cover page
-    const coverPageServiceNames = servicesArray.controls.map(control => {
+    // Get service IDs and names from cover page
+    const coverPageServices = servicesArray.controls.map(control => {
       const serviceFormGroup = control as FormGroup;
+      const serviceIdControl = serviceFormGroup.get(EMaterialsFormControls.serviceId);
       const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
-      return serviceNameControl?.value || '';
+      return {
+        id: serviceIdControl?.value || '',
+        name: serviceNameControl?.value || ''
+      };
     });
 
-    // Get service names from service level
-    const serviceLevelServiceNames = serviceLevelArray.controls.map(control => {
+    // Get service IDs from service level
+    const serviceLevelServiceIds = serviceLevelArray.controls.map(control => {
       const serviceFormGroup = control as FormGroup;
-      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
-      return serviceNameControl?.value || '';
+      const serviceIdControl = serviceFormGroup.get(EMaterialsFormControls.serviceId);
+      return serviceIdControl?.value || '';
     });
 
-    // Check if services match (same count and same names in order)
-    const servicesMatch = coverPageServiceNames.length === serviceLevelServiceNames.length &&
-      coverPageServiceNames.every((name, index) => name === serviceLevelServiceNames[index]);
+    // Check if services match (same count and same IDs in order).
+    // If IDs are missing/empty (legacy data), force sync so service names are populated.
+    const idsAreValid =
+      coverPageServices.every((s) => !!s.id) &&
+      serviceLevelServiceIds.every((id) => !!id);
+
+    const servicesMatch =
+      idsAreValid &&
+      coverPageServices.length === serviceLevelServiceIds.length &&
+      coverPageServices.every((service, index) => service.id === serviceLevelServiceIds[index]);
 
     if (servicesMatch) {
-      // Services already match, don't overwrite existing data
+      // Services already match: keep existing row data, but refresh service names
+      serviceLevelArray.controls.forEach((control, index) => {
+        const serviceFormGroup = control as FormGroup;
+        const serviceNameValueControl = serviceFormGroup.get(
+          `${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`
+        );
+        if (serviceNameValueControl && coverPageServices[index]) {
+          const nextName = coverPageServices[index].name || '';
+          if (serviceNameValueControl.value !== nextName) {
+            serviceNameValueControl.setValue(nextName);
+          }
+        }
+      });
       return;
     }
 
     // Services don't match, need to sync
-    // Save any existing data that can be matched by service name
+    // Save any existing data that can be matched by service ID (and also keep index fallback)
     const existingDataMap = new Map<string, any>();
+    const existingDataByIndex = serviceLevelArray.controls.map(control => {
+      const serviceFormGroup = control as FormGroup;
+      return serviceFormGroup.getRawValue();
+    });
     serviceLevelArray.controls.forEach(control => {
       const serviceFormGroup = control as FormGroup;
-      const serviceName = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`)?.value;
-      if (serviceName) {
-        existingDataMap.set(serviceName, serviceFormGroup.getRawValue());
+      const serviceId = serviceFormGroup.get(EMaterialsFormControls.serviceId)?.value;
+      if (serviceId) {
+        existingDataMap.set(serviceId, serviceFormGroup.getRawValue());
       }
     });
 
@@ -348,26 +379,29 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     serviceLevelArray.clear();
 
     // Create a service level item for each service
-    servicesArray.controls.forEach((serviceControl) => {
-      const serviceFormGroup = serviceControl as FormGroup;
-      const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
-      const serviceName = serviceNameControl?.value || '';
+    coverPageServices.forEach((service, index) => {
 
       // Create new service level item
       const newServiceLevel = this.createServiceLevelItem();
 
+      // Set the service ID
+      const serviceIdControl = newServiceLevel.get(EMaterialsFormControls.serviceId);
+      if (serviceIdControl) {
+        serviceIdControl.setValue(service.id);
+      }
+
       // Pre-fill the service name (value only, not the comment)
       const serviceNameValueControl = newServiceLevel.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
       if (serviceNameValueControl) {
-        serviceNameValueControl.setValue(serviceName);
+        serviceNameValueControl.setValue(service.name);
       }
 
-      // Restore existing data if this service name was already present
-      const existingData = existingDataMap.get(serviceName);
+      // Restore existing data if this service ID was already present; otherwise fallback by index
+      const existingData = service.id ? existingDataMap.get(service.id) : existingDataByIndex[index];
       if (existingData) {
-        // Restore all fields except serviceName
+        // Restore all fields except serviceName and serviceId
         Object.keys(existingData).forEach(key => {
-          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName) {
+          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
             const targetControl = newServiceLevel.get(key);
             if (targetControl) {
               targetControl.patchValue(existingData[key]);

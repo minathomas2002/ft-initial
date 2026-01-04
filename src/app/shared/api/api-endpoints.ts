@@ -35,6 +35,7 @@ export const API_ENDPOINTS = {
     reassign: `${Plans}/reassign`,
     saveAsDraftProductLocalizationPlan: `${Plans}/saveAsDraft-productPlan`,
     submitProductLocalizationPlan: `${Plans}/submit-productPlan`,
+    submitServiceLocalizationPlan: `${Plans}/submit-servicePlan`,
     getProductPlan: `${Plans}/get-productPlan`,
     getTimelinePlan: `${Plans}/get-timeLine`,
     downloadPlan: `${Plans}/generate-product-plan-pdf?planId=`,

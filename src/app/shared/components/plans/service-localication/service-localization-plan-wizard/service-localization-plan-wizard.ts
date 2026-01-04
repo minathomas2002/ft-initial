@@ -24,6 +24,14 @@ import { ServiceLocalizationStepExistingSaudi } from '../service-localization-st
 import { ServiceLocalizationStepSummary } from '../service-localization-step-summary/service-localization-step-summary';
 import { ServiceLocalizationStepDirectLocalization } from '../service-localization-step-direct-localization/service-localization-step-direct-localization';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
+import { ButtonModule } from 'primeng/button';
+import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialog';
+import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
+import { ConfirmLeaveDialogComponent } from '../../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component';
+import { Signature } from 'src/app/shared/interfaces/plans.interface';
+import { IPlanRecord } from 'src/app/shared/interfaces/dashboard-plans.interface';
+import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData } from 'src/app/shared/utils/service-localization-plan.mapper';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-service-localization-plan-wizard',
@@ -36,6 +44,10 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
     ServiceLocalizationStepExistingSaudi,
     ServiceLocalizationStepSummary,
     ServiceLocalizationStepDirectLocalization,
+    ButtonModule,
+    TimelineDialog,
+    SubmissionConfirmationModalComponent,
+    ConfirmLeaveDialogComponent,
   ],
   templateUrl: './service-localization-plan-wizard.html',
   styleUrl: './service-localization-plan-wizard.scss',
@@ -46,12 +58,29 @@ export class ServiceLocalizationPlanWizard implements OnInit {
   i18nService = inject(I18nService);
   planStatusFactory = inject(HandlePlanStatusFactory);
   serviceLocalizationFormService = inject(ServicePlanFormService);
+  toasterService = inject(ToasterService);
 
   visibility = model(false);
   doRefresh = output<void>();
   isLoading = signal(false);
   activeStep = signal<number>(1);
   destroyRef = inject(DestroyRef);
+
+  timelineVisibility = signal(false);
+  isSubmitted = signal(false);
+  selectedPlan = signal<IPlanRecord | null>(null);
+
+  // Mode and plan ID from store
+  mode = this.planStore.wizardMode;
+  planId = this.planStore.selectedPlanId;
+  canOpenTimeline = computed(() => {
+    return (this.visibility() && this.mode() == 'view' && this.planStatus() !== null)
+  });
+
+  // Submission confirmation modal
+  showSubmissionModal = signal(false);
+  existingSignature = signal<string | null>(null);
+  showConfirmLeaveDialog = model(false);
 
   steps = computed<IWizardStepState[]>(() => {
     this.i18nService.currentLanguage();
@@ -62,7 +91,7 @@ export class ServiceLocalizationPlanWizard implements OnInit {
       title: 'Cover Page',
       description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
       isActive: this.activeStep() === list.length + 1,
-      formState: null,
+      formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: true,
     });
 
@@ -70,7 +99,7 @@ export class ServiceLocalizationPlanWizard implements OnInit {
       title: 'Overview',
       description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
       isActive: this.activeStep() === list.length + 1,
-      formState: null,
+      formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: true,
     });
 
@@ -79,7 +108,7 @@ export class ServiceLocalizationPlanWizard implements OnInit {
         title: 'Existing Saudi Co.',
         description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
         isActive: this.activeStep() === list.length + 1,
-        formState: null,
+        formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: true,
       });
     }
@@ -89,7 +118,7 @@ export class ServiceLocalizationPlanWizard implements OnInit {
         title: 'Direct Localization',
         description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
         isActive: this.activeStep() === list.length + 1,
-        formState: null,
+        formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: true,
       });
     }
@@ -172,7 +201,8 @@ export class ServiceLocalizationPlanWizard implements OnInit {
       }
     };
 
-    // Only evaluate when user changes methodology, not on init
+    // Evaluate once (handles edit/view prefilled forms), then react to changes
+    evaluate();
     detailsArray?.valueChanges?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => evaluate());
   };
 
@@ -207,60 +237,154 @@ export class ServiceLocalizationPlanWizard implements OnInit {
     this.planStore.resetWizardState();
   }
 
+  onSummarySubmitClick(): void {
+    const includeExistingSaudi = this.showExistingSaudiStep();
+    const includeDirectLocalization = this.showDirectLocalizationStep();
+
+    // Check if all forms are valid
+    if (!this.serviceLocalizationFormService.areAllFormsValid({
+      includeExistingSaudi,
+      includeDirectLocalization,
+    })) {
+      // Mark all controls as dirty to show validation errors (and trigger stepper error counters)
+      this.serviceLocalizationFormService.markAllControlsAsDirty({
+        includeExistingSaudi,
+        includeDirectLocalization,
+      });
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.fixValidationErrors'));
+      return;
+    }
+
+    // Mark all controls as dirty
+    this.serviceLocalizationFormService.markAllControlsAsDirty({
+      includeExistingSaudi,
+      includeDirectLocalization,
+    });
+
+    // Open submission confirmation modal
+    this.showSubmissionModal.set(true);
+  }
+
+  onSubmissionConfirm(data: {
+    name: string;
+    jobTitle: string;
+    contactNumber: string;
+    emailId: string;
+    signature: string;
+  }): void {
+    // Create signature object
+    const signature: Signature = {
+      id: '',
+      signatureValue: data.signature,
+      contactInfo: {
+        name: data.name,
+        jobTitle: data.jobTitle,
+        contactNumber: data.contactNumber,
+        emailId: data.emailId,
+      },
+    };
+
+    // Get plan ID if in edit mode
+    const currentPlanId = this.planStore.wizardMode() === 'edit' ? (this.planStore.selectedPlanId() ?? '') : '';
+
+    // Map form values to request structure with signature
+    const request = mapServiceLocalizationPlanFormToRequest(
+      this.serviceLocalizationFormService,
+      currentPlanId,
+      signature
+    );
+
+    // Convert request to FormData
+    const formData = convertServiceRequestToFormData(request);
+
+    console.log(request)
+
+    // Set processing state
+    this.isProcessing.set(true);
+
+    // Call store method to submit plan
+    this.planStore.submitServiceLocalizationPlan(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          // this.toasterServi.ce.success(this.i18nService.translate('plans.wizard.messages.submitSuccess'));
+          // Reset all forms after successful submission
+          this.serviceLocalizationFormService.resetAllForms();
+          // Reset wizard state
+          this.activeStep.set(1);
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.showSubmissionModal.set(false);
+          this.isSubmitted.set(true);
+          // Reset wizard state in store
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          // this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
+          console.error('Error submitting plan:', error);
+        }
+      });
+  }
+
+  onSubmissionCancel(): void {
+    this.showSubmissionModal.set(false);
+  }
+
+  onConfirmLeave(): void {
+    this.showConfirmLeaveDialog.set(false);
+    this.visibility.set(false);
+    this.onClose();
+  }
+
+  onContinueEditing(): void {
+    this.showConfirmLeaveDialog.set(false);
+  }
+
   saveAsDraft(): void {
-    // // Access nested form controls correctly
-    // const basicInfoFormGroup = this.productPlanFormService.basicInformationFormGroup;
-    // const planTitle = basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.value;
-    // const opportunity = basicInfoFormGroup?.get(EMaterialsFormControls.opportunity)?.value;
-    // // Check if plan title and opportunity are selected
-    // if (!planTitle) {
-    //   this.toasterService.error('Plan title is required');
-    //   return;
-    // }
-    // if (!planTitle || !opportunity) {
-    //   this.toasterService.error('Please select opportunity to save as draft');
-    //   return;
-    // }
-    // // Get plan ID if in edit mode
-    // const currentPlanId =
-    //   this.planStore.wizardMode() === 'edit' ? this.planStore.selectedPlanId() ?? '' : '';
-    // const isEditMode = this.planStore.wizardMode() === 'edit';
-    // // Map form values to request structure
-    // const request = mapProductLocalizationPlanFormToRequest(
-    //   this.productPlanFormService,
-    //   currentPlanId
-    // );
-    // // Convert request to FormData
-    // const formData = convertRequestToFormData(request);
-    // // Set processing state
-    // this.isProcessing.set(true);
-    // // Call store method to save as draft
-    // this.planStore
-    //   .saveAsDraftProductLocalizationPlan(formData)
-    //   .pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe({
-    //     next: () => {
-    //       this.isProcessing.set(false);
-    //       const successMessage = isEditMode
-    //         ? this.i18nService.translate('plans.wizard.messages.draftUpdatedSuccess')
-    //         : this.i18nService.translate('plans.wizard.messages.draftSavedSuccess');
-    //       this.toasterService.success(successMessage);
-    //       // Only reset forms if not in edit mode (to preserve data)
-    //       if (!isEditMode) {
-    //         this.productPlanFormService.resetAllForms();
-    //         this.activeStep.set(1);
-    //         // Reset wizard state in store for create mode
-    //         this.planStore.resetWizardState();
-    //       }
-    //       this.doRefresh.emit();
-    //       this.visibility.set(false);
-    //       this.isSubmitted.set(true);
-    //     },
-    //     error: (error) => {
-    //       this.isProcessing.set(false);
-    //       this.toasterService.error(this.i18nService.translate('plans.wizard.messages.draftError'));
-    //       console.error('Error saving draft:', error);
-    //     },
-    //   });
+    // Get plan ID if in edit mode
+    const currentPlanId =
+      this.planStore.wizardMode() === 'edit' ? this.planStore.selectedPlanId() ?? '' : '';
+    const isEditMode = this.planStore.wizardMode() === 'edit';
+
+    // Map form values to request structure
+    const request = mapServiceLocalizationPlanFormToRequest(
+      this.serviceLocalizationFormService,
+      currentPlanId
+    );
+
+    // Mark as draft
+    request.servicePlan.isDraft = true;
+
+    // Convert request to FormData
+    const formData = convertServiceRequestToFormData(request);
+
+    // Set processing state
+    this.isProcessing.set(true);
+
+    // Call store method to submit plan (as draft)
+    this.planStore
+      .submitServiceLocalizationPlan(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          // Only reset forms if not in edit mode (to preserve data)
+          if (!isEditMode) {
+            this.serviceLocalizationFormService.resetAllForms();
+            this.activeStep.set(1);
+            // Reset wizard state in store for create mode
+            this.planStore.resetWizardState();
+          }
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.isSubmitted.set(true);
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          console.error('Error saving draft:', error);
+        },
+      });
   }
 }

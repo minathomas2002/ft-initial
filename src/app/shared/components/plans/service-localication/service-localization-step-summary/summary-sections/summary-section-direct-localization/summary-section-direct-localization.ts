@@ -2,13 +2,15 @@ import { ChangeDetectionStrategy, Component, computed, input, output, inject } f
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-summary-section-direct-localization',
-  imports: [SummarySectionHeader, SummaryTableCell],
+  imports: [SummarySectionHeader, SummaryTableCell, TableModule],
   templateUrl: './summary-section-direct-localization.html',
   styleUrl: './summary-section-direct-localization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +23,13 @@ export class SummarySectionDirectLocalization {
   EMaterialsFormControls = EMaterialsFormControls;
   // Year columns for Entity Level and Service Level (5 years)
   serviceForm = inject(ServicePlanFormService);
+  planStore = inject(PlanStore);
   yearColumns = computed(() => this.serviceForm.upcomingYears(5));
+
+  constructor() {
+    // Ensure service names are synced even if the user never visited the step component
+    this.serviceForm.syncServicesFromCoverPageToDirectLocalization();
+  }
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -81,7 +89,7 @@ export class SummarySectionDirectLocalization {
       }
     }
 
-    if (control && control.invalid && control.dirty) {
+    if (control && control.invalid && (control.dirty || control.touched)) {
       return true;
     }
 
@@ -90,6 +98,25 @@ export class SummarySectionDirectLocalization {
 
   onEditClick(): void {
     this.onEdit.emit();
+  }
+
+  private mapOptionName(options: { id: string; name: string }[], rawValue: unknown): string | null {
+    if (rawValue === null || rawValue === undefined || rawValue === '') return null;
+    const raw = String(rawValue);
+    const match = options.find((o) => String(o.id) === raw);
+    return match ? match.name : raw;
+  }
+
+  formatLocalizationApproach(value: unknown): string | null {
+    return this.mapOptionName(this.planStore.localizationApproachOptions(), value);
+  }
+
+  formatLocation(value: unknown): string | null {
+    return this.mapOptionName(this.planStore.locationOptions(), value);
+  }
+
+  formatYesNo(value: unknown): string | null {
+    return this.mapOptionName(this.planStore.yesNoOptions(), value);
   }
 
   // Localization Strategy array (same as service level)
@@ -111,13 +138,17 @@ export class SummarySectionDirectLocalization {
         index: i,
         serviceName: getValueFromControl(EMaterialsFormControls.serviceName),
         expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.expectedLocalizationDate),
-        localizationApproach: getValueFromControl(EMaterialsFormControls.localizationApproach),
+        localizationApproach: this.formatLocalizationApproach(
+          getValueFromControl(EMaterialsFormControls.localizationApproach)
+        ),
         localizationApproachOther: getValueFromControl(EMaterialsFormControls.localizationApproachOtherDetails),
-        location: getValueFromControl(EMaterialsFormControls.location),
+        location: this.formatLocation(getValueFromControl(EMaterialsFormControls.location)),
         locationOther: getValueFromControl(EMaterialsFormControls.locationOtherDetails),
         capexRequired: getValueFromControl(EMaterialsFormControls.capexRequired),
         supervisionOversight: getValueFromControl(EMaterialsFormControls.supervisionOversightEntity),
-        proprietaryTools: getValueFromControl(EMaterialsFormControls.willBeAnyProprietaryToolsSystems),
+        proprietaryTools: this.formatYesNo(
+          getValueFromControl(EMaterialsFormControls.willBeAnyProprietaryToolsSystems)
+        ),
         proprietaryToolsExplanation: getValueFromControl(EMaterialsFormControls.proprietaryToolsSystemsDetails),
       };
     });
@@ -171,6 +202,10 @@ export class SummarySectionDirectLocalization {
         index: i,
         serviceName: getValueFromControl(EMaterialsFormControls.serviceName),
         expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.expectedLocalizationDate),
+        headcountYears: this.yearControlKeys.map((key) => ({
+          value: getValueFromControl(`${key}_headcount`),
+          controlName: `${key}_headcount`,
+        })),
         years: this.yearControlKeys.map(key => ({ value: getValueFromControl(`${key}_saudization`), controlName: `${key}_saudization` })),
         keyMeasuresToUpskillSaudis: getValueFromControl(EMaterialsFormControls.keyMeasuresToUpskillSaudis),
         mentionSupportRequiredFromSEC: getValueFromControl(EMaterialsFormControls.mentionSupportRequiredFromSEC),

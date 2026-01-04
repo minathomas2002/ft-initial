@@ -1,5 +1,6 @@
-import { inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServiceLocalizationStepCoverPageFormBuilder } from './steps/service-localization-step-cover-page.form-builder';
@@ -12,6 +13,7 @@ import { ServiceLocalizationStepDirectLocalizationFormBuilder } from './steps/se
 })
 export class ServicePlanFormService {
   private readonly _fb = inject(FormBuilder);
+  private readonly _destroyRef = inject(DestroyRef);
 
   // Step builders
   private readonly _step1Builder = new ServiceLocalizationStepCoverPageFormBuilder(this._fb);
@@ -36,6 +38,22 @@ export class ServicePlanFormService {
   step2_overview = this._step2FormGroup;
   step3_existingSaudi = this._step3FormGroup;
   step4_directLocalization = this._step4FormGroup;
+
+  constructor() {
+    // Keep all downstream service-name usages in sync with cover page services.
+    this.syncServicesFromCoverPageToOverview();
+    this.syncServicesFromCoverPageToExistingSaudi();
+    this.syncServicesFromCoverPageToDirectLocalization();
+
+    const servicesArray = this.getServicesFormArray();
+    servicesArray?.valueChanges
+      ?.pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        this.syncServicesFromCoverPageToOverview();
+        this.syncServicesFromCoverPageToExistingSaudi();
+        this.syncServicesFromCoverPageToDirectLocalization();
+      });
+  }
 
   // Expose sub-form groups for Step 1
   get coverPageCompanyInformationFormGroup(): FormGroup {
@@ -289,11 +307,26 @@ export class ServicePlanFormService {
   /**
    * Mark all form controls as dirty recursively
    */
-  markAllControlsAsDirty(): void {
-    this.markControlAsDirty(this._step1FormGroup);
-    this.markControlAsDirty(this._step2FormGroup);
-    this.markControlAsDirty(this._step3FormGroup);
-    this.markControlAsDirty(this._step4FormGroup);
+  markAllControlsAsDirty(options?: { includeExistingSaudi?: boolean; includeDirectLocalization?: boolean }): void {
+    const includeExistingSaudi = options?.includeExistingSaudi ?? true;
+    const includeDirectLocalization = options?.includeDirectLocalization ?? true;
+
+    // Mark controls (deep) so validation messages become visible.
+    // Then force an emitting validity update on each root form so stepper badges
+    // (which listen to value/status changes) recompute even if the user never
+    // interacted with a step.
+    const rootForms = [
+      this._step1FormGroup,
+      this._step2FormGroup,
+      ...(includeExistingSaudi ? [this._step3FormGroup] : []),
+      ...(includeDirectLocalization ? [this._step4FormGroup] : []),
+    ];
+
+    rootForms.forEach((fg) => {
+      this.markControlAsDirty(fg);
+      fg.markAllAsTouched();
+      fg.updateValueAndValidity({ emitEvent: true });
+    });
   }
 
   /**
@@ -317,11 +350,16 @@ export class ServicePlanFormService {
   /**
    * Check if all forms are valid
    */
-  areAllFormsValid(): boolean {
-    return this._step1FormGroup.valid &&
+  areAllFormsValid(options?: { includeExistingSaudi?: boolean; includeDirectLocalization?: boolean }): boolean {
+    const includeExistingSaudi = options?.includeExistingSaudi ?? true;
+    const includeDirectLocalization = options?.includeDirectLocalization ?? true;
+
+    return (
+      this._step1FormGroup.valid &&
       this._step2FormGroup.valid &&
-      this._step3FormGroup.valid &&
-      this._step4FormGroup.valid;
+      (!includeExistingSaudi || this._step3FormGroup.valid) &&
+      (!includeDirectLocalization || this._step4FormGroup.valid)
+    );
   }
 
   /**

@@ -55,6 +55,7 @@ export class ServiceLocalizationStepDirectLocalization {
     const years = this.yearColumns();
     this.yearControlKeys.forEach((key, idx) => {
       if (years[idx]) {
+        labels[`${key}_headcount`] = String(years[idx]);
         labels[`${key}_saudization`] = String(years[idx]);
       }
     });
@@ -66,6 +67,7 @@ export class ServiceLocalizationStepDirectLocalization {
     const yearCols = this.yearControlKeys.length;
     return [
       { label: '', colspan: 2 },
+      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols },
       { label: 'Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)', colspan: yearCols },
       { label: '', colspan: 2 },
       { label: '', colspan: 1 },

@@ -119,6 +119,7 @@ export enum EMaterialsFormControls {
   servicesFormGroup = 'servicesFormGroup',
 
   // Service Plan - Step 1 (Cover Page) - Controls
+  serviceId = 'serviceId',
   serviceName = 'serviceName',
 
   // Service Plan - Step 2 (Overview) - Main Form Groups

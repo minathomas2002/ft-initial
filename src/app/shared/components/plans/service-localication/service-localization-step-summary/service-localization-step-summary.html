@@ -14,16 +14,20 @@
   />
 
   <!-- Step 3: Existing Saudi Company -->
-  <app-summary-section-existing-saudi
-    [isViewMode]="isViewMode()"
-    [formGroup]="step3FormGroup"
-    (onEdit)="onEditStepClick(3)"
-  />
+  @if (includeExistingSaudi()) {
+    <app-summary-section-existing-saudi
+      [isViewMode]="isViewMode()"
+      [formGroup]="step3FormGroup"
+      (onEdit)="onEditStepClick(3)"
+    />
+  }
 
   <!-- Step 4: Direct Localization by Foreign Entity -->
-  <app-summary-section-direct-localization
-    [isViewMode]="isViewMode()"
-    [formGroup]="step4FormGroup"
-    (onEdit)="onEditStepClick(4)"
-  />
+  @if (includeDirectLocalization()) {
+    <app-summary-section-direct-localization
+      [isViewMode]="isViewMode()"
+      [formGroup]="step4FormGroup"
+      (onEdit)="onEditStepClick(4)"
+    />
+  }
 </div>

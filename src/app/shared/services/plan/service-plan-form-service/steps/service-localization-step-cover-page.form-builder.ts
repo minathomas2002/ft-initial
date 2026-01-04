@@ -21,6 +21,7 @@ export class ServiceLocalizationStepCoverPageFormBuilder {
   createServiceItem(): FormGroup {
     return this.fb.group({
       rowId: [null], // Hidden control to store the row ID (for edit mode)
+      [EMaterialsFormControls.serviceId]: this.fb.control(crypto.randomUUID()), // Generate GUID for service
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),

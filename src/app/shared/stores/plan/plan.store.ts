@@ -346,6 +346,25 @@ export const PlanStore = signalStore(
         );
       },
 
+      /* Submit Product Localization Plan*/
+      submitServiceLocalizationPlan(request: FormData) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.submitServiceLocalizationPlan(request).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error submitting service localization plan',
+            });
+            return throwError(() => new Error('Error submitting service localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
       /* Get Product Plan*/
       getProductPlan(planId: string): Observable<IBaseApiResponse<IProductPlanResponse>> {
         patchState(store, { isLoading: true, error: null });
