@@ -25,17 +25,20 @@
   <ng-template [appStepContent]="2">
     <app-service-localization-step-overview></app-service-localization-step-overview>
   </ng-template>
-  @if (getStepIndex('Direct Localization')) {
-  <ng-template [appStepContent]="getStepIndex('Direct Localization')">
+
+  @if (stepIndex('directLocalization')) {
+  <ng-template [appStepContent]="stepIndex('directLocalization')">
     <app-service-localization-step-direct-localization></app-service-localization-step-direct-localization>
   </ng-template>
-  } @if (getStepIndex('Existing Saudi Co.')) {
-  <ng-template [appStepContent]="getStepIndex('Existing Saudi Co.')">
+  }
+
+  @if (stepIndex('existingSaudi')) {
+  <ng-template [appStepContent]="stepIndex('existingSaudi')">
     <app-service-localization-step-existing-saudi></app-service-localization-step-existing-saudi>
   </ng-template>
   }
 
-  <ng-template [appStepContent]="getStepIndex('Summary')">
+  <ng-template [appStepContent]="stepIndex('summary')">
     <app-service-localization-step-summary
       [isViewMode]="isViewMode()"
       [includeExistingSaudi]="showExistingSaudiStep()"
@@ -47,18 +50,15 @@
   </ng-template>
 
   <ng-container ngProjectAs="final-step-action">
-    @if (activeStep() === getStepIndex('Summary') && !isViewMode()) {
-    <p-button
-      [label]="'Submit'"
-      (click)="onSummarySubmitClick()"
-    ></p-button>
+    @if (activeStep() === stepIndex('summary') && !isViewMode()) {
+    <p-button label="Submit" (click)="onSummarySubmitClick()"></p-button>
     }
   </ng-container>
 
   <ng-container ngProjectAs="more-actions">
     @if(canOpenTimeline()){
     <p-button
-      [label]="'Timeline'"
+      label="Timeline"
       icon="icon-list"
       text
       severity="secondary"

@@ -219,9 +219,16 @@ export class SummarySectionDirectLocalization {
 
   // Attachments
   attachments = computed(() => {
-    const attachmentsGroup = this.attachmentsFormGroup();
-    if (!attachmentsGroup) return null;
+    const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+    let value: unknown = null;
 
-    return attachmentsGroup.get(EMaterialsFormControls.value)?.value;
+    if (attachmentsControl instanceof FormGroup) {
+      value = attachmentsControl.get(EMaterialsFormControls.value)?.value;
+    } else {
+      value = attachmentsControl?.value;
+    }
+
+    if (Array.isArray(value)) return value;
+    return value ? [value] : [];
   });
 }

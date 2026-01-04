@@ -242,7 +242,7 @@
     <!-- Attachments -->
     <div class="flex flex-col gap-4">
       <h3 class="text-lg font-semibold text-[#4A4E5A]">Attachments</h3>
-      @if (attachments() && attachments().length > 0) {
+      @if (attachments().length > 0) {
         <div class="flex flex-col gap-2">
           @for (file of attachments(); track $index) {
             <div class="flex items-center gap-2 text-sm text-gray-700">
