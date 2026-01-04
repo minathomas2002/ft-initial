@@ -26,6 +26,8 @@ import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step
 import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
 import { PlanLocalizationStep02ProductPlantOverviewForm } from "../plan-localization-step-02-productPlantOverview/plan-localization-step-02-productPlantOverviewForm";
 import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-03-valueChain/plan-localization-step-03-valueChainForm";
+import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
+import { TranslatePipe } from "../../../../pipes/translate.pipe";
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -39,10 +41,11 @@ import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-
     ButtonModule,
     BaseTagComponent,
     StepContentDirective,
-    ConfirmLeaveDialogComponent,
     SubmissionConfirmationModalComponent,
-    TimelineDialog
-  ],
+    TimelineDialog,
+    GeneralConfirmationDialogComponent,
+    TranslatePipe
+],
   templateUrl: './product-localization-plan-wizard.html',
   styleUrl: './product-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -625,19 +628,23 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   }
 
   onClose(): void {
-    if (this.planStore.wizardMode() === 'create' || this.planStore.wizardMode() === 'edit') {
-      if (!this.isSubmitted()) {
+     console.log("closed");
+     if (this.planStore.wizardMode() === 'create' || this.planStore.wizardMode() === 'edit') {
+     //!this.isSubmitted() 
+      if (this.productPlanFormService.hasFormChanged() ) {
         // Keep the wizard open and show confirmation dialog
         this.visibility.set(true);
         this.showConfirmLeaveDialog.set(true);
         return;
       }
+    }
+      this.visibility.set(false);
       this.activeStep.set(1);
       this.doRefresh.emit();
       this.isSubmitted.set(false);
       // Reset wizard state in store
       this.planStore.resetWizardState();
-    }
+    
   }
 
   ngOnDestroy(): void {

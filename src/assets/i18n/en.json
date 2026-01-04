@@ -627,6 +627,12 @@
   },
   "plans": {
     "assign": "Assign",
+    "confirmation":{
+      "onLeaveTitle":"Are you sure you want to leave?",
+      "saveAsDraft":"Save as draft",
+      "cancelLabel":"Cancel",
+      "onLeaveDesc":"Canceling now will discard all unsaved changes. Save as draft to keep your work."
+    },
     "newPlan": {
       "title": "New Opportunity",
       "description": "Enter basic details to start your localization plan",

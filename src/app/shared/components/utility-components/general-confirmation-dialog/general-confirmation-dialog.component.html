@@ -6,6 +6,8 @@
   (onConfirm)="confirmed.emit()"
   [isLoading]="isLoading()"
   (onClose)="closed.emit()"
+  [cancelLabel]="cancelLabel()"
+  (onCancel)="onCancel.emit()"
   [confirmButtonSeverity]="confirmButtonSeverity()"
 >
   <div [class]="classes()">

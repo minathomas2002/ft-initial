@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, model, output, TemplateRef } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { ButtonModule } from 'primeng/button';
 
@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmLeaveDialogComponent {
+   @ContentChild('footerButtons') footerButtons!: TemplateRef<any>;
   visible = model<boolean>(false);
   onLeave = output<void>();
   onContinueEditing = output<void>();

@@ -13,7 +13,8 @@ import { PlanLocalizationStep4SaudizationFormBuilder } from './steps/plan-locali
 export class ProductPlanFormService {
   private readonly _fb = inject(FormBuilder);
   private readonly _planStore = inject(PlanStore);
-
+  private initialFormValue!: any;
+  
   // Step builders
   private readonly _step1Builder = new PlanLocalizationStep1OverviewFormBuilder(this._fb, this._planStore.newPlanTitle());
   private readonly _step2Builder = new PlanLocalizationStep2ProductPlantOverviewFormBuilder(this._fb);
@@ -313,6 +314,26 @@ export class ProductPlanFormService {
     this._step3FormGroup.markAsUntouched();
     this._step4FormGroup.markAsPristine();
     this._step4FormGroup.markAsUntouched();
+  }
+
+
+  private getAllFormsRawValue() {
+    return {
+      step1: this._step1FormGroup.getRawValue(),
+      step2: this._step2FormGroup.getRawValue(),
+      step3: this._step3FormGroup.getRawValue(),
+      step4: this._step4FormGroup.getRawValue(),
+    };
+  }
+
+  initiateFormValue():void{
+    this.initialFormValue = this.getAllFormsRawValue();
+  }
+
+  
+  hasFormChanged(): boolean {
+  return JSON.stringify(this.initialFormValue) !==
+          JSON.stringify(this.getAllFormsRawValue());
   }
 
   /* ------------------------------------------------ */

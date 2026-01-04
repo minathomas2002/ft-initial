@@ -471,6 +471,7 @@ function setPhoneValue(formGroup: FormGroup | null, controlName: string, phoneSt
 /**
  * Map API response to form structure
  */
+
 export function mapProductPlanResponseToForm(
   response: IProductPlanResponse,
   formService: ProductPlanFormService
@@ -795,6 +796,8 @@ export function mapProductPlanResponseToForm(
     // Signature will be handled by the wizard component
     // Store it in a way that can be accessed later
   }
+
+  formService.initiateFormValue();
 }
 
 /**

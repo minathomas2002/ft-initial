@@ -12,6 +12,7 @@ import { DividerModule } from "primeng/divider";
 export class BaseDialogComponent {
   visible = model<boolean>(false);
   onConfirm = output();
+  onCancel = output();
   onShow = output();
   onClose = output();
   icon = input<string>("icon-eye");
@@ -33,4 +34,9 @@ export class BaseDialogComponent {
   closeCallback(e: Event): void {
     this.dialogRef()?.close(e);
   }
+
+  handleCancel(): void {
+    this.onCancel.emit();
+    this.visible.set(false);
+}
 }
