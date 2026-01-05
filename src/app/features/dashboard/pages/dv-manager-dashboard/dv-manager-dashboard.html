@@ -164,7 +164,7 @@
                   : 'text-red-600'
               "
             >
-              {{ getSlaCountDownFactor(item.slaCountDown) }} {{getSlaCountDownNoun(item.slaCountDown)}}
+              {{ item.slaCountDown | slaCountdownNoun }}
             </span>
             } @else {
             <span class="text-sm font-medium">-</span>

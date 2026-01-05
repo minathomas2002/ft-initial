@@ -18,7 +18,7 @@ import { DashboardPlansFilterService } from '../../services/dashboard-plans-filt
 import { InvestorDashboardPlansFilter } from '../../components/investor-dashboard-plans-filter/investor-dashboard-plans-filter';
 import { InvestorDashboardPlanActionMenu } from '../../components/investor-dashboard-plan-action-menu/investor-dashboard-plan-action-menu';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
-import { TranslatePipe } from 'src/app/shared/pipes';
+import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
@@ -39,6 +39,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     NgClass,
     SkeletonModule,
     TranslatePipe,
+    SlaCountdownNounPipe,
     TimelineDialog
   ],
   templateUrl: './investor-dashboard.html',
@@ -67,7 +68,7 @@ export class InvestorDashboard implements OnInit {
     return [
       { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: 'Opportunity Type', isSortable: false, sortingKey: 'planType' },
+      { label: this.i18nService.translate('plans.table.opportunityType'), isSortable: false, sortingKey: 'planType' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
       { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
       { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
