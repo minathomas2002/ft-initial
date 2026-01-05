@@ -612,7 +612,8 @@
     "title": "Dashboard",
     "subtitle": "Track and manage your submitted localization plans and their review status",
     "subTitleDvManager": "Track and manage submitted localization plans that require your action",
-    "submitNewPlan": "Submit New Plan"
+    "submitNewPlan": "Submit New Plan",
+    "assigndPlanTitle": "Assigned Pending Plan"
   },
   "dialog": {
     "cancel": "Cancel",
