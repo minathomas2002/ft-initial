@@ -9,7 +9,7 @@
         ></i></span></h2>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'Plan Title'" />
+        <app-base-label [title]="'plans.newPlan.planTitle' | translate" />
         <input
           pInputText
           placeholder="Enter your plan title"
@@ -19,11 +19,11 @@
         />
         <app-base-error-messages
           [control]="getFormControl(basicInformationFormGroupControls['planTitle'])"
-          [label]="'Plan Title'"
+          [label]="'plans.newPlan.planTitle' | translate"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'Opportunity Type'" />
+        <app-base-label [title]="'plans.newPlan.opportunityType' | translate" />
         <p-select
           [options]="opportunityTypes"
           [formControl]="getFormControl(basicInformationFormGroupControls['opportunityType'])"
@@ -60,7 +60,7 @@
         />
         <app-base-error-messages
           [control]="getFormControl(basicInformationFormGroupControls['opportunity'])"
-          [label]="'Opportunity'"
+          [label]="'plans.newPlan.opportunity' | translate"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">

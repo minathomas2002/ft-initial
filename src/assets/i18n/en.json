@@ -641,6 +641,7 @@
       "planTitle": "Plan Title",
       "planTitlePlaceholder": "Enter your plan title",
       "planTitleRequired": "Plan title is required",
+      "opportunity": "Opportunity",
       "opportunityType": "Opportunity Type",
       "services": "Services",
       "servicesDescription": "Localize operational or support services",
@@ -812,11 +813,16 @@
       "investorName": "Investor Name",
       "planTitle": "Plan Title",
       "planType": "Plan Type",
+      "opportunityType": "Opportunity Type",
       "submissionDate": "Submission Date",
       "slaCountdown": "SLA Countdown",
       "currentStatus": "Current Status",
       "actions": "Actions",
-      "daysRemaining": "days remaining"
+      "daysRemaining": "days remaining",
+      "day": "Day",
+      "days": "Days",
+      "dayOverdue": "Day Overdue",
+      "daysOverdue": "Days Overdue"
     },
     "statistics": {
       "totalPlans": "Total Plans",

@@ -467,6 +467,7 @@
 			"planTitle": "عنوان الخطة",
 			"planTitlePlaceholder": "أدخل عنوان خطتك",
 			"planTitleRequired": "عنوان الخطة مطلوب",
+			"opportunity": "الفرصة",
 			"opportunityType": "نوع الفرصة",
 			"services": "الخدمات",
 			"servicesDescription": "توطين الخدمات التشغيلية أو الداعمة",
@@ -536,11 +537,16 @@
 			"investorName": "اسم المستثمر",
 			"planTitle": "عنوان الخطة",
 			"planType": "نوع الخطة",
+			"opportunityType": "نوع الفرصة",
 			"submissionDate": "تاريخ التقديم",
 			"slaCountdown": "العد التنازلي لاتفاقية مستوى الخدمة",
 			"currentStatus": "الحالة الحالية",
 			"actions": "الإجراءات",
-			"daysRemaining": "أيام متبقية"
+			"daysRemaining": "أيام متبقية",
+			"day": "يوم",
+			"days": "أيام",
+			"dayOverdue": "يوم متأخر",
+			"daysOverdue": "أيام متأخرة"
 		},
 		"statistics": {
 			"totalPlans": "إجمالي الخطط",

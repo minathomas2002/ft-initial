@@ -15,7 +15,7 @@ import { DvManagerDashboardPlansFilterService } from '../../services/dv-manager-
 import { DvManagerDashboardPlansFilter } from '../../components/dv-manager-dashboard-plans-filter/dv-manager-dashboard-plans-filter';
 import { DvManagerDashboardPlanActionMenu } from '../../components/dv-manager-dashboard-plan-action-menu/dv-manager-dashboard-plan-action-menu';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
-import { TranslatePipe } from 'src/app/shared/pipes';
+import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { AssignReassignManualEmployee } from 'src/app/features/plans/components/assign-reassign-manual-employee/assign-reassign-manual-employee';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
@@ -36,6 +36,7 @@ import { BaseTagComponent } from "src/app/shared/components/base-components/base
     NgClass,
     SkeletonModule,
     TranslatePipe,
+    SlaCountdownNounPipe,
     AssignReassignManualEmployee,
     ProductLocalizationPlanWizard,
     TimelineDialog,
@@ -68,7 +69,7 @@ export class DvManagerDashboard implements OnInit {
       { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
       { label: this.i18nService.translate('plans.table.investorName'), isSortable: true, sortingKey: 'investorName' },
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: 'Opportunity Type', isSortable: false, sortingKey: 'planType' },
+      { label: this.i18nService.translate('plans.table.opportunityType'), isSortable: false, sortingKey: 'planType' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
       { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
       { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
@@ -100,13 +101,6 @@ export class DvManagerDashboard implements OnInit {
     } else {
       console.log('service');
     }
-  }
-
-   getSlaCountDownFactor(numberInDays: number): number {
-    return Math.abs(numberInDays);
-  }
-  getSlaCountDownNoun(numberInDays: number): string {
-    return numberInDays > 1 ? 'Days' :(numberInDays < 1 )?'Day Overdue': 'Day';
   }
 
   getPlanTypeLabel(planType: EOpportunityType): string {
