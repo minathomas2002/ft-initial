@@ -38,6 +38,8 @@ export enum ENotificationChannel
      InvestorPlanSLAReminder = 5,
      OverdueInternalPlan = 6,
      FinalApprovalRejection = 7,
+     ReminderOnPlanAssignedforReview=8,
+     CommentNotification=9,
 
      // Opportunity
      InactiveOpportunityAlert = 20,
