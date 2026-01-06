@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { IActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IProductLocalizationPlanRequest, IProductPlanResponse, ITimeLineResponse } from '../../interfaces/plans.interface';
+import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse } from '../../interfaces/plans.interface';
 import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
 
 @Injectable({
@@ -31,6 +31,10 @@ export class PlanApiService {
     return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.saveAsDraftProductLocalizationPlan, req);
   }
 
+  saveAsDraftServiceLocalizationPlan(req: FormData): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.saveAsDraftServiceLocalizationPlan, req);
+  }
+
   submitProductLocalizationPlan(req: FormData): Observable<IBaseApiResponse<boolean>> {
     return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.submitProductLocalizationPlan, req);
   }
@@ -41,6 +45,10 @@ export class PlanApiService {
 
   getProductPlan(req: { planId: string }): Observable<IBaseApiResponse<IProductPlanResponse>> {
     return this.baseHttpService.post<IProductPlanResponse, { planId: string }, unknown>(API_ENDPOINTS.plans.getProductPlan, req);
+  }
+
+  getServicePlan(req: { planId: string }): Observable<IBaseApiResponse<IServiceLocalizationPlanResponse>> {
+    return this.baseHttpService.post<IServiceLocalizationPlanResponse, { planId: string }, unknown>(API_ENDPOINTS.plans.getServicePlan, req);
   }
 
   getTimeLine(req: { planId: string }): Observable<IBaseApiResponse<ITimeLineResponse[]>> {

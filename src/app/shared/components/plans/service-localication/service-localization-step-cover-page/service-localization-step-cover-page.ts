@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -7,7 +7,6 @@ import { BaseLabelComponent } from 'src/app/shared/components/base-components/ba
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
-// import { ServiceLocalizationFormService } from 'src/app/shared/services/plan/materials-form-service/service-localization-form-service';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 
@@ -28,6 +27,8 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationStepCoverPage {
+  isViewMode = input<boolean>(false);
+
   serviceLocalizationFormService = inject(ServicePlanFormService);
   showCheckbox = signal(false);
 

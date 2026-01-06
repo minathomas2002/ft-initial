@@ -3,14 +3,14 @@
   <app-summary-section-cover-page
     [isViewMode]="isViewMode()"
     [formGroup]="step1FormGroup"
-    (onEdit)="onEditStepClick(1)"
+    (onEdit)="onEditStepClick(coverStepNumber())"
   />
 
   <!-- Step 2: Overview & Company Information -->
   <app-summary-section-overview
     [isViewMode]="isViewMode()"
     [formGroup]="step2FormGroup"
-    (onEdit)="onEditStepClick(2)"
+    (onEdit)="onEditStepClick(overviewStepNumber())"
   />
 
   <!-- Step 3: Existing Saudi Company -->
@@ -18,7 +18,7 @@
     <app-summary-section-existing-saudi
       [isViewMode]="isViewMode()"
       [formGroup]="step3FormGroup"
-      (onEdit)="onEditStepClick(3)"
+      (onEdit)="onEditStepClick(existingSaudiStepNumber())"
     />
   }
 
@@ -27,7 +27,7 @@
     <app-summary-section-direct-localization
       [isViewMode]="isViewMode()"
       [formGroup]="step4FormGroup"
-      (onEdit)="onEditStepClick(4)"
+      (onEdit)="onEditStepClick(directLocalizationStepNumber())"
     />
   }
 </div>

@@ -11,7 +11,7 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
+import { AgreementType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
@@ -249,7 +249,7 @@ export class ServiceLocalizationStepExistingSaudi {
 
   isAgreementTypeOther(itemControl: AbstractControl): boolean {
     const agreementTypeValue = this.getValueControl(itemControl.get(EMaterialsFormControls.agreementType))?.value;
-    return agreementTypeValue === '5'; // 'Other' has id '5'
+    return agreementTypeValue === AgreementType.Other.toString();
   }
 
   getEntityLevelFormArray(): FormArray {

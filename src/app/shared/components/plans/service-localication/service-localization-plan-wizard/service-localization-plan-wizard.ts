@@ -3,14 +3,17 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
   inject,
   model,
+  OnDestroy,
   OnInit,
   output,
   signal,
 } from '@angular/core';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationMethodology } from 'src/app/shared/enums';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
@@ -29,8 +32,9 @@ import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialo
 import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
 import { ConfirmLeaveDialogComponent } from '../../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component';
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
-import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData } from 'src/app/shared/utils/service-localization-plan.mapper';
+import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { switchMap, of, map, catchError, finalize } from 'rxjs';
 
 type ServiceLocalizationWizardStepId =
   | 'cover'
@@ -61,7 +65,7 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
   styleUrl: './service-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceLocalizationPlanWizard implements OnInit {
+export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   readonly planStore = inject(PlanStore);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
@@ -88,6 +92,7 @@ export class ServiceLocalizationPlanWizard implements OnInit {
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
   showConfirmLeaveDialog = model(false);
+
 
   private readonly stepsWithId = computed<ServiceLocalizationWizardStepState[]>(() => {
     this.i18nService.currentLanguage();
@@ -153,6 +158,11 @@ export class ServiceLocalizationPlanWizard implements OnInit {
     return this.stepsWithId().map(({ id, ...step }) => step);
   });
 
+  // Memoized step indices to avoid recalculation in template
+  readonly existingSaudiStepIndex = computed(() => this.getStepIndexById('existingSaudi'));
+  readonly directLocalizationStepIndex = computed(() => this.getStepIndexById('directLocalization'));
+  readonly summaryStepIndex = computed(() => this.getStepIndexById('summary'));
+
   wizardTitle = computed(() => {
     const currentMode = this.planStore.wizardMode();
     this.i18nService.currentLanguage();
@@ -189,8 +199,134 @@ export class ServiceLocalizationPlanWizard implements OnInit {
   showExistingSaudiStep = signal(true);
   showDirectLocalizationStep = signal(true);
 
+  constructor() {
+    // Keep activeStep within current steps range (prevents Stepper issues when conditional steps hide/show)
+    effect(() => {
+      const stepsCount = this.stepsWithId().length;
+      const current = this.activeStep();
+      if (!stepsCount) return;
+
+      if (!current || current < 1) {
+        this.activeStep.set(1);
+        return;
+      }
+
+      if (current > stepsCount) {
+        this.activeStep.set(stepsCount);
+      }
+    }, { allowSignalWrites: true });
+
+    // Effect to load plan data when planId and mode are set (mirrors product localization wizard)
+    effect(() => {
+      const currentPlanId = this.planStore.selectedPlanId();
+      const currentMode = this.planStore.wizardMode();
+      const isVisible = this.visibility();
+
+      if (!isVisible) return;
+
+      if (currentPlanId && (currentMode === 'edit' || currentMode === 'view')) {
+        this.loadPlanData(currentPlanId);
+      } else if (currentMode === 'create' && !currentPlanId) {
+        this.serviceLocalizationFormService.resetAllForms();
+        this.enableAllForms();
+        this.activeStep.set(1);
+        this.isSubmitted.set(false);
+        this.existingSignature.set(null);
+        this.planStore.setPlanStatus(null);
+      }
+    });
+
+  }
+
   ngOnInit(): void {
     this.listenToConditionalSteps();
+  }
+
+  private loadPlanData(planId: string): void {
+    this.isLoadingPlan.set(true);
+    this.planStore
+      .getServicePlan(planId)
+      .pipe(
+        switchMap((response) => {
+          if (!response?.success || !response?.body) {
+            return of(null);
+          }
+
+          const opportunityId = response.body.servicePlan?.opportunityId;
+          if (opportunityId) {
+            return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId).pipe(
+              map(() => response.body),
+              catchError((error) => {
+                console.error('Error loading opportunity details:', error);
+                return of(response.body);
+              })
+            );
+          }
+
+          return of(response.body);
+        }),
+        catchError((error) => {
+          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.errorLoadingPlan'));
+          console.error('Error loading plan:', error);
+          this.visibility.set(false);
+          return of(null);
+        }),
+        finalize(() => {
+          this.isLoadingPlan.set(false);
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((data) => {
+        if (!data) return;
+
+        this.planStore.setPlanStatus(data.servicePlan?.status ?? null);
+
+        // Reset then map (ensures arrays match response)
+        this.serviceLocalizationFormService.resetAllForms();
+
+        const opportunityItem = this.planStore.availableOpportunities()?.[0] ?? null;
+        mapServicePlanResponseToForm(data, this.serviceLocalizationFormService, {
+          opportunityItem,
+        });
+
+        // Store existing signature if present
+        if (data.signature?.signatureValue) {
+          this.existingSignature.set(data.signature.signatureValue);
+        } else {
+          this.existingSignature.set(null);
+        }
+
+        const currentMode = this.planStore.wizardMode();
+        if (currentMode === 'view') {
+          this.disableAllForms();
+          this.activeStep.set(this.stepsWithId().length);
+        } else if (currentMode === 'edit') {
+          this.enableAllForms();
+          const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
+          const opportunityControl = basicInfo?.get(EMaterialsFormControls.opportunity);
+          opportunityControl?.disable({ emitEvent: true });
+        }
+
+      });
+  }
+
+  private disableAllForms(): void {
+    this.serviceLocalizationFormService.step1_coverPage.disable({ emitEvent: false });
+    this.serviceLocalizationFormService.step2_overview.disable({ emitEvent: false });
+    this.serviceLocalizationFormService.step3_existingSaudi.disable({ emitEvent: false });
+    this.serviceLocalizationFormService.step4_directLocalization.disable({ emitEvent: false });
+  }
+
+  private enableAllForms(): void {
+    this.serviceLocalizationFormService.step1_coverPage.enable({ emitEvent: false });
+    this.serviceLocalizationFormService.step2_overview.enable({ emitEvent: false });
+    this.serviceLocalizationFormService.step3_existingSaudi.enable({ emitEvent: false });
+    this.serviceLocalizationFormService.step4_directLocalization.enable({ emitEvent: false });
+
+    // Keep submission date read-only
+    const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
+    const submissionDateControl = basicInfo?.get(EMaterialsFormControls.submissionDate);
+    submissionDateControl?.disable({ emitEvent: false });
   }
 
   // Initialize watcher on service details form array to set flags
@@ -235,6 +371,13 @@ export class ServiceLocalizationPlanWizard implements OnInit {
   }
 
   stepIndex(stepId: ServiceLocalizationWizardStepId): number {
+    return this.getStepIndexById(stepId);
+  }
+
+  /**
+   * Private helper to get step index - used by computed signals and stepIndex method
+   */
+  private getStepIndexById(stepId: ServiceLocalizationWizardStepId): number {
     const idx = this.stepsWithId().findIndex((s) => s.id === stepId);
     return idx >= 0 ? idx + 1 : 0;
   }
@@ -248,9 +391,9 @@ export class ServiceLocalizationPlanWizard implements OnInit {
   }
 
   onClose(): void {
-    // Reset active step to 1 when closing
     this.activeStep.set(1);
-    // Reset wizard state in store
+    this.doRefresh.emit();
+    this.isSubmitted.set(false);
     this.planStore.resetWizardState();
   }
 
@@ -286,18 +429,18 @@ export class ServiceLocalizationPlanWizard implements OnInit {
     return this.planStore.wizardMode() === 'edit' ? this.planStore.selectedPlanId() ?? '' : '';
   }
 
-  private buildRequestFormData(options: { signature?: Signature; isDraft?: boolean }) {
+  private buildRequestFormData(options?: { signature?: Signature }) {
     const request = mapServiceLocalizationPlanFormToRequest(
       this.serviceLocalizationFormService,
       this.getCurrentPlanIdForRequest(),
-      options.signature
+      options?.signature,
+      {
+        includeExistingSaudi: this.showExistingSaudiStep(),
+        includeDirectLocalization: this.showDirectLocalizationStep(),
+      }
     );
 
-    if (options.isDraft) {
-      request.servicePlan.isDraft = true;
-    }
-
-    return convertServiceRequestToFormData(request);
+    return convertServiceRequestToFormData(request, { stripEmpty: true });
   }
 
   onSubmissionConfirm(data: {
@@ -331,7 +474,7 @@ export class ServiceLocalizationPlanWizard implements OnInit {
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.submitSuccess'));
+          this.toasterService.success('Service localization plan submitted successfully');
           // Reset all forms after successful submission
           this.serviceLocalizationFormService.resetAllForms();
           // Reset wizard state
@@ -357,7 +500,11 @@ export class ServiceLocalizationPlanWizard implements OnInit {
 
   onConfirmLeave(): void {
     this.showConfirmLeaveDialog.set(false);
+    this.serviceLocalizationFormService.resetAllForms();
     this.visibility.set(false);
+    this.activeStep.set(1);
+    this.doRefresh.emit();
+    this.isSubmitted.set(false);
     this.onClose();
   }
 
@@ -365,17 +512,18 @@ export class ServiceLocalizationPlanWizard implements OnInit {
     this.showConfirmLeaveDialog.set(false);
   }
 
+
   saveAsDraft(): void {
     const isEditMode = this.planStore.wizardMode() === 'edit';
 
-    const formData = this.buildRequestFormData({ isDraft: true });
+    const formData = this.buildRequestFormData();
 
     // Set processing state
     this.isProcessing.set(true);
 
     // Call store method to submit plan (as draft)
     this.planStore
-      .submitServiceLocalizationPlan(formData)
+      .saveAsDraftServiceLocalizationPlan(formData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
@@ -394,9 +542,12 @@ export class ServiceLocalizationPlanWizard implements OnInit {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.draftError'));
           console.error('Error saving draft:', error);
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    this.serviceLocalizationFormService.resetAllForms();
   }
 }

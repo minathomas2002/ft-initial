@@ -24,6 +24,13 @@ export class ServiceLocalizationStepSummary {
   isViewMode = input<boolean>(false);
   includeExistingSaudi = input<boolean>(true);
   includeDirectLocalization = input<boolean>(true);
+
+  // Wizard step numbers (can shift when optional steps are hidden)
+  coverStepNumber = input<number>(1);
+  overviewStepNumber = input<number>(2);
+  existingSaudiStepNumber = input<number>(3);
+  directLocalizationStepNumber = input<number>(4);
+
   private readonly formService = inject(ServicePlanFormService);
   private readonly validationService = inject(ServicePlanValidationService);
   private readonly toasterService = inject(ToasterService);

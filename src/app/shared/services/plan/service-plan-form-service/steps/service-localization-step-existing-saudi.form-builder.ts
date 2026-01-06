@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { AgreementType, EMaterialsFormControls } from 'src/app/shared/enums';
 
 export class ServiceLocalizationStepExistingSaudiFormBuilder {
   constructor(
@@ -497,7 +497,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
 
     if (!otherDetailsControl) return;
 
-    if (agreementType === 'Other') {
+    if (agreementType === AgreementType.Other.toString()) {
       otherDetailsControl.setValidators([Validators.required, Validators.maxLength(100)]);
     } else {
       otherDetailsControl.clearValidators();

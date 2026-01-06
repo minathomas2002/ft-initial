@@ -57,7 +57,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       [EMaterialsFormControls.serviceId]: this.fb.control(''), // Service GUID from cover page
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(150)]], // Auto-populated, dimmed
+        [EMaterialsFormControls.value]: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(150)]], // Auto-populated, dimmed
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],

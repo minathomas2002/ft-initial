@@ -9,6 +9,7 @@
       [createNewItem]="createLocalizationStrategyItem"
       [scrollHeight]="'600px'"
       [excludeKeys]="['serviceId', 'localizationApproachOtherDetails', 'locationOtherDetails', 'proprietaryToolsSystemsDetails', 'firstYear_headcount', 'firstYear_saudization', 'secondYear_headcount', 'secondYear_saudization', 'thirdYear_headcount', 'thirdYear_saudization', 'fourthYear_headcount', 'fourthYear_saudization', 'fifthYear_headcount', 'fifthYear_saudization', 'keyMeasuresToUpskillSaudis', 'mentionSupportRequiredFromSEC']"
+      [customHeaderLabels]="{'locationType': 'Location'}"
     >
       <ng-template #itemTemplate let-itemControl let-index="index">
         <!-- Service Name -->
@@ -111,7 +112,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.location))"
-                placeholder="Select location"
+                placeholder="Enter location"
                 fluid
                 [appendTo]="'body'"
               />
@@ -319,7 +320,7 @@
       [ft]="getServiceLevelFormArray()"
       [hideAddButton]="true"
       [hideDeleteButton]="true"
-      [excludeKeys]="['serviceId', 'localizationApproach', 'localizationApproachOtherDetails', 'location', 'locationOtherDetails', 'capexRequired', 'supervisionOversightEntity', 'willBeAnyProprietaryToolsSystems', 'proprietaryToolsSystemsDetails']"
+      [excludeKeys]="['serviceId', 'localizationApproach', 'localizationApproachOtherDetails', 'locationType', 'locationOtherDetails', 'capexRequired', 'supervisionOversightEntity', 'willBeAnyProprietaryToolsSystems', 'proprietaryToolsSystemsDetails']"
       [customHeaderLabels]="customHeadersLabels()"
       [groupHeader]="serviceLevelGroupHeader()"
       [scrollHeight]="'600px'"

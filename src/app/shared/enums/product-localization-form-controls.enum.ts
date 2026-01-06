@@ -184,7 +184,7 @@ export enum EMaterialsFormControls {
   // Service Plan - Step 4 (Direct Localization) - Localization Strategy Controls
   localizationApproach = 'localizationApproach',
   localizationApproachOtherDetails = 'localizationApproachOtherDetails',
-  location = 'location',
+  location = 'locationType',
   locationOtherDetails = 'locationOtherDetails',
   capexRequired = 'capexRequired',
   willBeAnyProprietaryToolsSystems = 'willBeAnyProprietaryToolsSystems',

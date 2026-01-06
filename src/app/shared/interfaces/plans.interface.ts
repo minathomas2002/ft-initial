@@ -153,6 +153,140 @@ export interface IProductPlanResponse {
   signature: Signature
 }
 
+export interface IServiceLocalizationPlanResponse {
+  signature: Signature;
+  servicePlan: IServicePlanResponse;
+}
+
+export interface IServicePlanGetResponse {
+  success: boolean;
+  errors: string[];
+  body: IServiceLocalizationPlanResponse;
+}
+
+export interface IServicePlanResponse {
+  id: string;
+  isDraft: boolean;
+  opportunityId: string;
+  planTitle: string;
+  status: number;
+  services: IServicePlanServiceItem[];
+  companyInformationSection: IServicePlanCompanyInformationSection;
+  localAgentDetailSection?: IServicePlanLocalAgentDetailSection;
+  saudiCompanyDetails?: IServicePlanSaudiCompanyDetail[];
+  partnershipModels?: IServicePlanPartnershipModel[];
+  entityHeadcounts?: IServicePlanEntityHeadcount[];
+  serviceHeadcounts?: IServicePlanServiceHeadcount[];
+  attachments?: Attachment[];
+  localizationStrategies?: IServicePlanLocalizationStrategy[];
+}
+
+export interface IServicePlanServiceItem {
+  id: string;
+  serviceName: string;
+  serviceDescription: string;
+  serviceType: number;
+  serviceCategory: number;
+  serviceProvidedTo: number;
+  targetedForLocalization: boolean;
+  serviceLocalizationMethodology: number[];
+  expectedLocalizationDate?: string;
+  otherProvidedTo?: string;
+  totalBusinessLast5Years: string;
+}
+
+export interface IServicePlanCompanyInformationSection {
+  companyName: string;
+  ceoName: string;
+  ceoEmail: string;
+  globalHQLocation: string;
+  secVendorId: string;
+  benaVendorId: string;
+  hasLocalAgent: boolean;
+  localAgentDetails?: string;
+}
+
+export interface IServicePlanLocalAgentDetailSection {
+  localAgentName: string;
+  agentContactPerson: string;
+  agentEmail: string;
+  agentContactNumber: string;
+  agentCompanyLocation: string;
+}
+
+export interface IServicePlanSaudiCompanyDetail {
+  id: string;
+  companyName: string;
+  vendorIdWithSEC: string;
+  benaRegisterVendorId: string;
+  companyType: number[];
+  qualificationStatus: number;
+  companyOverview: string;
+  companyOverviewOther?: string;
+  companyOverviewKeyProjectDetails?: string;
+  keyProjectsForSEC: string;
+  products?: string;
+}
+
+export interface IServicePlanPartnershipModel {
+  id: string;
+  agreementType: number;
+  otherAgreementType?: string;
+  agreementSigningDate: string;
+  supervisionEntity: string;
+  agreementCopyProvided: boolean;
+  keyAgreementClauses: string;
+  selectionJustification: string;
+}
+
+export interface IServicePlanEntityHeadcount {
+  id: string;
+  pageNumber: number;
+  y1Headcount: number;
+  y1Saudization: number;
+  y2Headcount: number;
+  y2Saudization: number;
+  y3Headcount: number;
+  y3Saudization: number;
+  y4Headcount: number;
+  y4Saudization: number;
+  y5Headcount: number;
+  y5Saudization: number;
+}
+
+export interface IServicePlanServiceHeadcount {
+  id: string;
+  planServiceTypeId: string;
+  mentionSupportRequiredSEC: string;
+  measuresUpSkillSaudis: string;
+  localizationDate?: string;
+  pageNumber: number;
+  y1Headcount: number;
+  y1Saudization: number;
+  y2Headcount: number;
+  y2Saudization: number;
+  y3Headcount: number;
+  y3Saudization: number;
+  y4Headcount: number;
+  y4Saudization: number;
+  y5Headcount: number;
+  y5Saudization: number;
+}
+
+export interface IServicePlanLocalizationStrategy {
+  id: string;
+  planServiceTypeId: string;
+  localizationApproach: number;
+  locationType: number;
+  expectedLocalizationDate: string;
+  capexRequired: number;
+  hasProprietaryTools: boolean;
+  proprietaryToolsDetails?: string;
+  governmentSupervision?: string;
+  otherLocalizationApproach?: string;
+  otherLocationType?: string;
+}
+
 export interface ICommentFields {
   name: string;
   id: string;

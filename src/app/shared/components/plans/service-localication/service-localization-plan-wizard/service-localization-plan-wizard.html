@@ -19,30 +19,37 @@
   }
 
   <ng-template [appStepContent]="1">
-    <app-service-localization-step-cover-page></app-service-localization-step-cover-page>
+    <app-service-localization-step-cover-page [isViewMode]="isViewMode()"></app-service-localization-step-cover-page>
   </ng-template>
 
   <ng-template [appStepContent]="2">
-    <app-service-localization-step-overview></app-service-localization-step-overview>
+    <app-service-localization-step-overview [isViewMode]="isViewMode()"></app-service-localization-step-overview>
   </ng-template>
 
-  @if (stepIndex('directLocalization')) {
-  <ng-template [appStepContent]="stepIndex('directLocalization')">
-    <app-service-localization-step-direct-localization></app-service-localization-step-direct-localization>
-  </ng-template>
+  <!-- Conditional step: Existing Saudi (appears before Direct Localization in step order) -->
+  @if (showExistingSaudiStep() && existingSaudiStepIndex() > 0) {
+    <ng-template [appStepContent]="existingSaudiStepIndex()">
+      <app-service-localization-step-existing-saudi [isViewMode]="isViewMode()"></app-service-localization-step-existing-saudi>
+    </ng-template>
   }
 
-  @if (stepIndex('existingSaudi')) {
-  <ng-template [appStepContent]="stepIndex('existingSaudi')">
-    <app-service-localization-step-existing-saudi></app-service-localization-step-existing-saudi>
-  </ng-template>
+  <!-- Conditional step: Direct Localization -->
+  @if (showDirectLocalizationStep() && directLocalizationStepIndex() > 0) {
+    <ng-template [appStepContent]="directLocalizationStepIndex()">
+      <app-service-localization-step-direct-localization [isViewMode]="isViewMode()"></app-service-localization-step-direct-localization>
+    </ng-template>
   }
 
-  <ng-template [appStepContent]="stepIndex('summary')">
+  <!-- Summary step is always last -->
+  <ng-template [appStepContent]="summaryStepIndex()">
     <app-service-localization-step-summary
       [isViewMode]="isViewMode()"
       [includeExistingSaudi]="showExistingSaudiStep()"
       [includeDirectLocalization]="showDirectLocalizationStep()"
+      [coverStepNumber]="stepIndex('cover')"
+      [overviewStepNumber]="stepIndex('overview')"
+      [existingSaudiStepNumber]="stepIndex('existingSaudi')"
+      [directLocalizationStepNumber]="stepIndex('directLocalization')"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onValidationErrorsChange)="updateValidationErrors($event)"
@@ -50,7 +57,7 @@
   </ng-template>
 
   <ng-container ngProjectAs="final-step-action">
-    @if (activeStep() === stepIndex('summary') && !isViewMode()) {
+    @if (activeStep() === summaryStepIndex() && !isViewMode()) {
     <p-button label="Submit" (click)="onSummarySubmitClick()"></p-button>
     }
   </ng-container>

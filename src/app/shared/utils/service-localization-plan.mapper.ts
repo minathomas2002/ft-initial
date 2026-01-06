@@ -1,8 +1,18 @@
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { ServicePlanFormService } from '../services/plan/service-plan-form-service/service-plan-form-service';
 import { EMaterialsFormControls } from '../enums/product-localization-form-controls.enum';
 import { Signature } from '../interfaces/plans.interface';
-import { ELocalizationMethodology } from 'src/app/shared/enums';
+import { ELocalizationMethodology, EYesNo } from 'src/app/shared/enums';
+import type {
+  Attachment,
+  IServiceLocalizationPlanResponse,
+  IServicePlanEntityHeadcount,
+  IServicePlanLocalizationStrategy,
+  IServicePlanResponse,
+  IServicePlanServiceHeadcount,
+  IServicePlanServiceItem,
+} from 'src/app/shared/interfaces/plans.interface';
+import { API_ENDPOINTS } from 'src/app/shared/api/api-endpoints';
 
 /**
  * Interface definitions for Service Localization Plan API Request
@@ -194,6 +204,341 @@ function toNumberArray(value: any): number[] {
   return [];
 }
 
+function toBooleanYesNo(value: any): boolean {
+  if (value === true || value === 'true') return true;
+  if (value === false || value === 'false') return false;
+
+  if (value === EYesNo.Yes || value === EYesNo.Yes.toString()) return true;
+  if (value === EYesNo.No || value === EYesNo.No.toString()) return false;
+
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'yes') return true;
+    if (normalized === 'no') return false;
+    if (normalized === '1') return true;
+    if (normalized === '2') return false;
+  }
+
+  if (typeof value === 'number') {
+    if (value === 1) return true;
+    if (value === 2) return false;
+    if (value === 0) return false;
+  }
+
+  return false;
+}
+
+function toYesNoId(value: boolean | null | undefined): string | null {
+  if (value === null || value === undefined) return null;
+  return value ? EYesNo.Yes.toString() : EYesNo.No.toString();
+}
+
+function setNestedValue(formGroup: FormGroup | null, controlName: string, value: any): void {
+  if (!formGroup) return;
+  const control = formGroup.get(controlName);
+  if (!control) return;
+
+  if (control instanceof FormGroup) {
+    const valueControl = control.get(EMaterialsFormControls.value);
+    valueControl?.setValue(value ?? null, { emitEvent: false });
+  }
+}
+
+function setDirectValue(formGroup: FormGroup | null, controlName: string, value: any): void {
+  if (!formGroup) return;
+  const control = formGroup.get(controlName);
+  control?.setValue(value ?? null, { emitEvent: false });
+}
+
+function clearAndRebuildFormArray(
+  formArray: FormArray | null,
+  count: number,
+  createItem: () => FormGroup
+): void {
+  if (!formArray) return;
+  while (formArray.length > 0) formArray.removeAt(0);
+
+  const safeCount = count > 0 ? count : 1;
+  for (let i = 0; i < safeCount; i++) {
+    formArray.push(createItem());
+  }
+}
+
+function getMimeTypeFromExtension(ext?: string | null): string {
+  const e = (ext ?? '').replace('.', '').toLowerCase();
+  if (e === 'pdf') return 'application/pdf';
+  if (e === 'png') return 'image/png';
+  if (e === 'jpg' || e === 'jpeg') return 'image/jpeg';
+  if (e === 'zip') return 'application/zip';
+  if (e === 'rar') return 'application/vnd.rar';
+  return 'application/octet-stream';
+}
+
+function toExistingFile(att: Attachment): File {
+  const fileExtension = att.fileExtension || '';
+  const fileName = att.fileName + (fileExtension ? fileExtension : '');
+  const fileType = getMimeTypeFromExtension(fileExtension);
+  const blob = new Blob([], { type: fileType });
+  const file = new File([blob], fileName, { type: fileType });
+
+  let fullFileUrl = att.fileUrl || '';
+  if (fullFileUrl && !fullFileUrl.startsWith('http://') && !fullFileUrl.startsWith('https://')) {
+    const baseUrl = API_ENDPOINTS.baseUrl.replace('/api', '');
+    fullFileUrl = baseUrl + (fullFileUrl.startsWith('/') ? fullFileUrl : '/' + fullFileUrl);
+  }
+
+  (file as any).id = att.id;
+  (file as any).fileUrl = fullFileUrl;
+  (file as any).fileExtension = fileExtension;
+  (file as any).isExistingAttachment = true;
+
+  return file;
+}
+
+function findByPage<T extends { pageNumber: number }>(items: T[] | undefined, pageNumber: number): T | undefined {
+  return (items ?? []).find((x) => x.pageNumber === pageNumber);
+}
+
+function findByServiceId<T extends { planServiceTypeId: string; pageNumber?: number }>(
+  items: T[] | undefined,
+  planServiceTypeId: string,
+  pageNumber?: number
+): T | undefined {
+  const list = items ?? [];
+  return list.find((x) => x.planServiceTypeId === planServiceTypeId && (pageNumber == null || x.pageNumber === pageNumber));
+}
+
+function setYearValues(
+  group: FormGroup,
+  data: {
+    y1Headcount?: number;
+    y1Saudization?: number;
+    y2Headcount?: number;
+    y2Saudization?: number;
+    y3Headcount?: number;
+    y3Saudization?: number;
+    y4Headcount?: number;
+    y4Saudization?: number;
+    y5Headcount?: number;
+    y5Saudization?: number;
+  }
+): void {
+  setNestedValue(group, `${EMaterialsFormControls.firstYear}_headcount`, data.y1Headcount ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.firstYear}_saudization`, data.y1Saudization ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.secondYear}_headcount`, data.y2Headcount ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.secondYear}_saudization`, data.y2Saudization ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.thirdYear}_headcount`, data.y3Headcount ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.thirdYear}_saudization`, data.y3Saudization ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.fourthYear}_headcount`, data.y4Headcount ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.fourthYear}_saudization`, data.y4Saudization ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.fifthYear}_headcount`, data.y5Headcount ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.fifthYear}_saudization`, data.y5Saudization ?? null);
+}
+
+/**
+ * Map GET service-plan response to form structure (edit/view mode)
+ */
+export function mapServicePlanResponseToForm(
+  response: IServiceLocalizationPlanResponse,
+  formService: ServicePlanFormService,
+  options?: { opportunityItem?: { id: string; name: string } | null }
+): void {
+  const servicePlan: IServicePlanResponse = response.servicePlan;
+
+  // Step 1: Cover Page
+  const step1Company = formService.coverPageCompanyInformationFormGroup;
+  setNestedValue(step1Company, EMaterialsFormControls.planTitle, servicePlan.planTitle ?? '');
+  setNestedValue(step1Company, EMaterialsFormControls.companyName, servicePlan.companyInformationSection?.companyName ?? '');
+
+  const servicesArray = formService.getServicesFormArray();
+  clearAndRebuildFormArray(servicesArray, servicePlan.services?.length ?? 1, () => formService.createServiceItem());
+  (servicePlan.services ?? []).forEach((svc: IServicePlanServiceItem, idx: number) => {
+    const row = servicesArray?.at(idx) as FormGroup | undefined;
+    if (!row) return;
+    row.get(EMaterialsFormControls.serviceId)?.setValue(svc.id ?? '', { emitEvent: false });
+    setNestedValue(row, EMaterialsFormControls.serviceName, svc.serviceName ?? '');
+    // Store row id (for potential future edit mapping)
+    row.get('rowId')?.setValue(svc.id ?? null, { emitEvent: false });
+  });
+
+  // Force sync dependent arrays so we can safely patch them next
+  formService.syncServicesFromCoverPageToOverview();
+  formService.syncServicesFromCoverPageToExistingSaudi();
+  formService.syncServicesFromCoverPageToDirectLocalization();
+
+  // Step 2: Overview
+  const basicInfo = formService.basicInformationFormGroup;
+  if (basicInfo) {
+    const opportunity = options?.opportunityItem ?? null;
+    if (opportunity) {
+      basicInfo.get(EMaterialsFormControls.opportunity)?.setValue(opportunity, { emitEvent: false });
+    }
+  }
+
+  const companyInfo = formService.overviewCompanyInformationFormGroup;
+  const companySection = servicePlan.companyInformationSection;
+  setNestedValue(companyInfo, EMaterialsFormControls.companyName, companySection?.companyName ?? '');
+  setNestedValue(companyInfo, EMaterialsFormControls.ceoName, companySection?.ceoName ?? '');
+  setNestedValue(companyInfo, EMaterialsFormControls.ceoEmailID, companySection?.ceoEmail ?? '');
+
+  const locationInfo = formService.locationInformationFormGroup;
+  setNestedValue(locationInfo, EMaterialsFormControls.globalHQLocation, companySection?.globalHQLocation ?? '');
+  setNestedValue(locationInfo, EMaterialsFormControls.registeredVendorIDwithSEC, companySection?.secVendorId ?? '');
+  setNestedValue(locationInfo, EMaterialsFormControls.benaRegisteredVendorID, companySection?.benaVendorId ?? '');
+  setDirectValue(locationInfo, EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA, companySection?.hasLocalAgent ?? false);
+  formService.toggleLocalAgentInformValidation(companySection?.hasLocalAgent === true);
+
+  const localAgentInfo = formService.localAgentInformationFormGroup;
+  setDirectValue(localAgentInfo, EMaterialsFormControls.localAgentDetails, companySection?.localAgentDetails ?? '');
+
+  const agent = servicePlan.localAgentDetailSection;
+  setNestedValue(localAgentInfo, EMaterialsFormControls.localAgentName, agent?.localAgentName ?? '');
+  setNestedValue(localAgentInfo, EMaterialsFormControls.contactPersonName, agent?.agentContactPerson ?? '');
+  setNestedValue(localAgentInfo, EMaterialsFormControls.emailID, agent?.agentEmail ?? '');
+  setNestedValue(localAgentInfo, EMaterialsFormControls.contactNumber, agent?.agentContactNumber ?? '');
+  setNestedValue(localAgentInfo, EMaterialsFormControls.companyLocation, agent?.agentCompanyLocation ?? '');
+
+  const detailsArray = formService.getServiceDetailsFormArray();
+  (detailsArray?.controls ?? []).forEach((ctrl, idx) => {
+    const row = ctrl as FormGroup;
+    const serviceId = row.get(EMaterialsFormControls.serviceId)?.value;
+    const svc = (servicePlan.services ?? []).find((s) => s.id === serviceId) ?? (servicePlan.services ?? [])[idx];
+    if (!svc) return;
+
+    row.get('rowId')?.setValue(svc.id ?? null, { emitEvent: false });
+    setNestedValue(row, EMaterialsFormControls.serviceName, svc.serviceName ?? '');
+    setNestedValue(row, EMaterialsFormControls.serviceType, svc.serviceType != null ? String(svc.serviceType) : null);
+    setNestedValue(row, EMaterialsFormControls.serviceCategory, svc.serviceCategory != null ? String(svc.serviceCategory) : null);
+    setNestedValue(row, EMaterialsFormControls.serviceDescription, svc.serviceDescription ?? '');
+    setNestedValue(row, EMaterialsFormControls.serviceProvidedTo, svc.serviceProvidedTo != null ? String(svc.serviceProvidedTo) : null);
+    setNestedValue(row, EMaterialsFormControls.serviceProvidedToCompanyNames, svc.otherProvidedTo ?? '');
+    setNestedValue(row, EMaterialsFormControls.totalBusinessDoneLast5Years, svc.totalBusinessLast5Years ?? '');
+    setNestedValue(row, EMaterialsFormControls.serviceTargetedForLocalization, toYesNoId(!!svc.targetedForLocalization));
+    setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, svc.expectedLocalizationDate ?? '');
+    setNestedValue(
+      row,
+      EMaterialsFormControls.serviceLocalizationMethodology,
+      (svc.serviceLocalizationMethodology ?? []).map((x) => String(x))?.[0]
+    );
+
+    // Keep conditional validators in sync
+    const providedToId = svc.serviceProvidedTo != null ? String(svc.serviceProvidedTo) : null;
+    formService.toggleServiceProvidedToCompanyNamesValidation(providedToId, idx);
+    formService.toggleExpectedLocalizationDateValidation(toYesNoId(!!svc.targetedForLocalization), idx);
+  });
+
+  // Step 3: Existing Saudi
+  const saudiCompaniesArray = formService.saudiCompanyDetailsFormGroup;
+  clearAndRebuildFormArray(saudiCompaniesArray, servicePlan.saudiCompanyDetails?.length ?? 1, () => formService.createSaudiCompanyDetailItem());
+  (servicePlan.saudiCompanyDetails ?? []).forEach((co, idx) => {
+    const row = saudiCompaniesArray?.at(idx) as FormGroup | undefined;
+    if (!row) return;
+    row.get('rowId')?.setValue(co.id ?? null, { emitEvent: false });
+    setNestedValue(row, EMaterialsFormControls.saudiCompanyName, co.companyName ?? '');
+    setNestedValue(row, EMaterialsFormControls.registeredVendorIDwithSEC, co.vendorIdWithSEC ?? '');
+    setNestedValue(row, EMaterialsFormControls.benaRegisteredVendorID, co.benaRegisterVendorId ?? '');
+    setNestedValue(row, EMaterialsFormControls.companyType, (co.companyType ?? []).map((x) => String(x)));
+    setNestedValue(row, EMaterialsFormControls.qualificationStatus, co.qualificationStatus != null ? String(co.qualificationStatus) : null);
+    setNestedValue(row, EMaterialsFormControls.companyOverview, co.companyOverview ?? '');
+    setNestedValue(row, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC, co.keyProjectsForSEC ?? '');
+    setNestedValue(row, EMaterialsFormControls.products, co.products ?? '');
+    setNestedValue(row, EMaterialsFormControls.companyOverviewOther, co.companyOverviewOther ?? '');
+    setNestedValue(row, EMaterialsFormControls.companyOverviewKeyProjectDetails, co.companyOverviewKeyProjectDetails ?? '');
+  });
+
+  const partnershipArray = formService.collaborationPartnershipFormGroup;
+  clearAndRebuildFormArray(partnershipArray, servicePlan.partnershipModels?.length ?? 1, () => formService.createCollaborationPartnershipItem());
+  (servicePlan.partnershipModels ?? []).forEach((pm, idx) => {
+    const row = partnershipArray?.at(idx) as FormGroup | undefined;
+    if (!row) return;
+    row.get('rowId')?.setValue(pm.id ?? null, { emitEvent: false });
+    setNestedValue(row, EMaterialsFormControls.agreementType, pm.agreementType != null ? String(pm.agreementType) : null);
+    setNestedValue(row, EMaterialsFormControls.agreementSigningDate, pm.agreementSigningDate ?? null);
+    setNestedValue(row, EMaterialsFormControls.agreementOtherDetails, pm.otherAgreementType ?? '');
+    setNestedValue(row, EMaterialsFormControls.supervisionOversightEntity, pm.supervisionEntity ?? '');
+    setNestedValue(row, EMaterialsFormControls.whyChoseThisCompany, pm.selectionJustification ?? '');
+    setNestedValue(row, EMaterialsFormControls.summaryOfKeyAgreementClauses, pm.keyAgreementClauses ?? '');
+    setNestedValue(row, EMaterialsFormControls.provideAgreementCopy, toYesNoId(!!pm.agreementCopyProvided));
+    formService.toggleAgreementOtherDetailsValidation(pm.agreementType != null ? String(pm.agreementType) : null, idx);
+    formService.toggleAgreementCopyValidation(toYesNoId(!!pm.agreementCopyProvided), idx);
+  });
+
+  const entity3: IServicePlanEntityHeadcount | undefined = findByPage(servicePlan.entityHeadcounts, 3);
+  const entityArray3 = formService.entityLevelFormGroup;
+  if (entity3 && entityArray3 && entityArray3.length > 0) {
+    const row = entityArray3.at(0) as FormGroup;
+    row.get('rowId')?.setValue(entity3.id ?? null, { emitEvent: false });
+    setYearValues(row, entity3);
+  }
+
+  const serviceLevelArray3 = formService.serviceLevelFormGroup;
+  (serviceLevelArray3?.controls ?? []).forEach((ctrl) => {
+    const row = ctrl as FormGroup;
+    const serviceId = row.get(EMaterialsFormControls.serviceId)?.value;
+    if (!serviceId) return;
+
+    const svc = (servicePlan.services ?? []).find((s) => s.id === serviceId);
+    if (svc?.expectedLocalizationDate) {
+      setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, svc.expectedLocalizationDate);
+    }
+
+    const head: IServicePlanServiceHeadcount | undefined = findByServiceId(servicePlan.serviceHeadcounts, serviceId, 3);
+    if (!head) return;
+    row.get('rowId')?.setValue((head as any).id ?? null, { emitEvent: false });
+    setYearValues(row, head);
+    setNestedValue(row, EMaterialsFormControls.keyMeasuresToUpskillSaudis, head.measuresUpSkillSaudis ?? '');
+    setNestedValue(row, EMaterialsFormControls.mentionSupportRequiredFromSEC, head.mentionSupportRequiredSEC ?? '');
+  });
+
+  // Step 4: Direct Localization
+  const entity4: IServicePlanEntityHeadcount | undefined = findByPage(servicePlan.entityHeadcounts, 4);
+  const entityArray4 = formService.directLocalizationEntityLevelFormGroup;
+  if (entity4 && entityArray4 && entityArray4.length > 0) {
+    const row = entityArray4.at(0) as FormGroup;
+    row.get('rowId')?.setValue(entity4.id ?? null, { emitEvent: false });
+    setYearValues(row, entity4);
+  }
+
+  const serviceLevelArray4 = formService.directLocalizationServiceLevelFormGroup;
+  (serviceLevelArray4?.controls ?? []).forEach((ctrl) => {
+    const row = ctrl as FormGroup;
+    const serviceId = row.get(EMaterialsFormControls.serviceId)?.value;
+    if (!serviceId) return;
+
+    const strategy: IServicePlanLocalizationStrategy | undefined = findByServiceId(servicePlan.localizationStrategies, serviceId);
+    const head: IServicePlanServiceHeadcount | undefined = findByServiceId(servicePlan.serviceHeadcounts, serviceId, 4);
+
+    if (strategy) {
+      row.get('rowId')?.setValue(strategy.id ?? null, { emitEvent: false });
+      setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, strategy.expectedLocalizationDate ?? '');
+      setNestedValue(row, EMaterialsFormControls.localizationApproach, strategy.localizationApproach != null ? String(strategy.localizationApproach) : null);
+      setNestedValue(row, EMaterialsFormControls.localizationApproachOtherDetails, strategy.otherLocalizationApproach ?? '');
+      setNestedValue(row, EMaterialsFormControls.location, strategy.locationType != null ? String(strategy.locationType) : null);
+      setNestedValue(row, EMaterialsFormControls.locationOtherDetails, strategy.otherLocationType ?? '');
+      setNestedValue(row, EMaterialsFormControls.capexRequired, strategy.capexRequired ?? null);
+      setNestedValue(row, EMaterialsFormControls.supervisionOversightEntity, strategy.governmentSupervision ?? '');
+      setNestedValue(row, EMaterialsFormControls.willBeAnyProprietaryToolsSystems, toYesNoId(!!strategy.hasProprietaryTools));
+      setNestedValue(row, EMaterialsFormControls.proprietaryToolsSystemsDetails, strategy.proprietaryToolsDetails ?? '');
+    }
+
+    if (head) {
+      setYearValues(row, head);
+      setNestedValue(row, EMaterialsFormControls.keyMeasuresToUpskillSaudis, head.measuresUpSkillSaudis ?? '');
+      setNestedValue(row, EMaterialsFormControls.mentionSupportRequiredFromSEC, head.mentionSupportRequiredSEC ?? '');
+    }
+  });
+
+  // Attachments (shared control in step4)
+  const attachmentsGroup = formService.attachmentsFormGroup;
+  const attControl = attachmentsGroup?.get(EMaterialsFormControls.attachments);
+  if (attachmentsGroup && attControl instanceof FormGroup) {
+    const valueControl = attControl.get(EMaterialsFormControls.value);
+    const attachments = servicePlan.attachments ?? [];
+    const files = attachments.map(toExistingFile);
+    valueControl?.setValue(files, { emitEvent: false });
+  }
+}
+
 /**
  * Map Services and Company Information
  */
@@ -245,7 +590,7 @@ function mapServicesAndCompanyInfo(formService: ServicePlanFormService): {
         serviceType: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceType)),
         serviceCategory: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceCategory)),
         serviceProvidedTo: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceProvidedTo)),
-        targetedForLocalization: getControlValue(detailGroup, EMaterialsFormControls.serviceTargetedForLocalization) || false,
+        targetedForLocalization: toBooleanYesNo(getControlValue(detailGroup, EMaterialsFormControls.serviceTargetedForLocalization)),
         serviceLocalizationMethodology: toNumberArray(methodology),
         expectedLocalizationDate: getControlValue(detailGroup, EMaterialsFormControls.expectedLocalizationDate) || undefined,
         otherProvidedTo: getControlValue(detailGroup, EMaterialsFormControls.serviceProvidedToCompanyNames) || undefined,
@@ -312,7 +657,7 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
         agreementType: toNumberOrEmpty(getControlValue(partnerGroup, EMaterialsFormControls.agreementType)),
         otherAgreementType: getControlValue(partnerGroup, EMaterialsFormControls.agreementOtherDetails) || undefined,
         agreementSigningDate: getControlValue(partnerGroup, EMaterialsFormControls.agreementSigningDate) || '',
-        agreementCopyProvided: getControlValue(partnerGroup, EMaterialsFormControls.provideAgreementCopy) || false,
+        agreementCopyProvided: toBooleanYesNo(getControlValue(partnerGroup, EMaterialsFormControls.provideAgreementCopy)),
         keyAgreementClauses: getControlValue(partnerGroup, EMaterialsFormControls.summaryOfKeyAgreementClauses) || '',
         selectionJustification: getControlValue(partnerGroup, EMaterialsFormControls.whyChoseThisCompany) || '',
         supervisionEntity: getControlValue(partnerGroup, EMaterialsFormControls.supervisionOversightEntity) || '',
@@ -412,14 +757,20 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
       const strategyGroup = localizationArray.at(i) as FormGroup;
       const serviceId = strategyGroup.get(EMaterialsFormControls.serviceId)?.value || '';
 
+      const hasProprietaryTools = toBooleanYesNo(
+        getControlValue(strategyGroup, EMaterialsFormControls.willBeAnyProprietaryToolsSystems)
+      );
+
       result.localizationStrategies.push({
         planServiceTypeId: serviceId,
         localizationApproach: toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.localizationApproach)),
         locationType: toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.location)),
         expectedLocalizationDate: getControlValue(strategyGroup, EMaterialsFormControls.expectedLocalizationDate) || '',
         capexRequired: toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.capexRequired)),
-        hasProprietaryTools: getControlValue(strategyGroup, EMaterialsFormControls.willBeAnyProprietaryToolsSystems) || false,
-        proprietaryToolsDetails: getControlValue(strategyGroup, EMaterialsFormControls.proprietaryToolsSystemsDetails) || undefined,
+        hasProprietaryTools,
+        proprietaryToolsDetails: hasProprietaryTools
+          ? (getControlValue(strategyGroup, EMaterialsFormControls.proprietaryToolsSystemsDetails) || undefined)
+          : undefined,
         governmentSupervision: getControlValue(strategyGroup, EMaterialsFormControls.supervisionOversightEntity) || undefined,
         otherLocalizationApproach: getControlValue(strategyGroup, EMaterialsFormControls.localizationApproachOtherDetails) || undefined,
         otherLocationType: getControlValue(strategyGroup, EMaterialsFormControls.locationOtherDetails) || undefined,
@@ -512,22 +863,30 @@ function createPlaceholderSignature(): Signature {
 export function mapServiceLocalizationPlanFormToRequest(
   formService: ServicePlanFormService,
   planId: string = '',
-  signature?: Signature
+  signature?: Signature,
+  options?: {
+    includeExistingSaudi?: boolean;
+    includeDirectLocalization?: boolean;
+  }
 ): IServiceLocalizationPlanRequest {
+  const includeExistingSaudi = options?.includeExistingSaudi ?? true;
+  const includeDirectLocalization = options?.includeDirectLocalization ?? true;
+
   const basicInfoGroup = formService.basicInformationFormGroup;
+  const coverCompanyInfoGroup = formService.coverPageCompanyInformationFormGroup;
 
   // Get opportunity ID and plan title
   const opportunityId = basicInfoGroup?.get(EMaterialsFormControls.opportunity)?.value || '';
-  const planTitle = basicInfoGroup?.get(EMaterialsFormControls.planTitle)?.value || '';
+  const planTitle = getControlValue(coverCompanyInfoGroup, EMaterialsFormControls.planTitle) || '';
 
   // Map services and company info
   const { services, companyInformationSection, localAgentDetailSection } = mapServicesAndCompanyInfo(formService);
 
   // Map existing saudi data
-  const existingSaudiData = mapExistingSaudiData(formService);
+  const existingSaudiData = includeExistingSaudi ? mapExistingSaudiData(formService) : undefined;
 
   // Map direct localization data
-  const directLocalizationData = mapDirectLocalizationData(formService);
+  const directLocalizationData = includeDirectLocalization ? mapDirectLocalizationData(formService) : undefined;
 
   // Combine entity headcounts and service headcounts from available steps only
   const allEntityHeadcounts = [
@@ -552,12 +911,12 @@ export function mapServiceLocalizationPlanFormToRequest(
     services,
     companyInformationSection,
     localAgentDetailSection,
-    saudiCompanyDetails: existingSaudiData?.saudiCompanyDetails,
-    partnershipModels: existingSaudiData?.partnershipModels,
+    saudiCompanyDetails: includeExistingSaudi ? existingSaudiData?.saudiCompanyDetails : undefined,
+    partnershipModels: includeExistingSaudi ? existingSaudiData?.partnershipModels : undefined,
     entityHeadcounts: allEntityHeadcounts.length > 0 ? allEntityHeadcounts : undefined,
     serviceHeadcounts: allServiceHeadcounts.length > 0 ? allServiceHeadcounts : undefined,
     attachments: allAttachments.length > 0 ? allAttachments : undefined,
-    localizationStrategies: directLocalizationData?.localizationStrategies,
+    localizationStrategies: includeDirectLocalization ? directLocalizationData?.localizationStrategies : undefined,
   };
 
   const signatureData = signature || createPlaceholderSignature();
@@ -568,10 +927,25 @@ export function mapServiceLocalizationPlanFormToRequest(
   };
 }
 
+function stripEmptyFormDataFields(formData: FormData): void {
+  const keysToDelete = new Set<string>();
+  for (const [key, value] of formData.entries()) {
+    if (typeof value === 'string' && value.trim() === '') {
+      keysToDelete.add(key);
+    }
+  }
+  keysToDelete.forEach((key) => formData.delete(key));
+}
+
 /**
  * Convert IServiceLocalizationPlanRequest to FormData
  */
-export function convertServiceRequestToFormData(request: IServiceLocalizationPlanRequest): FormData {
+export function convertServiceRequestToFormData(
+  request: IServiceLocalizationPlanRequest,
+  options?: {
+    stripEmpty?: boolean;
+  }
+): FormData {
   const formData = new FormData();
   const { servicePlan, signature } = request;
 
@@ -724,7 +1098,7 @@ export function convertServiceRequestToFormData(request: IServiceLocalizationPla
       if (strategy.id) formData.append(`ServicePlan.LocalizationStrategies[${index}].Id`, strategy.id);
       formData.append(`ServicePlan.LocalizationStrategies[${index}].PlanServiceTypeId`, strategy.planServiceTypeId);
       formData.append(`ServicePlan.LocalizationStrategies[${index}].LocalizationApproach`, strategy.localizationApproach.toString());
-      formData.append(`ServicePlan.LocalizationStrategies[${index}].LocalizationType`, strategy.locationType.toString());
+      formData.append(`ServicePlan.LocalizationStrategies[${index}].LocationType`, strategy.locationType.toString());
       formData.append(`ServicePlan.LocalizationStrategies[${index}].ExpectedLocalizationDate`, strategy.expectedLocalizationDate);
       formData.append(`ServicePlan.LocalizationStrategies[${index}].CapexRequired`, strategy.capexRequired.toString());
       formData.append(`ServicePlan.LocalizationStrategies[${index}].HasProprietaryTools`, strategy.hasProprietaryTools.toString());
@@ -741,6 +1115,10 @@ export function convertServiceRequestToFormData(request: IServiceLocalizationPla
         formData.append(`ServicePlan.LocalizationStrategies[${index}].OtherLocationType`, strategy.otherLocationType);
       }
     });
+  }
+
+  if (options?.stripEmpty) {
+    stripEmptyFormDataFields(formData);
   }
 
   return formData;

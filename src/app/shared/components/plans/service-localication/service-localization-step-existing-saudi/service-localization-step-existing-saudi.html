@@ -4,7 +4,7 @@
     <h2 class="text-lg font-semibold text-gray-900">Saudi Company Details</h2>
     <app-form-array-input
       [ft]="getSaudiCompanyDetailsFormArray()"
-      [hideAddButton]="false"
+      [hideAddButton]="isViewMode()"
       [hideDeleteButton]="false"
       [addButtonMessage]="'Add Saudi Company'"
       [createNewItem]="createSaudiCompanyDetailItem"
@@ -231,7 +231,7 @@
     <h2 class="text-lg font-semibold text-gray-900">Collaboration / Partnership with Saudi Company</h2>
     <app-form-array-input
       [ft]="getCollaborationPartnershipFormArray()"
-      [hideAddButton]="false"
+      [hideAddButton]="isViewMode()"
       [hideDeleteButton]="false"
       [addButtonMessage]="'Add Collaboration/Partnership'"
       [createNewItem]="createCollaborationPartnershipItem"

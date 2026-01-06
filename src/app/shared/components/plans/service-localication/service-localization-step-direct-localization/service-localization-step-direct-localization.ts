@@ -30,6 +30,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationStepDirectLocalization {
+  isViewMode = input<boolean>(false);
+
   serviceForm = inject(ServicePlanFormService);
   planStore = inject(PlanStore);
 

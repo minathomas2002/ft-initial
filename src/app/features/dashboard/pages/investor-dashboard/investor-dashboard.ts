@@ -122,7 +122,7 @@ export class InvestorDashboard implements OnInit {
   constructor() {
     effect(() => {
       if (
-        !this.productLocalizationPlanWizardVisibility() ||
+        !this.productLocalizationPlanWizardVisibility() &&
         !this.serviceLocalizationPlanWizardVisibility()
       ) {
         this.resetPlanWizard();

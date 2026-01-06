@@ -1,6 +1,7 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
+import { EYesNo } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 
 export class ServiceLocalizationStepOverviewFormBuilder {
@@ -261,7 +262,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
    * Toggle validation for Expected Localization Date field based on serviceTargetedForLocalization value
    * Required if "Yes" is selected
    */
-  toggleExpectedLocalizationDateValidation(formGroup: FormGroup, serviceTargetedForLocalization: string | boolean | null, index: number): void {
+  toggleExpectedLocalizationDateValidation(formGroup: FormGroup, serviceTargetedForLocalization: string | boolean | number | null, index: number): void {
     const serviceDetailsArray = this.getServiceDetailsFormArray(formGroup);
     if (!serviceDetailsArray || index >= serviceDetailsArray.length) return;
 
@@ -270,7 +271,8 @@ export class ServiceLocalizationStepOverviewFormBuilder {
 
     if (!expectedDateControl) return;
 
-    const isYes = serviceTargetedForLocalization === 'Yes' || serviceTargetedForLocalization === true || serviceTargetedForLocalization === 'true';
+    const normalized = serviceTargetedForLocalization == null ? '' : String(serviceTargetedForLocalization);
+    const isYes = normalized === 'Yes' || normalized === 'true' || normalized === EYesNo.Yes.toString();
     if (isYes) {
       expectedDateControl.setValidators([Validators.required, Validators.maxLength(50)]);
     } else {

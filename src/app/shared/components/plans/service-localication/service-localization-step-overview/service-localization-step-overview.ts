@@ -4,6 +4,7 @@ import {
   computed,
   effect,
   inject,
+  input,
   signal,
 } from '@angular/core';
 import { FormArray, ReactiveFormsModule, FormControl, AbstractControl } from '@angular/forms';
@@ -46,6 +47,8 @@ import { TextareaModule } from 'primeng/textarea';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationStepOverview {
+  isViewMode = input<boolean>(false);
+
   private readonly serviceForm = inject(ServicePlanFormService);
   private readonly planStore = inject(PlanStore);
 
@@ -129,23 +132,23 @@ export class ServiceLocalizationStepOverview {
     this.serviceForm.toggleServiceProvidedToCompanyNamesValidation(value, index);
   }
 
-  getHasCommentControl(control: any) {
+  getHasCommentControl(control: AbstractControl) {
     if (!control) return new FormControl<boolean>(false, { nonNullable: true });
-    const formGroup = control as any;
+    const formGroup = control as AbstractControl;
     return (
       (formGroup.get(EMaterialsFormControls.hasComment) as any) ??
       new FormControl<boolean>(false, { nonNullable: true })
     );
   }
 
-  getValueControl(control: any) {
-    if (!control) return new FormControl<any>('');
-    const formGroup = control as any;
+  getValueControl(control: AbstractControl | null) {
+    if (!control) return new FormControl('');
+    const formGroup = control;
     return (formGroup.get(EMaterialsFormControls.value) as any) ?? new FormControl<any>('');
   }
 
   getFormControl(control: AbstractControl): FormControl<any> {
-    return control as unknown as FormControl<any>;
+    return control as unknown as FormControl;
   }
 
   onAddComment(): void {

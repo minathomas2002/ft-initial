@@ -1,11 +1,11 @@
 import { computed, inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
 import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
-import { IProductPlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
+import { IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, IServicePlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
 
@@ -134,11 +134,11 @@ const initialState: {
     { id: EYesNo.No.toString(), name: 'No' },
   ],
   agreementTypeOptions: [
-    { id: '1', name: 'Joint Venture' },
-    { id: '2', name: 'Special Purpose Vehicle' },
-    { id: '3', name: 'Technology Transfer Agreement' },
-    { id: '4', name: 'Knowledge Transfer Agreement' },
-    { id: '5', name: 'Other' },
+    { id: AgreementType.JointVenture.toString(), name: 'Joint Venture' },
+    { id: AgreementType.SpecialPurposeVehicle.toString(), name: 'Special Purpose Vehicle' },
+    { id: AgreementType.TechnologyTransferAgreement.toString(), name: 'Technology Transfer Agreement' },
+    { id: AgreementType.KnowledgeTransferAgreement.toString(), name: 'Knowledge Transfer Agreement' },
+    { id: AgreementType.Other.toString(), name: 'Other' },
   ],
   activeEmployees: null,
   currentEmployee: null,
@@ -365,6 +365,25 @@ export const PlanStore = signalStore(
         );
       },
 
+      /* save As Draft Product Localization Plan*/
+      saveAsDraftServiceLocalizationPlan(request: FormData) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.saveAsDraftServiceLocalizationPlan(request).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error saving product localization plan',
+            });
+            return throwError(() => new Error('Error saving product localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
       /* Get Product Plan*/
       getProductPlan(planId: string): Observable<IBaseApiResponse<IProductPlanResponse>> {
         patchState(store, { isLoading: true, error: null });
@@ -378,6 +397,21 @@ export const PlanStore = signalStore(
           })
         );
       },
+
+      /* Get Service Plan*/
+      getServicePlan(planId: string): Observable<IBaseApiResponse<IServiceLocalizationPlanResponse>> {
+        patchState(store, { isLoading: true, error: null });
+        return planApiService.getServicePlan({ planId }).pipe(
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error loading service plan' });
+            return throwError(() => new Error('Error loading service plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          })
+        );
+      },
+
       /* Get timeline list*/
       getTimelinePlan(planId: string): Observable<IBaseApiResponse<ITimeLineResponse[]>> {
         patchState(store, { isLoading: true, error: null });
