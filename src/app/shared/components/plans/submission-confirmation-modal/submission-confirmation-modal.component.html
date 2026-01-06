@@ -129,7 +129,7 @@
     </div>
   </div>
 
-  <ng-template #footerButtons>
+  <ng-container ngProjectAs="footerButtons">
     <p-button
       [label]="'plans.submission.back' | translate"
       severity="secondary"
@@ -145,5 +145,5 @@
       [loading]="isSubmitting()"
       class="flex-initial"
     />
-  </ng-template>
+  </ng-container>
 </app-base-dialog>

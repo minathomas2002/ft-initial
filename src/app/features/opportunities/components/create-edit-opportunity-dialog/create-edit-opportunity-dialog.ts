@@ -173,5 +173,6 @@ export class CreateEditOpportunityDialog implements OnInit {
   onClose() {
     this.opportunityFormService.resetForm();
     this.activeStep.set(1);
+    this.visible.set(false);
   }
 }

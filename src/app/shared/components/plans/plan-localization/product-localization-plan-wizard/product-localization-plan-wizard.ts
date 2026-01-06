@@ -549,17 +549,28 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   }
 
   onClose(): void {
-    if (this.planStore.wizardMode() === 'create' || this.planStore.wizardMode() === 'edit') {
+    const mode = this.planStore.wizardMode();
+
+    // In view mode, close immediately without confirmation
+    if (mode === 'view') {
+      this.visibility.set(false);
+      this.activeStep.set(1);
+      this.planStore.resetWizardState();
+      return;
+    }
+
+    // In create/edit mode, show confirmation dialog if not submitted
+    if (mode === 'create' || mode === 'edit') {
       if (!this.isSubmitted()) {
-        // Keep the wizard open and show confirmation dialog
-        this.visibility.set(true);
         this.showConfirmLeaveDialog.set(true);
         return;
       }
+
+      // Already submitted, close without confirmation
+      this.visibility.set(false);
       this.activeStep.set(1);
       this.doRefresh.emit();
       this.isSubmitted.set(false);
-      // Reset wizard state in store
       this.planStore.resetWizardState();
     }
   }

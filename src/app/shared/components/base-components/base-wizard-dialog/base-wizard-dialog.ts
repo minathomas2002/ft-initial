@@ -46,6 +46,15 @@ export class BaseWizardDialog {
   wizardTitle = input<string>('Create Opportunity');
   hideSaveAsDraft = input<boolean>(false);
 
+  /**
+   * Handles the close button click.
+   * Emits onClose event to let parent components handle the close logic.
+   * Parent can show confirmation dialog and decide whether to actually close.
+   */
+  handleCloseClick(): void {
+    this.onClose.emit();
+  }
+
   // Computed to get current language for icon direction
   currentLanguage = computed(() => this.i18nService.currentLanguage());
   nextButtonIcon = computed(() => this.currentLanguage() === 'ar' ? 'icon-arrow-left' : 'icon-arrow-right');

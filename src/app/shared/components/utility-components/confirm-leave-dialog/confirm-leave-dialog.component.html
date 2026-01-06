@@ -1,10 +1,10 @@
 <app-base-dialog
   [(visible)]="visible"
-  icon="icon-alert-triangle"
   [showCloseButton]="false"
   [showConfirmButton]="false"
   dialogTitle="Confirm Leave"
   (onClose)="handleClose()"
+  [icon]="''"
   contentStyleClass="p-6"
 >
   <div class="max-w-[500px]">
@@ -16,7 +16,7 @@
     </p>
   </div>
 
-  <ng-template #footerButtons>
+  <ng-container ngProjectAs="footerButtons">
     <p-button
       label="Continue Editing"
       severity="secondary"
@@ -29,5 +29,5 @@
       (onClick)="handleLeave()"
       class="flex-initial"
     />
-  </ng-template>
+  </ng-container>
 </app-base-dialog>

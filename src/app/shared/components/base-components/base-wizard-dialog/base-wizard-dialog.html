@@ -2,14 +2,14 @@
   [(visible)]="visible"
   [modal]="true"
   [resizable]="false"
-  (onHide)="onClose.emit()"
   (onShow)="onShow.emit()"
   [styleClass]="'w-full !max-h-full h-full !p-0'"
   [pt]="pt"
+  [closable]="false"
 >
   <span
-    class="icon-x-close text-gray-400 cursor-pointer absolute top-[32px] right-[32px]"
-    (click)="visible.set(false)"
+    class="icon-x-close text-gray-400 cursor-pointer absolute top-[32px] right-[32px] z-10"
+    (click)="handleCloseClick()"
   ></span>
   <div class="flex !max-h-full h-full">
     <div class="steps-container bg-gray-50 ps-5 py-6 border-e-1 border-gray-200 max-w-[300px]">

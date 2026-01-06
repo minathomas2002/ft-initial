@@ -82,6 +82,7 @@ export interface SaudiCompanyDetail {
   companyType: number[];
   qualificationStatus: NumberOrEmpty;
   companyOverview: string;
+  companyOverviewOther: string;
   keyProjectsForSEC: string;
   products?: string;
 }
@@ -642,6 +643,7 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
         companyType: toNumberArray(getControlValue(companyGroup, EMaterialsFormControls.companyType)),
         qualificationStatus: toNumberOrEmpty(getControlValue(companyGroup, EMaterialsFormControls.qualificationStatus)),
         companyOverview: getControlValue(companyGroup, EMaterialsFormControls.companyOverview) || '',
+        companyOverviewOther: getControlValue(companyGroup, EMaterialsFormControls.companyOverviewOther) || '',
         keyProjectsForSEC: getControlValue(companyGroup, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC) || '',
         products: getControlValue(companyGroup, EMaterialsFormControls.products) || undefined,
       });
@@ -1023,6 +1025,7 @@ export function convertServiceRequestToFormData(
       });
       formData.append(`ServicePlan.SaudiCompanyDetails[${index}].QualificationStatus`, company.qualificationStatus.toString());
       formData.append(`ServicePlan.SaudiCompanyDetails[${index}].CompanyOverview`, company.companyOverview);
+      formData.append(`ServicePlan.SaudiCompanyDetails[${index}].CompanyOverviewOther`, company.companyOverviewOther);
       formData.append(`ServicePlan.SaudiCompanyDetails[${index}].KeyProjectsForSEC`, company.keyProjectsForSEC);
       if (company.products) {
         formData.append(`ServicePlan.SaudiCompanyDetails[${index}].Products`, company.products);

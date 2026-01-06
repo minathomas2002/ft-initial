@@ -391,10 +391,30 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   }
 
   onClose(): void {
-    this.activeStep.set(1);
-    this.doRefresh.emit();
-    this.isSubmitted.set(false);
-    this.planStore.resetWizardState();
+    const mode = this.planStore.wizardMode();
+
+    // In view mode, close immediately without confirmation
+    if (mode === 'view') {
+      this.visibility.set(false);
+      this.activeStep.set(1);
+      this.planStore.resetWizardState();
+      return;
+    }
+
+    // In create/edit mode, show confirmation dialog if not submitted
+    if (mode === 'create' || mode === 'edit') {
+      if (!this.isSubmitted()) {
+        this.showConfirmLeaveDialog.set(true);
+        return;
+      }
+
+      // Already submitted, close without confirmation
+      this.visibility.set(false);
+      this.activeStep.set(1);
+      this.doRefresh.emit();
+      this.isSubmitted.set(false);
+      this.planStore.resetWizardState();
+    }
   }
 
   onSummarySubmitClick(): void {
@@ -505,7 +525,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     this.activeStep.set(1);
     this.doRefresh.emit();
     this.isSubmitted.set(false);
-    this.onClose();
+    this.planStore.resetWizardState();
   }
 
   onContinueEditing(): void {
