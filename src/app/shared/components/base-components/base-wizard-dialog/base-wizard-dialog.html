@@ -64,7 +64,7 @@
         }
       </div>
     </div>
-    <div class="flex flex-col overflow-hidden flex-1 p-8 gap-[32px]">
+    <div class="flex flex-col overflow-hidden flex-1 p-8 pb-4 gap-[32px]">
       <div class="header flex flex-col gap-2">
         <h3 class="text-2xl font-semibold">{{wizardTitle()}}</h3>
         <ng-content select="status"></ng-content>
@@ -83,7 +83,7 @@
         }
         }
       </div>
-      <div class="actions flex justify-between items-center py-[16px] px-[1.5rem] border-t border-gray-200">
+      <div class="actions flex justify-between items-center pt-[16px] border-t border-gray-200">
         <div class="flex-1">
           @if (!hideSaveAsDraft()) {
           <p-button
