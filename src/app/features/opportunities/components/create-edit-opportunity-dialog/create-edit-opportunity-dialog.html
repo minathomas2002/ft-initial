@@ -46,3 +46,17 @@
     ></p-button>
   </ng-container>
 </app-base-wizard-dialog>
+
+<!-- Confirm Leave Dialog -->
+<app-general-confirmation-dialog
+  [(visible)]="showConfirmLeaveDialog"
+  [isLoading]="adminOpportunitiesStore.isProcessing()"
+  (onCancel)="saveAsDraft()"
+  [cancelLabel]="'opportunity.wizard.saveAsDraft' | translate"
+  [icon]="'icon-alert-triangle'"
+  [confirmButtonSeverity]="'danger'"
+  [title]="'opportunity.confirmation.onLeaveTitle' | translate"
+  [description]="'opportunity.confirmation.onLeaveDesc' | translate"
+  (confirmed)="onConfirmLeave()"
+  [confirmationLabel]="'common.cancel' | translate"
+></app-general-confirmation-dialog>
