@@ -92,8 +92,8 @@
             [label]="'opportunity.wizard.saveAsDraft' | translate"
             severity="secondary"
             (click)="saveAsDraft()"
-            [disabled]="isProcessing()"
-            [loading]="isProcessing()"
+            [disabled]="isSavingAsDraft() || isProcessing()"
+            [loading]="isSavingAsDraft()"
           />
           }
           <ng-content select="more-actions"></ng-content>

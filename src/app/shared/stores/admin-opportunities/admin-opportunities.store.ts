@@ -9,6 +9,7 @@ import { EViewMode } from '../../enums';
 const initialState: {
   isLoading: boolean;
   isProcessing: boolean;
+  isSavingAsDraft: boolean;
   error: string | null;
   count: number;
   list: IAdminOpportunity[];
@@ -28,6 +29,7 @@ const initialState: {
 } = {
   isLoading: false,
   isProcessing: false,
+  isSavingAsDraft: false,
   error: null,
   count: 0,
   list: [],
@@ -104,10 +106,10 @@ export const AdminOpportunitiesStore = signalStore(
       },
 
       draftOpportunity(opportunity: FormData) {
-        patchState(store, { isProcessing: true });
+        patchState(store, { isSavingAsDraft: true });
         return opportunitiesApiService.draftOpportunity(opportunity).pipe(
           finalize(() => {
-            patchState(store, { isProcessing: false, error: null });
+            patchState(store, { isSavingAsDraft: false, error: null });
           })
         )
       },
