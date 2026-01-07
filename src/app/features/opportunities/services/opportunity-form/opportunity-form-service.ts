@@ -188,8 +188,8 @@ export class OpportunityFormService {
 
   formValue() {
     return {
-      opportunityInformationFrom: this.opportunityInformationForm.value,
-      opportunityLocalizationForm: this.opportunityLocalizationForm.value,
+      opportunityInformationFrom: this.opportunityInformationForm.getRawValue(),
+      opportunityLocalizationForm: this.opportunityLocalizationForm.getRawValue(),
     };
   }
 
