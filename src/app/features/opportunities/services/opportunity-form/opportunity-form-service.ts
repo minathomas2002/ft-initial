@@ -208,6 +208,10 @@ export class OpportunityFormService {
     this.originalDateRange = null;
     this.hasActivePlans = false;
 
+    // Ensure all fields are enabled when resetting (especially when switching from edit to create mode)
+    this.opportunityInformationForm.get('title')?.enable({ emitEvent: false });
+    this.opportunityInformationForm.get('opportunityType')?.enable({ emitEvent: false });
+
     this.opportunityForm.updateValueAndValidity();
     this.opportunityInformationForm.updateValueAndValidity();
     this.opportunityLocalizationForm.updateValueAndValidity();
@@ -392,12 +396,13 @@ export class OpportunityFormService {
     // }
 
 
-    // disable title if has active plans 
+    // disable title and opportunityType if has active plans 
     if (this.hasActivePlans) {
       this.opportunityInformationForm.get("title")?.disable({ emitEvent: false });
+      this.opportunityInformationForm.get("opportunityType")?.disable({ emitEvent: false });
     } else {
       this.opportunityInformationForm.get("title")?.enable({ emitEvent: false });
-
+      this.opportunityInformationForm.get("opportunityType")?.enable({ emitEvent: false });
     }
     this.opportunityInformationForm.patchValue({
       id: value.id,
