@@ -272,6 +272,8 @@
       "globalSuppliersInvalid": "Global suppliers value is invalid",
       "dateRangeRequired": "Date range is required",
       "dateRangeInvalid": "You should select a date range",
+      "startDateRestriction": "Start date can only be changed to an earlier date when plans are linked",
+      "endDateRestriction": "End date can only be changed to a later date when plans are linked",
       "imageRequired": "Image is required",
       "designEngineeringRequired": "Design & Engineering is required",
       "designEngineeringMinLength": "Design & Engineering item must be at least 3 characters",
@@ -325,6 +327,7 @@
       "departmentManager": "Department Manager",
       "investor": "Investor",
       "dvManager": "DV Manager",
+      "divisionManager": "Division Manager",
       "autoProcess":"Automated Process"
     },
     "status": {
@@ -495,15 +498,15 @@
         "countNotification": " notifications",
         "unAssignedAlert": "Unassigned Plan Alert",
         "unAssignedAlertDesc": "Notify when a plan is submitted but not yet assigned to any reviewer",
-        "dvManager": " DV Manager",
+        "dvManager": " Division Manager",
         "planAssignedReview": "Plan Assigned for Review",
         "planAssignedReviewDesc": "Notify when a plan is assigned to a user for review",
         "employee":"Employee",
         "departmentManager":"Department Manager",
         "planReassignment": "Plan Reassignment",
         "planReassignmentDesc":"Notify when a plan is reassigned from one user to another",
-        "employeeReassignee": "Employee (Ressigene)",
-        "employeePrev": "Employee (Previous one)",
+        "employeeReassignee": "Employee (Reassigned To)",
+        "employeePrev": "Employee (Previously Assigned)",
         "internalPlanSLAReminder": "Internal Plan SLA Reminder",
         "internalPlanSLAReminderDesc":"Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminder": "Investor Plan SLA Reminder",
@@ -536,7 +539,8 @@
         "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
         "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA.",
-        "notificationSuccessMessage":"Notification updated successfully"
+        "notificationSuccessMessage":"Notification updated successfully",
+        "commentNotification":"Comment Notification "
       },
       "holidays": {
         "goBack": "Back to settings",
@@ -609,7 +613,9 @@
     "title": "Dashboard",
     "subtitle": "Track and manage your submitted localization plans and their review status",
     "subTitleDvManager": "Track and manage submitted localization plans that require your action",
-    "submitNewPlan": "Submit New Plan"
+    "submitNewPlan": "Submit New Plan",
+    "assigndPlanTitle": "Assigned Pending Plan",
+    "underReviewPlanTitle": "Under Review Plans"
   },
   "dialog": {
     "cancel": "Cancel",
@@ -624,12 +630,19 @@
   },
   "plans": {
     "assign": "Assign",
+    "confirmation":{
+      "onLeaveTitle":"Are you sure you want to leave?",
+      "saveAsDraft":"Save as draft",
+      "cancelLabel":"Cancel",
+      "onLeaveDesc":"Canceling now will discard all unsaved changes. Save as draft to keep your work."
+    },
     "newPlan": {
       "title": "New Opportunity",
       "description": "Enter basic details to start your localization plan",
       "planTitle": "Plan Title",
       "planTitlePlaceholder": "Enter your plan title",
       "planTitleRequired": "Plan title is required",
+      "opportunity": "Opportunity",
       "opportunityType": "Opportunity Type",
       "services": "Services",
       "servicesDescription": "Localize operational or support services",
@@ -672,6 +685,8 @@
     },
     "filter": {
       "searchPlaceholder": "Search by Plan ID or Title",
+      "dvsearchPlaceholder": "Search by Plan ID or Title or Investor Name",
+
       "selectPlanType": "Select Plan Type",
       "selectStatus": "Select Status",
       "selectSubmissionDate": "Select Submission Date",
@@ -799,11 +814,16 @@
       "investorName": "Investor Name",
       "planTitle": "Plan Title",
       "planType": "Plan Type",
+      "opportunityType": "Opportunity Type",
       "submissionDate": "Submission Date",
       "slaCountdown": "SLA Countdown",
       "currentStatus": "Current Status",
       "actions": "Actions",
-      "daysRemaining": "days remaining"
+      "daysRemaining": "days remaining",
+      "day": "Day",
+      "days": "Days",
+      "dayOverdue": "Day Overdue",
+      "daysOverdue": "Days Overdue"
     },
     "statistics": {
       "totalPlans": "Total Plans",
@@ -832,7 +852,7 @@
       "created": "Submit new {{param}} Plan ",
       "assign": "Assigned plan to employee {{param}} ",
       "autoAssign": "Auto assignment plan to employee {{param}} ",
-      "reassigned": "Reassign plan to employee {{param}}",
+      "reassigned": "Reassigned plan to employee {{param}}",
       "submitComment": "Submit comment on the plan and send back to investor ",
       "rejected" : "Rejected",
       "approved": "Approved"

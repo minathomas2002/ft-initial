@@ -78,7 +78,7 @@ const SELECT_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
   },
 };
@@ -118,7 +118,7 @@ const MULTISELECT_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
   },
 };
@@ -152,7 +152,7 @@ const TEXTAREA_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
   },
 };
@@ -186,7 +186,7 @@ const INPUTTEXT_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
   },
 };
@@ -244,7 +244,7 @@ const AUTOCOMPLETE_COMPONENT = {
     },
     shadow: "0px 1px 2px 0px #0A0D120D",
     disabled: {
-      background: "{gray.100}",
+      background: "{gray.50}",
     },
     option: {
       padding: "0.625rem 1rem",
@@ -555,17 +555,18 @@ const MY_PRESET = definePreset(Lara, {
       950: "#4B0505",
     },
     green: {
-      50: "#EDFCF2",
-      100: "#D3F8DF",
-      200: "#AAF0C4",
-      300: "#73E2A3",
-      400: "#3CCB7F",
-      500: "#16B364",
-      600: "#099250",
-      700: "#087443",
-      800: "#095C37",
-      900: "#084C2E",
-      950: "#052E1C",
+      25: "#F6FEF9",
+      50: "#F2F8F6",
+      100: "#B9D9CB",
+      200: "#8CC0AA",
+      300: "#60A789",
+      400: "#338F68",
+      500: "#067647",
+      600: "#05683E",
+      700: "#055A36",
+      800: "#044C2D",
+      900: "#033D25",
+      950: "#022F1C",
     },
     blue: {
       25: "F8FCFE",

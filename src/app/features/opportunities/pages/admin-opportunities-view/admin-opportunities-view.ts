@@ -126,6 +126,9 @@ export class AdminOpportunitiesView implements OnInit, OnDestroy {
             this.selectedOpportunity.set(null);
             this.moveToDraftConfirmDialogVisible.set(false);
             this.applyFilter();
+          },
+          error: () => {
+            this.moveToDraftConfirmDialogVisible.set(false);
           }
         });
     }

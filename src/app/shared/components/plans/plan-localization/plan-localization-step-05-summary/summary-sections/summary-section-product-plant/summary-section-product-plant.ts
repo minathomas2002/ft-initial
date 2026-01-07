@@ -38,6 +38,13 @@ export class SummarySectionProductPlant {
     return this.formGroup().get(EMaterialsFormControls.productManufacturingExperienceFormGroup) as FormGroup;
   });
 
+  showSECApprovedLocalSuppliersSection = computed(() => {
+    if (!this.targetedCustomer()) {
+      return false;
+    }
+    return this.targetedCustomer().split(',')
+      .some((customer: string) => customer.trim() === this.targetedCustomerOptions().find((option: any) => option.id === ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString())?.name);
+  });
 
   // Helper method to get value from nested form group
   getValue(formGroup: FormGroup | null, controlName: string): any {

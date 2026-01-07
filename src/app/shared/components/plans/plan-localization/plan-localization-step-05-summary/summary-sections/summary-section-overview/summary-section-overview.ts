@@ -1,15 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, inject, effect } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { EMaterialsFormControls, EOpportunityStatus, EOpportunityType } from 'src/app/shared/enums';
-import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
-import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
-import { DatePipe } from '@angular/common';
 import { SummaryField } from 'src/app/shared/components/plans/summary-field/summary-field';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
+import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-summary-section-overview',
-  imports: [SummarySectionHeader, SummaryField],
+  imports: [SummarySectionHeader, SummaryField, TranslatePipe],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

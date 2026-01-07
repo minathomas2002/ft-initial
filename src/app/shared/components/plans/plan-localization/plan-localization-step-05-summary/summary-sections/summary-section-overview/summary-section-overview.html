@@ -8,18 +8,18 @@
     />
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <app-summary-field
-        [label]="'Plan Title'"
+        [label]="'plans.newPlan.planTitle' | translate"
         [value]="planTitle()"
         [hasError]="hasFieldError('basicInformationFormGroup.planTitle')"
         [isEmpty]="!planTitle()"
       />
       <app-summary-field
-        [label]="'Opportunity Type'"
+        [label]="'plans.newPlan.opportunityType' | translate"
         [value]="opportunityType()"
         [isEmpty]="!opportunityType()"
       />
       <app-summary-field
-        [label]="'Opportunity'"
+        [label]="'plans.newPlan.opportunity' | translate"
         [value]="opportunity()"
         [hasError]="hasFieldError('basicInformationFormGroup.opportunity')"
         [isEmpty]="!opportunity()"

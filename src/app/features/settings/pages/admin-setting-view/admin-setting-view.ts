@@ -28,7 +28,7 @@ export class AdminSettingView {
     this.viewSlaDialog.set(true);
   }
 
-  onAutoAssigenClick() {
+  onAutoAssignClick() {
     this.viewAutoAssignDialog.set(true);
   }
 

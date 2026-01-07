@@ -32,8 +32,8 @@ import { DashboardPlansFilterService } from '../../services/dashboard-plans-filt
 import { InvestorDashboardPlansFilter } from '../../components/investor-dashboard-plans-filter/investor-dashboard-plans-filter';
 import { InvestorDashboardPlanActionMenu } from '../../components/investor-dashboard-plan-action-menu/investor-dashboard-plan-action-menu';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
-import { TranslatePipe } from 'src/app/shared/pipes';
-import { TimelineDialog } from 'src/app/shared/components/timeline/timeline-dialog/timeline-dialog';
+import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
+import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 
@@ -55,8 +55,9 @@ import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/s
     SkeletonModule,
     TranslatePipe,
     TimelineDialog,
-    ServiceLocalizationPlanWizard,
-  ],
+    SlaCountdownNounPipe,
+    ServiceLocalizationPlanWizard
+],
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
   providers: [DashboardPlansFilterService],
@@ -81,32 +82,12 @@ export class InvestorDashboard implements OnInit {
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
     this.i18nService.currentLanguage();
     return [
-      {
-        label: this.i18nService.translate('plans.table.planId'),
-        isSortable: true,
-        sortingKey: 'planCode',
-      },
-      {
-        label: this.i18nService.translate('plans.table.planTitle'),
-        isSortable: false,
-        sortingKey: 'title',
-      },
+      { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
+      { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
       { label: 'Opportunity Type', isSortable: false, sortingKey: 'planType' },
-      {
-        label: this.i18nService.translate('plans.table.submissionDate'),
-        isSortable: true,
-        sortingKey: 'submissionDate',
-      },
-      {
-        label: this.i18nService.translate('plans.table.slaCountdown'),
-        isSortable: true,
-        sortingKey: 'slaCountDown',
-      },
-      {
-        label: this.i18nService.translate('plans.table.currentStatus'),
-        isSortable: false,
-        sortingKey: 'status',
-      },
+      { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
+      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
+      { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
       { label: this.i18nService.translate('plans.table.actions'), isSortable: false },
     ];
   });

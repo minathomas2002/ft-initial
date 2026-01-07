@@ -22,7 +22,10 @@ export enum ENotificationChannel
 
      // Specific user targets for impersonation
      UserBeingImpersonated,
-     UserPerformingImpersonation
+     UserPerformingImpersonation,
+     // Specific user targets for reassignments
+    EmployeeReassignee,
+    EmployeePreviousOne
  }
 
  export enum ENotificationType
@@ -35,6 +38,8 @@ export enum ENotificationChannel
      InvestorPlanSLAReminder = 5,
      OverdueInternalPlan = 6,
      FinalApprovalRejection = 7,
+     ReminderOnPlanAssignedforReview=8,
+     CommentNotification=9,
 
      // Opportunity
      InactiveOpportunityAlert = 20,

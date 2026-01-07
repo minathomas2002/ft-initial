@@ -102,6 +102,10 @@ export class AdminHolidaysManagementView implements OnInit {
     this.applyFilter()
   }
 
+  getNumberOfDaysNoun(numberInDays: number): string {
+    return numberInDays > 1 ? 'Days' : 'Day';
+  }
+
   onSuccessActions() {
     // Reload holidays list after successful create/update/delete
     this.applyFilter();
@@ -111,7 +115,6 @@ export class AdminHolidaysManagementView implements OnInit {
     this.holidaysFilterService.applyFilterWithPaging();
   }
   onUpdate(item: IHolidaysManagementRecord) {
-    console.log("edit clicked");
     this.viewUpdateDialog.set(true);
     this.isEditMode.set(true);
     this.selectedItem.set(item);

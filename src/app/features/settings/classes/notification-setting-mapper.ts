@@ -26,6 +26,9 @@ export class notificationSettingMapper {
     [ENotificationRecipient.Admins]: 'setting.adminView.notification.admins',
     [ENotificationRecipient.UserBeingImpersonated]: 'setting.adminView.notification.userBeingImpersonated',
     [ENotificationRecipient.UserPerformingImpersonation]: 'setting.adminView.notification.userperformingImpersonation',
+    [ENotificationRecipient.EmployeePreviousOne]: 'setting.adminView.notification.employeePrev',
+    [ENotificationRecipient.EmployeeReassignee]: 'setting.adminView.notification.employeeReassignee',
+
 
   };
   getRecipientName(recipitiont: string | number): string {
@@ -42,11 +45,15 @@ export class notificationSettingMapper {
     [ENotificationType.InvestorPlanSLAReminder]: 'setting.adminView.notification.investorPlanSLAReminder',
     [ENotificationType.OverdueInternalPlan]: 'setting.adminView.notification.overdueInternalPlan',
     [ENotificationType.FinalApprovalRejection]: 'setting.adminView.notification.finalApprovalRejectionNotification',
+    [ENotificationType.ReminderOnPlanAssignedforReview]: 'setting.adminView.notification.reminderOnPlanAssignedforReview',
+    [ENotificationType.CommentNotification]: 'setting.adminView.notification.commentNotification',
     [ENotificationType.InactiveOpportunityAlert]: 'setting.adminView.notification.inactiveOpportunityAlert',
     [ENotificationType.DraftOpportunityReminder]: 'setting.adminView.notification.draftOpportunityReminder',
     [ENotificationType.OpportunityUpdateNotification]: 'setting.adminView.notification.opportunityUpdateNotification',
     [ENotificationType.NewOpportunityCreatedNotification]: 'setting.adminView.notification.newOpportunityCreatedNotification',
     [ENotificationType.ImpersonationAccessAlert]: 'setting.adminView.notification.impersonationAccessAlert',
+        
+
 
   };
   getTypeName(typeId: string | number): string {

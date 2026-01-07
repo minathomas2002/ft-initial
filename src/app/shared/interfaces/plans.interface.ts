@@ -28,6 +28,8 @@ export interface BasicInfo {
   opportunityType: number
   opportunityTitle: string
   opportunityId: string
+  createdDate: string
+  planCode: number
 }
 
 export interface CompanyInfo {

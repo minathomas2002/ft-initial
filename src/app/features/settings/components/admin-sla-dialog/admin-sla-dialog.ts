@@ -11,10 +11,12 @@ import { filter, take, tap } from 'rxjs';
 import { ISettingSla, ISettingSlaReq } from 'src/app/shared/interfaces/ISetting';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-admin-sla-dialog',
-  imports: [BaseDialogComponent, TranslatePipe, BaseLabelComponent, BaseErrorComponent, ReactiveFormsModule, InputTextModule],
+  imports: [BaseDialogComponent, TranslatePipe, BaseLabelComponent, BaseErrorComponent, 
+    ReactiveFormsModule, InputTextModule,InputNumberModule],
   templateUrl: './admin-sla-dialog.html',
   styleUrl: './admin-sla-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

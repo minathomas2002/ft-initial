@@ -135,25 +135,21 @@
             <span
               class="text-sm font-medium"
               [ngClass]="
-                item.slaCountDown >= 5
-                  ? 'text-[#067647]'
-                  : item.slaCountDown > 2
-                  ? 'text-[#F78F3A]'
-                  : 'text-[#B42318]'
+                item.slaCountDown > 5
+                  ? 'text-green-500'
+                  : item.slaCountDown > 0
+                  ? 'text-orange-500'
+                  : 'text-red-600'
               "
             >
-              {{ item.slaCountDown }} {{ 'plans.table.daysRemaining' | translate }}
+              {{ item.slaCountDown | slaCountdownNoun }}
             </span>
             } @else {
             <span class="text-sm font-medium text-center">-</span>
             }
           </td>
           <td>
-            <span
-              class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl {{
-                getStatusBadgeClass(item.status)
-              }}"
-            >
+            <span class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl whitespace-nowrap {{ getStatusBadgeClass(item.status) }}">
               {{ getStatusLabel(item.status) }}
             </span>
           </td>
@@ -192,6 +188,4 @@
   [(visibility)]="serviceLocalizationPlanWizardVisibility"
   (doRefresh)="applyFilter()"
 />
-} @if(timelineVisibility()){
-<app-timeline-dialog [(dialogVisible)]="timelineVisibility" [planId]="selectedPlan()?.id || null" />
 }

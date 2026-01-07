@@ -1,6 +1,6 @@
-/* Importing Own styles */
-@use "./assets/scss/style.scss";
-
 /* Importing Tailwind CSS styles */
 @use "tailwindcss";
+@use "./assets/scss/style.scss";
 @plugin "tailwindcss-primeui";
+
+/* Importing Own styles */

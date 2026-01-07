@@ -16,7 +16,10 @@ export class GeneralConfirmationDialogComponent {
   confirmButtonSeverity = input<'primary' | 'secondary' | 'success' | 'info' | 'danger' | 'help'>("primary");
   visible = model(false);
   confirmed = output();
+  onCancel= output();
   closed = output();
   isLoading = input(false)
   classes = input('max-w-[25rem]')
+  cancelLabel = input<string>("Cancel");
+
 }

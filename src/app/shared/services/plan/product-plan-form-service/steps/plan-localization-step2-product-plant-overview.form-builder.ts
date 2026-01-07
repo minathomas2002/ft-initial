@@ -135,7 +135,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.min(1)]);
-      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.min(1), Validators.max(1000000000)]);
     } else {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
@@ -168,7 +168,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder {
       experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
-      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.min(1), Validators.max(1000000000)]);
     } else {
       experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.clearValidators();
@@ -200,7 +200,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder {
     const othersDescriptionControl = capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`);
 
     if (othersPercentage !== null && othersPercentage > 0) {
-      othersDescriptionControl?.setValidators([Validators.required, Validators.maxLength(500)]);
+      othersDescriptionControl?.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       othersDescriptionControl?.clearValidators();
       othersDescriptionControl?.reset();

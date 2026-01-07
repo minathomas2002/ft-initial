@@ -64,7 +64,7 @@ export class NotificationHubService {
 				},
 			})
 			.withAutomaticReconnect({
-				nextRetryDelayInMilliseconds: (retryContext) => {
+				nextRetryDelayInMilliseconds: (retryContext: any) => {
 					// Exponential backoff: 0, 2, 10, 30 seconds
 					if (retryContext.previousRetryCount === 0) return 2000;
 					if (retryContext.previousRetryCount === 1) return 10000;
@@ -82,19 +82,19 @@ export class NotificationHubService {
 		});
 
 		// Handle connection state changes
-		this.hubConnection.onclose((error) => {
+		this.hubConnection.onclose((error: any) => {
 			console.log('SignalR connection closed', error);
 			this.connectionState.set(HubConnectionState.Disconnected);
 			this.isConnected.set(false);
 		});
 
-		this.hubConnection.onreconnecting((error) => {
+		this.hubConnection.onreconnecting((error: any) => {
 			console.log('SignalR reconnecting...', error);
 			this.connectionState.set(HubConnectionState.Reconnecting);
 			this.isConnected.set(false);
 		});
 
-		this.hubConnection.onreconnected((connectionId) => {
+		this.hubConnection.onreconnected((connectionId: any) => {
 			console.log('SignalR reconnected. Connection ID:', connectionId);
 			this.connectionState.set(HubConnectionState.Connected);
 			this.isConnected.set(true);

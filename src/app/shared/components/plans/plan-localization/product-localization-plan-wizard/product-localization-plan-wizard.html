@@ -81,11 +81,24 @@
 }
 
 <!-- Confirm Leave Dialog -->
-<app-confirm-leave-dialog
+<app-general-confirmation-dialog
+  [(visible)]="showConfirmLeaveDialog"
+  [isLoading]="isProcessing()"
+  (onCancel)="saveAsDraft()"
+  [cancelLabel]="'plans.confirmation.saveAsDraft' | translate"
+  [icon]="'icon-alert-triangle'"
+  [confirmButtonSeverity]="'danger'"
+  [title]="'plans.confirmation.onLeaveTitle' | translate"
+  [description]="'plans.confirmation.onLeaveDesc' | translate"
+  (confirmed)="onConfirmLeave()"
+  [confirmationLabel]="'plans.confirmation.cancelLabel' | translate"
+></app-general-confirmation-dialog>
+
+<!-- <app-confirm-leave-dialog
   [(visible)]="showConfirmLeaveDialog"
   (onLeave)="onConfirmLeave()"
-  (onContinueEditing)="onContinueEditing()"
-/>
+  (onContinueEditing)="saveAsDraft()"
+/> -->
 
 <app-timeline-dialog
   [(dialogVisible)]="timelineVisibility"

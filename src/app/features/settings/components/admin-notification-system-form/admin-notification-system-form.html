@@ -16,10 +16,7 @@
     @for(item of catg.items; track item.notificationType){
     <div class="bg-white rounded-xl border-1 border-gray-200 hover:shadow-md transition-shadow">
       <div class="flex flex-col flex-1 px-3 pt-4">
-        <p
-          class="text-lg font-semibold text-gray-900 line-clamp-1"
-          [pTooltip]="settingMapper.getTypeName(item.notificationType)"
-        >
+        <p class="text-lg font-semibold text-gray-900 line-clamp-1">
           {{ settingMapper.getTypeName(item.notificationType) }}
         </p>
         <p class="xl:text-md text-sm text-gray-600">
@@ -30,7 +27,10 @@
       @for(recipitiont of item.recipientToggles; track recipitiont.settingId; let last = $last){
       <p-divider />
       <!-- add switch -->
-      <div class="col-span-12 md:col-span-12 px-3" [ngClass]="last ? 'pb-4' : 'pb-0'">
+      <div
+        class="col-span-12 md:col-span-12 px-3"
+        [ngClass]="last ? 'pb-4' : 'pb-0'"
+      >
         <div class="justify-between items-center flex">
           <app-base-label [title]="settingMapper.getRecipientName(recipitiont.recipient)">
           </app-base-label>

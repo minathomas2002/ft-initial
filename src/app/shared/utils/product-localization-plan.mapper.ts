@@ -25,6 +25,7 @@ import { EMaterialsFormControls } from '../enums/product-localization-form-contr
 import { IPhoneValue } from '../interfaces/phone-input.interface';
 import { ELocalizationStatusType, ETargetedCustomer, EOpportunityType } from '../enums';
 import { API_ENDPOINTS } from '../api/api-endpoints';
+import { parsePhoneNumber } from '../data/countries.data';
 
 /**
  * Section type mapping for value chain sections
@@ -462,7 +463,7 @@ function setPhoneValue(formGroup: FormGroup | null, controlName: string, phoneSt
     if (valueControl) {
       // Try to parse phone string (format: countryCode+number or just number)
       // For now, set as string - components can handle parsing
-      valueControl.setValue(phoneString);
+      valueControl.setValue(parsePhoneNumber(phoneString));
     }
   }
 }
@@ -470,6 +471,7 @@ function setPhoneValue(formGroup: FormGroup | null, controlName: string, phoneSt
 /**
  * Map API response to form structure
  */
+
 export function mapProductPlanResponseToForm(
   response: IProductPlanResponse,
   formService: ProductPlanFormService
@@ -495,6 +497,18 @@ export function mapProductPlanResponseToForm(
         id: basicInfo.opportunityId,
         name: basicInfo.opportunityTitle
       });
+    }
+
+    // Set submissionDate from creationDate if available (for view/edit mode)
+    const submissionDateControl = basicInfoForm.get(EMaterialsFormControls.submissionDate);
+    if (submissionDateControl) {
+      // Check if creationDate exists in productPlan (it might be at the productPlan level)
+      const creationDate = new Date(productPlan.overviewCompanyInfo.basicInfo.createdDate);
+      if (creationDate) {
+        // Convert creationDate string to Date object if needed
+        const dateValue = creationDate instanceof Date ? creationDate : new Date(creationDate);
+        submissionDateControl.setValue(dateValue);
+      }
     }
   }
 
@@ -782,6 +796,8 @@ export function mapProductPlanResponseToForm(
     // Signature will be handled by the wizard component
     // Store it in a way that can be accessed later
   }
+
+  formService.initiateFormValue();
 }
 
 /**
@@ -885,7 +901,9 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
 
   // TargetCustomers - Convert boolean to integer for API (null stays null)
   const targetSECValue = productPlan.productPlantOverview.targetCustomers.targetSEC;
-  appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetSEC', targetSECValue);
+  targetSECValue?.forEach((value, i) => {
+    appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetSEC' + `[${i}]`, value);
+  });
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetedLocalSupplierNames', productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.ProductsUtilizingTargetProduct', productPlan.productPlantOverview.targetCustomers.productsUtilizingTargetProduct);
 

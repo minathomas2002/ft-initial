@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { finalize, tap } from 'rxjs';
+import { finalize, switchMap, tap } from 'rxjs';
 import { INotification } from '../../../core/layouts/main-layout/models/notifications.interface';
 import { NotificationsApiService } from '../../api/notifications/notifications-api-service';
 
@@ -68,6 +68,118 @@ export const NotificationsStore = signalStore(
             patchState(store, { loading: false });
           })
         );
+      },
+
+      setNotificationAsRead(id: string) {
+        console.log('setNotificationAsRead called with id:', id);
+        const notification = store.notifications().find(n => n.id === id);
+        console.log('Found notification:', notification);
+        const isAlreadyRead = notification?.isRead || false;
+
+        const previousState = {
+          notifications: [...store.notifications()],
+          unreadCount: store.unreadCount(),
+        };
+
+        // Optimistically update the UI only if not already read
+        if (!isAlreadyRead) {
+          patchState(store, (state) => ({
+            notifications: state.notifications.map(n =>
+              n.id === id ? { ...n, isRead: true, readDate: new Date().toISOString() } : n
+            ),
+            unreadCount: Math.max(0, state.unreadCount - 1),
+          }));
+        }
+
+        // Always call the API to mark as read (backend handles idempotency)
+        notificationsApiService.markNotificationAsRead(id).pipe(
+          switchMap(() => {
+            // Refresh notifications list and unread count after successful mark as read
+            return notificationsApiService.getNotifications(store.currentPage(), store.pageSize()).pipe(
+              tap((response) => {
+                const notificationsList = response?.body?.data || [];
+                patchState(store, {
+                  notifications: notificationsList || [],
+                  totalCount: response.body?.pagination?.totalCount || notificationsList.length || 0,
+                });
+              }),
+              switchMap(() => notificationsApiService.getUnreadNotifications()),
+              tap((response: any) => {
+                // Only update unread count, don't replace notifications list
+                const unreadCount = response.body?.pagination?.totalCount || 0;
+                patchState(store, (state) => ({
+                  unreadCount: unreadCount,
+                }));
+              })
+            );
+          })
+        ).subscribe({
+          error: (error) => {
+            // Revert on error only if we made an optimistic update
+            if (!isAlreadyRead) {
+              patchState(store, {
+                notifications: previousState.notifications,
+                unreadCount: previousState.unreadCount,
+              });
+            }
+            console.error('Failed to mark notification as read:', error);
+          }
+        });
+      },
+
+      markAllAsRead() {
+        const unreadNotifications = store.notifications().filter(n => !n.isRead);
+        if (unreadNotifications.length === 0) {
+          return;
+        }
+
+        const previousState = {
+          notifications: [...store.notifications()],
+          unreadCount: store.unreadCount(),
+        };
+
+        // Optimistically update the UI
+        patchState(store, (state) => ({
+          notifications: state.notifications.map(n => ({
+            ...n,
+            isRead: true,
+            readDate: n.readDate || new Date().toISOString()
+          })),
+          unreadCount: 0,
+        }));
+
+        // Call the API and refresh notifications after success
+        notificationsApiService.markAllNotificationsAsRead().pipe(
+          switchMap(() => {
+            // Refresh notifications list and unread count after successful mark all as read
+            return notificationsApiService.getNotifications(store.currentPage(), store.pageSize()).pipe(
+              tap((response) => {
+                const notificationsList = response?.body?.data || [];
+                patchState(store, {
+                  notifications: notificationsList || [],
+                  totalCount: response.body?.pagination?.totalCount || notificationsList.length || 0,
+                });
+              }),
+              switchMap(() => notificationsApiService.getUnreadNotifications()),
+              tap((response: any) => {
+                // Only update unread count, don't replace notifications list
+                const unreadCount = response.body?.pagination?.totalCount || 0;
+                patchState(store, (state) => ({
+                  unreadCount: unreadCount,
+                }));
+              })
+            );
+          })
+        ).subscribe({
+          error: (error) => {
+            // Revert on error
+            patchState(store, {
+              notifications: previousState.notifications,
+              unreadCount: previousState.unreadCount,
+            });
+            console.error('Failed to mark all notifications as read:', error);
+          }
+        });
       },
     };
   })

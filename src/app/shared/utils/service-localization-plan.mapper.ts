@@ -83,6 +83,7 @@ export interface SaudiCompanyDetail {
   qualificationStatus: NumberOrEmpty;
   companyOverview: string;
   companyOverviewOther: string;
+  companyOverviewKeyProjectDetails?: string;
   keyProjectsForSEC: string;
   products?: string;
 }
@@ -644,6 +645,7 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
         qualificationStatus: toNumberOrEmpty(getControlValue(companyGroup, EMaterialsFormControls.qualificationStatus)),
         companyOverview: getControlValue(companyGroup, EMaterialsFormControls.companyOverview) || '',
         companyOverviewOther: getControlValue(companyGroup, EMaterialsFormControls.companyOverviewOther) || '',
+        companyOverviewKeyProjectDetails: getControlValue(companyGroup, EMaterialsFormControls.companyOverviewKeyProjectDetails) || '',
         keyProjectsForSEC: getControlValue(companyGroup, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC) || '',
         products: getControlValue(companyGroup, EMaterialsFormControls.products) || undefined,
       });
@@ -1006,10 +1008,12 @@ export function convertServiceRequestToFormData(
   // Add local agent detail section if present
   if (servicePlan.localAgentDetailSection) {
     const agent = servicePlan.localAgentDetailSection;
+    const agentContact = agent.agentContactNumber as unknown as {countryCode: string, phoneNumber: string}
+
     formData.append('ServicePlan.LocalAgentDetailSection.LocalAgentName', agent.localAgentName);
     formData.append('ServicePlan.LocalAgentDetailSection.AgentContactPerson', agent.agentContactPerson);
     formData.append('ServicePlan.LocalAgentDetailSection.AgentEmail', agent.agentEmail);
-    formData.append('ServicePlan.LocalAgentDetailSection.AgentContactNumber', agent.agentContactNumber);
+    formData.append('ServicePlan.LocalAgentDetailSection.AgentContactNumber', agentContact.countryCode + agentContact.phoneNumber);
     formData.append('ServicePlan.LocalAgentDetailSection.AgentCompanyLocation', agent.agentCompanyLocation);
   }
 
@@ -1026,6 +1030,12 @@ export function convertServiceRequestToFormData(
       formData.append(`ServicePlan.SaudiCompanyDetails[${index}].QualificationStatus`, company.qualificationStatus.toString());
       formData.append(`ServicePlan.SaudiCompanyDetails[${index}].CompanyOverview`, company.companyOverview);
       formData.append(`ServicePlan.SaudiCompanyDetails[${index}].CompanyOverviewOther`, company.companyOverviewOther);
+      if (company.companyOverviewKeyProjectDetails) {
+        formData.append(
+          `ServicePlan.SaudiCompanyDetails[${index}].CompanyOverviewKeyProjectDetails`,
+          company.companyOverviewKeyProjectDetails
+        );
+      }
       formData.append(`ServicePlan.SaudiCompanyDetails[${index}].KeyProjectsForSEC`, company.keyProjectsForSEC);
       if (company.products) {
         formData.append(`ServicePlan.SaudiCompanyDetails[${index}].Products`, company.products);

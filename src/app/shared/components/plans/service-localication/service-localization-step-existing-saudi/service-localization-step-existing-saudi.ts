@@ -52,7 +52,6 @@ export class ServiceLocalizationStepExistingSaudi {
   yesNoOptions = this.planStore.yesNoOptions;
   agreementTypeOptions = this.planStore.agreementTypeOptions;
 
-
   availableQuartersWithPast = computed(() => this.serviceForm.getAvailableQuartersWithPast(5, 5));
 
   yearColumns = computed(() => this.serviceForm.upcomingYears(5));

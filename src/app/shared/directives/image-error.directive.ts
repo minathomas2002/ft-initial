@@ -16,35 +16,35 @@ import { Directive, ElementRef, HostListener, input } from '@angular/core';
 export class ImageErrorDirective {
   /**
    * Optional custom placeholder image path.
-   * If not provided, defaults to 'http://localhost:4200/assets/images/user_placeholder.png'
+   * If not provided, defaults to 'http://localhost:4200/assets/images/image-placeholder.png'
    */
-  placeholder = input<string>('http://localhost:4200/assets/images/user_placeholder.png');
+  placeholder = input<string>('assets/images/image-placeholder.png');
 
-  private defaultPlaceholder = 'http://localhost:4200/assets/images/user_placeholder.png';
-  
+  private defaultPlaceholder = 'assets/images/image-placeholder.png';
+
   // Fallback to relative path if absolute URL fails
-  private fallbackPlaceholder = '/assets/images/user_placeholder.png';
+  private fallbackPlaceholder = 'assets/images/image-placeholder.png';
   private hasErrored = false;
 
-  constructor(private elementRef: ElementRef<HTMLImageElement>) {}
+  constructor(private elementRef: ElementRef<HTMLImageElement>) { }
 
   @HostListener('error', ['$event'])
   onError(event: Event): void {
     const img = this.elementRef.nativeElement;
     const currentSrc = img.src;
-    
+
     // Prevent infinite loop if placeholder also fails to load
-    if (this.hasErrored || currentSrc.includes('user_placeholder.png')) {
+    if (this.hasErrored || currentSrc.includes('image-placeholder.png')) {
       return;
     }
 
     const placeholder = this.placeholder() || this.defaultPlaceholder;
-    
+
     // Only replace if the current src is not already the placeholder
-    if (currentSrc !== placeholder && !currentSrc.includes('user_placeholder.png')) {
+    if (currentSrc !== placeholder && !currentSrc.includes('image-placeholder.png')) {
       this.hasErrored = true;
       img.src = placeholder;
-      
+
       // If the absolute URL fails, try the relative path as fallback
       img.onerror = () => {
         if (img.src === placeholder && !img.src.includes(this.fallbackPlaceholder)) {

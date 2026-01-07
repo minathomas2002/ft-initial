@@ -177,6 +177,9 @@ export class OpportunityDetails implements OnInit {
           this.moveToDraftConfirmDialogVisible.set(false);
           this.getOpportunityDetails();
         },
+        error: () => {
+          this.moveToDraftConfirmDialogVisible.set(false);
+        }
       });
   }
 

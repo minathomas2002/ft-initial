@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-[32px] px-8 pb-10">
+<div class="flex flex-col gap-[32px] pb-10">
   <!-- Overview Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">
@@ -10,7 +10,7 @@
           [tooltipStyleClass]="'min-w-[400px]'"
         ></i>
         <ng-template #tooltipContent>
-          <div class="flex flex-col gap-2 text-center">
+          <div class="flex flex-col gap-2 text-start">
             <p>
               Please note, supplier is required to complete this template independently for each product intended for localization. However, specifications of the same product should be consolidated.
             </p>
@@ -260,7 +260,7 @@
         <textarea
           pInputTextarea
           fluid
-          [maxlength]="500"
+          [maxlength]="255"
           placeholder="Enter others description"
           [rows]="4"
           [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
@@ -268,7 +268,7 @@
       </app-group-input-with-checkbox>
       <!-- Character Counter -->
       <div class="text-xs text-gray-500 text-right mt-1">
-        {{ getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]).value?.length || 0 }} / 500
+        {{ getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]).value?.length || 0 }} / 255
       </div>
       <app-base-error-messages
         [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
@@ -299,6 +299,7 @@
               display="chip"
               dropdownIcon="icon-chevron-down"
               fluid
+              [filter]="false"
               placeholder="Select targeted customer"
             />
           </app-group-input-with-checkbox>
@@ -531,6 +532,7 @@
             >
               <p-inputnumber
                 fluid
+                [maxlength]="10"
                 placeholder="Enter total quantities provided to SEC"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
               />
@@ -661,6 +663,7 @@
             >
               <p-inputnumber
                 fluid
+                [maxlength]="10"
                 placeholder="Enter total quantities provided"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
               />
