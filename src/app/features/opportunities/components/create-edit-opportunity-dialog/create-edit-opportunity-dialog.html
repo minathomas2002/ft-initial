@@ -8,7 +8,7 @@
   (onSaveAsDraft)="saveAsDraft()"
   (onClose)="onClose()"
   [isLoading]="adminOpportunitiesStore.isLoading()"
-  [isProcessing]="adminOpportunitiesStore.isProcessing()"
+  [isSavingAsDraft]="adminOpportunitiesStore.isSavingAsDraft()"
 >
 
   <ng-container ngProjectAs="status">

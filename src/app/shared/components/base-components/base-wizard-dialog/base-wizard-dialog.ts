@@ -43,6 +43,7 @@ export class BaseWizardDialog {
   onSaveAsDraft = output<void>();
   isLoading = input<boolean>(false);
   isProcessing = input<boolean>(false);
+  isSavingAsDraft = input<boolean>(false);
   wizardTitle = input<string>('Create Opportunity');
   hideSaveAsDraft = input<boolean>(false);
 
