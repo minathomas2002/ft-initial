@@ -55,6 +55,7 @@
         [readonlyInput]="true"
         [(ngModel)]="filter().submissionDate"
         (ngModelChange)="onPickerChange($event)"
+        [dateFormat]="'dd M yy'"
         [showIcon]="true"
         [showButtonBar]="true"
         [iconDisplay]="'input'"
