@@ -4,18 +4,21 @@ import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { SummaryField } from '../../shared/summary-field/summary-field';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-summary-section-overview',
-  imports: [SummarySectionHeader, SummaryField, TranslatePipe],
+  imports: [SummarySectionHeader, SummaryField, TranslatePipe, DatePipe],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
+  providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionOverview {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   onEdit = output<void>();
+  private datePipe = inject(DatePipe);
 
   // Form group accessors
   basicInformationFormGroup = computed(() => {
@@ -86,7 +89,12 @@ export class SummarySectionOverview {
     return value === '-' ? '-' : value.charAt(0).toUpperCase() + value.slice(1);
   });
   opportunity = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.opportunity}`));
-  submissionDate = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`));
+  submissionDate = computed(() => {
+    const dateValue = this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`);
+    if (!dateValue) return null;
+    const date = new Date(dateValue);
+    return this.datePipe.transform(date, 'dd MMM yyyy') ?? null;
+  });
 
   companyName = computed(() => {
     const companyInfo = this.companyInformationFormGroup();
@@ -167,7 +175,7 @@ export class SummarySectionOverview {
 
   contactNumber = computed(() => {
     const localAgentInfo = this.localAgentInformationFormGroup();
-    const contactNumberControl = localAgentInfo?.get(EMaterialsFormControls.contactNumber);    
+    const contactNumberControl = localAgentInfo?.get(EMaterialsFormControls.contactNumber);
     if (contactNumberControl instanceof FormGroup) {
       const value = contactNumberControl.get(EMaterialsFormControls.value)?.value;
       return value ? value['countryCode'] + value['phoneNumber'] : null;
