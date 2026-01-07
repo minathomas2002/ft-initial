@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-summary-section-overview',
-  imports: [SummarySectionHeader, SummaryField, TranslatePipe, DatePipe],
+  imports: [SummarySectionHeader, SummaryField, TranslatePipe],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
   providers: [DatePipe],
