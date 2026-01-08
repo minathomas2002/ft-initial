@@ -6,7 +6,7 @@ import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashb
 import { DashboardPlansFilter } from '../../classes/dashboard-plans-filter';
 
 @Injectable()
-export class DvManagerDashboardPlansFilterService extends AbstractServiceFilter<IPlanFilter> {
+export class InternalUsersDashboardPlansFilterService extends AbstractServiceFilter<IPlanFilter> {
   store = inject(DashboardPlansStore);
   filterClass = new DashboardPlansFilter();
   filter = signal(this.filterClass.filter);
@@ -31,7 +31,7 @@ export class DvManagerDashboardPlansFilterService extends AbstractServiceFilter<
 
   performFilter$() {
     this.resetPagination();
-    return this.store.getDvManagerDashboardPlans(this.adpatedFilter());
+    return this.store.getInternalUserDashboardPlans(this.adpatedFilter());
   }
 
   clearAllFilters(): void {
@@ -45,6 +45,6 @@ export class DvManagerDashboardPlansFilterService extends AbstractServiceFilter<
 
   applyFilterWithPaging(): void {
     this.updateFilterSignal();
-    this.store.getDvManagerDashboardPlans(this.adpatedFilter()).pipe(take(1)).subscribe();
+    this.store.getInternalUserDashboardPlans(this.adpatedFilter()).pipe(take(1)).subscribe();
   }
 }

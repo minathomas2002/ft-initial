@@ -1,27 +1,114 @@
-@if(showDashboard()){
-<div class="flex flex-col gap-8">
-  <!-- Welcome Header -->
-  <div class="flex flex-col gap-2">
-    <h1 class="text-4xl font-bold text-gray-900">Welcome to BENA!</h1>
-    <p class="text-lg text-gray-600">Here's what's happening with your account today.</p>
-  </div>
-
-  <!-- Announcements -->
-  <div class="bg-gradient-to-r from-primary-50 to-blue-50 rounded-2xl border-1 border-primary-200 p-6">
-    <div class="flex items-start gap-4">
-      <div class="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center flex-shrink-0">
-        <i class="icon-bell text-primary-600 text-xl"></i>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">Important Announcement</h3>
-        <p class="text-gray-700 mb-3">
-          We've launched new features to help you find the perfect opportunity. Explore our enhanced search filters and personalized recommendations.
-        </p>
-        <button class="text-primary-600 font-medium hover:text-primary-700 text-sm">
-          Learn more →
-        </button>
-      </div>
+<app-table-layout
+  [tableTitle]="'dashboard.title' | translate"
+  [tableSubTitle]="dashboardSubtitle() | translate"
+  pageTitleClass="text-[24px] font-semibold"
+  pageSubTitleClass="text-md text-gray-600"
+>
+  <!-- Statistics Cards -->
+  <ng-container ngProjectAs="table-filters">
+    <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+      @if(isStatisticsLoading()) {
+      <app-dashboard-statistics-skeleton [count]="5" />
+      } @else {
+      <app-dashboard-statistics-cards [statistics]="statistics()" />
+      }
     </div>
-  </div>
-</div>
+
+    <!-- Filters -->
+    <app-internal-users-dashboard-plans-filter></app-internal-users-dashboard-plans-filter>
+  </ng-container>
+
+  <ng-container ngProjectAs="table-body">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="isLoading()"
+    >
+      <app-data-table
+        [columns]="headers()"
+        [rows]="rows()"
+        [(filter)]="filterService.filter"
+        [totalRecords]="totalRecords()"
+        (filterChange)="filterService.applyFilterWithPaging()"
+        [messageTitle]="'plans.list.noPlansFound' | translate"
+        [showCheckBox]="false"
+        [rowsCheckable]="false"
+      >
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
+          <td>
+            {{ '#' + item.planCode }}
+          </td>
+          <td>
+            <p class="text-sm text-gray-900 font-medium">{{ item.investorName ?? '-' }}</p>
+          </td>
+          <td>
+            <p class="text-sm text-gray-900 font-medium">{{ item.title }}</p>
+          </td>
+          <td>
+            <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
+          </td>
+          <td>{{ item.submissionDate | date : 'dd MMM yyyy' }}</td>
+          <td>
+            @if(item.status !== EEmployeePlanStatus.UNASSIGNED) {
+            <span
+              class="text-sm font-medium"
+              [ngClass]="
+                item.slaCountDown > 5
+                  ? 'text-green-500'
+                  : item.slaCountDown > 0
+                  ? 'text-orange-500'
+                  : 'text-red-600'
+              "
+            >
+              {{ item.slaCountDown | slaCountdownNoun }}
+            </span>
+            } @else {
+            <span class="text-sm font-medium">-</span>
+            }
+          </td>
+          <td>
+            <app-base-tag
+              [value]="getStatusLabel(item.status)"
+              [color]="getStatusBadgeColor(item.status)"
+            ></app-base-tag>
+          </td>
+          <td>
+            <app-internal-users-dashboard-plan-action-menu
+              [plan]="item"
+              (onViewDetails)="onViewDetails($event)"
+              (onDownload)="onDownload($event)"
+              (onViewTimeline)="onViewTimeline($event)"
+              (onAssignToEmployee)="onAssignToEmployee($event)"
+              (onReAssign)="onReAssign($event)"
+            />
+          </td>
+        </ng-template>
+      </app-data-table>
+    </app-table-skeleton>
+  </ng-container>
+</app-table-layout>
+
+@if (viewAssignDialog()) {
+<app-assign-reassign-manual-employee
+  [(dialogVisible)]="viewAssignDialog"
+  [isReassignMode]="isReassignMode()"
+  [planRecord]="planItem()"
+  (onSuccess)="applyFilter()"
+></app-assign-reassign-manual-employee>
+}
+
+@if(productLocalizationPlanWizardVisibility()){
+<app-product-localization-plan-wizard
+  [(visibility)]="productLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()"
+/>
+}
+
+@if(timelineVisibility()){
+<app-timeline-dialog
+  [(dialogVisible)]="timelineVisibility"
+  [planId]="planItem()?.id || null"
+/>
 }

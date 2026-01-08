@@ -13,7 +13,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DvManagerDashboardPlansFilterService } from '../../services/dv-manager-dashboard-plans-filter/dv-manager-dashboard-plans-filter-service';
+import { InternalUsersDashboardPlansFilterService } from '../../services/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter-service';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { EEmployeePlanStatus, IPlanFilter } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
@@ -26,21 +26,22 @@ interface IDropdownOption {
 }
 
 @Component({
-  selector: 'app-dv-manager-dashboard-plans-filter',
+  selector: 'app-internal-users-dashboard-plans-filter',
   imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe],
-  templateUrl: './dv-manager-dashboard-plans-filter.html',
-  styleUrl: './dv-manager-dashboard-plans-filter.scss',
+  templateUrl: './internal-users-dashboard-plans-filter.html',
+  styleUrl: './internal-users-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DvManagerDashboardPlansFilter implements OnInit {
+export class InternalUsersDashboardPlansFilter implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly searchSubject = new Subject<string>();
-  readonly filterService = inject(DvManagerDashboardPlansFilterService);
+  readonly filterService = inject(InternalUsersDashboardPlansFilterService);
   private readonly i18nService = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly planStore = inject(PlanStore);
   readonly filter = this.filterService.filter;
+
   planTypeOptions = computed<IDropdownOption[]>(() => {
     return this.planStore.planTypeOptions() as IDropdownOption[];
   });
@@ -74,7 +75,6 @@ export class DvManagerDashboardPlansFilter implements OnInit {
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params: Record<string, string | number | undefined>) => {
-        // Only process if notificationAction is present (from notification navigation)
         const updates: Partial<IPlanFilter> = {};
 
         if (params['notificationAction']) {
@@ -88,7 +88,6 @@ export class DvManagerDashboardPlansFilter implements OnInit {
         this.filterService.applyFilterWithPaging();
         if (params['notificationAction']) {
           if (Object.keys(updates).length > 0) {
-            // Clean up query params after processing
             setTimeout(() => {
               this.router.navigate([], {
                 relativeTo: this.route,
@@ -167,13 +166,11 @@ export class DvManagerDashboardPlansFilter implements OnInit {
   }
 
   private getStatusFromParam(param: string | number): EEmployeePlanStatus | null {
-    // Handle numeric status values (from notifications)
     const statusNum = Number(param);
     if (!isNaN(statusNum) && Object.values(EEmployeePlanStatus).includes(statusNum as EEmployeePlanStatus)) {
       return statusNum as EEmployeePlanStatus;
     }
 
-    // Handle string-based status values
     const paramStr = String(param).toLowerCase();
     switch (paramStr) {
       case 'employee_approved':
