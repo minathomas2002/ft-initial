@@ -535,23 +535,6 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
 
   saveAsDraft(): void {
-    const coverPageFormGroup = this.serviceLocalizationFormService.coverPageCompanyInformationFormGroup;
-    const overviewFormGroup = this.serviceLocalizationFormService.overviewCompanyInformationFormGroup;
-
-    const planTitle = coverPageFormGroup.get(EMaterialsFormControls.planTitle)?.value;
-    const opportunity = overviewFormGroup.get(EMaterialsFormControls.opportunity)?.value;
-
-    // Check if plan title and opportunity are selected
-    if (!planTitle) {
-      this.toasterService.error('Plan title is required');
-      return;
-    }
-
-    if (!planTitle || !opportunity) {
-      this.toasterService.error('Please select opportunity to save as draft');
-      return;
-    }
-
     const isEditMode = this.planStore.wizardMode() === 'edit';
 
     const formData = this.buildRequestFormData();
