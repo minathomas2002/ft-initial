@@ -226,6 +226,18 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
   }
 
   /**
+   * Build Attachments FormGroup
+   */
+  buildAttachmentsFormGroup(): FormGroup {
+    return this.fb.group({
+      [EMaterialsFormControls.attachments]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: [null], // File upload - optional
+      }),
+    });
+  }
+
+  /**
    * Build Step 3 main form group
    */
   buildExistingSaudiFormGroup(): FormGroup {
@@ -234,6 +246,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       [EMaterialsFormControls.collaborationPartnershipFormGroup]: this.buildCollaborationPartnershipFormGroup(),
       [EMaterialsFormControls.entityLevelFormGroup]: this.buildEntityLevelFormGroup(),
       [EMaterialsFormControls.serviceLevelFormGroup]: this.buildServiceLevelFormGroup(),
+      [EMaterialsFormControls.attachmentsFormGroup]: this.buildAttachmentsFormGroup(),
     });
   }
 

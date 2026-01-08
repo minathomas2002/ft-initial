@@ -3,14 +3,15 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 
 export class ServiceLocalizationStepCoverPageFormBuilder {
   constructor(
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly newPlanTitle: string,
   ) { }
 
   buildCompanyInformationFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.planTitle]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),
+        [EMaterialsFormControls.value]: this.fb.control(this.newPlanTitle, [Validators.required, Validators.maxLength(150)]),
       }),
       [EMaterialsFormControls.companyName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),

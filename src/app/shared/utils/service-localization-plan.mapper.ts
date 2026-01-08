@@ -158,7 +158,7 @@ export interface LocalizationStrategy {
 /**
  * Helper to get form control value
  */
-function getControlValue(formGroup: FormGroup, controlName: string, nestedValue: boolean = true): any {
+function getControlValue(formGroup: FormGroup, controlName: string, nestedValue: boolean = true) {
   const control = formGroup.get(controlName);
   if (!control) return null;
 
@@ -672,7 +672,7 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
   const collaborationArray = formService.collaborationPartnershipFormGroup;
   const entityLevelArray = formService.entityLevelFormGroup;
   const serviceLevelArray = formService.serviceLevelFormGroup;
-  const attachmentsGroup = formService.step3_existingSaudi.get(EMaterialsFormControls.attachmentsFormGroup) as FormGroup;
+  const attachmentsGroup = formService.attachmentsFormGroup;
 
   const result: {
     saudiCompanyDetails?: SaudiCompanyDetail[];
@@ -765,15 +765,17 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
     }
   }
 
-  // Map Attachments (from existing saudi)
+  // Map Attachments (from existing saudi step)
   if (attachmentsGroup) {
     const attachmentFiles = getControlValue(attachmentsGroup, EMaterialsFormControls.attachments, true);
     if (attachmentFiles && Array.isArray(attachmentFiles) && attachmentFiles.length > 0) {
-      result.attachments = result.attachments || [];
+      result.attachments = [];
       attachmentFiles.forEach((file: File) => {
         result.attachments!.push({
+          id: (file as any).id || undefined, // Preserve ID for existing attachments
           fileName: file.name,
-          fileExtension: file.name.split('.').pop() || '',
+          fileExtension: (file as any).fileExtension || file.name.split('.').pop() || '',
+          fileUrl: (file as any).fileUrl || undefined,
           file,
         });
       });
@@ -790,18 +792,15 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
   localizationStrategies?: LocalizationStrategy[];
   entityHeadcounts?: EntityHeadcount[];
   serviceHeadcounts?: ServiceHeadcount[];
-  attachments?: AttachmentFile[];
 } {
   const localizationArray = formService.directLocalizationServiceLevelFormGroup;
   const entityLevelArray = formService.directLocalizationEntityLevelFormGroup;
   const serviceLevelArray = formService.directLocalizationServiceLevelFormGroup;
-  const attachmentsGroup = formService.attachmentsFormGroup;
 
   const result: {
     localizationStrategies?: LocalizationStrategy[];
     entityHeadcounts?: EntityHeadcount[];
     serviceHeadcounts?: ServiceHeadcount[];
-    attachments?: AttachmentFile[];
   } = {};
 
   // Map Localization Strategies
@@ -877,21 +876,6 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
     }
   }
 
-  // Map Attachments (from direct localization)
-  if (attachmentsGroup) {
-    const attachmentFiles = getControlValue(attachmentsGroup, EMaterialsFormControls.attachments, true);
-    if (attachmentFiles && Array.isArray(attachmentFiles) && attachmentFiles.length > 0) {
-      result.attachments = result.attachments || [];
-      attachmentFiles.forEach((file: File) => {
-        result.attachments!.push({
-          fileName: file.name,
-          fileExtension: file.name.split('.').pop() || '',
-          file,
-        });
-      });
-    }
-  }
-
   return result;
 }
 
@@ -953,10 +937,8 @@ export function mapServiceLocalizationPlanFormToRequest(
     ...(directLocalizationData?.serviceHeadcounts || []),
   ];
 
-  const allAttachments = [
-    ...(existingSaudiData?.attachments || []),
-    ...(directLocalizationData?.attachments || []),
-  ];
+  // Attachments come from the Existing Saudi step (Step 3)
+  const allAttachments = existingSaudiData?.attachments || [];
 
   const servicePlan: ServicePlan = {
     id: planId,
@@ -1156,11 +1138,48 @@ export function convertServiceRequestToFormData(
     });
   }
 
-  // Add attachments if present
-  if (servicePlan.attachments) {
+  // Add attachments if present - append as structured objects with metadata and file
+  if (servicePlan.attachments && servicePlan.attachments.length > 0) {
     servicePlan.attachments.forEach((attachment, index) => {
-      if (attachment.id) formData.append(`ServicePlan.Attachments[${index}].Id`, attachment.id);
-      formData.append(`ServicePlan.Attachments[${index}]`, attachment.file, attachment.fileName);
+      // Append attachment metadata fields as structured object properties
+      if (attachment.id) {
+        formData.append(`ServicePlan.Attachments[${index}].Id`, attachment.id);
+      }
+      formData.append(`ServicePlan.Attachments[${index}].FileName`, attachment.fileName);
+      if (attachment.fileExtension) {
+        formData.append(`ServicePlan.Attachments[${index}].FileExtension`, attachment.fileExtension);
+      }
+      if (attachment.fileUrl) {
+        formData.append(`ServicePlan.Attachments[${index}].FileUrl`, attachment.fileUrl);
+      }
+
+      const fileValue: any = attachment.file;
+
+      // Handle the file data
+      if (fileValue) {
+        // Check if it's a File object - append as binary with proper field name
+        if (fileValue instanceof File) {
+          // File object - append as binary with the structured field name
+          formData.append(`ServicePlan.Attachments[${index}].File`, fileValue);
+        } else if (typeof fileValue === 'object' && 'size' in fileValue && 'type' in fileValue && 'name' in fileValue) {
+          // Duck typing for File-like object - append as binary
+          formData.append(`ServicePlan.Attachments[${index}].File`, fileValue as File);
+        } else if (typeof fileValue === 'string') {
+          // If file is already a string (base64), append as string field
+          let fileStringValue: string = '';
+          if (fileValue.startsWith('data:')) {
+            // Base64 data URL - extract the base64 part
+            fileStringValue = fileValue.split(',')[1];
+          } else if (fileValue.trim() !== '') {
+            // Plain base64 string
+            fileStringValue = fileValue;
+          }
+          // Append as string field (not binary)
+          if (fileStringValue) {
+            formData.append(`ServicePlan.Attachments[${index}].File`, fileStringValue);
+          }
+        }
+      }
     });
   }
 

@@ -13,6 +13,8 @@ import { ELocalizationMethodology } from 'src/app/shared/enums/plan.enum';
   providedIn: 'root'
 })
 export class ServicePlanFormService {
+  private readonly _planStore = inject(PlanStore);
+
   private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
 
@@ -20,7 +22,7 @@ export class ServicePlanFormService {
   private readonly _directLocalizationServiceLevelCache = new Map<string, any>();
 
   // Step builders
-  private readonly _step1Builder = new ServiceLocalizationStepCoverPageFormBuilder(this._fb);
+  private readonly _step1Builder = new ServiceLocalizationStepCoverPageFormBuilder(this._fb, this._planStore.newPlanTitle());
   private readonly _step2Builder = new ServiceLocalizationStepOverviewFormBuilder(this._fb);
   private readonly _step3Builder = new ServiceLocalizationStepExistingSaudiFormBuilder(this._fb);
   private readonly _step4Builder = new ServiceLocalizationStepDirectLocalizationFormBuilder(this._fb);
@@ -135,7 +137,7 @@ export class ServicePlanFormService {
   }
 
   get attachmentsFormGroup(): FormGroup {
-    return this._step4FormGroup.get(EMaterialsFormControls.attachmentsFormGroup) as FormGroup;
+    return this._step3FormGroup.get(EMaterialsFormControls.attachmentsFormGroup) as FormGroup;
   }
 
   // Step-specific methods delegate to builders
@@ -544,6 +546,18 @@ export class ServicePlanFormService {
     if (to.value !== nextValue) {
       // Keep Step 2 company name read-only; just mirror the value.
       to.setValue(nextValue, { emitEvent: false });
+    }
+  }
+
+  /**
+   * Set the initial plan title value (call this when opening a new plan dialog)
+   */
+  setInitialPlanTitle(title: string): void {
+    const companyInfo = this.coverPageCompanyInformationFormGroup;
+    if (!companyInfo) return;
+    const planTitleControl = companyInfo.get(`${EMaterialsFormControls.planTitle}.${EMaterialsFormControls.value}`);
+    if (planTitleControl && !planTitleControl.value) {
+      planTitleControl.setValue(title, { emitEvent: false });
     }
   }
 

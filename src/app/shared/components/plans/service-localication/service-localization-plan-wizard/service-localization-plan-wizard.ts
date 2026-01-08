@@ -230,6 +230,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         this.loadPlanData(currentPlanId);
       } else if (currentMode === 'create' && !currentPlanId) {
         this.serviceLocalizationFormService.resetAllForms();
+        this.serviceLocalizationFormService.setInitialPlanTitle(this.planStore.newPlanTitle());
         this.enableAllForms();
         this.activeStep.set(1);
         this.isSubmitted.set(false);
