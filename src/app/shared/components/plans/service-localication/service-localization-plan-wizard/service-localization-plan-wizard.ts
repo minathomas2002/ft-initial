@@ -95,6 +95,9 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
   showConfirmLeaveDialog = model(false);
+  // Conditional step flags - initialize as false so all steps are visible initially
+  showExistingSaudiStep = signal(false);
+  showDirectLocalizationStep = signal(false);
 
 
   private readonly stepsWithId = computed<ServiceLocalizationWizardStepState[]>(() => {
@@ -197,10 +200,6 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   });
 
   validationErrors = signal<Map<number, boolean>>(new Map());
-
-  // Conditional step flags - initialize as true so all steps are visible initially
-  showExistingSaudiStep = signal(true);
-  showDirectLocalizationStep = signal(true);
 
   constructor() {
     // Keep activeStep within current steps range (prevents Stepper issues when conditional steps hide/show)
@@ -345,8 +344,8 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
       const allNull = methodologies.every((m) => m === null);
       if (allNull) {
-        this.showExistingSaudiStep.set(true);
-        this.showDirectLocalizationStep.set(true);
+        this.showExistingSaudiStep.set(false);
+        this.showDirectLocalizationStep.set(false);
         return;
       }
 
@@ -536,6 +535,23 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
 
   saveAsDraft(): void {
+    const coverPageFormGroup = this.serviceLocalizationFormService.coverPageCompanyInformationFormGroup;
+    const overviewFormGroup = this.serviceLocalizationFormService.overviewCompanyInformationFormGroup;
+
+    const planTitle = coverPageFormGroup.get(EMaterialsFormControls.planTitle)?.value;
+    const opportunity = overviewFormGroup.get(EMaterialsFormControls.opportunity)?.value;
+
+    // Check if plan title and opportunity are selected
+    if (!planTitle) {
+      this.toasterService.error('Plan title is required');
+      return;
+    }
+
+    if (!planTitle || !opportunity) {
+      this.toasterService.error('Please select opportunity to save as draft');
+      return;
+    }
+
     const isEditMode = this.planStore.wizardMode() === 'edit';
 
     const formData = this.buildRequestFormData();

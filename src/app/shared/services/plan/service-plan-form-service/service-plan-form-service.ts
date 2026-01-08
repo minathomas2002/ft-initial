@@ -367,7 +367,8 @@ export class ServicePlanFormService {
    */
   resetAllForms(): void {
     // Reset Step 1: Cover Page
-    // Need to clear FormArrays and add back initial items
+    // Reset the form group FIRST, then clear and add new items to preserve generated IDs
+    this._step1FormGroup.reset();
     const servicesArray = this.getServicesFormArray();
     if (servicesArray) {
       while (servicesArray.length > 0) {
@@ -375,10 +376,10 @@ export class ServicePlanFormService {
       }
       servicesArray.push(this._step1Builder.createServiceItem());
     }
-    this._step1FormGroup.reset();
 
     // Reset Step 2: Overview
-    // Need to clear FormArrays and add back initial items
+    // Reset the form group FIRST, then clear and add new items
+    this._step2FormGroup.reset();
     const serviceDetailsArray = this.getServiceDetailsFormArray();
     if (serviceDetailsArray) {
       while (serviceDetailsArray.length > 0) {
@@ -386,7 +387,6 @@ export class ServicePlanFormService {
       }
       serviceDetailsArray.push(this._step2Builder.createServiceDetailItem());
     }
-    this._step2FormGroup.reset();
 
     // Ensure disabled controls maintain their disabled state and values
     const basicInfo = this.basicInformationFormGroup;
@@ -399,7 +399,8 @@ export class ServicePlanFormService {
     }
 
     // Reset Step 3: Existing Saudi Co.
-    // Need to clear FormArrays and add back initial items
+    // Reset the form group FIRST, then clear and add new items
+    this._step3FormGroup.reset();
     const step3Sections = [
       EMaterialsFormControls.saudiCompanyDetailsFormGroup,
       EMaterialsFormControls.collaborationPartnershipFormGroup,
@@ -428,7 +429,8 @@ export class ServicePlanFormService {
     });
 
     // Reset Step 4: Direct Localization
-    // Need to clear FormArrays and add back initial items
+    // Reset the form group FIRST, then clear and add new items
+    this._step4FormGroup.reset();
     const step4Sections = [
       EMaterialsFormControls.entityLevelFormGroup,
       EMaterialsFormControls.serviceLevelFormGroup,
@@ -449,8 +451,6 @@ export class ServicePlanFormService {
         }
       }
     });
-
-    this._step4FormGroup.reset();
 
     // Mark all forms as pristine and untouched
     this._step1FormGroup.markAsPristine();

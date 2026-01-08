@@ -49,7 +49,7 @@ export interface ServiceItem {
   serviceType: NumberOrEmpty;
   serviceCategory: NumberOrEmpty;
   serviceProvidedTo: NumberOrEmpty;
-  targetedForLocalization: boolean;
+  targetedForLocalization?: boolean;
   serviceLocalizationMethodology: number[];
   expectedLocalizationDate?: string;
   otherProvidedTo?: string;
@@ -63,7 +63,7 @@ export interface CompanyInformationSection {
   globalHQLocation: string;
   secVendorId: string;
   benaVendorId: string;
-  hasLocalAgent: boolean;
+  hasLocalAgent?: boolean;
   localAgentDetails?: string;
 }
 
@@ -231,6 +231,11 @@ function toBooleanYesNo(value: any): boolean {
   return false;
 }
 
+function toBooleanYesNoOrUndefined(value: any): boolean | undefined {
+  if (value === null || value === undefined || value === '') return undefined;
+  return toBooleanYesNo(value);
+}
+
 function toYesNoId(value: boolean | null | undefined): string | null {
   if (value === null || value === undefined) return null;
   return value ? EYesNo.Yes.toString() : EYesNo.No.toString();
@@ -375,7 +380,10 @@ export function mapServicePlanResponseToForm(
   (servicePlan.services ?? []).forEach((svc: IServicePlanServiceItem, idx: number) => {
     const row = servicesArray?.at(idx) as FormGroup | undefined;
     if (!row) return;
-    row.get(EMaterialsFormControls.serviceId)?.setValue(svc.id ?? '', { emitEvent: false });
+    // Only set serviceId from backend if provided; otherwise preserve the auto-generated UUID
+    if (svc.id) {
+      row.get(EMaterialsFormControls.serviceId)?.setValue(svc.id, { emitEvent: false });
+    }
     setNestedValue(row, EMaterialsFormControls.serviceName, svc.serviceName ?? '');
     // Store row id (for potential future edit mapping)
     row.get('rowId')?.setValue(svc.id ?? null, { emitEvent: false });
@@ -572,7 +580,19 @@ function mapServicesAndCompanyInfo(formService: ServicePlanFormService): {
   const localAgentInfoGroup = formService.localAgentInformationFormGroup;
   const serviceDetailsArray = formService.getServiceDetailsFormArray();
 
-  const hasLocalAgent = locationInfoGroup?.get(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA)?.value || false;
+  // Get service IDs from cover page (source of truth) since sync may not have run yet
+  const coverPageServicesArray = formService.getServicesFormArray();
+  const coverPageServiceIds: string[] = [];
+  if (coverPageServicesArray) {
+    for (let i = 0; i < coverPageServicesArray.length; i++) {
+      const serviceGroup = coverPageServicesArray.at(i) as FormGroup;
+      coverPageServiceIds.push(serviceGroup.get(EMaterialsFormControls.serviceId)?.value || '');
+    }
+  }
+
+  const hasLocalAgent = toBooleanYesNoOrUndefined(
+    locationInfoGroup?.get(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA)?.value
+  );
 
   const companyInformationSection: CompanyInformationSection = {
     companyName: getControlValue(companyInfoGroup, EMaterialsFormControls.companyName) || '',
@@ -582,11 +602,14 @@ function mapServicesAndCompanyInfo(formService: ServicePlanFormService): {
     secVendorId: getControlValue(locationInfoGroup, EMaterialsFormControls.registeredVendorIDwithSEC) || '',
     benaVendorId: getControlValue(locationInfoGroup, EMaterialsFormControls.benaRegisteredVendorID) || '',
     hasLocalAgent,
-    localAgentDetails: hasLocalAgent ? (localAgentInfoGroup?.get(EMaterialsFormControls.localAgentDetails)?.value || undefined) : undefined,
+    localAgentDetails:
+      hasLocalAgent === true
+        ? (localAgentInfoGroup?.get(EMaterialsFormControls.localAgentDetails)?.value || undefined)
+        : undefined,
   };
 
   let localAgentDetailSection: LocalAgentDetailSection | undefined;
-  if (hasLocalAgent) {
+  if (hasLocalAgent === true) {
     localAgentDetailSection = {
       localAgentName: getControlValue(localAgentInfoGroup, EMaterialsFormControls.localAgentName) || '',
       agentContactPerson: getControlValue(localAgentInfoGroup, EMaterialsFormControls.contactPersonName) || '',
@@ -600,7 +623,9 @@ function mapServicesAndCompanyInfo(formService: ServicePlanFormService): {
   if (serviceDetailsArray) {
     for (let i = 0; i < serviceDetailsArray.length; i++) {
       const detailGroup = serviceDetailsArray.at(i) as FormGroup;
-      const serviceId = detailGroup.get(EMaterialsFormControls.serviceId)?.value || '';
+      // Use service ID from cover page (source of truth), fallback to overview's synced ID
+      const overviewServiceId = detailGroup.get(EMaterialsFormControls.serviceId)?.value || '';
+      const serviceId = coverPageServiceIds[i] || overviewServiceId;
       const methodology = getControlValue(detailGroup, EMaterialsFormControls.serviceLocalizationMethodology);
 
       services.push({
@@ -610,7 +635,9 @@ function mapServicesAndCompanyInfo(formService: ServicePlanFormService): {
         serviceType: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceType)),
         serviceCategory: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceCategory)),
         serviceProvidedTo: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceProvidedTo)),
-        targetedForLocalization: toBooleanYesNo(getControlValue(detailGroup, EMaterialsFormControls.serviceTargetedForLocalization)),
+        targetedForLocalization: toBooleanYesNoOrUndefined(
+          getControlValue(detailGroup, EMaterialsFormControls.serviceTargetedForLocalization)
+        ),
         serviceLocalizationMethodology: toNumberArray(methodology),
         expectedLocalizationDate: getControlValue(detailGroup, EMaterialsFormControls.expectedLocalizationDate) || undefined,
         otherProvidedTo: getControlValue(detailGroup, EMaterialsFormControls.serviceProvidedToCompanyNames) || undefined,
@@ -997,7 +1024,12 @@ export function convertServiceRequestToFormData(
     formData.append(`ServicePlan.Services[${index}].ServiceType`, service.serviceType.toString());
     formData.append(`ServicePlan.Services[${index}].ServiceCategory`, service.serviceCategory.toString());
     formData.append(`ServicePlan.Services[${index}].ServiceProvidedTo`, service.serviceProvidedTo.toString());
-    formData.append(`ServicePlan.Services[${index}].TargetedForLocalization`, service.targetedForLocalization.toString());
+    if (service.targetedForLocalization !== undefined && service.targetedForLocalization !== null) {
+      formData.append(
+        `ServicePlan.Services[${index}].TargetedForLocalization`,
+        service.targetedForLocalization.toString()
+      );
+    }
     service.serviceLocalizationMethodology.forEach((method, methodIndex) => {
       formData.append(`ServicePlan.Services[${index}].ServiceLocalizationMethodology[${methodIndex}]`, method.toString());
     });
@@ -1018,7 +1050,9 @@ export function convertServiceRequestToFormData(
   formData.append('ServicePlan.CompanyInformationSection.GlobalHQLocation', companyInfo.globalHQLocation);
   formData.append('ServicePlan.CompanyInformationSection.SECVendorId', companyInfo.secVendorId);
   formData.append('ServicePlan.CompanyInformationSection.BenaVendorId', companyInfo.benaVendorId);
-  formData.append('ServicePlan.CompanyInformationSection.HasLocalAgent', companyInfo.hasLocalAgent.toString());
+  if (companyInfo.hasLocalAgent !== undefined && companyInfo.hasLocalAgent !== null) {
+    formData.append('ServicePlan.CompanyInformationSection.HasLocalAgent', companyInfo.hasLocalAgent.toString());
+  }
   if (companyInfo.localAgentDetails) {
     formData.append('ServicePlan.CompanyInformationSection.LocalAgentDetails', companyInfo.localAgentDetails);
   }
