@@ -36,4 +36,8 @@ export class BasicPlanBuilder {
   setCommentsFormGroup(formGroup: FormGroup): void {
     this.commentsFormGroup.patchValue(formGroup.value);
   }
+
+  resetCommentsFormGroup(): void {
+    this.commentsFormGroup.reset();
+  }
 }
