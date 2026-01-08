@@ -133,12 +133,10 @@ export class OpportunitiesList implements OnInit, OnDestroy {
   }
 
   onUserConfirmNewPlanDialog() {
-    if (this.planStore.newPlanOpportunityType() === EOpportunityType.SERVICES) {
-      this.toast.warn('Apply for services opportunity will be available soon');
-      return;
-    }
-    this.newPlanDialogVisibility.set(false);
-    this.productLocalizationPlanWizardVisibility.set(true);
+     this.newPlanDialogVisibility.set(false);
+      this.planStore.newPlanOpportunityType() === EOpportunityType.PRODUCT
+    ? this.productLocalizationPlanWizardVisibility.set(true)
+    : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
   ngOnDestroy(): void {
