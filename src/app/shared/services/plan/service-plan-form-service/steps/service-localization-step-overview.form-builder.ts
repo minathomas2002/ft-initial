@@ -20,7 +20,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.companyName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control({ value: '', disabled: true }, [Validators.required, Validators.maxLength(100)]),
       }),
       [EMaterialsFormControls.ceoName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),

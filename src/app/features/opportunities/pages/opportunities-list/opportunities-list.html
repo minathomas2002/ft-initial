@@ -74,7 +74,7 @@
 }
 
 @if(productLocalizationPlanWizardVisibility()){
-<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" />
+<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" (doRefresh)="applyFilter()" />
 } @if (serviceLocalizationPlanWizardVisibility()) {
-<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility" />
+<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility" (doRefresh)="applyFilter()" />
 }

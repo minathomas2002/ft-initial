@@ -308,7 +308,23 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
           opportunityControl?.disable({ emitEvent: true });
         }
 
+        // Force form validity update so stepper icons reflect current state
+        this.triggerFormValidityUpdate();
       });
+  }
+
+  /**
+   * Triggers updateValueAndValidity on all form groups to emit statusChanges.
+   * This ensures the stepper icons update correctly after form data is loaded.
+   */
+  private triggerFormValidityUpdate(): void {
+    // Use setTimeout to ensure this runs after Angular's change detection
+    setTimeout(() => {
+      this.serviceLocalizationFormService.step1_coverPage.updateValueAndValidity({ emitEvent: true });
+      this.serviceLocalizationFormService.step2_overview.updateValueAndValidity({ emitEvent: true });
+      this.serviceLocalizationFormService.step3_existingSaudi.updateValueAndValidity({ emitEvent: true });
+      this.serviceLocalizationFormService.step4_directLocalization.updateValueAndValidity({ emitEvent: true });
+    }, 0);
   }
 
   private disableAllForms(): void {
@@ -328,6 +344,10 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
     const submissionDateControl = basicInfo?.get(EMaterialsFormControls.submissionDate);
     submissionDateControl?.disable({ emitEvent: false });
+
+    // Re-enabling the whole step also enables nested read-only controls.
+    // Keep Step 2 company name disabled and synced with Step 1.
+    this.serviceLocalizationFormService.syncCompanyNameFromCoverPageToOverview();
   }
 
   // Initialize watcher on service details form array to set flags
@@ -549,7 +569,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.draftSaved'));
+          this.toasterService.success('Service localization plan saved as draft successfully');
           // Only reset forms if not in edit mode (to preserve data)
           if (!isEditMode) {
             this.serviceLocalizationFormService.resetAllForms();

@@ -455,6 +455,11 @@ export function mapServicePlanResponseToForm(
     formService.toggleExpectedLocalizationDateValidation(toYesNoId(!!svc.targetedForLocalization), idx);
   });
 
+  // Re-sync filtered service tables based on the (now) mapped methodology.
+  // (Mapping uses emitEvent:false, so ServicePlanFormService subscriptions won't fire here.)
+  formService.syncServicesFromCoverPageToExistingSaudi();
+  formService.syncServicesFromCoverPageToDirectLocalization();
+
   // Step 3: Existing Saudi
   const saudiCompaniesArray = formService.saudiCompanyDetailsFormGroup;
   clearAndRebuildFormArray(saudiCompaniesArray, servicePlan.saudiCompanyDetails?.length ?? 1, () => formService.createSaudiCompanyDetailItem());
@@ -1131,6 +1136,8 @@ export function convertServiceRequestToFormData(
 
   // Add service headcounts if present
   if (servicePlan.serviceHeadcounts) {
+    console.log(servicePlan.serviceHeadcounts)
+
     servicePlan.serviceHeadcounts.forEach((service, index) => {
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].PlanServiceTypeId`, service.planServiceTypeId);
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].MeasuresUpSkillSaudis`, service.measuresUpSkillSaudis);

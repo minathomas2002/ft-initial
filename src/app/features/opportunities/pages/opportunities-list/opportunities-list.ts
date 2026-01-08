@@ -67,6 +67,11 @@ export class OpportunitiesList implements OnInit, OnDestroy {
     if (isAnonymousData !== undefined) {
       this.isAnonymous.set(isAnonymousData);
     }
+
+    this.applyFilter()
+  }
+
+  applyFilter() {
     this.filterService.applyFilter();
   }
 

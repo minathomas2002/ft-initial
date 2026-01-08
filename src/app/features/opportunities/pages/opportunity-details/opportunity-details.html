@@ -253,7 +253,7 @@
 />
 
 @if(productLocalizationPlanWizardVisibility()){
-<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" />
+<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" (doRefresh)="getOpportunityDetails()" />
 } @if(serviceLocalizationPlanWizardVisibility()){
-<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility" />
+<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility" (doRefresh)="getOpportunityDetails()" />
 }

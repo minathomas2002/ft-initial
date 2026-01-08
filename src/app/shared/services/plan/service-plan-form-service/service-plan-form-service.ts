@@ -7,6 +7,7 @@ import { ServiceLocalizationStepCoverPageFormBuilder } from './steps/service-loc
 import { ServiceLocalizationStepOverviewFormBuilder } from './steps/service-localization-step-overview.form-builder';
 import { ServiceLocalizationStepExistingSaudiFormBuilder } from './steps/service-localization-step-existing-saudi.form-builder';
 import { ServiceLocalizationStepDirectLocalizationFormBuilder } from './steps/service-localization-step-direct-localization.form-builder';
+import { ELocalizationMethodology } from 'src/app/shared/enums/plan.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,9 @@ import { ServiceLocalizationStepDirectLocalizationFormBuilder } from './steps/se
 export class ServicePlanFormService {
   private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
+
+  private readonly _existingSaudiServiceLevelCache = new Map<string, any>();
+  private readonly _directLocalizationServiceLevelCache = new Map<string, any>();
 
   // Step builders
   private readonly _step1Builder = new ServiceLocalizationStepCoverPageFormBuilder(this._fb);
@@ -40,6 +44,16 @@ export class ServicePlanFormService {
   step4_directLocalization = this._step4FormGroup;
 
   constructor() {
+    // Keep overview company name in sync with cover page.
+    this.syncCompanyNameFromCoverPageToOverview();
+
+    const coverCompanyNameValueControl = this.getCoverPageCompanyNameValueControl();
+    coverCompanyNameValueControl?.valueChanges
+      ?.pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        this.syncCompanyNameFromCoverPageToOverview();
+      });
+
     // Keep all downstream service-name usages in sync with cover page services.
     this.syncServicesFromCoverPageToOverview();
     this.syncServicesFromCoverPageToExistingSaudi();
@@ -50,6 +64,15 @@ export class ServicePlanFormService {
       ?.pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this.syncServicesFromCoverPageToOverview();
+        this.syncServicesFromCoverPageToExistingSaudi();
+        this.syncServicesFromCoverPageToDirectLocalization();
+      });
+
+    // Re-sync filtered service tables when the Step 2 methodology selection changes.
+    const detailsArray = this.getServiceDetailsFormArray();
+    detailsArray?.valueChanges
+      ?.pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
         this.syncServicesFromCoverPageToExistingSaudi();
         this.syncServicesFromCoverPageToDirectLocalization();
       });
@@ -234,7 +257,13 @@ export class ServicePlanFormService {
   syncServicesFromCoverPageToExistingSaudi(): void {
     const servicesArray = this.getServicesFormArray();
     if (servicesArray) {
-      this._step3Builder.syncServicesFromCoverPage(this._step3FormGroup, servicesArray);
+      const includeServiceIds = this.getServiceIdsForMethodology(ELocalizationMethodology.Collaboration.toString());
+      this._step3Builder.syncServicesFromCoverPage(
+        this._step3FormGroup,
+        servicesArray,
+        includeServiceIds,
+        this._existingSaudiServiceLevelCache
+      );
     }
   }
 
@@ -278,8 +307,30 @@ export class ServicePlanFormService {
   syncServicesFromCoverPageToDirectLocalization(): void {
     const servicesArray = this.getServicesFormArray();
     if (servicesArray) {
-      this._step4Builder.syncServicesFromCoverPage(this._step4FormGroup, servicesArray);
+      const includeServiceIds = this.getServiceIdsForMethodology(ELocalizationMethodology.Direct.toString());
+      this._step4Builder.syncServicesFromCoverPage(
+        this._step4FormGroup,
+        servicesArray,
+        includeServiceIds,
+        this._directLocalizationServiceLevelCache
+      );
     }
+  }
+
+  private getServiceIdsForMethodology(methodologyId: string): string[] {
+    const detailsArray = this.getServiceDetailsFormArray();
+    if (!detailsArray) return [];
+
+    return detailsArray.controls
+      .map((ctrl) => {
+        const row = ctrl as FormGroup;
+        const serviceId = row.get(EMaterialsFormControls.serviceId)?.value;
+        const method = row.get(`${EMaterialsFormControls.serviceLocalizationMethodology}.${EMaterialsFormControls.value}`)?.value;
+
+        if (!serviceId) return null;
+        return String(method) === methodologyId ? String(serviceId) : null;
+      })
+      .filter((x): x is string => !!x);
   }
 
   // Helper methods
@@ -461,6 +512,39 @@ export class ServicePlanFormService {
     this._step3FormGroup.markAsUntouched();
     this._step4FormGroup.markAsPristine();
     this._step4FormGroup.markAsUntouched();
+
+    // Re-sync derived disabled fields after reset.
+    this.syncCompanyNameFromCoverPageToOverview();
+  }
+
+  private getCoverPageCompanyNameValueControl(): FormControl<string> | null {
+    const companyInfo = this.coverPageCompanyInformationFormGroup;
+    if (!companyInfo) return null;
+    return companyInfo.get(`${EMaterialsFormControls.companyName}.${EMaterialsFormControls.value}`) as FormControl<string> | null;
+  }
+
+  private getOverviewCompanyNameValueControl(): FormControl<string> | null {
+    const overviewCompanyInfo = this.overviewCompanyInformationFormGroup;
+    if (!overviewCompanyInfo) return null;
+    return overviewCompanyInfo.get(`${EMaterialsFormControls.companyName}.${EMaterialsFormControls.value}`) as FormControl<string> | null;
+  }
+
+  syncCompanyNameFromCoverPageToOverview(): void {
+    const from = this.getCoverPageCompanyNameValueControl();
+    const to = this.getOverviewCompanyNameValueControl();
+    if (!from || !to) return;
+
+    // Step 2 company name must always remain read-only, even if a parent form group
+    // is enabled (e.g. wizard edit mode enabling all steps).
+    if (to.enabled) {
+      to.disable({ emitEvent: false });
+    }
+
+    const nextValue = from.value ?? '';
+    if (to.value !== nextValue) {
+      // Keep Step 2 company name read-only; just mirror the value.
+      to.setValue(nextValue, { emitEvent: false });
+    }
   }
 
   /**

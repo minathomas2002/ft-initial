@@ -310,12 +310,17 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
    * and pre-fills the service name
    * Only syncs if the services have changed or are not yet initialized
    */
-  syncServicesFromCoverPage(directLocalizationFormGroup: FormGroup, servicesArray: FormArray): void {
+  syncServicesFromCoverPage(
+    directLocalizationFormGroup: FormGroup,
+    servicesArray: FormArray,
+    includeServiceIds?: string[] | null,
+    cache?: Map<string, any>
+  ): void {
     const serviceLevelArray = this.getServiceLevelFormArray(directLocalizationFormGroup);
     if (!serviceLevelArray) return;
 
     // Get service IDs and names from cover page
-    const coverPageServices = servicesArray.controls.map(control => {
+    const coverPageServicesAll = servicesArray.controls.map(control => {
       const serviceFormGroup = control as FormGroup;
       const serviceIdControl = serviceFormGroup.get(EMaterialsFormControls.serviceId);
       const serviceNameControl = serviceFormGroup.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
@@ -324,6 +329,10 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
         name: serviceNameControl?.value || ''
       };
     });
+
+    const coverPageServices = Array.isArray(includeServiceIds)
+      ? coverPageServicesAll.filter((s) => includeServiceIds.includes(s.id))
+      : coverPageServicesAll;
 
     // Get service IDs from service level
     const serviceLevelServiceIds = serviceLevelArray.controls.map(control => {
@@ -379,6 +388,11 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       }
     });
 
+    // Preserve removed rows across filtering toggles.
+    if (cache) {
+      existingDataMap.forEach((val, key) => cache.set(key, val));
+    }
+
     // Clear existing service level items
     serviceLevelArray.clear();
 
@@ -403,7 +417,9 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       }
 
       // Restore existing data if this service ID was already present; otherwise fallback by index
-      const existingData = service.id ? existingDataMap.get(service.id) : existingDataByIndex[index];
+      const existingData = service.id
+        ? (existingDataMap.get(service.id) ?? cache?.get(service.id))
+        : existingDataByIndex[index];
       if (existingData) {
         // Restore all fields except serviceName and serviceId
         Object.keys(existingData).forEach(key => {
