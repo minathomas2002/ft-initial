@@ -14,7 +14,7 @@ export class ProductPlanFormService {
   private readonly _fb = inject(FormBuilder);
   private readonly _planStore = inject(PlanStore);
   private initialFormValue!: any;
-  
+
   // Step builders
   private readonly _step1Builder = new PlanLocalizationStep1OverviewFormBuilder(this._fb, this._planStore.newPlanTitle());
   private readonly _step2Builder = new PlanLocalizationStep2ProductPlantOverviewFormBuilder(this._fb);
@@ -326,14 +326,14 @@ export class ProductPlanFormService {
     };
   }
 
-  initiateFormValue():void{
+  initiateFormValue(): void {
     this.initialFormValue = this.getAllFormsRawValue();
   }
 
-  
+
   hasFormChanged(): boolean {
-  return JSON.stringify(this.initialFormValue) !==
-          JSON.stringify(this.getAllFormsRawValue());
+    return JSON.stringify(this.initialFormValue) !==
+      JSON.stringify(this.getAllFormsRawValue());
   }
 
   /* ------------------------------------------------ */

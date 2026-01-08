@@ -16,6 +16,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
+import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -32,6 +33,7 @@ import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/
     TranslatePipe,
     BaseErrorMessages,
     PhoneInputComponent,
+    CommentStateComponent
   ],
   templateUrl: './plan-localization-step-01-overviewCompanyInformationForm.html',
   styleUrl: './plan-localization-step-01-overviewCompanyInformationForm.scss',

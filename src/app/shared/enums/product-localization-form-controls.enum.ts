@@ -9,6 +9,8 @@ export enum EMaterialsFormControls {
   locationInformationFormGroup = 'locationInformationFormGroup',
   localAgentInformationFormGroup = 'localAgentInformationFormGroup',
   comment = 'comment',
+  selectedInputs = 'selectedInputs',
+  commentsCount = 'commentsCount',
 
   // Basic Information Controls
   planTitle = 'planTitle',
