@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, model, OnInit, output, signal } from '@angular/core';
 import { BaseWizardDialog } from 'src/app/shared/components/base-components/base-wizard-dialog/base-wizard-dialog';
 import { StepContentDirective } from 'src/app/shared/directives/step-content.directive';
 import { OpportunityInformationForm } from '../opportunity-information-form/opportunity-information-form';
@@ -18,6 +18,7 @@ import { OpportunitiesFilterService } from '../../services/opportunities-filter/
 import { IOpportunityDetails } from 'src/app/shared/interfaces/opportunities.interface';
 import { TColors } from 'src/app/shared/interfaces/colors.interface';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -28,7 +29,8 @@ import { BaseTagComponent } from 'src/app/shared/components/base-components/base
     OpportunityLocalizationForm,
     ButtonModule,
     TranslatePipe,
-    BaseTagComponent
+    BaseTagComponent,
+    GeneralConfirmationDialogComponent
   ],
   templateUrl: './create-edit-opportunity-dialog.html',
   styleUrl: './create-edit-opportunity-dialog.scss',
@@ -63,18 +65,45 @@ export class CreateEditOpportunityDialog implements OnInit {
   activeStep = signal<number>(1);
   onSuccess = output<void>();
   wizardTitle = computed(() => (this.viewMode() === EViewMode.Edit ? this.i18nService.translate('opportunity.wizard.editOpportunity') : this.i18nService.translate('opportunity.wizard.createOpportunity')));
+  showConfirmLeaveDialog = signal<boolean>(false);
+
+  constructor() {
+    // Reset form and handle mode changes when dialog becomes visible
+    effect(() => {
+      const isVisible = this.visible();
+      const currentViewMode = this.viewMode();
+
+      if (isVisible) {
+        // Reset form when dialog opens to ensure clean state
+        this.opportunityFormService.resetForm();
+
+        // Load opportunity data if in edit mode
+        if (currentViewMode === EViewMode.Edit && this.adminOpportunitiesStore.selectedOpportunityId()) {
+          this.opportunitiesStore.getOpportunityDetails(this.adminOpportunitiesStore.selectedOpportunityId()!).subscribe({
+            next: async (res) => {
+              this.opportunity.set(res.body);
+              await this.opportunityFormService.setFormValue(res.body);
+              // Disable opportunityType if hasActivePlans in edit mode
+              if (res.body.hasActivePlans) {
+                this.opportunityFormService.opportunityInformationForm.get('opportunityType')?.disable({ emitEvent: false });
+              } else {
+                this.opportunityFormService.opportunityInformationForm.get('opportunityType')?.enable({ emitEvent: false });
+              }
+            },
+          });
+        } else {
+          // Clear opportunity data when switching to create mode
+          this.opportunity.set(null);
+          // Ensure title and opportunityType are enabled in create mode
+          this.opportunityFormService.opportunityInformationForm.get('title')?.enable({ emitEvent: false });
+          this.opportunityFormService.opportunityInformationForm.get('opportunityType')?.enable({ emitEvent: false });
+        }
+      }
+    });
+  }
 
   ngOnInit() {
-    this.opportunityFormService.resetForm();
-
-    if (this.viewMode() === EViewMode.Edit && this.adminOpportunitiesStore.selectedOpportunityId()) {
-      this.opportunitiesStore.getOpportunityDetails(this.adminOpportunitiesStore.selectedOpportunityId()!).subscribe({
-        next: async (res) => {
-          this.opportunity.set(res.body);
-          await this.opportunityFormService.setFormValue(res.body);
-        },
-      });
-    }
+    // Initial setup is handled in constructor effect
   }
 
   nextStep = () => {
@@ -171,6 +200,21 @@ export class CreateEditOpportunityDialog implements OnInit {
   }
 
   onClose() {
+    if (this.viewMode() === EViewMode.Edit || this.viewMode() === EViewMode.Create) {
+      if (this.opportunityFormService.hasFormChanged()) {
+        // Keep the wizard open and show confirmation dialog
+        this.visible.set(true);
+        this.showConfirmLeaveDialog.set(true);
+        return;
+      }
+    }
+    this.opportunityFormService.resetForm();
+    this.activeStep.set(1);
+    this.visible.set(false);
+  }
+
+  onConfirmLeave(): void {
+    this.showConfirmLeaveDialog.set(false);
     this.opportunityFormService.resetForm();
     this.activeStep.set(1);
     this.visible.set(false);

@@ -309,6 +309,10 @@
       "savedAsDraft": "Opportunity saved as draft",
       "createdSuccessfully": "Opportunity is created successfully",
       "updatedSuccessfully": "Opportunity is updated successfully"
+    },
+    "confirmation": {
+      "onLeaveTitle": "Are you sure you want to leave?",
+      "onLeaveDesc": "Canceling now will discard all unsaved changes. Save as draft to keep your work."
     }
   },
   "users": {

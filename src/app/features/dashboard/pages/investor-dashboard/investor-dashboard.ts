@@ -54,7 +54,6 @@ import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/s
     NgClass,
     SkeletonModule,
     TranslatePipe,
-    TimelineDialog,
     SlaCountdownNounPipe,
     ServiceLocalizationPlanWizard
 ],

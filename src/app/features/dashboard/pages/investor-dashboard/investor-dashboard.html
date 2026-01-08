@@ -128,7 +128,7 @@
           <td>
             <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
           </td>
-          <td>{{ item.submissionDate | date : 'dd/MM/yyyy' }}</td>
+          <td>{{ item.submissionDate | date: 'dd MMM yyyy' }}</td>
           <td>
             @if(item.status == eEmployeePlanStatus.PENDING) {
 

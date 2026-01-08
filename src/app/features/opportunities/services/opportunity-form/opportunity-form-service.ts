@@ -62,6 +62,7 @@ export class OpportunityFormService {
   // Store original date range for validation when plans are linked
   private originalDateRange: [Date, Date] | null = null;
   private hasActivePlans: boolean = false;
+  private initialFormValue!: any;
 
   constructor() {
     this.initializeForms();
@@ -187,8 +188,8 @@ export class OpportunityFormService {
 
   formValue() {
     return {
-      opportunityInformationFrom: this.opportunityInformationForm.value,
-      opportunityLocalizationForm: this.opportunityLocalizationForm.value,
+      opportunityInformationFrom: this.opportunityInformationForm.getRawValue(),
+      opportunityLocalizationForm: this.opportunityLocalizationForm.getRawValue(),
     };
   }
 
@@ -207,9 +208,16 @@ export class OpportunityFormService {
     this.originalDateRange = null;
     this.hasActivePlans = false;
 
+    // Ensure all fields are enabled when resetting (especially when switching from edit to create mode)
+    this.opportunityInformationForm.get('title')?.enable({ emitEvent: false });
+    this.opportunityInformationForm.get('opportunityType')?.enable({ emitEvent: false });
+
     this.opportunityForm.updateValueAndValidity();
     this.opportunityInformationForm.updateValueAndValidity();
     this.opportunityLocalizationForm.updateValueAndValidity();
+
+    // Reset initial form value tracking
+    this.initiateFormValue();
   }
 
   private resetFormArray(controlName: keyof IOpportunityLocalizationFrom) {
@@ -388,12 +396,13 @@ export class OpportunityFormService {
     // }
 
 
-// disable title if has active plans 
-    if(this.hasActivePlans){
+    // disable title and opportunityType if has active plans 
+    if (this.hasActivePlans) {
       this.opportunityInformationForm.get("title")?.disable({ emitEvent: false });
-    }else{
-        this.opportunityInformationForm.get("title")?.enable({ emitEvent: false });
-
+      this.opportunityInformationForm.get("opportunityType")?.disable({ emitEvent: false });
+    } else {
+      this.opportunityInformationForm.get("title")?.enable({ emitEvent: false });
+      this.opportunityInformationForm.get("opportunityType")?.enable({ emitEvent: false });
     }
     this.opportunityInformationForm.patchValue({
       id: value.id,
@@ -418,6 +427,9 @@ export class OpportunityFormService {
     this.patchFormArray('afterSalesServices', value.afterSalesServices);
 
     this.formUpdated.next();
+
+    // Initialize form value tracking after setting form values
+    this.initiateFormValue();
   }
 
   enableDraftValidators() {
@@ -541,5 +553,21 @@ export class OpportunityFormService {
       // If no activities, add one empty control
       formArray.push(this.createKeyActivityControl());
     }
+  }
+
+  private getAllFormsRawValue() {
+    return {
+      opportunityInformation: this.opportunityInformationForm.getRawValue(),
+      opportunityLocalization: this.opportunityLocalizationForm.getRawValue(),
+    };
+  }
+
+  initiateFormValue(): void {
+    this.initialFormValue = this.getAllFormsRawValue();
+  }
+
+  hasFormChanged(): boolean {
+    return JSON.stringify(this.initialFormValue) !==
+      JSON.stringify(this.getAllFormsRawValue());
   }
 }

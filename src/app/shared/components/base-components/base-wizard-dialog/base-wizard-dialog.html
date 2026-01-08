@@ -46,9 +46,9 @@
         }
       </div>
     </div>
-    <div class="flex flex-col overflow-hidden flex-1">
-      <div class="header ps-8">
-        <h3 class="text-2xl font-semibold pt-5">{{ wizardTitle() }}</h3>
+    <div class="flex flex-col overflow-hidden flex-1 p-8 pb-4 gap-[32px]">
+      <div class="header flex flex-col gap-2">
+        <h3 class="text-2xl font-semibold">{{wizardTitle()}}</h3>
         <ng-content select="status"></ng-content>
       </div>
       <div class="flex-1 py-6 overflow-auto max-w-full" #scrollableContent>
@@ -58,9 +58,7 @@
         <ng-container *ngTemplateOutlet="content.templateRef"></ng-container>
         } } } }
       </div>
-      <div
-        class="actions flex justify-between items-center py-[16px] px-[1.5rem] border-t border-gray-200"
-      >
+      <div class="actions flex justify-between items-center pt-[16px] border-t border-gray-200">
         <div class="flex-1">
           @if (!hideSaveAsDraft()) {
           <p-button
@@ -69,8 +67,8 @@
             [label]="'opportunity.wizard.saveAsDraft' | translate"
             severity="secondary"
             (click)="saveAsDraft()"
-            [disabled]="isProcessing()"
-            [loading]="isProcessing()"
+            [disabled]="isSavingAsDraft() || isProcessing()"
+            [loading]="isSavingAsDraft()"
           />
           }
           <ng-content select="more-actions"></ng-content>

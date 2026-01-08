@@ -4,18 +4,21 @@ import { SummaryField } from 'src/app/shared/components/plans/summary-field/summ
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-summary-section-overview',
   imports: [SummarySectionHeader, SummaryField, TranslatePipe],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
+  providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionOverview {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   onEdit = output<void>();
+  private datePipe = inject(DatePipe);
 
   // Form group accessors
   basicInformationFormGroup = computed(() => {
@@ -86,7 +89,12 @@ export class SummarySectionOverview {
     return value === '-' ? '-' : value.charAt(0).toUpperCase() + value.slice(1);
   });
   opportunity = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.opportunity}`));
-  submissionDate = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`));
+  submissionDate = computed(() => {
+    const dateValue = this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`);
+    if (!dateValue) return null;
+    const date = new Date(dateValue);
+    return this.datePipe.transform(date, 'dd MMM yyyy') ?? null;
+  });
 
   companyName = computed(() => {
     const companyInfo = this.companyInformationFormGroup();

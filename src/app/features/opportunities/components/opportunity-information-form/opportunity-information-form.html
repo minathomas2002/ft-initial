@@ -1,4 +1,4 @@
-<div class="px-8 flex flex-col gap-8 pb-10">
+<div class="flex flex-col gap-8 pb-10">
   @if(isLoading()) {
   <!-- Skeleton Loading State -->
   <div class="flex flex-col gap-8">
@@ -244,7 +244,7 @@
           [options]="opportunityTypes()"
           optionLabel="name"
           optionValue="id"
-          [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
+          [appendTo]="'body'"
           [placeholder]="'opportunity.form.select' | translate"
           class="md:w-[50%]"
         >
