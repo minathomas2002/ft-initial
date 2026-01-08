@@ -9,6 +9,7 @@ import {
   effect,
   ViewChild,
   ElementRef,
+  OnDestroy,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -17,6 +18,7 @@ import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
 import { TooltipModule } from 'primeng/tooltip';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-form-array-input',
@@ -25,7 +27,7 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrl: './form-array-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormArrayInput {
+export class FormArrayInput implements OnDestroy {
   hideAddButton = input<boolean>(false);
   // Accept FormArray instead of FieldTree
   // Using input instead of model since FormArray is mutable and changes are reflected automatically
@@ -67,16 +69,36 @@ export class FormArrayInput {
   private currentLength = 0;
   // Stable array reference - only recreated when structure changes
   private stableRowsArray: any[] = [];
+  // Subscription cleanup for valueChanges
+  private valueChangesSubscription: Subscription | null = null;
 
   constructor() {
     // Initialize stable rows array when formArray input changes
     effect(() => {
       const formArray = this.formArray();
       if (formArray) {
+        // Cleanup previous subscription if any
+        if (this.valueChangesSubscription) {
+          this.valueChangesSubscription.unsubscribe();
+          this.valueChangesSubscription = null;
+        }
+
         // Initial setup - create stable array reference
         this.currentLength = formArray.length;
         this.stableRowsArray = formArray.value || [];
         this.structureUpdateTrigger.update((v) => v + 1);
+
+        // Subscribe to valueChanges to detect when form data is patched (e.g., edit mode)
+        // This ensures the rows array is updated when data is loaded asynchronously
+        this.valueChangesSubscription = formArray.valueChanges.subscribe((value) => {
+          // Update stable rows array when values change
+          this.stableRowsArray = value || [];
+          // Only trigger re-render if length changed (structure change)
+          if (formArray.length !== this.currentLength) {
+            this.currentLength = formArray.length;
+            this.structureUpdateTrigger.update((v) => v + 1);
+          }
+        });
       }
     });
   }
@@ -202,5 +224,12 @@ export class FormArrayInput {
         }
       }
     }, 10);
+  }
+
+  ngOnDestroy(): void {
+    if (this.valueChangesSubscription) {
+      this.valueChangesSubscription.unsubscribe();
+      this.valueChangesSubscription = null;
+    }
   }
 }

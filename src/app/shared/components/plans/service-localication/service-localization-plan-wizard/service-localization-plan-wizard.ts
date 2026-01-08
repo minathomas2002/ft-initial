@@ -35,6 +35,8 @@ import { Signature } from 'src/app/shared/interfaces/plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { switchMap, of, map, catchError, finalize } from 'rxjs';
+import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
+import { TranslatePipe } from "../../../../pipes/translate.pipe";
 
 type ServiceLocalizationWizardStepId =
   | 'cover'
@@ -59,8 +61,9 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
     ButtonModule,
     TimelineDialog,
     SubmissionConfirmationModalComponent,
-    ConfirmLeaveDialogComponent,
-  ],
+    GeneralConfirmationDialogComponent,
+    TranslatePipe
+],
   templateUrl: './service-localization-plan-wizard.html',
   styleUrl: './service-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -253,6 +256,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
           }
 
           const opportunityId = response.body.servicePlan?.opportunityId;
+
           if (opportunityId) {
             return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId).pipe(
               map(() => response.body),
@@ -278,8 +282,6 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       )
       .subscribe((data) => {
         if (!data) return;
-
-        this.planStore.setPlanStatus(data.servicePlan?.status ?? null);
 
         // Reset then map (ensures arrays match response)
         this.serviceLocalizationFormService.resetAllForms();

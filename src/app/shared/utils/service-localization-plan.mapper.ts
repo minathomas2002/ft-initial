@@ -13,6 +13,7 @@ import type {
   IServicePlanServiceItem,
 } from 'src/app/shared/interfaces/plans.interface';
 import { API_ENDPOINTS } from 'src/app/shared/api/api-endpoints';
+import { parsePhoneNumber } from 'src/app/shared/data/countries.data';
 
 /**
  * Interface definitions for Service Localization Plan API Request
@@ -246,6 +247,23 @@ function setNestedValue(formGroup: FormGroup | null, controlName: string, value:
   }
 }
 
+function setPhoneValue(formGroup: FormGroup | null, controlName: string, phoneString: string | null | undefined): void {
+  if (!formGroup) return;
+
+  const control = formGroup.get(controlName);
+  if (!(control instanceof FormGroup)) return;
+
+  const valueControl = control.get(EMaterialsFormControls.value);
+  if (!valueControl) return;
+
+  if (!phoneString) {
+    valueControl.setValue(null, { emitEvent: false });
+    return;
+  }
+
+  valueControl.setValue(parsePhoneNumber(phoneString), { emitEvent: false });
+}
+
 function setDirectValue(formGroup: FormGroup | null, controlName: string, value: any): void {
   if (!formGroup) return;
   const control = formGroup.get(controlName);
@@ -397,7 +415,7 @@ export function mapServicePlanResponseToForm(
   setNestedValue(localAgentInfo, EMaterialsFormControls.localAgentName, agent?.localAgentName ?? '');
   setNestedValue(localAgentInfo, EMaterialsFormControls.contactPersonName, agent?.agentContactPerson ?? '');
   setNestedValue(localAgentInfo, EMaterialsFormControls.emailID, agent?.agentEmail ?? '');
-  setNestedValue(localAgentInfo, EMaterialsFormControls.contactNumber, agent?.agentContactNumber ?? '');
+  setPhoneValue(localAgentInfo, EMaterialsFormControls.contactNumber, agent?.agentContactNumber);
   setNestedValue(localAgentInfo, EMaterialsFormControls.companyLocation, agent?.agentCompanyLocation ?? '');
 
   const detailsArray = formService.getServiceDetailsFormArray();

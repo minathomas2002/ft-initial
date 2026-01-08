@@ -577,6 +577,12 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
         const serviceNameValueControl = serviceFormGroup.get(
           `${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`
         );
+
+        if (serviceNameValueControl) {
+          // Enforce non-editable service name (auto-populated from cover page)
+          serviceNameValueControl.disable({ emitEvent: false });
+        }
+
         if (serviceNameValueControl && coverPageServices[index]) {
           const nextName = coverPageServices[index].name || '';
           if (serviceNameValueControl.value !== nextName) {
@@ -621,6 +627,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       const serviceNameValueControl = newServiceLevel.get(`${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`);
       if (serviceNameValueControl) {
         serviceNameValueControl.setValue(service.name);
+        serviceNameValueControl.disable({ emitEvent: false });
       }
 
       // Restore existing data if this service ID was already present; otherwise fallback by index

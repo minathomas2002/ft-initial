@@ -56,6 +56,12 @@ export class SummarySectionExistingSaudi {
     return this.formGroup().get(EMaterialsFormControls.serviceLevelFormGroup) as FormArray;
   });
 
+  // Attachments live under the shared service-localization form's attachments group
+  // (currently created in step 4 builder, but displayed under Existing Saudi summary).
+  attachmentsFormGroup = computed(() => {
+    return this.serviceForm.attachmentsFormGroup;
+  });
+
   // Helper method to get values
   getValue(controlPath: string): any {
     const parts = controlPath.split('.');
@@ -254,4 +260,19 @@ export class SummarySectionExistingSaudi {
     const match = options.find((o) => String(o.id) === String(statusId));
     return match ? match.name : String(statusId);
   }
+
+  // Attachments
+  attachments = computed(() => {
+    const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+    let value: unknown = null;
+
+    if (attachmentsControl instanceof FormGroup) {
+      value = attachmentsControl.get(EMaterialsFormControls.value)?.value;
+    } else {
+      value = attachmentsControl?.value;
+    }
+
+    if (Array.isArray(value)) return value;
+    return value ? [value] : [];
+  });
 }

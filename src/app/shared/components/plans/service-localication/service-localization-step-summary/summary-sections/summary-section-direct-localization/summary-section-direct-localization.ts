@@ -52,10 +52,6 @@ export class SummarySectionDirectLocalization {
     return this.formGroup().get(EMaterialsFormControls.serviceLevelFormGroup) as FormArray;
   });
 
-  attachmentsFormGroup = computed(() => {
-    return this.formGroup().get(EMaterialsFormControls.attachmentsFormGroup) as FormGroup;
-  });
-
   // Helper method to get values
   getValue(controlPath: string): any {
     const parts = controlPath.split('.');
@@ -216,19 +212,4 @@ export class SummarySectionDirectLocalization {
   hasServiceLevelFieldError(index: number, controlName: string): boolean {
     return this.hasFieldError(`serviceLevelFormGroup.${index}.${controlName}.value`);
   }
-
-  // Attachments
-  attachments = computed(() => {
-    const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
-    let value: unknown = null;
-
-    if (attachmentsControl instanceof FormGroup) {
-      value = attachmentsControl.get(EMaterialsFormControls.value)?.value;
-    } else {
-      value = attachmentsControl?.value;
-    }
-
-    if (Array.isArray(value)) return value;
-    return value ? [value] : [];
-  });
 }
