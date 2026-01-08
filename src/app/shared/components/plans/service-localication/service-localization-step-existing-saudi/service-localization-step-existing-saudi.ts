@@ -56,6 +56,20 @@ export class ServiceLocalizationStepExistingSaudi {
 
   yearColumns = computed(() => this.serviceForm.upcomingYears(5));
 
+  // Custom header labels for Saudi Company Details table to ensure correct order
+  saudiCompanyDetailsHeaderLabels: Record<string, string> = {
+    [EMaterialsFormControls.saudiCompanyName]: 'Saudi Company Name',
+    [EMaterialsFormControls.registeredVendorIDwithSEC]: 'Vendor ID With SEC',
+    [EMaterialsFormControls.benaRegisteredVendorID]: 'Bena Register Vendor ID',
+    [EMaterialsFormControls.companyType]: 'Company Type',
+    [EMaterialsFormControls.qualificationStatus]: 'Qualification Status With SEC',
+    [EMaterialsFormControls.products]: 'Products',
+    [EMaterialsFormControls.companyOverview]: 'Company Overview',
+    [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: 'Key Projects Executed By Contractor For SEC',
+    [EMaterialsFormControls.companyOverviewKeyProjectDetails]: 'Company Overview Key Project Details',
+    [EMaterialsFormControls.companyOverviewOther]: 'Company Overview Other',
+  };
+
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
     EMaterialsFormControls.secondYear,
@@ -128,6 +142,36 @@ export class ServiceLocalizationStepExistingSaudi {
         }
       }
     });
+
+    // Disable all conditional fields when in view mode
+    effect(() => {
+      if (this.isViewMode()) {
+        this.disableAllConditionalFields();
+      }
+    });
+  }
+
+  /**
+   * Disable all conditional fields in Saudi Company Details for view mode
+   */
+  private disableAllConditionalFields(): void {
+    const formArray = this.getSaudiCompanyDetailsFormArray();
+    formArray.controls.forEach((control) => {
+      const rowControl = control as FormGroup;
+      const qualificationStatusControl = this.getValueControl(rowControl.get(EMaterialsFormControls.qualificationStatus));
+      const productsControl = this.getValueControl(rowControl.get(EMaterialsFormControls.products));
+      const companyOverviewControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverview));
+      const keyProjectsControl = this.getValueControl(rowControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC));
+      const companyOverviewKeyProjectControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails));
+      const companyOverviewOtherControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverviewOther));
+
+      qualificationStatusControl?.disable({ emitEvent: false });
+      productsControl?.disable({ emitEvent: false });
+      companyOverviewControl?.disable({ emitEvent: false });
+      keyProjectsControl?.disable({ emitEvent: false });
+      companyOverviewKeyProjectControl?.disable({ emitEvent: false });
+      companyOverviewOtherControl?.disable({ emitEvent: false });
+    });
   }
 
   private setupConditionalFields(): void {
@@ -157,6 +201,11 @@ export class ServiceLocalizationStepExistingSaudi {
 
     // Function to update fields based on current selections
     const updateFields = () => {
+      // In view mode, don't enable any fields - keep them all disabled
+      if (this.isViewMode()) {
+        return;
+      }
+
       const companyTypes: string[] = companyTypeControl?.value || [];
       const qualificationStatus = qualificationStatusControl?.value;
 

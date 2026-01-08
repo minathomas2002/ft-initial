@@ -439,20 +439,23 @@ export function mapServicePlanResponseToForm(
     setNestedValue(row, EMaterialsFormControls.serviceCategory, svc.serviceCategory != null ? String(svc.serviceCategory) : null);
     setNestedValue(row, EMaterialsFormControls.serviceDescription, svc.serviceDescription ?? '');
     setNestedValue(row, EMaterialsFormControls.serviceProvidedTo, svc.serviceProvidedTo != null ? String(svc.serviceProvidedTo) : null);
-    setNestedValue(row, EMaterialsFormControls.serviceProvidedToCompanyNames, svc.otherProvidedTo ?? '');
     setNestedValue(row, EMaterialsFormControls.totalBusinessDoneLast5Years, svc.totalBusinessLast5Years ?? '');
     setNestedValue(row, EMaterialsFormControls.serviceTargetedForLocalization, toYesNoId(!!svc.targetedForLocalization));
-    setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, svc.expectedLocalizationDate ?? '');
     setNestedValue(
       row,
       EMaterialsFormControls.serviceLocalizationMethodology,
       (svc.serviceLocalizationMethodology ?? []).map((x) => String(x))?.[0]
     );
 
-    // Keep conditional validators in sync
+    // Keep conditional validators in sync - call toggles first, then set conditional values
+    // This ensures values are not reset by the toggle functions
     const providedToId = svc.serviceProvidedTo != null ? String(svc.serviceProvidedTo) : null;
     formService.toggleServiceProvidedToCompanyNamesValidation(providedToId, idx);
     formService.toggleExpectedLocalizationDateValidation(toYesNoId(!!svc.targetedForLocalization), idx);
+
+    // Set values that may be reset by toggle functions AFTER the toggles
+    setNestedValue(row, EMaterialsFormControls.serviceProvidedToCompanyNames, svc.otherProvidedTo ?? '');
+    setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, svc.expectedLocalizationDate ?? '');
   });
 
   // Re-sync filtered service tables based on the (now) mapped methodology.
@@ -467,16 +470,17 @@ export function mapServicePlanResponseToForm(
     const row = saudiCompaniesArray?.at(idx) as FormGroup | undefined;
     if (!row) return;
     row.get('rowId')?.setValue(co.id ?? null, { emitEvent: false });
+    // Set values in the same order as form builder creates controls to preserve key order
     setNestedValue(row, EMaterialsFormControls.saudiCompanyName, co.companyName ?? '');
     setNestedValue(row, EMaterialsFormControls.registeredVendorIDwithSEC, co.vendorIdWithSEC ?? '');
     setNestedValue(row, EMaterialsFormControls.benaRegisteredVendorID, co.benaRegisterVendorId ?? '');
     setNestedValue(row, EMaterialsFormControls.companyType, (co.companyType ?? []).map((x) => String(x)));
     setNestedValue(row, EMaterialsFormControls.qualificationStatus, co.qualificationStatus != null ? String(co.qualificationStatus) : null);
+    setNestedValue(row, EMaterialsFormControls.products, co.products ?? '');
     setNestedValue(row, EMaterialsFormControls.companyOverview, co.companyOverview ?? '');
     setNestedValue(row, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC, co.keyProjectsForSEC ?? '');
-    setNestedValue(row, EMaterialsFormControls.products, co.products ?? '');
-    setNestedValue(row, EMaterialsFormControls.companyOverviewOther, co.companyOverviewOther ?? '');
     setNestedValue(row, EMaterialsFormControls.companyOverviewKeyProjectDetails, co.companyOverviewKeyProjectDetails ?? '');
+    setNestedValue(row, EMaterialsFormControls.companyOverviewOther, co.companyOverviewOther ?? '');
   });
 
   const partnershipArray = formService.collaborationPartnershipFormGroup;

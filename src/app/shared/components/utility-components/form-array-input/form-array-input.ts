@@ -84,15 +84,17 @@ export class FormArrayInput implements OnDestroy {
         }
 
         // Initial setup - create stable array reference
+        // Use getRawValue() to include disabled controls (important for header generation)
         this.currentLength = formArray.length;
-        this.stableRowsArray = formArray.value || [];
+        this.stableRowsArray = formArray.getRawValue() || [];
         this.structureUpdateTrigger.update((v) => v + 1);
 
         // Subscribe to valueChanges to detect when form data is patched (e.g., edit mode)
         // This ensures the rows array is updated when data is loaded asynchronously
-        this.valueChangesSubscription = formArray.valueChanges.subscribe((value) => {
+        this.valueChangesSubscription = formArray.valueChanges.subscribe(() => {
           // Update stable rows array when values change
-          this.stableRowsArray = value || [];
+          // Use getRawValue() to include disabled controls
+          this.stableRowsArray = formArray.getRawValue() || [];
           // Only trigger re-render if length changed (structure change)
           if (formArray.length !== this.currentLength) {
             this.currentLength = formArray.length;
@@ -111,7 +113,8 @@ export class FormArrayInput implements OnDestroy {
     if (newLength !== this.currentLength) {
       this.currentLength = newLength;
       // Recreate array reference when structure changes
-      this.stableRowsArray = formArray.value || [];
+      // Use getRawValue() to include disabled controls
+      this.stableRowsArray = formArray.getRawValue() || [];
       this.structureUpdateTrigger.update((v) => v + 1);
     }
   }

@@ -59,6 +59,7 @@
     <app-form-array-input
       [ft]="getServicesFormArray()"
       [hideAddButton]="isViewMode()"
+      [hideDeleteButton]="isViewMode()"
       [addButtonMessage]="'Add Service'"
       [createNewItem]="createServiceItem"
       [excludeKeys]="['serviceId']"
