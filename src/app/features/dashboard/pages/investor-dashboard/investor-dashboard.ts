@@ -10,7 +10,7 @@ import { DataTableComponent } from 'src/app/shared/components/layout-components/
 import { SkeletonModule } from 'primeng/skeleton';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
-import { EEmployeePlanStatus, EInvestorPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import { EInternalUserPlanStatus, EInvestorPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
@@ -53,7 +53,7 @@ export class InvestorDashboard implements OnInit {
   productLocalizationPlanWizardVisibility = signal(false);
   timelineVisibility = signal(false);
   selectedPlan = signal<IPlanRecord | null>(null);
-  eEmployeePlanStatus = EEmployeePlanStatus;
+  eInternalUserPlanStatus = EInternalUserPlanStatus;
 
 
   private readonly planStore = inject(PlanStore);

@@ -11,7 +11,7 @@ export enum EInvestorPlanStatus {
   UNDER_REVIEW = 6
 }
 
-export enum EEmployeePlanStatus {
+export enum EInternalUserPlanStatus {
   APPROVED = 1,
   DEPT_APPROVED = 2,
   DEPT_REJECTED = 3,
@@ -36,7 +36,7 @@ export interface IPlanRecord {
   planType: EOpportunityType;
   submissionDate: string;
   slaCountDown: number; // days remaining
-  status: EInvestorPlanStatus | EEmployeePlanStatus;
+  status: EInvestorPlanStatus | EInternalUserPlanStatus;
   actions: number[];
 }
 
@@ -45,14 +45,14 @@ export type TPlansSortingKeys = keyof IPlanRecord;
 export interface IPlanFilter extends IFilterBase<TPlansSortingKeys> {
   searchText?: string;
   planType?: EOpportunityType | null;
-  status?: EInvestorPlanStatus | EEmployeePlanStatus | null;
+  status?: EInvestorPlanStatus | EInternalUserPlanStatus | null;
   submissionDate?: Date[] | undefined;
 }
 
 export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {
   searchText?: string;
   planType?: EOpportunityType | null;
-  status?: EInvestorPlanStatus | EEmployeePlanStatus | null;
+  status?: EInvestorPlanStatus | EInternalUserPlanStatus | null;
   submissionDateFrom?: string | null;
   submissionDateTo?: string | null;
 }

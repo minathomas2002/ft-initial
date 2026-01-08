@@ -6,8 +6,8 @@ import { TableLayoutComponent } from 'src/app/shared/components/layout-component
 import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
-import { EEmployeePlanStatus, IPlanRecord, ITableHeaderItem, TColors, TPlansSortingKeys } from 'src/app/shared/interfaces';
-import { EOpportunityType, ERoles } from 'src/app/shared/enums';
+import { EInternalUserPlanStatus, IPlanRecord, ITableHeaderItem, TColors, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
 import { InternalUsersDashboardPlansFilter } from '../../components/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter';
@@ -53,7 +53,7 @@ import { InternalUsersDashboardPlansFilterService } from '../../services/interna
 export class DashboardView implements OnInit {
   productLocalizationPlanWizardVisibility = signal(false);
 
-  EEmployeePlanStatus = EEmployeePlanStatus;
+  EInternalUserPlanStatus = EInternalUserPlanStatus;
 
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
@@ -115,11 +115,11 @@ export class DashboardView implements OnInit {
       : this.i18nService.translate('opportunity.type.product');
   }
 
-  getStatusLabel(status: EEmployeePlanStatus): string {
+  getStatusLabel(status: EInternalUserPlanStatus): string {
     return this.employeePlanStatusMapper.getStatusLabel(status);
   }
 
-  getStatusBadgeColor(status: EEmployeePlanStatus): TColors {
+  getStatusBadgeColor(status: EInternalUserPlanStatus): TColors {
     return this.employeePlanStatusMapper.getStatusBadgeColor(status);
   }
 

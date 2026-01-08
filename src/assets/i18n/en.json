@@ -801,7 +801,8 @@
       "assigned": "Assigned",
       "reassigned": "Reassigned",
       "submitted": "Submitted",
-      "pendingOnInvestor": "Pending on investor"
+      "pendingOnInvestor": "Pending on investor",
+      "draft": "Draft"
     },
     "type": {
       "services": "Services",
