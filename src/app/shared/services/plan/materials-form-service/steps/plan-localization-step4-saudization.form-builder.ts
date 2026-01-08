@@ -1,15 +1,13 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { BasicPlanBuilder } from './basicPlanBuilder';
 
-export class PlanLocalizationStep4SaudizationFormBuilder {
+export class PlanLocalizationStep4SaudizationFormBuilder extends BasicPlanBuilder {
   constructor(
-    private readonly fb: FormBuilder
-  ) { }
+    fb: FormBuilder) {
+    super(fb);
+  }
 
-  /**
-   * Create a FormGroup for a single year column (Year 1-7)
-   * Each year has 4 fixed rows with {hasComment, value} pattern
-   */
   createYearFormGroup(): FormGroup {
     return this.fb.group({
       [EMaterialsFormControls.annualHeadcount]: this.fb.group({

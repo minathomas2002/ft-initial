@@ -1,11 +1,13 @@
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ELocalizationStatusType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { hasIncompleteControl } from 'src/app/shared/validators/form-control-helpers';
+import { BasicPlanBuilder } from './basicPlanBuilder';
 
-export class PlanLocalizationStep3ValueChainFormBuilder {
+export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder {
   constructor(
-    private readonly fb: FormBuilder
-  ) { }
+    fb: FormBuilder) {
+    super(fb);
+  }
 
   /**
    * Create a FormGroup for a single value chain item (row in the table)

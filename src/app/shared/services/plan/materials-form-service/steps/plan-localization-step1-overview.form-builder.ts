@@ -1,12 +1,12 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EOpportunityType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
+import { BasicPlanBuilder } from './basicPlanBuilder';
 
-export class PlanLocalizationStep1OverviewFormBuilder {
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly newPlanTitle: string
-  ) { }
+export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
+  constructor(fb: FormBuilder, private readonly newPlanTitle: string) {
+    super(fb);
+  }
 
   buildBasicInformationFormGroup(): FormGroup {
     return this.fb.group({
@@ -79,7 +79,6 @@ export class PlanLocalizationStep1OverviewFormBuilder {
       [EMaterialsFormControls.companyInformationFormGroup]: this.buildCompanyInformationFormGroup(),
       [EMaterialsFormControls.locationInformationFormGroup]: this.buildLocationInformationFormGroup(),
       [EMaterialsFormControls.localAgentInformationFormGroup]: this.buildLocalAgentInformationFormGroup(),
-      [EMaterialsFormControls.comment]: this.fb.control(''),
     });
   }
 
