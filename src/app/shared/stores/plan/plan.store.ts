@@ -35,7 +35,7 @@ const initialState: {
   currentEmployee: IAssignActiveEmployee | null;
   isLoading: boolean;
   isProcessing: boolean;
-  wizardMode: 'create' | 'edit' | 'view';
+  wizardMode: 'create' | 'edit' | 'view' | 'Review';
   selectedPlanId: string | null;
   planStatus: number | null;
 
@@ -142,7 +142,7 @@ export const PlanStore = signalStore(
       },
       resetWizardState(): void {
         patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null });
-      }      
+      }
     }
   }),
   withMethods((store) => {
