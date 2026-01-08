@@ -23,19 +23,25 @@
   }
 
   <ng-template [appStepContent]="1">
-    <app-plan-localization-step-01-overview-company-information-form />
+    <app-plan-localization-step-01-overview-company-information-form [(showCheckbox)]="showHasCommentControl" />
   </ng-template>
 
   <ng-template [appStepContent]="2">
-    <app-plan-localization-step-02-product-plant-overview-form />
+    <app-plan-localization-step-02-product-plant-overview-form [(showCheckbox)]="showHasCommentControl" />
   </ng-template>
 
   <ng-template [appStepContent]="3">
-    <app-plan-localization-step-03-valueChain-form [isViewMode]="isViewMode()" />
+    <app-plan-localization-step-03-valueChain-form
+      [(showCheckbox)]="showHasCommentControl"
+      [isViewMode]="isViewMode()"
+    />
   </ng-template>
 
   <ng-template [appStepContent]="4">
-    <app-plan-localization-step-04-saudization-form [isViewMode]="isViewMode()" />
+    <app-plan-localization-step-04-saudization-form
+      [(showCheckbox)]="showHasCommentControl"
+      [isViewMode]="isViewMode()"
+    />
   </ng-template>
 
   <ng-template [appStepContent]="5">
@@ -67,6 +73,15 @@
       (click)="timelineVisibility.set(true)"
     ></p-button>
     }
+    @if(isReviewMode()){
+    <p-button
+      [label]="'Add Comments'"
+      text
+      icon="icon-message-circle"
+      severity="secondary"
+      (click)="onAddComment()"
+    ></p-button>
+    }
   </ng-container>
 </app-base-wizard-dialog>
 }
@@ -94,12 +109,6 @@
   (confirmed)="onConfirmLeave()"
   [confirmationLabel]="'plans.confirmation.cancelLabel' | translate"
 ></app-general-confirmation-dialog>
-
-<!-- <app-confirm-leave-dialog
-  [(visible)]="showConfirmLeaveDialog"
-  (onLeave)="onConfirmLeave()"
-  (onContinueEditing)="saveAsDraft()"
-/> -->
 
 <app-timeline-dialog
   [(dialogVisible)]="timelineVisibility"
