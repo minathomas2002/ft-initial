@@ -195,26 +195,31 @@
           <p class="text-sm text-gray-600">If “Yes”, mention the following details of Local Agent - </p>
         </div>
         <div class="flex gap-2">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <p-radiobutton
-              name="doYouCurrentlyHaveLocalAgentInKSA"
-              [value]="true"
-              [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
-              inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
-              size="small"
-            />
-            <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <p-radiobutton
-              name="doYouCurrentlyHaveLocalAgentInKSA"
-              [value]="false"
-              [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
-              inputId="doYouCurrentlyHaveLocalAgentInKSANo"
-              size="small"
-            />
-            <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
-          </label>
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
+          >
+            <label class="flex items-center gap-2 cursor-pointer">
+              <p-radiobutton
+                name="doYouCurrentlyHaveLocalAgentInKSA"
+                [value]="true"
+                [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
+                inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
+                size="small"
+              />
+              <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <p-radiobutton
+                name="doYouCurrentlyHaveLocalAgentInKSA"
+                [value]="false"
+                [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
+                inputId="doYouCurrentlyHaveLocalAgentInKSANo"
+                size="small"
+              />
+              <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+            </label>
+          </app-group-input-with-checkbox>
         </div>
         <app-base-error-messages
           [control]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"

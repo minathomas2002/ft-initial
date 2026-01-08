@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, model, signal } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
@@ -49,7 +49,7 @@ export class PlanLocalizationStep03ValueChainForm {
   localizationStatusOptions = this.planStore.localizationStatusOptions;
 
   // Show checkbox signal (controls visibility of comment checkboxes)
-  showCheckbox = signal(false);
+  showCheckbox = model<boolean>(false);
 
   // Helper methods - delegate to ProductPlanFormService
   getValueControl(formGroup: AbstractControl): FormControl<any> {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, model, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
@@ -27,7 +27,7 @@ export class PlanLocalizationStep04SaudizationForm {
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
   // Show checkbox signal (controls visibility of comment checkboxes)
-  showCheckbox = signal(false);
+  showCheckbox = model<boolean>(false);
 
   // Files signal for file upload component
   files = signal<File[]>([]);

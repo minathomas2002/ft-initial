@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, model, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -46,7 +46,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm {
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
   formGroup = this.productPlanFormService.step2_productPlantOverview;
-  showCheckbox = signal(false);
+  showCheckbox = model<boolean>(false);
 
   // Form group accessors
   get overviewFormGroupControls() {
