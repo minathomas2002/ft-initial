@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+
+  &::ng-deep {
+    .p-checkbox-orange {
+    --p-checkbox-checked-border-color: var(--p-orange-500);
+    --p-checkbox-checked-background: var(--p-orange-500);
+    --p-checkbox-checked-hover-background: var(--p-orange-500);
+    --p-checkbox-checked-hover-border-color: var(--p-orange-500);
+    --p-checkbox-checked-focus-background: var(--p-orange-500);
+    --p-checkbox-checked-focus-border-color: var(--p-orange-500);
+    --p-checkbox-checked-active-background: var(--p-orange-500);
+    --p-checkbox-checked-active-border-color: var(--p-orange-500);
+    --p-checkbox-hover-border-color: var(--p-orange-500);
+    --p-checkbox-disabled-background: var(--p-orange-500);
+    --p-checkbox-icon-disabled-color: #ffffff;
+    }
+  }
+}

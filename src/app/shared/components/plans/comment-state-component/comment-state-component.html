@@ -1,0 +1,19 @@
+<div class="flex items-center justify-center gap-6 rounded-full bg-gray-50 py-2 px-4 border border-gray-200">
+  <div class="flex items-center gap-2">
+    <p-checkbox
+      [class.p-checkbox-orange]="checked()"
+      [(ngModel)]="checked"
+      [binary]="true"
+      [disabled]="true"
+    />
+    <span class="text-md font-semibold text-gray-600">{{ commentsCount() }} Selected</span>
+  </div>
+  <p-button
+    label="Add Comment"
+    severity="warn"
+    icon="icon-message-circle"
+    rounded
+    [disabled]="!checked()"
+    (click)="addCommentClick.emit()"
+  />
+</div>
