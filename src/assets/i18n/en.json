@@ -826,10 +826,15 @@
     },
     "statistics": {
       "totalPlans": "Total Plans",
+      "totalApprovedPlans": "Total Approved Plans",
       "unAssignedPlans": "Unassigned Plans",
+      "assignedPending": "Assigned Pending",
       "plansUnderReview": "Plans Under Review",
+      "assignedPlans": "Assigned Plans",
       "approvedPlans": "Approved Plans",
-      "rejectedPlans": "Rejected Plans"
+      "assignedApprovedPlans": "Assigned Approved",
+      "rejectedPlans": "Rejected Plans",
+      "assignedRejected": "Assigned Rejected"
     },
     "list": {
       "noPlansFound": "No Plans Found"

@@ -1,7 +1,7 @@
 <!-- Total Plans -->
 <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
   <p class="text-sm font-medium text-gray-600 mb-2">
-    {{ 'plans.statistics.totalPlans' | translate }}
+    {{ 'plans.statistics.totalApprovedPlans' | translate }}
   </p>
   <p class="text-2xl font-semibold text-gray-900 mb-4">
     {{ statistics()?.totalPlans ?? 0 }}
@@ -17,7 +17,7 @@
 <!-- Unsigned Plans -->
 <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
   <p class="text-sm font-medium text-gray-600 mb-2">
-    {{ 'plans.statistics.unAssignedPlans' | translate }}
+    {{ 'plans.statistics.assignedPending' | translate }}
   </p>
   <p class="text-2xl font-semibold text-gray-900 mb-4">
     {{ statistics()?.unAssignedPlans ?? 0 }}
@@ -33,7 +33,7 @@
 <!-- Plans Under Review -->
 <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
   <p class="text-sm font-medium text-gray-600 mb-2">
-    {{ 'plans.statistics.plansUnderReview' | translate }}
+    {{ 'plans.statistics.assignedPlans' | translate }}
   </p>
   <p class="text-2xl font-semibold text-gray-900 mb-4">
     {{ statistics()?.plansUnderReview ?? 0 }}
@@ -49,7 +49,7 @@
 <!-- Approved Plans -->
 <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
   <p class="text-sm font-medium text-gray-600 mb-2">
-    {{ 'plans.statistics.approvedPlans' | translate }}
+    {{ 'plans.statistics.assignedApprovedPlans' | translate }}
   </p>
   <p class="text-2xl font-semibold text-gray-900 mb-4">
     {{ statistics()?.approvedPlans ?? 0 }}
@@ -65,7 +65,7 @@
 <!-- Rejected Plans -->
 <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
   <p class="text-sm font-medium text-gray-600 mb-2">
-    {{ 'plans.statistics.rejectedPlans' | translate }}
+    {{ 'plans.statistics.assignedRejected' | translate }}
   </p>
   <p class="text-2xl font-semibold text-gray-900 mb-4">
     {{ statistics()?.rejectedPlans ?? 0 }}
