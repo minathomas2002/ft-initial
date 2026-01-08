@@ -1,25 +1,13 @@
 :host ::ng-deep {
   .has-comment-checkbox{
-     .p-checkbox-checked .p-checkbox-box{
-    border-color: var(--p-orange-500);
-    background: var(--p-orange-500);
-    &:hover {
-      border-color: var(--p-orange-500);
-      background: var(--p-orange-500);
-    }
-    &:focus {
-      border-color: var(--p-orange-500);
-      background: var(--p-orange-500);
-    }
-    &:active {
-      border-color: var(--p-orange-500);
-      background: var(--p-orange-500);
-    }
- }
-
- .p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box {
-    background: var(--p-orange-500);
-    border-color: var(--p-orange-500);
-  }
+    --p-checkbox-checked-border-color: var(--p-orange-500);
+    --p-checkbox-checked-background: var(--p-orange-500);
+    --p-checkbox-checked-hover-background: var(--p-orange-500);
+    --p-checkbox-checked-hover-border-color: var(--p-orange-500);
+    --p-checkbox-checked-focus-background: var(--p-orange-500);
+    --p-checkbox-checked-focus-border-color: var(--p-orange-500);
+    --p-checkbox-checked-active-background: var(--p-orange-500);
+    --p-checkbox-checked-active-border-color: var(--p-orange-500);
+    --p-checkbox-hover-border-color: var(--p-orange-500);
   }
 }
