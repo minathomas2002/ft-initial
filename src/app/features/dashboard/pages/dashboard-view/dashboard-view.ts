@@ -67,18 +67,6 @@ export class DashboardView implements OnInit {
   isReassignMode = signal<boolean>(false);
   planItem = signal<IPlanRecord | null>(null);
   timelineVisibility = signal(false);
-  
-  // Dynamic subtitle based on role
-  readonly dashboardSubtitle = computed(() => {
-    if (this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER])()) {
-      return 'dashboard.subTitleDvManager';
-    } else if (this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
-      return 'dashboard.subTitleDeptManager';
-    } else if (this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])()) {
-      return 'dashboard.subTitleEmployee';
-    }
-    return 'dashboard.subTitleDvManager'; // Default fallback
-  });
 
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
     this.i18nService.currentLanguage();

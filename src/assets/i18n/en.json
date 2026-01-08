@@ -612,9 +612,6 @@
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Track and manage your submitted localization plans and their review status",
-    "subTitleDvManager": "Track and manage submitted localization plans that require your action",
-    "subTitleDeptManager": "Track and manage submitted localization plans that require your action",
-    "subTitleEmployee": "Track and manage submitted localization plans that require your action",
     "submitNewPlan": "Submit New Plan",
     "assigndPlanTitle": "Assigned Pending Plan",
     "underReviewPlanTitle": "Under Review Plans"
