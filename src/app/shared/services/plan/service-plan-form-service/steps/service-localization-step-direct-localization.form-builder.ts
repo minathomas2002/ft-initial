@@ -59,7 +59,13 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(150)]], // Auto-populated, dimmed
       }),
+      // expectedLocalizationDate is for the Localization Strategy table
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: [false],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(50)]], // Required, quarters and years only, future date
+      }),
+      // serviceLevelLocalizationDate is for the Service Level table (sent as LocalizationDate to backend)
+      [EMaterialsFormControls.serviceLevelLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(50)]], // Required, quarters and years only, future date
       }),
@@ -423,7 +429,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       if (existingData) {
         // Restore all fields except serviceName and serviceId
         Object.keys(existingData).forEach(key => {
-          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
+          if (key !== EMaterialsFormControls.rowId && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
             const targetControl = newServiceLevel.get(key);
             if (targetControl) {
               targetControl.patchValue(existingData[key]);

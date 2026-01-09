@@ -3,6 +3,8 @@
  * Used to avoid magic strings throughout the form service and components
  */
 export enum EMaterialsFormControls {
+  rowId = 'rowId',
+
   // Step 1 - Main Form Groups
   basicInformationFormGroup = 'basicInformationFormGroup',
   companyInformationFormGroup = 'companyInformationFormGroup',
@@ -135,6 +137,7 @@ export enum EMaterialsFormControls {
   totalBusinessDoneLast5Years = 'totalBusinessDoneLast5Years',
   serviceTargetedForLocalization = 'serviceTargetedForLocalization',
   expectedLocalizationDate = 'expectedLocalizationDate',
+  serviceLevelLocalizationDate = 'serviceLevelLocalizationDate', // For service level tables in steps 3 & 4
   serviceLocalizationMethodology = 'serviceLocalizationMethodology',
 
   // Service Plan - Step 3 (Existing Saudi Co.) - Main Form Groups

@@ -282,7 +282,7 @@ export interface IServicePlanLocalizationStrategy {
   locationType: number;
   expectedLocalizationDate: string;
   capexRequired: number;
-  hasProprietaryTools: boolean;
+  hasProprietaryTools?: boolean;
   proprietaryToolsDetails?: string;
   governmentSupervision?: string;
   otherLocalizationApproach?: string;

@@ -8,7 +8,7 @@
       [hideDeleteButton]="true"
       [createNewItem]="createLocalizationStrategyItem"
       [scrollHeight]="'600px'"
-      [excludeKeys]="['serviceId', 'localizationApproachOtherDetails', 'locationOtherDetails', 'proprietaryToolsSystemsDetails', 'firstYear_headcount', 'firstYear_saudization', 'secondYear_headcount', 'secondYear_saudization', 'thirdYear_headcount', 'thirdYear_saudization', 'fourthYear_headcount', 'fourthYear_saudization', 'fifthYear_headcount', 'fifthYear_saudization', 'keyMeasuresToUpskillSaudis', 'mentionSupportRequiredFromSEC']"
+      [excludeKeys]="['serviceId', 'serviceLevelLocalizationDate', 'localizationApproachOtherDetails', 'locationOtherDetails', 'proprietaryToolsSystemsDetails', 'firstYear_headcount', 'firstYear_saudization', 'secondYear_headcount', 'secondYear_saudization', 'thirdYear_headcount', 'thirdYear_saudization', 'fourthYear_headcount', 'fourthYear_saudization', 'fifthYear_headcount', 'fifthYear_saudization', 'keyMeasuresToUpskillSaudis', 'mentionSupportRequiredFromSEC']"
       [customHeaderLabels]="{'locationType': 'Location'}"
     >
       <ng-template #itemTemplate let-itemControl let-index="index">
@@ -319,7 +319,7 @@
       [ft]="getServiceLevelFormArray()"
       [hideAddButton]="true"
       [hideDeleteButton]="true"
-      [excludeKeys]="['serviceId', 'localizationApproach', 'localizationApproachOtherDetails', 'locationType', 'locationOtherDetails', 'capexRequired', 'supervisionOversightEntity', 'willBeAnyProprietaryToolsSystems', 'proprietaryToolsSystemsDetails']"
+      [excludeKeys]="['serviceId', 'expectedLocalizationDate', 'localizationApproach', 'localizationApproachOtherDetails', 'locationType', 'locationOtherDetails', 'capexRequired', 'supervisionOversightEntity', 'willBeAnyProprietaryToolsSystems', 'proprietaryToolsSystemsDetails']"
       [customHeaderLabels]="customHeadersLabels()"
       [groupHeader]="serviceLevelGroupHeader()"
       [scrollHeight]="'600px'"
@@ -349,24 +349,24 @@
           />
         </td>
 
-        <!-- Expected Localization Date -->
+        <!-- Expected Localization Date (Service Level - uses serviceLevelLocalizationDate, sent as LocalizationDate) -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.serviceLevelLocalizationDate))"
           >
             <p-select
               [options]="serviceForm.getAvailableQuarters(5)"
               optionLabel="name"
               optionValue="id"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceLevelLocalizationDate))"
               placeholder="Select quarter"
               fluid
               [appendTo]="'body'"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
-            [control]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceLevelLocalizationDate))"
             [label]="'Expected Localization Date'"
           />
         </td>
