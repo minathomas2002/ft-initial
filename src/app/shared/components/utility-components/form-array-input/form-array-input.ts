@@ -19,6 +19,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
 import { TooltipModule } from 'primeng/tooltip';
 import { Subscription } from 'rxjs';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-form-array-input',
@@ -140,7 +141,7 @@ export class FormArrayInput implements OnDestroy {
     if (!firstObject || typeof firstObject !== 'object' || firstObject === null) return [];
 
     // Exclude 'rowId' and any keys specified in excludeKeys input
-    const keysToExclude = ['rowId', ...this.excludeKeys()];
+    const keysToExclude = [EMaterialsFormControls.rowId, ...this.excludeKeys()];
     return Object.keys(firstObject).filter((key) => !keysToExclude.includes(key));
   });
 

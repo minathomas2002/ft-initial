@@ -94,7 +94,7 @@ export interface PartnershipModel {
   agreementType: NumberOrEmpty;
   otherAgreementType?: string;
   agreementSigningDate: string;
-  agreementCopyProvided: boolean;
+  agreementCopyProvided?: boolean;
   keyAgreementClauses: string;
   selectionJustification: string;
   supervisionEntity: string;
@@ -120,6 +120,7 @@ export interface ServiceHeadcount {
   planServiceTypeId: string; // Service GUID
   measuresUpSkillSaudis: string;
   mentionSupportRequiredSEC: string;
+  localizationDate?: string; // For service level table in steps 3 and 4
   pageNumber: number; // 3 for existing saudi, 4 for direct localization
   y1Headcount: NumberOrEmpty;
   y1Saudization: NumberOrEmpty;
@@ -148,7 +149,7 @@ export interface LocalizationStrategy {
   locationType: NumberOrEmpty;
   expectedLocalizationDate: string;
   capexRequired: NumberOrEmpty;
-  hasProprietaryTools: boolean;
+  hasProprietaryTools?: boolean;
   proprietaryToolsDetails?: string;
   governmentSupervision?: string;
   otherLocalizationApproach?: string;
@@ -386,7 +387,7 @@ export function mapServicePlanResponseToForm(
     }
     setNestedValue(row, EMaterialsFormControls.serviceName, svc.serviceName ?? '');
     // Store row id (for potential future edit mapping)
-    row.get('rowId')?.setValue(svc.id ?? null, { emitEvent: false });
+    row.get(EMaterialsFormControls.rowId)?.setValue(svc.id ?? null, { emitEvent: false });
   });
 
   // Force sync dependent arrays so we can safely patch them next
@@ -433,7 +434,7 @@ export function mapServicePlanResponseToForm(
     const svc = (servicePlan.services ?? []).find((s) => s.id === serviceId) ?? (servicePlan.services ?? [])[idx];
     if (!svc) return;
 
-    row.get('rowId')?.setValue(svc.id ?? null, { emitEvent: false });
+    row.get(EMaterialsFormControls.rowId)?.setValue(svc.id ?? null, { emitEvent: false });
     setNestedValue(row, EMaterialsFormControls.serviceName, svc.serviceName ?? '');
     setNestedValue(row, EMaterialsFormControls.serviceType, svc.serviceType != null ? String(svc.serviceType) : null);
     setNestedValue(row, EMaterialsFormControls.serviceCategory, svc.serviceCategory != null ? String(svc.serviceCategory) : null);
@@ -469,7 +470,7 @@ export function mapServicePlanResponseToForm(
   (servicePlan.saudiCompanyDetails ?? []).forEach((co, idx) => {
     const row = saudiCompaniesArray?.at(idx) as FormGroup | undefined;
     if (!row) return;
-    row.get('rowId')?.setValue(co.id ?? null, { emitEvent: false });
+    row.get(EMaterialsFormControls.rowId)?.setValue(co.id ?? null, { emitEvent: false });
     // Set values in the same order as form builder creates controls to preserve key order
     setNestedValue(row, EMaterialsFormControls.saudiCompanyName, co.companyName ?? '');
     setNestedValue(row, EMaterialsFormControls.registeredVendorIDwithSEC, co.vendorIdWithSEC ?? '');
@@ -488,23 +489,23 @@ export function mapServicePlanResponseToForm(
   (servicePlan.partnershipModels ?? []).forEach((pm, idx) => {
     const row = partnershipArray?.at(idx) as FormGroup | undefined;
     if (!row) return;
-    row.get('rowId')?.setValue(pm.id ?? null, { emitEvent: false });
+    row.get(EMaterialsFormControls.rowId)?.setValue(pm.id ?? null, { emitEvent: false });
     setNestedValue(row, EMaterialsFormControls.agreementType, pm.agreementType != null ? String(pm.agreementType) : null);
     setNestedValue(row, EMaterialsFormControls.agreementSigningDate, pm.agreementSigningDate ?? null);
     setNestedValue(row, EMaterialsFormControls.agreementOtherDetails, pm.otherAgreementType ?? '');
     setNestedValue(row, EMaterialsFormControls.supervisionOversightEntity, pm.supervisionEntity ?? '');
     setNestedValue(row, EMaterialsFormControls.whyChoseThisCompany, pm.selectionJustification ?? '');
     setNestedValue(row, EMaterialsFormControls.summaryOfKeyAgreementClauses, pm.keyAgreementClauses ?? '');
-    setNestedValue(row, EMaterialsFormControls.provideAgreementCopy, toYesNoId(!!pm.agreementCopyProvided));
+    setNestedValue(row, EMaterialsFormControls.provideAgreementCopy, toYesNoId(pm.agreementCopyProvided));
     formService.toggleAgreementOtherDetailsValidation(pm.agreementType != null ? String(pm.agreementType) : null, idx);
-    formService.toggleAgreementCopyValidation(toYesNoId(!!pm.agreementCopyProvided), idx);
+    formService.toggleAgreementCopyValidation(toYesNoId(pm.agreementCopyProvided), idx);
   });
 
   const entity3: IServicePlanEntityHeadcount | undefined = findByPage(servicePlan.entityHeadcounts, 3);
   const entityArray3 = formService.entityLevelFormGroup;
   if (entity3 && entityArray3 && entityArray3.length > 0) {
     const row = entityArray3.at(0) as FormGroup;
-    row.get('rowId')?.setValue(entity3.id ?? null, { emitEvent: false });
+    row.get(EMaterialsFormControls.rowId)?.setValue(entity3.id ?? null, { emitEvent: false });
     setYearValues(row, entity3);
   }
 
@@ -514,14 +515,13 @@ export function mapServicePlanResponseToForm(
     const serviceId = row.get(EMaterialsFormControls.serviceId)?.value;
     if (!serviceId) return;
 
-    const svc = (servicePlan.services ?? []).find((s) => s.id === serviceId);
-    if (svc?.expectedLocalizationDate) {
-      setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, svc.expectedLocalizationDate);
-    }
-
     const head: IServicePlanServiceHeadcount | undefined = findByServiceId(servicePlan.serviceHeadcounts, serviceId, 3);
     if (!head) return;
-    row.get('rowId')?.setValue((head as any).id ?? null, { emitEvent: false });
+    row.get(EMaterialsFormControls.rowId)?.setValue((head as any).id ?? null, { emitEvent: false });
+    // Read localizationDate from serviceHeadcounts (backend sends it as localizationDate)
+    if (head.localizationDate) {
+      setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, head.localizationDate);
+    }
     setYearValues(row, head);
     setNestedValue(row, EMaterialsFormControls.keyMeasuresToUpskillSaudis, head.measuresUpSkillSaudis ?? '');
     setNestedValue(row, EMaterialsFormControls.mentionSupportRequiredFromSEC, head.mentionSupportRequiredSEC ?? '');
@@ -530,9 +530,10 @@ export function mapServicePlanResponseToForm(
   // Step 4: Direct Localization
   const entity4: IServicePlanEntityHeadcount | undefined = findByPage(servicePlan.entityHeadcounts, 4);
   const entityArray4 = formService.directLocalizationEntityLevelFormGroup;
+
   if (entity4 && entityArray4 && entityArray4.length > 0) {
     const row = entityArray4.at(0) as FormGroup;
-    row.get('rowId')?.setValue(entity4.id ?? null, { emitEvent: false });
+    row.get(EMaterialsFormControls.rowId)?.setValue(entity4.id ?? null, { emitEvent: false });
     setYearValues(row, entity4);
   }
 
@@ -546,7 +547,7 @@ export function mapServicePlanResponseToForm(
     const head: IServicePlanServiceHeadcount | undefined = findByServiceId(servicePlan.serviceHeadcounts, serviceId, 4);
 
     if (strategy) {
-      row.get('rowId')?.setValue(strategy.id ?? null, { emitEvent: false });
+      row.get(EMaterialsFormControls.rowId)?.setValue(strategy.id ?? null, { emitEvent: false });
       setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, strategy.expectedLocalizationDate ?? '');
       setNestedValue(row, EMaterialsFormControls.localizationApproach, strategy.localizationApproach != null ? String(strategy.localizationApproach) : null);
       setNestedValue(row, EMaterialsFormControls.localizationApproachOtherDetails, strategy.otherLocalizationApproach ?? '');
@@ -554,11 +555,16 @@ export function mapServicePlanResponseToForm(
       setNestedValue(row, EMaterialsFormControls.locationOtherDetails, strategy.otherLocationType ?? '');
       setNestedValue(row, EMaterialsFormControls.capexRequired, strategy.capexRequired ?? null);
       setNestedValue(row, EMaterialsFormControls.supervisionOversightEntity, strategy.governmentSupervision ?? '');
-      setNestedValue(row, EMaterialsFormControls.willBeAnyProprietaryToolsSystems, toYesNoId(!!strategy.hasProprietaryTools));
+      setNestedValue(row, EMaterialsFormControls.willBeAnyProprietaryToolsSystems, toYesNoId(strategy.hasProprietaryTools));
       setNestedValue(row, EMaterialsFormControls.proprietaryToolsSystemsDetails, strategy.proprietaryToolsDetails ?? '');
     }
 
     if (head) {
+      // Read localizationDate from serviceHeadcounts for service-level table
+      // Service level table uses the separate serviceLevelLocalizationDate control
+      if (head.localizationDate) {
+        setNestedValue(row, EMaterialsFormControls.serviceLevelLocalizationDate, head.localizationDate);
+      }
       setYearValues(row, head);
       setNestedValue(row, EMaterialsFormControls.keyMeasuresToUpskillSaudis, head.measuresUpSkillSaudis ?? '');
       setNestedValue(row, EMaterialsFormControls.mentionSupportRequiredFromSEC, head.mentionSupportRequiredSEC ?? '');
@@ -692,6 +698,7 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
     for (let i = 0; i < saudiCompanyArray.length; i++) {
       const companyGroup = saudiCompanyArray.at(i) as FormGroup;
       result.saudiCompanyDetails.push({
+        id: getControlValue(companyGroup, EMaterialsFormControls.rowId) || '',
         companyName: getControlValue(companyGroup, EMaterialsFormControls.saudiCompanyName) || '',
         vendorIdWithSEC: getControlValue(companyGroup, EMaterialsFormControls.registeredVendorIDwithSEC) || '',
         benaRegisterVendorId: getControlValue(companyGroup, EMaterialsFormControls.benaRegisteredVendorID) || '',
@@ -712,10 +719,11 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
     for (let i = 0; i < collaborationArray.length; i++) {
       const partnerGroup = collaborationArray.at(i) as FormGroup;
       result.partnershipModels.push({
+        id: getControlValue(partnerGroup, EMaterialsFormControls.rowId),
         agreementType: toNumberOrEmpty(getControlValue(partnerGroup, EMaterialsFormControls.agreementType)),
         otherAgreementType: getControlValue(partnerGroup, EMaterialsFormControls.agreementOtherDetails) || undefined,
         agreementSigningDate: getControlValue(partnerGroup, EMaterialsFormControls.agreementSigningDate) || '',
-        agreementCopyProvided: toBooleanYesNo(getControlValue(partnerGroup, EMaterialsFormControls.provideAgreementCopy)),
+        agreementCopyProvided: toBooleanYesNoOrUndefined(getControlValue(partnerGroup, EMaterialsFormControls.provideAgreementCopy)),
         keyAgreementClauses: getControlValue(partnerGroup, EMaterialsFormControls.summaryOfKeyAgreementClauses) || '',
         selectionJustification: getControlValue(partnerGroup, EMaterialsFormControls.whyChoseThisCompany) || '',
         supervisionEntity: getControlValue(partnerGroup, EMaterialsFormControls.supervisionOversightEntity) || '',
@@ -728,19 +736,37 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
     result.entityHeadcounts = [];
     const entityGroup = entityLevelArray.at(0) as FormGroup;
 
-    result.entityHeadcounts.push({
-      pageNumber: 3,
-      y1Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.firstYear}_headcount`)),
-      y1Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.firstYear}_saudization`)),
-      y2Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.secondYear}_headcount`)),
-      y2Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.secondYear}_saudization`)),
-      y3Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.thirdYear}_headcount`)),
-      y3Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.thirdYear}_saudization`)),
-      y4Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_headcount`)),
-      y4Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_saudization`)),
-      y5Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_headcount`)),
-      y5Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_saudization`)),
-    });
+    const y1Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.firstYear}_headcount`));
+    const y1Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.firstYear}_saudization`));
+    const y2Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.secondYear}_headcount`));
+    const y2Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.secondYear}_saudization`));
+    const y3Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.thirdYear}_headcount`));
+    const y3Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.thirdYear}_saudization`));
+    const y4Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_headcount`));
+    const y4Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_saudization`));
+    const y5Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_headcount`));
+    const y5Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_saudization`));
+
+    const hasEntityValues = [
+      y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,
+    ].some((v) => typeof v === 'number');
+
+    if (hasEntityValues) {
+      result.entityHeadcounts.push({
+        id: entityGroup.get(EMaterialsFormControls.rowId)?.value || undefined,
+        pageNumber: 3,
+        y1Headcount,
+        y1Saudization,
+        y2Headcount,
+        y2Saudization,
+        y3Headcount,
+        y3Saudization,
+        y4Headcount,
+        y4Saudization,
+        y5Headcount,
+        y5Saudization,
+      });
+    }
   }
 
   // Map Service Headcounts (Page 3 - Existing Saudi)
@@ -750,22 +776,48 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
       const serviceGroup = serviceLevelArray.at(i) as FormGroup;
       const serviceId = serviceGroup.get(EMaterialsFormControls.serviceId)?.value || '';
 
-      result.serviceHeadcounts.push({
-        planServiceTypeId: serviceId,
-        measuresUpSkillSaudis: getControlValue(serviceGroup, EMaterialsFormControls.keyMeasuresToUpskillSaudis) || '',
-        mentionSupportRequiredSEC: getControlValue(serviceGroup, EMaterialsFormControls.mentionSupportRequiredFromSEC) || '',
-        pageNumber: 3,
-        y1Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.firstYear}_headcount`)),
-        y1Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.firstYear}_saudization`)),
-        y2Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.secondYear}_headcount`)),
-        y2Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.secondYear}_saudization`)),
-        y3Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.thirdYear}_headcount`)),
-        y3Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.thirdYear}_saudization`)),
-        y4Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_headcount`)),
-        y4Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_saudization`)),
-        y5Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_headcount`)),
-        y5Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_saudization`)),
-      });
+      const measuresUpSkillSaudis = getControlValue(serviceGroup, EMaterialsFormControls.keyMeasuresToUpskillSaudis) || '';
+      const mentionSupportRequiredSEC = getControlValue(serviceGroup, EMaterialsFormControls.mentionSupportRequiredFromSEC) || '';
+      // Get localizationDate from the service level table (sent as LocalizationDate to backend)
+      const localizationDate = getControlValue(serviceGroup, EMaterialsFormControls.expectedLocalizationDate) || '';
+      const y1Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.firstYear}_headcount`));
+      const y1Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.firstYear}_saudization`));
+      const y2Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.secondYear}_headcount`));
+      const y2Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.secondYear}_saudization`));
+      const y3Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.thirdYear}_headcount`));
+      const y3Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.thirdYear}_saudization`));
+      const y4Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_headcount`));
+      const y4Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_saudization`));
+      const y5Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_headcount`));
+      const y5Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_saudization`));
+
+      const hasServiceValues = [
+        y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,
+      ].some((v) => typeof v === 'number')
+        || (measuresUpSkillSaudis && measuresUpSkillSaudis.toString().trim() !== '')
+        || (mentionSupportRequiredSEC && mentionSupportRequiredSEC.toString().trim() !== '')
+        || (localizationDate && localizationDate.toString().trim() !== '');
+
+      if (hasServiceValues) {
+        result.serviceHeadcounts.push({
+          id: serviceGroup.get(EMaterialsFormControls.rowId)?.value || undefined,
+          planServiceTypeId: serviceId,
+          measuresUpSkillSaudis,
+          mentionSupportRequiredSEC,
+          localizationDate: localizationDate || undefined, // Include localizationDate for service level table
+          pageNumber: 3,
+          y1Headcount,
+          y1Saudization,
+          y2Headcount,
+          y2Saudization,
+          y3Headcount,
+          y3Saudization,
+          y4Headcount,
+          y4Saudization,
+          y5Headcount,
+          y5Saudization,
+        });
+      }
     }
   }
 
@@ -814,24 +866,44 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
       const strategyGroup = localizationArray.at(i) as FormGroup;
       const serviceId = strategyGroup.get(EMaterialsFormControls.serviceId)?.value || '';
 
-      const hasProprietaryTools = toBooleanYesNo(
+      const localizationApproach = toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.localizationApproach));
+      const locationType = toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.location));
+      const expectedLocalizationDate = getControlValue(strategyGroup, EMaterialsFormControls.expectedLocalizationDate) || '';
+      const capexRequired = toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.capexRequired));
+      const hasProprietaryTools = toBooleanYesNoOrUndefined(
         getControlValue(strategyGroup, EMaterialsFormControls.willBeAnyProprietaryToolsSystems)
       );
+      const proprietaryToolsDetails = getControlValue(strategyGroup, EMaterialsFormControls.proprietaryToolsSystemsDetails) || undefined;
+      const governmentSupervision = getControlValue(strategyGroup, EMaterialsFormControls.supervisionOversightEntity) || undefined;
+      const otherLocalizationApproach = getControlValue(strategyGroup, EMaterialsFormControls.localizationApproachOtherDetails) || undefined;
+      const otherLocationType = getControlValue(strategyGroup, EMaterialsFormControls.locationOtherDetails) || undefined;
 
-      result.localizationStrategies.push({
-        planServiceTypeId: serviceId,
-        localizationApproach: toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.localizationApproach)),
-        locationType: toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.location)),
-        expectedLocalizationDate: getControlValue(strategyGroup, EMaterialsFormControls.expectedLocalizationDate) || '',
-        capexRequired: toNumberOrEmpty(getControlValue(strategyGroup, EMaterialsFormControls.capexRequired)),
-        hasProprietaryTools,
-        proprietaryToolsDetails: hasProprietaryTools
-          ? (getControlValue(strategyGroup, EMaterialsFormControls.proprietaryToolsSystemsDetails) || undefined)
-          : undefined,
-        governmentSupervision: getControlValue(strategyGroup, EMaterialsFormControls.supervisionOversightEntity) || undefined,
-        otherLocalizationApproach: getControlValue(strategyGroup, EMaterialsFormControls.localizationApproachOtherDetails) || undefined,
-        otherLocationType: getControlValue(strategyGroup, EMaterialsFormControls.locationOtherDetails) || undefined,
-      });
+      const trimmedValue = (s: string) => s.toString().trim();
+
+      // before pushing to request payload, we need to make sure the table has at least one valid value
+      const hasValues = [localizationApproach, locationType, capexRequired].some((v) => typeof v === 'number')
+        || (expectedLocalizationDate && trimmedValue(expectedLocalizationDate) !== '')
+        || hasProprietaryTools !== undefined
+        || (proprietaryToolsDetails && trimmedValue(proprietaryToolsDetails) !== '')
+        || (governmentSupervision && trimmedValue(governmentSupervision) !== '')
+        || (otherLocalizationApproach && trimmedValue(otherLocalizationApproach) !== '')
+        || (otherLocationType && trimmedValue(otherLocationType) !== '');
+
+      if (hasValues) {
+        result.localizationStrategies.push({
+          id: getControlValue(strategyGroup, EMaterialsFormControls.rowId),
+          planServiceTypeId: serviceId,
+          localizationApproach,
+          locationType,
+          expectedLocalizationDate,
+          capexRequired,
+          hasProprietaryTools,
+          proprietaryToolsDetails: hasProprietaryTools ? proprietaryToolsDetails : undefined,
+          governmentSupervision,
+          otherLocalizationApproach,
+          otherLocationType,
+        });
+      }
     }
   }
 
@@ -839,19 +911,38 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
   if (entityLevelArray && entityLevelArray.length > 0) {
     result.entityHeadcounts = [];
     const entityGroup = entityLevelArray.at(0) as FormGroup;
-    result.entityHeadcounts.push({
-      pageNumber: 4,
-      y1Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.firstYear}_headcount`)),
-      y1Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.firstYear}_saudization`)),
-      y2Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.secondYear}_headcount`)),
-      y2Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.secondYear}_saudization`)),
-      y3Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.thirdYear}_headcount`)),
-      y3Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.thirdYear}_saudization`)),
-      y4Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_headcount`)),
-      y4Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_saudization`)),
-      y5Headcount: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_headcount`)),
-      y5Saudization: toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_saudization`)),
-    });
+
+    const y1Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.firstYear}_headcount`));
+    const y1Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.firstYear}_saudization`));
+    const y2Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.secondYear}_headcount`));
+    const y2Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.secondYear}_saudization`));
+    const y3Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.thirdYear}_headcount`));
+    const y3Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.thirdYear}_saudization`));
+    const y4Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_headcount`));
+    const y4Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_saudization`));
+    const y5Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_headcount`));
+    const y5Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_saudization`));
+
+    const hasEntityValues = [
+      y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,
+    ].some((v) => typeof v === 'number');
+
+    if (hasEntityValues) {
+      result.entityHeadcounts.push({
+        id: entityGroup.get(EMaterialsFormControls.rowId)?.value || undefined,
+        pageNumber: 4,
+        y1Headcount,
+        y1Saudization,
+        y2Headcount,
+        y2Saudization,
+        y3Headcount,
+        y3Saudization,
+        y4Headcount,
+        y4Saudization,
+        y5Headcount,
+        y5Saudization,
+      });
+    }
   }
 
   // Map Service Headcounts (Page 4 - Direct Localization)
@@ -861,22 +952,49 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
       const serviceGroup = serviceLevelArray.at(i) as FormGroup;
       const serviceId = serviceGroup.get(EMaterialsFormControls.serviceId)?.value || '';
 
-      result.serviceHeadcounts.push({
-        planServiceTypeId: serviceId,
-        measuresUpSkillSaudis: getControlValue(serviceGroup, EMaterialsFormControls.keyMeasuresToUpskillSaudis) || '',
-        mentionSupportRequiredSEC: getControlValue(serviceGroup, EMaterialsFormControls.mentionSupportRequiredFromSEC) || '',
-        pageNumber: 4,
-        y1Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.firstYear}_headcount`)),
-        y1Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.firstYear}_saudization`)),
-        y2Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.secondYear}_headcount`)),
-        y2Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.secondYear}_saudization`)),
-        y3Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.thirdYear}_headcount`)),
-        y3Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.thirdYear}_saudization`)),
-        y4Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_headcount`)),
-        y4Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_saudization`)),
-        y5Headcount: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_headcount`)),
-        y5Saudization: toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_saudization`)),
-      });
+      const measuresUpSkillSaudis = getControlValue(serviceGroup, EMaterialsFormControls.keyMeasuresToUpskillSaudis) || '';
+      const mentionSupportRequiredSEC = getControlValue(serviceGroup, EMaterialsFormControls.mentionSupportRequiredFromSEC) || '';
+      // Get localizationDate from the service level table's separate control (sent as LocalizationDate to backend)
+      // In Step 4, service level table uses serviceLevelLocalizationDate, while localization strategy uses expectedLocalizationDate
+      const localizationDate = getControlValue(serviceGroup, EMaterialsFormControls.serviceLevelLocalizationDate) || '';
+      const y1Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.firstYear}_headcount`));
+      const y1Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.firstYear}_saudization`));
+      const y2Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.secondYear}_headcount`));
+      const y2Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.secondYear}_saudization`));
+      const y3Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.thirdYear}_headcount`));
+      const y3Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.thirdYear}_saudization`));
+      const y4Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_headcount`));
+      const y4Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_saudization`));
+      const y5Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_headcount`));
+      const y5Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_saudization`));
+
+      const hasServiceValues = [
+        y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,
+      ].some((v) => typeof v === 'number')
+        || (measuresUpSkillSaudis && measuresUpSkillSaudis.toString().trim() !== '')
+        || (mentionSupportRequiredSEC && mentionSupportRequiredSEC.toString().trim() !== '')
+        || (localizationDate && localizationDate.toString().trim() !== '');
+
+      if (hasServiceValues) {
+        result.serviceHeadcounts.push({
+          id: serviceGroup.get(EMaterialsFormControls.rowId)?.value || undefined,
+          planServiceTypeId: serviceId,
+          measuresUpSkillSaudis,
+          mentionSupportRequiredSEC,
+          localizationDate: localizationDate || undefined, // Include localizationDate for service level table
+          pageNumber: 4,
+          y1Headcount,
+          y1Saudization,
+          y2Headcount,
+          y2Saudization,
+          y3Headcount,
+          y3Saudization,
+          y4Headcount,
+          y4Saudization,
+          y5Headcount,
+          y5Saudization,
+        });
+      }
     }
   }
 
@@ -989,7 +1107,6 @@ export function convertServiceRequestToFormData(
   const formData = new FormData();
   const { servicePlan, signature } = request;
 
-
   // Add signature
   if (signature.id) formData.append('Signature.Id', signature.id);
   if (signature.signatureValue) formData.append('Signature.SignatureValue', signature.signatureValue);
@@ -1002,7 +1119,6 @@ export function convertServiceRequestToFormData(
 
   // Add service plan basic fields
   if (servicePlan.id) formData.append('ServicePlan.Id', servicePlan.id);
-  if (servicePlan.isDraft !== undefined) formData.append('ServicePlan.IsDraft', servicePlan.isDraft.toString());
   formData.append('ServicePlan.OpportunityId', servicePlan.opportunityId.id);
   formData.append('ServicePlan.PlanTitle', servicePlan.planTitle);
   if (servicePlan.status !== undefined) formData.append('ServicePlan.Status', servicePlan.status.toString());
@@ -1095,7 +1211,9 @@ export function convertServiceRequestToFormData(
         formData.append(`ServicePlan.PartnershipModels[${index}].OtherAgreementType`, partnership.otherAgreementType);
       }
       formData.append(`ServicePlan.PartnershipModels[${index}].AgreementSigningDate`, partnership.agreementSigningDate);
-      formData.append(`ServicePlan.PartnershipModels[${index}].AgreementCopyProvided`, partnership.agreementCopyProvided.toString());
+      if (partnership.agreementCopyProvided !== undefined && partnership.agreementCopyProvided !== null) {
+        formData.append(`ServicePlan.PartnershipModels[${index}].AgreementCopyProvided`, partnership.agreementCopyProvided.toString());
+      }
       formData.append(`ServicePlan.PartnershipModels[${index}].KeyAgreementClauses`, partnership.keyAgreementClauses);
       formData.append(`ServicePlan.PartnershipModels[${index}].SelectionJustification`, partnership.selectionJustification);
       formData.append(`ServicePlan.PartnershipModels[${index}].SupervisionEntity`, partnership.supervisionEntity);
@@ -1122,12 +1240,15 @@ export function convertServiceRequestToFormData(
 
   // Add service headcounts if present
   if (servicePlan.serviceHeadcounts) {
-    console.log(servicePlan.serviceHeadcounts)
-
     servicePlan.serviceHeadcounts.forEach((service, index) => {
+      if (service.id) formData.append(`ServicePlan.ServiceHeadcounts[${index}].id`, service.id)
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].PlanServiceTypeId`, service.planServiceTypeId);
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].MeasuresUpSkillSaudis`, service.measuresUpSkillSaudis);
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].MentionSupportRequiredSEC`, service.mentionSupportRequiredSEC);
+      // Send localizationDate as LocalizationDate for service level tables in steps 3 & 4
+      if (service.localizationDate) {
+        formData.append(`ServicePlan.ServiceHeadcounts[${index}].LocalizationDate`, service.localizationDate);
+      }
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].PageNumber`, service.pageNumber.toString());
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].Y1Headcount`, service.y1Headcount.toString());
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].Y1Saudization`, service.y1Saudization.toString());
@@ -1196,7 +1317,9 @@ export function convertServiceRequestToFormData(
       formData.append(`ServicePlan.LocalizationStrategies[${index}].LocationType`, strategy.locationType.toString());
       formData.append(`ServicePlan.LocalizationStrategies[${index}].ExpectedLocalizationDate`, strategy.expectedLocalizationDate);
       formData.append(`ServicePlan.LocalizationStrategies[${index}].CapexRequired`, strategy.capexRequired.toString());
-      formData.append(`ServicePlan.LocalizationStrategies[${index}].HasProprietaryTools`, strategy.hasProprietaryTools.toString());
+      if (strategy.hasProprietaryTools !== undefined && strategy.hasProprietaryTools !== null) {
+        formData.append(`ServicePlan.LocalizationStrategies[${index}].HasProprietaryTools`, strategy.hasProprietaryTools.toString());
+      }
       if (strategy.proprietaryToolsDetails) {
         formData.append(`ServicePlan.LocalizationStrategies[${index}].ProprietaryToolsDetails`, strategy.proprietaryToolsDetails);
       }

@@ -380,7 +380,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       if (existingData) {
         // Restore all fields except serviceName and serviceId
         Object.keys(existingData).forEach(key => {
-          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
+          if (key !== EMaterialsFormControls.rowId && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
             const targetControl = newServiceDetail.get(key);
             if (targetControl) {
               targetControl.patchValue(existingData[key]);
@@ -399,32 +399,32 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     }
   }
 
-  /**
-   * Check if a service detail row is empty (no user input)
-   */
-  private isServiceDetailEmpty(serviceDetailFormGroup: FormGroup): boolean {
-    const fields = [
-      EMaterialsFormControls.serviceName,
-      EMaterialsFormControls.serviceType,
-      EMaterialsFormControls.serviceCategory,
-      EMaterialsFormControls.serviceDescription,
-      EMaterialsFormControls.serviceProvidedTo,
-      EMaterialsFormControls.serviceProvidedToCompanyNames,
-      EMaterialsFormControls.totalBusinessDoneLast5Years,
-      EMaterialsFormControls.serviceTargetedForLocalization,
-      EMaterialsFormControls.expectedLocalizationDate,
-      EMaterialsFormControls.serviceLocalizationMethodology,
-    ];
+  // /**
+  //  * Check if a service detail row is empty (no user input)
+  //  */
+  // private isServiceDetailEmpty(serviceDetailFormGroup: FormGroup): boolean {
+  //   const fields = [
+  //     EMaterialsFormControls.serviceName,
+  //     EMaterialsFormControls.serviceType,
+  //     EMaterialsFormControls.serviceCategory,
+  //     EMaterialsFormControls.serviceDescription,
+  //     EMaterialsFormControls.serviceProvidedTo,
+  //     EMaterialsFormControls.serviceProvidedToCompanyNames,
+  //     EMaterialsFormControls.totalBusinessDoneLast5Years,
+  //     EMaterialsFormControls.serviceTargetedForLocalization,
+  //     EMaterialsFormControls.expectedLocalizationDate,
+  //     EMaterialsFormControls.serviceLocalizationMethodology,
+  //   ];
 
-    for (const field of fields) {
-      const control = serviceDetailFormGroup.get(`${field}.${EMaterialsFormControls.value}`);
-      if (control && control.value) {
-        // Has a value, not empty
-        return false;
-      }
-    }
+  //   for (const field of fields) {
+  //     const control = serviceDetailFormGroup.get(`${field}.${EMaterialsFormControls.value}`);
+  //     if (control && control.value) {
+  //       // Has a value, not empty
+  //       return false;
+  //     }
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 }
 

@@ -664,7 +664,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       if (existingData) {
         // Restore all fields except serviceName and serviceId
         Object.keys(existingData).forEach(key => {
-          if (key !== 'rowId' && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
+          if (key !== EMaterialsFormControls.rowId && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
             const targetControl = newServiceLevel.get(key);
             if (targetControl) {
               targetControl.patchValue(existingData[key]);
