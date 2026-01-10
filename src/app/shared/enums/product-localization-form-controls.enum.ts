@@ -4,6 +4,7 @@
  */
 export enum EMaterialsFormControls {
   rowId = 'rowId',
+  serviceHeadcountRowId = 'serviceHeadcountRowId', // Separate ID for service headcounts in Step 4
 
   // Step 1 - Main Form Groups
   basicInformationFormGroup = 'basicInformationFormGroup',

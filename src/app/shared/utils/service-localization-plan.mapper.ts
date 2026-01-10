@@ -560,6 +560,8 @@ export function mapServicePlanResponseToForm(
     }
 
     if (head) {
+      // Store service headcount ID separately from localization strategy ID
+      row.get(EMaterialsFormControls.serviceHeadcountRowId)?.setValue(head.id ?? null, { emitEvent: false });
       // Read localizationDate from serviceHeadcounts for service-level table
       // Service level table uses the separate serviceLevelLocalizationDate control
       if (head.localizationDate) {
@@ -977,7 +979,8 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
 
       if (hasServiceValues) {
         result.serviceHeadcounts.push({
-          id: serviceGroup.get(EMaterialsFormControls.rowId)?.value || undefined,
+          // Use serviceHeadcountRowId for service headcount ID (separate from localization strategy rowId)
+          id: serviceGroup.get(EMaterialsFormControls.serviceHeadcountRowId)?.value || undefined,
           planServiceTypeId: serviceId,
           measuresUpSkillSaudis,
           mentionSupportRequiredSEC,
