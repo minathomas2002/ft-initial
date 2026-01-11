@@ -104,10 +104,6 @@ export class OpportunityDetails implements OnInit {
   }
 
   onApply() {
-    if (this.opportunitiesStore.details()?.opportunityType === EOpportunityType.SERVICES) {
-      this.toast.warn('Applying for services plan will be available soon');
-      return;
-    }
     if (this.authStore.isAuthenticated()) {
       this.opportunitiesStore.checkApplyOpportunity(this.opportunityId()!).subscribe((res) => {
         if (res.body) {
