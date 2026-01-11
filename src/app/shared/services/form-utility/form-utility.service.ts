@@ -17,21 +17,43 @@ export class FormUtilityService {
 
     let errorCount = 0;
 
-    // Count errors on the FormGroup itself only if it's dirty
-    if (formGroup.dirty && formGroup.errors) {
+    // Count errors on the FormGroup itself only if it's interacted with
+    if ((formGroup.dirty || formGroup.touched) && formGroup.errors) {
       errorCount += Object.keys(formGroup.errors).length;
     }
     // Recursively count errors in all controls
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
-      if (control && control instanceof FormGroup) {
+      if (!control) return;
+
+      if (control instanceof FormGroup) {
         errorCount += this.countFormErrors(control);
+        return;
       }
-      else if (control && control instanceof FormArray && control.invalid && control.dirty && control.errors) {
-        errorCount++
+
+      if (control instanceof FormArray) {
+        // Count array-level errors (if any) only if interacted with
+        if ((control.dirty || control.touched) && control.invalid && control.errors) {
+          errorCount += Object.keys(control.errors).length;
+        }
+
+        // IMPORTANT: recurse into array items (tables/rows)
+        control.controls.forEach((arrayControl) => {
+          if (arrayControl instanceof FormGroup) {
+            errorCount += this.countFormErrors(arrayControl);
+          } else if (arrayControl instanceof FormControl) {
+            if ((arrayControl.dirty || arrayControl.touched) && arrayControl.invalid) {
+              errorCount++;
+            }
+          }
+        });
+        return;
       }
-      else if (control && control instanceof FormControl && control.dirty && control.invalid) {
-        errorCount++
+
+      if (control instanceof FormControl) {
+        if ((control.dirty || control.touched) && control.invalid) {
+          errorCount++;
+        }
       }
     });
 

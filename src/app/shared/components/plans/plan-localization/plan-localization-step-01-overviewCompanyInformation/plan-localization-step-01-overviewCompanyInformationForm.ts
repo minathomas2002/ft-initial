@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
-import { ProductPlanFormService } from 'src/app/shared/services/plan/materials-form-service/product-plan-form-service';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
@@ -82,8 +82,6 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
     const opportunityControl = this.getFormControl(
       this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]
     );
-    console.log(opportunityControl);
-
 
     const appliedOpportunity = this.planStore.appliedOpportunity();
     if (appliedOpportunity) {

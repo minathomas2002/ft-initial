@@ -1,11 +1,11 @@
 import { computed, inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { EExperienceRange, EInHouseProcuredType, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, ETargetedCustomer } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
 import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
-import { IProductPlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
+import { IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, IServicePlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
 
@@ -15,22 +15,32 @@ export interface IPlanTypeDropdownOption {
 }
 
 const initialState: {
-  newPlanOpportunityType: EOpportunityType | null,
-  appliedOpportunity: IOpportunity | null,
-  isPresetSelected: boolean,
-  newPlanTitle: string,
-  availableOpportunities: ISelectItem[],
-  isLoadingAvailableOpportunities: boolean,
-  loading: boolean,
-  error: string | null,
-  count: number,
-  list: IPlanRecord[],
-  statistics: IPlansDashboardStatistics | null,
-  targetedCustomerOptions: ISelectItem[],
-  productManufacturingExperienceOptions: ISelectItem[],
-  inHouseProcuredOptions: ISelectItem[],
-  timeLineList: ITimeLineResponse[],
-  localizationStatusOptions: ISelectItem[]
+  newPlanOpportunityType: EOpportunityType | null;
+  appliedOpportunity: IOpportunity | null;
+  isPresetSelected: boolean;
+  newPlanTitle: string;
+  availableOpportunities: ISelectItem[];
+  isLoadingAvailableOpportunities: boolean;
+  loading: boolean;
+  error: string | null;
+  count: number;
+  list: IPlanRecord[];
+  statistics: IPlansDashboardStatistics | null;
+  targetedCustomerOptions: ISelectItem[];
+  productManufacturingExperienceOptions: ISelectItem[];
+  inHouseProcuredOptions: ISelectItem[];
+  timeLineList: ITimeLineResponse[];
+  localizationStatusOptions: ISelectItem[];
+  serviceTypeOptions: ISelectItem[];
+  serviceProvidedToOptions: ISelectItem[];
+  serviceCategoryOptions: ISelectItem[];
+  companyTypeOptions: ISelectItem[];
+  qualificationStatusOptions: ISelectItem[];
+  localizationMethodologyOptions: ISelectItem[];
+  localizationApproachOptions: ISelectItem[];
+  locationOptions: ISelectItem[];
+  yesNoOptions: ISelectItem[];
+  agreementTypeOptions: ISelectItem[];
   activeEmployees: IAssignActiveEmployee[] | null;
   currentEmployee: IAssignActiveEmployee | null;
   isLoading: boolean;
@@ -38,7 +48,6 @@ const initialState: {
   wizardMode: 'create' | 'edit' | 'view';
   selectedPlanId: string | null;
   planStatus: number | null;
-
 } = {
   newPlanOpportunityType: null,
   appliedOpportunity: null,
@@ -54,7 +63,10 @@ const initialState: {
   statistics: null,
   targetedCustomerOptions: [
     { id: ETargetedCustomer.SEC.toString(), name: 'SEC' },
-    { id: ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString(), name: 'SEC\'s approved local suppliers' }
+    {
+      id: ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString(),
+      name: "SEC's approved local suppliers",
+    },
   ],
   productManufacturingExperienceOptions: [
     { id: EExperienceRange.Years_5.toString(), name: '5 Years or less' },
@@ -63,12 +75,70 @@ const initialState: {
   ],
   inHouseProcuredOptions: [
     { id: EInHouseProcuredType.InHouse.toString(), name: 'In-house' },
-    { id: EInHouseProcuredType.Procured.toString(), name: 'Procured' }
+    { id: EInHouseProcuredType.Procured.toString(), name: 'Procured' },
   ],
   localizationStatusOptions: [
     { id: ELocalizationStatusType.Yes.toString(), name: 'Yes' },
     { id: ELocalizationStatusType.No.toString(), name: 'No' },
-    { id: ELocalizationStatusType.Partial.toString(), name: 'Partial' }
+    { id: ELocalizationStatusType.Partial.toString(), name: 'Partial' },
+  ],
+  serviceTypeOptions: [
+    { id: EServiceType.Technical.toString(), name: 'Technical (Core) Service' },
+    {
+      id: EServiceType.NonTechnical.toString(),
+      name: 'Non-Technical (Non-Core / Support) Service',
+    },
+  ],
+
+  serviceProvidedToOptions: [
+    { id: EServiceProvidedTo.Contractors.toString(), name: 'SEC Approved Contractors' },
+    { id: EServiceProvidedTo.Manufacturers.toString(), name: 'SEC Approved Manufacturers' },
+    { id: EServiceProvidedTo.Others.toString(), name: 'Others' },
+  ],
+  serviceCategoryOptions: [
+    { id: EServiceCategory.CategoryA.toString(), name: 'Category A' },
+    { id: EServiceCategory.CategoryB.toString(), name: 'Category B' },
+  ],
+  companyTypeOptions: [
+    { id: EServiceProvidedTo.Contractors.toString(), name: 'Contractor' },
+    { id: EServiceProvidedTo.Manufacturers.toString(), name: 'Manufacturer' },
+    { id: EServiceProvidedTo.Others.toString(), name: 'Other' },
+  ],
+  qualificationStatusOptions: [
+    { id: EServiceQualificationStatus.Qualified.toString(), name: 'Qualified' },
+    { id: EServiceQualificationStatus.UnderPreQualification.toString(), name: 'Under Pre-Qualification' },
+    { id: EServiceQualificationStatus.NotQualified.toString(), name: 'Not Qualified' },
+  ],
+  localizationMethodologyOptions: [
+    {
+      id: ELocalizationMethodology.Collaboration.toString(),
+      name: 'Collaboration with Existing Saudi Company',
+    },
+    {
+      id: ELocalizationMethodology.Direct.toString(),
+      name: 'Direct Localization by Foreign Entity',
+    },
+  ],
+  localizationApproachOptions: [
+    { id: ELocalizationApproach.EstablishSaudiEntity.toString(), name: 'Establish Saudi Entity' },
+    { id: ELocalizationApproach.EstablishLocalBranch.toString(), name: 'Establish Local Branch of Foreign Company' },
+    { id: ELocalizationApproach.Other.toString(), name: 'Other' },
+  ],
+  locationOptions: [
+    { id: ELocation.SaudiEntity.toString(), name: 'Saudi Entity' },
+    { id: ELocation.Branch.toString(), name: 'Branch' },
+    { id: ELocation.Other.toString(), name: 'Other' },
+  ],
+  yesNoOptions: [
+    { id: EYesNo.Yes.toString(), name: 'Yes' },
+    { id: EYesNo.No.toString(), name: 'No' },
+  ],
+  agreementTypeOptions: [
+    { id: AgreementType.JointVenture.toString(), name: 'Joint Venture' },
+    { id: AgreementType.SpecialPurposeVehicle.toString(), name: 'Special Purpose Vehicle' },
+    { id: AgreementType.TechnologyTransferAgreement.toString(), name: 'Technology Transfer Agreement' },
+    { id: AgreementType.KnowledgeTransferAgreement.toString(), name: 'Knowledge Transfer Agreement' },
+    { id: AgreementType.Other.toString(), name: 'Other' },
   ],
   activeEmployees: null,
   currentEmployee: null,
@@ -76,9 +146,8 @@ const initialState: {
   isProcessing: false,
   wizardMode: 'create',
   selectedPlanId: null,
-  planStatus: null
-
-}
+  planStatus: null,
+};
 
 export const PlanStore = signalStore(
   { providedIn: 'root' },
@@ -142,8 +211,8 @@ export const PlanStore = signalStore(
       },
       resetWizardState(): void {
         patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null });
-      }      
-    }
+      },
+    };
   }),
   withMethods((store) => {
     const opportunitiesApiService = inject(OpportunitiesApiService);
@@ -152,38 +221,40 @@ export const PlanStore = signalStore(
       getActiveOpportunityLookUps(): Observable<IBaseApiResponse<ISelectItem[]>> {
         if (!store.newPlanOpportunityType()) return of({} as IBaseApiResponse<ISelectItem[]>);
         patchState(store, { isLoadingAvailableOpportunities: true });
-        return opportunitiesApiService.getActiveOpportunityLookUps(store.newPlanOpportunityType()!)
+        return opportunitiesApiService
+          .getActiveOpportunityLookUps(store.newPlanOpportunityType()!)
           .pipe(
             finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
             tap((response) => patchState(store, { availableOpportunities: response.body }))
-          )
+          );
       },
 
       /**
        * Get opportunity details by ID and update availableOpportunities
        * Used in edit mode to populate the opportunity dropdown with the existing opportunity
        */
-      getOpportunityDetailsAndUpdateOptions(opportunityId: string): Observable<IBaseApiResponse<IOpportunityDetails>> {
+      getOpportunityDetailsAndUpdateOptions(
+        opportunityId: string
+      ): Observable<IBaseApiResponse<IOpportunityDetails>> {
         patchState(store, { isLoadingAvailableOpportunities: true });
-        return opportunitiesApiService.getOpportunityById(opportunityId)
-          .pipe(
-            finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
-            tap((response) => {
-              if (response.body) {
-                // Convert IOpportunityDetails to ISelectItem format
-                const opportunityItem: ISelectItem = {
-                  id: response.body.id,
-                  name: response.body.title
-                };
-                // Update availableOpportunities with the single opportunity
-                patchState(store, { availableOpportunities: [opportunityItem] });
-              }
-            }),
-            catchError((error) => {
-              patchState(store, { error: error.errorMessage || 'Error loading opportunity details' });
-              return throwError(() => new Error('Error loading opportunity details'));
-            })
-          )
+        return opportunitiesApiService.getOpportunityById(opportunityId).pipe(
+          finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
+          tap((response) => {
+            if (response.body) {
+              // Convert IOpportunityDetails to ISelectItem format
+              const opportunityItem: ISelectItem = {
+                id: response.body.id,
+                name: response.body.title,
+              };
+              // Update availableOpportunities with the single opportunity
+              patchState(store, { availableOpportunities: [opportunityItem] });
+            }
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error loading opportunity details' });
+            return throwError(() => new Error('Error loading opportunity details'));
+          })
+        );
       },
 
       /* Get Active Employees  For plans*/
@@ -201,7 +272,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
-          }),
+          })
         );
       },
       /* assign Employee  For plan*/
@@ -217,7 +288,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
       /* reassign Employee  For plan*/
@@ -233,7 +304,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -245,12 +316,14 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error saving product localization plan' });
+            patchState(store, {
+              error: error.errorMessage || 'Error saving product localization plan',
+            });
             return throwError(() => new Error('Error saving product localization plan'));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -262,12 +335,52 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error submitting product localization plan' });
+            patchState(store, {
+              error: error.errorMessage || 'Error submitting product localization plan',
+            });
             return throwError(() => new Error('Error submitting product localization plan'));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
+      /* Submit Product Localization Plan*/
+      submitServiceLocalizationPlan(request: FormData) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.submitServiceLocalizationPlan(request).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
           }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error submitting service localization plan',
+            });
+            return throwError(() => new Error('Error submitting service localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
+      /* save As Draft Product Localization Plan*/
+      saveAsDraftServiceLocalizationPlan(request: FormData) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.saveAsDraftServiceLocalizationPlan(request).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error saving product localization plan',
+            });
+            return throwError(() => new Error('Error saving product localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
         );
       },
 
@@ -281,9 +394,24 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
-          }),
+          })
         );
       },
+
+      /* Get Service Plan*/
+      getServicePlan(planId: string): Observable<IBaseApiResponse<IServiceLocalizationPlanResponse>> {
+        patchState(store, { isLoading: true, error: null });
+        return planApiService.getServicePlan({ planId }).pipe(
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error loading service plan' });
+            return throwError(() => new Error('Error loading service plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
+          })
+        );
+      },
+
       /* Get timeline list*/
       getTimelinePlan(planId: string): Observable<IBaseApiResponse<ITimeLineResponse[]>> {
         patchState(store, { isLoading: true, error: null });
@@ -298,7 +426,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
-          }),
+          })
         );
       },
       /* Download Plan*/
@@ -318,18 +446,15 @@ export const PlanStore = signalStore(
             patchState(store, { loading: false });
           })
         );
-      }
-
-    }
-
-
+      },
+    };
   }),
   withMethods((store) => {
     return {
       savePlanBasicData(opportunityType: EOpportunityType, title: string): void {
         store.setNewPlanOpportunityType(opportunityType);
         store.setNewPlanTitle(title);
-      }
-    }
+      },
+    };
   })
-)
+);

@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
-import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
 import { CommonModule } from '@angular/common';
-import { ValueChainTable } from '../../shared/value-chain-table/value-chain-table';
+import { ValueChainTable } from './value-chain-table/value-chain-table';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ValueChainSummaryComponent } from '../../../plan-localization-step-03-valueChain/value-chain-summary/value-chain-summary.component';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
 
 @Component({
   selector: 'app-summary-section-value-chain',

@@ -1,0 +1,505 @@
+<div class="flex flex-col gap-[32px] px-8 pb-10">
+  <!-- Basic Information -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Basic Information</h2>
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Opportunity'" />
+        <p-select
+          [options]="availableOpportunities()"
+          [formControl]="getFormControl(basicInformationFormGroupControls['opportunity'])"
+          optionLabel="name"
+          placeholder="Select opportunity"
+          [loading]="isLoadingAvailableOpportunities()"
+          fluid
+          [disabled]="isOpportunityDisabled()"
+        />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Submission Date'" />
+        <p-datepicker
+          fluid
+          dateFormat="dd M yy"
+          [formControl]="getFormControl(basicInformationFormGroupControls['submissionDate'])"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Company Information -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Company Information</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+      <div class="flex flex-col gap-2 col-span-1">
+        <app-base-label [title]="'Company Name'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['companyName'])"
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            [maxlength]="100"
+            placeholder="Enter company name"
+            [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(companyInformationFormGroupControls['companyName'])"
+          [label]="'Company Name'"
+        />
+      </div>
+    </div>
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'CEO Name'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter CEO name"
+            [maxlength]="100"
+            [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(companyInformationFormGroupControls['ceoName'])"
+          [label]="'CEO Name'"
+        />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'CEO Email'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoEmailID'])"
+        >
+          <input
+            type="email"
+            pInputText
+            fluid
+            placeholder="Enter CEO email ID"
+            maxlength="100"
+            [formControl]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
+          [label]="'CEO Email'"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Location Information -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Location Information</h2>
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Global HQ Location'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="
+            getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])
+          "
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter global HQ location"
+            [maxlength]="255"
+            [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
+          [label]="'Global HQ Location'"
+        />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <div>
+          <app-base-label [title]="'Registered Vendor ID with SEC'" />
+          <span class="text-sm text-gray-600 ms-2">(If available)</span>
+        </div>
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="
+            getHasCommentControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])
+          "
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter registered vendor ID with SEC"
+            [maxlength]="50"
+            [formControl]="
+              getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])
+            "
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+          [label]="'Registered Vendor ID with SEC'"
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <div>
+          <app-base-label [title]="'BENA Registered Vendor ID'" />
+          <span class="text-sm text-gray-600 ms-2">(Required)</span>
+        </div>
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter BENA registered vendor ID"
+            [maxlength]="50"
+            [formControl]="getValueControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
+          [label]="'BENA Registered Vendor ID'"
+        />
+      </div>
+    </div>
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <div>
+          <h4 class="text-sm font-medium text-gray-900">
+            Do you currently have local Agent in KSA?
+          </h4>
+          <p class="text-sm text-gray-600">
+            If “Yes”, mention the following details of Local Agent -
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <p-radiobutton
+              name="doYouCurrentlyHaveLocalAgentInKSA"
+              [value]="true"
+              [formControl]="
+                getFormControl(
+                  locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']
+                )
+              "
+              inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
+              size="small"
+            />
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <p-radiobutton
+              name="doYouCurrentlyHaveLocalAgentInKSA"
+              [value]="false"
+              [formControl]="
+                getFormControl(
+                  locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA']
+                )
+              "
+              inputId="doYouCurrentlyHaveLocalAgentInKSANo"
+              size="small"
+            />
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+          </label>
+        </div>
+        <app-base-error-messages
+          [control]="
+            getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])
+          "
+          [label]="'Do you currently have local Agent in KSA?'"
+        />
+      </div>
+    </div>
+
+    @if(showLocalAgentInformation()){
+    <div class="animated flex flex-col gap-4" animate.enter="fadeIn">
+      <div class="flex flex-col gap-2 w-full">
+        <app-base-label [title]="'Local Agent Details'" />
+        <textarea
+          pTextarea
+          fluid
+          [maxlength]="500"
+          placeholder="Enter local agent details"
+          [formControl]="getFormControl(localAgentInformationFormGroupControls['localAgentDetails'])"
+        ></textarea>
+        <app-base-error-messages
+          [control]="getFormControl(localAgentInformationFormGroupControls['localAgentDetails'])"
+          [label]="'Local Agent Details'"
+        />
+      </div>
+
+      <div class="flex flex-col gap-4 md:flex-row">
+        <div class="flex flex-col gap-2 flex-1">
+          <app-base-label [title]="'Local Agent Name'" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="
+              getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])
+            "
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder="Enter local agent name"
+              [maxlength]="100"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
+            [label]="'Local Agent Name'"
+          />
+        </div>
+        <div class="flex flex-col gap-2 flex-1">
+          <app-base-label [title]="'Contact Person Name'" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="
+              getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])
+            "
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder="Enter contact person name"
+              [maxlength]="100"
+              [formControl]="
+                getValueControl(localAgentInformationFormGroupControls['contactPersonName'])
+              "
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
+            [label]="'Contact Person Name'"
+          />
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4 md:flex-row">
+        <div class="flex flex-col gap-2 flex-1">
+          <app-base-label [title]="'Email ID'" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="
+              getHasCommentControl(localAgentInformationFormGroupControls['emailID'])
+            "
+          >
+            <input
+              type="email"
+              pInputText
+              fluid
+              placeholder="Enter email ID"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
+            [label]="'Email ID'"
+          />
+        </div>
+        <div class="flex flex-col gap-2 flex-1">
+          <app-base-label [title]="'Contact Number'" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="
+              getHasCommentControl(localAgentInformationFormGroupControls['contactNumber'])
+            "
+          >
+            <app-phone-input
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
+            ></app-phone-input>
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
+            [label]="'Contact Number'"
+          />
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 w-full md:w-1/2">
+        <app-base-label [title]="'Company HQ Location'" />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="
+            getHasCommentControl(localAgentInformationFormGroupControls['companyLocation'])
+          "
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter Company HQ Location"
+            [formControl]="getValueControl(localAgentInformationFormGroupControls['companyLocation'])"
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(localAgentInformationFormGroupControls['companyLocation'])"
+          [label]="'Company HQ Location'"
+        />
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Details of Service Provided -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Details of Service Provided</h2>
+    <app-form-array-input
+      [ft]="getDetailsFormArray()"
+      [hideAddButton]="true"
+      [hideDeleteButton]="true"
+      [showIndexColumn]="true"
+      [indexColumnLabel]="'# of Services'"
+      [excludeKeys]="['serviceId', 'serviceProvidedToCompanyNames', 'agreementCopy']"
+      [headerTooltips]="{
+        totalBusinessDoneLast5Years: 'Mention total business done in last 5 years with top 5 entities',
+        serviceTargetedForLocalization: 'Select “Yes” if the service is currently targeted for localization; otherwise, select “No”'
+      }"
+    >
+      <ng-template #itemTemplate let-itemControl let-index="index">
+        <td class="p-3 border border-gray-200 w-[48px] text-center">Service {{ index + 1 }}</td>
+
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <input
+            type="text"
+            pInputText
+            fluid
+            [formControl]="getValueControl(itemControl.get('serviceName'))"
+            readonly
+            class="text-gray-400"
+          />
+        </td>
+
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <p-select
+            [options]="serviceTypeOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get('serviceType'))"
+            placeholder="Select"
+            fluid
+            [appendTo]="'body'"
+          />
+        </td>
+
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <p-select
+            [options]="serviceCategoryOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get('serviceCategory'))"
+            placeholder="Select"
+            fluid
+            [appendTo]="'body'"
+          />
+        </td>
+
+        <td class="p-3 border border-gray-200 min-w-[250px]">
+          <input
+            type="text"
+            pInputText
+            fluid
+            [maxlength]="255"
+            placeholder="Brief description of the service"
+            [formControl]="getValueControl(itemControl.get('serviceDescription'))"
+          />
+        </td>
+
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <p-select
+            [options]="serviceProvidedToOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get('serviceProvidedTo'))"
+            (onChange)="onServiceProvidedToChange($event.value, index)"
+            placeholder="Select"
+            fluid
+            [appendTo]="'body'"
+          />
+
+          @if (getValueControl(itemControl.get('serviceProvidedTo'))?.value === serviceProvidedToOthersId || getValueControl(itemControl.get('serviceProvidedTo'))?.value === 'Others') {
+          <div class="mt-2">
+            <textarea
+            pTextarea
+            fluid
+            [maxlength]="255"
+            placeholder="Please mention company names"
+            [formControl]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
+            ></textarea>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
+              [label]="'Company Names'"
+            />
+            <div class="text-xs text-gray-500 text-right mt-1">
+            {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
+            </div>
+          </div>
+          }
+        </td>
+
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <textarea
+            pTextarea
+            fluid
+            [maxlength]="150"
+            placeholder="Company Name – Amount (Mn SAR) (From Year – To Year)"
+            [formControl]="getValueControl(itemControl.get('totalBusinessDoneLast5Years'))"
+          ></textarea>
+          <div class="text-xs text-gray-500 text-right mt-1">
+            {{ getValueControl(itemControl.get('totalBusinessDoneLast5Years')).value?.length || 0 }} / 150
+          </div>
+        </td>
+
+        <td class="p-3 border border-gray-200 min-w-[150px]">
+          <p-select
+            [options]="yesNoOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get('serviceTargetedForLocalization'))"
+            placeholder="Select"
+            fluid
+            [appendTo]="'body'"
+          />
+        </td>
+
+        <td class="p-3 border border-gray-200 min-w-[150px]">
+          <p-select
+            [options]="availableQuarters()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get('expectedLocalizationDate'))"
+            placeholder="Select quarter"
+            fluid
+            [appendTo]="'body'"
+          />
+        </td>
+
+        <td class="p-3 border border-gray-200 min-w-[250px]">
+          <p-select
+            [options]="localizationMethodologyOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get('serviceLocalizationMethodology'))"
+            placeholder="Select"
+            fluid
+            [appendTo]="'body'"
+          />
+        </td>
+      </ng-template>
+    </app-form-array-input>
+  </div>
+</div>

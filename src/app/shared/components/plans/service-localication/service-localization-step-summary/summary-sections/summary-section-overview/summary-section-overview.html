@@ -1,0 +1,213 @@
+<div class="flex flex-col gap-6 bg-white">
+  <!-- Basic Information -->
+  <div class="flex flex-col gap-4">
+    <app-summary-section-header
+      [title]="'Overview'"
+      [isViewMode]="isViewMode()"
+      (onEdit)="onEditClick()"
+    />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        [label]="'Opportunity'"
+        [value]="opportunity()"
+        [hasError]="hasFieldError('basicInformationFormGroup.opportunity')"
+        [isEmpty]="!opportunity()"
+      />
+      <app-summary-field
+        [label]="'Submission Date'"
+        [value]="submissionDate()"
+        [isDate]="true"
+        [isEmpty]="!submissionDate()"
+      />
+    </div>
+  </div>
+
+  <!-- Company Information -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-lg font-semibold text-[#4A4E5A]">Company Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        class="col-span-2"
+        [label]="'Company Name'"
+        [value]="companyName()"
+        [hasError]="hasFieldError('overviewCompanyInformationFormGroup.companyName.value')"
+        [isEmpty]="!companyName()"
+      />
+      <app-summary-field
+        [label]="'CEO Name'"
+        [value]="ceoName()"
+        [hasError]="hasFieldError('overviewCompanyInformationFormGroup.ceoName.value')"
+        [isEmpty]="!ceoName()"
+      />
+      <app-summary-field
+        [label]="'CEO Email'"
+        [value]="ceoEmailID()"
+        [hasError]="hasFieldError('overviewCompanyInformationFormGroup.ceoEmailID.value')"
+        [isEmpty]="!ceoEmailID()"
+      />
+    </div>
+  </div>
+
+  <!-- Location Information -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-lg font-semibold text-[#4A4E5A]">Location Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-summary-field
+        [label]="'Global HQ Location'"
+        [value]="globalHQLocation()"
+        [hasError]="hasFieldError('locationInformationFormGroup.globalHQLocation.value')"
+        [isEmpty]="!globalHQLocation()"
+      />
+      <app-summary-field
+        [label]="'Registered Vendor ID with SEC (if available)'"
+        [value]="registeredVendorID()"
+        [hasError]="hasFieldError('locationInformationFormGroup.registeredVendorIDwithSEC.value')"
+        [isEmpty]="!registeredVendorID()"
+      />
+      <app-summary-field
+        [label]="'Do you currently have local Agent in KSA?'"
+        [value]="hasLocalAgent()"
+        [isBoolean]="true"
+        [hasError]="hasFieldError('locationInformationFormGroup.doYouCurrentlyHaveLocalAgentInKSA')"
+        [isEmpty]="hasLocalAgent() === null"
+      />
+    </div>
+
+    @if (hasLocalAgent() === true) {
+    <div class="flex flex-col gap-4">
+      <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-summary-field
+          [label]="'Local Agent Name'"
+          [value]="localAgentName()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.localAgentName.value')"
+          [isEmpty]="!localAgentName()"
+        />
+        <app-summary-field
+          [label]="'Contact Person Name'"
+          [value]="contactPersonName()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.contactPersonName.value')"
+          [isEmpty]="!contactPersonName()"
+        />
+        <app-summary-field
+          [label]="'Email ID'"
+          [value]="emailID()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.emailID.value')"
+          [isEmpty]="!emailID()"
+        />
+        <app-summary-field
+          [label]="'Contact Number'"
+          [value]="contactNumber()?.countryCode + ' ' +contactNumber()?.phoneNumber"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.contactNumber.value')"
+          [isEmpty]="!contactNumber()"
+        />
+        <app-summary-field
+          [label]="'Company HQ Location'"
+          [value]="companyLocation()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.companyLocation.value')"
+          [isEmpty]="!companyLocation()"
+        />
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Service Details -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-lg font-semibold text-[#4A4E5A]">Details of Service Provided</h3>
+      <div class="overflow-x-auto">
+      <div class="rounded-lg border border-gray-300">
+        <p-table
+          [value]="serviceDetails()"
+          [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
+          styleClass="w-full [&_th]:!border [&_td]:!border [&_th]:!border-gray-300 [&_td]:!border-gray-300"
+        >
+          <ng-template pTemplate="header">
+            <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]"># of Services</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[220px]">Service Name</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]">Service Type</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[360px]">Service Description</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[220px]">Service Provided to</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[240px]">Total Business Done (Last 5 Years)</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[160px]">Targeted for Localization</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[160px]">Expected Localization Date</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[260px]">Service Localization Methodology</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-service let-rowIndex="rowIndex">
+            <tr>
+              <td class="border-t border-gray-300 p-4">{{ rowIndex + 1 }}</td>
+
+              <td class="border-t border-gray-300 p-4 min-w-[220px]">
+                <app-summary-table-cell
+                  [value]="service.serviceName"
+                  [isEmpty]="!service.serviceName"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceName')"
+                />
+              </td>
+
+              <td class="border-t border-gray-300 p-4">
+                <app-summary-table-cell
+                  [value]="service.serviceType"
+                  [isEmpty]="!service.serviceType"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceType')"
+                />
+              </td>
+
+              <td class="border-t border-gray-300 p-4 min-w-[360px]">
+                <app-summary-table-cell
+                  [value]="service.serviceDescription"
+                  [isEmpty]="!service.serviceDescription"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceDescription')"
+                />
+              </td>
+
+              <td class="border-t border-gray-300 p-4 min-w-[220px]">
+                <app-summary-table-cell
+                  [value]="service.serviceProvidedTo"
+                  [isEmpty]="!service.serviceProvidedTo"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceProvidedTo')"
+                />
+              </td>
+
+              <td class="border-t border-gray-300 p-4 min-w-[240px]">
+                <app-summary-table-cell
+                  [value]="service.totalBusinessDoneLast5Years"
+                  [isEmpty]="!service.totalBusinessDoneLast5Years"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'totalBusinessDoneLast5Years')"
+                />
+              </td>
+
+              <td class="border-t border-gray-300 p-4">
+                <app-summary-table-cell
+                  [value]="service.serviceTargetedForLocalization"
+                  [isBoolean]="true"
+                  [isEmpty]="!service.serviceTargetedForLocalization"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceTargetedForLocalization')"
+                />
+              </td>
+
+              <td class="border-t border-gray-300 p-4">
+                <app-summary-table-cell
+                  [value]="service.expectedLocalizationDate"
+                  [isEmpty]="!service.expectedLocalizationDate"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'expectedLocalizationDate')"
+                />
+              </td>
+
+              <td class="border-t border-gray-300 p-4">
+                <app-summary-table-cell
+                  [value]="service.serviceLocalizationMethodology"
+                  [isEmpty]="!service.serviceLocalizationMethodology"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceLocalizationMethodology')"
+                />
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, inject, effect } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { SummaryField } from 'src/app/shared/components/plans/summary-field/summary-field';
+import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
-import { SummarySectionHeader } from '../../shared/summary-section-header/summary-section-header';
-import { SummaryField } from '../../shared/summary-field/summary-field';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
 

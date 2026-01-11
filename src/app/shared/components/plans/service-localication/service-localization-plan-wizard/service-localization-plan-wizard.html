@@ -1,0 +1,113 @@
+@if (!planStore.isLoading()) {
+<app-base-wizard-dialog
+  [(visible)]="visibility"
+  [(activeStep)]="activeStep"
+  [steps]="steps()"
+  [wizardTitle]="wizardTitle()"
+  (onNextStep)="nextStep()"
+  (onPreviousStep)="previousStep()"
+  (onSaveAsDraft)="saveAsDraft()"
+  [isLoading]="isLoading() || isLoadingPlan()"
+  [isProcessing]="isProcessing()"
+  [hideSaveAsDraft]="isViewMode()"
+  (onClose)="onClose()"
+>
+  @if (shouldShowStatusTag()) {
+  <ng-container ngProjectAs="status">
+    <app-base-tag [value]="statusLabel()" [styleClass]="statusBadgeClass()" />
+  </ng-container>
+  }
+
+  <ng-template [appStepContent]="1">
+    <app-service-localization-step-cover-page [isViewMode]="isViewMode()"></app-service-localization-step-cover-page>
+  </ng-template>
+
+  <ng-template [appStepContent]="2">
+    <app-service-localization-step-overview [isViewMode]="isViewMode()"></app-service-localization-step-overview>
+  </ng-template>
+
+  <!-- Conditional step: Existing Saudi (appears before Direct Localization in step order) -->
+  @if (showExistingSaudiStep() && existingSaudiStepIndex() > 0) {
+    <ng-template [appStepContent]="existingSaudiStepIndex()">
+      <app-service-localization-step-existing-saudi [isViewMode]="isViewMode()"></app-service-localization-step-existing-saudi>
+    </ng-template>
+  }
+
+  <!-- Conditional step: Direct Localization -->
+  @if (showDirectLocalizationStep() && directLocalizationStepIndex() > 0) {
+    <ng-template [appStepContent]="directLocalizationStepIndex()">
+      <app-service-localization-step-direct-localization [isViewMode]="isViewMode()"></app-service-localization-step-direct-localization>
+    </ng-template>
+  }
+
+  <!-- Summary step is always last -->
+  <ng-template [appStepContent]="summaryStepIndex()">
+    <app-service-localization-step-summary
+      [isViewMode]="isViewMode()"
+      [includeExistingSaudi]="showExistingSaudiStep()"
+      [includeDirectLocalization]="showDirectLocalizationStep()"
+      [coverStepNumber]="stepIndex('cover')"
+      [overviewStepNumber]="stepIndex('overview')"
+      [existingSaudiStepNumber]="stepIndex('existingSaudi')"
+      [directLocalizationStepNumber]="stepIndex('directLocalization')"
+      #summaryComponent
+      (onEditStep)="navigateToStep($event)"
+      (onValidationErrorsChange)="updateValidationErrors($event)"
+    ></app-service-localization-step-summary>
+  </ng-template>
+
+  <ng-container ngProjectAs="final-step-action">
+    @if (activeStep() === summaryStepIndex() && !isViewMode()) {
+    <p-button label="Submit" (click)="onSummarySubmitClick()"></p-button>
+    }
+  </ng-container>
+
+  <ng-container ngProjectAs="more-actions">
+    @if(canOpenTimeline()){
+    <p-button
+      label="Timeline"
+      icon="icon-list"
+      text
+      severity="secondary"
+      (click)="timelineVisibility.set(true)"
+    ></p-button>
+    }
+  </ng-container>
+</app-base-wizard-dialog>
+}
+
+@if(showSubmissionModal()){
+<!-- Submission Confirmation Modal -->
+<app-submission-confirmation-modal
+  [(visible)]="showSubmissionModal"
+  [(existingSignature)]="existingSignature"
+  (onConfirm)="onSubmissionConfirm($event)"
+  (onCancel)="onSubmissionCancel()"
+/>
+}
+
+<!-- Confirm Leave Dialog -->
+<app-general-confirmation-dialog
+  [(visible)]="showConfirmLeaveDialog"
+  [isLoading]="isProcessing()"
+  (onCancel)="saveAsDraft()"
+  [cancelLabel]="'plans.confirmation.saveAsDraft' | translate"
+  [icon]="'icon-info'"
+  [confirmButtonSeverity]="'danger'"
+  [title]="'plans.confirmation.onLeaveTitle' | translate"
+  [description]="'plans.confirmation.onLeaveDesc' | translate"
+  (confirmed)="onConfirmLeave()"
+  [confirmationLabel]="'plans.confirmation.cancelLabel' | translate"
+></app-general-confirmation-dialog>
+
+<!-- Confirm Leave Dialog -->
+<!-- <app-confirm-leave-dialog
+  [(visible)]="showConfirmLeaveDialog"
+  (onLeave)="onConfirmLeave()"
+  (onContinueEditing)="onContinueEditing()"
+/> -->
+
+<app-timeline-dialog
+  [(dialogVisible)]="timelineVisibility"
+  [planId]="planId()"
+/>

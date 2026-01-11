@@ -1,5 +1,5 @@
 import { FormGroup, FormArray } from '@angular/forms';
-import { ProductPlanFormService } from '../services/plan/materials-form-service/product-plan-form-service';
+import { ProductPlanFormService } from '../services/plan/product-plan-form-service/product-plan-form-service';
 import {
   IProductLocalizationPlanRequest,
   IProductPlanResponse,
@@ -261,7 +261,7 @@ function mapValueChainStep(formService: ProductPlanFormService): ValueChainStep 
       const costPercent = getFormValue(itemFormGroup, EMaterialsFormControls.costPercentage);
 
       // Get the row ID if it exists (for edit mode)
-      const rowIdControl = itemFormGroup.get('rowId');
+      const rowIdControl = itemFormGroup.get(EMaterialsFormControls.rowId);
       const rowId = rowIdControl?.value ?? null;
 
       // Only add row if it has at least an expense header
@@ -353,7 +353,7 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
           if (rowFormGroup) {
             // Get the row ID from the first year (it's the same for all years)
             if (year === 1) {
-              const rowIdControl = rowFormGroup.get('rowId');
+              const rowIdControl = rowFormGroup.get(EMaterialsFormControls.rowId);
               rowId = rowIdControl?.value ?? null;
             }
 
@@ -680,7 +680,7 @@ export function mapProductPlanResponseToForm(
       rowsBySection[sectionType].forEach(row => {
         const itemFormGroup = formService.createValueChainItem();
         // Store the row ID for edit mode
-        const rowIdControl = itemFormGroup.get('rowId');
+        const rowIdControl = itemFormGroup.get(EMaterialsFormControls.rowId);
         if (rowIdControl && row.id) {
           rowIdControl.setValue(row.id);
         }
@@ -735,7 +735,7 @@ export function mapProductPlanResponseToForm(
         const rowFormGroup = yearFormGroup.get(rowName) as FormGroup;
         if (rowFormGroup) {
           // Store the row ID for edit mode (same ID for all years of the same row type)
-          const rowIdControl = rowFormGroup.get('rowId');
+          const rowIdControl = rowFormGroup.get(EMaterialsFormControls.rowId);
           if (rowIdControl && row.id) {
             rowIdControl.setValue(row.id);
           }

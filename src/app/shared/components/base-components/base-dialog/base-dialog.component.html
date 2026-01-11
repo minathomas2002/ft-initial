@@ -13,10 +13,12 @@
   @if(visible()){
   <ng-template #header>
     <span class="inline-flex items-center gap-2">
+      @if(icon()){
       <div class="!min-w-[48px] !min-h-[48px] rounded-lg grid place-content-center border border-gray-300">
         <i class="{{icon()}} text-gray-900 text-xl"></i>
       </div>
-      <div class="ms-[12px]">
+      }
+      <div [class.ms-2]="icon()">
         <span class="font-semibold text-lg text-gray-900"> {{dialogTitle()}} </span>
         <ng-content select="subTitle"></ng-content>
       </div>

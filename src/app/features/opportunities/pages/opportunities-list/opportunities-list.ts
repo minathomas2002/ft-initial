@@ -18,6 +18,7 @@ import { OpportunitiesFilters } from '../../components/opportunities-filter/oppo
 import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.utils';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 
@@ -34,6 +35,7 @@ import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/n
     BaseTagComponent,
     OpportunitiesFilters,
     ProductLocalizationPlanWizard,
+    ServiceLocalizationPlanWizard,
     PlanTermsAndConditionsDialog,
     NewPlanDialog
   ],
@@ -56,6 +58,7 @@ export class OpportunitiesList implements OnInit, OnDestroy {
   isAnonymous = signal<boolean>(false);
 
   productLocalizationPlanWizardVisibility = signal<boolean>(false);
+  serviceLocalizationPlanWizardVisibility = signal<boolean>(false);
   planTermsAndConditionsDialogVisibility = signal<boolean>(false);
   newPlanDialogVisibility = signal<boolean>(false);
 
@@ -64,17 +67,22 @@ export class OpportunitiesList implements OnInit, OnDestroy {
     if (isAnonymousData !== undefined) {
       this.isAnonymous.set(isAnonymousData);
     }
+
+    this.applyFilter()
+  }
+
+  applyFilter() {
     this.filterService.applyFilter();
   }
 
   onViewDetails(opportunity: IOpportunity) {
     if (this.isAnonymous()) {
       this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities, opportunity.id], {
-        queryParams: { from: 'list' }
+        queryParams: { from: 'list' },
       });
     } else {
       this.router.navigate(['/', ERoutes.opportunities, opportunity.id], {
-        queryParams: { from: 'list' }
+        queryParams: { from: 'list' },
       });
     }
   }
@@ -85,10 +93,11 @@ export class OpportunitiesList implements OnInit, OnDestroy {
         if (res.body) {
           this.applyOpportunity(opportunity);
         } else {
-          this.toast.warn('Application is not allowed while an in-progress plan exists for the selected opportunity.');
+          this.toast.warn(
+            'Application is not allowed while an in-progress plan exists for the selected opportunity.'
+          );
         }
       });
-
     } else {
       this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
     }
@@ -108,10 +117,6 @@ export class OpportunitiesList implements OnInit, OnDestroy {
   getOpportunityTypeConfig = getOpportunityTypeConfig;
 
   applyOpportunity(opportunity: IOpportunity) {
-    if (opportunity.opportunityType === EOpportunityType.SERVICES) {
-      this.toast.warn('Apply for services opportunity will be available soon');
-      return;
-    }
     if (!opportunity.isOtherOpportunity) {
       this.planStore.setIsPresetSelected(true);
     }
@@ -128,12 +133,10 @@ export class OpportunitiesList implements OnInit, OnDestroy {
   }
 
   onUserConfirmNewPlanDialog() {
-    if (this.planStore.newPlanOpportunityType() === EOpportunityType.SERVICES) {
-      this.toast.warn('Apply for services opportunity will be available soon');
-      return;
-    }
-    this.newPlanDialogVisibility.set(false);
-    this.productLocalizationPlanWizardVisibility.set(true);
+     this.newPlanDialogVisibility.set(false);
+      this.planStore.newPlanOpportunityType() === EOpportunityType.PRODUCT
+    ? this.productLocalizationPlanWizardVisibility.set(true)
+    : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
   ngOnDestroy(): void {

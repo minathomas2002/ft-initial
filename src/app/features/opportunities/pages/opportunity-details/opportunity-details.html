@@ -1,8 +1,5 @@
 <div class="page-layout px-[32px] py-[24px]">
-  <app-cards-skeleton
-    [isLoading]="opportunitiesStore.loading()"
-    [count]="6"
-  >
+  <app-cards-skeleton [isLoading]="opportunitiesStore.loading()" [count]="6">
     <div class="page-layout--header mb-[20px]">
       <div class="flex items-center justify-between">
         <span
@@ -24,10 +21,7 @@
           [hasLabel]="true"
         />
         } }@else{
-        <p-button
-          [label]="'opportunity.details.apply' | translate"
-          (click)="onApply()"
-        ></p-button>
+        <p-button [label]="'opportunity.details.apply' | translate" (click)="onApply()"></p-button>
         }
       </div>
 
@@ -70,7 +64,11 @@
                 icon="icon-currency-dollar-circle"
                 [cardTitle]="'opportunity.details.spendSAR' | translate"
                 cardClass="bg-white"
-                cardDescription="{{ (opportunitiesStore.details()?.spendSAR) ? (opportunitiesStore.details()?.spendSAR + 'B') : '-' }}"
+                cardDescription="{{
+                  opportunitiesStore.details()?.spendSAR
+                    ? opportunitiesStore.details()?.spendSAR + 'B'
+                    : '-'
+                }}"
               >
               </app-base-card>
               <app-base-card
@@ -93,10 +91,10 @@
                 icon="icon-flag"
                 [cardTitle]="'opportunity.details.local' | translate"
                 cardClass="bg-white"
-                cardDescription="{{ 
-                  opportunitiesStore.details()?.localSuppliersFormatted == '0' ?
-                  '-':
-                   opportunitiesStore.details()?.localSuppliersFormatted + '+'
+                cardDescription="{{
+                  opportunitiesStore.details()?.localSuppliersFormatted == '0'
+                    ? '-'
+                    : opportunitiesStore.details()?.localSuppliersFormatted + '+'
                 }}"
               >
               </app-base-card>
@@ -105,9 +103,9 @@
                 [cardTitle]="'opportunity.details.global' | translate"
                 cardClass="bg-white"
                 cardDescription="{{
-                  opportunitiesStore.details()?.globalSuppliersFormatted == '0' ?
-                  '-':
-                   opportunitiesStore.details()?.globalSuppliersFormatted + '+'
+                  opportunitiesStore.details()?.globalSuppliersFormatted == '0'
+                    ? '-'
+                    : opportunitiesStore.details()?.globalSuppliersFormatted + '+'
                 }}"
               >
               </app-base-card>
@@ -255,5 +253,7 @@
 />
 
 @if(productLocalizationPlanWizardVisibility()){
-<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" />
+<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" (doRefresh)="getOpportunityDetails()" />
+} @if(serviceLocalizationPlanWizardVisibility()){
+<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility" (doRefresh)="getOpportunityDetails()" />
 }
