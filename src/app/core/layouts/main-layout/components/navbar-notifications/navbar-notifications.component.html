@@ -1,10 +1,10 @@
-<div (click)="op.toggle($event)">
-  <p-overlaybadge
-    styleClass="!p-0 !rounded-full !text-[10px]"
-    [value]="unreadCount()"
-  >
-    <i class="icon-bell !text-gray-400 !text-2xl cursor-pointer"> </i>
-  </p-overlaybadge>
+<div (click)="op.toggle($event)" [class.hidden-notification-counter]="!unreadCount()">
+    <p-overlaybadge
+      styleClass="!p-0 !rounded-full !text-[10px]"
+      [value]="unreadCount()"
+    >
+      <i class="icon-bell !text-gray-400 !text-2xl cursor-pointer"> </i>
+    </p-overlaybadge>
 </div>
 
 <p-popover #op class="custom-popover" (onShow)="loadNotifications()">
@@ -37,12 +37,22 @@
     </div>
     <div
       class="max-h-[500px] !max-w-[35rem] md:min-w-[35rem] overflow-auto border-t border-gray-200"
+      (scroll)="onScroll($event)"
     >
       <app-navbar-notifications-tabs
         [notifications]="notifications()"
         [loading]="isLoading()"
         (notificationClick)="onNotificationClick(op)"
       ></app-navbar-notifications-tabs>
+
+      @if (!showPreviousClicked() && totalCount() > (notifications().length || 0)) {
+        <div class="p-4 flex justify-center">
+          <button pButton type="button" class="p-button-text text-sm" (click)="loadPreviousNotifications()">
+            Previous Notifications
+          </button>
+        </div>
+      }
+
     </div>
     <div class="border-t border-gray-200 px-[24px] py-4">
       <div class="flex justify-center">

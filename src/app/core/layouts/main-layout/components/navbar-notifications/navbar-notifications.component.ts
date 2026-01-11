@@ -5,6 +5,7 @@ import {
   OnInit,
   OnDestroy,
   inject,
+  signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BadgeModule } from 'primeng/badge';
@@ -42,6 +43,11 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
   readonly notifications = this.notificationStore.notifications;
   readonly unreadCount = this.notificationStore.unreadCount;
   readonly isLoading = this.notificationStore.loading;
+  readonly totalCount = this.notificationStore.totalCount;
+  readonly currentPage = this.notificationStore.currentPage;
+  readonly pageSize = this.notificationStore.pageSize;
+
+  showPreviousClicked = signal(false);
 
   get ERoutes() {
     return ERoutes;
@@ -72,6 +78,37 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
 
   loadUnreadNotifications() {
     this.notificationStore.getUnreadNotification().pipe(takeUntil(this.destroy$)).subscribe();
+  }
+
+  /**
+   * Load older notifications once when user clicks the 'Previous Notifications' button.
+   * After this the button is hidden and infinite scroll will load more pages.
+   */
+  loadPreviousNotifications(): void {
+    const nextPage = this.currentPage() + 1;
+    this.notificationStore.getMoreNotifications(nextPage, 5).pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.showPreviousClicked.set(true)
+      },
+      error: () => {
+        this.showPreviousClicked.set(true)
+      }
+    });
+  }
+
+  onScroll(event: Event): void {
+    // Only enable infinite scroll after previous button was clicked
+    if (!this.showPreviousClicked) return;
+    const el = event.target as HTMLElement;
+    const threshold = 120;
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - threshold) {
+      const loaded = this.notifications()?.length ?? 0;
+      const total = this.totalCount() ?? 0;
+      if (loaded < total && !this.isLoading()) {
+        const nextPage = this.currentPage() + 1;
+        this.notificationStore.getMoreNotifications(nextPage, this.pageSize()).pipe(takeUntil(this.destroy$)).subscribe();
+      }
+    }
   }
 
   markAllAsRead() {

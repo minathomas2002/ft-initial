@@ -27,7 +27,7 @@ export const NotificationsStore = signalStore(
     const notificationsApiService = inject(NotificationsApiService);
 
     return {
-      getNotifications(pageIndex: number = 0, pageSize: number = 20) {
+      getNotifications(pageIndex: number = 0, pageSize: number = 5) {
         patchState(store, { loading: true, currentPage: pageIndex, pageSize });
         return notificationsApiService.getNotifications(pageIndex, pageSize).pipe(
           tap((response) => {
@@ -35,8 +35,29 @@ export const NotificationsStore = signalStore(
 
             patchState(store, {
               notifications: notificationsList || [],
-              totalCount: response.body?.pagination?.totalCount || notificationsList.length || 0,
+              totalCount: response.body?.totalCount || notificationsList.length || 0,
             });
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
+      },
+
+      /**
+       * Fetch next page of notifications and append to existing list
+       */
+      getMoreNotifications(pageIndex?: number, pageSize?: number) {
+        const nextPage = pageIndex ?? (store.currentPage() + 1);
+        const size = pageSize ?? store.pageSize();
+        patchState(store, { loading: true, currentPage: nextPage, pageSize: size });
+        return notificationsApiService.getNotifications(nextPage, size).pipe(
+          tap((response) => {
+            const notificationsList = response?.body?.data || [];
+            patchState(store, (state) => ({
+              notifications: [...state.notifications, ...(notificationsList || [])],
+              totalCount: response.body?.pagination?.totalCount || (state.totalCount || 0),
+            }));
           }),
           finalize(() => {
             patchState(store, { loading: false });
