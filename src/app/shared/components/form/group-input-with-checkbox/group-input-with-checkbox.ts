@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-group-input-with-checkbox',
-  imports: [CheckboxModule],
-  styleUrl: './group-input-with-checkbox.scss',
+  imports: [CheckboxModule, ReactiveFormsModule],
   template: `
     <div class="flex items-center gap-2">
       @if (showCheckbox() && hasCommentControl()) {
@@ -23,7 +22,7 @@ import { CheckboxModule } from 'primeng/checkbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupInputWithCheckbox {
-  hasCommentControl = input<FormControl<boolean> | null>(null);
+  hasCommentControl = input.required<FormControl<boolean>>();
   showCheckbox = input<boolean>(false);
 
   constructor() {
