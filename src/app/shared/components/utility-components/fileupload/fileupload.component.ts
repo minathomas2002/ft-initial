@@ -129,6 +129,7 @@ export class FileuploadComponent {
       .split(",")
       .map((t) => t.trim().toLowerCase());
     const maxSize = this.maxFileSize();
+    const maxTotalSize = 30 * 1024 * 1024; // 30 MB total limit
     const validFiles: File[] = [];
 
     for (const file of event.files) {
@@ -153,6 +154,21 @@ export class FileuploadComponent {
 
       validFiles.push(file);
     }
+
+    // If multiple is true, check total size of all files (existing + new)
+    // if (this.multiple() && validFiles.length > 0) {
+    //   const existingFiles = this.files();
+    //   const allFiles = [...existingFiles, ...validFiles];
+    //   const totalSize = allFiles.reduce((total, file) => total + file.size, 0);
+
+    //   if (totalSize > maxTotalSize) {
+    //     this.toasterService.error(
+    //       `All uploaded files should be less than ${Math.round(maxTotalSize / (1024 * 1024))} MB`,
+    //     );
+    //     // Don't add the new files if total size exceeds limit
+    //     return;
+    //   }
+    // }
 
     // If multiple is true and there are existing files, append new files instead of replacing
     if (this.multiple() && this.files().length > 0) {
@@ -214,5 +230,24 @@ export class FileuploadComponent {
     }
 
     return null;
+  }
+
+  /**
+   * Format file size in human-readable format (e.g., "2.5 MB", "500 KB")
+   * Returns null if file size doesn't exist
+   */
+  formatFileSize(file: File): string | null {
+    if (!file || file.size === undefined || file.size === null) {
+      return null;
+    }
+
+    const bytes = file.size;
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
   }
 }

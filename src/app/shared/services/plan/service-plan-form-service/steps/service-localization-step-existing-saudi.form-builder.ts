@@ -1,5 +1,6 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AgreementType, EMaterialsFormControls } from 'src/app/shared/enums';
+import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
 
 export class ServiceLocalizationStepExistingSaudiFormBuilder {
   constructor(
@@ -167,7 +168,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       [EMaterialsFormControls.serviceId]: this.fb.control(''), // Service GUID from cover page
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [{value:'',disabled: true}, [Validators.required, Validators.maxLength(150)]], // Read-only, auto-populated from Step 1
+        [EMaterialsFormControls.value]: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(150)]], // Read-only, auto-populated from Step 1
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -232,7 +233,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.attachments]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null], // File upload - optional
+        [EMaterialsFormControls.value]: [null, [fileSizeValidator(30 * 1024 * 1024)]], // File upload - optional, max 30 MB total
       }),
     });
   }

@@ -95,13 +95,14 @@ export class ServiceLocalizationStepExistingSaudi {
   // Grouped header cell for Service Level years
   serviceLevelGroupHeader = computed(() => {
     const yearCols = this.yearControlKeys.length;
-    // Structure: first two columns (Service name + Expected Localization Date), then yearCols headcount, then yearCols saudization, then two columns (Key Measures, Support), then delete button
+    // Structure: first two columns (Service name + Expected Localization Date), then yearCols headcount, then yearCols saudization, then two columns (Key Measures, Support)
     return [
-      { label: '', colspan: 2 },
-      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols },
-      { label: 'Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)', colspan: yearCols },
-      { label: '', colspan: 2 },
-      { label: '', colspan: 1 }, // Delete button column
+      { label: 'Service Name', rowspan: 2, dataGroup: false },
+      { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
+      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
+      { label: 'Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
+      { label: 'Key Measures to Upskill Saudis', rowspan: 2, dataGroup: false },
+      { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
     ];
   });
 
@@ -136,9 +137,17 @@ export class ServiceLocalizationStepExistingSaudi {
       const attachmentsControl = this.getAttachmentsFormGroup().get(EMaterialsFormControls.attachments);
       if (attachmentsControl) {
         const control = this.getValueControl(attachmentsControl);
-        // Only update if different to avoid infinite loops
-        if (control.value !== filesValue) {
-          control.setValue(filesValue, { emitEvent: false });
+        // Compare arrays by length and content to avoid infinite loops
+        const currentValue = control.value;
+        const isDifferent = !Array.isArray(currentValue) ||
+          currentValue.length !== filesValue.length ||
+          currentValue.some((file: File, index: number) => file !== filesValue[index]);
+
+        if (isDifferent) {
+          control.setValue(filesValue, { emitEvent: true });
+          // Mark as dirty and trigger validation to show errors
+          control.markAsDirty();
+          control.updateValueAndValidity();
         }
       }
     });

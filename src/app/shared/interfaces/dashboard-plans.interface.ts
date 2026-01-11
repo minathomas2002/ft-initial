@@ -24,7 +24,7 @@ export enum EInternalUserPlanStatus {
   REJECTED = 10,
   UNASSIGNED = 11,
   UNDER_REVIEW = 12,
-  ASSIGNED =13
+  ASSIGNED = 13
 }
 
 export interface IPlanRecord {
@@ -60,9 +60,11 @@ export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {
 export interface IPlansDashboardStatistics {
   totalPlans: number;
   unAssignedPlans?: number;
-  plansUnderReview: number;
+  plansUnderReview?: number;
   approvedPlans: number;
   rejectedPlans: number;
+  pendingAssignedPlans?: number;
+  assignedPlans?: number;
 }
 
 export interface IPlansDashboardResponse<T> extends IApiPaginatedResponse<T> {
