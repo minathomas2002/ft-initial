@@ -68,11 +68,12 @@ export class ServiceLocalizationStepDirectLocalization {
   serviceLevelGroupHeader = computed(() => {
     const yearCols = this.yearControlKeys.length;
     return [
-      { label: '', colspan: 2 },
-      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols },
-      { label: 'Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)', colspan: yearCols },
-      { label: '', colspan: 2 },
-      { label: '', colspan: 1 },
+      { label: 'Service Name', rowspan: 2, dataGroup: false },
+      { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
+      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
+      { label: 'Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
+      { label: 'Key Measures to Upskill Saudis', rowspan: 2, dataGroup: false },
+      { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
     ];
   });
 

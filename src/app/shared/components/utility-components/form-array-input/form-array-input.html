@@ -2,12 +2,49 @@
   <p-table [value]="rows()" [scrollable]="true" [scrollHeight]="scrollHeight()" class="rounded-xl">
     <ng-template pTemplate="header">
       @if(groupHeader().length > 0) {
-      <tr class="bg-gray-100">
+      <!-- First header row with group headers -->
+      <tr>
         @for (cell of groupHeader(); track cell) {
-        <th [attr.colspan]="cell.colspan" [class]="cell.label ? 'p-3 border border-gray-200 text-center font-normal! text-gray-700' : 'bg-white! border-0!'">{{ cell.label }}</th>
+        <th
+          [attr.colspan]="cell.colspan"
+          [attr.rowspan]="cell.rowspan"
+          [attr.data-group]="cell.dataGroup"
+          [class]="cell.dataGroup
+            ? 'p-3 border border-gray-200 text-center font-semibold bg-primary! text-white!'
+            : (cell.label ? 'p-3 border border-gray-200 text-left font-semibold bg-gray-50! text-gray-700!' : 'bg-white! border-0!')"
+        >{{ cell.label }}</th>
+        }
+        <!-- Delete button column header with rowspan -->
+        <th
+          class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700"
+          rowspan="2"
+        ></th>
+      </tr>
+      <!-- Second header row with year columns only (for grouped headers) -->
+      <tr class="bg-gray-50">
+        @for (key of secondRowKeys(); track key) {
+        <th
+          class="p-3 !border !border-gray-200 !text-center !font-semibold !whitespace-nowrap !bg-gray-50 !text-gray-700"
+        >
+          <span>{{
+            customHeaderLabels()[key]
+              ? customHeaderLabels()[key]
+              : key === 'keyActivity'
+              ? ('opportunity.wizard.keyActivity' | translate)
+              : (key | camelCaseToWord)
+          }}</span>@if(customTextBesideHeaders()[key]){<span class="font-light">{{ customTextBesideHeaders()[key] }}</span>}
+          @if(headerTooltips()[key]){
+          <i
+            class="icon-info text-sm ms-2 text-gray-400"
+            [pTooltip]="headerTooltips()[key]"
+            tooltipPosition="top"
+          ></i>
+          }
+        </th>
         }
       </tr>
-      }
+      } @else {
+      <!-- Default single header row when no groupHeader -->
       <tr class="bg-gray-50">
         @if(showIndexColumn()){
         <th
@@ -19,6 +56,8 @@
         <th
           class="p-3 !border !border-gray-200 !text-left !font-semibold !whitespace-nowrap !bg-gray-50 !text-gray-700"
           [class.rounded-tl-xl]="$index === 0 && !showIndexColumn()"
+          [attr.colspan]="headerColspan()[key] || null"
+          [attr.rowspan]="headerRowspan()[key] || null"
         >
           <span>{{
             customHeaderLabels()[key]
@@ -40,6 +79,7 @@
           class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700 rounded-tr-xl"
         ></th>
       </tr>
+      }
     </ng-template>
     <ng-template pTemplate="body" let-object let-rowIndex="rowIndex">
       <tr #tableRow>
