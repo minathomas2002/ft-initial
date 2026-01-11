@@ -216,7 +216,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       if (current > stepsCount) {
         this.activeStep.set(stepsCount);
       }
-    }, { allowSignalWrites: true });
+    });
 
     // Effect to load plan data when planId and mode are set (mirrors product localization wizard)
     effect(() => {
@@ -236,6 +236,16 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         this.isSubmitted.set(false);
         this.existingSignature.set(null);
         this.planStore.setPlanStatus(null);
+        // If the user applied from an opportunity, ensure the basic info opportunity
+        // control is initialized so it becomes part of the form value immediately.
+        const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
+        const opportunityControl = basicInfo?.get(EMaterialsFormControls.opportunity);
+        const applied = this.planStore.appliedOpportunity();
+        const available = this.planStore.availableOpportunities()?.[0] ?? null;
+        if (applied && opportunityControl) {
+          opportunityControl.setValue(available, { emitEvent: true });
+          opportunityControl.updateValueAndValidity({ emitEvent: true });
+        }
       }
     });
 
