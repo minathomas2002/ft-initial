@@ -11,7 +11,7 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { EOpportunityAction, ERoutes, EViewMode, EOpportunityType } from 'src/app/shared/enums';
+import { EOpportunityAction, EOpportunityType, ERoutes, EViewMode } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { OpportunityActionsService } from '../../services/opportunity-actions/opportunity-actions-service';
 import { take } from 'rxjs';
@@ -20,7 +20,6 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { CreateEditOpportunityDialog } from '../../components/create-edit-opportunity-dialog/create-edit-opportunity-dialog';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
-import { IOpportunity } from 'src/app/shared/interfaces';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 
@@ -97,6 +96,10 @@ export class OpportunityDetails implements OnInit {
   }
 
   onApply() {
+    if (this.opportunitiesStore.details()?.opportunityType === EOpportunityType.SERVICES) {
+      this.toast.warn('Applying for services plan will be available soon');
+      return;
+    }
     if (this.authStore.isAuthenticated()) {
       this.opportunitiesStore.checkApplyOpportunity(this.opportunityId()!).subscribe((res) => {
         if (res.body) {
