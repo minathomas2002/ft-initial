@@ -1,0 +1,92 @@
+<div class="flex flex-col gap-[32px] px-8 pb-10">
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Company Information</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+      <div class="flex flex-col gap-2 col-span-1">
+        <app-base-label [title]="'Plan Title'" />
+
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="
+            getHasCommentControl(coverPageCompanyInformationFormGroup.get('planTitle'))
+          "
+        >
+          <input
+            pInputText
+            placeholder="Enter plan title"
+            [formControl]="getValueControl(coverPageCompanyInformationFormGroup.get('planTitle'))"
+            fluid
+            maxlength="150"
+            trimOnBlur
+          />
+        </app-group-input-with-checkbox>
+
+        <app-base-error-messages
+          [control]="getValueControl(coverPageCompanyInformationFormGroup.get('planTitle'))"
+          [label]="'Plan Title'"
+        />
+      </div>
+
+      <div class="flex flex-col gap-2 col-span-1">
+        <app-base-label [title]="'Company Name'" />
+
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="
+            getHasCommentControl(coverPageCompanyInformationFormGroup.get('companyName'))
+          "
+        >
+          <input
+            pInputText
+            placeholder="Enter company name"
+            [formControl]="getValueControl(coverPageCompanyInformationFormGroup.get('companyName'))"
+            fluid
+            maxlength="100"
+            trimOnBlur
+          />
+        </app-group-input-with-checkbox>
+
+        <app-base-error-messages
+          [control]="getValueControl(coverPageCompanyInformationFormGroup.get('companyName'))"
+          [label]="'Company Name'"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg font-semibold text-gray-900">Services</h2>
+    <app-form-array-input
+      [ft]="getServicesFormArray()"
+      [hideAddButton]="isViewMode()"
+      [hideDeleteButton]="isViewMode()"
+      [addButtonMessage]="'Add Service'"
+      [createNewItem]="createServiceItem"
+      [excludeKeys]="['serviceId']"
+    >
+      <ng-template #itemTemplate let-itemControl let-index="index">
+        <td class="p-3 border border-gray-200 min-w-[300px]">
+          <app-group-input-with-checkbox
+            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceName'))"
+            [showCheckbox]="showCheckbox()"
+          >
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder="Enter service name"
+              [maxlength]="100"
+              [formControl]="getValueControl(itemControl.get('serviceName'))"
+              trimOnBlur
+            />
+          </app-group-input-with-checkbox>
+
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get('serviceName'))"
+            [label]="'Service Name'"
+          />
+        </td>
+      </ng-template>
+    </app-form-array-input>
+  </div>
+</div>

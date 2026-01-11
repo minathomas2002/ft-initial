@@ -2,24 +2,19 @@
   [(visible)]="visible"
   [modal]="true"
   [resizable]="false"
-  (onHide)="onClose.emit()"
   (onShow)="onShow.emit()"
   [styleClass]="'w-full !max-h-full h-full !p-0'"
   [pt]="pt"
+  [closable]="false"
 >
   <span
-    class="icon-x-close text-gray-400 cursor-pointer absolute top-[32px] right-[32px]"
-    (click)="onClose.emit()"
+    class="icon-x-close text-gray-400 cursor-pointer absolute top-[32px] right-[32px] z-10"
+    (click)="handleCloseClick()"
   ></span>
   <div class="flex !max-h-full h-full">
-    <div class="steps-container bg-gray-50 py-6 px-5 border-e-1 border-gray-200 max-w-[400px] flex flex-col gap-[80px]">
-      <div class="inline-flex items-center">
-        <img
-          src="assets/images/long-logo.svg"
-          alt="logo"
-          class="w-[125px] h-[40px]"
-          appImageError
-        >
+    <div class="steps-container bg-gray-50 ps-5 py-6 border-e-1 border-gray-200 max-w-[300px]">
+      <div class="inline-flex items-center mb-[80px]">
+        <img src="assets/images/long-logo.svg" alt="logo" class="w-[156px]" appImageError />
       </div>
       <div class="flex flex-col bg-gray-50">
         @if(activeStep()){
@@ -28,17 +23,10 @@
           (valueChange)="activeStep.set($event ?? 1)"
           class="bg-gray-50 basis-[10rem]"
         >
-          @for (step of steps(); track step.title; let i = $index) {
+          @for (step of steps(); track $index; let i = $index) {
           <p-step-item [value]="i + 1">
-            <p-step
-              [value]="i + 1"
-              class="flex flex-row flex-auto gap-2 w-full max-w-full min-w-0"
-            >
-              <ng-template
-                #content
-                let-activateCallback="activateCallback"
-                let-value="value"
-              >
+            <p-step [value]="i + 1" class="flex flex-row flex-auto gap-2 w-full max-w-full min-w-0">
+              <ng-template #content let-activateCallback="activateCallback" let-value="value">
                 <button
                   class="bg-transparent border-0 flex flex-col gap-2 w-full max-w-full"
                   (click)="activateCallback()"
@@ -47,17 +35,11 @@
                 </button>
               </ng-template>
             </p-step>
-            @if(i !== steps().length - 1){
-            <p-step-panel>
-              <ng-template
-                #content
-                let-activateCallback="activateCallback"
-              >
-                <div class="h-[70px]">
-                </div>
+            <p-step-panel [ngClass]="{ 'hidden': i === steps().length - 1 }">
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="h-[70px]"></div>
               </ng-template>
             </p-step-panel>
-            }
           </p-step-item>
           }
         </p-stepper>
@@ -69,19 +51,12 @@
         <h3 class="text-2xl font-semibold">{{wizardTitle()}}</h3>
         <ng-content select="status"></ng-content>
       </div>
-      <div
-        class="flex-1 overflow-auto max-w-full"
-        #scrollableContent
-      >
-        @for (step of steps(); track step.title; let i = $index) {
-        @if (activeStep() === i + 1) {
-        @for (content of stepContents(); track content.stepNumber) {
-        @if (content.stepNumber === i + 1) {
+      <div class="flex-1 py-6 overflow-auto max-w-full" #scrollableContent>
+        @for (step of steps(); track $index; let i = $index) { @if (activeStep() === i + 1) {
+        @for (content of stepContents(); track content.stepNumber) { @if (content.stepNumber === i +
+        1) {
         <ng-container *ngTemplateOutlet="content.templateRef"></ng-container>
-        }
-        }
-        }
-        }
+        } } } }
       </div>
       <div class="actions flex justify-between items-center pt-[16px] border-t border-gray-200">
         <div class="flex-1">
@@ -106,8 +81,7 @@
             [label]="'opportunity.wizard.back' | translate"
             [disabled]="isLoading()"
           />
-          }
-          @if (!isFinalStep()) {
+          } @if (!isFinalStep()) {
           <p-button
             (click)="nextStep()"
             [icon]="nextButtonIcon()"
@@ -115,8 +89,7 @@
             [disabled]="isLoading()"
             [loading]="isLoading()"
           />
-          }
-          @if (isFinalStep()) {
+          } @if (isFinalStep()) {
           <ng-content select="final-step-action"></ng-content>
           }
         </div>

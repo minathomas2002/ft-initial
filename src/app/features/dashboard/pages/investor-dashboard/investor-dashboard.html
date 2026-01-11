@@ -20,32 +20,18 @@
       <!-- Skeleton Loading State -->
       @for (item of [1, 2, 3, 4]; track item) {
       <div class="bg-white rounded-xl border-1 border-gray-200 p-6">
-        <p-skeleton
-          width="120px"
-          height="16px"
-          class="mb-2"
-        />
-        <p-skeleton
-          width="60px"
-          height="32px"
-          class="mb-4"
-        />
+        <p-skeleton width="120px" height="16px" class="mb-2" />
+        <p-skeleton width="60px" height="32px" class="mb-4" />
         <div class="flex items-center gap-1">
-          <p-skeleton
-            width="100px"
-            height="16px"
-          />
-          <p-skeleton
-            width="16px"
-            height="16px"
-            shape="circle"
-          />
+          <p-skeleton width="100px" height="16px" />
+          <p-skeleton width="16px" height="16px" shape="circle" />
         </div>
       </div>
-      }
-      } @else {
+      } } @else {
       <!-- Total Plans -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.totalPlans' | translate }}
         </p>
@@ -61,7 +47,9 @@
       </div>
 
       <!-- Plans Under Review -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.plansUnderReview' | translate }}
         </p>
@@ -77,7 +65,9 @@
       </div>
 
       <!-- Approved Plans -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.approvedPlans' | translate }}
         </p>
@@ -93,7 +83,9 @@
       </div>
 
       <!-- Rejected Plans -->
-      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+      >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.rejectedPlans' | translate }}
         </p>
@@ -115,10 +107,7 @@
   </ng-container>
 
   <ng-container ngProjectAs="table-body">
-    <app-table-skeleton
-      [headers]="headers()"
-      [isLoading]="isLoading()"
-    >
+    <app-table-skeleton [headers]="headers()" [isLoading]="isLoading()">
       <app-data-table
         [columns]="headers()"
         [rows]="rows()"
@@ -129,12 +118,9 @@
         [showCheckBox]="false"
         [rowsCheckable]="false"
       >
-        <ng-template
-          #itemsTemplate
-          let-item="item"
-        >
+        <ng-template #itemsTemplate let-item="item">
           <td>
-            {{ '#'+item.planCode }}
+            {{ '#' + item.planCode }}
           </td>
           <td>
             <p class="text-sm text-gray-900 font-medium">{{ item.title }}</p>
@@ -144,7 +130,7 @@
           </td>
           <td>{{ item.submissionDate | date: 'dd MMM yyyy' }}</td>
           <td>
-            @if(item.status == eEmployeePlanStatus.PENDING) {
+            @if(item.status == eInternalUserPlanStatus.PENDING) {
 
             <span
               class="text-sm font-medium"
@@ -187,25 +173,19 @@
   [(visibility)]="planTermsAndConditionsDialogVisibility"
   (onConfirm)="onUserReadAndApproved()"
 />
-}
-
-@if(newPlanDialogVisibility()){
+} @if(newPlanDialogVisibility()){
 <app-new-plan-dialog
   [(visibility)]="newPlanDialogVisibility"
   (onConfirm)="onUserConfirmNewPlanDialog()"
 />
-}
-
-@if(productLocalizationPlanWizardVisibility()){
+} @if(productLocalizationPlanWizardVisibility()){
 <app-product-localization-plan-wizard
   [(visibility)]="productLocalizationPlanWizardVisibility"
   (doRefresh)="applyFilter()"
 />
-}
-
-@if(timelineVisibility()){
-<app-timeline-dialog
-  [(dialogVisible)]="timelineVisibility"
-  [planId]="selectedPlan()?.id || null"
+} @if(serviceLocalizationPlanWizardVisibility()){
+<app-service-localization-plan-wizard
+  [(visibility)]="serviceLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()"
 />
 }

@@ -1,26 +1,34 @@
-import { ChangeDetectionStrategy, Component, input, TemplateRef, ContentChild, computed, signal, effect, ViewChild, ElementRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  TemplateRef,
+  ContentChild,
+  computed,
+  signal,
+  effect,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormArray, FormGroup, AbstractControl } from '@angular/forms';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
+import { TooltipModule } from 'primeng/tooltip';
+import { Subscription } from 'rxjs';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-form-array-input',
-  imports: [
-    ButtonModule,
-    TableModule,
-    NgTemplateOutlet,
-    TranslatePipe,
-    CamelCaseToWordPipe,
-  ],
+  imports: [ButtonModule, TableModule, NgTemplateOutlet, TranslatePipe, CamelCaseToWordPipe, TooltipModule],
   templateUrl: './form-array-input.html',
   styleUrl: './form-array-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormArrayInput {
-
+export class FormArrayInput implements OnDestroy {
   hideAddButton = input<boolean>(false);
   // Accept FormArray instead of FieldTree
   // Using input instead of model since FormArray is mutable and changes are reflected automatically
@@ -28,10 +36,25 @@ export class FormArrayInput {
   addButtonMessage = input<string>('Add');
   maxItems = input<number>(10);
   scrollHeight = input<string>('400px');
+  hideDeleteButton = input<boolean>(false);
   // Function to create a new empty item when adding (returns FormGroup)
   createNewItem = input<() => FormGroup>(() => {
     throw new Error('createNewItem must be provided');
   });
+  // Optionally show an index column at the start of the table
+  showIndexColumn = input<boolean>(false);
+  // Label for the index column header
+  indexColumnLabel = input<string>('#');
+  // Keys to exclude from column headers
+  excludeKeys = input<string[]>([]);
+  // Header tooltips - map of key names to tooltip text
+  headerTooltips = input<Record<string, string>>({});
+  // Optional header labels override - map of key names to custom label text
+  customHeaderLabels = input<Record<string, string>>({});
+  // Optional grouped header row - array of {label, colspan}
+  groupHeader = input<Array<{ label: string; colspan: number }>>([]);
+  // Optional additional text beside headers - map of key names to text to display beside the header
+  customTextBesideHeaders = input<Record<string, string>>({});
 
   @ContentChild('itemTemplate', { read: TemplateRef }) itemTemplate?: TemplateRef<{
     $implicit: AbstractControl;
@@ -47,16 +70,38 @@ export class FormArrayInput {
   private currentLength = 0;
   // Stable array reference - only recreated when structure changes
   private stableRowsArray: any[] = [];
+  // Subscription cleanup for valueChanges
+  private valueChangesSubscription: Subscription | null = null;
 
   constructor() {
     // Initialize stable rows array when formArray input changes
     effect(() => {
       const formArray = this.formArray();
       if (formArray) {
+        // Cleanup previous subscription if any
+        if (this.valueChangesSubscription) {
+          this.valueChangesSubscription.unsubscribe();
+          this.valueChangesSubscription = null;
+        }
+
         // Initial setup - create stable array reference
+        // Use getRawValue() to include disabled controls (important for header generation)
         this.currentLength = formArray.length;
-        this.stableRowsArray = formArray.value || [];
-        this.structureUpdateTrigger.update(v => v + 1);
+        this.stableRowsArray = formArray.getRawValue() || [];
+        this.structureUpdateTrigger.update((v) => v + 1);
+
+        // Subscribe to valueChanges to detect when form data is patched (e.g., edit mode)
+        // This ensures the rows array is updated when data is loaded asynchronously
+        this.valueChangesSubscription = formArray.valueChanges.subscribe(() => {
+          // Update stable rows array when values change
+          // Use getRawValue() to include disabled controls
+          this.stableRowsArray = formArray.getRawValue() || [];
+          // Only trigger re-render if length changed (structure change)
+          if (formArray.length !== this.currentLength) {
+            this.currentLength = formArray.length;
+            this.structureUpdateTrigger.update((v) => v + 1);
+          }
+        });
       }
     });
   }
@@ -69,8 +114,9 @@ export class FormArrayInput {
     if (newLength !== this.currentLength) {
       this.currentLength = newLength;
       // Recreate array reference when structure changes
-      this.stableRowsArray = formArray.value || [];
-      this.structureUpdateTrigger.update(v => v + 1);
+      // Use getRawValue() to include disabled controls
+      this.stableRowsArray = formArray.getRawValue() || [];
+      this.structureUpdateTrigger.update((v) => v + 1);
     }
   }
 
@@ -94,8 +140,9 @@ export class FormArrayInput {
     const firstObject = objectsArray[0];
     if (!firstObject || typeof firstObject !== 'object' || firstObject === null) return [];
 
-    // Exclude 'rowId' from the keys to prevent it from being displayed as a column
-    return Object.keys(firstObject).filter(key => key !== 'rowId');
+    // Exclude 'rowId' and any keys specified in excludeKeys input
+    const keysToExclude = [EMaterialsFormControls.rowId, ...this.excludeKeys()];
+    return Object.keys(firstObject).filter((key) => !keysToExclude.includes(key));
   });
 
   // Get FormControl/FormGroup for a specific index
@@ -156,22 +203,23 @@ export class FormArrayInput {
       // Find the first focusable input element (input, textarea, select, or PrimeNG input wrapper)
       const firstInput = lastRow.querySelector<HTMLElement>(
         'input:not([type="hidden"]):not([disabled]), ' +
-        'textarea:not([disabled]), ' +
-        'select:not([disabled]), ' +
-        '.p-inputtext input, ' +
-        '.p-textarea textarea, ' +
-        '.p-select .p-select-trigger, ' +
-        '.p-autocomplete input, ' +
-        '.p-dropdown .p-dropdown-trigger, ' +
-        '.p-datepicker input, ' +
-        '.p-inputnumber input'
+          'textarea:not([disabled]), ' +
+          'select:not([disabled]), ' +
+          '.p-inputtext input, ' +
+          '.p-textarea textarea, ' +
+          '.p-select .p-select-trigger, ' +
+          '.p-autocomplete input, ' +
+          '.p-dropdown .p-dropdown-trigger, ' +
+          '.p-datepicker input, ' +
+          '.p-inputnumber input'
       );
 
       if (firstInput) {
         // For PrimeNG components, focus the actual input element inside
-        const actualInput = firstInput.tagName === 'INPUT' || firstInput.tagName === 'TEXTAREA'
-          ? firstInput
-          : firstInput.querySelector<HTMLElement>('input, textarea');
+        const actualInput =
+          firstInput.tagName === 'INPUT' || firstInput.tagName === 'TEXTAREA'
+            ? firstInput
+            : firstInput.querySelector<HTMLElement>('input, textarea');
 
         if (actualInput) {
           actualInput.focus();
@@ -180,5 +228,12 @@ export class FormArrayInput {
         }
       }
     }, 10);
+  }
+
+  ngOnDestroy(): void {
+    if (this.valueChangesSubscription) {
+      this.valueChangesSubscription.unsubscribe();
+      this.valueChangesSubscription = null;
+    }
   }
 }

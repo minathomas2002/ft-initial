@@ -32,8 +32,6 @@ export class SidebarContentComponent {
 
     var dashboardLink = this.permissionService.canAccessInvestorDashboard()
       ? ERoutes.dashboard + '/' + ERoutes.investors
-      : this.permissionService.canAccessDvManagerDashboard()
-      ? ERoutes.dashboard + '/' + ERoutes.dvManager
       : ERoutes.dashboard;
       
     return [

@@ -1,0 +1,14 @@
+<div class="flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <h2 class="text-lg font-semibold text-gray-900">{{ title() }}</h2>
+  </div>
+  @if(!isViewMode()){
+  <p-button
+    label="Edit"
+    icon="icon-edit"
+    [text]="true"
+    (click)="onEditClick()"
+    size="small"
+  />
+  }
+</div>

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tooltip } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
@@ -22,6 +29,7 @@ import { CreateEditOpportunityDialog } from '../../components/create-edit-opport
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 
 @Component({
   selector: 'app-opportunity-details',
@@ -37,7 +45,8 @@ import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/p
     GeneralConfirmationDialogComponent,
     CreateEditOpportunityDialog,
     ImageErrorDirective,
-    ProductLocalizationPlanWizard
+    ProductLocalizationPlanWizard,
+    ServiceLocalizationPlanWizard,
   ],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
@@ -61,6 +70,7 @@ export class OpportunityDetails implements OnInit {
   publishConfirmDialogVisible = signal<boolean>(false);
   opportunityId = signal<string | null>(null);
   productLocalizationPlanWizardVisibility = signal<boolean>(false);
+  serviceLocalizationPlanWizardVisibility = signal<boolean>(false);
   get EOpportunityAction() {
     return EOpportunityAction;
   }
@@ -68,8 +78,8 @@ export class OpportunityDetails implements OnInit {
   today = new Date();
 
   forecastedDemand = computed(() => {
-    return `Forecasted SEC Demand (${this.today.getFullYear()}–${this.today.getFullYear() + 5})`
-  })
+    return `Forecasted SEC Demand (${this.today.getFullYear()}–${this.today.getFullYear() + 5})`;
+  });
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -80,9 +90,7 @@ export class OpportunityDetails implements OnInit {
   }
 
   getOpportunityDetails() {
-    this.opportunitiesStore.getOpportunityDetails(this.opportunityId()!)
-      .pipe(take(1))
-      .subscribe();
+    this.opportunitiesStore.getOpportunityDetails(this.opportunityId()!).pipe(take(1)).subscribe();
   }
 
   onBack() {
@@ -96,24 +104,23 @@ export class OpportunityDetails implements OnInit {
   }
 
   onApply() {
-    if (this.opportunitiesStore.details()?.opportunityType === EOpportunityType.SERVICES) {
-      this.toast.warn('Applying for services plan will be available soon');
-      return;
-    }
     if (this.authStore.isAuthenticated()) {
       this.opportunitiesStore.checkApplyOpportunity(this.opportunityId()!).subscribe((res) => {
         if (res.body) {
-          this.applyOpportunity(this.opportunityId()!, this.opportunitiesStore.details()?.title ?? '');
+          this.applyOpportunity(
+            this.opportunityId()!,
+            this.opportunitiesStore.details()?.title ?? ''
+          );
         } else {
-          this.toast.warn('Application is not allowed while an in-progress plan exists for the selected opportunity.');
+          this.toast.warn(
+            'Application is not allowed while an in-progress plan exists for the selected opportunity.'
+          );
         }
       });
-
     } else {
       this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
     }
   }
-
 
   onAction(action: EOpportunityAction) {
     // Handle actions (Edit, Delete, MoveToDraft, Publish)
@@ -144,7 +151,8 @@ export class OpportunityDetails implements OnInit {
   }
 
   deleteOpportunity() {
-    this.adminOpportunitiesStore.deleteOpportunity(this.opportunityId()!)
+    this.adminOpportunitiesStore
+      .deleteOpportunity(this.opportunityId()!)
       .pipe(take(1))
       .subscribe({
         next: () => {
@@ -154,12 +162,13 @@ export class OpportunityDetails implements OnInit {
         },
         error: () => {
           this.deleteConfirmDialogVisible.set(false);
-        }
+        },
       });
   }
 
   moveToDraftOpportunity() {
-    this.adminOpportunitiesStore.moveToDraftOpportunity(this.opportunityId()!)
+    this.adminOpportunitiesStore
+      .moveToDraftOpportunity(this.opportunityId()!)
       .pipe(take(1))
       .subscribe({
         next: () => {
@@ -174,14 +183,15 @@ export class OpportunityDetails implements OnInit {
   }
 
   publishOpportunity() {
-    this.adminOpportunitiesStore.publishOpportunity(this.opportunityId()!)
+    this.adminOpportunitiesStore
+      .publishOpportunity(this.opportunityId()!)
       .pipe(take(1))
       .subscribe({
         next: () => {
           this.toast.success('Opportunity published successfully');
           this.publishConfirmDialogVisible.set(false);
           this.getOpportunityDetails();
-        }
+        },
       });
   }
 
@@ -194,10 +204,13 @@ export class OpportunityDetails implements OnInit {
       opportunityType: this.opportunitiesStore.details()?.opportunityType!,
       isApplied: false,
       isOtherOpportunity: false,
-      icon: ''
+      icon: '',
     });
     this.planStore.setWizardMode('create');
     this.planStore.setSelectedPlanId(null);
-    this.productLocalizationPlanWizardVisibility.set(true);
+
+    this.opportunitiesStore.details()?.opportunityType === EOpportunityType.PRODUCT
+      ? this.productLocalizationPlanWizardVisibility.set(true)
+      : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 }

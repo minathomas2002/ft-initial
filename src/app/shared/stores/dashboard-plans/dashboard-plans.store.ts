@@ -42,9 +42,9 @@ export const DashboardPlansStore = signalStore(
         );
       },
 
-      getDvManagerDashboardPlans(filter: IPlanFilterRequest) {
+      getInternalUserDashboardPlans(filter: IPlanFilterRequest) {
         patchState(store, { loading: true });
-        return dashboardPlansApiService.getDvManagerDashboardPlans(filter).pipe(
+        return dashboardPlansApiService.getInternalUserDashboardPlans(filter).pipe(
           tap((res) => {
             const plans = res.body.data || [];
             const totalCount = res.body.pagination?.totalCount ?? plans.length;

@@ -3,7 +3,7 @@ import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/ba
 import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../../base-components/base-tag/base-tag.component";
 import { StepContentDirective } from "src/app/shared/directives";
-import { ProductPlanFormService } from "src/app/shared/services/plan/materials-form-service/product-plan-form-service";
+import { ProductPlanFormService } from "src/app/shared/services/plan/product-plan-form-service/product-plan-form-service";
 import { ProductPlanValidationService } from "src/app/shared/services/plan/validation/product-plan-validation.service";
 import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
@@ -19,7 +19,7 @@ import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
-import { EEmployeePlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
+import { EInternalUserPlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PlanLocalizationStep05Summary } from "../plan-localization-step-05-summary/plan-localization-step-05-summary";
 import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
 import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
@@ -139,7 +139,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   isReviewMode = computed(() => this.planStore.wizardMode() === 'Review' || true);
 
   // Computed signals for plan status tag
-  planStatus = signal<EEmployeePlanStatus | null>(null);
+  planStatus = signal<EInternalUserPlanStatus | null>(null);
   statusLabel = computed(() => {
     const status = this.planStatus();
     if (status === null) return 'Draft';
@@ -633,21 +633,28 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   }
 
   onClose(): void {
-    console.log("closed");
-    if (this.planStore.wizardMode() === 'create' || this.planStore.wizardMode() === 'edit') {
-      //!this.isSubmitted() 
-      if (this.productPlanFormService.hasFormChanged()) {
-        // Keep the wizard open and show confirmation dialog
-        this.visibility.set(true);
+    const mode = this.planStore.wizardMode();
+
+    // In view mode, close immediately without confirmation
+    if (mode === 'view') {
+      this.visibility.set(false);
+      this.activeStep.set(1);
+      this.planStore.resetWizardState();
+      return;
+    }
+
+    // In create/edit mode, show confirmation dialog if not submitted
+    if (mode === 'create' || mode === 'edit') {
+      if (!this.isSubmitted()) {
         this.showConfirmLeaveDialog.set(true);
         return;
       }
     }
+    // Already submitted, close without confirmation
     this.visibility.set(false);
     this.activeStep.set(1);
     this.doRefresh.emit();
     this.isSubmitted.set(false);
-    // Reset wizard state in store
     this.planStore.resetWizardState();
 
   }
