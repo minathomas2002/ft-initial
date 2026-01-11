@@ -12,9 +12,9 @@ export interface GroupInputWithCheckboxFormGroup {
   imports: [CheckboxModule],
   template: `
     <div class="flex items-center gap-2">
-      @if(showCheckbox()){
+      @if(showCheckbox() && hasCommentControl()){
       <p-checkbox
-        [formControl]="hasCommentControl()"
+        [formControl]="hasCommentControl()!"
         [binary]="true"
         class="has-comment-checkbox"
         />
@@ -26,7 +26,7 @@ export interface GroupInputWithCheckboxFormGroup {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupInputWithCheckbox {
-  hasCommentControl = input<FormControl<boolean>>();
+  hasCommentControl = input<FormControl<boolean> | null>();
   showCheckbox = input<boolean>(false);
 
 }
