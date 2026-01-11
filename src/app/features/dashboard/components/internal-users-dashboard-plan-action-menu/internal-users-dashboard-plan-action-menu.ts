@@ -3,18 +3,18 @@ import type { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.enum';
-import { EEmployeePlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
+import { IPlanRecord } from 'src/app/shared/interfaces';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
-    selector: 'app-dv-manager-dashboard-plan-action-menu',
+    selector: 'app-internal-users-dashboard-plan-action-menu',
     imports: [MenuModule, ButtonModule],
-    templateUrl: './dv-manager-dashboard-plan-action-menu.html',
-    styleUrl: './dv-manager-dashboard-plan-action-menu.scss',
+    templateUrl: './internal-users-dashboard-plan-action-menu.html',
+    styleUrl: './internal-users-dashboard-plan-action-menu.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DvManagerDashboardPlanActionMenu {
+export class InternalUsersDashboardPlanActionMenu {
     plan = input.required<IPlanRecord>();
     private readonly i18nService = inject(I18nService);
     readonly planStore = inject(PlanStore);
@@ -64,4 +64,3 @@ export class DvManagerDashboardPlanActionMenu {
         return items;
     });
 }
-

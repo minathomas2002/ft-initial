@@ -1,0 +1,25 @@
+@for (item of items(); track $index) {
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6">
+  <p-skeleton
+    width="120px"
+    height="16px"
+    class="mb-2"
+  />
+  <p-skeleton
+    width="60px"
+    height="32px"
+    class="mb-4"
+  />
+  <div class="flex items-center gap-1">
+    <p-skeleton
+      width="100px"
+      height="16px"
+    />
+    <p-skeleton
+      width="16px"
+      height="16px"
+      shape="circle"
+    />
+  </div>
+</div>
+}

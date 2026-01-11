@@ -1,6 +1,6 @@
 import { INotification, INotificationItem } from "src/app/core/layouts/main-layout/models/notifications.interface";
 import { EPlanAction, ERoles, ERoutes } from "../../enums";
-import { EEmployeePlanStatus } from "../../interfaces";
+import { EInternalUserPlanStatus } from "../../interfaces";
 import { ENotificationAction } from "../../enums/notification.enum";
 
 class BaseNotificationParams {
@@ -31,7 +31,7 @@ class DivisionMangerNotificationParams extends BaseNotificationParams {
     switch (notification.action) {
       case EPlanAction.Submitted:
         this.params = {
-          status: EEmployeePlanStatus.UNASSIGNED.toString(),
+          status: EInternalUserPlanStatus.UNASSIGNED.toString(),
           notificationAction: ENotificationAction.filter.toString(),
         };
         break;
