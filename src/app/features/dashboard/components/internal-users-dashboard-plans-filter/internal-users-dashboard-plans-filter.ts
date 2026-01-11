@@ -69,61 +69,17 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
       return this.getEmployeeStatusOptions();
     } else if (this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER])()) {
       return this.getDivisionManagerStatusOptions();
-    } else if (this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
-      return this.getDepartmentManagerStatusOptions();
-    }
-
-    // Default fallback - return current statuses if role is not recognized
-    return this.getDefaultStatusOptions();
+    } else
+      return [];
   }
 
-  /**
-   * Status options for Employee persona
-   * TODO: Update with specific statuses when known
-   */
+  // Employee Statuses Options
   private getEmployeeStatusOptions(): IDropdownOption[] {
-    // Placeholder - to be updated with actual employee-specific statuses
     return [
       {
-        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
-        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+        label: this.i18nService.translate('plans.employee_status.approved'),
+        value: EInternalUserPlanStatus.APPROVED,
       },
-      {
-        label: this.i18nService.translate('plans.employee_status.unassigned'),
-        value: EInternalUserPlanStatus.UNASSIGNED,
-      },
-    ];
-  }
-
-  /**
-   * Status options for Division Manager (DV Manager) persona
-   * TODO: Update with specific statuses when known
-   */
-  private getDivisionManagerStatusOptions(): IDropdownOption[] {
-    // Placeholder - to be updated with actual division manager-specific statuses
-    return [
-      {
-        label: this.i18nService.translate('plans.employee_status.dvApproved'),
-        value: EInternalUserPlanStatus.DV_APPROVED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.dvRejected'),
-        value: EInternalUserPlanStatus.DV_REJECTED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.unassigned'),
-        value: EInternalUserPlanStatus.UNASSIGNED,
-      },
-    ];
-  }
-
-  /**
-   * Status options for Department Manager persona
-   * TODO: Update with specific statuses when known
-   */
-  private getDepartmentManagerStatusOptions(): IDropdownOption[] {
-    // Placeholder - to be updated with actual department manager-specific statuses
-    return [
       {
         label: this.i18nService.translate('plans.employee_status.deptApproved'),
         value: EInternalUserPlanStatus.DEPT_APPROVED,
@@ -133,17 +89,50 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
         value: EInternalUserPlanStatus.DEPT_REJECTED,
       },
       {
+        label: this.i18nService.translate('plans.employee_status.dvApproved'),
+        value: EInternalUserPlanStatus.DV_APPROVED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.dvRejected'),
+        value: EInternalUserPlanStatus.DV_REJECTED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
+        value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
+        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.employeeRejected'),
+        value: EInternalUserPlanStatus.EMPLOYEE_REJECTED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.pending'),
+        value: EInternalUserPlanStatus.PENDING,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.rejected'),
+        value: EInternalUserPlanStatus.REJECTED,
+      },
+      {
         label: this.i18nService.translate('plans.employee_status.unassigned'),
         value: EInternalUserPlanStatus.UNASSIGNED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.underReview'),
+        value: EInternalUserPlanStatus.UNDER_REVIEW,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.assigned'),
+        value: EInternalUserPlanStatus.ASSIGNED,
       },
     ];
   }
 
-  /**
-   * Default status options (fallback)
-   * Used when role is not recognized or as a base set
-   */
-  private getDefaultStatusOptions(): IDropdownOption[] {
+  // Division Manager Statuses Options
+  private getDivisionManagerStatusOptions(): IDropdownOption[] {
     return [
       {
         label: this.i18nService.translate('plans.employee_status.employeeApproved'),
@@ -160,10 +149,34 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
     ];
   }
 
+
+  /**
+   * Computed signal to check if status dropdown should be shown
+   * Department Manager doesn't see status dropdown
+   */
+  readonly showStatusFilter = computed(() => {
+    return !this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])();
+  });
+
   ngOnInit() {
+    // Auto-set DV_APPROVED filter for Department Managers
+    this.initializeDepartmentManagerFilter();
     this.listenToSearchChanges();
     this.prefillFiltersFromQueryParams();
     this.listenToQueryParamChanges();
+  }
+
+  /**
+   * Initialize filter for Department Manager - automatically filter by DV_APPROVED
+   */
+  private initializeDepartmentManagerFilter(): void {
+    if (this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
+      this.filterService.updateFilterSignal({
+        status: EInternalUserPlanStatus.DV_APPROVED,
+        pageNumber: 1
+      });
+      this.filterService.applyFilterWithPaging();
+    }
   }
 
   private listenToQueryParamChanges() {
