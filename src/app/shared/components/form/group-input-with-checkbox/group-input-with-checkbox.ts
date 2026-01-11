@@ -5,6 +5,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 @Component({
   selector: 'app-group-input-with-checkbox',
   imports: [CheckboxModule, ReactiveFormsModule],
+  styleUrl: './group-input-with-checkbox.scss',
   template: `
     <div class="flex items-center gap-2">
       @if (showCheckbox() && hasCommentControl()) {
