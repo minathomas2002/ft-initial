@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 
@@ -22,20 +23,20 @@ import { CheckboxModule } from 'primeng/checkbox';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroupInputWithCheckbox {
+export class GroupInputWithCheckbox implements OnInit {
   hasCommentControl = input.required<FormControl<boolean>>();
   showCheckbox = input<boolean>(false);
+  valueChanged = output<boolean>();
+  private readonly destroyRef = inject(DestroyRef);
 
-  constructor() {
-    effect((onCleanup) => {
-      const control = this.hasCommentControl();
-      if (!control) return;
+  ngOnInit(): void {
+    const control = this.hasCommentControl();
+    if (!control) return;
 
-      const sub = control.valueChanges.subscribe(value => {
-        console.log(value);
-      });
-
-      onCleanup(() => sub.unsubscribe());
-    });
+    control.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(res => {
+        this.valueChanged.emit(res);
+      })
   }
 }

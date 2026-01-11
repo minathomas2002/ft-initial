@@ -83,6 +83,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="companyNameHasCommentControl()"
+          (valueChanged)="upDateSelectedInputs($event, 'companyInformation.companyName')"
         >
           <input
             type="text"
@@ -340,4 +341,4 @@
   </div>
 </div>
 
-<app-comment-state-component [commentsCount]="1" />
+<app-comment-state-component [commentsCount]="selectedComments().length" />

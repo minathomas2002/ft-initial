@@ -77,6 +77,16 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
     return this.planStore.appliedOpportunity() !== null;
   });
 
+  selectedComments = signal<string[]>([])
+
+  upDateSelectedInputs(value: boolean, controlKey: string): void {
+    if (value) {
+      this.selectedComments.set([...this.selectedComments(), controlKey]);
+    } else {
+      this.selectedComments.set(this.selectedComments().filter(comment => comment !== controlKey));
+    }
+  }
+
   constructor() {
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
