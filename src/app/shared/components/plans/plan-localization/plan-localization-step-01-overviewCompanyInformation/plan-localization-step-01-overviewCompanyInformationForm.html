@@ -82,7 +82,7 @@
         <app-base-label [title]="'Company Name'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['companyName'])"
+          [hasCommentControl]="companyNameHasCommentControl()"
         >
           <input
             type="text"
@@ -300,7 +300,7 @@
           <app-base-label [title]="'Contact Number'" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactNumber'])"
+            [hasCommentControl]="contactNumberHasCommentControl()"
           >
             <app-phone-input [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"></app-phone-input>
           </app-group-input-with-checkbox>

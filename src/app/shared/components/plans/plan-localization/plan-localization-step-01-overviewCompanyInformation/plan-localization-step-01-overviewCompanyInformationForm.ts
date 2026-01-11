@@ -56,6 +56,9 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   locationInformationFormGroupControls = this.productPlanFormService.locationInformationFormGroup.controls;
   localAgentInformationFormGroupControls = this.productPlanFormService.localAgentInformationFormGroup.controls;
 
+  companyNameHasCommentControl = computed(() => this.getHasCommentControl(this.companyInformationFormGroupControls['companyName']))
+  contactNumberHasCommentControl = computed(() => this.getHasCommentControl(this.localAgentInformationFormGroupControls['contactNumber']))
+
   private doYouCurrentlyHaveLocalAgentInKSAControl = this.locationInformationFormGroupControls[
     EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA
   ]
@@ -94,8 +97,6 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   getHasCommentControl(control: AbstractControl): FormControl<boolean> {
     const formGroup = control as FormGroup;
     const hasCommentControl = formGroup.get(EMaterialsFormControls.hasComment);
-    console.log(hasCommentControl?.value);
-
     return hasCommentControl as unknown as FormControl<boolean>;
   }
 
