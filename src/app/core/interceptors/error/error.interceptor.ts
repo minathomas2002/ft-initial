@@ -16,7 +16,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toaster = inject(ToasterService);
   return next(req).pipe(
     tap((response: any) => {
-      if(response?.body?.success === false) {
+      if (response?.body?.success === false) {
         response?.body?.errors?.forEach((error: string) => {
           toaster.error(error);
         });
@@ -26,13 +26,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (response.error?.success === false) {
         response.error?.errors?.forEach((error: string) => {
           toaster.error(error);
-        });        
-      }else if(response.status === 403) {
+        });
+      } else if (response.status === 403) {
         toaster.error('You are not authorized to access this resource or your user is not active');
-      }else if(response.status === 0) {
+      } else if (response.status === 413) {
+        toaster.error('The maximum allowed upload size is 30 MB');
+      } else if (response.status === 0) {
         toaster.error('You are facing an issue with the server. Please try again later.');
       }
-      
+
       return throwError(() => response);
     })
   );

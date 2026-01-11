@@ -1,5 +1,6 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
 
 export class ServiceLocalizationStepDirectLocalizationFormBuilder {
   constructor(
@@ -58,7 +59,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       [EMaterialsFormControls.serviceId]: this.fb.control(''), // Service GUID from cover page
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(150)]], // Auto-populated, dimmed
+        [EMaterialsFormControls.value]: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(150)]], // Auto-populated, dimmed
       }),
       // expectedLocalizationDate is for the Localization Strategy table
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
@@ -161,7 +162,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.attachments]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null], // File upload - optional
+        [EMaterialsFormControls.value]: [null, [fileSizeValidator(30 * 1024 * 1024)]], // File upload - optional, max 30 MB total
       }),
     });
   }
