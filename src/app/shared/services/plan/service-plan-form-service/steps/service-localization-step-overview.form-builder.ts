@@ -221,6 +221,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].reset();
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].reset();
       (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].reset();
+      (localAgentFormGroup.controls[EMaterialsFormControls.companyLocation] as FormGroup).controls[EMaterialsFormControls.value].reset();
       (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].clearValidators();
@@ -233,6 +234,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
     (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
     (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
+    (localAgentFormGroup.controls[EMaterialsFormControls.companyLocation] as FormGroup).controls[EMaterialsFormControls.value].updateValueAndValidity();
   }
 
   /**
