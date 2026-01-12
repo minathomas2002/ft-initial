@@ -1,0 +1,37 @@
+<app-base-dialog
+  [(visible)]="visible"
+  [icon]="'icon-message-circle'"
+  [confirmLabel]="'Save'"
+  [cancelLabel]="'Back'"
+  [confirmButtonClass]="'w-[100px]'"
+  [cancelButtonClass]="'w-[75px]'"
+  (onConfirm)="onConfirm()"
+  [isConfirmationDisabled]="commentFormControl.invalid"
+>
+  <div class="modal-content-wrapper max-w-[600px]">
+    <!-- Disclaimer Message - appears right after title -->
+    <div class="disclaimer-container">
+      <h2 class="text-lg font-semibold text-gray-900">Add Comment</h2>
+      <p class="text-sm text-gray-600">
+        add comment here
+      </p>
+    </div>
+
+    <div class="flex flex-col mt-5">
+      <app-base-label [title]="'Your Comment'" />
+      <textarea
+        rows="8"
+        cols="100"
+        pTextarea
+        [formControl]="commentFormControl"
+        maxlength="255"
+        placeholder="Enter your comment"
+      ></textarea>
+      <app-base-error-messages
+        [control]="commentFormControl"
+        [label]="'Your Comment'"
+      />
+
+    </div>
+  </div>
+</app-base-dialog>
