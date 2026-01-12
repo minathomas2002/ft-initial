@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordToggleComponent {
-  formControl = input.required<FormControl>();
+  control = input<FormControl>();
   placeholder = input<string>('');
   autocomplete = input<string>('new-password');
   showPassword = signal(false);
@@ -20,7 +20,5 @@ export class PasswordToggleComponent {
     this.showPassword.update(value => !value);
   }
 
-  get inputType(): string {
-    return this.showPassword() ? 'text' : 'password';
-  }
+  inputType = computed(() => this.showPassword() ? 'text' : 'password');
 }

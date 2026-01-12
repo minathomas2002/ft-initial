@@ -62,7 +62,7 @@
       <div class="field">
         <app-base-label [title]="'auth.register.confirmPassword' | translate"></app-base-label>
         <app-password-toggle
-          [formControl]="registerFormService.confirmPassword"
+          [control]="registerFormService.confirmPassword"
           [placeholder]="'auth.register.enterYourConfirmPassword' | translate"
         ></app-password-toggle>
         @if (registerFormService.confirmPassword.touched && registerFormService.confirmPassword.invalid) {
