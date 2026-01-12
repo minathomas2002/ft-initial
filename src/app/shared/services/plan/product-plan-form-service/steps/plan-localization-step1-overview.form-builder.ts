@@ -10,7 +10,10 @@ export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
 
   buildBasicInformationFormGroup(): FormGroup {
     return this.fb.group({
-      [EMaterialsFormControls.planTitle]: [this.newPlanTitle, [Validators.required, Validators.maxLength(150)]],
+      [EMaterialsFormControls.planTitle]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(this.newPlanTitle, [Validators.required, Validators.maxLength(150)]),
+      }),
       [EMaterialsFormControls.opportunityType]: this.fb.control({ value: EOpportunityType.PRODUCT.toString(), disabled: true }, [Validators.required]),
       [EMaterialsFormControls.opportunity]: [null, [Validators.required]],
       [EMaterialsFormControls.submissionDate]: this.fb.control({ value: new Date(), disabled: true }),

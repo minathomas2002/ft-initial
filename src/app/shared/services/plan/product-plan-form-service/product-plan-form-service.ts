@@ -251,8 +251,11 @@ export class ProductPlanFormService {
       const basicInfoFormGroup = this.basicInformationFormGroup;
       if (basicInfoFormGroup) {
         const planTitleControl = basicInfoFormGroup.get(EMaterialsFormControls.planTitle);
-        if (planTitleControl) {
-          planTitleControl.setValue(currentPlanTitle);
+        if (planTitleControl && planTitleControl instanceof FormGroup) {
+          const planTitleValueControl = planTitleControl.get(EMaterialsFormControls.value);
+          if (planTitleValueControl) {
+            planTitleValueControl.setValue(currentPlanTitle);
+          }
         }
       }
     }

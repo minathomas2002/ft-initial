@@ -10,15 +10,21 @@
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
         <app-base-label [title]="'plans.newPlan.planTitle' | translate" />
-        <input
-          pInputText
-          placeholder="Enter your plan title"
-          [formControl]="getFormControl(basicInformationFormGroupControls['planTitle'])"
-          fluid
-          maxlength="150"
-        />
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(basicInformationFormGroupControls['planTitle'])"
+        >
+          <input
+            type="text"
+            pInputText
+            placeholder="Enter your plan title"
+            [formControl]="getValueControl(basicInformationFormGroupControls['planTitle'])"
+            fluid
+            maxlength="150"
+          />
+        </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getFormControl(basicInformationFormGroupControls['planTitle'])"
+          [control]="getValueControl(basicInformationFormGroupControls['planTitle'])"
           [label]="'plans.newPlan.planTitle' | translate"
         />
       </div>

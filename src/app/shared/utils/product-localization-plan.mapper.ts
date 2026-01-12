@@ -498,7 +498,12 @@ export function mapProductPlanResponseToForm(
   // Basic Info
   if (basicInfoForm && productPlan.overviewCompanyInfo?.basicInfo) {
     const basicInfo = productPlan.overviewCompanyInfo.basicInfo;
-    basicInfoForm.get(EMaterialsFormControls.planTitle)?.setValue(basicInfo.planTitle ?? '');
+    const planTitleControl = basicInfoForm.get(EMaterialsFormControls.planTitle);
+    if (planTitleControl instanceof FormGroup) {
+      planTitleControl.get(EMaterialsFormControls.value)?.setValue(basicInfo.planTitle ?? '');
+    } else {
+      planTitleControl?.setValue(basicInfo.planTitle ?? '');
+    }
     basicInfoForm.get(EMaterialsFormControls.opportunityType)?.setValue(basicInfo.opportunityType?.toString() ?? EOpportunityType.PRODUCT.toString());
 
     // Set opportunity object (needs to match the select item format)

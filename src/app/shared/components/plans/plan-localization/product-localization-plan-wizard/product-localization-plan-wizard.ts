@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, model, OnDestroy, output, signal, viewChild } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../../base-components/base-tag/base-tag.component";
@@ -484,7 +485,10 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   saveAsDraft(): void {
     // Access nested form controls correctly
     const basicInfoFormGroup = this.productPlanFormService.basicInformationFormGroup;
-    const planTitle = basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.value;
+    const planTitleControl = basicInfoFormGroup?.get(EMaterialsFormControls.planTitle);
+    const planTitle = planTitleControl instanceof FormGroup
+      ? planTitleControl.get(EMaterialsFormControls.value)?.value
+      : planTitleControl?.value;
     const opportunity = basicInfoFormGroup?.get(EMaterialsFormControls.opportunity)?.value;
 
     // Check if plan title and opportunity are selected
