@@ -11,7 +11,6 @@ import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
 import { InternalUsersDashboardPlansFilter } from '../../components/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter';
-import { InternalUsersDashboardPlanActionMenu } from '../../components/internal-users-dashboard-plan-action-menu/internal-users-dashboard-plan-action-menu';
 import { DashboardStatisticsSkeleton } from '../../components/dashboard-statistics-skeleton/dashboard-statistics-skeleton';
 import { DashboardStatisticsCards } from '../../components/dashboard-statistics-cards/dashboard-statistics-cards';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
@@ -24,6 +23,7 @@ import { EmployeePlanStatusMapper } from '../../classes/employee-plan-status.map
 import { BaseTagComponent } from "src/app/shared/components/base-components/base-tag/base-tag.component";
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { InternalUsersDashboardPlansFilterService } from '../../services/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter-service';
+import { DashboardPlanActionMenu } from '../../components/dashboard-plan-action-menu/dashboard-plan-action-menu';
 
 @Component({
   selector: 'app-dashboard-view',
@@ -34,7 +34,7 @@ import { InternalUsersDashboardPlansFilterService } from '../../services/interna
     ButtonModule,
     MenuModule,
     InternalUsersDashboardPlansFilter,
-    InternalUsersDashboardPlanActionMenu,
+    DashboardPlanActionMenu,
     DashboardStatisticsSkeleton,
     DashboardStatisticsCards,
     DatePipe,
@@ -170,5 +170,9 @@ export class DashboardView implements OnInit {
     this.viewAssignDialog.set(true);
     this.planItem.set(plan);
     this.isReassignMode.set(true);
+  }
+
+  onReview(plan: IPlanRecord) {
+    console.log('Review Plan : ', plan);
   }
 }

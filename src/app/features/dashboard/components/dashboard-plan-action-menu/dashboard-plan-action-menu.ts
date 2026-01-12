@@ -1,25 +1,26 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
-import type { MenuItem } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.enum';
-import { EInvestorPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
-import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { IPlanRecord } from 'src/app/shared/interfaces';
+import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { InvestorPlanActionsMapper } from '../../classes/investor-plan-actions.mapper';
+import { PlanActionsMapper } from '../../classes/plan-actions.mapper';
 
 @Component({
-  selector: 'app-investor-dashboard-plan-action-menu',
+  selector: 'app-dashboard-plan-action-menu',
   imports: [MenuModule, ButtonModule],
-  templateUrl: './investor-dashboard-plan-action-menu.html',
-  styleUrl: './investor-dashboard-plan-action-menu.scss',
+  templateUrl: './dashboard-plan-action-menu.html',
+  styleUrl: './dashboard-plan-action-menu.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InvestorDashboardPlanActionMenu {
+export class DashboardPlanActionMenu {
+  actions = input.required<EActionPlanTimeLine[]>();
   plan = input.required<IPlanRecord>();
   private readonly i18nService = inject(I18nService);
   readonly planStore = inject(PlanStore);
-  private readonly actionsMapper = new InvestorPlanActionsMapper(this.i18nService);
+  private readonly actionsMapper = new PlanActionsMapper(this.i18nService);
 
   // Outputs for each action
   onEdit = output<IPlanRecord>();
@@ -72,23 +73,8 @@ export class InvestorDashboardPlanActionMenu {
 
   menuItems = computed<MenuItem[]>(() => {
     const plan = this.plan();
-    // Build actions array: always include ViewDetails, conditionally add ViewTimeLine and EditPlan, always add DownloadPDF
-    const actions: EActionPlanTimeLine[] = [
-      EActionPlanTimeLine.ViewDetails,
-    ];
-
-    if (plan.actions?.includes(EActionPlanTimeLine.ViewTimeLine)) {
-      actions.push(EActionPlanTimeLine.ViewTimeLine);
-    }
-
-    if (plan.actions?.includes(EActionPlanTimeLine.EditPlan)) {
-      actions.push(EActionPlanTimeLine.EditPlan);
-    }
-
-    actions.push(EActionPlanTimeLine.DownloadPDF);
-
     return this.actionsMapper
-      .getActions(actions)
+      .getActions(this.actions())
       .map((mItem) => {
         return {
           ...mItem,
@@ -99,4 +85,3 @@ export class InvestorDashboardPlanActionMenu {
       });
   });
 }
-

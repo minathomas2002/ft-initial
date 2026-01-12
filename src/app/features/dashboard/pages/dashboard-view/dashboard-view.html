@@ -75,13 +75,15 @@
             ></app-base-tag>
           </td>
           <td>
-            <app-internal-users-dashboard-plan-action-menu
+            <app-dashboard-plan-action-menu
+              [actions]="item.actions"
               [plan]="item"
               (onViewDetails)="onViewDetails($event)"
               (onDownload)="onDownload($event)"
-              (onViewTimeline)="onViewTimeline($event)"
+              (onViewTimeLine)="onViewTimeline($event)"
               (onAssignToEmployee)="onAssignToEmployee($event)"
               (onReAssign)="onReAssign($event)"
+              (onInternalReview)="onReview($event)"
             />
           </td>
         </ng-template>

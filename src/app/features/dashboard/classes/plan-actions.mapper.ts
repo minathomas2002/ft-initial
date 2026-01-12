@@ -7,7 +7,7 @@ type TActionDefinition = {
     command?: IActionMenuItem<IPlanRecord, EActionPlanTimeLine>["command"];
 };
 
-export class InvestorPlanActionsMapper {
+export class PlanActionsMapper {
     constructor(private readonly i18n: I18nService) { }
 
     private _actionDefinitions: Record<EActionPlanTimeLine, TActionDefinition> = {
@@ -18,14 +18,14 @@ export class InvestorPlanActionsMapper {
         [EActionPlanTimeLine.Assigned]: { labelKey: 'plans.actions.assignToEmployee' },
         [EActionPlanTimeLine.Reassigned]: { labelKey: 'plans.actions.reAssign' },
         [EActionPlanTimeLine.CommentSubmitted]: { labelKey: 'plans.actions.commentSubmitted' },
-        [EActionPlanTimeLine.Resubmitted]: { labelKey: 'plans.actions.resubmitted' },
+        [EActionPlanTimeLine.Resubmitted]: { labelKey: 'plans.actions.edit' },
         [EActionPlanTimeLine.Approved]: { labelKey: 'plans.actions.approved' },
         [EActionPlanTimeLine.Rejected]: { labelKey: 'plans.actions.rejected' },
-        [EActionPlanTimeLine.EmployeeApproved]: { labelKey: 'plans.actions.employeeApproved' },
-        [EActionPlanTimeLine.DVApproved]: { labelKey: 'plans.actions.dvApproved' },
-        [EActionPlanTimeLine.DeptApproved]: { labelKey: 'plans.actions.deptApproved' },
-        [EActionPlanTimeLine.DVRejected]: { labelKey: 'plans.actions.dvRejected' },
-        [EActionPlanTimeLine.DeptRejected]: { labelKey: 'plans.actions.deptRejected' },
+        [EActionPlanTimeLine.EmployeeApproved]: { labelKey: 'plans.actions.approved' },
+        [EActionPlanTimeLine.DVApproved]: { labelKey: 'plans.actions.approved' },
+        [EActionPlanTimeLine.DeptApproved]: { labelKey: 'plans.actions.approved' },
+        [EActionPlanTimeLine.DVRejected]: { labelKey: 'plans.actions.rejected' },
+        [EActionPlanTimeLine.DeptRejected]: { labelKey: 'plans.actions.rejected' },
         [EActionPlanTimeLine.DVRejectionAcknowledged]: { labelKey: 'plans.actions.dvRejectionAcknowledged' },
         [EActionPlanTimeLine.ReturnedForMoreInfo]: { labelKey: 'plans.actions.returnedForMoreInfo' },
         [EActionPlanTimeLine.ViewTimeLine]: { labelKey: 'plans.actions.viewTimeline' },
