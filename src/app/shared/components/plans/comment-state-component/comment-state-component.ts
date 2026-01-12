@@ -2,13 +2,15 @@ import { ChangeDetectionStrategy, Component, input, linkedSignal, model, output 
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { CommentDialog } from '../comment-dialog/comment-dialog';
 
 @Component({
   selector: 'app-comment-state-component',
   imports: [
     ButtonModule,
     CheckboxModule,
-    FormsModule
+    FormsModule,
+    CommentDialog
   ],
   templateUrl: './comment-state-component.html',
   styleUrl: './comment-state-component.scss',
@@ -18,4 +20,5 @@ export class CommentStateComponent {
   commentsCount = input<number>(0);
   checked = linkedSignal<boolean>(() => this.commentsCount() > 0);
   addCommentClick = output<void>();
+  showCommentDialog = model<boolean>(false);
 }

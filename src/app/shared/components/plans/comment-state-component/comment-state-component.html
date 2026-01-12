@@ -14,6 +14,7 @@
     icon="icon-message-circle"
     rounded
     [disabled]="!checked()"
-    (click)="addCommentClick.emit()"
+    (click)="showCommentDialog.set(true)"
   />
 </div>
+<app-comment-dialog [(visible)]="showCommentDialog"></app-comment-dialog>
