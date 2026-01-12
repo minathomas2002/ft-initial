@@ -18,6 +18,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { AssignReassignManualEmployee } from 'src/app/features/plans/components/assign-reassign-manual-employee/assign-reassign-manual-employee';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
 import { EmployeePlanStatusMapper } from '../../classes/employee-plan-status.mapper';
 import { BaseTagComponent } from "src/app/shared/components/base-components/base-tag/base-tag.component";
@@ -42,6 +43,7 @@ import { InternalUsersDashboardPlansFilterService } from '../../services/interna
     SlaCountdownNounPipe,
     AssignReassignManualEmployee,
     ProductLocalizationPlanWizard,
+    ServiceLocalizationPlanWizard,
     TimelineDialog,
     BaseTagComponent
   ],
@@ -52,6 +54,7 @@ import { InternalUsersDashboardPlansFilterService } from '../../services/interna
 })
 export class DashboardView implements OnInit {
   productLocalizationPlanWizardVisibility = signal(false);
+  serviceLocalizationPlanWizardVisibility = signal(false);
 
   EInternalUserPlanStatus = EInternalUserPlanStatus;
 
@@ -91,7 +94,7 @@ export class DashboardView implements OnInit {
   ngOnInit(): void {
     // Filter component handles query params and cleanup
   }
-  
+
   onUserReadAndApproved() {
     this.planStore.resetNewPlanOpportunityType();
   }
@@ -128,7 +131,12 @@ export class DashboardView implements OnInit {
     this.planStore.setWizardMode('view');
     this.planStore.setSelectedPlanId(plan.id);
     this.planStore.setPlanStatus(plan.status);
-    this.productLocalizationPlanWizardVisibility.set(true);
+
+    // Show the appropriate wizard based on plan type
+    if (plan.planType === EOpportunityType.PRODUCT)
+      this.productLocalizationPlanWizardVisibility.set(true);
+    else if (plan.planType === EOpportunityType.SERVICES)
+      this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
   onDownload(plan: IPlanRecord) {
