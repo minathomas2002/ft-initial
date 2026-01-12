@@ -17,4 +17,7 @@
     (click)="showCommentDialog.set(true)"
   />
 </div>
-<app-comment-dialog [(visible)]="showCommentDialog"></app-comment-dialog>
+<app-comment-dialog
+  [(visible)]="showCommentDialog"
+  (comment)="comment.emit($event)"
+></app-comment-dialog>

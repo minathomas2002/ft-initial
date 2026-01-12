@@ -19,6 +19,6 @@ import { CommentDialog } from '../comment-dialog/comment-dialog';
 export class CommentStateComponent {
   commentsCount = input<number>(0);
   checked = linkedSignal<boolean>(() => this.commentsCount() > 0);
-  addCommentClick = output<void>();
   showCommentDialog = model<boolean>(false);
+  comment = output<string>();
 }

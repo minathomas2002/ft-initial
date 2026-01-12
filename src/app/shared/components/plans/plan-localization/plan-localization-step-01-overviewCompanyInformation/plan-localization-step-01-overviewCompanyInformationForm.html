@@ -13,6 +13,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(basicInformationFormGroupControls['planTitle'])"
+          (valueChanged)="upDateSelectedInputs($event, 'planTitle')"
         >
           <input
             type="text"
@@ -112,6 +113,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
+          (valueChanged)="upDateSelectedInputs($event, 'companyInformation.ceoName')"
         >
           <input
             type="text"
@@ -132,6 +134,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoEmailID'])"
+          (valueChanged)="upDateSelectedInputs($event, 'companyInformation.ceoEmailID')"
         >
           <input
             type="email"
@@ -159,6 +162,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])"
+          (valueChanged)="upDateSelectedInputs($event, 'locationInformation.globalHQLocation')"
         >
           <input
             type="text"
@@ -179,6 +183,7 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+          (valueChanged)="upDateSelectedInputs($event, 'locationInformation.registeredVendorIDwithSEC')"
         >
           <input
             type="text"
@@ -205,27 +210,30 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
+            (valueChanged)="upDateSelectedInputs($event, 'locationInformation.doYouCurrentlyHaveLocalAgentInKSA')"
           >
-            <label class="flex items-center gap-2 cursor-pointer">
-              <p-radiobutton
-                name="doYouCurrentlyHaveLocalAgentInKSA"
-                [value]="true"
-                [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
-                inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
-                size="small"
-              />
-              <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <p-radiobutton
-                name="doYouCurrentlyHaveLocalAgentInKSA"
-                [value]="false"
-                [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
-                inputId="doYouCurrentlyHaveLocalAgentInKSANo"
-                size="small"
-              />
-              <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
-            </label>
+            <div class="flex gap-2">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <p-radiobutton
+                  name="doYouCurrentlyHaveLocalAgentInKSA"
+                  [value]="true"
+                  [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
+                  inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
+                  size="small"
+                />
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <p-radiobutton
+                  name="doYouCurrentlyHaveLocalAgentInKSA"
+                  [value]="false"
+                  [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
+                  inputId="doYouCurrentlyHaveLocalAgentInKSANo"
+                  size="small"
+                />
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+              </label>
+            </div>
           </app-group-input-with-checkbox>
         </div>
         <app-base-error-messages
@@ -247,6 +255,7 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])"
+            (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.localAgentName')"
           >
             <input
               type="text"
@@ -267,6 +276,7 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])"
+            (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.contactPersonName')"
           >
             <input
               type="text"
@@ -289,6 +299,7 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['emailID'])"
+            (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.emailID')"
           >
             <input
               type="text"
@@ -308,6 +319,7 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="contactNumberHasCommentControl()"
+            (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.contactNumber')"
           >
             <app-phone-input [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"></app-phone-input>
           </app-group-input-with-checkbox>
@@ -324,6 +336,7 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
+              (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.companyHQLocation')"
             >
               <input
                 type="text"
@@ -347,4 +360,9 @@
   </div>
 </div>
 
-<app-comment-state-component [commentsCount]="selectedComments().length" />
+@if(showCheckbox()){
+<app-comment-state-component
+  [commentsCount]="selectedInputs().length"
+  (comment)="comment.set($event)"
+/>
+}

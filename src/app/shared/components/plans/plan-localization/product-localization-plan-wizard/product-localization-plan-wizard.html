@@ -23,7 +23,10 @@
   }
 
   <ng-template [appStepContent]="1">
-    <app-plan-localization-step-01-overview-company-information-form [(showCheckbox)]="showHasCommentControl" />
+    <app-plan-localization-step-01-overview-company-information-form
+      [(showCheckbox)]="showHasCommentControl"
+      [pageTitle]="steps()[0].title"
+    />
   </ng-template>
 
   <ng-template [appStepContent]="2">

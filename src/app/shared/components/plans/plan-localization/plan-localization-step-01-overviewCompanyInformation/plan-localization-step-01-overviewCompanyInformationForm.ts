@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -43,6 +43,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly planStore = inject(PlanStore);
+  pageTitle = input.required<string>();
 
   showCheckbox = model<boolean>(false);
 
@@ -77,13 +78,21 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
     return this.planStore.appliedOpportunity() !== null;
   });
 
-  selectedComments = signal<string[]>([])
+  selectedInputs = signal<string[]>([])
+  comment = signal<string>('');
+  pageComment = computed(() => ({
+    planTitle: this.pageTitle() ?? '',
+    comment: this.comment() ?? '',
+    fields: computed(() => this.selectedInputs().map(input => ({
+      section: '' + input.split('.')[0],
+    })))
+  }))
 
   upDateSelectedInputs(value: boolean, controlKey: string): void {
     if (value) {
-      this.selectedComments.set([...this.selectedComments(), controlKey]);
+      this.selectedInputs.set([...this.selectedInputs(), controlKey]);
     } else {
-      this.selectedComments.set(this.selectedComments().filter(comment => comment !== controlKey));
+      this.selectedInputs.set(this.selectedInputs().filter(input => input !== controlKey));
     }
   }
 
