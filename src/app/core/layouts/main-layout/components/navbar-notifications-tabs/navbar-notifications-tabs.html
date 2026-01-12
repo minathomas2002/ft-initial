@@ -1,4 +1,4 @@
-@if (loading()) {
+@if (loading() && !notificationItems().length) {
 <div class="flex justify-center items-center py-6">
   <p-progress-spinner
     strokeWidth="8"
@@ -13,17 +13,16 @@
   <p class="text-sm font-medium">No notifications</p>
 </div>
 } @else {
-<div class="p-4 bg-white rounded-lg shadow-md">
-  <div class="space-y-3">
+<div class="bg-white rounded-lg">
     @for (notification of notificationItems() || []; track notification.id) {
     <div
-      class="cursor-pointer hover:bg-gray-50 transition-colors relative p-4"
+      class="cursor-pointer hover:bg-gray-50 transition-colors relative border-b p-6 border-[#D5D6DD]"
       (click)="onNotificationClick(notification)"
     >
       @if (!notification.isRead) {
-      <div class="absolute top-4 right-4 w-3 h-3 bg-[#067647] rounded-full"></div>
+      <div class="absolute top-6 right-3 w-3 h-3 bg-[#067647] rounded-full"></div>
       }
-      <div class="flex gap-3 items-start mb-2">
+      <div class="flex gap-2 items-baseline mb-2">
         <h3 class="text-md font-medium text-gray-900 font-bold m-0">{{ notification.title }}</h3>
         <span class="text-sm text-gray-500 m-0">{{ notification.createdDate | timeAgo }}</span>
       </div>
@@ -33,6 +32,20 @@
       ></p>
     </div>
     }
-  </div>
+
+      @if (loading()) {
+      <div class="space-y-3">
+        @for (_ of [0, 1, 2]; track $index) {
+        <div class="relative p-4 animate-pulse">
+          <div class="flex gap-3 items-start mb-2">
+            <div class="h-4 w-40 bg-gray-200 rounded"></div>
+            <div class="h-3 w-20 bg-gray-200 rounded ml-auto"></div>
+          </div>
+          <div class="h-3 w-full bg-gray-200 rounded mb-2"></div>
+          <div class="h-3 w-5/6 bg-gray-200 rounded"></div>
+        </div>
+        }
+      </div>
+      }
 </div>
 }

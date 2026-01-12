@@ -27,7 +27,7 @@ export const NotificationsStore = signalStore(
     const notificationsApiService = inject(NotificationsApiService);
 
     return {
-      getNotifications(pageIndex: number = 0, pageSize: number = 20) {
+      getNotifications(pageIndex: number = 0, pageSize: number = 5) {
         patchState(store, { loading: true, currentPage: pageIndex, pageSize });
         return notificationsApiService.getNotifications(pageIndex, pageSize).pipe(
           tap((response) => {
@@ -35,8 +35,29 @@ export const NotificationsStore = signalStore(
 
             patchState(store, {
               notifications: notificationsList || [],
-              totalCount: response.body?.pagination?.totalCount || notificationsList.length || 0,
+              totalCount: response.body?.totalCount || notificationsList.length || 0,
             });
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
+      },
+
+      /**
+       * Fetch next page of notifications and append to existing list
+       */
+      getMoreNotifications(pageIndex?: number, pageSize?: number) {
+        const nextPage = pageIndex ?? (store.currentPage() + 1);
+        const size = pageSize ?? store.pageSize();
+        patchState(store, { loading: true, currentPage: nextPage, pageSize: size });
+        return notificationsApiService.getNotifications(nextPage, size).pipe(
+          tap((response) => {
+            const notificationsList = response?.body?.data || [];
+            patchState(store, (state) => ({
+              notifications: [...state.notifications, ...(notificationsList || [])],
+              totalCount: response.body?.totalCount || (state.totalCount || 0),
+            }));
           }),
           finalize(() => {
             patchState(store, { loading: false });
@@ -55,13 +76,13 @@ export const NotificationsStore = signalStore(
       getUnreadNotification() {
         patchState(store, { loading: true });
         return notificationsApiService.getUnreadNotifications().pipe(
-          tap((response: any) => {
+          tap((response) => {
 
             const unreadNotificationsList = response?.body?.data || [];
 
             patchState(store, {
               notifications: unreadNotificationsList,
-              unreadCount: response.body?.pagination?.totalCount || unreadNotificationsList?.length || 0,
+              unreadCount: response.body?.totalCount || unreadNotificationsList?.length || 0,
             });
           }),
           finalize(() => {
@@ -71,10 +92,10 @@ export const NotificationsStore = signalStore(
       },
 
       setNotificationAsRead(id: string) {
-        console.log('setNotificationAsRead called with id:', id);
         const notification = store.notifications().find(n => n.id === id);
-        console.log('Found notification:', notification);
         const isAlreadyRead = notification?.isRead || false;
+
+        if (isAlreadyRead) return;
 
         const previousState = {
           notifications: [...store.notifications()],
@@ -93,26 +114,13 @@ export const NotificationsStore = signalStore(
 
         // Always call the API to mark as read (backend handles idempotency)
         notificationsApiService.markNotificationAsRead(id).pipe(
-          switchMap(() => {
-            // Refresh notifications list and unread count after successful mark as read
-            return notificationsApiService.getNotifications(store.currentPage(), store.pageSize()).pipe(
-              tap((response) => {
-                const notificationsList = response?.body?.data || [];
-                patchState(store, {
-                  notifications: notificationsList || [],
-                  totalCount: response.body?.pagination?.totalCount || notificationsList.length || 0,
-                });
-              }),
               switchMap(() => notificationsApiService.getUnreadNotifications()),
-              tap((response: any) => {
+              tap((response) => {
                 // Only update unread count, don't replace notifications list
-                const unreadCount = response.body?.pagination?.totalCount || 0;
-                patchState(store, (state) => ({
-                  unreadCount: unreadCount,
+                patchState(store, () => ({
+                  unreadCount: response.body?.totalCount || 0,
                 }));
               })
-            );
-          })
         ).subscribe({
           error: (error) => {
             // Revert on error only if we made an optimistic update
@@ -150,26 +158,14 @@ export const NotificationsStore = signalStore(
 
         // Call the API and refresh notifications after success
         notificationsApiService.markAllNotificationsAsRead().pipe(
-          switchMap(() => {
-            // Refresh notifications list and unread count after successful mark all as read
-            return notificationsApiService.getNotifications(store.currentPage(), store.pageSize()).pipe(
-              tap((response) => {
-                const notificationsList = response?.body?.data || [];
-                patchState(store, {
-                  notifications: notificationsList || [],
-                  totalCount: response.body?.pagination?.totalCount || notificationsList.length || 0,
-                });
-              }),
               switchMap(() => notificationsApiService.getUnreadNotifications()),
-              tap((response: any) => {
+              tap((response) => {
                 // Only update unread count, don't replace notifications list
-                const unreadCount = response.body?.pagination?.totalCount || 0;
-                patchState(store, (state) => ({
+                const unreadCount = response.body?.totalCount || 0;
+                patchState(store, () => ({
                   unreadCount: unreadCount,
                 }));
               })
-            );
-          })
         ).subscribe({
           error: (error) => {
             // Revert on error

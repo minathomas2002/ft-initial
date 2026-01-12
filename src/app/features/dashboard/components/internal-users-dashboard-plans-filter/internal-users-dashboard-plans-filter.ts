@@ -73,61 +73,14 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
       return [];
   }
 
+  // TODO: we will add these (DEPT Rejected - DV. Rejected - DV acknowledgement - DEPT Approved)
   // Employee Statuses Options
   private getEmployeeStatusOptions(): IDropdownOption[] {
     return [
       {
-        label: this.i18nService.translate('plans.employee_status.approved'),
-        value: EInternalUserPlanStatus.APPROVED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.deptApproved'),
-        value: EInternalUserPlanStatus.DEPT_APPROVED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.deptRejected'),
-        value: EInternalUserPlanStatus.DEPT_REJECTED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.dvApproved'),
-        value: EInternalUserPlanStatus.DV_APPROVED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.dvRejected'),
-        value: EInternalUserPlanStatus.DV_REJECTED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
-        value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
-        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.employeeRejected'),
-        value: EInternalUserPlanStatus.EMPLOYEE_REJECTED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.pending'),
-        value: EInternalUserPlanStatus.PENDING,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.rejected'),
-        value: EInternalUserPlanStatus.REJECTED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.unassigned'),
-        value: EInternalUserPlanStatus.UNASSIGNED,
-      },
-      {
         label: this.i18nService.translate('plans.employee_status.underReview'),
         value: EInternalUserPlanStatus.UNDER_REVIEW,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.assigned'),
-        value: EInternalUserPlanStatus.ASSIGNED,
-      },
+      }
     ];
   }
 
@@ -162,7 +115,6 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
     // Auto-set DV_APPROVED filter for Department Managers
     this.initializeDepartmentManagerFilter();
     this.listenToSearchChanges();
-    this.prefillFiltersFromQueryParams();
     this.listenToQueryParamChanges();
   }
 
@@ -182,30 +134,31 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   private listenToQueryParamChanges() {
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params: Record<string, string | number | undefined>) => {
+      .subscribe(queryParams => {
         const updates: Partial<IPlanFilter> = {};
 
-        if (params['notificationAction']) {
-          if (params['status']) {
-            const status = this.getStatusFromParam(params['status']);
-            if (status !== null) updates.status = status;
-          }
-        }
+    if (queryParams['status']) {
+      const status = this.getStatusFromParam(queryParams['status']);
+      if (status !== null) updates.status = status;
+    }
 
-        this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-        this.filterService.applyFilterWithPaging();
-        if (params['notificationAction']) {
-          if (Object.keys(updates).length > 0) {
-            setTimeout(() => {
-              this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { notificationAction: null, status: null },
-                queryParamsHandling: 'merge',
-              });
-            }, 100);
-          }
-        }
-      });
+    if (queryParams['planType']) {
+      const planType = this.getPlanTypeFromParam(queryParams['planType']);
+      if (planType) updates.planType = planType;
+    }
+
+    if (queryParams['searchText']) {
+      updates.searchText = queryParams['searchText'];
+    }
+
+    if (Object.keys(updates).length > 0) {
+      this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
+      this.filterService.applyFilterWithPaging();
+    } else {
+      this.filterService.applyFilterWithPaging();
+    }
+  });
+
   }
 
   onSearchTextChange(value: string) {
@@ -247,30 +200,6 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
-  }
-
-  private prefillFiltersFromQueryParams() {
-    const queryParams = this.route.snapshot.queryParams;
-    const updates: Partial<IPlanFilter> = {};
-
-    if (queryParams['status']) {
-      const status = this.getStatusFromParam(queryParams['status']);
-      if (status !== null) updates.status = status;
-    }
-
-    if (queryParams['planType']) {
-      const planType = this.getPlanTypeFromParam(queryParams['planType']);
-      if (planType) updates.planType = planType;
-    }
-
-    if (queryParams['searchText']) {
-      updates.searchText = queryParams['searchText'];
-    }
-
-    if (Object.keys(updates).length > 0) {
-      this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-      this.filterService.applyFilterWithPaging();
-    }
   }
 
   private getStatusFromParam(param: string | number): EInternalUserPlanStatus | null {

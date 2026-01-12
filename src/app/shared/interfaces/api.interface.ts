@@ -9,10 +9,11 @@ export interface IBaseApiResponse<T> {
 
 export interface IApiPaginatedResponse<T> {
   data: T;
+  totalCount: number;
   pagination: {
-    totalCount: number;
     pageSize: number;
     currentPage: number;
+    totalCount: number;
     totalPages: number;
     hasNext: boolean;
     hasPrevious: boolean;

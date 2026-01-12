@@ -1,3 +1,22 @@
-:host:ng-deep .p-popover-content{
+:host::ng-deep .p-popover-content {
   padding: 0 !important;
+}
+
+:host::ng-deep {
+  .hidden-notification-counter .p-overlaybadge .p-badge {
+    display: none !important;
+  }
+
+  .p-overlaybadge .p-badge {
+    background-color: #EF4444 !important;
+  }
+
+  .p-popover {
+    box-shadow: none !important;
+    border-radius: 20px !important;
+  }
+
+  .p-popover-content {
+    padding: 0 !important;
+  }
 }

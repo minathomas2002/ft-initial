@@ -12,8 +12,8 @@ export class NotificationsApiService {
   private readonly baseHttpService = inject(BaseHttpService);
 
   getNotifications(
-    pageIndex: number = 0,
-    pageSize: number = 20
+    pageIndex: number,
+    pageSize: number
   ): Observable<IBaseApiResponse<IApiPaginatedResponse<INotification[]>>> {
     const params = { pageIndex: pageIndex.toString(), pageSize: pageSize.toString() };
     return this.baseHttpService.get<any, unknown>(

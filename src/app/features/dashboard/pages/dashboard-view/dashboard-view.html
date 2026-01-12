@@ -106,6 +106,13 @@
 />
 }
 
+@if(serviceLocalizationPlanWizardVisibility()){
+<app-service-localization-plan-wizard
+  [(visibility)]="serviceLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()"
+/>
+}
+
 @if(timelineVisibility()){
 <app-timeline-dialog
   [(dialogVisible)]="timelineVisibility"
