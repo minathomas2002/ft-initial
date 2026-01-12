@@ -36,14 +36,10 @@
         <!-- Password -->
         <div class="field">
           <app-base-label [title]="'auth.login.password' | translate"></app-base-label>
-          <p-password
-            autocomplete="new-password"
+          <app-password-toggle
             [formControl]="loginFormService.password"
-            [feedback]="false"
-            class="w-full"
             [placeholder]="'auth.login.enterYourPassword' | translate"
-            inputStyleClass="w-full"
-          ></p-password>
+          ></app-password-toggle>
           @if(loginFormService.password.touched && loginFormService.password.invalid) {
           <app-base-error [message]="loginFormService.password.hasError('required') ? ('auth.login.passwordRequired' | translate) :
             ('auth.login.invalidPasswordFormat' | translate)" />

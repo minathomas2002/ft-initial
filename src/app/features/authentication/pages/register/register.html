@@ -61,13 +61,10 @@
       <!-- Confirm Password -->
       <div class="field">
         <app-base-label [title]="'auth.register.confirmPassword' | translate"></app-base-label>
-        <p-password
+        <app-password-toggle
           [formControl]="registerFormService.confirmPassword"
-          [feedback]="false"
-          class="w-full"
           [placeholder]="'auth.register.enterYourConfirmPassword' | translate"
-          inputStyleClass="w-full"
-        ></p-password>
+        ></app-password-toggle>
         @if (registerFormService.confirmPassword.touched && registerFormService.confirmPassword.invalid) {
         <app-base-error [message]="registerFormService.confirmPassword.hasError('required')
           ? ('auth.register.confirmPasswordRequired' | translate)
