@@ -162,7 +162,6 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
     // Auto-set DV_APPROVED filter for Department Managers
     this.initializeDepartmentManagerFilter();
     this.listenToSearchChanges();
-    this.prefillFiltersFromQueryParams();
     this.listenToQueryParamChanges();
   }
 
@@ -182,30 +181,28 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   private listenToQueryParamChanges() {
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params: Record<string, string | number | undefined>) => {
+      .subscribe(queryParams => {
         const updates: Partial<IPlanFilter> = {};
 
-        if (params['notificationAction']) {
-          if (params['status']) {
-            const status = this.getStatusFromParam(params['status']);
-            if (status !== null) updates.status = status;
-          }
-        }
+    if (queryParams['status']) {
+      const status = this.getStatusFromParam(queryParams['status']);
+      if (status !== null) updates.status = status;
+    }
 
-        this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-        this.filterService.applyFilterWithPaging();
-        if (params['notificationAction']) {
-          if (Object.keys(updates).length > 0) {
-            setTimeout(() => {
-              this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { notificationAction: null, status: null },
-                queryParamsHandling: 'merge',
-              });
-            }, 100);
-          }
-        }
-      });
+    if (queryParams['planType']) {
+      const planType = this.getPlanTypeFromParam(queryParams['planType']);
+      if (planType) updates.planType = planType;
+    }
+
+    if (queryParams['searchText']) {
+      updates.searchText = queryParams['searchText'];
+    }
+
+    if (Object.keys(updates).length > 0) {
+      this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
+      this.filterService.applyFilterWithPaging();
+    }
+    });
   }
 
   onSearchTextChange(value: string) {
@@ -247,30 +244,6 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
-  }
-
-  private prefillFiltersFromQueryParams() {
-    const queryParams = this.route.snapshot.queryParams;
-    const updates: Partial<IPlanFilter> = {};
-
-    if (queryParams['status']) {
-      const status = this.getStatusFromParam(queryParams['status']);
-      if (status !== null) updates.status = status;
-    }
-
-    if (queryParams['planType']) {
-      const planType = this.getPlanTypeFromParam(queryParams['planType']);
-      if (planType) updates.planType = planType;
-    }
-
-    if (queryParams['searchText']) {
-      updates.searchText = queryParams['searchText'];
-    }
-
-    if (Object.keys(updates).length > 0) {
-      this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-      this.filterService.applyFilterWithPaging();
-    }
   }
 
   private getStatusFromParam(param: string | number): EInternalUserPlanStatus | null {

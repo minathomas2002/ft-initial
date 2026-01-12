@@ -65,16 +65,12 @@ class EmployeeNotificationParams extends BaseNotificationParams {
 function buildInternalParams(notification: INotification, defaultRoute: string[]) {
   let route: string[] = [];
   let params: Record<string, string> = {};
+  let searchText = notification.customData?.planId || '';
+  let actionsToTrigger = [EPlanAction.Submitted, EPlanAction.Reassigned]
 
-  switch (notification.action) {
-    case EPlanAction.Submitted:
-      route = defaultRoute;
-      params = { status: EInternalUserPlanStatus.UNASSIGNED.toString() };
-      break;
-    case EPlanAction.Reassigned:
-      route = defaultRoute;
-      params = { status: EInternalUserPlanStatus.ASSIGNED.toString() };
-      break;
+  if (actionsToTrigger.includes(notification.action)) {
+    route = defaultRoute;
+    params = { searchText };
   }
 
   return { route, params };
