@@ -7,7 +7,7 @@ import { AssignReassignManualEmployee } from "../../components/assign-reassign-m
 
 @Component({
   selector: 'app-plans-list',
-  imports: [Button, TranslatePipe, AssignReassignManualEmployee],
+  imports: [AssignReassignManualEmployee],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
 })

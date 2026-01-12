@@ -33,13 +33,23 @@ export class SidebarContentComponent {
     var dashboardLink = this.permissionService.canAccessInvestorDashboard()
       ? ERoutes.dashboard + '/' + ERoutes.investors
       : ERoutes.dashboard;
-      
+
+    var planLink = this.permissionService.canAccessInvestorDashboard()
+      ? ERoutes.plans + '/' + ERoutes.investors
+      : ERoutes.plans;
+
     return [
       {
         label: this.i18nService.translate('navigation.dashboard'),
         icon: 'icon-home',
         routerLink: dashboardLink,
         show: this.permissionService.canAccessDashboard()
+      },
+      {
+        label: this.i18nService.translate('navigation.plans'),
+        icon: 'icon-home',
+        routerLink: planLink,
+        show: this.permissionService.canAccessPlan()
       },
       {
         label: this.i18nService.translate('navigation.opportunities'),

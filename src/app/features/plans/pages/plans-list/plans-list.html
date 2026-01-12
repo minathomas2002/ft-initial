@@ -1,14 +1,5 @@
 <p>plans-list works!</p>
 
-<p-button
-  [label]="'plans.assign' | translate"
-  severity="primary"
-  class="flex"
-  fluid
-  icon="icon-plus"
-  (onClick)="onAssign(planItem)"
-/>
-
 @if (viewAssignDialog()) {
 <app-assign-reassign-manual-employee
   [(dialogVisible)]="viewAssignDialog"

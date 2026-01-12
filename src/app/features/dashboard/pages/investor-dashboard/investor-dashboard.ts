@@ -63,7 +63,7 @@ export class InvestorDashboard implements OnInit {
   serviceLocalizationPlanWizardVisibility = signal(false);
   timelineVisibility = signal(false);
   selectedPlan = signal<IPlanRecord | null>(null);
-  eInternalUserPlanStatus = EInternalUserPlanStatus;
+  eInvestorPlanStatus = EInvestorPlanStatus;
 
   private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);

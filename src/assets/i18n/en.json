@@ -144,7 +144,8 @@
     "help": "Help",
     "users": "Employees",
     "opportunities": "Opportunities",
-    "investors": "Investors"
+    "investors": "Investors",
+    "plans": "Plans"
   },
   "opportunity": {
     "status": {
@@ -629,6 +630,9 @@
   },
   "plans": {
     "assign": "Assign",
+    "title": "Plans",
+    "submitNewPlan": "Submit New Plan",
+    "subtitle": "Track and manage your submitted localization plans and their review status",
     "confirmation": {
       "onLeaveTitle": "Are you sure you want to leave?",
       "saveAsDraft": "Save as draft",
