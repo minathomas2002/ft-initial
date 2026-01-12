@@ -5,7 +5,9 @@ export interface INotification {
   actionURL: string;
   body: string;
   createdDate: string;
-  customData: string;
+  customData: {
+    PlanId: string,
+  };
   from: string;
   id: string;
   isRead: boolean;

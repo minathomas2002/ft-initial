@@ -849,7 +849,17 @@
       "download": "Download",
       "viewTimeline": "View Timeline",
       "assignToEmployee": "Assign to Employee",
-      "reAssign": "Reassign"
+      "reAssign": "Reassign",
+      "internalReview": "Review",
+      "submitted": "Submit",
+      "commentSubmitted": "Submit Comment",
+      "approved": "Approve",
+      "rejected": "Reject",
+      "autoAssign": "Auto Assign",
+      "removeAssignee": "Remove Assignee",
+      "delete": "Delete",
+      "dvRejectionAcknowledged": "Rejection Acknowledged",
+      "returnedForMoreInfo": "Returned For More Info"
     }
   },
   "timeline": {
