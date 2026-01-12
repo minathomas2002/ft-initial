@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-[32px] px-8 pb-10">
+<div class="flex flex-col gap-[32px] pb-10">
   <!-- Saudi Company Details Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Saudi Company Details</h2>
@@ -19,7 +19,11 @@
         'companyOverviewOther':'If Company Type is Other Provide company overview',
       }"
     >
-      <ng-template #itemTemplate let-itemControl let-index="index">
+      <ng-template
+        #itemTemplate
+        let-itemControl
+        let-index="index"
+      >
         <!-- Saudi Company Name -->
         <td class="p-3 border border-gray-200 min-w-[250px]">
           <app-group-input-with-checkbox
@@ -244,45 +248,49 @@
         'provideAgreementCopy': 'If “Yes”, please attach the agreement copy at the end of the plan in the Attachment section.',
       }"
     >
-      <ng-template #itemTemplate let-itemControl let-index="index">
+      <ng-template
+        #itemTemplate
+        let-itemControl
+        let-index="index"
+      >
         <!-- Agreement Type -->
         <td class="p-3 border border-gray-200 min-w-[250px]">
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementType))"
           >
-          <div class="flex flex-col">
-            <p-select
-              [options]="agreementTypeOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
-              placeholder="Select agreement type"
-              fluid
-              [appendTo]="'body'"
-            />
-            @if (isAgreementTypeOther(itemControl)) {
-                <input
-                  type="text"
-                  pInputText
-                  fluid
-                  [maxlength]="100"
-                  placeholder="Enter other agreement details"
-                  [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
-                  class="mt-2"
-                />
-            }
-          </div>
+            <div class="flex flex-col">
+              <p-select
+                [options]="agreementTypeOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
+                placeholder="Select agreement type"
+                fluid
+                [appendTo]="'body'"
+              />
+              @if (isAgreementTypeOther(itemControl)) {
+              <input
+                type="text"
+                pInputText
+                fluid
+                [maxlength]="100"
+                placeholder="Enter other agreement details"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
+                class="mt-2"
+              />
+              }
+            </div>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
             [label]="'Agreement Type'"
           />
           @if (isAgreementTypeOther(itemControl)) {
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
-              [label]="'Other Agreement Details'"
-            />
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
+            [label]="'Other Agreement Details'"
+          />
           }
         </td>
 
@@ -407,32 +415,36 @@
     <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
     <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
     <div class="overflow-x-auto">
-      <table class="w-full border-collapse">
-        <thead>
-          <!-- Top Header Row -->
-          <tr class="bg-primary text-white">
-            <th class="p-3 border border-gray-200 text-start font-normal">Metrics</th>
-            <th class="p-3 border border-gray-200 text-start font-normal" colspan="6">Years ({{ yearColumns()[0] }}-{{ yearColumns()[4] }})</th>
-          </tr>
-          <!-- Bottom Header Row -->
-          <tr class="bg-gray-50">
-            <th class="p-3 border border-gray-200 text-left font-semibold text-gray-700 min-w-[250px]">Category</th>
-            @for (year of yearColumns(); track year) {
+      <div class="rounded-lg border border-gray-200 overflow-hidden">
+        <table class="w-full border-collapse">
+          <thead>
+            <!-- Top Header Row -->
+            <tr class="bg-primary text-white">
+              <th class="p-3 border border-gray-200 text-start font-normal">Metrics</th>
+              <th
+                class="p-3 border border-gray-200 text-start font-normal"
+                colspan="6"
+              >Years ({{ yearColumns()[0] }}-{{ yearColumns()[4] }})</th>
+            </tr>
+            <!-- Bottom Header Row -->
+            <tr class="bg-gray-50">
+              <th class="p-3 border border-gray-200 text-left font-semibold text-gray-700 min-w-[250px]">Category</th>
+              @for (year of yearColumns(); track year) {
               <th class="p-3 border border-gray-200 text-left font-semibold text-gray-700 min-w-[200px]">{{ year }}</th>
-            }
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Expected Annual Headcount Row -->
-          <tr>
-            <td class="p-3 border border-gray-200 font-medium text-gray-700">Expected Annual Headcount</td>
-            @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+              }
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Expected Annual Headcount Row -->
+            <tr>
+              <td class="p-3 border border-gray-200 font-medium text-gray-700">Expected Annual Headcount</td>
+              @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
               <td class="p-3 border border-gray-200">
                 <app-group-input-with-checkbox
                   [showCheckbox]="showCheckbox()"
                   [hasCommentControl]="getHasCommentControl(getEntityLevelItem().get(yearKey + '_headcount'))"
                 >
-                   <p-inputnumber
+                  <p-inputnumber
                     fluid
                     placeholder="Enter headcount"
                     [min]="0"
@@ -445,12 +457,12 @@
                   [label]="'Headcount ' + yearColumns()[i]"
                 />
               </td>
-            }
-          </tr>
-          <!-- Expected Saudization (%) Row -->
-          <tr>
-            <td class="p-3 border border-gray-200 font-medium text-gray-700">Expected Saudization (%)</td>
-            @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+              }
+            </tr>
+            <!-- Expected Saudization (%) Row -->
+            <tr>
+              <td class="p-3 border border-gray-200 font-medium text-gray-700">Expected Saudization (%)</td>
+              @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
               <td class="p-3 border border-gray-200">
                 <app-group-input-with-checkbox
                   [showCheckbox]="showCheckbox()"
@@ -465,17 +477,18 @@
                     [maxFractionDigits]="2"
                     [maxlength]="5"
                     [formControl]="getValueControl(getEntityLevelItem().get(yearKey + '_saudization'))"
-                 />
+                  />
                 </app-group-input-with-checkbox>
                 <app-base-error-messages
                   [control]="getValueControl(getEntityLevelItem().get(yearKey + '_saudization'))"
                   [label]="'Saudization % ' + yearColumns()[i]"
                 />
               </td>
-            }
-          </tr>
-        </tbody>
-      </table>
+              }
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -483,63 +496,68 @@
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Service Level</h2>
     <p>Details to be provided for the KSA based facility responsible for delivering all services. Provide details separately for each service you intend to localize</p>
-    <app-form-array-input
-      [ft]="getServiceLevelFormArray()"
-      [hideAddButton]="true"
-      [hideDeleteButton]="true"
-      [excludeKeys]="['serviceId']"
-      [customHeaderLabels]="customHeadersLabels()"
-      [groupHeader]="serviceLevelGroupHeader()"
-      [scrollHeight]="'600px'"
-      [headerTooltips]="{'keyMeasuresToUpskillSaudis':'What key measures / plans will you execute to upskill Saudis and hire the relevant Saudi talent to deliver the service?'}"
-      [customTextBesideHeaders]="{'mentionSupportRequiredFromSEC':' (if any) '}"
-    >
-      <ng-template #itemTemplate let-itemControl let-index="index">
-        <!-- Service Name -->
-        <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.serviceName))"
-          >
-            <input
-              type="text"
-              pInputText
-              fluid
-              placeholder=""
-              class="text-gray-400"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+    <div class="rounded-lg overflow-hidden">
+      <app-form-array-input
+        [ft]="getServiceLevelFormArray()"
+        [hideAddButton]="true"
+        [hideDeleteButton]="true"
+        [excludeKeys]="['serviceId']"
+        [customHeaderLabels]="customHeadersLabels()"
+        [groupHeader]="serviceLevelGroupHeader()"
+        [scrollHeight]="'600px'"
+        [headerTooltips]="{'keyMeasuresToUpskillSaudis':'What key measures / plans will you execute to upskill Saudis and hire the relevant Saudi talent to deliver the service?'}"
+        [customTextBesideHeaders]="{'mentionSupportRequiredFromSEC':' (if any) '}"
+      >
+        <ng-template
+          #itemTemplate
+          let-itemControl
+          let-index="index"
+        >
+          <!-- Service Name -->
+          <td class="p-3 border border-gray-200 min-w-[200px]">
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.serviceName))"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder=""
+                class="text-gray-400"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+              [label]="'Service Name'"
             />
-          </app-group-input-with-checkbox>
-          <app-base-error-messages
-            [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
-            [label]="'Service Name'"
-          />
-        </td>
+          </td>
 
-        <!-- Expected Localization Date -->
-        <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-          >
-            <p-select
-              [options]="serviceForm.getAvailableQuarters(5)"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-              placeholder="Select quarter"
-              fluid
-              [appendTo]="'body'"
+          <!-- Expected Localization Date -->
+          <td class="p-3 border border-gray-200 min-w-[200px]">
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+            >
+              <p-select
+                [options]="serviceForm.getAvailableQuarters(5)"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+                placeholder="Select quarter"
+                fluid
+                [appendTo]="'body'"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
+              [label]="'Expected Localization Date'"
             />
-          </app-group-input-with-checkbox>
-          <app-base-error-messages
-            [control]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-            [label]="'Expected Localization Date'"
-          />
-        </td>
+          </td>
 
-        <!-- Year Columns (Expected Annual Headcount) -->
-        @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+          <!-- Year Columns (Expected Annual Headcount) -->
+          @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
@@ -558,10 +576,10 @@
               [label]="'Headcount ' + yearColumns()[i]"
             />
           </td>
-        }
+          }
 
-        <!-- Year Columns (Saudization %) -->
-        @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
+          <!-- Year Columns (Saudization %) -->
+          @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
@@ -583,59 +601,63 @@
               [label]="'Saudization % ' + yearColumns()[i]"
             />
           </td>
-        }
+          }
 
-        <!-- Key Measures to Upskill Saudis -->
-        <td class="p-3 border border-gray-200 min-w-[400px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-          >
-            <textarea
-              pTextarea
-              fluid
-              rows="3"
-              placeholder="Enter key measures to upskill saudis"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-            ></textarea>
-          </app-group-input-with-checkbox>
-          <app-base-error-messages
-            [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-            [label]="'Key Measures to Upskill Saudis'"
-          />
-        </td>
+          <!-- Key Measures to Upskill Saudis -->
+          <td class="p-3 border border-gray-200 min-w-[400px]">
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
+            >
+              <textarea
+                pTextarea
+                fluid
+                rows="3"
+                placeholder="Enter key measures to upskill saudis"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
+              ></textarea>
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
+              [label]="'Key Measures to Upskill Saudis'"
+            />
+          </td>
 
-        <!-- Support Required from SEC -->
-        <td class="p-3 border border-gray-200 min-w-[400px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
-          >
-            <textarea
-              pTextarea
-              fluid
-              rows="3"
-              [maxlength]="500"
-              placeholder="Mention Support required from SEC to localize the service (if any)"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
-            ></textarea>
-            <div class="text-xs text-gray-500 text-right mt-1">
-              {{ getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).value?.length || 0 }} / 500
-            </div>
-          </app-group-input-with-checkbox>
-          <app-base-error-messages
-            [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
-            [label]="'Support Required from SEC'"
-          />
-        </td>
-      </ng-template>
-    </app-form-array-input>
+          <!-- Support Required from SEC -->
+          <td class="p-3 border border-gray-200 min-w-[400px]">
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
+            >
+              <textarea
+                pTextarea
+                fluid
+                rows="3"
+                [maxlength]="500"
+                placeholder="Mention Support required from SEC to localize the service (if any)"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
+              ></textarea>
+              <div class="text-xs text-gray-500 text-right mt-1">
+                {{ getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).value?.length || 0 }} / 500
+              </div>
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
+              [label]="'Support Required from SEC'"
+            />
+          </td>
+        </ng-template>
+      </app-form-array-input>
+    </div>
   </div>
 
   @if((isViewMode() && files().length > 0) || !isViewMode()) {
   <!-- Attachments Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Attachments (Optional)</h2>
+    <div>
+      <h2 class="text-lg font-semibold text-gray-900">Attachments (Optional)</h2>
+      <p class="text-xs text-gray-600"><span class="text-gray-600 font-semibold">Note:</span> all uploaded files size should be less than 30MB</p>
+    </div>
 
     <app-group-input-with-checkbox
       [hasCommentControl]="getHasCommentControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"

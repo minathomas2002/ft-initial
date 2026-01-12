@@ -1,40 +1,81 @@
 import { INotification, INotificationItem } from "src/app/core/layouts/main-layout/models/notifications.interface";
 import { EPlanAction, ERoles, ERoutes } from "../../enums";
-import { EEmployeePlanStatus } from "../../interfaces";
-import { ENotificationAction } from "../../enums/notification.enum";
+import { EInternalUserPlanStatus } from "../../interfaces";
 
 class BaseNotificationParams {
-  params?: Record<string, string>;
-  route?: string[];
+  route: string[] = [];
+  params: Record<string, string> = {};
 }
 
 export class NotificationItemFactory {
   static create(notification: INotification, userRole: ERoles): INotificationItem {
-    const roleValue = Number(userRole);
-    if (roleValue === ERoles.Division_MANAGER) {
-      const managerParams = new DivisionMangerNotificationParams(notification);
+    const internalUsersRoles: ERoles[] = [
+      ERoles.DEPARTMENT_MANAGER,
+      ERoles.Division_MANAGER,
+      ERoles.EMPLOYEE,
+    ];
+
+    // managerial roles
+    if (internalUsersRoles.includes(userRole)) {
+      const internalUser = new InternalUserNotificationParams(notification);
       return {
         ...notification,
-        route: managerParams.route,
-        params: managerParams.params,
-      };
+        route: internalUser.route,
+        params: internalUser.params,
+      } as INotificationItem;
     }
 
-    return notification;
+    // investors
+    if (userRole === ERoles.INVESTOR) {
+      const investor = new EmployeeNotificationParams(notification);
+      return {
+        ...notification,
+        route: investor.route,
+        params: investor.params,
+      } as INotificationItem;
+    }
+
+    // fallback for others
+    return {
+      ...notification,
+      route: [],
+      params: {},
+    } as INotificationItem;
   }
 }
 
-class DivisionMangerNotificationParams extends BaseNotificationParams {
+class InternalUserNotificationParams extends BaseNotificationParams {
   constructor(notification: INotification) {
     super();
-    this.route = [ERoutes.dashboard, ERoutes.dvManager] as string[];
-    switch (notification.action) {
-      case EPlanAction.Submitted:
-        this.params = {
-          status: EEmployeePlanStatus.UNASSIGNED.toString(),
-          notificationAction: ENotificationAction.filter.toString(),
-        };
-        break;
-    }
+    const built = buildInternalParams(notification, [ERoutes.dashboard]);
+    this.route = built.route;
+    this.params = built.params;
   }
+}
+
+class EmployeeNotificationParams extends BaseNotificationParams {
+  constructor(notification: INotification) {
+    super();
+    const built = buildInternalParams(notification, [ERoutes.dashboard, ERoutes.investors]);
+    this.route = built.route;
+    this.params = built.params;
+  }
+}
+
+function buildInternalParams(notification: INotification, defaultRoute: string[]) {
+  let route: string[] = [];
+  let params: Record<string, string> = {};
+
+  switch (notification.action) {
+    case EPlanAction.Submitted:
+      route = defaultRoute;
+      params = { status: EInternalUserPlanStatus.UNASSIGNED.toString() };
+      break;
+    case EPlanAction.Reassigned:
+      route = defaultRoute;
+      params = { status: EInternalUserPlanStatus.ASSIGNED.toString() };
+      break;
+  }
+
+  return { route, params };
 }

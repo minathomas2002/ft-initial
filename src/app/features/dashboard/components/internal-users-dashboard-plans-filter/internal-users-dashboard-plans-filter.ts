@@ -13,68 +13,176 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DvManagerDashboardPlansFilterService } from '../../services/dv-manager-dashboard-plans-filter/dv-manager-dashboard-plans-filter-service';
+import { InternalUsersDashboardPlansFilterService } from '../../services/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter-service';
 import { TranslatePipe } from 'src/app/shared/pipes';
-import { EEmployeePlanStatus, IPlanFilter } from 'src/app/shared/interfaces';
-import { EOpportunityType } from 'src/app/shared/enums';
+import { EInternalUserPlanStatus, IPlanFilter } from 'src/app/shared/interfaces';
+import { EOpportunityType, ERoles } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PlanStore, IPlanTypeDropdownOption } from 'src/app/shared/stores/plan/plan.store';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 
 interface IDropdownOption {
   label: string;
-  value: EOpportunityType | EEmployeePlanStatus | null;
+  value: EOpportunityType | EInternalUserPlanStatus | null;
 }
 
 @Component({
-  selector: 'app-dv-manager-dashboard-plans-filter',
+  selector: 'app-internal-users-dashboard-plans-filter',
   imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe],
-  templateUrl: './dv-manager-dashboard-plans-filter.html',
-  styleUrl: './dv-manager-dashboard-plans-filter.scss',
+  templateUrl: './internal-users-dashboard-plans-filter.html',
+  styleUrl: './internal-users-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DvManagerDashboardPlansFilter implements OnInit {
+export class InternalUsersDashboardPlansFilter implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly searchSubject = new Subject<string>();
-  readonly filterService = inject(DvManagerDashboardPlansFilterService);
+  readonly filterService = inject(InternalUsersDashboardPlansFilterService);
   private readonly i18nService = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly planStore = inject(PlanStore);
+  private readonly roleService = inject(RoleService);
   readonly filter = this.filterService.filter;
+
   planTypeOptions = computed<IDropdownOption[]>(() => {
     return this.planStore.planTypeOptions() as IDropdownOption[];
   });
 
   statusOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
+
+    // Base option: "All Statuses"
+    const allStatusesOption: IDropdownOption =
+      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null };
+
+    // Get role-specific status options
+    const roleSpecificOptions = this.getRoleSpecificStatusOptions();
+
+    return [allStatusesOption, ...roleSpecificOptions];
+  });
+
+  /**
+   * Returns status options based on the current user's role
+   */
+  private getRoleSpecificStatusOptions(): IDropdownOption[] {
+    if (this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])()) {
+      return this.getEmployeeStatusOptions();
+    } else if (this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER])()) {
+      return this.getDivisionManagerStatusOptions();
+    } else
+      return [];
+  }
+
+  // Employee Statuses Options
+  private getEmployeeStatusOptions(): IDropdownOption[] {
     return [
-      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null },
       {
-        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
-        value: EEmployeePlanStatus.EMPLOYEE_APPROVED,
+        label: this.i18nService.translate('plans.employee_status.approved'),
+        value: EInternalUserPlanStatus.APPROVED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.deptApproved'),
+        value: EInternalUserPlanStatus.DEPT_APPROVED,
       },
       {
         label: this.i18nService.translate('plans.employee_status.deptRejected'),
-        value: EEmployeePlanStatus.DEPT_REJECTED,
+        value: EInternalUserPlanStatus.DEPT_REJECTED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.dvApproved'),
+        value: EInternalUserPlanStatus.DV_APPROVED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.dvRejected'),
+        value: EInternalUserPlanStatus.DV_REJECTED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
+        value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
+        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.employeeRejected'),
+        value: EInternalUserPlanStatus.EMPLOYEE_REJECTED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.pending'),
+        value: EInternalUserPlanStatus.PENDING,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.rejected'),
+        value: EInternalUserPlanStatus.REJECTED,
       },
       {
         label: this.i18nService.translate('plans.employee_status.unassigned'),
-        value: EEmployeePlanStatus.UNASSIGNED,
+        value: EInternalUserPlanStatus.UNASSIGNED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.underReview'),
+        value: EInternalUserPlanStatus.UNDER_REVIEW,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.assigned'),
+        value: EInternalUserPlanStatus.ASSIGNED,
       },
     ];
+  }
+
+  // Division Manager Statuses Options
+  private getDivisionManagerStatusOptions(): IDropdownOption[] {
+    return [
+      {
+        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
+        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.deptRejected'),
+        value: EInternalUserPlanStatus.DEPT_REJECTED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.unassigned'),
+        value: EInternalUserPlanStatus.UNASSIGNED,
+      },
+    ];
+  }
+
+
+  /**
+   * Computed signal to check if status dropdown should be shown
+   * Department Manager doesn't see status dropdown
+   */
+  readonly showStatusFilter = computed(() => {
+    return !this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])();
   });
 
   ngOnInit() {
+    // Auto-set DV_APPROVED filter for Department Managers
+    this.initializeDepartmentManagerFilter();
     this.listenToSearchChanges();
     this.prefillFiltersFromQueryParams();
     this.listenToQueryParamChanges();
+  }
+
+  /**
+   * Initialize filter for Department Manager - automatically filter by DV_APPROVED
+   */
+  private initializeDepartmentManagerFilter(): void {
+    if (this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
+      this.filterService.updateFilterSignal({
+        status: EInternalUserPlanStatus.DV_APPROVED,
+        pageNumber: 1
+      });
+      this.filterService.applyFilterWithPaging();
+    }
   }
 
   private listenToQueryParamChanges() {
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params: Record<string, string | number | undefined>) => {
-        // Only process if notificationAction is present (from notification navigation)
         const updates: Partial<IPlanFilter> = {};
 
         if (params['notificationAction']) {
@@ -88,7 +196,6 @@ export class DvManagerDashboardPlansFilter implements OnInit {
         this.filterService.applyFilterWithPaging();
         if (params['notificationAction']) {
           if (Object.keys(updates).length > 0) {
-            // Clean up query params after processing
             setTimeout(() => {
               this.router.navigate([], {
                 relativeTo: this.route,
@@ -111,7 +218,7 @@ export class DvManagerDashboardPlansFilter implements OnInit {
     this.filterService.applyFilterWithPaging();
   }
 
-  onStatusChange(value: EEmployeePlanStatus | null) {
+  onStatusChange(value: EInternalUserPlanStatus | null) {
     this.filterService.updateFilterSignal({ status: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
@@ -166,22 +273,20 @@ export class DvManagerDashboardPlansFilter implements OnInit {
     }
   }
 
-  private getStatusFromParam(param: string | number): EEmployeePlanStatus | null {
-    // Handle numeric status values (from notifications)
+  private getStatusFromParam(param: string | number): EInternalUserPlanStatus | null {
     const statusNum = Number(param);
-    if (!isNaN(statusNum) && Object.values(EEmployeePlanStatus).includes(statusNum as EEmployeePlanStatus)) {
-      return statusNum as EEmployeePlanStatus;
+    if (!isNaN(statusNum) && Object.values(EInternalUserPlanStatus).includes(statusNum as EInternalUserPlanStatus)) {
+      return statusNum as EInternalUserPlanStatus;
     }
 
-    // Handle string-based status values
     const paramStr = String(param).toLowerCase();
     switch (paramStr) {
       case 'employee_approved':
-        return EEmployeePlanStatus.EMPLOYEE_APPROVED;
+        return EInternalUserPlanStatus.EMPLOYEE_APPROVED;
       case 'dept_rejected':
-        return EEmployeePlanStatus.DEPT_REJECTED;
+        return EInternalUserPlanStatus.DEPT_REJECTED;
       case 'unassigned':
-        return EEmployeePlanStatus.UNASSIGNED;
+        return EInternalUserPlanStatus.UNASSIGNED;
       default:
         return null;
     }

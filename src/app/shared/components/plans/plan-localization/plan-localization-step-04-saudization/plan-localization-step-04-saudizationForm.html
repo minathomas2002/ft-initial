@@ -14,7 +14,10 @@
   @if((isViewMode() && files().length > 0) || !isViewMode()) {
   <!-- Attachments Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Attachments (Optional)</h2>
+    <div>
+      <h2 class="text-lg font-semibold text-gray-900">Attachments (Optional)</h2>
+      <p class="text-xs text-gray-600"><span class="text-gray-600 font-semibold">Note:</span> all uploaded files size should be less than 30MB</p>
+    </div>
 
     <app-group-input-with-checkbox
       [hasCommentControl]="getHasCommentControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"

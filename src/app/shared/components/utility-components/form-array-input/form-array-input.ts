@@ -52,9 +52,13 @@ export class FormArrayInput implements OnDestroy {
   // Optional header labels override - map of key names to custom label text
   customHeaderLabels = input<Record<string, string>>({});
   // Optional grouped header row - array of {label, colspan}
-  groupHeader = input<Array<{ label: string; colspan: number }>>([]);
+  groupHeader = input<Array<{ label: string; colspan?: number, rowspan?: number, dataGroup: boolean }>>([]);
   // Optional additional text beside headers - map of key names to text to display beside the header
   customTextBesideHeaders = input<Record<string, string>>({});
+  // Optional colspan for individual header columns - map of key names to colspan value
+  headerColspan = input<Record<string, number>>({});
+  // Optional rowspan for individual header columns - map of key names to rowspan value
+  headerRowspan = input<Record<string, number>>({});
 
   @ContentChild('itemTemplate', { read: TemplateRef }) itemTemplate?: TemplateRef<{
     $implicit: AbstractControl;
@@ -143,6 +147,40 @@ export class FormArrayInput implements OnDestroy {
     // Exclude 'rowId' and any keys specified in excludeKeys input
     const keysToExclude = [EMaterialsFormControls.rowId, ...this.excludeKeys()];
     return Object.keys(firstObject).filter((key) => !keysToExclude.includes(key));
+  });
+
+  /**
+   * Keys to display in the second header row when groupHeader is used.
+   * Only includes keys that fall under dataGroup: true columns (e.g., year columns).
+   * Skips keys that are covered by rowspan in the first row.
+   */
+  secondRowKeys = computed(() => {
+    const header = this.groupHeader();
+    if (!header || header.length === 0) return [];
+
+    const allKeys = this.keys();
+    if (allKeys.length === 0) return [];
+
+    // Calculate which keys belong to each group header cell
+    const result: string[] = [];
+    let keyIndex = 0;
+
+    for (const cell of header) {
+      const colCount = cell.colspan ?? 1;
+
+      if (cell.dataGroup) {
+        // This is a grouped header - include these keys in second row
+        for (let i = 0; i < colCount && keyIndex < allKeys.length; i++) {
+          result.push(allKeys[keyIndex]);
+          keyIndex++;
+        }
+      } else {
+        // This is a non-grouped header with rowspan - skip these keys
+        keyIndex += colCount;
+      }
+    }
+
+    return result;
   });
 
   // Get FormControl/FormGroup for a specific index

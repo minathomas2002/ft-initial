@@ -13,7 +13,7 @@
 }
 
 /*timeline*/
-  .p-timeline-hidden-opposite {
+.p-timeline-hidden-opposite {
   .p-timeline-event-opposite {
     display: none !important;
   }
@@ -23,17 +23,19 @@
 
 /*p-tooltip */
 .p-tooltip {
-  .p-tooltip-text{
+  .p-tooltip-text {
     font-size: 12px;
     text-align: center;
   }
 }
+
 /*p-tooltip end*/
 
 /*p-button */
 .p-button {
   @include primengInputsFontSize;
 }
+
 /*p-button end*/
 
 /*.p-inputtext */
@@ -41,12 +43,14 @@
   @include primengInputsFontSize;
   height: 44px !important;
 }
+
 /*.p-inputtext end*/
 
 /*.p-textarea */
 .p-textarea {
   @include primengInputsFontSize;
 }
+
 /*.p-textarea end*/
 
 /*.p-select */
@@ -64,21 +68,25 @@
 .p-menu-list {
   @include primengInputsFontSize;
 }
+
 /*.p-select end*/
 
 /*.p-autocomplete */
 .p-autocomplete {
   @include primengInputsFontSize;
 }
-.p-autocomplete-input-chip input{
+
+.p-autocomplete-input-chip input {
   @include primengInputsFontSize;
 }
+
 /*.p-autocomplete end*/
 
 /*.p-select */
-.p-multiselect{
+.p-multiselect {
   @include primengInputsFontSize;
-  .p-multiselect-label .p-chip{
+
+  .p-multiselect-label .p-chip {
     border: 1px solid var(--p-primary-200);
     padding-top: calc((var(--p-multiselect-padding-y) - 1px) / 2) !important;
     padding-bottom: calc((var(--p-multiselect-padding-y) - 1px) / 2) !important;
@@ -90,38 +98,43 @@
 /*.p-datepicker */
 .p-datepicker {
   &:has(.p-datepicker-input-icon-container) .p-datepicker-clear-icon {
-      inset-inline-end: calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size)) !important;
+    inset-inline-end: calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size)) !important;
   }
-  .p-datepicker-day-view{
+
+  .p-datepicker-day-view {
     @include primengInputsFontSize;
   }
 }
+
 /*.p-datepicker end*/
 
 /*.p-chip-label*/
-.p-chip-label{
+.p-chip-label {
   max-width: 110px !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
+
 /*.p-chip-label end*/
 
 /*.p-accordion start*/
-.p-accordion{
-  .p-accordioncontent-content{
+.p-accordion {
+  .p-accordioncontent-content {
     border-radius: 0 0 12px 12px;
   }
 }
+
 /*.p-accordion end*/
 
 /*.p-radiobutton start*/
-.p-radiobutton{
-  .p-radiobutton-icon{
+.p-radiobutton {
+  .p-radiobutton-icon {
     width: 8px;
     height: 8px;
   }
 }
+
 /*.p-radiobutton end*/
 
 // .p-datepicker start
@@ -129,34 +142,39 @@
   background: var(--p-inputtext-background) !important;
   padding: 0 0 0 4px !important;
 }
+
 // .p-datepicker end
 
 // p-editor start
-.p-editor{
+.p-editor {
   .ql-toolbar button.ql-image {
     display: none !important;
   }
-  .ql-blank::before{
+
+  .ql-blank::before {
     font-style: normal !important;
   }
-  .ql-container{
+
+  .ql-container {
     font-family: $font-family;
-    &.ql-disabled{
-      .ql-editor{
+
+    &.ql-disabled {
+      .ql-editor {
         background-color: var(--p-gray-50);
       }
     }
   }
 }
+
 // p-editor end
 
 // p-datatable start
 .p-datatable {
   --p-datatable-header-cell-background: var(--p-primary-600) !important;
   --p-datatable-header-cell-color: white !important;
-  
-  .p-datatable-thead > tr > th {
-    background: var(--p-datatable-header-cell-background) !important;    
+
+  .p-datatable-thead>tr>th {
+    background: var(--p-datatable-header-cell-background) !important;
   }
 
   // Scrollbar styling for p-table - target all possible scrollable containers
@@ -165,6 +183,7 @@
   .p-datatable-scrollable-body-table,
   .p-datatable-scrollable-header,
   .p-datatable-scrollable-footer {
+
     // Webkit browsers (Chrome, Safari, Edge)
     &::-webkit-scrollbar {
       width: 8px !important;
@@ -179,7 +198,7 @@
     &::-webkit-scrollbar-thumb {
       background: #E5E7EB !important; // gray-200 for the thumb
       border-radius: 4px !important;
-      
+
       &:hover {
         background: #D1D5DB !important; // gray-300 on hover
       }
@@ -193,6 +212,7 @@
 
 // Global scrollbar styling for all p-datatable scrollable elements
 .p-datatable {
+
   // Target any scrollable element within p-datatable
   * {
     &::-webkit-scrollbar {
@@ -208,7 +228,7 @@
     &::-webkit-scrollbar-thumb {
       background: #E5E7EB !important; // gray-200 for the thumb
       border-radius: 4px !important;
-      
+
       &:hover {
         background: #D1D5DB !important; // gray-300 on hover
       }
@@ -218,4 +238,76 @@
     scrollbar-color: #E5E7EB #FAFAFA !important;
   }
 }
+
+.p-popover {
+  padding: 0 !important;
+  box-shadow: none !important;
+  border-radius: 20px !important;
+  border: none !important;
+
+  @media (min-width: 576px) {
+    transform: translate(40px, 16px) !important;
+  }
+
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06),
+  0 4px 8px rgba(16, 24, 40, 0.08) !important;
+
+  // Target any scrollable element within p-datatable
+  * {
+    &::-webkit-scrollbar {
+      width: 8px !important;
+      height: 8px !important;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #FAFAFA !important; // gray-50
+      border-radius: 4px !important;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #E5E7EB !important; // gray-200 for the thumb
+      border-radius: 4px !important;
+
+      &:hover {
+        background: #D1D5DB !important; // gray-300 on hover
+      }
+    }
+
+    scrollbar-width: thin !important;
+    scrollbar-color: #E5E7EB #FAFAFA !important;
+  }
+}
+
+.p-popover .p-popover-content {
+  padding: 0 !important;
+}
+
+.p-popover::before,
+.p-popover::after {
+  display: none !important;
+  content: none !important;
+  border: 0 !important;
+}
+
+.notification-badge {
+  position: relative;
+}
+
+.notification-badge .p-badge {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  border-radius: 9.75px !important;
+
+  background: #EF4444 !important;
+  color: #fff !important;
+
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  line-height: 18px !important;
+  padding: 10px !important;
+  top: -4px !important;
+  left: 7px !important;
+}
+
 // p-datatable end

@@ -825,18 +825,28 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
 
   // Map Attachments (from existing saudi step)
   if (attachmentsGroup) {
-    const attachmentFiles = getControlValue(attachmentsGroup, EMaterialsFormControls.attachments, true);
-    if (attachmentFiles && Array.isArray(attachmentFiles) && attachmentFiles.length > 0) {
-      result.attachments = [];
-      attachmentFiles.forEach((file: File) => {
-        result.attachments!.push({
-          id: (file as any).id || undefined, // Preserve ID for existing attachments
-          fileName: file.name,
-          fileExtension: (file as any).fileExtension || file.name.split('.').pop() || '',
-          fileUrl: (file as any).fileUrl || undefined,
-          file,
-        });
-      });
+    // Check if attachments control has fileSizeExceeded error - exclude attachments if error exists
+    const attachmentsControl = attachmentsGroup.get(EMaterialsFormControls.attachments);
+    if (attachmentsControl instanceof FormGroup) {
+      const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
+      const hasFileSizeError = valueControl?.errors?.['fileSizeExceeded'];
+
+      // Only process attachments if there's no file size error
+      if (!hasFileSizeError) {
+        const attachmentFiles = getControlValue(attachmentsGroup, EMaterialsFormControls.attachments, true);
+        if (attachmentFiles && Array.isArray(attachmentFiles) && attachmentFiles.length > 0) {
+          result.attachments = [];
+          attachmentFiles.forEach((file: File) => {
+            result.attachments!.push({
+              id: (file as any).id || undefined, // Preserve ID for existing attachments
+              fileName: file.name,
+              fileExtension: (file as any).fileExtension || file.name.split('.').pop() || '',
+              fileUrl: (file as any).fileUrl || undefined,
+              file,
+            });
+          });
+        }
+      }
     }
   }
 
@@ -1009,7 +1019,7 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
  */
 function createPlaceholderSignature(): Signature {
   return {
-    id:'',
+    id: '',
     signatureValue: '',
     contactInfo: {
       name: '',
@@ -1170,7 +1180,7 @@ export function convertServiceRequestToFormData(
   // Add local agent detail section if present
   if (servicePlan.localAgentDetailSection) {
     const agent = servicePlan.localAgentDetailSection;
-    const agentContact = agent.agentContactNumber as unknown as {countryCode: string, phoneNumber: string}
+    const agentContact = agent.agentContactNumber as unknown as { countryCode: string, phoneNumber: string }
 
     formData.append('ServicePlan.LocalAgentDetailSection.LocalAgentName', agent.localAgentName);
     formData.append('ServicePlan.LocalAgentDetailSection.AgentContactPerson', agent.agentContactPerson);

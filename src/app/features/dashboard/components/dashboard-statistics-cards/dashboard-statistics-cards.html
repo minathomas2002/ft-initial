@@ -1,0 +1,163 @@
+@if(isEmployee()) {
+<!-- Employee Statistics Cards -->
+<!-- Total Approved Plans -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    Total Approved Plans
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.totalPlans ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+
+<!-- Assigned Pending -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    {{ 'plans.statistics.assignedPending' | translate }}
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.pendingAssignedPlans ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+
+<!-- Assigned Plans -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    {{ 'plans.statistics.assignedPlans' | translate }}
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.plansUnderReview ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+
+<!-- Assigned Approved -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    {{ 'plans.statistics.assignedApprovedPlans' | translate }}
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.approvedPlans ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+
+<!-- Assigned Rejected -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    {{ 'plans.statistics.assignedRejected' | translate }}
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.rejectedPlans ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+} @else {
+<!-- Managers Statistics Cards (DV Manager & Department Manager) -->
+<!-- Total Plans -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    {{ 'plans.statistics.totalPlans' | translate }}
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.totalPlans ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+
+<!-- Unassigned Plans -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    {{ 'plans.statistics.unAssignedPlans' | translate }}
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.unAssignedPlans ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+
+<!-- Under Review Plans -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    Under Review Plans
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.plansUnderReview ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+
+<!-- Approved Plans -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    {{ 'plans.statistics.approvedPlans' | translate }}
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.approvedPlans ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+
+<!-- Rejected Plans -->
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+  <p class="text-sm font-medium text-gray-600 mb-2">
+    {{ 'plans.statistics.rejectedPlans' | translate }}
+  </p>
+  <p class="text-2xl font-semibold text-gray-900 mb-4">
+    {{ statistics()?.rejectedPlans ?? 0 }}
+  </p>
+  <div class="flex items-center gap-1 text-primary-600 cursor-pointer">
+    <span class="text-sm font-semibold">
+      {{ 'opportunity.counts.viewDetails' | translate }}
+    </span>
+    <i class="icon-arrow-right-up text-xs text-primary-600 ms-1"></i>
+  </div>
+</div>
+}

@@ -22,10 +22,10 @@ export class DashboardPlansApiService {
     return this.baseHttpService.post(API_ENDPOINTS.plans.getInvestorDashboardPlans, filter);
   }
 
-  getDvManagerDashboardPlans(
+  getInternalUserDashboardPlans(
     filter: IPlanFilterRequest
   ): Observable<IBaseApiResponse<IPlansDashboardResponse<IPlanRecord[]>>> {
-    return this.baseHttpService.post(API_ENDPOINTS.plans.getDvManagerDashboardPlans, filter);
+    return this.baseHttpService.post(API_ENDPOINTS.plans.getInternalUserDashboardPlans, filter);
   }
 }
 

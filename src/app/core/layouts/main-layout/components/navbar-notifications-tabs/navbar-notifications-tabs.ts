@@ -16,11 +16,9 @@ import { NotificationsStore } from 'src/app/shared/stores/notifications/notifica
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarNotificationsTabs {
-  private readonly router = inject(Router);
-
   notifications = input<INotification[]>();
   loading = input<boolean>();
-  notificationClick = output<void>();
+  notificationClick = output<INotification>();
   authStore = inject(AuthStore);
   notificationStore = inject(NotificationsStore);
   userRole = computed(() => {
@@ -29,25 +27,12 @@ export class NavbarNotificationsTabs {
   });
   notificationItems = computed<INotificationItem[]>(() => {
     return this.notifications()?.map((notification): INotificationItem => {
-      const notificationItem = NotificationItemFactory.create(notification, this.userRole());
+      const notificationItem = NotificationItemFactory.create(notification, Number(this.userRole()));
       return notificationItem;
     }) || [];
   })
 
   onNotificationClick(notification: INotificationItem) {
-    if (!notification || !notification.id) {
-      console.error('Invalid notification or missing ID:', notification);
-      return;
-    }
-
-    console.log('onNotificationClick called with notification ID:', notification.id);
-
-    // Mark notification as read (API call happens in the store)
-    this.notificationStore.setNotificationAsRead(notification.id);
-
-    // Navigate to the notification route
-    if (notification.route && notification.route.length > 0) {
-      this.router.navigate(notification.route, { queryParams: notification.params });
-    }
+    this.notificationClick.emit(notification)
   }
 }

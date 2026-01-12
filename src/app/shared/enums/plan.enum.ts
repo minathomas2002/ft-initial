@@ -97,4 +97,7 @@ export enum EPlanAction {
   ReturnedForMoreInfo = 17,
   ViewTimeLine = 18,
   AutoAssign = 19,
+  InternalReview = 20,
+  RemoveAssignee = 21,
+  Delete = 22,
 }

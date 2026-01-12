@@ -332,7 +332,7 @@
       "investor": "Investor",
       "dvManager": "DV Manager",
       "divisionManager": "Division Manager",
-      "autoProcess":"Automated Process"
+      "autoProcess": "Automated Process"
     },
     "status": {
       "active": "Active",
@@ -388,13 +388,13 @@
         "title": "Deactivate User",
         "description": "Are you sure you want to deactivate this user?"
       },
-      "add":{
-        "title":"Add Employee",
+      "add": {
+        "title": "Add Employee",
         "employeeId": "ID",
         "employeeIdPlaceholder": "Enter Employee ID",
         "employeeIdRequired": "Employee ID is required",
         "employeeIdInvalidLength": "Employee ID must be between 6 and 20 characters",
-        "enName":"English Name",
+        "enName": "English Name",
         "arName": "Arabic Name",
         "email": "Email",
         "phone": "Phone",
@@ -413,14 +413,14 @@
         "jobInvalid": "Invalid ID. Please enter a valid employee ID.",
         "jobInvalidLength": "ID. must be between 6 and 20 characters.",
         "jobRequired": "ID is required.",
-        "nameArabicInvalid":"Arabic name must contain Arabic letters only.",
-        "nameArabicInvalidLength":"Arabic name must be between 3 and 100 characters.",
-        "nameEnglishInvalid" : "English name must contain English letters only.",
-        "nameEnglishInvalidLength":"English name must be between 3 and 100 characters.",
+        "nameArabicInvalid": "Arabic name must contain Arabic letters only.",
+        "nameArabicInvalidLength": "Arabic name must be between 3 and 100 characters.",
+        "nameEnglishInvalid": "English name must contain English letters only.",
+        "nameEnglishInvalidLength": "English name must be between 3 and 100 characters.",
         "phoneInvalidLength": "Phone number must be between 8 and 15 digits",
-        "phoneInvalid":"Phone number must contain digits only."
+        "phoneInvalid": "Phone number must contain digits only."
       },
-      "edit":{
+      "edit": {
         "confirmedit": "Edit Employee"
       },
       "transferRole": {
@@ -459,11 +459,11 @@
       "joinDate": "Join Date"
     }
   },
-  "setting":{
+  "setting": {
     "title": "Settings",
     "subTitle": "Control account and application settings",
     "confirmButton": "Update",
-    "adminView":{
+    "adminView": {
       "slaCardTitle": "SLA Time",
       "slaCardDesc": "Modify the SLA time to match your service requirements.",
       "slaCardLink": "Change SLA Time",
@@ -476,20 +476,20 @@
       "holidaysCardTitle": "Holidays Management",
       "holidaysCardDesc": "Add official holidays or days off to exclude them from SLA calculations.",
       "holidaysCardLink": "View Holidays",
-      "dialog":{
-        "internalCycleLabel":"Internal cycle time",
-        "investorReplyTimeLabel" : "Investor reply time",
+      "dialog": {
+        "internalCycleLabel": "Internal cycle time",
+        "investorReplyTimeLabel": "Investor reply time",
         "days": "Days",
         "internalCycleRequired": "Internal cycle time cannot be empty",
-        "numbersOnlyError":"Numbers only (decimal numbers not allowed)",
+        "numbersOnlyError": "Numbers only (decimal numbers not allowed)",
         "internalCycleValidNumber": "Internal cycle time must be numeric, max 365, min 1 ",
-        "investorReplyTimeRequired" : "Investor reply time cannot be empty",
-        "investorReplyTimeValidNumber" : "Investor reply time must be numeric, max 365, min {{days}} ",
+        "investorReplyTimeRequired": "Investor reply time cannot be empty",
+        "investorReplyTimeValidNumber": "Investor reply time must be numeric, max 365, min {{days}} ",
         "slaSuccessUpdate": "SLA updated Successfully.",
         "autoAssignSuccessUpdate": "Auto - assign updated Successfully.",
         "autoAssignWarningUpdate": "No active employees available for assignment."
       },
-      "autoAssign":{
+      "autoAssign": {
         "autoAssignDesc": "Automatically assign submitted plans to employees in rotation.",
         "enableAutoAssign": "Enable Auto-Assign",
         "noActiveUsersWarning": "No active employees available for assignment."
@@ -505,26 +505,26 @@
         "dvManager": " Division Manager",
         "planAssignedReview": "Plan Assigned for Review",
         "planAssignedReviewDesc": "Notify when a plan is assigned to a user for review",
-        "employee":"Employee",
-        "departmentManager":"Department Manager",
+        "employee": "Employee",
+        "departmentManager": "Department Manager",
         "planReassignment": "Plan Reassignment",
-        "planReassignmentDesc":"Notify when a plan is reassigned from one user to another",
+        "planReassignmentDesc": "Notify when a plan is reassigned from one user to another",
         "employeeReassignee": "Employee (Reassigned To)",
         "employeePrev": "Employee (Previously Assigned)",
         "internalPlanSLAReminder": "Internal Plan SLA Reminder",
-        "internalPlanSLAReminderDesc":"Sent 5 days and 2 days before the internal SLA expires.",
+        "internalPlanSLAReminderDesc": "Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminder": "Investor Plan SLA Reminder",
         "investorPlanSLAReminderDesc": "Sent 5 days and 2 days before investor SLA expires.",
         "investor": "Investor",
         "overdueInternalPlan": "Overdue Internal Plan",
         "overdueInternalPlanDesc": "Sent immediately when an internal plan exceeds the SLA",
-        "finalApprovalRejectionNotification":"Final Approval / Rejection Notification",
+        "finalApprovalRejectionNotification": "Final Approval / Rejection Notification",
         "finalApprovalRejectionNotificationDesc": "Sent when the employee submits final approval or rejection.",
-        "finalApprovalRejectionNotificationDescCons":"Sent when the plan rejected automatic.",
+        "finalApprovalRejectionNotificationDescCons": "Sent when the plan rejected automatic.",
         "opportunityNotifications": "Opportunity Notifications",
-        "inactiveOpportunityAlert":"Inactive Opportunity Alert",
-        "inactiveOpportunityAlertDesc":"Sent one day before an opportunity becomes inactive.",
-        "admins":"Admins",
+        "inactiveOpportunityAlert": "Inactive Opportunity Alert",
+        "inactiveOpportunityAlertDesc": "Sent one day before an opportunity becomes inactive.",
+        "admins": "Admins",
         "draftOpportunityReminder": "Draft Opportunity Reminder",
         "draftOpportunityReminderDesc": "Sent for active draft opportunities pending publication.",
         "opportunityUpdateNotification": "Opportunity Update Notification",
@@ -532,7 +532,7 @@
         "newOpportunityCreatedNotification": "New Opportunity Created Notification",
         "newOpportunityCreatedNotificationDesc": "Sent automatically whenever a new active and published Opportunity is created in the system.",
         "accessNotifications": "Access Notifications",
-        "impersonationAccessAlert" :"Impersonation Access Alert",
+        "impersonationAccessAlert": "Impersonation Access Alert",
         "impersonationAccessAlertDesc": "Sent when a user impersonates another user in the system.",
         "userBeingImpersonated": "User Being Impersonated",
         "userperformingImpersonation": "User Performing Impersonation",
@@ -542,15 +542,15 @@
         "reminderOnPlanAssignedforReviewDesc": "Sent when a plan is assigned to a reviewer.",
         "internalPlanSLAReminderEmailDesc": "Sent 5 days and 2 days before the internal SLA expires.",
         "investorPlanSLAReminderEmailDesc": "Sent 2 days before investor SLA expires.",
-        "overdueInternalPlanEmailDesc":"Sent every 2 days when an internal plan exceeds the SLA.",
-        "notificationSuccessMessage":"Notification updated successfully",
-        "commentNotification":"Comment Notification "
+        "overdueInternalPlanEmailDesc": "Sent every 2 days when an internal plan exceeds the SLA.",
+        "notificationSuccessMessage": "Notification updated successfully",
+        "commentNotification": "Comment Notification "
       },
       "holidays": {
         "goBack": "Back to settings",
         "title": "Holidays Management",
-        "subTitle":"Add official holidays or days off to exclude them from SLA calculations.",
-        "addHoliday":"Create New Holiday",
+        "subTitle": "Add official holidays or days off to exclude them from SLA calculations.",
+        "addHoliday": "Create New Holiday",
         "table": {
           "holidayName": "Holiday Name",
           "type": "Type",
@@ -562,19 +562,18 @@
           "createdDate": "Created Date",
           "updatedDate": "Updated Date",
           "updatedBy": "Updated By",
-          "actions":"Actions",
-          "filter":{
-          "searchKeyPlaceHolder": "Search by Holiday Name",
-          "year": "Year",
-          "dateRangePlaceHolder":"Date Range"
+          "actions": "Actions",
+          "filter": {
+            "searchKeyPlaceHolder": "Search by Holiday Name",
+            "year": "Year",
+            "dateRangePlaceHolder": "Date Range"
           },
-          "typeMapper":{
-            "dayOff":"Day Off",
+          "typeMapper": {
+            "dayOff": "Day Off",
             "officialHoliday": "Official Holiday"
           }
-          
         },
-        "dialog":{
+        "dialog": {
           "confirm": "Submit",
           "addTitle": "Create New Holiday",
           "editTitle": "Edit Holiday",
@@ -584,8 +583,8 @@
           "holidayNameLength": "Holiday name must be between 3 and 100 characters.",
           "holidayNamePattern": "Holiday name must be english and arabic letters without special character.",
           "typeRequired": "Type is required.",
-          "endtDatePlaceHolder":"Select End Date",
-          "startDatePlaceHolder":"Select Start Date",
+          "endtDatePlaceHolder": "Select End Date",
+          "startDatePlaceHolder": "Select Start Date",
           "startDateRequired": "Start Date is required.",
           "endDateValidation": "End Date must be greater than start date.",
           "endDateValidateDateRange": "End date must be after or equal to start date.",
@@ -595,11 +594,10 @@
           "deleteDescription": "This action cannot be undone. Once deleted, all related data will be permanently removed.",
           "deleteSuccessMessage": "Holiday has been deleted successfully."
         },
-        "actions":{
-          "edit":"Edit",
+        "actions": {
+          "edit": "Edit",
           "delete": "Delete"
         }
-
       },
       "workingDays": {
         "title": "Working Days Management",
@@ -609,16 +607,13 @@
           "isWorkingDay": "Is Working Day"
         }
       }
-
     }
   },
-  
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Track and manage your submitted localization plans and their review status",
-    "subTitleDvManager": "Track and manage submitted localization plans that require your action",
     "submitNewPlan": "Submit New Plan",
-    "assigndPlanTitle": "Assigned Pending Plan",
+    "assigndPlanTitle": "Assigned Pending Plans",
     "underReviewPlanTitle": "Under Review Plans"
   },
   "dialog": {
@@ -634,11 +629,11 @@
   },
   "plans": {
     "assign": "Assign",
-    "confirmation":{
-      "onLeaveTitle":"Are you sure you want to leave?",
-      "saveAsDraft":"Save as draft",
-      "cancelLabel":"Cancel",
-      "onLeaveDesc":"Canceling now will discard all unsaved changes. Save as draft to keep your work."
+    "confirmation": {
+      "onLeaveTitle": "Are you sure you want to leave?",
+      "saveAsDraft": "Save as draft",
+      "cancelLabel": "Cancel",
+      "onLeaveDesc": "Canceling now will discard all unsaved changes. Save as draft to keep your work."
     },
     "newPlan": {
       "title": "New Opportunity",
@@ -690,7 +685,6 @@
     "filter": {
       "searchPlaceholder": "Search by Plan ID or Title",
       "dvsearchPlaceholder": "Search by Plan ID or Title or Investor Name",
-
       "selectPlanType": "Select Plan Type",
       "selectStatus": "Select Status",
       "selectSubmissionDate": "Select Submission Date",
@@ -805,9 +799,10 @@
       "employeeApproved": "Employee Approved",
       "employeeRejected": "Employee Rejected",
       "assigned": "Assigned",
-      "reassigned":"Reassigned",
+      "reassigned": "Reassigned",
       "submitted": "Submitted",
-      "pendingOnInvestor":"Pending on investor"
+      "pendingOnInvestor": "Pending on investor",
+      "draft": "Draft"
     },
     "type": {
       "services": "Services",
@@ -831,10 +826,15 @@
     },
     "statistics": {
       "totalPlans": "Total Plans",
+      "totalApproved": "Total Approved",
       "unAssignedPlans": "Unassigned Plans",
+      "assignedPending": "Assigned Pending",
       "plansUnderReview": "Plans Under Review",
+      "assignedPlans": "Assigned Plans",
       "approvedPlans": "Approved Plans",
-      "rejectedPlans": "Rejected Plans"
+      "assignedApprovedPlans": "Assigned Approved",
+      "rejectedPlans": "Rejected Plans",
+      "assignedRejected": "Assigned Rejected"
     },
     "list": {
       "noPlansFound": "No Plans Found"
@@ -848,29 +848,28 @@
       "reAssign": "Reassign"
     }
   },
-  "timeline":{
+  "timeline": {
     "title": "Plan timeline",
-    "remainingDays":" days after previous action",
+    "remainingDays": " days after previous action",
     "action": "Action",
-    "actions":{
+    "actions": {
       "created": "Submit new {{param}} Plan ",
       "assign": "Assigned plan to employee {{param}} ",
       "autoAssign": "Auto assignment plan to employee {{param}} ",
       "reassigned": "Reassigned plan to employee {{param}}",
       "submitComment": "Submit comment on the plan and send back to investor ",
-      "rejected" : "Rejected",
+      "rejected": "Rejected",
       "approved": "Approved"
     }
-
   },
   "assign": {
     "assign": "Assign",
     "reassign": " Reassign",
-    "assignDesc":"Please select the employee for plan(s) assignment",
-    "reassignDesc":"Please select the employee for plan(s) reassignment",
-    "employeeLabel":"Employee",
-    "employeePlaceholder":"Select Employee",
-    "employeeRequired":"Employee is required",
+    "assignDesc": "Please select the employee for plan(s) assignment",
+    "reassignDesc": "Please select the employee for plan(s) reassignment",
+    "employeeLabel": "Employee",
+    "employeePlaceholder": "Select Employee",
+    "employeeRequired": "Employee is required",
     "assignSuccessMsg": "Plan has been successfully assigned to {{employee}}.",
     "reassignSuccessMsg": "Plan has been reassigned successfully to {{employee}}.",
     "currentEmployee": "Current Employee"

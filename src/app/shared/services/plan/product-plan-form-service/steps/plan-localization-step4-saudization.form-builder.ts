@@ -1,5 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
 
 export class PlanLocalizationStep4SaudizationFormBuilder {
   constructor(
@@ -57,7 +58,7 @@ export class PlanLocalizationStep4SaudizationFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.attachments]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null], // File upload - optional
+        [EMaterialsFormControls.value]: [null, [fileSizeValidator(30 * 1024 * 1024)]], // File upload - optional, max 30 MB total
       }),
     });
   }
