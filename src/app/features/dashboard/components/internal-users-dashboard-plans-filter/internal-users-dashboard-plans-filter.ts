@@ -154,8 +154,11 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
     if (Object.keys(updates).length > 0) {
       this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
       this.filterService.applyFilterWithPaging();
+    } else {
+      this.filterService.applyFilterWithPaging();
     }
-    });
+  });
+
   }
 
   onSearchTextChange(value: string) {
