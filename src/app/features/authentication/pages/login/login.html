@@ -37,7 +37,7 @@
         <div class="field">
           <app-base-label [title]="'auth.login.password' | translate"></app-base-label>
           <app-password-toggle
-            [formControl]="loginFormService.password"
+            [control]="loginFormService.password"
             [placeholder]="'auth.login.enterYourPassword' | translate"
           ></app-password-toggle>
           @if(loginFormService.password.touched && loginFormService.password.invalid) {
