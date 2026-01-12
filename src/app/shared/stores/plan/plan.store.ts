@@ -4,7 +4,7 @@ import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApp
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
-import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, IServicePlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
@@ -455,6 +455,24 @@ export const PlanStore = signalStore(
         store.setNewPlanOpportunityType(opportunityType);
         store.setNewPlanTitle(title);
       },
+    };
+  }),
+  withMethods((store) => {
+    const planApiService = inject(PlanApiService);
+    return {
+      getInvestorPlans(filter: IPlanFilterRequest) {
+        patchState(store, { loading: true });
+        return planApiService.getInvestorPlans(filter).pipe(
+          tap((res) => {
+            const plans = res.body.data || [];
+            const totalCount = res.body.pagination?.totalCount ?? plans.length;
+            patchState(store, { list: plans, count: totalCount });
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
+      }
     };
   })
 );
