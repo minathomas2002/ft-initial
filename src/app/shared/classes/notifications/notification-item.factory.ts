@@ -65,7 +65,8 @@ class EmployeeNotificationParams extends BaseNotificationParams {
 function buildInternalParams(notification: INotification, defaultRoute: string[]) {
   let route: string[] = [];
   let params: Record<string, string> = {};
-  let searchText = notification.customData?.planId || '';
+  let parsedCustomData = safeParseCustomData(notification.customData);
+  let searchText = parsedCustomData?.planId || '';
   let actionsToTrigger = [EPlanAction.Submitted, EPlanAction.Reassigned]
 
   if (actionsToTrigger.includes(notification.action)) {
@@ -75,3 +76,17 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
 
   return { route, params };
 }
+
+function safeParseCustomData(value: string | { planId: string; }) {
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  }
+
+  return value;
+};
+
+
