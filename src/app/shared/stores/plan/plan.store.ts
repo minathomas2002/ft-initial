@@ -431,19 +431,14 @@ export const PlanStore = signalStore(
       },
       /* Download Plan*/
       downloadPlan(planId: string): Observable<{ blob: Blob; filename: string }> {
-        patchState(store, { loading: true, error: null });
         return planApiService.downloadPlan(planId).pipe(
           tap((res) => {
-            patchState(store, { loading: false });
             downloadFileFromBlob(res.blob, res.filename);
           }),
           catchError((error) => {
             const errorMessage = error.message || error.error?.message || 'Error downloading plan';
-            patchState(store, { loading: false, error: errorMessage });
+            patchState(store, { error: errorMessage });
             return throwError(() => error);
-          }),
-          finalize(() => {
-            patchState(store, { loading: false });
           })
         );
       },

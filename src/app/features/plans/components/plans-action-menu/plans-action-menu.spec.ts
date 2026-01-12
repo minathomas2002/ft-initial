@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InvestorPlansActionMenu } from './investor-plans-action-menu';
+import { PlansActionMenu } from './plans-action-menu';
 
-describe('InvestorPlansActionMenu', () => {
-  let component: InvestorPlansActionMenu;
-  let fixture: ComponentFixture<InvestorPlansActionMenu>;
+describe('PlansActionMenu', () => {
+  let component: PlansActionMenu;
+  let fixture: ComponentFixture<PlansActionMenu>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InvestorPlansActionMenu]
+      imports: [PlansActionMenu]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(InvestorPlansActionMenu);
+    fixture = TestBed.createComponent(PlansActionMenu);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

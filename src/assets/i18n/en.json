@@ -846,7 +846,7 @@
     "actions": {
       "viewDetails": "View Details",
       "edit": "Edit",
-      "download": "Download",
+      "download": "Download (PDF)",
       "viewTimeline": "View Timeline",
       "assignToEmployee": "Assign to Employee",
       "reAssign": "Reassign",

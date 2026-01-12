@@ -33,7 +33,7 @@
             </span>
           </td>
           <td>
-            <app-investor-plans-action-menu [plan]="item" (onViewDetails)="onViewDetails($event)"
+            <app-plans-action-menu [actions]="item.actions" [plan]="item" (onViewDetails)="onViewDetails($event)"
               (onEdit)="onEdit($event)" (onDownload)="onDownload($event)" (onViewTimeLine)="onViewTimeline($event)" />
           </td>
         </ng-template>
@@ -42,20 +42,19 @@
   </ng-container>
 </app-table-layout>
 
-<!-- @if (planTermsAndConditionsDialogVisibility()) {
+@if (planTermsAndConditionsDialogVisibility()) {
 <app-plan-terms-and-conditions-dialog
-  [(dialogVisible)]="planTermsAndConditionsDialogVisibility"
-  (onUserReadAndApproved)="onUserReadAndApproved()"
+  [(visibility)]="planTermsAndConditionsDialogVisibility"
+  (onConfirm)="onUserReadAndApproved()"
 />
 }
 
 @if (newPlanDialogVisibility()) {
 <app-new-plan-dialog
-  [(dialogVisible)]="newPlanDialogVisibility"
-  [newPlanOpportunityType]="newPlanOpportunityType()"
-  (onUserConfirmNewPlanDialog)="onUserConfirmNewPlanDialog()"
+  [(visibility)]="newPlanDialogVisibility"
+  (onConfirm)="onUserConfirmNewPlanDialog()"
 />
-} -->
+}
 
 @if (productLocalizationPlanWizardVisibility()) {
 <app-product-localization-plan-wizard

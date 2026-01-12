@@ -11,7 +11,6 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { DatePipe } from '@angular/common';
-import { InvestorPlansActionMenu } from '../../components/investor-plans-action-menu/investor-plans-action-menu';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
@@ -19,6 +18,8 @@ import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/p
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 import { TimelineDialog } from 'src/app/shared/components/timeline/timeline-dialog/timeline-dialog';
 import { take } from 'rxjs';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { PlansActionMenu } from '../../components/plans-action-menu/plans-action-menu';
 
 @Component({
   selector: 'app-investor-plans',
@@ -27,12 +28,14 @@ import { take } from 'rxjs';
     TableSkeletonComponent,
     DataTableComponent,
     InvestorPlansFilter,
-    InvestorPlansActionMenu,
+    PlansActionMenu,
     TranslatePipe,
     DatePipe,
     ButtonModule,
     SkeletonModule,
+    PlanTermsAndConditionsDialog,
     ProductLocalizationPlanWizard,
+    NewPlanDialog,
     ServiceLocalizationPlanWizard,
     TimelineDialog
   ],
@@ -42,31 +45,20 @@ import { take } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvestorPlans implements OnInit {
-  eInvestorPlanStatus = EInvestorPlanStatus;
-
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
   serviceLocalizationPlanWizardVisibility = signal(false);
   timelineVisibility = signal(false);
   selectedPlan = signal<IPlanRecord | null>(null);
+  eInvestorPlanStatus = EInvestorPlanStatus;
 
   private readonly planStore = inject(PlanStore);
   readonly filterService = inject(InvestorPlansFilterService);
   private readonly i18nService = inject(I18nService);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
-
-  constructor() {
-    effect(() => {
-      if (
-        !this.productLocalizationPlanWizardVisibility() &&
-        !this.serviceLocalizationPlanWizardVisibility()
-      ) {
-        this.resetPlanWizard();
-      }
-    });
-  }
+  private readonly toastService = inject(ToasterService);
 
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
     this.i18nService.currentLanguage();
@@ -83,6 +75,17 @@ export class InvestorPlans implements OnInit {
   readonly rows = computed<IPlanRecord[]>(() => this.planStore.list());
   readonly totalRecords = computed(() => this.planStore.count());
   readonly isLoading = computed(() => this.planStore.loading());
+
+  constructor() {
+    effect(() => {
+      if (
+        !this.productLocalizationPlanWizardVisibility() &&
+        !this.serviceLocalizationPlanWizardVisibility()
+      ) {
+        this.resetPlanWizard();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.filterService.applyFilter();
@@ -186,14 +189,18 @@ export class InvestorPlans implements OnInit {
   }
 
   onDownload(plan: IPlanRecord) {
-    this.planStore
-      .downloadPlan(plan.id)
-      .pipe(take(1))
-      .subscribe({
-        error: (error) => {
-          console.error('Error downloading plan:', error);
-        },
-      });
+    if (plan.planType === EOpportunityType.PRODUCT) {
+      this.planStore
+        .downloadPlan(plan.id)
+        .pipe(take(1))
+        .subscribe({
+          error: (error) => {
+            console.error('Error downloading plan:', error);
+          },
+        });
+    } else if (plan.planType === EOpportunityType.SERVICES) {
+      this.toastService.warn('Downloading Service Plans Will be implemented soon');
+    }
   }
 
   onViewTimeline(plan: IPlanRecord) {
