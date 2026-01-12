@@ -10,8 +10,8 @@ export class PlanTimelineActionsMapper {
     [EActionPlanTimeLine.Reassigned]: 'timeline.actions.reassigned',
     [EActionPlanTimeLine.Approved]: 'timeline.actions.approved',
     [EActionPlanTimeLine.Rejected]: 'timeline.actions.rejected',
-    [EActionPlanTimeLine.SubmittedComment]: 'timeline.actions.submitComment',
-    [EActionPlanTimeLine.AutoAssigned]: 'timeline.actions.autoAssign',
+    [EActionPlanTimeLine.CommentSubmitted]: 'timeline.actions.submitComment',
+    [EActionPlanTimeLine.AutoAssign]: 'timeline.actions.autoAssign',
   };
 
   constructor(private i18nService: I18nService) { }
@@ -19,7 +19,7 @@ export class PlanTimelineActionsMapper {
   getActionParam(item: ITimeLineResponse) {
     let param: string = '';
     switch (item.actionType) {
-      case EActionPlanTimeLine.AutoAssigned:
+      case EActionPlanTimeLine.AutoAssign:
         param = item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.Assigned:

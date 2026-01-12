@@ -188,4 +188,9 @@
   [(visibility)]="serviceLocalizationPlanWizardVisibility"
   (doRefresh)="applyFilter()"
 />
-}
+} @if(timelineVisibility()){
+  <app-timeline-dialog
+    [(dialogVisible)]="timelineVisibility"
+    [planId]="selectedPlan()?.id || null"
+  />
+  }

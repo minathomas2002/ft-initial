@@ -49,7 +49,8 @@ import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/s
     SkeletonModule,
     TranslatePipe,
     SlaCountdownNounPipe,
-    ServiceLocalizationPlanWizard
+    ServiceLocalizationPlanWizard,
+    TimelineDialog
 ],
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
