@@ -117,10 +117,6 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
         value: EInternalUserPlanStatus.REJECTED,
       },
       {
-        label: this.i18nService.translate('plans.employee_status.unassigned'),
-        value: EInternalUserPlanStatus.UNASSIGNED,
-      },
-      {
         label: this.i18nService.translate('plans.employee_status.underReview'),
         value: EInternalUserPlanStatus.UNDER_REVIEW,
       },
