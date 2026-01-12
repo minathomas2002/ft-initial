@@ -7,10 +7,10 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { EInvestorPlanStatus } from 'src/app/shared/interfaces';
 import { TranslatePipe } from 'src/app/shared/pipes';
-import { InvestorPlansFilterService } from '../../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 
 interface IDropdownOption {
   label: string;
