@@ -192,14 +192,18 @@ export class InvestorDashboard implements OnInit {
   }
 
   onDownload(plan: IPlanRecord) {
-    this.planStore
-      .downloadPlan(plan.id)
-      .pipe(take(1))
-      .subscribe({
-        error: (error) => {
-          console.error('Error downloading plan:', error);
-        },
-      });
+    if (plan.planType === EOpportunityType.PRODUCT) {
+      this.planStore
+        .downloadPlan(plan.id)
+        .pipe(take(1))
+        .subscribe({
+          error: (error) => {
+            console.error('Error downloading plan:', error);
+          },
+        });
+    } else if (plan.planType === EOpportunityType.SERVICES) {
+      this.toastService.warn('Will be implemented soon');
+    }
   }
 
   onViewTimeline(plan: IPlanRecord) {
