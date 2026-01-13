@@ -147,7 +147,12 @@ export class PlansList implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filterService().applyFilter();
+    // Only apply filter if no query params are present
+    // If query params exist, the filter component will handle them via listenToQueryParamChanges()
+    const hasQueryParams = Object.keys(this.route.snapshot.queryParams).length > 0;
+    if (!hasQueryParams) {
+      this.filterService().applyFilter();
+    }
   }
 
   createNewPlan() {
@@ -314,5 +319,9 @@ export class PlansList implements OnInit {
   onViewTimeline(plan: IPlanRecord) {
     this.timelineVisibility.set(true);
     this.selectedPlan.set(plan);
+  }
+
+  onReview(plan: IPlanRecord) {
+    console.log('Review Plan : ', plan);
   }
 }

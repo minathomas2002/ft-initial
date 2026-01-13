@@ -83,7 +83,8 @@
           }
           <td>
             <app-plans-action-menu [actions]="item.actions" [plan]="item" (onViewDetails)="onViewDetails($event)"
-              (onEdit)="onEdit($event)" (onDownload)="onDownload($event)" (onViewTimeLine)="onViewTimeline($event)" />
+              (onEdit)="onEdit($event)" (onDownload)="onDownload($event)" (onViewTimeLine)="onViewTimeline($event)"
+              (onInternalReview)="onReview($event)" />
           </td>
         </ng-template>
       </app-data-table>
