@@ -143,6 +143,8 @@
             fluid
             placeholder="Enter CEO email ID"
             maxlength="100"
+            [appConditionalColorClass]="highlightInput('ceoEmailID')"
+            [color]="selectedInputColor()"
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
           />
         </app-group-input-with-checkbox>
@@ -350,7 +352,7 @@
     </div>
     }
 
-    @if(comment()){
+    @if(commentPhase() == 'editing' || commentPhase() == 'viewing'){
     <div
       class="animated flex flex-col gap-4"
       animate.enter="fadeIn"
@@ -362,9 +364,12 @@
             fluid
             rows="8"
             pTextarea
-            [ngModel]="comment()"
-            disabled
+            [formControl]="commentFormControl"
           ></textarea>
+          <app-base-error-messages
+            [control]="commentFormControl"
+            [label]="'Your Comment'"
+          />
         </div>
       </div>
     </div>
@@ -375,6 +380,8 @@
 @if(showCheckbox()){
 <app-comment-state-component
   [commentsCount]="selectedInputs().length"
-  (comment)="comment.set($event)"
+  [(commentPhase)]="commentPhase"
+  [commentFormControl]="commentFormControl"
+  (deleteComments)="onDeleteComments()"
 />
 }

@@ -6,12 +6,13 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TrimOnBlurDirective } from 'src/app/shared/directives';
+import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
@@ -19,6 +20,8 @@ import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TextareaModule } from 'primeng/textarea';
+import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
+import { TColors } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -29,6 +32,7 @@ import { TextareaModule } from 'primeng/textarea';
     SelectModule,
     ReactiveFormsModule,
     TrimOnBlurDirective,
+    ConditionalColorClassDirective,
     GroupInputWithCheckbox,
     RadioButtonModule,
     TooltipModule,
@@ -47,10 +51,12 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly planStore = inject(PlanStore);
+  private readonly formUtilityService = inject(FormUtilityService);
   pageTitle = input.required<string>();
 
   showCheckbox = model<boolean>(false);
-
+  commentPhase = model<TCommentPhase>('none');
+  selectedInputColor = input.required<TColors>();
   formGroup = this.productPlanFormService.overviewCompanyInformation;
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes();
   availableOpportunities = this.planStore.availableOpportunities;
@@ -82,7 +88,8 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
     return this.planStore.appliedOpportunity() !== null;
   });
 
-  selectedInputs = signal<IFieldInformation[]>([])
+  commentFormControl = this.formGroup.get(EMaterialsFormControls.comment) as FormControl<string>;
+  selectedInputs = model<IFieldInformation[]>([])
   comment = signal<string>('');
   pageComment = computed<IPageComment>(() => {
     return {
@@ -93,11 +100,10 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   });
 
   upDateSelectedInputs(value: boolean, fliedInformation: IFieldInformation): void {
-
     if (value) {
       this.selectedInputs.set([...this.selectedInputs(), fliedInformation]);
     } else {
-      this.selectedInputs.set(this.selectedInputs().filter(input => input !== fliedInformation));
+      this.selectedInputs.set(this.selectedInputs().filter(input => input.inputKey !== fliedInformation.inputKey));
     }
   }
 
@@ -106,6 +112,19 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
       this.productPlanFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
     });
+
+    effect(() => {
+      if (this.commentPhase() === 'viewing') {
+        this.comment.set(this.commentFormControl.value ?? '');
+        this.commentFormControl.setValue(this.comment(), { emitEvent: true });
+        // disable all hasComment controls
+        this.formUtilityService.disableHasCommentControls(this.formGroup);
+      }
+      if (['adding', 'editing'].includes(this.commentPhase())) {
+        // enable all hasComment controls
+        this.formUtilityService.enableHasCommentControls(this.formGroup);
+      }
+    })
 
     // Initialize opportunity value based on appliedOpportunity
     const opportunityControl = this.getFormControl(
@@ -132,5 +151,20 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
 
   getFormControl(control: AbstractControl): FormControl<any> {
     return control as unknown as FormControl<any>;
+  }
+
+  onDeleteComments(): void {
+    this.resetAllHasCommentControls();
+    this.selectedInputs.set([]);
+    this.showCheckbox.set(false);
+  }
+
+  resetAllHasCommentControls(): void {
+    // Reset hasComment controls in all form groups
+    this.formUtilityService.resetHasCommentControls(this.formGroup);
+  }
+
+  highlightInput(inputKey: string): boolean {
+    return this.selectedInputs().some(input => input.inputKey === inputKey) && this.commentPhase() !== 'viewing';
   }
 }
