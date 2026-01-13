@@ -373,46 +373,56 @@ function mapSaudization(formService: ProductPlanFormService): Saudization {
   // Map attachments - files are stored as File[] or Attachment[] in the form control
   const attachments: Attachment[] = [];
   if (attachmentsFormGroup) {
-    const attachmentsValue = getFormValue(attachmentsFormGroup, EMaterialsFormControls.attachments);
+    // Check if attachments control has fileSizeExceeded error - exclude attachments if error exists
+    const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
+    if (attachmentsControl instanceof FormGroup) {
+      const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
+      const hasFileSizeError = valueControl?.errors?.['fileSizeExceeded'];
 
-    // Handle file attachments - files can be File objects or Attachment objects
-    if (attachmentsValue && Array.isArray(attachmentsValue)) {
-      attachmentsValue.forEach((file: File | any) => {
-        if (file instanceof File) {
-          // File object - could be new file or existing attachment converted to File
-          // Check if it has attachment metadata (from existing attachments)
-          const existingFile = file as any;
-          const attachmentId = existingFile.id || '';
-          const isExistingAttachment = existingFile.isExistingAttachment === true;
+      // Only process attachments if there's no file size error
+      if (!hasFileSizeError) {
+        const attachmentsValue = getFormValue(attachmentsFormGroup, EMaterialsFormControls.attachments);
 
-          const fileName = file.name;
-          const fileExtension = existingFile.fileExtension || (fileName.split('.').pop() ?? '');
-          const fileUrl = existingFile.fileUrl || '';
+        // Handle file attachments - files can be File objects or Attachment objects
+        if (attachmentsValue && Array.isArray(attachmentsValue)) {
+          attachmentsValue.forEach((file: File | any) => {
+            if (file instanceof File) {
+              // File object - could be new file or existing attachment converted to File
+              // Check if it has attachment metadata (from existing attachments)
+              const existingFile = file as any;
+              const attachmentId = existingFile.id || '';
+              const isExistingAttachment = existingFile.isExistingAttachment === true;
 
-          attachments.push({
-            id: attachmentId, // Preserve ID if it's an existing attachment
-            fileName: fileName,
-            fileExtension: fileExtension,
-            fileUrl: fileUrl,
-            // For existing attachments without file changes, we might not need to send the file again
-            // But if the file was replaced, we need to send the new File object
-            file: isExistingAttachment && !existingFile.file ? '' : (file as any as string), // Store File object reference temporarily, will be handled in FormData conversion
-          } as Attachment);
-        } else if (file && typeof file === 'object') {
-          // Already processed attachment object (from edit mode or existing attachments)
-          // Ensure all Attachment interface fields are properly mapped
-          const fileName = file.fileName ?? file.name ?? '';
-          const fileExtension = file.fileExtension ?? (fileName ? fileName.split('.').pop() ?? '' : '');
+              const fileName = file.name;
+              const fileExtension = existingFile.fileExtension || (fileName.split('.').pop() ?? '');
+              const fileUrl = existingFile.fileUrl || '';
 
-          attachments.push({
-            id: file.id ?? '',
-            fileName: fileName,
-            fileExtension: fileExtension,
-            fileUrl: file.fileUrl ?? file.url ?? '',
-            file: file.file ?? file.base64 ?? file.data ?? '',
-          } as Attachment);
+              attachments.push({
+                id: attachmentId, // Preserve ID if it's an existing attachment
+                fileName: fileName,
+                fileExtension: fileExtension,
+                fileUrl: fileUrl,
+                // For existing attachments without file changes, we might not need to send the file again
+                // But if the file was replaced, we need to send the new File object
+                file: isExistingAttachment && !existingFile.file ? '' : (file as any as string), // Store File object reference temporarily, will be handled in FormData conversion
+              } as Attachment);
+            } else if (file && typeof file === 'object') {
+              // Already processed attachment object (from edit mode or existing attachments)
+              // Ensure all Attachment interface fields are properly mapped
+              const fileName = file.fileName ?? file.name ?? '';
+              const fileExtension = file.fileExtension ?? (fileName ? fileName.split('.').pop() ?? '' : '');
+
+              attachments.push({
+                id: file.id ?? '',
+                fileName: fileName,
+                fileExtension: fileExtension,
+                fileUrl: file.fileUrl ?? file.url ?? '',
+                file: file.file ?? file.base64 ?? file.data ?? '',
+              } as Attachment);
+            }
+          });
         }
-      });
+      }
     }
   }
 

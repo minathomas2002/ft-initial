@@ -8,6 +8,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
 import { LoginFormService } from '../../services/login-form/login-form';
 import { environment } from 'src/environments/environment';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
@@ -29,6 +30,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     BaseErrorComponent,
     TranslatePipe,
     TrimOnBlurDirective,
+    PasswordToggleComponent,
   ],
   providers: [LoginFormService],
   templateUrl: './login.html',
