@@ -6,7 +6,7 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -17,6 +17,8 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
+import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -33,7 +35,9 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
     TranslatePipe,
     BaseErrorMessages,
     PhoneInputComponent,
-    CommentStateComponent
+    CommentStateComponent,
+    FormsModule,
+    TextareaModule
   ],
   templateUrl: './plan-localization-step-01-overviewCompanyInformationForm.html',
   styleUrl: './plan-localization-step-01-overviewCompanyInformationForm.scss',
@@ -78,21 +82,22 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
     return this.planStore.appliedOpportunity() !== null;
   });
 
-  selectedInputs = signal<string[]>([])
+  selectedInputs = signal<IFieldInformation[]>([])
   comment = signal<string>('');
-  pageComment = computed(() => ({
-    planTitle: this.pageTitle() ?? '',
-    comment: this.comment() ?? '',
-    fields: computed(() => this.selectedInputs().map(input => ({
-      section: '' + input.split('.')[0],
-    })))
-  }))
+  pageComment = computed<IPageComment>(() => {
+    return {
+      pageTitleForTL: this.pageTitle() ?? '',
+      comment: this.comment() ?? '',
+      fields: this.selectedInputs(),
+    }
+  });
 
-  upDateSelectedInputs(value: boolean, controlKey: string): void {
+  upDateSelectedInputs(value: boolean, fliedInformation: IFieldInformation): void {
+
     if (value) {
-      this.selectedInputs.set([...this.selectedInputs(), controlKey]);
+      this.selectedInputs.set([...this.selectedInputs(), fliedInformation]);
     } else {
-      this.selectedInputs.set(this.selectedInputs().filter(input => input !== controlKey));
+      this.selectedInputs.set(this.selectedInputs().filter(input => input !== fliedInformation));
     }
   }
 

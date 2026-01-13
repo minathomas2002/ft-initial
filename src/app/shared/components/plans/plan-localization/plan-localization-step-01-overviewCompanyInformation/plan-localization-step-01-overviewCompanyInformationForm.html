@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-[32px] pb-10">
+<div class="flex flex-col gap-[32px]">
   <!-- Basic Information -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Basic Information <span><i
@@ -13,7 +13,6 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(basicInformationFormGroupControls['planTitle'])"
-          (valueChanged)="upDateSelectedInputs($event, 'planTitle')"
         >
           <input
             type="text"
@@ -90,7 +89,6 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="companyNameHasCommentControl()"
-          (valueChanged)="upDateSelectedInputs($event, 'companyInformation.companyName')"
         >
           <input
             type="text"
@@ -113,7 +111,6 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
-          (valueChanged)="upDateSelectedInputs($event, 'companyInformation.ceoName')"
         >
           <input
             type="text"
@@ -134,7 +131,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoEmailID'])"
-          (valueChanged)="upDateSelectedInputs($event, 'companyInformation.ceoEmailID')"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'companyInformation',
+            inputKey: 'ceoEmailID',
+            label: 'CEO Email'
+          })"
         >
           <input
             type="email"
@@ -162,7 +163,6 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])"
-          (valueChanged)="upDateSelectedInputs($event, 'locationInformation.globalHQLocation')"
         >
           <input
             type="text"
@@ -183,7 +183,6 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
-          (valueChanged)="upDateSelectedInputs($event, 'locationInformation.registeredVendorIDwithSEC')"
         >
           <input
             type="text"
@@ -210,7 +209,6 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
-            (valueChanged)="upDateSelectedInputs($event, 'locationInformation.doYouCurrentlyHaveLocalAgentInKSA')"
           >
             <div class="flex gap-2">
               <label class="flex items-center gap-2 cursor-pointer">
@@ -255,7 +253,6 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])"
-            (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.localAgentName')"
           >
             <input
               type="text"
@@ -276,7 +273,6 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])"
-            (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.contactPersonName')"
           >
             <input
               type="text"
@@ -299,7 +295,6 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['emailID'])"
-            (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.emailID')"
           >
             <input
               type="text"
@@ -319,7 +314,6 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="contactNumberHasCommentControl()"
-            (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.contactNumber')"
           >
             <app-phone-input [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"></app-phone-input>
           </app-group-input-with-checkbox>
@@ -336,7 +330,6 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
-              (valueChanged)="upDateSelectedInputs($event, 'localAgentInformation.companyHQLocation')"
             >
               <input
                 type="text"
@@ -355,7 +348,26 @@
         </div>
       </div>
     </div>
+    }
 
+    @if(comment()){
+    <div
+      class="animated flex flex-col gap-4"
+      animate.enter="fadeIn"
+    >
+      <div class="flex flex-col gap-4 md:flex-row">
+        <div class="flex flex-col gap-2 flex-1">
+          <app-base-label [title]="'Your Comment'" />
+          <textarea
+            fluid
+            rows="8"
+            pTextarea
+            [ngModel]="comment()"
+            disabled
+          ></textarea>
+        </div>
+      </div>
+    </div>
     }
   </div>
 </div>
