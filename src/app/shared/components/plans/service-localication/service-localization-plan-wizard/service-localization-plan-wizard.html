@@ -44,6 +44,7 @@
   <ng-template [appStepContent]="summaryStepIndex()">
     <app-service-localization-step-summary
       [isViewMode]="isViewMode()"
+      [signature]="planSignature()"
       [includeExistingSaudi]="showExistingSaudiStep()"
       [includeDirectLocalization]="showDirectLocalizationStep()"
       [coverStepNumber]="stepIndex('cover')"

@@ -41,6 +41,7 @@
   <ng-template [appStepContent]="5">
     <app-plan-localization-step-05-summary
       [isViewMode]="isViewMode()"
+      [signature]="planSignature()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onValidationErrorsChange)="updateValidationErrors($event)"
