@@ -321,3 +321,21 @@ export interface IPlanStatus {
   getStatusBadgeClass(status: number): string;
 }
 
+export interface ReviewPlanRequest {
+  planId: string;
+  comments: IPageComment[];
+}
+
+export interface IPageComment {
+  pageTitleForTL: string;
+  comment: string;
+  fields: IFieldInformation[];
+}
+
+export interface IFieldInformation {
+  section: string;
+  inputKey: string;
+  label: string;
+  value?: string;
+  id?: string;
+}
