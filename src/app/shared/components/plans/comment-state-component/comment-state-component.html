@@ -1,11 +1,12 @@
 <div class="flex items-center justify-center gap-6 rounded-full bg-gray-50 py-2 px-4 border border-gray-200">
-  @if(hasComment()){
+  @if(commentPhase() === 'viewing'){
   <p-button
     label="Edit"
     variant="outlined"
     icon="icon-edit"
     rounded
     styleClass="border-0! bg-white!"
+    (click)="onStartEditing()"
   />
 
   <p-button
@@ -15,9 +16,10 @@
     rounded
     variant="outlined"
     styleClass="bg-white!"
+    (click)="onDeleteComments()"
   />
   }
-  @else{
+  @else if(commentPhase() === 'adding' || commentPhase() === 'editing'){
   <div class="flex items-center gap-2">
     <p-checkbox
       [class.p-checkbox-orange]="checked()"
@@ -27,6 +29,7 @@
     />
     <span class="text-md font-semibold text-gray-600">{{ commentsCount() }} Selected</span>
   </div>
+  @if(commentPhase() === 'adding'){
   <p-button
     label="Add Comment"
     severity="warn"
@@ -35,9 +38,20 @@
     [disabled]="!checked()"
     (click)="showCommentDialog.set(true)"
   />
+  }@else{
+  <p-button
+    label="Save Comment"
+    severity="warn"
+    icon="icon-check-circle"
+    rounded
+    [disabled]="commentFormControl().invalid || !checked()"
+    (click)="onSaveComment()"
+  />
+  }
   }
 </div>
 <app-comment-dialog
   [(visible)]="showCommentDialog"
-  (comment)="onCommentChanges($event)"
+  [commentFormControl]="commentFormControl()"
+  (commentAdded)="onCommentAdded()"
 ></app-comment-dialog>
