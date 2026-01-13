@@ -224,7 +224,7 @@ export class DashboardView implements OnInit {
 
   onViewAssignedPlans() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: EInternalUserPlanStatus.ASSIGNED }
+      queryParams: { status: EInternalUserPlanStatus.UNDER_REVIEW }
     });
   }
 }
