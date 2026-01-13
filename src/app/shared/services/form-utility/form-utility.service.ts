@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormArray, AbstractControl, FormControl } from '@angular/forms';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,102 @@ export class FormUtilityService {
     });
 
     return errorCount;
+  }
+
+  /**
+   * Recursively reset all hasComment FormControls in a control
+   * @param control The AbstractControl (FormGroup or FormArray) to reset hasComment controls in
+   */
+  resetHasCommentControls(control: AbstractControl): void {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        const childControl = control.controls[key];
+
+        // Check if this is a FormGroup that contains hasComment
+        if (childControl instanceof FormGroup) {
+          const hasCommentControl = childControl.get(EMaterialsFormControls.hasComment);
+          if (hasCommentControl instanceof FormControl) {
+            // Reset hasComment to false
+            hasCommentControl.setValue(false, { emitEvent: false });
+          }
+          // Continue recursively to handle nested structures
+          this.resetHasCommentControls(childControl);
+        } else if (childControl instanceof FormArray) {
+          // Handle FormArrays
+          childControl.controls.forEach(arrayControl => {
+            this.resetHasCommentControls(arrayControl);
+          });
+        }
+      });
+    } else if (control instanceof FormArray) {
+      control.controls.forEach(arrayControl => {
+        this.resetHasCommentControls(arrayControl);
+      });
+    }
+  }
+
+  /**
+   * Recursively disable all hasComment FormControls in a control
+   * @param control The AbstractControl (FormGroup or FormArray) to disable hasComment controls in
+   */
+  disableHasCommentControls(control: AbstractControl): void {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        const childControl = control.controls[key];
+
+        // Check if this is a FormGroup that contains hasComment
+        if (childControl instanceof FormGroup) {
+          const hasCommentControl = childControl.get(EMaterialsFormControls.hasComment);
+          if (hasCommentControl instanceof FormControl) {
+            // Disable hasComment control
+            hasCommentControl.disable({ emitEvent: false });
+          }
+          // Continue recursively to handle nested structures
+          this.disableHasCommentControls(childControl);
+        } else if (childControl instanceof FormArray) {
+          // Handle FormArrays
+          childControl.controls.forEach(arrayControl => {
+            this.disableHasCommentControls(arrayControl);
+          });
+        }
+      });
+    } else if (control instanceof FormArray) {
+      control.controls.forEach(arrayControl => {
+        this.disableHasCommentControls(arrayControl);
+      });
+    }
+  }
+
+  /**
+   * Recursively enable all hasComment FormControls in a control
+   * @param control The AbstractControl (FormGroup or FormArray) to enable hasComment controls in
+   */
+  enableHasCommentControls(control: AbstractControl): void {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        const childControl = control.controls[key];
+
+        // Check if this is a FormGroup that contains hasComment
+        if (childControl instanceof FormGroup) {
+          const hasCommentControl = childControl.get(EMaterialsFormControls.hasComment);
+          if (hasCommentControl instanceof FormControl) {
+            // Enable hasComment control
+            hasCommentControl.enable({ emitEvent: false });
+          }
+          // Continue recursively to handle nested structures
+          this.enableHasCommentControls(childControl);
+        } else if (childControl instanceof FormArray) {
+          // Handle FormArrays
+          childControl.controls.forEach(arrayControl => {
+            this.enableHasCommentControls(arrayControl);
+          });
+        }
+      });
+    } else if (control instanceof FormArray) {
+      control.controls.forEach(arrayControl => {
+        this.enableHasCommentControls(arrayControl);
+      });
+    }
   }
 }
 
