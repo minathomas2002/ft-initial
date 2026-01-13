@@ -82,6 +82,7 @@ export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
       [EMaterialsFormControls.companyInformationFormGroup]: this.buildCompanyInformationFormGroup(),
       [EMaterialsFormControls.locationInformationFormGroup]: this.buildLocationInformationFormGroup(),
       [EMaterialsFormControls.localAgentInformationFormGroup]: this.buildLocalAgentInformationFormGroup(),
+      [EMaterialsFormControls.comment]: this.fb.control(''),
     });
   }
 
