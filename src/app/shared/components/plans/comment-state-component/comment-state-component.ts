@@ -31,6 +31,9 @@ export class CommentStateComponent {
   toaster = inject(ToasterService);
 
   onCommentAdded() {
+    // Comment is already saved to form control by dialog
+    // Trigger parent's save logic to update signals and show success message
+    this.saveComment.emit();
     this.commentPhase.set('viewing');
     this.commentFormControl().disable();
   }

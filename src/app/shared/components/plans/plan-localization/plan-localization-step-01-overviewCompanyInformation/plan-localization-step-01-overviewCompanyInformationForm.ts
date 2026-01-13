@@ -6,7 +6,7 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -22,6 +22,8 @@ import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans
 import { TextareaModule } from 'primeng/textarea';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 import { TColors } from 'src/app/shared/interfaces';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -41,7 +43,8 @@ import { TColors } from 'src/app/shared/interfaces';
     PhoneInputComponent,
     CommentStateComponent,
     FormsModule,
-    TextareaModule
+    TextareaModule,
+    GeneralConfirmationDialogComponent
   ],
   templateUrl: './plan-localization-step-01-overviewCompanyInformationForm.html',
   styleUrl: './plan-localization-step-01-overviewCompanyInformationForm.scss',
@@ -52,6 +55,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly planStore = inject(PlanStore);
   private readonly formUtilityService = inject(FormUtilityService);
+  private readonly toasterService = inject(ToasterService);
   pageTitle = input.required<string>();
 
   showCheckbox = model<boolean>(false);
@@ -91,6 +95,8 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   commentFormControl = this.formGroup.get(EMaterialsFormControls.comment) as FormControl<string>;
   selectedInputs = model<IFieldInformation[]>([])
   comment = signal<string>('');
+  showDeleteConfirmationDialog = signal<boolean>(false);
+
   pageComment = computed<IPageComment>(() => {
     return {
       pageTitleForTL: this.pageTitle() ?? '',
@@ -99,11 +105,22 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
     }
   });
 
-  upDateSelectedInputs(value: boolean, fliedInformation: IFieldInformation): void {
+  upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation): void {
+    const currentInputs = this.selectedInputs();
+    const existingIndex = currentInputs.findIndex(
+      input => input.section === fieldInformation.section && input.inputKey === fieldInformation.inputKey
+    );
+
     if (value) {
-      this.selectedInputs.set([...this.selectedInputs(), fliedInformation]);
+      // Add field if not already selected
+      if (existingIndex === -1) {
+        this.selectedInputs.set([...currentInputs, fieldInformation]);
+      }
     } else {
-      this.selectedInputs.set(this.selectedInputs().filter(input => input.inputKey !== fliedInformation.inputKey));
+      // Remove field if it exists
+      if (existingIndex !== -1) {
+        this.selectedInputs.set(currentInputs.filter((_, index) => index !== existingIndex));
+      }
     }
   }
 
@@ -154,9 +171,79 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   }
 
   onDeleteComments(): void {
+    this.showDeleteConfirmationDialog.set(true);
+  }
+
+  onConfirmDeleteComment(): void {
     this.resetAllHasCommentControls();
     this.selectedInputs.set([]);
+    this.comment.set('');
+    this.commentFormControl.reset();
+    this.commentPhase.set('none');
     this.showCheckbox.set(false);
+    this.showDeleteConfirmationDialog.set(false);
+    this.toasterService.success('Your comments and selected fields were removed successfully.');
+  }
+
+  onCancelDeleteComment(): void {
+    this.showDeleteConfirmationDialog.set(false);
+  }
+
+  onSaveComment(): void {
+    // Validate at least one field is selected
+    if (this.selectedInputs().length === 0) {
+      this.toasterService.error('Please select at least one field before adding a comment.');
+      return;
+    }
+
+    // Validate comment text
+    const commentValue = this.commentFormControl.value?.trim() || '';
+    if (!commentValue) {
+      this.commentFormControl.markAsTouched();
+      this.toasterService.error('Please enter a comment.');
+      return;
+    }
+
+    if (commentValue.length > 255) {
+      this.toasterService.error('Comment cannot exceed 255 characters.');
+      return;
+    }
+
+    // Save comment
+    this.comment.set(commentValue);
+    this.commentFormControl.setValue(commentValue, { emitEvent: false });
+    this.commentPhase.set('viewing');
+    this.commentFormControl.disable();
+    this.toasterService.success('Your comments have been saved successfully.');
+  }
+
+  onEditComment(): void {
+    // Load existing comment into form control
+    this.commentFormControl.setValue(this.comment(), { emitEvent: false });
+    this.commentFormControl.enable();
+    this.commentPhase.set('editing');
+  }
+
+  onSaveEditedComment(): void {
+    // Validate comment text
+    const commentValue = this.commentFormControl.value?.trim() || '';
+    if (!commentValue) {
+      this.commentFormControl.markAsTouched();
+      this.toasterService.error('Please enter a comment.');
+      return;
+    }
+
+    if (commentValue.length > 255) {
+      this.toasterService.error('Comment cannot exceed 255 characters.');
+      return;
+    }
+
+    // Update comment
+    this.comment.set(commentValue);
+    this.commentFormControl.setValue(commentValue, { emitEvent: false });
+    this.commentPhase.set('viewing');
+    this.commentFormControl.disable();
+    this.toasterService.success('Your updates have been saved successfully.');
   }
 
   resetAllHasCommentControls(): void {
@@ -165,6 +252,8 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   }
 
   highlightInput(inputKey: string): boolean {
-    return this.selectedInputs().some(input => input.inputKey === inputKey) && this.commentPhase() !== 'viewing';
+    const isSelected = this.selectedInputs().some(input => input.inputKey === inputKey);
+    const phase = this.commentPhase();
+    return isSelected && (phase === 'adding' || phase === 'editing');
   }
 }

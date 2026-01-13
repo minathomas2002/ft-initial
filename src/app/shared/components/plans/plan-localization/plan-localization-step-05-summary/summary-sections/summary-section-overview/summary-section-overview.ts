@@ -5,6 +5,7 @@ import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-se
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
+import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-overview',
@@ -17,8 +18,13 @@ import { DatePipe } from '@angular/common';
 export class SummarySectionOverview {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
+  pageComments = input<IPageComment[]>([]);
   onEdit = output<void>();
   private datePipe = inject(DatePipe);
+
+  hasComments = computed(() => {
+    return this.pageComments().length > 0 && this.pageComments().some(comment => comment.comment && comment.comment.trim().length > 0);
+  });
 
   // Form group accessors
   basicInformationFormGroup = computed(() => {

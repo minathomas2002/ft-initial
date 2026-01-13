@@ -123,4 +123,39 @@
     </div>
     }
   </div>
+
+  <!-- Comments Display (Read-Only) -->
+  @if(hasComments()){
+  <div class="flex flex-col gap-4 mt-6">
+    <h3 class="text-lg font-semibold text-gray-900">Comments</h3>
+    @for(comment of pageComments(); track comment.pageTitleForTL){
+    @if(comment.comment && comment.comment.trim().length > 0){
+    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-start gap-2">
+          <i class="icon-info text-orange-600 mt-1"></i>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-gray-900 mb-2">Comment:</p>
+            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ comment.comment }}</p>
+          </div>
+        </div>
+        @if(comment.fields && comment.fields.length > 0){
+        <div class="flex flex-col gap-2 mt-2">
+          <p class="text-sm font-medium text-gray-900">Referenced Fields:</p>
+          <div class="flex flex-wrap gap-2">
+            @for(field of comment.fields; track field.inputKey + (field.id || '')){
+            <div class="flex items-center gap-1 bg-white border border-orange-200 rounded px-2 py-1">
+              <i class="icon-info text-orange-600 text-xs"></i>
+              <span class="text-xs text-gray-700">{{ field.label }}</span>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+    }
+  </div>
+  }
 </div>

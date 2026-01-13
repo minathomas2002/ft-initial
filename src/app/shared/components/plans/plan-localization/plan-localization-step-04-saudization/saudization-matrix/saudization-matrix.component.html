@@ -44,9 +44,17 @@
           class="p-3 !border !border-gray-200"
           [ngClass]="row.alignBaseline ? 'align-baseline' : 'text-center'"
         >
+          @let rowControl = getRowControl()(year, row.controlName);
+          @let rowId = rowControl?.get('rowId')?.value;
+          @let uniqueInputKey = row.controlName + '_year' + year;
           <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl()(getRowControl()(year, row.controlName)!)"
+            [hasCommentControl]="getHasCommentControl()(rowControl!)"
             [showCheckbox]="showCheckbox()"
+            (valueChanged)="upDateSelectedInputs()($event, {
+              section: 'saudization',
+              inputKey: uniqueInputKey,
+              label: row.label + ' - Year ' + year
+            }, rowId)"
           >
             <p-inputnumber
               fluid
@@ -54,11 +62,13 @@
               [mode]="row.mode"
               [minFractionDigits]="row.minFractionDigits"
               [maxFractionDigits]="row.maxFractionDigits"
-              [formControl]="getValueControl()(getRowControl()(year, row.controlName)!)"
+              [formControl]="getValueControl()(rowControl!)"
+              [appConditionalColorClass]="highlightInput()(uniqueInputKey, rowId)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
-            [control]="getValueControl()(getRowControl()(year, row.controlName)!)"
+            [control]="getValueControl()(rowControl!)"
             [label]="row.label"
           />
         </td>

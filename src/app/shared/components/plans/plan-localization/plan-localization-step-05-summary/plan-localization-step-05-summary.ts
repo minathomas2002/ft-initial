@@ -7,6 +7,7 @@ import { SummarySectionOverview } from './summary-sections/summary-section-overv
 import { SummarySectionProductPlant } from './summary-sections/summary-section-product-plant/summary-section-product-plant';
 import { SummarySectionValueChain } from './summary-sections/summary-section-value-chain/summary-section-value-chain';
 import { SummarySectionSaudization } from './summary-sections/summary-section-saudization/summary-section-saudization';
+import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-plan-localization-step-05-summary',
@@ -22,6 +23,7 @@ import { SummarySectionSaudization } from './summary-sections/summary-section-sa
 })
 export class PlanLocalizationStep05Summary {
   isViewMode = input<boolean>(false);
+  pageComments = input<IPageComment[]>([]);
   private readonly formService = inject(ProductPlanFormService);
   private readonly validationService = inject(ProductPlanValidationService);
   private readonly toasterService = inject(ToasterService);
@@ -31,6 +33,13 @@ export class PlanLocalizationStep05Summary {
   onEditStep = output<number>();
   onSubmit = output<void>();
   onValidationErrorsChange = output<Map<number, IStepValidationErrors>>();
+
+  // Get comments for specific step
+  step1Comments = computed(() => {
+    return this.pageComments().filter(comment =>
+      comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step1.title')
+    );
+  });
 
   // Validation errors state
   validationErrors = signal<Map<number, IStepValidationErrors>>(new Map());

@@ -8,6 +8,9 @@
       [getHasCommentControl]="getHasCommentControl"
       [getRowControl]="getRowControl"
       [showCheckbox]="showCheckbox()"
+      [upDateSelectedInputs]="upDateSelectedInputsWrapper"
+      [highlightInput]="highlightInputWrapper"
+      [selectedInputColor]="selectedInputColor()"
     />
   </div>
 
@@ -22,6 +25,11 @@
     <app-group-input-with-checkbox
       [hasCommentControl]="getHasCommentControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
       [showCheckbox]="showCheckbox()"
+      (valueChanged)="upDateSelectedInputs($event, {
+        section: 'attachments',
+        inputKey: 'attachments',
+        label: 'Attachments'
+      })"
     >
       <app-fileupload
         [isViewMode]="isViewMode()"
@@ -37,5 +45,51 @@
       [label]="'Attachments'"
     />
   </div>
+  }
+
+  @if(commentPhase() == 'editing' || commentPhase() == 'viewing'){
+  <div
+    class="animated flex flex-col gap-4 mt-8"
+    animate.enter="fadeIn"
+  >
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Your Comment'" />
+        <textarea
+          fluid
+          rows="8"
+          pTextarea
+          [formControl]="commentFormControl"
+        ></textarea>
+        <app-base-error-messages
+          [control]="commentFormControl"
+          [label]="'Your Comment'"
+        />
+      </div>
+    </div>
+  </div>
+  }
+
+  @if(showCheckbox()){
+  <app-comment-state-component
+    [commentsCount]="selectedInputs().length"
+    [(commentPhase)]="commentPhase"
+    [commentFormControl]="commentFormControl"
+    (deleteComments)="onDeleteComments()"
+    (saveComment)="commentPhase() === 'editing' ? onSaveEditedComment() : onSaveComment()"
+  />
+  }
+
+  @if(showDeleteConfirmationDialog()){
+  <app-general-confirmation-dialog
+    [(visible)]="showDeleteConfirmationDialog"
+    [title]="'Are you sure you want to delete the comment and selected fields?'"
+    [confirmationLabel]="'Delete'"
+    [cancelLabel]="'Cancel'"
+    [confirmButtonSeverity]="'danger'"
+    [icon]="'icon-trash-2'"
+    (confirmed)="onConfirmDeleteComment()"
+    (onCancel)="onCancelDeleteComment()"
+  />
   }
 </div>

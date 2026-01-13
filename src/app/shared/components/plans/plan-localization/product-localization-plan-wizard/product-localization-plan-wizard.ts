@@ -15,9 +15,8 @@ import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
-import { IFieldInformation, Signature } from "src/app/shared/interfaces/plans.interface";
+import { IFieldInformation, IPageComment, IProductPlanResponse, ReviewPlanRequest, Signature } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
-import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
 import { EInternalUserPlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
@@ -78,7 +77,17 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
-  selectedInputColor = computed<TColors>(() => this.commentPhase() === 'none' ? 'green' : 'orange');
+  // Get comment phase for current active step
+  currentStepCommentPhase = computed<TCommentPhase>(() => {
+    const step = this.activeStep();
+    if (step === 1) return this.step1CommentPhase();
+    if (step === 2) return this.step2CommentPhase();
+    if (step === 3) return this.step3CommentPhase();
+    if (step === 4) return this.step4CommentPhase();
+    return 'none';
+  });
+
+  selectedInputColor = computed<TColors>(() => this.currentStepCommentPhase() === 'none' ? 'green' : 'orange');
   steps = computed<IWizardStepState[]>(() => {
     const errors = this.validationErrors();
     this.i18nService.currentLanguage();
@@ -88,30 +97,36 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         description: this.i18nService.translate('plans.wizard.step1.description'),
         isActive: this.activeStep() === 1,
         formState: this.productPlanFormService.overviewCompanyInformation,
-        hasErrors: this.commentPhase() === 'none',
+        hasErrors: this.step1CommentPhase() === 'none',
         commentsCount: this.step1SelectedInputs().length,
-        commentColor: this.selectedInputColor()
+        commentColor: this.step1CommentPhase() === 'none' ? 'green' : 'orange'
       },
       {
         title: this.i18nService.translate('plans.wizard.step2.title'),
         description: this.i18nService.translate('plans.wizard.step2.description'),
         isActive: this.activeStep() === 2,
         formState: this.productPlanFormService.step2_productPlantOverview,
-        hasErrors: true
+        hasErrors: this.step2CommentPhase() === 'none',
+        commentsCount: this.step2SelectedInputs().length,
+        commentColor: this.step2CommentPhase() === 'none' ? 'green' : 'orange'
       },
       {
         title: this.i18nService.translate('plans.wizard.step3.title'),
         description: this.i18nService.translate('plans.wizard.step3.description'),
         isActive: this.activeStep() === 3,
         formState: this.productPlanFormService.step3_valueChain,
-        hasErrors: true
+        hasErrors: this.step3CommentPhase() === 'none',
+        commentsCount: this.step3SelectedInputs().length,
+        commentColor: this.step3CommentPhase() === 'none' ? 'green' : 'orange'
       },
       {
         title: this.i18nService.translate('plans.wizard.step4.title'),
         description: this.i18nService.translate('plans.wizard.step4.description'),
         isActive: this.activeStep() === 4,
         formState: this.productPlanFormService.step4_saudization,
-        hasErrors: true
+        hasErrors: this.step4CommentPhase() === 'none',
+        commentsCount: this.step4SelectedInputs().length,
+        commentColor: this.step4CommentPhase() === 'none' ? 'green' : 'orange'
       },
       {
         title: this.i18nService.translate('plans.wizard.step5.title'),
@@ -123,6 +138,9 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     ];
   });
   step1SelectedInputs = signal<IFieldInformation[]>([]);
+  step2SelectedInputs = signal<IFieldInformation[]>([]);
+  step3SelectedInputs = signal<IFieldInformation[]>([]);
+  step4SelectedInputs = signal<IFieldInformation[]>([]);
   wizardTitle = computed(() => {
     const currentMode = this.planStore.wizardMode();
     this.i18nService.currentLanguage();
@@ -166,7 +184,42 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   });
 
   showHasCommentControl = signal<boolean>(false);
-  commentPhase = model<TCommentPhase>('none');
+  // Separate comment phases for each step
+  step1CommentPhase = signal<TCommentPhase>('none');
+  step2CommentPhase = signal<TCommentPhase>('none');
+  step3CommentPhase = signal<TCommentPhase>('none');
+  step4CommentPhase = signal<TCommentPhase>('none');
+  showSendBackConfirmationDialog = signal<boolean>(false);
+
+  // Computed signals for action controls
+  hasSelectedFields = computed(() => {
+    return this.step1SelectedInputs().length > 0 ||
+      this.step2SelectedInputs().length > 0 ||
+      this.step3SelectedInputs().length > 0 ||
+      this.step4SelectedInputs().length > 0;
+  });
+
+  hasComments = computed(() => {
+    // Check if any step has saved comments (comment phase is 'viewing' and comment exists)
+    const step1Form = this.productPlanFormService.overviewCompanyInformation;
+    const step1CommentControl = step1Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step1HasComment = step1CommentControl?.value && step1CommentControl.value.trim().length > 0;
+
+    // Step 2 comments
+    const step2Form = this.productPlanFormService.step2_productPlantOverview;
+    const step2CommentControl = step2Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step2HasComment = step2CommentControl?.value && step2CommentControl.value.trim().length > 0;
+
+    // Step 3 comments - check if step3SelectedInputs has items (indicates comment was saved)
+    const step3HasComment = this.step3SelectedInputs().length > 0;
+
+    // Step 4 comments
+    const step4Form = this.productPlanFormService.step4_saudization;
+    const step4CommentControl = step4Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step4HasComment = step4CommentControl?.value && step4CommentControl.value.trim().length > 0;
+
+    return step1HasComment || step2HasComment || step3HasComment || step4HasComment;
+  });
 
   constructor() {
     // Effect to load plan data when planId and mode are set
@@ -202,6 +255,29 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         }
       }
     });
+
+    // Effect to sync comment phase when navigating between steps
+    // If showHasCommentControl is true, ensure the current step's comment phase is also active
+    effect(() => {
+      const showCheckbox = this.showHasCommentControl();
+      const currentStep = this.activeStep();
+
+      // Only sync if comment mode is enabled
+      if (!showCheckbox) {
+        return;
+      }
+
+      // Set comment phase to 'adding' for the current step if it's 'none'
+      if (currentStep === 1 && this.step1CommentPhase() === 'none') {
+        this.step1CommentPhase.set('adding');
+      } else if (currentStep === 2 && this.step2CommentPhase() === 'none') {
+        this.step2CommentPhase.set('adding');
+      } else if (currentStep === 3 && this.step3CommentPhase() === 'none') {
+        this.step3CommentPhase.set('adding');
+      } else if (currentStep === 4 && this.step4CommentPhase() === 'none') {
+        this.step4CommentPhase.set('adding');
+      }
+    });
   }
 
   previousStep(): void {
@@ -216,7 +292,17 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   }
 
   onAddComment(): void {
-    this.commentPhase.set('adding');
+    const step = this.activeStep();
+    // Set comment phase for the current active step
+    if (step === 1) {
+      this.step1CommentPhase.set('adding');
+    } else if (step === 2) {
+      this.step2CommentPhase.set('adding');
+    } else if (step === 3) {
+      this.step3CommentPhase.set('adding');
+    } else if (step === 4) {
+      this.step4CommentPhase.set('adding');
+    }
     this.showHasCommentControl.set(true);
   }
 
@@ -702,5 +788,116 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
   ngOnDestroy(): void {
     this.productPlanFormService.resetAllForms();
+  }
+
+  /**
+   * Collect all page comments from step forms
+   */
+  collectAllPageComments(): IPageComment[] {
+    const comments: IPageComment[] = [];
+
+    // Step 1 comments
+    const step1Form = this.productPlanFormService.overviewCompanyInformation;
+    const step1CommentControl = step1Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    if (step1CommentControl?.value && step1CommentControl.value.trim().length > 0 && this.step1SelectedInputs().length > 0) {
+      comments.push({
+        pageTitleForTL: this.steps()[0].title,
+        comment: step1CommentControl.value.trim(),
+        fields: this.step1SelectedInputs(),
+      });
+    }
+
+    // Step 2 comments
+    const step2Form = this.productPlanFormService.step2_productPlantOverview;
+    const step2CommentControl = step2Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    if (step2CommentControl?.value && step2CommentControl.value.trim().length > 0 && this.step2SelectedInputs().length > 0) {
+      comments.push({
+        pageTitleForTL: this.steps()[1].title,
+        comment: step2CommentControl.value.trim(),
+        fields: this.step2SelectedInputs(),
+      });
+    }
+
+    // Step 3 comments
+    const step3Form = this.productPlanFormService.step3_valueChain;
+    const step3CommentControl = step3Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    if (step3CommentControl?.value && step3CommentControl.value.trim().length > 0 && this.step3SelectedInputs().length > 0) {
+      comments.push({
+        pageTitleForTL: this.steps()[2].title,
+        comment: step3CommentControl.value.trim(),
+        fields: this.step3SelectedInputs(),
+      });
+    }
+
+    // Step 4 comments
+    const step4Form = this.productPlanFormService.step4_saudization;
+    const step4CommentControl = step4Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    if (step4CommentControl?.value && step4CommentControl.value.trim().length > 0 && this.step4SelectedInputs().length > 0) {
+      comments.push({
+        pageTitleForTL: this.steps()[3].title,
+        comment: step4CommentControl.value.trim(),
+        fields: this.step4SelectedInputs(),
+      });
+    }
+
+    return comments;
+  }
+
+  /**
+   * Handle Send Back to Investor action
+   */
+  onSendBackToInvestor(): void {
+    // Validate at least one comment exists
+    const comments = this.collectAllPageComments();
+    if (comments.length === 0) {
+      this.toasterService.error('You must add a comment before sending back the plan.');
+      return;
+    }
+
+    // Show confirmation dialog
+    this.showSendBackConfirmationDialog.set(true);
+  }
+
+  /**
+   * Confirm sending plan back to investor
+   */
+  onConfirmSendBack(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const comments = this.collectAllPageComments();
+    const request: ReviewPlanRequest = {
+      planId: planId,
+      comments: comments,
+    };
+
+    this.isProcessing.set(true);
+    this.planStore.sendPlanBackToInvestor(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showSendBackConfirmationDialog.set(false);
+          this.toasterService.success('Plan has been sent back to investor successfully.');
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error sending plan back to investor. Please try again.');
+          console.error('Error sending plan back:', error);
+        }
+      });
+  }
+
+  /**
+   * Cancel sending plan back
+   */
+  onCancelSendBack(): void {
+    this.showSendBackConfirmationDialog.set(false);
   }
 }

@@ -68,6 +68,7 @@ export class PlanLocalizationStep4SaudizationFormBuilder extends BasicPlanBuilde
     return this.fb.group({
       [EMaterialsFormControls.saudizationFormGroup]: this.buildSaudizationFormGroup(),
       [EMaterialsFormControls.attachmentsFormGroup]: this.buildAttachmentsFormGroup(),
+      [EMaterialsFormControls.comment]: this.fb.control(''),
     });
   }
 

@@ -13,6 +13,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(basicInformationFormGroupControls['planTitle'])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'basicInformation',
+            inputKey: 'planTitle',
+            label: 'Plan Title'
+          })"
         >
           <input
             type="text"
@@ -21,6 +26,8 @@
             [formControl]="getValueControl(basicInformationFormGroupControls['planTitle'])"
             fluid
             maxlength="150"
+            [appConditionalColorClass]="highlightInput('planTitle')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -89,6 +96,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="companyNameHasCommentControl()"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'companyInformation',
+            inputKey: 'companyName',
+            label: 'Company Name'
+          })"
         >
           <input
             type="text"
@@ -97,6 +109,8 @@
             [maxlength]="100"
             placeholder="Enter company name"
             [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
+            [appConditionalColorClass]="highlightInput('companyName')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -111,6 +125,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'companyInformation',
+            inputKey: 'ceoName',
+            label: 'CEO Name'
+          })"
         >
           <input
             type="text"
@@ -119,6 +138,8 @@
             placeholder="Enter CEO name"
             [maxlength]="100"
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
+            [appConditionalColorClass]="highlightInput('ceoName')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -165,6 +186,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'locationInformation',
+            inputKey: 'globalHQLocation',
+            label: 'Global HQ Location'
+          })"
         >
           <input
             type="text"
@@ -173,6 +199,8 @@
             placeholder="Enter global HQ location"
             [maxlength]="255"
             [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
+            [appConditionalColorClass]="highlightInput('globalHQLocation')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -185,6 +213,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'locationInformation',
+            inputKey: 'registeredVendorIDwithSEC',
+            label: 'Registered Vendor ID with SEC'
+          })"
         >
           <input
             type="text"
@@ -193,6 +226,8 @@
             placeholder="Enter registered vendor ID with SEC"
             [maxlength]="50"
             [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+            [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -211,6 +246,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'locationInformation',
+              inputKey: 'doYouCurrentlyHaveLocalAgentInKSA',
+              label: 'Do you currently have local Agent in KSA?'
+            })"
           >
             <div class="flex gap-2">
               <label class="flex items-center gap-2 cursor-pointer">
@@ -220,6 +260,8 @@
                   [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
                   inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
                   size="small"
+                  [appConditionalColorClass]="highlightInput('doYouCurrentlyHaveLocalAgentInKSA')"
+                  [color]="selectedInputColor()"
                 />
                 <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
               </label>
@@ -230,6 +272,8 @@
                   [formControl]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
                   inputId="doYouCurrentlyHaveLocalAgentInKSANo"
                   size="small"
+                  [appConditionalColorClass]="highlightInput('doYouCurrentlyHaveLocalAgentInKSA')"
+                  [color]="selectedInputColor()"
                 />
                 <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
               </label>
@@ -255,6 +299,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'localAgentInformation',
+              inputKey: 'localAgentName',
+              label: 'Local Agent Name'
+            })"
           >
             <input
               type="text"
@@ -263,6 +312,8 @@
               placeholder="Enter local agent name"
               maxlength="100"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
+              [appConditionalColorClass]="highlightInput('localAgentName')"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -275,6 +326,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'localAgentInformation',
+              inputKey: 'contactPersonName',
+              label: 'Contact Person Name'
+            })"
           >
             <input
               type="text"
@@ -283,6 +339,8 @@
               [maxlength]="100"
               placeholder="Enter contact person name"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
+              [appConditionalColorClass]="highlightInput('contactPersonName')"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -297,6 +355,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['emailID'])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'localAgentInformation',
+              inputKey: 'emailID',
+              label: 'Email ID'
+            })"
           >
             <input
               type="text"
@@ -304,6 +367,8 @@
               fluid
               placeholder="Enter email ID"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
+              [appConditionalColorClass]="highlightInput('emailID')"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -316,8 +381,17 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="contactNumberHasCommentControl()"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'localAgentInformation',
+              inputKey: 'contactNumber',
+              label: 'Contact Number'
+            })"
           >
-            <app-phone-input [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"></app-phone-input>
+            <app-phone-input
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
+              [appConditionalColorClass]="highlightInput('contactNumber')"
+              [color]="selectedInputColor()"
+            ></app-phone-input>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
@@ -332,6 +406,11 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'localAgentInformation',
+                inputKey: 'companyHQLocation',
+                label: 'Company HQ Location'
+              })"
             >
               <input
                 type="text"
@@ -340,6 +419,8 @@
                 maxlength="255"
                 placeholder="Enter company HQ location"
                 [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
+                [appConditionalColorClass]="highlightInput('companyHQLocation')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -383,5 +464,19 @@
   [(commentPhase)]="commentPhase"
   [commentFormControl]="commentFormControl"
   (deleteComments)="onDeleteComments()"
+  (saveComment)="commentPhase() === 'editing' ? onSaveEditedComment() : onSaveComment()"
+/>
+}
+
+@if(showDeleteConfirmationDialog()){
+<app-general-confirmation-dialog
+  [(visible)]="showDeleteConfirmationDialog"
+  [title]="'Are you sure you want to delete the comment and selected fields?'"
+  [confirmationLabel]="'Delete'"
+  [cancelLabel]="'Cancel'"
+  [confirmButtonSeverity]="'danger'"
+  [icon]="'icon-trash-2'"
+  (confirmed)="onConfirmDeleteComment()"
+  (onCancel)="onCancelDeleteComment()"
 />
 }

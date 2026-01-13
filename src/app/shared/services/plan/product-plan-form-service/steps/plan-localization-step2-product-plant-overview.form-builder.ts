@@ -119,6 +119,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       [EMaterialsFormControls.expectedCAPEXInvestmentFormGroup]: this.buildExpectedCAPEXInvestmentFormGroup(),
       [EMaterialsFormControls.targetCustomersFormGroup]: this.buildTargetCustomersFormGroup(),
       [EMaterialsFormControls.productManufacturingExperienceFormGroup]: this.buildProductManufacturingExperienceFormGroup(),
+      [EMaterialsFormControls.comment]: this.fb.control(''),
     });
   }
 

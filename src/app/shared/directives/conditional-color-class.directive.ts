@@ -55,24 +55,52 @@ export class ConditionalColorClassDirective {
       const shouldApply = this.appConditionalColorClass();
       const colorValue = this.color();
 
+      // Get the target element (may be nested input for PrimeNG components)
+      const targetElement = this.getTargetElement();
+
       // Remove any existing color classes
-      this.removeColorClasses();
+      this.removeColorClasses(targetElement);
 
       if (shouldApply && colorValue) {
         const colorClasses = this.colorClassMap[colorValue];
         if (colorClasses) {
-          this.elementRef.nativeElement.classList.add(colorClasses.bg, colorClasses.border);
+          targetElement.classList.add(colorClasses.bg, colorClasses.border);
         }
       }
     });
   }
 
   /**
+   * Gets the target element to apply classes to.
+   * For PrimeNG components like p-inputnumber, p-select, etc., 
+   * finds the nested input element. Otherwise, returns the element itself.
+   */
+  private getTargetElement(): HTMLElement {
+    const element = this.elementRef.nativeElement;
+
+    // Check if this element is already an input element
+    if (element.tagName.toLowerCase() === 'input' ||
+      element.tagName.toLowerCase() === 'textarea' ||
+      element.tagName.toLowerCase() === 'select') {
+      return element;
+    }
+
+    // For PrimeNG components, look for nested input element
+    // PrimeNG components typically wrap the actual input in a nested structure
+    const nestedInput = element.querySelector('input, textarea, select') as HTMLElement | null;
+    if (nestedInput) {
+      return nestedInput;
+    }
+
+    // Return the element itself if no nested input found
+    return element;
+  }
+
+  /**
    * Removes all color-related classes that match the pattern
    * bg-*-50! and border-*-500!
    */
-  private removeColorClasses(): void {
-    const element = this.elementRef.nativeElement;
+  private removeColorClasses(element: HTMLElement): void {
     const classesToRemove: string[] = [];
 
     // Collect all classes that match our pattern

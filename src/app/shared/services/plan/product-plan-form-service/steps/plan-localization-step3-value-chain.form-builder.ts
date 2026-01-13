@@ -116,6 +116,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
       [EMaterialsFormControls.manufacturingFormGroup]: this.buildManufacturingFormGroup(),
       [EMaterialsFormControls.assemblyTestingFormGroup]: this.buildAssemblyTestingFormGroup(),
       [EMaterialsFormControls.afterSalesFormGroup]: this.buildAfterSalesFormGroup(),
+      [EMaterialsFormControls.comment]: this.fb.control(''),
     }, {
       validators: [this.validateTotalCostPercentage()]
     });

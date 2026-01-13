@@ -6,6 +6,9 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
+import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
+import { TColors } from 'src/app/shared/interfaces';
 
 
 interface TableRow {
@@ -31,6 +34,7 @@ interface TableRow {
     GroupInputWithCheckbox,
     InputNumberModule,
     TableModule,
+    ConditionalColorClassDirective,
   ],
   templateUrl: './saudization-matrix.component.html',
   styleUrl: './saudization-matrix.component.scss',
@@ -44,6 +48,11 @@ export class SaudizationMatrixComponent {
 
   // Input signal for checkbox visibility
   showCheckbox = input.required<boolean>();
+
+  // Comment functionality inputs
+  upDateSelectedInputs = input.required<(value: boolean, fieldInformation: IFieldInformation, rowId?: string) => void>();
+  highlightInput = input.required<(inputKey: string, rowId?: string) => boolean>();
+  selectedInputColor = input.required<TColors>();
 
   // Enum reference
   readonly EMaterialsFormControls = EMaterialsFormControls;

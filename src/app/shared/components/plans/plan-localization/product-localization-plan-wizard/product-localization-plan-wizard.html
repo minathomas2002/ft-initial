@@ -26,20 +26,30 @@
     <app-plan-localization-step-01-overview-company-information-form
       [(showCheckbox)]="showHasCommentControl"
       [pageTitle]="steps()[0].title"
-      [(commentPhase)]="commentPhase"
+      [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
-      [selectedInputColor]="selectedInputColor()"
+      [selectedInputColor]="step1CommentPhase() === 'none' ? 'green' : 'orange'"
     />
   </ng-template>
 
   <ng-template [appStepContent]="2">
-    <app-plan-localization-step-02-product-plant-overview-form [(showCheckbox)]="showHasCommentControl" />
+    <app-plan-localization-step-02-product-plant-overview-form
+      [(showCheckbox)]="showHasCommentControl"
+      [pageTitle]="steps()[1].title"
+      [(commentPhase)]="step2CommentPhase"
+      [(selectedInputs)]="step2SelectedInputs"
+      [selectedInputColor]="step2CommentPhase() === 'none' ? 'green' : 'orange'"
+    />
   </ng-template>
 
   <ng-template [appStepContent]="3">
     <app-plan-localization-step-03-valueChain-form
       [(showCheckbox)]="showHasCommentControl"
       [isViewMode]="isViewMode() || isReviewMode()"
+      [pageTitle]="steps()[2].title"
+      [(commentPhase)]="step3CommentPhase"
+      [(selectedInputs)]="step3SelectedInputs"
+      [selectedInputColor]="step3CommentPhase() === 'none' ? 'green' : 'orange'"
     />
   </ng-template>
 
@@ -47,12 +57,17 @@
     <app-plan-localization-step-04-saudization-form
       [(showCheckbox)]="showHasCommentControl"
       [isViewMode]="isViewMode()"
+      [pageTitle]="steps()[3].title"
+      [(commentPhase)]="step4CommentPhase"
+      [(selectedInputs)]="step4SelectedInputs"
+      [selectedInputColor]="step4CommentPhase() === 'none' ? 'green' : 'orange'"
     />
   </ng-template>
 
   <ng-template [appStepContent]="5">
     <app-plan-localization-step-05-summary
       [isViewMode]="isViewMode()"
+      [pageComments]="collectAllPageComments()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onValidationErrorsChange)="updateValidationErrors($event)"
@@ -61,10 +76,31 @@
 
   <ng-container ngProjectAs="final-step-action">
     @if (activeStep() === 5 && !isViewMode()) {
+    @if (isReviewMode()) {
+    @if (hasSelectedFields()) {
+    <p-button
+      [label]="'Send Back to Investor'"
+      severity="warn"
+      (click)="onSendBackToInvestor()"
+    ></p-button>
+    } @else {
+    <p-button
+      [label]="'Approve & Forward'"
+      severity="success"
+      [disabled]="hasSelectedFields()"
+    ></p-button>
+    <p-button
+      [label]="'Reject'"
+      severity="danger"
+      [disabled]="hasSelectedFields()"
+    ></p-button>
+    }
+    } @else {
     <p-button
       [label]="'Submit'"
       (click)="onSummarySubmitClick()"
     ></p-button>
+    }
     }
   </ng-container>
 
@@ -119,3 +155,16 @@
   [(dialogVisible)]="timelineVisibility"
   [planId]="planId()"
 />
+
+@if(showSendBackConfirmationDialog()){
+<app-general-confirmation-dialog
+  [(visible)]="showSendBackConfirmationDialog"
+  [title]="'Are you sure you want to send back the plan?'"
+  [description]="'This action cannot be undone and the plan will go directly to the investor.'"
+  [confirmationLabel]="'Send Back'"
+  [cancelLabel]="'Cancel'"
+  [icon]="'icon-send'"
+  (confirmed)="onConfirmSendBack()"
+  (onCancel)="onCancelSendBack()"
+/>
+}

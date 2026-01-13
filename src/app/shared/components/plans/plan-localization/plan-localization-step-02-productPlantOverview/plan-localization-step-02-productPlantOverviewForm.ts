@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, signal } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,7 +14,15 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
-import { TrimOnBlurDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
+import { TColors } from 'src/app/shared/interfaces';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
+import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
+import { FormsModule } from '@angular/forms';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 
 @Component({
   selector: 'app-plan-localization-step-02-product-plant-overview-form',
@@ -32,7 +40,11 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives';
     InputNumberModule,
     BaseErrorMessages,
     BaseLabelComponent,
-    TrimOnBlurDirective
+    TrimOnBlurDirective,
+    ConditionalColorClassDirective,
+    CommentStateComponent,
+    FormsModule,
+    GeneralConfirmationDialogComponent
   ],
   templateUrl: './plan-localization-step-02-productPlantOverviewForm.html',
   styleUrl: './plan-localization-step-02-productPlantOverviewForm.scss',
@@ -40,13 +52,31 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives';
 })
 export class PlanLocalizationStep02ProductPlantOverviewForm {
   private readonly productPlanFormService = inject(ProductPlanFormService);
-  private readonly planStore = inject(PlanStore)
+  private readonly planStore = inject(PlanStore);
+  private readonly toasterService = inject(ToasterService);
+  private readonly formUtilityService = inject(FormUtilityService);
+  pageTitle = input<string>('Product & Plant Overview');
 
   // Expose enum to template
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
   formGroup = this.productPlanFormService.step2_productPlantOverview;
   showCheckbox = model<boolean>(false);
+  commentPhase = model<TCommentPhase>('none');
+  selectedInputColor = input<TColors>('orange');
+  selectedInputs = model<IFieldInformation[]>([]);
+  comment = signal<string>('');
+  showDeleteConfirmationDialog = signal<boolean>(false);
+
+  commentFormControl = this.formGroup.get(EMaterialsFormControls.comment) as FormControl<string>;
+
+  pageComment = computed<IPageComment>(() => {
+    return {
+      pageTitleForTL: this.pageTitle() ?? '',
+      comment: this.comment() ?? '',
+      fields: this.selectedInputs(),
+    }
+  });
 
   // Form group accessors
   get overviewFormGroupControls() {
@@ -146,6 +176,21 @@ export class PlanLocalizationStep02ProductPlantOverviewForm {
       const othersPercentageValue = this.othersPercentageSignal();
       this.productPlanFormService.toggleOthersDescriptionValidation(othersPercentageValue);
     });
+
+    // Comment phase effect
+    effect(() => {
+      if (this.commentPhase() === 'viewing') {
+        const commentValue = this.commentFormControl.value ?? '';
+        this.comment.set(commentValue);
+        this.commentFormControl.setValue(commentValue, { emitEvent: false });
+        this.commentFormControl.disable();
+        this.formUtilityService.disableHasCommentControls(this.formGroup);
+      }
+      if (['adding', 'editing'].includes(this.commentPhase())) {
+        this.commentFormControl.enable();
+        this.formUtilityService.enableHasCommentControls(this.formGroup);
+      }
+    });
   }
 
   // Helper methods - delegate to service
@@ -164,5 +209,96 @@ export class PlanLocalizationStep02ProductPlantOverviewForm {
   // Dropdown options
   targetedCustomerOptions = this.planStore.targetedCustomerOptions;
   productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptions;
+
+  upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation): void {
+    const currentInputs = this.selectedInputs();
+    const existingIndex = currentInputs.findIndex(
+      input => input.section === fieldInformation.section && input.inputKey === fieldInformation.inputKey
+    );
+
+    if (value) {
+      if (existingIndex === -1) {
+        this.selectedInputs.set([...currentInputs, fieldInformation]);
+      }
+    } else {
+      if (existingIndex !== -1) {
+        this.selectedInputs.set(currentInputs.filter((_, index) => index !== existingIndex));
+      }
+    }
+  }
+
+  highlightInput(inputKey: string): boolean {
+    const isSelected = this.selectedInputs().some(input => input.inputKey === inputKey);
+    const phase = this.commentPhase();
+    return isSelected && (phase === 'adding' || phase === 'editing');
+  }
+
+  onDeleteComments(): void {
+    this.showDeleteConfirmationDialog.set(true);
+  }
+
+  onConfirmDeleteComment(): void {
+    this.resetAllHasCommentControls();
+    this.selectedInputs.set([]);
+    this.comment.set('');
+    this.commentFormControl.reset();
+    this.commentPhase.set('none');
+    this.showCheckbox.set(false);
+    this.showDeleteConfirmationDialog.set(false);
+    this.toasterService.success('Your comments and selected fields were removed successfully.');
+  }
+
+  onCancelDeleteComment(): void {
+    this.showDeleteConfirmationDialog.set(false);
+  }
+
+  onSaveComment(): void {
+    if (this.selectedInputs().length === 0) {
+      this.toasterService.error('Please select at least one field before adding a comment.');
+      return;
+    }
+
+    const commentValue = this.commentFormControl.value?.trim() || '';
+    if (!commentValue) {
+      this.commentFormControl.markAsTouched();
+      this.toasterService.error('Please enter a comment.');
+      return;
+    }
+
+    if (commentValue.length > 255) {
+      this.toasterService.error('Comment cannot exceed 255 characters.');
+      return;
+    }
+
+    this.comment.set(commentValue);
+    this.commentFormControl.setValue(commentValue, { emitEvent: false });
+    this.commentPhase.set('viewing');
+    this.commentFormControl.disable();
+    this.toasterService.success('Your comments have been saved successfully.');
+  }
+
+  onSaveEditedComment(): void {
+    const commentValue = this.commentFormControl.value?.trim() || '';
+    if (!commentValue) {
+      this.commentFormControl.markAsTouched();
+      this.toasterService.error('Please enter a comment.');
+      return;
+    }
+
+    if (commentValue.length > 255) {
+      this.toasterService.error('Comment cannot exceed 255 characters.');
+      return;
+    }
+
+    this.comment.set(commentValue);
+    this.commentFormControl.setValue(commentValue, { emitEvent: false });
+    this.commentPhase.set('viewing');
+    this.commentFormControl.disable();
+    this.toasterService.success('Your updates have been saved successfully.');
+  }
+
+  resetAllHasCommentControls(): void {
+    this.formUtilityService.resetHasCommentControls(this.formGroup);
+  }
 }
 

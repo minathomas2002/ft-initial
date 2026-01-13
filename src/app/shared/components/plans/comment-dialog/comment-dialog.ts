@@ -34,13 +34,15 @@ export class CommentDialog implements OnInit {
   }
 
   onCancel(): void {
-    this.commentFormControl()!.reset();
+    // Don't save comment, return to selected fields view, keep fields selected
+    // Don't reset the form control - user might want to continue editing
     this.visible.set(false);
   }
 
   onClose(): void {
-    this.commentFormControl()!.removeValidators(Validators.required);
-    this.commentFormControl()!.disable();
+    // Same behavior as Back button - don't save, return to fields
+    // Don't reset the form control - user might want to continue editing
+    this.visible.set(false);
   }
 
   onConfirm(): void {
@@ -48,7 +50,7 @@ export class CommentDialog implements OnInit {
       this.toaster.error('Please enter a comment');
       return;
     }
-    this.toaster.success('Comment added successfully');
+    // Success message will be shown by parent component
     this.commentAdded.emit();
     this.visible.set(false);
   }

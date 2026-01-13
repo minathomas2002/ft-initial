@@ -32,6 +32,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'overview',
+            inputKey: 'productName',
+            label: 'Product Name'
+          })"
         >
           <input
             type="text"
@@ -40,6 +45,8 @@
             placeholder="Enter product name"
             [maxlength]="100"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
+            [appConditionalColorClass]="highlightInput('productName')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -57,6 +64,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'overview',
+            inputKey: 'productSpecifications',
+            label: 'Product Specifications'
+          })"
         >
           <textarea
             pTextarea
@@ -65,6 +77,8 @@
             [maxlength]="500"
             [rows]="4"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
+            [appConditionalColorClass]="highlightInput('productSpecifications')"
+            [color]="selectedInputColor()"
           ></textarea>
         </app-group-input-with-checkbox>
         <!-- Character Counter -->
@@ -89,6 +103,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'overview',
+              inputKey: 'targetedAnnualPlantCapacity',
+              label: 'Targeted Annual Plant Capacity'
+            })"
           >
             <input
               type="text"
@@ -97,6 +116,8 @@
               [maxlength]="50"
               placeholder="Enter targeted annual plant capacity"
               [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
+              [appConditionalColorClass]="highlightInput('targetedAnnualPlantCapacity')"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -116,6 +137,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'overview',
+              inputKey: 'timeRequiredToSetupFactory',
+              label: 'Time Required to Setup Factory'
+            })"
           >
             <input
               type="text"
@@ -124,6 +150,8 @@
               maxlength="50"
               placeholder="Enter time required to setup factory"
               [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
+              [appConditionalColorClass]="highlightInput('timeRequiredToSetupFactory')"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -149,6 +177,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'expectedCAPEXInvestment',
+            inputKey: 'landPercentage',
+            label: 'Land'
+          })"
         >
           <p-inputnumber
             fluid
@@ -159,6 +192,8 @@
             [maxFractionDigits]="2"
             [maxlength]="5"
             [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage])"
+            [appConditionalColorClass]="highlightInput('landPercentage')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -176,6 +211,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'expectedCAPEXInvestment',
+            inputKey: 'buildingPercentage',
+            label: 'Building'
+          })"
         >
           <p-inputnumber
             fluid
@@ -186,6 +226,8 @@
             [minFractionDigits]="0"
             [maxFractionDigits]="2"
             [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage])"
+            [appConditionalColorClass]="highlightInput('buildingPercentage')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -203,6 +245,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'expectedCAPEXInvestment',
+            inputKey: 'machineryEquipmentPercentage',
+            label: 'Machinery / Equipment'
+          })"
         >
           <p-inputnumber
             fluid
@@ -213,6 +260,8 @@
             [minFractionDigits]="0"
             [maxFractionDigits]="2"
             [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage])"
+            [appConditionalColorClass]="highlightInput('machineryEquipmentPercentage')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -230,6 +279,11 @@
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'expectedCAPEXInvestment',
+            inputKey: 'othersPercentage',
+            label: 'Others'
+          })"
         >
           <p-inputnumber
             fluid
@@ -240,6 +294,8 @@
             [minFractionDigits]="0"
             [maxFractionDigits]="2"
             [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage])"
+            [appConditionalColorClass]="highlightInput('othersPercentage')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -256,6 +312,11 @@
       <app-group-input-with-checkbox
         [showCheckbox]="showCheckbox()"
         [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
+        (valueChanged)="upDateSelectedInputs($event, {
+          section: 'expectedCAPEXInvestment',
+          inputKey: 'othersDescription',
+          label: 'Others Description'
+        })"
       >
         <textarea
           pInputTextarea
@@ -264,6 +325,8 @@
           placeholder="Enter others description"
           [rows]="4"
           [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
+          [appConditionalColorClass]="highlightInput('othersDescription')"
+          [color]="selectedInputColor()"
         ></textarea>
       </app-group-input-with-checkbox>
       <!-- Character Counter -->
@@ -290,6 +353,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'targetCustomers',
+              inputKey: 'targetedCustomer',
+              label: 'Targeted Customer'
+            })"
           >
             <p-multiselect
               [options]="targetedCustomerOptions()"
@@ -301,6 +369,8 @@
               fluid
               [filter]="false"
               placeholder="Select targeted customer"
+              [appConditionalColorClass]="highlightInput('targetedCustomer')"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -321,6 +391,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'targetCustomers',
+              inputKey: 'namesOfTargetedSuppliers',
+              label: 'Names of Targeted Suppliers'
+            })"
           >
             <textarea
               pInputTextarea
@@ -329,6 +404,8 @@
               placeholder="Enter provide names of targeted SEC's"
               [rows]="4"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
+              [appConditionalColorClass]="highlightInput('namesOfTargetedSuppliers')"
+              [color]="selectedInputColor()"
             ></textarea>
           </app-group-input-with-checkbox>
           <!-- Character Counter -->
@@ -347,6 +424,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'targetCustomers',
+              inputKey: 'productsUtilizeTargetedProduct',
+              label: 'Products Utilize Targeted Product'
+            })"
           >
             <textarea
               pInputTextarea
@@ -355,6 +437,8 @@
               [rows]="4"
               [maxlength]="255"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
+              [appConditionalColorClass]="highlightInput('productsUtilizeTargetedProduct')"
+              [color]="selectedInputColor()"
             ></textarea>
           </app-group-input-with-checkbox>
           <!-- Character Counter -->
@@ -383,6 +467,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'productManufacturingExperience',
+              inputKey: 'productManufacturingExperience',
+              label: 'Product Manufacturing Experience'
+            })"
           >
             <p-select
               [options]="productManufacturingExperienceOptions()"
@@ -392,6 +481,8 @@
               dropdownIcon="icon-chevron-down"
               placeholder="Select product manufacturing experience"
               fluid
+              [appConditionalColorClass]="highlightInput('productManufacturingExperience')"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -456,6 +547,11 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'qualifiedPlantLocationSEC',
+                label: 'Qualified Plant Location (By SEC)'
+              })"
             >
               <input
                 type="text"
@@ -464,6 +560,8 @@
                 fluid
                 placeholder="Enter qualified plant location"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
+                [appConditionalColorClass]="highlightInput('qualifiedPlantLocationSEC')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -481,6 +579,11 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'approvedVendorIDSEC',
+                label: 'Approved Vendor ID (with SEC)'
+              })"
             >
               <input
                 type="text"
@@ -489,6 +592,8 @@
                 fluid
                 placeholder="Enter approved vendor ID"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
+                [appConditionalColorClass]="highlightInput('approvedVendorIDSEC')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -506,12 +611,19 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'yearsOfExperienceSEC',
+                label: 'Years of Experience (with SEC)'
+              })"
             >
               <p-inputnumber
                 fluid
                 placeholder="Enter years of experience"
                 [maxlength]="2"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
+                [appConditionalColorClass]="highlightInput('yearsOfExperienceSEC')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -529,12 +641,19 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'totalQuantitiesSEC',
+                label: 'Total Quantities provided to SEC'
+              })"
             >
               <p-inputnumber
                 fluid
                 [maxlength]="10"
                 placeholder="Enter total quantities provided to SEC"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
+                [appConditionalColorClass]="highlightInput('totalQuantitiesSEC')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -593,6 +712,11 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'namesOfSECApprovedSuppliers',
+                label: 'Name(s) of SEC approved local supplier(s)'
+              })"
             >
               <input
                 type="text"
@@ -601,6 +725,8 @@
                 placeholder="Enter name(s) of SEC approved local supplier(s)"
                 [maxlength]="255"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
+                [appConditionalColorClass]="highlightInput('namesOfSECApprovedSuppliers')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -615,6 +741,11 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'qualifiedPlantLocation',
+                label: 'Qualified Plant Location'
+              })"
             >
               <input
                 type="text"
@@ -623,6 +754,8 @@
                 fluid
                 placeholder="Enter qualified plant location"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
+                [appConditionalColorClass]="highlightInput('qualifiedPlantLocation')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -637,12 +770,19 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'yearsOfExperience',
+                label: 'Years of Experience'
+              })"
             >
               <p-inputnumber
                 fluid
                 [maxlength]="2"
                 placeholder="Enter years of experience"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
+                [appConditionalColorClass]="highlightInput('yearsOfExperience')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -660,12 +800,19 @@
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'totalQuantities',
+                label: 'Total quantities provided to all approved local suppliers'
+              })"
             >
               <p-inputnumber
                 fluid
                 [maxlength]="10"
                 placeholder="Enter total quantities provided"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
+                [appConditionalColorClass]="highlightInput('totalQuantities')"
+                [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
             <app-base-error-messages
@@ -678,4 +825,50 @@
       }
     </div>
   </div>
+
+  @if(commentPhase() == 'editing' || commentPhase() == 'viewing'){
+  <div
+    class="animated flex flex-col gap-4 mt-8"
+    animate.enter="fadeIn"
+  >
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Your Comment'" />
+        <textarea
+          fluid
+          rows="8"
+          pTextarea
+          [formControl]="commentFormControl"
+        ></textarea>
+        <app-base-error-messages
+          [control]="commentFormControl"
+          [label]="'Your Comment'"
+        />
+      </div>
+    </div>
+  </div>
+  }
+
+  @if(showCheckbox()){
+  <app-comment-state-component
+    [commentsCount]="selectedInputs().length"
+    [(commentPhase)]="commentPhase"
+    [commentFormControl]="commentFormControl"
+    (deleteComments)="onDeleteComments()"
+    (saveComment)="commentPhase() === 'editing' ? onSaveEditedComment() : onSaveComment()"
+  />
+  }
+
+  @if(showDeleteConfirmationDialog()){
+  <app-general-confirmation-dialog
+    [(visible)]="showDeleteConfirmationDialog"
+    [title]="'Are you sure you want to delete the comment and selected fields?'"
+    [confirmationLabel]="'Delete'"
+    [cancelLabel]="'Cancel'"
+    [confirmButtonSeverity]="'danger'"
+    [icon]="'icon-trash-2'"
+    (confirmed)="onConfirmDeleteComment()"
+    (onCancel)="onCancelDeleteComment()"
+  />
+  }
 </div>
