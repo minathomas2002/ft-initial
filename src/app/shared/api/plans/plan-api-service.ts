@@ -7,6 +7,7 @@ import { IActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseAp
 import { API_ENDPOINTS } from '../api-endpoints';
 import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse } from '../../interfaces/plans.interface';
 import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
+import { EemployeePlanAction } from 'src/app/shared/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -43,8 +44,8 @@ export class PlanApiService {
     return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.submitServiceLocalizationPlan, req);
   }
 
-  employeeTogglePlanStatus(req: { planId: string, status: 7 | 10, reason: string }): Observable<IBaseApiResponse<boolean>> {
-    return this.baseHttpService.post<boolean, { planId: string }, unknown>(API_ENDPOINTS.plans.employeeTogglePlanStatus, req);
+  employeeTogglePlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined }): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined }, unknown>(API_ENDPOINTS.plans.employeeTogglePlanStatus, req);
   }
 
   getProductPlan(req: { planId: string }): Observable<IBaseApiResponse<IProductPlanResponse>> {
