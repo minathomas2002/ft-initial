@@ -8,6 +8,7 @@ import { PasswordPolicy } from '../../components/password-policy/password-policy
 import { RegisterFormService } from '../../services/register-form/register-form';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
+import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { IRegisterRequest } from 'src/app/shared/interfaces';
 import { ERoutes } from 'src/app/shared/enums';
@@ -30,6 +31,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     TranslatePipe,
     PhoneInputComponent,
     TrimOnBlurDirective,
+    PasswordToggleComponent,
   ],
   providers: [RegisterFormService],
   templateUrl: './register.html',

@@ -8,6 +8,7 @@ import { BaseLabelComponent } from 'src/app/shared/components/base-components/ba
 import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { InputTextModule } from 'primeng/inputtext';
+import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
 
 @Component({
   selector: 'app-password-policy',
@@ -18,7 +19,8 @@ import { InputTextModule } from 'primeng/inputtext';
     BaseLabelComponent,
     BaseErrorComponent,
     TranslatePipe,
-    InputTextModule
+    InputTextModule,
+    PasswordToggleComponent
   ],
   templateUrl: './password-policy.html',
   styleUrl: './password-policy.scss',

@@ -24,12 +24,12 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
 import { DashboardPlansFilterService } from '../../services/dashboard-plans-filter/dashboard-plans-filter-service';
 import { InvestorDashboardPlansFilter } from '../../components/investor-dashboard-plans-filter/investor-dashboard-plans-filter';
-import { InvestorDashboardPlanActionMenu } from '../../components/investor-dashboard-plan-action-menu/investor-dashboard-plan-action-menu';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
+import { DashboardPlanActionMenu } from '../../components/dashboard-plan-action-menu/dashboard-plan-action-menu';
 
 @Component({
   selector: 'app-investor-dashboard',
@@ -43,14 +43,15 @@ import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/s
     NewPlanDialog,
     ProductLocalizationPlanWizard,
     InvestorDashboardPlansFilter,
-    InvestorDashboardPlanActionMenu,
+    DashboardPlanActionMenu,
     DatePipe,
     NgClass,
     SkeletonModule,
     TranslatePipe,
     SlaCountdownNounPipe,
-    ServiceLocalizationPlanWizard
-],
+    ServiceLocalizationPlanWizard,
+    TimelineDialog
+  ],
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
   providers: [DashboardPlansFilterService],
@@ -191,19 +192,27 @@ export class InvestorDashboard implements OnInit {
   }
 
   onDownload(plan: IPlanRecord) {
-    this.planStore
-      .downloadPlan(plan.id)
-      .pipe(take(1))
-      .subscribe({
-        error: (error) => {
-          console.error('Error downloading plan:', error);
-        },
-      });
+    if (plan.planType === EOpportunityType.PRODUCT) {
+      this.planStore
+        .downloadPlan(plan.id)
+        .pipe(take(1))
+        .subscribe({
+          error: (error) => {
+            console.error('Error downloading plan:', error);
+          },
+        });
+    } else if (plan.planType === EOpportunityType.SERVICES) {
+      this.toastService.warn('Will be implemented soon');
+    }
   }
 
   onViewTimeline(plan: IPlanRecord) {
     this.timelineVisibility.set(true);
     this.selectedPlan.set(plan);
+  }
+
+  onReview(plan: IPlanRecord) {
+    console.log('Review Plan : ', plan);
   }
 
   applyFilter() {

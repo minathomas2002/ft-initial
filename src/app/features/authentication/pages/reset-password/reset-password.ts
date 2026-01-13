@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
 import { PasswordPolicy } from '../../components/password-policy/password-policy';
 import { ResetPasswordFormService } from '../../services/reset-password-form/reset-password-form';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
@@ -27,6 +28,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     BaseErrorComponent,
     TranslatePipe,
     PasswordPolicy,
+    PasswordToggleComponent,
   ],
   providers: [ResetPasswordFormService],
   templateUrl: './reset-password.html',

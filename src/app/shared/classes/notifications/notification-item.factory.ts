@@ -66,7 +66,7 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
   let route: string[] = [];
   let params: Record<string, string> = {};
   let parsedCustomData = safeParseCustomData(notification.customData);
-  let searchText = parsedCustomData?.planId || '';
+  let searchText = parsedCustomData?.PlanId || '';
   let actionsToTrigger = [EPlanAction.Submitted, EPlanAction.Reassigned]
 
   if (actionsToTrigger.includes(notification.action)) {
@@ -77,7 +77,7 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
   return { route, params };
 }
 
-function safeParseCustomData(value: string | { planId: string; }) {
+function safeParseCustomData(value: string | { PlanId: string; }) {
   if (typeof value === 'string') {
     try {
       return JSON.parse(value);

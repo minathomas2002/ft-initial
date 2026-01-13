@@ -6,7 +6,7 @@ export interface INotification {
   body: string;
   createdDate: string;
   customData: {
-    planId: string,
+    PlanId: string,
   };
   from: string;
   id: string;
