@@ -2,13 +2,15 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { FormGroup } from '@angular/forms';
 import { SummaryField } from 'src/app/shared/components/plans/summary-field/summary-field';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
+import { SummaryComments } from 'src/app/shared/components/plans/summary-comments/summary-comments';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-product-plant',
-  imports: [SummarySectionHeader, SummaryField],
+  imports: [SummarySectionHeader, SummaryField, SummaryComments],
   templateUrl: './summary-section-product-plant.html',
   styleUrl: './summary-section-product-plant.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,6 +18,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 export class SummarySectionProductPlant {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
+  pageComments = input<IPageComment[]>([]);
   onEdit = output<void>();
   private readonly planStore = inject(PlanStore);
   targetedCustomerOptions = this.planStore.targetedCustomerOptions;
@@ -139,4 +142,37 @@ export class SummarySectionProductPlant {
   // Computed labels for complex strings
   productsUtilizeLabel = 'Which product(s) manufactured by SEC\'s approved local suppliers will utilize your "Targeted Product"';
   provideToLocalSuppliersLabel = 'Do you currently provide this product to SEC\'s approved local suppliers?';
+
+  // Helper method to check if a field has comments
+  hasFieldComment(fieldKey: string, fieldId?: string): boolean {
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        field.inputKey === fieldKey &&
+        (fieldId === undefined || field.id === fieldId)
+      )
+    );
+  }
+
+  // Computed properties for comment status
+  productNameHasComment = computed(() => this.hasFieldComment('productName'));
+  productSpecificationsHasComment = computed(() => this.hasFieldComment('productSpecifications'));
+  targetedAnnualPlantCapacityHasComment = computed(() => this.hasFieldComment('targetedAnnualPlantCapacity'));
+  timeRequiredToSetupFactoryHasComment = computed(() => this.hasFieldComment('timeRequiredToSetupFactory'));
+  landPercentageHasComment = computed(() => this.hasFieldComment('landPercentage'));
+  buildingPercentageHasComment = computed(() => this.hasFieldComment('buildingPercentage'));
+  machineryEquipmentPercentageHasComment = computed(() => this.hasFieldComment('machineryEquipmentPercentage'));
+  othersPercentageHasComment = computed(() => this.hasFieldComment('othersPercentage'));
+  othersDescriptionHasComment = computed(() => this.hasFieldComment('othersDescription'));
+  targetedCustomerHasComment = computed(() => this.hasFieldComment('targetedCustomer'));
+  namesOfTargetedSuppliersHasComment = computed(() => this.hasFieldComment('namesOfTargetedSuppliers'));
+  productsUtilizeTargetedProductHasComment = computed(() => this.hasFieldComment('productsUtilizeTargetedProduct'));
+  productManufacturingExperienceHasComment = computed(() => this.hasFieldComment('productManufacturingExperience'));
+  qualifiedPlantLocationSECHasComment = computed(() => this.hasFieldComment('qualifiedPlantLocationSEC'));
+  approvedVendorIDSECHasComment = computed(() => this.hasFieldComment('approvedVendorIDSEC'));
+  yearsOfExperienceSECHasComment = computed(() => this.hasFieldComment('yearsOfExperienceSEC'));
+  totalQuantitiesSECHasComment = computed(() => this.hasFieldComment('totalQuantitiesSEC'));
+  namesOfSECApprovedSuppliersHasComment = computed(() => this.hasFieldComment('namesOfSECApprovedSuppliers'));
+  qualifiedPlantLocationHasComment = computed(() => this.hasFieldComment('qualifiedPlantLocation'));
+  yearsOfExperienceHasComment = computed(() => this.hasFieldComment('yearsOfExperience'));
+  totalQuantitiesHasComment = computed(() => this.hasFieldComment('totalQuantities'));
 }

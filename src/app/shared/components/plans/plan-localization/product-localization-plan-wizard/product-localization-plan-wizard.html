@@ -81,6 +81,7 @@
     <p-button
       [label]="'Send Back to Investor'"
       severity="warn"
+      [disabled]="!hasComments()"
       (click)="onSendBackToInvestor()"
     ></p-button>
     } @else {

@@ -1,5 +1,12 @@
 <div class="flex items-center gap-2">
   <span class="text-sm text-gray-900">{{ displayValue() }}</span>
+  @if (hasComment()) {
+  <i
+    class="icon-info text-orange-600 text-xs bg-orange-50 p-1 rounded-full"
+    pTooltip="This field has a comment"
+    tooltipPosition="top"
+  ></i>
+  }
   @if (hasError()) {
   <i
     class="icon-info text-red-500 text-xs bg-red-50 p-1 rounded-full"

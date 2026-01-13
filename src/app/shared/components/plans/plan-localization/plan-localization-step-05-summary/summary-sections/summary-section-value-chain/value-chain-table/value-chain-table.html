@@ -24,18 +24,21 @@
         <app-summary-table-cell
           [value]="rowData.expenseHeader"
           [hasError]="rowData.expenseHeaderHasError"
+          [hasComment]="rowData.expenseHeaderHasComment"
         />
       </td>
       <td class="p-3 !border !border-gray-200">
         <app-summary-table-cell
           [value]="rowData.inHouseOrProcured"
           [hasError]="rowData.inHouseOrProcuredHasError"
+          [hasComment]="rowData.inHouseOrProcuredHasComment"
         />
       </td>
       <td class="p-3 !border !border-gray-200">
         <app-summary-table-cell
           [value]="rowData.costPercentage"
           [hasError]="rowData.costPercentageHasError"
+          [hasComment]="rowData.costPercentageHasComment"
         />
       </td>
       @for (year of years; track year) {
@@ -46,6 +49,7 @@
         <app-summary-table-cell
           [value]="rowData['year' + year]"
           [hasError]="rowData['year' + year + 'HasError']"
+          [hasComment]="rowData['year' + year + 'HasComment']"
         />
       </td>
       }

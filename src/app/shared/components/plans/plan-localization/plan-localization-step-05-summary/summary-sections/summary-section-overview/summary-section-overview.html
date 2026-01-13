@@ -11,6 +11,7 @@
         [label]="'plans.newPlan.planTitle' | translate"
         [value]="planTitle()"
         [hasError]="hasFieldError('basicInformationFormGroup.planTitle.value')"
+        [hasComment]="planTitleHasComment()"
         [isEmpty]="!planTitle()"
       />
       <app-summary-field
@@ -41,18 +42,21 @@
         [label]="'Company Name'"
         [value]="companyName()"
         [hasError]="hasFieldError('companyInformationFormGroup.companyName.value')"
+        [hasComment]="companyNameHasComment()"
         [isEmpty]="!companyName()"
       />
       <app-summary-field
         [label]="'CEO Name'"
         [value]="ceoName()"
         [hasError]="hasFieldError('companyInformationFormGroup.ceoName.value')"
+        [hasComment]="ceoNameHasComment()"
         [isEmpty]="!ceoName()"
       />
       <app-summary-field
         [label]="'CEO Email ID'"
         [value]="ceoEmailID()"
         [hasError]="hasFieldError('companyInformationFormGroup.ceoEmailID.value')"
+        [hasComment]="ceoEmailIDHasComment()"
         [isEmpty]="!ceoEmailID()"
       />
     </div>
@@ -66,12 +70,14 @@
         [label]="'Global HQ Location'"
         [value]="globalHQLocation()"
         [hasError]="hasFieldError('locationInformationFormGroup.globalHQLocation.value')"
+        [hasComment]="globalHQLocationHasComment()"
         [isEmpty]="!globalHQLocation()"
       />
       <app-summary-field
         [label]="'Registered Vendor ID with SEC (if available)'"
         [value]="registeredVendorID()"
         [hasError]="hasFieldError('locationInformationFormGroup.registeredVendorIDwithSEC.value')"
+        [hasComment]="registeredVendorIDHasComment()"
         [isEmpty]="!registeredVendorID()"
       />
       <app-summary-field
@@ -79,6 +85,7 @@
         [value]="hasLocalAgent()"
         [isBoolean]="true"
         [hasError]="hasFieldError('locationInformationFormGroup.doYouCurrentlyHaveLocalAgentInKSA')"
+        [hasComment]="hasLocalAgentHasComment()"
         [isEmpty]="hasLocalAgent() === null"
       />
     </div>
@@ -91,6 +98,7 @@
           [label]="'Contact Person Name'"
           [value]="contactPersonName()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.contactPersonName.value')"
+          [hasComment]="contactPersonNameHasComment()"
           [isEmpty]="!contactPersonName()"
         />
 
@@ -98,6 +106,7 @@
           [label]="'Local Agent Name'"
           [value]="localAgentName()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.localAgentName.value')"
+          [hasComment]="localAgentNameHasComment()"
           [isEmpty]="!localAgentName()"
         />
 
@@ -105,18 +114,21 @@
           [label]="'Email ID'"
           [value]="emailID()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.emailID.value')"
+          [hasComment]="emailIDHasComment()"
           [isEmpty]="!emailID()"
         />
         <app-summary-field
           [label]="'Contact Number'"
           [value]="contactNumber()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.contactNumber.value')"
+          [hasComment]="contactNumberHasComment()"
           [isEmpty]="!contactNumber()"
         />
         <app-summary-field
           [label]="'Company HQ Location'"
           [value]="companyHQLocation()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.companyHQLocation.value')"
+          [hasComment]="companyHQLocationHasComment()"
           [isEmpty]="!companyHQLocation()"
         />
       </div>
@@ -125,37 +137,5 @@
   </div>
 
   <!-- Comments Display (Read-Only) -->
-  @if(hasComments()){
-  <div class="flex flex-col gap-4 mt-6">
-    <h3 class="text-lg font-semibold text-gray-900">Comments</h3>
-    @for(comment of pageComments(); track comment.pageTitleForTL){
-    @if(comment.comment && comment.comment.trim().length > 0){
-    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
-      <div class="flex flex-col gap-3">
-        <div class="flex items-start gap-2">
-          <i class="icon-info text-orange-600 mt-1"></i>
-          <div class="flex-1">
-            <p class="text-sm font-medium text-gray-900 mb-2">Comment:</p>
-            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ comment.comment }}</p>
-          </div>
-        </div>
-        @if(comment.fields && comment.fields.length > 0){
-        <div class="flex flex-col gap-2 mt-2">
-          <p class="text-sm font-medium text-gray-900">Referenced Fields:</p>
-          <div class="flex flex-wrap gap-2">
-            @for(field of comment.fields; track field.inputKey + (field.id || '')){
-            <div class="flex items-center gap-1 bg-white border border-orange-200 rounded px-2 py-1">
-              <i class="icon-info text-orange-600 text-xs"></i>
-              <span class="text-xs text-gray-700">{{ field.label }}</span>
-            </div>
-            }
-          </div>
-        </div>
-        }
-      </div>
-    </div>
-    }
-    }
-  </div>
-  }
+  <app-summary-comments [pageComments]="pageComments()" />
 </div>

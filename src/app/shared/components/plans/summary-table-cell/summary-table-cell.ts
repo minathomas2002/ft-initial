@@ -11,6 +11,7 @@ import { TooltipModule } from 'primeng/tooltip';
 export class SummaryTableCell {
   value = input<any>(null);
   hasError = input<boolean>(false);
+  hasComment = input<boolean>(false);
   isDate = input<boolean>(false);
   isBoolean = input<boolean>(false);
   isEmpty = input<boolean>(false);

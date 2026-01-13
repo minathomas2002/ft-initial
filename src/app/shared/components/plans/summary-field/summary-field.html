@@ -3,6 +3,13 @@
     <span class="text-sm text-gray-700">{{ label() }}</span>
     <span class="text-sm font-medium text-gray-900 wrap-break-word">{{ displayValue() }}</span>
   </div>
+  @if (hasComment()) {
+  <i
+    class="icon-info text-orange-600 text-sm bg-orange-50 p-1 rounded-full font-medium"
+    pTooltip="This field has a comment"
+    tooltipPosition="top"
+  ></i>
+  }
   @if (hasError()) {
   <i
     class="icon-info text-red-500 text-sm bg-red-50 p-1 rounded-full font-medium"

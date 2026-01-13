@@ -41,6 +41,24 @@ export class PlanLocalizationStep05Summary {
     );
   });
 
+  step2Comments = computed(() => {
+    return this.pageComments().filter(comment =>
+      comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step2.title')
+    );
+  });
+
+  step3Comments = computed(() => {
+    return this.pageComments().filter(comment =>
+      comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title')
+    );
+  });
+
+  step4Comments = computed(() => {
+    return this.pageComments().filter(comment =>
+      comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title')
+    );
+  });
+
   // Validation errors state
   validationErrors = signal<Map<number, IStepValidationErrors>>(new Map());
 

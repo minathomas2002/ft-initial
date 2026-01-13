@@ -46,6 +46,7 @@
               <app-summary-table-cell
                 [value]="formatValue(rowData['year' + year])"
                 [hasError]="rowData['year' + year + 'HasError']"
+                [hasComment]="rowData['year' + year + 'HasComment']"
               />
             </td>
             }
@@ -105,4 +106,7 @@
     <span class="text-sm text-gray-500">-</span>
     }
   </div>
+
+  <!-- Comments Display (Read-Only) -->
+  <app-summary-comments [pageComments]="pageComments()" />
 </div>

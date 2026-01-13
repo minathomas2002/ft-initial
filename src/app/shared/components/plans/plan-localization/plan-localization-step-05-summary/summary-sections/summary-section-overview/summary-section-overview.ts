@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output, inject, ef
 import { FormGroup } from '@angular/forms';
 import { SummaryField } from 'src/app/shared/components/plans/summary-field/summary-field';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
+import { SummaryComments } from 'src/app/shared/components/plans/summary-comments/summary-comments';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
@@ -9,7 +10,7 @@ import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-overview',
-  imports: [SummarySectionHeader, SummaryField, TranslatePipe],
+  imports: [SummarySectionHeader, SummaryField, SummaryComments, TranslatePipe],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
   providers: [DatePipe],
@@ -22,9 +23,6 @@ export class SummarySectionOverview {
   onEdit = output<void>();
   private datePipe = inject(DatePipe);
 
-  hasComments = computed(() => {
-    return this.pageComments().length > 0 && this.pageComments().some(comment => comment.comment && comment.comment.trim().length > 0);
-  });
 
   // Form group accessors
   basicInformationFormGroup = computed(() => {
@@ -197,4 +195,28 @@ export class SummarySectionOverview {
     }
     return null;
   });
+
+  // Helper method to check if a field has comments
+  hasFieldComment(fieldKey: string, fieldId?: string): boolean {
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        field.inputKey === fieldKey &&
+        (fieldId === undefined || field.id === fieldId)
+      )
+    );
+  }
+
+  // Computed properties for comment status
+  planTitleHasComment = computed(() => this.hasFieldComment('planTitle'));
+  companyNameHasComment = computed(() => this.hasFieldComment('companyName'));
+  ceoNameHasComment = computed(() => this.hasFieldComment('ceoName'));
+  ceoEmailIDHasComment = computed(() => this.hasFieldComment('ceoEmailID'));
+  globalHQLocationHasComment = computed(() => this.hasFieldComment('globalHQLocation'));
+  registeredVendorIDHasComment = computed(() => this.hasFieldComment('registeredVendorIDwithSEC'));
+  hasLocalAgentHasComment = computed(() => this.hasFieldComment('doYouCurrentlyHaveLocalAgentInKSA'));
+  localAgentNameHasComment = computed(() => this.hasFieldComment('localAgentName'));
+  contactPersonNameHasComment = computed(() => this.hasFieldComment('contactPersonName'));
+  emailIDHasComment = computed(() => this.hasFieldComment('emailID'));
+  contactNumberHasComment = computed(() => this.hasFieldComment('contactNumber'));
+  companyHQLocationHasComment = computed(() => this.hasFieldComment('companyHQLocation'));
 }

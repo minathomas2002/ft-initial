@@ -10,10 +10,12 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 import { SummaryTableCell } from 'src/app/shared/components/plans/summary-table-cell/summary-table-cell';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
+import { SummaryComments } from 'src/app/shared/components/plans/summary-comments/summary-comments';
+import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-saudization',
-  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, TableModule, TranslatePipe, ImageErrorDirective],
+  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, SummaryComments, TableModule, TranslatePipe, ImageErrorDirective],
   templateUrl: './summary-section-saudization.html',
   styleUrl: './summary-section-saudization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +26,7 @@ export class SummarySectionSaudization {
   private readonly i18nService = inject(I18nService);
 
   formGroup = input.required<FormGroup>();
+  pageComments = input<IPageComment[]>([]);
   onEdit = output<void>();
 
   // Expose enum to template
@@ -96,6 +99,22 @@ export class SummarySectionSaudization {
     this.onEdit.emit();
   }
 
+  // Helper method to check if a field has comments
+  hasFieldComment(fieldKey: string, rowId?: string): boolean {
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        field.inputKey === fieldKey &&
+        (rowId === undefined || field.id === rowId)
+      )
+    );
+  }
+
+  // Helper method to check if a year cell has comments
+  hasYearComment(controlName: string, year: number, rowId?: string): boolean {
+    const yearKey = `${controlName}_year${year}`;
+    return this.hasFieldComment(yearKey, rowId);
+  }
+
   // Get attachments value
   attachments = computed(() => {
     const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
@@ -139,80 +158,113 @@ export class SummarySectionSaudization {
   // Table rows data for PrimeNG table
   tableRows = computed(() => {
     this.i18nService.currentLanguage();
+    const annualHeadcountControlName = EMaterialsFormControls.annualHeadcount;
+    const saudizationPercentageControlName = EMaterialsFormControls.saudizationPercentage;
+    const annualTotalCompensationControlName = EMaterialsFormControls.annualTotalCompensation;
+    const saudiCompensationPercentageControlName = EMaterialsFormControls.saudiCompensationPercentage;
+
     return [
       {
         label: this.i18nService.translate('plans.summary.saudization.annualHeadcount'),
-        controlName: EMaterialsFormControls.annualHeadcount,
-        year1: this.getRowValueForYear(1, EMaterialsFormControls.annualHeadcount),
-        year1HasError: this.getRowHasErrorForYear(1, EMaterialsFormControls.annualHeadcount),
-        year2: this.getRowValueForYear(2, EMaterialsFormControls.annualHeadcount),
-        year2HasError: this.getRowHasErrorForYear(2, EMaterialsFormControls.annualHeadcount),
-        year3: this.getRowValueForYear(3, EMaterialsFormControls.annualHeadcount),
-        year3HasError: this.getRowHasErrorForYear(3, EMaterialsFormControls.annualHeadcount),
-        year4: this.getRowValueForYear(4, EMaterialsFormControls.annualHeadcount),
-        year4HasError: this.getRowHasErrorForYear(4, EMaterialsFormControls.annualHeadcount),
-        year5: this.getRowValueForYear(5, EMaterialsFormControls.annualHeadcount),
-        year5HasError: this.getRowHasErrorForYear(5, EMaterialsFormControls.annualHeadcount),
-        year6: this.getRowValueForYear(6, EMaterialsFormControls.annualHeadcount),
-        year6HasError: this.getRowHasErrorForYear(6, EMaterialsFormControls.annualHeadcount),
-        year7: this.getRowValueForYear(7, EMaterialsFormControls.annualHeadcount),
-        year7HasError: this.getRowHasErrorForYear(7, EMaterialsFormControls.annualHeadcount),
+        controlName: annualHeadcountControlName,
+        year1: this.getRowValueForYear(1, annualHeadcountControlName),
+        year1HasError: this.getRowHasErrorForYear(1, annualHeadcountControlName),
+        year1HasComment: this.hasYearComment(annualHeadcountControlName, 1),
+        year2: this.getRowValueForYear(2, annualHeadcountControlName),
+        year2HasError: this.getRowHasErrorForYear(2, annualHeadcountControlName),
+        year2HasComment: this.hasYearComment(annualHeadcountControlName, 2),
+        year3: this.getRowValueForYear(3, annualHeadcountControlName),
+        year3HasError: this.getRowHasErrorForYear(3, annualHeadcountControlName),
+        year3HasComment: this.hasYearComment(annualHeadcountControlName, 3),
+        year4: this.getRowValueForYear(4, annualHeadcountControlName),
+        year4HasError: this.getRowHasErrorForYear(4, annualHeadcountControlName),
+        year4HasComment: this.hasYearComment(annualHeadcountControlName, 4),
+        year5: this.getRowValueForYear(5, annualHeadcountControlName),
+        year5HasError: this.getRowHasErrorForYear(5, annualHeadcountControlName),
+        year5HasComment: this.hasYearComment(annualHeadcountControlName, 5),
+        year6: this.getRowValueForYear(6, annualHeadcountControlName),
+        year6HasError: this.getRowHasErrorForYear(6, annualHeadcountControlName),
+        year6HasComment: this.hasYearComment(annualHeadcountControlName, 6),
+        year7: this.getRowValueForYear(7, annualHeadcountControlName),
+        year7HasError: this.getRowHasErrorForYear(7, annualHeadcountControlName),
+        year7HasComment: this.hasYearComment(annualHeadcountControlName, 7),
       },
       {
         label: this.i18nService.translate('plans.summary.saudization.saudizationPercentage'),
         subtitle: this.i18nService.translate('plans.summary.saudization.saudizationSubtitle'),
-        controlName: EMaterialsFormControls.saudizationPercentage,
-        year1: this.getRowValueForYear(1, EMaterialsFormControls.saudizationPercentage),
-        year1HasError: this.getRowHasErrorForYear(1, EMaterialsFormControls.saudizationPercentage),
-        year2: this.getRowValueForYear(2, EMaterialsFormControls.saudizationPercentage),
-        year2HasError: this.getRowHasErrorForYear(2, EMaterialsFormControls.saudizationPercentage),
-        year3: this.getRowValueForYear(3, EMaterialsFormControls.saudizationPercentage),
-        year3HasError: this.getRowHasErrorForYear(3, EMaterialsFormControls.saudizationPercentage),
-        year4: this.getRowValueForYear(4, EMaterialsFormControls.saudizationPercentage),
-        year4HasError: this.getRowHasErrorForYear(4, EMaterialsFormControls.saudizationPercentage),
-        year5: this.getRowValueForYear(5, EMaterialsFormControls.saudizationPercentage),
-        year5HasError: this.getRowHasErrorForYear(5, EMaterialsFormControls.saudizationPercentage),
-        year6: this.getRowValueForYear(6, EMaterialsFormControls.saudizationPercentage),
-        year6HasError: this.getRowHasErrorForYear(6, EMaterialsFormControls.saudizationPercentage),
-        year7: this.getRowValueForYear(7, EMaterialsFormControls.saudizationPercentage),
-        year7HasError: this.getRowHasErrorForYear(7, EMaterialsFormControls.saudizationPercentage),
+        controlName: saudizationPercentageControlName,
+        year1: this.getRowValueForYear(1, saudizationPercentageControlName),
+        year1HasError: this.getRowHasErrorForYear(1, saudizationPercentageControlName),
+        year1HasComment: this.hasYearComment(saudizationPercentageControlName, 1),
+        year2: this.getRowValueForYear(2, saudizationPercentageControlName),
+        year2HasError: this.getRowHasErrorForYear(2, saudizationPercentageControlName),
+        year2HasComment: this.hasYearComment(saudizationPercentageControlName, 2),
+        year3: this.getRowValueForYear(3, saudizationPercentageControlName),
+        year3HasError: this.getRowHasErrorForYear(3, saudizationPercentageControlName),
+        year3HasComment: this.hasYearComment(saudizationPercentageControlName, 3),
+        year4: this.getRowValueForYear(4, saudizationPercentageControlName),
+        year4HasError: this.getRowHasErrorForYear(4, saudizationPercentageControlName),
+        year4HasComment: this.hasYearComment(saudizationPercentageControlName, 4),
+        year5: this.getRowValueForYear(5, saudizationPercentageControlName),
+        year5HasError: this.getRowHasErrorForYear(5, saudizationPercentageControlName),
+        year5HasComment: this.hasYearComment(saudizationPercentageControlName, 5),
+        year6: this.getRowValueForYear(6, saudizationPercentageControlName),
+        year6HasError: this.getRowHasErrorForYear(6, saudizationPercentageControlName),
+        year6HasComment: this.hasYearComment(saudizationPercentageControlName, 6),
+        year7: this.getRowValueForYear(7, saudizationPercentageControlName),
+        year7HasError: this.getRowHasErrorForYear(7, saudizationPercentageControlName),
+        year7HasComment: this.hasYearComment(saudizationPercentageControlName, 7),
       },
       {
         label: this.i18nService.translate('plans.summary.saudization.annualTotalCompensation'),
-        controlName: EMaterialsFormControls.annualTotalCompensation,
-        year1: this.getRowValueForYear(1, EMaterialsFormControls.annualTotalCompensation),
-        year1HasError: this.getRowHasErrorForYear(1, EMaterialsFormControls.annualTotalCompensation),
-        year2: this.getRowValueForYear(2, EMaterialsFormControls.annualTotalCompensation),
-        year2HasError: this.getRowHasErrorForYear(2, EMaterialsFormControls.annualTotalCompensation),
-        year3: this.getRowValueForYear(3, EMaterialsFormControls.annualTotalCompensation),
-        year3HasError: this.getRowHasErrorForYear(3, EMaterialsFormControls.annualTotalCompensation),
-        year4: this.getRowValueForYear(4, EMaterialsFormControls.annualTotalCompensation),
-        year4HasError: this.getRowHasErrorForYear(4, EMaterialsFormControls.annualTotalCompensation),
-        year5: this.getRowValueForYear(5, EMaterialsFormControls.annualTotalCompensation),
-        year5HasError: this.getRowHasErrorForYear(5, EMaterialsFormControls.annualTotalCompensation),
-        year6: this.getRowValueForYear(6, EMaterialsFormControls.annualTotalCompensation),
-        year6HasError: this.getRowHasErrorForYear(6, EMaterialsFormControls.annualTotalCompensation),
-        year7: this.getRowValueForYear(7, EMaterialsFormControls.annualTotalCompensation),
-        year7HasError: this.getRowHasErrorForYear(7, EMaterialsFormControls.annualTotalCompensation),
+        controlName: annualTotalCompensationControlName,
+        year1: this.getRowValueForYear(1, annualTotalCompensationControlName),
+        year1HasError: this.getRowHasErrorForYear(1, annualTotalCompensationControlName),
+        year1HasComment: this.hasYearComment(annualTotalCompensationControlName, 1),
+        year2: this.getRowValueForYear(2, annualTotalCompensationControlName),
+        year2HasError: this.getRowHasErrorForYear(2, annualTotalCompensationControlName),
+        year2HasComment: this.hasYearComment(annualTotalCompensationControlName, 2),
+        year3: this.getRowValueForYear(3, annualTotalCompensationControlName),
+        year3HasError: this.getRowHasErrorForYear(3, annualTotalCompensationControlName),
+        year3HasComment: this.hasYearComment(annualTotalCompensationControlName, 3),
+        year4: this.getRowValueForYear(4, annualTotalCompensationControlName),
+        year4HasError: this.getRowHasErrorForYear(4, annualTotalCompensationControlName),
+        year4HasComment: this.hasYearComment(annualTotalCompensationControlName, 4),
+        year5: this.getRowValueForYear(5, annualTotalCompensationControlName),
+        year5HasError: this.getRowHasErrorForYear(5, annualTotalCompensationControlName),
+        year5HasComment: this.hasYearComment(annualTotalCompensationControlName, 5),
+        year6: this.getRowValueForYear(6, annualTotalCompensationControlName),
+        year6HasError: this.getRowHasErrorForYear(6, annualTotalCompensationControlName),
+        year6HasComment: this.hasYearComment(annualTotalCompensationControlName, 6),
+        year7: this.getRowValueForYear(7, annualTotalCompensationControlName),
+        year7HasError: this.getRowHasErrorForYear(7, annualTotalCompensationControlName),
+        year7HasComment: this.hasYearComment(annualTotalCompensationControlName, 7),
       },
       {
         label: this.i18nService.translate('plans.summary.saudization.saudiCompensationPercentage'),
         subtitle: this.i18nService.translate('plans.summary.saudization.saudiCompensationSubtitle'),
-        controlName: EMaterialsFormControls.saudiCompensationPercentage,
-        year1: this.getRowValueForYear(1, EMaterialsFormControls.saudiCompensationPercentage),
-        year1HasError: this.getRowHasErrorForYear(1, EMaterialsFormControls.saudiCompensationPercentage),
-        year2: this.getRowValueForYear(2, EMaterialsFormControls.saudiCompensationPercentage),
-        year2HasError: this.getRowHasErrorForYear(2, EMaterialsFormControls.saudiCompensationPercentage),
-        year3: this.getRowValueForYear(3, EMaterialsFormControls.saudiCompensationPercentage),
-        year3HasError: this.getRowHasErrorForYear(3, EMaterialsFormControls.saudiCompensationPercentage),
-        year4: this.getRowValueForYear(4, EMaterialsFormControls.saudiCompensationPercentage),
-        year4HasError: this.getRowHasErrorForYear(4, EMaterialsFormControls.saudiCompensationPercentage),
-        year5: this.getRowValueForYear(5, EMaterialsFormControls.saudiCompensationPercentage),
-        year5HasError: this.getRowHasErrorForYear(5, EMaterialsFormControls.saudiCompensationPercentage),
-        year6: this.getRowValueForYear(6, EMaterialsFormControls.saudiCompensationPercentage),
-        year6HasError: this.getRowHasErrorForYear(6, EMaterialsFormControls.saudiCompensationPercentage),
-        year7: this.getRowValueForYear(7, EMaterialsFormControls.saudiCompensationPercentage),
-        year7HasError: this.getRowHasErrorForYear(7, EMaterialsFormControls.saudiCompensationPercentage),
+        controlName: saudiCompensationPercentageControlName,
+        year1: this.getRowValueForYear(1, saudiCompensationPercentageControlName),
+        year1HasError: this.getRowHasErrorForYear(1, saudiCompensationPercentageControlName),
+        year1HasComment: this.hasYearComment(saudiCompensationPercentageControlName, 1),
+        year2: this.getRowValueForYear(2, saudiCompensationPercentageControlName),
+        year2HasError: this.getRowHasErrorForYear(2, saudiCompensationPercentageControlName),
+        year2HasComment: this.hasYearComment(saudiCompensationPercentageControlName, 2),
+        year3: this.getRowValueForYear(3, saudiCompensationPercentageControlName),
+        year3HasError: this.getRowHasErrorForYear(3, saudiCompensationPercentageControlName),
+        year3HasComment: this.hasYearComment(saudiCompensationPercentageControlName, 3),
+        year4: this.getRowValueForYear(4, saudiCompensationPercentageControlName),
+        year4HasError: this.getRowHasErrorForYear(4, saudiCompensationPercentageControlName),
+        year4HasComment: this.hasYearComment(saudiCompensationPercentageControlName, 4),
+        year5: this.getRowValueForYear(5, saudiCompensationPercentageControlName),
+        year5HasError: this.getRowHasErrorForYear(5, saudiCompensationPercentageControlName),
+        year5HasComment: this.hasYearComment(saudiCompensationPercentageControlName, 5),
+        year6: this.getRowValueForYear(6, saudiCompensationPercentageControlName),
+        year6HasError: this.getRowHasErrorForYear(6, saudiCompensationPercentageControlName),
+        year6HasComment: this.hasYearComment(saudiCompensationPercentageControlName, 6),
+        year7: this.getRowValueForYear(7, saudiCompensationPercentageControlName),
+        year7HasError: this.getRowHasErrorForYear(7, saudiCompensationPercentageControlName),
+        year7HasComment: this.hasYearComment(saudiCompensationPercentageControlName, 7),
       },
     ];
   });

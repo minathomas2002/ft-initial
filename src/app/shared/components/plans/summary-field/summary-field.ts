@@ -12,6 +12,7 @@ export class SummaryField {
   label = input.required<string>();
   value = input<any>(null);
   hasError = input<boolean>(false);
+  hasComment = input<boolean>(false);
   isDate = input<boolean>(false);
   isBoolean = input<boolean>(false);
   isEmpty = input<boolean>(false);
