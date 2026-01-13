@@ -9,7 +9,7 @@
   (onSaveAsDraft)="saveAsDraft()"
   [isLoading]="isLoading() || isLoadingPlan()"
   [isProcessing]="isProcessing()"
-  [hideSaveAsDraft]="isViewMode()"
+  [hideSaveAsDraft]="isViewMode() || isReviewMode()"
   (onClose)="onClose()"
 >
 
@@ -36,7 +36,7 @@
   <ng-template [appStepContent]="3">
     <app-plan-localization-step-03-valueChain-form
       [(showCheckbox)]="showHasCommentControl"
-      [isViewMode]="isViewMode()"
+      [isViewMode]="isViewMode() || isReviewMode()"
     />
   </ng-template>
 

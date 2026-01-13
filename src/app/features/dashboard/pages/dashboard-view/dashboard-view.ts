@@ -179,6 +179,15 @@ export class DashboardView implements OnInit {
   }
 
   onReview(plan: IPlanRecord) {
-    console.log('Review Plan : ', plan);
+    // Set mode to view and plan ID
+    this.planStore.setWizardMode('Review');
+    this.planStore.setSelectedPlanId(plan.id);
+    this.planStore.setPlanStatus(plan.status);
+
+    // Show the appropriate wizard based on plan type
+    if (plan.planType === EOpportunityType.PRODUCT)
+      this.productLocalizationPlanWizardVisibility.set(true);
+    else if (plan.planType === EOpportunityType.SERVICES)
+      this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 }

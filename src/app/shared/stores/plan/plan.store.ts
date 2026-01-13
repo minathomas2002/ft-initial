@@ -1,4 +1,4 @@
-import { computed, inject } from "@angular/core";
+import { computed, inject, Type } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
 import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
@@ -13,6 +13,8 @@ export interface IPlanTypeDropdownOption {
   label: string;
   value: EOpportunityType | null;
 }
+
+export type TWizardMode = 'create' | 'edit' | 'view' | 'Review';
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null;
@@ -45,7 +47,7 @@ const initialState: {
   currentEmployee: IAssignActiveEmployee | null;
   isLoading: boolean;
   isProcessing: boolean;
-  wizardMode: 'create' | 'edit' | 'view' | 'Review';
+  wizardMode: TWizardMode;
   selectedPlanId: string | null;
   planStatus: number | null;
 } = {
@@ -200,7 +202,7 @@ export const PlanStore = signalStore(
       setAvailableOpportunities(opportunity: ISelectItem): void {
         patchState(store, { availableOpportunities: [opportunity] });
       },
-      setWizardMode(mode: 'create' | 'edit' | 'view'): void {
+      setWizardMode(mode: TWizardMode): void {
         patchState(store, { wizardMode: mode });
       },
       setSelectedPlanId(planId: string | null): void {

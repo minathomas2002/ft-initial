@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, model, OnDestroy, output, signal, viewChild } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../../base-components/base-tag/base-tag.component";
@@ -70,7 +70,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
-    return (this.visibility() && this.mode() == 'view' && this.planStatus() !== null)
+    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review') && this.planStatus() !== null)
   })
 
   // Track validation errors for stepper indicators
@@ -122,6 +122,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     this.i18nService.currentLanguage();
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
+    if (currentMode === 'Review') return 'Review Product Localization Plan';
     return this.i18nService.translate('plans.wizard.title.create');
   });
   isLoading = signal(false);
@@ -137,7 +138,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   showConfirmLeaveDialog = model(false);
   // Computed signal for view mode
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
-  isReviewMode = computed(() => this.planStore.wizardMode() === 'Review' || true);
+  isReviewMode = computed(() => this.planStore.wizardMode() === 'Review');
 
   // Computed signals for plan status tag
   planStatus = signal<EInternalUserPlanStatus | null>(null);
@@ -155,7 +156,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   });
   shouldShowStatusTag = computed(() => {
     const mode = this.planStore.wizardMode();
-    return (mode === 'view' || mode === 'edit');
+    return ['view', 'edit', 'Review'].includes(mode);
   });
 
   showHasCommentControl = signal<boolean>(false);
@@ -172,7 +173,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         return;
       }
 
-      if (currentPlanId && (currentMode === 'edit' || currentMode === 'view')) {
+      if (currentPlanId && ['view', 'edit', 'Review'].includes(currentMode)) {
         this.loadPlanData(currentPlanId);
       } else if (currentMode === 'create' && !currentPlanId) {
         // Reset forms for create mode - this will set opportunityType and submissionDate
@@ -287,7 +288,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     const currentMode = this.planStore.wizardMode();
 
     // Handle forms based on mode
-    if (currentMode === 'view') {
+    if (['view', 'Review'].includes(currentMode)) {
       // Disable all forms in view mode
       this.disableAllForms();
     } else if (currentMode === 'edit') {
@@ -310,6 +311,34 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     this.productPlanFormService.step2_productPlantOverview.disable();
     this.productPlanFormService.step3_valueChain.disable();
     this.productPlanFormService.step4_saudization.disable();
+
+    // Re-enable all hasComment controls
+    this.enableHasCommentControls(this.productPlanFormService.step1_overviewCompanyInformation);
+    this.enableHasCommentControls(this.productPlanFormService.step2_productPlantOverview);
+    this.enableHasCommentControls(this.productPlanFormService.step3_valueChain);
+    this.enableHasCommentControls(this.productPlanFormService.step4_saudization);
+  }
+
+  /**
+   * Recursively enable all hasComment FormControls in a form group
+   */
+  private enableHasCommentControls(control: AbstractControl): void {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        const childControl = control.controls[key];
+        if (key === EMaterialsFormControls.hasComment && childControl instanceof FormControl) {
+          // Enable the hasComment control
+          childControl.enable({ emitEvent: false });
+        } else {
+          // Recursively process nested controls
+          this.enableHasCommentControls(childControl);
+        }
+      });
+    } else if (control instanceof FormArray) {
+      control.controls.forEach((arrayControl: AbstractControl) => {
+        this.enableHasCommentControls(arrayControl);
+      });
+    }
   }
 
   enableAllForms(): void {
