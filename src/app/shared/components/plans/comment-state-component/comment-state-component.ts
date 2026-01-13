@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, linkedSignal, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, linkedSignal, model, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -21,4 +21,11 @@ export class CommentStateComponent {
   checked = linkedSignal<boolean>(() => this.commentsCount() > 0);
   showCommentDialog = model<boolean>(false);
   comment = output<string>();
+  hasComment = model<boolean>(false)
+
+
+  onCommentChanges($event: string) {
+    this.comment.emit($event);
+    this.hasComment.set(true);
+  }
 }

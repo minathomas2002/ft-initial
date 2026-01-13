@@ -1,4 +1,23 @@
 <div class="flex items-center justify-center gap-6 rounded-full bg-gray-50 py-2 px-4 border border-gray-200">
+  @if(hasComment()){
+  <p-button
+    label="Edit"
+    variant="outlined"
+    icon="icon-edit"
+    rounded
+    styleClass="border-0! bg-white!"
+  />
+
+  <p-button
+    label="Delete Comment"
+    severity="danger"
+    icon="icon-trash-2"
+    rounded
+    variant="outlined"
+    styleClass="bg-white!"
+  />
+  }
+  @else{
   <div class="flex items-center gap-2">
     <p-checkbox
       [class.p-checkbox-orange]="checked()"
@@ -16,8 +35,9 @@
     [disabled]="!checked()"
     (click)="showCommentDialog.set(true)"
   />
+  }
 </div>
 <app-comment-dialog
   [(visible)]="showCommentDialog"
-  (comment)="comment.emit($event)"
+  (comment)="onCommentChanges($event)"
 ></app-comment-dialog>
