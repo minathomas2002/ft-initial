@@ -225,6 +225,13 @@ export class PlansList implements OnInit {
     }
   }
 
+  getAssigneeName(assignee: string): string {
+    if (assignee && assignee.length > 0)
+      return assignee;
+    else
+      return '-';
+  }
+
   getStatusBadgeClass(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
     if (this.isInvestorRoute()) {
       const classMap = {

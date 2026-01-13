@@ -38,7 +38,7 @@
           <td>{{ item.submissionDate | date: 'dd MMM yyyy' }}</td>
           @if (!isInvestorRoute()) {
           <td>
-            <p class="text-sm text-gray-900 font-medium">{{ item.assignedEmployee ?? '-'  }}</p>
+            <p class="text-sm text-gray-900 font-medium">{{ getAssigneeName(item.assignedEmployee) }}</p>
           </td>
           }
           <td>
