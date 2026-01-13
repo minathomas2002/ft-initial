@@ -26,6 +26,9 @@
     <app-plan-localization-step-01-overview-company-information-form
       [(showCheckbox)]="showHasCommentControl"
       [pageTitle]="steps()[0].title"
+      [(commentPhase)]="commentPhase"
+      [(selectedInputs)]="step1SelectedInputs"
+      [selectedInputColor]="selectedInputColor()"
     />
   </ng-template>
 

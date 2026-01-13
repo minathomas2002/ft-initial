@@ -15,7 +15,7 @@ import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
-import { Signature } from "src/app/shared/interfaces/plans.interface";
+import { IFieldInformation, Signature } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { IProductPlanResponse } from "src/app/shared/interfaces/plans.interface";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
@@ -28,6 +28,9 @@ import { PlanLocalizationStep02ProductPlantOverviewForm } from "../plan-localiza
 import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-03-valueChain/plan-localization-step-03-valueChainForm";
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
+import { TColors } from "src/app/shared/interfaces";
+
+export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 
 @Component({
   selector: 'app-product-localization-plan-wizard',
@@ -75,7 +78,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
-
+  selectedInputColor = computed<TColors>(() => this.commentPhase() === 'none' ? 'green' : 'orange');
   steps = computed<IWizardStepState[]>(() => {
     const errors = this.validationErrors();
     this.i18nService.currentLanguage();
@@ -85,7 +88,9 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         description: this.i18nService.translate('plans.wizard.step1.description'),
         isActive: this.activeStep() === 1,
         formState: this.productPlanFormService.overviewCompanyInformation,
-        hasErrors: true
+        hasErrors: this.commentPhase() === 'none',
+        commentsCount: this.step1SelectedInputs().length,
+        commentColor: this.selectedInputColor()
       },
       {
         title: this.i18nService.translate('plans.wizard.step2.title'),
@@ -117,6 +122,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       }
     ];
   });
+  step1SelectedInputs = signal<IFieldInformation[]>([]);
   wizardTitle = computed(() => {
     const currentMode = this.planStore.wizardMode();
     this.i18nService.currentLanguage();
@@ -160,6 +166,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   });
 
   showHasCommentControl = signal<boolean>(false);
+  commentPhase = model<TCommentPhase>('none');
 
   constructor() {
     // Effect to load plan data when planId and mode are set
@@ -209,6 +216,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   }
 
   onAddComment(): void {
+    this.commentPhase.set('adding');
     this.showHasCommentControl.set(true);
   }
 
