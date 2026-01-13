@@ -384,6 +384,11 @@ export const PlanStore = signalStore(
         );
       },
 
+      approvePlan(planId: string) {
+        patchState(store, { isProcessing: true, error: null });
+
+      },
+
       /* Get Product Plan*/
       getProductPlan(planId: string): Observable<IBaseApiResponse<IProductPlanResponse>> {
         patchState(store, { isLoading: true, error: null });
