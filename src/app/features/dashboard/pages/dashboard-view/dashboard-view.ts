@@ -26,6 +26,7 @@ import { RoleService } from 'src/app/shared/services/role/role-service';
 import { InternalUsersDashboardPlansFilterService } from '../../services/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter-service';
 import { DashboardPlanActionMenu } from '../../components/dashboard-plan-action-menu/dashboard-plan-action-menu';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-dashboard-view',
@@ -47,7 +48,8 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     ProductLocalizationPlanWizard,
     ServiceLocalizationPlanWizard,
     TimelineDialog,
-    BaseTagComponent
+    BaseTagComponent,
+    TooltipModule
   ],
   templateUrl: './dashboard-view.html',
   styleUrl: './dashboard-view.scss',

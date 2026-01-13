@@ -1,16 +1,8 @@
-<app-table-layout
-  [tableTitle]="'dashboard.title' | translate"
-  [tableSubTitle]="'dashboard.subtitle' | translate"
-  pageTitleClass="text-[24px] font-semibold"
-  pageSubTitleClass="text-md text-gray-600"
->
+<app-table-layout [tableTitle]="'dashboard.title' | translate" [tableSubTitle]="'dashboard.subtitle' | translate"
+  pageTitleClass="text-[24px] font-semibold" pageSubTitleClass="text-md text-gray-600">
   <ng-container ngProjectAs="table-actions">
-    <p-button
-      [label]="'dashboard.submitNewPlan' | translate"
-      [icon]="'icon-plus'"
-      [size]="'small'"
-      (onClick)="createNewPlan()"
-    />
+    <p-button [label]="'dashboard.submitNewPlan' | translate" [icon]="'icon-plus'" [size]="'small'"
+      (onClick)="createNewPlan()" />
   </ng-container>
 
   <!-- Statistics Cards -->
@@ -29,10 +21,8 @@
       </div>
       } } @else {
       <!-- Total Plans -->
-      <div
-        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-        (click)="onViewTotalPlans()"
-      >
+      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+        (click)="onViewTotalPlans()">
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.totalPlans' | translate }}
         </p>
@@ -48,10 +38,8 @@
       </div>
 
       <!-- Plans Under Review -->
-      <div
-        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-        (click)="onViewPlansUnderReview()"
-      >
+      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+        (click)="onViewPlansUnderReview()">
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.plansUnderReview' | translate }}
         </p>
@@ -67,10 +55,8 @@
       </div>
 
       <!-- Approved Plans -->
-      <div
-        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-        (click)="onViewApprovedPlans()"
-      >
+      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+        (click)="onViewApprovedPlans()">
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.approvedPlans' | translate }}
         </p>
@@ -86,10 +72,8 @@
       </div>
 
       <!-- Rejected Plans -->
-      <div
-        class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-        (click)="onViewRejectedPlans()"
-      >
+      <div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+        (click)="onViewRejectedPlans()">
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.rejectedPlans' | translate }}
         </p>
@@ -112,22 +96,16 @@
 
   <ng-container ngProjectAs="table-body">
     <app-table-skeleton [headers]="headers()" [isLoading]="isLoading()">
-      <app-data-table
-        [columns]="headers()"
-        [rows]="rows()"
-        [(filter)]="filterService.filter"
-        [totalRecords]="totalRecords()"
-        (filterChange)="filterService.applyFilterWithPaging()"
-        [messageTitle]="'plans.list.noPlansFound' | translate"
-        [showCheckBox]="false"
-        [rowsCheckable]="false"
-      >
+      <app-data-table [columns]="headers()" [rows]="rows()" [(filter)]="filterService.filter"
+        [totalRecords]="totalRecords()" (filterChange)="filterService.applyFilterWithPaging()"
+        [messageTitle]="'plans.list.noPlansFound' | translate" [showCheckBox]="false" [rowsCheckable]="false">
         <ng-template #itemsTemplate let-item="item">
           <td>
             {{ '#' + item.planCode }}
           </td>
           <td>
-            <p class="text-sm text-gray-900 font-medium">{{ item.title }}</p>
+            <p class="text-sm text-gray-900 font-medium max-w-[25ch] truncate" [pTooltip]="item.title ?? '-'"
+              tooltipPosition="top">{{ item.title }}</p>
           </td>
           <td>
             <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
@@ -136,16 +114,13 @@
           <td>
             @if(item.status == eInvestorPlanStatus.PENDING) {
 
-            <span
-              class="text-sm font-medium"
-              [ngClass]="
+            <span class="text-sm font-medium" [ngClass]="
                 item.slaCountDown > 5
                   ? 'text-green-500'
                   : item.slaCountDown > 0
                   ? 'text-orange-500'
                   : 'text-red-600'
-              "
-            >
+              ">
               {{ item.slaCountDown | slaCountdownNoun }}
             </span>
             } @else {
@@ -153,20 +128,15 @@
             }
           </td>
           <td>
-            <span class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl whitespace-nowrap {{ getStatusBadgeClass(item.status) }}">
+            <span
+              class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl whitespace-nowrap {{ getStatusBadgeClass(item.status) }}">
               {{ getStatusLabel(item.status) }}
             </span>
           </td>
           <td>
-            <app-dashboard-plan-action-menu
-              [actions]="item.actions"
-              [plan]="item"
-              (onViewDetails)="onViewDetails($event)"
-              (onEdit)="onEdit($event)"
-              (onDownload)="onDownload($event)"
-              (onViewTimeLine)="onViewTimeline($event)"
-              (onInternalReview)="onReview($event)"
-            />
+            <app-dashboard-plan-action-menu [actions]="item.actions" [plan]="item"
+              (onViewDetails)="onViewDetails($event)" (onEdit)="onEdit($event)" (onDownload)="onDownload($event)"
+              (onViewTimeLine)="onViewTimeline($event)" (onInternalReview)="onReview($event)" />
           </td>
         </ng-template>
       </app-data-table>
@@ -175,28 +145,16 @@
 </app-table-layout>
 
 @if(planTermsAndConditionsDialogVisibility()){
-<app-plan-terms-and-conditions-dialog
-  [(visibility)]="planTermsAndConditionsDialogVisibility"
-  (onConfirm)="onUserReadAndApproved()"
-/>
+<app-plan-terms-and-conditions-dialog [(visibility)]="planTermsAndConditionsDialogVisibility"
+  (onConfirm)="onUserReadAndApproved()" />
 } @if(newPlanDialogVisibility()){
-<app-new-plan-dialog
-  [(visibility)]="newPlanDialogVisibility"
-  (onConfirm)="onUserConfirmNewPlanDialog()"
-/>
+<app-new-plan-dialog [(visibility)]="newPlanDialogVisibility" (onConfirm)="onUserConfirmNewPlanDialog()" />
 } @if(productLocalizationPlanWizardVisibility()){
-<app-product-localization-plan-wizard
-  [(visibility)]="productLocalizationPlanWizardVisibility"
-  (doRefresh)="applyFilter()"
-/>
+<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()" />
 } @if(serviceLocalizationPlanWizardVisibility()){
-<app-service-localization-plan-wizard
-  [(visibility)]="serviceLocalizationPlanWizardVisibility"
-  (doRefresh)="applyFilter()"
-/>
+<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()" />
 } @if(timelineVisibility()){
-  <app-timeline-dialog
-    [(dialogVisible)]="timelineVisibility"
-    [planId]="selectedPlan()?.id || null"
-  />
-  }
+<app-timeline-dialog [(dialogVisible)]="timelineVisibility" [planId]="selectedPlan()?.id || null" />
+}

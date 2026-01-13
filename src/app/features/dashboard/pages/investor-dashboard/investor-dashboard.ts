@@ -32,6 +32,7 @@ import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/s
 import { DashboardPlanActionMenu } from '../../components/dashboard-plan-action-menu/dashboard-plan-action-menu';
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-investor-dashboard',
@@ -52,7 +53,8 @@ import { ERoutes } from 'src/app/shared/enums';
     TranslatePipe,
     SlaCountdownNounPipe,
     ServiceLocalizationPlanWizard,
-    TimelineDialog
+    TimelineDialog,
+    TooltipModule
   ],
   templateUrl: './investor-dashboard.html',
   styleUrl: './investor-dashboard.scss',
