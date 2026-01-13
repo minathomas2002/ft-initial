@@ -47,6 +47,7 @@ export interface IPlanFilter extends IFilterBase<TPlansSortingKeys> {
   planType?: EOpportunityType | null;
   status?: EInvestorPlanStatus | EInternalUserPlanStatus | null;
   submissionDate?: Date[] | undefined;
+  assigneeId?: number | null;
 }
 
 export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {
@@ -55,6 +56,7 @@ export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {
   status?: EInvestorPlanStatus | EInternalUserPlanStatus | null;
   submissionDateFrom?: string | null;
   submissionDateTo?: string | null;
+  assigneeId?: number | null;
 }
 
 export interface IPlansDashboardStatistics {

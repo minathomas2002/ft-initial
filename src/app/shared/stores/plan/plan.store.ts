@@ -467,6 +467,19 @@ export const PlanStore = signalStore(
             patchState(store, { loading: false });
           })
         );
+      },
+      getInternalUserPlans(filter: IPlanFilterRequest) {
+        patchState(store, { loading: true });
+        return planApiService.getInternalUserPlans(filter).pipe(
+          tap((res) => {
+            const plans = res.body.data || [];
+            const totalCount = res.body.pagination?.totalCount ?? plans.length;
+            patchState(store, { list: plans, count: totalCount });
+          }),
+          finalize(() => {
+            patchState(store, { loading: false });
+          })
+        );
       }
     };
   })

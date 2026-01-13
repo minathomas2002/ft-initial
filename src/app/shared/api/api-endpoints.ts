@@ -31,7 +31,9 @@ export const API_ENDPOINTS = {
     getInvestorDashboardPlans: `${Plans}/get-investor-dashboard-plans`,
     getInternalUserDashboardPlans: `${Plans}/get-internal-dashboard-plans`,
     getInverstorPlans: `${Plans}/get-investor-plans`,
+    getInternalUserPlans: `${Plans}/get-internal-plans`,
     getActiveEmployeesWithPlans: `${Plans}/active-employees?planId=`,
+    getPlanAssignees: `${Plans}/get-plan-assignees`, // TODO: Update with exact endpoint when known
     assign: `${Plans}/assign`,
     reassign: `${Plans}/reassign`,
     saveAsDraftProductLocalizationPlan: `${Plans}/saveAsDraft-productPlan`,

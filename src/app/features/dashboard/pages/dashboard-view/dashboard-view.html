@@ -10,7 +10,16 @@
       @if(isStatisticsLoading()) {
       <app-dashboard-statistics-skeleton [count]="5" />
       } @else {
-      <app-dashboard-statistics-cards [statistics]="statistics()" />
+      <app-dashboard-statistics-cards 
+        [statistics]="statistics()"
+        (onViewTotalPlans)="onViewTotalPlans()"
+        (onViewUnassignedPlans)="onViewUnassignedPlans()"
+        (onViewPlansUnderReview)="onViewPlansUnderReview()"
+        (onViewApprovedPlans)="onViewApprovedPlans()"
+        (onViewRejectedPlans)="onViewRejectedPlans()"
+        (onViewPendingAssignedPlans)="onViewPendingAssignedPlans()"
+        (onViewAssignedPlans)="onViewAssignedPlans()"
+      />
       }
     </div>
 

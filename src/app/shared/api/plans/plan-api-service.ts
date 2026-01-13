@@ -3,7 +3,7 @@ import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { IActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IPlanFilterRequest, IPlanRecord, IPlansResponse } from '../../interfaces';
+import { IActiveEmployee, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IPlanFilterRequest, IPlanRecord, IPlansResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse } from '../../interfaces/plans.interface';
 import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
@@ -77,6 +77,26 @@ export class PlanApiService {
     filter: IPlanFilterRequest
   ): Observable<IBaseApiResponse<IPlansResponse<IPlanRecord[]>>> {
     return this.baseHttpService.post(API_ENDPOINTS.plans.getInverstorPlans, filter);
+  }
+
+  getInternalUserPlans(
+    filter: IPlanFilterRequest
+  ): Observable<IBaseApiResponse<IPlansResponse<IPlanRecord[]>>> {
+    return this.baseHttpService.post(API_ENDPOINTS.plans.getInternalUserPlans, filter);
+  }
+
+  getPlanAssignees(): Observable<IBaseApiResponse<IAssignActiveEmployee[]>> {
+    // For now, using getActiveEmployees as placeholder and mapping to IAssignActiveEmployee format
+    // This should be replaced with: return this.baseHttpService.get(API_ENDPOINTS.plans.getPlanAssignees);
+    return this.baseHttpService.get<IAssignActiveEmployee[], string>(API_ENDPOINTS.systemEmployees.getActiveEmployees).pipe(
+      map(response => ({
+        ...response,
+        body: {
+          ...response.body,
+          data: response.body as IAssignActiveEmployee[]
+        }
+      }))
+    );
   }
 
 }

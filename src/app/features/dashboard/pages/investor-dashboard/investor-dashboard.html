@@ -31,6 +31,7 @@
       <!-- Total Plans -->
       <div
         class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+        (click)="onViewTotalPlans()"
       >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.totalPlans' | translate }}
@@ -49,6 +50,7 @@
       <!-- Plans Under Review -->
       <div
         class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+        (click)="onViewPlansUnderReview()"
       >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.plansUnderReview' | translate }}
@@ -67,6 +69,7 @@
       <!-- Approved Plans -->
       <div
         class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+        (click)="onViewApprovedPlans()"
       >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.approvedPlans' | translate }}
@@ -85,6 +88,7 @@
       <!-- Rejected Plans -->
       <div
         class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+        (click)="onViewRejectedPlans()"
       >
         <p class="text-sm font-medium text-gray-600 mb-2">
           {{ 'plans.statistics.rejectedPlans' | translate }}

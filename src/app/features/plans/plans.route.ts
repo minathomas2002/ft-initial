@@ -6,12 +6,12 @@ export const plans_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () => import('./pages/plans-list/plans-list').then((m) => m.PlansList),
+    canActivate: [internalPlansGuardGuard],
     pathMatch: 'full',
-    canActivate: [internalPlansGuardGuard]
   },
   {
     path: ERoutes.investors,
     loadComponent: () =>
-      import('./pages/investor-plans/investor-plans').then((m) => m.InvestorPlans),
+      import('./pages/plans-list/plans-list').then((m) => m.PlansList),
   }
 ];

@@ -695,7 +695,9 @@
       "allTypes": "All Types",
       "service": "Service",
       "material": "Material",
-      "allStatuses": "All Statuses"
+      "allStatuses": "All Statuses",
+      "selectAssignee": "Select Assignee",
+      "allAssignees": "All Assignees"
     },
     "wizard": {
       "step1": {
@@ -826,7 +828,8 @@
       "day": "Day",
       "days": "Days",
       "dayOverdue": "Day Overdue",
-      "daysOverdue": "Days Overdue"
+      "daysOverdue": "Days Overdue",
+      "assignee": "Assignee"
     },
     "statistics": {
       "totalPlans": "Total Plans",

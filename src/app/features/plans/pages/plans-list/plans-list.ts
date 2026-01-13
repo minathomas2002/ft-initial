@@ -1,40 +1,314 @@
-import { Component, OnInit, signal, Signal } from '@angular/core';
-import { Button } from "primeng/button";
-import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
-import { EInvestorPlanStatus, IPlanRecord } from 'src/app/shared/interfaces';
-import { EOpportunityType } from 'src/app/shared/enums';
-import { AssignReassignManualEmployee } from "../../components/assign-reassign-manual-employee/assign-reassign-manual-employee";
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { SkeletonModule } from 'primeng/skeleton';
+import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
+import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
+import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
+import { EInvestorPlanStatus, EInternalUserPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
+import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
+import { EOpportunityType, ERoutes } from 'src/app/shared/enums';
+import { DatePipe, NgClass } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
+import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
+import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
+import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
+import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
+import { TimelineDialog } from 'src/app/shared/components/timeline/timeline-dialog/timeline-dialog';
+import { take } from 'rxjs';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { PlansActionMenu } from '../../components/plans-action-menu/plans-action-menu';
+import { AbstractServiceFilter } from 'src/app/shared/classes/abstract-service-filter';
+import { IPlanFilter } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-plans-list',
-  imports: [AssignReassignManualEmployee],
+  imports: [
+    TableLayoutComponent,
+    TableSkeletonComponent,
+    DataTableComponent,
+    InvestorPlansFilter,
+    InternalUsersPlansFilter,
+    PlansActionMenu,
+    TranslatePipe,
+    SlaCountdownNounPipe,
+    DatePipe,
+    NgClass,
+    ButtonModule,
+    SkeletonModule,
+    PlanTermsAndConditionsDialog,
+    ProductLocalizationPlanWizard,
+    NewPlanDialog,
+    ServiceLocalizationPlanWizard,
+    TimelineDialog
+  ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
 })
 export class PlansList implements OnInit {
-  planItem: IPlanRecord = {
-    id: '',
-    planId: '',
-    planCode: '#334',
-    title: 'plan B',
-    planType: EOpportunityType.PRODUCT,
-    submissionDate: '2025-12-31',
-    slaCountDown: 10, // days remaining
-    status: EInvestorPlanStatus.PENDING,
-    actions: []
-  };
-  viewAssignDialog = signal<boolean>(false);
+  planTermsAndConditionsDialogVisibility = signal(false);
+  newPlanDialogVisibility = signal(false);
+  productLocalizationPlanWizardVisibility = signal(false);
+  serviceLocalizationPlanWizardVisibility = signal(false);
+  timelineVisibility = signal(false);
+  selectedPlan = signal<IPlanRecord | null>(null);
+  eInvestorPlanStatus = EInvestorPlanStatus;
+  eInternalUserPlanStatus = EInternalUserPlanStatus;
+  EInternalUserPlanStatus = EInternalUserPlanStatus;
 
-  ngOnInit() {
+  private readonly planStore = inject(PlanStore);
+  private readonly route = inject(ActivatedRoute);
+  private readonly investorFilterService = inject(InvestorPlansFilterService);
+  private readonly internalUsersFilterService = inject(InternalUsersPlansFilterService);
+  private readonly i18nService = inject(I18nService);
+
+  newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
+  private readonly toastService = inject(ToasterService);
+
+  // Determine if this is investor or internal user route
+  readonly isInvestorRoute = computed(() => {
+    // Check the route path - if it contains 'investors', it's investor route
+    const urlSegments = this.route.snapshot.url.map(s => s.path);
+    return urlSegments.includes(ERoutes.investors);
+  });
+
+  // Get the appropriate filter service based on route
+  readonly filterService = computed<AbstractServiceFilter<IPlanFilter>>(() => {
+    return this.isInvestorRoute() ? this.investorFilterService : this.internalUsersFilterService;
+  });
+
+  readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
+    this.i18nService.currentLanguage();
+    const baseHeaders: ITableHeaderItem<TPlansSortingKeys>[] = [
+      { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
+    ];
+
+    if (!this.isInvestorRoute()) {
+      baseHeaders.push({
+        label: this.i18nService.translate('plans.table.investorName'),
+        isSortable: true,
+        sortingKey: 'investorName'
+      });
+    }
+
+    baseHeaders.push(
+      { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
+      { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'title' },
+      { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
+    );
+
+    if (!this.isInvestorRoute()) {
+      baseHeaders.push({
+        label: this.i18nService.translate('plans.table.assignee'),
+        isSortable: false,
+        sortingKey: 'title'
+      });
+    }
+
+    baseHeaders.push(
+      { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
+    );
+
+    if (!this.isInvestorRoute()) {
+      baseHeaders.push({
+        label: this.i18nService.translate('plans.table.slaCountdown'),
+        isSortable: true,
+        sortingKey: 'slaCountDown'
+      });
+    }
+
+    baseHeaders.push(
+      { label: this.i18nService.translate('plans.table.actions'), isSortable: false },
+    );
+
+    return baseHeaders;
+  });
+
+  readonly rows = computed<IPlanRecord[]>(() => this.planStore.list());
+  readonly totalRecords = computed(() => this.planStore.count());
+  readonly isLoading = computed(() => this.planStore.loading());
+
+  constructor() {
+    effect(() => {
+      if (
+        !this.productLocalizationPlanWizardVisibility() &&
+        !this.serviceLocalizationPlanWizardVisibility()
+      ) {
+        this.resetPlanWizard();
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.filterService().applyFilter();
+  }
+
+  createNewPlan() {
+    // Set mode to create and plan ID
+    // Clear applied opportunity when creating from scratch
+    this.planStore.resetAppliedOpportunity();
+    this.planStore.setWizardMode('create');
+    this.planStore.setSelectedPlanId(null);
+    this.planTermsAndConditionsDialogVisibility.set(true);
+  }
+
+  onUserReadAndApproved() {
+    this.planTermsAndConditionsDialogVisibility.set(false);
+    this.planStore.resetNewPlanOpportunityType();
+    this.newPlanDialogVisibility.set(true);
+  }
+
+  onUserConfirmNewPlanDialog() {
+    this.planStore.getActiveOpportunityLookUps().pipe(take(1)).subscribe();
+    this.newPlanDialogVisibility.set(false);
+
+    if (!this.newPlanOpportunityType()) return;
+
+    // Creating new plan from scratch - clear applied opportunity
+    this.planStore.resetAppliedOpportunity();
+    // Reset mode and plan ID for new plan
+    this.planStore.setWizardMode('create');
+    this.planStore.setSelectedPlanId(null);
+
+    this.newPlanOpportunityType() === EOpportunityType.PRODUCT
+      ? this.productLocalizationPlanWizardVisibility.set(true)
+      : this.serviceLocalizationPlanWizardVisibility.set(true);
+  }
+
+  resetPlanWizard() {
+    this.planStore.resetWizardState();
+  }
+
+  applyFilter() {
+    this.filterService().applyFilter();
   }
 
 
-  onAssign(item: IPlanRecord) {
-    this.viewAssignDialog.set(true);
-    this.planItem = item;
+  getPlanTypeLabel(planType: EOpportunityType): string {
+    const planTypeOption = this.planStore.planTypeOptions().find(option => option.value === planType);
+    return planTypeOption?.label ?? '';
   }
 
-  ApplyFilter() {
+  getStatusLabel(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
+    if (this.isInvestorRoute()) {
+      const statusMap = {
+        [EInvestorPlanStatus.SUBMITTED]: this.i18nService.translate('plans.status.submitted'),
+        [EInvestorPlanStatus.PENDING]: this.i18nService.translate('plans.status.pending'),
+        [EInvestorPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
+        [EInvestorPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
+        [EInvestorPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
+        [EInvestorPlanStatus.DRAFT]: this.i18nService.translate('plans.status.draft'),
+      };
+      return statusMap[status as EInvestorPlanStatus] || '';
+    } else {
+      const statusMap = {
+        [EInternalUserPlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pending'),
+        [EInternalUserPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.employee_status.underReview'),
+        [EInternalUserPlanStatus.APPROVED]: this.i18nService.translate('plans.employee_status.approved'),
+        [EInternalUserPlanStatus.REJECTED]: this.i18nService.translate('plans.employee_status.rejected'),
+        [EInternalUserPlanStatus.UNASSIGNED]: this.i18nService.translate('plans.employee_status.unassigned'),
+        [EInternalUserPlanStatus.ASSIGNED]: this.i18nService.translate('plans.employee_status.assigned'),
+        [EInternalUserPlanStatus.DEPT_APPROVED]: this.i18nService.translate('plans.employee_status.deptApproved'),
+        [EInternalUserPlanStatus.DEPT_REJECTED]: this.i18nService.translate('plans.employee_status.deptRejected'),
+        [EInternalUserPlanStatus.DV_APPROVED]: this.i18nService.translate('plans.employee_status.dvApproved'),
+        [EInternalUserPlanStatus.DV_REJECTED]: this.i18nService.translate('plans.employee_status.dvRejected'),
+        [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
+        [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
+        [EInternalUserPlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
+      };
+      return statusMap[status as EInternalUserPlanStatus] || '';
+    }
+  }
 
+  getAssigneeName(plan: IPlanRecord): string {
+    // Check if assigneeName exists in the plan object (may need to be added to IPlanRecord interface)
+    return (plan as any).assigneeName ?? '-';
+  }
+
+  getStatusBadgeClass(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
+    if (this.isInvestorRoute()) {
+      const classMap = {
+        [EInvestorPlanStatus.SUBMITTED]: 'bg-primary-50 text-primary-700 border-primary-200',
+        [EInvestorPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+        [EInvestorPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
+        [EInvestorPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
+        [EInvestorPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+        [EInvestorPlanStatus.DRAFT]: 'bg-gray-50 text-gray-700 border-gray-200',
+      };
+      return classMap[status as EInvestorPlanStatus] || 'bg-gray-50 text-gray-700 border-gray-200';
+    } else {
+      const classMap = {
+        [EInternalUserPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+        [EInternalUserPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
+        [EInternalUserPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
+        [EInternalUserPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+        [EInternalUserPlanStatus.UNASSIGNED]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+        [EInternalUserPlanStatus.ASSIGNED]: 'bg-orange-50 text-orange-700 border-orange-200',
+        [EInternalUserPlanStatus.DEPT_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
+        [EInternalUserPlanStatus.DEPT_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+        [EInternalUserPlanStatus.DV_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
+        [EInternalUserPlanStatus.DV_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+        [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: 'bg-red-50 text-red-700 border-red-200',
+        [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: 'bg-primary-50 text-primary-700 border-primary-200',
+        [EInternalUserPlanStatus.EMPLOYEE_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
+      };
+      return classMap[status as EInternalUserPlanStatus] || 'bg-gray-50 text-gray-700 border-gray-200';
+    }
+  }
+
+  onViewDetails(plan: IPlanRecord) {
+    // Set mode to view and plan ID
+    this.planStore.setWizardMode('view');
+    this.planStore.setSelectedPlanId(plan.id);
+    this.planStore.setPlanStatus(plan.status);
+
+    plan.planType === EOpportunityType.PRODUCT
+      ? this.productLocalizationPlanWizardVisibility.set(true)
+      : this.serviceLocalizationPlanWizardVisibility.set(true);
+  }
+
+  onEdit(plan: IPlanRecord) {
+    // Check if plan status allows editing
+    const canEdit = this.isInvestorRoute()
+      ? (plan.status === EInvestorPlanStatus.DRAFT || plan.status === EInvestorPlanStatus.PENDING)
+      : (plan.status === EInternalUserPlanStatus.PENDING);
+
+    if (canEdit) {
+      // Set mode to edit and plan ID
+      this.planStore.setWizardMode('edit');
+      this.planStore.setSelectedPlanId(plan.id);
+      this.planStore.setPlanStatus(plan.status);
+
+      plan.planType === EOpportunityType.PRODUCT
+        ? this.productLocalizationPlanWizardVisibility.set(true)
+        : this.serviceLocalizationPlanWizardVisibility.set(true);
+    } else {
+      console.warn('Plan cannot be edited. Status:', plan.status);
+    }
+  }
+
+  onDownload(plan: IPlanRecord) {
+    if (plan.planType === EOpportunityType.PRODUCT) {
+      this.planStore
+        .downloadPlan(plan.id)
+        .pipe(take(1))
+        .subscribe({
+          error: (error) => {
+            console.error('Error downloading plan:', error);
+          },
+        });
+    } else if (plan.planType === EOpportunityType.SERVICES) {
+      this.toastService.warn('Downloading Service Plans Will be implemented soon');
+    }
+  }
+
+  onViewTimeline(plan: IPlanRecord) {
+    this.timelineVisibility.set(true);
+    this.selectedPlan.set(plan);
   }
 }

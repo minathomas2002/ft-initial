@@ -30,6 +30,8 @@ import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dial
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 import { DashboardPlanActionMenu } from '../../components/dashboard-plan-action-menu/dashboard-plan-action-menu';
+import { Router } from '@angular/router';
+import { ERoutes } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-investor-dashboard',
@@ -70,6 +72,7 @@ export class InvestorDashboard implements OnInit {
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
   readonly filterService = inject(DashboardPlansFilterService);
   private readonly i18nService = inject(I18nService);
+  private readonly router = inject(Router);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
 
@@ -234,5 +237,29 @@ export class InvestorDashboard implements OnInit {
 
   resetPlanWizard() {
     this.planStore.resetWizardState();
+  }
+
+  onViewTotalPlans() {
+    this.router.navigate([ERoutes.plans, ERoutes.investors], {
+      queryParams: {},
+    });
+  }
+
+  onViewPlansUnderReview() {
+    this.router.navigate([ERoutes.plans, ERoutes.investors], {
+      queryParams: { status: EInvestorPlanStatus.UNDER_REVIEW }
+    });
+  }
+
+  onViewApprovedPlans() {
+    this.router.navigate([ERoutes.plans, ERoutes.investors], {
+      queryParams: { status: EInvestorPlanStatus.APPROVED }
+    });
+  }
+
+  onViewRejectedPlans() {
+    this.router.navigate([ERoutes.plans, ERoutes.investors], {
+      queryParams: { status: EInvestorPlanStatus.REJECTED }
+    });
   }
 }

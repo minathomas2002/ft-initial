@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { PlanActionsMapper } from 'src/app/features/dashboard/classes/plan-actions.mapper';
+import { PlanActionsMapper } from 'src/app/shared/classes/plan-actions.mapper';
 import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.enum';
 import { IPlanRecord } from 'src/app/shared/interfaces';
 import { I18nService } from 'src/app/shared/services/i18n';
