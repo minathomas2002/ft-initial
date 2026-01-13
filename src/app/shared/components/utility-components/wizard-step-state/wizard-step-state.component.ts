@@ -5,6 +5,7 @@ import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interfa
 import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
 import { merge, startWith, distinctUntilChanged } from 'rxjs';
 import { map } from 'rxjs';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
   selector: 'app-wizard-step-state',
@@ -17,7 +18,11 @@ export class WizardStepStateComponent {
   private formUtilityService = inject(FormUtilityService);
   stepState = input.required<IWizardStepState>();
   formState = computed(() => this.stepState().formState);
+  commentColor = computed(() => this.stepState().commentColor);
+  planStore = inject(PlanStore);
+  viewMode = computed(() => this.planStore.wizardMode());
 
+  commentBadgeSeverity = computed(() => this.commentColor() === 'green' ? 'success' : 'warn');
   // Signal to track form state - updated reactively
   private formStateSignal = signal<{ valid: boolean; invalid: boolean; dirty: boolean; touched: boolean; value: any }>({
     valid: false,
