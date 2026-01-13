@@ -43,7 +43,7 @@ export class SettingsApiService {
     }
 
     updateHoliday(req: IHolidayCreating): Observable<IBaseApiResponse<IHolidaysManagementRecord>> {
-      return this.baseHttpService.put<IHolidaysManagementRecord, IHolidayCreating, unknown>(API_ENDPOINTS.AdminSettings.updateHoliday, req);
+      return this.baseHttpService.post<IHolidaysManagementRecord, IHolidayCreating, unknown>(API_ENDPOINTS.AdminSettings.updateHoliday, req);
     }
 
     deleteHoliday(id: string): Observable<IBaseApiResponse<boolean>> {
