@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, model, OnInit, output } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { TrimOnBlurDirective } from 'src/app/shared/directives';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
@@ -21,18 +21,35 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
   styleUrl: './comment-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentDialog {
+export class CommentDialog implements OnInit {
   visible = model<boolean>(false);
   private readonly fb = inject(FormBuilder);
   private readonly toaster = inject(ToasterService);
-  commentFormControl = this.fb.control('', [Validators.required, Validators.maxLength(255)]);
-  comment = output<string>();
+  commentFormControl = input.required<FormControl<string>>();
+  commentAdded = output();
+
+  ngOnInit(): void {
+    this.commentFormControl()!.addValidators(Validators.required);
+    this.commentFormControl()!.enable()
+  }
+
+  onCancel(): void {
+    this.commentFormControl()!.reset();
+    this.visible.set(false);
+  }
+
+  onClose(): void {
+    this.commentFormControl()!.removeValidators(Validators.required);
+    this.commentFormControl()!.disable();
+  }
 
   onConfirm(): void {
-    if (this.commentFormControl.valid) {
-      this.toaster.success('Comment added successfully');
-      this.comment.emit(this.commentFormControl.value ?? '');
-      this.visible.set(false);
+    if (!this.commentFormControl()?.valid) {
+      this.toaster.error('Please enter a comment');
+      return;
     }
+    this.toaster.success('Comment added successfully');
+    this.commentAdded.emit();
+    this.visible.set(false);
   }
 }
