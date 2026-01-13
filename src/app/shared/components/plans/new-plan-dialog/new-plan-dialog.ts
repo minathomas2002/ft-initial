@@ -47,7 +47,7 @@ export class NewPlanDialog implements OnInit {
   }
 
   canGoNext() {
-    return this.newPlanTitle().trim().length > 0 && this.newPlanOpportunityType() !== null;
+    return this.newPlanTitle().trim().length > 0 && this.newPlanOpportunityType();
   }
 
   savePlanBasicData(): void {

@@ -94,6 +94,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   // Submission confirmation modal
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
+  planSignature = signal<Signature | null>(null);
   showConfirmLeaveDialog = model(false);
   // Conditional step flags - initialize as false so all steps are visible initially
   showExistingSaudiStep = signal(false);
@@ -235,6 +236,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         this.activeStep.set(1);
         this.isSubmitted.set(false);
         this.existingSignature.set(null);
+        this.planSignature.set(null);
         this.planStore.setPlanStatus(null);
         // If the user applied from an opportunity, ensure the basic info opportunity
         // control is initialized so it becomes part of the form value immediately.
@@ -307,6 +309,9 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         } else {
           this.existingSignature.set(null);
         }
+
+        // Store signature for summary display
+        this.planSignature.set(data.signature ?? null);
 
         const currentMode = this.planStore.wizardMode();
         if (currentMode === 'view') {
