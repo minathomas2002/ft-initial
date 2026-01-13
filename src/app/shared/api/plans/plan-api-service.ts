@@ -92,7 +92,7 @@ export class PlanApiService {
       map(response => {
         const currentLang = this.i18nService.currentLanguage();
         const mappedData: IAssignActiveEmployee[] = (response.body || []).map(emp => ({
-          id: emp.userId,
+          id: emp.id,
           name: currentLang === 'ar' ? (emp.name_Ar || emp.name_En || '') : (emp.name_En || emp.name_Ar || '')
         }));
         return {
