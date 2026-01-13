@@ -10,7 +10,7 @@ export const internalPlansGuardGuard: CanActivateFn = (route, state) => {
   if (roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
     return router.navigate([ERoutes.plans, ERoutes.investors]);
   }
-  else if (roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE])()) {
+  else if (roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE, ERoles.ADMIN])()) {
     return true;
   }
   else {

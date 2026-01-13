@@ -46,16 +46,16 @@ export class SidebarContentComponent {
         show: this.permissionService.canAccessDashboard()
       },
       {
-        label: this.i18nService.translate('navigation.plans'),
-        icon: 'icon-file-text',
-        routerLink: planLink,
-        show: this.permissionService.canAccessPlan()
-      },
-      {
         label: this.i18nService.translate('navigation.opportunities'),
         icon: 'icon-idea',
         routerLink: opportunitiesLink,
         show: true,
+      },
+      {
+        label: this.i18nService.translate('navigation.plans'),
+        icon: 'icon-file-text',
+        routerLink: planLink,
+        show: this.permissionService.canAccessPlan()
       },
       {
         label: this.i18nService.translate('navigation.users'),
