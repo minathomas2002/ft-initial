@@ -26,4 +26,9 @@
     [formGroup]="step4FormGroup"
     (onEdit)="onEditStepClick(4)"
   />
+
+  <!-- Signature (view/edit modes) -->
+  @if (signature() && isViewMode()) {
+    <app-summary-section-signature [signature]="signature()" />
+  }
 </div>

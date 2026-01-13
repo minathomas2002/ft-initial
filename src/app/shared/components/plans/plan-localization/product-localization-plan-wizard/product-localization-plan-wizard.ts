@@ -134,6 +134,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Submission confirmation modal
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
+  planSignature = signal<Signature | null>(null);
   showConfirmLeaveDialog = model(false);
   // Computed signal for view mode
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
@@ -272,6 +273,9 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   private mapPlanDataToForm(response: IProductPlanResponse): void {
     // Map response to form
     mapProductPlanResponseToForm(response, this.productPlanFormService);
+
+    // Store signature for summary display (view/edit modes)
+    this.planSignature.set(response.signature ?? null);
 
     // Store existing signature if present
     if (response.signature?.signatureValue) {
@@ -630,7 +634,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   onClose(): void {
      console.log("closed");
      if (this.planStore.wizardMode() === 'create' || this.planStore.wizardMode() === 'edit') {
-     //!this.isSubmitted() 
+     //!this.isSubmitted()
       if (this.productPlanFormService.hasFormChanged() ) {
         // Keep the wizard open and show confirmation dialog
         this.visibility.set(true);
@@ -644,7 +648,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       this.isSubmitted.set(false);
       // Reset wizard state in store
       this.planStore.resetWizardState();
-    
+
   }
 
   ngOnDestroy(): void {
