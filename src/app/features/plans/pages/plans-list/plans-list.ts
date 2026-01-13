@@ -225,11 +225,6 @@ export class PlansList implements OnInit {
     }
   }
 
-  getAssigneeName(plan: IPlanRecord): string {
-    // Check if assigneeName exists in the plan object (may need to be added to IPlanRecord interface)
-    return (plan as any).assigneeName ?? '-';
-  }
-
   getStatusBadgeClass(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
     if (this.isInvestorRoute()) {
       const classMap = {

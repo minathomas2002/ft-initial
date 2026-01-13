@@ -19,7 +19,7 @@ export class InternalUsersPlansFilter extends Filter<IPlanFilter, TPlansSortingK
       searchText: '',
       planType: null,
       status: null,
-      assigneeId: null,
+      assignee: null,
       submissionDate: undefined
     };
 

@@ -33,7 +33,7 @@ export const API_ENDPOINTS = {
     getInverstorPlans: `${Plans}/get-investor-plans`,
     getInternalUserPlans: `${Plans}/get-internal-plans`,
     getActiveEmployeesWithPlans: `${Plans}/active-employees?planId=`,
-    getPlanAssignees: `${Plans}/get-plan-assignees`, // TODO: Update with exact endpoint when known
+    getPlanAssignees: `${Plans}/get-assignee`,
     assign: `${Plans}/assign`,
     reassign: `${Plans}/reassign`,
     saveAsDraftProductLocalizationPlan: `${Plans}/saveAsDraft-productPlan`,

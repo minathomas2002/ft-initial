@@ -26,7 +26,7 @@ export class InternalUsersPlansFilterService extends AbstractServiceFilter<IPlan
     return Boolean(current.searchText?.trim()) ||
       current.planType !== null ||
       current.status !== null ||
-      current.assigneeId !== null ||
+      current.assignee !== null ||
       Boolean(current.submissionDate);
   });
 

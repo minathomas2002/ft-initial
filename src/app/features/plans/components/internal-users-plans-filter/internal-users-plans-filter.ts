@@ -6,7 +6,7 @@ import { SelectModule } from 'primeng/select';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { EOpportunityType } from 'src/app/shared/enums';
-import { EInternalUserPlanStatus, IAssignActiveEmployee, IPlanFilter } from 'src/app/shared/interfaces';
+import { EInternalUserPlanStatus, IActiveEmployee, IAssignActiveEmployee, IAssignee, IPlanFilter } from 'src/app/shared/interfaces';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -21,7 +21,7 @@ interface IDropdownOption {
 
 interface IAssigneeOption {
   label: string;
-  value: any | null;
+  value: string | null;
 }
 
 @Component({
@@ -41,18 +41,18 @@ export class InternalUsersPlansFilter implements OnInit {
   private readonly planApiService = inject(PlanApiService);
   readonly filter = this.filterService.filter;
 
-  assignees = signal<IAssignActiveEmployee[]>([]);
+  assignees = signal<IAssignee[]>([]);
   isLoadingAssignees = signal(false);
 
   planTypeOptions = computed<IDropdownOption[]>(() => {
     return this.planStore.planTypeOptions() as IDropdownOption[];
   });
 
-  assigneeOptions = computed<IAssigneeOption[]>(() => {
+  assigneeOptions = computed<IAssigneeOption[]>(() => {    
     return [
       { label: this.i18nService.translate('plans.filter.allAssignees'), value: null },
       ...this.assignees().map(assignee => ({
-        label: assignee.name,
+        label: assignee.name_En || assignee.name_Ar || '',
         value: assignee.id
       }))
     ];
@@ -90,7 +90,12 @@ export class InternalUsersPlansFilter implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.assignees.set(response.body as IAssignActiveEmployee[] || []);
+          this.assignees.set(response.body.map(assignee => ({
+            id: assignee.id,
+            name_Ar: assignee.name,
+            name_En: assignee.name,
+            userId: assignee.id,
+          })));
           this.isLoadingAssignees.set(false);
         },
         error: (error) => {
@@ -134,10 +139,10 @@ export class InternalUsersPlansFilter implements OnInit {
           updates.searchText = '';
         }
 
-        if (queryParams['assigneeId']) {
-          updates.assigneeId = queryParams['assigneeId'];
+        if (queryParams['assignee']) {
+          updates.assignee = queryParams['assignee'];
         } else {
-          updates.assigneeId = null;
+          updates.assignee = null;
         }
 
         if (Object.keys(updates).length > 0) {
@@ -183,8 +188,8 @@ export class InternalUsersPlansFilter implements OnInit {
     this.filterService.applyFilterWithPaging();
   }
 
-  onAssigneeChange(value: number | null) {
-    this.filterService.updateFilterSignal({ assigneeId: value, pageNumber: 1 });
+  onAssigneeChange(value: string | null) {
+    this.filterService.updateFilterSignal({ assignee: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
 

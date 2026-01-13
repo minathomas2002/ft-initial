@@ -1,5 +1,5 @@
 <div class="grid grid-cols-12 gap-4">
-    <div class="col-span-12 md:col-span-4">
+    <div class="col-span-12 md:col-span-3">
         <div class="flex flex-col">
             <input type="text" pInputText name="planSearch" [placeholder]="'plans.filter.dvsearchPlaceholder' | translate"
                 [ngModel]="filter().searchText ?? ''" (ngModelChange)="onSearchTextChange($event)" />
@@ -24,13 +24,13 @@
 
     <div class="col-span-12 md:col-span-2">
         <div class="flex flex-col">
-            <p-select name="assignee" [options]="assigneeOptions()" [ngModel]="filter().assigneeId"
+            <p-select name="assignee" [options]="assigneeOptions()" [ngModel]="filter().assignee"
                 (ngModelChange)="onAssigneeChange($event)" [placeholder]="'plans.filter.selectAssignee' | translate"
                 optionLabel="label" optionValue="value" [showClear]="true" [loading]="isLoadingAssignees()" appendTo="body"></p-select>
         </div>
     </div>
 
-    <div class="col-span-12 md:col-span-2">
+    <div class="col-span-12 md:col-span-3">
         <div class="flex flex-col">
             <p-datepicker name="submissionDate" selectionMode="range" [readonlyInput]="true"
                 [(ngModel)]="filter().submissionDate" (ngModelChange)="onPickerChange($event)" [dateFormat]="'dd M yy'"

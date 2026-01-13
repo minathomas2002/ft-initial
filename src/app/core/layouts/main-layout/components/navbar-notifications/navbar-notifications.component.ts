@@ -128,6 +128,9 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
     // Mark notification as read (API call happens in the store)
     this.notificationStore.setNotificationAsRead(notification.id);
 
+    console.log(notification);
+    
+    debugger
     // Navigate to the notification route
     if (notification.route && notification.route.length > 0) {
       this.router.navigate(notification.route, { queryParams: notification.params });
