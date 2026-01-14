@@ -68,16 +68,16 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   isLoadingAvailableOpportunities = this.planStore.isLoadingAvailableOpportunities;
 
   get basicInformationFormGroupControls() {
-    return this.planFormService.basicInformationFormGroup?.controls;
+    return this.planFormService?.basicInformationFormGroup?.controls;
   }
   get companyInformationFormGroupControls() {
-    return this.planFormService.companyInformationFormGroup?.controls;
+    return this.planFormService?.companyInformationFormGroup?.controls;
   }
   get locationInformationFormGroupControls() {
-    return this.planFormService.locationInformationFormGroup?.controls;
+    return this.planFormService?.locationInformationFormGroup?.controls;
   }
   get localAgentInformationFormGroupControls() {
-    return this.planFormService.localAgentInformationFormGroup?.controls;
+    return this.planFormService?.localAgentInformationFormGroup?.controls;
   }
 
   companyNameHasCommentControl = computed(() => {
@@ -149,6 +149,11 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
+    // Ensure form service is available before accessing form groups
+    if (!this.planFormService) {
+      return;
+    }
+
     // Initialize and sync local agent control value to signal if control exists
     const localAgentControl = this.doYouCurrentlyHaveLocalAgentInKSAControl;
     if (localAgentControl) {
@@ -169,7 +174,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     // Local agent validation effect
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
-      if (doYouHaveLocalAgentInKSA !== null) {
+      if (doYouHaveLocalAgentInKSA !== null && this.planFormService) {
         this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
       }
     });
