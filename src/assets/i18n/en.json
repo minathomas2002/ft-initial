@@ -144,7 +144,8 @@
     "help": "Help",
     "users": "Employees",
     "opportunities": "Opportunities",
-    "investors": "Investors"
+    "investors": "Investors",
+    "plans": "Plans"
   },
   "opportunity": {
     "status": {
@@ -629,6 +630,9 @@
   },
   "plans": {
     "assign": "Assign",
+    "title": "Plans",
+    "submitNewPlan": "Submit New Plan",
+    "subtitle": "Track and manage your submitted localization plans and their review status",
     "confirmation": {
       "onLeaveTitle": "Are you sure you want to leave?",
       "saveAsDraft": "Save as draft",
@@ -691,7 +695,9 @@
       "allTypes": "All Types",
       "service": "Service",
       "material": "Material",
-      "allStatuses": "All Statuses"
+      "allStatuses": "All Statuses",
+      "selectAssignee": "Select Assignee",
+      "allAssignees": "All Assignees"
     },
     "wizard": {
       "step1": {
@@ -822,7 +828,8 @@
       "day": "Day",
       "days": "Days",
       "dayOverdue": "Day Overdue",
-      "daysOverdue": "Days Overdue"
+      "daysOverdue": "Days Overdue",
+      "assignee": "Assignee"
     },
     "statistics": {
       "totalPlans": "Total Plans",
@@ -842,7 +849,7 @@
     "actions": {
       "viewDetails": "View Details",
       "edit": "Edit",
-      "download": "Download",
+      "download": "Download (PDF)",
       "viewTimeline": "View Timeline",
       "assignToEmployee": "Assign to Employee",
       "reAssign": "Reassign",

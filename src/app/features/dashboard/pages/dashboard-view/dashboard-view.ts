@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } 
 import { DatePipe, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
+import { Router } from '@angular/router';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
 import { EInternalUserPlanStatus, IPlanRecord, ITableHeaderItem, TColors, TPlansSortingKeys } from 'src/app/shared/interfaces';
-import { EOpportunityType } from 'src/app/shared/enums';
+import { EOpportunityType, ERoutes } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
 import { InternalUsersDashboardPlansFilter } from '../../components/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter';
@@ -25,6 +26,7 @@ import { RoleService } from 'src/app/shared/services/role/role-service';
 import { InternalUsersDashboardPlansFilterService } from '../../services/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter-service';
 import { DashboardPlanActionMenu } from '../../components/dashboard-plan-action-menu/dashboard-plan-action-menu';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-dashboard-view',
@@ -46,7 +48,8 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     ProductLocalizationPlanWizard,
     ServiceLocalizationPlanWizard,
     TimelineDialog,
-    BaseTagComponent
+    BaseTagComponent,
+    TooltipModule
   ],
   templateUrl: './dashboard-view.html',
   styleUrl: './dashboard-view.scss',
@@ -66,6 +69,7 @@ export class DashboardView implements OnInit {
   private readonly employeePlanStatusMapper = new EmployeePlanStatusMapper(this.i18nService);
   private readonly roleService = inject(RoleService);
   private readonly toasterService = inject(ToasterService);
+  private readonly router = inject(Router);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
   viewAssignDialog = signal<boolean>(false);
@@ -180,5 +184,49 @@ export class DashboardView implements OnInit {
 
   onReview(plan: IPlanRecord) {
     console.log('Review Plan : ', plan);
+  }
+
+  // Navigation methods for statistics cards
+  onViewTotalPlans() {
+    this.router.navigate([ERoutes.plans], {
+      queryParams: {},
+    });
+  }
+
+  onViewUnassignedPlans() {
+    this.router.navigate([ERoutes.plans], {
+      queryParams: { status: EInternalUserPlanStatus.UNASSIGNED }
+    });
+  }
+
+  onViewPlansUnderReview() {
+    this.router.navigate([ERoutes.plans], {
+      queryParams: { status: EInternalUserPlanStatus.UNDER_REVIEW }
+    });
+  }
+
+  onViewApprovedPlans() {
+    this.router.navigate([ERoutes.plans], {
+      queryParams: { status: EInternalUserPlanStatus.APPROVED }
+    });
+  }
+
+  onViewRejectedPlans() {
+    this.router.navigate([ERoutes.plans], {
+      queryParams: { status: EInternalUserPlanStatus.REJECTED }
+    });
+  }
+
+  // Employee-specific navigation methods
+  onViewPendingAssignedPlans() {
+    this.router.navigate([ERoutes.plans], {
+      queryParams: { status: EInternalUserPlanStatus.PENDING }
+    });
+  }
+
+  onViewAssignedPlans() {
+    this.router.navigate([ERoutes.plans], {
+      queryParams: { status: EInternalUserPlanStatus.UNDER_REVIEW }
+    });
   }
 }
