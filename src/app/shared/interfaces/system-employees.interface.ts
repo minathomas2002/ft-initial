@@ -19,6 +19,13 @@ export interface IActiveEmployee {
   nameEn: string;
 }
 
+export interface IAssignee {
+  id: string;
+  userId: string;
+  name_Ar: string;
+  name_En: string;
+}
+
 export interface IAssignActiveEmployee {
   id: string;
   name: string;  

@@ -30,7 +30,10 @@ export const API_ENDPOINTS = {
   plans: {
     getInvestorDashboardPlans: `${Plans}/get-investor-dashboard-plans`,
     getInternalUserDashboardPlans: `${Plans}/get-internal-dashboard-plans`,
+    getInverstorPlans: `${Plans}/get-investor-plans`,
+    getInternalUserPlans: `${Plans}/get-internal-plans`,
     getActiveEmployeesWithPlans: `${Plans}/active-employees?planId=`,
+    getPlanAssignees: `${Plans}/get-assignee`,
     assign: `${Plans}/assign`,
     reassign: `${Plans}/reassign`,
     saveAsDraftProductLocalizationPlan: `${Plans}/saveAsDraft-productPlan`,

@@ -68,6 +68,7 @@
     <app-plan-localization-step-05-summary
       [isViewMode]="isViewMode()"
       [pageComments]="collectAllPageComments()"
+      [signature]="planSignature()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onValidationErrorsChange)="updateValidationErrors($event)"

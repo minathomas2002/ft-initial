@@ -1,7 +1,7 @@
 @if(isEmployee()) {
 <!-- Employee Statistics Cards -->
 <!-- Total Approved Plans -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewApprovedPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     Total Approved Plans
   </p>
@@ -17,7 +17,7 @@
 </div>
 
 <!-- Assigned Pending -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewPendingAssignedPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     {{ 'plans.statistics.assignedPending' | translate }}
   </p>
@@ -33,7 +33,7 @@
 </div>
 
 <!-- Assigned Plans -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewAssignedPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     {{ 'plans.statistics.assignedPlans' | translate }}
   </p>
@@ -49,7 +49,7 @@
 </div>
 
 <!-- Assigned Approved -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewApprovedPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     {{ 'plans.statistics.assignedApprovedPlans' | translate }}
   </p>
@@ -65,7 +65,7 @@
 </div>
 
 <!-- Assigned Rejected -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewRejectedPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     {{ 'plans.statistics.assignedRejected' | translate }}
   </p>
@@ -82,7 +82,7 @@
 } @else {
 <!-- Managers Statistics Cards (DV Manager & Department Manager) -->
 <!-- Total Plans -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewTotalPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     {{ 'plans.statistics.totalPlans' | translate }}
   </p>
@@ -98,7 +98,7 @@
 </div>
 
 <!-- Unassigned Plans -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewUnassignedPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     {{ 'plans.statistics.unAssignedPlans' | translate }}
   </p>
@@ -114,7 +114,7 @@
 </div>
 
 <!-- Under Review Plans -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewPlansUnderReview.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     Under Review Plans
   </p>
@@ -130,7 +130,7 @@
 </div>
 
 <!-- Approved Plans -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewApprovedPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     {{ 'plans.statistics.approvedPlans' | translate }}
   </p>
@@ -146,7 +146,7 @@
 </div>
 
 <!-- Rejected Plans -->
-<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow">
+<div class="bg-white rounded-xl border-1 border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" (click)="onViewRejectedPlans.emit()">
   <p class="text-sm font-medium text-gray-600 mb-2">
     {{ 'plans.statistics.rejectedPlans' | translate }}
   </p>

@@ -8,6 +8,8 @@ import { SummarySectionProductPlant } from './summary-sections/summary-section-p
 import { SummarySectionValueChain } from './summary-sections/summary-section-value-chain/summary-section-value-chain';
 import { SummarySectionSaudization } from './summary-sections/summary-section-saudization/summary-section-saudization';
 import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
+import { Signature } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-plan-localization-step-05-summary',
@@ -16,6 +18,7 @@ import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
     SummarySectionProductPlant,
     SummarySectionValueChain,
     SummarySectionSaudization,
+    SummarySectionSignature,
   ],
   templateUrl: './plan-localization-step-05-summary.html',
   styleUrl: './plan-localization-step-05-summary.scss',
@@ -24,6 +27,7 @@ import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 export class PlanLocalizationStep05Summary {
   isViewMode = input<boolean>(false);
   pageComments = input<IPageComment[]>([]);
+  signature = input<Signature | null>(null);
   private readonly formService = inject(ProductPlanFormService);
   private readonly validationService = inject(ProductPlanValidationService);
   private readonly toasterService = inject(ToasterService);

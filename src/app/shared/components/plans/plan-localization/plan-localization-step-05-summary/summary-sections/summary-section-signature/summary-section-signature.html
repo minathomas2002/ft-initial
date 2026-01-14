@@ -1,0 +1,47 @@
+<div class="flex flex-col gap-6 bg-white">
+  <app-summary-section-header
+    [title]="'plans.submission.signature' | translate"
+    [isViewMode]="true"
+  />
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <app-summary-field
+      [label]="'plans.submission.name' | translate"
+      [value]="contactInfo()?.name"
+      [isEmpty]="!contactInfo()?.name"
+    />
+
+    <app-summary-field
+      [label]="'plans.submission.jobTitle' | translate"
+      [value]="contactInfo()?.jobTitle"
+      [isEmpty]="!contactInfo()?.jobTitle"
+    />
+
+    <app-summary-field
+      [label]="'plans.submission.contactNumber' | translate"
+      [value]="contactInfo()?.contactNumber"
+      [isEmpty]="!contactInfo()?.contactNumber"
+    />
+
+    <app-summary-field
+      [label]="'plans.submission.emailId' | translate"
+      [value]="contactInfo()?.emailId"
+      [isEmpty]="!contactInfo()?.emailId"
+    />
+
+    <div class="flex flex-col gap-2">
+      <span class="text-sm text-gray-700">{{ 'plans.submission.signature' | translate }}:</span>
+
+      @if (signatureValue()) {
+        <img
+          [src]="signatureValue()!"
+          alt="Signature"
+          class="h-full md:w-32 w-full object-contain border border-gray-200 rounded"
+        />
+      } @else {
+        <span class="text-sm font-medium text-gray-900">-</span>
+      }
+    </div>
+  </div>
+
+</div>

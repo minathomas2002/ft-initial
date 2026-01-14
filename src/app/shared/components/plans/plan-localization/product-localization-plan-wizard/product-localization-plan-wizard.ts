@@ -159,6 +159,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Submission confirmation modal
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
+  planSignature = signal<Signature | null>(null);
   showConfirmLeaveDialog = model(false);
   // Computed signal for view mode
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
@@ -373,6 +374,9 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   private mapPlanDataToForm(response: IProductPlanResponse): void {
     // Map response to form
     mapProductPlanResponseToForm(response, this.productPlanFormService);
+
+    // Store signature for summary display (view/edit modes)
+    this.planSignature.set(response.signature ?? null);
 
     // Store existing signature if present
     if (response.signature?.signatureValue) {

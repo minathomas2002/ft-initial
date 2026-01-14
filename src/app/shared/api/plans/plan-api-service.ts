@@ -2,11 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../../services/Base-HTTP/base-Http.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import { IActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse } from '../../interfaces';
+import { map, catchError, tap } from 'rxjs/operators';
+import { IActiveEmployee, IAssignActiveEmployee, IAssignee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IPlanFilterRequest, IPlanRecord, IPlansResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse, ReviewPlanRequest } from '../../interfaces/plans.interface';
 import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
+import { I18nService } from '../../services/i18n/i18n.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-do
 export class PlanApiService {
   private readonly baseHttpService = inject(BaseHttpService);
   private readonly http = inject(HttpClient);
+  private readonly i18nService = inject(I18nService);
 
   getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IAssignReassignActiveEmployee>> {
     return this.baseHttpService.get<IAssignReassignActiveEmployee, string>(API_ENDPOINTS.plans.getActiveEmployeesWithPlans + planId);
@@ -76,4 +78,32 @@ export class PlanApiService {
   sendPlanBackToInvestor(req: ReviewPlanRequest): Observable<IBaseApiResponse<boolean>> {
     return this.baseHttpService.post<boolean, ReviewPlanRequest, unknown>(API_ENDPOINTS.plans.reviewPlan, req);
   }
+  getInvestorPlans(
+    filter: IPlanFilterRequest
+  ): Observable<IBaseApiResponse<IPlansResponse<IPlanRecord[]>>> {
+    return this.baseHttpService.post(API_ENDPOINTS.plans.getInverstorPlans, filter);
+  }
+
+  getInternalUserPlans(
+    filter: IPlanFilterRequest
+  ): Observable<IBaseApiResponse<IPlansResponse<IPlanRecord[]>>> {
+    return this.baseHttpService.post(API_ENDPOINTS.plans.getInternalUserPlans, filter);
+  }
+
+  getPlanAssignees(): Observable<IBaseApiResponse<IAssignActiveEmployee[]>> {
+    return this.baseHttpService.get<IAssignee[], string>(API_ENDPOINTS.plans.getPlanAssignees).pipe(
+      map(response => {
+        const currentLang = this.i18nService.currentLanguage();
+        const mappedData: IAssignActiveEmployee[] = (response.body || []).map(emp => ({
+          id: emp.id,
+          name: currentLang === 'ar' ? (emp.name_Ar || emp.name_En || '') : (emp.name_En || emp.name_Ar || '')
+        }));
+        return {
+          ...response,
+          body: mappedData
+        } as IBaseApiResponse<IAssignActiveEmployee[]>;
+      })
+    );
+  }
+
 }

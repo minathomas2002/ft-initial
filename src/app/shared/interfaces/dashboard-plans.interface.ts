@@ -38,6 +38,7 @@ export interface IPlanRecord {
   slaCountDown: number; // days remaining
   status: EInvestorPlanStatus | EInternalUserPlanStatus;
   actions: number[];
+  assignee?: string;
 }
 
 export type TPlansSortingKeys = keyof IPlanRecord;
@@ -47,6 +48,7 @@ export interface IPlanFilter extends IFilterBase<TPlansSortingKeys> {
   planType?: EOpportunityType | null;
   status?: EInvestorPlanStatus | EInternalUserPlanStatus | null;
   submissionDate?: Date[] | undefined;
+  assignee?: string | null;
 }
 
 export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {
@@ -55,6 +57,7 @@ export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {
   status?: EInvestorPlanStatus | EInternalUserPlanStatus | null;
   submissionDateFrom?: string | null;
   submissionDateTo?: string | null;
+  assignee?: string | null;
 }
 
 export interface IPlansDashboardStatistics {
@@ -69,6 +72,9 @@ export interface IPlansDashboardStatistics {
 
 export interface IPlansDashboardResponse<T> extends IApiPaginatedResponse<T> {
   counts: IPlansDashboardStatistics;
+}
+
+export interface IPlansResponse<T> extends IApiPaginatedResponse<T> {
 }
 
 export interface IAssignRequest {

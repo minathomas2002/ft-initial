@@ -30,4 +30,9 @@
       (onEdit)="onEditStepClick(directLocalizationStepNumber())"
     />
   }
+
+  <!-- Signature (view/edit modes) -->
+  @if (signature() && isViewMode()) {
+    <app-summary-section-signature [signature]="signature()" />
+  }
 </div>

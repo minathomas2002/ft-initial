@@ -9,13 +9,13 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
-  selector: 'app-dashboard-plan-action-menu',
+  selector: 'app-plans-action-menu',
   imports: [MenuModule, ButtonModule],
-  templateUrl: './dashboard-plan-action-menu.html',
-  styleUrl: './dashboard-plan-action-menu.scss',
+  templateUrl: './plans-action-menu.html',
+  styleUrl: './plans-action-menu.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardPlanActionMenu {
+export class PlansActionMenu {
   actions = input.required<EActionPlanTimeLine[]>();
   plan = input.required<IPlanRecord>();
   private readonly i18nService = inject(I18nService);

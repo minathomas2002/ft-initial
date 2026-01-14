@@ -27,7 +27,7 @@ export class NotificationItemFactory {
 
     // investors
     if (userRole === ERoles.INVESTOR) {
-      const investor = new EmployeeNotificationParams(notification);
+      const investor = new InvestorNotificationParams(notification);
       return {
         ...notification,
         route: investor.route,
@@ -47,16 +47,16 @@ export class NotificationItemFactory {
 class InternalUserNotificationParams extends BaseNotificationParams {
   constructor(notification: INotification) {
     super();
-    const built = buildInternalParams(notification, [ERoutes.dashboard]);
+    const built = buildInternalParams(notification, [ERoutes.plans]);
     this.route = built.route;
     this.params = built.params;
   }
 }
 
-class EmployeeNotificationParams extends BaseNotificationParams {
+class InvestorNotificationParams extends BaseNotificationParams {
   constructor(notification: INotification) {
     super();
-    const built = buildInternalParams(notification, [ERoutes.dashboard, ERoutes.investors]);
+    const built = buildInternalParams(notification, [ERoutes.plans, ERoutes.investors]);
     this.route = built.route;
     this.params = built.params;
   }

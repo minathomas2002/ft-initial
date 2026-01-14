@@ -7,6 +7,8 @@ import { SummarySectionCoverPage } from './summary-sections/summary-section-cove
 import { SummarySectionOverview } from './summary-sections/summary-section-overview/summary-section-overview';
 import { SummarySectionExistingSaudi } from './summary-sections/summary-section-existing-saudi/summary-section-existing-saudi';
 import { SummarySectionDirectLocalization } from './summary-sections/summary-section-direct-localization/summary-section-direct-localization';
+import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
+import { Signature } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-service-localization-step-summary',
@@ -15,6 +17,7 @@ import { SummarySectionDirectLocalization } from './summary-sections/summary-sec
     SummarySectionOverview,
     SummarySectionExistingSaudi,
     SummarySectionDirectLocalization,
+    SummarySectionSignature,
   ],
   templateUrl: './service-localization-step-summary.html',
   styleUrl: './service-localization-step-summary.scss',
@@ -22,6 +25,7 @@ import { SummarySectionDirectLocalization } from './summary-sections/summary-sec
 })
 export class ServiceLocalizationStepSummary {
   isViewMode = input<boolean>(false);
+  signature = input<Signature | null>(null);
   includeExistingSaudi = input<boolean>(true);
   includeDirectLocalization = input<boolean>(true);
 
