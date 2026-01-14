@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { IActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse } from '../../interfaces/plans.interface';
+import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse, ReviewPlanRequest } from '../../interfaces/plans.interface';
 import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
 
 @Injectable({
@@ -73,4 +73,7 @@ export class PlanApiService {
       );
   }
 
+  sendPlanBackToInvestor(req: ReviewPlanRequest): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, ReviewPlanRequest, unknown>(API_ENDPOINTS.plans.reviewPlan, req);
+  }
 }

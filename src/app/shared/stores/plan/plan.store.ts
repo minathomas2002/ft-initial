@@ -5,7 +5,7 @@ import { patchState, signalStore, withComputed, withMethods, withState } from '@
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
 import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
-import { IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, IServicePlanResponse, ITimeLineResponse } from "../../interfaces/plans.interface";
+import { IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, IServicePlanResponse, ITimeLineResponse, ReviewPlanRequest } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
 
@@ -379,6 +379,25 @@ export const PlanStore = signalStore(
               error: error.errorMessage || 'Error saving product localization plan',
             });
             return throwError(() => new Error('Error saving product localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
+      /* Send Plan Back to Investor*/
+      sendPlanBackToInvestor(request: ReviewPlanRequest): Observable<IBaseApiResponse<boolean>> {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.sendPlanBackToInvestor(request).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error sending plan back to investor',
+            });
+            return throwError(() => new Error('Error sending plan back to investor'));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });

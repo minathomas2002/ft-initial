@@ -41,6 +41,7 @@ export const API_ENDPOINTS = {
     getServicePlan: `${Plans}/get-servicePlan`,
     getTimelinePlan: `${Plans}/get-timeLine`,
     downloadPlan: `${Plans}/generate-product-plan-pdf?planId=`,
+    reviewPlan: `${Plans}/review-plan`,
   },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,
