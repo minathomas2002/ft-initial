@@ -1,6 +1,6 @@
 import { computed, inject, Type } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
@@ -398,6 +398,42 @@ export const PlanStore = signalStore(
               error: error.errorMessage || 'Error sending plan back to investor',
             });
             return throwError(() => new Error('Error sending plan back to investor'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
+      employeeApprovePlan(planId: string, reason?: string) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.employeeTogglePlanStatus({ planId, status: EemployeePlanAction.Approve, reason }).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error approving plan',
+            });
+            return throwError(() => new Error('Error approving plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
+      employeeRejectPlan(planId: string, reason: string) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.employeeTogglePlanStatus({ planId, status: EemployeePlanAction.Reject, reason }).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error rejecting plan',
+            });
+            return throwError(() => new Error('Error rejecting plan'));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });

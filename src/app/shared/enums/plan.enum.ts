@@ -101,3 +101,8 @@ export enum EPlanAction {
   RemoveAssignee = 21,
   Delete = 22,
 }
+
+export enum EemployeePlanAction {
+  Approve = 7,
+  Reject = 10
+}

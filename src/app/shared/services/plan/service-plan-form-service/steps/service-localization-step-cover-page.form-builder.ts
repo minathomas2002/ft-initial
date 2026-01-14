@@ -1,5 +1,6 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ServiceLocalizationStepCoverPageFormBuilder {
   constructor(
@@ -26,7 +27,7 @@ export class ServiceLocalizationStepCoverPageFormBuilder {
   createServiceItem(): FormGroup {
     return this.fb.group({
       rowId: [null], // Hidden control to store the row ID (for edit mode)
-      [EMaterialsFormControls.serviceId]: this.fb.control(crypto.randomUUID()), // Generate GUID for service
+      [EMaterialsFormControls.serviceId]: this.fb.control(uuidv4()), // Generate GUID for service
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),
