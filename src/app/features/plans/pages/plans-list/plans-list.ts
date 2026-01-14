@@ -11,11 +11,11 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
-import { EOpportunityType, ERoutes } from 'src/app/shared/enums';
+import { EOpportunityType, ERoles, ERoutes } from 'src/app/shared/enums';
 import { DatePipe, NgClass } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
@@ -51,6 +51,7 @@ import { IPlanFilter } from 'src/app/shared/interfaces';
   ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlansList implements OnInit {
   planTermsAndConditionsDialogVisibility = signal(false);
@@ -64,24 +65,23 @@ export class PlansList implements OnInit {
   EInternalUserPlanStatus = EInternalUserPlanStatus;
 
   private readonly planStore = inject(PlanStore);
-  private readonly route = inject(ActivatedRoute);
   private readonly investorFilterService = inject(InvestorPlansFilterService);
   private readonly internalUsersFilterService = inject(InternalUsersPlansFilterService);
   private readonly i18nService = inject(I18nService);
+  private readonly roleService = inject(RoleService);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
   private readonly toastService = inject(ToasterService);
 
-  // Determine if this is investor or internal user route
-  readonly isInvestorRoute = computed(() => {
-    // Check the route path - if it contains 'investors', it's investor route
-    const urlSegments = this.route.snapshot.url.map(s => s.path);
-    return urlSegments.includes(ERoutes.investors);
-  });
+  // Determine if user is investor or internal user based on role
+  readonly isInvestor = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
+  readonly isInternalUser = computed(() => 
+    this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE])()
+  );
 
-  // Get the appropriate filter service based on route
+  // Get the appropriate filter service based on role
   readonly filterService = computed<AbstractServiceFilter<IPlanFilter>>(() => {
-    return this.isInvestorRoute() ? this.investorFilterService : this.internalUsersFilterService;
+    return this.isInvestor() ? this.investorFilterService : this.internalUsersFilterService;
   });
 
   readonly headers = computed<ITableHeaderItem<TPlansSortingKeys>[]>(() => {
@@ -90,7 +90,7 @@ export class PlansList implements OnInit {
       { label: this.i18nService.translate('plans.table.planId'), isSortable: true, sortingKey: 'planCode' },
     ];
 
-    if (!this.isInvestorRoute()) {
+    if (this.isInternalUser()) {
       baseHeaders.push({
         label: this.i18nService.translate('plans.table.investorName'),
         isSortable: true,
@@ -104,7 +104,7 @@ export class PlansList implements OnInit {
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
     );
 
-    if (!this.isInvestorRoute()) {
+    if (this.isInternalUser()) {
       baseHeaders.push({
         label: this.i18nService.translate('plans.table.assignee'),
         isSortable: false,
@@ -116,7 +116,7 @@ export class PlansList implements OnInit {
       { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
     );
 
-    if (!this.isInvestorRoute()) {
+    if (this.isInternalUser()) {
       baseHeaders.push({
         label: this.i18nService.translate('plans.table.slaCountdown'),
         isSortable: true,
@@ -149,10 +149,10 @@ export class PlansList implements OnInit {
   ngOnInit(): void {
     // Only apply filter if no query params are present
     // If query params exist, the filter component will handle them via listenToQueryParamChanges()
-    const hasQueryParams = Object.keys(this.route.snapshot.queryParams).length > 0;
-    if (!hasQueryParams) {
+    // const hasQueryParams = Object.keys(this.route.snapshot.queryParams).length > 0;
+    // if (!hasQueryParams) {
       this.filterService().applyFilter();
-    }
+    // }
   }
 
   createNewPlan() {
@@ -202,7 +202,7 @@ export class PlansList implements OnInit {
   }
 
   getStatusLabel(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
-    if (this.isInvestorRoute()) {
+    if (this.isInvestor()) {
       const statusMap = {
         [EInvestorPlanStatus.SUBMITTED]: this.i18nService.translate('plans.status.submitted'),
         [EInvestorPlanStatus.PENDING]: this.i18nService.translate('plans.status.pending'),
@@ -240,7 +240,7 @@ export class PlansList implements OnInit {
   }
 
   getStatusBadgeClass(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
-    if (this.isInvestorRoute()) {
+    if (this.isInvestor()) {
       const classMap = {
         [EInvestorPlanStatus.SUBMITTED]: 'bg-primary-50 text-primary-700 border-primary-200',
         [EInvestorPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
@@ -283,7 +283,7 @@ export class PlansList implements OnInit {
 
   onEdit(plan: IPlanRecord) {
     // Check if plan status allows editing
-    const canEdit = this.isInvestorRoute()
+    const canEdit = this.isInvestor()
       ? (plan.status === EInvestorPlanStatus.DRAFT || plan.status === EInvestorPlanStatus.PENDING)
       : (plan.status === EInternalUserPlanStatus.PENDING);
 

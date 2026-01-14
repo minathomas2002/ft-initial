@@ -31,4 +31,12 @@ export class DashboardStatisticsCards {
   readonly isEmployee = computed(() => {
     return this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   });
+
+  /**
+   * Computed signal to determine if user is an Investor
+   * Investors see different statistics cards
+   */
+  readonly isInvestor = computed(() => {
+    return this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])();
+  });
 }

@@ -10,10 +10,7 @@ export const internalDashboardGuard: CanActivateFn = (route, state) => {
     if (roleService.hasAnyRoleSignal([ERoles.ADMIN])()) {
         return router.navigate([ERoutes.opportunities, ERoutes.admin]);
     }
-    else if (roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
-        return router.navigate([ERoutes.dashboard, ERoutes.investors]);
-    }
-    else if (roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE])()) {
+    else if (roleService.hasAnyRoleSignal([ERoles.INVESTOR, ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE])()) {
         return true;
     }
     else {
