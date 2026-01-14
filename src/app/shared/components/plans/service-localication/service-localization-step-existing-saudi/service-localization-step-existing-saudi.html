@@ -537,7 +537,7 @@
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
     <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
-    <div class="data-table bg-white border-1 border-gray-200 rounded-xl">
+    <div class="data-table bg-white border border-gray-200 rounded-xl table-with-caption">
       <p-table
         [value]="entityLevelTableRows()"
         [scrollable]="true"
@@ -555,13 +555,13 @@
         <ng-template pTemplate="header">
           <tr>
             <th
-              class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700 min-w-[250px]"
+              class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[250px] z-10000000"
               pFrozenColumn
             >
               <span>Category</span>
             </th>
             @for(year of yearColumns(); track year) {
-            <th class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700 min-w-[200px]">
+            <th class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[200px]">
               <span>{{ year }}</span>
             </th>
             }
@@ -573,7 +573,7 @@
         >
           <tr>
             <td
-              class="p-3 !border !border-gray-200 font-medium text-gray-700 !bg-gray-50"
+              class="p-3 !border !border-gray-200 font-medium text-gray-700 !bg-gray-50 z-10000000"
               pFrozenColumn
             >
               <span>{{ row.label }}</span>
