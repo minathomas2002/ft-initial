@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, linkedSignal, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, linkedSignal, model, output } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -30,9 +30,16 @@ export class CommentStateComponent {
   saveComment = output();
   toaster = inject(ToasterService);
 
+  constructor() {
+    effect(() => {
+      console.log(this.commentPhase());
+      if (this.commentPhase() === 'viewing') {
+        this.commentFormControl().disable();
+      }
+    });
+  }
+
   onCommentAdded() {
-    // Comment is already saved to form control by dialog
-    // Trigger parent's save logic to update signals and show success message
     this.saveComment.emit();
     this.commentPhase.set('viewing');
     this.commentFormControl().disable();
@@ -41,7 +48,6 @@ export class CommentStateComponent {
   onDeleteComments() {
     this.commentPhase.set('none');
     this.commentFormControl().reset();
-    this.toaster.success('Comments deleted successfully');
     this.deleteComments.emit();
   }
 
@@ -54,6 +60,5 @@ export class CommentStateComponent {
     this.saveComment.emit();
     this.commentPhase.set('viewing');
     this.commentFormControl().disable();
-    this.toaster.success('Comment saved successfully');
   }
 }

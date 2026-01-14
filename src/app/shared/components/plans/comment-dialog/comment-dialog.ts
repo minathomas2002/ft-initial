@@ -31,7 +31,6 @@ export class CommentDialog implements OnInit {
 
   ngOnInit(): void {
     this.commentFormControl()!.addValidators(Validators.required);
-    this.commentFormControl()!.enable()
     this.commentSubmitted.set(false);
   }
 

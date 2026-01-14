@@ -6,7 +6,7 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -58,7 +58,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   private readonly toasterService = inject(ToasterService);
   pageTitle = input.required<string>();
 
-  showCheckbox = model<boolean>(false);
+  showCheckbox = computed(() => this.commentPhase() !== 'none');
   commentPhase = model<TCommentPhase>('none');
   selectedInputColor = input.required<TColors>();
   formGroup = this.productPlanFormService.overviewCompanyInformation;
@@ -132,13 +132,14 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
 
     effect(() => {
       if (this.commentPhase() === 'viewing') {
-        this.comment.set(this.commentFormControl.value ?? '');
-        this.commentFormControl.setValue(this.comment(), { emitEvent: true });
-        // disable all hasComment controls
+        const commentValue = this.commentFormControl.value ?? '';
+        this.comment.set(commentValue);
+        this.commentFormControl.setValue(commentValue, { emitEvent: false });
+        this.commentFormControl.disable({ emitEvent: false });
         this.formUtilityService.disableHasCommentControls(this.formGroup);
       }
       if (['adding', 'editing'].includes(this.commentPhase())) {
-        // enable all hasComment controls
+        this.commentFormControl.enable();
         this.formUtilityService.enableHasCommentControls(this.formGroup);
       }
     })
@@ -175,12 +176,11 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
   }
 
   onConfirmDeleteComment(): void {
-    this.resetAllHasCommentControls();
+    this.formUtilityService.resetHasCommentControls(this.formGroup);
     this.selectedInputs.set([]);
     this.comment.set('');
     this.commentFormControl.reset();
     this.commentPhase.set('none');
-    this.showCheckbox.set(false);
     this.showDeleteConfirmationDialog.set(false);
     this.toasterService.success('Your comments and selected fields were removed successfully.');
   }
@@ -217,12 +217,12 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm {
     this.toasterService.success('Your comments have been saved successfully.');
   }
 
-  onEditComment(): void {
-    // Load existing comment into form control
-    this.commentFormControl.setValue(this.comment(), { emitEvent: false });
-    this.commentFormControl.enable();
-    this.commentPhase.set('editing');
-  }
+  // onEditComment(): void {
+  //   // Load existing comment into form control
+  //   this.commentFormControl.setValue(this.comment(), { emitEvent: false });
+  //   this.commentFormControl.enable();
+  //   this.commentPhase.set('editing');
+  // }
 
   onSaveEditedComment(): void {
     // Validate comment text

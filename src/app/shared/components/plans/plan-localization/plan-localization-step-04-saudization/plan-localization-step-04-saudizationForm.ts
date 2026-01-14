@@ -50,7 +50,7 @@ export class PlanLocalizationStep04SaudizationForm {
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
   // Show checkbox signal (controls visibility of comment checkboxes)
-  showCheckbox = model<boolean>(false);
+  showCheckbox = computed(() => this.commentPhase() !== 'none');
   commentPhase = model<TCommentPhase>('none');
   selectedInputColor = input<TColors>('orange');
   selectedInputs = model<IFieldInformation[]>([]);
@@ -201,12 +201,11 @@ export class PlanLocalizationStep04SaudizationForm {
   }
 
   onConfirmDeleteComment(): void {
-    this.resetAllHasCommentControls();
+    this.formUtilityService.resetHasCommentControls(this.formGroup);
     this.selectedInputs.set([]);
     this.comment.set('');
     this.commentFormControl.reset();
     this.commentPhase.set('none');
-    this.showCheckbox.set(false);
     this.showDeleteConfirmationDialog.set(false);
     this.toasterService.success('Your comments and selected fields were removed successfully.');
   }

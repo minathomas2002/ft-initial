@@ -72,7 +72,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
-    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review') && this.planStatus() !== null)
+    return (this.visibility() && (this.mode() == 'view' || (this.mode() == 'Review')) && this.planStatus() !== null && this.activeStep() < 5)
   })
 
   // Track validation errors for stepper indicators
@@ -295,13 +295,13 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   onAddComment(): void {
     const step = this.activeStep();
     // Set comment phase for the current active step
-    if (step === 1) {
+    if (step === 1 && this.step1CommentPhase() === 'none') {
       this.step1CommentPhase.set('adding');
-    } else if (step === 2) {
+    } else if (step === 2 && this.step2CommentPhase() === 'none') {
       this.step2CommentPhase.set('adding');
-    } else if (step === 3) {
+    } else if (step === 3 && this.step3CommentPhase() === 'none') {
       this.step3CommentPhase.set('adding');
-    } else if (step === 4) {
+    } else if (step === 4 && this.step4CommentPhase() === 'none') {
       this.step4CommentPhase.set('adding');
     }
     this.showHasCommentControl.set(true);

@@ -24,7 +24,6 @@
 
   <ng-template [appStepContent]="1">
     <app-plan-localization-step-01-overview-company-information-form
-      [(showCheckbox)]="showHasCommentControl"
       [pageTitle]="steps()[0].title"
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
@@ -34,7 +33,6 @@
 
   <ng-template [appStepContent]="2">
     <app-plan-localization-step-02-product-plant-overview-form
-      [(showCheckbox)]="showHasCommentControl"
       [pageTitle]="steps()[1].title"
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
@@ -44,7 +42,6 @@
 
   <ng-template [appStepContent]="3">
     <app-plan-localization-step-03-valueChain-form
-      [(showCheckbox)]="showHasCommentControl"
       [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[2].title"
       [(commentPhase)]="step3CommentPhase"
@@ -55,7 +52,6 @@
 
   <ng-template [appStepContent]="4">
     <app-plan-localization-step-04-saudization-form
-      [(showCheckbox)]="showHasCommentControl"
       [isViewMode]="isViewMode()"
       [isReviewMode]="isReviewMode()"
       [pageTitle]="steps()[3].title"
@@ -79,25 +75,15 @@
   <ng-container ngProjectAs="final-step-action">
     @if (activeStep() === 5 && !isViewMode()) {
     @if (isReviewMode()) {
-    @if (hasSelectedFields()) {
-    <p-button
-      [label]="'Send Back to Investor'"
-      severity="warn"
-      [disabled]="!hasComments()"
-      (click)="onSendBackToInvestor()"
-    ></p-button>
-    } @else {
-    <p-button
-      [label]="'Approve & Forward'"
-      severity="success"
-      [disabled]="hasSelectedFields()"
-    ></p-button>
     <p-button
       [label]="'Reject'"
       severity="danger"
       [disabled]="hasSelectedFields()"
     ></p-button>
-    }
+    <p-button
+      [label]="'Approve & Forward'"
+      [disabled]="hasSelectedFields()"
+    ></p-button>
     } @else {
     <p-button
       [label]="'Submit'"
@@ -118,14 +104,25 @@
     ></p-button>
     }
     @if(isReviewMode()){
+    @if (activeStep() === 5) {
     <p-button
+      text
+      (click)="onSendBackToInvestor()"
+      styleClass="p-0!"
+    >
+      <span class="underline text-md font-semibold">Send Back to Investor</span>
+    </p-button>
+    }
+    @if(activeStep() <5){
+      <p-button
       [label]="'Add Comments'"
       text
       icon="icon-message-circle"
       severity="secondary"
       (click)="onAddComment()"
     ></p-button>
-    }
+      }
+      }
   </ng-container>
 </app-base-wizard-dialog>
 }
@@ -166,7 +163,7 @@
   [description]="'This action cannot be undone and the plan will go directly to the investor.'"
   [confirmationLabel]="'Send Back'"
   [cancelLabel]="'Cancel'"
-  [icon]="'icon-send'"
+  [icon]="'icon-info'"
   (confirmed)="onConfirmSendBack()"
   (onCancel)="onCancelSendBack()"
 />
