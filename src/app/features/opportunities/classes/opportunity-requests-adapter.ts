@@ -1,7 +1,7 @@
 import { ICreateOpportunity, IOpportunityDraftRequest } from "src/app/shared/interfaces";
 
 export class OpportunityRequestsAdapter {
-  async toOpportunityRequest(formValue: ICreateOpportunity): Promise<IOpportunityDraftRequest> {
+  async toOpportunityRequest(formValue: ICreateOpportunity): Promise<Partial<IOpportunityDraftRequest>> {
     // Extract File from image - handle both File objects and objects with objectURL
     const imageValue = formValue.opportunityInformationFrom.image;
     let image: File | null = null;
@@ -29,11 +29,26 @@ export class OpportunityRequestsAdapter {
       }));
     };
 
+    const { dateRange, image: _image, ...opportunityInformationFrom } = formValue.opportunityInformationFrom;
+
+    const isNotNullUndefinedOrEmptyString = (value: unknown) => {
+      if (value === null || value === undefined) return false;
+      if (typeof value === 'string') return value.trim() !== '';
+      return true;
+    };
+
+    const filteredOpportunityInformationValues = Object.fromEntries(
+      Object.entries(opportunityInformationFrom).filter(([_, v]) => isNotNullUndefinedOrEmptyString(v))
+    ) as Partial<IOpportunityDraftRequest>;
+
+    const startDate = dateRange?.[0]?.toLocaleDateString("en-CA");
+    const endDate = dateRange?.[1]?.toLocaleDateString("en-CA");
+
     return {
-      ...formValue.opportunityInformationFrom,
-      startDate: formValue.opportunityInformationFrom.dateRange?.[0]?.toLocaleDateString("en-CA") ?? "",
-      endDate: formValue.opportunityInformationFrom.dateRange?.[1]?.toLocaleDateString("en-CA") ?? "",
-      image,
+      ...filteredOpportunityInformationValues,
+      ...(isNotNullUndefinedOrEmptyString(startDate) ? { startDate } : {}),
+      ...(isNotNullUndefinedOrEmptyString(endDate) ? { endDate } : {}),
+      ...(image ? { image } : {}),
       designEngineerings: mapKeyActivities(formValue.opportunityLocalizationForm.designEngineerings),
       sourcings: mapKeyActivities(formValue.opportunityLocalizationForm.sourcings),
       manufacturings: mapKeyActivities(formValue.opportunityLocalizationForm.manufacturings),
