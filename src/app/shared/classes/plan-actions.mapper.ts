@@ -18,7 +18,7 @@ export class PlanActionsMapper {
         [EActionPlanTimeLine.Assigned]: { labelKey: 'plans.actions.assignToEmployee' },
         [EActionPlanTimeLine.Reassigned]: { labelKey: 'plans.actions.reAssign' },
         [EActionPlanTimeLine.CommentSubmitted]: { labelKey: 'plans.actions.commentSubmitted' },
-        [EActionPlanTimeLine.Resubmitted]: { labelKey: 'plans.actions.edit' },
+        [EActionPlanTimeLine.Resubmitted]: { labelKey: 'Edit / Resubmit' },
         [EActionPlanTimeLine.Approved]: { labelKey: 'plans.actions.approved' },
         [EActionPlanTimeLine.Rejected]: { labelKey: 'plans.actions.rejected' },
         [EActionPlanTimeLine.EmployeeApproved]: { labelKey: 'plans.actions.approved' },
