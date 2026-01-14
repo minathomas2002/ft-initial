@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, DestroyRef } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
@@ -11,7 +11,14 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationApproach, ELocation, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
-
+import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
+import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
+import { TColors } from 'src/app/shared/interfaces';
+import { FormsModule } from '@angular/forms';
+import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-service-localization-step-direct-localization',
@@ -24,24 +31,34 @@ import { InputNumberModule } from 'primeng/inputnumber';
     GroupInputWithCheckbox,
     TextareaModule,
     InputNumberModule,
+    CommentStateComponent,
+    GeneralConfirmationDialogComponent,
+    FormsModule,
+    ConditionalColorClassDirective
   ],
   templateUrl: './service-localization-step-direct-localization.html',
   styleUrl: './service-localization-step-direct-localization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceLocalizationStepDirectLocalization {
+export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
 
-  serviceForm = inject(ServicePlanFormService);
+  readonly planFormService = inject(ServicePlanFormService);
   planStore = inject(PlanStore);
+  private readonly destroyRef = inject(DestroyRef);
 
-  showCheckbox = signal(false);
+  pageTitle = input.required<string>();
+  selectedInputColor = input.required<TColors>();
+  commentPhase = model<TCommentPhase>('none');
+  selectedInputs = model<IFieldInformation[]>([]);
+
+  formGroup = this.planFormService.step4_directLocalization;
   EMaterialsFormControls = EMaterialsFormControls;
   yesNoOptions = this.planStore.yesNoOptions;
   localizationApproachOptions = this.planStore.localizationApproachOptions;
   locationOptions = this.planStore.locationOptions;
 
-  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
+  yearColumns = computed(() => this.planFormService.upcomingYears(5));
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -77,36 +94,81 @@ export class ServiceLocalizationStepDirectLocalization {
     ];
   });
 
-  constructor() {
+  // Implement abstract method from base class
+  getFormGroup(): FormGroup {
+    return this.formGroup;
+  }
+
+  // Expose base class methods as public for template access
+  override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation, rowId?: string): void {
+    super.upDateSelectedInputs(value, fieldInformation, rowId);
+  }
+
+  override highlightInput(inputKey: string, rowId?: string): boolean {
+    return super.highlightInput(inputKey, rowId);
+  }
+
+  override onDeleteComments(): void {
+    super.onDeleteComments();
+  }
+
+  override onConfirmDeleteComment(): void {
+    super.onConfirmDeleteComment();
+  }
+
+  override onCancelDeleteComment(): void {
+    super.onCancelDeleteComment();
+  }
+
+  override onSaveComment(): void {
+    super.onSaveComment();
+  }
+
+  override onSaveEditedComment(): void {
+    super.onSaveEditedComment();
+  }
+
+  override resetAllHasCommentControls(): void {
+    super.resetAllHasCommentControls();
+  }
+
+  // Override hook method for step-specific initialization
+  protected override initializeStepSpecificLogic(): void {
     // Sync services from cover page to service level on component initialization
-    this.serviceForm.syncServicesFromCoverPageToDirectLocalization();
+    this.planFormService.syncServicesFromCoverPageToDirectLocalization();
   }
 
   getLocalizationStrategyFormArray(): FormArray {
-    return this.serviceForm.directLocalizationServiceLevelFormGroup!;
+    return this.planFormService.directLocalizationServiceLevelFormGroup!;
   }
 
   createLocalizationStrategyItem = (): FormGroup => {
-    return this.serviceForm.createDirectLocalizationServiceLevelItem();
+    return this.planFormService.createDirectLocalizationServiceLevelItem();
   };
 
   isLocalizationApproachOther(itemControl: AbstractControl): boolean {
-    const value = this.getValueControl(itemControl.get(EMaterialsFormControls.localizationApproach))?.value;
+    const control = itemControl.get(EMaterialsFormControls.localizationApproach);
+    if (!control) return false;
+    const value = this.getValueControl(control)?.value;
     return value === ELocalizationApproach.Other.toString();
   }
 
   isLocationOther(itemControl: AbstractControl): boolean {
-    const value = this.getValueControl(itemControl.get(EMaterialsFormControls.location))?.value;
+    const control = itemControl.get(EMaterialsFormControls.location);
+    if (!control) return false;
+    const value = this.getValueControl(control)?.value;
     return value === ELocation.Other.toString();
   }
 
   isProprietaryToolsYes(itemControl: AbstractControl): boolean {
-    const value = this.getValueControl(itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems))?.value;
+    const control = itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems);
+    if (!control) return false;
+    const value = this.getValueControl(control)?.value;
     return value === EYesNo.Yes.toString();
   }
 
   getEntityLevelFormArray(): FormArray {
-    return this.serviceForm.directLocalizationEntityLevelFormGroup!;
+    return this.planFormService.directLocalizationEntityLevelFormGroup!;
   }
 
   getEntityLevelItem(): FormGroup {
@@ -114,30 +176,21 @@ export class ServiceLocalizationStepDirectLocalization {
     return formArray.at(0) as FormGroup;
   }
 
+  // Helper method to safely get value control from entity level item
+  getEntityLevelValueControl(key: string): FormControl<any> {
+    const control = this.getEntityLevelItem().get(key);
+    if (!control) {
+      // Return a dummy control if not found (shouldn't happen in normal usage)
+      return new FormControl<any>('');
+    }
+    return this.getValueControl(control);
+  }
+
   getServiceLevelFormArray(): FormArray {
-    return this.serviceForm.directLocalizationServiceLevelFormGroup!;
+    return this.planFormService.directLocalizationServiceLevelFormGroup!;
   }
 
   createServiceLevelItem = (): FormGroup => {
-    return this.serviceForm.createDirectLocalizationServiceLevelItem();
+    return this.planFormService.createDirectLocalizationServiceLevelItem();
   };
-
-  getHasCommentControl(control: any): FormControl<boolean> {
-    if (!control) return new FormControl<boolean>(false, { nonNullable: true });
-    const formGroup = control;
-    return (
-      (formGroup.get(EMaterialsFormControls.hasComment)) ??
-      new FormControl<boolean>(false, { nonNullable: true })
-    );
-  }
-
-  getValueControl(control: any): FormControl<any> {
-    if (!control) return new FormControl('');
-    const formGroup = control as any;
-    return (formGroup.get(EMaterialsFormControls.value)) ?? new FormControl('');
-  }
-
-  onAddComment(): void {
-    this.showCheckbox.set(true);
-  }
 }

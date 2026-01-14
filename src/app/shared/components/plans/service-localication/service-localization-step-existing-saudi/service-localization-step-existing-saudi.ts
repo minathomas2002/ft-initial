@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, effect, input, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, effect, input, model, DestroyRef } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,6 +15,14 @@ import { AgreementType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo 
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
+import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
+import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
+import { TColors } from 'src/app/shared/interfaces';
+import { FormsModule } from '@angular/forms';
+import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
@@ -28,19 +36,26 @@ import { FileuploadComponent } from 'src/app/shared/components/utility-component
     GroupInputWithCheckbox,
     TextareaModule,
     InputNumberModule,
-    FileuploadComponent
+    FileuploadComponent,
+    CommentStateComponent,
+    GeneralConfirmationDialogComponent,
+    FormsModule,
+    ConditionalColorClassDirective
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceLocalizationStepExistingSaudi {
+export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
 
-  serviceForm = inject(ServicePlanFormService);
+  readonly planFormService = inject(ServicePlanFormService);
   planStore = inject(PlanStore);
 
-  showCheckbox = signal(false);
+  pageTitle = input.required<string>();
+  selectedInputColor = input.required<TColors>();
+  commentPhase = model<TCommentPhase>('none');
+  selectedInputs = model<IFieldInformation[]>([]);
   files = signal<File[]>([]);
   EMaterialsFormControls = EMaterialsFormControls;
   EServiceProvidedTo = EServiceProvidedTo;
@@ -52,9 +67,11 @@ export class ServiceLocalizationStepExistingSaudi {
   yesNoOptions = this.planStore.yesNoOptions;
   agreementTypeOptions = this.planStore.agreementTypeOptions;
 
-  availableQuartersWithPast = computed(() => this.serviceForm.getAvailableQuartersWithPast(5, 5));
+  formGroup = this.planFormService.step3_existingSaudi;
 
-  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
+  availableQuartersWithPast = computed(() => this.planFormService.getAvailableQuartersWithPast(5, 5));
+
+  yearColumns = computed(() => this.planFormService.upcomingYears(5));
 
   // Custom header labels for Saudi Company Details table to ensure correct order
   saudiCompanyDetailsHeaderLabels: Record<string, string> = {
@@ -108,33 +125,79 @@ export class ServiceLocalizationStepExistingSaudi {
 
   destroyRef = inject(DestroyRef);
 
-  constructor() {
+  // Implement abstract method from base class
+  getFormGroup(): FormGroup {
+    return this.formGroup;
+  }
+
+  // Expose base class methods as public for template access
+  override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation, rowId?: string): void {
+    super.upDateSelectedInputs(value, fieldInformation, rowId);
+  }
+
+  override highlightInput(inputKey: string, rowId?: string): boolean {
+    return super.highlightInput(inputKey, rowId);
+  }
+
+  override onDeleteComments(): void {
+    super.onDeleteComments();
+  }
+
+  override onConfirmDeleteComment(): void {
+    super.onConfirmDeleteComment();
+  }
+
+  override onCancelDeleteComment(): void {
+    super.onCancelDeleteComment();
+  }
+
+  override onSaveComment(): void {
+    super.onSaveComment();
+  }
+
+  override onSaveEditedComment(): void {
+    super.onSaveEditedComment();
+  }
+
+  override resetAllHasCommentControls(): void {
+    super.resetAllHasCommentControls();
+  }
+
+  // Override hook method for step-specific initialization
+  protected override initializeStepSpecificLogic(): void {
     // Sync services from cover page to service level on component initialization
-    this.serviceForm.syncServicesFromCoverPageToExistingSaudi();
+    this.planFormService.syncServicesFromCoverPageToExistingSaudi();
 
     // Re-sync when services on cover page change
-    const servicesArray = this.serviceForm.getServicesFormArray();
+    const servicesArray = this.planFormService.getServicesFormArray();
     servicesArray?.valueChanges?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.serviceForm.syncServicesFromCoverPageToExistingSaudi();
+      this.planFormService.syncServicesFromCoverPageToExistingSaudi();
     });
 
     // Setup conditional field enabling/disabling
     this.setupConditionalFields();
 
     // Initialize files from form control value
-    const attachmentsControl = this.getAttachmentsFormGroup().get(EMaterialsFormControls.attachments);
-    if (attachmentsControl) {
-      const control = this.getValueControl(attachmentsControl);
-      const formValue = control.value;
-      if (Array.isArray(formValue)) {
-        this.files.set(formValue);
+    const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
+    if (attachmentsFormGroup) {
+      const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
+      if (attachmentsControl) {
+        const control = this.getValueControl(attachmentsControl);
+        const formValue = control.value;
+        if (Array.isArray(formValue)) {
+          this.files.set(formValue);
+        }
       }
     }
 
     // Sync files signal changes to form control
     effect(() => {
       const filesValue = this.files();
-      const attachmentsControl = this.getAttachmentsFormGroup().get(EMaterialsFormControls.attachments);
+      const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
+      if (!attachmentsFormGroup) {
+        return;
+      }
+      const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
       if (attachmentsControl) {
         const control = this.getValueControl(attachmentsControl);
         // Compare arrays by length and content to avoid infinite loops
@@ -167,12 +230,19 @@ export class ServiceLocalizationStepExistingSaudi {
     const formArray = this.getSaudiCompanyDetailsFormArray();
     formArray.controls.forEach((control) => {
       const rowControl = control as FormGroup;
-      const qualificationStatusControl = this.getValueControl(rowControl.get(EMaterialsFormControls.qualificationStatus));
-      const productsControl = this.getValueControl(rowControl.get(EMaterialsFormControls.products));
-      const companyOverviewControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverview));
-      const keyProjectsControl = this.getValueControl(rowControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC));
-      const companyOverviewKeyProjectControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails));
-      const companyOverviewOtherControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverviewOther));
+      const qualificationStatusCtrl = rowControl.get(EMaterialsFormControls.qualificationStatus);
+      const productsCtrl = rowControl.get(EMaterialsFormControls.products);
+      const companyOverviewCtrl = rowControl.get(EMaterialsFormControls.companyOverview);
+      const keyProjectsCtrl = rowControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC);
+      const companyOverviewKeyProjectCtrl = rowControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails);
+      const companyOverviewOtherCtrl = rowControl.get(EMaterialsFormControls.companyOverviewOther);
+
+      const qualificationStatusControl = qualificationStatusCtrl ? this.getValueControl(qualificationStatusCtrl) : null;
+      const productsControl = productsCtrl ? this.getValueControl(productsCtrl) : null;
+      const companyOverviewControl = companyOverviewCtrl ? this.getValueControl(companyOverviewCtrl) : null;
+      const keyProjectsControl = keyProjectsCtrl ? this.getValueControl(keyProjectsCtrl) : null;
+      const companyOverviewKeyProjectControl = companyOverviewKeyProjectCtrl ? this.getValueControl(companyOverviewKeyProjectCtrl) : null;
+      const companyOverviewOtherControl = companyOverviewOtherCtrl ? this.getValueControl(companyOverviewOtherCtrl) : null;
 
       qualificationStatusControl?.disable({ emitEvent: false });
       productsControl?.disable({ emitEvent: false });
@@ -200,13 +270,21 @@ export class ServiceLocalizationStepExistingSaudi {
   }
 
   private setupRowConditionalFields(rowControl: FormGroup): void {
-    const companyTypeControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyType));
-    const qualificationStatusControl = this.getValueControl(rowControl.get(EMaterialsFormControls.qualificationStatus));
-    const productsControl = this.getValueControl(rowControl.get(EMaterialsFormControls.products));
-    const companyOverviewControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverview));
-    const keyProjectsControl = this.getValueControl(rowControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC));
-    const companyOverviewKeyProjectControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails));
-    const companyOverviewOtherControl = this.getValueControl(rowControl.get(EMaterialsFormControls.companyOverviewOther));
+    const companyTypeCtrl = rowControl.get(EMaterialsFormControls.companyType);
+    const qualificationStatusCtrl = rowControl.get(EMaterialsFormControls.qualificationStatus);
+    const productsCtrl = rowControl.get(EMaterialsFormControls.products);
+    const companyOverviewCtrl = rowControl.get(EMaterialsFormControls.companyOverview);
+    const keyProjectsCtrl = rowControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC);
+    const companyOverviewKeyProjectCtrl = rowControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails);
+    const companyOverviewOtherCtrl = rowControl.get(EMaterialsFormControls.companyOverviewOther);
+
+    const companyTypeControl = companyTypeCtrl ? this.getValueControl(companyTypeCtrl) : null;
+    const qualificationStatusControl = qualificationStatusCtrl ? this.getValueControl(qualificationStatusCtrl) : null;
+    const productsControl = productsCtrl ? this.getValueControl(productsCtrl) : null;
+    const companyOverviewControl = companyOverviewCtrl ? this.getValueControl(companyOverviewCtrl) : null;
+    const keyProjectsControl = keyProjectsCtrl ? this.getValueControl(keyProjectsCtrl) : null;
+    const companyOverviewKeyProjectControl = companyOverviewKeyProjectCtrl ? this.getValueControl(companyOverviewKeyProjectCtrl) : null;
+    const companyOverviewOtherControl = companyOverviewOtherCtrl ? this.getValueControl(companyOverviewOtherCtrl) : null;
 
     // Function to update fields based on current selections
     const updateFields = () => {
@@ -287,30 +365,32 @@ export class ServiceLocalizationStepExistingSaudi {
   }
 
   getSaudiCompanyDetailsFormArray(): FormArray {
-    return this.serviceForm.saudiCompanyDetailsFormGroup!;
+    return this.planFormService.saudiCompanyDetailsFormGroup!;
   }
 
   // Create new Saudi company detail item for FormArrayInput
   createSaudiCompanyDetailItem = (): FormGroup => {
-    return this.serviceForm.createSaudiCompanyDetailItem();
+    return this.planFormService.createSaudiCompanyDetailItem();
   };
 
   getCollaborationPartnershipFormArray(): FormArray {
-    return this.serviceForm.collaborationPartnershipFormGroup!;
+    return this.planFormService.collaborationPartnershipFormGroup!;
   }
 
   // Create new collaboration/partnership item for FormArrayInput
   createCollaborationPartnershipItem = (): FormGroup => {
-    return this.serviceForm.createCollaborationPartnershipItem();
+    return this.planFormService.createCollaborationPartnershipItem();
   };
 
   isAgreementTypeOther(itemControl: AbstractControl): boolean {
-    const agreementTypeValue = this.getValueControl(itemControl.get(EMaterialsFormControls.agreementType))?.value;
+    const control = itemControl.get(EMaterialsFormControls.agreementType);
+    if (!control) return false;
+    const agreementTypeValue = this.getValueControl(control)?.value;
     return agreementTypeValue === AgreementType.Other.toString();
   }
 
   getEntityLevelFormArray(): FormArray {
-    return this.serviceForm.entityLevelFormGroup!;
+    return this.planFormService.entityLevelFormGroup!;
   }
 
   getEntityLevelItem(): FormGroup {
@@ -319,38 +399,15 @@ export class ServiceLocalizationStepExistingSaudi {
   }
 
   getServiceLevelFormArray(): FormArray {
-    return this.serviceForm.serviceLevelFormGroup!;
+    return this.planFormService.serviceLevelFormGroup!;
   }
 
   // Create new service level item for FormArrayInput
   createServiceLevelItem = (): FormGroup => {
-    return this.serviceForm.createServiceLevelItem();
+    return this.planFormService.createServiceLevelItem();
   };
 
   getAttachmentsFormGroup(): FormGroup {
-    return this.serviceForm.attachmentsFormGroup;
-  }
-
-  getHasCommentControl(control: any): FormControl<boolean> {
-    if (!control) return new FormControl<boolean>(false, { nonNullable: true });
-    const formGroup = control;
-    return (
-      (formGroup.get(EMaterialsFormControls.hasComment)) ??
-      new FormControl<boolean>(false, { nonNullable: true })
-    );
-  }
-
-  getValueControl(control: any): FormControl<any> {
-    if (!control) return new FormControl('');
-    const formGroup = control as any;
-    return (formGroup.get(EMaterialsFormControls.value)) ?? new FormControl('');
-  }
-
-  getFormControl(control: AbstractControl) {
-    return control as unknown as FormControl;
-  }
-
-  onAddComment(): void {
-    this.showCheckbox.set(true);
+    return this.planFormService.attachmentsFormGroup;
   }
 }

@@ -1,6 +1,7 @@
 import { computed, effect, inject, signal, InputSignal, ModelSignal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
+import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
@@ -14,7 +15,6 @@ import { TCommentPhase } from './product-localization-plan-wizard/product-locali
  */
 export abstract class PlanStepBaseClass {
   // Injected services
-  protected readonly productPlanFormService = inject(ProductPlanFormService);
   protected readonly formUtilityService = inject(FormUtilityService);
   protected readonly toasterService = inject(ToasterService);
 
@@ -22,6 +22,9 @@ export abstract class PlanStepBaseClass {
   abstract readonly pageTitle: InputSignal<string>;
   abstract readonly commentPhase: ModelSignal<TCommentPhase>;
   abstract readonly selectedInputs: ModelSignal<IFieldInformation[]>;
+  
+  // Abstract property for plan form service - subclasses must provide either ProductPlanFormService or ServicePlanFormService
+  abstract readonly planFormService: ProductPlanFormService | ServicePlanFormService;
 
   // Common signals
   showCheckbox = computed(() => this.commentPhase() !== 'none');
@@ -220,29 +223,29 @@ export abstract class PlanStepBaseClass {
 
   /**
    * Helper method to get the hasComment control from a form group.
-   * Delegates to ProductPlanFormService for consistency.
+   * Delegates to planFormService for consistency.
    * Returns null if control is null, undefined, or not a FormGroup.
    */
   protected getHasCommentControl(control: AbstractControl | null | undefined): FormControl<boolean> | null {
     if (!control || !(control instanceof FormGroup)) {
       return null;
     }
-    return this.productPlanFormService.getHasCommentControl(control);
+    return this.planFormService.getHasCommentControl(control);
   }
 
   /**
    * Helper method to get the value control from a form group.
-   * Delegates to ProductPlanFormService for consistency.
+   * Delegates to planFormService for consistency.
    */
   protected getValueControl(control: AbstractControl): FormControl<any> {
-    return this.productPlanFormService.getValueControl(control);
+    return this.planFormService.getValueControl(control);
   }
 
   /**
    * Helper method to get a form control.
-   * Delegates to ProductPlanFormService for consistency.
+   * Delegates to planFormService for consistency.
    */
   protected getFormControl(control: AbstractControl): FormControl<any> {
-    return this.productPlanFormService.getFormControl(control);
+    return this.planFormService.getFormControl(control);
   }
 }

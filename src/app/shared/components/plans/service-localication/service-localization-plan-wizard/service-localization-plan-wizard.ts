@@ -31,12 +31,13 @@ import { ButtonModule } from 'primeng/button';
 import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialog';
 import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
 import { ConfirmLeaveDialogComponent } from '../../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component';
-import { Signature } from 'src/app/shared/interfaces/plans.interface';
+import { Signature, IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { switchMap, of, map, catchError, finalize } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
+import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 
 type ServiceLocalizationWizardStepId =
   | 'cover'
@@ -99,6 +100,16 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   // Conditional step flags - initialize as false so all steps are visible initially
   showExistingSaudiStep = signal(false);
   showDirectLocalizationStep = signal(false);
+
+  // Comment phase signals for each step
+  step2CommentPhase = signal<TCommentPhase>('none');
+  step3CommentPhase = signal<TCommentPhase>('none');
+  step4CommentPhase = signal<TCommentPhase>('none');
+
+  // Selected inputs signals for each step
+  step2SelectedInputs = signal<IFieldInformation[]>([]);
+  step3SelectedInputs = signal<IFieldInformation[]>([]);
+  step4SelectedInputs = signal<IFieldInformation[]>([]);
 
 
   private readonly stepsWithId = computed<ServiceLocalizationWizardStepState[]>(() => {

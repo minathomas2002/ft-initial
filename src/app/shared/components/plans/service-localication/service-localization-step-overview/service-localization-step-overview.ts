@@ -5,9 +5,11 @@ import {
   effect,
   inject,
   input,
+  model,
   signal,
+  DestroyRef,
 } from '@angular/core';
-import { FormArray, ReactiveFormsModule, FormControl, AbstractControl } from '@angular/forms';
+import { FormArray, ReactiveFormsModule, FormControl, AbstractControl, FormGroup } from '@angular/forms';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -16,15 +18,22 @@ import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-inp
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { TrimOnBlurDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { TextareaModule } from 'primeng/textarea';
+import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
+import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
+import { TColors } from 'src/app/shared/interfaces';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-service-localization-step-overview',
@@ -39,34 +48,58 @@ import { TextareaModule } from 'primeng/textarea';
     BaseErrorMessages,
     RadioButtonModule,
     TrimOnBlurDirective,
+    ConditionalColorClassDirective,
     PhoneInputComponent,
-    TextareaModule
+    TextareaModule,
+    CommentStateComponent,
+    GeneralConfirmationDialogComponent,
+    FormsModule
   ],
   templateUrl: './service-localization-step-overview.html',
   styleUrl: './service-localization-step-overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceLocalizationStepOverview {
+export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
 
-  private readonly serviceForm = inject(ServicePlanFormService);
+  readonly planFormService = inject(ServicePlanFormService);
   private readonly planStore = inject(PlanStore);
+  private readonly destroyRef = inject(DestroyRef);
 
-  showCheckbox = signal(false);
+  pageTitle = input.required<string>();
+  selectedInputColor = input.required<TColors>();
+  commentPhase = model<TCommentPhase>('none');
+  selectedInputs = model<IFieldInformation[]>([]);
 
-  formGroup = this.serviceForm.step2_overview;
+  formGroup = this.planFormService.step2_overview;
 
-  basicInformationFormGroup = this.serviceForm.basicInformationFormGroup;
-  basicInformationFormGroupControls = this.serviceForm.basicInformationFormGroup.controls;
-  companyInformationFormGroup = this.serviceForm.overviewCompanyInformationFormGroup;
-  companyInformationFormGroupControls = this.serviceForm.overviewCompanyInformationFormGroup.controls;
-  locationInformationFormGroup = this.serviceForm.locationInformationFormGroup;
-  locationInformationFormGroupControls = this.serviceForm.locationInformationFormGroup.controls;
-  localAgentInformationFormGroup = this.serviceForm.localAgentInformationFormGroup;
-  localAgentInformationFormGroupControls = this.serviceForm.localAgentInformationFormGroup.controls;
+  get basicInformationFormGroup() {
+    return this.planFormService.basicInformationFormGroup;
+  }
+  get basicInformationFormGroupControls() {
+    return this.planFormService.basicInformationFormGroup?.controls;
+  }
+  get companyInformationFormGroup() {
+    return this.planFormService.overviewCompanyInformationFormGroup;
+  }
+  get companyInformationFormGroupControls() {
+    return this.planFormService.overviewCompanyInformationFormGroup?.controls;
+  }
+  get locationInformationFormGroup() {
+    return this.planFormService.locationInformationFormGroup;
+  }
+  get locationInformationFormGroupControls() {
+    return this.planFormService.locationInformationFormGroup?.controls;
+  }
+  get localAgentInformationFormGroup() {
+    return this.planFormService.localAgentInformationFormGroup;
+  }
+  get localAgentInformationFormGroupControls() {
+    return this.planFormService.localAgentInformationFormGroup?.controls;
+  }
 
   getDetailsFormArray(): FormArray {
-    return this.serviceForm.getServiceDetailsFormArray()!;
+    return this.planFormService.getServiceDetailsFormArray()!;
   }
 
   // Dropdown options
@@ -82,16 +115,18 @@ export class ServiceLocalizationStepOverview {
   availableOpportunities = this.planStore.availableOpportunities;
   isLoadingAvailableOpportunities = this.planStore.isLoadingAvailableOpportunities;
 
-  private doYouCurrentlyHaveLocalAgentInKSAControl = this.locationInformationFormGroupControls[
-    EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA
-  ];
+  private get doYouCurrentlyHaveLocalAgentInKSAControl() {
+    return this.locationInformationFormGroupControls?.[EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA];
+  }
 
-  private doYouHaveLocalAgentInKSASignal = toSignal(
-    this.doYouCurrentlyHaveLocalAgentInKSAControl.valueChanges,
-    {
-      initialValue: this.doYouCurrentlyHaveLocalAgentInKSAControl.value,
+  // Use private field with getter to ensure signal is always initialized
+  private _doYouHaveLocalAgentInKSASignal: ReturnType<typeof signal<boolean | null>> | undefined;
+  private get doYouHaveLocalAgentInKSASignal(): ReturnType<typeof signal<boolean | null>> {
+    if (!this._doYouHaveLocalAgentInKSASignal) {
+      this._doYouHaveLocalAgentInKSASignal = signal<boolean | null>(null);
     }
-  );
+    return this._doYouHaveLocalAgentInKSASignal;
+  }
 
   showLocalAgentInformation = computed(() => {
     return this.doYouHaveLocalAgentInKSASignal() === true;
@@ -101,57 +136,104 @@ export class ServiceLocalizationStepOverview {
     return this.planStore.appliedOpportunity() !== null;
   });
 
-  availableQuarters = computed(() => this.serviceForm.getAvailableQuarters(5));
+  availableQuarters = computed(() => this.planFormService.getAvailableQuarters(5));
 
-  constructor() {
+  // Implement abstract method from base class
+  getFormGroup(): FormGroup {
+    return this.formGroup;
+  }
+
+  // Expose base class methods as public for template access
+  override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation): void {
+    super.upDateSelectedInputs(value, fieldInformation);
+  }
+
+  override highlightInput(inputKey: string): boolean {
+    return super.highlightInput(inputKey);
+  }
+
+  override onDeleteComments(): void {
+    super.onDeleteComments();
+  }
+
+  override onConfirmDeleteComment(): void {
+    super.onConfirmDeleteComment();
+  }
+
+  override onCancelDeleteComment(): void {
+    super.onCancelDeleteComment();
+  }
+
+  override onSaveComment(): void {
+    super.onSaveComment();
+  }
+
+  override onSaveEditedComment(): void {
+    super.onSaveEditedComment();
+  }
+
+  override resetAllHasCommentControls(): void {
+    super.resetAllHasCommentControls();
+  }
+
+  onServiceProvidedToChange(value: string | null, index: number): void {
+    this.planFormService.toggleServiceProvidedToCompanyNamesValidation(value, index);
+  }
+
+  // Override hook method for step-specific initialization
+  protected override initializeStepSpecificLogic(): void {
     // Sync services from cover page to overview details on component initialization
-    this.serviceForm.syncServicesFromCoverPageToOverview();
+    this.planFormService.syncServicesFromCoverPageToOverview();
 
+    // Initialize and sync local agent control value to signal if control exists
+    const localAgentControl = this.doYouCurrentlyHaveLocalAgentInKSAControl;
+    if (localAgentControl) {
+      const control = this.getFormControl(localAgentControl);
+      // Ensure signal is initialized (getter handles this)
+      const signalRef = this.doYouHaveLocalAgentInKSASignal;
+      // Set initial value
+      signalRef.set(control.value ?? false);
+
+      // Subscribe to value changes with automatic cleanup
+      control.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(value => {
+          this.doYouHaveLocalAgentInKSASignal.set(value ?? false);
+        });
+    }
+
+    // Local agent validation effect
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
-      this.serviceForm.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+      if (doYouHaveLocalAgentInKSA !== null) {
+        this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+      }
     });
 
     // Initialize validation for existing details rows (use current values)
     const detailsArray = this.getDetailsFormArray();
-    detailsArray.controls.forEach((ctrl, idx) => {
-      const val = this.getValueControl(ctrl.get(EMaterialsFormControls.serviceProvidedTo))?.value ?? null;
-      this.serviceForm.toggleServiceProvidedToCompanyNamesValidation(val, idx);
-    });
-
-    const opportunityControl = this.getFormControl(
-      this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]
-    );
-    const appliedOpportunity = this.planStore.appliedOpportunity();
-    if (appliedOpportunity) {
-      opportunityControl.setValue(this.planStore.availableOpportunities()[0]);
+    if (detailsArray) {
+      detailsArray.controls.forEach((ctrl, idx) => {
+        const serviceProvidedToControl = ctrl.get(EMaterialsFormControls.serviceProvidedTo);
+        if (serviceProvidedToControl) {
+          const val = this.getValueControl(serviceProvidedToControl)?.value ?? null;
+          this.planFormService.toggleServiceProvidedToCompanyNamesValidation(val, idx);
+        }
+      });
     }
-  }
 
-  onServiceProvidedToChange(value: string | null, index: number): void {
-    this.serviceForm.toggleServiceProvidedToCompanyNamesValidation(value, index);
-  }
-
-  getHasCommentControl(control: AbstractControl) {
-    if (!control) return new FormControl<boolean>(false, { nonNullable: true });
-    const formGroup = control as AbstractControl;
-    return (
-      (formGroup.get(EMaterialsFormControls.hasComment) as any) ??
-      new FormControl<boolean>(false, { nonNullable: true })
-    );
-  }
-
-  getValueControl(control: AbstractControl | null) {
-    if (!control) return new FormControl('');
-    const formGroup = control;
-    return (formGroup.get(EMaterialsFormControls.value) as any) ?? new FormControl<any>('');
-  }
-
-  getFormControl(control: AbstractControl): FormControl<any> {
-    return control as unknown as FormControl;
-  }
-
-  onAddComment(): void {
-    this.showCheckbox.set(true);
+    // Initialize opportunity value based on appliedOpportunity
+    const planStore = this.planStore;
+    if (this.basicInformationFormGroupControls && planStore) {
+      const opportunityFormControl = this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity];
+      if (opportunityFormControl) {
+        const opportunityControl = this.getFormControl(opportunityFormControl);
+        const appliedOpportunity = planStore.appliedOpportunity();
+        const availableOpportunities = planStore.availableOpportunities();
+        if (appliedOpportunity && availableOpportunities.length > 0) {
+          opportunityControl.setValue(availableOpportunities[0]);
+        }
+      }
+    }
   }
 }

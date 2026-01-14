@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
+import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -51,9 +52,11 @@ import { TCommentPhase } from '../product-localization-plan-wizard/product-local
 export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
   private readonly planStore = inject(PlanStore);
+  readonly planFormService = inject(ProductPlanFormService);
+
   pageTitle = input<string>('Value Chain');
 
-  formGroup = this.productPlanFormService.step3_valueChain;
+  formGroup = this.planFormService.step3_valueChain;
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
   // Dropdown options
@@ -100,44 +103,44 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   // Get section FormArrays
   getDesignEngineeringFormArray(): FormArray | null {
-    return this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.designEngineeringFormGroup);
+    return this.planFormService.getValueChainSectionFormArray(EMaterialsFormControls.designEngineeringFormGroup);
   }
 
   getSourcingFormArray(): FormArray | null {
-    return this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.sourcingFormGroup);
+    return this.planFormService.getValueChainSectionFormArray(EMaterialsFormControls.sourcingFormGroup);
   }
 
   getManufacturingFormArray(): FormArray | null {
-    return this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.manufacturingFormGroup);
+    return this.planFormService.getValueChainSectionFormArray(EMaterialsFormControls.manufacturingFormGroup);
   }
 
   getAssemblyTestingFormArray(): FormArray | null {
-    return this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.assemblyTestingFormGroup);
+    return this.planFormService.getValueChainSectionFormArray(EMaterialsFormControls.assemblyTestingFormGroup);
   }
 
   getAfterSalesFormArray(): FormArray | null {
-    return this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.afterSalesFormGroup);
+    return this.planFormService.getValueChainSectionFormArray(EMaterialsFormControls.afterSalesFormGroup);
   }
 
   // Factory functions for creating new items (used by form-array-input component)
   createDesignEngineeringItem = (): FormGroup => {
-    return this.productPlanFormService.createValueChainItem();
+    return this.planFormService.createValueChainItem();
   };
 
   createSourcingItem = (): FormGroup => {
-    return this.productPlanFormService.createValueChainItem();
+    return this.planFormService.createValueChainItem();
   };
 
   createManufacturingItem = (): FormGroup => {
-    return this.productPlanFormService.createValueChainItem();
+    return this.planFormService.createValueChainItem();
   };
 
   createAssemblyTestingItem = (): FormGroup => {
-    return this.productPlanFormService.createValueChainItem();
+    return this.planFormService.createValueChainItem();
   };
 
   createAfterSalesItem = (): FormGroup => {
-    return this.productPlanFormService.createValueChainItem();
+    return this.planFormService.createValueChainItem();
   };
 
   // @ts-expect-error - Intentionally shadowing base class method with incompatible signature (itemControl vs rowId)

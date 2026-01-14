@@ -51,31 +51,33 @@ import { TCommentPhase } from '../product-localization-plan-wizard/product-local
 })
 export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBaseClass {
   private readonly planStore = inject(PlanStore);
+  readonly planFormService = inject(ProductPlanFormService);
+
   pageTitle = input<string>('Product & Plant Overview');
 
   // Expose enum to template
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
-  formGroup = this.productPlanFormService.step2_productPlantOverview;
+  formGroup = this.planFormService.step2_productPlantOverview;
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
 
   // Form group accessors
   get overviewFormGroupControls() {
-    return this.productPlanFormService.overviewFormGroup.controls;
+    return this.planFormService.overviewFormGroup.controls;
   }
 
   get expectedCAPEXInvestmentFormGroupControls() {
-    return this.productPlanFormService.expectedCAPEXInvestmentFormGroup.controls;
+    return this.planFormService.expectedCAPEXInvestmentFormGroup.controls;
   }
 
   get targetCustomersFormGroupControls() {
-    return this.productPlanFormService.targetCustomersFormGroup.controls;
+    return this.planFormService.targetCustomersFormGroup.controls;
   }
 
   get productManufacturingExperienceFormGroupControls() {
-    return this.productPlanFormService.productManufacturingExperienceFormGroup.controls;
+    return this.planFormService.productManufacturingExperienceFormGroup.controls;
   }
 
   // Form control signals
@@ -181,22 +183,22 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     // Effect to handle validation toggles
     effect(() => {
       const provideToSECValue = this.provideToSECSignal();
-      this.productPlanFormService.toggleSECFieldsValidation(provideToSECValue === true);
+      this.planFormService.toggleSECFieldsValidation(provideToSECValue === true);
     });
 
     effect(() => {
       const provideToLocalSuppliersValue = this.provideToLocalSuppliersSignal();
-      this.productPlanFormService.toggleLocalSuppliersFieldsValidation(provideToLocalSuppliersValue === true);
+      this.planFormService.toggleLocalSuppliersFieldsValidation(provideToLocalSuppliersValue === true);
     });
 
     effect(() => {
       const targetedCustomerValue = this.targetedCustomerSignal();
-      this.productPlanFormService.toggleTargetedSuppliersFieldsValidation(targetedCustomerValue || []);
+      this.planFormService.toggleTargetedSuppliersFieldsValidation(targetedCustomerValue || []);
     });
 
     effect(() => {
       const othersPercentageValue = this.othersPercentageSignal();
-      this.productPlanFormService.toggleOthersDescriptionValidation(othersPercentageValue);
+      this.planFormService.toggleOthersDescriptionValidation(othersPercentageValue);
     });
   }
 

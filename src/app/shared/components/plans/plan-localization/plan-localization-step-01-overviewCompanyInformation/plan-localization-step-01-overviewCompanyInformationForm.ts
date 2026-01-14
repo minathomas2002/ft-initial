@@ -55,27 +55,29 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   private readonly planStore = inject(PlanStore);
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly planFormService = inject(ProductPlanFormService);
+
   pageTitle = input.required<string>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
 
-  formGroup = this.productPlanFormService.overviewCompanyInformation;
+  formGroup = this.planFormService.overviewCompanyInformation;
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes();
   availableOpportunities = this.planStore.availableOpportunities;
   isLoadingAvailableOpportunities = this.planStore.isLoadingAvailableOpportunities;
 
   get basicInformationFormGroupControls() {
-    return this.productPlanFormService.basicInformationFormGroup?.controls;
+    return this.planFormService.basicInformationFormGroup?.controls;
   }
   get companyInformationFormGroupControls() {
-    return this.productPlanFormService.companyInformationFormGroup?.controls;
+    return this.planFormService.companyInformationFormGroup?.controls;
   }
   get locationInformationFormGroupControls() {
-    return this.productPlanFormService.locationInformationFormGroup?.controls;
+    return this.planFormService.locationInformationFormGroup?.controls;
   }
   get localAgentInformationFormGroupControls() {
-    return this.productPlanFormService.localAgentInformationFormGroup?.controls;
+    return this.planFormService.localAgentInformationFormGroup?.controls;
   }
 
   companyNameHasCommentControl = computed(() => {
@@ -168,7 +170,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
       if (doYouHaveLocalAgentInKSA !== null) {
-        this.productPlanFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+        this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
       }
     });
 

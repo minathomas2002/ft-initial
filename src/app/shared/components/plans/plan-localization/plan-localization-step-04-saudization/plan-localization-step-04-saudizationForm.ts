@@ -37,12 +37,14 @@ import { TCommentPhase } from '../product-localization-plan-wizard/product-local
 export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
   isReviewMode = input<boolean>(false);
+  readonly planFormService = inject(ProductPlanFormService);
+
   pageTitle = input<string>('Saudization');
 
   // Computed property to determine if file upload should be disabled
   isFileUploadDisabled = computed(() => this.isViewMode() || this.isReviewMode());
 
-  formGroup = this.productPlanFormService.step4_saudization;
+  formGroup = this.planFormService.step4_saudization;
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
   selectedInputColor = input<TColors>('orange');
@@ -110,7 +112,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
 
   // Arrow function wrappers to preserve 'this' context when passed to child components
   getYearFormGroupWrapper = (year: number): FormGroup | null => {
-    return this.productPlanFormService.getYearFormGroup(year);
+    return this.planFormService.getYearFormGroup(year);
   };
 
   getRowControlWrapper = (year: number, rowName: string): AbstractControl | null => {
@@ -120,16 +122,16 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
 
   // Get form groups
   getSaudizationFormGroup(): FormGroup {
-    return this.productPlanFormService.saudizationFormGroup;
+    return this.planFormService.saudizationFormGroup;
   }
 
   getAttachmentsFormGroup(): FormGroup {
-    return this.productPlanFormService.attachmentsFormGroup;
+    return this.planFormService.attachmentsFormGroup;
   }
 
   // Get year form group
   getYearFormGroup(year: number): FormGroup | null {
-    return this.productPlanFormService.getYearFormGroup(year);
+    return this.planFormService.getYearFormGroup(year);
   }
 
   // Get row control for a specific year
@@ -141,7 +143,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
     // Check if attachments form group is available (may not be initialized during construction)
-    const attachmentsFormGroup = this.productPlanFormService.attachmentsFormGroup;
+    const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
     if (!attachmentsFormGroup) {
       return;
     }
@@ -159,7 +161,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
     // Sync files signal changes to form control
     effect(() => {
       const filesValue = this.files();
-      const attachmentsFormGroup = this.productPlanFormService.attachmentsFormGroup;
+      const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
       if (!attachmentsFormGroup) {
         return;
       }
