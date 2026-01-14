@@ -37,10 +37,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     TextareaModule,
     InputNumberModule,
     FileuploadComponent,
-    CommentStateComponent,
-    GeneralConfirmationDialogComponent,
     FormsModule,
-    ConditionalColorClassDirective
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',
@@ -67,11 +64,13 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   yesNoOptions = this.planStore.yesNoOptions;
   agreementTypeOptions = this.planStore.agreementTypeOptions;
 
-  formGroup = this.planFormService.step3_existingSaudi;
+  get formGroup() {
+    return this.planFormService?.step3_existingSaudi ?? new FormGroup({});
+  }
 
-  availableQuartersWithPast = computed(() => this.planFormService.getAvailableQuartersWithPast(5, 5));
+  availableQuartersWithPast = computed(() => this.planFormService?.getAvailableQuartersWithPast(5, 5) ?? []);
 
-  yearColumns = computed(() => this.planFormService.upcomingYears(5));
+  yearColumns = computed(() => this.planFormService?.upcomingYears(5) ?? []);
 
   // Custom header labels for Saudi Company Details table to ensure correct order
   saudiCompanyDetailsHeaderLabels: Record<string, string> = {
@@ -165,34 +164,58 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
-    // Sync services from cover page to service level on component initialization
-    this.planFormService.syncServicesFromCoverPageToExistingSaudi();
+    // Defer service-dependent initialization until after component is fully constructed
+    // This ensures planFormService is available (inject() runs during property initialization)
+    effect(() => {
+      const service = this.planFormService;
+      if (!service) {
+        return;
+      }
 
-    // Re-sync when services on cover page change
-    const servicesArray = this.planFormService.getServicesFormArray();
-    servicesArray?.valueChanges?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.planFormService.syncServicesFromCoverPageToExistingSaudi();
+      // Sync services from cover page to service level on component initialization
+      // Use a flag to ensure this only runs once
+      if (!this._servicesSynced) {
+        service.syncServicesFromCoverPageToExistingSaudi();
+        this._servicesSynced = true;
+
+        // Re-sync when services on cover page change
+        const servicesArray = service.getServicesFormArray();
+        servicesArray?.valueChanges?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+          service.syncServicesFromCoverPageToExistingSaudi();
+        });
+      }
+
+      // Setup conditional field enabling/disabling (only once)
+      if (!this._conditionalFieldsSetup) {
+        this.setupConditionalFields();
+        this._conditionalFieldsSetup = true;
+      }
     });
 
-    // Setup conditional field enabling/disabling
-    this.setupConditionalFields();
-
     // Initialize files from form control value
-    const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
-    if (attachmentsFormGroup) {
-      const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
-      if (attachmentsControl) {
-        const control = this.getValueControl(attachmentsControl);
-        const formValue = control.value;
-        if (Array.isArray(formValue)) {
-          this.files.set(formValue);
+    effect(() => {
+      if (!this.planFormService) {
+        return;
+      }
+      const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
+      if (attachmentsFormGroup) {
+        const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
+        if (attachmentsControl) {
+          const control = this.getValueControl(attachmentsControl);
+          const formValue = control.value;
+          if (Array.isArray(formValue)) {
+            this.files.set(formValue);
+          }
         }
       }
-    }
+    });
 
     // Sync files signal changes to form control
     effect(() => {
       const filesValue = this.files();
+      if (!this.planFormService) {
+        return;
+      }
       const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
       if (!attachmentsFormGroup) {
         return;
@@ -254,7 +277,13 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   }
 
   private setupConditionalFields(): void {
+    if (!this.planFormService) {
+      return;
+    }
     const formArray = this.getSaudiCompanyDetailsFormArray();
+    if (!formArray || formArray.length === 0) {
+      return;
+    }
 
     // Subscribe to each row's company type and qualification status changes
     formArray.controls.forEach((control) => {
@@ -365,20 +394,26 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   }
 
   getSaudiCompanyDetailsFormArray(): FormArray {
-    return this.planFormService.saudiCompanyDetailsFormGroup!;
+    return this.planFormService?.saudiCompanyDetailsFormGroup ?? new FormArray<any>([]);
   }
 
   // Create new Saudi company detail item for FormArrayInput
   createSaudiCompanyDetailItem = (): FormGroup => {
+    if (!this.planFormService) {
+      return new FormGroup({});
+    }
     return this.planFormService.createSaudiCompanyDetailItem();
   };
 
   getCollaborationPartnershipFormArray(): FormArray {
-    return this.planFormService.collaborationPartnershipFormGroup!;
+    return this.planFormService?.collaborationPartnershipFormGroup ?? new FormArray<any>([]);
   }
 
   // Create new collaboration/partnership item for FormArrayInput
   createCollaborationPartnershipItem = (): FormGroup => {
+    if (!this.planFormService) {
+      return new FormGroup({});
+    }
     return this.planFormService.createCollaborationPartnershipItem();
   };
 
@@ -390,24 +425,43 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   }
 
   getEntityLevelFormArray(): FormArray {
-    return this.planFormService.entityLevelFormGroup!;
+    return this.planFormService?.entityLevelFormGroup ?? new FormArray<any>([]);
   }
 
   getEntityLevelItem(): FormGroup {
     const formArray = this.getEntityLevelFormArray();
+    if (formArray.length === 0) {
+      return new FormGroup({});
+    }
     return formArray.at(0) as FormGroup;
   }
 
+  // Helper method to safely get value control from entity level item
+  getEntityLevelValueControl(key: string): FormControl<any> {
+    const control = this.getEntityLevelItem().get(key);
+    if (!control) {
+      // Return a dummy control if not found (shouldn't happen in normal usage)
+      return new FormControl<any>('');
+    }
+    return this.getValueControl(control);
+  }
+
   getServiceLevelFormArray(): FormArray {
-    return this.planFormService.serviceLevelFormGroup!;
+    return this.planFormService?.serviceLevelFormGroup ?? new FormArray<any>([]);
   }
 
   // Create new service level item for FormArrayInput
   createServiceLevelItem = (): FormGroup => {
+    if (!this.planFormService) {
+      return new FormGroup({});
+    }
     return this.planFormService.createServiceLevelItem();
   };
 
   getAttachmentsFormGroup(): FormGroup {
-    return this.planFormService.attachmentsFormGroup;
+    return this.planFormService?.attachmentsFormGroup ?? new FormGroup({});
   }
+
+  private _servicesSynced = false;
+  private _conditionalFieldsSetup = false;
 }

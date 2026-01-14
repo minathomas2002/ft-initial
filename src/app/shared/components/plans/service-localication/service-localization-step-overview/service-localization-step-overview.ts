@@ -71,35 +71,37 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
 
-  formGroup = this.planFormService.step2_overview;
+  get formGroup() {
+    return this.planFormService?.step2_overview ?? new FormGroup({});
+  }
 
   get basicInformationFormGroup() {
-    return this.planFormService.basicInformationFormGroup;
+    return this.planFormService?.basicInformationFormGroup;
   }
   get basicInformationFormGroupControls() {
-    return this.planFormService.basicInformationFormGroup?.controls;
+    return this.planFormService?.basicInformationFormGroup?.controls;
   }
   get companyInformationFormGroup() {
-    return this.planFormService.overviewCompanyInformationFormGroup;
+    return this.planFormService?.overviewCompanyInformationFormGroup;
   }
   get companyInformationFormGroupControls() {
-    return this.planFormService.overviewCompanyInformationFormGroup?.controls;
+    return this.planFormService?.overviewCompanyInformationFormGroup?.controls;
   }
   get locationInformationFormGroup() {
-    return this.planFormService.locationInformationFormGroup;
+    return this.planFormService?.locationInformationFormGroup;
   }
   get locationInformationFormGroupControls() {
-    return this.planFormService.locationInformationFormGroup?.controls;
+    return this.planFormService?.locationInformationFormGroup?.controls;
   }
   get localAgentInformationFormGroup() {
-    return this.planFormService.localAgentInformationFormGroup;
+    return this.planFormService?.localAgentInformationFormGroup;
   }
   get localAgentInformationFormGroupControls() {
-    return this.planFormService.localAgentInformationFormGroup?.controls;
+    return this.planFormService?.localAgentInformationFormGroup?.controls;
   }
 
   getDetailsFormArray(): FormArray {
-    return this.planFormService.getServiceDetailsFormArray()!;
+    return this.planFormService?.getServiceDetailsFormArray() ?? new FormArray<any>([]);
   }
 
   // Dropdown options
@@ -136,7 +138,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     return this.planStore.appliedOpportunity() !== null;
   });
 
-  availableQuarters = computed(() => this.planFormService.getAvailableQuarters(5));
+  availableQuarters = computed(() => this.planFormService?.getAvailableQuarters(5) ?? []);
 
   // Implement abstract method from base class
   getFormGroup(): FormGroup {
@@ -182,58 +184,87 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
-    // Sync services from cover page to overview details on component initialization
-    this.planFormService.syncServicesFromCoverPageToOverview();
+    // Defer service-dependent initialization until after component is fully constructed
+    // This ensures planFormService is available (inject() runs during property initialization)
+    effect(() => {
+      // Access planFormService to ensure it's initialized
+      const service = this.planFormService;
+      if (!service) {
+        return;
+      }
+
+      // Sync services from cover page to overview details on component initialization
+      // Use a flag to ensure this only runs once
+      if (!this._servicesSynced) {
+        service.syncServicesFromCoverPageToOverview();
+        this._servicesSynced = true;
+      }
+
+      // Initialize validation for existing details rows (use current values)
+      const detailsArray = this.getDetailsFormArray();
+      if (detailsArray) {
+        detailsArray.controls.forEach((ctrl, idx) => {
+          const serviceProvidedToControl = ctrl.get(EMaterialsFormControls.serviceProvidedTo);
+          if (serviceProvidedToControl) {
+            const val = this.getValueControl(serviceProvidedToControl)?.value ?? null;
+            service.toggleServiceProvidedToCompanyNamesValidation(val, idx);
+          }
+        });
+      }
+    });
 
     // Initialize and sync local agent control value to signal if control exists
-    const localAgentControl = this.doYouCurrentlyHaveLocalAgentInKSAControl;
-    if (localAgentControl) {
-      const control = this.getFormControl(localAgentControl);
-      // Ensure signal is initialized (getter handles this)
-      const signalRef = this.doYouHaveLocalAgentInKSASignal;
-      // Set initial value
-      signalRef.set(control.value ?? false);
+    // Defer until planFormService is available
+    effect(() => {
+      if (!this.planFormService) {
+        return;
+      }
+      const localAgentControl = this.doYouCurrentlyHaveLocalAgentInKSAControl;
+      if (localAgentControl && !this._localAgentInitialized) {
+        const control = this.getFormControl(localAgentControl);
+        // Ensure signal is initialized (getter handles this)
+        const signalRef = this.doYouHaveLocalAgentInKSASignal;
+        // Set initial value
+        signalRef.set(control.value ?? false);
 
-      // Subscribe to value changes with automatic cleanup
-      control.valueChanges
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(value => {
-          this.doYouHaveLocalAgentInKSASignal.set(value ?? false);
-        });
-    }
+        // Subscribe to value changes with automatic cleanup
+        control.valueChanges
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(value => {
+            this.doYouHaveLocalAgentInKSASignal.set(value ?? false);
+          });
+        this._localAgentInitialized = true;
+      }
+    });
 
     // Local agent validation effect
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
-      if (doYouHaveLocalAgentInKSA !== null) {
+      if (doYouHaveLocalAgentInKSA !== null && this.planFormService) {
         this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
       }
     });
 
-    // Initialize validation for existing details rows (use current values)
-    const detailsArray = this.getDetailsFormArray();
-    if (detailsArray) {
-      detailsArray.controls.forEach((ctrl, idx) => {
-        const serviceProvidedToControl = ctrl.get(EMaterialsFormControls.serviceProvidedTo);
-        if (serviceProvidedToControl) {
-          const val = this.getValueControl(serviceProvidedToControl)?.value ?? null;
-          this.planFormService.toggleServiceProvidedToCompanyNamesValidation(val, idx);
-        }
-      });
-    }
-
     // Initialize opportunity value based on appliedOpportunity
-    const planStore = this.planStore;
-    if (this.basicInformationFormGroupControls && planStore) {
-      const opportunityFormControl = this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity];
-      if (opportunityFormControl) {
-        const opportunityControl = this.getFormControl(opportunityFormControl);
-        const appliedOpportunity = planStore.appliedOpportunity();
-        const availableOpportunities = planStore.availableOpportunities();
-        if (appliedOpportunity && availableOpportunities.length > 0) {
-          opportunityControl.setValue(availableOpportunities[0]);
+    effect(() => {
+      if (!this.planFormService) {
+        return;
+      }
+      const planStore = this.planStore;
+      if (this.basicInformationFormGroupControls && planStore) {
+        const opportunityFormControl = this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity];
+        if (opportunityFormControl) {
+          const opportunityControl = this.getFormControl(opportunityFormControl);
+          const appliedOpportunity = planStore.appliedOpportunity();
+          const availableOpportunities = planStore.availableOpportunities();
+          if (appliedOpportunity && availableOpportunities.length > 0) {
+            opportunityControl.setValue(availableOpportunities[0]);
+          }
         }
       }
-    }
+    });
   }
+
+  private _servicesSynced = false;
+  private _localAgentInitialized = false;
 }

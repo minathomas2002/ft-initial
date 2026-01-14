@@ -449,11 +449,11 @@
                     placeholder="Enter headcount"
                     [min]="0"
                     inputId="integeronly"
-                    [formControl]="getValueControl(getEntityLevelItem().get(yearKey + '_headcount'))"
+                    [formControl]="getEntityLevelValueControl(yearKey + '_headcount')"
                   />
                 </app-group-input-with-checkbox>
                 <app-base-error-messages
-                  [control]="getValueControl(getEntityLevelItem().get(yearKey + '_headcount'))"
+                  [control]="getEntityLevelValueControl(yearKey + '_headcount')"
                   [label]="'Headcount ' + yearColumns()[i]"
                 />
               </td>
@@ -476,11 +476,11 @@
                     [minFractionDigits]="0"
                     [maxFractionDigits]="2"
                     [maxlength]="5"
-                    [formControl]="getValueControl(getEntityLevelItem().get(yearKey + '_saudization'))"
+                    [formControl]="getEntityLevelValueControl(yearKey + '_saudization')"
                   />
                 </app-group-input-with-checkbox>
                 <app-base-error-messages
-                  [control]="getValueControl(getEntityLevelItem().get(yearKey + '_saudization'))"
+                  [control]="getEntityLevelValueControl(yearKey + '_saudization')"
                   [label]="'Saudization % ' + yearColumns()[i]"
                 />
               </td>
@@ -541,7 +541,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
             >
               <p-select
-                [options]="serviceForm.getAvailableQuarters(5)"
+                [options]="planFormService.getAvailableQuarters(5)"
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"

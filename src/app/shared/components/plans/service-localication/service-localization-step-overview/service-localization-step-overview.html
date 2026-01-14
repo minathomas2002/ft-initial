@@ -504,7 +504,7 @@
             [appendTo]="'body'"
           />
 
-          @if (getValueControl(itemControl.get('serviceProvidedTo'))?.value === serviceProvidedToOthersId || getValueControl(itemControl.get('serviceProvidedTo'))?.value === 'Others') {
+          @if (getValueControl(itemControl.get('serviceProvidedTo')).value === serviceProvidedToOthersId || getValueControl(itemControl.get('serviceProvidedTo')).value === 'Others') {
           <div class="mt-2">
             <textarea
               pTextarea

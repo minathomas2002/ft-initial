@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, DestroyRef, effect } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
@@ -11,14 +11,11 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationApproach, ELocation, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
-import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
-import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-service-localization-step-direct-localization',
@@ -31,10 +28,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     GroupInputWithCheckbox,
     TextareaModule,
     InputNumberModule,
-    CommentStateComponent,
-    GeneralConfirmationDialogComponent,
     FormsModule,
-    ConditionalColorClassDirective
   ],
   templateUrl: './service-localization-step-direct-localization.html',
   styleUrl: './service-localization-step-direct-localization.scss',
@@ -52,13 +46,15 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
 
-  formGroup = this.planFormService.step4_directLocalization;
+  get formGroup() {
+    return this.planFormService?.step4_directLocalization ?? new FormGroup({});
+  }
   EMaterialsFormControls = EMaterialsFormControls;
   yesNoOptions = this.planStore.yesNoOptions;
   localizationApproachOptions = this.planStore.localizationApproachOptions;
   locationOptions = this.planStore.locationOptions;
 
-  yearColumns = computed(() => this.planFormService.upcomingYears(5));
+  yearColumns = computed(() => this.planFormService?.upcomingYears(5) ?? []);
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -134,15 +130,33 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
-    // Sync services from cover page to service level on component initialization
-    this.planFormService.syncServicesFromCoverPageToDirectLocalization();
+    // Defer service-dependent initialization until after component is fully constructed
+    // This ensures planFormService is available (inject() runs during property initialization)
+    effect(() => {
+      const service = this.planFormService;
+      if (!service) {
+        return;
+      }
+
+      // Sync services from cover page to service level on component initialization
+      // Use a flag to ensure this only runs once
+      if (!this._servicesSynced) {
+        service.syncServicesFromCoverPageToDirectLocalization();
+        this._servicesSynced = true;
+      }
+    });
   }
 
+  private _servicesSynced = false;
+
   getLocalizationStrategyFormArray(): FormArray {
-    return this.planFormService.directLocalizationServiceLevelFormGroup!;
+    return this.planFormService?.directLocalizationServiceLevelFormGroup ?? new FormArray<any>([]);
   }
 
   createLocalizationStrategyItem = (): FormGroup => {
+    if (!this.planFormService) {
+      return new FormGroup({});
+    }
     return this.planFormService.createDirectLocalizationServiceLevelItem();
   };
 
@@ -168,11 +182,14 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   }
 
   getEntityLevelFormArray(): FormArray {
-    return this.planFormService.directLocalizationEntityLevelFormGroup!;
+    return this.planFormService?.directLocalizationEntityLevelFormGroup ?? new FormArray<any>([]);
   }
 
   getEntityLevelItem(): FormGroup {
     const formArray = this.getEntityLevelFormArray();
+    if (formArray.length === 0) {
+      return new FormGroup({});
+    }
     return formArray.at(0) as FormGroup;
   }
 
@@ -187,10 +204,13 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   }
 
   getServiceLevelFormArray(): FormArray {
-    return this.planFormService.directLocalizationServiceLevelFormGroup!;
+    return this.planFormService?.directLocalizationServiceLevelFormGroup ?? new FormArray<any>([]);
   }
 
   createServiceLevelItem = (): FormGroup => {
+    if (!this.planFormService) {
+      return new FormGroup({});
+    }
     return this.planFormService.createDirectLocalizationServiceLevelItem();
   };
 }
