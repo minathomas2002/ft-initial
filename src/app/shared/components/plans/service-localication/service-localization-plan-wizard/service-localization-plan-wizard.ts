@@ -365,6 +365,8 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
           if (currentMode === 'view') {
             this.activeStep.set(this.stepsWithId().length);
           }
+          // Re-evaluate conditional steps after disabling forms (getRawValue() will work correctly)
+          this.evaluateConditionalSteps();
         } else if (currentMode === 'edit') {
           this.enableAllForms();
           const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
@@ -447,29 +449,36 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     const detailsArray = this.serviceLocalizationFormService.getServiceDetailsFormArray();
     if (!detailsArray) return;
 
-    const evaluate = () => {
-      const items = (detailsArray.value ?? []) as Array<{ serviceLocalizationMethodology?: { value?: unknown } }>;
-      const methodologies = items.map((it) => {
-        const value = it?.serviceLocalizationMethodology?.value;
-        return value === undefined || value === null || value === '' ? null : String(value);
-      });
-
-      const allNull = methodologies.every((m) => m === null);
-      if (allNull) {
-        this.showExistingSaudiStep.set(false);
-        this.showDirectLocalizationStep.set(false);
-        return;
-      }
-
-      const collaboration = ELocalizationMethodology.Collaboration.toString();
-      const direct = ELocalizationMethodology.Direct.toString();
-      this.showExistingSaudiStep.set(methodologies.some((m) => m === collaboration));
-      this.showDirectLocalizationStep.set(methodologies.some((m) => m === direct));
-    };
-
     // Evaluate once (handles edit/view prefilled forms), then react to changes
-    evaluate();
-    detailsArray.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(evaluate);
+    this.evaluateConditionalSteps();
+    detailsArray.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.evaluateConditionalSteps();
+    });
+  }
+
+  // Evaluate conditional steps based on service localization methodology
+  private evaluateConditionalSteps(): void {
+    const detailsArray = this.serviceLocalizationFormService.getServiceDetailsFormArray();
+    if (!detailsArray) return;
+
+    // Use getRawValue() to get values even when forms are disabled (view/review mode)
+    const items = (detailsArray.getRawValue() ?? []) as Array<{ serviceLocalizationMethodology?: { value?: unknown } }>;
+    const methodologies = items.map((it) => {
+      const value = it?.serviceLocalizationMethodology?.value;
+      return value === undefined || value === null || value === '' ? null : String(value);
+    });
+
+    const allNull = methodologies.every((m) => m === null);
+    if (allNull) {
+      this.showExistingSaudiStep.set(false);
+      this.showDirectLocalizationStep.set(false);
+      return;
+    }
+
+    const collaboration = ELocalizationMethodology.Collaboration.toString();
+    const direct = ELocalizationMethodology.Direct.toString();
+    this.showExistingSaudiStep.set(methodologies.some((m) => m === collaboration));
+    this.showDirectLocalizationStep.set(methodologies.some((m) => m === direct));
   }
 
   previousStep(): void {
