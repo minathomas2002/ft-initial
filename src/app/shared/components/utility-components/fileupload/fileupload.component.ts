@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, model, viewChild, afterNextRender } from "@angular/core";
+import { ChangeDetectionStrategy, Component, effect, inject, input, model, viewChild, afterNextRender, computed } from "@angular/core";
 import { MessageService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import {
@@ -21,11 +21,15 @@ import { TranslatePipe } from "../../../pipes";
 })
 export class FileuploadComponent {
   isViewMode = input<boolean>(false);
+  disabled = input<boolean>(false);
   maxFileSize = input<number>(1024 * 1024 * 10); // 10MB default
   acceptedFileTypes = input<string>("*/*");
   files = model<File[]>([]);
   placeholder = input("SVG, PNG, JPG, PDF, DOCX, MP4");
   multiple = input<boolean>(false);
+
+  // Computed property to determine if file upload should be disabled
+  isDisabled = computed(() => this.isViewMode() || this.disabled());
 
   private fileupload = viewChild<FileUpload>("fileupload");
   private toasterService = inject(ToasterService);
@@ -88,8 +92,8 @@ export class FileuploadComponent {
   clear!: () => void;
 
   clearFiles() {
-    // Don't allow clearing in view mode
-    if (this.isViewMode()) {
+    // Don't allow clearing in view mode or when disabled
+    if (this.isDisabled()) {
       return;
     }
 
@@ -107,8 +111,8 @@ export class FileuploadComponent {
   }
 
   removeUploadedFile(index: number) {
-    // Don't allow removal in view mode
-    if (this.isViewMode()) {
+    // Don't allow removal in view mode or when disabled
+    if (this.isDisabled()) {
       return;
     }
 

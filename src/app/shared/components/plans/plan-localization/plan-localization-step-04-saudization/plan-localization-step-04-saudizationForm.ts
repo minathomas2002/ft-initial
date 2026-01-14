@@ -37,10 +37,14 @@ import { BaseLabelComponent } from 'src/app/shared/components/base-components/ba
 })
 export class PlanLocalizationStep04SaudizationForm {
   isViewMode = input<boolean>(false);
+  isReviewMode = input<boolean>(false);
   pageTitle = input<string>('Saudization');
   private readonly productPlanFormService = inject(ProductPlanFormService);
   private readonly toasterService = inject(ToasterService);
   private readonly formUtilityService = inject(FormUtilityService);
+
+  // Computed property to determine if file upload should be disabled
+  isFileUploadDisabled = computed(() => this.isViewMode() || this.isReviewMode());
 
   formGroup = this.productPlanFormService.step4_saudization;
   readonly EMaterialsFormControls = EMaterialsFormControls;

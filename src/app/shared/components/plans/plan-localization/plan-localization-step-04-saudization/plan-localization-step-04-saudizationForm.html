@@ -33,6 +33,7 @@
     >
       <app-fileupload
         [isViewMode]="isViewMode()"
+        [disabled]="isFileUploadDisabled()"
         [acceptedFileTypes]="'.pdf, .png, .jpg, .jpeg, .zip, .rar'"
         [(files)]="files"
         class="w-full"
