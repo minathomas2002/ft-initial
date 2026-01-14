@@ -14,6 +14,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { AgreementType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TableModule } from 'primeng/table';
 import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
@@ -36,8 +37,10 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     GroupInputWithCheckbox,
     TextareaModule,
     InputNumberModule,
+    TableModule,
     FileuploadComponent,
     FormsModule,
+    ConditionalColorClassDirective,
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',
@@ -93,6 +96,29 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
   ];
+
+  // Table rows data for PrimeNG table
+  entityLevelTableRows = computed(() => {
+    const years = this.yearColumns();
+    return [
+      {
+        label: 'Expected Annual Headcount',
+        controlKey: 'headcount',
+        placeholder: 'Enter headcount',
+        mode: 'integer' as const,
+        minFractionDigits: 0,
+        maxFractionDigits: 0,
+      },
+      {
+        label: 'Expected Saudization (%)',
+        controlKey: 'saudization',
+        placeholder: 'Enter %',
+        mode: 'decimal' as const,
+        minFractionDigits: 0,
+        maxFractionDigits: 2,
+      },
+    ];
+  });
 
   // Generate header labels for service level year columns (show as numbers)
   customHeadersLabels = computed(() => {
