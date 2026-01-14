@@ -22,7 +22,7 @@ export abstract class PlanStepBaseClass {
   abstract readonly pageTitle: InputSignal<string>;
   abstract readonly commentPhase: ModelSignal<TCommentPhase>;
   abstract readonly selectedInputs: ModelSignal<IFieldInformation[]>;
-  
+
   // Abstract property for plan form service - subclasses must provide either ProductPlanFormService or ServicePlanFormService
   abstract readonly planFormService: ProductPlanFormService | ServicePlanFormService;
 
@@ -36,7 +36,15 @@ export abstract class PlanStepBaseClass {
 
   // Get comment form control from the form group
   protected get commentFormControl(): FormControl<string> {
-    return this.getFormGroup().get(EMaterialsFormControls.comment) as FormControl<string>;
+    const formGroup = this.getFormGroup();
+    let control = formGroup.get(EMaterialsFormControls.comment) as FormControl<string> | null;
+    if (!control) {
+      // Create a new control if it doesn't exist (shouldn't happen in normal flow, but defensive)
+      // Use nonNullable: true to ensure type is FormControl<string> not FormControl<string | null>
+      control = new FormControl('', { nonNullable: true }) as FormControl<string>;
+      formGroup.addControl(EMaterialsFormControls.comment, control);
+    }
+    return control;
   }
 
   // Computed page comment for timeline

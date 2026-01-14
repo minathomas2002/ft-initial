@@ -30,13 +30,16 @@ export class CommentDialog implements OnInit {
   private commentSubmitted = signal<boolean>(false);
 
   ngOnInit(): void {
-    this.commentFormControl()!.addValidators(Validators.required);
+    const control = this.commentFormControl();
+    if (control) {
+      control.addValidators(Validators.required);
+    }
     this.commentSubmitted.set(false);
   }
 
   onClose() {
     if (!this.commentSubmitted()) {
-      this.commentFormControl().reset();
+      this.commentFormControl()?.reset();
     }
   }
 
