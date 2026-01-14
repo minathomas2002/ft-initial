@@ -15,13 +15,13 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
-import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
+import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -39,11 +39,11 @@ import { ProductPlanFormService } from 'src/app/shared/services/plan/product-pla
     BaseErrorMessages,
     TrimOnBlurDirective,
     ConditionalColorClassDirective,
-    CommentStateComponent,
     TextareaModule,
     FormsModule,
     GeneralConfirmationDialogComponent,
-    BaseLabelComponent
+    BaseLabelComponent,
+    CommentStateComponent
   ],
   templateUrl: './plan-localization-step-03-valueChainForm.html',
   styleUrl: './plan-localization-step-03-valueChainForm.scss',

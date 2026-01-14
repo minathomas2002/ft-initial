@@ -289,7 +289,15 @@ export class UserDashboard implements OnInit {
   }
 
   onReview(plan: IPlanRecord) {
-    console.log('Review Plan : ', plan);
+    this.planStore.setWizardMode('Review');
+    this.planStore.setSelectedPlanId(plan.id);
+    this.planStore.setPlanStatus(plan.status);
+
+    if (plan.planType === EOpportunityType.PRODUCT) {
+      this.productLocalizationPlanWizardVisibility.set(true);
+    } else if (plan.planType === EOpportunityType.SERVICES) {
+      this.serviceLocalizationPlanWizardVisibility.set(true);
+    }
   }
   //#endregion
 
