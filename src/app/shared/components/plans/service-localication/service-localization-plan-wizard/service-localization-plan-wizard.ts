@@ -141,7 +141,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     pushStep({
       id: 'cover',
       title: 'Cover Page',
-      description: 'Cover Page',
+      description: 'Enter high-level submission and plan details',
       formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: this.step1CommentPhase() === 'none',
       commentsCount: this.step1SelectedInputs().length,
@@ -151,7 +151,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     pushStep({
       id: 'overview',
       title: 'Overview',
-      description: 'Overview',
+      description: 'Provide an overview of the localization plan',
       formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: this.step2CommentPhase() === 'none',
       commentsCount: this.step2SelectedInputs().length,
@@ -162,7 +162,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       pushStep({
         id: 'existingSaudi',
         title: 'Existing Saudi Co.',
-        description: 'Existing Saudi Co.',
+        description: 'Enter details of your existing presence in Saudi Arabia',
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.step3SelectedInputs().length,
@@ -174,7 +174,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       pushStep({
         id: 'directLocalization',
         title: 'Direct Localization',
-        description: 'Direct Localization',
+        description: 'Provide direct localization and investment details',
         formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.step4SelectedInputs().length,
@@ -186,7 +186,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     pushStep({
       id: 'summary',
       title: 'Summary',
-      description: 'Summary',
+      description: 'Review the plan before final submission',
       formState: null,
       hasErrors: false,
     });

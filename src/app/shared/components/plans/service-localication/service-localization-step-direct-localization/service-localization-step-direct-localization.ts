@@ -36,6 +36,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     CommentStateComponent,
     GeneralConfirmationDialogComponent,
     FormsModule,
+    ConditionalColorClassDirective
   ],
   templateUrl: './service-localization-step-direct-localization.html',
   styleUrl: './service-localization-step-direct-localization.scss',
@@ -43,6 +44,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 })
 export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
+  isReviewMode = input<boolean>(false);
 
   readonly planFormService = inject(ServicePlanFormService);
   planStore = inject(PlanStore);

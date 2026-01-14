@@ -23,7 +23,7 @@
     </div>
 
     <app-group-input-with-checkbox
-      [hasCommentControl]="getHasCommentControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
+      [hasCommentControl]="getHasCommentControl(getAttachmentsFormGroup()?.get(EMaterialsFormControls.attachments) || null)"
       [showCheckbox]="showCheckbox()"
       (valueChanged)="upDateSelectedInputs($event, {
         section: 'attachments',
@@ -41,10 +41,12 @@
         [multiple]="true"
       />
     </app-group-input-with-checkbox>
+    @if(getAttachmentsFormGroup()?.get(EMaterialsFormControls.attachments)) {
     <app-base-error-messages
-      [control]="getValueControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
+      [control]="getValueControl(getAttachmentsFormGroup()!.get(EMaterialsFormControls.attachments)!)"
       [label]="'Attachments'"
     />
+    }
   </div>
   }
 

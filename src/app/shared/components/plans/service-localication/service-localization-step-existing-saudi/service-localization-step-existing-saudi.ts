@@ -51,6 +51,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 })
 export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
+  isReviewMode = input<boolean>(false);
 
   readonly planFormService = inject(ServicePlanFormService);
   planStore = inject(PlanStore);

@@ -34,6 +34,7 @@
   <ng-template [appStepContent]="2">
     <app-service-localization-step-overview
       [isViewMode]="isViewMode() || isReviewMode()"
+      [isReviewMode]="isReviewMode()"
       [pageTitle]="steps()[1].title"
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
@@ -46,6 +47,7 @@
   <ng-template [appStepContent]="existingSaudiStepIndex()">
     <app-service-localization-step-existing-saudi
       [isViewMode]="isViewMode() || isReviewMode()"
+      [isReviewMode]="isReviewMode()"
       [pageTitle]="steps()[existingSaudiStepIndex() - 1].title"
       [(commentPhase)]="step3CommentPhase"
       [(selectedInputs)]="step3SelectedInputs"
@@ -59,6 +61,7 @@
   <ng-template [appStepContent]="directLocalizationStepIndex()">
     <app-service-localization-step-direct-localization
       [isViewMode]="isViewMode() || isReviewMode()"
+      [isReviewMode]="isReviewMode()"
       [pageTitle]="steps()[directLocalizationStepIndex() - 1].title"
       [(commentPhase)]="step4CommentPhase"
       [(selectedInputs)]="step4SelectedInputs"

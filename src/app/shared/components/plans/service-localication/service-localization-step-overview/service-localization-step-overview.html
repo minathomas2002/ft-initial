@@ -435,7 +435,11 @@
               label: 'Contact Number'
             })"
           >
-            <app-phone-input [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"></app-phone-input>
+            <app-phone-input
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
+              [appConditionalColorClass]="highlightInput('contactNumber')"
+              [color]="selectedInputColor()"
+            ></app-phone-input>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
@@ -450,6 +454,11 @@
           [hasCommentControl]="
             getHasCommentControl(localAgentInformationFormGroupControls['companyLocation'])
           "
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'localAgentInformation',
+            inputKey: 'companyLocation',
+            label: 'Company HQ Location'
+          })"
         >
           <input
             type="text"
@@ -457,6 +466,8 @@
             fluid
             placeholder="Enter Company HQ Location"
             [formControl]="getValueControl(localAgentInformationFormGroupControls['companyLocation'])"
+            [appConditionalColorClass]="highlightInput('companyLocation')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages
@@ -474,7 +485,7 @@
     <app-form-array-input
       [ft]="getDetailsFormArray()"
       [hideAddButton]="true"
-      [hideDeleteButton]="true"
+      [hideDeleteButton]="isViewMode() || isReviewMode()"
       [showIndexColumn]="true"
       [indexColumnLabel]="'# of Services'"
       [excludeKeys]="['serviceId', 'serviceProvidedToCompanyNames', 'agreementCopy']"

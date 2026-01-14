@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
+import { distinctUntilChanged, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-group-input-with-checkbox',
@@ -28,13 +29,21 @@ export class GroupInputWithCheckbox implements OnInit {
   showCheckbox = input<boolean>(false);
   valueChanged = output<boolean>();
   private readonly destroyRef = inject(DestroyRef);
+  private subscriptionCreated = false;
 
   ngOnInit(): void {
+    // Prevent multiple subscriptions if ngOnInit is called multiple times
+    if (this.subscriptionCreated) return;
+
     const control = this.hasCommentControl();
     if (!control) return;
 
+    this.subscriptionCreated = true;
     control.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe(res => {
         this.valueChanged.emit(res);
       })

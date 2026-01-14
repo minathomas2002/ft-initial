@@ -112,7 +112,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
 
   // Arrow function wrappers to preserve 'this' context when passed to child components
   getYearFormGroupWrapper = (year: number): FormGroup | null => {
-    return this.planFormService.getYearFormGroup(year);
+    return this.planFormService?.getYearFormGroup(year) || null;
   };
 
   getRowControlWrapper = (year: number, rowName: string): AbstractControl | null => {
@@ -121,17 +121,17 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   };
 
   // Get form groups
-  getSaudizationFormGroup(): FormGroup {
-    return this.planFormService.saudizationFormGroup;
+  getSaudizationFormGroup(): FormGroup | undefined {
+    return this.planFormService?.saudizationFormGroup;
   }
 
-  getAttachmentsFormGroup(): FormGroup {
-    return this.planFormService.attachmentsFormGroup;
+  getAttachmentsFormGroup(): FormGroup | undefined {
+    return this.planFormService?.attachmentsFormGroup;
   }
 
   // Get year form group
   getYearFormGroup(year: number): FormGroup | null {
-    return this.planFormService.getYearFormGroup(year);
+    return this.planFormService?.getYearFormGroup(year) || null;
   }
 
   // Get row control for a specific year
@@ -142,6 +142,11 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
+    // Ensure form service is available before accessing form groups
+    if (!this.planFormService) {
+      return;
+    }
+
     // Check if attachments form group is available (may not be initialized during construction)
     const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
     if (!attachmentsFormGroup) {
@@ -161,6 +166,9 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
     // Sync files signal changes to form control
     effect(() => {
       const filesValue = this.files();
+      if (!this.planFormService) {
+        return;
+      }
       const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
       if (!attachmentsFormGroup) {
         return;

@@ -61,6 +61,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
+  isReviewMode = input<boolean>(false);
 
   readonly planFormService = inject(ServicePlanFormService);
   private readonly planStore = inject(PlanStore);
