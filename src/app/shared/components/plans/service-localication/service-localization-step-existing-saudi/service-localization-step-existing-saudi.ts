@@ -105,7 +105,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         label: 'Expected Annual Headcount',
         controlKey: 'headcount',
         placeholder: 'Enter headcount',
-        mode: 'integer' as const,
+        mode: undefined,
         minFractionDigits: 0,
         maxFractionDigits: 0,
       },

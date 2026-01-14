@@ -472,7 +472,7 @@
                   fluid
                   [placeholder]="row.placeholder"
                   [min]="0"
-                  [mode]="row.mode"
+                  [mode]="row.mode ?? undefined"
                   [minFractionDigits]="row.minFractionDigits"
                   [maxFractionDigits]="row.maxFractionDigits"
                   [maxlength]="row.mode === 'decimal' ? 5 : null"

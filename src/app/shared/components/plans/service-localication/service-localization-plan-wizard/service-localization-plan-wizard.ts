@@ -30,14 +30,14 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 import { ButtonModule } from 'primeng/button';
 import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialog';
 import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
-import { ConfirmLeaveDialogComponent } from '../../../utility-components/confirm-leave-dialog/confirm-leave-dialog.component';
-import { Signature, IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
+import { Signature, IFieldInformation, IPageComment, ReviewPlanRequest } from 'src/app/shared/interfaces/plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { switchMap, of, map, catchError, finalize } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 
 type ServiceLocalizationWizardStepId =
   | 'cover'
@@ -64,7 +64,7 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
     SubmissionConfirmationModalComponent,
     GeneralConfirmationDialogComponent,
     TranslatePipe
-],
+  ],
   templateUrl: './service-localization-plan-wizard.html',
   styleUrl: './service-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -89,7 +89,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
-    return this.visibility() && this.mode() === 'view' && this.planStatus() !== null;
+    return (this.visibility() && (this.mode() == 'view' || (this.mode() == 'Review')) && this.planStatus() !== null && this.activeStep() < this.stepsWithId().length)
   });
 
   // Submission confirmation modal
@@ -110,6 +110,17 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   step2SelectedInputs = signal<IFieldInformation[]>([]);
   step3SelectedInputs = signal<IFieldInformation[]>([]);
   step4SelectedInputs = signal<IFieldInformation[]>([]);
+
+  // Review mode signals
+  showSendBackConfirmationDialog = signal<boolean>(false);
+  showHasCommentControl = signal<boolean>(false);
+
+  // Computed signals for action controls
+  hasSelectedFields = computed(() => {
+    return this.step2SelectedInputs().length > 0 ||
+      this.step3SelectedInputs().length > 0 ||
+      this.step4SelectedInputs().length > 0;
+  });
 
 
   private readonly stepsWithId = computed<ServiceLocalizationWizardStepState[]>(() => {
@@ -186,6 +197,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     this.i18nService.currentLanguage();
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
+    if (currentMode === 'Review') return 'Review Service Localization Plan';
     return 'Service Localization Plan';
   });
 
@@ -199,10 +211,10 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     return statusService.getStatusLabel(status);
   });
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
+  isReviewMode = computed(() => this.planStore.wizardMode() === 'Review');
   shouldShowStatusTag = computed(() => {
     const mode = this.planStore.wizardMode();
-    const status = this.planStatus();
-    return (mode === 'view' || mode === 'edit') && status !== null;
+    return ['view', 'edit', 'Review'].includes(mode);
   });
   statusBadgeClass = computed(() => {
     const status = this.planStatus();
@@ -238,7 +250,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
       if (!isVisible) return;
 
-      if (currentPlanId && (currentMode === 'edit' || currentMode === 'view')) {
+      if (currentPlanId && ['view', 'edit', 'Review'].includes(currentMode)) {
         this.loadPlanData(currentPlanId);
       } else if (currentMode === 'create' && !currentPlanId) {
         this.serviceLocalizationFormService.resetAllForms();
@@ -259,6 +271,28 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
           opportunityControl.setValue(available, { emitEvent: true });
           opportunityControl.updateValueAndValidity({ emitEvent: true });
         }
+      }
+    });
+
+    // Effect to sync comment phase when navigating between steps
+    // If showHasCommentControl is true, ensure the current step's comment phase is also active
+    effect(() => {
+      const showCheckbox = this.showHasCommentControl();
+      const currentStep = this.activeStep();
+
+      // Only sync if comment mode is enabled
+      if (!showCheckbox) {
+        return;
+      }
+
+      // Set comment phase to 'adding' for the current step if it's 'none'
+      const stepId = this.stepsWithId()[currentStep - 1]?.id;
+      if (stepId === 'overview' && this.step2CommentPhase() === 'none') {
+        this.step2CommentPhase.set('adding');
+      } else if (stepId === 'existingSaudi' && this.step3CommentPhase() === 'none') {
+        this.step3CommentPhase.set('adding');
+      } else if (stepId === 'directLocalization' && this.step4CommentPhase() === 'none') {
+        this.step4CommentPhase.set('adding');
       }
     });
 
@@ -325,9 +359,12 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         this.planSignature.set(data.signature ?? null);
 
         const currentMode = this.planStore.wizardMode();
-        if (currentMode === 'view') {
+        if (['view', 'Review'].includes(currentMode)) {
+          // Disable all forms in view/review mode
           this.disableAllForms();
-          this.activeStep.set(this.stepsWithId().length);
+          if (currentMode === 'view') {
+            this.activeStep.set(this.stepsWithId().length);
+          }
         } else if (currentMode === 'edit') {
           this.enableAllForms();
           const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
@@ -359,6 +396,34 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     this.serviceLocalizationFormService.step2_overview.disable({ emitEvent: false });
     this.serviceLocalizationFormService.step3_existingSaudi.disable({ emitEvent: false });
     this.serviceLocalizationFormService.step4_directLocalization.disable({ emitEvent: false });
+
+    // Re-enable all hasComment controls
+    this.enableHasCommentControls(this.serviceLocalizationFormService.step1_coverPage);
+    this.enableHasCommentControls(this.serviceLocalizationFormService.step2_overview);
+    this.enableHasCommentControls(this.serviceLocalizationFormService.step3_existingSaudi);
+    this.enableHasCommentControls(this.serviceLocalizationFormService.step4_directLocalization);
+  }
+
+  /**
+   * Recursively enable all hasComment FormControls in a form group
+   */
+  private enableHasCommentControls(control: AbstractControl): void {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        const childControl = control.controls[key];
+        if (key === EMaterialsFormControls.hasComment && childControl instanceof FormControl) {
+          // Enable the hasComment control
+          childControl.enable({ emitEvent: false });
+        } else {
+          // Recursively process nested controls
+          this.enableHasCommentControls(childControl);
+        }
+      });
+    } else if (control instanceof FormArray) {
+      control.controls.forEach((arrayControl: AbstractControl) => {
+        this.enableHasCommentControls(arrayControl);
+      });
+    }
   }
 
   private enableAllForms(): void {
@@ -418,6 +483,23 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     this.activeStep.set(stepNumber);
   }
 
+  onAddComment(): void {
+    const step = this.activeStep();
+    // Set comment phase for the current active step
+    // Step 2 is overview (index 2)
+    // Step 3 is existingSaudi (if shown)
+    // Step 4 is directLocalization (if shown)
+    const stepId = this.stepsWithId()[step - 1]?.id;
+    if (stepId === 'overview' && this.step2CommentPhase() === 'none') {
+      this.step2CommentPhase.set('adding');
+    } else if (stepId === 'existingSaudi' && this.step3CommentPhase() === 'none') {
+      this.step3CommentPhase.set('adding');
+    } else if (stepId === 'directLocalization' && this.step4CommentPhase() === 'none') {
+      this.step4CommentPhase.set('adding');
+    }
+    this.showHasCommentControl.set(true);
+  }
+
   stepIndex(stepId: ServiceLocalizationWizardStepId): number {
     return this.getStepIndexById(stepId);
   }
@@ -455,14 +537,13 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         this.showConfirmLeaveDialog.set(true);
         return;
       }
-
-      // Already submitted, close without confirmation
-      this.visibility.set(false);
-      this.activeStep.set(1);
-      this.doRefresh.emit();
-      this.isSubmitted.set(false);
-      this.planStore.resetWizardState();
     }
+    // Already submitted, close without confirmation
+    this.visibility.set(false);
+    this.activeStep.set(1);
+    this.doRefresh.emit();
+    this.isSubmitted.set(false);
+    this.planStore.resetWizardState();
   }
 
   onSummarySubmitClick(): void {
@@ -613,6 +694,112 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
           console.error('Error saving draft:', error);
         },
       });
+  }
+
+  /**
+   * Collect all page comments from step forms
+   */
+  collectAllPageComments(): IPageComment[] {
+    const comments: IPageComment[] = [];
+
+    // Step 2 comments (Overview)
+    const step2Form = this.serviceLocalizationFormService.step2_overview;
+    const step2CommentControl = step2Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    if (step2CommentControl?.value && step2CommentControl.value.trim().length > 0 && this.step2SelectedInputs().length > 0) {
+      comments.push({
+        pageTitleForTL: this.steps()[1].title,
+        comment: step2CommentControl.value.trim(),
+        fields: this.step2SelectedInputs(),
+      });
+    }
+
+    // Step 3 comments (Existing Saudi)
+    if (this.showExistingSaudiStep()) {
+      const step3Form = this.serviceLocalizationFormService.step3_existingSaudi;
+      const step3CommentControl = step3Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+      if (step3CommentControl?.value && step3CommentControl.value.trim().length > 0 && this.step3SelectedInputs().length > 0) {
+        const step3Index = this.existingSaudiStepIndex();
+        comments.push({
+          pageTitleForTL: this.steps()[step3Index - 1].title,
+          comment: step3CommentControl.value.trim(),
+          fields: this.step3SelectedInputs(),
+        });
+      }
+    }
+
+    // Step 4 comments (Direct Localization)
+    if (this.showDirectLocalizationStep()) {
+      const step4Form = this.serviceLocalizationFormService.step4_directLocalization;
+      const step4CommentControl = step4Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+      if (step4CommentControl?.value && step4CommentControl.value.trim().length > 0 && this.step4SelectedInputs().length > 0) {
+        const step4Index = this.directLocalizationStepIndex();
+        comments.push({
+          pageTitleForTL: this.steps()[step4Index - 1].title,
+          comment: step4CommentControl.value.trim(),
+          fields: this.step4SelectedInputs(),
+        });
+      }
+    }
+
+    return comments;
+  }
+
+  /**
+   * Handle Send Back to Investor action
+   */
+  onSendBackToInvestor(): void {
+    // Validate at least one comment exists
+    const comments = this.collectAllPageComments();
+    if (comments.length === 0) {
+      this.toasterService.error('You must add a comment before sending back the plan.');
+      return;
+    }
+
+    // Show confirmation dialog
+    this.showSendBackConfirmationDialog.set(true);
+  }
+
+  /**
+   * Confirm sending plan back to investor
+   */
+  onConfirmSendBack(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const comments = this.collectAllPageComments();
+    const request: ReviewPlanRequest = {
+      planId: planId,
+      comments: comments,
+    };
+
+    this.isProcessing.set(true);
+    this.planStore.sendPlanBackToInvestor(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showSendBackConfirmationDialog.set(false);
+          this.toasterService.success('Plan has been sent back to investor successfully.');
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error sending plan back to investor. Please try again.');
+          console.error('Error sending plan back:', error);
+        }
+      });
+  }
+
+  /**
+   * Cancel sending plan back
+   */
+  onCancelSendBack(): void {
+    this.showSendBackConfirmationDialog.set(false);
   }
 
   ngOnDestroy(): void {

@@ -9,7 +9,7 @@
   (onSaveAsDraft)="saveAsDraft()"
   [isLoading]="isLoading() || isLoadingPlan()"
   [isProcessing]="isProcessing()"
-  [hideSaveAsDraft]="isViewMode()"
+  [hideSaveAsDraft]="isViewMode() || isReviewMode()"
   (onClose)="onClose()"
 >
   @if (shouldShowStatusTag()) {
@@ -22,12 +22,12 @@
   }
 
   <ng-template [appStepContent]="1">
-    <app-service-localization-step-cover-page [isViewMode]="isViewMode()"></app-service-localization-step-cover-page>
+    <app-service-localization-step-cover-page [isViewMode]="isViewMode() || isReviewMode()"></app-service-localization-step-cover-page>
   </ng-template>
 
   <ng-template [appStepContent]="2">
     <app-service-localization-step-overview
-      [isViewMode]="isViewMode()"
+      [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[1].title"
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
@@ -39,7 +39,7 @@
   @if (showExistingSaudiStep() && existingSaudiStepIndex() > 0) {
   <ng-template [appStepContent]="existingSaudiStepIndex()">
     <app-service-localization-step-existing-saudi
-      [isViewMode]="isViewMode()"
+      [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[existingSaudiStepIndex() - 1].title"
       [(commentPhase)]="step3CommentPhase"
       [(selectedInputs)]="step3SelectedInputs"
@@ -52,7 +52,7 @@
   @if (showDirectLocalizationStep() && directLocalizationStepIndex() > 0) {
   <ng-template [appStepContent]="directLocalizationStepIndex()">
     <app-service-localization-step-direct-localization
-      [isViewMode]="isViewMode()"
+      [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[directLocalizationStepIndex() - 1].title"
       [(commentPhase)]="step4CommentPhase"
       [(selectedInputs)]="step4SelectedInputs"
@@ -80,10 +80,22 @@
 
   <ng-container ngProjectAs="final-step-action">
     @if (activeStep() === summaryStepIndex() && !isViewMode()) {
+    @if (isReviewMode()) {
+    <p-button
+      [label]="'Reject'"
+      severity="danger"
+      [disabled]="hasSelectedFields()"
+    ></p-button>
+    <p-button
+      [label]="'Approve & Forward'"
+      [disabled]="hasSelectedFields()"
+    ></p-button>
+    } @else {
     <p-button
       label="Submit"
       (click)="onSummarySubmitClick()"
     ></p-button>
+    }
     }
   </ng-container>
 
@@ -97,6 +109,27 @@
       (click)="timelineVisibility.set(true)"
     ></p-button>
     }
+    @if(isReviewMode()){
+    @if (activeStep() === summaryStepIndex()) {
+    <p-button
+      text
+      (click)="onSendBackToInvestor()"
+      styleClass="p-0!"
+    >
+      <span class="underline text-md font-semibold">Send Back to Investor</span>
+    </p-button>
+    }
+    @if(activeStep() <
+      summaryStepIndex()){
+      <p-button
+      [label]="'Add Comments'"
+      text
+      icon="icon-message-circle"
+      severity="secondary"
+      (click)="onAddComment()"
+    ></p-button>
+      }
+      }
   </ng-container>
 </app-base-wizard-dialog>
 }
@@ -136,3 +169,17 @@
   [(dialogVisible)]="timelineVisibility"
   [planId]="planId()"
 />
+
+@if(showSendBackConfirmationDialog()){
+<app-general-confirmation-dialog
+  [(visible)]="showSendBackConfirmationDialog"
+  [title]="'Are you sure you want to send back the plan?'"
+  [description]="'This action cannot be undone and the plan will go directly to the investor.'"
+  [confirmationLabel]="'Send Back'"
+  [cancelLabel]="'Cancel'"
+  [icon]="'icon-info'"
+  (confirmed)="onConfirmSendBack()"
+  (onCancel)="onCancelSendBack()"
+  [isLoading]="isProcessing()"
+/>
+}
