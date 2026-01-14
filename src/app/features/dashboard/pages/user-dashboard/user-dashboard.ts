@@ -32,6 +32,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { TooltipModule } from 'primeng/tooltip';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
+import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -58,7 +59,8 @@ import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/pl
     BaseTagComponent,
     TooltipModule,
     NewPlanDialog,
-    PlanTermsAndConditionsDialog
+    PlanTermsAndConditionsDialog,
+    TruncateTooltipDirective
   ],
   templateUrl: './user-dashboard.html',
   styleUrl: './user-dashboard.scss',

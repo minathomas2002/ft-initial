@@ -26,19 +26,15 @@
           </td>
           @if (isInternalUser()) {
           <td>
-            <p 
-              class="text-sm text-gray-900 font-medium max-w-[25ch] truncate" 
-              [pTooltip]="item.investorName ?? '-'"
-              tooltipPosition="top">
+            <p class="text-sm text-gray-900 font-medium max-w-[25ch]" 
+            [appTruncateTooltip]="item.investorName ?? '-'" [maxChars]="20">
               {{ item.investorName ?? '-' }}
             </p>
           </td>
           }
           <td>
-            <p 
-              class="text-sm text-gray-900 font-medium max-w-[25ch] truncate" 
-              [pTooltip]="item.title"
-              tooltipPosition="top">
+            <p class="text-sm text-gray-900 font-medium max-w-[25ch]"
+             [appTruncateTooltip]="item.title" [maxChars]="20">
               {{ item.title }}
             </p>
           </td>
@@ -48,10 +44,8 @@
           <td>{{ item.submissionDate | date: 'dd MMM yyyy' }}</td>
           @if (isInternalUser()) {
           <td>
-            <p 
-              class="text-sm text-gray-900 font-medium max-w-[25ch] truncate" 
-              [pTooltip]="getAssigneeName(item.assignedEmployee)"
-              tooltipPosition="top">
+            <p class="text-sm text-gray-900 font-medium max-w-[25ch]"
+              [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)" [maxChars]="20">
               {{ getAssigneeName(item.assignedEmployee) }}
             </p>
           </td>
@@ -65,9 +59,7 @@
           @if (isInternalUser()) {
           <td>
             @if(item.status !== EInternalUserPlanStatus.UNASSIGNED) {
-            <span
-              class="text-sm font-medium"
-              [ngClass]="
+            <span class="text-sm font-medium" [ngClass]="
                 item.slaCountDown > 5
                   ? 'text-green-500'
                   : item.slaCountDown > 0

@@ -26,6 +26,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { PlansActionMenu } from '../../components/plans-action-menu/plans-action-menu';
 import { AbstractServiceFilter } from 'src/app/shared/classes/abstract-service-filter';
 import { IPlanFilter } from 'src/app/shared/interfaces';
+import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 
 @Component({
   selector: 'app-plans-list',
@@ -47,7 +48,8 @@ import { IPlanFilter } from 'src/app/shared/interfaces';
     ProductLocalizationPlanWizard,
     NewPlanDialog,
     ServiceLocalizationPlanWizard,
-    TimelineDialog
+    TimelineDialog,
+    TruncateTooltipDirective
   ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
