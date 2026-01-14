@@ -18,6 +18,7 @@ export class BaseTagComponent {
 		const colorMap: Record<TColors, string> = {
 			primary: 'border-primary-200 bg-primary-50 text-primary-700',
 			blue: 'border-blue-200 bg-blue-50 text-blue-700',
+			fadedBlue: 'border-slate-300 bg-slate-50 text-[#4767A5]',
 			red: 'border-red-200 bg-red-50 text-red-700',
 			green: 'border-green-200 bg-green-50 text-green-700',
 			yellow: 'border-yellow-200 bg-yellow-50 text-yellow-700',

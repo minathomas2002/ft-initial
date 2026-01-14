@@ -12,6 +12,7 @@ export class PlanTimelineActionsMapper {
     [EActionPlanTimeLine.Rejected]: 'timeline.actions.rejected',
     [EActionPlanTimeLine.CommentSubmitted]: 'timeline.actions.submitComment',
     [EActionPlanTimeLine.AutoAssign]: 'timeline.actions.autoAssign',
+    [EActionPlanTimeLine.InternalReview]: 'Submitted comment on the plan and sent back to investor',
   };
 
   constructor(private i18nService: I18nService) { }
@@ -43,12 +44,10 @@ export class PlanTimelineActionsMapper {
     // Try to find translation key for the role
     const translationKey = this._roleTranslationMap[actionCode];
 
+
     if (translationKey) {
       const translated = this.i18nService.translate(translationKey, { param: additionalParam });
-      // If translation exists (not the same as key), return it
-      if (translated !== translationKey) {
-        return translated;
-      }
+      return translated;
     }
 
     // Fallback to original role if no translation found

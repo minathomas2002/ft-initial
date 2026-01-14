@@ -21,6 +21,7 @@ export class BaseAlertComponent {
 		blue: "border-blue-600 bg-blue-50",
 		yellow: "border-yellow-600 bg-yellow-50",
 		red: "border-red-600 bg-red-50",
+    fadedBlue: "border-slate-300 bg-slate-50 text-[#4767A5]",
 		green: "border-green-600 bg-green-50",
 		indigo: "border-indigo-600 bg-indigo-50",
 		purple: "border-purple-600 bg-purple-50",
@@ -32,6 +33,7 @@ export class BaseAlertComponent {
 
 	private readonly iconClassesMap: Record<TColors, string> = {
 		blue: "bg-[#2563EB26] text-blue-600",
+    fadedBlue: "border-slate-300 bg-slate-50 text-[#4767A5]",
 		yellow: "bg-[#DC680326] text-yellow-600",
 		red: "bg-[#DC262626] text-red-600",
 		green: "bg-[#05966926] text-green-600",
@@ -45,6 +47,7 @@ export class BaseAlertComponent {
 
 	private readonly iconMap: Record<TColors, string> = {
 		blue: "icon-info-circle",
+    fadedBlue: "border-slate-300 bg-slate-50 text-[#4767A5]",
 		yellow: "icon-info-circle",
 		red: "icon-error",
 		green: "icon-check-circle",
