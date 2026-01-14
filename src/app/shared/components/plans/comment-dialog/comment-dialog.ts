@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, model, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -27,22 +27,18 @@ export class CommentDialog implements OnInit {
   private readonly toaster = inject(ToasterService);
   commentFormControl = input.required<FormControl<string>>();
   commentAdded = output();
+  private commentSubmitted = signal<boolean>(false);
 
   ngOnInit(): void {
     this.commentFormControl()!.addValidators(Validators.required);
     this.commentFormControl()!.enable()
+    this.commentSubmitted.set(false);
   }
 
-  onCancel(): void {
-    // Don't save comment, return to selected fields view, keep fields selected
-    // Don't reset the form control - user might want to continue editing
-    this.visible.set(false);
-  }
-
-  onClose(): void {
-    // Same behavior as Back button - don't save, return to fields
-    // Don't reset the form control - user might want to continue editing
-    this.visible.set(false);
+  onClose() {
+    if (!this.commentSubmitted()) {
+      this.commentFormControl().reset();
+    }
   }
 
   onConfirm(): void {
@@ -51,6 +47,7 @@ export class CommentDialog implements OnInit {
       return;
     }
     // Success message will be shown by parent component
+    this.commentSubmitted.set(true);
     this.commentAdded.emit();
     this.visible.set(false);
   }
