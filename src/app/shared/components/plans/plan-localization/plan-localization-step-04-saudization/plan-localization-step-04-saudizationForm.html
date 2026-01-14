@@ -4,9 +4,9 @@
     <h2 class="text-lg font-semibold text-gray-900">Saudization</h2>
 
     <app-saudization-matrix
-      [getValueControl]="getValueControl"
-      [getHasCommentControl]="getHasCommentControl"
-      [getRowControl]="getRowControl"
+      [getValueControl]="getValueControlWrapper"
+      [getHasCommentControl]="getHasCommentControlWrapper"
+      [getRowControl]="getRowControlWrapper"
       [showCheckbox]="showCheckbox()"
       [upDateSelectedInputs]="upDateSelectedInputsWrapper"
       [highlightInput]="highlightInputWrapper"

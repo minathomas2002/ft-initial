@@ -32,7 +32,6 @@ export class CommentStateComponent {
 
   constructor() {
     effect(() => {
-      console.log(this.commentPhase());
       if (this.commentPhase() === 'viewing') {
         this.commentFormControl().disable();
       }

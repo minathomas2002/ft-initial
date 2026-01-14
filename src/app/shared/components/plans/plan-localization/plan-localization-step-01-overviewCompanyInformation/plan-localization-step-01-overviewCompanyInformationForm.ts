@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, model, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -6,24 +7,23 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { TextareaModule } from 'primeng/textarea';
-import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 import { TColors } from 'src/app/shared/interfaces';
-import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { PlanStepBaseClass } from '../plan-step-base-class';
+import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -50,210 +50,142 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
   styleUrl: './plan-localization-step-01-overviewCompanyInformationForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlanLocalizationStep01OverviewCompanyInformationForm {
-  private readonly productPlanFormService = inject(ProductPlanFormService);
+export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanStepBaseClass {
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly planStore = inject(PlanStore);
-  private readonly formUtilityService = inject(FormUtilityService);
-  private readonly toasterService = inject(ToasterService);
-  pageTitle = input.required<string>();
+  private readonly destroyRef = inject(DestroyRef);
 
-  showCheckbox = computed(() => this.commentPhase() !== 'none');
-  commentPhase = model<TCommentPhase>('none');
+  pageTitle = input.required<string>();
   selectedInputColor = input.required<TColors>();
+  commentPhase = model<TCommentPhase>('none');
+  selectedInputs = model<IFieldInformation[]>([]);
+
   formGroup = this.productPlanFormService.overviewCompanyInformation;
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes();
   availableOpportunities = this.planStore.availableOpportunities;
   isLoadingAvailableOpportunities = this.planStore.isLoadingAvailableOpportunities;
 
-  basicInformationFormGroupControls = this.productPlanFormService.basicInformationFormGroup.controls;
-  companyInformationFormGroupControls = this.productPlanFormService.companyInformationFormGroup.controls;
-  locationInformationFormGroupControls = this.productPlanFormService.locationInformationFormGroup.controls;
-  localAgentInformationFormGroupControls = this.productPlanFormService.localAgentInformationFormGroup.controls;
+  get basicInformationFormGroupControls() {
+    return this.productPlanFormService.basicInformationFormGroup?.controls;
+  }
+  get companyInformationFormGroupControls() {
+    return this.productPlanFormService.companyInformationFormGroup?.controls;
+  }
+  get locationInformationFormGroupControls() {
+    return this.productPlanFormService.locationInformationFormGroup?.controls;
+  }
+  get localAgentInformationFormGroupControls() {
+    return this.productPlanFormService.localAgentInformationFormGroup?.controls;
+  }
 
-  companyNameHasCommentControl = computed(() => this.getHasCommentControl(this.companyInformationFormGroupControls['companyName']))
-  contactNumberHasCommentControl = computed(() => this.getHasCommentControl(this.localAgentInformationFormGroupControls['contactNumber']))
+  companyNameHasCommentControl = computed(() => {
+    const controls = this.companyInformationFormGroupControls;
+    return controls ? this.getHasCommentControl(controls['companyName']) : null;
+  });
+  contactNumberHasCommentControl = computed(() => {
+    const controls = this.localAgentInformationFormGroupControls;
+    return controls ? this.getHasCommentControl(controls['contactNumber']) : null;
+  });
 
-  private doYouCurrentlyHaveLocalAgentInKSAControl = this.locationInformationFormGroupControls[
-    EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA
-  ]
-  private doYouHaveLocalAgentInKSASignal = toSignal(
-    this.doYouCurrentlyHaveLocalAgentInKSAControl.valueChanges,
-    {
-      initialValue: this.doYouCurrentlyHaveLocalAgentInKSAControl.value
+  private get doYouCurrentlyHaveLocalAgentInKSAControl() {
+    return this.locationInformationFormGroupControls?.[EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA];
+  }
+  // Use private field with getter to ensure signal is always initialized
+  private _doYouHaveLocalAgentInKSASignal: ReturnType<typeof signal<boolean | null>> | undefined;
+  private get doYouHaveLocalAgentInKSASignal(): ReturnType<typeof signal<boolean | null>> {
+    if (!this._doYouHaveLocalAgentInKSASignal) {
+      this._doYouHaveLocalAgentInKSASignal = signal<boolean | null>(null);
     }
-  );
+    return this._doYouHaveLocalAgentInKSASignal;
+  }
   showLocalAgentInformation = computed(() => {
     return this.doYouHaveLocalAgentInKSASignal() === true;
   });
 
   // Computed signal for opportunity disabled state
   isOpportunityDisabled = computed(() => {
-    return this.planStore.appliedOpportunity() !== null;
+    return this.planStore?.appliedOpportunity() !== null;
   });
 
-  commentFormControl = this.formGroup.get(EMaterialsFormControls.comment) as FormControl<string>;
-  selectedInputs = model<IFieldInformation[]>([])
-  comment = signal<string>('');
-  showDeleteConfirmationDialog = signal<boolean>(false);
-
-  pageComment = computed<IPageComment>(() => {
-    return {
-      pageTitleForTL: this.pageTitle() ?? '',
-      comment: this.comment() ?? '',
-      fields: this.selectedInputs(),
-    }
-  });
-
-  upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation): void {
-    const currentInputs = this.selectedInputs();
-    const existingIndex = currentInputs.findIndex(
-      input => input.section === fieldInformation.section && input.inputKey === fieldInformation.inputKey
-    );
-
-    if (value) {
-      // Add field if not already selected
-      if (existingIndex === -1) {
-        this.selectedInputs.set([...currentInputs, fieldInformation]);
-      }
-    } else {
-      // Remove field if it exists
-      if (existingIndex !== -1) {
-        this.selectedInputs.set(currentInputs.filter((_, index) => index !== existingIndex));
-      }
-    }
+  // Implement abstract method from base class
+  getFormGroup(): FormGroup {
+    return this.formGroup;
   }
 
-  constructor() {
+  // Expose base class methods as public for template access
+  override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation): void {
+    super.upDateSelectedInputs(value, fieldInformation);
+  }
+
+  override highlightInput(inputKey: string): boolean {
+    return super.highlightInput(inputKey);
+  }
+
+  override onDeleteComments(): void {
+    super.onDeleteComments();
+  }
+
+  override onConfirmDeleteComment(): void {
+    super.onConfirmDeleteComment();
+  }
+
+  override onCancelDeleteComment(): void {
+    super.onCancelDeleteComment();
+  }
+
+  override onSaveComment(): void {
+    super.onSaveComment();
+  }
+
+  override onSaveEditedComment(): void {
+    super.onSaveEditedComment();
+  }
+
+  override resetAllHasCommentControls(): void {
+    super.resetAllHasCommentControls();
+  }
+
+  // Override hook method for step-specific initialization
+  protected override initializeStepSpecificLogic(): void {
+    // Initialize and sync local agent control value to signal if control exists
+    const localAgentControl = this.doYouCurrentlyHaveLocalAgentInKSAControl;
+    if (localAgentControl) {
+      const control = this.getFormControl(localAgentControl);
+      // Ensure signal is initialized (getter handles this)
+      const signalRef = this.doYouHaveLocalAgentInKSASignal;
+      // Set initial value
+      signalRef.set(control.value ?? false);
+
+      // Subscribe to value changes with automatic cleanup
+      control.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(value => {
+          this.doYouHaveLocalAgentInKSASignal.set(value ?? false);
+        });
+    }
+
+    // Local agent validation effect
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
-      this.productPlanFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+      if (doYouHaveLocalAgentInKSA !== null) {
+        this.productPlanFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+      }
     });
 
-    effect(() => {
-      if (this.commentPhase() === 'viewing') {
-        const commentValue = this.commentFormControl.value ?? '';
-        this.comment.set(commentValue);
-        this.commentFormControl.setValue(commentValue, { emitEvent: false });
-        this.commentFormControl.disable({ emitEvent: false });
-        this.formUtilityService.disableHasCommentControls(this.formGroup);
-      }
-      if (['adding', 'editing'].includes(this.commentPhase())) {
-        this.commentFormControl.enable();
-        this.formUtilityService.enableHasCommentControls(this.formGroup);
-      }
-    })
-
     // Initialize opportunity value based on appliedOpportunity
-    const opportunityControl = this.getFormControl(
-      this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]
-    );
-
-    const appliedOpportunity = this.planStore.appliedOpportunity();
-    if (appliedOpportunity) {
-      opportunityControl.setValue(this.planStore.availableOpportunities()[0]);
+    // Check if form controls and store are available (may not be initialized in review mode or during construction)
+    // Note: planStore is injected, but property initializers run after base constructor, so we need to check
+    const planStore = this.planStore;
+    if (this.basicInformationFormGroupControls && planStore) {
+      const opportunityFormControl = this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity];
+      if (opportunityFormControl) {
+        const opportunityControl = this.getFormControl(opportunityFormControl);
+        const appliedOpportunity = planStore.appliedOpportunity();
+        const availableOpportunities = planStore.availableOpportunities();
+        if (appliedOpportunity && availableOpportunities.length > 0) {
+          opportunityControl.setValue(availableOpportunities[0]);
+        }
+      }
     }
-  }
-
-  getHasCommentControl(control: AbstractControl): FormControl<boolean> {
-    const formGroup = control as FormGroup;
-    const hasCommentControl = formGroup.get(EMaterialsFormControls.hasComment);
-    return hasCommentControl as unknown as FormControl<boolean>;
-  }
-
-  getValueControl(control: AbstractControl): FormControl<string | null> {
-    const formGroup = control as FormGroup;
-    const valueControl = formGroup.get(EMaterialsFormControls.value);
-    return valueControl as unknown as FormControl<string | null>;
-  }
-
-  getFormControl(control: AbstractControl): FormControl<any> {
-    return control as unknown as FormControl<any>;
-  }
-
-  onDeleteComments(): void {
-    this.showDeleteConfirmationDialog.set(true);
-  }
-
-  onConfirmDeleteComment(): void {
-    this.formUtilityService.resetHasCommentControls(this.formGroup);
-    this.selectedInputs.set([]);
-    this.comment.set('');
-    this.commentFormControl.reset();
-    this.commentPhase.set('none');
-    this.showDeleteConfirmationDialog.set(false);
-    this.toasterService.success('Your comments and selected fields were removed successfully.');
-  }
-
-  onCancelDeleteComment(): void {
-    this.showDeleteConfirmationDialog.set(false);
-  }
-
-  onSaveComment(): void {
-    // Validate at least one field is selected
-    if (this.selectedInputs().length === 0) {
-      this.toasterService.error('Please select at least one field before adding a comment.');
-      return;
-    }
-
-    // Validate comment text
-    const commentValue = this.commentFormControl.value?.trim() || '';
-    if (!commentValue) {
-      this.commentFormControl.markAsTouched();
-      this.toasterService.error('Please enter a comment.');
-      return;
-    }
-
-    if (commentValue.length > 255) {
-      this.toasterService.error('Comment cannot exceed 255 characters.');
-      return;
-    }
-
-    // Save comment
-    this.comment.set(commentValue);
-    this.commentFormControl.setValue(commentValue, { emitEvent: false });
-    this.commentPhase.set('viewing');
-    this.commentFormControl.disable();
-    this.toasterService.success('Your comments have been saved successfully.');
-  }
-
-  // onEditComment(): void {
-  //   // Load existing comment into form control
-  //   this.commentFormControl.setValue(this.comment(), { emitEvent: false });
-  //   this.commentFormControl.enable();
-  //   this.commentPhase.set('editing');
-  // }
-
-  onSaveEditedComment(): void {
-    // Validate comment text
-    const commentValue = this.commentFormControl.value?.trim() || '';
-    if (!commentValue) {
-      this.commentFormControl.markAsTouched();
-      this.toasterService.error('Please enter a comment.');
-      return;
-    }
-
-    if (commentValue.length > 255) {
-      this.toasterService.error('Comment cannot exceed 255 characters.');
-      return;
-    }
-
-    // Update comment
-    this.comment.set(commentValue);
-    this.commentFormControl.setValue(commentValue, { emitEvent: false });
-    this.commentPhase.set('viewing');
-    this.commentFormControl.disable();
-    this.toasterService.success('Your updates have been saved successfully.');
-  }
-
-  resetAllHasCommentControls(): void {
-    // Reset hasComment controls in all form groups
-    this.formUtilityService.resetHasCommentControls(this.formGroup);
-  }
-
-  highlightInput(inputKey: string): boolean {
-    const isSelected = this.selectedInputs().some(input => input.inputKey === inputKey);
-    const phase = this.commentPhase();
-    return isSelected && (phase === 'adding' || phase === 'editing');
   }
 }

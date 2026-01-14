@@ -6,17 +6,16 @@ import { SaudizationMatrixComponent } from './saudization-matrix/saudization-mat
 import { BaseErrorMessages } from '../../../base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { FileuploadComponent } from '../../../utility-components/fileupload/fileupload.component';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
-import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
+import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
-import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { FormsModule } from '@angular/forms';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { TextareaModule } from 'primeng/textarea';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { PlanStepBaseClass } from '../plan-step-base-class';
+import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 
 @Component({
   selector: 'app-plan-localization-step-04-saudization-form',
@@ -35,13 +34,10 @@ import { BaseLabelComponent } from 'src/app/shared/components/base-components/ba
   templateUrl: './plan-localization-step-04-saudizationForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlanLocalizationStep04SaudizationForm {
+export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
   isReviewMode = input<boolean>(false);
   pageTitle = input<string>('Saudization');
-  private readonly productPlanFormService = inject(ProductPlanFormService);
-  private readonly toasterService = inject(ToasterService);
-  private readonly formUtilityService = inject(FormUtilityService);
 
   // Computed property to determine if file upload should be disabled
   isFileUploadDisabled = computed(() => this.isViewMode() || this.isReviewMode());
@@ -49,38 +45,45 @@ export class PlanLocalizationStep04SaudizationForm {
   formGroup = this.productPlanFormService.step4_saudization;
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
-  // Show checkbox signal (controls visibility of comment checkboxes)
-  showCheckbox = computed(() => this.commentPhase() !== 'none');
-  commentPhase = model<TCommentPhase>('none');
   selectedInputColor = input<TColors>('orange');
+  commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
-  comment = signal<string>('');
-  showDeleteConfirmationDialog = signal<boolean>(false);
-
-  commentFormControl = this.formGroup.get(EMaterialsFormControls.comment) as FormControl<string>;
-
-  pageComment = computed<IPageComment>(() => {
-    return {
-      pageTitleForTL: this.pageTitle() ?? '',
-      comment: this.comment() ?? '',
-      fields: this.selectedInputs(),
-    }
-  });
 
   // Files signal for file upload component
   files = signal<File[]>([]);
 
-  // Helper methods - delegate to ProductPlanFormService
-  // Using arrow functions to preserve 'this' context when passed to child components
-  getValueControl = (formGroup: AbstractControl): FormControl<any> => {
-    return this.productPlanFormService.getValueControl(formGroup);
-  };
+  // Implement abstract method from base class
+  getFormGroup(): FormGroup {
+    return this.formGroup;
+  }
 
-  getHasCommentControl = (formGroup: AbstractControl): FormControl<boolean> => {
-    return this.productPlanFormService.getHasCommentControl(formGroup);
-  };
+  // Expose base class methods as public for template access
+  override onDeleteComments(): void {
+    super.onDeleteComments();
+  }
+
+  override onConfirmDeleteComment(): void {
+    super.onConfirmDeleteComment();
+  }
+
+  override onCancelDeleteComment(): void {
+    super.onCancelDeleteComment();
+  }
+
+  override onSaveComment(): void {
+    super.onSaveComment();
+  }
+
+  override onSaveEditedComment(): void {
+    super.onSaveEditedComment();
+  }
+
+  override resetAllHasCommentControls(): void {
+    super.resetAllHasCommentControls();
+  }
 
   // Arrow function wrappers for comment functionality to pass to child components
+  // Using arrow functions to preserve 'this' context when passed to child components
   upDateSelectedInputsWrapper = (value: boolean, fieldInformation: IFieldInformation, rowId?: string): void => {
     this.upDateSelectedInputs(value, fieldInformation, rowId);
   };
@@ -89,29 +92,62 @@ export class PlanLocalizationStep04SaudizationForm {
     return this.highlightInput(inputKey, rowId);
   };
 
-  // Get form groups
-  getSaudizationFormGroup = (): FormGroup => {
-    return this.productPlanFormService.saudizationFormGroup;
+  // Wrapper for getHasCommentControl to match expected signature (non-null return)
+  // SaudizationMatrixComponent expects (formGroup: AbstractControl) => FormControl<boolean>
+  getHasCommentControlWrapper = (formGroup: AbstractControl): FormControl<boolean> => {
+    const result = this.getHasCommentControl(formGroup);
+    if (!result) {
+      // Return a dummy control if null (shouldn't happen in normal usage, but satisfies type requirement)
+      return new FormControl<boolean>(false) as FormControl<boolean>;
+    }
+    return result;
   };
 
-  getAttachmentsFormGroup = (): FormGroup => {
-    return this.productPlanFormService.attachmentsFormGroup;
+  // Arrow function wrapper to preserve 'this' context when passed to child components
+  getValueControlWrapper = (formGroup: AbstractControl): FormControl<any> => {
+    return this.getValueControl(formGroup);
   };
 
-  // Get year form group
-  getYearFormGroup = (year: number): FormGroup | null => {
+  // Arrow function wrappers to preserve 'this' context when passed to child components
+  getYearFormGroupWrapper = (year: number): FormGroup | null => {
     return this.productPlanFormService.getYearFormGroup(year);
   };
 
-  // Get row control for a specific year
-  getRowControl = (year: number, rowName: string): AbstractControl | null => {
-    const yearGroup = this.getYearFormGroup(year);
+  getRowControlWrapper = (year: number, rowName: string): AbstractControl | null => {
+    const yearGroup = this.getYearFormGroupWrapper(year);
     return yearGroup?.get(rowName) || null;
   };
 
-  constructor() {
+  // Get form groups
+  getSaudizationFormGroup(): FormGroup {
+    return this.productPlanFormService.saudizationFormGroup;
+  }
+
+  getAttachmentsFormGroup(): FormGroup {
+    return this.productPlanFormService.attachmentsFormGroup;
+  }
+
+  // Get year form group
+  getYearFormGroup(year: number): FormGroup | null {
+    return this.productPlanFormService.getYearFormGroup(year);
+  }
+
+  // Get row control for a specific year
+  getRowControl(year: number, rowName: string): AbstractControl | null {
+    const yearGroup = this.getYearFormGroup(year);
+    return yearGroup?.get(rowName) || null;
+  }
+
+  // Override hook method for step-specific initialization
+  protected override initializeStepSpecificLogic(): void {
+    // Check if attachments form group is available (may not be initialized during construction)
+    const attachmentsFormGroup = this.productPlanFormService.attachmentsFormGroup;
+    if (!attachmentsFormGroup) {
+      return;
+    }
+
     // Initialize files from form control value
-    const attachmentsControl = this.getAttachmentsFormGroup().get(EMaterialsFormControls.attachments);
+    const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
     if (attachmentsControl) {
       const control = this.getValueControl(attachmentsControl);
       const formValue = control.value;
@@ -123,7 +159,11 @@ export class PlanLocalizationStep04SaudizationForm {
     // Sync files signal changes to form control
     effect(() => {
       const filesValue = this.files();
-      const attachmentsControl = this.getAttachmentsFormGroup().get(EMaterialsFormControls.attachments);
+      const attachmentsFormGroup = this.productPlanFormService.attachmentsFormGroup;
+      if (!attachmentsFormGroup) {
+        return;
+      }
+      const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
       if (attachmentsControl) {
         const control = this.getValueControl(attachmentsControl);
         // Compare arrays by length and content to avoid infinite loops
@@ -140,21 +180,6 @@ export class PlanLocalizationStep04SaudizationForm {
         }
       }
     });
-
-    // Comment phase effect
-    effect(() => {
-      if (this.commentPhase() === 'viewing') {
-        const commentValue = this.commentFormControl.value ?? '';
-        this.comment.set(commentValue);
-        this.commentFormControl.setValue(commentValue, { emitEvent: false });
-        this.commentFormControl.disable();
-        this.formUtilityService.disableHasCommentControls(this.formGroup);
-      }
-      if (['adding', 'editing'].includes(this.commentPhase())) {
-        this.commentFormControl.enable();
-        this.formUtilityService.enableHasCommentControls(this.formGroup);
-      }
-    });
   }
 
   // Helper to get year control names
@@ -162,105 +187,14 @@ export class PlanLocalizationStep04SaudizationForm {
     return `year${year}` as keyof typeof EMaterialsFormControls;
   }
 
-  upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation, rowId?: string): void {
-    const currentInputs = this.selectedInputs();
-
-    // Set row ID for both selecting and unselecting (needed to find item when unselecting)
-    if (rowId) {
-      fieldInformation.id = rowId;
-    }
-
-    const existingIndex = currentInputs.findIndex(
-      input => input.section === fieldInformation.section &&
-        input.inputKey === fieldInformation.inputKey &&
-        input.id === fieldInformation.id
-    );
-
-    if (value) {
-      if (existingIndex === -1) {
-        this.selectedInputs.set([...currentInputs, fieldInformation]);
-      }
-    } else {
-      if (existingIndex !== -1) {
-        this.selectedInputs.set(currentInputs.filter((_, index) => index !== existingIndex));
-      }
-    }
+  // Override upDateSelectedInputs to expose as public method
+  override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation, rowId?: string): void {
+    super.upDateSelectedInputs(value, fieldInformation, rowId);
   }
 
-  highlightInput(inputKey: string, rowId?: string): boolean {
-    const isSelected = this.selectedInputs().some(input =>
-      input.inputKey === inputKey &&
-      (rowId === undefined || input.id === rowId)
-    );
-    const phase = this.commentPhase();
-    return isSelected && (phase === 'adding' || phase === 'editing');
-  }
-
-  onDeleteComments(): void {
-    this.showDeleteConfirmationDialog.set(true);
-  }
-
-  onConfirmDeleteComment(): void {
-    this.formUtilityService.resetHasCommentControls(this.formGroup);
-    this.selectedInputs.set([]);
-    this.comment.set('');
-    this.commentFormControl.reset();
-    this.commentPhase.set('none');
-    this.showDeleteConfirmationDialog.set(false);
-    this.toasterService.success('Your comments and selected fields were removed successfully.');
-  }
-
-  onCancelDeleteComment(): void {
-    this.showDeleteConfirmationDialog.set(false);
-  }
-
-  onSaveComment(): void {
-    if (this.selectedInputs().length === 0) {
-      this.toasterService.error('Please select at least one field before adding a comment.');
-      return;
-    }
-
-    const commentValue = this.commentFormControl.value?.trim() || '';
-    if (!commentValue) {
-      this.commentFormControl.markAsTouched();
-      this.toasterService.error('Please enter a comment.');
-      return;
-    }
-
-    if (commentValue.length > 255) {
-      this.toasterService.error('Comment cannot exceed 255 characters.');
-      return;
-    }
-
-    this.comment.set(commentValue);
-    this.commentFormControl.setValue(commentValue, { emitEvent: false });
-    this.commentPhase.set('viewing');
-    this.commentFormControl.disable();
-    this.toasterService.success('Your comments have been saved successfully.');
-  }
-
-  onSaveEditedComment(): void {
-    const commentValue = this.commentFormControl.value?.trim() || '';
-    if (!commentValue) {
-      this.commentFormControl.markAsTouched();
-      this.toasterService.error('Please enter a comment.');
-      return;
-    }
-
-    if (commentValue.length > 255) {
-      this.toasterService.error('Comment cannot exceed 255 characters.');
-      return;
-    }
-
-    this.comment.set(commentValue);
-    this.commentFormControl.setValue(commentValue, { emitEvent: false });
-    this.commentPhase.set('viewing');
-    this.commentFormControl.disable();
-    this.toasterService.success('Your updates have been saved successfully.');
-  }
-
-  resetAllHasCommentControls(): void {
-    this.formUtilityService.resetHasCommentControls(this.formGroup);
+  // Expose highlightInput as public method
+  override highlightInput(inputKey: string, rowId?: string): boolean {
+    return super.highlightInput(inputKey, rowId);
   }
 }
 

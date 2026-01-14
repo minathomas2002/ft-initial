@@ -24,7 +24,7 @@ import { CheckboxModule } from 'primeng/checkbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupInputWithCheckbox implements OnInit {
-  hasCommentControl = input.required<FormControl<boolean>>();
+  hasCommentControl = input<FormControl<boolean> | null>(null);
   showCheckbox = input<boolean>(false);
   valueChanged = output<boolean>();
   private readonly destroyRef = inject(DestroyRef);

@@ -95,7 +95,7 @@
         <app-base-label [title]="'Company Name'" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="companyNameHasCommentControl()"
+          [hasCommentControl]="companyNameHasCommentControl()!"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'companyName',
@@ -380,7 +380,7 @@
           <app-base-label [title]="'Contact Number'" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="contactNumberHasCommentControl()"
+            [hasCommentControl]="contactNumberHasCommentControl()!"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'contactNumber',
