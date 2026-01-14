@@ -12,6 +12,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationApproach, ELocation, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TableModule } from 'primeng/table';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
@@ -33,6 +34,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     GroupInputWithCheckbox,
     TextareaModule,
     InputNumberModule,
+    TableModule,
     CommentStateComponent,
     GeneralConfirmationDialogComponent,
     FormsModule,
@@ -72,6 +74,28 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
   ];
+
+  entityLevelTableRows = computed(() => {
+    const years = this.yearColumns();
+    return [
+      {
+        label: 'Expected Annual Headcount',
+        controlKey: 'headcount',
+        placeholder: 'Enter headcount',
+        mode: undefined,
+        minFractionDigits: 0,
+        maxFractionDigits: 0,
+      },
+      {
+        label: 'Expected Saudization (%)',
+        controlKey: 'saudization',
+        placeholder: 'Enter %',
+        mode: 'decimal' as const,
+        minFractionDigits: 0,
+        maxFractionDigits: 2,
+      },
+    ];
+  });
 
   // Generate header labels for service level year columns (show as numbers)
   customHeadersLabels = computed(() => {
