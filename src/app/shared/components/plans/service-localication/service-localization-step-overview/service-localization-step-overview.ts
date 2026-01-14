@@ -146,12 +146,12 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   }
 
   // Expose base class methods as public for template access
-  override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation): void {
-    super.upDateSelectedInputs(value, fieldInformation);
+  override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation, rowId?: string): void {
+    super.upDateSelectedInputs(value, fieldInformation, rowId);
   }
 
-  override highlightInput(inputKey: string): boolean {
-    return super.highlightInput(inputKey);
+  override highlightInput(inputKey: string, rowId?: string): boolean {
+    return super.highlightInput(inputKey, rowId);
   }
 
   override onDeleteComments(): void {

@@ -29,6 +29,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'saudiCompanyName_' + index,
+              label: 'Saudi Company Name'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -37,6 +42,8 @@
               [maxlength]="100"
               placeholder="Enter Saudi company name"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
+              [appConditionalColorClass]="highlightInput('saudiCompanyName_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -50,6 +57,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'registeredVendorIDwithSEC_' + index,
+              label: 'Registered Vendor ID with SEC'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -58,6 +70,8 @@
               placeholder=""
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
               class="bg-gray-100 text-gray-500"
+              [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
         </td>
@@ -67,6 +81,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'benaRegisteredVendorID_' + index,
+              label: 'BENA Registered Vendor ID'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -75,6 +94,8 @@
               placeholder=""
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
               class="bg-gray-100 text-gray-500"
+              [appConditionalColorClass]="highlightInput('benaRegisteredVendorID_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
         </td>
@@ -84,6 +105,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyType))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'companyType_' + index,
+              label: 'Company Type'
+            }, itemControl.get('rowId')?.value)"
           >
             <p-multiselect
               [options]="companyTypeOptions()"
@@ -93,6 +119,8 @@
               placeholder="Select company type(s)"
               fluid
               [appendTo]="'body'"
+              [appConditionalColorClass]="highlightInput('companyType_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -106,6 +134,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'qualificationStatus_' + index,
+              label: 'Qualification Status with SEC'
+            }, itemControl.get('rowId')?.value)"
           >
             <p-select
               [options]="qualificationStatusOptions()"
@@ -115,6 +148,8 @@
               placeholder="Select qualification status"
               fluid
               [appendTo]="'body'"
+              [appConditionalColorClass]="highlightInput('qualificationStatus_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -128,6 +163,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.products))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'products_' + index,
+              label: 'Product(s)'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -136,6 +176,8 @@
               [maxlength]="255"
               placeholder="Enter specify the product(s)"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
+              [appConditionalColorClass]="highlightInput('products_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -149,6 +191,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverview))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'companyOverview_' + index,
+              label: 'Company Overview'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -157,6 +204,8 @@
               [maxlength]="255"
               placeholder="Enter company overview"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
+              [appConditionalColorClass]="highlightInput('companyOverview_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -170,6 +219,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'keyProjectsExecutedByContractorForSEC_' + index,
+              label: 'Key Projects Executed'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -178,6 +232,8 @@
               [maxlength]="255"
               placeholder="Enter key projects executed by contractor for SEC"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
+              [appConditionalColorClass]="highlightInput('keyProjectsExecutedByContractorForSEC_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -191,6 +247,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'companyOverviewKeyProjectDetails_' + index,
+              label: 'Company Overview, Key Project Details'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -199,6 +260,8 @@
               [maxlength]="255"
               placeholder="Enter company overview, key project details etc."
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
+              [appConditionalColorClass]="highlightInput('companyOverviewKeyProjectDetails_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -212,6 +275,11 @@
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'companyOverviewOther_' + index,
+              label: 'Company Overview'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -220,6 +288,8 @@
               [maxlength]="255"
               placeholder="Enter company overview"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
+              [appConditionalColorClass]="highlightInput('companyOverviewOther_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
           <app-base-error-messages
@@ -678,5 +748,51 @@
       [label]="'Attachments'"
     />
   </div>
+  }
+
+  @if(commentPhase() == 'editing' || commentPhase() == 'viewing'){
+  <div
+    class="animated flex flex-col gap-4 mt-8"
+    animate.enter="fadeIn"
+  >
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Your Comment'" />
+        <textarea
+          fluid
+          rows="8"
+          pTextarea
+          [formControl]="commentFormControl"
+        ></textarea>
+        <app-base-error-messages
+          [control]="commentFormControl"
+          [label]="'Your Comment'"
+        />
+      </div>
+    </div>
+  </div>
+  }
+
+  @if(showCheckbox()){
+  <app-comment-state-component
+    [commentsCount]="selectedInputs().length"
+    [(commentPhase)]="commentPhase"
+    [commentFormControl]="commentFormControl"
+    (deleteComments)="onDeleteComments()"
+    (saveComment)="commentPhase() === 'editing' ? onSaveEditedComment() : onSaveComment()"
+  />
+  }
+
+  @if(showDeleteConfirmationDialog()){
+  <app-general-confirmation-dialog
+    [(visible)]="showDeleteConfirmationDialog"
+    [title]="'Are you sure you want to delete the comment and selected fields?'"
+    [confirmationLabel]="'Delete'"
+    [cancelLabel]="'Cancel'"
+    [confirmButtonSeverity]="'danger'"
+    [icon]="'icon-trash-2'"
+    (confirmed)="onConfirmDeleteComment()"
+    (onCancel)="onCancelDeleteComment()"
+  />
   }
 </div>
