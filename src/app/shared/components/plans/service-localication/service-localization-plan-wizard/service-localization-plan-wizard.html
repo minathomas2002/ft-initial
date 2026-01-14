@@ -22,7 +22,13 @@
   }
 
   <ng-template [appStepContent]="1">
-    <app-service-localization-step-cover-page [isViewMode]="isViewMode() || isReviewMode()"></app-service-localization-step-cover-page>
+    <app-service-localization-step-cover-page
+      [isViewMode]="isViewMode() || isReviewMode()"
+      [pageTitle]="steps()[0].title"
+      [(commentPhase)]="step1CommentPhase"
+      [(selectedInputs)]="step1SelectedInputs"
+      [selectedInputColor]="step1CommentPhase() === 'none' ? 'green' : 'orange'"
+    ></app-service-localization-step-cover-page>
   </ng-template>
 
   <ng-template [appStepContent]="2">

@@ -10,19 +10,26 @@
           [hasCommentControl]="
             getHasCommentControl(coverPageCompanyInformationFormGroup.get('planTitle'))
           "
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'coverPageCompanyInformation',
+            inputKey: 'planTitle',
+            label: 'Plan Title'
+          })"
         >
           <input
             pInputText
             placeholder="Enter plan title"
-            [formControl]="getValueControl(coverPageCompanyInformationFormGroup.get('planTitle'))"
+            [formControl]="getCoverPageValueControl('planTitle')"
             fluid
             maxlength="150"
             trimOnBlur
+            [appConditionalColorClass]="highlightInput('planTitle')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
 
         <app-base-error-messages
-          [control]="getValueControl(coverPageCompanyInformationFormGroup.get('planTitle'))"
+          [control]="getCoverPageValueControl('planTitle')"
           [label]="'Plan Title'"
         />
       </div>
@@ -35,19 +42,26 @@
           [hasCommentControl]="
             getHasCommentControl(coverPageCompanyInformationFormGroup.get('companyName'))
           "
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'coverPageCompanyInformation',
+            inputKey: 'companyName',
+            label: 'Company Name'
+          })"
         >
           <input
             pInputText
             placeholder="Enter company name"
-            [formControl]="getValueControl(coverPageCompanyInformationFormGroup.get('companyName'))"
+            [formControl]="getCoverPageValueControl('companyName')"
             fluid
             maxlength="100"
             trimOnBlur
+            [appConditionalColorClass]="highlightInput('companyName')"
+            [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
 
         <app-base-error-messages
-          [control]="getValueControl(coverPageCompanyInformationFormGroup.get('companyName'))"
+          [control]="getCoverPageValueControl('companyName')"
           [label]="'Company Name'"
         />
       </div>
@@ -64,11 +78,20 @@
       [createNewItem]="createServiceItem"
       [excludeKeys]="['serviceId']"
     >
-      <ng-template #itemTemplate let-itemControl let-index="index">
+      <ng-template
+        #itemTemplate
+        let-itemControl
+        let-index="index"
+      >
         <td class="p-3 border border-gray-200 min-w-[300px]">
           <app-group-input-with-checkbox
             [hasCommentControl]="getHasCommentControl(itemControl.get('serviceName'))"
             [showCheckbox]="showCheckbox()"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'services',
+              inputKey: 'serviceName_' + index,
+              label: 'Service Name'
+            }, itemControl.get('rowId')?.value)"
           >
             <input
               type="text"
@@ -78,6 +101,8 @@
               [maxlength]="100"
               [formControl]="getValueControl(itemControl.get('serviceName'))"
               trimOnBlur
+              [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
 
@@ -89,4 +114,50 @@
       </ng-template>
     </app-form-array-input>
   </div>
+
+  @if(commentPhase() == 'editing' || commentPhase() == 'viewing'){
+  <div
+    class="animated flex flex-col gap-4 mt-8"
+    animate.enter="fadeIn"
+  >
+    <div class="flex flex-col gap-4 md:flex-row">
+      <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'Your Comment'" />
+        <textarea
+          fluid
+          rows="8"
+          pTextarea
+          [formControl]="commentFormControl"
+        ></textarea>
+        <app-base-error-messages
+          [control]="commentFormControl"
+          [label]="'Your Comment'"
+        />
+      </div>
+    </div>
+  </div>
+  }
+
+  @if(showCheckbox()){
+  <app-comment-state-component
+    [commentsCount]="selectedInputs().length"
+    [(commentPhase)]="commentPhase"
+    [commentFormControl]="commentFormControl"
+    (deleteComments)="onDeleteComments()"
+    (saveComment)="commentPhase() === 'editing' ? onSaveEditedComment() : onSaveComment()"
+  />
+  }
+
+  @if(showDeleteConfirmationDialog()){
+  <app-general-confirmation-dialog
+    [(visible)]="showDeleteConfirmationDialog"
+    [title]="'Are you sure you want to delete the comment and selected fields?'"
+    [confirmationLabel]="'Delete'"
+    [cancelLabel]="'Cancel'"
+    [confirmButtonSeverity]="'danger'"
+    [icon]="'icon-trash-2'"
+    (confirmed)="onConfirmDeleteComment()"
+    (onCancel)="onCancelDeleteComment()"
+  />
+  }
 </div>

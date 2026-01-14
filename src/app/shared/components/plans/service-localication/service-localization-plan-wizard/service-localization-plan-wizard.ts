@@ -102,11 +102,13 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   showDirectLocalizationStep = signal(false);
 
   // Comment phase signals for each step
+  step1CommentPhase = signal<TCommentPhase>('none');
   step2CommentPhase = signal<TCommentPhase>('none');
   step3CommentPhase = signal<TCommentPhase>('none');
   step4CommentPhase = signal<TCommentPhase>('none');
 
   // Selected inputs signals for each step
+  step1SelectedInputs = signal<IFieldInformation[]>([]);
   step2SelectedInputs = signal<IFieldInformation[]>([]);
   step3SelectedInputs = signal<IFieldInformation[]>([]);
   step4SelectedInputs = signal<IFieldInformation[]>([]);
@@ -117,7 +119,8 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
   // Computed signals for action controls
   hasSelectedFields = computed(() => {
-    return this.step2SelectedInputs().length > 0 ||
+    return this.step1SelectedInputs().length > 0 ||
+      this.step2SelectedInputs().length > 0 ||
       this.step3SelectedInputs().length > 0 ||
       this.step4SelectedInputs().length > 0;
   });
@@ -138,26 +141,32 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     pushStep({
       id: 'cover',
       title: 'Cover Page',
-      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+      description: 'Cover Page',
       formState: this.serviceLocalizationFormService.step1_coverPage,
-      hasErrors: true,
+      hasErrors: this.step1CommentPhase() === 'none',
+      commentsCount: this.step1SelectedInputs().length,
+      commentColor: this.step1CommentPhase() === 'none' ? 'green' : 'orange',
     });
 
     pushStep({
       id: 'overview',
       title: 'Overview',
-      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+      description: 'Overview',
       formState: this.serviceLocalizationFormService.step2_overview,
-      hasErrors: true,
+      hasErrors: this.step2CommentPhase() === 'none',
+      commentsCount: this.step2SelectedInputs().length,
+      commentColor: this.step2CommentPhase() === 'none' ? 'green' : 'orange',
     });
 
     if (this.showExistingSaudiStep()) {
       pushStep({
         id: 'existingSaudi',
         title: 'Existing Saudi Co.',
-        description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+        description: 'Existing Saudi Co.',
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
-        hasErrors: true,
+        hasErrors: this.step3CommentPhase() === 'none',
+        commentsCount: this.step3SelectedInputs().length,
+        commentColor: this.step3CommentPhase() === 'none' ? 'green' : 'orange',
       });
     }
 
@@ -165,9 +174,11 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       pushStep({
         id: 'directLocalization',
         title: 'Direct Localization',
-        description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+        description: 'Direct Localization',
         formState: this.serviceLocalizationFormService.step4_directLocalization,
-        hasErrors: true,
+        hasErrors: this.step4CommentPhase() === 'none',
+        commentsCount: this.step4SelectedInputs().length,
+        commentColor: this.step4CommentPhase() === 'none' ? 'green' : 'orange',
       });
     }
 
@@ -175,7 +186,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     pushStep({
       id: 'summary',
       title: 'Summary',
-      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+      description: 'Summary',
       formState: null,
       hasErrors: false,
     });
@@ -287,7 +298,9 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
       // Set comment phase to 'adding' for the current step if it's 'none'
       const stepId = this.stepsWithId()[currentStep - 1]?.id;
-      if (stepId === 'overview' && this.step2CommentPhase() === 'none') {
+      if (stepId === 'cover' && this.step1CommentPhase() === 'none') {
+        this.step1CommentPhase.set('adding');
+      } else if (stepId === 'overview' && this.step2CommentPhase() === 'none') {
         this.step2CommentPhase.set('adding');
       } else if (stepId === 'existingSaudi' && this.step3CommentPhase() === 'none') {
         this.step3CommentPhase.set('adding');
@@ -495,11 +508,14 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   onAddComment(): void {
     const step = this.activeStep();
     // Set comment phase for the current active step
-    // Step 2 is overview (index 2)
+    // Step 1 is cover
+    // Step 2 is overview
     // Step 3 is existingSaudi (if shown)
     // Step 4 is directLocalization (if shown)
     const stepId = this.stepsWithId()[step - 1]?.id;
-    if (stepId === 'overview' && this.step2CommentPhase() === 'none') {
+    if (stepId === 'cover' && this.step1CommentPhase() === 'none') {
+      this.step1CommentPhase.set('adding');
+    } else if (stepId === 'overview' && this.step2CommentPhase() === 'none') {
       this.step2CommentPhase.set('adding');
     } else if (stepId === 'existingSaudi' && this.step3CommentPhase() === 'none') {
       this.step3CommentPhase.set('adding');
@@ -710,6 +726,17 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
    */
   collectAllPageComments(): IPageComment[] {
     const comments: IPageComment[] = [];
+
+    // Step 1 comments (Cover Page)
+    const step1Form = this.serviceLocalizationFormService.step1_coverPage;
+    const step1CommentControl = step1Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    if (step1CommentControl?.value && step1CommentControl.value.trim().length > 0 && this.step1SelectedInputs().length > 0) {
+      comments.push({
+        pageTitleForTL: this.steps()[0].title,
+        comment: step1CommentControl.value.trim(),
+        fields: this.step1SelectedInputs(),
+      });
+    }
 
     // Step 2 comments (Overview)
     const step2Form = this.serviceLocalizationFormService.step2_overview;
