@@ -290,9 +290,10 @@ export interface IServicePlanLocalizationStrategy {
 }
 
 export interface ICommentFields {
-  name: string;
-  id: string;
-
+  section: string;
+  inputKey: string;
+  label: string;
+  id: string | null;
 }
 export interface ITimelineComment {
   pageTitle: string;

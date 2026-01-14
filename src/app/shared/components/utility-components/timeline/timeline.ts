@@ -18,6 +18,7 @@ export class Timeline {
   getBadgeClasses(color: TColors) {
 		const colorMap: Record<TColors, { border: string; circle: string }> = {
 			blue: { border: 'border-blue-700', circle: 'bg-blue-700' },
+			fadedBlue: { border: 'border-slate-300', circle: 'bg-slate-50' },
 			red: { border: 'border-red-700', circle: 'bg-red-700' },
 			green: { border: 'border-green-700', circle: 'bg-green-700' },
 			yellow: { border: 'border-yellow-400', circle: 'bg-yellow-400' },
@@ -31,5 +32,5 @@ export class Timeline {
 		return colorMap[color];
 	}
 
-  
+
 }

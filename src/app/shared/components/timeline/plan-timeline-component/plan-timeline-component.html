@@ -1,17 +1,12 @@
 <app-timeline [events]="events()">
-  <ng-template
-    #timelineTemplate
-    let-item="item"
-  >
+  <ng-template #timelineTemplate let-item="item">
     <div class="flex flex-col gap-2">
       <!-- status and date -->
       <div class="flex justify-between items-start">
 
         <!-- Status -->
-        <app-base-tag
-          [value]="getStatusLabel(item.item.status)"
-          [color]="getStatusBadgeColor(item.item.status)"
-        ></app-base-tag>
+        <app-base-tag [value]="getStatusLabel(item.item.status)"
+          [color]="getStatusBadgeColor(item.item.status)"></app-base-tag>
 
         <!-- Date & Days -->
         <div class="">
@@ -33,11 +28,8 @@
 
       <!-- user card -->
       <div>
-        <app-identify-user
-          [userAvatar]="item.item.profilePicURL"
-          [userName]="item.item.actionByNameEn"
-          [userRole]="getUserTranslatedRole(item.item.actorRole)"
-        >
+        <app-identify-user [userAvatar]="item.item.profilePicURL" [userName]="item.item.actionByNameEn"
+          [userRole]="getUserTranslatedRole(item.item.actorRole)">
         </app-identify-user>
       </div>
 
@@ -52,7 +44,29 @@
       </div>
 
       @if (item.item.comments?.length > 0) {
-      <p-divider></p-divider>
+      <p-divider class="m-0!"></p-divider>
+
+      @for (comment of item.item.comments; track comment) {
+      <div class="mt-2">
+        <div class="text-sm font-semibold text-gray-700">
+          {{ comment.pageTitleForTL }}
+        </div>
+
+        <div class="mt-1">
+          <label class="block text-sm text-[#414651] font-medium mb-1">Comment</label>
+          <input class="p-inputtext w-full bg-gray-100" [value]="comment.comment" disabled />
+        </div>
+
+        @if (comment.fields?.length > 0) {
+        <div class="mt-2 flex gap-2 flex-wrap">
+          @for (field of comment.fields; track field) {
+          <app-base-tag [value]="field.label" [color]="'fadedBlue'"></app-base-tag>
+          }
+        </div>
+        }
+      </div>
+      }
+
       }
     </div>
 
