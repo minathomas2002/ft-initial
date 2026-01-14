@@ -30,13 +30,9 @@ export class SidebarContentComponent {
       ? ERoutes.opportunities + '/' + ERoutes.admin
       : ERoutes.opportunities;
 
-    var dashboardLink = this.permissionService.canAccessInvestorDashboard()
-      ? ERoutes.dashboard + '/' + ERoutes.investors
-      : ERoutes.dashboard;
+    var dashboardLink = ERoutes.dashboard;
 
-    var planLink = this.permissionService.canAccessInvestorDashboard()
-      ? ERoutes.plans + '/' + ERoutes.investors
-      : ERoutes.plans;
+    var planLink = ERoutes.plans;
 
     return [
       {
