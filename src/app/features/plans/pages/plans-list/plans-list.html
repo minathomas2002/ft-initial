@@ -1,6 +1,6 @@
 <app-table-layout [tableTitle]="'plans.title' | translate" [tableSubTitle]="'plans.subtitle' | translate"
   pageTitleClass="text-[24px] font-semibold" pageSubTitleClass="text-md text-gray-600">
-  @if (isInvestorRoute()) { <ng-container ngProjectAs="table-actions">
+  @if (isInvestor()) { <ng-container ngProjectAs="table-actions">
     <p-button [label]="'plans.submitNewPlan' | translate" [icon]="'icon-plus'" [size]="'small'"
       (onClick)="createNewPlan()" />
   </ng-container>}
@@ -8,7 +8,7 @@
 
   <ng-container ngProjectAs="table-filters">
     <!-- Filters -->
-    @if (isInvestorRoute()) {
+    @if (isInvestor()) {
     <app-investor-plans-filter></app-investor-plans-filter>
     } @else {
     <app-internal-users-plans-filter></app-internal-users-plans-filter>
@@ -24,21 +24,17 @@
           <td>
             {{ '#' + item.planCode }}
           </td>
-          @if (!isInvestorRoute()) {
+          @if (isInternalUser()) {
           <td>
-            <p 
-              class="text-sm text-gray-900 font-medium max-w-[25ch] truncate" 
-              [pTooltip]="item.investorName ?? '-'"
-              tooltipPosition="top">
+            <p class="text-sm text-gray-900 font-medium max-w-[25ch]" 
+            [appTruncateTooltip]="item.investorName ?? '-'" [maxChars]="20">
               {{ item.investorName ?? '-' }}
             </p>
           </td>
           }
           <td>
-            <p 
-              class="text-sm text-gray-900 font-medium max-w-[25ch] truncate" 
-              [pTooltip]="item.title"
-              tooltipPosition="top">
+            <p class="text-sm text-gray-900 font-medium max-w-[25ch]"
+             [appTruncateTooltip]="item.title" [maxChars]="20">
               {{ item.title }}
             </p>
           </td>
@@ -46,12 +42,10 @@
             <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
           </td>
           <td>{{ item.submissionDate | date: 'dd MMM yyyy' }}</td>
-          @if (!isInvestorRoute()) {
+          @if (isInternalUser()) {
           <td>
-            <p 
-              class="text-sm text-gray-900 font-medium max-w-[25ch] truncate" 
-              [pTooltip]="getAssigneeName(item.assignedEmployee)"
-              tooltipPosition="top">
+            <p class="text-sm text-gray-900 font-medium max-w-[25ch]"
+              [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)" [maxChars]="20">
               {{ getAssigneeName(item.assignedEmployee) }}
             </p>
           </td>
@@ -62,12 +56,10 @@
               {{ getStatusLabel(item.status) }}
             </span>
           </td>
-          @if (!isInvestorRoute()) {
+          @if (isInternalUser()) {
           <td>
             @if(item.status !== EInternalUserPlanStatus.UNASSIGNED) {
-            <span
-              class="text-sm font-medium"
-              [ngClass]="
+            <span class="text-sm font-medium" [ngClass]="
                 item.slaCountDown > 5
                   ? 'text-green-500'
                   : item.slaCountDown > 0
