@@ -1,6 +1,6 @@
 import { computed, inject, Type } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
@@ -172,6 +172,18 @@ export const PlanStore = signalStore(
             value: EOpportunityType.PRODUCT,
           },
         ];
+      }),
+      commentPersona: computed<string | null>(() => {
+        const role = store.planComments()?.creatorRole;
+        if (!role) return null;
+        const roleMap: Record<number, string> = {
+          [ERoles.ADMIN]: 'Admin Comment',
+          [ERoles.INVESTOR]: 'Investor Comment',
+          [ERoles.EMPLOYEE]: 'Employee Comment',
+          [ERoles.Division_MANAGER]: 'Division Manager Comment',
+          [ERoles.DEPARTMENT_MANAGER]: 'Department Manager Comment',
+        };
+        return roleMap[role] || 'Comment';
       }),
     };
   }),
