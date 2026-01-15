@@ -148,7 +148,7 @@
                 <tr>
                   <td class="border-t border-gray-300 p-3">
                     <app-summary-table-cell
-                      [value]="partner.agreementType"
+                      [value]="formatAgreementType(partner.agreementType)"
                       [isEmpty]="!partner.agreementType"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'agreementType')"
                       [hasComment]="hasCollaborationComment(rowIndex, 'agreementType')"
@@ -196,7 +196,7 @@
                   </td>
                   <td class="border-t border-gray-300 p-3">
                     <app-summary-table-cell
-                      [value]="partner.provideAgreementCopy"
+                      [value]="formatYesNo(partner.provideAgreementCopy)"
                       [isEmpty]="partner.provideAgreementCopy === null || partner.provideAgreementCopy === undefined"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'provideAgreementCopy')"
                       [hasComment]="hasCollaborationComment(rowIndex, 'provideAgreementCopy')"
