@@ -19,7 +19,7 @@
             getHasCommentControl(coverPageCompanyInformationFormGroup.get('planTitle'))
           "
           (valueChanged)="upDateSelectedInputs($event, {
-            section: 'coverPageCompanyInformation',
+            section: 'companyInformation',
             inputKey: 'planTitle',
             label: 'Plan Title'
           })"
@@ -32,7 +32,7 @@
             maxlength="150"
             trimOnBlur
             [appConditionalColorClass]="highlightInput('planTitle')"
-            [color]="isViewMode() && isFieldCorrected('planTitle', 'coverPageCompanyInformation') ? 'green' : selectedInputColor()"
+            [color]="isViewMode() && isFieldCorrected('planTitle', 'companyInformation') ? 'green' : selectedInputColor()"
           />
         </app-group-input-with-checkbox>
 
@@ -51,7 +51,7 @@
             getHasCommentControl(coverPageCompanyInformationFormGroup.get('companyName'))
           "
           (valueChanged)="upDateSelectedInputs($event, {
-            section: 'coverPageCompanyInformation',
+            section: 'companyInformation',
             inputKey: 'companyName',
             label: 'Company Name'
           })"
@@ -64,7 +64,7 @@
             maxlength="100"
             trimOnBlur
             [appConditionalColorClass]="highlightInput('companyName')"
-            [color]="isViewMode() && isFieldCorrected('companyName', 'coverPageCompanyInformation') ? 'green' : selectedInputColor()"
+            [color]="isViewMode() && isFieldCorrected('companyName', 'companyInformation') ? 'green' : selectedInputColor()"
           />
         </app-group-input-with-checkbox>
 
