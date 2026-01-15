@@ -26,6 +26,7 @@ import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-lo
 import { PlanLocalizationStep02ProductPlantOverviewForm } from "../plan-localization-step-02-productPlantOverview/plan-localization-step-02-productPlantOverviewForm";
 import { PlanLocalizationStep03ValueChainForm } from "../plan-localization-step-03-valueChain/plan-localization-step-03-valueChainForm";
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
+import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TColors } from "src/app/shared/interfaces";
 
@@ -46,6 +47,7 @@ export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
     SubmissionConfirmationModalComponent,
     TimelineDialog,
     GeneralConfirmationDialogComponent,
+    ApproveRejectDialogComponent,
     TranslatePipe
   ],
   templateUrl: './product-localization-plan-wizard.html',
@@ -192,12 +194,23 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   step4CommentPhase = signal<TCommentPhase>('none');
   showSendBackConfirmationDialog = signal<boolean>(false);
 
+  // Approve/Reject dialogs
+  showApproveConfirmationDialog = signal<boolean>(false);
+  showRejectReasonDialog = signal<boolean>(false);
+  showRejectConfirmationDialog = signal<boolean>(false);
+  approvalNote = signal<string>('');
+  rejectionReason = signal<string>('');
+
   // Computed signals for action controls
   hasSelectedFields = computed(() => {
     return this.step1SelectedInputs().length > 0 ||
       this.step2SelectedInputs().length > 0 ||
       this.step3SelectedInputs().length > 0 ||
       this.step4SelectedInputs().length > 0;
+  });
+
+  canApproveOrReject = computed(() => {
+    return !this.hasSelectedFields() && !this.hasComments();
   });
 
   hasComments = computed(() => {
@@ -903,5 +916,138 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
    */
   onCancelSendBack(): void {
     this.showSendBackConfirmationDialog.set(false);
+  }
+
+  /**
+   * Handle Approve and Forward action
+   */
+  onApproveAndForward(): void {
+    if (!this.canApproveOrReject()) {
+      return;
+    }
+    this.approvalNote.set('');
+    this.showApproveConfirmationDialog.set(true);
+  }
+
+  /**
+   * Confirm approval with optional note
+   */
+  onConfirmApprove(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const note = this.approvalNote().trim();
+    this.isProcessing.set(true);
+    this.planStore.employeeApprovePlan(planId, note || undefined)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showApproveConfirmationDialog.set(false);
+          this.approvalNote.set('');
+          this.toasterService.success('Plan has been approved and forwarded successfully.');
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error approving plan. Please try again.');
+          console.error('Error approving plan:', error);
+        }
+      });
+  }
+
+  /**
+   * Cancel approval
+   */
+  onCancelApprove(): void {
+    this.showApproveConfirmationDialog.set(false);
+    this.approvalNote.set('');
+  }
+
+  /**
+   * Handle Reject action
+   */
+  onReject(): void {
+    if (!this.canApproveOrReject()) {
+      return;
+    }
+    this.rejectionReason.set('');
+    this.showRejectReasonDialog.set(true);
+  }
+
+  /**
+   * Proceed to rejection confirmation after entering reason
+   */
+  onProceedReject(): void {
+    const reason = this.rejectionReason().trim();
+    if (!reason) {
+      this.toasterService.error('Rejection reason is required.');
+      return;
+    }
+    if (reason.length > 255) {
+      this.toasterService.error('Rejection reason must not exceed 255 characters.');
+      return;
+    }
+    this.showRejectReasonDialog.set(false);
+    this.showRejectConfirmationDialog.set(true);
+  }
+
+  /**
+   * Cancel rejection reason entry
+   */
+  onCancelRejectReason(): void {
+    this.showRejectReasonDialog.set(false);
+    this.rejectionReason.set('');
+  }
+
+  /**
+   * Confirm final rejection
+   */
+  onConfirmReject(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const reason = this.rejectionReason().trim();
+    if (!reason) {
+      this.toasterService.error('Rejection reason is required.');
+      return;
+    }
+
+    this.isProcessing.set(true);
+    this.planStore.employeeRejectPlan(planId, reason)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showRejectConfirmationDialog.set(false);
+          this.rejectionReason.set('');
+          this.toasterService.success('Plan has been rejected successfully.');
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error rejecting plan. Please try again.');
+          console.error('Error rejecting plan:', error);
+        }
+      });
+  }
+
+  /**
+   * Cancel final rejection confirmation
+   */
+  onCancelRejectConfirmation(): void {
+    this.showRejectConfirmationDialog.set(false);
+    // Return to reason entry dialog
+    this.showRejectReasonDialog.set(true);
   }
 }

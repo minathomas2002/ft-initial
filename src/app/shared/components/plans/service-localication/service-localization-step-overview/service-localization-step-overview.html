@@ -309,13 +309,13 @@
             fluid
             [maxlength]="500"
             placeholder="Enter local agent details"
-            [formControl]="getFormControl(localAgentInformationFormGroupControls['localAgentDetails'])"
+            [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentDetails'])"
             [appConditionalColorClass]="highlightInput('localAgentDetails')"
             [color]="selectedInputColor()"
           ></textarea>
         </app-group-input-with-checkbox>
         <app-base-error-messages
-          [control]="getFormControl(localAgentInformationFormGroupControls['localAgentDetails'])"
+          [control]="getValueControl(localAgentInformationFormGroupControls['localAgentDetails'])"
           [label]="'Local Agent Details'"
         />
       </div>

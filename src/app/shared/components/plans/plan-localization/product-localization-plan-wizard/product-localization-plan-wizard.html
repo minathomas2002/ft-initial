@@ -78,11 +78,13 @@
     <p-button
       [label]="'Reject'"
       severity="danger"
-      [disabled]="hasSelectedFields()"
+      [disabled]="!canApproveOrReject()"
+      (click)="onReject()"
     ></p-button>
     <p-button
       [label]="'Approve & Forward'"
-      [disabled]="hasSelectedFields()"
+      [disabled]="!canApproveOrReject()"
+      (click)="onApproveAndForward()"
     ></p-button>
     } @else {
     <p-button
@@ -166,6 +168,59 @@
   [icon]="'icon-info'"
   (confirmed)="onConfirmSendBack()"
   (onCancel)="onCancelSendBack()"
+  [isLoading]="isProcessing()"
+/>
+}
+
+<!-- Approve Confirmation Dialog -->
+@if(showApproveConfirmationDialog()){
+<app-approve-reject-dialog
+  [(visible)]="showApproveConfirmationDialog"
+  [title]="'Are you sure you want to approve this plan and forward it to the Division Manager for review?'"
+  [label]="'Approval Note (Optional)'"
+  [placeholder]="'Enter approval note (max 255 characters)'"
+  [maxLength]="255"
+  [(note)]="approvalNote"
+  [confirmationLabel]="'Approve and Forward'"
+  [cancelLabel]="'Cancel'"
+  [icon]="'icon-info'"
+  (confirmed)="onConfirmApprove()"
+  (onCancel)="onCancelApprove()"
+  [isLoading]="isProcessing()"
+/>
+}
+
+<!-- Reject Reason Dialog -->
+@if(showRejectReasonDialog()){
+<app-approve-reject-dialog
+  [(visible)]="showRejectReasonDialog"
+  [title]="'Rejection Reason'"
+  [label]="'Rejection Reason'"
+  [placeholder]="'Enter rejection reason (max 255 characters)'"
+  [maxLength]="255"
+  [(note)]="rejectionReason"
+  [confirmationLabel]="'Reject'"
+  [cancelLabel]="'Back'"
+  [icon]="'icon-info'"
+  [isRequired]="true"
+  (confirmed)="onProceedReject()"
+  (onCancel)="onCancelRejectReason()"
+  [isLoading]="isProcessing()"
+/>
+}
+
+<!-- Reject Confirmation Dialog -->
+@if(showRejectConfirmationDialog()){
+<app-general-confirmation-dialog
+  [(visible)]="showRejectConfirmationDialog"
+  [title]="'Are you sure you want to reject the plan as final rejection?'"
+  [description]="'This action cannot be undone, and the plan will proceed to the investor.'"
+  [confirmationLabel]="'Confirm Rejection'"
+  [cancelLabel]="'Cancel'"
+  [icon]="'icon-info'"
+  [confirmButtonSeverity]="'danger'"
+  (confirmed)="onConfirmReject()"
+  (onCancel)="onCancelRejectConfirmation()"
   [isLoading]="isProcessing()"
 />
 }

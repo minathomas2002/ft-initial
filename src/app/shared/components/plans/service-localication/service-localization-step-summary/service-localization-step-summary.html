@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-8 px-8 pb-10">
+<div class="flex flex-col gap-8">
   <!-- Step 1: Cover Page -->
   <app-summary-section-cover-page
     [isViewMode]="isViewMode()"
@@ -15,24 +15,24 @@
 
   <!-- Step 3: Existing Saudi Company -->
   @if (includeExistingSaudi()) {
-    <app-summary-section-existing-saudi
-      [isViewMode]="isViewMode()"
-      [formGroup]="step3FormGroup"
-      (onEdit)="onEditStepClick(existingSaudiStepNumber())"
-    />
+  <app-summary-section-existing-saudi
+    [isViewMode]="isViewMode()"
+    [formGroup]="step3FormGroup"
+    (onEdit)="onEditStepClick(existingSaudiStepNumber())"
+  />
   }
 
   <!-- Step 4: Direct Localization by Foreign Entity -->
   @if (includeDirectLocalization()) {
-    <app-summary-section-direct-localization
-      [isViewMode]="isViewMode()"
-      [formGroup]="step4FormGroup"
-      (onEdit)="onEditStepClick(directLocalizationStepNumber())"
-    />
+  <app-summary-section-direct-localization
+    [isViewMode]="isViewMode()"
+    [formGroup]="step4FormGroup"
+    (onEdit)="onEditStepClick(directLocalizationStepNumber())"
+  />
   }
 
   <!-- Signature (view/edit modes) -->
   @if (signature() && isViewMode()) {
-    <app-summary-section-signature [signature]="signature()" />
+  <app-summary-section-signature [signature]="signature()" />
   }
 </div>
