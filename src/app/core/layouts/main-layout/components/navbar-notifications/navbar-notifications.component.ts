@@ -23,6 +23,7 @@ import { NotificationsStore } from 'src/app/shared/stores/notifications/notifica
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ServiceLocalizationPlanWizard } from "src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard";
 import { ProductLocalizationPlanWizard } from "src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard";
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-navbar-notifications',
@@ -48,6 +49,8 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
   private readonly notificationStore = inject(NotificationsStore);
   private readonly router = inject(Router);
   private readonly planStore = inject(PlanStore);
+  private readonly toastService = inject(ToasterService);
+
 
   private readonly destroy$ = new Subject<void>();
   readonly notifications = this.notificationStore.notifications;
@@ -144,6 +147,11 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
       // Set mode to view and plan ID
       this.planStore.setWizardMode('view');
       this.planStore.setSelectedPlanId(notification.customData.PlanId);
+
+      if (!notification.customData.PlanType) {
+        this.toastService.error('Plan type is not provided');
+        return;
+      }
 
       notification.customData.PlanType === EOpportunityType.PRODUCT
         ? this.productLocalizationPlanWizardVisibility.set(true)
