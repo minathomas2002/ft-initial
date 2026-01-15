@@ -92,7 +92,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
-    return (this.visibility() && (this.mode() == 'view' || (this.mode() == 'Review')) && this.planStatus() !== null && this.activeStep() < this.stepsWithId().length)
+    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.activeStep() < this.stepsWithId().length)
   });
 
   // Submission confirmation modal
@@ -285,6 +285,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
     if (currentMode === 'Review') return 'Review Service Localization Plan';
+    if (currentMode === 'resubmit') return 'Resubmit Service Localization Plan';
     return 'Service Localization Plan';
   });
 
@@ -299,9 +300,10 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   });
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
   isReviewMode = computed(() => this.planStore.wizardMode() === 'Review');
+  isResubmitMode = computed(() => this.planStore.wizardMode() === 'resubmit');
   shouldShowStatusTag = computed(() => {
     const mode = this.planStore.wizardMode();
-    return ['view', 'edit', 'Review'].includes(mode);
+    return ['view', 'edit', 'Review', 'resubmit'].includes(mode);
   });
   statusBadgeClass = computed(() => {
     const status = this.planStatus();
@@ -337,7 +339,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
       if (!isVisible) return;
 
-      if (currentPlanId && ['view', 'edit', 'Review'].includes(currentMode)) {
+      if (currentPlanId && ['view', 'edit', 'Review', 'resubmit'].includes(currentMode)) {
         this.loadPlanData(currentPlanId);
       } else if (currentMode === 'create' && !currentPlanId) {
         this.serviceLocalizationFormService.resetAllForms();
@@ -455,26 +457,25 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         const currentMode = this.planStore.wizardMode();
         const planStatusValue = data.servicePlan?.status;
 
-        if (['view', 'Review'].includes(currentMode)) {
-          // Disable all forms in view/review mode
+        if (['view', 'Review', 'resubmit'].includes(currentMode)) {
+          // Disable all forms in view/review/resubmit mode
           this.disableAllForms();
-          if (currentMode === 'view') {
-            // Default to summary page when opening in view mode
+          if (currentMode === 'view' || currentMode === 'resubmit') {
+            // Default to summary page when opening in view/resubmit mode
             this.activeStep.set(this.stepsWithId().length);
-
-            // Fetch comments if status is Under Review
-            if (planStatusValue === EInternalUserPlanStatus.UNDER_REVIEW) {
-              this.planStore.getPlanComments(planId)
-                .pipe(
-                  takeUntilDestroyed(this.destroyRef),
-                  catchError((error) => {
-                    console.error('Error loading plan comments:', error);
-                    return of(null);
-                  })
-                )
-                .subscribe();
-            }
           }
+
+          // Fetch comments in review, view, and resubmit modes
+          this.planStore.getPlanComments(planId)
+            .pipe(
+              takeUntilDestroyed(this.destroyRef),
+              catchError((error) => {
+                console.error('Error loading plan comments:', error);
+                return of(null);
+              })
+            )
+            .subscribe();
+
           // Re-evaluate conditional steps after disabling forms (getRawValue() will work correctly)
           this.evaluateConditionalSteps();
         } else if (currentMode === 'edit') {

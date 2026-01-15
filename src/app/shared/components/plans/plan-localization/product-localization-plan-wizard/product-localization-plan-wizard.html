@@ -9,7 +9,7 @@
   (onSaveAsDraft)="saveAsDraft()"
   [isLoading]="isLoading() || isLoadingPlan()"
   [isProcessing]="isProcessing()"
-  [hideSaveAsDraft]="isViewMode() || isReviewMode() || isInvestorViewMode()"
+  [hideSaveAsDraft]="isViewMode() || isReviewMode() || isResubmitMode() || isInvestorViewMode()"
   (onClose)="onClose()"
 >
 
@@ -32,7 +32,7 @@
     </div>
     }
     <app-plan-localization-step-01-overview-company-information-form
-      [isViewMode]="isViewMode() || isReviewMode()"
+      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [pageTitle]="steps()[0].title"
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
@@ -52,7 +52,7 @@
     </div>
     }
     <app-plan-localization-step-02-product-plant-overview-form
-      [isViewMode]="isViewMode() || isReviewMode()"
+      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [pageTitle]="steps()[1].title"
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
@@ -72,7 +72,7 @@
     </div>
     }
     <app-plan-localization-step-03-valueChain-form
-      [isViewMode]="isViewMode() || isReviewMode()"
+      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [pageTitle]="steps()[2].title"
       [(commentPhase)]="step3CommentPhase"
       [(selectedInputs)]="step3SelectedInputs"
