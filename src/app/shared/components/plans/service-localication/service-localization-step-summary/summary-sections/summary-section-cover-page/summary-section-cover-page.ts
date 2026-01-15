@@ -3,12 +3,13 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
+import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-summary-section-cover-page',
-  imports: [SummarySectionHeader, SummaryTableCell, TableModule],
+  imports: [SummarySectionHeader, SummaryField, SummaryTableCell, TableModule],
   templateUrl: './summary-section-cover-page.html',
   styleUrl: './summary-section-cover-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,6 +55,15 @@ export class SummarySectionCoverPage {
   }
 
   // Computed values for Company Information
+  planTitle = computed(() => {
+    const companyInfo = this.coverPageCompanyInformationFormGroup();
+    const planTitleControl = companyInfo?.get(EMaterialsFormControls.planTitle);
+    if (planTitleControl instanceof FormGroup) {
+      return planTitleControl.get(EMaterialsFormControls.value)?.value;
+    }
+    return null;
+  });
+
   companyName = computed(() => {
     const companyInfo = this.coverPageCompanyInformationFormGroup();
     const companyNameControl = companyInfo?.get(EMaterialsFormControls.companyName);

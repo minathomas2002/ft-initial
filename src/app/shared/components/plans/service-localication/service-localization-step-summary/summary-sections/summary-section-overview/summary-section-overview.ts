@@ -150,12 +150,30 @@ export class SummarySectionOverview {
     return null;
   });
 
+  benaRegisteredVendorID = computed(() => {
+    const locationInfo = this.locationInformationFormGroup();
+    const benaVendorIDControl = locationInfo?.get(EMaterialsFormControls.benaRegisteredVendorID);
+    if (benaVendorIDControl instanceof FormGroup) {
+      return benaVendorIDControl.get(EMaterialsFormControls.value)?.value;
+    }
+    return null;
+  });
+
   hasLocalAgent = computed(() => {
     const locationInfo = this.locationInformationFormGroup();
     return locationInfo?.get(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA)?.value ?? null;
   });
 
   // Local Agent Information
+  localAgentDetails = computed(() => {
+    const localAgentInfo = this.localAgentInformationFormGroup();
+    const localAgentDetailsControl = localAgentInfo?.get(EMaterialsFormControls.localAgentDetails);
+    if (localAgentDetailsControl instanceof FormGroup) {
+      return localAgentDetailsControl.get(EMaterialsFormControls.value)?.value;
+    }
+    return null;
+  });
+
   localAgentName = computed(() => {
     const localAgentInfo = this.localAgentInformationFormGroup();
     const localAgentNameControl = localAgentInfo?.get(EMaterialsFormControls.localAgentName);
@@ -304,7 +322,9 @@ export class SummarySectionOverview {
   ceoEmailIDHasComment = computed(() => this.hasFieldComment('ceoEmailID', 'overviewCompanyInformation'));
   globalHQLocationHasComment = computed(() => this.hasFieldComment('globalHQLocation', 'locationInformation'));
   registeredVendorIDHasComment = computed(() => this.hasFieldComment('registeredVendorIDwithSEC', 'locationInformation'));
+  benaRegisteredVendorIDHasComment = computed(() => this.hasFieldComment('benaRegisteredVendorID', 'locationInformation'));
   hasLocalAgentHasComment = computed(() => this.hasFieldComment('doYouCurrentlyHaveLocalAgentInKSA', 'locationInformation'));
+  localAgentDetailsHasComment = computed(() => this.hasFieldComment('localAgentDetails', 'localAgentInformation'));
   localAgentNameHasComment = computed(() => this.hasFieldComment('localAgentName', 'localAgentInformation'));
   contactPersonNameHasComment = computed(() => this.hasFieldComment('contactPersonName', 'localAgentInformation'));
   emailIDHasComment = computed(() => this.hasFieldComment('emailID', 'localAgentInformation'));
