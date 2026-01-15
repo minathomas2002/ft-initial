@@ -79,7 +79,7 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
 
   const action = notification.action;
 
-  if (action === EPlanAction.AutoRejection) {
+  if (action === EPlanAction.AutoRejection || action === EPlanAction.CommentSubmitted) {
     route = defaultRoute;
     params = { searchText };
     behavior = 'planDetails';
