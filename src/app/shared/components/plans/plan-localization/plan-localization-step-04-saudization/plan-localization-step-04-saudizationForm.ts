@@ -62,6 +62,40 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
     return this.formGroup;
   }
 
+  constructor() {
+    super();
+    // Initialize files from form control value
+    const attachmentsControl = this.getAttachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+    if (attachmentsControl) {
+      const control = this.getValueControl(attachmentsControl);
+      const formValue = control.value;
+      if (Array.isArray(formValue)) {
+        this.files.set(formValue);
+      }
+    }
+
+    // Sync files signal changes to form control
+    effect(() => {
+      const filesValue = this.files();
+      const attachmentsControl = this.getAttachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+      if (attachmentsControl) {
+        const control = this.getValueControl(attachmentsControl);
+        // Compare arrays by length and content to avoid infinite loops
+        const currentValue = control.value;
+        const isDifferent = !Array.isArray(currentValue) ||
+          currentValue.length !== filesValue.length ||
+          currentValue.some((file: File, index: number) => file !== filesValue[index]);
+
+        if (isDifferent) {
+          control.setValue(filesValue, { emitEvent: true });
+          // Mark as dirty and trigger validation to show errors
+          control.markAsDirty();
+          control.updateValueAndValidity();
+        }
+      }
+    });
+  }
+
   // Expose base class methods as public for template access
   override onDeleteComments(): void {
     super.onDeleteComments();
