@@ -37,6 +37,7 @@
                       [value]="strategy.serviceName"
                       [isEmpty]="!strategy.serviceName"
                       [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'serviceName')"
+                      [hasComment]="hasLocalizationStrategyComment(rowIndex, 'serviceName')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -44,6 +45,7 @@
                       [value]="strategy.expectedLocalizationDate"
                       [isEmpty]="!strategy.expectedLocalizationDate"
                       [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'expectedLocalizationDate')"
+                      [hasComment]="hasLocalizationStrategyComment(rowIndex, 'expectedLocalizationDate')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -51,6 +53,7 @@
                       [value]="strategy.localizationApproach"
                       [isEmpty]="!strategy.localizationApproach"
                       [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'localizationApproach')"
+                      [hasComment]="hasLocalizationStrategyComment(rowIndex, 'localizationApproach')"
                     />
                     @if (strategy.localizationApproachOther) {
                       <div class="mt-2 text-sm text-gray-600">
@@ -63,6 +66,7 @@
                       [value]="strategy.location"
                       [isEmpty]="!strategy.location"
                       [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'location')"
+                      [hasComment]="hasLocalizationStrategyComment(rowIndex, 'location')"
                     />
                     @if (strategy.locationOther) {
                       <div class="mt-2 text-sm text-gray-600">
@@ -75,6 +79,7 @@
                       [value]="strategy.capexRequired"
                       [isEmpty]="!strategy.capexRequired && strategy.capexRequired !== 0"
                       [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'capexRequired')"
+                      [hasComment]="hasLocalizationStrategyComment(rowIndex, 'capexRequired')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -82,6 +87,7 @@
                       [value]="strategy.supervisionOversight"
                       [isEmpty]="!strategy.supervisionOversight"
                       [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'supervisionOversightEntity')"
+                      [hasComment]="hasLocalizationStrategyComment(rowIndex, 'supervisionOversightEntity')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -89,6 +95,7 @@
                       [value]="strategy.proprietaryTools"
                       [isEmpty]="!strategy.proprietaryTools"
                       [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'willBeAnyProprietaryToolsSystems')"
+                      [hasComment]="hasLocalizationStrategyComment(rowIndex, 'willBeAnyProprietaryToolsSystems')"
                     />
                     @if (strategy.proprietaryToolsExplanation) {
                       <div class="mt-2 text-sm text-gray-600">
@@ -140,6 +147,7 @@
                         [value]="headcount.value"
                         [isEmpty]="!headcount.value && headcount.value !== 0"
                         [hasError]="hasEntityFieldError(headcount.controlName)"
+                        [hasComment]="hasEntityLevelComment(headcount.controlName)"
                       />
                     </td>
                   }
@@ -188,6 +196,7 @@
                       [value]="service.serviceName"
                       [isEmpty]="!service.serviceName"
                       [hasError]="hasServiceLevelFieldError(service.index, 'serviceName')"
+                      [hasComment]="hasServiceLevelComment(service.index, 'serviceName')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -195,6 +204,7 @@
                       [value]="service.expectedLocalizationDate"
                       [isEmpty]="!service.expectedLocalizationDate"
                       [hasError]="hasServiceLevelFieldError(service.index, 'expectedLocalizationDate')"
+                      [hasComment]="hasServiceLevelComment(service.index, 'expectedLocalizationDate')"
                     />
                   </td>
                   @for (yearCell of service.headcountYears; track $index) {
@@ -203,6 +213,7 @@
                         [value]="yearCell.value"
                         [isEmpty]="!yearCell.value && yearCell.value !== 0"
                         [hasError]="hasServiceLevelFieldError(service.index, yearCell.controlName)"
+                        [hasComment]="hasServiceLevelComment(service.index, yearCell.controlName)"
                       />
                     </td>
                   }
@@ -212,6 +223,7 @@
                         [value]="year.value"
                         [isEmpty]="!year.value && year.value !== 0"
                         [hasError]="hasServiceLevelFieldError(service.index, year.controlName)"
+                        [hasComment]="hasServiceLevelComment(service.index, year.controlName)"
                       />
                     </td>
                   }
@@ -220,6 +232,7 @@
                       [value]="service.keyMeasuresToUpskillSaudis"
                       [isEmpty]="!service.keyMeasuresToUpskillSaudis"
                       [hasError]="hasServiceLevelFieldError(service.index, 'keyMeasuresToUpskillSaudis')"
+                      [hasComment]="hasServiceLevelComment(service.index, 'keyMeasuresToUpskillSaudis')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -227,6 +240,7 @@
                       [value]="service.mentionSupportRequiredFromSEC"
                       [isEmpty]="!service.mentionSupportRequiredFromSEC"
                       [hasError]="hasServiceLevelFieldError(service.index, 'mentionSupportRequiredFromSEC')"
+                      [hasComment]="hasServiceLevelComment(service.index, 'mentionSupportRequiredFromSEC')"
                     />
                   </td>
                 </tr>

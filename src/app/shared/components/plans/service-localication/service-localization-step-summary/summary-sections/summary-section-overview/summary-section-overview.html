@@ -11,12 +11,14 @@
         [label]="'Opportunity'"
         [value]="opportunity()"
         [hasError]="hasFieldError('basicInformationFormGroup.opportunity')"
+        [hasComment]="opportunityHasComment()"
         [isEmpty]="!opportunity()"
       />
       <app-summary-field
         [label]="'Submission Date'"
         [value]="submissionDate()"
         [isDate]="true"
+        [hasComment]="submissionDateHasComment()"
         [isEmpty]="!submissionDate()"
       />
     </div>
@@ -31,18 +33,21 @@
         [label]="'Company Name'"
         [value]="companyName()"
         [hasError]="hasFieldError('overviewCompanyInformationFormGroup.companyName.value')"
+        [hasComment]="companyNameHasComment()"
         [isEmpty]="!companyName()"
       />
       <app-summary-field
         [label]="'CEO Name'"
         [value]="ceoName()"
         [hasError]="hasFieldError('overviewCompanyInformationFormGroup.ceoName.value')"
+        [hasComment]="ceoNameHasComment()"
         [isEmpty]="!ceoName()"
       />
       <app-summary-field
         [label]="'CEO Email'"
         [value]="ceoEmailID()"
         [hasError]="hasFieldError('overviewCompanyInformationFormGroup.ceoEmailID.value')"
+        [hasComment]="ceoEmailIDHasComment()"
         [isEmpty]="!ceoEmailID()"
       />
     </div>
@@ -56,12 +61,14 @@
         [label]="'Global HQ Location'"
         [value]="globalHQLocation()"
         [hasError]="hasFieldError('locationInformationFormGroup.globalHQLocation.value')"
+        [hasComment]="globalHQLocationHasComment()"
         [isEmpty]="!globalHQLocation()"
       />
       <app-summary-field
         [label]="'Registered Vendor ID with SEC (if available)'"
         [value]="registeredVendorID()"
         [hasError]="hasFieldError('locationInformationFormGroup.registeredVendorIDwithSEC.value')"
+        [hasComment]="registeredVendorIDHasComment()"
         [isEmpty]="!registeredVendorID()"
       />
       <app-summary-field
@@ -69,6 +76,7 @@
         [value]="hasLocalAgent()"
         [isBoolean]="true"
         [hasError]="hasFieldError('locationInformationFormGroup.doYouCurrentlyHaveLocalAgentInKSA')"
+        [hasComment]="hasLocalAgentHasComment()"
         [isEmpty]="hasLocalAgent() === null"
       />
     </div>
@@ -81,30 +89,35 @@
           [label]="'Local Agent Name'"
           [value]="localAgentName()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.localAgentName.value')"
+          [hasComment]="localAgentNameHasComment()"
           [isEmpty]="!localAgentName()"
         />
         <app-summary-field
           [label]="'Contact Person Name'"
           [value]="contactPersonName()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.contactPersonName.value')"
+          [hasComment]="contactPersonNameHasComment()"
           [isEmpty]="!contactPersonName()"
         />
         <app-summary-field
           [label]="'Email ID'"
           [value]="emailID()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.emailID.value')"
+          [hasComment]="emailIDHasComment()"
           [isEmpty]="!emailID()"
         />
         <app-summary-field
           [label]="'Contact Number'"
           [value]="contactNumber()?.countryCode + ' ' +contactNumber()?.phoneNumber"
           [hasError]="hasFieldError('localAgentInformationFormGroup.contactNumber.value')"
+          [hasComment]="contactNumberHasComment()"
           [isEmpty]="!contactNumber()"
         />
         <app-summary-field
           [label]="'Company HQ Location'"
           [value]="companyLocation()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.companyLocation.value')"
+          [hasComment]="companyLocationHasComment()"
           [isEmpty]="!companyLocation()"
         />
       </div>
@@ -115,7 +128,7 @@
   <!-- Service Details -->
   <div class="flex flex-col gap-4">
     <h3 class="text-lg font-semibold text-[#4A4E5A]">Details of Service Provided</h3>
-      <div class="overflow-x-auto">
+    <div class="overflow-x-auto">
       <div class="rounded-lg border border-gray-300">
         <p-table
           [value]="serviceDetails()"
@@ -136,7 +149,11 @@
             </tr>
           </ng-template>
 
-          <ng-template pTemplate="body" let-service let-rowIndex="rowIndex">
+          <ng-template
+            pTemplate="body"
+            let-service
+            let-rowIndex="rowIndex"
+          >
             <tr>
               <td class="border-t border-gray-300 p-4">{{ rowIndex + 1 }}</td>
 
@@ -145,6 +162,7 @@
                   [value]="service.serviceName"
                   [isEmpty]="!service.serviceName"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceName')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'serviceName')"
                 />
               </td>
 
@@ -153,6 +171,7 @@
                   [value]="service.serviceType"
                   [isEmpty]="!service.serviceType"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceType')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'serviceType')"
                 />
               </td>
 
@@ -161,6 +180,7 @@
                   [value]="service.serviceDescription"
                   [isEmpty]="!service.serviceDescription"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceDescription')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'serviceDescription')"
                 />
               </td>
 
@@ -169,6 +189,7 @@
                   [value]="service.serviceProvidedTo"
                   [isEmpty]="!service.serviceProvidedTo"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceProvidedTo')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'serviceProvidedTo')"
                 />
               </td>
 
@@ -177,6 +198,7 @@
                   [value]="service.totalBusinessDoneLast5Years"
                   [isEmpty]="!service.totalBusinessDoneLast5Years"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'totalBusinessDoneLast5Years')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'totalBusinessDoneLast5Years')"
                 />
               </td>
 
@@ -186,6 +208,7 @@
                   [isBoolean]="true"
                   [isEmpty]="!service.serviceTargetedForLocalization"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceTargetedForLocalization')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'serviceTargetedForLocalization')"
                 />
               </td>
 
@@ -194,6 +217,7 @@
                   [value]="service.expectedLocalizationDate"
                   [isEmpty]="!service.expectedLocalizationDate"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'expectedLocalizationDate')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'expectedLocalizationDate')"
                 />
               </td>
 
@@ -202,6 +226,7 @@
                   [value]="service.serviceLocalizationMethodology"
                   [isEmpty]="!service.serviceLocalizationMethodology"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceLocalizationMethodology')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'serviceLocalizationMethodology')"
                 />
               </td>
             </tr>

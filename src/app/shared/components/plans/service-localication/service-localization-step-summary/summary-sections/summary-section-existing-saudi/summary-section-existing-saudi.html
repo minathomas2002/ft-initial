@@ -39,6 +39,7 @@
                       [value]="company.saudiCompanyName"
                       [isEmpty]="!company.saudiCompanyName"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'saudiCompanyName')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'saudiCompanyName')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -46,6 +47,7 @@
                       [value]="company.registeredVendorIDwithSEC"
                       [isEmpty]="!company.registeredVendorIDwithSEC"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'registeredVendorIDwithSEC')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'registeredVendorIDwithSEC')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -53,6 +55,7 @@
                       [value]="company.benaRegisteredVendorID"
                       [isEmpty]="!company.benaRegisteredVendorID"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'benaRegisteredVendorID')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'benaRegisteredVendorID')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -60,6 +63,7 @@
                       [value]="formatCompanyType(company.companyType)"
                       [isEmpty]="!formatCompanyType(company.companyType)"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'companyType')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'companyType')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -67,6 +71,7 @@
                       [value]="formatQualificationStatus(company.qualificationStatus)"
                       [isEmpty]="!formatQualificationStatus(company.qualificationStatus)"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'qualificationStatus')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'qualificationStatus')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -74,6 +79,7 @@
                       [value]="company.products"
                       [isEmpty]="!company.products"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'products')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'products')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -81,6 +87,7 @@
                       [value]="company.companyOverview"
                       [isEmpty]="!company.companyOverview"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'companyOverview')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'companyOverview')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -88,6 +95,7 @@
                       [value]="company.keyProjectsExecutedByContractorForSEC"
                       [isEmpty]="!company.keyProjectsExecutedByContractorForSEC"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'keyProjectsExecutedByContractorForSEC')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'keyProjectsExecutedByContractorForSEC')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -95,6 +103,7 @@
                       [value]="company.companyOverviewKeyProjectDetails"
                       [isEmpty]="!company.companyOverviewKeyProjectDetails"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'companyOverviewKeyProjectDetails')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'companyOverviewKeyProjectDetails')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -102,6 +111,7 @@
                       [value]="company.companyOverviewOther"
                       [isEmpty]="!company.companyOverviewOther"
                       [hasError]="hasSaudiCompanyFieldError(rowIndex, 'companyOverviewOther')"
+                      [hasComment]="hasSaudiCompanyComment(rowIndex, 'companyOverviewOther')"
                     />
                   </td>
                 </tr>
@@ -141,6 +151,7 @@
                       [value]="partner.agreementType"
                       [isEmpty]="!partner.agreementType"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'agreementType')"
+                      [hasComment]="hasCollaborationComment(rowIndex, 'agreementType')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -148,6 +159,7 @@
                       [value]="partner.agreementOtherDetails"
                       [isEmpty]="!partner.agreementOtherDetails"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'agreementOtherDetails')"
+                      [hasComment]="hasCollaborationComment(rowIndex, 'agreementOtherDetails')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -155,6 +167,7 @@
                       [value]="partner.agreementSigningDate"
                       [isEmpty]="!partner.agreementSigningDate"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'agreementSigningDate')"
+                      [hasComment]="hasCollaborationComment(rowIndex, 'agreementSigningDate')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -162,6 +175,7 @@
                       [value]="partner.supervisionOversight"
                       [isEmpty]="!partner.supervisionOversight"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'supervisionOversightEntity')"
+                      [hasComment]="hasCollaborationComment(rowIndex, 'supervisionOversightEntity')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -169,6 +183,7 @@
                       [value]="partner.whyChoseThisCompany"
                       [isEmpty]="!partner.whyChoseThisCompany"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'whyChoseThisCompany')"
+                      [hasComment]="hasCollaborationComment(rowIndex, 'whyChoseThisCompany')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -176,6 +191,7 @@
                       [value]="partner.summaryOfKeyAgreementClauses"
                       [isEmpty]="!partner.summaryOfKeyAgreementClauses"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'summaryOfKeyAgreementClauses')"
+                      [hasComment]="hasCollaborationComment(rowIndex, 'summaryOfKeyAgreementClauses')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -183,6 +199,7 @@
                       [value]="partner.provideAgreementCopy"
                       [isEmpty]="partner.provideAgreementCopy === null || partner.provideAgreementCopy === undefined"
                       [hasError]="hasCollaborationFieldError(rowIndex, 'provideAgreementCopy')"
+                      [hasComment]="hasCollaborationComment(rowIndex, 'provideAgreementCopy')"
                     />
                   </td>
                 </tr>
@@ -226,6 +243,7 @@
                         [value]="headcount.value"
                         [isEmpty]="!headcount.value && headcount.value !== 0"
                         [hasError]="hasEntityFieldError(headcount.controlName)"
+                        [hasComment]="hasEntityLevelComment(headcount.controlName)"
                       />
                     </td>
                   }
@@ -275,6 +293,7 @@
                       [value]="service.serviceName"
                       [isEmpty]="!service.serviceName"
                       [hasError]="hasServiceLevelFieldError(service.index, 'serviceName')"
+                      [hasComment]="hasServiceLevelComment(service.index, 'serviceName')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -282,6 +301,7 @@
                       [value]="service.expectedLocalizationDate"
                       [isEmpty]="!service.expectedLocalizationDate"
                       [hasError]="hasServiceLevelFieldError(service.index, 'expectedLocalizationDate')"
+                      [hasComment]="hasServiceLevelComment(service.index, 'expectedLocalizationDate')"
                     />
                   </td>
                   @for (yearCell of service.headcountYears; track $index) {
@@ -290,6 +310,7 @@
                         [value]="yearCell.value"
                         [isEmpty]="!yearCell.value && yearCell.value !== 0"
                         [hasError]="hasServiceLevelFieldError(service.index, yearCell.controlName)"
+                        [hasComment]="hasServiceLevelComment(service.index, yearCell.controlName)"
                       />
                     </td>
                   }
@@ -299,6 +320,7 @@
                         [value]="year.value"
                         [isEmpty]="!year.value && year.value !== 0"
                         [hasError]="hasServiceLevelFieldError(service.index, year.controlName)"
+                        [hasComment]="hasServiceLevelComment(service.index, year.controlName)"
                       />
                     </td>
                   }
@@ -307,6 +329,7 @@
                       [value]="service.keyMeasuresToUpskillSaudis"
                       [isEmpty]="!service.keyMeasuresToUpskillSaudis"
                       [hasError]="hasServiceLevelFieldError(service.index, 'keyMeasuresToUpskillSaudis')"
+                      [hasComment]="hasServiceLevelComment(service.index, 'keyMeasuresToUpskillSaudis')"
                     />
                   </td>
                   <td class="border-t border-gray-300 p-3">
@@ -314,6 +337,7 @@
                       [value]="service.mentionSupportRequiredFromSEC"
                       [isEmpty]="!service.mentionSupportRequiredFromSEC"
                       [hasError]="hasServiceLevelFieldError(service.index, 'mentionSupportRequiredFromSEC')"
+                      [hasComment]="hasServiceLevelComment(service.index, 'mentionSupportRequiredFromSEC')"
                     />
                   </td>
                 </tr>

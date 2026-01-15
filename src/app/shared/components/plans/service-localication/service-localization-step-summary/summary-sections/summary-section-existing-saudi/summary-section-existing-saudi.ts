@@ -300,4 +300,70 @@ export class SummarySectionExistingSaudi {
 
     return false;
   });
+
+  // Check if a field has a comment
+  hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {
+    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
+    if (this.correctedFieldIds().length > 0) {
+      const hasCorrectedField = this.pageComments().some(comment =>
+        comment.fields?.some(field =>
+          (field.inputKey === fieldKey || field.inputKey === `${section}.${fieldKey}`) &&
+          (!section || field.section === section) &&
+          field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (rowId === undefined || field.id === rowId)
+        )
+      );
+      if (hasCorrectedField) {
+        return true;
+      }
+    }
+
+    // Check if field has comments
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        (field.inputKey === fieldKey || field.inputKey === `${section}.${fieldKey}`) &&
+        (!section || field.section === section) &&
+        (rowId === undefined || field.id === rowId)
+      )
+    );
+  }
+
+  // Helper methods for checking comments on array items
+  hasSaudiCompanyComment(index: number, fieldKey: string): boolean {
+    const detailsArray = this.saudiCompanyDetailsFormArray();
+    if (!detailsArray || index >= detailsArray.length) return false;
+    const companyGroup = detailsArray.at(index) as FormGroup;
+    const rowId = companyGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'saudiCompanyDetails', rowId);
+  }
+
+  hasCollaborationComment(index: number, fieldKey: string): boolean {
+    const partnershipArray = this.collaborationPartnershipFormArray();
+    if (!partnershipArray || index >= partnershipArray.length) return false;
+    const partnershipGroup = partnershipArray.at(index) as FormGroup;
+    const rowId = partnershipGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'collaborationPartnership', rowId);
+  }
+
+  hasEntityLevelComment(fieldKey: string): boolean {
+    // Entity level array only has one item at index 0
+    const entityArray = this.entityLevelFormArray();
+    if (!entityArray || entityArray.length === 0) return false;
+    const entityGroup = entityArray.at(0) as FormGroup;
+    const rowId = entityGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'entityLevel', rowId);
+  }
+
+  hasServiceLevelComment(index: number, fieldKey: string): boolean {
+    const serviceArray = this.serviceLevelFormArray();
+    if (!serviceArray || index >= serviceArray.length) return false;
+    const serviceGroup = serviceArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'serviceLevel', rowId);
+  }
+
+  hasAttachmentsComment(): boolean {
+    return this.hasFieldComment('attachments', 'attachments');
+  }
 }

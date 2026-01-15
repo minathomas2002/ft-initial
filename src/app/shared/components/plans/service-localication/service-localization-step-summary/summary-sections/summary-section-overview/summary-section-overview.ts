@@ -253,4 +253,56 @@ export class SummarySectionOverview {
   hasServiceDetailFieldError(index: number, controlName: string): boolean {
     return this.hasFieldError(`serviceDetailsFormGroup.${index}.${controlName}.value`);
   }
+
+  // Check if a field has a comment
+  hasFieldComment(fieldKey: string, section?: string, fieldId?: string): boolean {
+    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
+    if (this.correctedFieldIds().length > 0) {
+      const hasCorrectedField = this.pageComments().some(comment =>
+        comment.fields?.some(field =>
+          (field.inputKey === fieldKey || field.inputKey === `${section}.${fieldKey}`) &&
+          (!section || field.section === section) &&
+          field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (fieldId === undefined || field.id === fieldId)
+        )
+      );
+      if (hasCorrectedField) {
+        return true;
+      }
+    }
+
+    // Check if field has comments
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        (field.inputKey === fieldKey || field.inputKey === `${section}.${fieldKey}`) &&
+        (!section || field.section === section) &&
+        (fieldId === undefined || field.id === fieldId)
+      )
+    );
+  }
+
+  // Computed properties for comment status
+  opportunityHasComment = computed(() => this.hasFieldComment('opportunity', 'basicInformation'));
+  submissionDateHasComment = computed(() => this.hasFieldComment('submissionDate', 'basicInformation'));
+  companyNameHasComment = computed(() => this.hasFieldComment('companyName', 'overviewCompanyInformation'));
+  ceoNameHasComment = computed(() => this.hasFieldComment('ceoName', 'overviewCompanyInformation'));
+  ceoEmailIDHasComment = computed(() => this.hasFieldComment('ceoEmailID', 'overviewCompanyInformation'));
+  globalHQLocationHasComment = computed(() => this.hasFieldComment('globalHQLocation', 'locationInformation'));
+  registeredVendorIDHasComment = computed(() => this.hasFieldComment('registeredVendorIDwithSEC', 'locationInformation'));
+  hasLocalAgentHasComment = computed(() => this.hasFieldComment('doYouCurrentlyHaveLocalAgentInKSA', 'locationInformation'));
+  localAgentNameHasComment = computed(() => this.hasFieldComment('localAgentName', 'localAgentInformation'));
+  contactPersonNameHasComment = computed(() => this.hasFieldComment('contactPersonName', 'localAgentInformation'));
+  emailIDHasComment = computed(() => this.hasFieldComment('emailID', 'localAgentInformation'));
+  contactNumberHasComment = computed(() => this.hasFieldComment('contactNumber', 'localAgentInformation'));
+  companyLocationHasComment = computed(() => this.hasFieldComment('companyLocation', 'localAgentInformation'));
+
+  // For service details array items
+  hasServiceDetailComment(index: number, fieldKey: string): boolean {
+    const detailsArray = this.serviceDetailsFormArray();
+    if (!detailsArray || index >= detailsArray.length) return false;
+    const serviceGroup = detailsArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'serviceDetails', rowId);
+  }
 }

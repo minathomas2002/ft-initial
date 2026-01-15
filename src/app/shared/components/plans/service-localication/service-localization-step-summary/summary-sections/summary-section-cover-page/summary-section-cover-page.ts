@@ -79,4 +79,45 @@ export class SummarySectionCoverPage {
   hasServiceItemFieldError(index: number, controlName: string): boolean {
     return this.hasFieldError(`servicesFormGroup.${index}.${controlName}.value`);
   }
+
+  // Check if a field has a comment
+  hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {
+    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
+    if (this.correctedFieldIds().length > 0) {
+      const hasCorrectedField = this.pageComments().some(comment =>
+        comment.fields?.some(field =>
+          (field.inputKey === fieldKey || field.inputKey === `${section}.${fieldKey}`) &&
+          (!section || field.section === section) &&
+          field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (rowId === undefined || field.id === rowId)
+        )
+      );
+      if (hasCorrectedField) {
+        return true;
+      }
+    }
+
+    // Check if field has comments
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        (field.inputKey === fieldKey || field.inputKey === `${section}.${fieldKey}`) &&
+        (!section || field.section === section) &&
+        (rowId === undefined || field.id === rowId)
+      )
+    );
+  }
+
+  // Computed properties for comment status
+  planTitleHasComment = computed(() => this.hasFieldComment('planTitle', 'coverPageCompanyInformation'));
+  companyNameHasComment = computed(() => this.hasFieldComment('companyName', 'coverPageCompanyInformation'));
+
+  // For services array items
+  hasServiceItemComment(index: number): boolean {
+    const servicesArray = this.servicesFormArray();
+    if (!servicesArray || index >= servicesArray.length) return false;
+    const serviceGroup = servicesArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.hasFieldComment('serviceName', 'services', rowId);
+  }
 }
