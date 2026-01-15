@@ -315,6 +315,7 @@ export interface ITimeLineResponse {
   planType: EOpportunityType;
   daysAfterPreviousAction: number;
   comments: ITimelineComment[];
+  reason: string;
 }
 
 export interface IPlanStatus {

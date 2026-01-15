@@ -77,7 +77,7 @@ export class PlansList implements OnInit {
 
   // Determine if user is investor or internal user based on role
   readonly isInvestor = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
-  readonly isInternalUser = computed(() => 
+  readonly isInternalUser = computed(() =>
     this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE])()
   );
 
@@ -153,7 +153,7 @@ export class PlansList implements OnInit {
     // If query params exist, the filter component will handle them via listenToQueryParamChanges()
     // const hasQueryParams = Object.keys(this.route.snapshot.queryParams).length > 0;
     // if (!hasQueryParams) {
-      this.filterService().applyFilter();
+    this.filterService().applyFilter();
     // }
   }
 
@@ -324,6 +324,14 @@ export class PlansList implements OnInit {
   }
 
   onReview(plan: IPlanRecord) {
-    console.log('Review Plan : ', plan);
+    this.planStore.setWizardMode('Review');
+    this.planStore.setSelectedPlanId(plan.id);
+    this.planStore.setPlanStatus(plan.status);
+
+    if (plan.planType === EOpportunityType.PRODUCT) {
+      this.productLocalizationPlanWizardVisibility.set(true);
+    } else if (plan.planType === EOpportunityType.SERVICES) {
+      this.serviceLocalizationPlanWizardVisibility.set(true);
+    }
   }
 }

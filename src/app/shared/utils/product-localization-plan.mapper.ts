@@ -511,7 +511,7 @@ export function mapProductPlanResponseToForm(
       basicInfoForm.get(EMaterialsFormControls.opportunity)?.setValue({
         id: basicInfo.opportunityId,
         name: basicInfo.opportunityTitle
-      });
+      });      
     }
 
     // Set submissionDate from creationDate if available (for view/edit mode)
