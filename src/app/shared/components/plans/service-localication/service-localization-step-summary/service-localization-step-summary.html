@@ -1,5 +1,11 @@
 <div class="flex flex-col gap-8">
   <!-- Step 1: Cover Page -->
+  @if (shouldShowIncomingComments() && hasIncomingStep1Comments()) {
+  <app-page-comment-box
+    [commentTitle]="incomingCommentPersona() || 'Comment'"
+    [commentText]="getIncomingStep1CommentText()"
+  />
+  }
   <app-summary-section-cover-page
     [isViewMode]="isViewMode()"
     [formGroup]="step1FormGroup"
@@ -8,14 +14,20 @@
     [correctedFieldIds]="step1CorrectedFields()"
     (onEdit)="onEditStepClick(coverStepNumber())"
   />
-  @if (isViewMode() && hasStep1Comments()) {
+  @if (isViewMode() && hasStep1OutComingComments()) {
   <app-page-comment-box
-    [commentTitle]="getStep1CommentText() + ' - Cover Page'"
+    [commentTitle]="'Your Comment' + ' - Cover Page'"
     [commentText]="getStep1CommentText()"
   />
   }
 
   <!-- Step 2: Overview & Company Information -->
+  @if (shouldShowIncomingComments() && hasIncomingStep2Comments()) {
+  <app-page-comment-box
+    [commentTitle]="incomingCommentPersona() || 'Comment'"
+    [commentText]="getIncomingStep2CommentText()"
+  />
+  }
   <app-summary-section-overview
     [isViewMode]="isViewMode()"
     [formGroup]="step2FormGroup"
@@ -24,15 +36,21 @@
     [correctedFieldIds]="step2CorrectedFields()"
     (onEdit)="onEditStepClick(overviewStepNumber())"
   />
-  @if (isViewMode() && hasStep2Comments()) {
+  @if (isViewMode() && hasStep2OutComingComments()) {
   <app-page-comment-box
-    [commentTitle]="getStep2CommentText() + ' - Overview'"
+    [commentTitle]="'Your Comment' + ' - Overview'"
     [commentText]="getStep2CommentText()"
   />
   }
 
   <!-- Step 3: Existing Saudi Company -->
   @if (includeExistingSaudi()) {
+  @if (shouldShowIncomingComments() && hasIncomingStep3Comments()) {
+  <app-page-comment-box
+    [commentTitle]="incomingCommentPersona() || 'Comment'"
+    [commentText]="getIncomingStep3CommentText()"
+  />
+  }
   <app-summary-section-existing-saudi
     [isViewMode]="isViewMode()"
     [formGroup]="step3FormGroup"
@@ -41,9 +59,9 @@
     [correctedFieldIds]="step3CorrectedFields()"
     (onEdit)="onEditStepClick(existingSaudiStepNumber())"
   />
-  @if (isViewMode() && hasStep3Comments()) {
+  @if (isViewMode() && hasStep3OutComingComments()) {
   <app-page-comment-box
-    [commentTitle]="getStep3CommentText() + ' - Existing Saudi Co.'"
+    [commentTitle]="'Your Comment' + ' - Existing Saudi Co.'"
     [commentText]="getStep3CommentText()"
   />
   }
@@ -51,6 +69,12 @@
 
   <!-- Step 4: Direct Localization by Foreign Entity -->
   @if (includeDirectLocalization()) {
+  @if (shouldShowIncomingComments() && hasIncomingStep4Comments()) {
+  <app-page-comment-box
+    [commentTitle]="incomingCommentPersona() || 'Comment'"
+    [commentText]="getIncomingStep4CommentText()"
+  />
+  }
   <app-summary-section-direct-localization
     [isViewMode]="isViewMode()"
     [formGroup]="step4FormGroup"
@@ -59,9 +83,9 @@
     [correctedFieldIds]="step4CorrectedFields()"
     (onEdit)="onEditStepClick(directLocalizationStepNumber())"
   />
-  @if (isViewMode() && hasStep4Comments()) {
+  @if (isViewMode() && hasStep4OutComingComments()) {
   <app-page-comment-box
-    [commentTitle]="getStep4CommentText() + ' - Direct Localization'"
+    [commentTitle]="'Your Comment' + ' - Direct Localization'"
     [commentText]="getStep4CommentText()"
   />
   }

@@ -11,6 +11,7 @@ import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
   selector: 'app-plan-localization-step-05-summary',
@@ -46,6 +47,7 @@ export class PlanLocalizationStep05Summary {
   private readonly toasterService = inject(ToasterService);
   private readonly changeDetectionRef = inject(ChangeDetectorRef);
   private readonly i18nService = inject(I18nService);
+  private readonly planStore = inject(PlanStore);
 
   onEditStep = output<number>();
   onSubmit = output<void>();
@@ -96,6 +98,83 @@ export class PlanLocalizationStep05Summary {
     return this.step4Comments().length > 0 ? this.step4Comments() :
       this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title'));
   });
+
+  // Incoming comments from plan store (API response)
+  planComments = this.planStore.planComments;
+  incomingCommentPersona = this.planStore.commentPersona;
+
+  // Computed signal to check if incoming comments should be shown
+  shouldShowIncomingComments = computed(() => {
+    const mode = this.planStore.wizardMode();
+    return mode === 'view' || mode === 'Review' || mode === 'resubmit';
+  });
+
+  // Computed signals for incoming comments per step
+  incomingStep1Comments = computed(() => {
+    const comments = this.planComments()?.comments || [];
+    const step1Title = this.i18nService.translate('plans.wizard.step1.title');
+    return comments.filter(c => c.pageTitleForTL === step1Title);
+  });
+
+  incomingStep2Comments = computed(() => {
+    const comments = this.planComments()?.comments || [];
+    const step2Title = this.i18nService.translate('plans.wizard.step2.title');
+    return comments.filter(c => c.pageTitleForTL === step2Title);
+  });
+
+  incomingStep3Comments = computed(() => {
+    const comments = this.planComments()?.comments || [];
+    const step3Title = this.i18nService.translate('plans.wizard.step3.title');
+    return comments.filter(c => c.pageTitleForTL === step3Title);
+  });
+
+  incomingStep4Comments = computed(() => {
+    const comments = this.planComments()?.comments || [];
+    const step4Title = this.i18nService.translate('plans.wizard.step4.title');
+    return comments.filter(c => c.pageTitleForTL === step4Title);
+  });
+
+  // Computed signals to check if incoming comments exist and have content
+  hasIncomingStep1Comments = computed(() => {
+    const comments = this.incomingStep1Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep2Comments = computed(() => {
+    const comments = this.incomingStep2Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep3Comments = computed(() => {
+    const comments = this.incomingStep3Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep4Comments = computed(() => {
+    const comments = this.incomingStep4Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  // Helper methods to get combined incoming comment text for each step
+  getIncomingStep1CommentText(): string {
+    const comments = this.incomingStep1Comments();
+    return comments.map(c => c.comment).join('\n\n');
+  }
+
+  getIncomingStep2CommentText(): string {
+    const comments = this.incomingStep2Comments();
+    return comments.map(c => c.comment).join('\n\n');
+  }
+
+  getIncomingStep3CommentText(): string {
+    const comments = this.incomingStep3Comments();
+    return comments.map(c => c.comment).join('\n\n');
+  }
+
+  getIncomingStep4CommentText(): string {
+    const comments = this.incomingStep4Comments();
+    return comments.map(c => c.comment).join('\n\n');
+  }
 
   // Validation errors state
   validationErrors = signal<Map<number, IStepValidationErrors>>(new Map());
