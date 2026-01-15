@@ -33,21 +33,12 @@ export class FormUtilityService {
       }
 
       if (control instanceof FormArray) {
-        // Count array-level errors (if any) only if interacted with
-        if ((control.dirty || control.touched) && control.invalid && control.errors) {
-          errorCount += Object.keys(control.errors).length;
+        // If FormArray is invalid (either has array-level errors OR children have errors),
+        // count it as 1 total and don't count individual FormControls inside it.
+        // The FormArray being invalid already represents that there are errors inside it.
+        if ((control.dirty || control.touched) && control.invalid) {
+          errorCount += 1;
         }
-
-        // IMPORTANT: recurse into array items (tables/rows)
-        control.controls.forEach((arrayControl) => {
-          if (arrayControl instanceof FormGroup) {
-            errorCount += this.countFormErrors(arrayControl);
-          } else if (arrayControl instanceof FormControl) {
-            if ((arrayControl.dirty || arrayControl.touched) && arrayControl.invalid) {
-              errorCount++;
-            }
-          }
-        });
         return;
       }
 
