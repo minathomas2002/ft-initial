@@ -24,6 +24,7 @@ import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans
 import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
@@ -44,6 +45,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     FormsModule,
     BaseLabelComponent,
     ConditionalColorClassDirective,
+    PageCommentBox,
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',

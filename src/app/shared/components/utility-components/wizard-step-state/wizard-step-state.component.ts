@@ -6,6 +6,8 @@ import { FormUtilityService } from 'src/app/shared/services/form-utility/form-ut
 import { merge, startWith, distinctUntilChanged } from 'rxjs';
 import { map } from 'rxjs';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { ERoles } from 'src/app/shared/enums/roles.enum';
 
 @Component({
   selector: 'app-wizard-step-state',
@@ -20,9 +22,24 @@ export class WizardStepStateComponent {
   formState = computed(() => this.stepState().formState);
   commentColor = computed(() => this.stepState().commentColor);
   planStore = inject(PlanStore);
+  authStore = inject(AuthStore);
   viewMode = computed(() => this.planStore.wizardMode());
 
+  // Check if user is investor persona
+  isInvestorPersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    const hasInvestorCode = !!userProfile.investorCode;
+    const hasNoEmployeeId = !userProfile.employeeID;
+    const hasInvestorRole = userProfile.roleCodes?.includes(ERoles.INVESTOR) ?? false;
+    return (hasInvestorCode && hasNoEmployeeId) || hasInvestorRole;
+  });
+
   commentBadgeSeverity = computed(() => {
+    // Always use warn (orange) for investor persona
+    if (this.isInvestorPersona()) {
+      return 'warn';
+    }
     // For investor view mode (when fieldsRequiringUpdate is defined), always use orange/warn for comment badge
     if (this.stepState().fieldsRequiringUpdate !== undefined) {
       return 'warn';

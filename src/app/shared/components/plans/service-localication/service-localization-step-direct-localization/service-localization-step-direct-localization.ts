@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 
 @Component({
   selector: 'app-service-localization-step-direct-localization',
@@ -38,7 +39,8 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     CommentStateComponent,
     GeneralConfirmationDialogComponent,
     FormsModule,
-    ConditionalColorClassDirective
+    ConditionalColorClassDirective,
+    PageCommentBox
   ],
   templateUrl: './service-localization-step-direct-localization.html',
   styleUrl: './service-localization-step-direct-localization.scss',

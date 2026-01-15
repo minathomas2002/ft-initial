@@ -32,6 +32,7 @@ import { TColors } from "src/app/shared/interfaces";
 import { AuthStore } from "src/app/shared/stores/auth/auth.store";
 import { ERoles } from "src/app/shared/enums/roles.enum";
 import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
+import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 
@@ -51,7 +52,8 @@ export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
     TimelineDialog,
     GeneralConfirmationDialogComponent,
     ApproveRejectDialogComponent,
-    TranslatePipe
+    TranslatePipe,
+    PageCommentBox
   ],
   templateUrl: './product-localization-plan-wizard.html',
   styleUrl: './product-localization-plan-wizard.scss',
@@ -104,7 +106,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         isActive: this.activeStep() === 1,
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: this.step1CommentPhase() === 'none',
-        commentsCount: this.isViewMode() && this.planComments() ? this.step1CorrectedFields().length : this.step1SelectedInputs().length,
+        commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
         commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0 && this.isEmployeePersona()) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange'),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step1CorrectedFields().length : 0
       },
@@ -114,7 +116,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         isActive: this.activeStep() === 2,
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: this.step2CommentPhase() === 'none',
-        commentsCount: this.isViewMode() && this.planComments() ? this.step2CorrectedFields().length : this.step2SelectedInputs().length,
+        commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
         commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0 && this.isEmployeePersona()) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange'),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step2CorrectedFields().length : 0
       },
@@ -124,7 +126,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         isActive: this.activeStep() === 3,
         formState: this.productPlanFormService.step3_valueChain,
         hasErrors: this.step3CommentPhase() === 'none',
-        commentsCount: this.isViewMode() && this.planComments() ? this.step3CorrectedFields().length : this.step3SelectedInputs().length,
+        commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
         commentColor: (this.isViewMode() && this.step3CorrectedFields().length > 0) ? 'green' : (this.step3CommentPhase() === 'none' ? 'green' : 'orange'),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step3CorrectedFields().length : 0
       },
@@ -134,7 +136,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         isActive: this.activeStep() === 4,
         formState: this.productPlanFormService.step4_saudization,
         hasErrors: this.step4CommentPhase() === 'none',
-        commentsCount: this.isViewMode() && this.planComments() ? this.step4CorrectedFields().length : this.step4SelectedInputs().length,
+        commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
         commentColor: (this.isViewMode() && this.step4CorrectedFields().length > 0) ? 'green' : (this.step4CommentPhase() === 'none' ? 'green' : 'orange'),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step4CorrectedFields().length : 0
       },
@@ -207,6 +209,23 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
   step4CorrectedFields = computed<string[]>(() => {
     return this.step4Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  });
+
+  // Computed signals to map comment fields to selectedInputs for each step
+  step1CommentFields = computed<IFieldInformation[]>(() => {
+    return this.step1Comments().flatMap(c => c.fields);
+  });
+
+  step2CommentFields = computed<IFieldInformation[]>(() => {
+    return this.step2Comments().flatMap(c => c.fields);
+  });
+
+  step3CommentFields = computed<IFieldInformation[]>(() => {
+    return this.step3Comments().flatMap(c => c.fields);
+  });
+
+  step4CommentFields = computed<IFieldInformation[]>(() => {
+    return this.step4Comments().flatMap(c => c.fields);
   });
 
   // Computed signals for comment text display
@@ -541,7 +560,10 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
               return of(null);
             })
           )
-          .subscribe();
+          .subscribe(() => {
+            // Map comment fields to selectedInputs for each step when comments are loaded
+            this.mapCommentFieldsToSelectedInputs();
+          });
       }
     } else if (currentMode === 'edit') {
       // Enable all forms in edit mode without resetting read-only field values
@@ -1190,5 +1212,17 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     this.showRejectConfirmationDialog.set(false);
     // Return to reason entry dialog
     this.showRejectReasonDialog.set(true);
+  }
+
+  /**
+   * Maps comment fields from API response to selectedInputs for each step
+   * This allows step components to use the fields for highlighting and display
+   */
+  private mapCommentFieldsToSelectedInputs(): void {
+    // Map fields from comments to selectedInputs for each step
+    this.step1SelectedInputs.set(this.step1CommentFields());
+    this.step2SelectedInputs.set(this.step2CommentFields());
+    this.step3SelectedInputs.set(this.step3CommentFields());
+    this.step4SelectedInputs.set(this.step4CommentFields());
   }
 }
