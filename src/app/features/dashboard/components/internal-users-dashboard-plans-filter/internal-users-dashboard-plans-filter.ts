@@ -84,17 +84,18 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
     ];
   }
 
+  // TODO: Uncomment these statuses after completing current scope
   // Division Manager Statuses Options
   private getDivisionManagerStatusOptions(): IDropdownOption[] {
     return [
-      {
-        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
-        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
-      },
-      {
-        label: this.i18nService.translate('plans.employee_status.deptRejected'),
-        value: EInternalUserPlanStatus.DEPT_REJECTED,
-      },
+      // {
+      //   label: this.i18nService.translate('plans.employee_status.employeeApproved'),
+      //   value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+      // },
+      // {
+      //   label: this.i18nService.translate('plans.employee_status.deptRejected'),
+      //   value: EInternalUserPlanStatus.DEPT_REJECTED,
+      // },
       {
         label: this.i18nService.translate('plans.employee_status.unassigned'),
         value: EInternalUserPlanStatus.UNASSIGNED,
