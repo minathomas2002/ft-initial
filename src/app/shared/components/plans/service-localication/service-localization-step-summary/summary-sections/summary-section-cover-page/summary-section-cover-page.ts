@@ -133,8 +133,8 @@ export class SummarySectionCoverPage {
   }
 
   // Computed properties for comment status
-  planTitleHasComment = computed(() => this.hasFieldComment('planTitle', 'coverPageCompanyInformation'));
-  companyNameHasComment = computed(() => this.hasFieldComment('companyName', 'coverPageCompanyInformation'));
+  planTitleHasComment = computed(() => this.hasFieldComment('planTitle', 'companyInformation'));
+  companyNameHasComment = computed(() => this.hasFieldComment('companyName', 'companyInformation'));
 
   // For services array items
   hasServiceItemComment(index: number): boolean {
