@@ -29,10 +29,12 @@ export class OpportunityRequestsAdapter {
       }));
     };
 
+    const { startDate, endDate, image: _image, ...opportunityInformationFrom } = formValue.opportunityInformationFrom;
+
     return {
-      ...formValue.opportunityInformationFrom,
-      startDate: formValue.opportunityInformationFrom.dateRange?.[0]?.toLocaleDateString("en-CA") ?? "",
-      endDate: formValue.opportunityInformationFrom.dateRange?.[1]?.toLocaleDateString("en-CA") ?? "",
+      ...opportunityInformationFrom,
+      startDate: startDate?.toLocaleDateString("en-CA") ?? "",
+      endDate: endDate?.toLocaleDateString("en-CA") ?? "",
       image,
       designEngineerings: mapKeyActivities(formValue.opportunityLocalizationForm.designEngineerings),
       sourcings: mapKeyActivities(formValue.opportunityLocalizationForm.sourcings),
