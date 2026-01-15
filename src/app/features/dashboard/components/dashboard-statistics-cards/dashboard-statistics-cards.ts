@@ -37,7 +37,7 @@ export class DashboardStatisticsCards {
    * Computed signal to determine if user is an Employee
    * Employees see different statistics cards than managers
    */
-  readonly isEmployee = computed(() => 
+  readonly isEmployee = computed(() =>
     this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])()
   );
 
@@ -45,7 +45,7 @@ export class DashboardStatisticsCards {
    * Computed signal to determine if user is an Investor
    * Investors see different statistics cards
    */
-  readonly isInvestor = computed(() => 
+  readonly isInvestor = computed(() =>
     this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()
   );
 
@@ -141,13 +141,12 @@ export class DashboardStatisticsCards {
    * Computed signal to get the active cards based on user role
    */
   readonly activeCards = computed<IStatisticsCard[]>(() => {
-    if (this.isInvestor()) {
+    if (this.isInvestor())
       return this.investorCards();
-    }
-    if (this.isEmployee()) {
+    else if (this.isEmployee())
       return this.employeeCards();
-    }
-    return this.managerCards();
+    else
+      return this.managerCards();
   });
 
   /**
