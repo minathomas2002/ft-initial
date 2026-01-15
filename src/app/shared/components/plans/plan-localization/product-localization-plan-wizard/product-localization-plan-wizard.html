@@ -24,19 +24,25 @@
 
   <ng-template [appStepContent]="1">
     <app-plan-localization-step-01-overview-company-information-form
+      [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[0].title"
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
       [selectedInputColor]="step1CommentPhase() === 'none' ? 'green' : 'orange'"
+      [investorComments]="step1Comments()"
+      [correctedFieldIds]="step1CorrectedFields()"
     />
   </ng-template>
 
   <ng-template [appStepContent]="2">
     <app-plan-localization-step-02-product-plant-overview-form
+      [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[1].title"
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
       [selectedInputColor]="step2CommentPhase() === 'none' ? 'green' : 'orange'"
+      [investorComments]="step2Comments()"
+      [correctedFieldIds]="step2CorrectedFields()"
     />
   </ng-template>
 
@@ -47,6 +53,8 @@
       [(commentPhase)]="step3CommentPhase"
       [(selectedInputs)]="step3SelectedInputs"
       [selectedInputColor]="step3CommentPhase() === 'none' ? 'green' : 'orange'"
+      [investorComments]="step3Comments()"
+      [correctedFieldIds]="step3CorrectedFields()"
     />
   </ng-template>
 
@@ -58,6 +66,8 @@
       [(commentPhase)]="step4CommentPhase"
       [(selectedInputs)]="step4SelectedInputs"
       [selectedInputColor]="step4CommentPhase() === 'none' ? 'green' : 'orange'"
+      [investorComments]="step4Comments()"
+      [correctedFieldIds]="step4CorrectedFields()"
     />
   </ng-template>
 
@@ -66,6 +76,14 @@
       [isViewMode]="isViewMode()"
       [pageComments]="collectAllPageComments()"
       [signature]="planSignature()"
+      [step1Comments]="step1Comments()"
+      [step2Comments]="step2Comments()"
+      [step3Comments]="step3Comments()"
+      [step4Comments]="step4Comments()"
+      [step1CorrectedFields]="step1CorrectedFields()"
+      [step2CorrectedFields]="step2CorrectedFields()"
+      [step3CorrectedFields]="step3CorrectedFields()"
+      [step4CorrectedFields]="step4CorrectedFields()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onValidationErrorsChange)="updateValidationErrors($event)"

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
@@ -15,6 +16,8 @@ import { TableModule } from 'primeng/table';
 export class SummarySectionCoverPage {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 
   // Form group accessors

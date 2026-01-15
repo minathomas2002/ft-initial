@@ -341,3 +341,8 @@ export interface IFieldInformation {
   value?: string;
   id?: string;
 }
+
+export interface IPlanCommentResponse {
+  comments: IPageComment[];
+  creatorRole: number;
+}

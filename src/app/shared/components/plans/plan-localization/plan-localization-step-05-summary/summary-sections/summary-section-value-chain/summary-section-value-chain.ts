@@ -22,6 +22,8 @@ export class SummarySectionValueChain {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
   private readonly planStore = inject(PlanStore);
   inHouseOrProcuredOptions = this.planStore.inHouseProcuredOptions;

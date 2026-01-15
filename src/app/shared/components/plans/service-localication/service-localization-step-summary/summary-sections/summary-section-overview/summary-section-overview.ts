@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls, EYesNo } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -18,6 +19,8 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 export class SummarySectionOverview {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 
   planYesOrNoEnum = EYesNo;

@@ -15,7 +15,7 @@ import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
-import { IFieldInformation, IPageComment, IProductPlanResponse, ReviewPlanRequest, Signature } from "src/app/shared/interfaces/plans.interface";
+import { IFieldInformation, IPageComment, IProductPlanResponse, ReviewPlanRequest, Signature, IPlanCommentResponse } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
@@ -100,8 +100,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         isActive: this.activeStep() === 1,
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: this.step1CommentPhase() === 'none',
-        commentsCount: this.step1SelectedInputs().length,
-        commentColor: this.step1CommentPhase() === 'none' ? 'green' : 'orange'
+        commentsCount: this.isViewMode() && this.planComments() ? this.step1CorrectedFields().length : this.step1SelectedInputs().length,
+        commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange')
       },
       {
         title: this.i18nService.translate('plans.wizard.step2.title'),
@@ -109,8 +109,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         isActive: this.activeStep() === 2,
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: this.step2CommentPhase() === 'none',
-        commentsCount: this.step2SelectedInputs().length,
-        commentColor: this.step2CommentPhase() === 'none' ? 'green' : 'orange'
+        commentsCount: this.isViewMode() && this.planComments() ? this.step2CorrectedFields().length : this.step2SelectedInputs().length,
+        commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange')
       },
       {
         title: this.i18nService.translate('plans.wizard.step3.title'),
@@ -118,8 +118,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         isActive: this.activeStep() === 3,
         formState: this.productPlanFormService.step3_valueChain,
         hasErrors: this.step3CommentPhase() === 'none',
-        commentsCount: this.step3SelectedInputs().length,
-        commentColor: this.step3CommentPhase() === 'none' ? 'green' : 'orange'
+        commentsCount: this.isViewMode() && this.planComments() ? this.step3CorrectedFields().length : this.step3SelectedInputs().length,
+        commentColor: (this.isViewMode() && this.step3CorrectedFields().length > 0) ? 'green' : (this.step3CommentPhase() === 'none' ? 'green' : 'orange')
       },
       {
         title: this.i18nService.translate('plans.wizard.step4.title'),
@@ -127,8 +127,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         isActive: this.activeStep() === 4,
         formState: this.productPlanFormService.step4_saudization,
         hasErrors: this.step4CommentPhase() === 'none',
-        commentsCount: this.step4SelectedInputs().length,
-        commentColor: this.step4CommentPhase() === 'none' ? 'green' : 'orange'
+        commentsCount: this.isViewMode() && this.planComments() ? this.step4CorrectedFields().length : this.step4SelectedInputs().length,
+        commentColor: (this.isViewMode() && this.step4CorrectedFields().length > 0) ? 'green' : (this.step4CommentPhase() === 'none' ? 'green' : 'orange')
       },
       {
         title: this.i18nService.translate('plans.wizard.step5.title'),
@@ -143,6 +143,54 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   step2SelectedInputs = signal<IFieldInformation[]>([]);
   step3SelectedInputs = signal<IFieldInformation[]>([]);
   step4SelectedInputs = signal<IFieldInformation[]>([]);
+
+  // Plan comments from API
+  planComments = this.planStore.planComments;
+
+  // Computed signals to map comments to each step based on pageTitleForTL
+  step1Comments = computed<IPageComment[]>(() => {
+    const comments = this.planComments()?.comments || [];
+    // Match by step title translation key or actual title
+    return comments.filter(c => {
+      const stepTitle = this.i18nService.translate('plans.wizard.step1.title');
+      return c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Overview & Company Information';
+    });
+  });
+
+  step2Comments = computed<IPageComment[]>(() => {
+    const comments = this.planComments()?.comments || [];
+    const stepTitle = this.i18nService.translate('plans.wizard.step2.title');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Product Plant Overview');
+  });
+
+  step3Comments = computed<IPageComment[]>(() => {
+    const comments = this.planComments()?.comments || [];
+    const stepTitle = this.i18nService.translate('plans.wizard.step3.title');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Value Chain');
+  });
+
+  step4Comments = computed<IPageComment[]>(() => {
+    const comments = this.planComments()?.comments || [];
+    const stepTitle = this.i18nService.translate('plans.wizard.step4.title');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Saudization');
+  });
+
+  // Computed signals to extract corrected field IDs for each step
+  step1CorrectedFields = computed<string[]>(() => {
+    return this.step1Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  });
+
+  step2CorrectedFields = computed<string[]>(() => {
+    return this.step2Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  });
+
+  step3CorrectedFields = computed<string[]>(() => {
+    return this.step3Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  });
+
+  step4CorrectedFields = computed<string[]>(() => {
+    return this.step4Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  });
   wizardTitle = computed(() => {
     const currentMode = this.planStore.wizardMode();
     this.i18nService.currentLanguage();
@@ -345,12 +393,11 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
             return of(null);
           }
 
-          // Get opportunity details and update availableOpportunities for edit/view/Review modes
+          // Get opportunity details and update availableOpportunities for edit mode
           const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-          const isEditOrViewOrReview =
-            this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review';
+          const isEditOrViewMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view';
 
-          if (opportunityId && isEditOrViewOrReview) {
+          if (opportunityId && isEditOrViewMode) {
             // Chain opportunity details loading, catch errors to continue with form mapping
             return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
               .pipe(
@@ -379,7 +426,12 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
       )
       .subscribe((responseBody) => {
         if (responseBody) {
-          this.planStatus.set(responseBody.productPlan.status ?? null);
+          const status = responseBody.productPlan.status ?? null;
+          this.planStatus.set(status);
+          // Set plan status in store
+          if (status !== null) {
+            this.planStore.setPlanStatus(status);
+          }
           this.mapPlanDataToForm(responseBody);
         }
       });
@@ -398,11 +450,28 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     }
 
     const currentMode = this.planStore.wizardMode();
+    const planStatusValue = response.productPlan?.status;
 
     // Handle forms based on mode
     if (['view', 'Review'].includes(currentMode)) {
       // Disable all forms in view mode
       this.disableAllForms();
+      // Default to summary page when opening in view mode
+      this.activeStep.set(5);
+
+      // Fetch comments if status is Under Review
+      const planId = this.planStore.selectedPlanId();
+      if (planId) {
+        this.planStore.getPlanComments(planId)
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            catchError((error) => {
+              console.error('Error loading plan comments:', error);
+              return of(null);
+            })
+          )
+          .subscribe();
+      }
     } else if (currentMode === 'edit') {
       // Enable all forms in edit mode without resetting read-only field values
       this.enableAllFormsWithoutResettingReadOnly();

@@ -27,6 +27,8 @@ export class SummarySectionSaudization {
 
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 
   // Expose enum to template

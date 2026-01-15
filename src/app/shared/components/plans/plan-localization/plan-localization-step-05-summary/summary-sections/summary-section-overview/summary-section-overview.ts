@@ -20,6 +20,8 @@ export class SummarySectionOverview {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
   private datePipe = inject(DatePipe);
 

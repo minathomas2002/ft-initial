@@ -3,6 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -18,6 +19,8 @@ import { TableModule } from 'primeng/table';
 export class SummarySectionDirectLocalization {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 
   EMaterialsFormControls = EMaterialsFormControls;
