@@ -72,6 +72,13 @@
         [isEmpty]="!registeredVendorID()"
       />
       <app-summary-field
+        [label]="'BENA Registered Vendor ID (Required)'"
+        [value]="benaRegisteredVendorID()"
+        [hasError]="hasFieldError('locationInformationFormGroup.benaRegisteredVendorID.value')"
+        [hasComment]="benaRegisteredVendorIDHasComment()"
+        [isEmpty]="!benaRegisteredVendorID()"
+      />
+      <app-summary-field
         [label]="'Do you currently have local Agent in KSA?'"
         [value]="hasLocalAgent()"
         [isBoolean]="true"
@@ -85,6 +92,14 @@
     <div class="flex flex-col gap-4">
       <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-summary-field
+          class="col-span-2"
+          [label]="'Local Agent Details'"
+          [value]="localAgentDetails()"
+          [hasError]="hasFieldError('localAgentInformationFormGroup.localAgentDetails.value')"
+          [hasComment]="localAgentDetailsHasComment()"
+          [isEmpty]="!localAgentDetails()"
+        />
         <app-summary-field
           [label]="'Local Agent Name'"
           [value]="localAgentName()"
@@ -140,6 +155,7 @@
               <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]"># of Services</th>
               <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[220px]">Service Name</th>
               <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]">Service Type</th>
+              <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]">Service Category</th>
               <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[360px]">Service Description</th>
               <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[220px]">Service Provided to</th>
               <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[240px]">Total Business Done (Last 5 Years)</th>
@@ -172,6 +188,15 @@
                   [isEmpty]="!service.serviceType"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceType')"
                   [hasComment]="hasServiceDetailComment(rowIndex, 'serviceType')"
+                />
+              </td>
+
+              <td class="border-t border-gray-300 p-4">
+                <app-summary-table-cell
+                  [value]="service.serviceCategory"
+                  [isEmpty]="!service.serviceCategory"
+                  [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceCategory')"
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'serviceCategory')"
                 />
               </td>
 
