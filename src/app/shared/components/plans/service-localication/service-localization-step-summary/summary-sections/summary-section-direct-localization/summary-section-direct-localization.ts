@@ -8,10 +8,11 @@ import { SummarySectionHeader } from '../../../../summary-section-header/summary
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-summary-section-direct-localization',
-  imports: [SummarySectionHeader, SummaryTableCell, TableModule],
+  imports: [SummarySectionHeader, SummaryTableCell, TableModule, TooltipModule],
   templateUrl: './summary-section-direct-localization.html',
   styleUrl: './summary-section-direct-localization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,7 +20,8 @@ import { TableModule } from 'primeng/table';
 export class SummarySectionDirectLocalization {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
-  investorComments = input<IPageComment[]>([]);
+  pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 
@@ -214,5 +216,86 @@ export class SummarySectionDirectLocalization {
 
   hasServiceLevelFieldError(index: number, controlName: string): boolean {
     return this.hasFieldError(`serviceLevelFormGroup.${index}.${controlName}.value`);
+  }
+
+  // Check if a field has a comment
+  hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {
+    // Helper function to check if inputKey matches the fieldKey
+    // Handles cases where inputKey might have an index suffix (e.g., 'fieldName_0', 'fieldName_1')
+    const matchesInputKey = (inputKey: string): boolean => {
+      // Exact match
+      if (inputKey === fieldKey) return true;
+      // Match with section prefix
+      if (section && inputKey === `${section}.${fieldKey}`) return true;
+      // Match with index suffix (for table rows): 'fieldKey_0', 'fieldKey_1', etc.
+      if (inputKey.startsWith(fieldKey + '_') && /^\d+$/.test(inputKey.substring(fieldKey.length + 1))) return true;
+      // Match with section prefix and index suffix: 'section.fieldKey_0', 'section.fieldKey_1', etc.
+      if (section && inputKey.startsWith(`${section}.${fieldKey}_`) && /^\d+$/.test(inputKey.substring(`${section}.${fieldKey}`.length + 1))) return true;
+      return false;
+    };
+
+    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
+    if (this.correctedFieldIds().length > 0) {
+      const hasCorrectedField = this.pageComments().some(comment =>
+        comment.fields?.some(field =>
+          matchesInputKey(field.inputKey) &&
+          (!section || field.section === section) &&
+          field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (rowId === undefined || field.id === rowId)
+        )
+      );
+      if (hasCorrectedField) {
+        return true;
+      }
+    }
+
+    // Check if field has comments
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        matchesInputKey(field.inputKey) &&
+        (!section || field.section === section) &&
+        (rowId === undefined || field.id === rowId)
+      )
+    );
+  }
+
+  // Helper methods for checking comments on array items
+  hasLocalizationStrategyComment(index: number, fieldKey: string): boolean {
+    const strategyArray = this.directLocalizationServiceLevelFormArray();
+    if (!strategyArray || index >= strategyArray.length) return false;
+    const strategyGroup = strategyArray.at(index) as FormGroup;
+    const rowId = strategyGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'localizationStrategy', rowId);
+  }
+
+  hasEntityLevelComment(fieldKey: string): boolean {
+    // Entity level array only has one item at index 0
+    const entityArray = this.entityLevelFormArray();
+    if (!entityArray || entityArray.length === 0) return false;
+    const entityGroup = entityArray.at(0) as FormGroup;
+    const rowId = entityGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'entityLevel', rowId);
+  }
+
+  hasServiceLevelComment(index: number, fieldKey: string): boolean {
+    const serviceArray = this.serviceLevelFormArray();
+    if (!serviceArray || index >= serviceArray.length) return false;
+    const serviceGroup = serviceArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'serviceLevel', rowId);
+  }
+
+  // Helper methods for checking comments on "Other" detail fields
+  hasLocalizationApproachOtherComment(index: number): boolean {
+    return this.hasLocalizationStrategyComment(index, 'localizationApproachOtherDetails');
+  }
+
+  hasLocationOtherComment(index: number): boolean {
+    return this.hasLocalizationStrategyComment(index, 'locationOtherDetails');
+  }
+
+  hasProprietaryToolsExplanationComment(index: number): boolean {
+    return this.hasLocalizationStrategyComment(index, 'proprietaryToolsSystemsDetails');
   }
 }

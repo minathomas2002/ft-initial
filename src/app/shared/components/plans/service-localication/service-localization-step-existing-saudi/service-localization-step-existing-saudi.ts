@@ -24,6 +24,7 @@ import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans
 import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
@@ -44,6 +45,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     FormsModule,
     BaseLabelComponent,
     ConditionalColorClassDirective,
+    PageCommentBox,
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',
@@ -60,7 +62,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
-  investorComments = input<IPageComment[]>([]);
+  pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   files = signal<File[]>([]);
   EMaterialsFormControls = EMaterialsFormControls;
@@ -501,7 +504,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   isFieldCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
     // Check if any comment field matches this inputKey (and section if provided)
-    const matchingFields = this.investorComments()
+    const matchingFields = this.pageComments()
       .flatMap(c => c.fields)
       .filter(f => {
         const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
@@ -514,14 +517,14 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
   // Helper method to get combined comment text for display
   getCombinedCommentText(): string {
-    if (!this.isViewMode() || this.investorComments().length === 0) return '';
-    return this.investorComments().map(c => c.comment).join('\n\n');
+    if (!this.isViewMode() || this.pageComments().length === 0) return '';
+    return this.pageComments().map(c => c.comment).join('\n\n');
   }
 
   // Helper method to get all field labels from comments
   getCommentedFieldLabels(): string {
-    if (!this.isViewMode() || this.investorComments().length === 0) return '';
-    const allLabels = this.investorComments().flatMap(c => c.fields.map(f => f.label));
+    if (!this.isViewMode() || this.pageComments().length === 0) return '';
+    const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
     return [...new Set(allLabels)].join(', ');
   }
 }

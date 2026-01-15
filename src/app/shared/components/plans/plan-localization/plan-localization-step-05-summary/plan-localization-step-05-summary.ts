@@ -10,6 +10,7 @@ import { SummarySectionSaudization } from './summary-sections/summary-section-sa
 import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
+import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 
 @Component({
   selector: 'app-plan-localization-step-05-summary',
@@ -19,6 +20,7 @@ import { Signature } from 'src/app/shared/interfaces/plans.interface';
     SummarySectionValueChain,
     SummarySectionSaudization,
     SummarySectionSignature,
+    PageCommentBox,
   ],
   templateUrl: './plan-localization-step-05-summary.html',
   styleUrl: './plan-localization-step-05-summary.scss',
@@ -27,6 +29,7 @@ import { Signature } from 'src/app/shared/interfaces/plans.interface';
 export class PlanLocalizationStep05Summary {
   isViewMode = input<boolean>(false);
   pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   signature = input<Signature | null>(null);
 
   // Comments and corrected fields inputs (from wizard)

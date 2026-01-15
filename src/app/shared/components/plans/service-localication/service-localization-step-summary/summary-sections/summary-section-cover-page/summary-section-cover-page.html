@@ -10,33 +10,38 @@
     <!-- Services Section -->
     <div class="flex flex-col gap-4">
       <h3 class="text-lg font-semibold text-[#4A4E5A]">Services</h3>
-        <div class="overflow-x-auto">
-          <div class="rounded-lg overflow-hidden border border-gray-300">
-            <p-table
-              [value]="services()"
-              [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
-              styleClass="w-full [&_th]:!border [&_td]:!border [&_th]:!border-gray-300 [&_td]:!border-gray-300"
-            >
-              <ng-template pTemplate="header">
-                <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
-                  <th class="p-3 text-left text-sm font-medium text-[#4A4E5A]">Service Name</th>
-                </tr>
-              </ng-template>
+      <div class="overflow-x-auto">
+        <div class="rounded-lg overflow-hidden border border-gray-300">
+          <p-table
+            [value]="services()"
+            [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
+            styleClass="w-full [&_th]:!border [&_td]:!border [&_th]:!border-gray-300 [&_td]:!border-gray-300"
+          >
+            <ng-template pTemplate="header">
+              <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
+                <th class="p-3 text-left text-sm font-medium text-[#4A4E5A]">Service Name</th>
+              </tr>
+            </ng-template>
 
-              <ng-template pTemplate="body" let-service let-rowIndex="rowIndex">
-                <tr>
-                  <td class="border-t border-gray-300 p-4">
-                    <app-summary-table-cell
-                      [value]="service.serviceName"
-                      [isEmpty]="!service.serviceName"
-                      [hasError]="hasServiceItemFieldError(rowIndex, 'serviceName')"
-                    />
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
+            <ng-template
+              pTemplate="body"
+              let-service
+              let-rowIndex="rowIndex"
+            >
+              <tr>
+                <td class="border-t border-gray-300 p-4">
+                  <app-summary-table-cell
+                    [value]="service.serviceName"
+                    [isEmpty]="!service.serviceName"
+                    [hasError]="hasServiceItemFieldError(rowIndex, 'serviceName')"
+                    [hasComment]="hasServiceItemComment(rowIndex)"
+                  />
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
         </div>
+      </div>
     </div>
   </div>
 </div>

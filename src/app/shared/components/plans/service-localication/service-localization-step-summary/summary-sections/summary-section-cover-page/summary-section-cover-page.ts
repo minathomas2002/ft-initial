@@ -16,7 +16,8 @@ import { TableModule } from 'primeng/table';
 export class SummarySectionCoverPage {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
-  investorComments = input<IPageComment[]>([]);
+  pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 
@@ -77,5 +78,60 @@ export class SummarySectionCoverPage {
 
   hasServiceItemFieldError(index: number, controlName: string): boolean {
     return this.hasFieldError(`servicesFormGroup.${index}.${controlName}.value`);
+  }
+
+  // Check if a field has a comment
+  hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {
+    // Helper function to check if inputKey matches the fieldKey
+    // Handles cases where inputKey might have an index suffix (e.g., 'fieldName_0', 'fieldName_1')
+    const matchesInputKey = (inputKey: string): boolean => {
+      // Exact match
+      if (inputKey === fieldKey) return true;
+      // Match with section prefix
+      if (section && inputKey === `${section}.${fieldKey}`) return true;
+      // Match with index suffix (for table rows): 'fieldKey_0', 'fieldKey_1', etc.
+      if (inputKey.startsWith(fieldKey + '_') && /^\d+$/.test(inputKey.substring(fieldKey.length + 1))) return true;
+      // Match with section prefix and index suffix: 'section.fieldKey_0', 'section.fieldKey_1', etc.
+      if (section && inputKey.startsWith(`${section}.${fieldKey}_`) && /^\d+$/.test(inputKey.substring(`${section}.${fieldKey}`.length + 1))) return true;
+      return false;
+    };
+
+    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
+    if (this.correctedFieldIds().length > 0) {
+      const hasCorrectedField = this.pageComments().some(comment =>
+        comment.fields?.some(field =>
+          matchesInputKey(field.inputKey) &&
+          (!section || field.section === section) &&
+          field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (rowId === undefined || field.id === rowId)
+        )
+      );
+      if (hasCorrectedField) {
+        return true;
+      }
+    }
+
+    // Check if field has comments
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        matchesInputKey(field.inputKey) &&
+        (!section || field.section === section) &&
+        (rowId === undefined || field.id === rowId)
+      )
+    );
+  }
+
+  // Computed properties for comment status
+  planTitleHasComment = computed(() => this.hasFieldComment('planTitle', 'coverPageCompanyInformation'));
+  companyNameHasComment = computed(() => this.hasFieldComment('companyName', 'coverPageCompanyInformation'));
+
+  // For services array items
+  hasServiceItemComment(index: number): boolean {
+    const servicesArray = this.servicesFormArray();
+    if (!servicesArray || index >= servicesArray.length) return false;
+    const serviceGroup = servicesArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.hasFieldComment('serviceName', 'services', rowId);
   }
 }

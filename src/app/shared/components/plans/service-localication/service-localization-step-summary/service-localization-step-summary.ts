@@ -9,6 +9,7 @@ import { SummarySectionExistingSaudi } from './summary-sections/summary-section-
 import { SummarySectionDirectLocalization } from './summary-sections/summary-section-direct-localization/summary-section-direct-localization';
 import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
 import { Signature, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 
 @Component({
   selector: 'app-service-localization-step-summary',
@@ -18,6 +19,7 @@ import { Signature, IPageComment } from 'src/app/shared/interfaces/plans.interfa
     SummarySectionExistingSaudi,
     SummarySectionDirectLocalization,
     SummarySectionSignature,
+    PageCommentBox,
   ],
   templateUrl: './service-localization-step-summary.html',
   styleUrl: './service-localization-step-summary.scss',
@@ -25,9 +27,11 @@ import { Signature, IPageComment } from 'src/app/shared/interfaces/plans.interfa
 })
 export class ServiceLocalizationStepSummary {
   isViewMode = input<boolean>(false);
+  commentTitle = input<string>('Comments');
   signature = input<Signature | null>(null);
   includeExistingSaudi = input<boolean>(true);
   includeDirectLocalization = input<boolean>(true);
+  pageComments = input<IPageComment[]>([]);
 
   // Wizard step numbers (can shift when optional steps are hidden)
   coverStepNumber = input<number>(1);
@@ -71,20 +75,70 @@ export class ServiceLocalizationStepSummary {
 
   // Helper methods to get combined comment text for each step
   getStep1CommentText(): string {
-    return this.step1Comments().map(c => c.comment).join('\n\n');
+    const comments = this.step1Comments().length > 0 ? this.step1Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page');
+    return comments.map(c => c.comment).join('\n\n');
   }
 
   getStep2CommentText(): string {
-    return this.step2Comments().map(c => c.comment).join('\n\n');
+    const comments = this.step2Comments().length > 0 ? this.step2Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === 'Overview');
+    return comments.map(c => c.comment).join('\n\n');
   }
 
   getStep3CommentText(): string {
-    return this.step3Comments().map(c => c.comment).join('\n\n');
+    const comments = this.step3Comments().length > 0 ? this.step3Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === 'Existing Saudi Co.');
+    return comments.map(c => c.comment).join('\n\n');
   }
 
   getStep4CommentText(): string {
-    return this.step4Comments().map(c => c.comment).join('\n\n');
+    const comments = this.step4Comments().length > 0 ? this.step4Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === 'Direct Localization');
+    return comments.map(c => c.comment).join('\n\n');
   }
+
+  // Computed signals to get comments (fallback to pageComments if step comments not provided)
+  step1CommentsComputed = computed(() => {
+    return this.step1Comments().length > 0 ? this.step1Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page');
+  });
+
+  step2CommentsComputed = computed(() => {
+    return this.step2Comments().length > 0 ? this.step2Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === 'Overview');
+  });
+
+  step3CommentsComputed = computed(() => {
+    return this.step3Comments().length > 0 ? this.step3Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === 'Existing Saudi Co.');
+  });
+
+  step4CommentsComputed = computed(() => {
+    return this.step4Comments().length > 0 ? this.step4Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === 'Direct Localization');
+  });
+
+  // Computed signals to check if comments exist and have content
+  hasStep1Comments = computed(() => {
+    const comments = this.step1CommentsComputed();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasStep2Comments = computed(() => {
+    const comments = this.step2CommentsComputed();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasStep3Comments = computed(() => {
+    const comments = this.step3CommentsComputed();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasStep4Comments = computed(() => {
+    const comments = this.step4CommentsComputed();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
 
   // Form groups
   step1FormGroup = this.formService.step1_coverPage;

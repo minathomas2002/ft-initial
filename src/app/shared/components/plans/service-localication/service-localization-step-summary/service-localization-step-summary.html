@@ -3,34 +3,32 @@
   <app-summary-section-cover-page
     [isViewMode]="isViewMode()"
     [formGroup]="step1FormGroup"
-    [investorComments]="step1Comments()"
+    [pageComments]="step1CommentsComputed()"
+    [commentTitle]="commentTitle()"
     [correctedFieldIds]="step1CorrectedFields()"
     (onEdit)="onEditStepClick(coverStepNumber())"
   />
-  @if (isViewMode() && step1Comments().length > 0) {
-  <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mt-4">
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-orange-900">Investor Comments - Cover Page</h3>
-      <p class="text-sm text-orange-800 whitespace-pre-line">{{ getStep1CommentText() }}</p>
-    </div>
-  </div>
+  @if (isViewMode() && hasStep1Comments()) {
+  <app-page-comment-box
+    [commentTitle]="getStep1CommentText() + ' - Cover Page'"
+    [commentText]="getStep1CommentText()"
+  />
   }
 
   <!-- Step 2: Overview & Company Information -->
   <app-summary-section-overview
     [isViewMode]="isViewMode()"
     [formGroup]="step2FormGroup"
-    [investorComments]="step2Comments()"
+    [pageComments]="step2CommentsComputed()"
+    [commentTitle]="commentTitle()"
     [correctedFieldIds]="step2CorrectedFields()"
     (onEdit)="onEditStepClick(overviewStepNumber())"
   />
-  @if (isViewMode() && step2Comments().length > 0) {
-  <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mt-4">
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-orange-900">Investor Comments - Overview</h3>
-      <p class="text-sm text-orange-800 whitespace-pre-line">{{ getStep2CommentText() }}</p>
-    </div>
-  </div>
+  @if (isViewMode() && hasStep2Comments()) {
+  <app-page-comment-box
+    [commentTitle]="getStep2CommentText() + ' - Overview'"
+    [commentText]="getStep2CommentText()"
+  />
   }
 
   <!-- Step 3: Existing Saudi Company -->
@@ -38,17 +36,16 @@
   <app-summary-section-existing-saudi
     [isViewMode]="isViewMode()"
     [formGroup]="step3FormGroup"
-    [investorComments]="step3Comments()"
+    [pageComments]="step3CommentsComputed()"
+    [commentTitle]="commentTitle()"
     [correctedFieldIds]="step3CorrectedFields()"
     (onEdit)="onEditStepClick(existingSaudiStepNumber())"
   />
-  @if (isViewMode() && step3Comments().length > 0) {
-  <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mt-4">
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-orange-900">Investor Comments - Existing Saudi Co.</h3>
-      <p class="text-sm text-orange-800 whitespace-pre-line">{{ getStep3CommentText() }}</p>
-    </div>
-  </div>
+  @if (isViewMode() && hasStep3Comments()) {
+  <app-page-comment-box
+    [commentTitle]="getStep3CommentText() + ' - Existing Saudi Co.'"
+    [commentText]="getStep3CommentText()"
+  />
   }
   }
 
@@ -57,17 +54,16 @@
   <app-summary-section-direct-localization
     [isViewMode]="isViewMode()"
     [formGroup]="step4FormGroup"
-    [investorComments]="step4Comments()"
+    [pageComments]="step4CommentsComputed()"
+    [commentTitle]="commentTitle()"
     [correctedFieldIds]="step4CorrectedFields()"
     (onEdit)="onEditStepClick(directLocalizationStepNumber())"
   />
-  @if (isViewMode() && step4Comments().length > 0) {
-  <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mt-4">
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-orange-900">Investor Comments - Direct Localization</h3>
-      <p class="text-sm text-orange-800 whitespace-pre-line">{{ getStep4CommentText() }}</p>
-    </div>
-  </div>
+  @if (isViewMode() && hasStep4Comments()) {
+  <app-page-comment-box
+    [commentTitle]="getStep4CommentText() + ' - Direct Localization'"
+    [commentText]="getStep4CommentText()"
+  />
   }
   }
 

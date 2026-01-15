@@ -19,7 +19,8 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 export class SummarySectionOverview {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
-  investorComments = input<IPageComment[]>([]);
+  pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 
@@ -251,5 +252,71 @@ export class SummarySectionOverview {
 
   hasServiceDetailFieldError(index: number, controlName: string): boolean {
     return this.hasFieldError(`serviceDetailsFormGroup.${index}.${controlName}.value`);
+  }
+
+  // Check if a field has a comment
+  hasFieldComment(fieldKey: string, section?: string, fieldId?: string): boolean {
+    // Helper function to check if inputKey matches the fieldKey
+    // Handles cases where inputKey might have an index suffix (e.g., 'fieldName_0', 'fieldName_1')
+    const matchesInputKey = (inputKey: string): boolean => {
+      // Exact match
+      if (inputKey === fieldKey) return true;
+      // Match with section prefix
+      if (section && inputKey === `${section}.${fieldKey}`) return true;
+      // Match with index suffix (for table rows): 'fieldKey_0', 'fieldKey_1', etc.
+      if (inputKey.startsWith(fieldKey + '_') && /^\d+$/.test(inputKey.substring(fieldKey.length + 1))) return true;
+      // Match with section prefix and index suffix: 'section.fieldKey_0', 'section.fieldKey_1', etc.
+      if (section && inputKey.startsWith(`${section}.${fieldKey}_`) && /^\d+$/.test(inputKey.substring(`${section}.${fieldKey}`.length + 1))) return true;
+      return false;
+    };
+
+    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
+    if (this.correctedFieldIds().length > 0) {
+      const hasCorrectedField = this.pageComments().some(comment =>
+        comment.fields?.some(field =>
+          matchesInputKey(field.inputKey) &&
+          (!section || field.section === section) &&
+          field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (fieldId === undefined || field.id === fieldId)
+        )
+      );
+      if (hasCorrectedField) {
+        return true;
+      }
+    }
+
+    // Check if field has comments
+    return this.pageComments().some(comment =>
+      comment.fields?.some(field =>
+        matchesInputKey(field.inputKey) &&
+        (!section || field.section === section) &&
+        (fieldId === undefined || field.id === fieldId)
+      )
+    );
+  }
+
+  // Computed properties for comment status
+  opportunityHasComment = computed(() => this.hasFieldComment('opportunity', 'basicInformation'));
+  submissionDateHasComment = computed(() => this.hasFieldComment('submissionDate', 'basicInformation'));
+  companyNameHasComment = computed(() => this.hasFieldComment('companyName', 'overviewCompanyInformation'));
+  ceoNameHasComment = computed(() => this.hasFieldComment('ceoName', 'overviewCompanyInformation'));
+  ceoEmailIDHasComment = computed(() => this.hasFieldComment('ceoEmailID', 'overviewCompanyInformation'));
+  globalHQLocationHasComment = computed(() => this.hasFieldComment('globalHQLocation', 'locationInformation'));
+  registeredVendorIDHasComment = computed(() => this.hasFieldComment('registeredVendorIDwithSEC', 'locationInformation'));
+  hasLocalAgentHasComment = computed(() => this.hasFieldComment('doYouCurrentlyHaveLocalAgentInKSA', 'locationInformation'));
+  localAgentNameHasComment = computed(() => this.hasFieldComment('localAgentName', 'localAgentInformation'));
+  contactPersonNameHasComment = computed(() => this.hasFieldComment('contactPersonName', 'localAgentInformation'));
+  emailIDHasComment = computed(() => this.hasFieldComment('emailID', 'localAgentInformation'));
+  contactNumberHasComment = computed(() => this.hasFieldComment('contactNumber', 'localAgentInformation'));
+  companyLocationHasComment = computed(() => this.hasFieldComment('companyLocation', 'localAgentInformation'));
+
+  // For service details array items
+  hasServiceDetailComment(index: number, fieldKey: string): boolean {
+    const detailsArray = this.serviceDetailsFormArray();
+    if (!detailsArray || index >= detailsArray.length) return false;
+    const serviceGroup = detailsArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.hasFieldComment(fieldKey, 'serviceDetails', rowId);
   }
 }
