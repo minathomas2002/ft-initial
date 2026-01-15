@@ -143,10 +143,10 @@ export class DashboardStatisticsCards {
   readonly activeCards = computed<IStatisticsCard[]>(() => {
     if (this.isInvestor())
       return this.investorCards();
-    else if (this.isEmployee())
+    if (this.isEmployee())
       return this.employeeCards();
-    else
-      return this.managerCards();
+
+    return this.managerCards();
   });
 
   /**
