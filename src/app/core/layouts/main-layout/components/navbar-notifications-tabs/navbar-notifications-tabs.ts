@@ -18,7 +18,7 @@ import { NotificationsStore } from 'src/app/shared/stores/notifications/notifica
 export class NavbarNotificationsTabs {
   notifications = input<INotification[]>();
   loading = input<boolean>();
-  notificationClick = output<INotification>();
+  notificationClick = output<INotificationItem>();
   authStore = inject(AuthStore);
   notificationStore = inject(NotificationsStore);
   userRole = computed(() => {

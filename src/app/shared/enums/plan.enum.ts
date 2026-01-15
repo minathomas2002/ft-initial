@@ -100,6 +100,7 @@ export enum EPlanAction {
   InternalReview = 20,
   RemoveAssignee = 21,
   Delete = 22,
+  AutoRejection = 23,
 }
 
 export enum EemployeePlanAction {

@@ -1,3 +1,4 @@
+import { NotificationBehavior } from "src/app/shared/classes/notifications/notification-item.factory";
 import { EPlanAction } from "src/app/shared/enums";
 
 export interface INotification {
@@ -7,6 +8,7 @@ export interface INotification {
   createdDate: string;
   customData: {
     PlanId: string,
+    PlanType: number,
   };
   from: string;
   id: string;
@@ -19,4 +21,5 @@ export interface INotification {
 export interface INotificationItem extends INotification {
   route?: string[];
   params?: Record<string, string>;
+  behavior: NotificationBehavior;
 }
