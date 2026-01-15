@@ -35,6 +35,7 @@ import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormDat
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { switchMap, of, map, catchError, finalize } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
+import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
@@ -63,6 +64,7 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
     TimelineDialog,
     SubmissionConfirmationModalComponent,
     GeneralConfirmationDialogComponent,
+    ApproveRejectDialogComponent,
     TranslatePipe
   ],
   templateUrl: './service-localization-plan-wizard.html',
@@ -116,6 +118,13 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   // Review mode signals
   showSendBackConfirmationDialog = signal<boolean>(false);
   showHasCommentControl = signal<boolean>(false);
+  
+  // Approve/Reject dialogs
+  showApproveConfirmationDialog = signal<boolean>(false);
+  showRejectReasonDialog = signal<boolean>(false);
+  showRejectConfirmationDialog = signal<boolean>(false);
+  approvalNote = signal<string>('');
+  rejectionReason = signal<string>('');
 
   // Computed signals for action controls
   hasSelectedFields = computed(() => {
@@ -123,6 +132,31 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       this.step2SelectedInputs().length > 0 ||
       this.step3SelectedInputs().length > 0 ||
       this.step4SelectedInputs().length > 0;
+  });
+
+  hasComments = computed(() => {
+    // Check if any step has saved comments
+    const step1Form = this.serviceLocalizationFormService.step1_coverPage;
+    const step1CommentControl = step1Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step1HasComment = step1CommentControl?.value && step1CommentControl.value.trim().length > 0;
+
+    const step2Form = this.serviceLocalizationFormService.step2_overview;
+    const step2CommentControl = step2Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step2HasComment = step2CommentControl?.value && step2CommentControl.value.trim().length > 0;
+
+    const step3Form = this.serviceLocalizationFormService.step3_existingSaudi;
+    const step3CommentControl = step3Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step3HasComment = step3CommentControl?.value && step3CommentControl.value.trim().length > 0;
+
+    const step4Form = this.serviceLocalizationFormService.step4_directLocalization;
+    const step4CommentControl = step4Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step4HasComment = step4CommentControl?.value && step4CommentControl.value.trim().length > 0;
+
+    return step1HasComment || step2HasComment || step3HasComment || step4HasComment;
+  });
+
+  canApproveOrReject = computed(() => {
+    return !this.hasSelectedFields() && !this.hasComments();
   });
 
 
@@ -836,6 +870,139 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
    */
   onCancelSendBack(): void {
     this.showSendBackConfirmationDialog.set(false);
+  }
+
+  /**
+   * Handle Approve and Forward action
+   */
+  onApproveAndForward(): void {
+    if (!this.canApproveOrReject()) {
+      return;
+    }
+    this.approvalNote.set('');
+    this.showApproveConfirmationDialog.set(true);
+  }
+
+  /**
+   * Confirm approval with optional note
+   */
+  onConfirmApprove(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const note = this.approvalNote().trim();
+    this.isProcessing.set(true);
+    this.planStore.employeeApprovePlan(planId, note || undefined)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showApproveConfirmationDialog.set(false);
+          this.approvalNote.set('');
+          this.toasterService.success('Plan has been approved and forwarded successfully.');
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error approving plan. Please try again.');
+          console.error('Error approving plan:', error);
+        }
+      });
+  }
+
+  /**
+   * Cancel approval
+   */
+  onCancelApprove(): void {
+    this.showApproveConfirmationDialog.set(false);
+    this.approvalNote.set('');
+  }
+
+  /**
+   * Handle Reject action
+   */
+  onReject(): void {
+    if (!this.canApproveOrReject()) {
+      return;
+    }
+    this.rejectionReason.set('');
+    this.showRejectReasonDialog.set(true);
+  }
+
+  /**
+   * Proceed to rejection confirmation after entering reason
+   */
+  onProceedReject(): void {
+    const reason = this.rejectionReason().trim();
+    if (!reason) {
+      this.toasterService.error('Rejection reason is required.');
+      return;
+    }
+    if (reason.length > 255) {
+      this.toasterService.error('Rejection reason must not exceed 255 characters.');
+      return;
+    }
+    this.showRejectReasonDialog.set(false);
+    this.showRejectConfirmationDialog.set(true);
+  }
+
+  /**
+   * Cancel rejection reason entry
+   */
+  onCancelRejectReason(): void {
+    this.showRejectReasonDialog.set(false);
+    this.rejectionReason.set('');
+  }
+
+  /**
+   * Confirm final rejection
+   */
+  onConfirmReject(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const reason = this.rejectionReason().trim();
+    if (!reason) {
+      this.toasterService.error('Rejection reason is required.');
+      return;
+    }
+
+    this.isProcessing.set(true);
+    this.planStore.employeeRejectPlan(planId, reason)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showRejectConfirmationDialog.set(false);
+          this.rejectionReason.set('');
+          this.toasterService.success('Plan has been rejected successfully.');
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error rejecting plan. Please try again.');
+          console.error('Error rejecting plan:', error);
+        }
+      });
+  }
+
+  /**
+   * Cancel final rejection confirmation
+   */
+  onCancelRejectConfirmation(): void {
+    this.showRejectConfirmationDialog.set(false);
+    // Return to reason entry dialog
+    this.showRejectReasonDialog.set(true);
   }
 
   ngOnDestroy(): void {
