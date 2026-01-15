@@ -61,7 +61,8 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
-  investorComments = input<IPageComment[]>([]);
+  pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   isViewMode = input<boolean>(false);
 
@@ -208,7 +209,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   isFieldCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
     // Check if any comment field matches this inputKey (and section if provided)
-    const matchingFields = this.investorComments()
+    const matchingFields = this.pageComments()
       .flatMap(c => c.fields)
       .filter(f => {
         const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
@@ -221,14 +222,14 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
 
   // Helper method to get combined comment text for display
   getCombinedCommentText(): string {
-    if (!this.isViewMode() || this.investorComments().length === 0) return '';
-    return this.investorComments().map(c => c.comment).join('\n\n');
+    if (!this.isViewMode() || this.pageComments().length === 0) return '';
+    return this.pageComments().map(c => c.comment).join('\n\n');
   }
 
   // Helper method to get all field labels from comments
   getCommentedFieldLabels(): string {
-    if (!this.isViewMode() || this.investorComments().length === 0) return '';
-    const allLabels = this.investorComments().flatMap(c => c.fields.map(f => f.label));
+    if (!this.isViewMode() || this.pageComments().length === 0) return '';
+    const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
     return [...new Set(allLabels)].join(', ');
   }
 }

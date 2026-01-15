@@ -119,6 +119,15 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   // Plan comments from API
   planComments = this.planStore.planComments;
 
+  // Computed signal to get creatorRole from planComments
+  creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
+
+  // Computed signal to determine comment title based on creatorRole
+  commentTitle = computed(() => {
+    const role = this.creatorRole();
+    return role === 3 ? 'Employee Comments' : 'Investor Comments';
+  });
+
   // Computed signals to map comments to each step based on pageTitleForTL
   step1Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];

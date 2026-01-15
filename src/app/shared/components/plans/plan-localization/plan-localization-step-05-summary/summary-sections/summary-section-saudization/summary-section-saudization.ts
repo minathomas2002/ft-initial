@@ -27,7 +27,7 @@ export class SummarySectionSaudization {
 
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
-  investorComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 

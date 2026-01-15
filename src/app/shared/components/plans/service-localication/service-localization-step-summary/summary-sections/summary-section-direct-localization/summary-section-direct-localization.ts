@@ -19,7 +19,8 @@ import { TableModule } from 'primeng/table';
 export class SummarySectionDirectLocalization {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
-  investorComments = input<IPageComment[]>([]);
+  pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 

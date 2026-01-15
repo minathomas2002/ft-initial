@@ -19,7 +19,8 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 export class SummarySectionOverview {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
-  investorComments = input<IPageComment[]>([]);
+  pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 

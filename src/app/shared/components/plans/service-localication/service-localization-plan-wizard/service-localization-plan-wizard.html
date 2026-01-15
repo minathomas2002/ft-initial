@@ -28,7 +28,8 @@
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
       [selectedInputColor]="step1CommentPhase() === 'none' ? 'green' : 'orange'"
-      [investorComments]="step1Comments()"
+      [pageComments]="step1Comments()"
+      [commentTitle]="commentTitle()"
       [correctedFieldIds]="step1CorrectedFields()"
     ></app-service-localization-step-cover-page>
   </ng-template>
@@ -41,7 +42,8 @@
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
       [selectedInputColor]="step2CommentPhase() === 'none' ? 'green' : 'orange'"
-      [investorComments]="step2Comments()"
+      [pageComments]="step2Comments()"
+      [commentTitle]="commentTitle()"
       [correctedFieldIds]="step2CorrectedFields()"
     ></app-service-localization-step-overview>
   </ng-template>
@@ -56,7 +58,8 @@
       [(commentPhase)]="step3CommentPhase"
       [(selectedInputs)]="step3SelectedInputs"
       [selectedInputColor]="step3CommentPhase() === 'none' ? 'green' : 'orange'"
-      [investorComments]="step3Comments()"
+      [pageComments]="step3Comments()"
+      [commentTitle]="commentTitle()"
       [correctedFieldIds]="step3CorrectedFields()"
     ></app-service-localization-step-existing-saudi>
   </ng-template>
@@ -72,7 +75,8 @@
       [(commentPhase)]="step4CommentPhase"
       [(selectedInputs)]="step4SelectedInputs"
       [selectedInputColor]="step4CommentPhase() === 'none' ? 'green' : 'orange'"
-      [investorComments]="step4Comments()"
+      [pageComments]="step4Comments()"
+      [commentTitle]="commentTitle()"
       [correctedFieldIds]="step4CorrectedFields()"
     ></app-service-localization-step-direct-localization>
   </ng-template>
@@ -82,6 +86,7 @@
   <ng-template [appStepContent]="summaryStepIndex()">
     <app-service-localization-step-summary
       [isViewMode]="isViewMode()"
+      [commentTitle]="commentTitle()"
       [signature]="planSignature()"
       [includeExistingSaudi]="showExistingSaudiStep()"
       [includeDirectLocalization]="showDirectLocalizationStep()"
