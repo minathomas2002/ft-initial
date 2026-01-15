@@ -24,7 +24,8 @@ export class OpportunityFormService {
     maxQuantity: '',
     localSuppliers: '',
     globalSuppliers: '',
-    dateRange: null,
+    startDate: null,
+    endDate: null,
     image: null,
   }
   private OpportunityLocalizationFormInitialState: IOpportunityLocalizationFrom = {
@@ -94,7 +95,8 @@ export class OpportunityFormService {
         maxQuantity: ['', [Validators.required, Validators.min(0)]],
         localSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(1000000000)]],
         globalSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(1000000000)]],
-        dateRange: [null, [Validators.required, this.dateRangeValidator]],
+        startDate: [null, [Validators.required, this.startDateRestrictionValidator]],
+        endDate: [null, [Validators.required, this.endDateAfterStartDateValidator, this.endDateRestrictionValidator]],
         image: [null, Validators.required],
       }, { validators: [this.quantityRangeValidator] }),
       opportunityLocalization: this.fb.group({
@@ -123,15 +125,83 @@ export class OpportunityFormService {
   }
 
   // Custom validators
-  private dateRangeValidator = (control: AbstractControl): ValidationErrors | null => {
+  private toDateOnly(value: unknown): Date | null {
+    if (!value) return null;
+    const date = value instanceof Date ? value : new Date(value as string | number | Date);
+    if (isNaN(date.getTime())) return null;
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  private getTodayDateOnly(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+
+  private lockStartDateIfPast(startDate: Date | null) {
+    const startDateControl = this.opportunityInformationForm.get('startDate');
+    if (!startDateControl) return;
+
+    const today = this.getTodayDateOnly();
+    const normalized = startDate ? this.toDateOnly(startDate) : null;
+
+    if (normalized && normalized < today) {
+      startDateControl.disable({ emitEvent: false });
+      startDateControl.setErrors(null);
+    } else {
+      startDateControl.enable({ emitEvent: false });
+    }
+  }
+
+  private endDateAfterStartDateValidator = (control: AbstractControl): ValidationErrors | null => {
+    const endDateValue = control.value;
+    const parent = control.parent as FormGroup | null;
+    const startDateValue = parent?.get('startDate')?.value;
+
+    if (!startDateValue || !endDateValue) return null;
+
+    const startDate = startDateValue instanceof Date ? startDateValue : new Date(startDateValue);
+    const endDate = endDateValue instanceof Date ? endDateValue : new Date(endDateValue);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return null;
+
+    return endDate >= startDate ? null : { dateRangeInvalid: true };
+  };
+
+  private startDateRestrictionValidator = (control: AbstractControl): ValidationErrors | null => {
+    if (!this.hasActivePlans || !this.originalDateRange) return null;
     const value = control.value;
-    if (!value) {
-      return { required: { message: 'Date range is required' } };
+    if (!value) return null;
+
+    const startDate = this.toDateOnly(value);
+    if (!startDate) return null;
+
+    const [originalStartRaw] = this.originalDateRange;
+    const originalStart = this.toDateOnly(originalStartRaw);
+    if (!originalStart) return null;
+
+    const today = this.getTodayDateOnly();
+
+    // If the opportunity already started in the past, allow moving startDate forward,
+    // but never allow setting a past date (user can only choose today or later).
+    if (originalStart < today) {
+      return startDate < today ? { startDateRestriction: true } : null;
     }
-    if (Array.isArray(value) && value.length === 2 && value[0] && value[1]) {
-      return null;
-    }
-    return { invalidRange: { message: 'You should select a date range' } };
+
+    // Original behavior for future opportunities with linked plans:
+    // startDate can only move earlier (not later than original).
+    return startDate > originalStart ? { startDateRestriction: true } : null;
+  };
+
+  private endDateRestrictionValidator = (control: AbstractControl): ValidationErrors | null => {
+    if (!this.hasActivePlans || !this.originalDateRange) return null;
+    const value = control.value;
+    if (!value) return null;
+
+    const endDate = value instanceof Date ? value : new Date(value);
+    if (isNaN(endDate.getTime())) return null;
+
+    const [, originalEnd] = this.originalDateRange;
+    return endDate < originalEnd ? { endDateRestriction: true } : null;
   };
 
   private quantityRangeValidator = (group: AbstractControl): ValidationErrors | null => {
@@ -211,6 +281,7 @@ export class OpportunityFormService {
     // Ensure all fields are enabled when resetting (especially when switching from edit to create mode)
     this.opportunityInformationForm.get('title')?.enable({ emitEvent: false });
     this.opportunityInformationForm.get('opportunityType')?.enable({ emitEvent: false });
+    this.opportunityInformationForm.get('startDate')?.enable({ emitEvent: false });
 
     this.opportunityForm.updateValueAndValidity();
     this.opportunityInformationForm.updateValueAndValidity();
@@ -263,124 +334,57 @@ export class OpportunityFormService {
     this.opportunityInformationForm.get('image')?.markAsDirty();
   }
 
-  updateDateRange(dateRange: [Date, Date] | null) {
-    this.opportunityInformationForm.patchValue({ dateRange });
+  updateStartDate(startDate: Date | null) {
+    this.opportunityInformationForm.patchValue({ startDate });
+    this.opportunityInformationForm.get('startDate')?.markAsTouched();
+    this.opportunityInformationForm.get('endDate')?.updateValueAndValidity({ emitEvent: false });
   }
 
-  handleDateRangeChange(event: any, hasActivePlans: boolean = false) {
-    // Handle date range selection from PrimeNG DatePicker
-    // PrimeNG DatePicker emits different formats depending on selection state
-    if (event === null || event === undefined) {
-      // Clear the value
-      this.updateDateRange(null);
-      return;
-    }
+  updateEndDate(endDate: Date | null) {
+    this.opportunityInformationForm.patchValue({ endDate });
+    this.opportunityInformationForm.get('endDate')?.markAsTouched();
+    this.opportunityInformationForm.get('endDate')?.updateValueAndValidity({ emitEvent: false });
+  }
 
-    if (Array.isArray(event)) {
-      // Check if we have a complete date range (both start and end dates)
-      // event[0] and event[1] must be truthy and not null/undefined
-      if (event.length === 2 && event[0] != null && event[1] != null) {
-        // Ensure dates are Date objects and valid
-        let startDate: Date;
-        let endDate: Date;
+  handleStartDateChange(event: Date, hasActivePlans: boolean = false) {
+    this.hasActivePlans = hasActivePlans;
+    if (this.opportunityInformationForm.get('startDate')?.disabled) return;
 
-        if (event[0] instanceof Date) {
-          startDate = event[0];
-        } else if (typeof event[0] === 'string' || typeof event[0] === 'number') {
-          startDate = new Date(event[0]);
-        } else {
-          // Invalid start date
-          return;
-        }
+    const startDate = event instanceof Date ? event : (event ? new Date(event) : null);
+    const normalized = startDate && !isNaN(startDate.getTime()) ? startDate : null;
 
-        if (event[1] instanceof Date) {
-          endDate = event[1];
-        } else if (typeof event[1] === 'string' || typeof event[1] === 'number') {
-          endDate = new Date(event[1]);
-        } else {
-          // Invalid end date
-          return;
-        }
-
-        // Validate dates are not invalid (NaN)
-        if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
-          const normalizedDates: [Date, Date] = [startDate, endDate];
-          const dateRangeControl = this.opportunityInformationForm.get('dateRange');
-
-          // Validate date changes if plans are linked
-          if (hasActivePlans && this.originalDateRange) {
-            const [originalStart, originalEnd] = this.originalDateRange;
-            let hasError = false;
-            const restrictionErrors: any = {};
-
-            // Start Date validation: Can only be moved earlier (not later)
-            if (startDate > originalStart) {
-              restrictionErrors.startDateRestriction = {
-                message: 'Start date can only be changed to an earlier date when plans are linked'
-              };
-              hasError = true;
-            }
-
-            // End Date validation: Can only be moved later (not earlier)
-            if (endDate < originalEnd) {
-              restrictionErrors.endDateRestriction = {
-                message: 'End date can only be changed to a later date when plans are linked'
-              };
-              hasError = true;
-            }
-
-            if (hasError) {
-              // Update the date range first (so datepicker shows user's selection)
-              this.updateDateRange(normalizedDates);
-              // Then set errors on the control (preserving existing errors from dateRangeValidator)
-              const existingErrors = dateRangeControl?.errors || {};
-              // Remove any existing restriction errors before adding new ones
-              const cleanedErrors = { ...existingErrors };
-              delete cleanedErrors['startDateRestriction'];
-              delete cleanedErrors['endDateRestriction'];
-              dateRangeControl?.setErrors({ ...cleanedErrors, ...restrictionErrors });
-              dateRangeControl?.markAsTouched();
-            } else {
-              // Clear date restriction errors if validation passes
-              if (dateRangeControl?.errors) {
-                const errors = { ...dateRangeControl.errors };
-                delete errors['startDateRestriction'];
-                delete errors['endDateRestriction'];
-                dateRangeControl.setErrors(Object.keys(errors).length > 0 ? errors : null);
-              }
-              // Update the form field value
-              this.updateDateRange(normalizedDates);
-            }
-          } else {
-            // No restrictions, update normally
-            this.updateDateRange(normalizedDates);
-          }
-
-          // Mark the field as touched
-          dateRangeControl?.markAsTouched();
-        }
-      } else if (event.length === 1 && event[0] != null) {
-        // Only start date selected, don't update yet (wait for end date)
-        // This is normal behavior when user is selecting a range
-        return;
-      } else {
-        // Empty array or invalid format
-        this.updateDateRange(null);
-      }
+    if (!normalized) {
+      this.updateStartDate(null);
     } else {
-      // Single date or other format - treat as null
-      this.updateDateRange(null);
+      const candidate = this.toDateOnly(normalized);
+      const today = this.getTodayDateOnly();
+      // Prevent manual typing of past dates
+      this.updateStartDate(candidate && candidate < today ? today : candidate);
     }
+
+    this.opportunityInformationForm.get('startDate')?.updateValueAndValidity({ emitEvent: false });
+  }
+
+  handleEndDateChange(event: Date, hasActivePlans: boolean = false) {
+    this.hasActivePlans = hasActivePlans;
+    const endDate = event instanceof Date ? event : (event ? new Date(event) : null);
+    this.updateEndDate(endDate && !isNaN(endDate.getTime()) ? endDate : null);
+    this.opportunityInformationForm.get('endDate')?.updateValueAndValidity({ emitEvent: false });
   }
 
   async setFormValue(value: IOpportunityDetails) {
     // Patch opportunity information form
-    const dateRange: [Date, Date] | null = value.startDate && value.endDate
-      ? [new Date(value.startDate), new Date(value.endDate)]
+    const startDate = value.startDate ? new Date(value.startDate) : null;
+    const endDate = value.endDate ? new Date(value.endDate) : null;
+    const normalizedStartDate = startDate && !isNaN(startDate.getTime()) ? startDate : null;
+    const normalizedEndDate = endDate && !isNaN(endDate.getTime()) ? endDate : null;
+
+    const originalDateRange: [Date, Date] | null = normalizedStartDate && normalizedEndDate
+      ? [normalizedStartDate, normalizedEndDate]
       : null;
 
     // Store original date range and hasActivePlans for validation
-    this.originalDateRange = dateRange;
+    this.originalDateRange = originalDateRange;
     this.hasActivePlans = value.hasActivePlans ?? false;
 
     // Get image from attachments (first attachment if available) and convert to File
@@ -396,7 +400,7 @@ export class OpportunityFormService {
     // }
 
 
-    // disable title and opportunityType if has active plans 
+    // disable title and opportunityType if has active plans
     if (this.hasActivePlans) {
       this.opportunityInformationForm.get("title")?.disable({ emitEvent: false });
       this.opportunityInformationForm.get("opportunityType")?.disable({ emitEvent: false });
@@ -415,9 +419,13 @@ export class OpportunityFormService {
       maxQuantity: value.maxQuantity?.toString() || '',
       localSuppliers: value.localSuppliers?.toString() || '',
       globalSuppliers: value.globalSuppliers?.toString() || '',
-      dateRange: dateRange,
+      startDate: normalizedStartDate,
+      endDate: normalizedEndDate,
       image: image,
     });
+
+    // If the current start date is already in the past, lock it (edit mode).
+    this.lockStartDateIfPast(normalizedStartDate);
 
     // Patch opportunity localization form arrays
     this.patchFormArray('designEngineerings', value.designEngineerings);
@@ -468,7 +476,8 @@ export class OpportunityFormService {
     infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.min(0)]);
     infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(1000000000)]);
     infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(1000000000)]);
-    infoGroup.get('dateRange')?.setValidators([Validators.required, this.dateRangeValidator]);
+    infoGroup.get('startDate')?.setValidators([Validators.required, this.startDateRestrictionValidator]);
+    infoGroup.get('endDate')?.setValidators([Validators.required, this.endDateAfterStartDateValidator, this.endDateRestrictionValidator]);
     infoGroup.get('image')?.setValidators([Validators.required]);
 
     //Group-level validator

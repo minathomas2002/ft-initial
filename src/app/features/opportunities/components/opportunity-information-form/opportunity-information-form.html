@@ -370,32 +370,60 @@
   <div>
     <h3 class="text-lg font-semibold mb-4">{{ 'opportunity.form.opportunityDates' | translate }}</h3>
     <div class="flex flex-col gap-4">
-      <!-- Date Range -->
-      <div class="flex flex-col gap-2">
-        <app-base-label [title]="'opportunity.form.dateRange' | translate" />
-        <p-datepicker
-          [showIcon]="true"
-          [showTime]="false"
-          [ngModel]="opportunityInformationForm.get('dateRange')?.value"
-          (ngModelChange)="onDateRangeChange($event)"
-          [selectionMode]="'range'"
-          [placeholder]="'opportunity.form.selectDateRange' | translate"
-          [dateFormat]="'dd M yy'"
-          [minDate]="today"
-          class="w-full md:w-[50%]"
-          keepInvalid
-          [invalid]="opportunityInformationForm.get('dateRange')?.invalid && opportunityInformationForm.get('dateRange')?.dirty"
-          fluid
-        />
-        @if(getControl('dateRange').invalid && getControl('dateRange').dirty){
-        <app-base-error [message]="
-        getControl('dateRange').hasError('required') ? 
-        ('opportunity.form.dateRangeRequired' | translate) :
-          getControl('dateRange').hasError('startDateRestriction') ? 
-          ('opportunity.form.startDateRestriction' | translate) :getControl('dateRange').hasError('endDateRestriction') ?
+      <!-- Start / End Dates -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:w-[50%]">
+        <div class="flex flex-col gap-2">
+          <app-base-label [title]="'opportunity.form.startDate' | translate" />
+          <p-datepicker
+            [showIcon]="true"
+            [showTime]="false"
+            [ngModel]="opportunityInformationForm.get('startDate')?.value"
+            (ngModelChange)="onStartDateChange($event)"
+            [placeholder]="'opportunity.form.selectStartDate' | translate"
+            [dateFormat]="'dd M yy'"
+            [minDate]="today"
+            [disabled]="getControl('startDate').disabled"
+            class="w-full"
+            keepInvalid
+            [invalid]="getControl('startDate').invalid && getControl('startDate').dirty"
+            fluid
+          />
+          @if(getControl('startDate').invalid && getControl('startDate').dirty){
+          <app-base-error [message]="
+          getControl('startDate').hasError('required') ?
+          ('opportunity.form.startDateRequired' | translate) :
+          getControl('startDate').hasError('startDateRestriction') ?
+          ('opportunity.form.startDateRestriction' | translate) :
+          ''" />
+          }
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <app-base-label [title]="'opportunity.form.endDate' | translate" />
+          <p-datepicker
+            [showIcon]="true"
+            [showTime]="false"
+            [ngModel]="opportunityInformationForm.get('endDate')?.value"
+            (ngModelChange)="onEndDateChange($event)"
+            [placeholder]="'opportunity.form.selectEndDate' | translate"
+            [dateFormat]="'dd M yy'"
+            [minDate]="(getControl('startDate').value && getControl('startDate').value > today) ? getControl('startDate').value : today"
+            class="w-full"
+            keepInvalid
+            [invalid]="getControl('endDate').invalid && getControl('endDate').dirty"
+            fluid
+          />
+          @if(getControl('endDate').invalid && getControl('endDate').dirty){
+          <app-base-error [message]="
+          getControl('endDate').hasError('required') ?
+          ('opportunity.form.endDateRequired' | translate) :
+          getControl('endDate').hasError('endDateRestriction') ?
           ('opportunity.form.endDateRestriction' | translate) :
-          ('opportunity.form.dateRangeInvalid' | translate)" />
-        }
+          getControl('endDate').hasError('dateRangeInvalid') ?
+          ('opportunity.form.endDateValidateDateRange' | translate) :
+          ''" />
+          }
+        </div>
       </div>
     </div>
   </div>

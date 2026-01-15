@@ -50,7 +50,8 @@ export interface IOpportunityInformationFrom {
   maxQuantity: string;
   localSuppliers: string;
   globalSuppliers: string;
-  dateRange: [Date, Date] | null;
+  startDate: Date | null;
+  endDate: Date | null;
   image: File | null;
 }
 

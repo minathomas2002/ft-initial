@@ -100,9 +100,14 @@ export class OpportunityInformationForm implements OnInit {
     // Mark the field as touched so validation errors appear when user interacts with it
   }
 
-  onDateRangeChange(event: any) {
+  onStartDateChange(event: Date) {
     const hasActivePlans = this.opportunitiesStore.details()?.hasActivePlans ?? false;
-    this.opportunityFormService.handleDateRangeChange(event, hasActivePlans);
+    this.opportunityFormService.handleStartDateChange(event, hasActivePlans);
+  }
+
+  onEndDateChange(event: Date) {
+    const hasActivePlans = this.opportunitiesStore.details()?.hasActivePlans ?? false;
+    this.opportunityFormService.handleEndDateChange(event, hasActivePlans);
   }
 
   // Helper methods to get FormControls with proper typing
