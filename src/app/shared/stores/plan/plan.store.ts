@@ -14,7 +14,7 @@ export interface IPlanTypeDropdownOption {
   value: EOpportunityType | null;
 }
 
-export type TWizardMode = 'create' | 'edit' | 'view' | 'Review';
+export type TWizardMode = 'create' | 'edit' | 'view' | 'Review' | 'resubmit';
 
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null;

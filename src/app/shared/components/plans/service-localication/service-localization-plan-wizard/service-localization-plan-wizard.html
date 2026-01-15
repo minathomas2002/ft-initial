@@ -9,7 +9,7 @@
   (onSaveAsDraft)="saveAsDraft()"
   [isLoading]="isLoading() || isLoadingPlan()"
   [isProcessing]="isProcessing()"
-  [hideSaveAsDraft]="isViewMode() || isReviewMode()"
+  [hideSaveAsDraft]="isViewMode() || isReviewMode() || isResubmitMode()"
   (onClose)="onClose()"
 >
   @if (shouldShowStatusTag()) {
@@ -23,7 +23,7 @@
 
   <ng-template [appStepContent]="1">
     <app-service-localization-step-cover-page
-      [isViewMode]="isViewMode() || isReviewMode()"
+      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [pageTitle]="steps()[0].title"
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
@@ -35,7 +35,7 @@
 
   <ng-template [appStepContent]="2">
     <app-service-localization-step-overview
-      [isViewMode]="isViewMode() || isReviewMode()"
+      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [isReviewMode]="isReviewMode()"
       [pageTitle]="steps()[1].title"
       [(commentPhase)]="step2CommentPhase"
@@ -50,7 +50,7 @@
   @if (showExistingSaudiStep() && existingSaudiStepIndex() > 0) {
   <ng-template [appStepContent]="existingSaudiStepIndex()">
     <app-service-localization-step-existing-saudi
-      [isViewMode]="isViewMode() || isReviewMode()"
+      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [isReviewMode]="isReviewMode()"
       [pageTitle]="steps()[existingSaudiStepIndex() - 1].title"
       [(commentPhase)]="step3CommentPhase"
@@ -66,7 +66,7 @@
   @if (showDirectLocalizationStep() && directLocalizationStepIndex() > 0) {
   <ng-template [appStepContent]="directLocalizationStepIndex()">
     <app-service-localization-step-direct-localization
-      [isViewMode]="isViewMode() || isReviewMode()"
+      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [isReviewMode]="isReviewMode()"
       [pageTitle]="steps()[directLocalizationStepIndex() - 1].title"
       [(commentPhase)]="step4CommentPhase"

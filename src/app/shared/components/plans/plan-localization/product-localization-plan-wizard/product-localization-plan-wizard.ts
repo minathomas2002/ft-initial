@@ -78,7 +78,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
-    return (this.visibility() && (this.mode() == 'view' || (this.mode() == 'Review')) && this.planStatus() !== null && this.activeStep() < 5)
+    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.activeStep() < 5)
   })
 
   // Track validation errors for stepper indicators
@@ -222,6 +222,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
     if (currentMode === 'Review') return 'Review Product Localization Plan';
+    if (currentMode === 'resubmit') return 'Resubmit Product Localization Plan';
     return this.i18nService.translate('plans.wizard.title.create');
   });
   isLoading = signal(false);
@@ -239,6 +240,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Computed signal for view mode
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
   isReviewMode = computed(() => this.planStore.wizardMode() === 'Review');
+  isResubmitMode = computed(() => this.planStore.wizardMode() === 'resubmit');
 
   // Check if user is investor persona
   isInvestorPersona = computed(() => {
@@ -280,7 +282,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   });
   shouldShowStatusTag = computed(() => {
     const mode = this.planStore.wizardMode();
-    return ['view', 'edit', 'Review'].includes(mode);
+    return ['view', 'edit', 'Review', 'resubmit'].includes(mode);
   });
 
   showHasCommentControl = signal<boolean>(false);
@@ -344,7 +346,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         return;
       }
 
-      if (currentPlanId && ['view', 'edit', 'Review'].includes(currentMode)) {
+      if (currentPlanId && ['view', 'edit', 'Review', 'resubmit'].includes(currentMode)) {
         this.loadPlanData(currentPlanId);
       } else if (currentMode === 'create' && !currentPlanId) {
         // Reset forms for create mode - this will set opportunityType and submissionDate
@@ -502,34 +504,25 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     const planStatusValue = response.productPlan?.status;
 
     // Handle forms based on mode
-    if (['view', 'Review'].includes(currentMode)) {
+    if (['view', 'Review', 'resubmit'].includes(currentMode)) {
       // Disable all forms in view mode
       this.disableAllForms();
       // Default to summary page when opening in view mode (especially for investor)
       this.activeStep.set(5);
 
-      // Fetch comments if status is Under Review or PENDING (for investor)
+      // Fetch comments in review, view, and resubmit modes
       const planId = this.planStore.selectedPlanId();
       if (planId) {
-        // For investor persona, always fetch comments
-        // Also fetch if status indicates review state (check numeric values since status can be either enum type)
-        const statusValue = planStatusValue as number | undefined;
-        const shouldFetchComments = this.isInvestorPersona() ||
-          statusValue === EInvestorPlanStatus.PENDING ||
-          statusValue === EInvestorPlanStatus.UNDER_REVIEW ||
-          statusValue === EInternalUserPlanStatus.UNDER_REVIEW;
-
-        if (shouldFetchComments) {
-          this.planStore.getPlanComments(planId)
-            .pipe(
-              takeUntilDestroyed(this.destroyRef),
-              catchError((error) => {
-                console.error('Error loading plan comments:', error);
-                return of(null);
-              })
-            )
-            .subscribe();
-        }
+        // Always fetch comments in these modes
+        this.planStore.getPlanComments(planId)
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            catchError((error) => {
+              console.error('Error loading plan comments:', error);
+              return of(null);
+            })
+          )
+          .subscribe();
       }
     } else if (currentMode === 'edit') {
       // Enable all forms in edit mode without resetting read-only field values
