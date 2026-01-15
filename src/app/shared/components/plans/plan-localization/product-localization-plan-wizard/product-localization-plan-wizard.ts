@@ -393,12 +393,11 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
             return of(null);
           }
 
-          // Get opportunity details and update availableOpportunities for edit/view/Review modes
+          // Get opportunity details and update availableOpportunities for edit mode
           const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-          const isEditOrViewOrReview =
-            this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review';
+          const isEditOrViewMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view';
 
-          if (opportunityId && isEditOrViewOrReview) {
+          if (opportunityId && isEditOrViewMode) {
             // Chain opportunity details loading, catch errors to continue with form mapping
             return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
               .pipe(
