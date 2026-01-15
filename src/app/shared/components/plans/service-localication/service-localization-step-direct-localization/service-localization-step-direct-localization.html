@@ -339,13 +339,13 @@
         <ng-template pTemplate="header">
           <tr>
             <th
-              class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700 min-w-[250px]"
+              class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[250px]"
               pFrozenColumn
             >
               <span>Category</span>
             </th>
             @for(year of yearColumns(); track year) {
-            <th class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700 min-w-[200px]">
+            <th class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[200px]">
               <span>{{ year }}</span>
             </th>
             }
