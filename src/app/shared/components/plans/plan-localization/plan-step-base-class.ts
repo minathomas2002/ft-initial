@@ -154,7 +154,7 @@ export abstract class PlanStepBaseClass {
     this.selectedInputs.set([]);
     this.comment.set('');
     this.commentFormControl.reset();
-    this.commentPhase.set('none');
+    this.commentPhase.set('adding');
     this.showDeleteConfirmationDialog.set(false);
     this.toasterService.success('Your comments and selected fields were removed successfully.');
   }
