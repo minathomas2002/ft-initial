@@ -22,7 +22,13 @@ export class WizardStepStateComponent {
   planStore = inject(PlanStore);
   viewMode = computed(() => this.planStore.wizardMode());
 
-  commentBadgeSeverity = computed(() => this.commentColor() === 'green' ? 'success' : 'warn');
+  commentBadgeSeverity = computed(() => {
+    // For investor view mode (when fieldsRequiringUpdate is defined), always use orange/warn for comment badge
+    if (this.stepState().fieldsRequiringUpdate !== undefined) {
+      return 'warn';
+    }
+    return this.commentColor() === 'green' ? 'success' : 'warn';
+  });
   // Signal to track form state - updated reactively
   private formStateSignal = signal<{ valid: boolean; invalid: boolean; dirty: boolean; touched: boolean; value: any }>({
     valid: false,
