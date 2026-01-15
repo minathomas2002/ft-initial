@@ -103,6 +103,9 @@ export class UserDashboard implements OnInit {
   readonly isInternalUser = computed(() =>
     this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE])()
   );
+  readonly isManager = computed(() =>
+    this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER])()
+  );
   //#endregion
 
   //#region Get the appropriate filter service based on role
@@ -127,11 +130,21 @@ export class UserDashboard implements OnInit {
     baseHeaders.push(
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
       { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'planType' },
-      { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
+      { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' }
+    );
+
+    if (this.isManager()) {
+      baseHeaders.push({
+        label: this.i18nService.translate('plans.table.assignee'),
+        isSortable: false,
+        sortingKey: 'assignee'
+      });
+    }
+
+    baseHeaders.push(
       { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
       { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
-      { label: this.i18nService.translate('plans.table.actions'), isSortable: false }
-    );
+      { label: this.i18nService.translate('plans.table.actions'), isSortable: false });
 
     return baseHeaders;
   });
@@ -344,6 +357,13 @@ export class UserDashboard implements OnInit {
 
   onSubmitProductLocalizationPlanWizard() {
     console.log('Submit product localization plan wizard');
+  }
+
+  getAssigneeName(assignee: string): string {
+    if (assignee && assignee.length > 0)
+      return assignee;
+    else
+      return '-';
   }
 
   //#region Navigation methods for statistics cards - different for investor vs internal users
