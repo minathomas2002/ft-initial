@@ -193,7 +193,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   step3CommentPhase = signal<TCommentPhase>('none');
   step4CommentPhase = signal<TCommentPhase>('none');
   showSendBackConfirmationDialog = signal<boolean>(false);
-  
+
   // Approve/Reject dialogs
   showApproveConfirmationDialog = signal<boolean>(false);
   showRejectReasonDialog = signal<boolean>(false);
