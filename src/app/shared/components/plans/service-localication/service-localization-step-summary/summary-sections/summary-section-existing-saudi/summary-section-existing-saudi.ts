@@ -265,6 +265,26 @@ export class SummarySectionExistingSaudi {
     return match ? match.name : String(statusId);
   }
 
+  /**
+   * Convert agreement type id to label
+   */
+  formatAgreementType(agreementTypeId: string) {
+    if (!agreementTypeId) return null;
+    const options = this.planStore.agreementTypeOptions();
+    const match = options.find((o) => String(o.id) === String(agreementTypeId));
+    return match ? match.name : String(agreementTypeId);
+  }
+
+  /**
+   * Convert yes/no enum to label
+   */
+  formatYesNo(value: string | boolean | null | undefined) {
+    if (value === null || value === undefined) return null;
+    const options = this.planStore.yesNoOptions();
+    const match = options.find((o) => String(o.id) === String(value));
+    return match ? match.name : String(value);
+  }
+
   // Attachments
   attachments = computed(() => {
     const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
