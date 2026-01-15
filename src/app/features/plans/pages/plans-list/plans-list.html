@@ -26,7 +26,7 @@
           </td>
           @if (isInternalUser()) {
           <td>
-            <p class="text-sm text-gray-900 font-medium max-w-[25ch]" 
+            <p class="text-sm text-gray-900 font-medium max-w-[25ch]"
             [appTruncateTooltip]="item.investorName ?? '-'" [maxChars]="20">
               {{ item.investorName ?? '-' }}
             </p>
@@ -76,7 +76,7 @@
           <td>
             <app-plans-action-menu [actions]="item.actions" [plan]="item" (onViewDetails)="onViewDetails($event)"
               (onEdit)="onEdit($event)" (onDownload)="onDownload($event)" (onViewTimeLine)="onViewTimeline($event)"
-              (onInternalReview)="onReview($event)" />
+              (onInternalReview)="onReview($event)" (onAssignToEmployee)="onAssignToEmployee($event)" (onReAssign)="onReAssign($event)" />
           </td>
         </ng-template>
       </app-data-table>
@@ -105,4 +105,14 @@
 
 @if (timelineVisibility()) {
 <app-timeline-dialog [(dialogVisible)]="timelineVisibility" [planId]="selectedPlan()?.id || null" />
+}
+
+
+@if (viewAssignDialog()) {
+<app-assign-reassign-manual-employee
+  [(dialogVisible)]="viewAssignDialog"
+  [isReassignMode]="isReassignMode()"
+  [planRecord]="planItem()"
+  (onSuccess)="applyFilter()"
+></app-assign-reassign-manual-employee>
 }
