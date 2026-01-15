@@ -70,26 +70,42 @@ class InvestorNotificationParams extends BaseNotificationParams {
 }
 
 function buildInternalParams(notification: INotification, defaultRoute: string[]) {
-  let route: string[] = [];
-  let params: Record<string, string> = {};
-  let parsedCustomData = safeParseCustomData(notification.customData);
-  let searchText = parsedCustomData?.PlanId || '';
-  let actionsWithNavigations = [EPlanAction.Submitted, EPlanAction.Reassigned, EPlanAction.Assigned];
-  let behavior: NotificationBehavior = null;
+  const parsedCustomData = safeParseCustomData(notification.customData);
+  const searchText = parsedCustomData?.PlanId || '';
 
-  const action = notification.action;
+  const action = (typeof notification.action === 'string'
+    ? Number(notification.action)
+    : notification.action) as EPlanAction;
 
-  if (action === EPlanAction.AutoRejection || action === EPlanAction.CommentSubmitted) {
-    route = defaultRoute;
-    params = { searchText };
-    behavior = 'planDetails';
-  } else if (actionsWithNavigations.includes(action)) {
-    route = defaultRoute;
-    params = { searchText };
-    behavior = null;
+  const baseNavigationConfig = {
+    route: defaultRoute,
+    params: { searchText },
+  };
+
+  const planDetailsActions = new Set<EPlanAction>([
+    EPlanAction.AutoRejection,
+    EPlanAction.CommentSubmitted,
+    EPlanAction.Rejected,
+    EPlanAction.DeptRejected,
+    EPlanAction.DVRejected,
+    EPlanAction.DVRejectionAcknowledged,
+  ]);
+
+  const navigationActions = new Set<EPlanAction>([
+    EPlanAction.Submitted,
+    EPlanAction.Reassigned,
+    EPlanAction.Assigned,
+  ]);
+
+  if (planDetailsActions.has(action)) {
+    return { ...baseNavigationConfig, behavior: 'planDetails' as const };
   }
 
-  return { route, params, behavior };
+  if (navigationActions.has(action)) {
+    return { ...baseNavigationConfig, behavior: null };
+  }
+
+  return { route: [], params: {}, behavior: null };
 }
 
 function safeParseCustomData(value: string | { PlanId: string; }) {
