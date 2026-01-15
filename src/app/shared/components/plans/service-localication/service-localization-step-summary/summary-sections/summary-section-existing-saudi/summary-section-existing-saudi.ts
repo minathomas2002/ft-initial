@@ -19,7 +19,8 @@ import { TableModule } from 'primeng/table';
 export class SummarySectionExistingSaudi {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
-  investorComments = input<IPageComment[]>([]);
+  pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
 
@@ -283,12 +284,12 @@ export class SummarySectionExistingSaudi {
   hasAttachmentsError = computed(() => {
     const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
     if (!attachmentsControl) return false;
-    
+
     // Check if the control itself has errors
     if (attachmentsControl.invalid && (attachmentsControl.dirty || attachmentsControl.touched)) {
       return true;
     }
-    
+
     // Check if the value control has errors
     if (attachmentsControl instanceof FormGroup) {
       const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
@@ -296,7 +297,7 @@ export class SummarySectionExistingSaudi {
         return true;
       }
     }
-    
+
     return false;
   });
 }

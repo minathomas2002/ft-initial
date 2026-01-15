@@ -25,6 +25,7 @@ import { Signature, IPageComment } from 'src/app/shared/interfaces/plans.interfa
 })
 export class ServiceLocalizationStepSummary {
   isViewMode = input<boolean>(false);
+  commentTitle = input<string>('Comments');
   signature = input<Signature | null>(null);
   includeExistingSaudi = input<boolean>(true);
   includeDirectLocalization = input<boolean>(true);

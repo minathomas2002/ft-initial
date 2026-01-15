@@ -20,7 +20,7 @@ export class SummarySectionOverview {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
-  investorComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
   private datePipe = inject(DatePipe);
@@ -202,7 +202,7 @@ export class SummarySectionOverview {
   hasFieldComment(fieldKey: string, fieldId?: string): boolean {
     // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
     if (this.correctedFieldIds().length > 0) {
-      const hasCorrectedField = this.investorComments().some(comment =>
+      const hasCorrectedField = this.pageComments().some(comment =>
         comment.fields?.some(field =>
           field.inputKey === fieldKey &&
           field.id &&
@@ -213,7 +213,7 @@ export class SummarySectionOverview {
         return true;
       }
     }
-    
+
     // Check if field has comments
     return this.pageComments().some(comment =>
       comment.fields?.some(field =>
@@ -222,7 +222,7 @@ export class SummarySectionOverview {
       )
     );
   }
-  
+
   // Helper method to check if a field requires update (for investor view)
   isFieldRequiringUpdate(fieldId: string): boolean {
     return this.correctedFieldIds().includes(fieldId);

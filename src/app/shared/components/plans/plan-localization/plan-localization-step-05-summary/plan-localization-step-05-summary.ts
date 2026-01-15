@@ -27,6 +27,7 @@ import { Signature } from 'src/app/shared/interfaces/plans.interface';
 export class PlanLocalizationStep05Summary {
   isViewMode = input<boolean>(false);
   pageComments = input<IPageComment[]>([]);
+  commentTitle = input<string>('Comments');
   signature = input<Signature | null>(null);
 
   // Comments and corrected fields inputs (from wizard)

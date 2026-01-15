@@ -105,7 +105,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: this.step1CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CorrectedFields().length : this.step1SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0 && this.isEmployeePersona()) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange'),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step1CorrectedFields().length : 0
       },
       {
@@ -115,7 +115,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: this.step2CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CorrectedFields().length : this.step2SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0 && this.isEmployeePersona()) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange'),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step2CorrectedFields().length : 0
       },
       {
@@ -154,6 +154,15 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
   // Plan comments from API
   planComments = this.planStore.planComments;
+
+  // Computed signal to get creatorRole from planComments
+  creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
+
+  // Computed signal to determine comment title based on creatorRole
+  commentTitle = computed(() => {
+    const role = this.creatorRole();
+    return role === 3 ? 'Employee Comments' : 'Investor Comments';
+  });
 
   // Computed signals to map comments to each step based on pageTitleForTL
   step1Comments = computed<IPageComment[]>(() => {
@@ -251,6 +260,16 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     const hasNoEmployeeId = !userProfile.employeeID;
     const hasInvestorRole = userProfile.roleCodes?.includes(ERoles.INVESTOR) ?? false;
     return (hasInvestorCode && hasNoEmployeeId) || hasInvestorRole;
+  });
+
+  // Check if user is employee persona
+  isEmployeePersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    // Check if user has employeeID or has EMPLOYEE role
+    const hasEmployeeId = !!userProfile.employeeID;
+    const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
+    return hasEmployeeId || hasEmployeeRole;
   });
 
   // Check if plan is in pending status for investor

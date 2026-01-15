@@ -26,7 +26,7 @@
     @if(isInvestorViewMode() && step1Comments().length > 0) {
     <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
       <div class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold text-orange-900">Employee Comments - {{ steps()[0].title }}</h3>
+        <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - {{ steps()[0].title }}</h3>
         <p class="text-sm text-orange-800 whitespace-pre-line">{{ step1CommentText() }}</p>
       </div>
     </div>
@@ -37,7 +37,8 @@
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
       [selectedInputColor]="step1CommentPhase() === 'none' ? 'green' : 'orange'"
-      [investorComments]="step1Comments()"
+      [pageComments]="step1Comments()"
+      [commentTitle]="commentTitle()"
       [correctedFieldIds]="step1CorrectedFields()"
     />
   </ng-template>
@@ -46,7 +47,7 @@
     @if(isInvestorViewMode() && step2Comments().length > 0) {
     <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
       <div class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold text-orange-900">Employee Comments - {{ steps()[1].title }}</h3>
+        <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - {{ steps()[1].title }}</h3>
         <p class="text-sm text-orange-800 whitespace-pre-line">{{ step2CommentText() }}</p>
       </div>
     </div>
@@ -57,7 +58,8 @@
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
       [selectedInputColor]="step2CommentPhase() === 'none' ? 'green' : 'orange'"
-      [investorComments]="step2Comments()"
+      [pageComments]="step2Comments()"
+      [commentTitle]="commentTitle()"
       [correctedFieldIds]="step2CorrectedFields()"
     />
   </ng-template>
@@ -66,7 +68,7 @@
     @if(isInvestorViewMode() && step3Comments().length > 0) {
     <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
       <div class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold text-orange-900">Employee Comments - {{ steps()[2].title }}</h3>
+        <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - {{ steps()[2].title }}</h3>
         <p class="text-sm text-orange-800 whitespace-pre-line">{{ step3CommentText() }}</p>
       </div>
     </div>
@@ -77,7 +79,8 @@
       [(commentPhase)]="step3CommentPhase"
       [(selectedInputs)]="step3SelectedInputs"
       [selectedInputColor]="step3CommentPhase() === 'none' ? 'green' : 'orange'"
-      [investorComments]="step3Comments()"
+      [pageComments]="step3Comments()"
+      [commentTitle]="commentTitle()"
       [correctedFieldIds]="step3CorrectedFields()"
     />
   </ng-template>
@@ -86,7 +89,7 @@
     @if(isInvestorViewMode() && step4Comments().length > 0) {
     <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
       <div class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold text-orange-900">Employee Comments - {{ steps()[3].title }}</h3>
+        <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - {{ steps()[3].title }}</h3>
         <p class="text-sm text-orange-800 whitespace-pre-line">{{ step4CommentText() }}</p>
       </div>
     </div>
@@ -98,7 +101,8 @@
       [(commentPhase)]="step4CommentPhase"
       [(selectedInputs)]="step4SelectedInputs"
       [selectedInputColor]="step4CommentPhase() === 'none' ? 'green' : 'orange'"
-      [investorComments]="step4Comments()"
+      [pageComments]="step4Comments()"
+      [commentTitle]="commentTitle()"
       [correctedFieldIds]="step4CorrectedFields()"
     />
   </ng-template>
@@ -107,6 +111,7 @@
     <app-plan-localization-step-05-summary
       [isViewMode]="isViewMode()"
       [pageComments]="collectAllPageComments()"
+      [commentTitle]="commentTitle()"
       [signature]="planSignature()"
       [step1Comments]="step1Comments()"
       [step2Comments]="step2Comments()"
