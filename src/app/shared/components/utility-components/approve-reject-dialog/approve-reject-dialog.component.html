@@ -1,23 +1,22 @@
 <app-base-dialog
   [(visible)]="visible"
   [icon]="icon()"
-  [dialogTitle]="title()"
   [confirmLabel]="confirmationLabel()"
   [cancelLabel]="cancelLabel()"
   [showCloseButton]="true"
   (onConfirm)="onConfirm()"
   [isLoading]="isLoading()"
+  [confirmButtonClass]="'max-w-[200px]'"
+  [cancelButtonClass]="'w-[75px]'"
   (onCancel)="onCancelClick()"
   [isConfirmationDisabled]="isRequired() && !note().trim()"
 >
-  <div class="max-w-[25rem]">
+  <div class="max-w-[30rem]">
+    <div class="disclaimer-container">
+      <h2 class="text-lg font-semibold text-gray-900">{{title()}}</h2>
+    </div>
     <div class="mt-4">
-      <label class="block text-sm font-medium text-gray-700 mb-2">
-        {{ label() }}
-        @if (isRequired()) {
-        <span class="text-red-500">*</span>
-        }
-      </label>
+      <app-base-label [title]="label()"></app-base-label>
       <textarea
         pTextarea
         [(ngModel)]="note"
@@ -27,8 +26,8 @@
         class="w-full"
         [class.ng-invalid]="isRequired() && !note().trim()"
       ></textarea>
-      <div class="mt-1 text-xs text-gray-500">
-        {{ note().length }} / {{ maxLength() }} characters
+      <div class="mt-1 text-xs text-gray-500 flex justify-end">
+        <span>{{ note().length }} / {{ maxLength() }} characters</span>
       </div>
     </div>
   </div>

@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, input, model, output } from '@angul
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
+import { BaseLabelComponent } from "../../base-components/base-label/base-label.component";
 
 @Component({
   selector: 'app-approve-reject-dialog',
-  imports: [BaseDialogComponent, FormsModule, TextareaModule],
+  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent],
   templateUrl: './approve-reject-dialog.component.html',
   styleUrl: './approve-reject-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
