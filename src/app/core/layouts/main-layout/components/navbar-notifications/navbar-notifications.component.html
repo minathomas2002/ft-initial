@@ -70,3 +70,11 @@
     </div>
   </div>
 </p-popover>
+
+@if (productLocalizationPlanWizardVisibility()) {
+<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility"/>
+}
+
+@if (serviceLocalizationPlanWizardVisibility()) {
+<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility" />
+}

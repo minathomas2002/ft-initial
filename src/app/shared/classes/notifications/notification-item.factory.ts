@@ -1,10 +1,12 @@
 import { INotification, INotificationItem } from "src/app/core/layouts/main-layout/models/notifications.interface";
 import { EPlanAction, ERoles, ERoutes } from "../../enums";
-import { EInternalUserPlanStatus } from "../../interfaces";
+
+export type NotificationBehavior = 'planDetails' | null;
 
 class BaseNotificationParams {
   route: string[] = [];
   params: Record<string, string> = {};
+  behavior: NotificationBehavior = null;
 }
 
 export class NotificationItemFactory {
@@ -22,6 +24,7 @@ export class NotificationItemFactory {
         ...notification,
         route: internalUser.route,
         params: internalUser.params,
+        behavior: internalUser.behavior,
       } as INotificationItem;
     }
 
@@ -32,6 +35,7 @@ export class NotificationItemFactory {
         ...notification,
         route: investor.route,
         params: investor.params,
+        behavior: investor.behavior,
       } as INotificationItem;
     }
 
@@ -40,6 +44,7 @@ export class NotificationItemFactory {
       ...notification,
       route: [],
       params: {},
+      behavior: null,
     } as INotificationItem;
   }
 }
@@ -50,15 +55,17 @@ class InternalUserNotificationParams extends BaseNotificationParams {
     const built = buildInternalParams(notification, [ERoutes.plans]);
     this.route = built.route;
     this.params = built.params;
+    this.behavior = built.behavior;
   }
 }
 
 class InvestorNotificationParams extends BaseNotificationParams {
   constructor(notification: INotification) {
     super();
-    const built = buildInternalParams(notification, [ERoutes.plans, ERoutes.investors]);
+    const built = buildInternalParams(notification, [ERoutes.plans]);
     this.route = built.route;
     this.params = built.params;
+    this.behavior = built.behavior;
   }
 }
 
@@ -67,14 +74,22 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
   let params: Record<string, string> = {};
   let parsedCustomData = safeParseCustomData(notification.customData);
   let searchText = parsedCustomData?.PlanId || '';
-  let actionsToTrigger = [EPlanAction.Submitted, EPlanAction.Reassigned]
+  let actionsWithNavigations = [EPlanAction.Submitted, EPlanAction.Reassigned, EPlanAction.Assigned];
+  let behavior: NotificationBehavior = null;
 
-  if (actionsToTrigger.includes(notification.action)) {
+  const action = notification.action;
+
+  if (action === EPlanAction.AutoRejection) {
     route = defaultRoute;
     params = { searchText };
+    behavior = 'planDetails';
+  } else if (actionsWithNavigations.includes(action)) {
+    route = defaultRoute;
+    params = { searchText };
+    behavior = null;
   }
 
-  return { route, params };
+  return { route, params, behavior };
 }
 
 function safeParseCustomData(value: string | { PlanId: string; }) {
