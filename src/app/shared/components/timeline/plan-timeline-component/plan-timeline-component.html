@@ -76,7 +76,7 @@
         @if (comment.fields?.length > 0) {
         <div class="mt-2 flex gap-2 flex-wrap">
           @for (field of comment.fields; track field) {
-          <app-base-tag [value]="field.label" [color]="'fadedBlue'"></app-base-tag>
+          <app-base-tag [value]="(field.section | camelCaseToWord) + ' - ' + field.label" [color]="'fadedBlue'"></app-base-tag>
           }
         </div>
         }
