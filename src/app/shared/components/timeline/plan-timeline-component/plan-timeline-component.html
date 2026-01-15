@@ -43,6 +43,22 @@
         </span>
       </div>
 
+      @if (item.item.reason) {
+      <p-divider class="m-0!"></p-divider>
+      <div class="mt-2">
+        <label class="block text-sm text-[#414651] font-medium mb-1">
+          @if (planApprovedActionsEnum.includes(item.item.status)) {
+            Approved Note
+          } @else if (planRejectedActionsEnum.includes(item.item.status)) {
+            Rejected Reason
+          } @else {
+            Note
+          }
+        </label>
+        <input class="p-inputtext w-full bg-gray-100" [value]="item.item.reason" disabled />
+      </div>
+      }
+
       @if (item.item.comments?.length > 0) {
       <p-divider class="m-0!"></p-divider>
 

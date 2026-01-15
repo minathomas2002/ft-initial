@@ -16,11 +16,11 @@ export class PlanTimelineStatusMapper {
       [EStatusPlanTimeLine.PendingOnInvestor]: 'red',
       [EStatusPlanTimeLine.Approved]: 'green',
       [EStatusPlanTimeLine.Rejected]: 'red',
-      [EStatusPlanTimeLine.EmployeeApproved]: 'red',
-      [EStatusPlanTimeLine.DVApproved]: 'red',
-      [EStatusPlanTimeLine.DEPTApproved]: 'yellow',
+      [EStatusPlanTimeLine.EmployeeApproved]: 'green',
+      [EStatusPlanTimeLine.DVApproved]: 'green',
+      [EStatusPlanTimeLine.DEPTApproved]: 'green',
       [EStatusPlanTimeLine.DVRejected]: 'red',
-      [EStatusPlanTimeLine.DEPTRejected]: 'orange',
+      [EStatusPlanTimeLine.DEPTRejected]: 'red',
       [EStatusPlanTimeLine.DVRejectionAcknowledged]: 'orange',
     };
     return classMap[status] as TColors || 'primary';
