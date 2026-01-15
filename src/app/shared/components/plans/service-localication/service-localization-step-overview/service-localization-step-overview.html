@@ -64,26 +64,16 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
       <div class="flex flex-col gap-2 col-span-1">
         <app-base-label [title]="'Company Name'" />
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['companyName'])"
-          (valueChanged)="upDateSelectedInputs($event, {
-            section: 'overviewCompanyInformation',
-            inputKey: 'companyName',
-            label: 'Company Name'
-          })"
-        >
-          <input
-            type="text"
-            pInputText
-            fluid
-            [maxlength]="100"
-            placeholder="Enter company name"
-            [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
-            [appConditionalColorClass]="highlightInput('companyName')"
-            [color]="selectedInputColor()"
-          />
-        </app-group-input-with-checkbox>
+        <input
+          type="text"
+          pInputText
+          fluid
+          [maxlength]="100"
+          placeholder="Enter company name"
+          [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
+          [appConditionalColorClass]="highlightInput('companyName')"
+          [color]="selectedInputColor()"
+        />
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['companyName'])"
           [label]="'Company Name'"
@@ -502,26 +492,16 @@
         <td class="p-3 border border-gray-200 w-[48px] text-center">Service {{ index + 1 }}</td>
 
         <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceName'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'serviceName_' + index,
-              label: 'Service Name'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <input
-              type="text"
-              pInputText
-              fluid
-              [formControl]="getValueControl(itemControl.get('serviceName'))"
-              readonly
-              class="text-gray-400"
-              [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
+          <input
+            type="text"
+            pInputText
+            fluid
+            [formControl]="getValueControl(itemControl.get('serviceName'))"
+            readonly
+            class="text-gray-400"
+            [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
+            [color]="selectedInputColor()"
+          />
         </td>
 
         <td class="p-3 border border-gray-200 min-w-[200px]">
