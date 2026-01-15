@@ -13,7 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { ValueChainSummaryComponent } from './value-chain-summary/value-chain-summary.component';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
-import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
@@ -66,6 +66,8 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
 
   // Implement abstract method from base class
   getFormGroup(): FormGroup {
@@ -153,5 +155,34 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     // Call protected base class method with extracted rowId
     super.upDateSelectedInputs(value, fieldInformation, rowId);
   };
+
+  // Helper method to check if a field should be highlighted in view mode
+  isFieldCorrected(inputKey: string, section?: string, rowId?: string): boolean {
+    if (!this.isViewMode()) return false;
+    // Check if any comment field matches this inputKey (and section if provided)
+    const matchingFields = this.investorComments()
+      .flatMap(c => c.fields)
+      .filter(f => {
+        const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
+        const sectionMatch = !section || f.section === section;
+        const rowMatch = !rowId || f.id === rowId;
+        return keyMatch && sectionMatch && rowMatch;
+      });
+    // If any matching field has an ID in correctedFieldIds, highlight it
+    return matchingFields.some(f => f.id && this.correctedFieldIds().includes(f.id));
+  }
+
+  // Helper method to get combined comment text for display
+  getCombinedCommentText(): string {
+    if (!this.isViewMode() || this.investorComments().length === 0) return '';
+    return this.investorComments().map(c => c.comment).join('\n\n');
+  }
+
+  // Helper method to get all field labels from comments
+  getCommentedFieldLabels(): string {
+    if (!this.isViewMode() || this.investorComments().length === 0) return '';
+    const allLabels = this.investorComments().flatMap(c => c.fields.map(f => f.label));
+    return [...new Set(allLabels)].join(', ');
+  }
 }
 

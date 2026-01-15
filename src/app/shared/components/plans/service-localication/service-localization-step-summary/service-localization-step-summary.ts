@@ -8,7 +8,7 @@ import { SummarySectionOverview } from './summary-sections/summary-section-overv
 import { SummarySectionExistingSaudi } from './summary-sections/summary-section-existing-saudi/summary-section-existing-saudi';
 import { SummarySectionDirectLocalization } from './summary-sections/summary-section-direct-localization/summary-section-direct-localization';
 import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
-import { Signature } from 'src/app/shared/interfaces/plans.interface';
+import { Signature, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-service-localization-step-summary',
@@ -69,11 +69,38 @@ export class ServiceLocalizationStepSummary {
     return this.validationService.hasStepErrors(this.validationErrors(), 4);
   });
 
+  // Helper methods to get combined comment text for each step
+  getStep1CommentText(): string {
+    return this.step1Comments().map(c => c.comment).join('\n\n');
+  }
+
+  getStep2CommentText(): string {
+    return this.step2Comments().map(c => c.comment).join('\n\n');
+  }
+
+  getStep3CommentText(): string {
+    return this.step3Comments().map(c => c.comment).join('\n\n');
+  }
+
+  getStep4CommentText(): string {
+    return this.step4Comments().map(c => c.comment).join('\n\n');
+  }
+
   // Form groups
   step1FormGroup = this.formService.step1_coverPage;
   step2FormGroup = this.formService.step2_overview;
   step3FormGroup = this.formService.step3_existingSaudi;
   step4FormGroup = this.formService.step4_directLocalization;
+
+  // Comments and corrected fields inputs
+  step1Comments = input<IPageComment[]>([]);
+  step2Comments = input<IPageComment[]>([]);
+  step3Comments = input<IPageComment[]>([]);
+  step4Comments = input<IPageComment[]>([]);
+  step1CorrectedFields = input<string[]>([]);
+  step2CorrectedFields = input<string[]>([]);
+  step3CorrectedFields = input<string[]>([]);
+  step4CorrectedFields = input<string[]>([]);
 
   /**
    * Handles edit button click for a specific step

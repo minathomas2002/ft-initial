@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { IActiveEmployee, IAssignActiveEmployee, IAssignee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IPlanFilterRequest, IPlanRecord, IPlansResponse } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse, ReviewPlanRequest } from '../../interfaces/plans.interface';
+import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from '../../interfaces/plans.interface';
 import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
 import { EemployeePlanAction } from 'src/app/shared/enums';
 import { I18nService } from '../../services/i18n/i18n.service';
@@ -109,6 +109,10 @@ export class PlanApiService {
         } as IBaseApiResponse<IAssignActiveEmployee[]>;
       })
     );
+  }
+
+  getPlanComment(planId: string): Observable<IBaseApiResponse<IPlanCommentResponse>> {
+    return this.baseHttpService.post<IPlanCommentResponse, { planId: string }, unknown>(API_ENDPOINTS.plans.getPlanComment, { planId });
   }
 
 }

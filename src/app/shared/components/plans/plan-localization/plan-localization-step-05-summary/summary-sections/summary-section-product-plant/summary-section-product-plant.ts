@@ -19,6 +19,8 @@ export class SummarySectionProductPlant {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   onEdit = output<void>();
   private readonly planStore = inject(PlanStore);
   targetedCustomerOptions = this.planStore.targetedCustomerOptions;

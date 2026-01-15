@@ -6,7 +6,7 @@ import { SaudizationMatrixComponent } from './saudization-matrix/saudization-mat
 import { BaseErrorMessages } from '../../../base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { FileuploadComponent } from '../../../utility-components/fileupload/fileupload.component';
-import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { FormsModule } from '@angular/forms';
@@ -50,6 +50,8 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
+  investorComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
 
   // Files signal for file upload component
   files = signal<File[]>([]);
@@ -205,6 +207,35 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   // Expose highlightInput as public method
   override highlightInput(inputKey: string, rowId?: string): boolean {
     return super.highlightInput(inputKey, rowId);
+  }
+
+  // Helper method to check if a field should be highlighted in view mode
+  isFieldCorrected(inputKey: string, section?: string, rowId?: string): boolean {
+    if (!this.isViewMode()) return false;
+    // Check if any comment field matches this inputKey (and section if provided)
+    const matchingFields = this.investorComments()
+      .flatMap(c => c.fields)
+      .filter(f => {
+        const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
+        const sectionMatch = !section || f.section === section;
+        const rowMatch = !rowId || f.id === rowId;
+        return keyMatch && sectionMatch && rowMatch;
+      });
+    // If any matching field has an ID in correctedFieldIds, highlight it
+    return matchingFields.some(f => f.id && this.correctedFieldIds().includes(f.id));
+  }
+
+  // Helper method to get combined comment text for display
+  getCombinedCommentText(): string {
+    if (!this.isViewMode() || this.investorComments().length === 0) return '';
+    return this.investorComments().map(c => c.comment).join('\n\n');
+  }
+
+  // Helper method to get all field labels from comments
+  getCommentedFieldLabels(): string {
+    if (!this.isViewMode() || this.investorComments().length === 0) return '';
+    const allLabels = this.investorComments().flatMap(c => c.fields.map(f => f.label));
+    return [...new Set(allLabels)].join(', ');
   }
 }
 

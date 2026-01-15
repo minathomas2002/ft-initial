@@ -5,7 +5,7 @@ import { patchState, signalStore, withComputed, withMethods, withState } from '@
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
 import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
-import { IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, IServicePlanResponse, ITimeLineResponse, ReviewPlanRequest } from "../../interfaces/plans.interface";
+import { IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, IServicePlanResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
 
@@ -50,6 +50,7 @@ const initialState: {
   wizardMode: TWizardMode;
   selectedPlanId: string | null;
   planStatus: number | null;
+  planComments: IPlanCommentResponse | null;
 } = {
   newPlanOpportunityType: null,
   appliedOpportunity: null,
@@ -149,6 +150,7 @@ const initialState: {
   wizardMode: 'create',
   selectedPlanId: null,
   planStatus: null,
+  planComments: null,
 };
 
 export const PlanStore = signalStore(
@@ -211,8 +213,11 @@ export const PlanStore = signalStore(
       setPlanStatus(status: number | null): void {
         patchState(store, { planStatus: status });
       },
+      setPlanComments(comments: IPlanCommentResponse | null): void {
+        patchState(store, { planComments: comments });
+      },
       resetWizardState(): void {
-        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null });
+        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null });
       },
     };
   }),
@@ -496,6 +501,23 @@ export const PlanStore = signalStore(
             const errorMessage = error.message || error.error?.message || 'Error downloading plan';
             patchState(store, { error: errorMessage });
             return throwError(() => error);
+          })
+        );
+      },
+
+      /* Get Plan Comments*/
+      getPlanComments(planId: string): Observable<IBaseApiResponse<IPlanCommentResponse>> {
+        patchState(store, { isLoading: true, error: null });
+        return planApiService.getPlanComment(planId).pipe(
+          tap((res) => {
+            patchState(store, { isLoading: false, planComments: res.body || null });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error loading plan comments', isLoading: false });
+            return throwError(() => new Error('Error loading plan comments'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
           })
         );
       },
