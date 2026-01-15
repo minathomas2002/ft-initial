@@ -24,19 +24,17 @@
 
   <ng-template [appStepContent]="1">
     @if(isInvestorViewMode() && step1Comments().length > 0) {
-    <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
-      <div class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - {{ steps()[0].title }}</h3>
-        <p class="text-sm text-orange-800 whitespace-pre-line">{{ step1CommentText() }}</p>
-      </div>
-    </div>
+    <app-page-comment-box
+      [commentTitle]="commentTitle() + ' - ' + steps()[0].title"
+      [commentText]="step1CommentText()"
+    />
     }
     <app-plan-localization-step-01-overview-company-information-form
       [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [pageTitle]="steps()[0].title"
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
-      [selectedInputColor]="step1CommentPhase() === 'none' ? 'green' : 'orange'"
+      [selectedInputColor]="(step1CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
       [pageComments]="step1Comments()"
       [commentTitle]="commentTitle()"
       [correctedFieldIds]="step1CorrectedFields()"
@@ -45,19 +43,17 @@
 
   <ng-template [appStepContent]="2">
     @if(isInvestorViewMode() && step2Comments().length > 0) {
-    <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
-      <div class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - {{ steps()[1].title }}</h3>
-        <p class="text-sm text-orange-800 whitespace-pre-line">{{ step2CommentText() }}</p>
-      </div>
-    </div>
+    <app-page-comment-box
+      [commentTitle]="commentTitle() + ' - ' + steps()[1].title"
+      [commentText]="step2CommentText()"
+    />
     }
     <app-plan-localization-step-02-product-plant-overview-form
       [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [pageTitle]="steps()[1].title"
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
-      [selectedInputColor]="step2CommentPhase() === 'none' ? 'green' : 'orange'"
+      [selectedInputColor]="(step2CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
       [pageComments]="step2Comments()"
       [commentTitle]="commentTitle()"
       [correctedFieldIds]="step2CorrectedFields()"
@@ -66,19 +62,17 @@
 
   <ng-template [appStepContent]="3">
     @if(isInvestorViewMode() && step3Comments().length > 0) {
-    <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
-      <div class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - {{ steps()[2].title }}</h3>
-        <p class="text-sm text-orange-800 whitespace-pre-line">{{ step3CommentText() }}</p>
-      </div>
-    </div>
+    <app-page-comment-box
+      [commentTitle]="commentTitle() + ' - ' + steps()[2].title"
+      [commentText]="step3CommentText()"
+    />
     }
     <app-plan-localization-step-03-valueChain-form
       [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
       [pageTitle]="steps()[2].title"
       [(commentPhase)]="step3CommentPhase"
       [(selectedInputs)]="step3SelectedInputs"
-      [selectedInputColor]="step3CommentPhase() === 'none' ? 'green' : 'orange'"
+      [selectedInputColor]="(step3CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
       [pageComments]="step3Comments()"
       [commentTitle]="commentTitle()"
       [correctedFieldIds]="step3CorrectedFields()"
@@ -87,12 +81,10 @@
 
   <ng-template [appStepContent]="4">
     @if(isInvestorViewMode() && step4Comments().length > 0) {
-    <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
-      <div class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - {{ steps()[3].title }}</h3>
-        <p class="text-sm text-orange-800 whitespace-pre-line">{{ step4CommentText() }}</p>
-      </div>
-    </div>
+    <app-page-comment-box
+      [commentTitle]="commentTitle() + ' - ' + steps()[3].title"
+      [commentText]="step4CommentText()"
+    />
     }
     <app-plan-localization-step-04-saudization-form
       [isViewMode]="isViewMode()"
@@ -100,7 +92,7 @@
       [pageTitle]="steps()[3].title"
       [(commentPhase)]="step4CommentPhase"
       [(selectedInputs)]="step4SelectedInputs"
-      [selectedInputColor]="step4CommentPhase() === 'none' ? 'green' : 'orange'"
+      [selectedInputColor]="(step4CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
       [pageComments]="step4Comments()"
       [commentTitle]="commentTitle()"
       [correctedFieldIds]="step4CorrectedFields()"

@@ -9,12 +9,10 @@
     (onEdit)="onEditStepClick(1)"
   />
   @if (isViewMode() && step1CommentsComputed().length > 0) {
-  <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mt-4">
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - Overview & Company Information</h3>
-      <p class="text-sm text-orange-800 whitespace-pre-line">{{ getStep1CommentText() }}</p>
-    </div>
-  </div>
+  <app-page-comment-box
+    [commentTitle]="commentTitle() + ' - Overview & Company Information'"
+    [commentText]="getStep1CommentText()"
+  />
   }
 
   <!-- Step 2: Product & Plant Overview -->
@@ -27,12 +25,10 @@
     (onEdit)="onEditStepClick(2)"
   />
   @if (isViewMode() && step2CommentsComputed().length > 0) {
-  <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mt-4">
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - Product & Plant Overview</h3>
-      <p class="text-sm text-orange-800 whitespace-pre-line">{{ getStep2CommentText() }}</p>
-    </div>
-  </div>
+  <app-page-comment-box
+    [commentTitle]="commentTitle() + ' - Product & Plant Overview'"
+    [commentText]="getStep2CommentText()"
+  />
   }
 
   <!-- Step 3: Value Chain -->
@@ -45,12 +41,10 @@
     (onEdit)="onEditStepClick(3)"
   />
   @if (isViewMode() && step3CommentsComputed().length > 0) {
-  <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mt-4">
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - Value Chain</h3>
-      <p class="text-sm text-orange-800 whitespace-pre-line">{{ getStep3CommentText() }}</p>
-    </div>
-  </div>
+  <app-page-comment-box
+    [commentTitle]="commentTitle() + ' - Value Chain'"
+    [commentText]="getStep3CommentText()"
+  />
   }
 
   <!-- Step 4: Saudization -->
@@ -63,12 +57,10 @@
     (onEdit)="onEditStepClick(4)"
   />
   @if (isViewMode() && step4CommentsComputed().length > 0) {
-  <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mt-4">
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-orange-900">{{ commentTitle() }} - Saudization</h3>
-      <p class="text-sm text-orange-800 whitespace-pre-line">{{ getStep4CommentText() }}</p>
-    </div>
-  </div>
+  <app-page-comment-box
+    [commentTitle]="commentTitle() + ' - Saudization'"
+    [commentText]="getStep4CommentText()"
+  />
   }
 
   <!-- Signature (view/edit modes) -->

@@ -9,6 +9,7 @@ import { SummarySectionExistingSaudi } from './summary-sections/summary-section-
 import { SummarySectionDirectLocalization } from './summary-sections/summary-section-direct-localization/summary-section-direct-localization';
 import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
 import { Signature, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 
 @Component({
   selector: 'app-service-localization-step-summary',
@@ -18,6 +19,7 @@ import { Signature, IPageComment } from 'src/app/shared/interfaces/plans.interfa
     SummarySectionExistingSaudi,
     SummarySectionDirectLocalization,
     SummarySectionSignature,
+    PageCommentBox,
   ],
   templateUrl: './service-localization-step-summary.html',
   styleUrl: './service-localization-step-summary.scss',

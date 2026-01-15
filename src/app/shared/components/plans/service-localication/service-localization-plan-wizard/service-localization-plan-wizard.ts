@@ -40,6 +40,8 @@ import { ApproveRejectDialogComponent } from "../../../utility-components/approv
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { ERoles } from 'src/app/shared/enums/roles.enum';
 
 type ServiceLocalizationWizardStepId =
   | 'cover'
@@ -78,6 +80,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   private readonly toasterService = inject(ToasterService);
+  private readonly authStore = inject(AuthStore);
 
   visibility = model(false);
   doRefresh = output<void>();
@@ -166,6 +169,23 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     return this.step4Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
   });
 
+  // Computed signals to map comment fields to selectedInputs for each step
+  step1CommentFields = computed<IFieldInformation[]>(() => {
+    return this.step1Comments().flatMap(c => c.fields);
+  });
+
+  step2CommentFields = computed<IFieldInformation[]>(() => {
+    return this.step2Comments().flatMap(c => c.fields);
+  });
+
+  step3CommentFields = computed<IFieldInformation[]>(() => {
+    return this.step3Comments().flatMap(c => c.fields);
+  });
+
+  step4CommentFields = computed<IFieldInformation[]>(() => {
+    return this.step4Comments().flatMap(c => c.fields);
+  });
+
   // Review mode signals
   showSendBackConfirmationDialog = signal<boolean>(false);
   showHasCommentControl = signal<boolean>(false);
@@ -210,6 +230,24 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
     return !this.hasSelectedFields() && !this.hasComments();
   });
 
+  // Check if user is investor persona
+  isInvestorPersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    const hasInvestorCode = !!userProfile.investorCode;
+    const hasNoEmployeeId = !userProfile.employeeID;
+    const hasInvestorRole = userProfile.roleCodes?.includes(ERoles.INVESTOR) ?? false;
+    return (hasInvestorCode && hasNoEmployeeId) || hasInvestorRole;
+  });
+
+  // Check if user is employee persona
+  isEmployeePersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    const hasEmployeeId = !!userProfile.employeeID;
+    const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
+    return hasEmployeeId || hasEmployeeRole;
+  });
 
   private readonly stepsWithId = computed<ServiceLocalizationWizardStepState[]>(() => {
     this.i18nService.currentLanguage();
@@ -229,7 +267,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       description: 'Enter high-level submission and plan details',
       formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: this.step1CommentPhase() === 'none',
-      commentsCount: this.isViewMode() && this.planComments() ? this.step1CorrectedFields().length : this.step1SelectedInputs().length,
+      commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
       commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange'),
     });
 
@@ -239,7 +277,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       description: 'Provide an overview of the localization plan',
       formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: this.step2CommentPhase() === 'none',
-      commentsCount: this.isViewMode() && this.planComments() ? this.step2CorrectedFields().length : this.step2SelectedInputs().length,
+      commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
       commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange'),
     });
 
@@ -250,7 +288,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         description: 'Enter details of your existing presence in Saudi Arabia',
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: this.step3CommentPhase() === 'none',
-        commentsCount: this.isViewMode() && this.planComments() ? this.step3CorrectedFields().length : this.step3SelectedInputs().length,
+        commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
         commentColor: (this.isViewMode() && this.step3CorrectedFields().length > 0) ? 'green' : (this.step3CommentPhase() === 'none' ? 'green' : 'orange'),
       });
     }
@@ -262,7 +300,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         description: 'Provide direct localization and investment details',
         formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: this.step4CommentPhase() === 'none',
-        commentsCount: this.isViewMode() && this.planComments() ? this.step4CorrectedFields().length : this.step4SelectedInputs().length,
+        commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
         commentColor: (this.isViewMode() && this.step4CorrectedFields().length > 0) ? 'green' : (this.step4CommentPhase() === 'none' ? 'green' : 'orange'),
       });
     }
@@ -483,7 +521,10 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
                 return of(null);
               })
             )
-            .subscribe();
+            .subscribe(() => {
+              // Map comment fields to selectedInputs for each step when comments are loaded
+              this.mapCommentFieldsToSelectedInputs();
+            });
 
           // Re-evaluate conditional steps after disabling forms (getRawValue() will work correctly)
           this.evaluateConditionalSteps();
@@ -1080,5 +1121,17 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.serviceLocalizationFormService.resetAllForms();
+  }
+
+  /**
+   * Maps comment fields from API response to selectedInputs for each step
+   * This allows step components to use the fields for highlighting and display
+   */
+  private mapCommentFieldsToSelectedInputs(): void {
+    // Map fields from comments to selectedInputs for each step
+    this.step1SelectedInputs.set(this.step1CommentFields());
+    this.step2SelectedInputs.set(this.step2CommentFields());
+    this.step3SelectedInputs.set(this.step3CommentFields());
+    this.step4SelectedInputs.set(this.step4CommentFields());
   }
 }

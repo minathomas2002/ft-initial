@@ -136,7 +136,7 @@ export abstract class PlanStepBaseClass {
         (rowId === undefined || input.id === rowId)
     );
     const phase = this.commentPhase();
-    return isSelected && (phase === 'adding' || phase === 'editing');
+    return isSelected
   }
 
   /**
