@@ -674,7 +674,7 @@
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
-                [options]="planFormService.getAvailableQuarters(5)"
+                [options]="availableQuarters()"
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
