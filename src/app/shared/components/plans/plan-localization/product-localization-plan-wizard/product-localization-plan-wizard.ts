@@ -156,6 +156,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
   // Plan comments from API
   planComments = this.planStore.planComments;
+  incomingCommentPersona = this.planStore.commentPersona;
 
   // Computed signal to get creatorRole from planComments
   creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
@@ -164,6 +165,12 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   commentTitle = computed(() => {
     const role = this.creatorRole();
     return role === 3 ? 'Employee Comments' : 'Investor Comments';
+  });
+
+  // Computed signal to check if incoming comments should be shown
+  shouldShowIncomingComments = computed(() => {
+    const mode = this.planStore.wizardMode();
+    return mode === 'view' || mode === 'Review' || mode === 'resubmit';
   });
 
   // Computed signals to map comments to each step based on pageTitleForTL
@@ -244,6 +251,44 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   step4CommentText = computed<string>(() => {
     return this.step4Comments().map(c => c.comment).join('\n\n');
   });
+
+  // Computed signals to check if incoming comments exist and have content
+  hasIncomingStep1Comments = computed(() => {
+    const comments = this.step1Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep2Comments = computed(() => {
+    const comments = this.step2Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep3Comments = computed(() => {
+    const comments = this.step3Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep4Comments = computed(() => {
+    const comments = this.step4Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  // Helper methods to get combined incoming comment text for each step
+  getIncomingStep1CommentText(): string {
+    return this.step1CommentText();
+  }
+
+  getIncomingStep2CommentText(): string {
+    return this.step2CommentText();
+  }
+
+  getIncomingStep3CommentText(): string {
+    return this.step3CommentText();
+  }
+
+  getIncomingStep4CommentText(): string {
+    return this.step4CommentText();
+  }
   wizardTitle = computed(() => {
     const currentMode = this.planStore.wizardMode();
     this.i18nService.currentLanguage();

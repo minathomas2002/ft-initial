@@ -99,6 +99,22 @@ export class PlanLocalizationStep05Summary {
       this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title'));
   });
 
+  hasStep1OutComingComments = computed(() => {
+    return this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step1.title')).length > 0;
+  });
+
+  hasStep2OutComingComments = computed(() => {
+    return this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step2.title')).length > 0;
+  });
+
+  hasStep3OutComingComments = computed(() => {
+    return this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title')).length > 0;
+  });
+
+  hasStep4OutComingComments = computed(() => {
+    return this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title')).length > 0;
+  });
+
   // Incoming comments from plan store (API response)
   planComments = this.planStore.planComments;
   incomingCommentPersona = this.planStore.commentPersona;

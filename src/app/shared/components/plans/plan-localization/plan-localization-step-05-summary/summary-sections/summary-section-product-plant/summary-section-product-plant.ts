@@ -2,15 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { FormGroup } from '@angular/forms';
 import { SummaryField } from 'src/app/shared/components/plans/summary-field/summary-field';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
-import { SummaryComments } from 'src/app/shared/components/plans/summary-comments/summary-comments';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
-import { IStepValidationErrors } from 'src/app/shared/services/plan/validation/product-plan-validation.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-product-plant',
-  imports: [SummarySectionHeader, SummaryField, SummaryComments],
+  imports: [SummarySectionHeader, SummaryField],
   templateUrl: './summary-section-product-plant.html',
   styleUrl: './summary-section-product-plant.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
