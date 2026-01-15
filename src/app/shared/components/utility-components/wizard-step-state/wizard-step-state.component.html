@@ -44,6 +44,12 @@
     class="bg-red-400 text-white"
   ></p-badge>
   }
+  @else if(stepState().fieldsRequiringUpdate && stepState().fieldsRequiringUpdate! > 0){
+  <p-badge
+    [value]="stepState().fieldsRequiringUpdate!"
+    [severity]="'warn'"
+  ></p-badge>
+  }
   @else if(stepState().commentsCount){
   <p-badge
     [value]="stepState().commentsCount"

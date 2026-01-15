@@ -29,6 +29,9 @@ import { GeneralConfirmationDialogComponent } from "../../../utility-components/
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TColors } from "src/app/shared/interfaces";
+import { AuthStore } from "src/app/shared/stores/auth/auth.store";
+import { ERoles } from "src/app/shared/enums/roles.enum";
+import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 
@@ -62,6 +65,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
+  private readonly authStore = inject(AuthStore);
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
@@ -101,7 +105,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: this.step1CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CorrectedFields().length : this.step1SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange')
+        commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange'),
+        fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step1CorrectedFields().length : 0
       },
       {
         title: this.i18nService.translate('plans.wizard.step2.title'),
@@ -110,7 +115,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: this.step2CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CorrectedFields().length : this.step2SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange')
+        commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange'),
+        fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step2CorrectedFields().length : 0
       },
       {
         title: this.i18nService.translate('plans.wizard.step3.title'),
@@ -119,7 +125,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.step3_valueChain,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CorrectedFields().length : this.step3SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step3CorrectedFields().length > 0) ? 'green' : (this.step3CommentPhase() === 'none' ? 'green' : 'orange')
+        commentColor: (this.isViewMode() && this.step3CorrectedFields().length > 0) ? 'green' : (this.step3CommentPhase() === 'none' ? 'green' : 'orange'),
+        fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step3CorrectedFields().length : 0
       },
       {
         title: this.i18nService.translate('plans.wizard.step4.title'),
@@ -128,7 +135,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.step4_saudization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CorrectedFields().length : this.step4SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step4CorrectedFields().length > 0) ? 'green' : (this.step4CommentPhase() === 'none' ? 'green' : 'orange')
+        commentColor: (this.isViewMode() && this.step4CorrectedFields().length > 0) ? 'green' : (this.step4CommentPhase() === 'none' ? 'green' : 'orange'),
+        fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step4CorrectedFields().length : 0
       },
       {
         title: this.i18nService.translate('plans.wizard.step5.title'),
@@ -191,6 +199,23 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   step4CorrectedFields = computed<string[]>(() => {
     return this.step4Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
   });
+
+  // Computed signals for comment text display
+  step1CommentText = computed<string>(() => {
+    return this.step1Comments().map(c => c.comment).join('\n\n');
+  });
+
+  step2CommentText = computed<string>(() => {
+    return this.step2Comments().map(c => c.comment).join('\n\n');
+  });
+
+  step3CommentText = computed<string>(() => {
+    return this.step3Comments().map(c => c.comment).join('\n\n');
+  });
+
+  step4CommentText = computed<string>(() => {
+    return this.step4Comments().map(c => c.comment).join('\n\n');
+  });
   wizardTitle = computed(() => {
     const currentMode = this.planStore.wizardMode();
     this.i18nService.currentLanguage();
@@ -214,6 +239,30 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   // Computed signal for view mode
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
   isReviewMode = computed(() => this.planStore.wizardMode() === 'Review');
+
+  // Check if user is investor persona
+  isInvestorPersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    // Check if user has investorCode and no employeeID, or has INVESTOR role
+    const hasInvestorCode = !!userProfile.investorCode;
+    const hasNoEmployeeId = !userProfile.employeeID;
+    const hasInvestorRole = userProfile.roleCodes?.includes(ERoles.INVESTOR) ?? false;
+    return (hasInvestorCode && hasNoEmployeeId) || hasInvestorRole;
+  });
+
+  // Check if plan is in pending status for investor
+  isPendingStatusForInvestor = computed(() => {
+    const status = this.planStatus();
+    if (status === null) return false;
+    // Compare numeric values since status can be either enum type
+    return (status as number) === EInvestorPlanStatus.PENDING;
+  });
+
+  // Check if this is investor view mode (investor persona viewing pending plan)
+  isInvestorViewMode = computed(() => {
+    return this.isViewMode() && this.isInvestorPersona() && this.isPendingStatusForInvestor();
+  });
 
   // Computed signals for plan status tag
   planStatus = signal<EInternalUserPlanStatus | null>(null);
@@ -456,21 +505,31 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     if (['view', 'Review'].includes(currentMode)) {
       // Disable all forms in view mode
       this.disableAllForms();
-      // Default to summary page when opening in view mode
+      // Default to summary page when opening in view mode (especially for investor)
       this.activeStep.set(5);
 
-      // Fetch comments if status is Under Review
+      // Fetch comments if status is Under Review or PENDING (for investor)
       const planId = this.planStore.selectedPlanId();
       if (planId) {
-        this.planStore.getPlanComments(planId)
-          .pipe(
-            takeUntilDestroyed(this.destroyRef),
-            catchError((error) => {
-              console.error('Error loading plan comments:', error);
-              return of(null);
-            })
-          )
-          .subscribe();
+        // For investor persona, always fetch comments
+        // Also fetch if status indicates review state (check numeric values since status can be either enum type)
+        const statusValue = planStatusValue as number | undefined;
+        const shouldFetchComments = this.isInvestorPersona() ||
+          statusValue === EInvestorPlanStatus.PENDING ||
+          statusValue === EInvestorPlanStatus.UNDER_REVIEW ||
+          statusValue === EInternalUserPlanStatus.UNDER_REVIEW;
+
+        if (shouldFetchComments) {
+          this.planStore.getPlanComments(planId)
+            .pipe(
+              takeUntilDestroyed(this.destroyRef),
+              catchError((error) => {
+                console.error('Error loading plan comments:', error);
+                return of(null);
+              })
+            )
+            .subscribe();
+        }
       }
     } else if (currentMode === 'edit') {
       // Enable all forms in edit mode without resetting read-only field values

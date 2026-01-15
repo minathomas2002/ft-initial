@@ -123,6 +123,11 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   }
 
   override highlightInput(inputKey: string): boolean {
+    // In view mode, check if field is corrected (for investor view)
+    if (this.isViewMode()) {
+      return this.isFieldCorrected(inputKey);
+    }
+    // In edit/create mode, use base class logic
     return super.highlightInput(inputKey);
   }
 
