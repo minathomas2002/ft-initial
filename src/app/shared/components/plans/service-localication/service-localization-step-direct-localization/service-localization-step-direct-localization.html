@@ -18,26 +18,16 @@
       >
         <!-- Service Name -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.serviceName))"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'localizationStrategy',
-              inputKey: 'serviceName_' + index,
-              label: 'Service Name'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <input
-              type="text"
-              pInputText
-              fluid
-              placeholder=""
-              class="bg-gray-100 text-gray-500"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
-              [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder=""
+            class="bg-gray-100 text-gray-500"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+            [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
+            [color]="selectedInputColor()"
+          />
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
             [label]="'Service Name'"
@@ -426,27 +416,17 @@
         >
           <!-- Service Name -->
           <td class="p-3 border border-gray-200 min-w-[200px]">
-            <app-group-input-with-checkbox
-              [showCheckbox]="showCheckbox()"
-              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.serviceName))"
-              (valueChanged)="upDateSelectedInputs($event, {
-                section: 'serviceLevel',
-                inputKey: 'serviceName_' + index,
-                label: 'Service Name'
-              }, itemControl.get('rowId')?.value)"
-            >
-              <input
-                type="text"
-                pInputText
-                fluid
-                readonly
-                placeholder=""
-                class="bg-gray-100 text-gray-500"
-                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
-                [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
-                [color]="selectedInputColor()"
-              />
-            </app-group-input-with-checkbox>
+            <input
+              type="text"
+              pInputText
+              fluid
+              readonly
+              placeholder=""
+              class="bg-gray-100 text-gray-500"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
+              [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
+            />
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
               [label]="'Service Name'"
