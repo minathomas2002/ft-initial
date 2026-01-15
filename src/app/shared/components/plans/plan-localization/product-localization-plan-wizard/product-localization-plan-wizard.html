@@ -9,7 +9,7 @@
   (onSaveAsDraft)="saveAsDraft()"
   [isLoading]="isLoading() || isLoadingPlan()"
   [isProcessing]="isProcessing()"
-  [hideSaveAsDraft]="isViewMode() || isReviewMode()"
+  [hideSaveAsDraft]="isViewMode() || isReviewMode() || isInvestorViewMode()"
   (onClose)="onClose()"
 >
 
@@ -23,6 +23,14 @@
   }
 
   <ng-template [appStepContent]="1">
+    @if(isInvestorViewMode() && step1Comments().length > 0) {
+    <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
+      <div class="flex flex-col gap-2">
+        <h3 class="text-sm font-semibold text-orange-900">Employee Comments - {{ steps()[0].title }}</h3>
+        <p class="text-sm text-orange-800 whitespace-pre-line">{{ step1CommentText() }}</p>
+      </div>
+    </div>
+    }
     <app-plan-localization-step-01-overview-company-information-form
       [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[0].title"
@@ -35,6 +43,14 @@
   </ng-template>
 
   <ng-template [appStepContent]="2">
+    @if(isInvestorViewMode() && step2Comments().length > 0) {
+    <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
+      <div class="flex flex-col gap-2">
+        <h3 class="text-sm font-semibold text-orange-900">Employee Comments - {{ steps()[1].title }}</h3>
+        <p class="text-sm text-orange-800 whitespace-pre-line">{{ step2CommentText() }}</p>
+      </div>
+    </div>
+    }
     <app-plan-localization-step-02-product-plant-overview-form
       [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[1].title"
@@ -47,6 +63,14 @@
   </ng-template>
 
   <ng-template [appStepContent]="3">
+    @if(isInvestorViewMode() && step3Comments().length > 0) {
+    <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
+      <div class="flex flex-col gap-2">
+        <h3 class="text-sm font-semibold text-orange-900">Employee Comments - {{ steps()[2].title }}</h3>
+        <p class="text-sm text-orange-800 whitespace-pre-line">{{ step3CommentText() }}</p>
+      </div>
+    </div>
+    }
     <app-plan-localization-step-03-valueChain-form
       [isViewMode]="isViewMode() || isReviewMode()"
       [pageTitle]="steps()[2].title"
@@ -59,6 +83,14 @@
   </ng-template>
 
   <ng-template [appStepContent]="4">
+    @if(isInvestorViewMode() && step4Comments().length > 0) {
+    <div class="bg-orange-50 border border-orange-500 rounded-lg p-4 mb-6">
+      <div class="flex flex-col gap-2">
+        <h3 class="text-sm font-semibold text-orange-900">Employee Comments - {{ steps()[3].title }}</h3>
+        <p class="text-sm text-orange-800 whitespace-pre-line">{{ step4CommentText() }}</p>
+      </div>
+    </div>
+    }
     <app-plan-localization-step-04-saudization-form
       [isViewMode]="isViewMode()"
       [isReviewMode]="isReviewMode()"
@@ -91,7 +123,7 @@
   </ng-template>
 
   <ng-container ngProjectAs="final-step-action">
-    @if (activeStep() === 5 && !isViewMode()) {
+    @if (activeStep() === 5 && !isViewMode() && !isInvestorViewMode()) {
     @if (isReviewMode()) {
     <p-button
       [label]="'Reject'"
@@ -114,7 +146,7 @@
   </ng-container>
 
   <ng-container ngProjectAs="more-actions">
-    @if(canOpenTimeline()){
+    @if(canOpenTimeline() || isInvestorViewMode()){
     <p-button
       [label]="'Timeline'"
       icon="icon-list"
@@ -123,7 +155,7 @@
       (click)="timelineVisibility.set(true)"
     ></p-button>
     }
-    @if(isReviewMode()){
+    @if(isReviewMode() && !isInvestorViewMode()){
     @if (activeStep() === 5) {
     <p-button
       text

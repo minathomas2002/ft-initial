@@ -198,14 +198,34 @@ export class SummarySectionOverview {
     return null;
   });
 
-  // Helper method to check if a field has comments
+  // Helper method to check if a field has comments or requires update (for investor view)
   hasFieldComment(fieldKey: string, fieldId?: string): boolean {
+    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
+    if (this.correctedFieldIds().length > 0) {
+      const hasCorrectedField = this.investorComments().some(comment =>
+        comment.fields?.some(field =>
+          field.inputKey === fieldKey &&
+          field.id &&
+          this.correctedFieldIds().includes(field.id)
+        )
+      );
+      if (hasCorrectedField) {
+        return true;
+      }
+    }
+    
+    // Check if field has comments
     return this.pageComments().some(comment =>
       comment.fields?.some(field =>
         field.inputKey === fieldKey &&
         (fieldId === undefined || field.id === fieldId)
       )
     );
+  }
+  
+  // Helper method to check if a field requires update (for investor view)
+  isFieldRequiringUpdate(fieldId: string): boolean {
+    return this.correctedFieldIds().includes(fieldId);
   }
 
   // Computed properties for comment status

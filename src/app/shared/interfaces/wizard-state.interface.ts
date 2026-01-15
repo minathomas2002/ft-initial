@@ -9,4 +9,5 @@ export interface IWizardStepState {
   hasErrors?: boolean; // Optional flag to indicate if step has validation errors
   commentsCount?: number;
   commentColor?: TColors;
+  fieldsRequiringUpdate?: number; // Number of fields requiring updates (for investor view)
 }
