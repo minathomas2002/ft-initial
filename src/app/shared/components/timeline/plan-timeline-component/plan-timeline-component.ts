@@ -14,6 +14,7 @@ import { EStatusPlanTimeLine } from 'src/app/shared/enums';
 import { BaseTagComponent } from "../../base-components/base-tag/base-tag.component";
 import { PlanTimelineActionsMapper } from 'src/app/shared/classes/Plan-Timeline/plan-timeline-actions.mapper';
 import { PlanTimelineStatusMapper } from 'src/app/shared/classes/Plan-Timeline/plan-timeline-status.mapper';
+import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.enum';
 
 @Component({
   selector: 'app-plan-timeline-component',
@@ -58,6 +59,14 @@ export class TimelineComponent {
 
   get InvestorPlanStatus() {
     return EInvestorPlanStatus;
+  }
+
+  get planApprovedActionsEnum() {
+    return [EActionPlanTimeLine.Approved, EActionPlanTimeLine.DeptApproved, EActionPlanTimeLine.DVApproved, EActionPlanTimeLine.EmployeeApproved];
+  }
+
+  get planRejectedActionsEnum() {
+    return [EActionPlanTimeLine.Rejected, EActionPlanTimeLine.DeptRejected, EActionPlanTimeLine.DVRejected, EActionPlanTimeLine.DVRejectionAcknowledged];
   }
 
   getUserTranslatedRole(roleCode: ERoles): string {
