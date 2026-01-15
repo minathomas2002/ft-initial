@@ -303,11 +303,25 @@ export class SummarySectionExistingSaudi {
 
   // Check if a field has a comment
   hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {
+    // Helper function to check if inputKey matches the fieldKey
+    // Handles cases where inputKey might have an index suffix (e.g., 'fieldName_0', 'fieldName_1')
+    const matchesInputKey = (inputKey: string): boolean => {
+      // Exact match
+      if (inputKey === fieldKey) return true;
+      // Match with section prefix
+      if (section && inputKey === `${section}.${fieldKey}`) return true;
+      // Match with index suffix (for table rows): 'fieldKey_0', 'fieldKey_1', etc.
+      if (inputKey.startsWith(fieldKey + '_') && /^\d+$/.test(inputKey.substring(fieldKey.length + 1))) return true;
+      // Match with section prefix and index suffix: 'section.fieldKey_0', 'section.fieldKey_1', etc.
+      if (section && inputKey.startsWith(`${section}.${fieldKey}_`) && /^\d+$/.test(inputKey.substring(`${section}.${fieldKey}`.length + 1))) return true;
+      return false;
+    };
+
     // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
     if (this.correctedFieldIds().length > 0) {
       const hasCorrectedField = this.pageComments().some(comment =>
         comment.fields?.some(field =>
-          (field.inputKey === fieldKey || field.inputKey === `${section}.${fieldKey}`) &&
+          matchesInputKey(field.inputKey) &&
           (!section || field.section === section) &&
           field.id &&
           this.correctedFieldIds().includes(field.id) &&
@@ -322,7 +336,7 @@ export class SummarySectionExistingSaudi {
     // Check if field has comments
     return this.pageComments().some(comment =>
       comment.fields?.some(field =>
-        (field.inputKey === fieldKey || field.inputKey === `${section}.${fieldKey}`) &&
+        matchesInputKey(field.inputKey) &&
         (!section || field.section === section) &&
         (rowId === undefined || field.id === rowId)
       )

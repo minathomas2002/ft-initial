@@ -8,10 +8,11 @@ import { SummarySectionHeader } from '../../../../summary-section-header/summary
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-summary-section-direct-localization',
-  imports: [SummarySectionHeader, SummaryTableCell, TableModule],
+  imports: [SummarySectionHeader, SummaryTableCell, TableModule, TooltipModule],
   templateUrl: './summary-section-direct-localization.html',
   styleUrl: './summary-section-direct-localization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -283,5 +284,18 @@ export class SummarySectionDirectLocalization {
     const serviceGroup = serviceArray.at(index) as FormGroup;
     const rowId = serviceGroup.get('rowId')?.value;
     return this.hasFieldComment(fieldKey, 'serviceLevel', rowId);
+  }
+
+  // Helper methods for checking comments on "Other" detail fields
+  hasLocalizationApproachOtherComment(index: number): boolean {
+    return this.hasLocalizationStrategyComment(index, 'localizationApproachOtherDetails');
+  }
+
+  hasLocationOtherComment(index: number): boolean {
+    return this.hasLocalizationStrategyComment(index, 'locationOtherDetails');
+  }
+
+  hasProprietaryToolsExplanationComment(index: number): boolean {
+    return this.hasLocalizationStrategyComment(index, 'proprietaryToolsSystemsDetails');
   }
 }
