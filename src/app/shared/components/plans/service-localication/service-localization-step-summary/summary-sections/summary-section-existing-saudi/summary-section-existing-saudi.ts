@@ -278,4 +278,25 @@ export class SummarySectionExistingSaudi {
     if (Array.isArray(value)) return value;
     return value ? [value] : [];
   });
+
+  // Check if attachments field has validation errors
+  hasAttachmentsError = computed(() => {
+    const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+    if (!attachmentsControl) return false;
+    
+    // Check if the control itself has errors
+    if (attachmentsControl.invalid && (attachmentsControl.dirty || attachmentsControl.touched)) {
+      return true;
+    }
+    
+    // Check if the value control has errors
+    if (attachmentsControl instanceof FormGroup) {
+      const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
+      if (valueControl && valueControl.invalid && (valueControl.dirty || valueControl.touched)) {
+        return true;
+      }
+    }
+    
+    return false;
+  });
 }
