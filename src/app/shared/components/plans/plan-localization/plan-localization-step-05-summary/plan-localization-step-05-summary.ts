@@ -28,6 +28,16 @@ export class PlanLocalizationStep05Summary {
   isViewMode = input<boolean>(false);
   pageComments = input<IPageComment[]>([]);
   signature = input<Signature | null>(null);
+
+  // Comments and corrected fields inputs (from wizard)
+  step1Comments = input<IPageComment[]>([]);
+  step2Comments = input<IPageComment[]>([]);
+  step3Comments = input<IPageComment[]>([]);
+  step4Comments = input<IPageComment[]>([]);
+  step1CorrectedFields = input<string[]>([]);
+  step2CorrectedFields = input<string[]>([]);
+  step3CorrectedFields = input<string[]>([]);
+  step4CorrectedFields = input<string[]>([]);
   private readonly formService = inject(ProductPlanFormService);
   private readonly validationService = inject(ProductPlanValidationService);
   private readonly toasterService = inject(ToasterService);
@@ -38,29 +48,50 @@ export class PlanLocalizationStep05Summary {
   onSubmit = output<void>();
   onValidationErrorsChange = output<Map<number, IStepValidationErrors>>();
 
-  // Get comments for specific step
-  step1Comments = computed(() => {
-    return this.pageComments().filter(comment =>
-      comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step1.title')
-    );
+  // Helper methods to get combined comment text for each step
+  getStep1CommentText(): string {
+    const comments = this.step1Comments().length > 0 ? this.step1Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step1.title'));
+    return comments.map(c => c.comment).join('\n\n');
+  }
+
+  getStep2CommentText(): string {
+    const comments = this.step2Comments().length > 0 ? this.step2Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step2.title'));
+    return comments.map(c => c.comment).join('\n\n');
+  }
+
+  getStep3CommentText(): string {
+    const comments = this.step3Comments().length > 0 ? this.step3Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title'));
+    return comments.map(c => c.comment).join('\n\n');
+  }
+
+  getStep4CommentText(): string {
+    const comments = this.step4Comments().length > 0 ? this.step4Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title'));
+    return comments.map(c => c.comment).join('\n\n');
+  }
+
+  // Computed signals to get comments (fallback to pageComments if step comments not provided)
+  step1CommentsComputed = computed(() => {
+    return this.step1Comments().length > 0 ? this.step1Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step1.title'));
   });
 
-  step2Comments = computed(() => {
-    return this.pageComments().filter(comment =>
-      comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step2.title')
-    );
+  step2CommentsComputed = computed(() => {
+    return this.step2Comments().length > 0 ? this.step2Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step2.title'));
   });
 
-  step3Comments = computed(() => {
-    return this.pageComments().filter(comment =>
-      comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title')
-    );
+  step3CommentsComputed = computed(() => {
+    return this.step3Comments().length > 0 ? this.step3Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title'));
   });
 
-  step4Comments = computed(() => {
-    return this.pageComments().filter(comment =>
-      comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title')
-    );
+  step4CommentsComputed = computed(() => {
+    return this.step4Comments().length > 0 ? this.step4Comments() :
+      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title'));
   });
 
   // Validation errors state
