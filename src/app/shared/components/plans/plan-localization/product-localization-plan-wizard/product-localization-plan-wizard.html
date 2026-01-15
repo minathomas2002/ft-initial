@@ -23,80 +23,88 @@
   }
 
   <ng-template [appStepContent]="1">
-    @if(isInvestorViewMode() && step1Comments().length > 0) {
-    <app-page-comment-box
-      [commentTitle]="commentTitle() + ' - ' + steps()[0].title"
-      [commentText]="step1CommentText()"
-    />
-    }
-    <app-plan-localization-step-01-overview-company-information-form
-      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-      [pageTitle]="steps()[0].title"
-      [(commentPhase)]="step1CommentPhase"
-      [(selectedInputs)]="step1SelectedInputs"
-      [selectedInputColor]="(step1CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
-      [pageComments]="step1Comments()"
-      [commentTitle]="commentTitle()"
-      [correctedFieldIds]="step1CorrectedFields()"
-    />
+    <div class="flex flex-col gap-8">
+      @if (shouldShowIncomingComments() && hasIncomingStep1Comments()) {
+      <app-page-comment-box
+        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentText]="getIncomingStep1CommentText()"
+      />
+      }
+      <app-plan-localization-step-01-overview-company-information-form
+        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+        [pageTitle]="steps()[0].title"
+        [(commentPhase)]="step1CommentPhase"
+        [(selectedInputs)]="step1SelectedInputs"
+        [selectedInputColor]="(step1CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+        [pageComments]="step1Comments()"
+        [commentTitle]="commentTitle()"
+        [correctedFieldIds]="step1CorrectedFields()"
+      />
+    </div>
   </ng-template>
 
   <ng-template [appStepContent]="2">
-    @if(isInvestorViewMode() && step2Comments().length > 0) {
-    <app-page-comment-box
-      [commentTitle]="commentTitle() + ' - ' + steps()[1].title"
-      [commentText]="step2CommentText()"
-    />
-    }
-    <app-plan-localization-step-02-product-plant-overview-form
-      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-      [pageTitle]="steps()[1].title"
-      [(commentPhase)]="step2CommentPhase"
-      [(selectedInputs)]="step2SelectedInputs"
-      [selectedInputColor]="(step2CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
-      [pageComments]="step2Comments()"
-      [commentTitle]="commentTitle()"
-      [correctedFieldIds]="step2CorrectedFields()"
-    />
+    <div class="flex flex-col gap-8">
+      @if (shouldShowIncomingComments() && hasIncomingStep2Comments()) {
+      <app-page-comment-box
+        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentText]="getIncomingStep2CommentText()"
+      />
+      }
+      <app-plan-localization-step-02-product-plant-overview-form
+        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+        [pageTitle]="steps()[1].title"
+        [(commentPhase)]="step2CommentPhase"
+        [(selectedInputs)]="step2SelectedInputs"
+        [selectedInputColor]="(step2CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+        [pageComments]="step2Comments()"
+        [commentTitle]="commentTitle()"
+        [correctedFieldIds]="step2CorrectedFields()"
+      />
+    </div>
   </ng-template>
 
   <ng-template [appStepContent]="3">
-    @if(isInvestorViewMode() && step3Comments().length > 0) {
-    <app-page-comment-box
-      [commentTitle]="commentTitle() + ' - ' + steps()[2].title"
-      [commentText]="step3CommentText()"
-    />
-    }
-    <app-plan-localization-step-03-valueChain-form
-      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-      [pageTitle]="steps()[2].title"
-      [(commentPhase)]="step3CommentPhase"
-      [(selectedInputs)]="step3SelectedInputs"
-      [selectedInputColor]="(step3CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
-      [pageComments]="step3Comments()"
-      [commentTitle]="commentTitle()"
-      [correctedFieldIds]="step3CorrectedFields()"
-    />
+    <div class="flex flex-col gap-8">
+      @if (shouldShowIncomingComments() && hasIncomingStep3Comments()) {
+      <app-page-comment-box
+        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentText]="getIncomingStep3CommentText()"
+      />
+      }
+      <app-plan-localization-step-03-valueChain-form
+        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+        [pageTitle]="steps()[2].title"
+        [(commentPhase)]="step3CommentPhase"
+        [(selectedInputs)]="step3SelectedInputs"
+        [selectedInputColor]="(step3CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+        [pageComments]="step3Comments()"
+        [commentTitle]="commentTitle()"
+        [correctedFieldIds]="step3CorrectedFields()"
+      />
+    </div>
   </ng-template>
 
   <ng-template [appStepContent]="4">
-    @if(isInvestorViewMode() && step4Comments().length > 0) {
-    <app-page-comment-box
-      [commentTitle]="commentTitle() + ' - ' + steps()[3].title"
-      [commentText]="step4CommentText()"
-    />
-    }
-    <app-plan-localization-step-04-saudization-form
-      [isViewMode]="isViewMode()"
-      [isReviewMode]="isReviewMode()"
-      [pageTitle]="steps()[3].title"
-      [(commentPhase)]="step4CommentPhase"
-      [(selectedInputs)]="step4SelectedInputs"
-      [selectedInputColor]="(step4CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
-      [pageComments]="step4Comments()"
-      [commentTitle]="commentTitle()"
-      [correctedFieldIds]="step4CorrectedFields()"
-    />
+    <div class="flex flex-col gap-8">
+      @if (shouldShowIncomingComments() && hasIncomingStep4Comments()) {
+      <app-page-comment-box
+        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentText]="getIncomingStep4CommentText()"
+      />
+      }
+      <app-plan-localization-step-04-saudization-form
+        [isViewMode]="isViewMode()"
+        [isReviewMode]="isReviewMode()"
+        [pageTitle]="steps()[3].title"
+        [(commentPhase)]="step4CommentPhase"
+        [(selectedInputs)]="step4SelectedInputs"
+        [selectedInputColor]="(step4CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+        [pageComments]="step4Comments()"
+        [commentTitle]="commentTitle()"
+        [correctedFieldIds]="step4CorrectedFields()"
+      />
+    </div>
   </ng-template>
 
   <ng-template [appStepContent]="5">

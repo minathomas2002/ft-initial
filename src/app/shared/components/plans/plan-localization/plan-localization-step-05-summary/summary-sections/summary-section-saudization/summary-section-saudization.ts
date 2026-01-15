@@ -10,12 +10,11 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 import { SummaryTableCell } from 'src/app/shared/components/plans/summary-table-cell/summary-table-cell';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
-import { SummaryComments } from 'src/app/shared/components/plans/summary-comments/summary-comments';
 import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-saudization',
-  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, SummaryComments, TableModule, TranslatePipe, ImageErrorDirective],
+  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, TableModule, TranslatePipe, ImageErrorDirective],
   templateUrl: './summary-section-saudization.html',
   styleUrl: './summary-section-saudization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

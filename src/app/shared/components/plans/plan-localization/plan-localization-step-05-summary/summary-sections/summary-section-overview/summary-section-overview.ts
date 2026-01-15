@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, inject, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SummaryField } from 'src/app/shared/components/plans/summary-field/summary-field';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
-import { SummaryComments } from 'src/app/shared/components/plans/summary-comments/summary-comments';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
@@ -10,7 +9,7 @@ import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-overview',
-  imports: [SummarySectionHeader, SummaryField, SummaryComments, TranslatePipe],
+  imports: [SummarySectionHeader, SummaryField, TranslatePipe],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
   providers: [DatePipe],

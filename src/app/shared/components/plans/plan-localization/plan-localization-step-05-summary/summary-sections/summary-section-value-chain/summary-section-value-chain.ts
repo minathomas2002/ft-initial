@@ -8,12 +8,11 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ValueChainSummaryComponent } from '../../../plan-localization-step-03-valueChain/value-chain-summary/value-chain-summary.component';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
-import { SummaryComments } from 'src/app/shared/components/plans/summary-comments/summary-comments';
 import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-value-chain',
-  imports: [SummarySectionHeader, CommonModule, ValueChainTable, ValueChainSummaryComponent, SummaryComments, TranslatePipe],
+  imports: [SummarySectionHeader, CommonModule, ValueChainTable, ValueChainSummaryComponent, TranslatePipe],
   templateUrl: './summary-section-value-chain.html',
   styleUrl: './summary-section-value-chain.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
