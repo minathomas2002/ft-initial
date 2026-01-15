@@ -3,14 +3,14 @@
   <app-summary-section-cover-page
     [isViewMode]="isViewMode()"
     [formGroup]="step1FormGroup"
-    [pageComments]="step1Comments()"
+    [pageComments]="step1CommentsComputed()"
     [commentTitle]="commentTitle()"
     [correctedFieldIds]="step1CorrectedFields()"
     (onEdit)="onEditStepClick(coverStepNumber())"
   />
-  @if (isViewMode() && step1Comments().length > 0) {
+  @if (isViewMode() && hasStep1Comments()) {
   <app-page-comment-box
-    [commentTitle]="commentTitle() + ' - Cover Page'"
+    [commentTitle]="getStep1CommentText() + ' - Cover Page'"
     [commentText]="getStep1CommentText()"
   />
   }
@@ -19,14 +19,14 @@
   <app-summary-section-overview
     [isViewMode]="isViewMode()"
     [formGroup]="step2FormGroup"
-    [pageComments]="step2Comments()"
+    [pageComments]="step2CommentsComputed()"
     [commentTitle]="commentTitle()"
     [correctedFieldIds]="step2CorrectedFields()"
     (onEdit)="onEditStepClick(overviewStepNumber())"
   />
-  @if (isViewMode() && step2Comments().length > 0) {
+  @if (isViewMode() && hasStep2Comments()) {
   <app-page-comment-box
-    [commentTitle]="commentTitle() + ' - Overview'"
+    [commentTitle]="getStep2CommentText() + ' - Overview'"
     [commentText]="getStep2CommentText()"
   />
   }
@@ -36,14 +36,14 @@
   <app-summary-section-existing-saudi
     [isViewMode]="isViewMode()"
     [formGroup]="step3FormGroup"
-    [pageComments]="step3Comments()"
+    [pageComments]="step3CommentsComputed()"
     [commentTitle]="commentTitle()"
     [correctedFieldIds]="step3CorrectedFields()"
     (onEdit)="onEditStepClick(existingSaudiStepNumber())"
   />
-  @if (isViewMode() && step3Comments().length > 0) {
+  @if (isViewMode() && hasStep3Comments()) {
   <app-page-comment-box
-    [commentTitle]="commentTitle() + ' - Existing Saudi Co.'"
+    [commentTitle]="getStep3CommentText() + ' - Existing Saudi Co.'"
     [commentText]="getStep3CommentText()"
   />
   }
@@ -54,14 +54,14 @@
   <app-summary-section-direct-localization
     [isViewMode]="isViewMode()"
     [formGroup]="step4FormGroup"
-    [pageComments]="step4Comments()"
+    [pageComments]="step4CommentsComputed()"
     [commentTitle]="commentTitle()"
     [correctedFieldIds]="step4CorrectedFields()"
     (onEdit)="onEditStepClick(directLocalizationStepNumber())"
   />
-  @if (isViewMode() && step4Comments().length > 0) {
+  @if (isViewMode() && hasStep4Comments()) {
   <app-page-comment-box
-    [commentTitle]="commentTitle() + ' - Direct Localization'"
+    [commentTitle]="getStep4CommentText() + ' - Direct Localization'"
     [commentText]="getStep4CommentText()"
   />
   }
