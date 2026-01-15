@@ -14,12 +14,15 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { Popover, PopoverModule } from 'primeng/popover';
-import { ERoutes } from '../../../../../shared/enums';
+import { EOpportunityType, ERoutes } from '../../../../../shared/enums';
 import { NotificationHubService } from '../../../../../shared/services/signalr/notification-hub.service';
 import { Subject, takeUntil } from 'rxjs';
 import { NavbarNotificationsTabs } from '../navbar-notifications-tabs/navbar-notifications-tabs';
 import { INotification, INotificationItem } from 'src/app/core/layouts/main-layout/models/notifications.interface';
 import { NotificationsStore } from 'src/app/shared/stores/notifications/notifications.store';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ServiceLocalizationPlanWizard } from "src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard";
+import { ProductLocalizationPlanWizard } from "src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard";
 
 @Component({
   selector: 'app-navbar-notifications',
@@ -31,7 +34,9 @@ import { NotificationsStore } from 'src/app/shared/stores/notifications/notifica
     RouterLink,
     PopoverModule,
     NavbarNotificationsTabs,
-  ],
+    ServiceLocalizationPlanWizard,
+    ProductLocalizationPlanWizard
+],
   templateUrl: './navbar-notifications.component.html',
   styleUrl: './navbar-notifications.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +47,7 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
   private readonly notificationHubService = inject(NotificationHubService);
   private readonly notificationStore = inject(NotificationsStore);
   private readonly router = inject(Router);
+  private readonly planStore = inject(PlanStore);
 
   private readonly destroy$ = new Subject<void>();
   readonly notifications = this.notificationStore.notifications;
@@ -52,6 +58,8 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
   readonly pageSize = this.notificationStore.pageSize;
 
   isShowPreviousButtonClicked = signal(false);
+  productLocalizationPlanWizardVisibility = signal(false);
+  serviceLocalizationPlanWizardVisibility = signal(false);
 
   get ERoutes() {
     return ERoutes;
@@ -126,10 +134,20 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
     }
 
     // Mark notification as read (API call happens in the store)
-    this.notificationStore.setNotificationAsRead(notification.id);    
+    this.notificationStore.setNotificationAsRead(notification.id);
     // Navigate to the notification route
     if (notification.route && notification.route.length > 0) {
       this.router.navigate(notification.route, { queryParams: notification.params });
+    }
+
+    if (notification.behavior === 'planDetails') {
+      // Set mode to view and plan ID
+      this.planStore.setWizardMode('view');
+      this.planStore.setSelectedPlanId(notification.customData.PlanId);
+
+      notification.customData.PlanType === EOpportunityType.PRODUCT
+        ? this.productLocalizationPlanWizardVisibility.set(true)
+        : this.serviceLocalizationPlanWizardVisibility.set(true);
     }
 
     this.notificationsModal()?.hide()
