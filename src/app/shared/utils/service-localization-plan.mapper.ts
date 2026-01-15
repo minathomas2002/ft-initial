@@ -418,7 +418,7 @@ export function mapServicePlanResponseToForm(
   formService.toggleLocalAgentInformValidation(companySection?.hasLocalAgent === true);
 
   const localAgentInfo = formService.localAgentInformationFormGroup;
-  setDirectValue(localAgentInfo, EMaterialsFormControls.localAgentDetails, companySection?.localAgentDetails ?? '');
+  setNestedValue(localAgentInfo, EMaterialsFormControls.localAgentDetails, companySection?.localAgentDetails ?? '');
 
   const agent = servicePlan.localAgentDetailSection;
   setNestedValue(localAgentInfo, EMaterialsFormControls.localAgentName, agent?.localAgentName ?? '');
@@ -621,7 +621,7 @@ function mapServicesAndCompanyInfo(formService: ServicePlanFormService): {
     hasLocalAgent,
     localAgentDetails:
       hasLocalAgent === true
-        ? (localAgentInfoGroup?.get(EMaterialsFormControls.localAgentDetails)?.value || undefined)
+        ? (getControlValue(localAgentInfoGroup, EMaterialsFormControls.localAgentDetails) || undefined)
         : undefined,
   };
 

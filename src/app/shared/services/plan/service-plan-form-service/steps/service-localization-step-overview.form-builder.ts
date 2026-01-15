@@ -53,7 +53,10 @@ export class ServiceLocalizationStepOverviewFormBuilder {
 
   buildLocalAgentInformationFormGroup(): FormGroup {
     return this.fb.group({
-      [EMaterialsFormControls.localAgentDetails]: this.fb.control(''), // Text area, conditional
+      [EMaterialsFormControls.localAgentDetails]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(''), // Text area, conditional
+      }),
       [EMaterialsFormControls.localAgentName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(''),
@@ -196,10 +199,10 @@ export class ServiceLocalizationStepOverviewFormBuilder {
 
     if (value) {
       // Text area for local agent details (conditional)
-      const localAgentDetailsControl = localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails);
-      if (localAgentDetailsControl) {
-        localAgentDetailsControl.addValidators([Validators.required]);
-        localAgentDetailsControl.updateValueAndValidity();
+      const localAgentDetailsValueControl = (localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails) as FormGroup)?.get(EMaterialsFormControls.value);
+      if (localAgentDetailsValueControl) {
+        localAgentDetailsValueControl.addValidators([Validators.required]);
+        localAgentDetailsValueControl.updateValueAndValidity();
       }
 
       // Individual fields (conditional)
@@ -210,11 +213,11 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       (localAgentFormGroup.controls[EMaterialsFormControls.companyLocation] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       // Reset and clear validators for conditional fields
-      const localAgentDetailsControl = localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails);
-      if (localAgentDetailsControl) {
-        localAgentDetailsControl.reset();
-        localAgentDetailsControl.clearValidators();
-        localAgentDetailsControl.updateValueAndValidity();
+      const localAgentDetailsValueControl = (localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails) as FormGroup)?.get(EMaterialsFormControls.value);
+      if (localAgentDetailsValueControl) {
+        localAgentDetailsValueControl.reset();
+        localAgentDetailsValueControl.clearValidators();
+        localAgentDetailsValueControl.updateValueAndValidity();
       }
 
       (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].reset();
