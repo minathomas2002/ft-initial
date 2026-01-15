@@ -31,7 +31,7 @@
             fluid
             maxlength="150"
             trimOnBlur
-            [appConditionalColorClass]="isViewMode() ? isFieldCorrected('planTitle', 'coverPageCompanyInformation') : highlightInput('planTitle')"
+            [appConditionalColorClass]="highlightInput('planTitle')"
             [color]="isViewMode() && isFieldCorrected('planTitle', 'coverPageCompanyInformation') ? 'green' : selectedInputColor()"
           />
         </app-group-input-with-checkbox>
@@ -63,7 +63,7 @@
             fluid
             maxlength="100"
             trimOnBlur
-            [appConditionalColorClass]="isViewMode() ? isFieldCorrected('companyName', 'coverPageCompanyInformation') : highlightInput('companyName')"
+            [appConditionalColorClass]="highlightInput('companyName')"
             [color]="isViewMode() && isFieldCorrected('companyName', 'coverPageCompanyInformation') ? 'green' : selectedInputColor()"
           />
         </app-group-input-with-checkbox>
