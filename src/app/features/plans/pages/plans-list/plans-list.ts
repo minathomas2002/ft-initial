@@ -27,6 +27,7 @@ import { PlansActionMenu } from '../../components/plans-action-menu/plans-action
 import { AbstractServiceFilter } from 'src/app/shared/classes/abstract-service-filter';
 import { IPlanFilter } from 'src/app/shared/interfaces';
 import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
+import { AssignReassignManualEmployee } from "../../components/assign-reassign-manual-employee/assign-reassign-manual-employee";
 
 @Component({
   selector: 'app-plans-list',
@@ -49,8 +50,9 @@ import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-too
     NewPlanDialog,
     ServiceLocalizationPlanWizard,
     TimelineDialog,
-    TruncateTooltipDirective
-  ],
+    TruncateTooltipDirective,
+    AssignReassignManualEmployee
+],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,6 +64,10 @@ export class PlansList implements OnInit {
   serviceLocalizationPlanWizardVisibility = signal(false);
   timelineVisibility = signal(false);
   selectedPlan = signal<IPlanRecord | null>(null);
+  viewAssignDialog = signal<boolean>(false);
+  isReassignMode = signal<boolean>(false);
+  planItem = signal<IPlanRecord | null>(null);
+
   eInvestorPlanStatus = EInvestorPlanStatus;
   eInternalUserPlanStatus = EInternalUserPlanStatus;
   EInternalUserPlanStatus = EInternalUserPlanStatus;
@@ -334,4 +340,17 @@ export class PlansList implements OnInit {
       this.serviceLocalizationPlanWizardVisibility.set(true);
     }
   }
+
+  onAssignToEmployee(plan: IPlanRecord) {
+    this.viewAssignDialog.set(true);
+    this.planItem.set(plan);
+    this.isReassignMode.set(false);
+  }
+
+  onReAssign(plan: IPlanRecord) {
+    this.viewAssignDialog.set(true);
+    this.planItem.set(plan);
+    this.isReassignMode.set(true);
+  }
+
 }
