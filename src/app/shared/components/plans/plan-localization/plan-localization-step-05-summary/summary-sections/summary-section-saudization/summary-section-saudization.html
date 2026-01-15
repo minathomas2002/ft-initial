@@ -59,6 +59,9 @@
   <!-- Attachments -->
   <div class="flex flex-col gap-4">
     <h3 class="text-md font-semibold text-gray-900">{{ 'plans.summary.attachments' | translate }}</h3>
+    @if (hasAttachmentsError()) {
+    <span class="text-sm text-red-600">{{ 'plans.summary.attachments' | translate }} is required</span>
+    }
     @if (hasAttachments()) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
       @for (file of attachments(); track $index) {

@@ -131,6 +131,11 @@ export class SummarySectionSaudization {
     return atts && Array.isArray(atts) && atts.length > 0;
   });
 
+  // Check if attachments field has validation errors
+  hasAttachmentsError = computed(() => {
+    return this.hasFieldError(`${EMaterialsFormControls.attachmentsFormGroup}.${EMaterialsFormControls.attachments}`);
+  });
+
   // Get file icon based on file type
   getFileIcon(file: any): string | null {
     if (!file) return null;
