@@ -105,7 +105,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.serviceProvidedTo]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]),
+        [EMaterialsFormControls.value]: this.fb.control([], [Validators.required]),
       }),
       [EMaterialsFormControls.serviceProvidedToCompanyNames]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -244,7 +244,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
    * Toggle validation for Service Provided To Company Names field based on serviceProvidedTo value
    * Required if "Others" is selected
    */
-  toggleServiceProvidedToCompanyNamesValidation(formGroup: FormGroup, serviceProvidedTo: string | null, index: number): void {
+  toggleServiceProvidedToCompanyNamesValidation(formGroup: FormGroup, serviceProvidedTo: Array<string | number> | null, index: number): void {
     const serviceDetailsArray = this.getServiceDetailsFormArray(formGroup);
     if (!serviceDetailsArray || index >= serviceDetailsArray.length) return;
 
@@ -253,7 +253,10 @@ export class ServiceLocalizationStepOverviewFormBuilder {
 
     if (!companyNamesControl) return;
 
-    if (serviceProvidedTo === EServiceProvidedTo.Others.toString()) {
+    const selected = (serviceProvidedTo ?? []).map((v) => String(v));
+    const hasOthers = selected.includes(EServiceProvidedTo.Others.toString()) || selected.includes('Others');
+
+    if (hasOthers) {
       companyNamesControl.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       companyNamesControl.clearValidators();

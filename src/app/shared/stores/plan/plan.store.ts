@@ -94,6 +94,7 @@ const initialState: {
   ],
 
   serviceProvidedToOptions: [
+    { id: EServiceProvidedTo.SEC.toString(), name: 'SEC' },
     { id: EServiceProvidedTo.Contractors.toString(), name: 'SEC Approved Contractors' },
     { id: EServiceProvidedTo.Manufacturers.toString(), name: 'SEC Approved Manufacturers' },
     { id: EServiceProvidedTo.Others.toString(), name: 'Others' },

@@ -35,6 +35,7 @@ import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans
 import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
+import { MultiSelect } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-service-localization-step-overview',
@@ -55,7 +56,8 @@ import { PageCommentBox } from '../../page-comment-box/page-comment-box';
     CommentStateComponent,
     GeneralConfirmationDialogComponent,
     FormsModule,
-    PageCommentBox
+    PageCommentBox,
+    MultiSelect
   ],
   templateUrl: './service-localization-step-overview.html',
   styleUrl: './service-localization-step-overview.scss',
@@ -116,9 +118,6 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   serviceProvidedToOptions = this.planStore.serviceProvidedToOptions;
   yesNoOptions = this.planStore.yesNoOptions;
   localizationMethodologyOptions = this.planStore.localizationMethodologyOptions;
-
-  // id for 'Others' in serviceProvidedTo options (string)
-  serviceProvidedToOthersId = EServiceProvidedTo.Others.toString();
 
   availableOpportunities = this.planStore.availableOpportunities;
   isLoadingAvailableOpportunities = this.planStore.isLoadingAvailableOpportunities;
@@ -184,8 +183,14 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     super.resetAllHasCommentControls();
   }
 
-  onServiceProvidedToChange(value: string | null, index: number): void {
+  onServiceProvidedToChange(value: Array<string | number> | null, index: number): void {
     this.planFormService.toggleServiceProvidedToCompanyNamesValidation(value, index);
+  }
+
+  hasServiceProvidedToOthers(value: unknown): boolean {
+    const list = Array.isArray(value) ? value : [];
+    const selected = list.map((v) => String(v));
+    return selected.includes(EServiceProvidedTo.Others.toString());
   }
 
   // Override hook method for step-specific initialization
