@@ -66,7 +66,7 @@ export class FormUtilityService {
           const hasCommentControl = childControl.get(EMaterialsFormControls.hasComment);
           if (hasCommentControl instanceof FormControl) {
             // Reset hasComment to false
-            hasCommentControl.setValue(false, { emitEvent: false });
+            hasCommentControl.setValue(false, { emitEvent: true });
           }
           // Continue recursively to handle nested structures
           this.resetHasCommentControls(childControl);
