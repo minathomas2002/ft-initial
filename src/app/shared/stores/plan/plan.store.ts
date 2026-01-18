@@ -1,13 +1,14 @@
-import { computed, inject, Type } from "@angular/core";
+import { computed, inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EProductManufacturingExperience, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
 import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
-import { IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, IServicePlanResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from "../../interfaces/plans.interface";
+import { IProductPlanResponse, IServiceLocalizationPlanResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
+import { RoleService } from "../../services/role/role-service";
 
 export interface IPlanTypeDropdownOption {
   label: string;
@@ -158,6 +159,8 @@ export const PlanStore = signalStore(
   withState(initialState),
   withComputed((store) => {
     const i18nService = inject(I18nService);
+    const roleService = inject(RoleService);
+
     return {
       planTypeOptions: computed<IPlanTypeDropdownOption[]>(() => {
         i18nService.currentLanguage();
@@ -176,6 +179,9 @@ export const PlanStore = signalStore(
       commentPersona: computed<string | null>(() => {
         const role = store.planComments()?.creatorRole;
         if (!role) return null;
+        if (roleService.hasAnyRoleSignal([role])) {
+          return 'Your Comment'
+        }
         const roleMap: Record<number, string> = {
           [ERoles.ADMIN]: 'Admin Comment',
           [ERoles.INVESTOR]: 'Investor Comment',
