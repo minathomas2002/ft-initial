@@ -1,11 +1,5 @@
 <div class="flex flex-col gap-8 pb-10">
   <!-- Step 1: Overview & Company Information -->
-  @if (shouldShowIncomingComments() && hasIncomingStep1Comments()) {
-  <app-page-comment-box
-    [commentTitle]="incomingCommentPersona() || 'Comment'"
-    [commentText]="getIncomingStep1CommentText()"
-  />
-  }
   <app-summary-section-overview
     [isViewMode]="isViewMode()"
     [formGroup]="step1FormGroup"
@@ -14,6 +8,12 @@
     [correctedFieldIds]="step1CorrectedFields()"
     (onEdit)="onEditStepClick(1)"
   />
+  @if (shouldShowIncomingComments() && hasIncomingStep1Comments()) {
+  <app-page-comment-box
+    [commentTitle]="incomingCommentPersona() || 'Comment'"
+    [commentText]="getIncomingStep1CommentText()"
+  />
+  }
   @if (hasStep1OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Overview & Company Information'"
@@ -22,12 +22,6 @@
   }
 
   <!-- Step 2: Product & Plant Overview -->
-  @if (shouldShowIncomingComments() && hasIncomingStep2Comments()) {
-  <app-page-comment-box
-    [commentTitle]="incomingCommentPersona() || 'Comment'"
-    [commentText]="getIncomingStep2CommentText()"
-  />
-  }
   <app-summary-section-product-plant
     [isViewMode]="isViewMode()"
     [formGroup]="step2FormGroup"
@@ -36,6 +30,12 @@
     [correctedFieldIds]="step2CorrectedFields()"
     (onEdit)="onEditStepClick(2)"
   />
+  @if (shouldShowIncomingComments() && hasIncomingStep2Comments()) {
+  <app-page-comment-box
+    [commentTitle]="incomingCommentPersona() || 'Comment'"
+    [commentText]="getIncomingStep2CommentText()"
+  />
+  }
   @if (hasStep2OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Product & Plant Overview'"
@@ -44,12 +44,6 @@
   }
 
   <!-- Step 3: Value Chain -->
-  @if (shouldShowIncomingComments() && hasIncomingStep3Comments()) {
-  <app-page-comment-box
-    [commentTitle]="incomingCommentPersona() || 'Comment'"
-    [commentText]="getIncomingStep3CommentText()"
-  />
-  }
   <app-summary-section-value-chain
     [isViewMode]="isViewMode()"
     [formGroup]="step3FormGroup"
@@ -58,6 +52,12 @@
     [correctedFieldIds]="step3CorrectedFields()"
     (onEdit)="onEditStepClick(3)"
   />
+  @if (shouldShowIncomingComments() && hasIncomingStep3Comments()) {
+  <app-page-comment-box
+    [commentTitle]="incomingCommentPersona() || 'Comment'"
+    [commentText]="getIncomingStep3CommentText()"
+  />
+  }
   @if (hasStep3OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Value Chain'"
@@ -66,12 +66,6 @@
   }
 
   <!-- Step 4: Saudization -->
-  @if (shouldShowIncomingComments() && hasIncomingStep4Comments()) {
-  <app-page-comment-box
-    [commentTitle]="incomingCommentPersona() || 'Comment'"
-    [commentText]="getIncomingStep4CommentText()"
-  />
-  }
   <app-summary-section-saudization
     [isViewMode]="isViewMode()"
     [formGroup]="step4FormGroup"
@@ -80,6 +74,12 @@
     [correctedFieldIds]="step4CorrectedFields()"
     (onEdit)="onEditStepClick(4)"
   />
+  @if (shouldShowIncomingComments() && hasIncomingStep4Comments()) {
+  <app-page-comment-box
+    [commentTitle]="incomingCommentPersona() || 'Comment'"
+    [commentText]="getIncomingStep4CommentText()"
+  />
+  }
   @if (hasStep4OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Saudization'"
