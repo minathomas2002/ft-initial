@@ -9,13 +9,12 @@ import { ProductPlanValidationService } from "src/app/shared/services/plan/valid
 import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
-import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
-import { IFieldInformation, IPageComment, IProductPlanResponse, ReviewPlanRequest, Signature, IPlanCommentResponse } from "src/app/shared/interfaces/plans.interface";
+import { IFieldInformation, IPageComment, IProductPlanResponse, Signature } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
@@ -33,6 +32,7 @@ import { AuthStore } from "src/app/shared/stores/auth/auth.store";
 import { ERoles } from "src/app/shared/enums/roles.enum";
 import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
+import { BasePlanWizard } from '../../base-wizard-class/base-plan-wizard';
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 
@@ -59,11 +59,10 @@ export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
   styleUrl: './product-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductLocalizationPlanWizard implements OnDestroy {
+export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnDestroy {
   productPlanFormService = inject(ProductPlanFormService);
-  toasterService = inject(ToasterService);
-  planStore = inject(PlanStore);
-  destroyRef = inject(DestroyRef);
+  override readonly toasterService = inject(ToasterService);
+  override readonly planStore = inject(PlanStore);
   validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
@@ -85,6 +84,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
 
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
+
   // Get comment phase for current active step
   currentStepCommentPhase = computed<TCommentPhase>(() => {
     const step = this.activeStep();
@@ -308,7 +308,6 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     return this.i18nService.translate('plans.wizard.title.create');
   });
   isLoading = signal(false);
-  isProcessing = signal(false);
   isLoadingPlan = signal(false);
 
   // Reference to Step 5 Summary component
@@ -383,14 +382,6 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   step2CommentPhase = signal<TCommentPhase>('none');
   step3CommentPhase = signal<TCommentPhase>('none');
   step4CommentPhase = signal<TCommentPhase>('none');
-  showSendBackConfirmationDialog = signal<boolean>(false);
-
-  // Approve/Reject dialogs
-  showApproveConfirmationDialog = signal<boolean>(false);
-  showRejectReasonDialog = signal<boolean>(false);
-  showRejectConfirmationDialog = signal<boolean>(false);
-  approvalNote = signal<string>('');
-  rejectionReason = signal<string>('');
 
   // Computed signals for action controls
   hasSelectedFields = computed(() => {
@@ -427,6 +418,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   });
 
   constructor() {
+    super();
     // Effect to load plan data when planId and mode are set
     effect(() => {
       const currentPlanId = this.planStore.selectedPlanId();
@@ -1027,7 +1019,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
   /**
    * Collect all page comments from step forms
    */
-  collectAllPageComments(): IPageComment[] {
+  override collectAllPageComments(): IPageComment[] {
     const comments: IPageComment[] = [];
 
     // Step 1 comments
@@ -1076,195 +1068,38 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     return comments;
   }
   /**
-   * Handle Send Back to Investor action
+   * Validate that steps with selected inputs have submitted comments (not in 'adding' or 'editing' phase)
    */
-  onSendBackToInvestor(): void {
-    // Validate at least one comment exists
-    const comments = this.collectAllPageComments();
-    if (comments.length === 0) {
-      this.toasterService.error('You must add a comment before sending back the plan.');
-      return;
+  protected override validateCommentSubmission(): string | null {
+    // Check Step 1 (Overview & Company Information)
+    if (this.step1SelectedInputs().length > 0 &&
+      (this.step1CommentPhase() === 'adding' || this.step1CommentPhase() === 'editing')) {
+      return this.getSendBackErrorMessage(this.steps()[0].title, this.step1CommentPhase());
     }
 
-    // Show confirmation dialog
-    this.showSendBackConfirmationDialog.set(true);
-  }
-
-  /**
-   * Confirm sending plan back to investor
-   */
-  onConfirmSendBack(): void {
-    const planId = this.planStore.selectedPlanId();
-    if (!planId) {
-      this.toasterService.error('Plan ID is required.');
-      return;
+    // Check Step 2 (Product & Plant Overview)
+    if (this.step2SelectedInputs().length > 0 &&
+      (this.step2CommentPhase() === 'adding' || this.step2CommentPhase() === 'editing')) {
+      return this.getSendBackErrorMessage(this.steps()[1].title, this.step2CommentPhase());
     }
 
-    const comments = this.collectAllPageComments();
-    const request: ReviewPlanRequest = {
-      planId: planId,
-      comments: comments,
-    };
-
-    this.isProcessing.set(true);
-    this.planStore.sendPlanBackToInvestor(request)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.isProcessing.set(false);
-          this.showSendBackConfirmationDialog.set(false);
-          this.toasterService.success('Plan has been sent back to investor successfully.');
-          this.doRefresh.emit();
-          this.visibility.set(false);
-          this.planStore.resetWizardState();
-        },
-        error: (error) => {
-          this.isProcessing.set(false);
-          this.toasterService.error('Error sending plan back to investor. Please try again.');
-          console.error('Error sending plan back:', error);
-        }
-      });
-  }
-
-  /**
-   * Cancel sending plan back
-   */
-  onCancelSendBack(): void {
-    this.showSendBackConfirmationDialog.set(false);
-  }
-
-  /**
-   * Handle Approve and Forward action
-   */
-  onApproveAndForward(): void {
-    if (!this.canApproveOrReject()) {
-      return;
-    }
-    this.approvalNote.set('');
-    this.showApproveConfirmationDialog.set(true);
-  }
-
-  /**
-   * Confirm approval with optional note
-   */
-  onConfirmApprove(): void {
-    const planId = this.planStore.selectedPlanId();
-    if (!planId) {
-      this.toasterService.error('Plan ID is required.');
-      return;
+    // Check Step 3 (Value Chain)
+    if (this.step3SelectedInputs().length > 0 &&
+      (this.step3CommentPhase() === 'adding' || this.step3CommentPhase() === 'editing')) {
+      return this.getSendBackErrorMessage(this.steps()[2].title, this.step3CommentPhase());
     }
 
-    const note = this.approvalNote().trim();
-    this.isProcessing.set(true);
-    this.planStore.employeeApprovePlan(planId, note || undefined)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.isProcessing.set(false);
-          this.showApproveConfirmationDialog.set(false);
-          this.approvalNote.set('');
-          this.toasterService.success('Plan has been approved and forwarded successfully.');
-          this.doRefresh.emit();
-          this.visibility.set(false);
-          this.planStore.resetWizardState();
-        },
-        error: (error) => {
-          this.isProcessing.set(false);
-          this.toasterService.error('Error approving plan. Please try again.');
-          console.error('Error approving plan:', error);
-        }
-      });
-  }
-
-  /**
-   * Cancel approval
-   */
-  onCancelApprove(): void {
-    this.showApproveConfirmationDialog.set(false);
-    this.approvalNote.set('');
-  }
-
-  /**
-   * Handle Reject action
-   */
-  onReject(): void {
-    if (!this.canApproveOrReject()) {
-      return;
-    }
-    this.rejectionReason.set('');
-    this.showRejectReasonDialog.set(true);
-  }
-
-  /**
-   * Proceed to rejection confirmation after entering reason
-   */
-  onProceedReject(): void {
-    const reason = this.rejectionReason().trim();
-    if (!reason) {
-      this.toasterService.error('Rejection reason is required.');
-      return;
-    }
-    if (reason.length > 255) {
-      this.toasterService.error('Rejection reason must not exceed 255 characters.');
-      return;
-    }
-    this.showRejectReasonDialog.set(false);
-    this.showRejectConfirmationDialog.set(true);
-  }
-
-  /**
-   * Cancel rejection reason entry
-   */
-  onCancelRejectReason(): void {
-    this.showRejectReasonDialog.set(false);
-    this.rejectionReason.set('');
-  }
-
-  /**
-   * Confirm final rejection
-   */
-  onConfirmReject(): void {
-    const planId = this.planStore.selectedPlanId();
-    if (!planId) {
-      this.toasterService.error('Plan ID is required.');
-      return;
+    // Check Step 4 (Saudization)
+    if (this.step4SelectedInputs().length > 0 &&
+      (this.step4CommentPhase() === 'adding' || this.step4CommentPhase() === 'editing')) {
+      return this.getSendBackErrorMessage(this.steps()[3].title, this.step4CommentPhase());
     }
 
-    const reason = this.rejectionReason().trim();
-    if (!reason) {
-      this.toasterService.error('Rejection reason is required.');
-      return;
-    }
-
-    this.isProcessing.set(true);
-    this.planStore.employeeRejectPlan(planId, reason)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.isProcessing.set(false);
-          this.showRejectConfirmationDialog.set(false);
-          this.rejectionReason.set('');
-          this.toasterService.success('Plan has been rejected successfully.');
-          this.doRefresh.emit();
-          this.visibility.set(false);
-          this.planStore.resetWizardState();
-        },
-        error: (error) => {
-          this.isProcessing.set(false);
-          this.toasterService.error('Error rejecting plan. Please try again.');
-          console.error('Error rejecting plan:', error);
-        }
-      });
+    return null;
   }
 
-  /**
-   * Cancel final rejection confirmation
-   */
-  onCancelRejectConfirmation(): void {
-    this.showRejectConfirmationDialog.set(false);
-    // Return to reason entry dialog
-    this.showRejectReasonDialog.set(true);
-  }
+  // Base class provides all the review/approval/rejection methods
+  // We only need to implement the abstract methods and step-specific logic
 
   /**
    * Maps comment fields from API response to selectedInputs for each step
@@ -1276,5 +1111,14 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     this.step2SelectedInputs.set(this.step2CommentFields());
     this.step3SelectedInputs.set(this.step3CommentFields());
     this.step4SelectedInputs.set(this.step4CommentFields());
+  }
+
+  // Implement abstract methods from BasePlanWizard
+  protected closeWizard(): void {
+    this.visibility.set(false);
+  }
+
+  protected refresh(): void {
+    this.doRefresh.emit();
   }
 }
