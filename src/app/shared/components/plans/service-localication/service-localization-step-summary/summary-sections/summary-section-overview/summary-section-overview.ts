@@ -249,8 +249,12 @@ export class SummarySectionOverview {
         serviceDescription: getValueFromControl(EMaterialsFormControls.serviceDescription),
         serviceProvidedTo: ((): string | null => {
           const raw = getValueFromControl(EMaterialsFormControls.serviceProvidedTo);
-          const option = this.planStore.serviceProvidedToOptions().find(o => o.id === String(raw));
-          return option ? option.name : raw;
+          const ids = Array.isArray(raw) ? raw : raw == null ? [] : [raw];
+          const labels = ids
+            .map((id) => this.planStore.serviceProvidedToOptions().find((o) => o.id === String(id))?.name ?? String(id))
+            .filter((x) => !!x);
+
+          return labels.length ? labels.join(', ') : null;
         })(),
         totalBusinessDoneLast5Years: getValueFromControl(EMaterialsFormControls.totalBusinessDoneLast5Years),
         serviceTargetedForLocalization: ((): string | null => {
