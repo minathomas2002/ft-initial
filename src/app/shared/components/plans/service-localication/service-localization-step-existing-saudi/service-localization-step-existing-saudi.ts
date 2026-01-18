@@ -10,7 +10,7 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { AgreementType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
+import { AgreementType, EServiceCompanyType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
@@ -396,9 +396,9 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       const companyTypes: string[] = companyTypeControl?.value || [];
       const qualificationStatus = qualificationStatusControl?.value;
 
-      const isManufacturer = companyTypes.includes(EServiceProvidedTo.Manufacturers.toString());
-      const isContractor = companyTypes.includes(EServiceProvidedTo.Contractors.toString());
-      const isOther = companyTypes.includes(EServiceProvidedTo.Others.toString());
+      const isManufacturer = companyTypes.includes(EServiceCompanyType.Manufacturers.toString());
+      const isContractor = companyTypes.includes(EServiceCompanyType.Contractors.toString());
+      const isOther = companyTypes.includes(EServiceCompanyType.Others.toString());
 
       // Qualification Status - only for Manufacturer
       if (isManufacturer) {

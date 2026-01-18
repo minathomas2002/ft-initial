@@ -37,6 +37,12 @@ export enum EServiceProvidedTo {
   Others = 4,
 }
 
+export enum EServiceCompanyType {
+  Contractors = 1,
+  Manufacturers = 2,
+  Others = 3,
+}
+
 export enum EServiceCategory {
   CategoryA = 1,
   CategoryB = 2,

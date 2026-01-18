@@ -1,6 +1,6 @@
 import { computed, inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
@@ -105,9 +105,9 @@ const initialState: {
     { id: EServiceCategory.CategoryB.toString(), name: 'Category B' },
   ],
   companyTypeOptions: [
-    { id: EServiceProvidedTo.Contractors.toString(), name: 'Contractor' },
-    { id: EServiceProvidedTo.Manufacturers.toString(), name: 'Manufacturer' },
-    { id: EServiceProvidedTo.Others.toString(), name: 'Other' },
+    { id: EServiceCompanyType.Contractors.toString(), name: 'Contractor' },
+    { id: EServiceCompanyType.Manufacturers.toString(), name: 'Manufacturer' },
+    { id: EServiceCompanyType.Others.toString(), name: 'Other' },
   ],
   qualificationStatusOptions: [
     { id: EServiceQualificationStatus.Qualified.toString(), name: 'Qualified' },
