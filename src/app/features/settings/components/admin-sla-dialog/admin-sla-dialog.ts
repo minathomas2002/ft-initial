@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model } from '@angular/core';
 import { SlaForm } from '../../services/sla-form/sla-form';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
@@ -7,11 +7,13 @@ import { BaseErrorComponent } from "src/app/shared/components/base-components/ba
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
-import { filter, take, tap } from 'rxjs';
+import { filter, merge, take, tap } from 'rxjs';
 import { ISettingSla, ISettingSlaReq } from 'src/app/shared/interfaces/ISetting';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { startWith, map } from 'rxjs';
 
 @Component({
   selector: 'app-admin-sla-dialog',
@@ -28,6 +30,24 @@ export class AdminSlaDialog {
   settingAdminStore = inject(AdminSettingsStore);
   i18nService = inject(I18nService);
   toasterService = inject(ToasterService);
+
+  // Reactive signal to track form invalid state
+  // Merge statusChanges and valueChanges to ensure we catch all validity updates
+  isFormInvalid = toSignal(
+    merge(
+      this.formService.form.statusChanges.pipe(startWith(this.formService.form.status)),
+      this.formService.form.valueChanges.pipe(
+        map(() => this.formService.form.status),
+        startWith(this.formService.form.status)
+      )
+    ).pipe(
+      map(() => this.formService.form.invalid)
+    ),
+    { initialValue: this.formService.form.invalid }
+  );
+
+  // Computed signal for button disabled state
+  isConfirmationDisabled = computed(() => this.isFormInvalid() ?? false);
 
   ngOnInit() {
 

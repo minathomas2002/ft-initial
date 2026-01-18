@@ -4,7 +4,7 @@
   [confirmLabel]="'setting.confirmButton' | translate"
   [confirmButtonClass]="'w-fit'"
   [cancelButtonClass]="'w-fit'"
-  [isConfirmationDisabled]="formService.form.invalid"
+  [isConfirmationDisabled]="isConfirmationDisabled()"
   (onConfirm)="onConfirm()"
   (onClose)="onClose()"
   [isLoading]="settingAdminStore.isProcessing()"
