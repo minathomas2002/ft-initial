@@ -151,7 +151,6 @@ export abstract class PlanStepBaseClass {
    */
   protected onConfirmDeleteComment(): void {
     this.formUtilityService.resetHasCommentControls(this.getFormGroup());
-    this.selectedInputs.set([]);
     this.comment.set('');
     this.commentFormControl.reset();
     this.commentPhase.set('adding');
