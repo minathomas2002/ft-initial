@@ -10,10 +10,10 @@ import { I18nService } from '../../i18n';
 export class InvestorPlanStatus implements IPlanStatus {
   i18nService = inject(I18nService);
 
- getStatusLabel(status: EInvestorPlanStatus): string {
+  getStatusLabel(status: EInvestorPlanStatus): string {
     const statusMap = {
       [EInvestorPlanStatus.SUBMITTED]: this.i18nService.translate('plans.status.submitted'),
-      [EInvestorPlanStatus.PENDING]: this.i18nService.translate('plans.status.pending'),
+      [EInvestorPlanStatus.PENDING]: 'Pending with Investor',
       [EInvestorPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
       [EInvestorPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
       [EInvestorPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
@@ -31,7 +31,7 @@ export class InvestorPlanStatus implements IPlanStatus {
       [EInvestorPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
       [EInvestorPlanStatus.DRAFT]: 'bg-gray-50 text-gray-700 border-gray-200',
     };
-    return classMap[status] || classMap[EInvestorPlanStatus.SUBMITTED] ;
+    return classMap[status] || classMap[EInvestorPlanStatus.SUBMITTED];
   }
-  
+
 }

@@ -6,8 +6,8 @@ import { I18nService } from '../../i18n';
 @Injectable({
   providedIn: 'root',
 })
-export class InternalUserPlanStatus implements IPlanStatus{
-i18nService = inject(I18nService);
+export class InternalUserPlanStatus implements IPlanStatus {
+  i18nService = inject(I18nService);
 
 
    getStatusLabel(status: EInternalUserPlanStatus): string {
@@ -48,5 +48,5 @@ i18nService = inject(I18nService);
       };
       return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200';
     }
-  
+
 }
