@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  HostListener,
   OnInit,
   OnDestroy,
   inject,
@@ -44,6 +45,8 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 })
 export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly notificationsModal = viewChild<Popover>('notificationsModal');
+
+  private isPopoverOpen = false;
 
   private readonly notificationHubService = inject(NotificationHubService);
   private readonly notificationStore = inject(NotificationsStore);
@@ -166,11 +169,52 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
     this.isShowPreviousButtonClicked.set(false)
   }
 
+  onPopoverShow(): void {
+    this.isPopoverOpen = true;
+  }
+
+  onPopoverHide(): void {
+    this.isPopoverOpen = false;
+  }
+
+  @HostListener('window:scroll')
+  @HostListener('window:resize')
+  onViewportChange(): void {
+    if (!this.isPopoverOpen) return;
+    this.repositionPopover();
+  }
+
+  private repositionPopover(): void {
+    const popover = this.notificationsModal();
+    if (!popover) return;
+
+    // PrimeNG API differs across versions; try the common reposition methods.
+    const anyPopover = popover as unknown as {
+      align?: () => void;
+      updatePosition?: () => void;
+      hide?: () => void;
+    };
+
+    if (typeof anyPopover.align === 'function') {
+      anyPopover.align();
+      return;
+    }
+
+    if (typeof anyPopover.updatePosition === 'function') {
+      anyPopover.updatePosition();
+      return;
+    }
+
+    // Fallback: at least avoid a "stuck" overlay.
+    anyPopover.hide?.();
+  }
+
   ngAfterViewInit(): void {
     // this.notificationsActionsService.setPopoverRef(this.popoverRef);
   }
 
   ngOnDestroy(): void {
+    this.isPopoverOpen = false;
     this.destroy$.next();
     this.destroy$.complete();
     // Note: We're not stopping the connection here because it might be used by other components
