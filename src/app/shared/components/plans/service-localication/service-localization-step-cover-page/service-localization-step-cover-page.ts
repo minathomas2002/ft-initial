@@ -17,6 +17,7 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
+import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
   selector: 'app-service-localization-step-cover-page',
@@ -35,6 +36,7 @@ import { PageCommentBox } from '../../page-comment-box/page-comment-box';
     FormsModule,
     ConditionalColorClassDirective,
     PageCommentBox,
+    CommentInputComponent,
   ],
   templateUrl: './service-localization-step-cover-page.html',
   styleUrl: './service-localization-step-cover-page.scss',

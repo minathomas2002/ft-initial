@@ -3,7 +3,6 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
-import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -25,6 +24,7 @@ import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
+import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
@@ -43,9 +43,9 @@ import { PageCommentBox } from '../../page-comment-box/page-comment-box';
     CommentStateComponent,
     GeneralConfirmationDialogComponent,
     FormsModule,
-    BaseLabelComponent,
     ConditionalColorClassDirective,
     PageCommentBox,
+    CommentInputComponent,
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',
