@@ -210,13 +210,36 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
     return step1HasComment || step2HasComment || step3HasComment || step4HasComment;
   });
+
+  private readonly hasAnyCorrectedFields = computed(() => {
+    return (
+      this.step1CorrectedFields().length +
+      this.step2CorrectedFields().length +
+      this.step3CorrectedFields().length +
+      this.step4CorrectedFields().length
+    ) > 0;
+  });
+
+  private readonly isAnyCommentInProgress = computed(() => {
+    return (
+      this.step1CommentPhase() !== 'none' ||
+      this.step2CommentPhase() !== 'none' ||
+      this.step3CommentPhase() !== 'none' ||
+      this.step4CommentPhase() !== 'none' ||
+      this.hasSelectedFields()
+    );
+  });
+
   commentColor = computed(() => {
-    return (this.isViewMode() && this.step1CorrectedFields().length > 0 && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
-      'green' :
-      (
-        (this.step1CommentPhase() === 'none' && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
-          'green' : 'orange')
-      ;
+    if (this.planStore.planStatus() !== EInternalUserPlanStatus.UNDER_REVIEW) return 'orange';
+
+    // Investor (view) mode: show green when corrected fields exist.
+    if (this.isViewMode()) {
+      return this.hasAnyCorrectedFields() ? 'green' : 'orange';
+    }
+
+    // Reviewer mode: green when no comments are being added, orange otherwise.
+    return this.isAnyCommentInProgress() ? 'orange' : 'green';
   });
   canApproveOrReject = computed(() => {
     return !this.hasSelectedFields() && !this.hasComments();
