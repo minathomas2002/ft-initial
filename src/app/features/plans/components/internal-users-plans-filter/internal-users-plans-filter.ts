@@ -90,7 +90,7 @@ export class InternalUsersPlansFilter implements OnInit {
   // Employee Statuses Options
   private getEmployeeStatusOptions(): IDropdownOption[] {
     return [
-      { label: this.i18nService.translate('plans.employee_status.pending'), value: EInternalUserPlanStatus.PENDING },
+      { label: this.i18nService.translate('plans.employee_status.pendingWithInvestor'), value: EInternalUserPlanStatus.PENDING },
       { label: this.i18nService.translate('plans.employee_status.underReview'), value: EInternalUserPlanStatus.UNDER_REVIEW },
       { label: this.i18nService.translate('plans.employee_status.rejected'), value: EInternalUserPlanStatus.REJECTED },
       { label: this.i18nService.translate('plans.employee_status.approved'), value: EInternalUserPlanStatus.APPROVED },
@@ -107,17 +107,17 @@ export class InternalUsersPlansFilter implements OnInit {
   //  Manager Statuses Options
   private getManagerStatusOptions(): IDropdownOption[] {
     return [
-      { label: this.i18nService.translate('plans.employee_status.pending'), value: EInternalUserPlanStatus.PENDING },
+      { label: this.i18nService.translate('plans.employee_status.pendingWithInvestor'), value: EInternalUserPlanStatus.PENDING },
       { label: this.i18nService.translate('plans.employee_status.underReview'), value: EInternalUserPlanStatus.UNDER_REVIEW },
       { label: this.i18nService.translate('plans.employee_status.approved'), value: EInternalUserPlanStatus.APPROVED },
       { label: this.i18nService.translate('plans.employee_status.rejected'), value: EInternalUserPlanStatus.REJECTED },
-      { label: this.i18nService.translate('plans.employee_status.unassigned'), value: EInternalUserPlanStatus.UNASSIGNED },
-      { label: this.i18nService.translate('plans.employee_status.assigned'), value: EInternalUserPlanStatus.ASSIGNED },
-      { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
-      { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
-      { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EInternalUserPlanStatus.DV_APPROVED },
-      { label: this.i18nService.translate('plans.employee_status.dvRejected'), value: EInternalUserPlanStatus.DV_REJECTED },
-      { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
+      // { label: this.i18nService.translate('plans.employee_status.unassigned'), value: EInternalUserPlanStatus.UNASSIGNED },
+      // { label: this.i18nService.translate('plans.employee_status.assigned'), value: EInternalUserPlanStatus.ASSIGNED },
+      // { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
+      // { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
+      // { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EInternalUserPlanStatus.DV_APPROVED },
+      // { label: this.i18nService.translate('plans.employee_status.dvRejected'), value: EInternalUserPlanStatus.DV_REJECTED },
+      // { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
       { label: this.i18nService.translate('plans.employee_status.employeeRejected'), value: EInternalUserPlanStatus.EMPLOYEE_REJECTED },
     ];

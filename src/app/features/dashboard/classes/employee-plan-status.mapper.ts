@@ -26,7 +26,7 @@ export class EmployeePlanStatusMapper {
 
   getStatusLabel(status: EInternalUserPlanStatus): string {
     const statusMap: Record<EInternalUserPlanStatus, string> = {
-      [EInternalUserPlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pending'),
+      [EInternalUserPlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pendingWithInvestor'),
       [EInternalUserPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.employee_status.underReview'),
       [EInternalUserPlanStatus.APPROVED]: this.i18nService.translate('plans.employee_status.approved'),
       [EInternalUserPlanStatus.REJECTED]: this.i18nService.translate('plans.employee_status.rejected'),
