@@ -95,6 +95,15 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
     return 'none';
   });
 
+  commentColor = computed(() => {
+    return (this.isViewMode() && this.step1CorrectedFields().length > 0 && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
+      'green' :
+      (
+        (this.step1CommentPhase() === 'none' && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
+          'green' : 'orange')
+      ;
+  });
+
   selectedInputColor = computed<TColors>(() => this.currentStepCommentPhase() === 'none' ? 'green' : 'orange');
   steps = computed<IWizardStepState[]>(() => {
     const errors = this.validationErrors();
@@ -107,7 +116,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: this.step1CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0 && this.isEmployeePersona()) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: this.commentColor(),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step1CorrectedFields().length : 0
       },
       {
@@ -117,7 +126,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: this.step2CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0 && this.isEmployeePersona()) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: this.commentColor(),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step2CorrectedFields().length : 0
       },
       {
@@ -127,7 +136,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.step3_valueChain,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step3CorrectedFields().length > 0) ? 'green' : (this.step3CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: this.commentColor(),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step3CorrectedFields().length : 0
       },
       {
@@ -137,7 +146,7 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         formState: this.productPlanFormService.step4_saudization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step4CorrectedFields().length > 0) ? 'green' : (this.step4CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: this.commentColor(),
         fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step4CorrectedFields().length : 0
       },
       {

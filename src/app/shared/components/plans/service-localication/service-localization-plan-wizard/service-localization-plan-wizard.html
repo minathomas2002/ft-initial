@@ -27,9 +27,9 @@
       [pageTitle]="steps()[0].title"
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
-      [selectedInputColor]="(step1CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+      [selectedInputColor]="commentColor()"
       [pageComments]="step1Comments()"
-      [commentTitle]="commentTitle()"
+      [commentTitle]="commentTitle() || 'Comments'"
       [correctedFieldIds]="step1CorrectedFields()"
     ></app-service-localization-step-cover-page>
   </ng-template>
@@ -41,9 +41,9 @@
       [pageTitle]="steps()[1].title"
       [(commentPhase)]="step2CommentPhase"
       [(selectedInputs)]="step2SelectedInputs"
-      [selectedInputColor]="(step2CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+      [selectedInputColor]="commentColor()"
       [pageComments]="step2Comments()"
-      [commentTitle]="commentTitle()"
+      [commentTitle]="commentTitle() || 'Comments'"
       [correctedFieldIds]="step2CorrectedFields()"
     ></app-service-localization-step-overview>
   </ng-template>
@@ -57,9 +57,9 @@
       [pageTitle]="steps()[existingSaudiStepIndex() - 1].title"
       [(commentPhase)]="step3CommentPhase"
       [(selectedInputs)]="step3SelectedInputs"
-      [selectedInputColor]="(step3CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+      [selectedInputColor]="commentColor()"
       [pageComments]="step3Comments()"
-      [commentTitle]="commentTitle()"
+      [commentTitle]="commentTitle() || 'Comments'"
       [correctedFieldIds]="step3CorrectedFields()"
     ></app-service-localization-step-existing-saudi>
   </ng-template>
@@ -74,9 +74,9 @@
       [pageTitle]="steps()[directLocalizationStepIndex() - 1].title"
       [(commentPhase)]="step4CommentPhase"
       [(selectedInputs)]="step4SelectedInputs"
-      [selectedInputColor]="(step4CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+      [selectedInputColor]="commentColor()"
       [pageComments]="step4Comments()"
-      [commentTitle]="commentTitle()"
+      [commentTitle]="commentTitle() || 'Comments'"
       [correctedFieldIds]="step4CorrectedFields()"
     ></app-service-localization-step-direct-localization>
   </ng-template>
@@ -86,7 +86,7 @@
   <ng-template [appStepContent]="summaryStepIndex()">
     <app-service-localization-step-summary
       [isViewMode]="isViewMode()"
-      [commentTitle]="commentTitle()"
+      [commentTitle]="commentTitle() || 'Comments' "
       [signature]="planSignature()"
       [pageComments]="collectAllPageComments()"
       [includeExistingSaudi]="showExistingSaudiStep()"
