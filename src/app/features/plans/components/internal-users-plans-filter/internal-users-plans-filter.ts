@@ -79,7 +79,8 @@ export class InternalUsersPlansFilter implements OnInit {
   private getRoleSpecificStatusOptions(): IDropdownOption[] {
     if (this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])()) {
       return this.getEmployeeStatusOptions();
-    } else if (this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER])() || this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
+    } else if (this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER])() || this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()
+      || this.roleService.hasAnyRoleSignal([ERoles.ADMIN])()) {
       return this.getManagerStatusOptions();
     } else
       return [];

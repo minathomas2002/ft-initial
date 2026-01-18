@@ -84,7 +84,7 @@ export class PlansList implements OnInit {
   // Determine if user is investor or internal user based on role
   readonly isInvestor = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
   readonly isInternalUser = computed(() =>
-    this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE])()
+    this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE, ERoles.ADMIN])()
   );
 
   // Get the appropriate filter service based on role
