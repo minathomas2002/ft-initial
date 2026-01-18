@@ -101,6 +101,7 @@ export enum EPlanAction {
   RemoveAssignee = 21,
   Delete = 22,
   AutoRejection = 23,
+  SystemReminder = 24,
 }
 
 export enum EemployeePlanAction {
