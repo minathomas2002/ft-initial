@@ -111,7 +111,7 @@ export class InternalUsersPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.employee_status.underReview'), value: EInternalUserPlanStatus.UNDER_REVIEW },
       { label: this.i18nService.translate('plans.employee_status.approved'), value: EInternalUserPlanStatus.APPROVED },
       { label: this.i18nService.translate('plans.employee_status.rejected'), value: EInternalUserPlanStatus.REJECTED },
-      // { label: this.i18nService.translate('plans.employee_status.unassigned'), value: EInternalUserPlanStatus.UNASSIGNED },
+      { label: this.i18nService.translate('plans.employee_status.unassigned'), value: EInternalUserPlanStatus.UNASSIGNED },
       // { label: this.i18nService.translate('plans.employee_status.assigned'), value: EInternalUserPlanStatus.ASSIGNED },
       // { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
       // { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
