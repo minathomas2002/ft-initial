@@ -14,7 +14,10 @@
     [correctedFieldIds]="step1CorrectedFields()"
     (onEdit)="onEditStepClick(1)"
   />
-  @if (hasStep1OutComingComments()) {
+
+  @if
+  (hasStep1OutComingComments())
+  {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Overview & Company Information'"
     [commentText]="getStep1CommentText()"
@@ -36,7 +39,9 @@
     [correctedFieldIds]="step2CorrectedFields()"
     (onEdit)="onEditStepClick(2)"
   />
-  @if (hasStep2OutComingComments()) {
+  @if
+  (hasStep2OutComingComments())
+  {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Product & Plant Overview'"
     [commentText]="getStep2CommentText()"
@@ -58,7 +63,9 @@
     [correctedFieldIds]="step3CorrectedFields()"
     (onEdit)="onEditStepClick(3)"
   />
-  @if (hasStep3OutComingComments()) {
+  @if
+  (hasStep3OutComingComments())
+  {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Value Chain'"
     [commentText]="getStep3CommentText()"
@@ -80,7 +87,9 @@
     [correctedFieldIds]="step4CorrectedFields()"
     (onEdit)="onEditStepClick(4)"
   />
-  @if (hasStep4OutComingComments()) {
+  @if
+  (hasStep4OutComingComments())
+  {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Saudization'"
     [commentText]="getStep4CommentText()"
