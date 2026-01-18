@@ -31,7 +31,7 @@ import { ButtonModule } from 'primeng/button';
 import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialog';
 import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
 import { Signature, IFieldInformation, IPageComment, ReviewPlanRequest, IPlanCommentResponse } from 'src/app/shared/interfaces/plans.interface';
-import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
+import { EInternalUserPlanStatus, EInvestorPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { switchMap, of, map, catchError, finalize } from 'rxjs';
@@ -126,10 +126,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
 
   // Computed signal to determine comment title based on creatorRole
-  commentTitle = computed(() => {
-    const role = this.creatorRole();
-    return role === 3 ? 'Employee Comments' : 'Investor Comments';
-  });
+  commentTitle = this.planStore.commentPersona;
 
   // Computed signals to map comments to each step based on pageTitleForTL
   step1Comments = computed<IPageComment[]>(() => {
@@ -225,7 +222,14 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
     return step1HasComment || step2HasComment || step3HasComment || step4HasComment;
   });
-
+  commentColor = computed(() => {
+    return (this.isViewMode() && this.step1CorrectedFields().length > 0 && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
+      'green' :
+      (
+        (this.step1CommentPhase() === 'none' && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
+          'green' : 'orange')
+      ;
+  });
   canApproveOrReject = computed(() => {
     return !this.hasSelectedFields() && !this.hasComments();
   });
@@ -268,7 +272,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: this.step1CommentPhase() === 'none',
       commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
-      commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange'),
+      commentColor: this.commentColor(),
     });
 
     pushStep({
@@ -278,7 +282,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: this.step2CommentPhase() === 'none',
       commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
-      commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange'),
+      commentColor: this.commentColor(),
     });
 
     if (this.showExistingSaudiStep()) {
@@ -289,7 +293,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step3CorrectedFields().length > 0) ? 'green' : (this.step3CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: this.commentColor(),
       });
     }
 
@@ -301,7 +305,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step4CorrectedFields().length > 0) ? 'green' : (this.step4CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: this.commentColor(),
       });
     }
 
