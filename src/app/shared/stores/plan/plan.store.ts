@@ -9,6 +9,7 @@ import { IProductPlanResponse, IServiceLocalizationPlanResponse, ITimeLineRespon
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
 import { RoleService } from "../../services/role/role-service";
+import { AuthStore } from "../auth/auth.store";
 
 export interface IPlanTypeDropdownOption {
   label: string;
@@ -180,9 +181,11 @@ export const PlanStore = signalStore(
       commentPersona: computed<string | null>(() => {
         const role = store.planComments()?.creatorRole;
         if (!role) return null;
-        if (roleService.hasAnyRoleSignal([role])) {
+
+        if (roleService.hasAnyRoleSignal([role])()) {
           return 'Your Comment'
         }
+
         const roleMap: Record<number, string> = {
           [ERoles.ADMIN]: 'Admin Comment',
           [ERoles.INVESTOR]: 'Investor Comment',
