@@ -36,7 +36,10 @@
     [correctedFieldIds]="step2CorrectedFields()"
     (onEdit)="onEditStepClick(overviewStepNumber())"
   />
-  @if (hasStep2OutComingComments()) {
+
+  @if
+  (hasStep2OutComingComments())
+  {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Overview'"
     [commentText]="getStep2CommentText()"
