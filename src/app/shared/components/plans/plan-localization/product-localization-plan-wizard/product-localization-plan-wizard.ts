@@ -1073,10 +1073,8 @@ export class ProductLocalizationPlanWizard implements OnDestroy {
         fields: this.step4SelectedInputs(),
       });
     }
-
     return comments;
   }
-
   /**
    * Handle Send Back to Investor action
    */

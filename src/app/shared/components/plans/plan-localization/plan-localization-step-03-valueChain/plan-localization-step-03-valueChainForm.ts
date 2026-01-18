@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, input, model } from '@angul
 import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
-import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { SelectModule } from 'primeng/select';
@@ -22,6 +21,7 @@ import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
+import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -42,8 +42,8 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
     TextareaModule,
     FormsModule,
     GeneralConfirmationDialogComponent,
-    BaseLabelComponent,
-    CommentStateComponent
+    CommentStateComponent,
+    CommentInputComponent
   ],
   templateUrl: './plan-localization-step-03-valueChainForm.html',
   styleUrl: './plan-localization-step-03-valueChainForm.scss',

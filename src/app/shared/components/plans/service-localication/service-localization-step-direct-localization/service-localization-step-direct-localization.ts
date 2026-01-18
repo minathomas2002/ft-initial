@@ -5,7 +5,6 @@ import { FormArrayInput } from 'src/app/shared/components/utility-components/for
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
-import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -22,6 +21,7 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
+import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
   selector: 'app-service-localization-step-direct-localization',
@@ -31,7 +31,6 @@ import { PageCommentBox } from '../../page-comment-box/page-comment-box';
     InputTextModule,
     SelectModule,
     BaseErrorMessages,
-    BaseLabelComponent,
     GroupInputWithCheckbox,
     TextareaModule,
     InputNumberModule,
@@ -40,7 +39,8 @@ import { PageCommentBox } from '../../page-comment-box/page-comment-box';
     GeneralConfirmationDialogComponent,
     FormsModule,
     ConditionalColorClassDirective,
-    PageCommentBox
+    PageCommentBox,
+    CommentInputComponent
   ],
   templateUrl: './service-localization-step-direct-localization.html',
   styleUrl: './service-localization-step-direct-localization.scss',

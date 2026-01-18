@@ -35,6 +35,7 @@ import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans
 import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
+import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
   selector: 'app-service-localization-step-overview',
@@ -55,7 +56,8 @@ import { PageCommentBox } from '../../page-comment-box/page-comment-box';
     CommentStateComponent,
     GeneralConfirmationDialogComponent,
     FormsModule,
-    PageCommentBox
+    PageCommentBox,
+    CommentInputComponent
   ],
   templateUrl: './service-localization-step-overview.html',
   styleUrl: './service-localization-step-overview.scss',

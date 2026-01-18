@@ -11,11 +11,10 @@ import { TColors } from 'src/app/shared/interfaces';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { FormsModule } from '@angular/forms';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
-import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { TextareaModule } from 'primeng/textarea';
-import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
+import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
   selector: 'app-plan-localization-step-04-saudization-form',
@@ -29,7 +28,7 @@ import { TCommentPhase } from '../product-localization-plan-wizard/product-local
     FormsModule,
     GeneralConfirmationDialogComponent,
     TextareaModule,
-    BaseLabelComponent
+    CommentInputComponent
   ],
   templateUrl: './plan-localization-step-04-saudizationForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

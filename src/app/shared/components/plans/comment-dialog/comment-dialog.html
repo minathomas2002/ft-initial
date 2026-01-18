@@ -29,6 +29,9 @@
         maxlength="255"
         placeholder="Enter your comment"
       ></textarea>
+      <div class="text-xs text-gray-500 text-right mt-1">
+        {{ commentFormControl().value.length || 0 }} / 255
+      </div>
       <app-base-error-messages
         [control]="commentFormControl()"
         [label]="'Your Comment'"
