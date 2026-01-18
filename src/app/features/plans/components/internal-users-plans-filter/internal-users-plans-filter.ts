@@ -5,18 +5,19 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
-import { EOpportunityType } from 'src/app/shared/enums';
-import { EInternalUserPlanStatus, IActiveEmployee, IAssignActiveEmployee, IAssignee, IPlanFilter } from 'src/app/shared/interfaces';
+import { EOpportunityType, ERoles } from 'src/app/shared/enums';
+import { EInternalUserPlanStatus, IAssignee, IPlanFilter } from 'src/app/shared/interfaces';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
 import { PlanApiService } from 'src/app/shared/api/plans/plan-api-service';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 
 interface IDropdownOption {
   label: string;
-  value: EOpportunityType | EInternalUserPlanStatus  | null;
+  value: EOpportunityType | EInternalUserPlanStatus | null;
 }
 
 interface IAssigneeOption {
@@ -39,6 +40,7 @@ export class InternalUsersPlansFilter implements OnInit {
   private readonly planStore = inject(PlanStore);
   private readonly route = inject(ActivatedRoute);
   private readonly planApiService = inject(PlanApiService);
+  private readonly roleService = inject(RoleService);
   readonly filter = this.filterService.filter;
 
   assignees = signal<IAssignee[]>([]);
@@ -48,7 +50,7 @@ export class InternalUsersPlansFilter implements OnInit {
     return this.planStore.planTypeOptions() as IDropdownOption[];
   });
 
-  assigneeOptions = computed<IAssigneeOption[]>(() => {    
+  assigneeOptions = computed<IAssigneeOption[]>(() => {
     return [
       { label: this.i18nService.translate('plans.filter.allAssignees'), value: null },
       ...this.assignees().map(assignee => ({
@@ -60,8 +62,50 @@ export class InternalUsersPlansFilter implements OnInit {
 
   statusOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
+
+    // Base option: "All Statuses"
+    const allStatusesOption: IDropdownOption =
+      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null };
+
+    // Get role-specific status options
+    const roleSpecificOptions = this.getRoleSpecificStatusOptions();
+
+    return [allStatusesOption, ...roleSpecificOptions];
+  });
+
+  /**
+   * Returns status options based on the current user's role
+   */
+  private getRoleSpecificStatusOptions(): IDropdownOption[] {
+    if (this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])()) {
+      return this.getEmployeeStatusOptions();
+    } else if (this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER])() || this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
+      return this.getManagerStatusOptions();
+    } else
+      return [];
+  }
+
+  // TODO: Uncomment these statuses after completing current scope
+  // Employee Statuses Options
+  private getEmployeeStatusOptions(): IDropdownOption[] {
     return [
-      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null },
+      { label: this.i18nService.translate('plans.employee_status.pending'), value: EInternalUserPlanStatus.PENDING },
+      { label: this.i18nService.translate('plans.employee_status.underReview'), value: EInternalUserPlanStatus.UNDER_REVIEW },
+      { label: this.i18nService.translate('plans.employee_status.rejected'), value: EInternalUserPlanStatus.REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.approved'), value: EInternalUserPlanStatus.APPROVED },
+      // { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
+      // { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
+      // { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EInternalUserPlanStatus.DV_APPROVED },
+      // { label: this.i18nService.translate('plans.employee_status.dvRejected'), value: EInternalUserPlanStatus.DV_REJECTED },
+      // { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
+      { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
+      { label: this.i18nService.translate('plans.employee_status.employeeRejected'), value: EInternalUserPlanStatus.EMPLOYEE_REJECTED },
+    ];
+  }
+
+  //  Manager Statuses Options
+  private getManagerStatusOptions(): IDropdownOption[] {
+    return [
       { label: this.i18nService.translate('plans.employee_status.pending'), value: EInternalUserPlanStatus.PENDING },
       { label: this.i18nService.translate('plans.employee_status.underReview'), value: EInternalUserPlanStatus.UNDER_REVIEW },
       { label: this.i18nService.translate('plans.employee_status.approved'), value: EInternalUserPlanStatus.APPROVED },
@@ -76,7 +120,7 @@ export class InternalUsersPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
       { label: this.i18nService.translate('plans.employee_status.employeeRejected'), value: EInternalUserPlanStatus.EMPLOYEE_REJECTED },
     ];
-  });
+  }
 
   ngOnInit() {
     this.loadAssignees();

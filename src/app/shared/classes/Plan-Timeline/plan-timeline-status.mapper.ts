@@ -28,7 +28,7 @@ export class PlanTimelineStatusMapper {
 
   getStatusLabel(status: EStatusPlanTimeLine): string {
     const statusMap: Record<EStatusPlanTimeLine, string> = {
-      [EStatusPlanTimeLine.PendingOnInvestor]: this.i18nService.translate('plans.employee_status.pendingOnInvestor'),
+      [EStatusPlanTimeLine.PendingOnInvestor]: this.i18nService.translate('plans.employee_status.pendingWithInvestor'),
       [EStatusPlanTimeLine.UnderReview]: this.i18nService.translate('plans.employee_status.underReview'),
       [EStatusPlanTimeLine.Approved]: this.i18nService.translate('plans.employee_status.approved'),
       [EStatusPlanTimeLine.Rejected]: this.i18nService.translate('plans.employee_status.rejected'),

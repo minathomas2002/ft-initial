@@ -624,7 +624,8 @@
     "subtitleInternalUser":"Track the status of all localization plans.",
     "submitNewPlan": "Submit New Plan",
     "assigndPlanTitle": "Assigned Pending Plans",
-    "underReviewPlanTitle": "Under Review Plans"
+    "underReviewPlanTitle": "Under Review Plans",
+    "inProgressPlanTitle": "In Progress Plans"
   },
   "dialog": {
     "cancel": "Cancel",
@@ -687,6 +688,7 @@
     "status": {
       "submitted": "Submitted",
       "pending": "Pending",
+      "pendingWithInvestor": "Pending with Investor",
       "underReview": "Under Review",
       "approved": "Approved",
       "rejected": "Rejected",
@@ -816,7 +818,8 @@
       "assigned": "Assigned",
       "reassigned": "Reassigned",
       "submitted": "Submitted",
-      "pendingOnInvestor": "Pending on investor",
+      "pendingOnInvestor": "Pending on Investor",
+      "pendingWithInvestor": "Pending with Investor",
       "draft": "Draft"
     },
     "type": {
