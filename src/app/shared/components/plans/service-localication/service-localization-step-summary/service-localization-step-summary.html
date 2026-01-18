@@ -36,6 +36,7 @@
     [correctedFieldIds]="step2CorrectedFields()"
     (onEdit)="onEditStepClick(overviewStepNumber())"
   />
+
   @if
   (hasStep2OutComingComments())
   {
@@ -61,15 +62,12 @@
     [correctedFieldIds]="step3CorrectedFields()"
     (onEdit)="onEditStepClick(existingSaudiStepNumber())"
   />
-  }
-
-  @if
-  (hasStep3OutComingComments())
-  {
+  @if (hasStep3OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Existing Saudi Co.'"
     [commentText]="getStep3CommentText()"
   />
+  }
   }
 
   <!-- Step 4: Direct Localization by Foreign Entity -->
@@ -88,13 +86,12 @@
     [correctedFieldIds]="step4CorrectedFields()"
     (onEdit)="onEditStepClick(directLocalizationStepNumber())"
   />
-  }
-
-  @if(hasStep4OutComingComments()){
+  @if (hasStep4OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Direct Localization'"
     [commentText]="getStep4CommentText()"
   />
+  }
   }
 
   <!-- Signature (view/edit modes) -->

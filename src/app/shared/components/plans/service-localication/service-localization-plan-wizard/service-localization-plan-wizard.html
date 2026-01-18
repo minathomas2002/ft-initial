@@ -27,7 +27,7 @@
       [pageTitle]="steps()[0].title"
       [(commentPhase)]="step1CommentPhase"
       [(selectedInputs)]="step1SelectedInputs"
-      [selectedInputColor]="(step1CommentPhase() === 'none' && isEmployeePersona()) ? 'green' : 'orange'"
+      [selectedInputColor]="commentColor()"
       [pageComments]="step1Comments()"
       [commentTitle]="commentTitle() || 'Comments'"
       [correctedFieldIds]="step1CorrectedFields()"

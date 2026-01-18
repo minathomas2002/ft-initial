@@ -38,7 +38,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     NavbarNotificationsTabs,
     ServiceLocalizationPlanWizard,
     ProductLocalizationPlanWizard
-],
+  ],
   templateUrl: './navbar-notifications.component.html',
   styleUrl: './navbar-notifications.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
