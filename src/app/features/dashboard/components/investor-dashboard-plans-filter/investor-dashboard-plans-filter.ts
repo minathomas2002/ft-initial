@@ -42,7 +42,7 @@ export class InvestorDashboardPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.filter.allStatuses'), value: null },
       { label: this.i18nService.translate('plans.status.submitted'), value: EInvestorPlanStatus.SUBMITTED },
       { label: this.i18nService.translate('plans.status.draft'), value: EInvestorPlanStatus.DRAFT },
-      { label: this.i18nService.translate('plans.status.pending'), value: EInvestorPlanStatus.PENDING },
+      { label: this.i18nService.translate('plans.status.pendingWithInvestor'), value: EInvestorPlanStatus.PENDING },
       { label: this.i18nService.translate('plans.status.underReview'), value: EInvestorPlanStatus.UNDER_REVIEW },
     ];
   });
