@@ -853,6 +853,22 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   saveAsDraft(): void {
     const isEditMode = this.planStore.wizardMode() === 'edit';
 
+    const step2Overview = this.serviceLocalizationFormService.step2_overview;
+    const basicInformationFormGroup = step2Overview.get(EMaterialsFormControls.basicInformationFormGroup) as FormGroup | null;
+    const opportunityControl = basicInformationFormGroup?.get(EMaterialsFormControls.opportunity) as FormControl | null;
+
+    if (opportunityControl && opportunityControl.invalid) {
+      opportunityControl.markAsDirty();
+      opportunityControl.markAsTouched();
+      basicInformationFormGroup?.markAsDirty();
+      basicInformationFormGroup?.markAllAsTouched();
+
+      // Emit statusChanges so the stepper can update its error counter.
+      opportunityControl.updateValueAndValidity({ emitEvent: true });
+      step2Overview.updateValueAndValidity({ emitEvent: true });
+      return;
+    }
+
     const formData = this.buildRequestFormData();
 
     // Set processing state
