@@ -45,8 +45,6 @@ export class CommentStateComponent {
   }
 
   onDeleteComments() {
-    this.commentPhase.set('none');
-    this.commentFormControl().reset();
     this.deleteComments.emit();
   }
 
