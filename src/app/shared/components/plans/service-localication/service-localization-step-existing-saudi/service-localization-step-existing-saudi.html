@@ -842,28 +842,10 @@
   </div>
   }
 
-  @if(commentPhase() == 'editing' || commentPhase() == 'viewing'){
-  <div
-    class="animated flex flex-col gap-4 mt-8"
-    animate.enter="fadeIn"
-  >
-    <div class="flex flex-col gap-4 md:flex-row">
-      <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'Your Comment'" />
-        <textarea
-          fluid
-          rows="8"
-          pTextarea
-          [formControl]="commentFormControl"
-        ></textarea>
-        <app-base-error-messages
-          [control]="commentFormControl"
-          [label]="'Your Comment'"
-        />
-      </div>
-    </div>
-  </div>
-  }
+  <app-comment-input
+    [commentFormControl]="commentFormControl"
+    [commentPhase]="commentPhase()"
+  />
 
   @if(showCheckbox()){
   <app-comment-state-component

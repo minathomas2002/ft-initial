@@ -17,7 +17,7 @@ export class NotificationItemFactory {
       ERoles.EMPLOYEE,
     ];
 
-    // managerial roles
+    // internal roles
     if (internalUsersRoles.includes(userRole)) {
       const internalUser = new InternalUserNotificationParams(notification);
       return {
@@ -89,6 +89,7 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
     EPlanAction.DeptRejected,
     EPlanAction.DVRejected,
     EPlanAction.DVRejectionAcknowledged,
+    EPlanAction.SystemReminder
   ]);
 
   const navigationActions = new Set<EPlanAction>([

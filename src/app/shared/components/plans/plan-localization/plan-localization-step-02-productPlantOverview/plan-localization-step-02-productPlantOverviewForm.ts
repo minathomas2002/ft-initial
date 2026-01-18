@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
+import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
   selector: 'app-plan-localization-step-02-product-plant-overview-form',
@@ -43,7 +44,8 @@ import { TCommentPhase } from '../product-localization-plan-wizard/product-local
     ConditionalColorClassDirective,
     CommentStateComponent,
     FormsModule,
-    GeneralConfirmationDialogComponent
+    GeneralConfirmationDialogComponent,
+    CommentInputComponent
   ],
   templateUrl: './plan-localization-step-02-productPlantOverviewForm.html',
   styleUrl: './plan-localization-step-02-productPlantOverviewForm.scss',

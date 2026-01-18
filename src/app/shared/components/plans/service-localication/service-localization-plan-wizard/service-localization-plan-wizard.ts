@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DestroyRef,
   effect,
   inject,
   model,
@@ -30,7 +29,7 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 import { ButtonModule } from 'primeng/button';
 import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialog';
 import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
-import { Signature, IFieldInformation, IPageComment, ReviewPlanRequest, IPlanCommentResponse } from 'src/app/shared/interfaces/plans.interface';
+import { Signature, IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
@@ -42,6 +41,7 @@ import { TCommentPhase } from '../../plan-localization/product-localization-plan
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
+import { BasePlanWizard } from '../../base-wizard-class/base-plan-wizard';
 
 type ServiceLocalizationWizardStepId =
   | 'cover'
@@ -74,19 +74,18 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
   styleUrl: './service-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
-  readonly planStore = inject(PlanStore);
+export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnInit, OnDestroy {
+  override readonly planStore = inject(PlanStore);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
-  private readonly toasterService = inject(ToasterService);
+  override readonly toasterService = inject(ToasterService);
   private readonly authStore = inject(AuthStore);
 
   visibility = model(false);
   doRefresh = output<void>();
   isLoading = signal(false);
   activeStep = signal<number>(1);
-  private readonly destroyRef = inject(DestroyRef);
 
   timelineVisibility = signal(false);
   isSubmitted = signal(false);
@@ -126,10 +125,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
 
   // Computed signal to determine comment title based on creatorRole
-  commentTitle = computed(() => {
-    const role = this.creatorRole();
-    return role === 3 ? 'Employee Comments' : 'Investor Comments';
-  });
+  commentTitle = this.planStore.commentPersona;
 
   // Computed signals to map comments to each step based on pageTitleForTL
   step1Comments = computed<IPageComment[]>(() => {
@@ -187,15 +183,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   });
 
   // Review mode signals
-  showSendBackConfirmationDialog = signal<boolean>(false);
   showHasCommentControl = signal<boolean>(false);
-
-  // Approve/Reject dialogs
-  showApproveConfirmationDialog = signal<boolean>(false);
-  showRejectReasonDialog = signal<boolean>(false);
-  showRejectConfirmationDialog = signal<boolean>(false);
-  approvalNote = signal<string>('');
-  rejectionReason = signal<string>('');
 
   // Computed signals for action controls
   hasSelectedFields = computed(() => {
@@ -225,7 +213,14 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
 
     return step1HasComment || step2HasComment || step3HasComment || step4HasComment;
   });
-
+  commentColor = computed(() => {
+    return (this.isViewMode() && this.step1CorrectedFields().length > 0 && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
+      'green' :
+      (
+        (this.step1CommentPhase() === 'none' && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
+          'green' : 'orange')
+      ;
+  });
   canApproveOrReject = computed(() => {
     return !this.hasSelectedFields() && !this.hasComments();
   });
@@ -268,7 +263,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: this.step1CommentPhase() === 'none',
       commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
-      commentColor: (this.isViewMode() && this.step1CorrectedFields().length > 0) ? 'green' : (this.step1CommentPhase() === 'none' ? 'green' : 'orange'),
+      commentColor: this.commentColor(),
     });
 
     pushStep({
@@ -278,7 +273,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
       formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: this.step2CommentPhase() === 'none',
       commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
-      commentColor: (this.isViewMode() && this.step2CorrectedFields().length > 0) ? 'green' : (this.step2CommentPhase() === 'none' ? 'green' : 'orange'),
+      commentColor: this.commentColor(),
     });
 
     if (this.showExistingSaudiStep()) {
@@ -289,7 +284,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step3CorrectedFields().length > 0) ? 'green' : (this.step3CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: this.commentColor(),
       });
     }
 
@@ -301,7 +296,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
         formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
-        commentColor: (this.isViewMode() && this.step4CorrectedFields().length > 0) ? 'green' : (this.step4CommentPhase() === 'none' ? 'green' : 'orange'),
+        commentColor: this.commentColor(),
       });
     }
 
@@ -337,7 +332,6 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   });
 
   isLoadingPlan = signal(false);
-  isProcessing = signal(false);
   planStatus = computed(() => this.planStore.planStatus());
   statusLabel = computed(() => {
     const status = this.planStatus();
@@ -362,6 +356,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   validationErrors = signal<Map<number, boolean>>(new Map());
 
   constructor() {
+    super();
     // Keep activeStep within current steps range (prevents Stepper issues when conditional steps hide/show)
     effect(() => {
       const stepsCount = this.stepsWithId().length;
@@ -872,7 +867,7 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   /**
    * Collect all page comments from step forms
    */
-  collectAllPageComments(): IPageComment[] {
+  override collectAllPageComments(): IPageComment[] {
     const comments: IPageComment[] = [];
 
     // Step 1 comments (Cover Page)
@@ -929,198 +924,54 @@ export class ServiceLocalizationPlanWizard implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle Send Back to Investor action
+   * Validate that steps with selected inputs have submitted comments (not in 'adding' or 'editing' phase)
    */
-  onSendBackToInvestor(): void {
-    // Validate at least one comment exists
-    const comments = this.collectAllPageComments();
-    if (comments.length === 0) {
-      this.toasterService.error('You must add a comment before sending back the plan.');
-      return;
+  protected override validateCommentSubmission(): string | null {
+    // Check Step 1 (Cover Page)
+    if (this.step1SelectedInputs().length > 0 &&
+      (this.step1CommentPhase() === 'adding' || this.step1CommentPhase() === 'editing')) {
+      return this.getSendBackErrorMessage(this.steps()[0].title, this.step1CommentPhase());
     }
 
-    // Show confirmation dialog
-    this.showSendBackConfirmationDialog.set(true);
-  }
-
-  /**
-   * Confirm sending plan back to investor
-   */
-  onConfirmSendBack(): void {
-    const planId = this.planStore.selectedPlanId();
-    if (!planId) {
-      this.toasterService.error('Plan ID is required.');
-      return;
+    // Check Step 2 (Overview)
+    if (this.step2SelectedInputs().length > 0 &&
+      (this.step2CommentPhase() === 'adding' || this.step2CommentPhase() === 'editing')) {
+      return this.getSendBackErrorMessage(this.steps()[1].title, this.step2CommentPhase());
     }
 
-    const comments = this.collectAllPageComments();
-    const request: ReviewPlanRequest = {
-      planId: planId,
-      comments: comments,
-    };
-
-    this.isProcessing.set(true);
-    this.planStore.sendPlanBackToInvestor(request)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.isProcessing.set(false);
-          this.showSendBackConfirmationDialog.set(false);
-          this.toasterService.success('Plan has been sent back to investor successfully.');
-          this.doRefresh.emit();
-          this.visibility.set(false);
-          this.planStore.resetWizardState();
-        },
-        error: (error) => {
-          this.isProcessing.set(false);
-          this.toasterService.error('Error sending plan back to investor. Please try again.');
-          console.error('Error sending plan back:', error);
-        }
-      });
-  }
-
-  /**
-   * Cancel sending plan back
-   */
-  onCancelSendBack(): void {
-    this.showSendBackConfirmationDialog.set(false);
-  }
-
-  /**
-   * Handle Approve and Forward action
-   */
-  onApproveAndForward(): void {
-    if (!this.canApproveOrReject()) {
-      return;
-    }
-    this.approvalNote.set('');
-    this.showApproveConfirmationDialog.set(true);
-  }
-
-  /**
-   * Confirm approval with optional note
-   */
-  onConfirmApprove(): void {
-    const planId = this.planStore.selectedPlanId();
-    if (!planId) {
-      this.toasterService.error('Plan ID is required.');
-      return;
+    // Check Step 3 (Existing Saudi) - only if step is shown
+    if (this.showExistingSaudiStep()) {
+      if (this.step3SelectedInputs().length > 0 &&
+        (this.step3CommentPhase() === 'adding' || this.step3CommentPhase() === 'editing')) {
+        return this.getSendBackErrorMessage(this.steps()[this.existingSaudiStepIndex() - 1].title, this.step3CommentPhase());
+      }
     }
 
-    const note = this.approvalNote().trim();
-    this.isProcessing.set(true);
-    this.planStore.employeeApprovePlan(planId, note || undefined)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.isProcessing.set(false);
-          this.showApproveConfirmationDialog.set(false);
-          this.approvalNote.set('');
-          this.toasterService.success('Plan has been approved and forwarded successfully.');
-          this.doRefresh.emit();
-          this.visibility.set(false);
-          this.planStore.resetWizardState();
-        },
-        error: (error) => {
-          this.isProcessing.set(false);
-          this.toasterService.error('Error approving plan. Please try again.');
-          console.error('Error approving plan:', error);
-        }
-      });
-  }
-
-  /**
-   * Cancel approval
-   */
-  onCancelApprove(): void {
-    this.showApproveConfirmationDialog.set(false);
-    this.approvalNote.set('');
-  }
-
-  /**
-   * Handle Reject action
-   */
-  onReject(): void {
-    if (!this.canApproveOrReject()) {
-      return;
-    }
-    this.rejectionReason.set('');
-    this.showRejectReasonDialog.set(true);
-  }
-
-  /**
-   * Proceed to rejection confirmation after entering reason
-   */
-  onProceedReject(): void {
-    const reason = this.rejectionReason().trim();
-    if (!reason) {
-      this.toasterService.error('Rejection reason is required.');
-      return;
-    }
-    if (reason.length > 255) {
-      this.toasterService.error('Rejection reason must not exceed 255 characters.');
-      return;
-    }
-    this.showRejectReasonDialog.set(false);
-    this.showRejectConfirmationDialog.set(true);
-  }
-
-  /**
-   * Cancel rejection reason entry
-   */
-  onCancelRejectReason(): void {
-    this.showRejectReasonDialog.set(false);
-    this.rejectionReason.set('');
-  }
-
-  /**
-   * Confirm final rejection
-   */
-  onConfirmReject(): void {
-    const planId = this.planStore.selectedPlanId();
-    if (!planId) {
-      this.toasterService.error('Plan ID is required.');
-      return;
+    // Check Step 4 (Direct Localization) - only if step is shown
+    if (this.showDirectLocalizationStep()) {
+      if (this.step4SelectedInputs().length > 0 &&
+        (this.step4CommentPhase() === 'adding' || this.step4CommentPhase() === 'editing')) {
+        return this.getSendBackErrorMessage(this.steps()[this.directLocalizationStepIndex() - 1].title, this.step4CommentPhase());
+      }
     }
 
-    const reason = this.rejectionReason().trim();
-    if (!reason) {
-      this.toasterService.error('Rejection reason is required.');
-      return;
-    }
-
-    this.isProcessing.set(true);
-    this.planStore.employeeRejectPlan(planId, reason)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.isProcessing.set(false);
-          this.showRejectConfirmationDialog.set(false);
-          this.rejectionReason.set('');
-          this.toasterService.success('Plan has been rejected successfully.');
-          this.doRefresh.emit();
-          this.visibility.set(false);
-          this.planStore.resetWizardState();
-        },
-        error: (error) => {
-          this.isProcessing.set(false);
-          this.toasterService.error('Error rejecting plan. Please try again.');
-          console.error('Error rejecting plan:', error);
-        }
-      });
+    return null;
   }
 
-  /**
-   * Cancel final rejection confirmation
-   */
-  onCancelRejectConfirmation(): void {
-    this.showRejectConfirmationDialog.set(false);
-    // Return to reason entry dialog
-    this.showRejectReasonDialog.set(true);
-  }
+  // Base class provides all the review/approval/rejection methods
+  // We only need to implement the abstract methods and step-specific logic
 
   ngOnDestroy(): void {
     this.serviceLocalizationFormService.resetAllForms();
+  }
+
+  // Implement abstract methods from BasePlanWizard
+  protected closeWizard(): void {
+    this.visibility.set(false);
+  }
+
+  protected refresh(): void {
+    this.doRefresh.emit();
   }
 
   /**

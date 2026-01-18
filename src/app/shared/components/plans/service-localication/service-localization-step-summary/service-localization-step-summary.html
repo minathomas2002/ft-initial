@@ -14,7 +14,7 @@
     [correctedFieldIds]="step1CorrectedFields()"
     (onEdit)="onEditStepClick(coverStepNumber())"
   />
-  @if (isViewMode() && hasStep1OutComingComments()) {
+  @if (hasStep1OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Cover Page'"
     [commentText]="getStep1CommentText()"
@@ -36,7 +36,7 @@
     [correctedFieldIds]="step2CorrectedFields()"
     (onEdit)="onEditStepClick(overviewStepNumber())"
   />
-  @if (isViewMode() && hasStep2OutComingComments()) {
+  @if (hasStep2OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Overview'"
     [commentText]="getStep2CommentText()"
@@ -59,7 +59,7 @@
     [correctedFieldIds]="step3CorrectedFields()"
     (onEdit)="onEditStepClick(existingSaudiStepNumber())"
   />
-  @if (isViewMode() && hasStep3OutComingComments()) {
+  @if (hasStep3OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Existing Saudi Co.'"
     [commentText]="getStep3CommentText()"
@@ -83,7 +83,7 @@
     [correctedFieldIds]="step4CorrectedFields()"
     (onEdit)="onEditStepClick(directLocalizationStepNumber())"
   />
-  @if (isViewMode() && hasStep4OutComingComments()) {
+  @if (hasStep4OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="'Your Comment' + ' - Direct Localization'"
     [commentText]="getStep4CommentText()"

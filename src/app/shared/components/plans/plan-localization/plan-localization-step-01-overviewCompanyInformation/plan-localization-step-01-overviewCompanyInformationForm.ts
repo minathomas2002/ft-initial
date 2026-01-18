@@ -24,6 +24,7 @@ import { TColors } from 'src/app/shared/interfaces';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
+import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -44,7 +45,8 @@ import { TCommentPhase } from '../product-localization-plan-wizard/product-local
     CommentStateComponent,
     FormsModule,
     TextareaModule,
-    GeneralConfirmationDialogComponent
+    GeneralConfirmationDialogComponent,
+    CommentInputComponent
   ],
   templateUrl: './plan-localization-step-01-overviewCompanyInformationForm.html',
   styleUrl: './plan-localization-step-01-overviewCompanyInformationForm.scss',
