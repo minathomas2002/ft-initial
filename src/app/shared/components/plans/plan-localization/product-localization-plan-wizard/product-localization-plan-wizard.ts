@@ -530,9 +530,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
           // Get opportunity details and update availableOpportunities for edit mode
           const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-          const isEditOrViewMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view';
+          const isEditOrViewOrReviewMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review';
 
-          if (opportunityId && isEditOrViewMode) {
+          if (opportunityId && isEditOrViewOrReviewMode) {
             // Chain opportunity details loading, catch errors to continue with form mapping
             return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
               .pipe(
