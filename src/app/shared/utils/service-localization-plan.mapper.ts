@@ -48,7 +48,7 @@ export interface ServiceItem {
   serviceDescription: string;
   serviceType: NumberOrEmpty;
   serviceCategory: NumberOrEmpty;
-  serviceProvidedTo: NumberOrEmpty;
+  serviceProvidedTo: number[];
   targetedForLocalization?: boolean;
   serviceLocalizationMethodology: number[];
   expectedLocalizationDate?: string;
@@ -439,7 +439,7 @@ export function mapServicePlanResponseToForm(
     setNestedValue(row, EMaterialsFormControls.serviceType, svc.serviceType != null ? String(svc.serviceType) : null);
     setNestedValue(row, EMaterialsFormControls.serviceCategory, svc.serviceCategory != null ? String(svc.serviceCategory) : null);
     setNestedValue(row, EMaterialsFormControls.serviceDescription, svc.serviceDescription ?? '');
-    setNestedValue(row, EMaterialsFormControls.serviceProvidedTo, svc.serviceProvidedTo != null ? String(svc.serviceProvidedTo) : null);
+    setNestedValue(row, EMaterialsFormControls.serviceProvidedTo, svc.serviceProvidedTo != null ? (svc.serviceProvidedTo ?? []).map((x) => String(x)) : null);
     setNestedValue(row, EMaterialsFormControls.totalBusinessDoneLast5Years, svc.totalBusinessLast5Years ?? '');
     setNestedValue(row, EMaterialsFormControls.serviceTargetedForLocalization, toYesNoId(!!svc.targetedForLocalization));
     setNestedValue(
@@ -450,8 +450,8 @@ export function mapServicePlanResponseToForm(
 
     // Keep conditional validators in sync - call toggles first, then set conditional values
     // This ensures values are not reset by the toggle functions
-    const providedToId = svc.serviceProvidedTo != null ? String(svc.serviceProvidedTo) : null;
-    formService.toggleServiceProvidedToCompanyNamesValidation(providedToId, idx);
+    const providedToIds = svc.serviceProvidedTo != null ? (svc.serviceProvidedTo ?? []).map((x) => String(x)) : null;
+    formService.toggleServiceProvidedToCompanyNamesValidation(providedToIds, idx);
     formService.toggleExpectedLocalizationDateValidation(toYesNoId(!!svc.targetedForLocalization), idx);
 
     // Set values that may be reset by toggle functions AFTER the toggles
@@ -651,7 +651,7 @@ function mapServicesAndCompanyInfo(formService: ServicePlanFormService): {
         serviceDescription: getControlValue(detailGroup, EMaterialsFormControls.serviceDescription) || '',
         serviceType: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceType)),
         serviceCategory: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceCategory)),
-        serviceProvidedTo: toNumberOrEmpty(getControlValue(detailGroup, EMaterialsFormControls.serviceProvidedTo)),
+        serviceProvidedTo: toNumberArray(getControlValue(detailGroup, EMaterialsFormControls.serviceProvidedTo)),
         targetedForLocalization: toBooleanYesNoOrUndefined(
           getControlValue(detailGroup, EMaterialsFormControls.serviceTargetedForLocalization)
         ),
@@ -1143,7 +1143,9 @@ export function convertServiceRequestToFormData(
     formData.append(`ServicePlan.Services[${index}].ServiceDescription`, service.serviceDescription);
     formData.append(`ServicePlan.Services[${index}].ServiceType`, service.serviceType.toString());
     formData.append(`ServicePlan.Services[${index}].ServiceCategory`, service.serviceCategory.toString());
-    formData.append(`ServicePlan.Services[${index}].ServiceProvidedTo`, service.serviceProvidedTo.toString());
+    service.serviceProvidedTo.forEach((type, typeIndex) => {
+      formData.append(`ServicePlan.Services[${index}].ServiceProvidedTo[${typeIndex}]`, type.toString());
+    });
     if (service.targetedForLocalization !== undefined && service.targetedForLocalization !== null) {
       formData.append(
         `ServicePlan.Services[${index}].TargetedForLocalization`,

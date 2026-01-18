@@ -189,7 +189,7 @@ export interface IServicePlanServiceItem {
   serviceDescription: string;
   serviceType: number;
   serviceCategory: number;
-  serviceProvidedTo: number;
+  serviceProvidedTo: number[];
   targetedForLocalization: boolean;
   serviceLocalizationMethodology: number[];
   expectedLocalizationDate?: string;

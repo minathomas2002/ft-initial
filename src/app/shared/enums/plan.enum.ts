@@ -31,9 +31,10 @@ export enum EServiceType {
 }
 
 export enum EServiceProvidedTo {
-  Contractors = 1,
-  Manufacturers = 2,
-  Others = 3,
+  SEC = 1,
+  Contractors = 2,
+  Manufacturers = 3,
+  Others = 4,
 }
 
 export enum EServiceCategory {
