@@ -172,7 +172,7 @@ export class ServicePlanFormService {
     this._step2Builder.removeServiceDetailItem(this._step2FormGroup, index);
   }
 
-  toggleServiceProvidedToCompanyNamesValidation(serviceProvidedTo: string | null, index: number): void {
+  toggleServiceProvidedToCompanyNamesValidation(serviceProvidedTo: Array<string | number> | null, index: number): void {
     this._step2Builder.toggleServiceProvidedToCompanyNamesValidation(this._step2FormGroup, serviceProvidedTo, index);
   }
 
