@@ -439,7 +439,7 @@ export function mapServicePlanResponseToForm(
     setNestedValue(row, EMaterialsFormControls.serviceType, svc.serviceType != null ? String(svc.serviceType) : null);
     setNestedValue(row, EMaterialsFormControls.serviceCategory, svc.serviceCategory != null ? String(svc.serviceCategory) : null);
     setNestedValue(row, EMaterialsFormControls.serviceDescription, svc.serviceDescription ?? '');
-    setNestedValue(row, EMaterialsFormControls.serviceProvidedTo, svc.serviceProvidedTo != null ? (svc.serviceProvidedTo ?? []).map((x) => String(x)) : null);
+    setNestedValue(row, EMaterialsFormControls.serviceProvidedTo, Array.isArray(svc.serviceProvidedTo) ? svc.serviceProvidedTo.map((x) => String(x)) : null);
     setNestedValue(row, EMaterialsFormControls.totalBusinessDoneLast5Years, svc.totalBusinessLast5Years ?? '');
     setNestedValue(row, EMaterialsFormControls.serviceTargetedForLocalization, toYesNoId(!!svc.targetedForLocalization));
     setNestedValue(
@@ -450,7 +450,7 @@ export function mapServicePlanResponseToForm(
 
     // Keep conditional validators in sync - call toggles first, then set conditional values
     // This ensures values are not reset by the toggle functions
-    const providedToIds = svc.serviceProvidedTo != null ? (svc.serviceProvidedTo ?? []).map((x) => String(x)) : null;
+    const providedToIds = Array.isArray(svc.serviceProvidedTo) ? svc.serviceProvidedTo.map((x) => String(x)) : null;
     formService.toggleServiceProvidedToCompanyNamesValidation(providedToIds, idx);
     formService.toggleExpectedLocalizationDateValidation(toYesNoId(!!svc.targetedForLocalization), idx);
 
