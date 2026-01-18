@@ -121,7 +121,7 @@ export class DashboardStatisticsCards {
       outputEvent: () => this.onViewUnassignedPlans.emit()
     },
     {
-      titleKey: 'plans.statistics.plansUnderReview',
+      titleKey: 'plans.statistics.inProgressPlans',
       valueKey: 'plansUnderReview',
       outputEvent: () => this.onViewPlansUnderReview.emit()
     },

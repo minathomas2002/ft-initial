@@ -849,6 +849,7 @@
       "unAssignedPlans": "Unassigned Plans",
       "assignedPending": "Assigned Pending",
       "plansUnderReview": "Plans Under Review",
+      "inProgressPlans":"In Progress Plans",
       "assignedPlans": "Assigned Plans",
       "approvedPlans": "Approved Plans",
       "assignedApprovedPlans": "Assigned Approved",
