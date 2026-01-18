@@ -24,6 +24,8 @@ export abstract class BasePlanWizard {
   protected approvalNote = signal<string>('');
   protected rejectionReason = signal<string>('');
 
+  protected readonly commentTitle = this.planStore.commentPersona
+
   /**
    * Abstract methods for component-specific behavior
    * Subclasses must implement these to handle their specific signals/models/outputs

@@ -37,7 +37,7 @@
         [(selectedInputs)]="step1SelectedInputs"
         [selectedInputColor]="commentColor()"
         [pageComments]="step1Comments()"
-        [commentTitle]="commentTitle()"
+        [commentTitle]="commentTitle() || ''"
         [correctedFieldIds]="step1CorrectedFields()"
       />
     </div>
@@ -58,7 +58,7 @@
         [(selectedInputs)]="step2SelectedInputs"
         [selectedInputColor]="commentColor()"
         [pageComments]="step2Comments()"
-        [commentTitle]="commentTitle()"
+        [commentTitle]="commentTitle() || ''"
         [correctedFieldIds]="step2CorrectedFields()"
       />
     </div>
@@ -79,7 +79,7 @@
         [(selectedInputs)]="step3SelectedInputs"
         [selectedInputColor]="commentColor()"
         [pageComments]="step3Comments()"
-        [commentTitle]="commentTitle()"
+        [commentTitle]="commentTitle() || ''"
         [correctedFieldIds]="step3CorrectedFields()"
       />
     </div>
@@ -101,7 +101,7 @@
         [(selectedInputs)]="step4SelectedInputs"
         [selectedInputColor]="commentColor()"
         [pageComments]="step4Comments()"
-        [commentTitle]="commentTitle()"
+        [commentTitle]="commentTitle() || ''"
         [correctedFieldIds]="step4CorrectedFields()"
       />
     </div>
@@ -111,7 +111,7 @@
     <app-plan-localization-step-05-summary
       [isViewMode]="isViewMode()"
       [pageComments]="collectAllPageComments()"
-      [commentTitle]="commentTitle()"
+      [commentTitle]="commentTitle() || ''"
       [signature]="planSignature()"
       [step1Comments]="step1Comments()"
       [step2Comments]="step2Comments()"

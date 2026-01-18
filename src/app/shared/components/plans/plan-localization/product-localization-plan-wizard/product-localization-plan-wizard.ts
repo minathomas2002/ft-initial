@@ -170,12 +170,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   // Computed signal to get creatorRole from planComments
   creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
 
-  // Computed signal to determine comment title based on creatorRole
-  commentTitle = computed(() => {
-    const role = this.creatorRole();
-    return role === 3 ? 'Employee Comments' : 'Investor Comments';
-  });
-
   // Computed signal to check if incoming comments should be shown
   shouldShowIncomingComments = computed(() => {
     const mode = this.planStore.wizardMode();

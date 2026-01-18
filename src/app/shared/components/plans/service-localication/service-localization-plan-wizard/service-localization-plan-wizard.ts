@@ -124,9 +124,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   // Computed signal to get creatorRole from planComments
   creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
 
-  // Computed signal to determine comment title based on creatorRole
-  commentTitle = this.planStore.commentPersona;
-
   // Computed signals to map comments to each step based on pageTitleForTL
   step1Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
