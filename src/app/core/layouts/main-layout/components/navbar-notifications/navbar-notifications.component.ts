@@ -9,7 +9,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
@@ -33,7 +33,6 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     OverlayBadgeModule,
     BadgeModule,
     MenuModule,
-    RouterLink,
     PopoverModule,
     NavbarNotificationsTabs,
     ServiceLocalizationPlanWizard,
