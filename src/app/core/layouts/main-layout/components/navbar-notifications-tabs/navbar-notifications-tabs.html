@@ -16,7 +16,8 @@
 <div class="bg-white rounded-lg">
     @for (notification of notificationItems() || []; track notification.id) {
     <div
-      class="cursor-pointer hover:bg-gray-50 transition-colors relative border-b p-6 border-[#D5D6DD]"
+      class="hover:bg-gray-50 transition-colors relative border-b p-6 border-[#D5D6DD]"
+      [class.cursor-pointer]="notification.route?.length"
       (click)="onNotificationClick(notification)"
     >
       @if (!notification.isRead) {
