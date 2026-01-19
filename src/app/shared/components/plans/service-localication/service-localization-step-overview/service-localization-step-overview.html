@@ -665,6 +665,7 @@
               placeholder="Select"
               fluid
               [appendTo]="'body'"
+              (onChange)="onServiceTargetedForLocalizationChange($event.value, index)"
               [appConditionalColorClass]="highlightInput('serviceTargetedForLocalization_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
