@@ -394,6 +394,44 @@ export const PlanStore = signalStore(
         );
       },
 
+      /* Investor Resubmit Product Localization Plan*/
+      investorResubmitProductPlan(request: FormData) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.reSubmitProductPlan(request).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error resubmitting product localization plan',
+            });
+            return throwError(() => new Error('Error resubmitting product localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
+      /* Investor Resubmit Service Localization Plan*/
+      investorResubmitServicePlan(request: FormData) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.reSubmitServicePlan(request).pipe(
+          tap((res) => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error resubmitting service localization plan',
+            });
+            return throwError(() => new Error('Error resubmitting service localization plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
       /* save As Draft Product Localization Plan*/
       saveAsDraftServiceLocalizationPlan(request: FormData) {
         patchState(store, { isProcessing: true, error: null });
