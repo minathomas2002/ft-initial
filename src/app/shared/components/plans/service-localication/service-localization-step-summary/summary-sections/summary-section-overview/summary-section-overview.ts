@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls, EYesNo } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -22,6 +22,7 @@ export class SummarySectionOverview {
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
   onEdit = output<void>();
 
   planYesOrNoEnum = EYesNo;
@@ -342,5 +343,204 @@ export class SummarySectionOverview {
     const serviceGroup = detailsArray.at(index) as FormGroup;
     const rowId = serviceGroup.get('rowId')?.value;
     return this.hasFieldComment(fieldKey, 'serviceDetails', rowId);
+  }
+
+  // Helper method to get before value (original value from plan response) for a field
+  getBeforeValue(fieldKey: string, index?: number): any {
+    const originalPlan = this.originalPlanResponse();
+    if (!originalPlan?.servicePlan) return null;
+
+    const plan = originalPlan.servicePlan;
+    const companyInfo = plan.companyInformationSection;
+    const localAgent = plan.localAgentDetailSection;
+
+    // Map field keys to plan response paths
+    switch (fieldKey) {
+      case 'opportunity':
+        // Opportunity is not stored in the plan response, return null
+        return null;
+      case 'submissionDate':
+        // Submission date is not stored in the plan response, return null
+        return null;
+      case 'companyName':
+        return companyInfo?.companyName ?? null;
+      case 'ceoName':
+        return companyInfo?.ceoName ?? null;
+      case 'ceoEmailID':
+        return companyInfo?.ceoEmail ?? null;
+      case 'globalHQLocation':
+        return companyInfo?.globalHQLocation ?? null;
+      case 'registeredVendorIDwithSEC':
+        return companyInfo?.secVendorId ?? null;
+      case 'benaRegisteredVendorID':
+        return companyInfo?.benaVendorId ?? null;
+      case 'doYouCurrentlyHaveLocalAgentInKSA':
+        return companyInfo?.hasLocalAgent ?? null;
+      case 'localAgentDetails':
+        return companyInfo?.localAgentDetails ?? null;
+      case 'localAgentName':
+        return localAgent?.localAgentName ?? null;
+      case 'contactPersonName':
+        return localAgent?.agentContactPerson ?? null;
+      case 'emailID':
+        return localAgent?.agentEmail ?? null;
+      case 'contactNumber':
+        return localAgent?.agentContactNumber ?? null;
+      case 'companyLocation':
+        return localAgent?.agentCompanyLocation ?? null;
+      case 'serviceName':
+      case 'serviceType':
+      case 'serviceCategory':
+      case 'serviceDescription':
+      case 'serviceProvidedTo':
+      case 'totalBusinessDoneLast5Years':
+      case 'serviceTargetedForLocalization':
+      case 'expectedLocalizationDate':
+      case 'serviceLocalizationMethodology':
+        if (index !== undefined && plan.services && plan.services[index]) {
+          const service = plan.services[index];
+          switch (fieldKey) {
+            case 'serviceName':
+              return service.serviceName ?? null;
+            case 'serviceType':
+              return service.serviceType ?? null;
+            case 'serviceCategory':
+              return service.serviceCategory ?? null;
+            case 'serviceDescription':
+              return service.serviceDescription ?? null;
+            case 'serviceProvidedTo':
+              return service.serviceProvidedTo ?? null;
+            case 'totalBusinessDoneLast5Years':
+              return service.totalBusinessLast5Years ?? null;
+            case 'serviceTargetedForLocalization':
+              return service.targetedForLocalization ?? null;
+            case 'expectedLocalizationDate':
+              return service.expectedLocalizationDate ?? null;
+            case 'serviceLocalizationMethodology':
+              return service.serviceLocalizationMethodology ?? null;
+          }
+        }
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  // Helper method to get after value (current form value) for a field
+  getAfterValue(fieldKey: string, index?: number): any {
+    if (fieldKey === 'opportunity') {
+      return this.opportunity();
+    } else if (fieldKey === 'submissionDate') {
+      return this.submissionDate();
+    } else if (fieldKey === 'companyName') {
+      return this.companyName();
+    } else if (fieldKey === 'ceoName') {
+      return this.ceoName();
+    } else if (fieldKey === 'ceoEmailID') {
+      return this.ceoEmailID();
+    } else if (fieldKey === 'globalHQLocation') {
+      return this.globalHQLocation();
+    } else if (fieldKey === 'registeredVendorIDwithSEC') {
+      return this.registeredVendorID();
+    } else if (fieldKey === 'benaRegisteredVendorID') {
+      return this.benaRegisteredVendorID();
+    } else if (fieldKey === 'doYouCurrentlyHaveLocalAgentInKSA') {
+      return this.hasLocalAgent();
+    } else if (fieldKey === 'localAgentDetails') {
+      return this.localAgentDetails();
+    } else if (fieldKey === 'localAgentName') {
+      return this.localAgentName();
+    } else if (fieldKey === 'contactPersonName') {
+      return this.contactPersonName();
+    } else if (fieldKey === 'emailID') {
+      return this.emailID();
+    } else if (fieldKey === 'contactNumber') {
+      return this.contactNumber();
+    } else if (fieldKey === 'companyLocation') {
+      return this.companyLocation();
+    } else if (index !== undefined) {
+      // For service details array items
+      const detailsArray = this.serviceDetailsFormArray();
+      if (!detailsArray || index >= detailsArray.length) return null;
+      const serviceGroup = detailsArray.at(index) as FormGroup;
+      const getValueFromControl = (controlName: string) => {
+        const ctrl = serviceGroup.get(controlName);
+        if (ctrl instanceof FormGroup) {
+          return ctrl.get(EMaterialsFormControls.value)?.value;
+        }
+        return ctrl?.value;
+      };
+      switch (fieldKey) {
+        case 'serviceName':
+          return getValueFromControl(EMaterialsFormControls.serviceName);
+        case 'serviceType':
+          return getValueFromControl(EMaterialsFormControls.serviceType);
+        case 'serviceCategory':
+          return getValueFromControl(EMaterialsFormControls.serviceCategory);
+        case 'serviceDescription':
+          return getValueFromControl(EMaterialsFormControls.serviceDescription);
+        case 'serviceProvidedTo':
+          return getValueFromControl(EMaterialsFormControls.serviceProvidedTo);
+        case 'totalBusinessDoneLast5Years':
+          return getValueFromControl(EMaterialsFormControls.totalBusinessDoneLast5Years);
+        case 'serviceTargetedForLocalization':
+          return getValueFromControl(EMaterialsFormControls.serviceTargetedForLocalization);
+        case 'expectedLocalizationDate':
+          return getValueFromControl(EMaterialsFormControls.expectedLocalizationDate);
+        case 'serviceLocalizationMethodology':
+          return getValueFromControl(EMaterialsFormControls.serviceLocalizationMethodology);
+      }
+    }
+    return null;
+  }
+
+  // Helper method to check if field should show diff (has before and after values and they differ)
+  shouldShowDiff(fieldKey: string, index?: number): boolean {
+    // Only show diff if field has a comment
+    if (index !== undefined) {
+      // For array items, check comment with rowId
+      const detailsArray = this.serviceDetailsFormArray();
+      if (!detailsArray || index >= detailsArray.length) return false;
+      const serviceGroup = detailsArray.at(index) as FormGroup;
+      const rowId = serviceGroup.get('rowId')?.value;
+      if (!this.hasFieldComment(fieldKey, 'serviceDetails', rowId)) return false;
+    } else {
+      // Determine section based on fieldKey
+      let section: string | undefined;
+      if (['opportunity', 'submissionDate'].includes(fieldKey)) {
+        section = 'basicInformation';
+      } else if (['companyName', 'ceoName', 'ceoEmailID'].includes(fieldKey)) {
+        section = 'overviewCompanyInformation';
+      } else if (['globalHQLocation', 'registeredVendorIDwithSEC', 'benaRegisteredVendorID', 'doYouCurrentlyHaveLocalAgentInKSA'].includes(fieldKey)) {
+        section = 'locationInformation';
+      } else if (['localAgentDetails', 'localAgentName', 'contactPersonName', 'emailID', 'contactNumber', 'companyLocation'].includes(fieldKey)) {
+        section = 'localAgentInformation';
+      }
+      if (!this.hasFieldComment(fieldKey, section)) return false;
+    }
+
+    const beforeValue = this.getBeforeValue(fieldKey, index);
+    const afterValue = this.getAfterValue(fieldKey, index);
+
+    // Compare values
+    if (beforeValue === afterValue) return false;
+    if (beforeValue === null || beforeValue === undefined || beforeValue === '') {
+      return afterValue !== null && afterValue !== undefined && afterValue !== '';
+    }
+    if (afterValue === null || afterValue === undefined || afterValue === '') {
+      return true;
+    }
+
+    // For arrays, compare by JSON stringify
+    if (Array.isArray(beforeValue) && Array.isArray(afterValue)) {
+      return JSON.stringify(beforeValue.sort()) !== JSON.stringify(afterValue.sort());
+    }
+
+    // For objects, compare by JSON stringify
+    if (typeof beforeValue === 'object' && typeof afterValue === 'object') {
+      return JSON.stringify(beforeValue) !== JSON.stringify(afterValue);
+    }
+
+    return String(beforeValue) !== String(afterValue);
   }
 }
