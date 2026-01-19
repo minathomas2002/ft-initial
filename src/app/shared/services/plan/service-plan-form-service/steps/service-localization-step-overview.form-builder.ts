@@ -39,10 +39,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
       }),
-      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''), // Optional, disabled, auto-filled
-      }),
+      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.control({ value: '', disabled: true }),
       [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]), // Required, disabled, auto-filled

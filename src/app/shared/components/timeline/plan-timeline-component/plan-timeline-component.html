@@ -47,9 +47,9 @@
       <p-divider class="m-0!"></p-divider>
       <div class="mt-2">
         <label class="block text-sm text-[#414651] font-medium mb-1">
-          @if (planApprovedActionsEnum.includes(item.item.status)) {
+          @if (planApprovedActionsEnum.includes(item.item.actionType)) {
             Approved Note
-          } @else if (planRejectedActionsEnum.includes(item.item.status)) {
+          } @else if (planRejectedActionsEnum.includes(item.item.actionType)) {
             Rejected Reason
           } @else {
             Note

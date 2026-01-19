@@ -209,6 +209,10 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     this.planFormService.toggleServiceProvidedToCompanyNamesValidation(value, index);
   }
 
+  onServiceTargetedForLocalizationChange(value: string | boolean | number | null, index: number): void {
+    this.planFormService.toggleExpectedLocalizationDateValidation(value, index);
+  }
+
   hasServiceProvidedToOthers(value: unknown): boolean {
     const list = Array.isArray(value) ? value : [];
     const selected = list.map((v) => String(v));
@@ -241,6 +245,14 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
           if (serviceProvidedToControl) {
             const val = this.getValueControl(serviceProvidedToControl)?.value ?? null;
             service.toggleServiceProvidedToCompanyNamesValidation(val, idx);
+          }
+
+          const serviceTargetedForLocalizationControl = ctrl.get(
+            EMaterialsFormControls.serviceTargetedForLocalization
+          );
+          if (serviceTargetedForLocalizationControl) {
+            const val = this.getValueControl(serviceTargetedForLocalizationControl)?.value ?? null;
+            service.toggleExpectedLocalizationDateValidation(val, idx);
           }
         });
       }

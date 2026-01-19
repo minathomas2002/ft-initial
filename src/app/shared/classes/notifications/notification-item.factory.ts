@@ -71,7 +71,7 @@ class InvestorNotificationParams extends BaseNotificationParams {
 
 function buildInternalParams(notification: INotification, defaultRoute: string[]) {
   const parsedCustomData = safeParseCustomData(notification.customData);
-  const searchText = parsedCustomData?.PlanId || '';
+  const searchText = parsedCustomData?.PlanCode || '';
 
   const action = (typeof notification.action === 'string'
     ? Number(notification.action)
@@ -82,7 +82,12 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
     params: { searchText },
   };
 
-  const planDetailsActions = new Set<EPlanAction>([
+  const actionsToOpenPlanDetails = new Set<EPlanAction>([]);
+
+  const actionsToNavigate = new Set<EPlanAction>([
+    EPlanAction.Submitted,
+    EPlanAction.Reassigned,
+    EPlanAction.Assigned,
     EPlanAction.AutoRejection,
     EPlanAction.CommentSubmitted,
     EPlanAction.Rejected,
@@ -92,24 +97,19 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
     EPlanAction.SystemReminder
   ]);
 
-  const navigationActions = new Set<EPlanAction>([
-    EPlanAction.Submitted,
-    EPlanAction.Reassigned,
-    EPlanAction.Assigned,
-  ]);
+  if (actionsToNavigate.has(action)) {
+    return { ...baseNavigationConfig, behavior: null };
+  }
 
-  if (planDetailsActions.has(action)) {
+  if (actionsToOpenPlanDetails.has(action)) {
     return { ...baseNavigationConfig, behavior: 'planDetails' as const };
   }
 
-  if (navigationActions.has(action)) {
-    return { ...baseNavigationConfig, behavior: null };
-  }
 
   return { route: [], params: {}, behavior: null };
 }
 
-function safeParseCustomData(value: string | { PlanId: string; }) {
+function safeParseCustomData(value: string | { PlanCode: string; }) {
   if (typeof value === 'string') {
     try {
       return JSON.parse(value);

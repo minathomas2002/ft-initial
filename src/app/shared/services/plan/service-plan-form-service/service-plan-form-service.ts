@@ -176,7 +176,7 @@ export class ServicePlanFormService {
     this._step2Builder.toggleServiceProvidedToCompanyNamesValidation(this._step2FormGroup, serviceProvidedTo, index);
   }
 
-  toggleExpectedLocalizationDateValidation(serviceTargetedForLocalization: string | boolean | null, index: number): void {
+  toggleExpectedLocalizationDateValidation(serviceTargetedForLocalization: string | boolean | number | null, index: number): void {
     this._step2Builder.toggleExpectedLocalizationDateValidation(this._step2FormGroup, serviceTargetedForLocalization, index);
   }
 

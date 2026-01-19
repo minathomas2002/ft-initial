@@ -9,6 +9,7 @@ export interface INotification {
   customData: {
     PlanId: string,
     PlanType: number,
+    PlanCode: string,
   };
   from: string;
   id: string;

@@ -668,6 +668,28 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const submissionDateControl = basicInfo?.get(EMaterialsFormControls.submissionDate);
     submissionDateControl?.disable({ emitEvent: false });
 
+    // Keep registeredVendorIDwithSEC read-only in location information
+    const locationInfo = this.serviceLocalizationFormService.locationInformationFormGroup;
+    if (locationInfo) {
+      const registeredVendorIDControl = locationInfo.get(EMaterialsFormControls.registeredVendorIDwithSEC);
+      if (registeredVendorIDControl) {
+        registeredVendorIDControl.disable({ emitEvent: false });
+      }
+    }
+
+    // Keep registeredVendorIDwithSEC read-only in all Saudi company details items
+    const saudiCompanyDetailsArray = this.serviceLocalizationFormService.saudiCompanyDetailsFormGroup;
+    if (saudiCompanyDetailsArray) {
+      saudiCompanyDetailsArray.controls.forEach((itemControl) => {
+        if (itemControl instanceof FormGroup) {
+          const registeredVendorIDControl = itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC);
+          if (registeredVendorIDControl) {
+            registeredVendorIDControl.disable({ emitEvent: false });
+          }
+        }
+      });
+    }
+
     // Re-enabling the whole step also enables nested read-only controls.
     // Keep Step 2 company name disabled and synced with Step 1.
     this.serviceLocalizationFormService.syncCompanyNameFromCoverPageToOverview();

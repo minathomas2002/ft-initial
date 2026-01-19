@@ -143,24 +143,9 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
     // Navigate to the notification route
     if (notification.route && notification.route.length > 0) {
       this.router.navigate(notification.route, { queryParams: notification.params });
+      this.notificationsModal()?.hide()
     }
 
-    if (notification.behavior === 'planDetails') {
-      // Set mode to view and plan ID
-      this.planStore.setWizardMode('view');
-      this.planStore.setSelectedPlanId(notification.customData.PlanId);
-
-      if (!notification.customData.PlanType) {
-        this.toastService.error('Plan type is not provided');
-        return;
-      }
-
-      notification.customData.PlanType === EOpportunityType.PRODUCT
-        ? this.productLocalizationPlanWizardVisibility.set(true)
-        : this.serviceLocalizationPlanWizardVisibility.set(true);
-    }
-
-    this.notificationsModal()?.hide()
   }
 
   toggleNotificationTab(event: PointerEvent) {
