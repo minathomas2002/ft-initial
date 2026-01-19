@@ -1,9 +1,12 @@
-import { computed, effect, inject, signal, InputSignal, ModelSignal } from '@angular/core';
+import { computed, effect, inject, OnInit, signal, InputSignal, ModelSignal, Directive } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TCommentPhase } from './product-localization-plan-wizard/product-localization-plan-wizard';
@@ -12,24 +15,45 @@ import { TCommentPhase } from './product-localization-plan-wizard/product-locali
  * Abstract base class for plan localization step forms.
  * Implements the Template Method pattern to provide common comment management functionality
  * while allowing subclasses to customize step-specific behavior.
+ * 
+ * Note: Abstract base classes using inject() don't require Angular decorators.
  */
+@Directive()
 export abstract class PlanStepBaseClass {
   // Injected services
   protected readonly formUtilityService = inject(FormUtilityService);
   protected readonly toasterService = inject(ToasterService);
+  readonly planStore = inject(PlanStore);
+  protected readonly destroyRef = inject(DestroyRef);
 
   // Abstract properties - must be provided by subclasses (defined as inputs/models in @Component)
   abstract readonly pageTitle: InputSignal<string>;
   abstract readonly commentPhase: ModelSignal<TCommentPhase>;
   abstract readonly selectedInputs: ModelSignal<IFieldInformation[]>;
+  abstract readonly pageComments: InputSignal<IPageComment[]>;
+  abstract readonly isViewMode: InputSignal<boolean>;
+  abstract readonly correctedFieldIds: InputSignal<string[]>;
+  abstract readonly correctedFields: InputSignal<IFieldInformation[]>;
 
   // Abstract property for plan form service - subclasses must provide either ProductPlanFormService or ServicePlanFormService
   abstract readonly planFormService: ProductPlanFormService | ServicePlanFormService;
 
+  // Abstract method - must be implemented by subclasses to map field information to form control
+  abstract getControlForField(field: IFieldInformation): FormControl<any> | null;
+
   // Common signals
-  showCheckbox = computed(() => this.commentPhase() !== 'none');
+  showCheckbox = computed(() => this.commentPhase() !== 'none' && !this.isResubmitMode());
   comment = signal<string>('');
   showDeleteConfirmationDialog = signal<boolean>(false);
+
+  // Store original values for before/after comparison in resubmit mode
+  private originalFieldValues = signal<Map<string, any>>(new Map());
+  private previousCorrectedFieldsLength = signal<number>(-1);
+
+  // Resubmit mode check
+  isResubmitMode = computed(() => {
+    return this.planStore.wizardMode() === 'resubmit';
+  });
 
   // Abstract method - must be implemented by subclasses
   abstract getFormGroup(): FormGroup;
@@ -60,8 +84,131 @@ export abstract class PlanStepBaseClass {
     // Setup common comment phase effect
     this.setupCommentPhaseEffect();
 
+    // Setup resubmit mode effect to handle correctedFields when they become available
+    this.setupResubmitModeEffect();
+
     // Call hook for step-specific initialization
     this.initializeStepSpecificLogic();
+  }
+
+  ngOnInit(): void {
+    // Only proceed if form group is available
+    const formGroup = this.getFormGroup();
+    if (!formGroup || !this.planFormService) {
+      return;
+    }
+
+    const wizardMode = this.planStore.wizardMode();
+    const isView = this.isViewMode();
+
+    if (isView && wizardMode !== 'resubmit') {
+      // In view mode (but not resubmit), disable all controls immediately
+      formGroup.disable({ emitEvent: false });
+    }
+    // Resubmit mode logic is handled in the effect to wait for correctedFields to be available
+  }
+
+  /**
+   * Sets up an effect to handle resubmit mode when correctedFields become available.
+   * This ensures we wait for the data to load before processing corrected fields.
+   */
+  private setupResubmitModeEffect(): void {
+    effect(() => {
+      const formGroup = this.getFormGroup();
+      if (!formGroup || !this.planFormService) {
+        return;
+      }
+
+      const wizardMode = this.planStore.wizardMode();
+      const isResubmit = wizardMode === 'resubmit';
+      const correctedFields = this.correctedFields();
+      const currentLength = correctedFields?.length ?? 0;
+      const previousLength = this.previousCorrectedFieldsLength();
+
+      // Only process if we're in resubmit mode
+      if (isResubmit) {
+        // Process if this is the first time (previousLength === -1) or if correctedFields changed
+        if (previousLength === -1 || currentLength !== previousLength) {
+          // Store original values for before/after comparison
+          if (correctedFields && correctedFields.length > 0) {
+            this.storeOriginalValues(correctedFields);
+          }
+
+          // Disable all controls first
+          formGroup.disable({ emitEvent: false });
+          console.log(correctedFields);
+
+          // Enable only corrected fields
+          if (correctedFields && correctedFields.length > 0) {
+            correctedFields.forEach(field => {
+              const control = this.getControlForField(field);
+              console.log(control);
+              if (control) {
+                control.enable({ emitEvent: false });
+                control.markAsPristine();
+                control.markAsUntouched();
+
+                // Subscribe to status changes to track when field becomes valid
+                control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+                  if (control.status === 'VALID') {
+                    this.upDateSelectedInputs(false, field);
+                  }
+                });
+              }
+            });
+          }
+
+          // Update the tracked length
+          this.previousCorrectedFieldsLength.set(currentLength);
+        }
+      } else {
+        // Reset tracking when not in resubmit mode
+        if (previousLength !== -1) {
+          this.previousCorrectedFieldsLength.set(-1);
+        }
+      }
+    });
+  }
+
+  /**
+   * Stores original values of corrected fields for before/after comparison.
+   */
+  private storeOriginalValues(correctedFields: IFieldInformation[]): void {
+    const originalValues = new Map<string, any>();
+
+    correctedFields.forEach(field => {
+      const control = this.getControlForField(field);
+      if (control) {
+        // Create a unique key for the field
+        const fieldKey = this.getFieldKey(field);
+        originalValues.set(fieldKey, control.value);
+      }
+    });
+
+    this.originalFieldValues.set(originalValues);
+  }
+
+  /**
+   * Gets a unique key for a field for storing/retrieving original values.
+   */
+  private getFieldKey(field: IFieldInformation): string {
+    return `${field.section}.${field.inputKey}${field.id ? `.${field.id}` : ''}`;
+  }
+
+  /**
+   * Gets the original value for a field (before correction).
+   */
+  getOriginalValue(field: IFieldInformation): any {
+    const fieldKey = this.getFieldKey(field);
+    return this.originalFieldValues().get(fieldKey);
+  }
+
+  /**
+   * Gets the current value for a field (after correction).
+   */
+  getCurrentValue(field: IFieldInformation): any {
+    const control = this.getControlForField(field);
+    return control ? control.value : null;
   }
 
   /**
@@ -254,5 +401,25 @@ export abstract class PlanStepBaseClass {
    */
   protected getFormControl(control: AbstractControl): FormControl<any> {
     return this.planFormService.getFormControl(control);
+  }
+
+  /**
+   * Helper method to check if a field should be highlighted in view mode.
+   * Determines if a field is part of the corrected fields list.
+   */
+  isFieldCorrected(inputKey: string, section?: string): boolean {
+    if (!this.isViewMode()) return false;
+
+    // Check if any comment field matches this inputKey (and section if provided)
+    const matchingFields = this.pageComments()
+      .flatMap(c => c.fields)
+      .filter(f => {
+        const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
+        const sectionMatch = !section || f.section === section;
+        return keyMatch && sectionMatch;
+      });
+
+    // If any matching field has an ID in correctedFieldIds, highlight it
+    return matchingFields.some(f => f.id && this.correctedFieldIds().includes(f.id));
   }
 }
