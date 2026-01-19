@@ -40,6 +40,8 @@ export const API_ENDPOINTS = {
     saveAsDraftServiceLocalizationPlan: `${Plans}/saveAsDraft-servicePlan`,
     submitProductLocalizationPlan: `${Plans}/submit-productPlan`,
     submitServiceLocalizationPlan: `${Plans}/submit-servicePlan`,
+    reSubmitProductPlan: `${Plans}/reSubmit-productPlan`,
+    reSubmitServicePlan: `${Plans}/reSubmit-servicePlan`,
     employeeTogglePlanStatus: `${Plans}/employee-toggle-plan-status`,
     getProductPlan: `${Plans}/get-productPlan`,
     getServicePlan: `${Plans}/get-servicePlan`,

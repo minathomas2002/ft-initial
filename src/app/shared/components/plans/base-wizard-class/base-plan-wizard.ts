@@ -21,6 +21,7 @@ export abstract class BasePlanWizard {
   protected showApproveConfirmationDialog = signal<boolean>(false);
   protected showRejectReasonDialog = signal<boolean>(false);
   protected showRejectConfirmationDialog = signal<boolean>(false);
+  protected showInvestorResubmitConfirmationDialog = signal<boolean>(false);
   protected approvalNote = signal<string>('');
   protected rejectionReason = signal<string>('');
 
@@ -51,6 +52,24 @@ export abstract class BasePlanWizard {
    * When implemented as a computed signal, it can be called like a method: canApproveOrReject()
    */
   abstract canApproveOrReject(): boolean;
+
+  /**
+   * Template method: Check if investor can submit resubmission.
+   * Subclasses must implement this to check if all required corrected fields have been updated.
+   */
+  abstract canInvestorSubmit(): boolean;
+
+  /**
+   * Template method: Build FormData for resubmission including comments JSON.
+   * Subclasses must implement this to build the FormData with all plan data plus investor page comments.
+   */
+  abstract buildResubmitFormData(): FormData;
+
+  /**
+   * Template method: Get the plan type for resubmission.
+   * Subclasses must implement this to return 'product' or 'service'.
+   */
+  abstract getResubmitPlanType(): 'product' | 'service';
 
   /**
    * Handle Send Back to Investor action - Template Method
@@ -247,5 +266,64 @@ export abstract class BasePlanWizard {
     this.showRejectConfirmationDialog.set(false);
     // Return to reason entry dialog
     this.showRejectReasonDialog.set(true);
+  }
+
+  /**
+   * Handle Investor Resubmit action - Template Method
+   * Validates that all required fields are updated and shows confirmation dialog
+   */
+  onInvestorResubmit(): void {
+    if (!this.canInvestorSubmit()) {
+      this.toasterService.error('Please update all required fields before resubmitting.');
+      return;
+    }
+
+    // Show confirmation dialog
+    this.showInvestorResubmitConfirmationDialog.set(true);
+  }
+
+  /**
+   * Confirm investor resubmission - Template Method
+   * Common implementation for both wizards
+   */
+  onConfirmInvestorResubmit(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const formData = this.buildResubmitFormData();
+    const planType = this.getResubmitPlanType();
+
+    this.isProcessing.set(true);
+    const resubmitObservable = planType === 'product'
+      ? this.planStore.investorResubmitProductPlan(formData)
+      : this.planStore.investorResubmitServicePlan(formData);
+
+    resubmitObservable
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showInvestorResubmitConfirmationDialog.set(false);
+          this.toasterService.success('Plan has been resubmitted successfully.');
+          this.refresh();
+          this.closeWizard();
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error resubmitting plan. Please try again.');
+          console.error('Error resubmitting plan:', error);
+        }
+      });
+  }
+
+  /**
+   * Cancel investor resubmission - Common implementation
+   */
+  onCancelInvestorResubmit(): void {
+    this.showInvestorResubmitConfirmationDialog.set(false);
   }
 }

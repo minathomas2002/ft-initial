@@ -46,6 +46,14 @@ export class PlanApiService {
     return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.submitServiceLocalizationPlan, req);
   }
 
+  reSubmitProductPlan(req: FormData): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.reSubmitProductPlan, req);
+  }
+
+  reSubmitServicePlan(req: FormData): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.reSubmitServicePlan, req);
+  }
+
   employeeTogglePlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined }): Observable<IBaseApiResponse<boolean>> {
     return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined }, unknown>(API_ENDPOINTS.plans.employeeTogglePlanStatus, req);
   }
