@@ -747,6 +747,17 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         submissionDateControl.disable({ emitEvent: false });
       }
     }
+
+    const locationInfo = this.productPlanFormService.locationInformationFormGroup;
+    if (locationInfo) {
+      const registeredVendorIDControl = locationInfo.get(EMaterialsFormControls.registeredVendorIDwithSEC);
+      if (registeredVendorIDControl) {
+        if (!preserveValues) {
+          registeredVendorIDControl.setValue('');
+        }
+        registeredVendorIDControl.disable({ emitEvent: false });
+      }
+    }
   }
 
   onSubmissionConfirm(data: {

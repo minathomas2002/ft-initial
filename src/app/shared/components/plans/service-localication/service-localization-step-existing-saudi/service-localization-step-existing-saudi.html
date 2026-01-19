@@ -61,26 +61,14 @@
 
         <!-- Vendor ID with SEC (Readonly) -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'saudiCompanyDetails',
-              inputKey: 'registeredVendorIDwithSEC_' + index,
-              label: 'Registered Vendor ID with SEC'
-            }, itemControl.get('rowId')?.value)"
-          >
             <input
               type="text"
               pInputText
               fluid
               placeholder=""
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+              [formControl]="getFormControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
               class="bg-gray-100 text-gray-500"
-              [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
             />
-          </app-group-input-with-checkbox>
         </td>
 
         <!-- Bena register Vendor ID (Readonly) -->

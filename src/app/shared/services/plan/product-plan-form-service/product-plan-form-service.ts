@@ -276,6 +276,15 @@ export class ProductPlanFormService {
         submissionDateControl.disable({ emitEvent: false });
       }
     }
+    const locationInfo = this.locationInformationFormGroup;
+    if (locationInfo) {
+      const registeredVendorIDwithSECControl = locationInfo.get(EMaterialsFormControls.registeredVendorIDwithSEC);
+      if (registeredVendorIDwithSECControl) {
+        // Always set value and disable for create mode
+        registeredVendorIDwithSECControl.setValue('');
+        registeredVendorIDwithSECControl.disable({ emitEvent: false });
+      }
+    }
 
     // Reset Step 2: Product & Plant Overview
     this._step2FormGroup.reset();
