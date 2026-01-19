@@ -29,6 +29,9 @@ export class CommentStateComponent {
   deleteComments = output();
   saveComment = output();
   toaster = inject(ToasterService);
+  mode = input<'fieldSelection' | 'pageComment'>('fieldSelection');
+  isResubmitMode = input<boolean>(false);
+  hasInvestorComment = input<boolean>(false);
 
   constructor() {
     effect(() => {
