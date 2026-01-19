@@ -143,9 +143,9 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
     // Navigate to the notification route
     if (notification.route && notification.route.length > 0) {
       this.router.navigate(notification.route, { queryParams: notification.params });
+      this.notificationsModal()?.hide()
     }
 
-    this.notificationsModal()?.hide()
   }
 
   toggleNotificationTab(event: PointerEvent) {
