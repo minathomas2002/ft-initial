@@ -3,7 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -22,6 +22,7 @@ export class SummarySectionExistingSaudi {
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
   onEdit = output<void>();
 
   EMaterialsFormControls = EMaterialsFormControls;
@@ -399,5 +400,213 @@ export class SummarySectionExistingSaudi {
 
   hasAttachmentsComment(): boolean {
     return this.hasFieldComment('attachments', 'attachments');
+  }
+
+  // Helper method to get before value (original value from plan response) for a field
+  getBeforeValue(fieldKey: string, section: 'saudiCompanyDetails' | 'collaborationPartnership' | 'entityLevel' | 'serviceLevel', index?: number): any {
+    const originalPlan = this.originalPlanResponse();
+    if (!originalPlan?.servicePlan) return null;
+
+    const plan = originalPlan.servicePlan;
+
+    switch (section) {
+      case 'saudiCompanyDetails':
+        if (index !== undefined && plan.saudiCompanyDetails && plan.saudiCompanyDetails[index]) {
+          const company = plan.saudiCompanyDetails[index];
+          switch (fieldKey) {
+            case 'saudiCompanyName':
+              return company.companyName ?? null;
+            case 'registeredVendorIDwithSEC':
+              return company.vendorIdWithSEC ?? null;
+            case 'benaRegisteredVendorID':
+              return company.benaRegisterVendorId ?? null;
+            case 'companyType':
+              return company.companyType ?? null;
+            case 'qualificationStatus':
+              return company.qualificationStatus ?? null;
+            case 'products':
+              return company.products ?? null;
+            case 'companyOverview':
+              return company.companyOverview ?? null;
+            case 'keyProjectsExecutedByContractorForSEC':
+              return company.keyProjectsForSEC ?? null;
+            case 'companyOverviewKeyProjectDetails':
+              return company.companyOverviewKeyProjectDetails ?? null;
+            case 'companyOverviewOther':
+              return company.companyOverviewOther ?? null;
+          }
+        }
+        return null;
+
+      case 'collaborationPartnership':
+        if (index !== undefined && plan.partnershipModels && plan.partnershipModels[index]) {
+          const partnership = plan.partnershipModels[index];
+          switch (fieldKey) {
+            case 'agreementType':
+              return partnership.agreementType ?? null;
+            case 'agreementOtherDetails':
+              return partnership.otherAgreementType ?? null;
+            case 'agreementSigningDate':
+              return partnership.agreementSigningDate ?? null;
+            case 'supervisionOversightEntity':
+              return partnership.supervisionEntity ?? null;
+            case 'whyChoseThisCompany':
+              return partnership.selectionJustification ?? null;
+            case 'summaryOfKeyAgreementClauses':
+              return partnership.keyAgreementClauses ?? null;
+            case 'provideAgreementCopy':
+              return partnership.agreementCopyProvided ?? null;
+          }
+        }
+        return null;
+
+      case 'entityLevel':
+        if (plan.entityHeadcounts && plan.entityHeadcounts.length > 0) {
+          const entity = plan.entityHeadcounts[0];
+          const yearMap: Record<string, string> = {
+            'firstYear_headcount': 'y1Headcount',
+            'secondYear_headcount': 'y2Headcount',
+            'thirdYear_headcount': 'y3Headcount',
+            'fourthYear_headcount': 'y4Headcount',
+            'fifthYear_headcount': 'y5Headcount',
+          };
+          const yearKey = yearMap[fieldKey];
+          if (yearKey && entity[yearKey as keyof typeof entity] !== undefined) {
+            return entity[yearKey as keyof typeof entity] ?? null;
+          }
+        }
+        return null;
+
+      case 'serviceLevel':
+        if (index !== undefined && plan.serviceHeadcounts && plan.serviceHeadcounts[index]) {
+          const service = plan.serviceHeadcounts[index];
+          const yearMap: Record<string, string> = {
+            'firstYear_headcount': 'y1Headcount',
+            'secondYear_headcount': 'y2Headcount',
+            'thirdYear_headcount': 'y3Headcount',
+            'fourthYear_headcount': 'y4Headcount',
+            'fifthYear_headcount': 'y5Headcount',
+            'firstYear_saudization': 'y1Saudization',
+            'secondYear_saudization': 'y2Saudization',
+            'thirdYear_saudization': 'y3Saudization',
+            'fourthYear_saudization': 'y4Saudization',
+            'fifthYear_saudization': 'y5Saudization',
+          };
+          if (fieldKey === 'serviceName') {
+            // Find service name from services array
+            if (plan.services && plan.services[index]) {
+              return plan.services[index].serviceName ?? null;
+            }
+          } else if (fieldKey === 'expectedLocalizationDate') {
+            if (plan.services && plan.services[index]) {
+              return plan.services[index].expectedLocalizationDate ?? null;
+            }
+          } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {
+            return service.measuresUpSkillSaudis ?? null;
+          } else if (fieldKey === 'mentionSupportRequiredFromSEC') {
+            return service.mentionSupportRequiredSEC ?? null;
+          } else {
+            const yearKey = yearMap[fieldKey];
+            if (yearKey && service[yearKey as keyof typeof service] !== undefined) {
+              return service[yearKey as keyof typeof service] ?? null;
+            }
+          }
+        }
+        return null;
+
+      default:
+        return null;
+    }
+  }
+
+  // Helper method to get after value (current form value) for a field
+  getAfterValue(fieldKey: string, section: 'saudiCompanyDetails' | 'collaborationPartnership' | 'entityLevel' | 'serviceLevel', index?: number): any {
+    switch (section) {
+      case 'saudiCompanyDetails':
+        if (index !== undefined) {
+          const details = this.saudiCompanyDetails();
+          if (details[index]) {
+            return details[index][fieldKey as keyof typeof details[0]] ?? null;
+          }
+        }
+        return null;
+
+      case 'collaborationPartnership':
+        if (index !== undefined) {
+          const partnerships = this.collaborationPartnership();
+          if (partnerships[index]) {
+            return partnerships[index][fieldKey as keyof typeof partnerships[0]] ?? null;
+          }
+        }
+        return null;
+
+      case 'entityLevel':
+        const entity = this.entityLevel();
+        if (entity) {
+          const headcount = entity.headcount.find(h => h.controlName === fieldKey);
+          return headcount?.value ?? null;
+        }
+        return null;
+
+      case 'serviceLevel':
+        if (index !== undefined) {
+          const services = this.serviceLevel();
+          if (services[index]) {
+            if (fieldKey === 'serviceName' || fieldKey === 'expectedLocalizationDate' ||
+              fieldKey === 'keyMeasuresToUpskillSaudis' || fieldKey === 'mentionSupportRequiredFromSEC') {
+              return services[index][fieldKey as keyof typeof services[0]] ?? null;
+            } else {
+              const headcount = services[index].headcountYears.find(h => h.controlName === fieldKey);
+              if (headcount) return headcount.value ?? null;
+              const year = services[index].years.find(y => y.controlName === fieldKey);
+              return year?.value ?? null;
+            }
+          }
+        }
+        return null;
+
+      default:
+        return null;
+    }
+  }
+
+  // Helper method to check if field should show diff (has before and after values and they differ)
+  shouldShowDiff(fieldKey: string, section: 'saudiCompanyDetails' | 'collaborationPartnership' | 'entityLevel' | 'serviceLevel', index?: number): boolean {
+    // Only show diff if field has a comment
+    if (index !== undefined) {
+      if (section === 'saudiCompanyDetails') {
+        if (!this.hasSaudiCompanyComment(index, fieldKey)) return false;
+      } else if (section === 'collaborationPartnership') {
+        if (!this.hasCollaborationComment(index, fieldKey)) return false;
+      } else if (section === 'serviceLevel') {
+        if (!this.hasServiceLevelComment(index, fieldKey)) return false;
+      }
+    } else if (section === 'entityLevel') {
+      if (!this.hasEntityLevelComment(fieldKey)) return false;
+    }
+
+    const beforeValue = this.getBeforeValue(fieldKey, section, index);
+    const afterValue = this.getAfterValue(fieldKey, section, index);
+
+    // Compare values
+    if (beforeValue === afterValue) return false;
+    if (beforeValue === null || beforeValue === undefined || beforeValue === '') {
+      return afterValue !== null && afterValue !== undefined && afterValue !== '';
+    }
+    if (afterValue === null || afterValue === undefined || afterValue === '') {
+      return true;
+    }
+
+    // For arrays, compare by JSON stringify
+    if (Array.isArray(beforeValue) && Array.isArray(afterValue)) {
+      return JSON.stringify(beforeValue.sort()) !== JSON.stringify(afterValue.sort());
+    }
+
+    // For objects, compare by JSON stringify
+    if (typeof beforeValue === 'object' && typeof afterValue === 'object' && beforeValue !== null && afterValue !== null) {
+      return JSON.stringify(beforeValue) !== JSON.stringify(afterValue);
+    }
+
+    return String(beforeValue) !== String(afterValue);
   }
 }

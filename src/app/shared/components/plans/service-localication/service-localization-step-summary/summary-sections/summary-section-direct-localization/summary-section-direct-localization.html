@@ -42,6 +42,9 @@
                     [isEmpty]="!strategy.serviceName"
                     [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'serviceName')"
                     [hasComment]="hasLocalizationStrategyComment(rowIndex, 'serviceName')"
+                    [beforeValue]="getBeforeValue('serviceName', 'localizationStrategy', rowIndex)"
+                    [afterValue]="getAfterValue('serviceName', 'localizationStrategy', rowIndex)"
+                    [showDiff]="shouldShowDiff('serviceName', 'localizationStrategy', rowIndex)"
                   />
                 </td>
                 <td class="border-t border-gray-300 p-3">
@@ -50,6 +53,10 @@
                     [isEmpty]="!strategy.expectedLocalizationDate"
                     [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'expectedLocalizationDate')"
                     [hasComment]="hasLocalizationStrategyComment(rowIndex, 'expectedLocalizationDate')"
+                    [beforeValue]="getBeforeValue('expectedLocalizationDate', 'localizationStrategy', rowIndex)"
+                    [afterValue]="getAfterValue('expectedLocalizationDate', 'localizationStrategy', rowIndex)"
+                    [showDiff]="shouldShowDiff('expectedLocalizationDate', 'localizationStrategy', rowIndex)"
+                    [isDate]="true"
                   />
                 </td>
                 <td class="border-t border-gray-300 p-3">
@@ -58,6 +65,9 @@
                     [isEmpty]="!strategy.localizationApproach"
                     [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'localizationApproach')"
                     [hasComment]="hasLocalizationStrategyComment(rowIndex, 'localizationApproach')"
+                    [beforeValue]="getBeforeValue('localizationApproach', 'localizationStrategy', rowIndex)"
+                    [afterValue]="getAfterValue('localizationApproach', 'localizationStrategy', rowIndex)"
+                    [showDiff]="shouldShowDiff('localizationApproach', 'localizationStrategy', rowIndex)"
                   />
                   @if (strategy.localizationApproachOther) {
                   <div class="mt-2 text-sm text-gray-600 flex items-center gap-2">
@@ -78,6 +88,9 @@
                     [isEmpty]="!strategy.location"
                     [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'location')"
                     [hasComment]="hasLocalizationStrategyComment(rowIndex, 'location')"
+                    [beforeValue]="getBeforeValue('location', 'localizationStrategy', rowIndex)"
+                    [afterValue]="getAfterValue('location', 'localizationStrategy', rowIndex)"
+                    [showDiff]="shouldShowDiff('location', 'localizationStrategy', rowIndex)"
                   />
                   @if (strategy.locationOther) {
                   <div class="mt-2 text-sm text-gray-600 flex items-center gap-2">
@@ -98,6 +111,9 @@
                     [isEmpty]="!strategy.capexRequired && strategy.capexRequired !== 0"
                     [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'capexRequired')"
                     [hasComment]="hasLocalizationStrategyComment(rowIndex, 'capexRequired')"
+                    [beforeValue]="getBeforeValue('capexRequired', 'localizationStrategy', rowIndex)"
+                    [afterValue]="getAfterValue('capexRequired', 'localizationStrategy', rowIndex)"
+                    [showDiff]="shouldShowDiff('capexRequired', 'localizationStrategy', rowIndex)"
                   />
                 </td>
                 <td class="border-t border-gray-300 p-3">
@@ -106,6 +122,9 @@
                     [isEmpty]="!strategy.supervisionOversight"
                     [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'supervisionOversightEntity')"
                     [hasComment]="hasLocalizationStrategyComment(rowIndex, 'supervisionOversightEntity')"
+                    [beforeValue]="getBeforeValue('supervisionOversightEntity', 'localizationStrategy', rowIndex)"
+                    [afterValue]="getAfterValue('supervisionOversightEntity', 'localizationStrategy', rowIndex)"
+                    [showDiff]="shouldShowDiff('supervisionOversightEntity', 'localizationStrategy', rowIndex)"
                   />
                 </td>
                 <td class="border-t border-gray-300 p-3">
@@ -114,6 +133,10 @@
                     [isEmpty]="!strategy.proprietaryTools"
                     [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'willBeAnyProprietaryToolsSystems')"
                     [hasComment]="hasLocalizationStrategyComment(rowIndex, 'willBeAnyProprietaryToolsSystems')"
+                    [beforeValue]="getBeforeValue('willBeAnyProprietaryToolsSystems', 'localizationStrategy', rowIndex)"
+                    [afterValue]="getAfterValue('willBeAnyProprietaryToolsSystems', 'localizationStrategy', rowIndex)"
+                    [showDiff]="shouldShowDiff('willBeAnyProprietaryToolsSystems', 'localizationStrategy', rowIndex)"
+                    [isBoolean]="true"
                   />
                   @if (strategy.proprietaryToolsExplanation) {
                   <div class="mt-2 text-sm text-gray-600 flex items-center gap-2">
@@ -179,6 +202,9 @@
                     [isEmpty]="!headcount.value && headcount.value !== 0"
                     [hasError]="hasEntityFieldError(headcount.controlName)"
                     [hasComment]="hasEntityLevelComment(headcount.controlName)"
+                    [beforeValue]="getBeforeValue(headcount.controlName, 'entityLevel')"
+                    [afterValue]="getAfterValue(headcount.controlName, 'entityLevel')"
+                    [showDiff]="shouldShowDiff(headcount.controlName, 'entityLevel')"
                   />
                 </td>
                 }
@@ -251,6 +277,9 @@
                     [isEmpty]="!service.serviceName"
                     [hasError]="hasServiceLevelFieldError(service.index, 'serviceName')"
                     [hasComment]="hasServiceLevelComment(service.index, 'serviceName')"
+                    [beforeValue]="getBeforeValue('serviceName', 'serviceLevel', service.index)"
+                    [afterValue]="getAfterValue('serviceName', 'serviceLevel', service.index)"
+                    [showDiff]="shouldShowDiff('serviceName', 'serviceLevel', service.index)"
                   />
                 </td>
                 <td class="border-t border-gray-300 p-3">
@@ -259,6 +288,10 @@
                     [isEmpty]="!service.expectedLocalizationDate"
                     [hasError]="hasServiceLevelFieldError(service.index, 'expectedLocalizationDate')"
                     [hasComment]="hasServiceLevelComment(service.index, 'expectedLocalizationDate')"
+                    [beforeValue]="getBeforeValue('expectedLocalizationDate', 'serviceLevel', service.index)"
+                    [afterValue]="getAfterValue('expectedLocalizationDate', 'serviceLevel', service.index)"
+                    [showDiff]="shouldShowDiff('expectedLocalizationDate', 'serviceLevel', service.index)"
+                    [isDate]="true"
                   />
                 </td>
                 @for (yearCell of service.headcountYears; track $index) {
@@ -268,6 +301,9 @@
                     [isEmpty]="!yearCell.value && yearCell.value !== 0"
                     [hasError]="hasServiceLevelFieldError(service.index, yearCell.controlName)"
                     [hasComment]="hasServiceLevelComment(service.index, yearCell.controlName)"
+                    [beforeValue]="getBeforeValue(yearCell.controlName, 'serviceLevel', service.index)"
+                    [afterValue]="getAfterValue(yearCell.controlName, 'serviceLevel', service.index)"
+                    [showDiff]="shouldShowDiff(yearCell.controlName, 'serviceLevel', service.index)"
                   />
                 </td>
                 }
@@ -278,6 +314,9 @@
                     [isEmpty]="!year.value && year.value !== 0"
                     [hasError]="hasServiceLevelFieldError(service.index, year.controlName)"
                     [hasComment]="hasServiceLevelComment(service.index, year.controlName)"
+                    [beforeValue]="getBeforeValue(year.controlName, 'serviceLevel', service.index)"
+                    [afterValue]="getAfterValue(year.controlName, 'serviceLevel', service.index)"
+                    [showDiff]="shouldShowDiff(year.controlName, 'serviceLevel', service.index)"
                   />
                 </td>
                 }
@@ -287,6 +326,9 @@
                     [isEmpty]="!service.keyMeasuresToUpskillSaudis"
                     [hasError]="hasServiceLevelFieldError(service.index, 'keyMeasuresToUpskillSaudis')"
                     [hasComment]="hasServiceLevelComment(service.index, 'keyMeasuresToUpskillSaudis')"
+                    [beforeValue]="getBeforeValue('keyMeasuresToUpskillSaudis', 'serviceLevel', service.index)"
+                    [afterValue]="getAfterValue('keyMeasuresToUpskillSaudis', 'serviceLevel', service.index)"
+                    [showDiff]="shouldShowDiff('keyMeasuresToUpskillSaudis', 'serviceLevel', service.index)"
                   />
                 </td>
                 <td class="border-t border-gray-300 p-3">
@@ -295,6 +337,9 @@
                     [isEmpty]="!service.mentionSupportRequiredFromSEC"
                     [hasError]="hasServiceLevelFieldError(service.index, 'mentionSupportRequiredFromSEC')"
                     [hasComment]="hasServiceLevelComment(service.index, 'mentionSupportRequiredFromSEC')"
+                    [beforeValue]="getBeforeValue('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"
+                    [afterValue]="getAfterValue('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"
+                    [showDiff]="shouldShowDiff('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"
                   />
                 </td>
               </tr>

@@ -5,10 +5,10 @@
     [formGroup]="step1FormGroup"
     [pageComments]="step1CommentsComputed()"
     [commentTitle]="commentTitle()"
-    [correctedFieldIds]="step1CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(1)"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep1Comments()) {
+  @if (shouldShowIncomingComments() && hasIncomingStep1Comments() && !hasStep1OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep1CommentText()"
@@ -27,10 +27,10 @@
     [formGroup]="step2FormGroup"
     [pageComments]="step2CommentsComputed()"
     [commentTitle]="commentTitle()"
-    [correctedFieldIds]="step2CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(2)"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep2Comments()) {
+  @if (shouldShowIncomingComments() && hasIncomingStep2Comments() && !hasStep2OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep2CommentText()"
@@ -49,10 +49,10 @@
     [formGroup]="step3FormGroup"
     [pageComments]="step3CommentsComputed()"
     [commentTitle]="commentTitle()"
-    [correctedFieldIds]="step3CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(3)"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep3Comments()) {
+  @if (shouldShowIncomingComments() && hasIncomingStep3Comments() && !hasStep3OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep3CommentText()"
@@ -71,10 +71,10 @@
     [formGroup]="step4FormGroup"
     [pageComments]="step4CommentsComputed()"
     [commentTitle]="commentTitle()"
-    [correctedFieldIds]="step4CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(4)"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep4Comments()) {
+  @if (shouldShowIncomingComments() && hasIncomingStep4Comments() && !hasStep4OutComingComments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep4CommentText()"

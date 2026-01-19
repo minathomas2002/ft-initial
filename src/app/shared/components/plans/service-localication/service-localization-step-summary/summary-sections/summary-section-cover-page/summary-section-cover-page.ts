@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -20,6 +20,7 @@ export class SummarySectionCoverPage {
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
   onEdit = output<void>();
 
   // Form group accessors
@@ -143,5 +144,81 @@ export class SummarySectionCoverPage {
     const serviceGroup = servicesArray.at(index) as FormGroup;
     const rowId = serviceGroup.get('rowId')?.value;
     return this.hasFieldComment('serviceName', 'services', rowId);
+  }
+
+  // Helper method to get before value (original value from plan response) for a field
+  getBeforeValue(fieldKey: string, index?: number): any {
+    const originalPlan = this.originalPlanResponse();
+    if (!originalPlan?.servicePlan) return null;
+
+    const plan = originalPlan.servicePlan;
+
+    // Map field keys to plan response paths
+    switch (fieldKey) {
+      case 'planTitle':
+        return plan.planTitle ?? null;
+      case 'companyName':
+        return plan.companyInformationSection?.companyName ?? null;
+      case 'serviceName':
+        if (index !== undefined && plan.services && plan.services[index]) {
+          return plan.services[index].serviceName ?? null;
+        }
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  // Helper method to get after value (current form value) for a field
+  getAfterValue(fieldKey: string, index?: number): any {
+    if (fieldKey === 'planTitle') {
+      return this.planTitle();
+    } else if (fieldKey === 'companyName') {
+      return this.companyName();
+    } else if (fieldKey === 'serviceName' && index !== undefined) {
+      const servicesArray = this.servicesFormArray();
+      if (!servicesArray || index >= servicesArray.length) return null;
+      const serviceGroup = servicesArray.at(index) as FormGroup;
+      const serviceNameControl = serviceGroup.get(EMaterialsFormControls.serviceName);
+      if (serviceNameControl instanceof FormGroup) {
+        return serviceNameControl.get(EMaterialsFormControls.value)?.value;
+      }
+      return serviceNameControl?.value ?? null;
+    }
+    return null;
+  }
+
+  // Helper method to check if field should show diff (has before and after values and they differ)
+  shouldShowDiff(fieldKey: string, index?: number): boolean {
+    // Only show diff if field has a comment
+    if (index !== undefined) {
+      // For array items, check comment with rowId
+      const servicesArray = this.servicesFormArray();
+      if (!servicesArray || index >= servicesArray.length) return false;
+      const serviceGroup = servicesArray.at(index) as FormGroup;
+      const rowId = serviceGroup.get('rowId')?.value;
+      if (!this.hasFieldComment(fieldKey, 'services', rowId)) return false;
+    } else {
+      if (!this.hasFieldComment(fieldKey, 'companyInformation')) return false;
+    }
+
+    const beforeValue = this.getBeforeValue(fieldKey, index);
+    const afterValue = this.getAfterValue(fieldKey, index);
+
+    // Compare values
+    if (beforeValue === afterValue) return false;
+    if (beforeValue === null || beforeValue === undefined || beforeValue === '') {
+      return afterValue !== null && afterValue !== undefined && afterValue !== '';
+    }
+    if (afterValue === null || afterValue === undefined || afterValue === '') {
+      return true;
+    }
+
+    // For objects, compare by JSON stringify
+    if (typeof beforeValue === 'object' && typeof afterValue === 'object') {
+      return JSON.stringify(beforeValue) !== JSON.stringify(afterValue);
+    }
+
+    return String(beforeValue) !== String(afterValue);
   }
 }

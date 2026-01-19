@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, model, DestroyRef, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, effect } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
@@ -7,8 +7,8 @@ import { SelectModule } from 'primeng/select';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationApproach, ELocation, EYesNo } from 'src/app/shared/enums/plan.enum';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
@@ -20,7 +20,6 @@ import { FormsModule } from '@angular/forms';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
-import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
@@ -39,7 +38,6 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     GeneralConfirmationDialogComponent,
     FormsModule,
     ConditionalColorClassDirective,
-    PageCommentBox,
     CommentInputComponent
   ],
   templateUrl: './service-localization-step-direct-localization.html',
@@ -51,8 +49,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   isReviewMode = input<boolean>(false);
 
   readonly planFormService = inject(ServicePlanFormService);
-  planStore = inject(PlanStore);
-  private readonly destroyRef = inject(DestroyRef);
+  override readonly planStore = inject(PlanStore);
 
   pageTitle = input.required<string>();
   selectedInputColor = input.required<TColors>();
@@ -61,6 +58,28 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  correctedFields = input<IFieldInformation[]>([]);
+  showCommentState = input<boolean>(false);
+
+  // Check if investor comment exists for this step
+  hasInvestorComment = computed((): boolean => {
+    if (!this.isResubmitMode()) return false;
+    const formGroup = this.getFormGroup();
+    const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+    return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
+  });
+
+  // Handle start editing for investor comment
+  onStartEditing(): void {
+    if (this.isResubmitMode()) {
+      this.commentPhase.set('editing');
+      const formGroup = this.getFormGroup();
+      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+      if (investorCommentControl) {
+        investorCommentControl.enable();
+      }
+    }
+  }
 
   get formGroup() {
     return this.planFormService?.step4_directLocalization ?? new FormGroup({});
@@ -129,7 +148,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   });
 
   // Implement abstract method from base class
-  getFormGroup(): FormGroup {
+  override getFormGroup(): FormGroup {
     return this.formGroup;
   }
 
@@ -253,7 +272,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   };
 
   // Helper method to check if a field should be highlighted in view mode
-  isFieldCorrected(inputKey: string, section?: string): boolean {
+  override isFieldCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
     // Check if any comment field matches this inputKey (and section if provided)
     const matchingFields = this.pageComments()
@@ -278,5 +297,64 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     if (!this.isViewMode() || this.pageComments().length === 0) return '';
     const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
     return [...new Set(allLabels)].join(', ');
+  }
+
+  // Helper method to strip index suffix from inputKey (e.g., 'expectedLocalizationDate_0' -> 'expectedLocalizationDate')
+  private stripIndexSuffix(inputKey: string): string {
+    // Match pattern: _ followed by one or more digits at the end
+    const match = inputKey.match(/^(.+)_(\d+)$/);
+    return match ? match[1] : inputKey;
+  }
+
+  // Implement abstract method from base class to get form control for a field
+  getControlForField(field: IFieldInformation): FormControl<any> | null {
+    const { section, inputKey, id: rowId } = field;
+
+    // Handle FormArray items (localization strategy rows)
+    if (section === 'localizationStrategy' && rowId) {
+      const formArray = this.getLocalizationStrategyFormArray();
+      const rowIndex = formArray.controls.findIndex(
+        control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+      );
+      if (rowIndex !== -1) {
+        const rowControl = formArray.at(rowIndex);
+        // Strip index suffix from inputKey (e.g., 'expectedLocalizationDate_0' -> 'expectedLocalizationDate')
+        const actualInputKey = this.stripIndexSuffix(inputKey);
+        const fieldControl = rowControl.get(actualInputKey);
+        return fieldControl ? this.getValueControl(fieldControl) : null;
+      }
+      return null;
+    }
+
+    // Entity level (single-item FormArray)
+    if (section === 'entityLevel') {
+      const entityLevelItem = this.getEntityLevelItem();
+      // Strip 'entityLevel_' prefix from inputKey (e.g., 'entityLevel_firstYear_headcount' -> 'firstYear_headcount')
+      const actualInputKey = inputKey.startsWith('entityLevel_') ? inputKey.substring('entityLevel_'.length) : inputKey;
+      const fieldControl = entityLevelItem.get(actualInputKey);
+      return fieldControl ? this.getValueControl(fieldControl) : null;
+    }
+
+    // Service level (FormArray)
+    if (section === 'serviceLevel' && rowId) {
+      const formArray = this.getServiceLevelFormArray();
+      const rowIndex = formArray.controls.findIndex(
+        control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+      );
+      if (rowIndex !== -1) {
+        const rowControl = formArray.at(rowIndex);
+        // Strip index suffix from inputKey (e.g., 'serviceLevelLocalizationDate_0' -> 'serviceLevelLocalizationDate')
+        // Also handle year-based keys like 'firstYear_headcount_0' -> 'firstYear_headcount'
+        const actualInputKey = this.stripIndexSuffix(inputKey);
+        const fieldControl = rowControl.get(actualInputKey);
+        return fieldControl ? this.getValueControl(fieldControl) : null;
+      }
+      return null;
+    }
+
+    // Fallback: try to find in main form group
+    const formGroup = this.getFormGroup();
+    const fieldControl = formGroup.get(inputKey);
+    return fieldControl ? this.getValueControl(fieldControl) : null;
   }
 }

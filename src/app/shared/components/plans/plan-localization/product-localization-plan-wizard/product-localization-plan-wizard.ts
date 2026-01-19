@@ -96,7 +96,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   commentColor = computed(() => {
-    return (this.isViewMode() && this.step1CorrectedFields().length > 0 && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
+    return (this.isViewMode() && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
       'green' :
       (
         (this.step1CommentPhase() === 'none' && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
@@ -117,7 +117,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         hasErrors: this.step1CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
         commentColor: this.commentColor(),
-        fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step1CorrectedFields().length : 0
       },
       {
         title: this.i18nService.translate('plans.wizard.step2.title'),
@@ -127,7 +126,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         hasErrors: this.step2CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
         commentColor: this.commentColor(),
-        fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step2CorrectedFields().length : 0
       },
       {
         title: this.i18nService.translate('plans.wizard.step3.title'),
@@ -137,7 +135,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
         commentColor: this.commentColor(),
-        fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step3CorrectedFields().length : 0
       },
       {
         title: this.i18nService.translate('plans.wizard.step4.title'),
@@ -147,7 +144,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
         commentColor: this.commentColor(),
-        fieldsRequiringUpdate: this.isInvestorViewMode() ? this.step4CorrectedFields().length : 0
       },
       {
         title: this.i18nService.translate('plans.wizard.step5.title'),
@@ -166,6 +162,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   // Plan comments from API
   planComments = this.planStore.planComments;
   incomingCommentPersona = this.planStore.commentPersona;
+
+
+  showCommentState = signal(false)
 
   // Computed signal to get creatorRole from planComments
   creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
@@ -204,23 +203,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Saudization');
   });
 
-  // Computed signals to extract corrected field IDs for each step
-  step1CorrectedFields = computed<string[]>(() => {
-    return this.step1Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
-  });
-
-  step2CorrectedFields = computed<string[]>(() => {
-    return this.step2Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
-  });
-
-  step3CorrectedFields = computed<string[]>(() => {
-    return this.step3Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
-  });
-
-  step4CorrectedFields = computed<string[]>(() => {
-    return this.step4Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
-  });
-
   // Computed signals to map comment fields to selectedInputs for each step
   step1CommentFields = computed<IFieldInformation[]>(() => {
     return this.step1Comments().flatMap(c => c.fields);
@@ -236,6 +218,56 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   step4CommentFields = computed<IFieldInformation[]>(() => {
     return this.step4Comments().flatMap(c => c.fields);
+  });
+
+  // Computed signals for corrected fields (filtered to only those with IDs)
+  step1CorrectedFieldsFiltered = computed<IPageComment[]>(() => {
+    return this.step1Comments();
+  });
+
+  step2CorrectedFieldsFiltered = computed<IPageComment[]>(() => {
+    return this.step2Comments();
+  });
+
+  step3CorrectedFieldsFiltered = computed<IPageComment[]>(() => {
+    return this.step3Comments();
+  });
+
+  step4CorrectedFieldsFiltered = computed<IPageComment[]>(() => {
+    return this.step4Comments();
+  });
+
+  // Computed signals to extract corrected field IDs from comments
+  step1CorrectedFieldIds = computed<string[]>(() => {
+    return this.step1Comments()
+      .flatMap(comment => comment.fields)
+      .filter(field => field.id)
+      .map(field => field.id!)
+      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
+  });
+
+  step2CorrectedFieldIds = computed<string[]>(() => {
+    return this.step2Comments()
+      .flatMap(comment => comment.fields)
+      .filter(field => field.id)
+      .map(field => field.id!)
+      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
+  });
+
+  step3CorrectedFieldIds = computed<string[]>(() => {
+    return this.step3Comments()
+      .flatMap(comment => comment.fields)
+      .filter(field => field.id)
+      .map(field => field.id!)
+      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
+  });
+
+  step4CorrectedFieldIds = computed<string[]>(() => {
+    return this.step4Comments()
+      .flatMap(comment => comment.fields)
+      .filter(field => field.id)
+      .map(field => field.id!)
+      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
   });
 
   // Computed signals for comment text display
@@ -312,6 +344,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
   showConfirmLeaveDialog = model(false);
+  // Store original plan response for before/after comparison
+  originalPlanResponse = signal<IProductPlanResponse | null>(null);
   // Computed signal for view mode
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
   isReviewMode = computed(() => this.planStore.wizardMode() === 'Review');
@@ -483,7 +517,12 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   onAddComment(): void {
+    if (this.isResubmitMode()) {
+      this.showCommentState.set(true);
+      return
+    }
     const step = this.activeStep();
+
     // Set comment phase for the current active step
     if (step === 1 && this.step1CommentPhase() === 'none') {
       this.step1CommentPhase.set('adding');
@@ -567,6 +606,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   private mapPlanDataToForm(response: IProductPlanResponse): void {
+    // Store original plan response for before/after comparison
+    this.originalPlanResponse.set(response);
+
     // Map response to form
     mapProductPlanResponseToForm(response, this.productPlanFormService);
 
@@ -1094,6 +1136,127 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   // Base class provides all the review/approval/rejection methods
   // We only need to implement the abstract methods and step-specific logic
+
+  // Track original values for resubmit mode
+  private originalValuesMap = new Map<string, any>();
+  private updatedFieldsSet = new Set<string>();
+
+  // Computed signal for remaining fields requiring update
+  remainingFieldsRequiringUpdate = computed(() => {
+    if (!this.isResubmitMode()) return 0;
+    const totalCorrected = this.step1CorrectedFieldsFiltered().length +
+      this.step2CorrectedFieldsFiltered().length +
+      this.step3CorrectedFieldsFiltered().length +
+      this.step4CorrectedFieldsFiltered().length;
+    return totalCorrected - this.updatedFieldsSet.size;
+  });
+
+  // Collect investor page comments (from investorCommentControl in each step)
+  collectInvestorPageComments(): IPageComment[] {
+    const comments: IPageComment[] = [];
+
+    // Step 1 investor comments
+    const step1Form = this.productPlanFormService.overviewCompanyInformation;
+    const step1InvestorCommentControl = step1Form.get('investorComment') as FormControl<string> | null;
+    if (step1InvestorCommentControl?.value && step1InvestorCommentControl.value.trim().length > 0) {
+      // Get selected inputs from step1 (fields that investor has corrected)
+      const correctedFields = this.step1CommentFields().filter(f => f.id);
+      if (correctedFields.length > 0) {
+        comments.push({
+          pageTitleForTL: this.steps()[0].title,
+          comment: step1InvestorCommentControl.value.trim(),
+          fields: correctedFields,
+        });
+      }
+    }
+
+    // Step 2 investor comments
+    const step2Form = this.productPlanFormService.step2_productPlantOverview;
+    const step2InvestorCommentControl = step2Form.get('investorComment') as FormControl<string> | null;
+    if (step2InvestorCommentControl?.value && step2InvestorCommentControl.value.trim().length > 0) {
+      const correctedFields = this.step2CommentFields().filter(f => f.id);
+      if (correctedFields.length > 0) {
+        comments.push({
+          pageTitleForTL: this.steps()[1].title,
+          comment: step2InvestorCommentControl.value.trim(),
+          fields: correctedFields,
+        });
+      }
+    }
+
+    // Step 3 investor comments
+    const step3Form = this.productPlanFormService.step3_valueChain;
+    const step3InvestorCommentControl = step3Form.get('investorComment') as FormControl<string> | null;
+    if (step3InvestorCommentControl?.value && step3InvestorCommentControl.value.trim().length > 0) {
+      const correctedFields = this.step3CommentFields().filter(f => f.id);
+      if (correctedFields.length > 0) {
+        comments.push({
+          pageTitleForTL: this.steps()[2].title,
+          comment: step3InvestorCommentControl.value.trim(),
+          fields: correctedFields,
+        });
+      }
+    }
+
+    // Step 4 investor comments
+    const step4Form = this.productPlanFormService.step4_saudization;
+    const step4InvestorCommentControl = step4Form.get('investorComment') as FormControl<string> | null;
+    if (step4InvestorCommentControl?.value && step4InvestorCommentControl.value.trim().length > 0) {
+      const correctedFields = this.step4CommentFields().filter(f => f.id);
+      if (correctedFields.length > 0) {
+        comments.push({
+          pageTitleForTL: this.steps()[3].title,
+          comment: step4InvestorCommentControl.value.trim(),
+          fields: correctedFields,
+        });
+      }
+    }
+
+    return comments;
+  }
+
+  // Implement abstract method: canInvestorSubmit
+  override canInvestorSubmit(): boolean {
+    if (!this.isResubmitMode()) return false;
+    return this.remainingFieldsRequiringUpdate() === 0;
+  }
+
+  // Implement abstract method: buildResubmitFormData
+  override buildResubmitFormData(): FormData {
+    const planId = this.planStore.selectedPlanId() ?? '';
+
+    // Build request (same as submit)
+    const request = mapProductLocalizationPlanFormToRequest(
+      this.productPlanFormService,
+      planId,
+      this.planSignature() ?? {
+        id: '',
+        signatureValue: '',
+        contactInfo: {
+          name: '',
+          jobTitle: '',
+          contactNumber: '',
+          emailId: '',
+        },
+      }
+    );
+
+    // Convert to FormData
+    const formData = convertRequestToFormData(request);
+
+    // Append investor page comments as JSON string
+    const investorComments = this.collectInvestorPageComments();
+    if (investorComments.length > 0) {
+      formData.append('comments', JSON.stringify(investorComments));
+    }
+
+    return formData;
+  }
+
+  // Implement abstract method: getResubmitPlanType
+  override getResubmitPlanType(): 'product' | 'service' {
+    return 'product';
+  }
 
   /**
    * Maps comment fields from API response to selectedInputs for each step

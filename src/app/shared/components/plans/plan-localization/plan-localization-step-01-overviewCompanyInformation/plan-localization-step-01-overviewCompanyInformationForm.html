@@ -440,13 +440,16 @@
   </div>
 </div>
 
-@if(showCheckbox()){
+@if(showCheckbox() || showCommentState()){
 <app-comment-state-component
   [commentsCount]="selectedInputs().length"
   [(commentPhase)]="commentPhase"
   [commentFormControl]="commentFormControl"
+  [isResubmitMode]="isResubmitMode()"
+  [hasInvestorComment]="hasInvestorComment()"
   (deleteComments)="onDeleteComments()"
   (saveComment)="commentPhase() === 'editing' ? onSaveEditedComment() : onSaveComment()"
+  (startEditing)="onStartEditing()"
 />
 }
 

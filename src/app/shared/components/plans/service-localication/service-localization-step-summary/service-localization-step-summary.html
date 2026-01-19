@@ -6,6 +6,7 @@
     [pageComments]="step1CommentsComputed()"
     [commentTitle]="commentTitle()"
     [correctedFieldIds]="step1CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(coverStepNumber())"
   />
   @if (shouldShowIncomingComments() && hasIncomingStep1Comments()) {
@@ -28,6 +29,7 @@
     [pageComments]="step2CommentsComputed()"
     [commentTitle]="commentTitle()"
     [correctedFieldIds]="step2CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(overviewStepNumber())"
   />
   @if (shouldShowIncomingComments() && hasIncomingStep2Comments()) {
@@ -52,6 +54,7 @@
     [pageComments]="step3CommentsComputed()"
     [commentTitle]="commentTitle()"
     [correctedFieldIds]="step3CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(existingSaudiStepNumber())"
   />
   @if (shouldShowIncomingComments() && hasIncomingStep3Comments()) {
@@ -77,6 +80,7 @@
     [pageComments]="step4CommentsComputed()"
     [commentTitle]="commentTitle()"
     [correctedFieldIds]="step4CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(directLocalizationStepNumber())"
   />
   @if (shouldShowIncomingComments() && hasIncomingStep4Comments()) {

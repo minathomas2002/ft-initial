@@ -15,6 +15,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
   selector: 'app-plan-localization-step-04-saudization-form',
@@ -36,6 +37,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
 export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
   isReviewMode = input<boolean>(false);
+  override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
 
   pageTitle = input<string>('Saudization');
@@ -52,6 +54,28 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  correctedFields = input<IFieldInformation[]>([]);
+  showCommentState = input<boolean>(false);
+
+  // Check if investor comment exists for this step
+  hasInvestorComment = computed((): boolean => {
+    if (!this.isResubmitMode()) return false;
+    const formGroup = this.getFormGroup();
+    const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+    return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
+  });
+
+  // Handle start editing for investor comment
+  onStartEditing(): void {
+    if (this.isResubmitMode()) {
+      this.commentPhase.set('editing');
+      const formGroup = this.getFormGroup();
+      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+      if (investorCommentControl) {
+        investorCommentControl.enable();
+      }
+    }
+  }
 
   // Files signal for file upload component
   files = signal<File[]>([]);
@@ -243,33 +267,34 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
     return super.highlightInput(inputKey, rowId);
   }
 
-  // Helper method to check if a field should be highlighted in view mode
-  isFieldCorrected(inputKey: string, section?: string, rowId?: string): boolean {
-    if (!this.isViewMode()) return false;
-    // Check if any comment field matches this inputKey (and section if provided)
-    const matchingFields = this.pageComments()
-      .flatMap(c => c.fields)
-      .filter(f => {
-        const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
-        const sectionMatch = !section || f.section === section;
-        const rowMatch = !rowId || f.id === rowId;
-        return keyMatch && sectionMatch && rowMatch;
-      });
-    // If any matching field has an ID in correctedFieldIds, highlight it
-    return matchingFields.some(f => f.id && this.correctedFieldIds().includes(f.id));
+  // Implement abstract method from base class to get form control for a field (handles year-based rows)
+  getControlForField(field: IFieldInformation): FormControl<any> | null {
+    const { inputKey, id: rowId } = field;
+
+    if (!rowId) return null;
+
+    // Saudization uses year-based form groups
+    // Try to find the control in year form groups
+    const saudizationFormGroup = this.getSaudizationFormGroup();
+    if (!saudizationFormGroup) return null;
+
+    // Iterate through year form groups (year1, year2, etc.)
+    for (let year = 1; year <= 7; year++) {
+      const yearGroup = saudizationFormGroup.get(`year${year}`);
+      if (yearGroup instanceof FormGroup) {
+        // Check each row in this year group
+        const rowControl = yearGroup.get(rowId);
+        if (rowControl instanceof FormGroup) {
+          const fieldControl = rowControl.get(inputKey);
+          if (fieldControl) {
+            return this.getValueControl(fieldControl);
+          }
+        }
+      }
+    }
+
+    return null;
   }
 
-  // Helper method to get combined comment text for display
-  getCombinedCommentText(): string {
-    if (!this.isViewMode() || this.pageComments().length === 0) return '';
-    return this.pageComments().map(c => c.comment).join('\n\n');
-  }
-
-  // Helper method to get all field labels from comments
-  getCommentedFieldLabels(): string {
-    if (!this.isViewMode() || this.pageComments().length === 0) return '';
-    const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
-    return [...new Set(allLabels)].join(', ');
-  }
 }
 

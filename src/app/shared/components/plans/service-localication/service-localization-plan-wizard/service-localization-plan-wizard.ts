@@ -29,7 +29,7 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 import { ButtonModule } from 'primeng/button';
 import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialog';
 import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
-import { Signature, IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { Signature, IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
@@ -38,6 +38,7 @@ import { GeneralConfirmationDialogComponent } from "../../../utility-components/
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
@@ -68,7 +69,8 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
     SubmissionConfirmationModalComponent,
     GeneralConfirmationDialogComponent,
     ApproveRejectDialogComponent,
-    TranslatePipe
+    TranslatePipe,
+    PageCommentBox
   ],
   templateUrl: './service-localization-plan-wizard.html',
   styleUrl: './service-localization-plan-wizard.scss',
@@ -102,6 +104,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
   showConfirmLeaveDialog = model(false);
+  // Store original plan response for before/after comparison
+  originalPlanResponse = signal<IServiceLocalizationPlanResponse | null>(null);
   // Conditional step flags - initialize as false so all steps are visible initially
   showExistingSaudiStep = signal(false);
   showDirectLocalizationStep = signal(false);
@@ -120,9 +124,54 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   // Plan comments from API
   planComments = this.planStore.planComments;
+  incomingCommentPersona = this.planStore.commentPersona;
 
   // Computed signal to get creatorRole from planComments
   creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
+
+  // Computed signal to check if incoming comments should be shown
+  shouldShowIncomingComments = computed(() => {
+    const mode = this.planStore.wizardMode();
+    return mode === 'view' || mode === 'Review' || mode === 'resubmit';
+  });
+
+  // Computed signals to check if incoming comments exist and have content
+  hasIncomingStep1Comments = computed(() => {
+    const comments = this.step1Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep2Comments = computed(() => {
+    const comments = this.step2Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep3Comments = computed(() => {
+    const comments = this.step3Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  hasIncomingStep4Comments = computed(() => {
+    const comments = this.step4Comments();
+    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+  });
+
+  // Helper methods to get combined incoming comment text for each step
+  getIncomingStep1CommentText(): string {
+    return this.step1Comments().map(c => c.comment).join('\n\n');
+  }
+
+  getIncomingStep2CommentText(): string {
+    return this.step2Comments().map(c => c.comment).join('\n\n');
+  }
+
+  getIncomingStep3CommentText(): string {
+    return this.step3Comments().map(c => c.comment).join('\n\n');
+  }
+
+  getIncomingStep4CommentText(): string {
+    return this.step4Comments().map(c => c.comment).join('\n\n');
+  }
 
   // Computed signals to map comments to each step based on pageTitleForTL
   step1Comments = computed<IPageComment[]>(() => {
@@ -146,20 +195,20 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   // Computed signals to extract corrected field IDs for each step
-  step1CorrectedFields = computed<string[]>(() => {
-    return this.step1Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  step1CorrectedFields = computed<IFieldInformation[]>(() => {
+    return this.step1Comments().flatMap(c => c.fields);
   });
 
-  step2CorrectedFields = computed<string[]>(() => {
-    return this.step2Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  step2CorrectedFields = computed<IFieldInformation[]>(() => {
+    return this.step2Comments().flatMap(c => c.fields);
   });
 
-  step3CorrectedFields = computed<string[]>(() => {
-    return this.step3Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  step3CorrectedFields = computed<IFieldInformation[]>(() => {
+    return this.step3Comments().flatMap(c => c.fields);
   });
 
-  step4CorrectedFields = computed<string[]>(() => {
-    return this.step4Comments().flatMap(c => c.fields.map(f => f.id || '')).filter(id => id !== '');
+  step4CorrectedFields = computed<IFieldInformation[]>(() => {
+    return this.step4Comments().flatMap(c => c.fields);
   });
 
   // Computed signals to map comment fields to selectedInputs for each step
@@ -181,6 +230,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   // Review mode signals
   showHasCommentControl = signal<boolean>(false);
+  showCommentState = signal(false);
 
   // Computed signals for action controls
   hasSelectedFields = computed(() => {
@@ -493,6 +543,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       .subscribe((data) => {
         if (!data) return;
 
+        // Store original plan response for before/after comparison
+        this.originalPlanResponse.set(data);
+
         // Reset then map (ensures arrays match response)
         this.serviceLocalizationFormService.resetAllForms();
 
@@ -669,6 +722,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   }
 
   onAddComment(): void {
+    if (this.isResubmitMode()) {
+      this.showCommentState.set(true);
+      return;
+    }
     const step = this.activeStep();
     // Set comment phase for the current active step
     // Step 1 is cover
@@ -1008,6 +1065,71 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   protected refresh(): void {
     this.doRefresh.emit();
+  }
+
+  // Track original values for resubmit mode
+  private originalValuesMap = new Map<string, any>();
+  private updatedFieldsSet = new Set<string>();
+
+  // Computed signal for remaining fields requiring update
+  remainingFieldsRequiringUpdate = computed(() => {
+    if (this.planStore.wizardMode() !== 'resubmit') return 0;
+    const totalCorrected = this.step1CorrectedFields().length +
+      this.step2CorrectedFields().length +
+      this.step3CorrectedFields().length +
+      this.step4CorrectedFields().length;
+    return totalCorrected - this.updatedFieldsSet.size;
+  });
+
+  // Collect investor page comments
+  collectInvestorPageComments(): IPageComment[] {
+    const comments: IPageComment[] = [];
+    // Note: We'll need to access step components' investorCommentControl
+    // For now, this is a placeholder
+    return comments;
+  }
+
+  // Implement abstract method: canInvestorSubmit
+  override canInvestorSubmit(): boolean {
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
+    return this.remainingFieldsRequiringUpdate() === 0;
+  }
+
+  // Implement abstract method: buildResubmitFormData
+  override buildResubmitFormData(): FormData {
+    const planId = this.planStore.selectedPlanId() ?? '';
+
+    // Build request (same as submit)
+    const request = mapServiceLocalizationPlanFormToRequest(
+      this.serviceLocalizationFormService,
+      planId,
+      this.planSignature() ?? {
+        id: '',
+        signatureValue: '',
+        contactInfo: {
+          name: '',
+          jobTitle: '',
+          contactNumber: '',
+          emailId: '',
+        },
+      }
+    );
+
+    // Convert to FormData
+    const formData = convertServiceRequestToFormData(request);
+
+    // Append investor page comments as JSON string
+    const investorComments = this.collectInvestorPageComments();
+    if (investorComments.length > 0) {
+      formData.append('comments', JSON.stringify(investorComments));
+    }
+
+    return formData;
+  }
+
+  // Implement abstract method: getResubmitPlanType
+  override getResubmitPlanType(): 'product' | 'service' {
+    return 'service';
   }
 
   /**

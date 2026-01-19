@@ -8,7 +8,7 @@ import { SummarySectionOverview } from './summary-sections/summary-section-overv
 import { SummarySectionExistingSaudi } from './summary-sections/summary-section-existing-saudi/summary-section-existing-saudi';
 import { SummarySectionDirectLocalization } from './summary-sections/summary-section-direct-localization/summary-section-direct-localization';
 import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
-import { Signature, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { Signature, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
@@ -33,6 +33,7 @@ export class ServiceLocalizationStepSummary {
   includeExistingSaudi = input<boolean>(true);
   includeDirectLocalization = input<boolean>(true);
   pageComments = input<IPageComment[]>([]);
+  originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
 
   // Wizard step numbers (can shift when optional steps are hidden)
   coverStepNumber = input<number>(1);

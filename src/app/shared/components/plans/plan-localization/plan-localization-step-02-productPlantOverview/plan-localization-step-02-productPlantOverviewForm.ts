@@ -52,7 +52,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBaseClass {
-  private readonly planStore = inject(PlanStore);
+  override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
 
   pageTitle = input<string>('Product & Plant Overview');
@@ -67,7 +67,29 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  correctedFields = input<IFieldInformation[]>([]);
   isViewMode = input<boolean>(false);
+  showCommentState = input<boolean>(false);
+
+  // Check if investor comment exists for this step
+  hasInvestorComment = computed((): boolean => {
+    if (!this.isResubmitMode()) return false;
+    const formGroup = this.getFormGroup();
+    const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+    return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
+  });
+
+  // Handle start editing for investor comment
+  onStartEditing(): void {
+    if (this.isResubmitMode()) {
+      this.commentPhase.set('editing');
+      const formGroup = this.getFormGroup();
+      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+      if (investorCommentControl) {
+        investorCommentControl.enable();
+      }
+    }
+  }
 
   // Form group accessors
   get overviewFormGroupControls() {
@@ -212,32 +234,34 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   targetedCustomerOptions = this.planStore.targetedCustomerOptions;
   productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptions;
 
-  // Helper method to check if a field should be highlighted in view mode
-  isFieldCorrected(inputKey: string, section?: string): boolean {
-    if (!this.isViewMode()) return false;
-    // Check if any comment field matches this inputKey (and section if provided)
-    const matchingFields = this.pageComments()
-      .flatMap(c => c.fields)
-      .filter(f => {
-        const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
-        const sectionMatch = !section || f.section === section;
-        return keyMatch && sectionMatch;
-      });
-    // If any matching field has an ID in correctedFieldIds, highlight it
-    return matchingFields.some(f => f.id && this.correctedFieldIds().includes(f.id));
-  }
-
-  // Helper method to get combined comment text for display
-  getCombinedCommentText(): string {
-    if (!this.isViewMode() || this.pageComments().length === 0) return '';
-    return this.pageComments().map(c => c.comment).join('\n\n');
-  }
-
-  // Helper method to get all field labels from comments
-  getCommentedFieldLabels(): string {
-    if (!this.isViewMode() || this.pageComments().length === 0) return '';
-    const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
-    return [...new Set(allLabels)].join(', ');
+  // Implement abstract method from base class to get form control for a field
+  getControlForField(field: IFieldInformation): FormControl<any> | null {
+    const { section, inputKey } = field;
+    
+    // Map section + inputKey to form control
+    if (section === 'overview') {
+      const controls = this.overviewFormGroupControls;
+      if (controls && controls[inputKey]) {
+        return this.getValueControl(controls[inputKey]);
+      }
+    } else if (section === 'expectedCapex') {
+      const controls = this.expectedCAPEXInvestmentFormGroupControls;
+      if (controls && controls[inputKey]) {
+        return this.getValueControl(controls[inputKey]);
+      }
+    } else if (section === 'targetCustomers') {
+      const controls = this.targetCustomersFormGroupControls;
+      if (controls && controls[inputKey]) {
+        return this.getValueControl(controls[inputKey]);
+      }
+    } else if (section === 'manufacturingExperience') {
+      const controls = this.productManufacturingExperienceFormGroupControls;
+      if (controls && controls[inputKey]) {
+        return this.getValueControl(controls[inputKey]);
+      }
+    }
+    
+    return null;
   }
 }
 

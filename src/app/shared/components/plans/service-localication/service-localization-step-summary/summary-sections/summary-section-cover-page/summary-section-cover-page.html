@@ -17,6 +17,9 @@
           [hasError]="hasFieldError('coverPageCompanyInformationFormGroup.planTitle.value')"
           [hasComment]="planTitleHasComment()"
           [isEmpty]="!planTitle()"
+          [beforeValue]="getBeforeValue('planTitle')"
+          [afterValue]="getAfterValue('planTitle')"
+          [showDiff]="shouldShowDiff('planTitle')"
         />
         <app-summary-field
           [label]="'Company Name'"
@@ -24,6 +27,9 @@
           [hasError]="hasFieldError('coverPageCompanyInformationFormGroup.companyName.value')"
           [hasComment]="companyNameHasComment()"
           [isEmpty]="!companyName()"
+          [beforeValue]="getBeforeValue('companyName')"
+          [afterValue]="getAfterValue('companyName')"
+          [showDiff]="shouldShowDiff('companyName')"
         />
       </div>
     </div>
@@ -56,6 +62,9 @@
                     [isEmpty]="!service.serviceName"
                     [hasError]="hasServiceItemFieldError(rowIndex, 'serviceName')"
                     [hasComment]="hasServiceItemComment(rowIndex)"
+                    [beforeValue]="getBeforeValue('serviceName', rowIndex)"
+                    [afterValue]="getAfterValue('serviceName', rowIndex)"
+                    [showDiff]="shouldShowDiff('serviceName', rowIndex)"
                   />
                 </td>
               </tr>

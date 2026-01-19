@@ -23,7 +23,6 @@ import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans
 import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
-import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
@@ -44,7 +43,6 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     GeneralConfirmationDialogComponent,
     FormsModule,
     ConditionalColorClassDirective,
-    PageCommentBox,
     CommentInputComponent,
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
@@ -56,7 +54,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   isReviewMode = input<boolean>(false);
 
   readonly planFormService = inject(ServicePlanFormService);
-  planStore = inject(PlanStore);
+  override readonly planStore = inject(PlanStore);
 
   pageTitle = input.required<string>();
   selectedInputColor = input.required<TColors>();
@@ -65,7 +63,29 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  correctedFields = input<IFieldInformation[]>([]);
+  showCommentState = input<boolean>(false);
   files = signal<File[]>([]);
+
+  // Check if investor comment exists for this step
+  hasInvestorComment = computed((): boolean => {
+    if (!this.isResubmitMode()) return false;
+    const formGroup = this.getFormGroup();
+    const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+    return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
+  });
+
+  // Handle start editing for investor comment
+  onStartEditing(): void {
+    if (this.isResubmitMode()) {
+      this.commentPhase.set('editing');
+      const formGroup = this.getFormGroup();
+      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+      if (investorCommentControl) {
+        investorCommentControl.enable();
+      }
+    }
+  }
   EMaterialsFormControls = EMaterialsFormControls;
   EServiceProvidedTo = EServiceProvidedTo;
   EServiceQualificationStatus = EServiceQualificationStatus;
@@ -159,10 +179,10 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     ];
   });
 
-  destroyRef = inject(DestroyRef);
+  protected override readonly destroyRef = inject(DestroyRef);
 
   // Implement abstract method from base class
-  getFormGroup(): FormGroup {
+  override getFormGroup(): FormGroup {
     return this.formGroup;
   }
 
@@ -537,7 +557,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   private _conditionalFieldsSetup = false;
 
   // Helper method to check if a field should be highlighted in view mode
-  isFieldCorrected(inputKey: string, section?: string): boolean {
+  override isFieldCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
     // Check if any comment field matches this inputKey (and section if provided)
     const matchingFields = this.pageComments()
@@ -562,5 +582,106 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     if (!this.isViewMode() || this.pageComments().length === 0) return '';
     const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
     return [...new Set(allLabels)].join(', ');
+  }
+
+  // Helper method to strip index suffix from inputKey (e.g., 'saudiCompanyName_0' -> 'saudiCompanyName')
+  private stripIndexSuffix(inputKey: string): string {
+    // Match pattern: _ followed by one or more digits at the end
+    const match = inputKey.match(/^(.+)_(\d+)$/);
+    return match ? match[1] : inputKey;
+  }
+
+  // Implement abstract method from base class to get form control for a field
+  getControlForField(field: IFieldInformation): FormControl<any> | null {
+    const { section, inputKey, id: rowId } = field;
+
+    // Handle FormArray items with rowId
+    if (rowId) {
+      // Saudi Company Details
+      if (section === 'saudiCompanyDetails') {
+        const formArray = this.getSaudiCompanyDetailsFormArray();
+        const rowIndex = formArray.controls.findIndex(
+          control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+        );
+        if (rowIndex !== -1) {
+          const rowControl = formArray.at(rowIndex);
+          // Strip index suffix from inputKey (e.g., 'saudiCompanyName_0' -> 'saudiCompanyName')
+          const actualInputKey = this.stripIndexSuffix(inputKey);
+          const fieldControl = rowControl.get(actualInputKey);
+          if (fieldControl) {
+            return this.getValueControl(fieldControl);
+          }
+        }
+        return null;
+      }
+
+      // Collaboration/Partnership
+      if (section === 'collaborationPartnership') {
+        const formArray = this.getCollaborationPartnershipFormArray();
+        const rowIndex = formArray.controls.findIndex(
+          control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+        );
+        if (rowIndex !== -1) {
+          const rowControl = formArray.at(rowIndex);
+          // Strip index suffix from inputKey
+          const actualInputKey = this.stripIndexSuffix(inputKey);
+          const fieldControl = rowControl.get(actualInputKey);
+          if (fieldControl) {
+            return this.getValueControl(fieldControl);
+          }
+        }
+        return null;
+      }
+
+      // Service Level
+      if (section === 'serviceLevel') {
+        const formArray = this.getServiceLevelFormArray();
+        const rowIndex = formArray.controls.findIndex(
+          control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+        );
+        if (rowIndex !== -1) {
+          const rowControl = formArray.at(rowIndex);
+          // Strip index suffix from inputKey (e.g., 'expectedLocalizationDate_0' -> 'expectedLocalizationDate')
+          // Also handle year-based keys like 'firstYear_headcount_0' -> 'firstYear_headcount'
+          const actualInputKey = this.stripIndexSuffix(inputKey);
+          const fieldControl = rowControl.get(actualInputKey);
+          if (fieldControl) {
+            return this.getValueControl(fieldControl);
+          }
+        }
+        return null;
+      }
+    }
+
+    // Handle Entity Level (single item FormArray)
+    if (section === 'entityLevel') {
+      const entityLevelItem = this.getEntityLevelItem();
+      // Strip 'entityLevel_' prefix from inputKey (e.g., 'entityLevel_firstYear_headcount' -> 'firstYear_headcount')
+      const actualInputKey = inputKey.startsWith('entityLevel_') ? inputKey.substring('entityLevel_'.length) : inputKey;
+      const fieldControl = entityLevelItem.get(actualInputKey);
+      if (fieldControl) {
+        return this.getValueControl(fieldControl);
+      }
+      return null;
+    }
+
+    // Handle Attachments (FormGroup)
+    if (section === 'attachments') {
+      const attachmentsFormGroup = this.getAttachmentsFormGroup();
+      const fieldControl = attachmentsFormGroup.get(inputKey);
+      if (fieldControl) {
+        return this.getValueControl(fieldControl);
+      }
+      return null;
+    }
+
+    // Try to find in main form group
+    const formGroup = this.getFormGroup();
+    const fieldControl = formGroup.get(inputKey);
+    if (fieldControl) {
+      return this.getValueControl(fieldControl);
+    }
+
+    return null;
   }
 }

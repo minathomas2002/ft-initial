@@ -4,7 +4,7 @@ import { SummaryField } from 'src/app/shared/components/plans/summary-field/summ
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-product-plant',
@@ -18,7 +18,7 @@ export class SummarySectionProductPlant {
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
-  correctedFieldIds = input<string[]>([]);
+  originalPlanResponse = input<IProductPlanResponse | null>(null);
   onEdit = output<void>();
   private readonly planStore = inject(PlanStore);
   targetedCustomerOptions = this.planStore.targetedCustomerOptions;

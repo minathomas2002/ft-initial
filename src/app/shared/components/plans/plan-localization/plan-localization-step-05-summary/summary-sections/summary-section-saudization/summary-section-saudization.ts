@@ -10,7 +10,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 import { SummaryTableCell } from 'src/app/shared/components/plans/summary-table-cell/summary-table-cell';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
-import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-summary-section-saudization',
@@ -27,7 +27,7 @@ export class SummarySectionSaudization {
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
-  correctedFieldIds = input<string[]>([]);
+  originalPlanResponse = input<IProductPlanResponse | null>(null);
   onEdit = output<void>();
 
   // Expose enum to template

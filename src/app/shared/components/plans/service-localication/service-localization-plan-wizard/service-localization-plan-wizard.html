@@ -22,63 +22,99 @@
   }
 
   <ng-template [appStepContent]="1">
-    <app-service-localization-step-cover-page
-      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-      [pageTitle]="steps()[0].title"
-      [(commentPhase)]="step1CommentPhase"
-      [(selectedInputs)]="step1SelectedInputs"
-      [selectedInputColor]="commentColor()"
-      [pageComments]="step1Comments()"
-      [commentTitle]="commentTitle() || 'Comments'"
-      [correctedFieldIds]="step1CorrectedFields()"
-    ></app-service-localization-step-cover-page>
+    <div class="flex flex-col gap-8">
+      @if (shouldShowIncomingComments() && hasIncomingStep1Comments() && !showCommentState()) {
+      <app-page-comment-box
+        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentText]="getIncomingStep1CommentText()"
+      />
+      }
+      <app-service-localization-step-cover-page
+        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+        [pageTitle]="steps()[0].title"
+        [(commentPhase)]="step1CommentPhase"
+        [(selectedInputs)]="step1SelectedInputs"
+        [selectedInputColor]="commentColor()"
+        [pageComments]="step1Comments()"
+        [commentTitle]="commentTitle() || 'Comments'"
+        [showCommentState]="showCommentState()"
+        [correctedFields]="step1CorrectedFields()"
+      ></app-service-localization-step-cover-page>
+    </div>
   </ng-template>
 
   <ng-template [appStepContent]="2">
-    <app-service-localization-step-overview
-      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-      [isReviewMode]="isReviewMode()"
-      [pageTitle]="steps()[1].title"
-      [(commentPhase)]="step2CommentPhase"
-      [(selectedInputs)]="step2SelectedInputs"
-      [selectedInputColor]="commentColor()"
-      [pageComments]="step2Comments()"
-      [commentTitle]="commentTitle() || 'Comments'"
-      [correctedFieldIds]="step2CorrectedFields()"
-    ></app-service-localization-step-overview>
+    <div class="flex flex-col gap-8">
+      @if (shouldShowIncomingComments() && hasIncomingStep2Comments() && !showCommentState()) {
+      <app-page-comment-box
+        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentText]="getIncomingStep2CommentText()"
+      />
+      }
+      <app-service-localization-step-overview
+        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+        [isReviewMode]="isReviewMode()"
+        [pageTitle]="steps()[1].title"
+        [(commentPhase)]="step2CommentPhase"
+        [(selectedInputs)]="step2SelectedInputs"
+        [selectedInputColor]="commentColor()"
+        [pageComments]="step2Comments()"
+        [commentTitle]="commentTitle() || 'Comments'"
+        [showCommentState]="showCommentState()"
+        [correctedFields]="step2CorrectedFields()"
+      ></app-service-localization-step-overview>
+    </div>
   </ng-template>
 
   <!-- Conditional step: Existing Saudi (appears before Direct Localization in step order) -->
   @if (showExistingSaudiStep() && existingSaudiStepIndex() > 0) {
   <ng-template [appStepContent]="existingSaudiStepIndex()">
-    <app-service-localization-step-existing-saudi
-      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-      [isReviewMode]="isReviewMode()"
-      [pageTitle]="steps()[existingSaudiStepIndex() - 1].title"
-      [(commentPhase)]="step3CommentPhase"
-      [(selectedInputs)]="step3SelectedInputs"
-      [selectedInputColor]="commentColor()"
-      [pageComments]="step3Comments()"
-      [commentTitle]="commentTitle() || 'Comments'"
-      [correctedFieldIds]="step3CorrectedFields()"
-    ></app-service-localization-step-existing-saudi>
+    <div class="flex flex-col gap-8">
+      @if (shouldShowIncomingComments() && hasIncomingStep3Comments() && !showCommentState()) {
+      <app-page-comment-box
+        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentText]="getIncomingStep3CommentText()"
+      />
+      }
+      <app-service-localization-step-existing-saudi
+        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+        [isReviewMode]="isReviewMode()"
+        [pageTitle]="steps()[existingSaudiStepIndex() - 1].title"
+        [(commentPhase)]="step3CommentPhase"
+        [(selectedInputs)]="step3SelectedInputs"
+        [selectedInputColor]="commentColor()"
+        [pageComments]="step3Comments()"
+        [commentTitle]="commentTitle() || 'Comments'"
+        [showCommentState]="showCommentState()"
+        [correctedFields]="step3CorrectedFields()"
+      ></app-service-localization-step-existing-saudi>
+    </div>
   </ng-template>
   }
 
   <!-- Conditional step: Direct Localization -->
   @if (showDirectLocalizationStep() && directLocalizationStepIndex() > 0) {
   <ng-template [appStepContent]="directLocalizationStepIndex()">
-    <app-service-localization-step-direct-localization
-      [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-      [isReviewMode]="isReviewMode()"
-      [pageTitle]="steps()[directLocalizationStepIndex() - 1].title"
-      [(commentPhase)]="step4CommentPhase"
-      [(selectedInputs)]="step4SelectedInputs"
-      [selectedInputColor]="commentColor()"
-      [pageComments]="step4Comments()"
-      [commentTitle]="commentTitle() || 'Comments'"
-      [correctedFieldIds]="step4CorrectedFields()"
-    ></app-service-localization-step-direct-localization>
+    <div class="flex flex-col gap-8">
+      @if (shouldShowIncomingComments() && hasIncomingStep4Comments() && !showCommentState()) {
+      <app-page-comment-box
+        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentText]="getIncomingStep4CommentText()"
+      />
+      }
+      <app-service-localization-step-direct-localization
+        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+        [isReviewMode]="isReviewMode()"
+        [pageTitle]="steps()[directLocalizationStepIndex() - 1].title"
+        [(commentPhase)]="step4CommentPhase"
+        [(selectedInputs)]="step4SelectedInputs"
+        [selectedInputColor]="commentColor()"
+        [pageComments]="step4Comments()"
+        [commentTitle]="commentTitle() || 'Comments'"
+        [showCommentState]="showCommentState()"
+        [correctedFields]="step4CorrectedFields()"
+      ></app-service-localization-step-direct-localization>
+    </div>
   </ng-template>
   }
 
@@ -99,10 +135,7 @@
       [step2Comments]="step2Comments()"
       [step3Comments]="step3Comments()"
       [step4Comments]="step4Comments()"
-      [step1CorrectedFields]="step1CorrectedFields()"
-      [step2CorrectedFields]="step2CorrectedFields()"
-      [step3CorrectedFields]="step3CorrectedFields()"
-      [step4CorrectedFields]="step4CorrectedFields()"
+      [originalPlanResponse]="originalPlanResponse()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onValidationErrorsChange)="updateValidationErrors($event)"
@@ -142,8 +175,7 @@
       (click)="timelineVisibility.set(true)"
     ></p-button>
     }
-    @if(isReviewMode()){
-    @if (activeStep() === summaryStepIndex()) {
+    @if (isReviewMode() && activeStep() === 5) {
     <p-button
       text
       (click)="onSendBackToInvestor()"
@@ -152,8 +184,7 @@
       <span class="underline text-md font-semibold">Send Back to Investor</span>
     </p-button>
     }
-    @if(activeStep() <
-      summaryStepIndex()){
+    @if((isReviewMode() || isResubmitMode()) && activeStep() <5){
       <p-button
       [label]="'Add Comments'"
       text
@@ -161,7 +192,6 @@
       severity="secondary"
       (click)="onAddComment()"
     ></p-button>
-      }
       }
   </ng-container>
 </app-base-wizard-dialog>

@@ -34,7 +34,6 @@ import { TCommentPhase } from '../../plan-localization/product-localization-plan
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
-import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { MultiSelect } from 'primeng/multiselect';
 
@@ -57,7 +56,6 @@ import { MultiSelect } from 'primeng/multiselect';
     CommentStateComponent,
     GeneralConfirmationDialogComponent,
     FormsModule,
-    PageCommentBox,
     CommentInputComponent,
     MultiSelect
   ],
@@ -70,8 +68,8 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   isReviewMode = input<boolean>(false);
 
   readonly planFormService = inject(ServicePlanFormService);
-  private readonly planStore = inject(PlanStore);
-  private readonly destroyRef = inject(DestroyRef);
+  override readonly planStore = inject(PlanStore);
+  override readonly destroyRef = inject(DestroyRef);
 
   pageTitle = input.required<string>();
   selectedInputColor = input.required<TColors>();
@@ -80,6 +78,28 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  correctedFields = input<IFieldInformation[]>([]);
+  showCommentState = input<boolean>(false);
+
+  // Check if investor comment exists for this step
+  hasInvestorComment = computed((): boolean => {
+    if (!this.isResubmitMode()) return false;
+    const formGroup = this.getFormGroup();
+    const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+    return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
+  });
+
+  // Handle start editing for investor comment
+  onStartEditing(): void {
+    if (this.isResubmitMode()) {
+      this.commentPhase.set('editing');
+      const formGroup = this.getFormGroup();
+      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+      if (investorCommentControl) {
+        investorCommentControl.enable();
+      }
+    }
+  }
 
   get formGroup() {
     return this.planFormService?.step2_overview ?? new FormGroup({});
@@ -281,20 +301,6 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   private _servicesSynced = false;
   private _localAgentInitialized = false;
 
-  // Helper method to check if a field should be highlighted in view mode
-  isFieldCorrected(inputKey: string, section?: string): boolean {
-    if (!this.isViewMode()) return false;
-    // Check if any comment field matches this inputKey (and section if provided)
-    const matchingFields = this.pageComments()
-      .flatMap(c => c.fields)
-      .filter(f => {
-        const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
-        const sectionMatch = !section || f.section === section;
-        return keyMatch && sectionMatch;
-      });
-    // If any matching field has an ID in correctedFieldIds, highlight it
-    return matchingFields.some(f => f.id && this.correctedFieldIds().includes(f.id));
-  }
 
   // Helper method to get combined comment text for display
   getCombinedCommentText(): string {
@@ -307,5 +313,60 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     if (!this.isViewMode() || this.pageComments().length === 0) return '';
     const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
     return [...new Set(allLabels)].join(', ');
+  }
+
+  // Helper method to strip index suffix from inputKey (e.g., 'serviceType_0' -> 'serviceType')
+  private stripIndexSuffix(inputKey: string): string {
+    // Match pattern: _ followed by one or more digits at the end
+    const match = inputKey.match(/^(.+)_(\d+)$/);
+    return match ? match[1] : inputKey;
+  }
+
+  // Implement abstract method from base class to get form control for a field
+  getControlForField(field: IFieldInformation): FormControl<any> | null {
+    const { section, inputKey, id: rowId } = field;
+
+    // Handle FormArray items (service details)
+    if (section === 'serviceDetails' && rowId) {
+      const formArray = this.getDetailsFormArray();
+      const rowIndex = formArray.controls.findIndex(
+        control => control.get('rowId')?.value === rowId
+      );
+      if (rowIndex !== -1) {
+        const rowControl = formArray.at(rowIndex);
+        // Strip index suffix from inputKey (e.g., 'serviceType_0' -> 'serviceType')
+        const actualInputKey = this.stripIndexSuffix(inputKey);
+        const fieldControl = rowControl.get(actualInputKey);
+        if (fieldControl) {
+          return this.getValueControl(fieldControl);
+        }
+      }
+      return null;
+    }
+
+    // Map section + inputKey to form control
+    if (section === 'overviewCompanyInformation') {
+      const controls = this.companyInformationFormGroupControls;
+      if (controls && controls[inputKey]) {
+        return this.getValueControl(controls[inputKey]);
+      }
+    } else if (section === 'locationInformation') {
+      const controls = this.locationInformationFormGroupControls;
+      if (controls && controls[inputKey]) {
+        return this.getValueControl(controls[inputKey]);
+      }
+    } else if (section === 'localAgentInformation') {
+      const controls = this.localAgentInformationFormGroupControls;
+      if (controls && controls[inputKey]) {
+        return this.getValueControl(controls[inputKey]);
+      }
+    } else if (section === 'basicInformation') {
+      const controls = this.basicInformationFormGroupControls;
+      if (controls && controls[inputKey]) {
+        return this.getValueControl(controls[inputKey]);
+      }
+    }
+
+    return null;
   }
 }

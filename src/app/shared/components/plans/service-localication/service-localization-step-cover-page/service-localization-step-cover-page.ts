@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -35,7 +35,6 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     TextareaModule,
     FormsModule,
     ConditionalColorClassDirective,
-    PageCommentBox,
     CommentInputComponent,
   ],
   templateUrl: './service-localization-step-cover-page.html',
@@ -54,6 +53,28 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  correctedFields = input<IFieldInformation[]>([]);
+  showCommentState = input<boolean>(false);
+
+  // Check if investor comment exists for this step
+  hasInvestorComment = computed((): boolean => {
+    if (!this.isResubmitMode()) return false;
+    const formGroup = this.getFormGroup();
+    const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+    return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
+  });
+
+  // Handle start editing for investor comment
+  onStartEditing(): void {
+    if (this.isResubmitMode()) {
+      this.commentPhase.set('editing');
+      const formGroup = this.getFormGroup();
+      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+      if (investorCommentControl) {
+        investorCommentControl.enable();
+      }
+    }
+  }
 
   // Get form group for base class
   get formGroup() {
@@ -61,7 +82,7 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
   }
 
   // Implement abstract method from base class
-  getFormGroup(): FormGroup {
+  override getFormGroup(): FormGroup {
     return this.formGroup;
   }
 
@@ -126,7 +147,7 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
   }
 
   // Helper method to check if a field should be highlighted in view mode
-  isFieldCorrected(inputKey: string, section?: string): boolean {
+  override isFieldCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
     // Check if any comment field matches this inputKey (and section if provided)
     const matchingFields = this.pageComments()
@@ -151,5 +172,55 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
     if (!this.isViewMode() || this.pageComments().length === 0) return '';
     const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
     return [...new Set(allLabels)].join(', ');
+  }
+
+  // Helper method to strip index suffix from inputKey (e.g., 'serviceName_0' -> 'serviceName')
+  private stripIndexSuffix(inputKey: string): string {
+    // Match pattern: _ followed by one or more digits at the end
+    const match = inputKey.match(/^(.+)_(\d+)$/);
+    return match ? match[1] : inputKey;
+  }
+
+  // Implement abstract method from base class to get form control for a field
+  getControlForField(field: IFieldInformation): FormControl<any> | null {
+    const { section, inputKey, id: rowId } = field;
+
+    // Handle FormArray items (services)
+    if (section === 'services' && rowId) {
+      const formArray = this.getServicesFormArray();
+      const rowIndex = formArray.controls.findIndex(
+        control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+      );
+      if (rowIndex !== -1) {
+        const rowControl = formArray.at(rowIndex);
+        // Strip index suffix from inputKey (e.g., 'serviceName_0' -> 'serviceName')
+        const actualInputKey = this.stripIndexSuffix(inputKey);
+        const fieldControl = rowControl.get(actualInputKey);
+        if (fieldControl) {
+          return this.getValueControl(fieldControl);
+        }
+      }
+      return null;
+    }
+
+
+    // Handle companyInformation section
+    if (section === 'companyInformation' || section === 'coverPageCompanyInformation') {
+      const companyInfoFormGroup = this.coverPageCompanyInformationFormGroup;
+      const fieldControl = companyInfoFormGroup.get(inputKey);
+      if (fieldControl) {
+        return this.getValueControl(fieldControl);
+      }
+      return null;
+    }
+
+    // Try to find in main form group
+    const formGroup = this.getFormGroup();
+    const fieldControl = formGroup.get(inputKey);
+    if (fieldControl) {
+      return this.getValueControl(fieldControl);
+    }
+
+    return null;
   }
 }

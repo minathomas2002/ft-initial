@@ -7,7 +7,7 @@ import { SummarySectionOverview } from './summary-sections/summary-section-overv
 import { SummarySectionProductPlant } from './summary-sections/summary-section-product-plant/summary-section-product-plant';
 import { SummarySectionValueChain } from './summary-sections/summary-section-value-chain/summary-section-value-chain';
 import { SummarySectionSaudization } from './summary-sections/summary-section-saudization/summary-section-saudization';
-import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionSignature } from './summary-sections/summary-section-signature/summary-section-signature';
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
@@ -38,10 +38,10 @@ export class PlanLocalizationStep05Summary {
   step2Comments = input<IPageComment[]>([]);
   step3Comments = input<IPageComment[]>([]);
   step4Comments = input<IPageComment[]>([]);
-  step1CorrectedFields = input<string[]>([]);
-  step2CorrectedFields = input<string[]>([]);
-  step3CorrectedFields = input<string[]>([]);
-  step4CorrectedFields = input<string[]>([]);
+
+  // Original plan response for before/after comparison
+  originalPlanResponse = input<IProductPlanResponse | null>(null);
+
   private readonly formService = inject(ProductPlanFormService);
   private readonly validationService = inject(ProductPlanValidationService);
   private readonly toasterService = inject(ToasterService);

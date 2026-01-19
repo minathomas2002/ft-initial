@@ -24,7 +24,7 @@
 
   <ng-template [appStepContent]="1">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep1Comments()) {
+      @if (shouldShowIncomingComments() && hasIncomingStep1Comments() && !showCommentState()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep1CommentText()"
@@ -38,14 +38,15 @@
         [selectedInputColor]="commentColor()"
         [pageComments]="step1Comments()"
         [commentTitle]="commentTitle() || ''"
-        [correctedFieldIds]="step1CorrectedFields()"
+        [showCommentState]="showCommentState()"
+        [correctedFields]="step1CommentFields()"
       />
     </div>
   </ng-template>
 
   <ng-template [appStepContent]="2">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep2Comments()) {
+      @if (shouldShowIncomingComments() && hasIncomingStep2Comments() && !showCommentState()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep2CommentText()"
@@ -59,14 +60,15 @@
         [selectedInputColor]="commentColor()"
         [pageComments]="step2Comments()"
         [commentTitle]="commentTitle() || ''"
-        [correctedFieldIds]="step2CorrectedFields()"
+        [showCommentState]="showCommentState()"
+        [correctedFields]="step2CommentFields()"
       />
     </div>
   </ng-template>
 
   <ng-template [appStepContent]="3">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep3Comments()) {
+      @if (shouldShowIncomingComments() && hasIncomingStep3Comments() && !showCommentState()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep3CommentText()"
@@ -80,14 +82,15 @@
         [selectedInputColor]="commentColor()"
         [pageComments]="step3Comments()"
         [commentTitle]="commentTitle() || ''"
-        [correctedFieldIds]="step3CorrectedFields()"
+        [showCommentState]="showCommentState()"
+        [correctedFields]="step3CommentFields()"
       />
     </div>
   </ng-template>
 
   <ng-template [appStepContent]="4">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep4Comments()) {
+      @if (shouldShowIncomingComments() && hasIncomingStep4Comments() && !showCommentState()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep4CommentText()"
@@ -102,7 +105,8 @@
         [selectedInputColor]="commentColor()"
         [pageComments]="step4Comments()"
         [commentTitle]="commentTitle() || ''"
-        [correctedFieldIds]="step4CorrectedFields()"
+        [showCommentState]="showCommentState()"
+        [correctedFields]="step4CommentFields()"
       />
     </div>
   </ng-template>
@@ -117,10 +121,7 @@
       [step2Comments]="step2Comments()"
       [step3Comments]="step3Comments()"
       [step4Comments]="step4Comments()"
-      [step1CorrectedFields]="step1CorrectedFields()"
-      [step2CorrectedFields]="step2CorrectedFields()"
-      [step3CorrectedFields]="step3CorrectedFields()"
-      [step4CorrectedFields]="step4CorrectedFields()"
+      [originalPlanResponse]="originalPlanResponse()"
       #summaryComponent
       (onEditStep)="navigateToStep($event)"
       (onValidationErrorsChange)="updateValidationErrors($event)"
@@ -160,8 +161,7 @@
       (click)="timelineVisibility.set(true)"
     ></p-button>
     }
-    @if(isReviewMode() && !isInvestorViewMode()){
-    @if (activeStep() === 5) {
+    @if (isReviewMode() && activeStep() === 5) {
     <p-button
       text
       (click)="onSendBackToInvestor()"
@@ -170,7 +170,7 @@
       <span class="underline text-md font-semibold">Send Back to Investor</span>
     </p-button>
     }
-    @if(activeStep() <5){
+    @if((isReviewMode() || isResubmitMode()) && activeStep() <5){
       <p-button
       [label]="'Add Comments'"
       text
@@ -178,7 +178,6 @@
       severity="secondary"
       (click)="onAddComment()"
     ></p-button>
-      }
       }
   </ng-container>
 </app-base-wizard-dialog>

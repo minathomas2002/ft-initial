@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, input, model } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
@@ -51,7 +51,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
 })
 export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
-  private readonly planStore = inject(PlanStore);
+  override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
 
   pageTitle = input<string>('Value Chain');
@@ -69,6 +69,28 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   pageComments = input<IPageComment[]>([]);
   commentTitle = input<string>('Comments');
   correctedFieldIds = input<string[]>([]);
+  correctedFields = input<IFieldInformation[]>([]);
+  showCommentState = input<boolean>(false);
+
+  // Check if investor comment exists for this step
+  hasInvestorComment = computed((): boolean => {
+    if (!this.isResubmitMode()) return false;
+    const formGroup = this.getFormGroup();
+    const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+    return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
+  });
+
+  // Handle start editing for investor comment
+  onStartEditing(): void {
+    if (this.isResubmitMode()) {
+      this.commentPhase.set('editing');
+      const formGroup = this.getFormGroup();
+      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
+      if (investorCommentControl) {
+        investorCommentControl.enable();
+      }
+    }
+  }
 
   // Implement abstract method from base class
   getFormGroup(): FormGroup {
@@ -157,33 +179,46 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     super.upDateSelectedInputs(value, fieldInformation, rowId);
   };
 
-  // Helper method to check if a field should be highlighted in view mode
-  isFieldCorrected(inputKey: string, section?: string, rowId?: string): boolean {
-    if (!this.isViewMode()) return false;
-    // Check if any comment field matches this inputKey (and section if provided)
-    const matchingFields = this.pageComments()
-      .flatMap(c => c.fields)
-      .filter(f => {
-        const keyMatch = f.inputKey === inputKey || f.inputKey === `${section}.${inputKey}`;
-        const sectionMatch = !section || f.section === section;
-        const rowMatch = !rowId || f.id === rowId;
-        return keyMatch && sectionMatch && rowMatch;
-      });
-    // If any matching field has an ID in correctedFieldIds, highlight it
-    return matchingFields.some(f => f.id && this.correctedFieldIds().includes(f.id));
+  // Override hook method for step-specific initialization
+  protected override initializeStepSpecificLogic(): void {
+    // Step-specific logic can be added here if needed
   }
 
-  // Helper method to get combined comment text for display
-  getCombinedCommentText(): string {
-    if (!this.isViewMode() || this.pageComments().length === 0) return '';
-    return this.pageComments().map(c => c.comment).join('\n\n');
+  // Implement abstract method from base class to get form control for a field (handles FormArray rows)
+  getControlForField(field: IFieldInformation): FormControl<any> | null {
+    const { section, inputKey, id: rowId } = field;
+
+    // Get the appropriate FormArray based on section
+    let formArray: FormArray | null = null;
+    if (section === 'designEngineering') {
+      formArray = this.getDesignEngineeringFormArray();
+    } else if (section === 'sourcing') {
+      formArray = this.getSourcingFormArray();
+    } else if (section === 'manufacturing') {
+      formArray = this.getManufacturingFormArray();
+    } else if (section === 'assemblyTesting') {
+      formArray = this.getAssemblyTestingFormArray();
+    } else if (section === 'afterSales') {
+      formArray = this.getAfterSalesFormArray();
+    }
+
+    if (!formArray || !rowId) return null;
+
+    // Find the row with matching rowId
+    const rowIndex = formArray.controls.findIndex(
+      control => control.get('rowId')?.value === rowId
+    );
+
+    if (rowIndex === -1) return null;
+
+    const rowControl = formArray.at(rowIndex);
+    const fieldControl = rowControl.get(inputKey);
+    if (fieldControl) {
+      return this.getValueControl(fieldControl);
+    }
+
+    return null;
   }
 
-  // Helper method to get all field labels from comments
-  getCommentedFieldLabels(): string {
-    if (!this.isViewMode() || this.pageComments().length === 0) return '';
-    const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
-    return [...new Set(allLabels)].join(', ');
-  }
 }
 
