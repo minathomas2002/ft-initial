@@ -341,6 +341,23 @@ export class PlansList implements OnInit {
     }
   }
 
+  onResubmitted(plan: IPlanRecord) {
+    // Only investors can resubmit plans
+    if (this.isInvestor()) {
+      this.planStore.setWizardMode('resubmit');
+      this.planStore.setSelectedPlanId(plan.id);
+      this.planStore.setPlanStatus(plan.status);
+
+      if (plan.planType === EOpportunityType.PRODUCT) {
+        this.productLocalizationPlanWizardVisibility.set(true);
+      } else if (plan.planType === EOpportunityType.SERVICES) {
+        this.serviceLocalizationPlanWizardVisibility.set(true);
+      }
+    } else {
+      console.warn('Only investors can resubmit plans.');
+    }
+  }
+
   onAssignToEmployee(plan: IPlanRecord) {
     this.viewAssignDialog.set(true);
     this.planItem.set(plan);

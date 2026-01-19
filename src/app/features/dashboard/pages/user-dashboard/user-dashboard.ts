@@ -312,6 +312,17 @@ export class UserDashboard implements OnInit {
       this.serviceLocalizationPlanWizardVisibility.set(true);
     }
   }
+
+  onResubmitted(plan: IPlanRecord) {
+    this.planStore.setWizardMode('resubmit');
+    this.planStore.setSelectedPlanId(plan.id);
+    this.planStore.setPlanStatus(plan.status);
+    if (plan.planType === EOpportunityType.PRODUCT) {
+      this.productLocalizationPlanWizardVisibility.set(true);
+    } else if (plan.planType === EOpportunityType.SERVICES) {
+      this.serviceLocalizationPlanWizardVisibility.set(true);
+    }
+  }
   //#endregion
 
 

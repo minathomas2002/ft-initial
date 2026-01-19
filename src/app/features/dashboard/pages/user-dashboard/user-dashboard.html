@@ -1,11 +1,19 @@
-<app-table-layout [tableTitle]="'dashboard.title' | translate" [tableSubTitle]="dashboardSubtitle() | translate"
-  pageTitleClass="text-[24px] font-semibold" pageSubTitleClass="text-md text-gray-600">
+<app-table-layout
+  [tableTitle]="'dashboard.title' | translate"
+  [tableSubTitle]="dashboardSubtitle() | translate"
+  pageTitleClass="text-[24px] font-semibold"
+  pageSubTitleClass="text-md text-gray-600"
+>
 
   <!-- Create New Plan Button (Investor only) -->
   @if (isInvestor()) {
   <ng-container ngProjectAs="table-actions">
-    <p-button [label]="'dashboard.submitNewPlan' | translate" [icon]="'icon-plus'" [size]="'small'"
-      (onClick)="createNewPlan()" />
+    <p-button
+      [label]="'dashboard.submitNewPlan' | translate"
+      [icon]="'icon-plus'"
+      [size]="'small'"
+      (onClick)="createNewPlan()"
+    />
   </ng-container>
   }
 
@@ -16,9 +24,13 @@
       @if(isStatisticsLoading()) {
       <app-dashboard-statistics-skeleton [count]="4" />
       } @else {
-      <app-dashboard-statistics-cards [statistics]="statistics()" (onViewTotalPlans)="onViewTotalPlans()"
-        (onViewPlansUnderReview)="onViewPlansUnderReview()" (onViewApprovedPlans)="onViewApprovedPlans()"
-        (onViewRejectedPlans)="onViewRejectedPlans()" />
+      <app-dashboard-statistics-cards
+        [statistics]="statistics()"
+        (onViewTotalPlans)="onViewTotalPlans()"
+        (onViewPlansUnderReview)="onViewPlansUnderReview()"
+        (onViewApprovedPlans)="onViewApprovedPlans()"
+        (onViewRejectedPlans)="onViewRejectedPlans()"
+      />
       }
     </div>
     } @else {
@@ -26,10 +38,16 @@
       @if(isStatisticsLoading()) {
       <app-dashboard-statistics-skeleton [count]="5" />
       } @else {
-      <app-dashboard-statistics-cards [statistics]="statistics()" (onViewTotalPlans)="onViewTotalPlans()"
-        (onViewUnassignedPlans)="onViewUnassignedPlans()" (onViewPlansUnderReview)="onViewPlansUnderReview()"
-        (onViewApprovedPlans)="onViewApprovedPlans()" (onViewRejectedPlans)="onViewRejectedPlans()"
-        (onViewPendingAssignedPlans)="onViewPendingAssignedPlans()" (onViewAssignedPlans)="onViewAssignedPlans()" />
+      <app-dashboard-statistics-cards
+        [statistics]="statistics()"
+        (onViewTotalPlans)="onViewTotalPlans()"
+        (onViewUnassignedPlans)="onViewUnassignedPlans()"
+        (onViewPlansUnderReview)="onViewPlansUnderReview()"
+        (onViewApprovedPlans)="onViewApprovedPlans()"
+        (onViewRejectedPlans)="onViewRejectedPlans()"
+        (onViewPendingAssignedPlans)="onViewPendingAssignedPlans()"
+        (onViewAssignedPlans)="onViewAssignedPlans()"
+      />
       }
     </div>
     }
@@ -43,22 +61,42 @@
   </ng-container>
 
   <ng-container ngProjectAs="table-body">
-    <app-table-skeleton [headers]="headers()" [isLoading]="isLoading()">
-      <app-data-table [columns]="headers()" [rows]="rows()" [(filter)]="filterService().filter"
-        [totalRecords]="totalRecords()" (filterChange)="filterService().applyFilterWithPaging()"
-        [messageTitle]="'plans.list.noPlansFound' | translate" [showCheckBox]="false" [rowsCheckable]="false">
-        <ng-template #itemsTemplate let-item="item">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="isLoading()"
+    >
+      <app-data-table
+        [columns]="headers()"
+        [rows]="rows()"
+        [(filter)]="filterService().filter"
+        [totalRecords]="totalRecords()"
+        (filterChange)="filterService().applyFilterWithPaging()"
+        [messageTitle]="'plans.list.noPlansFound' | translate"
+        [showCheckBox]="false"
+        [rowsCheckable]="false"
+      >
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
           <td>
             {{ '#' + item.planCode }}
           </td>
           @if (isInternalUser()) {
           <td>
-            <p class="text-sm text-gray-900 font-medium max-w-[25ch]" [appTruncateTooltip]="item.investorName ?? '-'"
-              [maxChars]="20">{{ item.investorName ?? '-' }}</p>
+            <p
+              class="text-sm text-gray-900 font-medium max-w-[25ch]"
+              [appTruncateTooltip]="item.investorName ?? '-'"
+              [maxChars]="20"
+            >{{ item.investorName ?? '-' }}</p>
           </td>
           }
           <td>
-            <p class="text-sm text-gray-900 font-medium max-w-[25ch]" [appTruncateTooltip]="item.title" [maxChars]="20">
+            <p
+              class="text-sm text-gray-900 font-medium max-w-[25ch]"
+              [appTruncateTooltip]="item.title"
+              [maxChars]="20"
+            >
               {{ item.title }}</p>
           </td>
           <td>
@@ -67,8 +105,11 @@
           <td>{{ item.submissionDate | date : 'dd MMM yyyy' }}</td>
           @if (isManager()) {
           <td>
-            <p class="text-sm text-gray-900 font-medium max-w-[25ch]"
-              [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)" [maxChars]="20">
+            <p
+              class="text-sm text-gray-900 font-medium max-w-[25ch]"
+              [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)"
+              [maxChars]="20"
+            >
               {{ getAssigneeName(item.assignedEmployee) }}
             </p>
           </td>
@@ -76,13 +117,16 @@
           <td>
             @if (isInvestor()) {
             @if(item.status == EInvestorPlanStatus.PENDING) {
-            <span class="text-sm font-medium" [ngClass]="
+            <span
+              class="text-sm font-medium"
+              [ngClass]="
                     item.slaCountDown > 5
                       ? 'text-green-500'
                       : item.slaCountDown > 0
                       ? 'text-orange-500'
                       : 'text-red-600'
-                  ">
+                  "
+            >
               {{ item.slaCountDown | slaCountdownNoun }}
             </span>
             } @else {
@@ -90,13 +134,16 @@
             }
             } @else {
             @if(item.status !== EInternalUserPlanStatus.UNASSIGNED) {
-            <span class="text-sm font-medium" [ngClass]="
+            <span
+              class="text-sm font-medium"
+              [ngClass]="
                     item.slaCountDown > 5
                       ? 'text-green-500'
                       : item.slaCountDown > 0
                       ? 'text-orange-500'
                       : 'text-red-600'
-                  ">
+                  "
+            >
               {{ item.slaCountDown | slaCountdownNoun }}
             </span>
             } @else {
@@ -108,23 +155,35 @@
             @if (isInvestor()) {
             <span
               class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl max-w-[25ch] truncate {{ getStatusBadge(item.status).class }}"
-              [pTooltip]="getStatusBadge(item.status).label" tooltipPosition="top">
+              [pTooltip]="getStatusBadge(item.status).label"
+              tooltipPosition="top"
+            >
               {{ getStatusBadge(item.status).label }}
             </span>
             } @else {
             @if (getStatusBadge(item.status).color) {
-            <app-base-tag [value]="getStatusBadge(item.status).label"
-              [color]="getStatusBadge(item.status).color!"></app-base-tag>
+            <app-base-tag
+              [value]="getStatusBadge(item.status).label"
+              [color]="getStatusBadge(item.status).color!"
+            ></app-base-tag>
             } @else {
             <app-base-tag [value]="getStatusBadge(item.status).label"></app-base-tag>
             }
             }
           </td>
           <td>
-            <app-dashboard-plan-action-menu [actions]="item.actions" [plan]="item"
-              (onViewDetails)="onViewDetails($event)" (onEdit)="onEdit($event)" (onDownload)="onDownload($event)"
-              (onViewTimeLine)="onViewTimeline($event)" (onAssignToEmployee)="onAssignToEmployee($event)"
-              (onReAssign)="onReAssign($event)" (onInternalReview)="onReview($event)" />
+            <app-dashboard-plan-action-menu
+              [actions]="item.actions"
+              [plan]="item"
+              (onViewDetails)="onViewDetails($event)"
+              (onEdit)="onEdit($event)"
+              (onDownload)="onDownload($event)"
+              (onViewTimeLine)="onViewTimeline($event)"
+              (onAssignToEmployee)="onAssignToEmployee($event)"
+              (onReAssign)="onReAssign($event)"
+              (onInternalReview)="onReview($event)"
+              (onResubmitted)="onResubmitted($event)"
+            />
           </td>
         </ng-template>
       </app-data-table>
@@ -135,29 +194,45 @@
 <!-- Dialogs and Wizards -->
 @if (isInvestor()) {
 @if(planTermsAndConditionsDialogVisibility()) {
-<app-plan-terms-and-conditions-dialog [(visibility)]="planTermsAndConditionsDialogVisibility"
-  (onConfirm)="onUserReadAndApproved()" />
+<app-plan-terms-and-conditions-dialog
+  [(visibility)]="planTermsAndConditionsDialogVisibility"
+  (onConfirm)="onUserReadAndApproved()"
+/>
 }
 @if(newPlanDialogVisibility()) {
-<app-new-plan-dialog [(visibility)]="newPlanDialogVisibility" (onConfirm)="onUserConfirmNewPlanDialog()" />
+<app-new-plan-dialog
+  [(visibility)]="newPlanDialogVisibility"
+  (onConfirm)="onUserConfirmNewPlanDialog()"
+/>
 }
 }
 
 @if (isInternalUser() && viewAssignDialog()) {
-<app-assign-reassign-manual-employee [(dialogVisible)]="viewAssignDialog" [isReassignMode]="isReassignMode()"
-  [planRecord]="planItem()" (onSuccess)="applyFilter()"></app-assign-reassign-manual-employee>
+<app-assign-reassign-manual-employee
+  [(dialogVisible)]="viewAssignDialog"
+  [isReassignMode]="isReassignMode()"
+  [planRecord]="planItem()"
+  (onSuccess)="applyFilter()"
+></app-assign-reassign-manual-employee>
 }
 
 @if(productLocalizationPlanWizardVisibility()) {
-<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility"
-  (doRefresh)="applyFilter()" />
+<app-product-localization-plan-wizard
+  [(visibility)]="productLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()"
+/>
 }
 
 @if(serviceLocalizationPlanWizardVisibility()) {
-<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility"
-  (doRefresh)="applyFilter()" />
+<app-service-localization-plan-wizard
+  [(visibility)]="serviceLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()"
+/>
 }
 
 @if(timelineVisibility()) {
-<app-timeline-dialog [(dialogVisible)]="timelineVisibility" [planId]="planItem()?.id || selectedPlan()?.id || null" />
+<app-timeline-dialog
+  [(dialogVisible)]="timelineVisibility"
+  [planId]="planItem()?.id || selectedPlan()?.id || null"
+/>
 }
