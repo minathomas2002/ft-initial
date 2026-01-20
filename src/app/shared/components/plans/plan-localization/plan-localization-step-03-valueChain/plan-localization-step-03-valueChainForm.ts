@@ -84,11 +84,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   onStartEditing(): void {
     if (this.isResubmitMode()) {
       this.commentPhase.set('editing');
-      const formGroup = this.getFormGroup();
-      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
-      if (investorCommentControl) {
-        investorCommentControl.enable();
-      }
+
     }
   }
 

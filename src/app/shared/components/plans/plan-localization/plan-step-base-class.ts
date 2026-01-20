@@ -15,7 +15,7 @@ import { TCommentPhase } from './product-localization-plan-wizard/product-locali
  * Abstract base class for plan localization step forms.
  * Implements the Template Method pattern to provide common comment management functionality
  * while allowing subclasses to customize step-specific behavior.
- * 
+ *
  * Note: Abstract base classes using inject() don't require Angular decorators.
  */
 @Directive()
@@ -71,6 +71,15 @@ export abstract class PlanStepBaseClass {
     return control;
   }
 
+  // A dedicated, always-disabled control for displaying the comment inside each step.
+  // This prevents editing in the step UI while keeping the dialog editable.
+  private readonly stepCommentControl = new FormControl<string>('', { nonNullable: true });
+  private stepCommentSyncInitialized = false;
+
+  protected get stepCommentFormControl(): FormControl<string> {
+    return this.stepCommentControl;
+  }
+
   // Computed page comment for timeline
   pageComment = computed<IPageComment>(() => {
     return {
@@ -89,6 +98,9 @@ export abstract class PlanStepBaseClass {
 
     // Call hook for step-specific initialization
     this.initializeStepSpecificLogic();
+
+    // Always keep the step comment control disabled.
+    this.stepCommentControl.disable({ emitEvent: false });
   }
 
   ngOnInit(): void {
@@ -96,6 +108,17 @@ export abstract class PlanStepBaseClass {
     const formGroup = this.getFormGroup();
     if (!formGroup || !this.planFormService) {
       return;
+    }
+
+    // Now that derived services/form groups are initialized, safely sync the step display control.
+    if (!this.stepCommentSyncInitialized) {
+      this.stepCommentSyncInitialized = true;
+      this.stepCommentControl.setValue(this.commentFormControl.value ?? '', { emitEvent: false });
+      this.commentFormControl.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(value => {
+          this.stepCommentControl.setValue(value ?? '', { emitEvent: false });
+        });
     }
 
     const wizardMode = this.planStore.wizardMode();
