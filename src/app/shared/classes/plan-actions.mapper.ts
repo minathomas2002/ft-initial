@@ -33,6 +33,7 @@ export class PlanActionsMapper {
         [EActionPlanTimeLine.InternalReview]: { labelKey: 'plans.actions.internalReview' },
         [EActionPlanTimeLine.RemoveAssignee]: { labelKey: 'plans.actions.removeAssignee' },
         [EActionPlanTimeLine.Delete]: { labelKey: 'plans.actions.delete' },
+        [EActionPlanTimeLine.AutoRejected]: { labelKey: 'Plan Auto Rejected' },
     };
 
     getActions(
