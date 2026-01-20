@@ -15,6 +15,7 @@ import { BaseTagComponent } from "../../base-components/base-tag/base-tag.compon
 import { PlanTimelineActionsMapper } from 'src/app/shared/classes/Plan-Timeline/plan-timeline-actions.mapper';
 import { PlanTimelineStatusMapper } from 'src/app/shared/classes/Plan-Timeline/plan-timeline-status.mapper';
 import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.enum';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-plan-timeline-component',
@@ -25,8 +26,8 @@ import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.e
     Divider,
     IdentifyUserComponent,
     BaseTagComponent,
-    BaseTagComponent,
-    CamelCaseToWordPipe
+    CamelCaseToWordPipe,
+    TextareaModule
   ],
   templateUrl: './plan-timeline-component.html',
   styleUrl: './plan-timeline-component.scss',
