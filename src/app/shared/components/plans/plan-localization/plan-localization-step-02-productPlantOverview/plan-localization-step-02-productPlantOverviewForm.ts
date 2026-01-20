@@ -83,11 +83,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   onStartEditing(): void {
     if (this.isResubmitMode()) {
       this.commentPhase.set('editing');
-      const formGroup = this.getFormGroup();
-      const investorCommentControl = formGroup.get('investorComment') as FormControl<string> | null;
-      if (investorCommentControl) {
-        investorCommentControl.enable();
-      }
+
     }
   }
 
@@ -237,7 +233,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   // Implement abstract method from base class to get form control for a field
   getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey } = field;
-    
+
     // Map section + inputKey to form control
     if (section === 'overview') {
       const controls = this.overviewFormGroupControls;
@@ -260,7 +256,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
         return this.getValueControl(controls[inputKey]);
       }
     }
-    
+
     return null;
   }
 }

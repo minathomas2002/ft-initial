@@ -54,6 +54,16 @@ export class CommentStateComponent {
   onStartEditing() {
     this.commentPhase.set('editing');
     this.commentFormControl()!.enable();
+    // Open dialog with current comment value (FormControl already holds it).
+    this.showCommentDialog.set(true);
+  }
+
+  onStartEditingResubmitMode() {
+    // Keep the existing external hook, but also open the dialog for editing.
+    this.startEditing.emit();
+    this.commentPhase.set('editing');
+    this.commentFormControl()!.enable();
+    this.showCommentDialog.set(true);
   }
 
   onSaveComment() {

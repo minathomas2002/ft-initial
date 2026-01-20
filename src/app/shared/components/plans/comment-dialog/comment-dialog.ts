@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -25,21 +25,40 @@ export class CommentDialog implements OnInit {
   visible = model<boolean>(false);
   private readonly fb = inject(FormBuilder);
   private readonly toaster = inject(ToasterService);
-  commentFormControl = input.required<FormControl<string>>();
+  commentFormControl = input.required<FormControl<string | null>>();
   commentAdded = output();
   private commentSubmitted = signal<boolean>(false);
+  private initialValue = signal<string>('');
+
+  constructor() {
+    let wasVisible = false;
+    effect(() => {
+      const isVisible = this.visible();
+      if (isVisible && !wasVisible) {
+        this.initialValue.set(this.commentFormControl()?.value ?? '');
+        this.commentSubmitted.set(false);
+      }
+      wasVisible = isVisible;
+    });
+
+  }
 
   ngOnInit(): void {
     const control = this.commentFormControl();
     if (control) {
       control.addValidators(Validators.required);
     }
-    this.commentSubmitted.set(false);
   }
 
   onClose() {
     if (!this.commentSubmitted()) {
-      this.commentFormControl()?.reset();
+      // Restore original value (important for Edit flow).
+      const control = this.commentFormControl();
+      if (control) {
+        control.setValue(this.initialValue());
+        control.markAsPristine();
+        control.markAsUntouched();
+      }
     }
   }
 
