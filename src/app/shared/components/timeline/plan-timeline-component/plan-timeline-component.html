@@ -84,11 +84,13 @@
 
         <div class="mt-1">
           <label class="block text-sm text-[#414651] font-medium mb-1">Comment</label>
-          <input
-            class="p-inputtext w-full bg-gray-100"
+          <textarea
+            pTextarea
             [value]="comment.comment"
             disabled
-          />
+            rows="3"
+            fluid
+          ></textarea>
         </div>
 
         @if (comment.fields?.length > 0) {
