@@ -36,14 +36,8 @@ export class WizardStepStateComponent {
   });
 
   commentBadgeSeverity = computed(() => {
-    // Always use warn (orange) for investor persona
-    if (this.isInvestorPersona()) {
-      return 'warn';
-    }
-    // For investor view mode (when fieldsRequiringUpdate is defined), always use orange/warn for comment badge
-    if (this.stepState().fieldsRequiringUpdate !== undefined) {
-      return 'warn';
-    }
+    // Match commentColor from product/service plans in all cases
+    // 'green' maps to 'success' badge, anything else (including 'orange') maps to 'warn' badge
     return this.commentColor() === 'green' ? 'success' : 'warn';
   });
   // Signal to track form state - updated reactively
