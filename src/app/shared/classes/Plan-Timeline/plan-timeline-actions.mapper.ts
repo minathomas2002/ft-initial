@@ -13,6 +13,7 @@ export class PlanTimelineActionsMapper {
     [EActionPlanTimeLine.CommentSubmitted]: 'timeline.actions.submitComment',
     [EActionPlanTimeLine.AutoAssign]: 'timeline.actions.autoAssign',
     [EActionPlanTimeLine.InternalReview]: 'Submitted comment on the plan and sent back to investor',
+    [EActionPlanTimeLine.AutoRejected]: 'Plan Auto Rejected',
   };
 
   constructor(private i18nService: I18nService) { }
