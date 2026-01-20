@@ -237,7 +237,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
       if (controls && controls[inputKey]) {
         return this.getValueControl(controls[inputKey]);
       }
-    } else if (section === 'basicInfo') {
+    } else if (section === 'basicInformation') {
       const controls = this.basicInformationFormGroupControls;
       if (controls && controls[inputKey]) {
         return this.getValueControl(controls[inputKey]);
