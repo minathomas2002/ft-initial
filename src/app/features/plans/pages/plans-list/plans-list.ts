@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
-import { TooltipModule } from 'primeng/tooltip';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
@@ -44,7 +43,6 @@ import { AssignReassignManualEmployee } from "../../components/assign-reassign-m
     NgClass,
     ButtonModule,
     SkeletonModule,
-    TooltipModule,
     PlanTermsAndConditionsDialog,
     ProductLocalizationPlanWizard,
     NewPlanDialog,
