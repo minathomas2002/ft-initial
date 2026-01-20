@@ -404,6 +404,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return ['view', 'edit', 'Review', 'resubmit'].includes(mode);
   });
 
+  allowUserToResubmit = computed(() => {
+    const mode = this.planStore.wizardMode();
+    return mode === 'resubmit' && this.steps().every(step => !step.commentsCount);
+  });
+
   showHasCommentControl = signal<boolean>(false);
   // Separate comment phases for each step
   step1CommentPhase = signal<TCommentPhase>('none');
@@ -1118,7 +1123,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     // Step 1 comments
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
     // In resubmit mode, check 'comment' control; otherwise check EMaterialsFormControls.comment
-    const step1CommentControl = this.isResubmitMode() 
+    const step1CommentControl = this.isResubmitMode()
       ? (step1Form.get('comment') as FormControl<string> | null)
       : (step1Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
     if (step1CommentControl?.value && step1CommentControl.value.trim().length > 0 && this.step1SelectedInputs().length > 0) {

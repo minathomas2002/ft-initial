@@ -110,6 +110,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showExistingSaudiStep = signal(false);
   showDirectLocalizationStep = signal(false);
 
+
+
   // Comment phase signals for each step
   step1CommentPhase = signal<TCommentPhase>('none');
   step2CommentPhase = signal<TCommentPhase>('none');
@@ -283,12 +285,12 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   commentColor = computed(() => {
     const status = this.planStore.planStatus();
     const isViewOrReviewMode = this.isViewMode() || this.isReviewMode();
-    
+
     // If status is not UNDER_REVIEW, return orange
     if (status !== EInternalUserPlanStatus.UNDER_REVIEW) {
       return 'orange';
     }
-    
+
     // When employee reviews (view/Review mode) and status is UNDER_REVIEW
     if (isViewOrReviewMode) {
       // If there are corrected fields (investor changed fields), show green
@@ -302,7 +304,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       // No corrected fields and no comments in progress - employee just viewing, show green
       return 'green';
     }
-    
+
     // Not in view/Review mode but status is UNDER_REVIEW (e.g., investor in resubmit mode)
     // Show orange as default
     return 'orange';
@@ -400,6 +402,11 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   steps = computed<IWizardStepState[]>(() => {
     return this.stepsWithId().map(({ id, ...step }) => step);
+  });
+
+  allowUserToResubmit = computed(() => {
+    const mode = this.planStore.wizardMode();
+    return mode === 'resubmit' && this.steps().every(step => !step.commentsCount);
   });
 
   // Memoized step indices to avoid recalculation in template
