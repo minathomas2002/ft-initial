@@ -97,17 +97,16 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     return controls ? this.getHasCommentControl(controls['contactNumber']) : null;
   });
 
-  private get doYouCurrentlyHaveLocalAgentInKSAControl() {
-    return this.locationInformationFormGroupControls?.[EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA];
-  }
-  // Use private field with getter to ensure signal is always initialized
-  private _doYouHaveLocalAgentInKSASignal: ReturnType<typeof signal<boolean | null>> | undefined;
-  private get doYouHaveLocalAgentInKSASignal(): ReturnType<typeof signal<boolean | null>> {
-    if (!this._doYouHaveLocalAgentInKSASignal) {
-      this._doYouHaveLocalAgentInKSASignal = signal<boolean | null>(null);
+  private doYouCurrentlyHaveLocalAgentInKSAControl = this.getFormControl(
+    this.locationInformationFormGroupControls?.[EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]
+  );
+  private doYouHaveLocalAgentInKSASignal = toSignal(
+    this.doYouCurrentlyHaveLocalAgentInKSAControl.valueChanges,
+    {
+      initialValue: this.doYouCurrentlyHaveLocalAgentInKSAControl.value ?? false
     }
-    return this._doYouHaveLocalAgentInKSASignal;
-  }
+  );
+
   showLocalAgentInformation = computed(() => {
     return this.doYouHaveLocalAgentInKSASignal() === true;
   });
@@ -183,24 +182,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
       return;
     }
 
-    // Initialize and sync local agent control value to signal if control exists
-    const localAgentControl = this.doYouCurrentlyHaveLocalAgentInKSAControl;
-    if (localAgentControl) {
-      const control = this.getFormControl(localAgentControl);
-      // Ensure signal is initialized (getter handles this)
-      const signalRef = this.doYouHaveLocalAgentInKSASignal;
-      // Set initial value
-      signalRef.set(control.value ?? false);
-
-      // Subscribe to value changes with automatic cleanup
-      control.valueChanges
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(value => {
-          this.doYouHaveLocalAgentInKSASignal.set(value ?? false);
-        });
-    }
-
-    // Local agent validation effect
+    // Local agent validation effect - reactive to signal changes
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
       if (doYouHaveLocalAgentInKSA !== null && this.planFormService) {
