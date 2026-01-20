@@ -566,8 +566,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       .subscribe((data) => {
         if (!data) return;
 
-        // Store original plan response for before/after comparison
-        this.originalPlanResponse.set(data);
+        if (this.isResubmitMode()) {
+          // Store original plan response for before/after comparison
+          this.originalPlanResponse.set(data);
+        }
 
         // Reset then map (ensures arrays match response)
         this.serviceLocalizationFormService.resetAllForms();

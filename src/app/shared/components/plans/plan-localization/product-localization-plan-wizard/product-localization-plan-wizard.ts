@@ -613,7 +613,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   private mapPlanDataToForm(response: IProductPlanResponse): void {
     // Store original plan response for before/after comparison
-    this.originalPlanResponse.set(response);
+    if (this.isResubmitMode()) {
+      // Store original plan response for before/after comparison
+      this.originalPlanResponse.set(response);
+    }
 
     // Map response to form
     mapProductPlanResponseToForm(response, this.productPlanFormService);
