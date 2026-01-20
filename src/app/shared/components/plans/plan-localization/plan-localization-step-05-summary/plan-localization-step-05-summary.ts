@@ -54,28 +54,49 @@ export class PlanLocalizationStep05Summary {
   onValidationErrorsChange = output<Map<number, IStepValidationErrors>>();
 
   // Helper methods to get combined comment text for each step
+  // Priority: pageComments (investor comments from form controls) > stepComments (employee comments from API)
   getStep1CommentText(): string {
-    const comments = this.step1Comments().length > 0 ? this.step1Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step1.title'));
-    return comments.map(c => c.comment).join('\n\n');
+    // First check pageComments (investor comments from collectAllPageComments)
+    const investorComments = this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step1.title'));
+    if (investorComments.length > 0) {
+      return investorComments.map(c => c.comment).join('\n\n');
+    }
+    // Fallback to step1Comments (employee comments from API)
+    const employeeComments = this.step1Comments();
+    return employeeComments.map(c => c.comment).join('\n\n');
   }
 
   getStep2CommentText(): string {
-    const comments = this.step2Comments().length > 0 ? this.step2Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step2.title'));
-    return comments.map(c => c.comment).join('\n\n');
+    // First check pageComments (investor comments from collectAllPageComments)
+    const investorComments = this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step2.title'));
+    if (investorComments.length > 0) {
+      return investorComments.map(c => c.comment).join('\n\n');
+    }
+    // Fallback to step2Comments (employee comments from API)
+    const employeeComments = this.step2Comments();
+    return employeeComments.map(c => c.comment).join('\n\n');
   }
 
   getStep3CommentText(): string {
-    const comments = this.step3Comments().length > 0 ? this.step3Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title'));
-    return comments.map(c => c.comment).join('\n\n');
+    // First check pageComments (investor comments from collectAllPageComments)
+    const investorComments = this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title'));
+    if (investorComments.length > 0) {
+      return investorComments.map(c => c.comment).join('\n\n');
+    }
+    // Fallback to step3Comments (employee comments from API)
+    const employeeComments = this.step3Comments();
+    return employeeComments.map(c => c.comment).join('\n\n');
   }
 
   getStep4CommentText(): string {
-    const comments = this.step4Comments().length > 0 ? this.step4Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title'));
-    return comments.map(c => c.comment).join('\n\n');
+    // First check pageComments (investor comments from collectAllPageComments)
+    const investorComments = this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title'));
+    if (investorComments.length > 0) {
+      return investorComments.map(c => c.comment).join('\n\n');
+    }
+    // Fallback to step4Comments (employee comments from API)
+    const employeeComments = this.step4Comments();
+    return employeeComments.map(c => c.comment).join('\n\n');
   }
 
   // Computed signals to get comments (fallback to pageComments if step comments not provided)

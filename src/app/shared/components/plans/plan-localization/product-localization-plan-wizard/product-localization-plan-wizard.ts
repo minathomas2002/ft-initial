@@ -1117,7 +1117,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     // Step 1 comments
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
-    const step1CommentControl = step1Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    // In resubmit mode, check 'comment' control; otherwise check EMaterialsFormControls.comment
+    const step1CommentControl = this.isResubmitMode() 
+      ? (step1Form.get('comment') as FormControl<string> | null)
+      : (step1Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
     if (step1CommentControl?.value && step1CommentControl.value.trim().length > 0 && this.step1SelectedInputs().length > 0) {
       comments.push({
         pageTitleForTL: this.steps()[0].title,
@@ -1128,7 +1131,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     // Step 2 comments
     const step2Form = this.productPlanFormService.step2_productPlantOverview;
-    const step2CommentControl = step2Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step2CommentControl = this.isResubmitMode()
+      ? (step2Form.get('comment') as FormControl<string> | null)
+      : (step2Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
     if (step2CommentControl?.value && step2CommentControl.value.trim().length > 0 && this.step2SelectedInputs().length > 0) {
       comments.push({
         pageTitleForTL: this.steps()[1].title,
@@ -1139,7 +1144,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     // Step 3 comments
     const step3Form = this.productPlanFormService.step3_valueChain;
-    const step3CommentControl = step3Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step3CommentControl = this.isResubmitMode()
+      ? (step3Form.get('comment') as FormControl<string> | null)
+      : (step3Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
     if (step3CommentControl?.value && step3CommentControl.value.trim().length > 0 && this.step3SelectedInputs().length > 0) {
       comments.push({
         pageTitleForTL: this.steps()[2].title,
@@ -1150,7 +1157,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     // Step 4 comments
     const step4Form = this.productPlanFormService.step4_saudization;
-    const step4CommentControl = step4Form.get(EMaterialsFormControls.comment) as FormControl<string>;
+    const step4CommentControl = this.isResubmitMode()
+      ? (step4Form.get('comment') as FormControl<string> | null)
+      : (step4Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
     if (step4CommentControl?.value && step4CommentControl.value.trim().length > 0 && this.step4SelectedInputs().length > 0) {
       comments.push({
         pageTitleForTL: this.steps()[3].title,
@@ -1223,7 +1232,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     ): void => {
       const investorCommentControl = stepForm.get('comment') as FormControl<string> | null;
       const investorComment = investorCommentControl?.value?.trim() || '';
-      debugger
 
       if (investorComment.length > 0 || correctedFields.length > 0) {
         // Case 1: Investor added comments - use new investor comments
@@ -1246,7 +1254,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     // Step 1 comments
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
-    debugger
     // Use all fields from employee comments (not just those with IDs)
     // IDs are only needed for FormArray items, but all highlighted fields should be included
     const step1CorrectedFields = this.step1CommentFields();
