@@ -29,7 +29,6 @@ import { InternalUsersDashboardPlansFilterService } from '../../services/interna
 import { DashboardPlansFilterService } from '../../services/dashboard-plans-filter/dashboard-plans-filter-service';
 import { DashboardPlanActionMenu } from '../../components/dashboard-plan-action-menu/dashboard-plan-action-menu';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { TooltipModule } from 'primeng/tooltip';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
@@ -57,7 +56,6 @@ import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-too
     ServiceLocalizationPlanWizard,
     TimelineDialog,
     BaseTagComponent,
-    TooltipModule,
     NewPlanDialog,
     PlanTermsAndConditionsDialog,
     TruncateTooltipDirective

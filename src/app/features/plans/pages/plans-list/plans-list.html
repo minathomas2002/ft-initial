@@ -52,7 +52,8 @@
           }
           <td>
             <span
-              class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl max-w-[25ch] truncate {{ getStatusBadgeClass(item.status) }}">
+              class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl max-w-[25ch] {{ getStatusBadgeClass(item.status) }}"
+              [appTruncateTooltip]="getStatusLabel(item.status)" [maxChars]="25">
               {{ getStatusLabel(item.status) }}
             </span>
           </td>
