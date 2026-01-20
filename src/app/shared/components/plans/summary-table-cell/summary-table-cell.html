@@ -1,25 +1,29 @@
 <div class="flex items-center gap-2">
   @if (showDiff() && hasDiff()) {
   <div class="flex items-center gap-2">
-    <span class="text-sm font-medium text-gray-500 line-through wrap-break-word border-1 border-gray-200 bg-gray-50 p-1 rounded-md">{{ displayBeforeValue() }}</span>
+    <span
+      class="text-sm font-medium text-gray-500 line-through wrap-break-word border border-gray-200 bg-gray-50 p-1 rounded-md">{{
+      displayBeforeValue() }}</span>
     <i class="icon-arrow-right text-gray-500 text-xs"></i>
-    <span class="text-sm font-medium text-green-600 wrap-break-word border-1 border-success-200 bg-success-50 p-1 rounded-md">{{ displayAfterValue() }}</span>
+    <span
+      class="text-sm font-medium text-green-600 wrap-break-word border border-success-200 bg-success-50 p-1 rounded-md">{{
+      displayAfterValue() }}</span>
   </div>
   } @else {
-  <span class="text-sm text-gray-900">{{ displayValue() }}</span>
+  <span class="text-sm" [ngClass]="{
+    'text-[#1D1E23] font-medium border border-[#ABEFC6] bg-[#ECFDF3] px-2 w-fit py-1 rounded-md': isResolved(),
+    'text-gray-900': !isResolved()
+  }">
+    {{ displayValue() }}
+  </span>
+
   }
-  @if (hasComment() && !showDiff()) {
-  <i
-    class="icon-info text-orange-600 text-xs bg-orange-50 p-1 rounded-full"
-    pTooltip="This field has a comment"
-    tooltipPosition="top"
-  ></i>
+  @if (hasComment() && !showDiff() && !isResolved()) {
+  <i class="icon-info text-orange-600 text-xs bg-orange-50 p-1 rounded-full" pTooltip="This field has a comment"
+    tooltipPosition="top"></i>
   }
   @if (hasError()) {
-  <i
-    class="icon-info text-red-500 text-xs bg-red-50 p-1 rounded-full"
-    pTooltip="This field has validation errors"
-    tooltipPosition="top"
-  ></i>
+  <i class="icon-info text-red-500 text-xs bg-red-50 p-1 rounded-full" pTooltip="This field has validation errors"
+    tooltipPosition="top"></i>
   }
 </div>

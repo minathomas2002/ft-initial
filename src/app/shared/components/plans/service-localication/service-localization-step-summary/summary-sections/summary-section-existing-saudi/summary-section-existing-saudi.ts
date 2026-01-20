@@ -364,6 +364,35 @@ export class SummarySectionExistingSaudi {
     );
   }
 
+  // Check if a field is resolved/corrected by investor (based on correctedFieldIds)
+  isFieldResolved(fieldKey: string, section?: string, rowId?: string): boolean {
+    if (this.correctedFieldIds().length === 0) return false;
+
+    const matchesInputKey = (inputKey: string): boolean => {
+      if (inputKey === fieldKey) return true;
+      if (section && inputKey === `${section}.${fieldKey}`) return true;
+      if (inputKey.startsWith(fieldKey + '_') && /^\d+$/.test(inputKey.substring(fieldKey.length + 1))) return true;
+      if (
+        section &&
+        inputKey.startsWith(`${section}.${fieldKey}_`) &&
+        /^\d+$/.test(inputKey.substring(`${section}.${fieldKey}`.length + 1))
+      )
+        return true;
+      return false;
+    };
+
+    return this.pageComments().some((comment) =>
+      comment.fields?.some(
+        (field) =>
+          matchesInputKey(field.inputKey) &&
+          (!section || field.section === section) &&
+          !!field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (rowId === undefined || field.id === rowId)
+      )
+    );
+  }
+
   // Helper methods for checking comments on array items
   hasSaudiCompanyComment(index: number, fieldKey: string): boolean {
     const detailsArray = this.saudiCompanyDetailsFormArray();
@@ -373,12 +402,28 @@ export class SummarySectionExistingSaudi {
     return this.hasFieldComment(fieldKey, 'saudiCompanyDetails', rowId);
   }
 
+  isSaudiCompanyResolved(index: number, fieldKey: string): boolean {
+    const detailsArray = this.saudiCompanyDetailsFormArray();
+    if (!detailsArray || index >= detailsArray.length) return false;
+    const companyGroup = detailsArray.at(index) as FormGroup;
+    const rowId = companyGroup.get('rowId')?.value;
+    return this.isFieldResolved(fieldKey, 'saudiCompanyDetails', rowId);
+  }
+
   hasCollaborationComment(index: number, fieldKey: string): boolean {
     const partnershipArray = this.collaborationPartnershipFormArray();
     if (!partnershipArray || index >= partnershipArray.length) return false;
     const partnershipGroup = partnershipArray.at(index) as FormGroup;
     const rowId = partnershipGroup.get('rowId')?.value;
     return this.hasFieldComment(fieldKey, 'collaborationPartnership', rowId);
+  }
+
+  isCollaborationResolved(index: number, fieldKey: string): boolean {
+    const partnershipArray = this.collaborationPartnershipFormArray();
+    if (!partnershipArray || index >= partnershipArray.length) return false;
+    const partnershipGroup = partnershipArray.at(index) as FormGroup;
+    const rowId = partnershipGroup.get('rowId')?.value;
+    return this.isFieldResolved(fieldKey, 'collaborationPartnership', rowId);
   }
 
   hasEntityLevelComment(fieldKey: string): boolean {
@@ -390,6 +435,14 @@ export class SummarySectionExistingSaudi {
     return this.hasFieldComment(fieldKey, 'entityLevel', rowId);
   }
 
+  isEntityLevelResolved(fieldKey: string): boolean {
+    const entityArray = this.entityLevelFormArray();
+    if (!entityArray || entityArray.length === 0) return false;
+    const entityGroup = entityArray.at(0) as FormGroup;
+    const rowId = entityGroup.get('rowId')?.value;
+    return this.isFieldResolved(fieldKey, 'entityLevel', rowId);
+  }
+
   hasServiceLevelComment(index: number, fieldKey: string): boolean {
     const serviceArray = this.serviceLevelFormArray();
     if (!serviceArray || index >= serviceArray.length) return false;
@@ -398,8 +451,20 @@ export class SummarySectionExistingSaudi {
     return this.hasFieldComment(fieldKey, 'serviceLevel', rowId);
   }
 
+  isServiceLevelResolved(index: number, fieldKey: string): boolean {
+    const serviceArray = this.serviceLevelFormArray();
+    if (!serviceArray || index >= serviceArray.length) return false;
+    const serviceGroup = serviceArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.isFieldResolved(fieldKey, 'serviceLevel', rowId);
+  }
+
   hasAttachmentsComment(): boolean {
     return this.hasFieldComment('attachments', 'attachments');
+  }
+
+  isAttachmentsResolved(): boolean {
+    return this.isFieldResolved('attachments', 'attachments');
   }
 
   // Helper method to get before value (original value from plan response) for a field

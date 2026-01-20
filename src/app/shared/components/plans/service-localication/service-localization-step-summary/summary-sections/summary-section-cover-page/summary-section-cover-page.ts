@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -133,9 +133,63 @@ export class SummarySectionCoverPage {
     );
   }
 
+  // Check if a field is resolved/corrected by investor (based on correctedFieldIds)
+  isFieldResolved(fieldKey: string, section?: string, rowId?: string): boolean {
+    if (this.correctedFieldIds().length === 0) return false;
+
+    const corrected = this.correctedFieldIds();
+
+    const normalizedKeyForField = (field: IFieldInformation): string | null => {
+      if (!field.inputKey) return null;
+      if (field.section && field.inputKey.startsWith(field.section + '.')) {
+        return field.inputKey;
+      }
+      if (field.section) {
+        return `${field.section}.${field.inputKey}`;
+      }
+      return field.inputKey;
+    };
+
+    const isCorrected = (field: IFieldInformation): boolean => {
+      // For array rows, require rowId match via field.id to avoid marking every row corrected.
+      if (rowId !== undefined) {
+        return !!field.id && field.id === rowId && corrected.includes(field.id);
+      }
+
+      if (field.id && corrected.includes(field.id)) return true;
+      const key = normalizedKeyForField(field);
+      return !!key && corrected.includes(key);
+    };
+
+    const matchesInputKey = (inputKey: string): boolean => {
+      if (inputKey === fieldKey) return true;
+      if (section && inputKey === `${section}.${fieldKey}`) return true;
+      if (inputKey.startsWith(fieldKey + '_') && /^\d+$/.test(inputKey.substring(fieldKey.length + 1))) return true;
+      if (
+        section &&
+        inputKey.startsWith(`${section}.${fieldKey}_`) &&
+        /^\d+$/.test(inputKey.substring(`${section}.${fieldKey}`.length + 1))
+      )
+        return true;
+      return false;
+    };
+
+    return this.pageComments().some((comment) =>
+      comment.fields?.some(
+        (field) =>
+          matchesInputKey(field.inputKey) &&
+          (!section || field.section === section) &&
+          isCorrected(field)
+      )
+    );
+  }
+
   // Computed properties for comment status
   planTitleHasComment = computed(() => this.hasFieldComment('planTitle', 'companyInformation'));
   companyNameHasComment = computed(() => this.hasFieldComment('companyName', 'companyInformation'));
+
+  planTitleIsResolved = computed(() => this.isFieldResolved('planTitle', 'companyInformation'));
+  companyNameIsResolved = computed(() => this.isFieldResolved('companyName', 'companyInformation'));
 
   // For services array items
   hasServiceItemComment(index: number): boolean {
@@ -144,6 +198,14 @@ export class SummarySectionCoverPage {
     const serviceGroup = servicesArray.at(index) as FormGroup;
     const rowId = serviceGroup.get('rowId')?.value;
     return this.hasFieldComment('serviceName', 'services', rowId);
+  }
+
+  isServiceItemResolved(index: number): boolean {
+    const servicesArray = this.servicesFormArray();
+    if (!servicesArray || index >= servicesArray.length) return false;
+    const serviceGroup = servicesArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.isFieldResolved('serviceName', 'services', rowId);
   }
 
   // Helper method to get before value (original value from plan response) for a field

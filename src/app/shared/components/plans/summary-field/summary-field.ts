@@ -1,9 +1,10 @@
+import { NgClass } from '@angular/common';
 import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-summary-field',
-  imports: [TooltipModule],
+  imports: [TooltipModule, NgClass],
   templateUrl: './summary-field.html',
   styleUrl: './summary-field.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,6 +17,7 @@ export class SummaryField {
   showDiff = input<boolean>(false);
   hasError = input<boolean>(false);
   hasComment = input<boolean>(false);
+  isResolved = input<boolean>(false);
   isDate = input<boolean>(false);
   isBoolean = input<boolean>(false);
   isEmpty = input<boolean>(false);
@@ -103,7 +105,7 @@ export class SummaryField {
     if (!this.showDiff()) return false;
     const before = this.beforeValue();
     const after = this.afterValue() ?? this.value();
-    
+
     // Compare values
     if (before === after) return false;
     if (before === null || before === undefined || before === '') {
@@ -112,12 +114,12 @@ export class SummaryField {
     if (after === null || after === undefined || after === '') {
       return true;
     }
-    
+
     // For objects, compare by JSON stringify
     if (typeof before === 'object' && typeof after === 'object') {
       return JSON.stringify(before) !== JSON.stringify(after);
     }
-    
+
     return String(before) !== String(after);
   });
 }

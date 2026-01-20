@@ -211,6 +211,95 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return this.step4Comments().flatMap(c => c.fields);
   });
 
+  // Computed signals to extract corrected field IDs from comments (deduped)
+  step1CorrectedFieldIds = computed<string[]>(() => {
+    const ids = this.step1Comments().flatMap(comment => comment.fields).flatMap(field => {
+      const keys: string[] = [];
+
+      if (field.id) {
+        keys.push(field.id);
+      }
+
+      if (field.inputKey) {
+        keys.push(field.inputKey);
+      }
+
+      if (field.section && field.inputKey && !field.inputKey.startsWith(field.section + '.')) {
+        keys.push(`${field.section}.${field.inputKey}`);
+      }
+
+      return keys;
+    });
+
+    return ids.filter((id, index, self) => self.indexOf(id) === index);
+  });
+
+  step2CorrectedFieldIds = computed<string[]>(() => {
+    const ids = this.step2Comments().flatMap(comment => comment.fields).flatMap(field => {
+      const keys: string[] = [];
+
+      if (field.id) {
+        keys.push(field.id);
+      }
+
+      if (field.inputKey) {
+        keys.push(field.inputKey);
+      }
+
+      if (field.section && field.inputKey && !field.inputKey.startsWith(field.section + '.')) {
+        keys.push(`${field.section}.${field.inputKey}`);
+      }
+
+      return keys;
+    });
+
+    return ids.filter((id, index, self) => self.indexOf(id) === index);
+  });
+
+  step3CorrectedFieldIds = computed<string[]>(() => {
+    const ids = this.step3Comments().flatMap(comment => comment.fields).flatMap(field => {
+      const keys: string[] = [];
+
+      if (field.id) {
+        keys.push(field.id);
+      }
+
+      if (field.inputKey) {
+        keys.push(field.inputKey);
+      }
+
+      if (field.section && field.inputKey && !field.inputKey.startsWith(field.section + '.')) {
+        keys.push(`${field.section}.${field.inputKey}`);
+      }
+
+      return keys;
+    });
+
+    return ids.filter((id, index, self) => self.indexOf(id) === index);
+  });
+
+  step4CorrectedFieldIds = computed<string[]>(() => {
+    const ids = this.step4Comments().flatMap(comment => comment.fields).flatMap(field => {
+      const keys: string[] = [];
+
+      if (field.id) {
+        keys.push(field.id);
+      }
+
+      if (field.inputKey) {
+        keys.push(field.inputKey);
+      }
+
+      if (field.section && field.inputKey && !field.inputKey.startsWith(field.section + '.')) {
+        keys.push(`${field.section}.${field.inputKey}`);
+      }
+
+      return keys;
+    });
+
+    return ids.filter((id, index, self) => self.indexOf(id) === index);
+  });
+
   // Computed signals to map comment fields to selectedInputs for each step
   step1CommentFields = computed<IFieldInformation[]>(() => {
     return this.step1Comments().flatMap(c => c.fields);
@@ -229,15 +318,26 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   // Review mode signals
-  showHasCommentControl = signal<boolean>(false);
   showCommentState = signal(false);
 
   // Computed signals for action controls
   hasSelectedFields = computed(() => {
-    return this.step1SelectedInputs().length > 0 ||
-      this.step2SelectedInputs().length > 0 ||
-      this.step3SelectedInputs().length > 0 ||
-      this.step4SelectedInputs().length > 0;
+    // In review/view flows we map incoming (already-saved) comment fields into
+    // selectedInputs so the UI can highlight them. Those should NOT disable
+    // Approve/Reject.
+    //
+    // Only treat selectedInputs as blocking when the employee is actively
+    // adding/editing/viewing comments on that step (i.e., orange state).
+    const isBlockingSelection = (phase: TCommentPhase, fields: IFieldInformation[]) => {
+      return phase !== 'none' && fields.length > 0;
+    };
+
+    return (
+      isBlockingSelection(this.step1CommentPhase(), this.step1SelectedInputs()) ||
+      isBlockingSelection(this.step2CommentPhase(), this.step2SelectedInputs()) ||
+      isBlockingSelection(this.step3CommentPhase(), this.step3SelectedInputs()) ||
+      isBlockingSelection(this.step4CommentPhase(), this.step4SelectedInputs())
+    );
   });
 
   hasComments = computed(() => {
@@ -270,42 +370,55 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     ) > 0;
   });
 
-  private readonly isAnyCommentInProgress = computed(() => {
-    return (
-      this.step1CommentPhase() !== 'none' ||
-      this.step2CommentPhase() !== 'none' ||
-      this.step3CommentPhase() !== 'none' ||
-      this.step4CommentPhase() !== 'none' ||
-      this.hasSelectedFields()
-    );
-  });
 
-  commentColor = computed(() => {
+  private readonly isStepActivelyAddingComments = (stepId: ServiceLocalizationWizardStepId): boolean => {
+    // Treat 'viewing' as comment-present so the badge stays orange after save.
+    const activePhases: TCommentPhase[] = ['adding', 'editing', 'viewing'];
+    const phase =
+      stepId === 'cover'
+        ? this.step1CommentPhase()
+        : stepId === 'overview'
+          ? this.step2CommentPhase()
+          : stepId === 'existingSaudi'
+            ? this.step3CommentPhase()
+            : stepId === 'directLocalization'
+              ? this.step4CommentPhase()
+              : 'none';
+
+    return activePhases.includes(phase);
+  };
+
+  private readonly getCommentColorForStep = (stepId: ServiceLocalizationWizardStepId): 'green' | 'orange' => {
     const status = this.planStore.planStatus();
     const isViewOrReviewMode = this.isViewMode() || this.isReviewMode();
-    
-    // If status is not UNDER_REVIEW, return orange
+
+    // Outside UNDER_REVIEW, keep the legacy behavior (all steps orange)
     if (status !== EInternalUserPlanStatus.UNDER_REVIEW) {
       return 'orange';
     }
-    
-    // When employee reviews (view/Review mode) and status is UNDER_REVIEW
+
+    // In employee view/review under review: only the step being actively commented should be orange.
     if (isViewOrReviewMode) {
-      // If there are corrected fields (investor changed fields), show green
+      if (this.isStepActivelyAddingComments(stepId)) {
+        return 'orange';
+      }
+
+      // Preserve existing semantics (green in view/review when not actively commenting)
       if (this.hasAnyCorrectedFields()) {
         return 'green';
       }
-      // If any comment is in progress, show orange
-      if (this.isAnyCommentInProgress()) {
-        return 'orange';
-      }
-      // No corrected fields and no comments in progress - employee just viewing, show green
+
       return 'green';
     }
-    
-    // Not in view/Review mode but status is UNDER_REVIEW (e.g., investor in resubmit mode)
-    // Show orange as default
+
+    // Not in view/review mode but status is UNDER_REVIEW (e.g., investor in resubmit mode)
     return 'orange';
+  };
+
+  // Used by the active step content components (they only render one step at a time)
+  commentColor = computed(() => {
+    const stepId = this.stepsWithId()[this.activeStep() - 1]?.id;
+    return stepId ? this.getCommentColorForStep(stepId) : 'orange';
   });
   canApproveOrReject = computed(() => {
     return !this.hasSelectedFields() && !this.hasComments();
@@ -349,7 +462,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: this.step1CommentPhase() === 'none',
       commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
-      commentColor: this.commentColor(),
+      commentColor: this.getCommentColorForStep('cover'),
     });
 
     pushStep({
@@ -359,7 +472,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: this.step2CommentPhase() === 'none',
       commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
-      commentColor: this.commentColor(),
+      commentColor: this.getCommentColorForStep('overview'),
     });
 
     if (this.showExistingSaudiStep()) {
@@ -370,7 +483,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
-        commentColor: this.commentColor(),
+        commentColor: this.getCommentColorForStep('existingSaudi'),
       });
     }
 
@@ -382,7 +495,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
-        commentColor: this.commentColor(),
+        commentColor: this.getCommentColorForStep('directLocalization'),
       });
     }
 
@@ -488,30 +601,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           opportunityControl.setValue(available, { emitEvent: true });
           opportunityControl.updateValueAndValidity({ emitEvent: true });
         }
-      }
-    });
-
-    // Effect to sync comment phase when navigating between steps
-    // If showHasCommentControl is true, ensure the current step's comment phase is also active
-    effect(() => {
-      const showCheckbox = this.showHasCommentControl();
-      const currentStep = this.activeStep();
-
-      // Only sync if comment mode is enabled
-      if (!showCheckbox) {
-        return;
-      }
-
-      // Set comment phase to 'adding' for the current step if it's 'none'
-      const stepId = this.stepsWithId()[currentStep - 1]?.id;
-      if (stepId === 'cover' && this.step1CommentPhase() === 'none') {
-        this.step1CommentPhase.set('adding');
-      } else if (stepId === 'overview' && this.step2CommentPhase() === 'none') {
-        this.step2CommentPhase.set('adding');
-      } else if (stepId === 'existingSaudi' && this.step3CommentPhase() === 'none') {
-        this.step3CommentPhase.set('adding');
-      } else if (stepId === 'directLocalization' && this.step4CommentPhase() === 'none') {
-        this.step4CommentPhase.set('adding');
       }
     });
 
@@ -764,23 +853,78 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       this.showCommentState.set(true);
       return;
     }
+
     const step = this.activeStep();
+    const stepId = this.stepsWithId()[step - 1]?.id;
+
+    // Non-investor (internal) flow: starting a new comment session should clear
+    // any previously mapped/selected fields so counters, checkboxes and highlights reset.
+    if (!this.isInvestorPersona()) {
+      this.resetCurrentStepCommentSelections(stepId);
+    }
+
     // Set comment phase for the current active step
     // Step 1 is cover
     // Step 2 is overview
     // Step 3 is existingSaudi (if shown)
     // Step 4 is directLocalization (if shown)
-    const stepId = this.stepsWithId()[step - 1]?.id;
-    if (stepId === 'cover' && this.step1CommentPhase() === 'none') {
+    if (stepId === 'cover') {
       this.step1CommentPhase.set('adding');
-    } else if (stepId === 'overview' && this.step2CommentPhase() === 'none') {
+    } else if (stepId === 'overview') {
       this.step2CommentPhase.set('adding');
-    } else if (stepId === 'existingSaudi' && this.step3CommentPhase() === 'none') {
+    } else if (stepId === 'existingSaudi') {
       this.step3CommentPhase.set('adding');
-    } else if (stepId === 'directLocalization' && this.step4CommentPhase() === 'none') {
+    } else if (stepId === 'directLocalization') {
       this.step4CommentPhase.set('adding');
     }
-    this.showHasCommentControl.set(true);
+  }
+
+  private resetCurrentStepCommentSelections(stepId: ServiceLocalizationWizardStepId | undefined): void {
+    if (!stepId) return;
+
+    // Reset stepper counter + highlight state (bound to selectedInputs)
+    if (stepId === 'cover') {
+      this.step1SelectedInputs.set([]);
+      this.resetHasCommentControls(this.serviceLocalizationFormService.step1_coverPage);
+      return;
+    }
+
+    if (stepId === 'overview') {
+      this.step2SelectedInputs.set([]);
+      this.resetHasCommentControls(this.serviceLocalizationFormService.step2_overview);
+      return;
+    }
+
+    if (stepId === 'existingSaudi') {
+      this.step3SelectedInputs.set([]);
+      this.resetHasCommentControls(this.serviceLocalizationFormService.step3_existingSaudi);
+      return;
+    }
+
+    if (stepId === 'directLocalization') {
+      this.step4SelectedInputs.set([]);
+      this.resetHasCommentControls(this.serviceLocalizationFormService.step4_directLocalization);
+      return;
+    }
+  }
+
+  private resetHasCommentControls(control: AbstractControl): void {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        const childControl = control.controls[key];
+        if (key === EMaterialsFormControls.hasComment && childControl instanceof FormControl) {
+          childControl.setValue(false, { emitEvent: false });
+          childControl.markAsPristine();
+          childControl.markAsUntouched();
+        } else {
+          this.resetHasCommentControls(childControl);
+        }
+      });
+    } else if (control instanceof FormArray) {
+      control.controls.forEach((arrayControl: AbstractControl) => {
+        this.resetHasCommentControls(arrayControl);
+      });
+    }
   }
 
   stepIndex(stepId: ServiceLocalizationWizardStepId): number {

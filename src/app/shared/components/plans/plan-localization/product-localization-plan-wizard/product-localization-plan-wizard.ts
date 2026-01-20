@@ -413,10 +413,22 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   // Computed signals for action controls
   hasSelectedFields = computed(() => {
-    return this.step1SelectedInputs().length > 0 ||
-      this.step2SelectedInputs().length > 0 ||
-      this.step3SelectedInputs().length > 0 ||
-      this.step4SelectedInputs().length > 0;
+    // In review/view flows, incoming (already-saved) comment fields are mapped
+    // into selectedInputs so the UI can highlight them. Those should NOT disable
+    // Approve/Reject.
+    //
+    // Only treat selectedInputs as blocking when the reviewer is actively in a
+    // comment phase for that step (i.e., orange state).
+    const isBlockingSelection = (phase: TCommentPhase, fields: IFieldInformation[]) => {
+      return phase !== 'none' && fields.length > 0;
+    };
+
+    return (
+      isBlockingSelection(this.step1CommentPhase(), this.step1SelectedInputs()) ||
+      isBlockingSelection(this.step2CommentPhase(), this.step2SelectedInputs()) ||
+      isBlockingSelection(this.step3CommentPhase(), this.step3SelectedInputs()) ||
+      isBlockingSelection(this.step4CommentPhase(), this.step4SelectedInputs())
+    );
   });
 
   canApproveOrReject = computed(() => {
@@ -1118,7 +1130,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     // Step 1 comments
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
     // In resubmit mode, check 'comment' control; otherwise check EMaterialsFormControls.comment
-    const step1CommentControl = this.isResubmitMode() 
+    const step1CommentControl = this.isResubmitMode()
       ? (step1Form.get('comment') as FormControl<string> | null)
       : (step1Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
     if (step1CommentControl?.value && step1CommentControl.value.trim().length > 0 && this.step1SelectedInputs().length > 0) {

@@ -319,6 +319,35 @@ export class SummarySectionOverview {
     );
   }
 
+  // Check if a field is resolved/corrected by investor (based on correctedFieldIds)
+  isFieldResolved(fieldKey: string, section?: string, fieldId?: string): boolean {
+    if (this.correctedFieldIds().length === 0) return false;
+
+    const matchesInputKey = (inputKey: string): boolean => {
+      if (inputKey === fieldKey) return true;
+      if (section && inputKey === `${section}.${fieldKey}`) return true;
+      if (inputKey.startsWith(fieldKey + '_') && /^\d+$/.test(inputKey.substring(fieldKey.length + 1))) return true;
+      if (
+        section &&
+        inputKey.startsWith(`${section}.${fieldKey}_`) &&
+        /^\d+$/.test(inputKey.substring(`${section}.${fieldKey}`.length + 1))
+      )
+        return true;
+      return false;
+    };
+
+    return this.pageComments().some((comment) =>
+      comment.fields?.some(
+        (field) =>
+          matchesInputKey(field.inputKey) &&
+          (!section || field.section === section) &&
+          !!field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (fieldId === undefined || field.id === fieldId)
+      )
+    );
+  }
+
   // Computed properties for comment status
   opportunityHasComment = computed(() => this.hasFieldComment('opportunity', 'basicInformation'));
   submissionDateHasComment = computed(() => this.hasFieldComment('submissionDate', 'basicInformation'));
@@ -336,6 +365,23 @@ export class SummarySectionOverview {
   contactNumberHasComment = computed(() => this.hasFieldComment('contactNumber', 'localAgentInformation'));
   companyLocationHasComment = computed(() => this.hasFieldComment('companyLocation', 'localAgentInformation'));
 
+  // Computed properties for resolved/corrected status
+  opportunityIsResolved = computed(() => this.isFieldResolved('opportunity', 'basicInformation'));
+  submissionDateIsResolved = computed(() => this.isFieldResolved('submissionDate', 'basicInformation'));
+  companyNameIsResolved = computed(() => this.isFieldResolved('companyName', 'overviewCompanyInformation'));
+  ceoNameIsResolved = computed(() => this.isFieldResolved('ceoName', 'overviewCompanyInformation'));
+  ceoEmailIDIsResolved = computed(() => this.isFieldResolved('ceoEmailID', 'overviewCompanyInformation'));
+  globalHQLocationIsResolved = computed(() => this.isFieldResolved('globalHQLocation', 'locationInformation'));
+  registeredVendorIDIsResolved = computed(() => this.isFieldResolved('registeredVendorIDwithSEC', 'locationInformation'));
+  benaRegisteredVendorIDIsResolved = computed(() => this.isFieldResolved('benaRegisteredVendorID', 'locationInformation'));
+  hasLocalAgentIsResolved = computed(() => this.isFieldResolved('doYouCurrentlyHaveLocalAgentInKSA', 'locationInformation'));
+  localAgentDetailsIsResolved = computed(() => this.isFieldResolved('localAgentDetails', 'localAgentInformation'));
+  localAgentNameIsResolved = computed(() => this.isFieldResolved('localAgentName', 'localAgentInformation'));
+  contactPersonNameIsResolved = computed(() => this.isFieldResolved('contactPersonName', 'localAgentInformation'));
+  emailIDIsResolved = computed(() => this.isFieldResolved('emailID', 'localAgentInformation'));
+  contactNumberIsResolved = computed(() => this.isFieldResolved('contactNumber', 'localAgentInformation'));
+  companyLocationIsResolved = computed(() => this.isFieldResolved('companyLocation', 'localAgentInformation'));
+
   // For service details array items
   hasServiceDetailComment(index: number, fieldKey: string): boolean {
     const detailsArray = this.serviceDetailsFormArray();
@@ -343,6 +389,14 @@ export class SummarySectionOverview {
     const serviceGroup = detailsArray.at(index) as FormGroup;
     const rowId = serviceGroup.get('rowId')?.value;
     return this.hasFieldComment(fieldKey, 'serviceDetails', rowId);
+  }
+
+  isServiceDetailResolved(index: number, fieldKey: string): boolean {
+    const detailsArray = this.serviceDetailsFormArray();
+    if (!detailsArray || index >= detailsArray.length) return false;
+    const serviceGroup = detailsArray.at(index) as FormGroup;
+    const rowId = serviceGroup.get('rowId')?.value;
+    return this.isFieldResolved(fieldKey, 'serviceDetails', rowId);
   }
 
   // Helper method to get before value (original value from plan response) for a field
