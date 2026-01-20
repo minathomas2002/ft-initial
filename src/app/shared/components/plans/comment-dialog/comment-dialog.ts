@@ -25,7 +25,7 @@ export class CommentDialog implements OnInit {
   visible = model<boolean>(false);
   private readonly fb = inject(FormBuilder);
   private readonly toaster = inject(ToasterService);
-  commentFormControl = input.required<FormControl<string>>();
+  commentFormControl = input.required<FormControl<string | null>>();
   commentAdded = output();
   private commentSubmitted = signal<boolean>(false);
 
