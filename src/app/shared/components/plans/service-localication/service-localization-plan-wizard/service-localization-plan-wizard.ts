@@ -281,15 +281,31 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   commentColor = computed(() => {
-    if (this.planStore.planStatus() !== EInternalUserPlanStatus.UNDER_REVIEW) return 'orange';
-
-    // Investor (view) mode: show green when corrected fields exist.
-    if (this.isViewMode()) {
-      return this.hasAnyCorrectedFields() ? 'green' : 'orange';
+    const status = this.planStore.planStatus();
+    const isViewOrReviewMode = this.isViewMode() || this.isReviewMode();
+    
+    // If status is not UNDER_REVIEW, return orange
+    if (status !== EInternalUserPlanStatus.UNDER_REVIEW) {
+      return 'orange';
     }
-
-    // Reviewer mode: green when no comments are being added, orange otherwise.
-    return this.isAnyCommentInProgress() ? 'orange' : 'green';
+    
+    // When employee reviews (view/Review mode) and status is UNDER_REVIEW
+    if (isViewOrReviewMode) {
+      // If there are corrected fields (investor changed fields), show green
+      if (this.hasAnyCorrectedFields()) {
+        return 'green';
+      }
+      // If any comment is in progress, show orange
+      if (this.isAnyCommentInProgress()) {
+        return 'orange';
+      }
+      // No corrected fields and no comments in progress - employee just viewing, show green
+      return 'green';
+    }
+    
+    // Not in view/Review mode but status is UNDER_REVIEW (e.g., investor in resubmit mode)
+    // Show orange as default
+    return 'orange';
   });
   canApproveOrReject = computed(() => {
     return !this.hasSelectedFields() && !this.hasComments();
@@ -891,7 +907,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     if (currentMode === 'resubmit') {
       // Update planSignature with the signature from modal before building FormData
       this.planSignature.set(signature);
-      
+
       // Use buildResubmitFormData to build FormData (includes comments)
       const formData = this.buildResubmitFormData();
 
@@ -1173,7 +1189,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       correctedFields: IFieldInformation[],
       employeeComments: IPageComment[]
     ): void => {
-      const investorCommentControl = stepForm.get('investorComment') as FormControl<string> | null;
+      const investorCommentControl = stepForm.get('comment') as FormControl<string> | null;
       const investorComment = investorCommentControl?.value?.trim() || '';
 
       if (investorComment.length > 0 && correctedFields.length > 0) {
@@ -1197,18 +1213,20 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
     // Step 1 comments (Cover Page)
     const step1Form = this.serviceLocalizationFormService.step1_coverPage;
-    const step1CorrectedFields = this.step1CommentFields().filter(f => f.id);
+    // Use all fields from employee comments (not just those with IDs)
+    // IDs are only needed for FormArray items, but all highlighted fields should be included
+    const step1CorrectedFields = this.step1CommentFields();
     processStepComments(step1Form, 0, step1CorrectedFields, this.step1Comments());
 
     // Step 2 comments (Overview)
     const step2Form = this.serviceLocalizationFormService.step2_overview;
-    const step2CorrectedFields = this.step2CommentFields().filter(f => f.id);
+    const step2CorrectedFields = this.step2CommentFields();
     processStepComments(step2Form, 1, step2CorrectedFields, this.step2Comments());
 
     // Step 3 comments (Existing Saudi) - only if step is shown
     if (this.showExistingSaudiStep()) {
       const step3Form = this.serviceLocalizationFormService.step3_existingSaudi;
-      const step3CorrectedFields = this.step3CommentFields().filter(f => f.id);
+      const step3CorrectedFields = this.step3CommentFields();
       const step3Index = this.existingSaudiStepIndex() - 1; // Convert to 0-based index
       processStepComments(step3Form, step3Index, step3CorrectedFields, this.step3Comments());
     }
@@ -1216,7 +1234,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Step 4 comments (Direct Localization) - only if step is shown
     if (this.showDirectLocalizationStep()) {
       const step4Form = this.serviceLocalizationFormService.step4_directLocalization;
-      const step4CorrectedFields = this.step4CommentFields().filter(f => f.id);
+      const step4CorrectedFields = this.step4CommentFields();
       const step4Index = this.directLocalizationStepIndex() - 1; // Convert to 0-based index
       processStepComments(step4Form, step4Index, step4CorrectedFields, this.step4Comments());
     }
@@ -1253,17 +1271,44 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Convert to FormData
     const formData = convertServiceRequestToFormData(request);
 
-    // Append investor page comments as JSON string
+    // Append investor page comments as nested FormData entries
     // Comments are required by the API, so always append (even if empty array)
     const investorComments = this.collectInvestorPageComments();
-    formData.append('Comments', JSON.stringify(investorComments));
-    
+    this.appendCommentsToFormData(formData, investorComments);
+
     return formData;
   }
 
   // Implement abstract method: getResubmitPlanType
   override getResubmitPlanType(): 'product' | 'service' {
     return 'service';
+  }
+
+  /**
+   * Appends comments to FormData in nested structure format
+   * Format: Comments[index].pageTitleForTL, Comments[index].comment, Comments[index].fields[index].section, etc.
+   */
+  private appendCommentsToFormData(formData: FormData, comments: IPageComment[]): void {
+    comments.forEach((comment, commentIndex) => {
+      // Append comment-level properties
+      formData.append(`Comments[${commentIndex}].pageTitleForTL`, comment.pageTitleForTL || '');
+      formData.append(`Comments[${commentIndex}].comment`, comment.comment || '');
+
+      // Append fields array
+      if (comment.fields && comment.fields.length > 0) {
+        comment.fields.forEach((field, fieldIndex) => {
+          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].section`, field.section || '');
+          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].inputKey`, field.inputKey || '');
+          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].label`, field.label || '');
+          if (field.id) {
+            formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].id`, field.id);
+          }
+          if (field.value) {
+            formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].value`, field.value);
+          }
+        });
+      }
+    });
   }
 
   /**

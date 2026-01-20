@@ -564,7 +564,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           // Get opportunity details and update availableOpportunities for edit mode
           const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
           const isEditOrViewOrReviewOrResubmitMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review'
-          || this.planStore.wizardMode() === 'resubmit';
+            || this.planStore.wizardMode() === 'resubmit';
 
           if (opportunityId && isEditOrViewOrReviewOrResubmitMode) {
             // Chain opportunity details loading, catch errors to continue with form mapping
@@ -835,7 +835,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     if (currentMode === 'resubmit') {
       // Update planSignature with the signature from modal before building FormData
       this.planSignature.set(signature);
-      
+
       // Use buildResubmitFormData to build FormData (includes comments)
       const formData = this.buildResubmitFormData();
 
@@ -1221,10 +1221,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       correctedFields: IFieldInformation[],
       employeeComments: IPageComment[]
     ): void => {
-      const investorCommentControl = stepForm.get('investorComment') as FormControl<string> | null;
+      const investorCommentControl = stepForm.get('comment') as FormControl<string> | null;
       const investorComment = investorCommentControl?.value?.trim() || '';
+      debugger
 
-      if (investorComment.length > 0 && correctedFields.length > 0) {
+      if (investorComment.length > 0 || correctedFields.length > 0) {
         // Case 1: Investor added comments - use new investor comments
         Comments.push({
           pageTitleForTL: this.steps()[stepIndex].title,
@@ -1245,22 +1246,25 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     // Step 1 comments
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
-    const step1CorrectedFields = this.step1CommentFields().filter(f => f.id);
+    debugger
+    // Use all fields from employee comments (not just those with IDs)
+    // IDs are only needed for FormArray items, but all highlighted fields should be included
+    const step1CorrectedFields = this.step1CommentFields();
     processStepComments(step1Form, 0, step1CorrectedFields, this.step1Comments());
 
     // Step 2 comments
     const step2Form = this.productPlanFormService.step2_productPlantOverview;
-    const step2CorrectedFields = this.step2CommentFields().filter(f => f.id);
+    const step2CorrectedFields = this.step2CommentFields();
     processStepComments(step2Form, 1, step2CorrectedFields, this.step2Comments());
 
     // Step 3 comments
     const step3Form = this.productPlanFormService.step3_valueChain;
-    const step3CorrectedFields = this.step3CommentFields().filter(f => f.id);
+    const step3CorrectedFields = this.step3CommentFields();
     processStepComments(step3Form, 2, step3CorrectedFields, this.step3Comments());
 
     // Step 4 comments
     const step4Form = this.productPlanFormService.step4_saudization;
-    const step4CorrectedFields = this.step4CommentFields().filter(f => f.id);
+    const step4CorrectedFields = this.step4CommentFields();
     processStepComments(step4Form, 3, step4CorrectedFields, this.step4Comments());
 
     return Comments;
@@ -1295,17 +1299,45 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     // Convert to FormData
     const formData = convertRequestToFormData(request);
 
-    // Append investor page comments as JSON string
+    // Append investor page comments as nested FormData entries
     // Comments are required by the API, so always append (even if empty array)
     const investorComments = this.collectInvestorPageComments();
-    formData.append('Comments', JSON.stringify(investorComments));
-    
+    this.appendCommentsToFormData(formData, investorComments);
+
     return formData;
   }
 
   // Implement abstract method: getResubmitPlanType
   override getResubmitPlanType(): 'product' | 'service' {
     return 'product';
+  }
+
+  /**
+   * Appends comments to FormData in nested structure format
+   * Format: Comments[index].pageTitleForTL, Comments[index].comment, Comments[index].fields[index].section, etc.
+   */
+  private appendCommentsToFormData(formData: FormData, comments: IPageComment[]): void {
+
+    comments.forEach((comment, commentIndex) => {
+      // Append comment-level properties
+      formData.append(`Comments[${commentIndex}].pageTitleForTL`, comment.pageTitleForTL || '');
+      formData.append(`Comments[${commentIndex}].comment`, comment.comment || '');
+
+      // Append fields array
+      if (comment.fields && comment.fields.length > 0) {
+        comment.fields.forEach((field, fieldIndex) => {
+          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].section`, field.section || '');
+          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].inputKey`, field.inputKey || '');
+          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].label`, field.label || '');
+          if (field.id) {
+            formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].id`, field.id);
+          }
+          if (field.value) {
+            formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].value`, field.value);
+          }
+        });
+      }
+    });
   }
 
   /**
