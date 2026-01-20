@@ -164,6 +164,7 @@
     <p-button
       [label]="'Resubmit'"
       (click)="onSummarySubmitClick()"
+      [disabled]="!allowUserToResubmit()"
     ></p-button>
     } @else {
     <p-button

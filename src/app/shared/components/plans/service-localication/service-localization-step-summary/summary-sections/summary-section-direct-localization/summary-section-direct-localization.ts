@@ -376,11 +376,11 @@ export class SummarySectionDirectLocalization {
             case 'expectedLocalizationDate':
               return strategy.expectedLocalizationDate ?? null;
             case 'localizationApproach':
-              return strategy.localizationApproach ?? null;
+              return this.formatLocalizationApproach(strategy.localizationApproach ?? null);
             case 'localizationApproachOtherDetails':
               return strategy.otherLocalizationApproach ?? null;
             case 'location':
-              return strategy.locationType ?? null;
+              return this.formatLocation(strategy.locationType ?? null);
             case 'locationOtherDetails':
               return strategy.otherLocationType ?? null;
             case 'capexRequired':
@@ -388,7 +388,7 @@ export class SummarySectionDirectLocalization {
             case 'supervisionOversightEntity':
               return strategy.governmentSupervision ?? null;
             case 'willBeAnyProprietaryToolsSystems':
-              return strategy.hasProprietaryTools ?? null;
+              return this.formatYesNo(strategy.hasProprietaryTools ?? null);
             case 'proprietaryToolsSystemsDetails':
               return strategy.proprietaryToolsDetails ?? null;
           }
@@ -525,6 +525,8 @@ export class SummarySectionDirectLocalization {
 
   // Helper method to check if field should show diff (has before and after values and they differ)
   shouldShowDiff(fieldKey: string, section: 'localizationStrategy' | 'entityLevel' | 'serviceLevel', index?: number): boolean {
+    // Only show diff in resubmit mode
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
     // Only show diff if field has a comment
     if (index !== undefined) {
       if (section === 'localizationStrategy') {

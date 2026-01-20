@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
@@ -6,6 +6,7 @@ import { SummarySectionHeader } from '../../../../summary-section-header/summary
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
   selector: 'app-summary-section-cover-page',
@@ -22,6 +23,7 @@ export class SummarySectionCoverPage {
   correctedFieldIds = input<string[]>([]);
   originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
   onEdit = output<void>();
+  private readonly planStore = inject(PlanStore);
 
   // Form group accessors
   coverPageCompanyInformationFormGroup = computed(() => {
@@ -252,6 +254,8 @@ export class SummarySectionCoverPage {
 
   // Helper method to check if field should show diff (has before and after values and they differ)
   shouldShowDiff(fieldKey: string, index?: number): boolean {
+    // Only show diff in resubmit mode
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
     // Only show diff if field has a comment
     if (index !== undefined) {
       // For array items, check comment with rowId

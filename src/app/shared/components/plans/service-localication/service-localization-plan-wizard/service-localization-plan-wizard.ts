@@ -110,6 +110,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showExistingSaudiStep = signal(false);
   showDirectLocalizationStep = signal(false);
 
+
+
   // Comment phase signals for each step
   step1CommentPhase = signal<TCommentPhase>('none');
   step2CommentPhase = signal<TCommentPhase>('none');
@@ -515,6 +517,11 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return this.stepsWithId().map(({ id, ...step }) => step);
   });
 
+  allowUserToResubmit = computed(() => {
+    const mode = this.planStore.wizardMode();
+    return mode === 'resubmit' && this.steps().every(step => !step.commentsCount);
+  });
+
   // Memoized step indices to avoid recalculation in template
   readonly existingSaudiStepIndex = computed(() => this.getStepIndexById('existingSaudi'));
   readonly directLocalizationStepIndex = computed(() => this.getStepIndexById('directLocalization'));
@@ -648,8 +655,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       .subscribe((data) => {
         if (!data) return;
 
-        // Store original plan response for before/after comparison
-        this.originalPlanResponse.set(data);
+        if (this.isResubmitMode()) {
+          // Store original plan response for before/after comparison
+          this.originalPlanResponse.set(data);
+        }
 
         // Reset then map (ensures arrays match response)
         this.serviceLocalizationFormService.resetAllForms();

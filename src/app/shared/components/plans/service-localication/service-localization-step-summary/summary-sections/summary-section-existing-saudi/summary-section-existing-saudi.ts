@@ -243,7 +243,7 @@ export class SummarySectionExistingSaudi {
   /**
    * Convert a company type id or list of ids to human-readable labels joined by comma
    */
-  formatCompanyType(companyType: string) {
+  formatCompanyType(companyType: string | string[] | number | number[] | null) {
     if (!companyType) return null;
     const options = this.planStore.companyTypeOptions();
     if (Array.isArray(companyType)) {
@@ -259,7 +259,7 @@ export class SummarySectionExistingSaudi {
   /**
    * Convert qualification status id to label
    */
-  formatQualificationStatus(statusId: string) {
+  formatQualificationStatus(statusId: string | number | null) {
     if (!statusId) return null;
     const options = this.planStore.qualificationStatusOptions();
     const match = options.find((o) => String(o.id) === String(statusId));
@@ -269,7 +269,7 @@ export class SummarySectionExistingSaudi {
   /**
    * Convert agreement type id to label
    */
-  formatAgreementType(agreementTypeId: string) {
+  formatAgreementType(agreementTypeId: string | number | null) {
     if (!agreementTypeId) return null;
     const options = this.planStore.agreementTypeOptions();
     const match = options.find((o) => String(o.id) === String(agreementTypeId));
@@ -469,7 +469,10 @@ export class SummarySectionExistingSaudi {
 
   // Helper method to get before value (original value from plan response) for a field
   getBeforeValue(fieldKey: string, section: 'saudiCompanyDetails' | 'collaborationPartnership' | 'entityLevel' | 'serviceLevel', index?: number): any {
-    const originalPlan = this.originalPlanResponse();
+    const originalPlan = {
+      ...this.originalPlanResponse(),
+    };
+
     if (!originalPlan?.servicePlan) return null;
 
     const plan = originalPlan.servicePlan;
@@ -486,9 +489,9 @@ export class SummarySectionExistingSaudi {
             case 'benaRegisteredVendorID':
               return company.benaRegisterVendorId ?? null;
             case 'companyType':
-              return company.companyType ?? null;
+              return this.formatCompanyType(company.companyType ?? null);
             case 'qualificationStatus':
-              return company.qualificationStatus ?? null;
+              return this.formatQualificationStatus(company.qualificationStatus ? String(company.qualificationStatus) : null);
             case 'products':
               return company.products ?? null;
             case 'companyOverview':
@@ -508,7 +511,7 @@ export class SummarySectionExistingSaudi {
           const partnership = plan.partnershipModels[index];
           switch (fieldKey) {
             case 'agreementType':
-              return partnership.agreementType ?? null;
+              return this.formatAgreementType(partnership.agreementType ? String(partnership.agreementType) : null);
             case 'agreementOtherDetails':
               return partnership.otherAgreementType ?? null;
             case 'agreementSigningDate':
@@ -520,7 +523,7 @@ export class SummarySectionExistingSaudi {
             case 'summaryOfKeyAgreementClauses':
               return partnership.keyAgreementClauses ?? null;
             case 'provideAgreementCopy':
-              return partnership.agreementCopyProvided ?? null;
+              return this.formatYesNo(partnership.agreementCopyProvided ?? null);
           }
         }
         return null;
@@ -591,7 +594,14 @@ export class SummarySectionExistingSaudi {
         if (index !== undefined) {
           const details = this.saudiCompanyDetails();
           if (details[index]) {
-            return details[index][fieldKey as keyof typeof details[0]] ?? null;
+            const rawValue = details[index][fieldKey as keyof typeof details[0]] ?? null;
+            // Format enum values to match template display
+            if (fieldKey === 'companyType') {
+              return this.formatCompanyType(rawValue);
+            } else if (fieldKey === 'qualificationStatus') {
+              return this.formatQualificationStatus(rawValue);
+            }
+            return rawValue;
           }
         }
         return null;
@@ -600,7 +610,14 @@ export class SummarySectionExistingSaudi {
         if (index !== undefined) {
           const partnerships = this.collaborationPartnership();
           if (partnerships[index]) {
-            return partnerships[index][fieldKey as keyof typeof partnerships[0]] ?? null;
+            const rawValue = partnerships[index][fieldKey as keyof typeof partnerships[0]] ?? null;
+            // Format enum values to match template display
+            if (fieldKey === 'agreementType') {
+              return this.formatAgreementType(rawValue);
+            } else if (fieldKey === 'provideAgreementCopy') {
+              return this.formatYesNo(rawValue);
+            }
+            return rawValue;
           }
         }
         return null;
@@ -637,6 +654,8 @@ export class SummarySectionExistingSaudi {
 
   // Helper method to check if field should show diff (has before and after values and they differ)
   shouldShowDiff(fieldKey: string, section: 'saudiCompanyDetails' | 'collaborationPartnership' | 'entityLevel' | 'serviceLevel', index?: number): boolean {
+    // Only show diff in resubmit mode
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
     // Only show diff if field has a comment
     if (index !== undefined) {
       if (section === 'saudiCompanyDetails') {
