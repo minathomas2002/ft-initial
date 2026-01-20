@@ -375,7 +375,7 @@ export const PlanStore = signalStore(
         );
       },
 
-      /* Submit Product Localization Plan*/
+      /* Submit Service Localization Plan*/
       submitServiceLocalizationPlan(request: FormData) {
         patchState(store, { isProcessing: true, error: null });
         return planApiService.submitServiceLocalizationPlan(request).pipe(

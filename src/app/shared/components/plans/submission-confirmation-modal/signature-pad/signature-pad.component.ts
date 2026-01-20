@@ -10,7 +10,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignaturePadComponent implements AfterViewInit, OnDestroy {
-  canvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
+  canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   existingSignature = input<string | null>(null);
   onSignatureChange = output<string | null>();
 
@@ -32,6 +32,8 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
       if (existing) {
         this.currentSignature.set(existing);
         this.showCanvas.set(false);
+        // Emit the existing signature to update the form control
+        this.onSignatureChange.emit(existing);
       } else {
         // When existing signature is cleared, reset the signature pad
         this.showCanvas.set(true);
@@ -40,8 +42,11 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
         // Clear the canvas if context is available
         if (this.ctx) {
           try {
-            const canvas = this.canvasRef().nativeElement;
-            this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const canvasRef = this.canvasRef();
+            if (canvasRef) {
+              const canvas = canvasRef.nativeElement;
+              this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
           } catch (error) {
             // Canvas might not be initialized yet, ignore error
           }
@@ -49,6 +54,8 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
         this.onSignatureChange.emit(null);
         // Only reinitialize if view is ready and canvas is visible
         if (this.viewInitialized && this.showCanvas()) {
+          // Reset retry count when showing canvas again
+          this.initRetryCount = 0;
           this.scheduleInitialization();
         }
       }
@@ -57,10 +64,23 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.viewInitialized = true;
-    // Use requestAnimationFrame to ensure canvas is fully rendered
-    requestAnimationFrame(() => {
-      this.initializeCanvas();
-    });
+    
+    // Emit existing signature if present (ensures form control is updated when modal opens)
+    const existing = this.existingSignature();
+    if (existing) {
+      // Use setTimeout to ensure the output is connected
+      setTimeout(() => {
+        this.onSignatureChange.emit(existing);
+      }, 0);
+    }
+    
+    // Only initialize canvas if it's visible (showCanvas is true)
+    if (this.showCanvas()) {
+      // Use requestAnimationFrame to ensure canvas is fully rendered
+      requestAnimationFrame(() => {
+        this.initializeCanvas();
+      });
+    }
   }
 
   private scheduleInitialization(): void {
@@ -77,9 +97,27 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    // Check if canvas is visible before initializing
+    if (!this.showCanvas()) {
+      return;
+    }
+
     try {
-      const canvas = this.canvasRef().nativeElement;
-      if (!canvas || !this.showCanvas()) {
+      const canvasRef = this.canvasRef();
+      if (!canvasRef) {
+        // Canvas not yet available, retry if within limit
+        this.initRetryCount++;
+        if (this.initRetryCount < this.MAX_RETRIES) {
+          requestAnimationFrame(() => {
+            this.isInitializing = false;
+            this.initializeCanvas();
+          });
+        }
+        return;
+      }
+
+      const canvas = canvasRef.nativeElement;
+      if (!canvas) {
         return;
       }
 
@@ -143,7 +181,9 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
 
   private getCanvasCoordinates(event: MouseEvent | Touch): { x: number; y: number } | null {
     try {
-      const canvas = this.canvasRef().nativeElement;
+      const canvasRef = this.canvasRef();
+      if (!canvasRef) return null;
+      const canvas = canvasRef.nativeElement;
       if (!canvas) return null;
 
       const rect = canvas.getBoundingClientRect();
@@ -264,21 +304,22 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
   }
 
   clearSignature(): void {
-    const canvas = this.canvasRef().nativeElement;
-    if (this.ctx) {
-      // Clear using canvas internal dimensions
-      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-      this.currentSignature.set(null);
-      this.onSignatureChange.emit(null);
-    }
+    const canvasRef = this.canvasRef();
+    if (!canvasRef || !this.ctx) return;
+    const canvas = canvasRef.nativeElement;
+    // Clear using canvas internal dimensions
+    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    this.currentSignature.set(null);
+    this.onSignatureChange.emit(null);
   }
 
   changeSignature(): void {
     this.showCanvas.set(true);
     this.currentSignature.set(null);
     // Clear the canvas if context is available
-    if (this.ctx) {
-      const canvas = this.canvasRef().nativeElement;
+    const canvasRef = this.canvasRef();
+    if (this.ctx && canvasRef) {
+      const canvas = canvasRef.nativeElement;
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     this.onSignatureChange.emit(null);
@@ -290,18 +331,21 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
     this.currentSignature.set(null);
     this.showCanvas.set(true);
     // Clear the canvas if context is available
-    if (this.ctx) {
-      const canvas = this.canvasRef().nativeElement;
+    const canvasRef = this.canvasRef();
+    if (this.ctx && canvasRef) {
+      const canvas = canvasRef.nativeElement;
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     this.onSignatureChange.emit(null);
   }
 
   private saveSignature(): void {
-    const canvas = this.canvasRef().nativeElement;
+    const canvasRef = this.canvasRef();
+    if (!canvasRef || !this.ctx) return;
+    const canvas = canvasRef.nativeElement;
     // Check if canvas has any content
     // Use internal canvas dimensions for getImageData
-    const imageData = this.ctx?.getImageData(0, 0, canvas.width, canvas.height);
+    const imageData = this.ctx.getImageData(0, 0, canvas.width, canvas.height);
     const hasContent = imageData?.data.some((value, index) => {
       // Check alpha channel (every 4th value starting from index 3)
       if (index % 4 === 3) {
@@ -321,7 +365,9 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
   }
 
   private loadSignature(dataUrl: string): void {
-    const canvas = this.canvasRef().nativeElement;
+    const canvasRef = this.canvasRef();
+    if (!canvasRef || !this.ctx) return;
+    const canvas = canvasRef.nativeElement;
     const img = new Image();
     img.onload = () => {
       if (this.ctx) {

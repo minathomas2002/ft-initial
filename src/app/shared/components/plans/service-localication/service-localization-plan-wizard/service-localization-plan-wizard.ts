@@ -878,19 +878,49 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       },
     };
 
-    const formData = this.buildRequestFormData({ signature });
+    // Get plan ID if in edit or resubmit mode
+    const currentMode = this.planStore.wizardMode();
+    const currentPlanId = (currentMode === 'edit' || currentMode === 'resubmit')
+      ? (this.planStore.selectedPlanId() ?? '')
+      : '';
 
     // Set processing state
     this.isProcessing.set(true);
 
-    // Call store method to submit plan
+    // Handle submit vs resubmit
+    if (currentMode === 'resubmit') {
+      // Update planSignature with the signature from modal before building FormData
+      this.planSignature.set(signature);
+      
+      // Use buildResubmitFormData to build FormData (includes comments)
+      const formData = this.buildResubmitFormData();
+
+      // Call store method to resubmit plan
+      this.resubmitServiceLocalizationPlan(formData);
+    } else {
+      // Map form values to request structure with signature
+      const request = mapServiceLocalizationPlanFormToRequest(
+        this.serviceLocalizationFormService,
+        currentPlanId,
+        signature
+      );
+
+      // Convert request to FormData
+      const formData = convertServiceRequestToFormData(request);
+
+      // Call store method to submit plan
+      this.submitServiceLocalizationPlan(formData);
+    }
+  }
+
+  submitServiceLocalizationPlan(formData: FormData): void {
     this.planStore
       .submitServiceLocalizationPlan(formData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.toasterService.success('Service localization plan submitted successfully');
+          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.submitSuccess'));
           // Reset all forms after successful submission
           this.serviceLocalizationFormService.resetAllForms();
           // Reset wizard state
@@ -906,6 +936,33 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           this.isProcessing.set(false);
           this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
           console.error('Error submitting plan:', error);
+        },
+      });
+  }
+
+  resubmitServiceLocalizationPlan(formData: FormData): void {
+    this.planStore
+      .investorResubmitServicePlan(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.submitSuccess'));
+          // Reset all forms after successful submission
+          this.serviceLocalizationFormService.resetAllForms();
+          // Reset wizard state
+          this.activeStep.set(1);
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.showSubmissionModal.set(false);
+          this.isSubmitted.set(true);
+          // Reset wizard state in store
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
+          console.error('Error resubmitting plan:', error);
         },
       });
   }
@@ -1103,12 +1160,68 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return totalCorrected - this.updatedFieldsSet.size;
   });
 
-  // Collect investor page comments
+  // Collect investor page comments (from investorCommentControl in each step)
+  // If investor didn't add comments, use employee comments with empty comment string
+  // If investor added comments, use the new investor comments
   collectInvestorPageComments(): IPageComment[] {
-    const comments: IPageComment[] = [];
-    // Note: We'll need to access step components' investorCommentControl
-    // For now, this is a placeholder
-    return comments;
+    const Comments: IPageComment[] = [];
+
+    // Helper function to process comments for a step
+    const processStepComments = (
+      stepForm: FormGroup,
+      stepIndex: number,
+      correctedFields: IFieldInformation[],
+      employeeComments: IPageComment[]
+    ): void => {
+      const investorCommentControl = stepForm.get('investorComment') as FormControl<string> | null;
+      const investorComment = investorCommentControl?.value?.trim() || '';
+
+      if (investorComment.length > 0 && correctedFields.length > 0) {
+        // Case 1: Investor added comments - use new investor comments
+        Comments.push({
+          pageTitleForTL: this.steps()[stepIndex].title,
+          comment: investorComment,
+          fields: correctedFields,
+        });
+      } else if (employeeComments.length > 0) {
+        // Case 2: Investor didn't add comments - use employee comments with empty comment
+        employeeComments.forEach(employeeComment => {
+          Comments.push({
+            pageTitleForTL: employeeComment.pageTitleForTL,
+            comment: '', // Empty string as per requirement
+            fields: employeeComment.fields, // Keep same fields from employee comments
+          });
+        });
+      }
+    };
+
+    // Step 1 comments (Cover Page)
+    const step1Form = this.serviceLocalizationFormService.step1_coverPage;
+    const step1CorrectedFields = this.step1CommentFields().filter(f => f.id);
+    processStepComments(step1Form, 0, step1CorrectedFields, this.step1Comments());
+
+    // Step 2 comments (Overview)
+    const step2Form = this.serviceLocalizationFormService.step2_overview;
+    const step2CorrectedFields = this.step2CommentFields().filter(f => f.id);
+    processStepComments(step2Form, 1, step2CorrectedFields, this.step2Comments());
+
+    // Step 3 comments (Existing Saudi) - only if step is shown
+    if (this.showExistingSaudiStep()) {
+      const step3Form = this.serviceLocalizationFormService.step3_existingSaudi;
+      const step3CorrectedFields = this.step3CommentFields().filter(f => f.id);
+      const step3Index = this.existingSaudiStepIndex() - 1; // Convert to 0-based index
+      processStepComments(step3Form, step3Index, step3CorrectedFields, this.step3Comments());
+    }
+
+    // Step 4 comments (Direct Localization) - only if step is shown
+    if (this.showDirectLocalizationStep()) {
+      const step4Form = this.serviceLocalizationFormService.step4_directLocalization;
+      const step4CorrectedFields = this.step4CommentFields().filter(f => f.id);
+      const step4Index = this.directLocalizationStepIndex() - 1; // Convert to 0-based index
+      processStepComments(step4Form, step4Index, step4CorrectedFields, this.step4Comments());
+    }
+
+    return Comments;
   }
 
   // Implement abstract method: canInvestorSubmit
@@ -1141,11 +1254,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const formData = convertServiceRequestToFormData(request);
 
     // Append investor page comments as JSON string
+    // Comments are required by the API, so always append (even if empty array)
     const investorComments = this.collectInvestorPageComments();
-    if (investorComments.length > 0) {
-      formData.append('comments', JSON.stringify(investorComments));
-    }
-
+    formData.append('Comments', JSON.stringify(investorComments));
+    
     return formData;
   }
 

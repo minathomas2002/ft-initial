@@ -563,9 +563,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
           // Get opportunity details and update availableOpportunities for edit mode
           const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-          const isEditOrViewOrReviewMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review';
+          const isEditOrViewOrReviewOrResubmitMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review'
+          || this.planStore.wizardMode() === 'resubmit';
 
-          if (opportunityId && isEditOrViewOrReviewMode) {
+          if (opportunityId && isEditOrViewOrReviewOrResubmitMode) {
             // Chain opportunity details loading, catch errors to continue with form mapping
             return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
               .pipe(
@@ -821,23 +822,42 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       },
     };
 
-    // Get plan ID if in edit mode
-    const currentPlanId = this.planStore.wizardMode() === 'edit' ? (this.planStore.selectedPlanId() ?? '') : '';
-
-    // Map form values to request structure with signature
-    const request = mapProductLocalizationPlanFormToRequest(
-      this.productPlanFormService,
-      currentPlanId,
-      signature
-    );
-
-    // Convert request to FormData
-    const formData = convertRequestToFormData(request);
+    // Get plan ID if in edit or resubmit mode
+    const currentMode = this.planStore.wizardMode();
+    const currentPlanId = (currentMode === 'edit' || currentMode === 'resubmit')
+      ? (this.planStore.selectedPlanId() ?? '')
+      : '';
 
     // Set processing state
     this.isProcessing.set(true);
 
-    // Call store method to submit plan
+    // Handle submit vs resubmit
+    if (currentMode === 'resubmit') {
+      // Update planSignature with the signature from modal before building FormData
+      this.planSignature.set(signature);
+      
+      // Use buildResubmitFormData to build FormData (includes comments)
+      const formData = this.buildResubmitFormData();
+
+      // Call store method to resubmit plan
+      this.resubmitProductLocalizationPlan(formData);
+    } else {
+      // Map form values to request structure with signature
+      const request = mapProductLocalizationPlanFormToRequest(
+        this.productPlanFormService,
+        currentPlanId,
+        signature
+      );
+
+      // Convert request to FormData
+      const formData = convertRequestToFormData(request);
+
+      // Call store method to submit plan
+      this.submitProductLocalizationPlan(formData);
+    }
+  }
+
+  submitProductLocalizationPlan(formData: FormData): void {
     this.planStore.submitProductLocalizationPlan(formData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -859,6 +879,32 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           this.isProcessing.set(false);
           this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
           console.error('Error submitting plan:', error);
+        }
+      });
+  }
+
+  resubmitProductLocalizationPlan(formData: FormData): void {
+    this.planStore.investorResubmitProductPlan(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.submitSuccess'));
+          // Reset all forms after successful submission
+          this.productPlanFormService.resetAllForms();
+          // Reset wizard state
+          this.activeStep.set(1);
+          this.doRefresh.emit();
+          this.visibility.set(false);
+          this.showSubmissionModal.set(false);
+          this.isSubmitted.set(true);
+          // Reset wizard state in store
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
+          console.error('Error resubmitting plan:', error);
         }
       });
   }
@@ -1163,67 +1209,61 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   // Collect investor page comments (from investorCommentControl in each step)
+  // If investor didn't add comments, use employee comments with empty comment string
+  // If investor added comments, use the new investor comments
   collectInvestorPageComments(): IPageComment[] {
-    const comments: IPageComment[] = [];
+    const Comments: IPageComment[] = [];
 
-    // Step 1 investor comments
+    // Helper function to process comments for a step
+    const processStepComments = (
+      stepForm: FormGroup,
+      stepIndex: number,
+      correctedFields: IFieldInformation[],
+      employeeComments: IPageComment[]
+    ): void => {
+      const investorCommentControl = stepForm.get('investorComment') as FormControl<string> | null;
+      const investorComment = investorCommentControl?.value?.trim() || '';
+
+      if (investorComment.length > 0 && correctedFields.length > 0) {
+        // Case 1: Investor added comments - use new investor comments
+        Comments.push({
+          pageTitleForTL: this.steps()[stepIndex].title,
+          comment: investorComment,
+          fields: correctedFields,
+        });
+      } else if (employeeComments.length > 0) {
+        // Case 2: Investor didn't add comments - use employee comments with empty comment
+        employeeComments.forEach(employeeComment => {
+          Comments.push({
+            pageTitleForTL: employeeComment.pageTitleForTL,
+            comment: '', // Empty string as per requirement
+            fields: employeeComment.fields, // Keep same fields from employee comments
+          });
+        });
+      }
+    };
+
+    // Step 1 comments
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
-    const step1InvestorCommentControl = step1Form.get('investorComment') as FormControl<string> | null;
-    if (step1InvestorCommentControl?.value && step1InvestorCommentControl.value.trim().length > 0) {
-      // Get selected inputs from step1 (fields that investor has corrected)
-      const correctedFields = this.step1CommentFields().filter(f => f.id);
-      if (correctedFields.length > 0) {
-        comments.push({
-          pageTitleForTL: this.steps()[0].title,
-          comment: step1InvestorCommentControl.value.trim(),
-          fields: correctedFields,
-        });
-      }
-    }
+    const step1CorrectedFields = this.step1CommentFields().filter(f => f.id);
+    processStepComments(step1Form, 0, step1CorrectedFields, this.step1Comments());
 
-    // Step 2 investor comments
+    // Step 2 comments
     const step2Form = this.productPlanFormService.step2_productPlantOverview;
-    const step2InvestorCommentControl = step2Form.get('investorComment') as FormControl<string> | null;
-    if (step2InvestorCommentControl?.value && step2InvestorCommentControl.value.trim().length > 0) {
-      const correctedFields = this.step2CommentFields().filter(f => f.id);
-      if (correctedFields.length > 0) {
-        comments.push({
-          pageTitleForTL: this.steps()[1].title,
-          comment: step2InvestorCommentControl.value.trim(),
-          fields: correctedFields,
-        });
-      }
-    }
+    const step2CorrectedFields = this.step2CommentFields().filter(f => f.id);
+    processStepComments(step2Form, 1, step2CorrectedFields, this.step2Comments());
 
-    // Step 3 investor comments
+    // Step 3 comments
     const step3Form = this.productPlanFormService.step3_valueChain;
-    const step3InvestorCommentControl = step3Form.get('investorComment') as FormControl<string> | null;
-    if (step3InvestorCommentControl?.value && step3InvestorCommentControl.value.trim().length > 0) {
-      const correctedFields = this.step3CommentFields().filter(f => f.id);
-      if (correctedFields.length > 0) {
-        comments.push({
-          pageTitleForTL: this.steps()[2].title,
-          comment: step3InvestorCommentControl.value.trim(),
-          fields: correctedFields,
-        });
-      }
-    }
+    const step3CorrectedFields = this.step3CommentFields().filter(f => f.id);
+    processStepComments(step3Form, 2, step3CorrectedFields, this.step3Comments());
 
-    // Step 4 investor comments
+    // Step 4 comments
     const step4Form = this.productPlanFormService.step4_saudization;
-    const step4InvestorCommentControl = step4Form.get('investorComment') as FormControl<string> | null;
-    if (step4InvestorCommentControl?.value && step4InvestorCommentControl.value.trim().length > 0) {
-      const correctedFields = this.step4CommentFields().filter(f => f.id);
-      if (correctedFields.length > 0) {
-        comments.push({
-          pageTitleForTL: this.steps()[3].title,
-          comment: step4InvestorCommentControl.value.trim(),
-          fields: correctedFields,
-        });
-      }
-    }
+    const step4CorrectedFields = this.step4CommentFields().filter(f => f.id);
+    processStepComments(step4Form, 3, step4CorrectedFields, this.step4Comments());
 
-    return comments;
+    return Comments;
   }
 
   // Implement abstract method: canInvestorSubmit
@@ -1256,11 +1296,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const formData = convertRequestToFormData(request);
 
     // Append investor page comments as JSON string
+    // Comments are required by the API, so always append (even if empty array)
     const investorComments = this.collectInvestorPageComments();
-    if (investorComments.length > 0) {
-      formData.append('comments', JSON.stringify(investorComments));
-    }
-
+    formData.append('Comments', JSON.stringify(investorComments));
+    
     return formData;
   }
 

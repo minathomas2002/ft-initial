@@ -156,9 +156,14 @@
       [disabled]="!canApproveOrReject()"
       (click)="onApproveAndForward()"
     ></p-button>
+    } @else if (isResubmitMode()) {
+    <p-button
+      [label]="'Resubmit'"
+      (click)="onSummarySubmitClick()"
+    ></p-button>
     } @else {
     <p-button
-      label="Submit"
+      [label]="'Submit'"
       (click)="onSummarySubmitClick()"
     ></p-button>
     }

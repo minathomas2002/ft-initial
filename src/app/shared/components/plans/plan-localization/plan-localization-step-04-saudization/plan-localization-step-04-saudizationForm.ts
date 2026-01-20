@@ -271,25 +271,65 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { inputKey, id: rowId } = field;
 
-    if (!rowId) return null;
+    if (!rowId) {
+      return null;
+    }
 
-    // Saudization uses year-based form groups
-    // Try to find the control in year form groups
     const saudizationFormGroup = this.getSaudizationFormGroup();
-    if (!saudizationFormGroup) return null;
+    if (!saudizationFormGroup) {
+      return null;
+    }
 
-    // Iterate through year form groups (year1, year2, etc.)
-    for (let year = 1; year <= 7; year++) {
+    const { baseControlName, yearNumber } = this.parseSaudizationInputKey(inputKey);
+    const yearsToCheck = this.getYearsToCheck(yearNumber);
+
+    return this.findControlInYears(saudizationFormGroup, yearsToCheck, baseControlName, rowId);
+  }
+
+  /**
+   * Parses the saudization input key to extract base control name and year number.
+   * Input key format: "controlName_yearX" (e.g., "annualHeadcount_year1")
+   */
+  private parseSaudizationInputKey(inputKey: string): { baseControlName: string; yearNumber: number | null } {
+    const yearMatch = inputKey.match(/_year(\d+)$/);
+    const baseControlName = yearMatch ? inputKey.replace(/_year\d+$/, '') : inputKey;
+    const yearNumber = yearMatch ? parseInt(yearMatch[1], 10) : null;
+
+    return { baseControlName, yearNumber };
+  }
+
+  /**
+   * Gets the list of years to check based on the year number.
+   * If yearNumber is provided, check only that year; otherwise check all years (1-7).
+   */
+  private getYearsToCheck(yearNumber: number | null): number[] {
+    return yearNumber ? [yearNumber] : [1, 2, 3, 4, 5, 6, 7];
+  }
+
+  /**
+   * Finds the control in the specified years by matching base control name and rowId.
+   */
+  private findControlInYears(
+    saudizationFormGroup: FormGroup,
+    yearsToCheck: number[],
+    baseControlName: string,
+    rowId: string
+  ): FormControl<any> | null {
+    for (const year of yearsToCheck) {
       const yearGroup = saudizationFormGroup.get(`year${year}`);
-      if (yearGroup instanceof FormGroup) {
-        // Check each row in this year group
-        const rowControl = yearGroup.get(rowId);
-        if (rowControl instanceof FormGroup) {
-          const fieldControl = rowControl.get(inputKey);
-          if (fieldControl) {
-            return this.getValueControl(fieldControl);
-          }
-        }
+      if (!(yearGroup instanceof FormGroup)) {
+        continue;
+      }
+
+      const rowControl = yearGroup.get(baseControlName);
+      if (!(rowControl instanceof FormGroup)) {
+        continue;
+      }
+
+      // Check if the rowId matches (rowId is stored as a value in the rowControl)
+      const controlRowId = rowControl.get('rowId')?.value;
+      if (controlRowId === rowId) {
+        return this.getValueControl(rowControl);
       }
     }
 

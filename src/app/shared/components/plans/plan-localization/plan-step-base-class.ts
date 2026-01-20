@@ -1,5 +1,5 @@
 import { computed, effect, inject, OnInit, signal, InputSignal, ModelSignal, Directive } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
@@ -125,49 +125,172 @@ export abstract class PlanStepBaseClass {
       const currentLength = correctedFields?.length ?? 0;
       const previousLength = this.previousCorrectedFieldsLength();
 
-      // Only process if we're in resubmit mode
-      if (isResubmit) {
-        // Process if this is the first time (previousLength === -1) or if correctedFields changed
-        if (previousLength === -1 || currentLength !== previousLength) {
-          // Store original values for before/after comparison
-          if (correctedFields && correctedFields.length > 0) {
-            this.storeOriginalValues(correctedFields);
-          }
-
-          // Disable all controls first
-          formGroup.disable({ emitEvent: false });
-          console.log(correctedFields);
-
-          // Enable only corrected fields
-          if (correctedFields && correctedFields.length > 0) {
-            correctedFields.forEach(field => {
-              const control = this.getControlForField(field);
-              console.log(control);
-              if (control) {
-                control.enable({ emitEvent: false });
-                control.markAsPristine();
-                control.markAsUntouched();
-
-                // Subscribe to status changes to track when field becomes valid
-                control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-                  if (control.status === 'VALID') {
-                    this.upDateSelectedInputs(false, field);
-                  }
-                });
-              }
-            });
-          }
-
-          // Update the tracked length
-          this.previousCorrectedFieldsLength.set(currentLength);
-        }
-      } else {
+      if (!isResubmit) {
         // Reset tracking when not in resubmit mode
         if (previousLength !== -1) {
           this.previousCorrectedFieldsLength.set(-1);
         }
+        return;
+      }
+
+      // Process if this is the first time (previousLength === -1) or if correctedFields changed
+      if (previousLength === -1 || currentLength !== previousLength) {
+        this.handleResubmitModeFields(formGroup, correctedFields);
+        this.previousCorrectedFieldsLength.set(currentLength);
       }
     });
+  }
+
+  /**
+   * Handles enabling/disabling controls for resubmit mode based on corrected fields.
+   */
+  private handleResubmitModeFields(formGroup: FormGroup, correctedFields: IFieldInformation[]): void {
+    // Store original values for before/after comparison
+    if (correctedFields?.length > 0) {
+      this.storeOriginalValues(correctedFields);
+    }
+
+    // Disable all controls first
+    formGroup.disable({ emitEvent: false });
+
+    if (!correctedFields?.length) {
+      return;
+    }
+
+    // Collect enabled controls and their parent chains
+    const { enabledControls, enabledParentChains } = this.collectEnabledControls(correctedFields);
+
+    // Enable parent chains and controls
+    this.enableCorrectedFields(enabledParentChains, correctedFields);
+
+    // Disable siblings that don't have enabled descendants
+    this.disableUnselectedSiblings(enabledParentChains, enabledControls);
+  }
+
+  /**
+   * Collects all controls and their parent chains that should be enabled.
+   */
+  private collectEnabledControls(
+    correctedFields: IFieldInformation[]
+  ): {
+    enabledControls: Set<AbstractControl>;
+    enabledParentChains: Map<AbstractControl, AbstractControl[]>;
+  } {
+    const enabledControls = new Set<AbstractControl>();
+    const enabledParentChains = new Map<AbstractControl, AbstractControl[]>();
+
+    correctedFields.forEach(field => {
+      const control = this.getControlForField(field);
+      if (!control) {
+        return;
+      }
+
+      const parentChain = this.buildParentChain(control);
+      parentChain.forEach(parent => enabledControls.add(parent));
+      enabledControls.add(control);
+      enabledParentChains.set(control, parentChain);
+    });
+
+    return { enabledControls, enabledParentChains };
+  }
+
+  /**
+   * Builds the parent chain for a control (from root to immediate parent).
+   */
+  private buildParentChain(control: AbstractControl): AbstractControl[] {
+    const parentChain: AbstractControl[] = [];
+    let parent: AbstractControl | null = control.parent;
+
+    while (parent) {
+      if (parent instanceof FormGroup || parent instanceof FormArray) {
+        parentChain.unshift(parent); // Add to beginning to maintain order (root to leaf)
+      }
+      parent = parent.parent;
+    }
+
+    return parentChain;
+  }
+
+  /**
+   * Enables the corrected fields and their parent chains.
+   */
+  private enableCorrectedFields(
+    enabledParentChains: Map<AbstractControl, AbstractControl[]>,
+    correctedFields: IFieldInformation[]
+  ): void {
+    enabledParentChains.forEach((parentChain, control) => {
+      // Enable parent chain
+      parentChain.forEach(parent => {
+        parent.enable({ emitEvent: false, onlySelf: true });
+      });
+
+      // Enable the control itself
+      control.enable({ emitEvent: false, onlySelf: true });
+      control.markAsPristine();
+      control.markAsUntouched();
+
+      // Subscribe to status changes to track when field becomes valid
+      control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+        if (control.status === 'VALID') {
+          const field = correctedFields.find(f => this.getControlForField(f) === control);
+          if (field) {
+            this.upDateSelectedInputs(false, field);
+          }
+        }
+      });
+    });
+  }
+
+  /**
+   * Disables siblings that don't have enabled descendants.
+   */
+  private disableUnselectedSiblings(
+    enabledParentChains: Map<AbstractControl, AbstractControl[]>,
+    enabledControls: Set<AbstractControl>
+  ): void {
+    const allParents = new Set<AbstractControl>();
+    enabledParentChains.forEach(parentChain => {
+      parentChain.forEach(parent => allParents.add(parent));
+    });
+
+    allParents.forEach(parent => {
+      if (parent instanceof FormGroup) {
+        Object.keys(parent.controls).forEach(key => {
+          const siblingControl = parent.get(key);
+          if (siblingControl && !this.hasEnabledDescendant(siblingControl, enabledControls)) {
+            siblingControl.disable({ emitEvent: false, onlySelf: true });
+          }
+        });
+      } else if (parent instanceof FormArray) {
+        parent.controls.forEach(siblingControl => {
+          if (!this.hasEnabledDescendant(siblingControl, enabledControls)) {
+            siblingControl.disable({ emitEvent: false, onlySelf: true });
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Checks if a control or any of its descendants should be enabled.
+   */
+  private hasEnabledDescendant(control: AbstractControl, enabledControls: Set<AbstractControl>): boolean {
+    if (enabledControls.has(control)) {
+      return true;
+    }
+
+    if (control instanceof FormGroup) {
+      return Object.keys(control.controls).some(key => {
+        const child = control.get(key);
+        return child ? this.hasEnabledDescendant(child, enabledControls) : false;
+      });
+    }
+
+    if (control instanceof FormArray) {
+      return control.controls.some(child => this.hasEnabledDescendant(child, enabledControls));
+    }
+
+    return false;
   }
 
   /**
@@ -317,7 +440,7 @@ export abstract class PlanStepBaseClass {
    */
   protected onSaveComment(): void {
     // Validate at least one field is selected
-    if (this.selectedInputs().length === 0) {
+    if (this.selectedInputs().length === 0 && !this.isResubmitMode()) {
       this.toasterService.error('Please select at least one field before adding a comment.');
       return;
     }
