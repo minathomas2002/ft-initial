@@ -21,6 +21,7 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-service-localization-step-direct-localization',
@@ -198,9 +199,103 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         this._servicesSynced = true;
       }
     });
+
+    // Watch for changes to willBeAnyProprietaryToolsSystems dropdown in localization strategy FormArray
+    this.setupProprietaryToolsSystemsWatcher();
   }
 
   private _servicesSynced = false;
+
+  /**
+   * Sets up watchers for willBeAnyProprietaryToolsSystems dropdown changes
+   * When value changes to "No", clears proprietaryToolsSystemsDetails field and removes it from selected inputs
+   */
+  private setupProprietaryToolsSystemsWatcher(): void {
+    effect(() => {
+      const formArray = this.getLocalizationStrategyFormArray();
+      if (!formArray || formArray.length === 0) {
+        return;
+      }
+
+      // Watch each item in the FormArray
+      formArray.controls.forEach((itemControl, index) => {
+        if (!(itemControl instanceof FormGroup)) return;
+
+        const willBeAnyControl = itemControl.get(`${EMaterialsFormControls.willBeAnyProprietaryToolsSystems}.${EMaterialsFormControls.value}`);
+        if (!willBeAnyControl) return;
+
+        // Subscribe to value changes
+        willBeAnyControl.valueChanges
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((value) => {
+            this.handleProprietaryToolsSystemsChange(itemControl, value, index);
+          });
+      });
+    });
+  }
+
+  /**
+   * Handles changes to willBeAnyProprietaryToolsSystems dropdown
+   * @param itemControl The FormGroup item from the FormArray
+   * @param value The new value of the dropdown
+   * @param index The index of the item in the FormArray
+   */
+  private handleProprietaryToolsSystemsChange(itemControl: FormGroup, value: any, index: number): void {
+    // Ensure the willBeAnyProprietaryToolsSystems control value is properly set
+    const willBeAnyControl = itemControl.get(`${EMaterialsFormControls.willBeAnyProprietaryToolsSystems}.${EMaterialsFormControls.value}`);
+    if (willBeAnyControl && willBeAnyControl.value !== value) {
+      willBeAnyControl.setValue(value, { emitEvent: false });
+    }
+
+    // Check if value is "No"
+    const isNo = value === EYesNo.No || 
+                 value === EYesNo.No.toString() || 
+                 value === 'No' || 
+                 value === 'no' ||
+                 value === false || 
+                 value === 'false' ||
+                 value === 2; // EYesNo.No = 2
+
+    if (isNo) {
+      // Get the proprietaryToolsSystemsDetails control
+      const detailsControl = itemControl.get(`${EMaterialsFormControls.proprietaryToolsSystemsDetails}.${EMaterialsFormControls.value}`);
+      if (detailsControl) {
+        // Clear the value
+        detailsControl.reset();
+        // Clear validation errors
+        detailsControl.clearValidators();
+        detailsControl.updateValueAndValidity({ emitEvent: false });
+      }
+
+      // Remove proprietaryToolsSystemsDetails from selected inputs if it was selected
+      const inputKey = `proprietaryToolsSystemsDetails_${index}`;
+      const currentSelectedInputs = this.selectedInputs();
+      const updatedSelectedInputs = currentSelectedInputs.filter(
+        input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
+      );
+      
+      if (updatedSelectedInputs.length !== currentSelectedInputs.length) {
+        this.selectedInputs.set(updatedSelectedInputs);
+      }
+
+      // Reset hasComment control for proprietaryToolsSystemsDetails
+      const detailsHasCommentControl = itemControl.get(`${EMaterialsFormControls.proprietaryToolsSystemsDetails}.${EMaterialsFormControls.hasComment}`);
+      if (detailsHasCommentControl instanceof FormControl) {
+        detailsHasCommentControl.setValue(false, { emitEvent: false });
+      }
+
+      // Toggle validation using the form service
+      this.planFormService.toggleProprietaryToolsSystemsDetailsValidation(value, index);
+    } else {
+      // If value is "Yes", ensure validation is set correctly
+      this.planFormService.toggleProprietaryToolsSystemsDetailsValidation(value, index);
+    }
+
+    // Mark the form control as dirty to ensure change detection
+    if (willBeAnyControl) {
+      willBeAnyControl.markAsDirty();
+    }
+  }
 
   getLocalizationStrategyFormArray(): FormArray {
     return this.planFormService?.directLocalizationServiceLevelFormGroup ?? new FormArray<any>([]);
