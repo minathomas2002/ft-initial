@@ -572,6 +572,8 @@ export class SummarySectionExistingSaudi {
 
   // Helper method to check if field should show diff (has before and after values and they differ)
   shouldShowDiff(fieldKey: string, section: 'saudiCompanyDetails' | 'collaborationPartnership' | 'entityLevel' | 'serviceLevel', index?: number): boolean {
+    // Only show diff in resubmit mode
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
     // Only show diff if field has a comment
     if (index !== undefined) {
       if (section === 'saudiCompanyDetails') {

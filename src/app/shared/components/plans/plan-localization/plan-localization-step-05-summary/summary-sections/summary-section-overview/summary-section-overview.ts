@@ -6,6 +6,7 @@ import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
 import { IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 @Component({
   selector: 'app-summary-section-overview',
@@ -24,6 +25,7 @@ export class SummarySectionOverview {
   originalPlanResponse = input<IProductPlanResponse | null>(null);
   onEdit = output<void>();
   private datePipe = inject(DatePipe);
+  private readonly planStore = inject(PlanStore);
 
 
   // Form group accessors
@@ -255,6 +257,8 @@ export class SummarySectionOverview {
 
   // Helper method to check if field should show diff (has before and after values and they differ)
   shouldShowDiff(fieldKey: string): boolean {
+    // Only show diff in resubmit mode
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
     // Only show diff if field has a comment
     if (!this.hasFieldComment(fieldKey)) return false;
 
