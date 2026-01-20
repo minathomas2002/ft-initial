@@ -10,10 +10,14 @@ export class SlaCountdownNounPipe implements PipeTransform {
 	private readonly i18nService = inject(I18nService);
 	private readonly cdr = inject(ChangeDetectorRef);
 
-	transform(numberInDays: number): string {
+	transform(numberInDays: number | null): string {
 		// Mark for check to ensure updates when language changes
 		this.i18nService.currentLanguage();
 		this.cdr.markForCheck();
+
+		if (!numberInDays) {
+			return '-';
+		}
 
 		const absoluteValue = Math.abs(numberInDays);
 		let noun: string;
