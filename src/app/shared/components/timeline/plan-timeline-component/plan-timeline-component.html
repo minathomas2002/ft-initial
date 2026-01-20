@@ -1,12 +1,17 @@
 <app-timeline [events]="events()">
-  <ng-template #timelineTemplate let-item="item">
+  <ng-template
+    #timelineTemplate
+    let-item="item"
+  >
     <div class="flex flex-col gap-2">
       <!-- status and date -->
       <div class="flex justify-between items-start">
 
         <!-- Status -->
-        <app-base-tag [value]="getStatusLabel(item.item.status)"
-          [color]="getStatusBadgeColor(item.item.status)"></app-base-tag>
+        <app-base-tag
+          [value]="getStatusLabel(item.item.status)"
+          [color]="getStatusBadgeColor(item.item.status)"
+        ></app-base-tag>
 
         <!-- Date & Days -->
         <div class="">
@@ -28,8 +33,11 @@
 
       <!-- user card -->
       <div>
-        <app-identify-user [userAvatar]="item.item.profilePicURL" [userName]="item.item.actionByNameEn"
-          [userRole]="getUserTranslatedRole(item.item.actorRole)">
+        <app-identify-user
+          [userAvatar]="item.item.profilePicURL"
+          [userName]="item.item.actionByNameEn"
+          [userRole]="getUserTranslatedRole(item.item.actorRole)"
+        >
         </app-identify-user>
       </div>
 
@@ -48,14 +56,20 @@
       <div class="mt-2">
         <label class="block text-sm text-[#414651] font-medium mb-1">
           @if (planApprovedActionsEnum.includes(item.item.actionType)) {
-            Approved Note
+          Approved Note
           } @else if (planRejectedActionsEnum.includes(item.item.actionType)) {
-            Rejected Reason
+          Rejected Reason
           } @else {
-            Note
+          Note
           }
         </label>
-        <input class="p-inputtext w-full bg-gray-100" [value]="item.item.reason" disabled />
+        <textarea
+          pTextarea
+          [value]="item.item.reason"
+          disabled
+          rows="3"
+          fluid
+        ></textarea>
       </div>
       }
 
@@ -70,13 +84,22 @@
 
         <div class="mt-1">
           <label class="block text-sm text-[#414651] font-medium mb-1">Comment</label>
-          <input class="p-inputtext w-full bg-gray-100" [value]="comment.comment" disabled />
+          <textarea
+            pTextarea
+            [value]="comment.comment"
+            disabled
+            rows="3"
+            fluid
+          ></textarea>
         </div>
 
         @if (comment.fields?.length > 0) {
         <div class="mt-2 flex gap-2 flex-wrap">
           @for (field of comment.fields; track field) {
-          <app-base-tag [value]="(field.section | camelCaseToWord) + ' - ' + field.label" [color]="'fadedBlue'"></app-base-tag>
+          <app-base-tag
+            [value]="(field.section | camelCaseToWord) + ' - ' + field.label"
+            [color]="'fadedBlue'"
+          ></app-base-tag>
           }
         </div>
         }
