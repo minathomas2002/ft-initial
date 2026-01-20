@@ -323,11 +323,11 @@ export class SummarySectionDirectLocalization {
             case 'expectedLocalizationDate':
               return strategy.expectedLocalizationDate ?? null;
             case 'localizationApproach':
-              return strategy.localizationApproach ?? null;
+              return this.formatLocalizationApproach(strategy.localizationApproach ?? null);
             case 'localizationApproachOtherDetails':
               return strategy.otherLocalizationApproach ?? null;
             case 'location':
-              return strategy.locationType ?? null;
+              return this.formatLocation(strategy.locationType ?? null);
             case 'locationOtherDetails':
               return strategy.otherLocationType ?? null;
             case 'capexRequired':
@@ -335,7 +335,7 @@ export class SummarySectionDirectLocalization {
             case 'supervisionOversightEntity':
               return strategy.governmentSupervision ?? null;
             case 'willBeAnyProprietaryToolsSystems':
-              return strategy.hasProprietaryTools ?? null;
+              return this.formatYesNo(strategy.hasProprietaryTools ?? null);
             case 'proprietaryToolsSystemsDetails':
               return strategy.proprietaryToolsDetails ?? null;
           }
