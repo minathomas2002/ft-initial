@@ -15,7 +15,7 @@ export class SlaCountdownNounPipe implements PipeTransform {
 		this.i18nService.currentLanguage();
 		this.cdr.markForCheck();
 
-		if (!numberInDays) {
+		if (numberInDays == null) {
 			return '-';
 		}
 
