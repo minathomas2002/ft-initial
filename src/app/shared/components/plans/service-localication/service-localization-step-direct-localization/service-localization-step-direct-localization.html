@@ -10,6 +10,7 @@
       [scrollHeight]="'600px'"
       [excludeKeys]="['serviceId', 'serviceHeadcountRowId','serviceLevelLocalizationDate', 'localizationApproachOtherDetails', 'locationOtherDetails', 'proprietaryToolsSystemsDetails', 'firstYear_headcount', 'firstYear_saudization', 'secondYear_headcount', 'secondYear_saudization', 'thirdYear_headcount', 'thirdYear_saudization', 'fourthYear_headcount', 'fourthYear_saudization', 'fifthYear_headcount', 'fifthYear_saudization', 'keyMeasuresToUpskillSaudis', 'mentionSupportRequiredFromSEC']"
       [customHeaderLabels]="{'locationType': 'Location'}"
+      [headerTooltips]="localizationStrategyHeaderTooltips()"
     >
       <ng-template
         #itemTemplate
