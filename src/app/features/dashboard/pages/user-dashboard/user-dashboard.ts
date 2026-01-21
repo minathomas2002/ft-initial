@@ -127,7 +127,7 @@ export class UserDashboard implements OnInit {
 
     baseHeaders.push(
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'planType' },
+      { label: 'Opportunity Type', isSortable: false, sortingKey: 'planType' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' }
     );
 
