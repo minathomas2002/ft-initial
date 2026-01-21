@@ -91,7 +91,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, numeric only
       }),
-      [EMaterialsFormControls.supervisionOversightEntity]: this.fb.group({
+      [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: ['', [Validators.maxLength(255)]], // Optional
       }),

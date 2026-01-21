@@ -161,11 +161,12 @@ export enum EMaterialsFormControls {
   provideAgreementCopy = 'provideAgreementCopy',
 
   // Service Plan - Step 3 (Existing Saudi Co.) - Collaboration/Partnership Controls
-  agreementType = 'agreementType',
+  agreementType = 'agreementTypeWithSaudiCompany',
   agreementOtherDetails = 'agreementOtherDetails',
   agreementSigningDate = 'agreementSigningDate',
   supervisionOversightEntity = 'supervisionOversightEntity',
-  whyChoseThisCompany = 'whyChoseThisCompany',
+  supervisionOversightByGovernmentEntity = 'Supervision / OversightByGovernmentEntity',
+  whyChoseThisCompany = 'WhyDidYouChoseThisParticularSaudiCompanyAsYourPartner',
   summaryOfKeyAgreementClauses = 'summaryOfKeyAgreementClauses',
   agreementCopy = 'agreementCopy',
 
@@ -192,7 +193,7 @@ export enum EMaterialsFormControls {
   localizationApproachOtherDetails = 'localizationApproachOtherDetails',
   location = 'locationType',
   locationOtherDetails = 'locationOtherDetails',
-  capexRequired = 'capexRequired',
+  capexRequired = 'capexRequired (InSAR)',
   willBeAnyProprietaryToolsSystems = 'willBeAnyProprietaryToolsSystems',
   proprietaryToolsSystemsDetails = 'proprietaryToolsSystemsDetails',
 }

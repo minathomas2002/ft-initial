@@ -5,7 +5,6 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
-import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
@@ -147,7 +146,7 @@ export class SummarySectionDirectLocalization {
         location: this.formatLocation(getValueFromControl(EMaterialsFormControls.location)),
         locationOther: getValueFromControl(EMaterialsFormControls.locationOtherDetails),
         capexRequired: getValueFromControl(EMaterialsFormControls.capexRequired),
-        supervisionOversight: getValueFromControl(EMaterialsFormControls.supervisionOversightEntity),
+        supervisionOversight: getValueFromControl(EMaterialsFormControls.supervisionOversightByGovernmentEntity),
         proprietaryTools: this.formatYesNo(
           getValueFromControl(EMaterialsFormControls.willBeAnyProprietaryToolsSystems)
         ),
@@ -385,7 +384,7 @@ export class SummarySectionDirectLocalization {
               return strategy.otherLocationType ?? null;
             case 'capexRequired':
               return strategy.capexRequired ?? null;
-            case 'supervisionOversightEntity':
+            case 'supervisionOversightByGovernmentEntity':
               return strategy.governmentSupervision ?? null;
             case 'willBeAnyProprietaryToolsSystems':
               return this.formatYesNo(strategy.hasProprietaryTools ?? null);
@@ -480,7 +479,7 @@ export class SummarySectionDirectLocalization {
                 return strategy.locationOther ?? null;
               case 'capexRequired':
                 return strategy.capexRequired ?? null;
-              case 'supervisionOversightEntity':
+              case 'supervisionOversightByGovernmentEntity':
                 return strategy.supervisionOversight ?? null;
               case 'willBeAnyProprietaryToolsSystems':
                 return strategy.proprietaryTools ?? null;
