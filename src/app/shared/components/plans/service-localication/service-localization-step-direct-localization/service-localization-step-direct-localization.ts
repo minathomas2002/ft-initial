@@ -70,6 +70,12 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
   });
 
+  localizationStrategyHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
+    return {
+      [EMaterialsFormControls.willBeAnyProprietaryToolsSystems]: 'mention if any proprietary tools / platforms / systems etc. will be transferred locally as part of localizing the service? If yes, provide details',
+    }
+  });
+
   // Handle start editing for investor comment
   onStartEditing(): void {
     if (this.isResubmitMode()) {
@@ -248,13 +254,13 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     }
 
     // Check if value is "No"
-    const isNo = value === EYesNo.No || 
-                 value === EYesNo.No.toString() || 
-                 value === 'No' || 
-                 value === 'no' ||
-                 value === false || 
-                 value === 'false' ||
-                 value === 2; // EYesNo.No = 2
+    const isNo = value === EYesNo.No ||
+      value === EYesNo.No.toString() ||
+      value === 'No' ||
+      value === 'no' ||
+      value === false ||
+      value === 'false' ||
+      value === 2; // EYesNo.No = 2
 
     if (isNo) {
       // Get the proprietaryToolsSystemsDetails control
@@ -273,7 +279,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       const updatedSelectedInputs = currentSelectedInputs.filter(
         input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
       );
-      
+
       if (updatedSelectedInputs.length !== currentSelectedInputs.length) {
         this.selectedInputs.set(updatedSelectedInputs);
       }

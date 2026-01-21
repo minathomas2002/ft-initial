@@ -1,5 +1,13 @@
-<div class="rounded-xl" #tableWrapper>
-  <p-table [value]="rows()" [scrollable]="true" [scrollHeight]="scrollHeight()" class="rounded-xl">
+<div
+  class="rounded-xl"
+  #tableWrapper
+>
+  <p-table
+    [value]="rows()"
+    [scrollable]="true"
+    [scrollHeight]="scrollHeight()"
+    class="rounded-xl"
+  >
     <ng-template pTemplate="header">
       @if(groupHeader().length > 0) {
       <!-- First header row with group headers -->
@@ -23,22 +31,25 @@
       <!-- Second header row with year columns only (for grouped headers) -->
       <tr class="bg-gray-50">
         @for (key of secondRowKeys(); track key) {
-        <th
-          class="p-3 !border !border-gray-200 !text-center !font-medium !whitespace-nowrap !bg-gray-50 !text-gray-700"
-        >
+        <th class="p-3 !border !border-gray-200 !text-center !font-medium !whitespace-nowrap !bg-gray-50 !text-gray-700">
           <span>{{
             customHeaderLabels()[key]
-              ? customHeaderLabels()[key]
-              : key === 'keyActivity'
-              ? ('opportunity.wizard.keyActivity' | translate)
-              : (key | camelCaseToWord)
-          }}</span>@if(customTextBesideHeaders()[key]){<span class="font-light">{{ customTextBesideHeaders()[key] }}</span>}
+            ? customHeaderLabels()[key]
+            : key === 'keyActivity'
+            ? ('opportunity.wizard.keyActivity' | translate)
+            : (key | camelCaseToWord)
+            }}</span>@if(customTextBesideHeaders()[key]){<span class="font-light">{{ customTextBesideHeaders()[key] }}</span>}
           @if(headerTooltips()[key]){
           <i
             class="icon-info text-sm ms-2 text-gray-400"
-            [pTooltip]="headerTooltips()[key]"
+            [pTooltip]="tooltipContent"
             tooltipPosition="top"
           ></i>
+          <ng-template #tooltipContent>
+            <div class="flex flex-col gap-2 text-start">
+              <p>{{ headerTooltips()[key] }}</p>
+            </div>
+          </ng-template>
           }
         </th>
         }
@@ -47,9 +58,7 @@
       <!-- Default single header row when no groupHeader -->
       <tr class="bg-gray-50">
         @if(showIndexColumn()){
-        <th
-          class="p-3 !border !border-gray-200 !text-left !font-medium !whitespace-nowrap !bg-gray-50 !text-gray-700 rounded-tl-xl"
-        >
+        <th class="p-3 !border !border-gray-200 !text-left !font-medium !whitespace-nowrap !bg-gray-50 !text-gray-700 rounded-tl-xl">
           <span>{{ indexColumnLabel() }}</span>
         </th>
         } @for (key of keys(); track key) {
@@ -61,39 +70,46 @@
         >
           <span>{{
             customHeaderLabels()[key]
-              ? customHeaderLabels()[key]
-              : key === 'keyActivity'
-              ? ('opportunity.wizard.keyActivity' | translate)
-              : (key | camelCaseToWord)
-          }}</span>@if(customTextBesideHeaders()[key]){<span class="font-light">{{ customTextBesideHeaders()[key] }}</span>}
+            ? customHeaderLabels()[key]
+            : key === 'keyActivity'
+            ? ('opportunity.wizard.keyActivity' | translate)
+            : (key | camelCaseToWord)
+            }}</span>@if(customTextBesideHeaders()[key]){<span class="font-light">{{ customTextBesideHeaders()[key] }}</span>}
+          @if(headerTooltips()[key]){
           @if(headerTooltips()[key]){
           <i
             class="icon-info text-sm ms-2 text-gray-400"
-            [pTooltip]="headerTooltips()[key]"
+            [pTooltip]="tooltipContent"
             tooltipPosition="top"
           ></i>
+          <ng-template #tooltipContent>
+            <div class="flex flex-col gap-2 text-start">
+              <p>{{ headerTooltips()[key] }}</p>
+            </div>
+          </ng-template>
+          }
           }
         </th>
         }
-        <th
-          class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700 rounded-tr-xl"
-        ></th>
+        <th class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700 rounded-tr-xl"></th>
       </tr>
       }
     </ng-template>
-    <ng-template pTemplate="body" let-object let-rowIndex="rowIndex">
+    <ng-template
+      pTemplate="body"
+      let-object
+      let-rowIndex="rowIndex"
+    >
       <tr #tableRow>
         @if (itemTemplate) {
-        <ng-container
-          *ngTemplateOutlet="
+        <ng-container *ngTemplateOutlet="
             itemTemplate;
             context: {
               $implicit: getItemControl(rowIndex)!,
               index: rowIndex,
               itemValue: object
             }
-          "
-        ></ng-container>
+          "></ng-container>
         <td class="!p-3 !border !border-gray-200 !text-center">
           @if(!hideDeleteButton()){ @if(rowIndex > 0 || rows().length > 1){
           <p-button
