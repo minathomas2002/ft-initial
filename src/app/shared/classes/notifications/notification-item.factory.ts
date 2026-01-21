@@ -1,7 +1,7 @@
-import { INotification, INotificationItem } from "src/app/core/layouts/main-layout/models/notifications.interface";
-import { EPlanAction, ERoles, ERoutes } from "../../enums";
-
-export type NotificationBehavior = 'planDetails' | null;
+import { INotification, INotificationItem, INotificationParams, NotificationBehavior } from "src/app/core/layouts/main-layout/models/notifications.interface";
+import { EOpportunityAction, EPlanAction, ERoles, ERoutes } from "../../enums";
+import { ENotificationCategory } from "src/app/shared/enums/notificationSetting.enum";
+import { safeJsonParse } from "src/app/shared/utils/safe-parse-json";
 
 class BaseNotificationParams {
   route: string[] = [];
@@ -11,6 +11,9 @@ class BaseNotificationParams {
 
 export class NotificationItemFactory {
   static create(notification: INotification, userRole: ERoles): INotificationItem {
+
+    notification = {...notification, customData: safeJsonParse(notification.customData)}
+
     const internalUsersRoles: ERoles[] = [
       ERoles.DEPARTMENT_MANAGER,
       ERoles.Division_MANAGER,
@@ -52,7 +55,7 @@ export class NotificationItemFactory {
 class InternalUserNotificationParams extends BaseNotificationParams {
   constructor(notification: INotification) {
     super();
-    const built = buildInternalParams(notification, [ERoutes.plans]);
+    const built = buildParams(notification);
     this.route = built.route;
     this.params = built.params;
     this.behavior = built.behavior;
@@ -62,24 +65,35 @@ class InternalUserNotificationParams extends BaseNotificationParams {
 class InvestorNotificationParams extends BaseNotificationParams {
   constructor(notification: INotification) {
     super();
-    const built = buildInternalParams(notification, [ERoutes.plans]);
+    const built = buildParams(notification);
     this.route = built.route;
     this.params = built.params;
     this.behavior = built.behavior;
   }
 }
 
-function buildInternalParams(notification: INotification, defaultRoute: string[]) {
-  const parsedCustomData = safeParseCustomData(notification.customData);
-  const searchText = parsedCustomData?.PlanCode || '';
+function buildParams(notification: INotification): INotificationParams {
 
-  const action = (typeof notification.action === 'string'
-    ? Number(notification.action)
-    : notification.action) as EPlanAction;
+  if (notification.notificationCategory === ENotificationCategory.PlanWorkflow) {
+    return handlePlansNotificationFlow(notification)
+  }
+
+  if (notification.notificationCategory === ENotificationCategory.Opportunity) {
+    return handleOpportunityNotificationFlow(notification)
+  }
+
+  return {route: [], params: {}, behavior: null}
+
+}
+
+function handlePlansNotificationFlow(notification: INotification) {
+  const searchText = notification.customData?.PlanCode || '';
+  const action = notification.action as EPlanAction;
 
   const baseNavigationConfig = {
-    route: defaultRoute,
+    route: [],
     params: { searchText },
+    behavior: null,
   };
 
   const actionsToOpenPlanDetails = new Set<EPlanAction>([]);
@@ -98,27 +112,35 @@ function buildInternalParams(notification: INotification, defaultRoute: string[]
   ]);
 
   if (actionsToNavigate.has(action)) {
-    return { ...baseNavigationConfig, behavior: null };
+    return { ...baseNavigationConfig, route: [ERoutes.plans] };
   }
 
   if (actionsToOpenPlanDetails.has(action)) {
     return { ...baseNavigationConfig, behavior: 'planDetails' as const };
   }
 
-
-  return { route: [], params: {}, behavior: null };
+  return baseNavigationConfig
 }
 
-function safeParseCustomData(value: string | { PlanCode: string; }) {
-  if (typeof value === 'string') {
-    try {
-      return JSON.parse(value);
-    } catch {
-      return value;
-    }
+function handleOpportunityNotificationFlow(notification: INotification) {
+  const opportunityId = notification.customData?.Id || '';
+  const action = notification.action as EOpportunityAction;
+
+  const baseNavigationConfig = {
+    route: [],
+    params: {},
+    behavior: null,
+  };
+
+  const actionsToNavigateToOpportunity = new Set<EOpportunityAction>([
+    EOpportunityAction.Publish
+  ])
+
+  if (actionsToNavigateToOpportunity.has(action)) {
+    return {...baseNavigationConfig, route: [ERoutes.opportunities, opportunityId]}
   }
 
-  return value;
-};
+  return baseNavigationConfig
+}
 
 
