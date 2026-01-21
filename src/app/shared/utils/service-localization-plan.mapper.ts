@@ -554,7 +554,7 @@ export function mapServicePlanResponseToForm(
       setNestedValue(row, EMaterialsFormControls.location, strategy.locationType != null ? String(strategy.locationType) : null);
       setNestedValue(row, EMaterialsFormControls.locationOtherDetails, strategy.otherLocationType ?? '');
       setNestedValue(row, EMaterialsFormControls.capexRequired, strategy.capexRequired ?? null);
-      setNestedValue(row, EMaterialsFormControls.supervisionOversightEntity, strategy.governmentSupervision ?? '');
+      setNestedValue(row, EMaterialsFormControls.supervisionOversightByGovernmentEntity, strategy.governmentSupervision ?? '');
       setNestedValue(row, EMaterialsFormControls.willBeAnyProprietaryToolsSystems, toYesNoId(strategy.hasProprietaryTools));
       setNestedValue(row, EMaterialsFormControls.proprietaryToolsSystemsDetails, strategy.proprietaryToolsDetails ?? '');
     }
@@ -886,7 +886,7 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
         getControlValue(strategyGroup, EMaterialsFormControls.willBeAnyProprietaryToolsSystems)
       );
       const proprietaryToolsDetails = getControlValue(strategyGroup, EMaterialsFormControls.proprietaryToolsSystemsDetails) || undefined;
-      const governmentSupervision = getControlValue(strategyGroup, EMaterialsFormControls.supervisionOversightEntity) || undefined;
+      const governmentSupervision = getControlValue(strategyGroup, EMaterialsFormControls.supervisionOversightByGovernmentEntity) || undefined;
       const otherLocalizationApproach = getControlValue(strategyGroup, EMaterialsFormControls.localizationApproachOtherDetails) || undefined;
       const otherLocationType = getControlValue(strategyGroup, EMaterialsFormControls.locationOtherDetails) || undefined;
 

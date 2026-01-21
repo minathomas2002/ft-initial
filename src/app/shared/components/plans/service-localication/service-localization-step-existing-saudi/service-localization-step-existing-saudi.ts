@@ -83,6 +83,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       [EMaterialsFormControls.companyOverviewKeyProjectDetails]: 'If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.',
       [EMaterialsFormControls.companyOverviewOther]: 'If Company Type is Other Provide company overview',
       [EMaterialsFormControls.qualificationStatus]: '(Qualified / Under-Prequalification / Not Qualified)',
+      [EMaterialsFormControls.supervisionOversightEntity]: 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.)',
     };
   });
 

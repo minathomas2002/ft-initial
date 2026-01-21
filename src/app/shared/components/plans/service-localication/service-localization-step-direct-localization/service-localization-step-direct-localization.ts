@@ -73,6 +73,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   localizationStrategyHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
       [EMaterialsFormControls.willBeAnyProprietaryToolsSystems]: 'mention if any proprietary tools / platforms / systems etc. will be transferred locally as part of localizing the service? If yes, provide details',
+      [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: 'mention whether the localization of the service is being supervised / overseen by any government entity (e.g., MoEn, PIF etc.) '
     }
   });
 
@@ -80,7 +81,6 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   onStartEditing(): void {
     if (this.isResubmitMode()) {
       this.commentPhase.set('editing');
-
     }
   }
 

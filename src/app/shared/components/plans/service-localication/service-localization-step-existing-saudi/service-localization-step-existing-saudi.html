@@ -314,7 +314,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'collaborationPartnership',
                 inputKey: 'agreementType_' + index,
-                label: 'Agreement Type'
+                label: 'Agreement Type with Saudi Company'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -322,7 +322,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
-                placeholder="Select agreement type"
+                placeholder="Select agreement type with Saudi Company"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('agreementType_' + index, itemControl.get('rowId')?.value)"
@@ -429,7 +429,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'whyChoseThisCompany_' + index,
-              label: 'Why Chose This Company'
+              label: 'Why Did You Chose This Particular Saudi Company As Your Partner?'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -448,7 +448,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
-            [label]="'Why Chose This Company'"
+            [label]="'Why Did You Chose This Particular Saudi Company As Your Partner?'"
           />
         </td>
 
