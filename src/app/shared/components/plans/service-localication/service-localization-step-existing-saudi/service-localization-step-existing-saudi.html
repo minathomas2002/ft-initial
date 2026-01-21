@@ -11,13 +11,7 @@
       [maxItems]="20"
       [scrollHeight]="'600px'"
       [customHeaderLabels]="saudiCompanyDetailsHeaderLabels"
-      [headerTooltips]="{
-        'products':'If Manufacturer is Qualified / Under-Prequalification, specify the product(s)',
-        'companyOverview':'If Manufacturer is Not Qualified, provide Company Overview',
-        'keyProjectsExecutedByContractorForSEC':'If Company Type is Contractor, Mention few key projects executed by the Contractor for SEC',
-        'companyOverviewKeyProjectDetails':'If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.',
-        'companyOverviewOther':'If Company Type is Other Provide company overview',
-      }"
+      [headerTooltips]="saudiCompanyDetailsHeaderTooltips()"
     >
       <ng-template
         #itemTemplate
@@ -54,14 +48,14 @@
 
         <!-- Vendor ID with SEC (Readonly) -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
-            <input
-              type="text"
-              pInputText
-              fluid
-              placeholder=""
-              [formControl]="getFormControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
-              class="bg-gray-100 text-gray-500"
-            />
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder=""
+            [formControl]="getFormControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+            class="bg-gray-100 text-gray-500"
+          />
         </td>
 
         <!-- Bena register Vendor ID (Readonly) -->
