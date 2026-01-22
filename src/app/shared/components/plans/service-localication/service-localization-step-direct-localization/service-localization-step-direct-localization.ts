@@ -73,7 +73,8 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   localizationStrategyHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
       [EMaterialsFormControls.willBeAnyProprietaryToolsSystems]: 'mention if any proprietary tools / platforms / systems etc. will be transferred locally as part of localizing the service? If yes, provide details',
-      [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: 'mention whether the localization of the service is being supervised / overseen by any government entity (e.g., MoEn, PIF etc.) '
+      [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: 'mention whether the localization of the service is being supervised / overseen by any government entity (e.g., MoEn, PIF etc.) ',
+      [EMaterialsFormControls.capexRequired]: "Provide details of the CAPEX required (in SAR) to establish local operations. Avoid duplicating CAPEX entries across services; if the same CAPEX applies to multiple services, please indicate it by stating 'included above'"
     }
   });
 
