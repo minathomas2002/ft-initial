@@ -275,13 +275,17 @@ export class UserDashboard implements OnInit {
 
   onDownload(plan: IPlanRecord) {
     if (plan.planType === EOpportunityType.PRODUCT) {
-      this.planStore.downloadPlan(plan.id).pipe(take(1)).subscribe({
+      this.planStore.generateProductPlanPdf(plan.id).pipe(take(1)).subscribe({
         error: (error) => {
-          console.error('Error downloading plan:', error);
+          this.toasterService.error(error.errorMessage || 'Error generating product plan pdf');
         }
       });
     } else if (plan.planType === EOpportunityType.SERVICES) {
-      this.toasterService.warn('Will be implemented soon');
+      this.planStore.generateServicePlanPdf(plan.id).pipe(take(1)).subscribe({
+        error: (error) => {
+          this.toasterService.error(error.errorMessage || 'Error generating service plan pdf');
+        }
+      });
     }
   }
 

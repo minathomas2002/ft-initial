@@ -1,17 +1,23 @@
 import { Directive, effect, ElementRef, inject, input } from '@angular/core';
+import { FileuploadComponent } from '../components/utility-components/fileupload/fileupload.component';
 
 /**
  * Directive that conditionally applies background and border color classes
  * based on a boolean condition and a color input.
- * 
+ *
  * Usage:
  * <input [appConditionalColorClass]="true" [color]="'orange'" />
  * <input [appConditionalColorClass]="someCondition" [color]="'red'" />
- * 
+ * <app-fileupload [appConditionalColorClass]="highlightInput('attachments')" [color]="selectedInputColor()" ... />
+ *
  * When the boolean is true, it adds:
  * - bg-{color}-50! (background color)
  * - border-{color}-500! (border color)
- * 
+ *
+ * For app-fileupload, classes are set or removed via the component's styleClass
+ * input (merged with any existing styleClass). For other components, classes
+ * are applied to the DOM (nested input when present; file inputs excluded).
+ *
  * Note: All possible class combinations are explicitly defined below
  * so Tailwind CSS v4 can detect and include them during build.
  */
@@ -48,6 +54,7 @@ export class ConditionalColorClassDirective {
   };
 
   private elementRef = inject(ElementRef<HTMLElement>);
+  private fileupload = inject(FileuploadComponent, { host: true, optional: true });
 
   constructor() {
     // Use effect to reactively update classes based on condition and color
@@ -55,12 +62,20 @@ export class ConditionalColorClassDirective {
       const shouldApply = this.appConditionalColorClass();
       const colorValue = this.color();
 
-      // Get the target element (may be nested input for PrimeNG components)
+      if (this.fileupload) {
+        // app-fileupload: set or remove classes via styleClass input
+        let classes = '';
+        if (shouldApply && colorValue) {
+          const m = this.colorClassMap[colorValue];
+          if (m) classes = `${m.bg} ${m.border}`;
+        }
+        this.fileupload.setConditionalHighlightClasses(classes);
+        return;
+      }
+
+      // Other elements: apply/remove classes on DOM
       const targetElement = this.getTargetElement();
-
-      // Remove any existing color classes
       this.removeColorClasses(targetElement);
-
       if (shouldApply && colorValue) {
         const colorClasses = this.colorClassMap[colorValue];
         if (colorClasses) {
@@ -72,27 +87,28 @@ export class ConditionalColorClassDirective {
 
   /**
    * Gets the target element to apply classes to.
-   * For PrimeNG components like p-inputnumber, p-select, etc., 
-   * finds the nested input element. Otherwise, returns the element itself.
+   * For PrimeNG components like p-inputnumber, p-select, etc.,
+   * finds the nested input element. File inputs are excluded.
+   * Otherwise, returns the element itself.
    */
   private getTargetElement(): HTMLElement {
     const element = this.elementRef.nativeElement;
 
-    // Check if this element is already an input element
-    if (element.tagName.toLowerCase() === 'input' ||
+    if (
+      element.tagName.toLowerCase() === 'input' ||
       element.tagName.toLowerCase() === 'textarea' ||
-      element.tagName.toLowerCase() === 'select') {
+      element.tagName.toLowerCase() === 'select'
+    ) {
       return element;
     }
 
-    // For PrimeNG components, look for nested input element
-    // PrimeNG components typically wrap the actual input in a nested structure
-    const nestedInput = element.querySelector('input, textarea, select') as HTMLElement | null;
+    const nestedInput = element.querySelector(
+      'input:not([type="file"]), textarea, select',
+    ) as HTMLElement | null;
     if (nestedInput) {
       return nestedInput;
     }
 
-    // Return the element itself if no nested input found
     return element;
   }
 

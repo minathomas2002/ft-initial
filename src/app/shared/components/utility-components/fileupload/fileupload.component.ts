@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, model, viewChild, afterNextRender, computed } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, signal, viewChild } from "@angular/core";
 import { MessageService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import {
@@ -27,6 +27,25 @@ export class FileuploadComponent {
   files = model<File[]>([]);
   placeholder = input("SVG, PNG, JPG, PDF, DOCX, MP4");
   multiple = input<boolean>(false);
+  styleClass = input<string>("");
+
+  /**
+   * Highlight classes set by appConditionalColorClass when used on app-fileupload.
+   * Merged with styleClass and passed to p-fileupload.
+   */
+  conditionalHighlightClasses = signal<string>("");
+
+  /** Effective styleClass: styleClass + conditional highlight classes from directive */
+  effectiveStyleClass = computed(() => {
+    const base = this.styleClass().trim();
+    const highlight = this.conditionalHighlightClasses().trim();
+    return [base, highlight].filter(Boolean).join(" ");
+  });
+
+  /** Called by ConditionalColorClassDirective when on app-fileupload. */
+  setConditionalHighlightClasses(classes: string): void {
+    this.conditionalHighlightClasses.set(classes);
+  }
 
   // Computed property to determine if file upload should be disabled
   isDisabled = computed(() => this.isViewMode() || this.disabled());

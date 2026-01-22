@@ -1,4 +1,4 @@
-import { Component, inject, input, model, OnDestroy, OnInit, output } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, model, OnDestroy, OnInit, output, signal } from '@angular/core';
 import { IAssignRequest, IPlanRecord } from 'src/app/shared/interfaces';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { AssignReassignFormService } from '../../services/assign-reassign-form/assign-reassign-form-service';
@@ -6,11 +6,13 @@ import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { take, tap } from 'rxjs';
 import { BaseLabelComponent } from "src/app/shared/components/base-components/base-label/base-label.component";
 import { Select } from "primeng/select";
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BaseErrorComponent } from "src/app/shared/components/base-components/base-error/base-error.component";
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { CheckboxModule } from 'primeng/checkbox';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-assign-reassign-manual-employee',
@@ -20,7 +22,9 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     BaseLabelComponent,
     Select,
     ReactiveFormsModule,
-    BaseErrorComponent
+    BaseErrorComponent,
+    CheckboxModule,
+    FormsModule
   ],
   templateUrl: './assign-reassign-manual-employee.html',
 })
@@ -35,9 +39,19 @@ export class AssignReassignManualEmployee implements OnInit, OnDestroy {
   activeSystemEmployees = this.planStore.activeEmployees;
   i18nService = inject(I18nService);
   toasterService = inject(ToasterService);
-
+  confirmed = signal<boolean>(false);
+  newAssigneeName = signal<string | undefined>(undefined);
+  destroyRef = inject(DestroyRef);
+  confirmedMessage = computed(() => {
+    return `I confirm that I want to reassign this plan from [${this.planStore.currentEmployee()?.name}] to [${this.newAssigneeName() || ''}].`;
+  });
   ngOnInit() {
     this.loadActiveEmployees();
+    this.formService.employeeId.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.newAssigneeName.set(this.activeSystemEmployees()?.find(x => x.id === value)?.name);
+      });
   }
 
   ngOnDestroy() {
