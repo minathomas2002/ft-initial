@@ -16,6 +16,7 @@ import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-plan-localization-step-04-saudization-form',
@@ -29,7 +30,8 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
     FormsModule,
     GeneralConfirmationDialogComponent,
     TextareaModule,
-    CommentInputComponent
+    CommentInputComponent,
+    ConditionalColorClassDirective
   ],
   templateUrl: './plan-localization-step-04-saudizationForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
