@@ -70,15 +70,33 @@ export class PlanApiService {
     return this.baseHttpService.post<ITimeLineResponse[], { planId: string }, unknown>(API_ENDPOINTS.plans.getTimelinePlan, req);
   }
 
-  downloadPlan(planId: string): Observable<{ blob: Blob; filename: string }> {
+  generateProductPlanPdf(planId: string): Observable<{ blob: Blob; filename: string }> {
     return this.http
-      .get(`${API_ENDPOINTS.baseUrl}/${API_ENDPOINTS.plans.downloadPlan}${planId}`, {
+      .get(`${API_ENDPOINTS.baseUrl}/${API_ENDPOINTS.plans.generateProductPlanPdf}${planId}`, {
         responseType: 'blob',
         observe: 'response'
       })
       .pipe(
         map((response: HttpResponse<Blob>) => {
-          const filename = extractFilenameFromHeaders(response.headers, 'plan.pdf');
+          const filename = extractFilenameFromHeaders(response.headers, 'product-plan.pdf');
+          return {
+            blob: response.body!,
+            filename: filename
+          };
+        }),
+        catchError(handleBlobError('Error downloading plan'))
+      );
+  }
+
+  generateServicePlanPdf(planId: string): Observable<{ blob: Blob; filename: string }> {
+    return this.http
+      .get(`${API_ENDPOINTS.baseUrl}/${API_ENDPOINTS.plans.generateServicePlanPdf}${planId}`, {
+        responseType: 'blob',
+        observe: 'response'
+      })
+      .pipe(
+        map((response: HttpResponse<Blob>) => {
+          const filename = extractFilenameFromHeaders(response.headers, 'service-plan.pdf');
           return {
             blob: response.body!,
             filename: filename
