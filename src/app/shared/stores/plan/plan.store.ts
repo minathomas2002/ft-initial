@@ -552,8 +552,9 @@ export const PlanStore = signalStore(
         );
       },
       /* Download Plan*/
-      downloadPlan(planId: string): Observable<{ blob: Blob; filename: string }> {
-        return planApiService.downloadPlan(planId).pipe(
+      generateProductPlanPdf(planId: string): Observable<{ blob: Blob; filename: string }> {
+        patchState(store, { isLoading: true, error: null });
+        return planApiService.generateProductPlanPdf(planId).pipe(
           tap((res) => {
             downloadFileFromBlob(res.blob, res.filename);
           }),
@@ -561,6 +562,23 @@ export const PlanStore = signalStore(
             const errorMessage = error.message || error.error?.message || 'Error downloading plan';
             patchState(store, { error: errorMessage });
             return throwError(() => error);
+          })
+        );
+      },
+
+      /* Generate Service Plan PDF*/
+      generateServicePlanPdf(planId: string): Observable<{ blob: Blob; filename: string }> {
+        patchState(store, { isLoading: true, error: null });
+        return planApiService.generateServicePlanPdf(planId).pipe(
+          tap((res) => {
+            downloadFileFromBlob(res.blob, res.filename);
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error generating service plan pdf' });
+            return throwError(() => new Error('Error generating service plan pdf'));
+          }),
+          finalize(() => {
+            patchState(store, { isLoading: false });
           })
         );
       },
