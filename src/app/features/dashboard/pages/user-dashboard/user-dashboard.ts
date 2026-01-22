@@ -186,9 +186,13 @@ export class UserDashboard implements OnInit {
       const planTypeOption = this.planStore.planTypeOptions().find(option => option.value === planType);
       return planTypeOption?.label ?? '';
     }
-    return planType === EOpportunityType.SERVICES
-      ? this.i18nService.translate('opportunity.type.services')
-      : this.i18nService.translate('opportunity.type.product');
+
+    if (planType === EOpportunityType.SERVICES)
+      return this.i18nService.translate('opportunity.type.services');
+    if (planType === EOpportunityType.PRODUCT)
+      return this.i18nService.translate('opportunity.type.product');
+
+    return '';
   }
   //#endregion
 

@@ -34,7 +34,7 @@ export class SummarySectionExistingSaudi {
     this.serviceForm.syncServicesFromCoverPageToExistingSaudi();
   }
 
-  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
+  yearColumns = computed(() => this.serviceForm.upcomingYears(6));
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -42,6 +42,7 @@ export class SummarySectionExistingSaudi {
     EMaterialsFormControls.thirdYear,
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
+    EMaterialsFormControls.sixthYear,
   ];
 
   // Form group accessors
@@ -537,6 +538,7 @@ export class SummarySectionExistingSaudi {
             'thirdYear_headcount': 'y3Headcount',
             'fourthYear_headcount': 'y4Headcount',
             'fifthYear_headcount': 'y5Headcount',
+            'sixthYear_headcount': 'y6Headcount',
           };
           const yearKey = yearMap[fieldKey];
           if (yearKey && entity[yearKey as keyof typeof entity] !== undefined) {
@@ -554,11 +556,13 @@ export class SummarySectionExistingSaudi {
             'thirdYear_headcount': 'y3Headcount',
             'fourthYear_headcount': 'y4Headcount',
             'fifthYear_headcount': 'y5Headcount',
+            'sixthYear_headcount': 'y6Headcount',
             'firstYear_saudization': 'y1Saudization',
             'secondYear_saudization': 'y2Saudization',
             'thirdYear_saudization': 'y3Saudization',
             'fourthYear_saudization': 'y4Saudization',
             'fifthYear_saudization': 'y5Saudization',
+            'sixthYear_saudization': 'y6Saudization',
           };
           if (fieldKey === 'serviceName') {
             // Find service name from services array

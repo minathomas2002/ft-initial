@@ -1,8 +1,8 @@
-import { NotificationBehavior } from "src/app/shared/classes/notifications/notification-item.factory";
-import { EPlanAction } from "src/app/shared/enums";
+import { EOpportunityAction, EPlanAction } from "src/app/shared/enums";
+import { ENotificationCategory } from "src/app/shared/enums/notificationSetting.enum";
 
 export interface INotification {
-  action: EPlanAction;
+  action: EPlanAction | EOpportunityAction;
   actionURL: string;
   body: string;
   createdDate: string;
@@ -10,6 +10,7 @@ export interface INotification {
     PlanId: string,
     PlanType: number,
     PlanCode: string,
+    Id: string
   };
   from: string;
   id: string;
@@ -17,6 +18,7 @@ export interface INotification {
   readDate: string | null;
   title: string;
   to: string;
+  notificationCategory: ENotificationCategory
 }
 
 export interface INotificationItem extends INotification {
@@ -24,3 +26,10 @@ export interface INotificationItem extends INotification {
   params?: Record<string, string>;
   behavior: NotificationBehavior;
 }
+
+export interface INotificationParams {
+  route: string[], params: Record<string, string>, behavior: NotificationBehavior
+}
+
+export type NotificationBehavior = 'planDetails' | null;
+

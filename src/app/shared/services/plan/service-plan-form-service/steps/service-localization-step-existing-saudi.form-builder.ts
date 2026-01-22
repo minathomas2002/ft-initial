@@ -130,6 +130,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       EMaterialsFormControls.thirdYear,
       EMaterialsFormControls.fourthYear,
       EMaterialsFormControls.fifthYear,
+      EMaterialsFormControls.sixthYear,
     ];
 
     yearControls.forEach(yearControl => {
@@ -180,6 +181,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       EMaterialsFormControls.thirdYear,
       EMaterialsFormControls.fourthYear,
       EMaterialsFormControls.fifthYear,
+      EMaterialsFormControls.sixthYear,
     ];
 
     // Expected Annual Headcount (required, integer only)

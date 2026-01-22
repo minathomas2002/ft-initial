@@ -14,6 +14,7 @@ export class PlanTimelineActionsMapper {
     [EActionPlanTimeLine.AutoAssign]: 'timeline.actions.autoAssign',
     [EActionPlanTimeLine.InternalReview]: 'Submitted comment on the plan and sent back to investor',
     [EActionPlanTimeLine.AutoRejected]: 'Plan Auto Rejected',
+    [EActionPlanTimeLine.Resubmitted]: 'Reassigned plan to employee',
   };
 
   constructor(private i18nService: I18nService) { }
@@ -28,6 +29,9 @@ export class PlanTimelineActionsMapper {
         param = item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.Reassigned:
+        param = item.targetUserNameEn;
+        break;
+      case EActionPlanTimeLine.Resubmitted:
         param = item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.Submitted:
