@@ -1,6 +1,6 @@
 import { INotification, INotificationItem, INotificationParams, NotificationBehavior } from "src/app/core/layouts/main-layout/models/notifications.interface";
 import { EOpportunityAction, EPlanAction, ERoles, ERoutes } from "../../enums";
-import { ENotificationCategory } from "src/app/shared/enums/notificationSetting.enum";
+import { ENotificationCategory, ENotificationType } from "src/app/shared/enums/notificationSetting.enum";
 import { safeJsonParse } from "src/app/shared/utils/safe-parse-json";
 
 class BaseNotificationParams {
@@ -124,7 +124,7 @@ function handlePlansNotificationFlow(notification: INotification) {
 
 function handleOpportunityNotificationFlow(notification: INotification) {
   const opportunityId = notification.customData?.Id || '';
-  const action = notification.action as EOpportunityAction;
+  const action = notification.action as EOpportunityAction | ENotificationType;
 
   const baseNavigationConfig = {
     route: [],
@@ -132,10 +132,10 @@ function handleOpportunityNotificationFlow(notification: INotification) {
     behavior: null,
   };
 
-  const actionsToNavigateToOpportunity = new Set<EOpportunityAction>([
+  const actionsToNavigateToOpportunity = new Set<EOpportunityAction | ENotificationType>([
     EOpportunityAction.Publish,
     EOpportunityAction.Edit,
-    EOpportunityAction.InActive,
+    ENotificationType.InactiveOpportunityAlert,
   ])
 
   if (actionsToNavigateToOpportunity.has(action)) {
