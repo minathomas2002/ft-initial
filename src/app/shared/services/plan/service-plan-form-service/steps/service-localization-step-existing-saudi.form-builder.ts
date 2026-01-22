@@ -383,6 +383,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
    * Company Type is multi-select, so we need to check if specific types are selected
    */
   toggleCompanyTypeFieldsValidation(formGroup: FormGroup, companyTypes: string[], index: number): void {
+    debugger
     const array = this.getSaudiCompanyDetailsFormArray(formGroup);
     if (!array || index >= array.length) return;
 
@@ -392,13 +393,27 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     const hasOther = companyTypes.includes('Other');
 
     // Qualification Status - only available if Manufacturer is selected
-    const qualificationStatusControl = itemFormGroup.get(`${EMaterialsFormControls.qualificationStatus}.${EMaterialsFormControls.value}`);
+    const qualificationStatusControl = itemFormGroup.get(`${EMaterialsFormControls.qualificationStatus}.${EMaterialsFormControls.value}`)!;
+    const keyProjectsExecutedByContractorForSEC = itemFormGroup.get(`${EMaterialsFormControls.keyProjectsExecutedByContractorForSEC}.${EMaterialsFormControls.value}`)!;
+    const companyOverviewKeyProjectDetails = itemFormGroup.get(`${EMaterialsFormControls.companyOverviewKeyProjectDetails}.${EMaterialsFormControls.value}`)!;
+    const companyOverviewOther = itemFormGroup.get(`${EMaterialsFormControls.companyOverviewOther}.${EMaterialsFormControls.value}`)!;
     if (qualificationStatusControl) {
       if (hasManufacturer) {
         qualificationStatusControl.setValidators([Validators.required]);
       } else {
-        qualificationStatusControl.clearValidators();
-        qualificationStatusControl.reset();
+        qualificationStatusControl.removeValidators([Validators.required]);;
+      }
+      if (hasContractor) {
+        keyProjectsExecutedByContractorForSEC.setValidators([Validators.required]);
+        companyOverviewKeyProjectDetails.setValidators([Validators.required]);
+      } else {
+        keyProjectsExecutedByContractorForSEC.removeValidators([Validators.required]);
+        companyOverviewKeyProjectDetails.removeValidators([Validators.required]);
+      }
+      if (hasOther) {
+        companyOverviewOther.setValidators([Validators.required]);
+      } else {
+        companyOverviewOther.removeValidators([Validators.required]);
       }
       qualificationStatusControl.updateValueAndValidity();
     }
