@@ -36,6 +36,13 @@ import { BasePlanWizard } from '../../base-wizard-class/base-plan-wizard';
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 
+type ProductLocalizationWizardStepId =
+  | 'overview'
+  | 'productPlant'
+  | 'valueChain'
+  | 'saudization'
+  | 'summary';
+
 @Component({
   selector: 'app-product-localization-plan-wizard',
   imports: [
@@ -95,20 +102,68 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return 'none';
   });
 
-  commentColor = computed(() => {
-    // During comment phase (adding/editing): always orange
-    const currentPhase = this.currentStepCommentPhase();
-    if (currentPhase === 'adding' || currentPhase === 'editing') {
+  private readonly hasAnyCorrectedFields = computed(() => {
+    return (
+      this.step1CorrectedFieldsFiltered().length +
+      this.step2CorrectedFieldsFiltered().length +
+      this.step3CorrectedFieldsFiltered().length +
+      this.step4CorrectedFieldsFiltered().length
+    ) > 0;
+  });
+
+  private readonly isStepActivelyAddingComments = (stepId: ProductLocalizationWizardStepId): boolean => {
+    // Treat 'viewing' as comment-present so the badge stays orange after save.
+    const activePhases: TCommentPhase[] = ['adding', 'editing', 'viewing'];
+    const phase =
+      stepId === 'overview'
+        ? this.step1CommentPhase()
+        : stepId === 'productPlant'
+          ? this.step2CommentPhase()
+          : stepId === 'valueChain'
+            ? this.step3CommentPhase()
+            : stepId === 'saudization'
+              ? this.step4CommentPhase()
+              : 'none';
+
+    return activePhases.includes(phase);
+  };
+
+  private readonly getCommentColorForStep = (stepId: ProductLocalizationWizardStepId): 'green' | 'orange' => {
+    const status = this.planStore.planStatus();
+    const isViewOrReviewMode = this.isViewMode() || this.isReviewMode();
+
+    // Outside UNDER_REVIEW, keep the legacy behavior (all steps orange)
+    if (status !== EInternalUserPlanStatus.UNDER_REVIEW) {
       return 'orange';
     }
-    
-    // Otherwise, use the existing logic for badge color
-    return (this.isViewMode() && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
-      'green' :
-      (
-        (this.step1CommentPhase() === 'none' && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
-          'green' : 'orange')
-      ;
+
+    // In employee view/review under review: only the step being actively commented should be orange.
+    if (isViewOrReviewMode) {
+      if (this.isStepActivelyAddingComments(stepId)) {
+        return 'orange';
+      }
+
+      // Preserve existing semantics (green in view/review when not actively commenting)
+      if (this.hasAnyCorrectedFields()) {
+        return 'green';
+      }
+
+      return 'green';
+    }
+
+    // Not in view/review mode but status is UNDER_REVIEW (e.g., investor in resubmit mode)
+    return 'orange';
+  };
+
+  // Used by the active step content components (they only render one step at a time)
+  commentColor = computed(() => {
+    const step = this.activeStep();
+    const stepId: ProductLocalizationWizardStepId =
+      step === 1 ? 'overview' :
+      step === 2 ? 'productPlant' :
+      step === 3 ? 'valueChain' :
+      step === 4 ? 'saudization' : 'summary';
+    return this.getCommentColorForStep(stepId);
   });
 
   // selectedInputColor = computed<TColors>(() => {
@@ -117,7 +172,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   //   if (currentPhase === 'adding' || currentPhase === 'editing') {
   //     return 'orange';
   //   }
-    
+
   //   // Otherwise, default to orange (actual field colors are determined by getFieldColor in step components)
   //   return 'orange';
   // });
@@ -132,7 +187,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: this.step1CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
-        commentColor: this.commentColor(),
+        commentColor: this.getCommentColorForStep('overview'),
       },
       {
         title: this.i18nService.translate('plans.wizard.step2.title'),
@@ -141,7 +196,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: this.step2CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
-        commentColor: this.commentColor(),
+        commentColor: this.getCommentColorForStep('productPlant'),
       },
       {
         title: this.i18nService.translate('plans.wizard.step3.title'),
@@ -150,7 +205,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step3_valueChain,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
-        commentColor: this.commentColor(),
+        commentColor: this.getCommentColorForStep('valueChain'),
       },
       {
         title: this.i18nService.translate('plans.wizard.step4.title'),
@@ -159,7 +214,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step4_saudization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
-        commentColor: this.commentColor(),
+        commentColor: this.getCommentColorForStep('saudization'),
       },
       {
         title: this.i18nService.translate('plans.wizard.step5.title'),
@@ -552,9 +607,57 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   onAddComment(): void {
     if (this.isResubmitMode()) {
       this.showCommentState.set(true);
-      return
+
+      // In resubmit mode the investor opens the comment panel from the wizard actions.
+      // Infer the correct phase from the existing comment so the UI shows Edit/Delete
+      // for saved comments, or Add Comment when empty.
+      const step = this.activeStep();
+      const stepForm =
+        step === 1
+          ? this.productPlanFormService.step1_overviewCompanyInformation
+          : step === 2
+            ? this.productPlanFormService.step2_productPlantOverview
+            : step === 3
+              ? this.productPlanFormService.step3_valueChain
+              : step === 4
+                ? this.productPlanFormService.step4_saudization
+                : null;
+
+      if (!stepForm) return;
+
+      const commentControl = stepForm.get(EMaterialsFormControls.comment) as FormControl<string> | null;
+      const hasComment = !!(commentControl?.value && commentControl.value.trim().length > 0);
+
+      const setPhaseIfNone = (phaseSignal: typeof this.step1CommentPhase) => {
+        if (phaseSignal() === 'none') {
+          phaseSignal.set(hasComment ? 'viewing' : 'none');
+        }
+      };
+
+      if (step === 1) {
+        setPhaseIfNone(this.step1CommentPhase);
+      } else if (step === 2) {
+        setPhaseIfNone(this.step2CommentPhase);
+      } else if (step === 3) {
+        setPhaseIfNone(this.step3CommentPhase);
+      } else if (step === 4) {
+        setPhaseIfNone(this.step4CommentPhase);
+      }
+
+      return;
     }
     const step = this.activeStep();
+    const stepId: ProductLocalizationWizardStepId =
+      step === 1 ? 'overview' :
+      step === 2 ? 'productPlant' :
+      step === 3 ? 'valueChain' :
+      step === 4 ? 'saudization' : 'summary';
+
+    // Non-investor (internal) flow: starting a new comment session should clear
+    // any previously mapped/selected fields so counters, checkboxes and highlights reset.
+    if (!this.isInvestorPersona()) {
+      this.resetCurrentStepCommentSelections(stepId);
+    }
 
     // Set comment phase for the current active step
     if (step === 1 && this.step1CommentPhase() === 'none') {
@@ -1153,15 +1256,18 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     // Step 1 comments
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
-    // In resubmit mode, check 'comment' control; otherwise check EMaterialsFormControls.comment
+    // In resubmit mode, use the investor 'comment' control; otherwise use the enum key
     const step1CommentControl = this.isResubmitMode()
       ? (step1Form.get('comment') as FormControl<string> | null)
       : (step1Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    if (step1CommentControl?.value && step1CommentControl.value.trim().length > 0 && this.step1SelectedInputs().length > 0) {
+    // Use selected inputs as fields and include comment when in resubmit mode even if no fields selected
+    const step1Fields = this.step1SelectedInputs();
+    const step1CommentValue = step1CommentControl?.value?.trim() || '';
+    if (step1CommentValue && (this.isResubmitMode() || step1Fields.length > 0)) {
       comments.push({
         pageTitleForTL: this.steps()[0].title,
-        comment: step1CommentControl.value.trim(),
-        fields: this.step1SelectedInputs(),
+        comment: step1CommentValue,
+        fields: step1Fields,
       });
     }
 
@@ -1170,11 +1276,13 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step2CommentControl = this.isResubmitMode()
       ? (step2Form.get('comment') as FormControl<string> | null)
       : (step2Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    if (step2CommentControl?.value && step2CommentControl.value.trim().length > 0 && this.step2SelectedInputs().length > 0) {
+    const step2Fields = this.step2SelectedInputs();
+    const step2CommentValue = step2CommentControl?.value?.trim() || '';
+    if (step2CommentValue && (this.isResubmitMode() || step2Fields.length > 0)) {
       comments.push({
         pageTitleForTL: this.steps()[1].title,
-        comment: step2CommentControl.value.trim(),
-        fields: this.step2SelectedInputs(),
+        comment: step2CommentValue,
+        fields: step2Fields,
       });
     }
 
@@ -1183,11 +1291,13 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step3CommentControl = this.isResubmitMode()
       ? (step3Form.get('comment') as FormControl<string> | null)
       : (step3Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    if (step3CommentControl?.value && step3CommentControl.value.trim().length > 0 && this.step3SelectedInputs().length > 0) {
+    const step3Fields = this.step3SelectedInputs();
+    const step3CommentValue = step3CommentControl?.value?.trim() || '';
+    if (step3CommentValue && (this.isResubmitMode() || step3Fields.length > 0)) {
       comments.push({
         pageTitleForTL: this.steps()[2].title,
-        comment: step3CommentControl.value.trim(),
-        fields: this.step3SelectedInputs(),
+        comment: step3CommentValue,
+        fields: step3Fields,
       });
     }
 
@@ -1196,11 +1306,13 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step4CommentControl = this.isResubmitMode()
       ? (step4Form.get('comment') as FormControl<string> | null)
       : (step4Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    if (step4CommentControl?.value && step4CommentControl.value.trim().length > 0 && this.step4SelectedInputs().length > 0) {
+    const step4Fields = this.step4SelectedInputs();
+    const step4CommentValue = step4CommentControl?.value?.trim() || '';
+    if (step4CommentValue && (this.isResubmitMode() || step4Fields.length > 0)) {
       comments.push({
         pageTitleForTL: this.steps()[3].title,
-        comment: step4CommentControl.value.trim(),
-        fields: this.step4SelectedInputs(),
+        comment: step4CommentValue,
+        fields: step4Fields,
       });
     }
     return comments;
@@ -1393,6 +1505,61 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.step2SelectedInputs.set(this.step2CommentFields());
     this.step3SelectedInputs.set(this.step3CommentFields());
     this.step4SelectedInputs.set(this.step4CommentFields());
+  }
+
+  /**
+   * Resets selected inputs and hasComment controls for the current step
+   * Called when employee clicks Add Comment to clear previous investor comment selections
+   */
+  private resetCurrentStepCommentSelections(stepId: ProductLocalizationWizardStepId | undefined): void {
+    if (!stepId) return;
+
+    // Reset stepper counter + highlight state (bound to selectedInputs)
+    if (stepId === 'overview') {
+      this.step1SelectedInputs.set([]);
+      this.resetHasCommentControls(this.productPlanFormService.step1_overviewCompanyInformation);
+      return;
+    }
+
+    if (stepId === 'productPlant') {
+      this.step2SelectedInputs.set([]);
+      this.resetHasCommentControls(this.productPlanFormService.step2_productPlantOverview);
+      return;
+    }
+
+    if (stepId === 'valueChain') {
+      this.step3SelectedInputs.set([]);
+      this.resetHasCommentControls(this.productPlanFormService.step3_valueChain);
+      return;
+    }
+
+    if (stepId === 'saudization') {
+      this.step4SelectedInputs.set([]);
+      this.resetHasCommentControls(this.productPlanFormService.step4_saudization);
+      return;
+    }
+  }
+
+  /**
+   * Recursively resets all hasComment controls in a form to false
+   */
+  private resetHasCommentControls(control: AbstractControl): void {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(key => {
+        const childControl = control.controls[key];
+        if (key === EMaterialsFormControls.hasComment && childControl instanceof FormControl) {
+          childControl.setValue(false, { emitEvent: false });
+          childControl.markAsPristine();
+          childControl.markAsUntouched();
+        } else {
+          this.resetHasCommentControls(childControl);
+        }
+      });
+    } else if (control instanceof FormArray) {
+      control.controls.forEach((arrayControl: AbstractControl) => {
+        this.resetHasCommentControls(arrayControl);
+      });
+    }
   }
 
   // Implement abstract methods from BasePlanWizard

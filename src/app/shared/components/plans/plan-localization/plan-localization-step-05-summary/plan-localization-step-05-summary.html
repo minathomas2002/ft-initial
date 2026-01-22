@@ -8,7 +8,7 @@
     [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(1)"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep1Comments() && !hasStep1OutComingComments()) {
+  @if (showIncomingStep1Comments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep1CommentText()"
@@ -30,7 +30,7 @@
     [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(2)"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep2Comments() && !hasStep2OutComingComments()) {
+  @if (showIncomingStep2Comments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep2CommentText()"
@@ -52,7 +52,7 @@
     [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(3)"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep3Comments() && !hasStep3OutComingComments()) {
+  @if (showIncomingStep3Comments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep3CommentText()"
@@ -74,7 +74,7 @@
     [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(4)"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep4Comments() && !hasStep4OutComingComments()) {
+  @if (showIncomingStep4Comments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep4CommentText()"

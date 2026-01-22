@@ -12,6 +12,9 @@
       } @case (EWizardStepState.Error) {
       <i class="block w-[10px] h-[10px] bg-white rounded-full in-progress"></i>
       } }
+      }@else if(viewMode() === 'Review'){
+      <!-- In Review mode, all steps show as active (blue background with white dot) -->
+      <i class="block w-[10px] h-[10px] bg-white rounded-full review-active"></i>
       }@else {
       <i
         class="block w-[10px] h-[10px] bg-gray-200 rounded-full"

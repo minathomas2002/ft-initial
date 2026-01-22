@@ -10,6 +10,16 @@
     styleClass="border-0! bg-white!"
     (click)="onStartEditingResubmitMode()"
   />
+
+  <p-button
+    label="Delete Comment"
+    severity="danger"
+    icon="icon-trash-2"
+    rounded
+    variant="outlined"
+    styleClass="bg-white!"
+    (click)="onDeleteComments()"
+  />
   } @else if(!hasInvestorComment() && commentPhase() === 'none'){
   <p-button
     label="Add Comment"
