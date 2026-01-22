@@ -96,6 +96,13 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   commentColor = computed(() => {
+    // During comment phase (adding/editing): always orange
+    const currentPhase = this.currentStepCommentPhase();
+    if (currentPhase === 'adding' || currentPhase === 'editing') {
+      return 'orange';
+    }
+    
+    // Otherwise, use the existing logic for badge color
     return (this.isViewMode() && this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW) ?
       'green' :
       (
@@ -104,7 +111,16 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       ;
   });
 
-  selectedInputColor = computed<TColors>(() => this.currentStepCommentPhase() === 'none' ? 'green' : 'orange');
+  selectedInputColor = computed<TColors>(() => {
+    // During comment phase (adding/editing): always orange
+    const currentPhase = this.currentStepCommentPhase();
+    if (currentPhase === 'adding' || currentPhase === 'editing') {
+      return 'orange';
+    }
+    
+    // Otherwise, default to orange (actual field colors are determined by getFieldColor in step components)
+    return 'orange';
+  });
   steps = computed<IWizardStepState[]>(() => {
     const errors = this.validationErrors();
     this.i18nService.currentLanguage();

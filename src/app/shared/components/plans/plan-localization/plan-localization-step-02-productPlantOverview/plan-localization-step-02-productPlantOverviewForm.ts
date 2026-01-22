@@ -240,7 +240,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
       if (controls && controls[inputKey]) {
         return this.getValueControl(controls[inputKey]);
       }
-    } else if (section === 'expectedCapex') {
+    } else if (section === 'expectedCAPEXInvestment') {
       const controls = this.expectedCAPEXInvestmentFormGroupControls;
       if (controls && controls[inputKey]) {
         return this.getValueControl(controls[inputKey]);

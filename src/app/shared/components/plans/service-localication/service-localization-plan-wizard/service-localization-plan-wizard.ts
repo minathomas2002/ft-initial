@@ -391,6 +391,23 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   };
 
   private readonly getCommentColorForStep = (stepId: ServiceLocalizationWizardStepId): 'green' | 'orange' => {
+    // Check if there are any selected inputs (inputs with comments) for this step
+    let hasSelectedInputs = false;
+    if (stepId === 'cover') {
+      hasSelectedInputs = this.step1SelectedInputs().length > 0;
+    } else if (stepId === 'overview') {
+      hasSelectedInputs = this.step2SelectedInputs().length > 0;
+    } else if (stepId === 'existingSaudi') {
+      hasSelectedInputs = this.step3SelectedInputs().length > 0;
+    } else if (stepId === 'directLocalization') {
+      hasSelectedInputs = this.step4SelectedInputs().length > 0;
+    }
+    
+    // If there are selected inputs (inputs with comments), always show orange
+    if (hasSelectedInputs) {
+      return 'orange';
+    }
+    
     const status = this.planStore.planStatus();
     const isViewOrReviewMode = this.isViewMode() || this.isReviewMode();
 

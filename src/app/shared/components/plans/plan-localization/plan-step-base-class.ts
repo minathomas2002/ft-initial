@@ -9,6 +9,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { TColors } from 'src/app/shared/interfaces';
 import { TCommentPhase } from './product-localization-plan-wizard/product-localization-plan-wizard';
 
 /**
@@ -430,6 +431,93 @@ export abstract class PlanStepBaseClass {
     );
     const phase = this.commentPhase();
     return isSelected && (phase === 'adding' || phase === 'editing' || phase === 'none');
+  }
+
+  /**
+   * Determines the color for a specific field based on comment phase, view mode, and whether investor changed value or added comment.
+   * 
+   * Color Logic:
+   * - Orange: During comment phase (adding/editing) OR investor view when field not changed and no comment
+   * - Green: Employee view when investor changed value OR added comment
+   * - Gray: Investor view when value changed OR comment added
+   * 
+   * @param inputKey - The input key of the field
+   * @param rowId - Optional row ID for FormArray items
+   * @returns The color to apply to the field
+   */
+  getFieldColor(inputKey: string, rowId?: string): TColors {
+    // Find the field in selectedInputs (fields with comments)
+    const field = this.findFieldInSelectedInputs(inputKey, rowId);
+    if (!field) {
+      return 'orange'; // Default fallback if field not found
+    }
+
+    // During comment phase (adding/editing): always orange
+    if (this.isCommentPhaseActive()) {
+      return 'orange';
+    }
+
+    // After comment is saved, determine color based on view mode and field state
+    const fieldState = this.getFieldState(field);
+    return this.determineColorByViewMode(fieldState);
+  }
+
+  /**
+   * Finds a field in selectedInputs by inputKey and optional rowId.
+   */
+  private findFieldInSelectedInputs(inputKey: string, rowId?: string): IFieldInformation | undefined {
+    return this.selectedInputs().find(
+      input =>
+        input.inputKey === inputKey &&
+        (rowId === undefined || input.id === rowId)
+    );
+  }
+
+  /**
+   * Checks if comment phase is active (adding or editing).
+   */
+  private isCommentPhaseActive(): boolean {
+    const phase = this.commentPhase();
+    return phase === 'adding' || phase === 'editing';
+  }
+
+  /**
+   * Gets the state of a field (whether value changed and if investor added comment).
+   */
+  private getFieldState(field: IFieldInformation): { valueChanged: boolean; hasInvestorComment: boolean } {
+    const originalValue = this.getOriginalValue(field);
+    const currentValue = this.getCurrentValue(field);
+    const valueChanged = originalValue !== undefined && 
+                        originalValue !== null && 
+                        JSON.stringify(originalValue) !== JSON.stringify(currentValue);
+
+    const formGroup = this.getFormGroup();
+    const investorCommentControl = formGroup.get('comment') as FormControl<string> | null;
+    const hasInvestorComment = !!(investorCommentControl?.value?.trim());
+
+    return { valueChanged, hasInvestorComment };
+  }
+
+  /**
+   * Determines the color based on view mode and field state.
+   */
+  private determineColorByViewMode(fieldState: { valueChanged: boolean; hasInvestorComment: boolean }): TColors {
+    const isViewMode = this.isViewMode();
+    const isResubmitMode = this.isResubmitMode();
+    const { valueChanged, hasInvestorComment } = fieldState;
+
+    // Employee view (isViewMode and not resubmit): Green if investor changed value OR added comment
+    if (isViewMode && !isResubmitMode) {
+      return (valueChanged || hasInvestorComment) ? 'green' : 'orange';
+    }
+
+    // Investor view (isResubmitMode and not view mode): Gray if changed or comment added, Orange otherwise
+    if (isResubmitMode && !isViewMode) {
+      return (valueChanged || hasInvestorComment) ? 'gray' : 'orange';
+    }
+
+    // Default: orange (for other cases like create mode, etc.)
+    return 'orange';
   }
 
   /**
