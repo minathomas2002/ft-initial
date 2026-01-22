@@ -5,7 +5,6 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
-import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
@@ -27,10 +26,10 @@ export class SummarySectionDirectLocalization {
   onEdit = output<void>();
 
   EMaterialsFormControls = EMaterialsFormControls;
-  // Year columns for Entity Level and Service Level (5 years)
+  // Year columns for Entity Level and Service Level (6 years)
   serviceForm = inject(ServicePlanFormService);
   planStore = inject(PlanStore);
-  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
+  yearColumns = computed(() => this.serviceForm.upcomingYears(6));
 
   constructor() {
     // Ensure service names are synced even if the user never visited the step component
@@ -43,6 +42,7 @@ export class SummarySectionDirectLocalization {
     EMaterialsFormControls.thirdYear,
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
+    EMaterialsFormControls.sixthYear,
   ];
 
   // Form group accessors
@@ -147,7 +147,7 @@ export class SummarySectionDirectLocalization {
         location: this.formatLocation(getValueFromControl(EMaterialsFormControls.location)),
         locationOther: getValueFromControl(EMaterialsFormControls.locationOtherDetails),
         capexRequired: getValueFromControl(EMaterialsFormControls.capexRequired),
-        supervisionOversight: getValueFromControl(EMaterialsFormControls.supervisionOversightEntity),
+        supervisionOversight: getValueFromControl(EMaterialsFormControls.supervisionOversightByGovernmentEntity),
         proprietaryTools: this.formatYesNo(
           getValueFromControl(EMaterialsFormControls.willBeAnyProprietaryToolsSystems)
         ),
@@ -385,7 +385,7 @@ export class SummarySectionDirectLocalization {
               return strategy.otherLocationType ?? null;
             case 'capexRequired':
               return strategy.capexRequired ?? null;
-            case 'supervisionOversightEntity':
+            case 'supervisionOversightByGovernmentEntity':
               return strategy.governmentSupervision ?? null;
             case 'willBeAnyProprietaryToolsSystems':
               return this.formatYesNo(strategy.hasProprietaryTools ?? null);
@@ -426,11 +426,13 @@ export class SummarySectionDirectLocalization {
             'thirdYear_headcount': 'y3Headcount',
             'fourthYear_headcount': 'y4Headcount',
             'fifthYear_headcount': 'y5Headcount',
+            'sixthYear_headcount': 'y6Headcount',
             'firstYear_saudization': 'y1Saudization',
             'secondYear_saudization': 'y2Saudization',
             'thirdYear_saudization': 'y3Saudization',
             'fourthYear_saudization': 'y4Saudization',
             'fifthYear_saudization': 'y5Saudization',
+            'sixthYear_saudization': 'y6Saudization',
           };
           if (fieldKey === 'serviceName') {
             // Find service name from services array
@@ -480,7 +482,7 @@ export class SummarySectionDirectLocalization {
                 return strategy.locationOther ?? null;
               case 'capexRequired':
                 return strategy.capexRequired ?? null;
-              case 'supervisionOversightEntity':
+              case 'supervisionOversightByGovernmentEntity':
                 return strategy.supervisionOversight ?? null;
               case 'willBeAnyProprietaryToolsSystems':
                 return strategy.proprietaryTools ?? null;

@@ -8,8 +8,9 @@
       [hideDeleteButton]="true"
       [createNewItem]="createLocalizationStrategyItem"
       [scrollHeight]="'600px'"
-      [excludeKeys]="['serviceId', 'serviceHeadcountRowId','serviceLevelLocalizationDate', 'localizationApproachOtherDetails', 'locationOtherDetails', 'proprietaryToolsSystemsDetails', 'firstYear_headcount', 'firstYear_saudization', 'secondYear_headcount', 'secondYear_saudization', 'thirdYear_headcount', 'thirdYear_saudization', 'fourthYear_headcount', 'fourthYear_saudization', 'fifthYear_headcount', 'fifthYear_saudization', 'keyMeasuresToUpskillSaudis', 'mentionSupportRequiredFromSEC']"
+      [excludeKeys]="['serviceId', 'serviceHeadcountRowId','serviceLevelLocalizationDate', 'localizationApproachOtherDetails', 'locationOtherDetails', 'proprietaryToolsSystemsDetails', 'firstYear_headcount', 'firstYear_saudization', 'secondYear_headcount', 'secondYear_saudization', 'thirdYear_headcount', 'thirdYear_saudization', 'fourthYear_headcount', 'fourthYear_saudization', 'fifthYear_headcount', 'fifthYear_saudization', 'sixthYear_headcount', 'sixthYear_saudization', 'keyMeasuresToUpskillSaudis', 'mentionSupportRequiredFromSEC']"
       [customHeaderLabels]="{'locationType': 'Location'}"
+      [headerTooltips]="localizationStrategyHeaderTooltips()"
     >
       <ng-template
         #itemTemplate
@@ -164,7 +165,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                placeholder="Please specify other location"
+                placeholder="Kindly provide details"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails))"
                 [appConditionalColorClass]="highlightInput('locationOtherDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -195,7 +196,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localizationStrategy',
               inputKey: 'capexRequired_' + index,
-              label: 'CAPEX Required'
+              label: 'CAPEX Required (In SAR)'
             }, itemControl.get('rowId')?.value)"
           >
             <p-inputnumber
@@ -218,11 +219,11 @@
         <td class="p-3 border border-gray-200 min-w-[300px]">
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localizationStrategy',
-              inputKey: 'supervisionOversightEntity_' + index,
-              label: 'Supervision / Oversight'
+              inputKey: 'supervisionOversightByGovernmentEntity' + index,
+              label: 'Supervision / Oversight by government entity'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -231,17 +232,17 @@
               rows="3"
               [maxlength]="255"
               placeholder="E.g., MoEn, PIF, etc."
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
-              [appConditionalColorClass]="highlightInput('supervisionOversightEntity_' + index, itemControl.get('rowId')?.value)"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity))"
+              [appConditionalColorClass]="highlightInput('supervisionOversightByGovernmentEntity' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             <div class="text-xs text-gray-500 text-right mt-1">
-              {{ getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity)).value?.length || 0 }} / 255
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity)).value?.length || 0 }} / 255
             </div>
           </app-group-input-with-checkbox>
           <app-base-error-messages
-            [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
-            [label]="'Supervision / Oversight'"
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity))"
+            [label]="'Supervision / Oversight by government entity'"
           />
         </td>
 
@@ -325,7 +326,7 @@
           <div class="bg-primary text-white p-3 border border-gray-200 rounded-t-xl">
             <div class="flex justify-between items-center">
               <span class="font-normal">Metrics</span>
-              <span class="font-normal">Years ({{ yearColumns()[0] }}-{{ yearColumns()[4] }})</span>
+              <span class="font-normal">Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</span>
             </div>
           </div>
         </ng-template>
@@ -402,7 +403,7 @@
         [ft]="getServiceLevelFormArray()"
         [hideAddButton]="true"
         [hideDeleteButton]="true"
-        [excludeKeys]="['serviceId', 'serviceHeadcountRowId', 'expectedLocalizationDate', 'localizationApproach', 'localizationApproachOtherDetails', 'locationType', 'locationOtherDetails', 'capexRequired', 'supervisionOversightEntity', 'willBeAnyProprietaryToolsSystems', 'proprietaryToolsSystemsDetails']"
+        [excludeKeys]="['serviceId', 'serviceHeadcountRowId', 'expectedLocalizationDate', 'localizationApproach', 'localizationApproachOtherDetails', 'locationType', 'locationOtherDetails', 'capexRequired', 'supervisionOversightByGovernmentEntity', 'willBeAnyProprietaryToolsSystems', 'proprietaryToolsSystemsDetails']"
         [customHeaderLabels]="customHeadersLabels()"
         [groupHeader]="serviceLevelGroupHeader()"
         [scrollHeight]="'600px'"

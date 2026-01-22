@@ -75,6 +75,18 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
   });
 
+  saudiCompanyDetailsHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
+    return {
+      [EMaterialsFormControls.products]: 'If Manufacturer is Qualified / Under-Prequalification, specify the product(s)',
+      [EMaterialsFormControls.companyOverview]: 'If Manufacturer is Not Qualified, provide Company Overview',
+      [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: 'If Company Type is Contractor, Mention few key projects executed by the Contractor for SEC',
+      [EMaterialsFormControls.companyOverviewKeyProjectDetails]: 'If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.',
+      [EMaterialsFormControls.companyOverviewOther]: 'If Company Type is Other Provide company overview',
+      [EMaterialsFormControls.qualificationStatus]: '(Qualified / Under-Prequalification / Not Qualified)',
+      [EMaterialsFormControls.supervisionOversightEntity]: 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.)',
+    };
+  });
+
   // Handle start editing for investor comment
   onStartEditing(): void {
     if (this.isResubmitMode()) {
@@ -100,7 +112,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
   availableQuarters = computed(() => this.planFormService?.getAvailableQuarters(5) ?? []);
 
-  yearColumns = computed(() => this.planFormService?.upcomingYears(5) ?? []);
+  yearColumns = computed(() => this.planFormService?.upcomingYears(6) ?? []);
 
   // Custom header labels for Saudi Company Details table to ensure correct order
   saudiCompanyDetailsHeaderLabels: Record<string, string> = {
@@ -122,6 +134,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     EMaterialsFormControls.thirdYear,
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
+    EMaterialsFormControls.sixthYear,
   ];
 
   // Table rows data for PrimeNG table
@@ -169,7 +182,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       { label: 'Service Name', rowspan: 2, dataGroup: false },
       { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
       { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
-      { label: 'Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
+      { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
       { label: 'Key Measures to Upskill Saudis', rowspan: 2, dataGroup: false },
       { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
     ];

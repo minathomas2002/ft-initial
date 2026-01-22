@@ -50,7 +50,7 @@ import { AssignReassignManualEmployee } from "../../components/assign-reassign-m
     TimelineDialog,
     TruncateTooltipDirective,
     AssignReassignManualEmployee
-],
+  ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -106,7 +106,7 @@ export class PlansList implements OnInit {
 
     baseHeaders.push(
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: this.i18nService.translate('plans.table.planType'), isSortable: false, sortingKey: 'title' },
+      { label: 'Opportunity Type', isSortable: false, sortingKey: 'title' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
     );
 

@@ -11,13 +11,7 @@
       [maxItems]="20"
       [scrollHeight]="'600px'"
       [customHeaderLabels]="saudiCompanyDetailsHeaderLabels"
-      [headerTooltips]="{
-        'products':'If Manufacturer is Qualified / Under-Prequalification, specify the product(s)',
-        'companyOverview':'If Manufacturer is Not Qualified, provide Company Overview',
-        'keyProjectsExecutedByContractorForSEC':'If Company Type is Contractor, Mention few key projects executed by the Contractor for SEC',
-        'companyOverviewKeyProjectDetails':'If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.',
-        'companyOverviewOther':'If Company Type is Other Provide company overview',
-      }"
+      [headerTooltips]="saudiCompanyDetailsHeaderTooltips()"
     >
       <ng-template
         #itemTemplate
@@ -54,14 +48,14 @@
 
         <!-- Vendor ID with SEC (Readonly) -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
-            <input
-              type="text"
-              pInputText
-              fluid
-              placeholder=""
-              [formControl]="getFormControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
-              class="bg-gray-100 text-gray-500"
-            />
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder=""
+            [formControl]="getFormControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+            class="bg-gray-100 text-gray-500"
+          />
         </td>
 
         <!-- Bena register Vendor ID (Readonly) -->
@@ -320,7 +314,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'collaborationPartnership',
                 inputKey: 'agreementType_' + index,
-                label: 'Agreement Type'
+                label: 'Agreement Type with Saudi Company'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -328,7 +322,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
-                placeholder="Select agreement type"
+                placeholder="Select agreement type with Saudi Company"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('agreementType_' + index, itemControl.get('rowId')?.value)"
@@ -435,7 +429,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'whyChoseThisCompany_' + index,
-              label: 'Why Chose This Company'
+              label: 'Why Did You Chose This Particular Saudi Company As Your Partner?'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -454,7 +448,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
-            [label]="'Why Chose This Company'"
+            [label]="'Why Did You Chose This Particular Saudi Company As Your Partner?'"
           />
         </td>
 
@@ -536,7 +530,7 @@
           <div class="bg-primary text-white p-3 border border-gray-200 rounded-t-xl">
             <div class="flex justify-between items-center">
               <span class="font-normal">Metrics</span>
-              <span class="font-normal">Years ({{ yearColumns()[0] }}-{{ yearColumns()[4] }})</span>
+              <span class="font-normal">Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</span>
             </div>
           </div>
         </ng-template>

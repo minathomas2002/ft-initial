@@ -16,13 +16,13 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
     };
 
-    // Add year columns (2025-2030) with Expected Annual Headcount and Saudization %
     const yearControls = [
       EMaterialsFormControls.firstYear,
       EMaterialsFormControls.secondYear,
       EMaterialsFormControls.thirdYear,
       EMaterialsFormControls.fourthYear,
       EMaterialsFormControls.fifthYear,
+      EMaterialsFormControls.sixthYear,
     ];
 
     yearControls.forEach(yearControl => {
@@ -91,7 +91,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, numeric only
       }),
-      [EMaterialsFormControls.supervisionOversightEntity]: this.fb.group({
+      [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
         [EMaterialsFormControls.value]: ['', [Validators.maxLength(255)]], // Optional
       }),
@@ -112,6 +112,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       EMaterialsFormControls.thirdYear,
       EMaterialsFormControls.fourthYear,
       EMaterialsFormControls.fifthYear,
+      EMaterialsFormControls.sixthYear,
     ];
 
     // Expected Annual Headcount (required, integer only)

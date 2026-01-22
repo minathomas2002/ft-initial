@@ -7,8 +7,8 @@ export enum ENotificationCategory {
 export enum ENotificationChannel
 {
     System = 1,
-    Email 
-} 
+    Email
+}
 
 
  export enum ENotificationRecipient
@@ -42,10 +42,10 @@ export enum ENotificationChannel
      CommentNotification=9,
 
      // Opportunity
-     InactiveOpportunityAlert = 20,
      DraftOpportunityReminder = 21,
      OpportunityUpdateNotification = 22,
      NewOpportunityCreatedNotification = 23,
+     InactiveOpportunityAlert = 24,
 
      // Access
      ImpersonationAccessAlert = 30

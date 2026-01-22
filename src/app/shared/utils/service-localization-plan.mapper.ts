@@ -113,6 +113,8 @@ export interface EntityHeadcount {
   y4Saudization: NumberOrEmpty;
   y5Headcount: NumberOrEmpty;
   y5Saudization: NumberOrEmpty;
+  y6Headcount: NumberOrEmpty;
+  y6Saudization: NumberOrEmpty;
 }
 
 export interface ServiceHeadcount {
@@ -132,6 +134,8 @@ export interface ServiceHeadcount {
   y4Saudization: NumberOrEmpty;
   y5Headcount: NumberOrEmpty;
   y5Saudization: NumberOrEmpty;
+  y6Headcount: NumberOrEmpty;
+  y6Saudization: NumberOrEmpty;
 }
 
 export interface AttachmentFile {
@@ -347,6 +351,8 @@ function setYearValues(
     y4Saudization?: number;
     y5Headcount?: number;
     y5Saudization?: number;
+    y6Headcount?: number;
+    y6Saudization?: number;
   }
 ): void {
   setNestedValue(group, `${EMaterialsFormControls.firstYear}_headcount`, data.y1Headcount ?? null);
@@ -359,6 +365,8 @@ function setYearValues(
   setNestedValue(group, `${EMaterialsFormControls.fourthYear}_saudization`, data.y4Saudization ?? null);
   setNestedValue(group, `${EMaterialsFormControls.fifthYear}_headcount`, data.y5Headcount ?? null);
   setNestedValue(group, `${EMaterialsFormControls.fifthYear}_saudization`, data.y5Saudization ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.sixthYear}_headcount`, data.y6Headcount ?? null);
+  setNestedValue(group, `${EMaterialsFormControls.sixthYear}_saudization`, data.y6Saudization ?? null);
 }
 
 /**
@@ -517,7 +525,7 @@ export function mapServicePlanResponseToForm(
 
     const head: IServicePlanServiceHeadcount | undefined = findByServiceId(servicePlan.serviceHeadcounts, serviceId, 3);
     if (!head) return;
-    row.get(EMaterialsFormControls.rowId)?.setValue((head as any).id ?? null, { emitEvent: false });
+    row.get(EMaterialsFormControls.rowId)?.setValue(head.id ?? null, { emitEvent: false });
     // Read localizationDate from serviceHeadcounts (backend sends it as localizationDate)
     if (head.localizationDate) {
       setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, head.localizationDate);
@@ -554,7 +562,7 @@ export function mapServicePlanResponseToForm(
       setNestedValue(row, EMaterialsFormControls.location, strategy.locationType != null ? String(strategy.locationType) : null);
       setNestedValue(row, EMaterialsFormControls.locationOtherDetails, strategy.otherLocationType ?? '');
       setNestedValue(row, EMaterialsFormControls.capexRequired, strategy.capexRequired ?? null);
-      setNestedValue(row, EMaterialsFormControls.supervisionOversightEntity, strategy.governmentSupervision ?? '');
+      setNestedValue(row, EMaterialsFormControls.supervisionOversightByGovernmentEntity, strategy.governmentSupervision ?? '');
       setNestedValue(row, EMaterialsFormControls.willBeAnyProprietaryToolsSystems, toYesNoId(strategy.hasProprietaryTools));
       setNestedValue(row, EMaterialsFormControls.proprietaryToolsSystemsDetails, strategy.proprietaryToolsDetails ?? '');
     }
@@ -748,9 +756,11 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
     const y4Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_saudization`));
     const y5Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_headcount`));
     const y5Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_saudization`));
+    const y6Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.sixthYear}_headcount`));
+    const y6Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.sixthYear}_saudization`));
 
     const hasEntityValues = [
-      y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,
+      y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization, y6Headcount, y6Saudization,
     ].some((v) => typeof v === 'number');
 
     if (hasEntityValues) {
@@ -767,6 +777,8 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
         y4Saudization,
         y5Headcount,
         y5Saudization,
+        y6Headcount,
+        y6Saudization,
       });
     }
   }
@@ -792,9 +804,11 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
       const y4Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_saudization`));
       const y5Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_headcount`));
       const y5Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_saudization`));
+      const y6Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.sixthYear}_headcount`));
+      const y6Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.sixthYear}_saudization`));
 
       const hasServiceValues = [
-        y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,
+        y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,  y6Headcount, y6Saudization,
       ].some((v) => typeof v === 'number')
         || (measuresUpSkillSaudis && measuresUpSkillSaudis.toString().trim() !== '')
         || (mentionSupportRequiredSEC && mentionSupportRequiredSEC.toString().trim() !== '')
@@ -818,6 +832,8 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
           y4Saudization,
           y5Headcount,
           y5Saudization,
+          y6Headcount,
+          y6Saudization,
         });
       }
     }
@@ -886,7 +902,7 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
         getControlValue(strategyGroup, EMaterialsFormControls.willBeAnyProprietaryToolsSystems)
       );
       const proprietaryToolsDetails = getControlValue(strategyGroup, EMaterialsFormControls.proprietaryToolsSystemsDetails) || undefined;
-      const governmentSupervision = getControlValue(strategyGroup, EMaterialsFormControls.supervisionOversightEntity) || undefined;
+      const governmentSupervision = getControlValue(strategyGroup, EMaterialsFormControls.supervisionOversightByGovernmentEntity) || undefined;
       const otherLocalizationApproach = getControlValue(strategyGroup, EMaterialsFormControls.localizationApproachOtherDetails) || undefined;
       const otherLocationType = getControlValue(strategyGroup, EMaterialsFormControls.locationOtherDetails) || undefined;
 
@@ -934,9 +950,11 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
     const y4Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fourthYear}_saudization`));
     const y5Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_headcount`));
     const y5Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.fifthYear}_saudization`));
+    const y6Headcount = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.sixthYear}_headcount`));
+    const y6Saudization = toNumberOrEmpty(getControlValue(entityGroup, `${EMaterialsFormControls.sixthYear}_saudization`));
 
     const hasEntityValues = [
-      y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,
+      y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization, y6Headcount, y6Saudization,
     ].some((v) => typeof v === 'number');
 
     if (hasEntityValues) {
@@ -953,6 +971,8 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
         y4Saudization,
         y5Headcount,
         y5Saudization,
+        y6Headcount,
+        y6Saudization,
       });
     }
   }
@@ -979,9 +999,11 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
       const y4Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fourthYear}_saudization`));
       const y5Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_headcount`));
       const y5Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.fifthYear}_saudization`));
+      const y6Headcount = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.sixthYear}_headcount`));
+      const y6Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.sixthYear}_saudization`));
 
       const hasServiceValues = [
-        y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,
+        y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization, y6Headcount, y6Saudization,
       ].some((v) => typeof v === 'number')
         || (measuresUpSkillSaudis && measuresUpSkillSaudis.toString().trim() !== '')
         || (mentionSupportRequiredSEC && mentionSupportRequiredSEC.toString().trim() !== '')
@@ -1006,6 +1028,8 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
           y4Saudization,
           y5Headcount,
           y5Saudization,
+          y6Headcount,
+          y6Saudization,
         });
       }
     }
@@ -1250,6 +1274,8 @@ export function convertServiceRequestToFormData(
       formData.append(`ServicePlan.EntityHeadcounts[${index}].Y4Saudization`, entity.y4Saudization.toString());
       formData.append(`ServicePlan.EntityHeadcounts[${index}].Y5Headcount`, entity.y5Headcount.toString());
       formData.append(`ServicePlan.EntityHeadcounts[${index}].Y5Saudization`, entity.y5Saudization.toString());
+      formData.append(`ServicePlan.EntityHeadcounts[${index}].Y6Headcount`, entity.y6Headcount.toString());
+      formData.append(`ServicePlan.EntityHeadcounts[${index}].Y6Saudization`, entity.y6Saudization.toString());
     });
   }
 
@@ -1275,6 +1301,8 @@ export function convertServiceRequestToFormData(
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].Y4Saudization`, service.y4Saudization.toString());
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].Y5Headcount`, service.y5Headcount.toString());
       formData.append(`ServicePlan.ServiceHeadcounts[${index}].Y5Saudization`, service.y5Saudization.toString());
+      formData.append(`ServicePlan.ServiceHeadcounts[${index}].Y6Headcount`, service.y6Headcount.toString());
+      formData.append(`ServicePlan.ServiceHeadcounts[${index}].Y6Saudization`, service.y6Saudization.toString());
     });
   }
 
