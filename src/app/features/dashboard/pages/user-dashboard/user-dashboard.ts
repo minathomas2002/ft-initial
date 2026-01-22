@@ -277,13 +277,13 @@ export class UserDashboard implements OnInit {
     if (plan.planType === EOpportunityType.PRODUCT) {
       this.planStore.generateProductPlanPdf(plan.id).pipe(take(1)).subscribe({
         error: (error) => {
-          console.error('Error generating product plan pdf:', error);
+          this.toasterService.error(error.errorMessage || 'Error generating product plan pdf');
         }
       });
     } else if (plan.planType === EOpportunityType.SERVICES) {
       this.planStore.generateServicePlanPdf(plan.id).pipe(take(1)).subscribe({
         error: (error) => {
-          console.error('Error generating service plan pdf:', error);
+          this.toasterService.error(error.errorMessage || 'Error generating service plan pdf');
         }
       });
     }

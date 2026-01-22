@@ -78,7 +78,7 @@ export class PlanApiService {
       })
       .pipe(
         map((response: HttpResponse<Blob>) => {
-          const filename = extractFilenameFromHeaders(response.headers, 'product-plan.pdf');
+          const filename = extractFilenameFromHeaders(response.headers, 'plan.pdf');
           return {
             blob: response.body!,
             filename: filename
@@ -96,7 +96,7 @@ export class PlanApiService {
       })
       .pipe(
         map((response: HttpResponse<Blob>) => {
-          const filename = extractFilenameFromHeaders(response.headers, 'service-plan.pdf');
+          const filename = extractFilenameFromHeaders(response.headers, 'plan.pdf');
           return {
             blob: response.body!,
             filename: filename

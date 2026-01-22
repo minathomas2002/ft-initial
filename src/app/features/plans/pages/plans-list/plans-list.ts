@@ -309,9 +309,17 @@ export class PlansList implements OnInit {
 
   onDownload(plan: IPlanRecord) {
     if (plan.planType === EOpportunityType.PRODUCT) {
-      this.planStore.generateProductPlanPdf(plan.id).pipe(take(1)).subscribe();
+      this.planStore.generateProductPlanPdf(plan.id).pipe(take(1)).subscribe({
+        error: (error) => {
+          this.toastService.error(error.errorMessage || 'Error generating product plan pdf');
+        }
+      });
     } else if (plan.planType === EOpportunityType.SERVICES) {
-      this.planStore.generateServicePlanPdf(plan.id).pipe(take(1)).subscribe();
+      this.planStore.generateServicePlanPdf(plan.id).pipe(take(1)).subscribe({
+        error: (error) => {
+          this.toastService.error(error.errorMessage || 'Error generating service plan pdf');
+        }
+      });
     }
   }
 
