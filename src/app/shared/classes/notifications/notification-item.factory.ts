@@ -133,7 +133,8 @@ function handleOpportunityNotificationFlow(notification: INotification) {
   };
 
   const actionsToNavigateToOpportunity = new Set<EOpportunityAction>([
-    EOpportunityAction.Publish
+    EOpportunityAction.Publish,
+    EOpportunityAction.Edit,
   ])
 
   if (actionsToNavigateToOpportunity.has(action)) {
