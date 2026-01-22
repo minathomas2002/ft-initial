@@ -1045,13 +1045,24 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const includeExistingSaudi = this.showExistingSaudiStep();
     const includeDirectLocalization = this.showDirectLocalizationStep();
 
+    // In resubmit mode, only validate steps that have corrected fields. Steps with no comments
+    // or highlighted inputs are fully disabled; we must not block resubmit due to their validity.
+    const resubmitStepsToValidate =
+      this.isResubmitMode() ?
+        {
+          step1: this.step1CorrectedFields().length > 0,
+          step2: this.step2CorrectedFields().length > 0,
+          step3: includeExistingSaudi && this.step3CorrectedFields().length > 0,
+          step4: includeDirectLocalization && this.step4CorrectedFields().length > 0,
+        }
+        : undefined;
+
     // Check if all forms are valid
     if (!this.serviceLocalizationFormService.areAllFormsValid({
       includeExistingSaudi,
       includeDirectLocalization,
+      resubmitStepsToValidate,
     })) {
-
-      // console.log(this.serviceLocalizationFormService)
       // Mark all controls as dirty to show validation errors (and trigger stepper error counters)
       this.serviceLocalizationFormService.markAllControlsAsDirty({
         includeExistingSaudi,

@@ -227,13 +227,21 @@ export class ProductPlanFormService {
   }
 
   /**
-   * Check if all forms are valid
+   * Check if all forms are valid.
+   * In resubmit mode, pass `resubmitStepsToValidate` to only validate steps that have corrected
+   * fields. Steps with no corrected fields are skipped (not required to be valid).
    */
-  areAllFormsValid(): boolean {
-    return this._step1FormGroup.valid &&
-      this._step2FormGroup.valid &&
-      this._step3FormGroup.valid &&
-      this._step4FormGroup.valid;
+  areAllFormsValid(options?: {
+    resubmitStepsToValidate?: { step1: boolean; step2: boolean; step3: boolean; step4: boolean };
+  }): boolean {
+    const resubmit = options?.resubmitStepsToValidate;
+
+    const step1Valid = resubmit ? (!resubmit.step1 || this._step1FormGroup.valid) : this._step1FormGroup.valid;
+    const step2Valid = resubmit ? (!resubmit.step2 || this._step2FormGroup.valid) : this._step2FormGroup.valid;
+    const step3Valid = resubmit ? (!resubmit.step3 || this._step3FormGroup.valid) : this._step3FormGroup.valid;
+    const step4Valid = resubmit ? (!resubmit.step4 || this._step4FormGroup.valid) : this._step4FormGroup.valid;
+
+    return step1Valid && step2Valid && step3Valid && step4Valid;
   }
 
   /**

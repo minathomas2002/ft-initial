@@ -408,18 +408,30 @@ export class ServicePlanFormService {
   }
 
   /**
-   * Check if all forms are valid
+   * Check if all forms are valid.
+   * In resubmit mode, pass `resubmitStepsToValidate` to only validate steps that have corrected
+   * fields. Steps with no corrected fields are skipped (not required to be valid).
    */
-  areAllFormsValid(options?: { includeExistingSaudi?: boolean; includeDirectLocalization?: boolean }): boolean {
+  areAllFormsValid(options?: {
+    includeExistingSaudi?: boolean;
+    includeDirectLocalization?: boolean;
+    /** In resubmit mode: only validate these steps; steps with false are skipped. */
+    resubmitStepsToValidate?: { step1: boolean; step2: boolean; step3: boolean; step4: boolean };
+  }): boolean {
     const includeExistingSaudi = options?.includeExistingSaudi ?? true;
     const includeDirectLocalization = options?.includeDirectLocalization ?? true;
+    const resubmit = options?.resubmitStepsToValidate;
 
-    return (
-      this._step1FormGroup.valid &&
-      this._step2FormGroup.valid &&
-      (!includeExistingSaudi || this._step3FormGroup.valid) &&
-      (!includeDirectLocalization || this._step4FormGroup.valid)
-    );
+    const step1Valid = resubmit ? (!resubmit.step1 || this._step1FormGroup.valid) : this._step1FormGroup.valid;
+    const step2Valid = resubmit ? (!resubmit.step2 || this._step2FormGroup.valid) : this._step2FormGroup.valid;
+    const step3Valid = resubmit
+      ? (!includeExistingSaudi || !resubmit.step3 || this._step3FormGroup.valid)
+      : (!includeExistingSaudi || this._step3FormGroup.valid);
+    const step4Valid = resubmit
+      ? (!includeDirectLocalization || !resubmit.step4 || this._step4FormGroup.valid)
+      : (!includeDirectLocalization || this._step4FormGroup.valid);
+
+    return step1Valid && step2Valid && step3Valid && step4Valid;
   }
 
   /**

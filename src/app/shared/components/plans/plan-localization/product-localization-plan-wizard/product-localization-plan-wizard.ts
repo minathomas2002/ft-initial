@@ -673,8 +673,19 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   onSummarySubmitClick(): void {
+    // In resubmit mode, only validate steps that have corrected fields. Steps with no comments
+    // or highlighted inputs are fully disabled; we must not block resubmit due to their validity.
+    const resubmitStepsToValidate = this.isResubmitMode()
+      ? {
+          step1: this.step1CorrectedFieldsFiltered().length > 0,
+          step2: this.step2CorrectedFieldsFiltered().length > 0,
+          step3: this.step3CorrectedFieldsFiltered().length > 0,
+          step4: this.step4CorrectedFieldsFiltered().length > 0,
+        }
+      : undefined;
+
     // Check if all forms are valid
-    if (!this.productPlanFormService.areAllFormsValid()) {
+    if (!this.productPlanFormService.areAllFormsValid({ resubmitStepsToValidate })) {
       // Mark all controls as dirty to show validation errors
       this.productPlanFormService.markAllControlsAsDirty();
       this.toasterService.error(this.i18nService.translate('plans.wizard.messages.fixValidationErrors'));
