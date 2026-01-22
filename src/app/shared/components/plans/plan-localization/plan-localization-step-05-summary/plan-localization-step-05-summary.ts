@@ -12,6 +12,8 @@ import { SummarySectionSignature } from './summary-sections/summary-section-sign
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { RoleService } from 'src/app/shared/services/role/role-service';
+import { ERoles } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-plan-localization-step-05-summary',
@@ -48,10 +50,17 @@ export class PlanLocalizationStep05Summary {
   private readonly changeDetectionRef = inject(ChangeDetectorRef);
   private readonly i18nService = inject(I18nService);
   private readonly planStore = inject(PlanStore);
+  private readonly roleService = inject(RoleService);
 
   onEditStep = output<number>();
   onSubmit = output<void>();
   onValidationErrorsChange = output<Map<number, IStepValidationErrors>>();
+
+  readonly isInvestor = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
+  readonly isResubmitMode = computed(() => this.planStore.wizardMode() === 'resubmit');
+  private readonly hideIncomingWhenInvestorOverrides = computed(
+    () => this.isResubmitMode() && this.isInvestor(),
+  );
 
   // Helper methods to get combined comment text for each step
   // Priority: pageComments (investor comments from form controls) > stepComments (employee comments from API)
@@ -134,6 +143,40 @@ export class PlanLocalizationStep05Summary {
 
   hasStep4OutComingComments = computed(() => {
     return this.pageComments().filter(c => c.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title')).length > 0;
+  });
+
+  // In investor resubmit mode: if investor added a new comment on a step, hide the incoming/internal one.
+  showIncomingStep1Comments = computed(() => {
+    return (
+      this.shouldShowIncomingComments() &&
+      this.hasIncomingStep1Comments() &&
+      !(this.hideIncomingWhenInvestorOverrides() && this.hasStep1OutComingComments())
+    );
+  });
+  // In investor resubmit mode: if investor added a new comment on a step, hide the incoming/internal one.
+  showIncomingStep2Comments = computed(() => {
+    return (
+      this.shouldShowIncomingComments() &&
+      this.hasIncomingStep2Comments() &&
+      !(this.hideIncomingWhenInvestorOverrides() && this.hasStep2OutComingComments())
+    );
+  });
+  // In investor resubmit mode: if investor added a new comment on a step, hide the incoming/internal one.
+  showIncomingStep3Comments = computed(() => {
+    return (
+      this.shouldShowIncomingComments() &&
+      this.hasIncomingStep3Comments() &&
+      !(this.hideIncomingWhenInvestorOverrides() && this.hasStep3OutComingComments())
+    );
+  });
+
+  // In investor resubmit mode: if investor added a new comment on a step, hide the incoming/internal one.
+  showIncomingStep4Comments = computed(() => {
+    return (
+      this.shouldShowIncomingComments() &&
+      this.hasIncomingStep4Comments() &&
+      !(this.hideIncomingWhenInvestorOverrides() && this.hasStep4OutComingComments())
+    );
   });
 
   // Incoming comments from plan store (API response)

@@ -446,7 +446,12 @@ export abstract class PlanStepBaseClass {
     this.formUtilityService.resetHasCommentControls(this.getFormGroup());
     this.comment.set('');
     this.commentFormControl.reset();
-    this.commentPhase.set('adding');
+    if (this.isResubmitMode()) {
+      this.commentPhase.set('none');
+      this.commentFormControl.disable({ emitEvent: false });
+    } else {
+      this.commentPhase.set('adding');
+    }
     this.showDeleteConfirmationDialog.set(false);
     this.toasterService.success('Your comments and selected fields were removed successfully.');
   }
@@ -486,6 +491,19 @@ export abstract class PlanStepBaseClass {
     this.commentFormControl.setValue(commentValue, { emitEvent: false });
     this.commentPhase.set('viewing');
     this.commentFormControl.disable();
+
+    // In resubmit (investor) flow, reset any current orange selections and counters
+    if (this.isResubmitMode()) {
+      // Clear the selected inputs so step highlights/counts reset
+      try {
+        this.selectedInputs.set([]);
+        this.resetAllHasCommentControls();
+      } catch (e) {
+        // Defensive: should not block save UX if resetting fails
+        console.warn('Failed to reset selected inputs after saving investor comment', e);
+      }
+    }
+
     this.toasterService.success('Your comments have been saved successfully.');
   }
 
@@ -511,6 +529,17 @@ export abstract class PlanStepBaseClass {
     this.commentFormControl.setValue(commentValue, { emitEvent: false });
     this.commentPhase.set('viewing');
     this.commentFormControl.disable();
+
+    // In resubmit (investor) flow, reset any current orange selections and counters
+    if (this.isResubmitMode()) {
+      try {
+        this.selectedInputs.set([]);
+        this.resetAllHasCommentControls();
+      } catch (e) {
+        console.warn('Failed to reset selected inputs after editing investor comment', e);
+      }
+    }
+
     this.toasterService.success('Your updates have been saved successfully.');
   }
 
