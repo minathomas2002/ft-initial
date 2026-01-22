@@ -31,6 +31,10 @@ export class OpportunityActionsMapper {
         label: 'opportunity.action.apply',
         key: EOpportunityAction.Apply,
       },
+      [EOpportunityAction.SystemReminder]: {
+        label: 'opportunity.action.systemReminder',
+        key: EOpportunityAction.SystemReminder,
+      },
     };
 
   getActions(
