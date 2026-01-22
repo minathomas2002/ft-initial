@@ -1,6 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { distinctUntilChanged } from 'rxjs';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServiceLocalizationStepCoverPageFormBuilder } from './steps/service-localization-step-cover-page.form-builder';
@@ -78,6 +79,9 @@ export class ServicePlanFormService {
         this.syncServicesFromCoverPageToExistingSaudi();
         this.syncServicesFromCoverPageToDirectLocalization();
       });
+
+    // Subscribe to companyType changes in Step 3 (Existing Saudi) to toggle validation
+    this.subscribeToCompanyTypeChanges();
   }
 
   // Expose sub-form groups for Step 1
@@ -630,6 +634,106 @@ export class ServicePlanFormService {
       years.push(startYear + i);
     }
     return years;
+  }
+
+  /**
+   * Subscribe to companyType changes in Step 3 (Existing Saudi) FormArray
+   * Automatically calls toggleCompanyTypeFieldsValidation when companyType value changes
+   */
+  private subscribeToCompanyTypeChanges(): void {
+    const saudiCompanyDetailsArray = this.saudiCompanyDetailsFormGroup;
+    if (!saudiCompanyDetailsArray) return;
+
+    // Helper function to compare arrays for distinctUntilChanged
+    const arraysEqual = (a: string[], b: string[]): boolean => {
+      if (!a && !b) return true;
+      if (!a || !b) return false;
+      if (a.length !== b.length) return false;
+      const sortedA = [...a].sort();
+      const sortedB = [...b].sort();
+      return sortedA.every((val, idx) => val === sortedB[idx]);
+    };
+
+    // Helper function to set up subscription for a specific item
+    const setupCompanyTypeSubscription = (index: number): void => {
+      const itemFormGroup = saudiCompanyDetailsArray.at(index) as FormGroup;
+      if (!itemFormGroup) return;
+
+      const companyTypeControl = itemFormGroup.get(
+        `${EMaterialsFormControls.companyType}.${EMaterialsFormControls.value}`
+      ) as FormControl<string[]>;
+
+      if (companyTypeControl) {
+        // Initial call with current value (only if value exists)
+        const currentValue = companyTypeControl.value || [];
+        if (currentValue.length > 0) {
+          this.toggleCompanyTypeFieldsValidation(currentValue, index);
+        }
+
+        // Subscribe to future changes, using distinctUntilChanged to prevent infinite loops
+        companyTypeControl.valueChanges
+          .pipe(
+            distinctUntilChanged((prev, curr) => arraysEqual(prev || [], curr || [])),
+            takeUntilDestroyed(this._destroyRef)
+          )
+          .subscribe((companyTypes: string[]) => {
+            this.toggleCompanyTypeFieldsValidation(companyTypes || [], index);
+          });
+      }
+    };
+
+    // Track which controls we've already subscribed to (by control reference)
+    const subscribedControls = new WeakSet<FormControl<string[]>>();
+
+    // Helper to check if we should set up subscription
+    const shouldSetupSubscription = (index: number): boolean => {
+      const itemFormGroup = saudiCompanyDetailsArray.at(index) as FormGroup;
+      if (!itemFormGroup) return false;
+      const companyTypeControl = itemFormGroup.get(
+        `${EMaterialsFormControls.companyType}.${EMaterialsFormControls.value}`
+      ) as FormControl<string[]>;
+      return companyTypeControl ? !subscribedControls.has(companyTypeControl) : false;
+    };
+
+    // Set up subscriptions for existing items
+    saudiCompanyDetailsArray.controls.forEach((_, index) => {
+      if (shouldSetupSubscription(index)) {
+        const itemFormGroup = saudiCompanyDetailsArray.at(index) as FormGroup;
+        const companyTypeControl = itemFormGroup.get(
+          `${EMaterialsFormControls.companyType}.${EMaterialsFormControls.value}`
+        ) as FormControl<string[]>;
+        if (companyTypeControl) {
+          subscribedControls.add(companyTypeControl);
+          setupCompanyTypeSubscription(index);
+        }
+      }
+    });
+
+    // Subscribe to array changes to handle new items being added
+    // Only process when array length actually changes (items added/removed)
+    let previousLength = saudiCompanyDetailsArray.length;
+    saudiCompanyDetailsArray.valueChanges
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        const currentLength = saudiCompanyDetailsArray.length;
+        // Only set up subscriptions when new items are added
+        if (currentLength > previousLength) {
+          // Set up subscriptions for newly added items
+          for (let i = previousLength; i < currentLength; i++) {
+            if (shouldSetupSubscription(i)) {
+              const itemFormGroup = saudiCompanyDetailsArray.at(i) as FormGroup;
+              const companyTypeControl = itemFormGroup.get(
+                `${EMaterialsFormControls.companyType}.${EMaterialsFormControls.value}`
+              ) as FormControl<string[]>;
+              if (companyTypeControl) {
+                subscribedControls.add(companyTypeControl);
+                setupCompanyTypeSubscription(i);
+              }
+            }
+          }
+        }
+        previousLength = currentLength;
+      });
   }
 }
 
