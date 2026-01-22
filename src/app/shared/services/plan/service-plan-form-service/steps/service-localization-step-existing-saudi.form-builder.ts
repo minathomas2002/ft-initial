@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AgreementType, EMaterialsFormControls } from 'src/app/shared/enums';
+import { AgreementType, EMaterialsFormControls, EServiceCompanyType } from 'src/app/shared/enums';
 import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
 
 export class ServiceLocalizationStepExistingSaudiFormBuilder {
@@ -387,9 +387,9 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     if (!array || index >= array.length) return;
 
     const itemFormGroup = array.at(index) as FormGroup;
-    const hasManufacturer = companyTypes.includes('Manufacturer');
-    const hasContractor = companyTypes.includes('Contractor');
-    const hasOther = companyTypes.includes('Other');
+    const hasManufacturer = companyTypes.includes(EServiceCompanyType.Manufacturers.toString());
+    const hasContractor = companyTypes.includes(EServiceCompanyType.Contractors.toString());
+    const hasOther = companyTypes.includes(EServiceCompanyType.Others.toString());
 
     // Qualification Status - only available if Manufacturer is selected
     const qualificationStatusControl = itemFormGroup.get(`${EMaterialsFormControls.qualificationStatus}.${EMaterialsFormControls.value}`);
@@ -412,7 +412,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     const keyProjectsControl = itemFormGroup.get(`${EMaterialsFormControls.keyProjectsExecutedByContractorForSEC}.${EMaterialsFormControls.value}`);
     if (keyProjectsControl) {
       if (hasContractor) {
-        keyProjectsControl.setValidators([Validators.maxLength(255)]);
+        keyProjectsControl.setValidators([Validators.required, Validators.maxLength(255)]);
       } else {
         keyProjectsControl.clearValidators();
         keyProjectsControl.reset();
@@ -424,7 +424,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     const companyOverviewKeyProjectControl = itemFormGroup.get(`${EMaterialsFormControls.companyOverviewKeyProjectDetails}.${EMaterialsFormControls.value}`);
     if (companyOverviewKeyProjectControl) {
       if (hasContractor) {
-        companyOverviewKeyProjectControl.setValidators([Validators.maxLength(255)]);
+        companyOverviewKeyProjectControl.setValidators([Validators.required, Validators.maxLength(255)]);
       } else {
         companyOverviewKeyProjectControl.clearValidators();
         companyOverviewKeyProjectControl.reset();
