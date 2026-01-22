@@ -19,5 +19,4 @@ export enum EOpportunityAction {
   MoveToDraft = 3,
   Publish = 4,
   Apply = 5,
-  InActive = 24
 }
