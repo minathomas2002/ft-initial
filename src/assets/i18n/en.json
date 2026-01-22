@@ -263,6 +263,8 @@
       "opportunityTypeRequired": "Opportunity type is required",
       "spendSARRequired": "Spend (SAR) is required",
       "spendSARCannotBeGreaterThan10": "Spend (SAR) cannot be greater than 10 billion",
+      "minQuantity": "Min quantity",
+      "maxQuantity": "Max quantity",
       "minQuantityRequired": "Min quantity is required",
       "minQuantityCannotBeNegative": "Min quantity cannot be negative",
       "minQuantityMustBeLessThanMax": "Min quantity must be less than max quantity",

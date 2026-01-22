@@ -4,88 +4,41 @@
   <div class="flex flex-col gap-8">
     <!-- Basic Information Skeleton -->
     <div>
-      <p-skeleton
-        width="200px"
-        height="24px"
-        class="mb-4"
-      />
+      <p-skeleton width="200px" height="24px" class="mb-4" />
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <p-skeleton
-            width="150px"
-            height="16px"
-          />
-          <p-skeleton
-            width="100%"
-            height="40px"
-          />
+          <p-skeleton width="150px" height="16px" />
+          <p-skeleton width="100%" height="40px" />
         </div>
         <div class="flex flex-col gap-2">
-          <p-skeleton
-            width="150px"
-            height="16px"
-          />
-          <p-skeleton
-            width="100%"
-            height="96px"
-          />
+          <p-skeleton width="150px" height="16px" />
+          <p-skeleton width="100%" height="96px" />
         </div>
         <div class="flex flex-col gap-2">
-          <p-skeleton
-            width="150px"
-            height="16px"
-          />
-          <p-skeleton
-            width="50%"
-            height="40px"
-          />
+          <p-skeleton width="150px" height="16px" />
+          <p-skeleton width="50%" height="40px" />
         </div>
         <div class="flex flex-col gap-2">
-          <p-skeleton
-            width="150px"
-            height="16px"
-          />
-          <p-skeleton
-            width="50%"
-            height="40px"
-          />
+          <p-skeleton width="150px" height="16px" />
+          <p-skeleton width="50%" height="40px" />
         </div>
       </div>
     </div>
 
     <!-- Forecasted Demand Skeleton -->
     <div>
-      <p-skeleton
-        width="250px"
-        height="24px"
-        class="mb-4"
-      />
+      <p-skeleton width="250px" height="24px" class="mb-4" />
       <div class="flex flex-col gap-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div class="flex flex-col gap-2">
-            <p-skeleton
-              width="120px"
-              height="16px"
-            />
-            <p-skeleton
-              width="100%"
-              height="40px"
-            />
+            <p-skeleton width="120px" height="16px" />
+            <p-skeleton width="100%" height="40px" />
           </div>
           <div class="flex flex-col gap-2">
-            <p-skeleton
-              width="120px"
-              height="16px"
-            />
+            <p-skeleton width="120px" height="16px" />
             <div class="flex gap-2">
-              <p-skeleton
-                width="48%"
-                height="40px"
-              />
-              <p-skeleton
-                width="48%"
-                height="40px"
-              />
+              <p-skeleton width="48%" height="40px" />
+              <p-skeleton width="48%" height="40px" />
             </div>
           </div>
         </div>
@@ -94,32 +47,16 @@
 
     <!-- Suppliers Base Skeleton -->
     <div>
-      <p-skeleton
-        width="150px"
-        height="24px"
-        class="mb-4"
-      />
+      <p-skeleton width="150px" height="24px" class="mb-4" />
       <div class="flex flex-col gap-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div class="flex flex-col gap-2">
-            <p-skeleton
-              width="120px"
-              height="16px"
-            />
-            <p-skeleton
-              width="100%"
-              height="40px"
-            />
+            <p-skeleton width="120px" height="16px" />
+            <p-skeleton width="100%" height="40px" />
           </div>
           <div class="flex flex-col gap-2">
-            <p-skeleton
-              width="120px"
-              height="16px"
-            />
-            <p-skeleton
-              width="100%"
-              height="40px"
-            />
+            <p-skeleton width="120px" height="16px" />
+            <p-skeleton width="100%" height="40px" />
           </div>
         </div>
       </div>
@@ -127,42 +64,22 @@
 
     <!-- Opportunity Dates Skeleton -->
     <div>
-      <p-skeleton
-        width="180px"
-        height="24px"
-        class="mb-4"
-      />
+      <p-skeleton width="180px" height="24px" class="mb-4" />
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <p-skeleton
-            width="100px"
-            height="16px"
-          />
-          <p-skeleton
-            width="50%"
-            height="40px"
-          />
+          <p-skeleton width="100px" height="16px" />
+          <p-skeleton width="50%" height="40px" />
         </div>
       </div>
     </div>
 
     <!-- Opportunity Image Skeleton -->
     <div>
-      <p-skeleton
-        width="180px"
-        height="24px"
-        class="mb-4"
-      />
+      <p-skeleton width="180px" height="24px" class="mb-4" />
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <p-skeleton
-            width="80px"
-            height="16px"
-          />
-          <p-skeleton
-            width="100%"
-            height="120px"
-          />
+          <p-skeleton width="80px" height="16px" />
+          <p-skeleton width="100%" height="120px" />
         </div>
       </div>
     </div>
@@ -176,94 +93,56 @@
       <div class="flex flex-col">
         <app-base-label [title]="'opportunity.form.opportunityTitle' | translate">
         </app-base-label>
-        <input
-          type="text"
-          pInputText
-          [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
-          [placeholder]="'opportunity.form.enterOpportunityTitle' | translate"
-          [formControl]="getControl('title')"
-          [maxlength]="150"
-        />
-        @if(getControl('title').invalid && getControl('title').dirty){
-        <app-base-error [message]="getControl('title').hasError('required') ? ('opportunity.form.titleRequired' | translate) :
-          ('opportunity.form.maxLengthExceeded' | translate)" />
-        }
+        <input type="text" pInputText [disabled]="opportunitiesStore.details()?.hasActivePlans ?? false"
+          [placeholder]="'opportunity.form.enterOpportunityTitle' | translate" [formControl]="getControl('title')"
+          [maxlength]="150" />
+        <app-base-error-messages [control]="getControl('title')"
+          [label]="'opportunity.form.opportunityTitle' | translate" />
       </div>
       <!-- Short Description -->
       <div class="flex flex-col">
         <app-base-label [title]="'opportunity.form.shortDescription' | translate" />
-        <textarea
-          pTextarea
-          [rows]="2"
-          [placeholder]="'opportunity.form.enterShortDescription' | translate"
-          [formControl]="getControl('shortDescription')"
-          [maxlength]="255"
-        >
+        <textarea pTextarea [rows]="2" [placeholder]="'opportunity.form.enterShortDescription' | translate"
+          [formControl]="getControl('shortDescription')" [maxlength]="255">
         </textarea>
         <!-- Character Counter -->
         <div class="text-xs text-gray-500 text-right mt-1">
           {{ getControl('shortDescription').value?.length || 0 }} / 255
         </div>
-        @if(getControl('shortDescription').invalid && getControl('shortDescription').dirty){
-        <app-base-error [message]="getControl('shortDescription').hasError('required') ? ('opportunity.form.shortDescriptionRequired' | translate) :
-          ('opportunity.form.maxLengthExceeded' | translate)" />
-        }
+        <app-base-error-messages [control]="getControl('shortDescription')"
+          [label]="'opportunity.form.shortDescription' | translate" />
       </div>
 
       <!-- Opportunity Category -->
       <div class="flex flex-col">
         <app-base-label [title]="'opportunity.form.opportunityCategory' | translate" />
-        <p-select
-          [formControl]="getControl('opportunityCategory')"
-          [options]="opportunityCategories()"
-          optionLabel="name"
-          optionValue="id"
-          [placeholder]="'opportunity.form.select' | translate"
-          class="md:w-[50%]"
-        >
-          <ng-template
-            pTemplate="item"
-            let-item
-          >
+        <p-select [formControl]="getControl('opportunityCategory')" [options]="opportunityCategories()"
+          optionLabel="name" optionValue="id" [placeholder]="'opportunity.form.select' | translate" class="md:w-[50%]">
+          <ng-template pTemplate="item" let-item>
             <div class="flex items-center gap-2">
               <i [class]="item.icon"></i>
               {{ item.name }}
             </div>
           </ng-template>
         </p-select>
-        @if(getControl('opportunityCategory').invalid && getControl('opportunityCategory').dirty){
-        <app-base-error [message]="'opportunity.form.opportunityCategoryRequired' | translate" />
-        }
+        <app-base-error-messages [control]="getControl('opportunityCategory')"
+          [label]="'opportunity.form.opportunityCategory' | translate" />
       </div>
 
       <!-- Opportunity Type -->
       <div class="flex flex-col">
         <app-base-label [title]="'opportunity.form.opportunityType' | translate" />
-        <p-select
-          [formControl]="getControl('opportunityType')"
-          [options]="opportunityTypes()"
-          optionLabel="name"
-          optionValue="id"
-          [appendTo]="'body'"
-          [placeholder]="'opportunity.form.select' | translate"
-          class="md:w-[50%]"
-        >
-          <ng-template
-            pTemplate="item"
-            let-item
-          >
+        <p-select [formControl]="getControl('opportunityType')" [options]="opportunityTypes()" optionLabel="name"
+          optionValue="id" [appendTo]="'body'" [placeholder]="'opportunity.form.select' | translate" class="md:w-[50%]">
+          <ng-template pTemplate="item" let-item>
             {{ item.name | translate }}
           </ng-template>
-          <ng-template
-            pTemplate="selectedItem"
-            let-item
-          >
+          <ng-template pTemplate="selectedItem" let-item>
             {{ item.name | translate }}
           </ng-template>
         </p-select>
-        @if(getControl('opportunityType').invalid && getControl('opportunityType').dirty){
-        <app-base-error [message]="'opportunity.form.opportunityTypeRequired' | translate" />
-        }
+        <app-base-error-messages [control]="getControl('opportunityType')"
+          [label]="'opportunity.form.opportunityType' | translate" />
       </div>
     </div>
   </div>
@@ -277,54 +156,28 @@
         <div class="flex flex-col">
           <app-base-label [title]="'opportunity.form.spendSAR' | translate" />
           <p-inputgroup class="w-full">
-            <p-inputnumber
-              mode="decimal"
-              [maxlength]="5"
-              [minFractionDigits]="0"
-              [maxFractionDigits]="3"
-              [placeholder]="'opportunity.form.enterSpendSAR' | translate"
-              [formControl]="getControl('spendSAR')"
-            />
+            <p-inputnumber mode="decimal" [maxlength]="5" [minFractionDigits]="0" [maxFractionDigits]="3"
+              [placeholder]="'opportunity.form.enterSpendSAR' | translate" [formControl]="getControl('spendSAR')" />
             <p-inputgroup-addon class="sar">$</p-inputgroup-addon>
           </p-inputgroup>
-
-          @if(getControl('spendSAR').invalid && getControl('spendSAR').dirty){
-          @if(getControl('spendSAR').errors?.['required']){
-          <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
-          }
-          @if(getControl('spendSAR').errors?.['max']){
-          <app-base-error [message]="'opportunity.form.spendSARCannotBeGreaterThan10' | translate" />
-          }
-          @if(getControl('spendSAR').errors?.['min']){
-          <app-base-error [message]="'opportunity.form.spendSARRequired' | translate" />
-          }
-          }
+          <app-base-error-messages [control]="getControl('spendSAR')"
+            [label]="'opportunity.form.spendSAR' | translate" />
         </div>
         <div>
           <app-base-label [title]="'opportunity.form.quantityUnits' | translate" />
           <div class="flex gap-2">
             <div>
-              <p-inputnumber
-                [placeholder]="'opportunity.form.enterMinQuantity' | translate"
-                [formControl]="getControl('minQuantity')"
-              />
-              @if(getControl('minQuantity').invalid && getControl('minQuantity').dirty){
-              <app-base-error [message]="getControl('minQuantity').hasError('required') ? ('opportunity.form.minQuantityRequired' | translate) :
-                getControl('minQuantity').hasError('min') ? ('opportunity.form.minQuantityCannotBeNegative' | translate) :
-                ('opportunity.form.minQuantityMustBeLessThanMax' | translate)" />
-              }
+              <p-inputnumber [placeholder]="'opportunity.form.enterMinQuantity' | translate"
+                [formControl]="getControl('minQuantity')" />
+              <app-base-error-messages [control]="getControl('minQuantity')"
+                [label]="'opportunity.form.minQuantity' | translate" />
             </div>
             <span class="text-gray-700 text-xl font-semibold pt-1"> - </span>
             <div>
-              <p-inputnumber
-                [placeholder]="'opportunity.form.enterMaxQuantity' | translate"
-                [formControl]="getControl('maxQuantity')"
-              />
-              @if(getControl('maxQuantity').invalid && getControl('maxQuantity').dirty){
-              <app-base-error [message]="getControl('maxQuantity').hasError('required') ? ('opportunity.form.maxQuantityRequired' | translate) :
-                getControl('maxQuantity').hasError('min') ? ('opportunity.form.maxQuantityCannotBeNegative' | translate) :
-                ('opportunity.form.maxQuantityMustBeGreaterThanMin' | translate)" />
-              }
+              <p-inputnumber [placeholder]="'opportunity.form.enterMaxQuantity' | translate"
+                [formControl]="getControl('maxQuantity')" />
+              <app-base-error-messages [control]="getControl('maxQuantity')"
+                [label]="'opportunity.form.maxQuantity' | translate" />
             </div>
           </div>
         </div>
@@ -340,27 +193,17 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div class="flex flex-col">
           <app-base-label [title]="'opportunity.form.localSuppliers' | translate" />
-          <p-inputnumber
-            [placeholder]="'opportunity.form.enterLocalSuppliersNumber' | translate"
-            [formControl]="getControl('localSuppliers')"
-            [maxlength]="9"
-          />
-          @if(getControl('localSuppliers').invalid && getControl('localSuppliers').dirty){
-          <app-base-error [message]="getControl('localSuppliers').hasError('required') ? ('opportunity.form.localSuppliersRequired' | translate) :
-            ('opportunity.form.localSuppliersInvalid' | translate)" />
-          }
+          <p-inputnumber [placeholder]="'opportunity.form.enterLocalSuppliersNumber' | translate"
+            [formControl]="getControl('localSuppliers')" [maxlength]="9" />
+          <app-base-error-messages [control]="getControl('localSuppliers')"
+            [label]="'opportunity.form.localSuppliers' | translate" />
         </div>
         <div class="flex flex-col">
           <app-base-label [title]="'opportunity.form.globalSuppliers' | translate" />
-          <p-inputnumber
-            [placeholder]="'opportunity.form.enterGlobalSuppliersNumber' | translate"
-            [formControl]="getControl('globalSuppliers')"
-            [maxlength]="9"
-          />
-          @if(getControl('globalSuppliers').invalid && getControl('globalSuppliers').dirty){
-          <app-base-error [message]="getControl('globalSuppliers').hasError('required') ? ('opportunity.form.globalSuppliersRequired' | translate) :
-            ('opportunity.form.globalSuppliersInvalid' | translate)" />
-          }
+          <p-inputnumber [placeholder]="'opportunity.form.enterGlobalSuppliersNumber' | translate"
+            [formControl]="getControl('globalSuppliers')" [maxlength]="9" />
+          <app-base-error-messages [control]="getControl('globalSuppliers')"
+            [label]="'opportunity.form.globalSuppliers' | translate" />
         </div>
       </div>
     </div>
@@ -374,55 +217,24 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:w-[50%]">
         <div class="flex flex-col gap-2">
           <app-base-label [title]="'opportunity.form.startDate' | translate" />
-          <p-datepicker
-            [showIcon]="true"
-            [showTime]="false"
-            [ngModel]="opportunityInformationForm.get('startDate')?.value"
-            (ngModelChange)="onStartDateChange($event)"
-            [placeholder]="'opportunity.form.selectStartDate' | translate"
-            [dateFormat]="'dd M yy'"
-            [minDate]="today"
-            [disabled]="getControl('startDate').disabled"
-            class="w-full"
-            keepInvalid
-            [invalid]="getControl('startDate').invalid && getControl('startDate').dirty"
-            fluid
-          />
-          @if(getControl('startDate').invalid && getControl('startDate').dirty){
-          <app-base-error [message]="
-          getControl('startDate').hasError('required') ?
-          ('opportunity.form.startDateRequired' | translate) :
-          getControl('startDate').hasError('startDateRestriction') ?
-          ('opportunity.form.startDateRestriction' | translate) :
-          ''" />
-          }
+          <p-datepicker [showIcon]="true" [showTime]="false"
+            [ngModel]="opportunityInformationForm.get('startDate')?.value" (ngModelChange)="onStartDateChange($event)"
+            [placeholder]="'opportunity.form.selectStartDate' | translate" [dateFormat]="'dd M yy'" [minDate]="today"
+            [disabled]="getControl('startDate').disabled" class="w-full" keepInvalid
+            [invalid]="getControl('startDate').invalid && getControl('startDate').dirty" fluid />
+          <app-base-error-messages [control]="getControl('startDate')"
+            [label]="'opportunity.form.startDate' | translate" />
         </div>
 
         <div class="flex flex-col gap-2">
           <app-base-label [title]="'opportunity.form.endDate' | translate" />
-          <p-datepicker
-            [showIcon]="true"
-            [showTime]="false"
-            [ngModel]="opportunityInformationForm.get('endDate')?.value"
-            (ngModelChange)="onEndDateChange($event)"
-            [placeholder]="'opportunity.form.selectEndDate' | translate"
-            [dateFormat]="'dd M yy'"
+          <p-datepicker [showIcon]="true" [showTime]="false"
+            [ngModel]="opportunityInformationForm.get('endDate')?.value" (ngModelChange)="onEndDateChange($event)"
+            [placeholder]="'opportunity.form.selectEndDate' | translate" [dateFormat]="'dd M yy'"
             [minDate]="(getControl('startDate').value && getControl('startDate').value > today) ? getControl('startDate').value : today"
-            class="w-full"
-            keepInvalid
-            [invalid]="getControl('endDate').invalid && getControl('endDate').dirty"
-            fluid
-          />
-          @if(getControl('endDate').invalid && getControl('endDate').dirty){
-          <app-base-error [message]="
-          getControl('endDate').hasError('required') ?
-          ('opportunity.form.endDateRequired' | translate) :
-          getControl('endDate').hasError('endDateRestriction') ?
-          ('opportunity.form.endDateRestriction' | translate) :
-          getControl('endDate').hasError('dateRangeInvalid') ?
-          ('opportunity.form.endDateValidateDateRange' | translate) :
-          ''" />
-          }
+            class="w-full" keepInvalid [invalid]="getControl('endDate').invalid && getControl('endDate').dirty" fluid />
+          <app-base-error-messages [control]="getControl('endDate')"
+            [label]="'opportunity.form.endDate' | translate" />
         </div>
       </div>
     </div>
@@ -435,17 +247,11 @@
       <!-- Image -->
       <div class="flex flex-col gap-2">
         <app-base-label [title]="'opportunity.form.image' | translate" />
-        <app-fileupload
-          [acceptedFileTypes]="'.jpg, .jpeg, .png'"
-          [files]="files()"
-          [placeholder]="placeholder()"
-          #fileupload
-          (filesChange)="onFilesChanged($event)"
-          [class.p-invalid]="getControl('image').invalid && getControl('image').dirty"
-        />
-        @if(getControl('image').invalid && getControl('image').dirty){
-        <app-base-error [message]="'opportunity.form.imageRequired' | translate" />
-        }
+        <app-fileupload [acceptedFileTypes]="'.jpg, .jpeg, .png'" [files]="files()" [placeholder]="placeholder()"
+          #fileupload (filesChange)="onFilesChanged($event)"
+          [class.p-invalid]="getControl('image').invalid && getControl('image').dirty" />
+        <app-base-error-messages [control]="getControl('image')"
+          [label]="'opportunity.form.image' | translate" />
       </div>
     </div>
   </div>

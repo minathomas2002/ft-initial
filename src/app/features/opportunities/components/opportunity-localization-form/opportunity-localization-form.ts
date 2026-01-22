@@ -15,6 +15,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 import { JsonPipe } from '@angular/common';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
 
 @Component({
@@ -30,7 +31,9 @@ import { JsonPipe } from '@angular/common';
     MessageModule,
     TranslatePipe,
     SkeletonModule,
-    TrimOnBlurDirective,],
+    TrimOnBlurDirective,
+    BaseErrorMessages,
+  ],
   templateUrl: './opportunity-localization-form.html',
   styleUrl: './opportunity-localization-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

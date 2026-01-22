@@ -19,6 +19,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -38,7 +39,8 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     TrimOnBlurDirective,
     InputGroupModule,
     InputGroupAddonModule,
-    InputNumberModule
+    InputNumberModule,
+    BaseErrorMessages
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',
