@@ -434,35 +434,6 @@ export abstract class PlanStepBaseClass {
   }
 
   /**
-   * Determines the color for a specific field based on comment phase, view mode, and whether investor changed value or added comment.
-   * 
-   * Color Logic:
-   * - Orange: During comment phase (adding/editing) OR investor view when field not changed and no comment
-   * - Green: Employee view when investor changed value OR added comment
-   * - Gray: Investor view when value changed OR comment added
-   * 
-   * @param inputKey - The input key of the field
-   * @param rowId - Optional row ID for FormArray items
-   * @returns The color to apply to the field
-   */
-  getFieldColor(inputKey: string, rowId?: string): TColors {
-    // Find the field in selectedInputs (fields with comments)
-    const field = this.findFieldInSelectedInputs(inputKey, rowId);
-    if (!field) {
-      return 'orange'; // Default fallback if field not found
-    }
-
-    // During comment phase (adding/editing): always orange
-    if (this.isCommentPhaseActive()) {
-      return 'orange';
-    }
-
-    // After comment is saved, determine color based on view mode and field state
-    const fieldState = this.getFieldState(field);
-    return this.determineColorByViewMode(fieldState);
-  }
-
-  /**
    * Finds a field in selectedInputs by inputKey and optional rowId.
    */
   private findFieldInSelectedInputs(inputKey: string, rowId?: string): IFieldInformation | undefined {

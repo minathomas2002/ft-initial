@@ -111,16 +111,16 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       ;
   });
 
-  selectedInputColor = computed<TColors>(() => {
-    // During comment phase (adding/editing): always orange
-    const currentPhase = this.currentStepCommentPhase();
-    if (currentPhase === 'adding' || currentPhase === 'editing') {
-      return 'orange';
-    }
+  // selectedInputColor = computed<TColors>(() => {
+  //   // During comment phase (adding/editing): always orange
+  //   const currentPhase = this.currentStepCommentPhase();
+  //   if (currentPhase === 'adding' || currentPhase === 'editing') {
+  //     return 'orange';
+  //   }
     
-    // Otherwise, default to orange (actual field colors are determined by getFieldColor in step components)
-    return 'orange';
-  });
+  //   // Otherwise, default to orange (actual field colors are determined by getFieldColor in step components)
+  //   return 'orange';
+  // });
   steps = computed<IWizardStepState[]>(() => {
     const errors = this.validationErrors();
     this.i18nService.currentLanguage();
