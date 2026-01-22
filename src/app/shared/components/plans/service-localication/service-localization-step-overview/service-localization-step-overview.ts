@@ -334,6 +334,18 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey, id: rowId } = field;
 
+    // Helper to safely get value control - handles both FormGroup and FormControl
+    const getValueControlSafe = (control: AbstractControl | null | undefined): FormControl<any> | null => {
+      if (!control) return null;
+      if (control instanceof FormControl) {
+        return control;
+      }
+      if (control instanceof FormGroup) {
+        return this.getValueControl(control);
+      }
+      return null;
+    };
+
     // Handle FormArray items (service details)
     if (section === 'serviceDetails' && rowId) {
       const formArray = this.getDetailsFormArray();
@@ -346,7 +358,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
         const actualInputKey = this.stripIndexSuffix(inputKey);
         const fieldControl = rowControl.get(actualInputKey);
         if (fieldControl) {
-          return this.getValueControl(fieldControl);
+          return getValueControlSafe(fieldControl);
         }
       }
       return null;
@@ -356,22 +368,22 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     if (section === 'overviewCompanyInformation') {
       const controls = this.companyInformationFormGroupControls;
       if (controls && controls[inputKey]) {
-        return this.getValueControl(controls[inputKey]);
+        return getValueControlSafe(controls[inputKey]);
       }
     } else if (section === 'locationInformation') {
       const controls = this.locationInformationFormGroupControls;
       if (controls && controls[inputKey]) {
-        return this.getValueControl(controls[inputKey]);
+        return getValueControlSafe(controls[inputKey]);
       }
     } else if (section === 'localAgentInformation') {
       const controls = this.localAgentInformationFormGroupControls;
       if (controls && controls[inputKey]) {
-        return this.getValueControl(controls[inputKey]);
+        return getValueControlSafe(controls[inputKey]);
       }
     } else if (section === 'basicInformation') {
       const controls = this.basicInformationFormGroupControls;
       if (controls && controls[inputKey]) {
-        return this.getValueControl(controls[inputKey]);
+        return getValueControlSafe(controls[inputKey]);
       }
     }
 
