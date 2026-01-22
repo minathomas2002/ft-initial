@@ -78,6 +78,22 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     }
   });
 
+  excludeKeysFromServiceLevelFormArray = computed<string[]>(() => {
+    return [
+      EMaterialsFormControls.serviceId,
+      EMaterialsFormControls.serviceHeadcountRowId,
+      EMaterialsFormControls.expectedLocalizationDate,
+      EMaterialsFormControls.localizationApproach,
+      EMaterialsFormControls.localizationApproachOtherDetails,
+      EMaterialsFormControls.location,
+      EMaterialsFormControls.locationOtherDetails,
+      EMaterialsFormControls.capexRequired,
+      EMaterialsFormControls.supervisionOversightByGovernmentEntity,
+      EMaterialsFormControls.willBeAnyProprietaryToolsSystems,
+      EMaterialsFormControls.proprietaryToolsSystemsDetails,
+    ];
+  });
+
   // Handle start editing for investor comment
   onStartEditing(): void {
     if (this.isResubmitMode()) {
