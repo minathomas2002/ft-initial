@@ -96,7 +96,7 @@ export enum EMaterialsFormControls {
   // Step 3 - Value Chain Item Controls (used in FormArray items)
   expenseHeader = 'expenseHeader',
   inHouseOrProcured = 'inHouseOrProcured',
-  costPercentage = 'cost (%)',
+  costPercentage = 'costPercentage',
   year1 = 'year1',
   year2 = 'year2',
   year3 = 'year3',

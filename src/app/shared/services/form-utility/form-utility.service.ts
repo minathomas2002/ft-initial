@@ -31,10 +31,13 @@ export class FormUtilityService {
       const errorKeys = Object.keys(formGroupErrors);
       
       // Check if this is a cross-field validation error that's already represented by child control errors
-      // Known cross-field validation error keys: quantityRange, dateRange, etc.
+      // Known cross-field validation error keys: quantityRange, dateRange.
+      // Also exclude FormArray validator errors (totalExceeds100, inComplete) as they're already represented by child control errors
       const isCrossFieldError = errorKeys.some(key => 
         key === 'quantityRange' || 
         key === 'dateRange' || 
+        key === 'totalExceeds100' ||
+        key === 'inComplete' ||
         key.toLowerCase().includes('range') ||
         key.toLowerCase().includes('crossfield')
       );
@@ -74,6 +77,8 @@ export class FormUtilityService {
       if (control instanceof FormArray) {
         // Only count individual invalid controls within the FormArray, NOT the FormArray itself
         // This ensures we count each invalid control separately (e.g., if 3 controls are invalid, count = 3, not 4)
+        // IMPORTANT: We explicitly skip counting FormArray-level errors (from validators like costPercentageArrayValidator)
+        // by not checking control.errors and only iterating through child controls
         control.controls.forEach(child => {
           if (child instanceof FormGroup) {
             // Recursively count errors in FormGroup children
@@ -92,12 +97,13 @@ export class FormUtilityService {
               }
             });
           } else if (child instanceof FormControl) {
-            // Count if control is invalid AND (dirty OR touched)
+            // Count if control is invalid AND (dirty)
             if ((child.dirty) && child.invalid) {
               errorCount++;
             }
           }
         });
+        // Explicitly return without counting FormArray-level errors
         return;
       }
 

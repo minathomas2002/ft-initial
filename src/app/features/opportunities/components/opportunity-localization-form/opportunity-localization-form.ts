@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
-import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
@@ -14,7 +13,6 @@ import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/for
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
-import { JsonPipe } from '@angular/common';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
 
@@ -24,7 +22,6 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
     CardModule,
     ButtonModule,
     BaseLabelComponent,
-    BaseErrorComponent,
     FormArrayInput,
     InputTextModule,
     ReactiveFormsModule,

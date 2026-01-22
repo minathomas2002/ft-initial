@@ -2,7 +2,6 @@ import { FileuploadComponent } from './../../../../shared/components/utility-com
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild, computed, effect } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
-import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { SelectModule } from 'primeng/select';
 import { OpportunityFormService } from '../../services/opportunity-form/opportunity-form-service';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
@@ -26,7 +25,6 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
   imports: [
     InputTextModule,
     BaseLabelComponent,
-    BaseErrorComponent,
     SelectModule,
     TextareaModule,
     DatePickerModule,
