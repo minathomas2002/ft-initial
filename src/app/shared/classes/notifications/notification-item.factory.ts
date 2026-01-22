@@ -135,6 +135,7 @@ function handleOpportunityNotificationFlow(notification: INotification) {
   const actionsToNavigateToOpportunity = new Set<EOpportunityAction | ENotificationType>([
     EOpportunityAction.Publish,
     EOpportunityAction.Edit,
+    EOpportunityAction.SystemReminder,
     ENotificationType.InactiveOpportunityAlert,
   ])
 
