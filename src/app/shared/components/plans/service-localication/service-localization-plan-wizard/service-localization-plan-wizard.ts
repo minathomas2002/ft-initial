@@ -402,12 +402,12 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     } else if (stepId === 'directLocalization') {
       hasSelectedInputs = this.step4SelectedInputs().length > 0;
     }
-    
+
     // If there are selected inputs (inputs with comments), always show orange
     if (hasSelectedInputs) {
       return 'orange';
     }
-    
+
     const status = this.planStore.planStatus();
     const isViewOrReviewMode = this.isViewMode() || this.isReviewMode();
 
@@ -1132,7 +1132,11 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       const request = mapServiceLocalizationPlanFormToRequest(
         this.serviceLocalizationFormService,
         currentPlanId,
-        signature
+        signature,
+        {
+          includeExistingSaudi: this.showExistingSaudiStep(),
+          includeDirectLocalization: this.showDirectLocalizationStep(),
+        }
       );
 
       // Convert request to FormData
