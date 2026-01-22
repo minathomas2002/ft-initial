@@ -86,7 +86,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   localizationApproachOptions = this.planStore.localizationApproachOptions;
   locationOptions = this.planStore.locationOptions;
 
-  yearColumns = computed(() => this.planFormService?.upcomingYears(5) ?? []);
+  yearColumns = computed(() => this.planFormService?.upcomingYears(6) ?? []);
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -94,6 +94,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     EMaterialsFormControls.thirdYear,
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
+    EMaterialsFormControls.sixthYear,
   ];
 
   entityLevelTableRows = computed(() => {
@@ -138,7 +139,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       { label: 'Service Name', rowspan: 2, dataGroup: false },
       { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
       { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
-      { label: 'Mention Y-o-Y expected Saudization % (upto 2030) (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
+      { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
       { label: 'Key Measures to Upskill Saudis', rowspan: 2, dataGroup: false },
       { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
     ];
@@ -248,11 +249,11 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     }
 
     // Check if value is "No"
-    const isNo = value === EYesNo.No || 
-                 value === EYesNo.No.toString() || 
-                 value === 'No' || 
+    const isNo = value === EYesNo.No ||
+                 value === EYesNo.No.toString() ||
+                 value === 'No' ||
                  value === 'no' ||
-                 value === false || 
+                 value === false ||
                  value === 'false' ||
                  value === 2; // EYesNo.No = 2
 
@@ -273,7 +274,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       const updatedSelectedInputs = currentSelectedInputs.filter(
         input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
       );
-      
+
       if (updatedSelectedInputs.length !== currentSelectedInputs.length) {
         this.selectedInputs.set(updatedSelectedInputs);
       }

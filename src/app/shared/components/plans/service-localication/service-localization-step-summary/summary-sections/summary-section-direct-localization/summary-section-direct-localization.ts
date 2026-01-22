@@ -27,10 +27,10 @@ export class SummarySectionDirectLocalization {
   onEdit = output<void>();
 
   EMaterialsFormControls = EMaterialsFormControls;
-  // Year columns for Entity Level and Service Level (5 years)
+  // Year columns for Entity Level and Service Level (6 years)
   serviceForm = inject(ServicePlanFormService);
   planStore = inject(PlanStore);
-  yearColumns = computed(() => this.serviceForm.upcomingYears(5));
+  yearColumns = computed(() => this.serviceForm.upcomingYears(6));
 
   constructor() {
     // Ensure service names are synced even if the user never visited the step component
@@ -43,6 +43,7 @@ export class SummarySectionDirectLocalization {
     EMaterialsFormControls.thirdYear,
     EMaterialsFormControls.fourthYear,
     EMaterialsFormControls.fifthYear,
+    EMaterialsFormControls.sixthYear,
   ];
 
   // Form group accessors
@@ -426,11 +427,13 @@ export class SummarySectionDirectLocalization {
             'thirdYear_headcount': 'y3Headcount',
             'fourthYear_headcount': 'y4Headcount',
             'fifthYear_headcount': 'y5Headcount',
+            'sixthYear_headcount': 'y6Headcount',
             'firstYear_saudization': 'y1Saudization',
             'secondYear_saudization': 'y2Saudization',
             'thirdYear_saudization': 'y3Saudization',
             'fourthYear_saudization': 'y4Saudization',
             'fifthYear_saudization': 'y5Saudization',
+            'sixthYear_saudization': 'y6Saudization',
           };
           if (fieldKey === 'serviceName') {
             // Find service name from services array

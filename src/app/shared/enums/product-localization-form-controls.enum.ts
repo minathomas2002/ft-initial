@@ -176,6 +176,7 @@ export enum EMaterialsFormControls {
   thirdYear = 'thirdYear',
   fourthYear = 'fourthYear',
   fifthYear = 'fifthYear',
+  sixthYear = 'sixthYear',
 
   // Service Plan - Step 3 & 4 - Service Level Controls
   serviceLevelFormGroup = 'serviceLevelFormGroup',
