@@ -82,6 +82,9 @@ export class ServicePlanFormService {
 
     // Subscribe to companyType changes in Step 3 (Existing Saudi) to toggle validation
     this.subscribeToCompanyTypeChanges();
+
+    // Subscribe to qualificationStatus changes in Step 3 (Existing Saudi) to toggle validation
+    this.subscribeToQualificationStatusChanges();
   }
 
   // Expose sub-form groups for Step 1
@@ -728,6 +731,108 @@ export class ServicePlanFormService {
               if (companyTypeControl) {
                 subscribedControls.add(companyTypeControl);
                 setupCompanyTypeSubscription(i);
+              }
+            }
+          }
+        }
+        previousLength = currentLength;
+      });
+  }
+
+  /**
+   * Subscribe to qualificationStatus changes in Step 3 (Existing Saudi) FormArray
+   * Automatically calls toggleProductsValidation when qualificationStatus value changes
+   */
+  private subscribeToQualificationStatusChanges(): void {
+    const saudiCompanyDetailsArray = this.saudiCompanyDetailsFormGroup;
+    if (!saudiCompanyDetailsArray) return;
+
+    // Helper function to get companyTypes for a specific item
+    const getCompanyTypes = (index: number): string[] => {
+      const itemFormGroup = saudiCompanyDetailsArray.at(index) as FormGroup;
+      if (!itemFormGroup) return [];
+      const companyTypeControl = itemFormGroup.get(
+        `${EMaterialsFormControls.companyType}.${EMaterialsFormControls.value}`
+      ) as FormControl<string[]>;
+      return companyTypeControl?.value || [];
+    };
+
+    // Helper function to set up subscription for a specific item
+    const setupQualificationStatusSubscription = (index: number): void => {
+      const itemFormGroup = saudiCompanyDetailsArray.at(index) as FormGroup;
+      if (!itemFormGroup) return;
+
+      const qualificationStatusControl = itemFormGroup.get(
+        `${EMaterialsFormControls.qualificationStatus}.${EMaterialsFormControls.value}`
+      ) as FormControl<string | null>;
+
+      if (qualificationStatusControl) {
+        // Initial call with current value (only if value exists)
+        const currentValue = qualificationStatusControl.value;
+        const companyTypes = getCompanyTypes(index);
+        if (currentValue !== null && currentValue !== undefined && companyTypes.length > 0) {
+          this.toggleProductsValidation(companyTypes, currentValue, index);
+        }
+
+        // Subscribe to future changes, using distinctUntilChanged to prevent infinite loops
+        qualificationStatusControl.valueChanges
+          .pipe(
+            distinctUntilChanged((prev, curr) => prev === curr),
+            takeUntilDestroyed(this._destroyRef)
+          )
+          .subscribe((qualificationStatus: string | null) => {
+            const companyTypes = getCompanyTypes(index);
+            this.toggleProductsValidation(companyTypes, qualificationStatus, index);
+          });
+      }
+    };
+
+    // Track which controls we've already subscribed to (by control reference)
+    const subscribedControls = new WeakSet<FormControl<string | null>>();
+
+    // Helper to check if we should set up subscription
+    const shouldSetupSubscription = (index: number): boolean => {
+      const itemFormGroup = saudiCompanyDetailsArray.at(index) as FormGroup;
+      if (!itemFormGroup) return false;
+      const qualificationStatusControl = itemFormGroup.get(
+        `${EMaterialsFormControls.qualificationStatus}.${EMaterialsFormControls.value}`
+      ) as FormControl<string | null>;
+      return qualificationStatusControl ? !subscribedControls.has(qualificationStatusControl) : false;
+    };
+
+    // Set up subscriptions for existing items
+    saudiCompanyDetailsArray.controls.forEach((_, index) => {
+      if (shouldSetupSubscription(index)) {
+        const itemFormGroup = saudiCompanyDetailsArray.at(index) as FormGroup;
+        const qualificationStatusControl = itemFormGroup.get(
+          `${EMaterialsFormControls.qualificationStatus}.${EMaterialsFormControls.value}`
+        ) as FormControl<string | null>;
+        if (qualificationStatusControl) {
+          subscribedControls.add(qualificationStatusControl);
+          setupQualificationStatusSubscription(index);
+        }
+      }
+    });
+
+    // Subscribe to array changes to handle new items being added
+    // Only process when array length actually changes (items added/removed)
+    let previousLength = saudiCompanyDetailsArray.length;
+    saudiCompanyDetailsArray.valueChanges
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        const currentLength = saudiCompanyDetailsArray.length;
+        // Only set up subscriptions when new items are added
+        if (currentLength > previousLength) {
+          // Set up subscriptions for newly added items
+          for (let i = previousLength; i < currentLength; i++) {
+            if (shouldSetupSubscription(i)) {
+              const itemFormGroup = saudiCompanyDetailsArray.at(i) as FormGroup;
+              const qualificationStatusControl = itemFormGroup.get(
+                `${EMaterialsFormControls.qualificationStatus}.${EMaterialsFormControls.value}`
+              ) as FormControl<string | null>;
+              if (qualificationStatusControl) {
+                subscribedControls.add(qualificationStatusControl);
+                setupQualificationStatusSubscription(i);
               }
             }
           }

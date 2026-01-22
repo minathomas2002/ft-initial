@@ -11,6 +11,8 @@ import { SummarySectionSignature } from './summary-sections/summary-section-sign
 import { Signature, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { RoleService } from 'src/app/shared/services/role/role-service';
+import { ERoles } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-service-localization-step-summary',
@@ -41,12 +43,19 @@ export class ServiceLocalizationStepSummary {
   existingSaudiStepNumber = input<number>(3);
   directLocalizationStepNumber = input<number>(4);
 
+  readonly isInvestor = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
+  readonly isResubmitMode = computed(() => this.planStore.wizardMode() === 'resubmit');
+  private readonly hideIncomingWhenInvestorOverrides = computed(
+    () => this.isResubmitMode() && this.isInvestor(),
+  );
+
   private readonly formService = inject(ServicePlanFormService);
   private readonly validationService = inject(ServicePlanValidationService);
   private readonly toasterService = inject(ToasterService);
   private readonly changeDetectionRef = inject(ChangeDetectorRef);
   private readonly i18nService = inject(I18nService);
   private readonly planStore = inject(PlanStore);
+  private readonly roleService = inject(RoleService);
 
   onEditStep = output<number>();
   onSubmit = output<void>();
@@ -78,48 +87,59 @@ export class ServiceLocalizationStepSummary {
 
   // Helper methods to get combined comment text for each step
   getStep1CommentText(): string {
-    const comments = this.step1Comments().length > 0 ? this.step1Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page');
+    // Prefer investor-supplied pageComments (from forms) over backend step comments
+    const comments = this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page').length > 0
+      ? this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page')
+      : this.step1Comments();
+
     return comments.map(c => c.comment).join('\n\n');
   }
 
   getStep2CommentText(): string {
-    const comments = this.step2Comments().length > 0 ? this.step2Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === 'Overview');
+    const comments = this.pageComments().filter(c => c.pageTitleForTL === 'Overview').length > 0
+      ? this.pageComments().filter(c => c.pageTitleForTL === 'Overview')
+      : this.step2Comments();
     return comments.map(c => c.comment).join('\n\n');
   }
 
   getStep3CommentText(): string {
-    const comments = this.step3Comments().length > 0 ? this.step3Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === 'Existing Saudi Co.');
+    const comments = this.pageComments().filter(c => c.pageTitleForTL === 'Existing Saudi Co.').length > 0
+      ? this.pageComments().filter(c => c.pageTitleForTL === 'Existing Saudi Co.')
+      : this.step3Comments();
     return comments.map(c => c.comment).join('\n\n');
   }
 
   getStep4CommentText(): string {
-    const comments = this.step4Comments().length > 0 ? this.step4Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === 'Direct Localization');
+    const comments = this.pageComments().filter(c => c.pageTitleForTL === 'Direct Localization').length > 0
+      ? this.pageComments().filter(c => c.pageTitleForTL === 'Direct Localization')
+      : this.step4Comments();
     return comments.map(c => c.comment).join('\n\n');
   }
 
   // Computed signals to get comments (fallback to pageComments if step comments not provided)
   step1CommentsComputed = computed(() => {
-    return this.step1Comments().length > 0 ? this.step1Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page');
+    // Prefer live pageComments (investor-supplied) over backend step comments
+    return this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page').length > 0
+      ? this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page')
+      : this.step1Comments();
   });
 
   step2CommentsComputed = computed(() => {
-    return this.step2Comments().length > 0 ? this.step2Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === 'Overview');
+    return this.pageComments().filter(c => c.pageTitleForTL === 'Overview').length > 0
+      ? this.pageComments().filter(c => c.pageTitleForTL === 'Overview')
+      : this.step2Comments();
   });
 
   step3CommentsComputed = computed(() => {
-    return this.step3Comments().length > 0 ? this.step3Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === 'Existing Saudi Co.');
+    return this.pageComments().filter(c => c.pageTitleForTL === 'Existing Saudi Co.').length > 0
+      ? this.pageComments().filter(c => c.pageTitleForTL === 'Existing Saudi Co.')
+      : this.step3Comments();
   });
 
   step4CommentsComputed = computed(() => {
-    return this.step4Comments().length > 0 ? this.step4Comments() :
-      this.pageComments().filter(c => c.pageTitleForTL === 'Direct Localization');
+    return this.pageComments().filter(c => c.pageTitleForTL === 'Direct Localization').length > 0
+      ? this.pageComments().filter(c => c.pageTitleForTL === 'Direct Localization')
+      : this.step4Comments();
   });
 
   // Computed signals to check if comments exist and have content
@@ -129,6 +149,7 @@ export class ServiceLocalizationStepSummary {
   });
 
   hasStep1OutComingComments = computed(() => {
+    // Outgoing (investor) comments are taken from live pageComments collected from forms
     return this.pageComments().filter(c => c.pageTitleForTL === 'Cover Page').length > 0;
   });
 
@@ -167,6 +188,39 @@ export class ServiceLocalizationStepSummary {
   shouldShowIncomingComments = computed(() => {
     const mode = this.planStore.wizardMode();
     return mode === 'view' || mode === 'Review' || mode === 'resubmit';
+  });
+
+  // In investor resubmit mode: if investor added a new comment on a step, hide the incoming/internal one.
+  showIncomingStep1Comments = computed(() => {
+    return (
+      this.shouldShowIncomingComments() &&
+      this.hasIncomingStep1Comments() &&
+      !(this.hideIncomingWhenInvestorOverrides() && this.hasStep1OutComingComments())
+    );
+  });
+
+  showIncomingStep2Comments = computed(() => {
+    return (
+      this.shouldShowIncomingComments() &&
+      this.hasIncomingStep2Comments() &&
+      !(this.hideIncomingWhenInvestorOverrides() && this.hasStep2OutComingComments())
+    );
+  });
+
+  showIncomingStep3Comments = computed(() => {
+    return (
+      this.shouldShowIncomingComments() &&
+      this.hasIncomingStep3Comments() &&
+      !(this.hideIncomingWhenInvestorOverrides() && this.hasStep3OutComingComments())
+    );
+  });
+
+  showIncomingStep4Comments = computed(() => {
+    return (
+      this.shouldShowIncomingComments() &&
+      this.hasIncomingStep4Comments() &&
+      !(this.hideIncomingWhenInvestorOverrides() && this.hasStep4OutComingComments())
+    );
   });
 
   // Computed signals for incoming comments per step

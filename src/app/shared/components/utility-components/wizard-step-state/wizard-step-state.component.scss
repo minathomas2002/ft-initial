@@ -3,10 +3,17 @@
     background: var(--p-stepper-step-number-active-background) !important;
     border-color: var(--p-stepper-step-number-active-border-color) !important;
     color: var(--p-stepper-step-number-active-color) !important;
-}
- .p-step-number:has(.in-progress) {
+  }
+
+  .p-step-number:has(.in-progress) {
     background: var(--p-stepper-step-number-active-background) !important;
     border-color: var(--p-stepper-step-number-active-border-color) !important;
     color: var(--p-stepper-step-number-active-color) !important;
-}
+  }
+
+  .p-step-number:has(.review-active) {
+    background: var(--p-stepper-step-number-active-background) !important;
+    border-color: var(--p-stepper-step-number-active-border-color) !important;
+    color: var(--p-stepper-step-number-active-color) !important;
+  }
 }

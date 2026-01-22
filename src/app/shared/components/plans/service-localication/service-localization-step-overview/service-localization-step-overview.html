@@ -71,8 +71,6 @@
           [maxlength]="100"
           placeholder="Enter company name"
           [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
-          [appConditionalColorClass]="highlightInput('companyName')"
-          [color]="selectedInputColor()"
         />
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['companyName'])"
@@ -176,16 +174,16 @@
           <app-base-label [title]="'Registered Vendor ID with SEC'" />
           <span class="text-sm text-gray-600 ms-2">(If available)</span>
         </div>
-          <input
-            type="text"
-            pInputText
-            fluid
-            placeholder="Enter registered vendor ID with SEC"
-            [maxlength]="50"
-            [formControl]="
-              getFormControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])
-            "
-          />
+        <input
+          type="text"
+          pInputText
+          fluid
+          placeholder="Enter registered vendor ID with SEC"
+          [maxlength]="50"
+          [formControl]="getFormControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+          [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
+          [color]="selectedInputColor()"
+        />
       </div>
     </div>
 

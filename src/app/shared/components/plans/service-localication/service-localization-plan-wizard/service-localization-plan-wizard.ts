@@ -879,6 +879,46 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   onAddComment(): void {
     if (this.isResubmitMode()) {
       this.showCommentState.set(true);
+
+      // In resubmit mode the investor opens the comment panel from the wizard actions.
+      // Infer the correct phase from the existing comment so the UI shows Edit/Delete
+      // for saved comments, or Add Comment when empty.
+      const step = this.activeStep();
+      const stepId = this.stepsWithId()[step - 1]?.id;
+      if (!stepId) return;
+
+      const stepForm =
+        stepId === 'cover'
+          ? this.serviceLocalizationFormService.step1_coverPage
+          : stepId === 'overview'
+            ? this.serviceLocalizationFormService.step2_overview
+            : stepId === 'existingSaudi'
+              ? this.serviceLocalizationFormService.step3_existingSaudi
+              : stepId === 'directLocalization'
+                ? this.serviceLocalizationFormService.step4_directLocalization
+                : null;
+
+      if (!stepForm) return;
+
+      const commentControl = stepForm.get(EMaterialsFormControls.comment) as FormControl<string> | null;
+      const hasComment = !!(commentControl?.value && commentControl.value.trim().length > 0);
+
+      const setPhaseIfNone = (phaseSignal: typeof this.step1CommentPhase) => {
+        if (phaseSignal() === 'none') {
+          phaseSignal.set(hasComment ? 'viewing' : 'none');
+        }
+      };
+
+      if (stepId === 'cover') {
+        setPhaseIfNone(this.step1CommentPhase);
+      } else if (stepId === 'overview') {
+        setPhaseIfNone(this.step2CommentPhase);
+      } else if (stepId === 'existingSaudi') {
+        setPhaseIfNone(this.step3CommentPhase);
+      } else if (stepId === 'directLocalization') {
+        setPhaseIfNone(this.step4CommentPhase);
+      }
+
       return;
     }
 
@@ -1010,6 +1050,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       includeExistingSaudi,
       includeDirectLocalization,
     })) {
+
+      // console.log(this.serviceLocalizationFormService)
       // Mark all controls as dirty to show validation errors (and trigger stepper error counters)
       this.serviceLocalizationFormService.markAllControlsAsDirty({
         includeExistingSaudi,
@@ -1232,36 +1274,50 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
     // Step 1 comments (Cover Page)
     const step1Form = this.serviceLocalizationFormService.step1_coverPage;
-    const step1CommentControl = step1Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    if (step1CommentControl?.value && step1CommentControl.value.trim().length > 0 && this.step1SelectedInputs().length > 0) {
+    // In resubmit mode the comment control may be the investor 'comment' field; otherwise use the constant enum key
+    const step1CommentControl = this.isResubmitMode()
+      ? (step1Form.get('comment') as FormControl<string> | null)
+      : (step1Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
+    // Always use the selected inputs (what the investor chose) when collecting new page comments
+    const step1Fields = this.step1SelectedInputs();
+    const step1CommentValue = step1CommentControl?.value?.trim() || '';
+    if (step1CommentValue && (this.isResubmitMode() || step1Fields.length > 0)) {
       comments.push({
         pageTitleForTL: this.steps()[0].title,
-        comment: step1CommentControl.value.trim(),
-        fields: this.step1SelectedInputs(),
+        comment: step1CommentValue,
+        fields: step1Fields,
       });
     }
 
     // Step 2 comments (Overview)
     const step2Form = this.serviceLocalizationFormService.step2_overview;
-    const step2CommentControl = step2Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    if (step2CommentControl?.value && step2CommentControl.value.trim().length > 0 && this.step2SelectedInputs().length > 0) {
+    const step2CommentControl = this.isResubmitMode()
+      ? (step2Form.get('comment') as FormControl<string> | null)
+      : (step2Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
+    const step2Fields = this.step2SelectedInputs();
+    const step2CommentValue = step2CommentControl?.value?.trim() || '';
+    if (step2CommentValue && (this.isResubmitMode() || step2Fields.length > 0)) {
       comments.push({
         pageTitleForTL: this.steps()[1].title,
-        comment: step2CommentControl.value.trim(),
-        fields: this.step2SelectedInputs(),
+        comment: step2CommentValue,
+        fields: step2Fields,
       });
     }
 
     // Step 3 comments (Existing Saudi)
     if (this.showExistingSaudiStep()) {
       const step3Form = this.serviceLocalizationFormService.step3_existingSaudi;
-      const step3CommentControl = step3Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-      if (step3CommentControl?.value && step3CommentControl.value.trim().length > 0 && this.step3SelectedInputs().length > 0) {
+      const step3CommentControl = this.isResubmitMode()
+        ? (step3Form.get('comment') as FormControl<string> | null)
+        : (step3Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
+      const step3Fields = this.step3SelectedInputs();
+      const step3CommentValue = step3CommentControl?.value?.trim() || '';
+      if (step3CommentValue && (this.isResubmitMode() || step3Fields.length > 0)) {
         const step3Index = this.existingSaudiStepIndex();
         comments.push({
           pageTitleForTL: this.steps()[step3Index - 1].title,
-          comment: step3CommentControl.value.trim(),
-          fields: this.step3SelectedInputs(),
+          comment: step3CommentValue,
+          fields: step3Fields,
         });
       }
     }
@@ -1269,13 +1325,17 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Step 4 comments (Direct Localization)
     if (this.showDirectLocalizationStep()) {
       const step4Form = this.serviceLocalizationFormService.step4_directLocalization;
-      const step4CommentControl = step4Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-      if (step4CommentControl?.value && step4CommentControl.value.trim().length > 0 && this.step4SelectedInputs().length > 0) {
+      const step4CommentControl = this.isResubmitMode()
+        ? (step4Form.get('comment') as FormControl<string> | null)
+        : (step4Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
+      const step4Fields = this.step4SelectedInputs();
+      const step4CommentValue = step4CommentControl?.value?.trim() || '';
+      if (step4CommentValue && (this.isResubmitMode() || step4Fields.length > 0)) {
         const step4Index = this.directLocalizationStepIndex();
         comments.push({
           pageTitleForTL: this.steps()[step4Index - 1].title,
-          comment: step4CommentControl.value.trim(),
-          fields: this.step4SelectedInputs(),
+          comment: step4CommentValue,
+          fields: step4Fields,
         });
       }
     }

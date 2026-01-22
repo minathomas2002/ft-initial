@@ -9,7 +9,7 @@
     [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(coverStepNumber())"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep1Comments()) {
+  @if (showIncomingStep1Comments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep1CommentText()"
@@ -32,7 +32,7 @@
     [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(overviewStepNumber())"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep2Comments()) {
+  @if (showIncomingStep2Comments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep2CommentText()"
@@ -57,7 +57,7 @@
     [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(existingSaudiStepNumber())"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep3Comments()) {
+  @if (showIncomingStep3Comments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep3CommentText()"
@@ -83,7 +83,7 @@
     [originalPlanResponse]="originalPlanResponse()"
     (onEdit)="onEditStepClick(directLocalizationStepNumber())"
   />
-  @if (shouldShowIncomingComments() && hasIncomingStep4Comments()) {
+  @if (showIncomingStep4Comments()) {
   <app-page-comment-box
     [commentTitle]="incomingCommentPersona() || 'Comment'"
     [commentText]="getIncomingStep4CommentText()"

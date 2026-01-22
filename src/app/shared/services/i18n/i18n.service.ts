@@ -42,7 +42,6 @@ export class I18nService {
 	translate(key: string, params?: Record<string, any>): string {
 		const translation = this.getNestedTranslation(key);
 		if (!translation) {
-			console.warn(`Translation key not found: ${key}`);
 			return key;
 		}
 
@@ -112,7 +111,7 @@ export class I18nService {
 		}
 
 		// TODO: Uncomment this when finishing all localization work
-		// Try to detect from browser 
+		// Try to detect from browser
 		// if (typeof window !== 'undefined' && window.navigator) {
 		// 	const browserLang = navigator.language.split('-')[0];
 		// 	if (browserLang === 'ar') {

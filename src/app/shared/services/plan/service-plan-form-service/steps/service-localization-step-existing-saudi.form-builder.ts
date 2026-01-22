@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AgreementType, EMaterialsFormControls, EServiceCompanyType } from 'src/app/shared/enums';
+import { AgreementType, EMaterialsFormControls, EServiceCompanyType, EServiceQualificationStatus } from 'src/app/shared/enums';
 import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
 
 export class ServiceLocalizationStepExistingSaudiFormBuilder {
@@ -458,8 +458,8 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
 
     if (!productsControl) return;
 
-    const hasManufacturer = companyTypes.includes('Manufacturer');
-    const isQualifiedOrPreQualified = qualificationStatus === 'Qualified' || qualificationStatus === 'Under Pre-Qualification';
+    const hasManufacturer = companyTypes.includes(EServiceCompanyType.Manufacturers.toString());
+    const isQualifiedOrPreQualified = qualificationStatus === EServiceQualificationStatus.Qualified.toString() || qualificationStatus === EServiceQualificationStatus.UnderPreQualification.toString();
 
     if (hasManufacturer && isQualifiedOrPreQualified) {
       productsControl.setValidators([Validators.required, Validators.maxLength(255)]);
@@ -484,8 +484,8 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
 
     if (!companyOverviewControl) return;
 
-    const hasManufacturer = companyTypes.includes('Manufacturer');
-    const isNotQualified = qualificationStatus === 'Not Qualified';
+    const hasManufacturer = companyTypes.includes(EServiceCompanyType.Manufacturers.toString());
+    const isNotQualified = qualificationStatus === EServiceQualificationStatus.NotQualified.toString();
 
     if (hasManufacturer && isNotQualified) {
       companyOverviewControl.setValidators([Validators.required, Validators.maxLength(255)]);
