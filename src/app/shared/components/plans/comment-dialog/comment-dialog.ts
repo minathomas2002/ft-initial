@@ -27,6 +27,7 @@ export class CommentDialog implements OnInit {
   private readonly toaster = inject(ToasterService);
   commentFormControl = input.required<FormControl<string | null>>();
   commentAdded = output();
+  cancelled = output();
   private commentSubmitted = signal<boolean>(false);
   private initialValue = signal<string>('');
 
@@ -58,6 +59,11 @@ export class CommentDialog implements OnInit {
         control.setValue(this.initialValue());
         control.markAsPristine();
         control.markAsUntouched();
+      }
+      // Notify parent that dialog was cancelled without saving
+      // Only emit if the initial value was empty (meaning no comment existed)
+      if (!this.initialValue()) {
+        this.cancelled.emit();
       }
     }
   }

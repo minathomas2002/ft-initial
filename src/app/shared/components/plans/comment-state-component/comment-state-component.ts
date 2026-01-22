@@ -71,4 +71,11 @@ export class CommentStateComponent {
     this.commentPhase.set('viewing');
     this.commentFormControl().disable();
   }
+
+  onCommentCancelled() {
+    // Reset to initial state when user cancels without entering a comment
+    if (this.commentPhase() === 'adding') {
+      this.commentPhase.set('none');
+    }
+  }
 }
