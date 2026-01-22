@@ -185,7 +185,7 @@
       (click)="timelineVisibility.set(true)"
     ></p-button>
     }
-    @if (isReviewMode() && activeStep() === 5) {
+    @if (isReviewMode() && activeStep() === stepsCount()) {
     <p-button
       text
       (click)="onSendBackToInvestor()"
@@ -194,7 +194,7 @@
       <span class="underline text-md font-semibold">Send Back to Investor</span>
     </p-button>
     }
-    @if((isReviewMode() || isResubmitMode()) && activeStep() <5){
+    @if((isReviewMode() || isResubmitMode()) && activeStep() <stepsCount()){
       <p-button
       [label]="'Add Comments'"
       text

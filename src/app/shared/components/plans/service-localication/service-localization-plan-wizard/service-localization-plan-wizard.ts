@@ -517,6 +517,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return this.stepsWithId().map(({ id, ...step }) => step);
   });
 
+  stepsCount = computed(() => this.steps().length);
+
   allowUserToResubmit = computed(() => {
     const mode = this.planStore.wizardMode();
     return mode === 'resubmit' && this.steps().every(step => !step.commentsCount);
