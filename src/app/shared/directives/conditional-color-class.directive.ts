@@ -8,6 +8,7 @@ import { FileuploadComponent } from '../components/utility-components/fileupload
  * Usage:
  * <input [appConditionalColorClass]="true" [color]="'orange'" />
  * <input [appConditionalColorClass]="someCondition" [color]="'red'" />
+ * <p-multiselect [appConditionalColorClass]="highlightInput('field')" [color]="selectedInputColor()" ... />
  * <app-fileupload [appConditionalColorClass]="highlightInput('attachments')" [color]="selectedInputColor()" ... />
  *
  * When the boolean is true, it adds:
@@ -15,8 +16,9 @@ import { FileuploadComponent } from '../components/utility-components/fileupload
  * - border-{color}-500! (border color)
  *
  * For app-fileupload, classes are set or removed via the component's styleClass
- * input (merged with any existing styleClass). For other components, classes
- * are applied to the DOM (nested input when present; file inputs excluded).
+ * input (merged with any existing styleClass). For p-multiselect, classes are
+ * applied to the MultiSelect root container (the visible trigger). For other
+ * components, classes are applied to the DOM (nested input when present; file inputs excluded).
  *
  * Note: All possible class combinations are explicitly defined below
  * so Tailwind CSS v4 can detect and include them during build.
@@ -87,18 +89,22 @@ export class ConditionalColorClassDirective {
 
   /**
    * Gets the target element to apply classes to.
-   * For PrimeNG components like p-inputnumber, p-select, etc.,
-   * finds the nested input element. File inputs are excluded.
-   * Otherwise, returns the element itself.
+   * - p-multiselect: the root container (visible trigger); never a nested filter input.
+   * - input/textarea/select: the element itself.
+   * - Other PrimeNG (p-inputnumber, p-select, etc.): nested input when present; file inputs excluded.
+   * - Otherwise: the host element.
    */
   private getTargetElement(): HTMLElement {
     const element = this.elementRef.nativeElement;
+    const tag = element.tagName.toLowerCase();
 
-    if (
-      element.tagName.toLowerCase() === 'input' ||
-      element.tagName.toLowerCase() === 'textarea' ||
-      element.tagName.toLowerCase() === 'select'
-    ) {
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') {
+      return element;
+    }
+
+    // p-multiselect: apply to the root container (the visible trigger/box), not a nested
+    // filter input inside the overlay
+    if (tag === 'p-multiselect' || element.classList.contains('p-multiselect')) {
       return element;
     }
 

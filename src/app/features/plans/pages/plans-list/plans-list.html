@@ -83,6 +83,7 @@
             <app-base-tag
               [value]="getStatusLabel(item.status)"
               [color]="getStatusBadgeColor(item.status)"
+              [maxChars]="25"
             ></app-base-tag>
           </td>
           @if (isInternalUser()) {

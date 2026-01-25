@@ -152,22 +152,11 @@
             }
           </td>
           <td>
-            @if (isInvestor()) {
-            <span
-              class="text-sm font-medium inline-block border-1 px-[10px] py-[2px] rounded-xl max-w-[25ch] truncate {{ getStatusBadge(item.status).class }}"
-              [appTruncateTooltip]="getStatusBadge(item.status).label" [maxChars]="25">
-              {{ getStatusBadge(item.status).label }}
-            </span>
-            } @else {
-            @if (getStatusBadge(item.status).color) {
             <app-base-tag
               [value]="getStatusBadge(item.status).label"
-              [color]="getStatusBadge(item.status).color!"
+              [color]="getStatusBadge(item.status).color"
+              [maxChars]="25"
             ></app-base-tag>
-            } @else {
-            <app-base-tag [value]="getStatusBadge(item.status).label"></app-base-tag>
-            }
-            }
           </td>
           <td>
             <app-dashboard-plan-action-menu
