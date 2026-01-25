@@ -536,8 +536,11 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr class="bg-primary text-white p-3 border border-gray-200 rounded-t-xl">
-            <td>Metrics</td>
-            <td colspan="20">Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</td>
+            <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">Metrics</td>
+            <td
+              class="p-3 !border-t-0 !border-e-0 !border-b-0"
+              colspan="20"
+            >Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</td>
           </tr>
           <tr>
             <th
