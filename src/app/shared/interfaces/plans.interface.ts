@@ -158,6 +158,11 @@ export interface IProductPlanResponse {
 export interface IServiceLocalizationPlanResponse {
   signature: Signature;
   servicePlan: IServicePlanResponse;
+  submissionDate: string;
+  planCode: number;
+  investorName: string;
+  investorId: string;
+  statusValue: string | null;
 }
 
 export interface IServicePlanGetResponse {
