@@ -440,7 +440,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return stepId ? this.getCommentColorForStep(stepId) : 'orange';
   });
   canApproveOrReject = computed(() => {
-    return !this.hasSelectedFields() && !this.hasComments();
+    return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
   });
 
   // Check if user is investor persona

@@ -160,9 +160,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step = this.activeStep();
     const stepId: ProductLocalizationWizardStepId =
       step === 1 ? 'overview' :
-      step === 2 ? 'productPlant' :
-      step === 3 ? 'valueChain' :
-      step === 4 ? 'saudization' : 'summary';
+        step === 2 ? 'productPlant' :
+          step === 3 ? 'valueChain' :
+            step === 4 ? 'saudization' : 'summary';
     return this.getCommentColorForStep(stepId);
   });
 
@@ -508,7 +508,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   canApproveOrReject = computed(() => {
-    return !this.hasSelectedFields() && !this.hasComments();
+    return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
   });
 
   hasComments = computed(() => {
@@ -649,9 +649,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step = this.activeStep();
     const stepId: ProductLocalizationWizardStepId =
       step === 1 ? 'overview' :
-      step === 2 ? 'productPlant' :
-      step === 3 ? 'valueChain' :
-      step === 4 ? 'saudization' : 'summary';
+        step === 2 ? 'productPlant' :
+          step === 3 ? 'valueChain' :
+            step === 4 ? 'saudization' : 'summary';
 
     // Non-investor (internal) flow: starting a new comment session should clear
     // any previously mapped/selected fields so counters, checkboxes and highlights reset.
@@ -677,11 +677,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     // or highlighted inputs are fully disabled; we must not block resubmit due to their validity.
     const resubmitStepsToValidate = this.isResubmitMode()
       ? {
-          step1: this.step1CorrectedFieldsFiltered().length > 0,
-          step2: this.step2CorrectedFieldsFiltered().length > 0,
-          step3: this.step3CorrectedFieldsFiltered().length > 0,
-          step4: this.step4CorrectedFieldsFiltered().length > 0,
-        }
+        step1: this.step1CorrectedFieldsFiltered().length > 0,
+        step2: this.step2CorrectedFieldsFiltered().length > 0,
+        step3: this.step3CorrectedFieldsFiltered().length > 0,
+        step4: this.step4CorrectedFieldsFiltered().length > 0,
+      }
       : undefined;
 
     // Check if all forms are valid
