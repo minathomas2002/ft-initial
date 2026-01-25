@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TagModule } from 'primeng/tag';
 import type { TColors } from '../../../interfaces';
+import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 
 @Component({
 	selector: 'app-base-tag',
-	imports: [TagModule],
+	imports: [TagModule, TruncateTooltipDirective],
 	templateUrl: './base-tag.component.html',
 	styleUrl: './base-tag.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,6 +14,7 @@ export class BaseTagComponent {
 	color = input<TColors>('red');
 	value = input<string>('');
 	styleClass = input<string>('');
+	maxChars = input<number>(25);
 
 	getBadgeClasses(): string {
 		const colorMap: Record<TColors, string> = {

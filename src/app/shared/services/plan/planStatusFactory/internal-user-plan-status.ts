@@ -32,7 +32,7 @@ export class InternalUserPlanStatus implements IPlanStatus {
 
   getStatusBadgeClass(status: EInternalUserPlanStatus): TColors {
     const classMap: Record<EInternalUserPlanStatus, TColors> = {
-      [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: 'primary',
+      [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: 'green',
       [EInternalUserPlanStatus.UNASSIGNED]: 'yellow',
       [EInternalUserPlanStatus.UNDER_REVIEW]: 'blue',
       [EInternalUserPlanStatus.APPROVED]: 'green',
