@@ -605,8 +605,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   onAddComment(): void {
+    this.showCommentState.set(true);
+
     if (this.isResubmitMode()) {
-      this.showCommentState.set(true);
 
       // In resubmit mode the investor opens the comment panel from the wizard actions.
       // Infer the correct phase from the existing comment so the UI shows Edit/Delete
@@ -653,7 +654,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           step === 3 ? 'valueChain' :
             step === 4 ? 'saudization' : 'summary';
 
-    // Non-investor (internal) flow: starting a new comment session should clear
+    // Non-investor (internal/employee) flow: starting a new comment session should clear
     // any previously mapped/selected fields so counters, checkboxes and highlights reset.
     if (!this.isInvestorPersona()) {
       this.resetCurrentStepCommentSelections(stepId);
