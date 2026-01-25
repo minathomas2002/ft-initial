@@ -4,8 +4,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ReviewPlanRequest, IPageComment } from 'src/app/shared/interfaces/plans.interface';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { TCommentPhase } from '../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 
 /**
  * Abstract base class for plan wizard components using Template Method pattern.
@@ -16,6 +18,7 @@ export abstract class BasePlanWizard {
   protected readonly planStore = inject(PlanStore);
   protected readonly toasterService = inject(ToasterService);
   protected readonly destroyRef = inject(DestroyRef);
+  protected readonly roleService = inject(RoleService);
 
   // Common signals - subclasses should initialize these
   protected isProcessing = signal(false);
@@ -97,6 +100,25 @@ export abstract class BasePlanWizard {
   /** Reset selected inputs and hasComment controls for the given step. Used when employee starts a new comment. */
   protected abstract resetCurrentStepCommentSelections(stepId: string | undefined): void;
 
+  /** Comment phase for the given step id. Used by getCommentColorForStep. */
+  protected abstract getCommentPhaseForStepId(stepId: string): TCommentPhase;
+
+  /**
+   * Comment color for the stepper badge: 'green' when done/not active, 'orange' when in focus or under review.
+   * Centralized for product and service wizards.
+   */
+  protected getCommentColorForStep(stepCommentPhase: TCommentPhase): 'green' | 'orange' {
+    const status = this.planStore.planStatus();
+    const isViewOrReview = this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review';
+
+    const showGreenColor =
+      isViewOrReview &&
+      status === EInternalUserPlanStatus.UNDER_REVIEW &&
+      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])() &&
+      stepCommentPhase === 'none'
+
+    return showGreenColor ? 'green' : 'orange';
+  }
   /**
    * Handle Add Comment action - centralized for resubmit and non-resubmit flows.
    * Resubmit: show comment panel and set phase from existing comment (viewing/none).
