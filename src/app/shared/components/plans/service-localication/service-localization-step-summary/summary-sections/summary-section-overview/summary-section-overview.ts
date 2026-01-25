@@ -332,7 +332,7 @@ export class SummarySectionOverview {
     );
   }
 
-  // Check if a field is resolved/corrected by investor (based on correctedFieldIds)
+  // Check if a field is resolved/corrected by investor (based on correctedFieldIds AND value change)
   isFieldResolved(fieldKey: string, section?: string, fieldId?: string): boolean {
     if (this.correctedFieldIds().length === 0) return false;
 
@@ -349,7 +349,8 @@ export class SummarySectionOverview {
       return false;
     };
 
-    return this.pageComments().some((comment) =>
+    // Check if field is in correctedFieldIds
+    const hasCorrectedField = this.pageComments().some((comment) =>
       comment.fields?.some(
         (field) =>
           matchesInputKey(field.inputKey) &&
@@ -359,6 +360,38 @@ export class SummarySectionOverview {
           (fieldId === undefined || field.id === fieldId)
       )
     );
+
+    if (!hasCorrectedField) return false;
+
+    // Also check if the value has actually changed (before !== after)
+    // For array items (serviceDetails), convert fieldId to index; for simple fields, use undefined
+    let indexForValue: number | undefined = undefined;
+    if (section === 'serviceDetails' && fieldId !== undefined) {
+      indexForValue = this.getServiceDetailIndexByRowId(fieldId);
+    }
+    const beforeValue = this.getBeforeValue(fieldKey, indexForValue);
+    const afterValue = this.getAfterValue(fieldKey, indexForValue);
+
+    // Normalize values for comparison
+    const beforeStr = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
+    const afterStr = afterValue === null || afterValue === undefined ? '' : String(afterValue).trim();
+
+    // Only resolved if value has changed
+    return beforeStr !== afterStr;
+  }
+
+  // Helper to get service detail index by rowId
+  private getServiceDetailIndexByRowId(rowId: string | number): number | undefined {
+    const detailsArray = this.serviceDetailsFormArray();
+    if (!detailsArray) return undefined;
+    for (let i = 0; i < detailsArray.length; i++) {
+      const group = detailsArray.at(i) as FormGroup;
+      const groupRowId = group.get('rowId')?.value;
+      if (groupRowId != null && String(groupRowId) === String(rowId)) {
+        return i;
+      }
+    }
+    return undefined;
   }
 
   // Computed properties for comment status
@@ -409,6 +442,7 @@ export class SummarySectionOverview {
     if (!detailsArray || index >= detailsArray.length) return false;
     const serviceGroup = detailsArray.at(index) as FormGroup;
     const rowId = serviceGroup.get('rowId')?.value;
+    // Pass rowId as fieldId parameter (they're the same in this context)
     return this.isFieldResolved(fieldKey, 'serviceDetails', rowId);
   }
 
@@ -592,25 +626,22 @@ export class SummarySectionOverview {
     const beforeValue = this.getBeforeValue(fieldKey, index);
     const afterValue = this.getAfterValue(fieldKey, index);
 
-    // Compare values
-    if (beforeValue === afterValue) return false;
-    if (beforeValue === null || beforeValue === undefined || beforeValue === '') {
-      return afterValue !== null && afterValue !== undefined && afterValue !== '';
-    }
-    if (afterValue === null || afterValue === undefined || afterValue === '') {
-      return true;
+    // If both values are null/undefined/empty, no diff
+    if ((beforeValue === null || beforeValue === undefined || beforeValue === '') &&
+        (afterValue === null || afterValue === undefined || afterValue === '')) {
+      return false;
     }
 
-    // For arrays, compare by JSON stringify
+    // For arrays, compare by JSON stringify (sorted)
     if (Array.isArray(beforeValue) && Array.isArray(afterValue)) {
       return JSON.stringify(beforeValue.sort()) !== JSON.stringify(afterValue.sort());
     }
 
-    // For objects, compare by JSON stringify
-    if (typeof beforeValue === 'object' && typeof afterValue === 'object') {
-      return JSON.stringify(beforeValue) !== JSON.stringify(afterValue);
-    }
+    // Compare values - normalize to strings for comparison
+    const beforeStr = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
+    const afterStr = afterValue === null || afterValue === undefined ? '' : String(afterValue).trim();
 
-    return String(beforeValue) !== String(afterValue);
+    // Only show diff if values actually differ
+    return beforeStr !== afterStr;
   }
 }
