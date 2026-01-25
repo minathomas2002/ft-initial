@@ -12,6 +12,7 @@ export interface ProductPlan {
   id: string;
   isDraft?: boolean;
   status?: EInternalUserPlanStatus;
+  investorStatus?: EInvestorPlanStatus;
   overviewCompanyInfo: OverviewCompanyInfo
   productPlantOverview: ProductPlantOverview
   valueChainStep: ValueChainStep
