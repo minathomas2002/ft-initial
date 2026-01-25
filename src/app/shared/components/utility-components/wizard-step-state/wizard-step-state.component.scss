@@ -1,4 +1,14 @@
 :host::ng-deep {
+  .wizard-step-badge.p-badge {
+    border-radius: 50%;
+    min-width: 1.5rem;
+    min-height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+  }
+
   .p-step-number:has(.icon-check) {
     background: var(--p-stepper-step-number-active-background) !important;
     border-color: var(--p-stepper-step-number-active-border-color) !important;

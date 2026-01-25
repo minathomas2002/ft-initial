@@ -44,19 +44,21 @@
   <p-badge
     [value]="errorsNumber()"
     [severity]="'danger'"
-    class="bg-red-400 text-white"
+    class="wizard-step-badge bg-red-400 text-white"
   ></p-badge>
   }
   @else if(stepState().fieldsRequiringUpdate && stepState().fieldsRequiringUpdate! > 0){
   <p-badge
     [value]="stepState().fieldsRequiringUpdate!"
     [severity]="'warn'"
+    class="wizard-step-badge"
   ></p-badge>
   }
   @else if(stepState().commentsCount){
   <p-badge
     [value]="stepState().commentsCount"
     [severity]="commentBadgeSeverity()"
+    class="wizard-step-badge"
   ></p-badge>
   }
 </div>
