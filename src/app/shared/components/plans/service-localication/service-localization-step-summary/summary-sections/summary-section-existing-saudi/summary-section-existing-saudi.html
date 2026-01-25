@@ -486,21 +486,55 @@
 
     <!-- Attachments -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-lg font-semibold text-[#4A4E5A]">Attachments</h3>
+      <h3 class="text-md font-semibold text-gray-900">{{ 'plans.summary.attachments' | translate }}</h3>
       @if (hasAttachmentsError()) {
-      <span class="text-sm text-red-600">Attachments is required</span>
+      <span class="text-sm text-red-600">{{ 'plans.summary.attachments' | translate }} is required</span>
       }
-      @if (attachments().length > 0) {
-      <div class="flex flex-col gap-2">
+      @if (hasAttachments()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
         @for (file of attachments(); track $index) {
-        <div class="flex items-center gap-2 text-sm text-gray-700">
-          <i class="icon-file"></i>
-          <span>{{ file.name }}</span>
+        <div class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            @if(file.type && file.type.startsWith('image/')){
+            <img
+              role="presentation"
+              [alt]="file.name || 'File ' + ($index + 1)"
+              [src]="file.objectURL || file.url"
+              width="32"
+              height="32"
+              class="flex-shrink-0"
+              appImageError
+            />
+            }@else if(getFileIcon(file)){
+            <img
+              role="presentation"
+              [alt]="file.name || 'File ' + ($index + 1)"
+              [src]="getFileIcon(file)"
+              width="32"
+              height="32"
+              class="flex-shrink-0"
+              appImageError
+            />
+            }@else{
+            <span
+              class="pi pi-file flex-shrink-0"
+              style="font-size: 2em"
+            ></span>
+            }
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="font-semibold text-ellipsis whitespace-nowrap overflow-hidden text-sm text-gray-700">
+                {{ file.name || 'File ' + ($index + 1) }}
+              </span>
+              @if (file.size) {
+              <span class="text-xs text-gray-500">({{ (file.size / 1024).toFixed(0) }} KB)</span>
+              }
+            </div>
+          </div>
         </div>
         }
       </div>
       } @else {
-      <p class="text-sm text-gray-500">No attachments</p>
+      <span class="text-sm text-gray-500">-</span>
       }
     </div>
   </div>
