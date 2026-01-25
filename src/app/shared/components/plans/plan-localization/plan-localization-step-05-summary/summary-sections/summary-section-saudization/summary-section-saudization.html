@@ -45,6 +45,9 @@
             >
               <app-summary-table-cell
                 [value]="formatValue(rowData['year' + year])"
+                [beforeValue]="rowData['year' + year + 'BeforeValue']"
+                [afterValue]="rowData['year' + year + 'AfterValue']"
+                [showDiff]="rowData['year' + year + 'ShowDiff']"
                 [hasError]="rowData['year' + year + 'HasError']"
                 [hasComment]="rowData['year' + year + 'HasComment']"
               />

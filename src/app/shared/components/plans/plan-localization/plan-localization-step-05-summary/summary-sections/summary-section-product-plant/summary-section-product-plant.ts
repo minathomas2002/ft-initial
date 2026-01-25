@@ -124,7 +124,11 @@ export class SummarySectionProductPlant {
     const control = this.productManufacturingExperienceFormGroup()?.get(EMaterialsFormControls.productManufacturingExperience);
     if (control instanceof FormGroup) {
       const value = this.getValue(control, EMaterialsFormControls.value);
-      return value ? this.productManufacturingExperienceOptions().find((option: any) => option.id === value)?.name : null;
+      if (!value) return null;
+      // Convert to string for consistent comparison (options use id as string)
+      const valueStr = String(value);
+      const option = this.productManufacturingExperienceOptions().find((opt: any) => String(opt.id) === valueStr);
+      return option?.name ?? null;
     }
     return null;
   });
@@ -151,6 +155,155 @@ export class SummarySectionProductPlant {
         (fieldId === undefined || field.id === fieldId)
       )
     );
+  }
+
+  // Helper method to get before value (original value from plan response) for a field
+  getBeforeValue(fieldKey: string): any {
+    const originalPlan = this.originalPlanResponse();
+    if (!originalPlan?.productPlan?.productPlantOverview) return null;
+
+    const productPlant = originalPlan.productPlan.productPlantOverview;
+
+    // Map field keys to plan response paths
+    switch (fieldKey) {
+      // Overview fields
+      case 'productName':
+        return productPlant.overview?.productName ?? null;
+      case 'productSpecifications':
+        return productPlant.overview?.productSpecifications ?? null;
+      case 'targetedAnnualPlantCapacity':
+        return productPlant.overview?.targetedAnnualPlantCapacity ?? null;
+      case 'timeRequiredToSetupFactory':
+        return productPlant.overview?.timeRequiredToSetupFactory ?? null;
+      
+      // Expected CAPEX fields
+      case 'landPercentage':
+        return productPlant.expectedCapex?.landPercent ?? null;
+      case 'buildingPercentage':
+        return productPlant.expectedCapex?.buildingPercent ?? null;
+      case 'machineryEquipmentPercentage':
+        return productPlant.expectedCapex?.machineryPercent ?? null;
+      case 'othersPercentage':
+        return productPlant.expectedCapex?.othersPercent ?? null;
+      case 'othersDescription':
+        return productPlant.expectedCapex?.othersDescription ?? null;
+      
+      // Target Customers fields
+      case 'targetedCustomer':
+        // Convert ETargetedCustomer[] to display string
+        const targetSEC = productPlant.targetCustomers?.targetSEC;
+        if (targetSEC && Array.isArray(targetSEC) && targetSEC.length > 0) {
+          return targetSEC.map(id => this.targetedCustomerOptions().find((option: any) => option.id === id.toString())?.name).filter(Boolean).join(', ');
+        }
+        return null;
+      case 'namesOfTargetedSuppliers':
+        return productPlant.targetCustomers?.targetedLocalSupplierNames ?? null;
+      case 'productsUtilizeTargetedProduct':
+        return productPlant.targetCustomers?.productsUtilizingTargetProduct ?? null;
+      
+      // Manufacturing Experience fields
+      case 'productManufacturingExperience':
+        const expRange = productPlant.manufacturingExperience?.experienceRange;
+        if (expRange === null || expRange === undefined) return null;
+        // Convert to string to match option id format (options use id as string)
+        const expRangeStr = String(expRange);
+        const option = this.productManufacturingExperienceOptions().find((opt: any) => String(opt.id) === expRangeStr);
+        return option?.name ?? null;
+      case 'qualifiedPlantLocationSEC':
+        return productPlant.manufacturingExperience?.qualifiedPlantLocation_SEC ?? null;
+      case 'approvedVendorIDSEC':
+        return productPlant.manufacturingExperience?.approvedVendorId_SEC ?? null;
+      case 'yearsOfExperienceSEC':
+        return productPlant.manufacturingExperience?.yearsExperience_SEC ?? null;
+      case 'totalQuantitiesSEC':
+        return productPlant.manufacturingExperience?.totalQuantitiesToSEC ?? null;
+      case 'namesOfSECApprovedSuppliers':
+        return productPlant.manufacturingExperience?.localSupplierNames ?? null;
+      case 'qualifiedPlantLocation':
+        return productPlant.manufacturingExperience?.qualifiedPlantLocation_LocalSupplier ?? null;
+      case 'yearsOfExperience':
+        return productPlant.manufacturingExperience?.yearsExperience_LocalSupplier ?? null;
+      case 'totalQuantities':
+        return productPlant.manufacturingExperience?.totalQuantitiesToLocalSuppliers ?? null;
+      
+      default:
+        return null;
+    }
+  }
+
+  // Helper method to get after value (current form value) for a field
+  getAfterValue(fieldKey: string): any {
+    switch (fieldKey) {
+      case 'productName':
+        return this.productName();
+      case 'productSpecifications':
+        return this.productSpecifications();
+      case 'targetedAnnualPlantCapacity':
+        return this.targetedAnnualPlantCapacity();
+      case 'timeRequiredToSetupFactory':
+        return this.timeRequiredToSetupFactory();
+      case 'landPercentage':
+        return this.landPercentage();
+      case 'buildingPercentage':
+        return this.buildingPercentage();
+      case 'machineryEquipmentPercentage':
+        return this.machineryEquipmentPercentage();
+      case 'othersPercentage':
+        return this.othersPercentage();
+      case 'othersDescription':
+        return this.othersDescription();
+      case 'targetedCustomer':
+        return this.targetedCustomer();
+      case 'namesOfTargetedSuppliers':
+        return this.namesOfTargetedSuppliers();
+      case 'productsUtilizeTargetedProduct':
+        return this.productsUtilizeTargetedProduct();
+      case 'productManufacturingExperience':
+        return this.productManufacturingExperience();
+      case 'qualifiedPlantLocationSEC':
+        return this.qualifiedPlantLocationSEC();
+      case 'approvedVendorIDSEC':
+        return this.approvedVendorIDSEC();
+      case 'yearsOfExperienceSEC':
+        return this.yearsOfExperienceSEC();
+      case 'totalQuantitiesSEC':
+        return this.totalQuantitiesSEC();
+      case 'namesOfSECApprovedSuppliers':
+        return this.namesOfSECApprovedSuppliers();
+      case 'qualifiedPlantLocation':
+        return this.qualifiedPlantLocation();
+      case 'yearsOfExperience':
+        return this.yearsOfExperience();
+      case 'totalQuantities':
+        return this.totalQuantities();
+      default:
+        return null;
+    }
+  }
+
+  // Helper method to check if field should show diff (has before and after values and they differ)
+  shouldShowDiff(fieldKey: string): boolean {
+    // Show diff in resubmit mode or view mode (when viewing plan details)
+    const wizardMode = this.planStore.wizardMode();
+    if (wizardMode !== 'resubmit' && wizardMode !== 'view') return false;
+    // Only show diff if field has a comment
+    if (!this.hasFieldComment(fieldKey)) return false;
+
+    const beforeValue = this.getBeforeValue(fieldKey);
+    const afterValue = this.getAfterValue(fieldKey);
+
+    // If both values are null/undefined/empty, no diff
+    if ((beforeValue === null || beforeValue === undefined || beforeValue === '') &&
+        (afterValue === null || afterValue === undefined || afterValue === '')) {
+      return false;
+    }
+
+    // Compare values - normalize to strings for comparison
+    const beforeStr = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
+    const afterStr = afterValue === null || afterValue === undefined ? '' : String(afterValue).trim();
+
+    // Only show diff if values actually differ
+    return beforeStr !== afterStr;
   }
 
   // Computed properties for comment status

@@ -254,8 +254,9 @@ export class SummarySectionCoverPage {
 
   // Helper method to check if field should show diff (has before and after values and they differ)
   shouldShowDiff(fieldKey: string, index?: number): boolean {
-    // Only show diff in resubmit mode
-    if (this.planStore.wizardMode() !== 'resubmit') return false;
+    // Show diff in resubmit mode or view mode (when viewing plan details)
+    const wizardMode = this.planStore.wizardMode();
+    if (wizardMode !== 'resubmit' && wizardMode !== 'view') return false;
     // Only show diff if field has a comment
     if (index !== undefined) {
       // For array items, check comment with rowId

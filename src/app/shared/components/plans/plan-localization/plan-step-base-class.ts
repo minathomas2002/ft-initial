@@ -444,15 +444,25 @@ export abstract class PlanStepBaseClass {
   /**
    * Determines if an input should be highlighted based on selection and comment phase.
    * Supports both simple fields and fields with row IDs (for FormArrays).
+   * In resubmit mode, also checks correctedFields() for employee-selected fields.
    */
   protected highlightInput(inputKey: string, rowId?: string): boolean {
+    // Check selectedInputs (for employee adding comments)
     const isSelected = this.selectedInputs().some(
       input =>
         input.inputKey === inputKey &&
         (rowId === undefined || input.id === rowId)
     );
+    
+    // In resubmit mode, also check correctedFields (employee-selected fields)
+    const isCorrected = this.isResubmitMode() && this.correctedFields().some(
+      input =>
+        input.inputKey === inputKey &&
+        (rowId === undefined || input.id === rowId)
+    );
+    
     const phase = this.commentPhase();
-    return isSelected && (phase === 'adding' || phase === 'editing' || phase === 'none');
+    return (isSelected || isCorrected) && (phase === 'adding' || phase === 'editing' || phase === 'none');
   }
 
   /**

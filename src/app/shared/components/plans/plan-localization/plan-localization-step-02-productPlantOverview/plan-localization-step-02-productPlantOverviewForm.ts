@@ -250,7 +250,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
       if (controls && controls[inputKey]) {
         return this.getValueControl(controls[inputKey]);
       }
-    } else if (section === 'manufacturingExperience') {
+    } else if (section === 'productManufacturingExperience') {
       const controls = this.productManufacturingExperienceFormGroupControls;
       if (controls && controls[inputKey]) {
         return this.getValueControl(controls[inputKey]);

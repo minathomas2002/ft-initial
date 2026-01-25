@@ -23,6 +23,9 @@
       <td class="p-3 !border !border-gray-200 rounded-bl-xl">
         <app-summary-table-cell
           [value]="rowData.expenseHeader"
+          [beforeValue]="rowData.expenseHeaderBeforeValue"
+          [afterValue]="rowData.expenseHeaderAfterValue"
+          [showDiff]="rowData.expenseHeaderShowDiff"
           [hasError]="rowData.expenseHeaderHasError"
           [hasComment]="rowData.expenseHeaderHasComment"
         />
@@ -30,6 +33,9 @@
       <td class="p-3 !border !border-gray-200">
         <app-summary-table-cell
           [value]="rowData.inHouseOrProcured"
+          [beforeValue]="rowData.inHouseOrProcuredBeforeValue"
+          [afterValue]="rowData.inHouseOrProcuredAfterValue"
+          [showDiff]="rowData.inHouseOrProcuredShowDiff"
           [hasError]="rowData.inHouseOrProcuredHasError"
           [hasComment]="rowData.inHouseOrProcuredHasComment"
         />
@@ -37,6 +43,9 @@
       <td class="p-3 !border !border-gray-200">
         <app-summary-table-cell
           [value]="rowData.costPercentage"
+          [beforeValue]="rowData.costPercentageBeforeValue"
+          [afterValue]="rowData.costPercentageAfterValue"
+          [showDiff]="rowData.costPercentageShowDiff"
           [hasError]="rowData.costPercentageHasError"
           [hasComment]="rowData.costPercentageHasComment"
         />
@@ -48,6 +57,9 @@
       >
         <app-summary-table-cell
           [value]="rowData['year' + year]"
+          [beforeValue]="rowData['year' + year + 'BeforeValue']"
+          [afterValue]="rowData['year' + year + 'AfterValue']"
+          [showDiff]="rowData['year' + year + 'ShowDiff']"
           [hasError]="rowData['year' + year + 'HasError']"
           [hasComment]="rowData['year' + year + 'HasComment']"
         />

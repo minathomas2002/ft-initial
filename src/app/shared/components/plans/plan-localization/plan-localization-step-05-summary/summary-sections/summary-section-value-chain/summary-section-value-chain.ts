@@ -174,20 +174,118 @@ export class SummarySectionValueChain {
     return item.get('rowId')?.value;
   }
 
+  // Helper method to get before value from original plan response
+  getBeforeValue(fieldKey: string, sectionName: string, rowId?: string): any {
+    const originalPlan = this.originalPlanResponse();
+    if (!originalPlan?.productPlan?.valueChainStep?.valueChainRows) return null;
+
+    // Map form group name to section type
+    const sectionMap: Record<string, number> = {
+      'designEngineeringFormGroup': 1,
+      'sourcingFormGroup': 2,
+      'manufacturingFormGroup': 3,
+      'assemblyTestingFormGroup': 4,
+      'afterSalesFormGroup': 5,
+    };
+
+    const sectionType = sectionMap[sectionName];
+    if (sectionType === undefined) return null;
+
+    // Find matching row by sectionType and rowId
+    const rows = originalPlan.productPlan.valueChainStep.valueChainRows.filter(
+      row => row.sectionType === sectionType && (rowId === undefined || String(row.id) === String(rowId))
+    );
+
+    if (rows.length === 0) return null;
+    const row = rows[0]; // Get first matching row
+
+    // Map field keys to row properties
+    switch (fieldKey) {
+      case 'expenseHeader':
+        return row.expenseHeader ?? null;
+      case 'inHouseOrProcured':
+        return row.inHouseOrProcured != null ? this.getInHouseOrProcuredName(String(row.inHouseOrProcured)) : null;
+      case 'costPercentage':
+        return row.costPercent ?? null;
+      case 'year1':
+        return row.year1 != null ? this.getLocalizationStatusName(String(row.year1)) : null;
+      case 'year2':
+        return row.year2 != null ? this.getLocalizationStatusName(String(row.year2)) : null;
+      case 'year3':
+        return row.year3 != null ? this.getLocalizationStatusName(String(row.year3)) : null;
+      case 'year4':
+        return row.year4 != null ? this.getLocalizationStatusName(String(row.year4)) : null;
+      case 'year5':
+        return row.year5 != null ? this.getLocalizationStatusName(String(row.year5)) : null;
+      case 'year6':
+        return row.year6 != null ? this.getLocalizationStatusName(String(row.year6)) : null;
+      case 'year7':
+        return row.year7 != null ? this.getLocalizationStatusName(String(row.year7)) : null;
+      default:
+        return null;
+    }
+  }
+
+  // Helper method to check if field should show diff
+  shouldShowDiff(fieldKey: string, sectionName: string, rowId?: string, currentValue?: any): boolean {
+    // Show diff in resubmit mode or view mode (when viewing plan details)
+    const wizardMode = this.planStore.wizardMode();
+    if (wizardMode !== 'resubmit' && wizardMode !== 'view') return false;
+    // Only show diff if field has a comment
+    if (!this.hasFieldComment(fieldKey, sectionName, rowId)) return false;
+
+    const beforeValue = this.getBeforeValue(fieldKey, sectionName, rowId);
+    const afterValue = currentValue;
+
+    // Compare values
+    if (beforeValue === afterValue) return false;
+    if (beforeValue === null || beforeValue === undefined || beforeValue === '') {
+      return afterValue !== null && afterValue !== undefined && afterValue !== '';
+    }
+    if (afterValue === null || afterValue === undefined || afterValue === '') {
+      return true;
+    }
+
+    // For objects, compare by JSON stringify
+    if (typeof beforeValue === 'object' && typeof afterValue === 'object') {
+      return JSON.stringify(beforeValue) !== JSON.stringify(afterValue);
+    }
+
+    return String(beforeValue) !== String(afterValue);
+  }
+
   // Helper to create table data structure
   getTableData(items: FormGroup[], sectionName: string): any[] {
     return items.map((item, index) => {
       const rowId = this.getRowId(item);
+      const expenseHeaderValue = this.getValue(item, EMaterialsFormControls.expenseHeader);
+      const inHouseOrProcuredValue = this.getInHouseOrProcuredName(this.getValue(item, EMaterialsFormControls.inHouseOrProcured));
+      const costPercentageValue = this.getValue(item, EMaterialsFormControls.costPercentage);
+
+      // Only get beforeValue if field has a comment (to avoid unnecessary lookups)
+      const expenseHeaderHasComment = this.hasFieldComment('expenseHeader', sectionName, rowId);
+      const inHouseOrProcuredHasComment = this.hasFieldComment('inHouseOrProcured', sectionName, rowId);
+      const costPercentageHasComment = this.hasFieldComment('costPercentage', sectionName, rowId);
+
       const row: any = {
-        expenseHeader: this.getValue(item, EMaterialsFormControls.expenseHeader),
-        inHouseOrProcured: this.getInHouseOrProcuredName(this.getValue(item, EMaterialsFormControls.inHouseOrProcured)),
-        costPercentage: this.getValue(item, EMaterialsFormControls.costPercentage),
+        expenseHeader: expenseHeaderValue,
+        expenseHeaderBeforeValue: expenseHeaderHasComment ? this.getBeforeValue('expenseHeader', sectionName, rowId) : null,
+        expenseHeaderAfterValue: expenseHeaderValue,
+        expenseHeaderShowDiff: this.shouldShowDiff('expenseHeader', sectionName, rowId, expenseHeaderValue),
         expenseHeaderHasError: this.hasFieldError(item, EMaterialsFormControls.expenseHeader),
-        expenseHeaderHasComment: this.hasFieldComment('expenseHeader', sectionName, rowId),
+        expenseHeaderHasComment: expenseHeaderHasComment,
+        inHouseOrProcured: inHouseOrProcuredValue,
+        inHouseOrProcuredBeforeValue: inHouseOrProcuredHasComment ? this.getBeforeValue('inHouseOrProcured', sectionName, rowId) : null,
+        inHouseOrProcuredAfterValue: inHouseOrProcuredValue,
+        inHouseOrProcuredShowDiff: this.shouldShowDiff('inHouseOrProcured', sectionName, rowId, inHouseOrProcuredValue),
         inHouseOrProcuredHasError: this.hasFieldError(item, EMaterialsFormControls.inHouseOrProcured),
-        inHouseOrProcuredHasComment: this.hasFieldComment('inHouseOrProcured', sectionName, rowId),
+        inHouseOrProcuredHasComment: inHouseOrProcuredHasComment,
+        costPercentage: costPercentageValue,
+        costPercentageBeforeValue: costPercentageHasComment ? this.getBeforeValue('costPercentage', sectionName, rowId) : null,
+        costPercentageAfterValue: costPercentageValue,
+        costPercentageShowDiff: this.shouldShowDiff('costPercentage', sectionName, rowId, costPercentageValue),
         costPercentageHasError: this.hasFieldError(item, EMaterialsFormControls.costPercentage),
-        costPercentageHasComment: this.hasFieldComment('costPercentage', sectionName, rowId),
+        costPercentageHasComment: costPercentageHasComment,
       };
 
       // Add all 7 years with error checking and comment checking
@@ -202,9 +300,14 @@ export class SummarySectionValueChain {
           7: EMaterialsFormControls.year7,
         };
         const yearKey = `year${year}`;
-        row[yearKey] = this.getYearValue(item, year);
+        const yearValue = this.getYearValue(item, year);
+        const yearHasComment = this.hasFieldComment(yearKey, sectionName, rowId);
+        row[yearKey] = yearValue;
+        row[`${yearKey}BeforeValue`] = yearHasComment ? this.getBeforeValue(yearKey, sectionName, rowId) : null;
+        row[`${yearKey}AfterValue`] = yearValue;
+        row[`${yearKey}ShowDiff`] = this.shouldShowDiff(yearKey, sectionName, rowId, yearValue);
         row[`${yearKey}HasError`] = this.getYearHasError(item, year);
-        row[`${yearKey}HasComment`] = this.hasFieldComment(yearKey, sectionName, rowId);
+        row[`${yearKey}HasComment`] = yearHasComment;
       });
 
       return row;

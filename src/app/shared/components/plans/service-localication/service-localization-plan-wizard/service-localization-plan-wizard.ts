@@ -674,7 +674,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       .subscribe((data) => {
         if (!data) return;
 
-        if (this.isResubmitMode()) {
+        if (this.isResubmitMode() || this.isViewMode()) {
           // Store original plan response for before/after comparison
           this.originalPlanResponse.set(data);
         }
