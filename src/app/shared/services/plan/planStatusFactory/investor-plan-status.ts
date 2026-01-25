@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { EInvestorPlanStatus } from 'src/app/shared/interfaces';
+import { EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
 import { IPlanStatus } from 'src/app/shared/interfaces/plans.interface';
 import { I18nService } from '../../i18n';
 
@@ -22,16 +22,16 @@ export class InvestorPlanStatus implements IPlanStatus {
     return statusMap[status] || this.i18nService.translate('plans.status.submitted');
   }
 
-  getStatusBadgeClass(status: EInvestorPlanStatus): string {
-    const classMap = {
-      [EInvestorPlanStatus.SUBMITTED]: 'bg-primary-50 text-primary-700 border-primary-200',
-      [EInvestorPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-      [EInvestorPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
-      [EInvestorPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-      [EInvestorPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-      [EInvestorPlanStatus.DRAFT]: 'bg-gray-50 text-gray-700 border-gray-200',
+  getStatusBadgeClass(status: EInvestorPlanStatus): TColors {
+    const classMap: Record<EInvestorPlanStatus, TColors> = {
+      [EInvestorPlanStatus.SUBMITTED]: 'primary',
+      [EInvestorPlanStatus.PENDING]: 'yellow',
+      [EInvestorPlanStatus.UNDER_REVIEW]: 'blue',
+      [EInvestorPlanStatus.APPROVED]: 'green',
+      [EInvestorPlanStatus.REJECTED]: 'red',
+      [EInvestorPlanStatus.DRAFT]: 'gray',
     };
-    return classMap[status] || classMap[EInvestorPlanStatus.SUBMITTED];
+    return classMap[status] as TColors || classMap[EInvestorPlanStatus.SUBMITTED] as TColors;
   }
 
 }

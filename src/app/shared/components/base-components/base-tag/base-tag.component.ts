@@ -28,7 +28,6 @@ export class BaseTagComponent {
 			gray: 'border-gray-200 bg-gray-50 text-gray-700',
 			orange: 'border-orange-200 bg-orange-50 text-orange-700',
 		};
-
 		return colorMap[this.color()];
 	}
 

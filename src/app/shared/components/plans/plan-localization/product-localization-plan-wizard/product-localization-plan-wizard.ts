@@ -102,82 +102,21 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return 'none';
   });
 
-  private readonly hasAnyCorrectedFields = computed(() => {
-    return (
-      this.step1CorrectedFieldsFiltered().length +
-      this.step2CorrectedFieldsFiltered().length +
-      this.step3CorrectedFieldsFiltered().length +
-      this.step4CorrectedFieldsFiltered().length
-    ) > 0;
-  });
-
-  private readonly isStepActivelyAddingComments = (stepId: ProductLocalizationWizardStepId): boolean => {
-    // Treat 'viewing' as comment-present so the badge stays orange after save.
-    const activePhases: TCommentPhase[] = ['adding', 'editing', 'viewing'];
-    const phase =
-      stepId === 'overview'
-        ? this.step1CommentPhase()
-        : stepId === 'productPlant'
-          ? this.step2CommentPhase()
-          : stepId === 'valueChain'
-            ? this.step3CommentPhase()
-            : stepId === 'saudization'
-              ? this.step4CommentPhase()
-              : 'none';
-
-    return activePhases.includes(phase);
-  };
-
-  private readonly getCommentColorForStep = (stepId: ProductLocalizationWizardStepId): 'green' | 'orange' => {
-    const status = this.planStore.planStatus();
-    const isViewOrReviewMode = this.isViewMode() || this.isReviewMode();
-
-    // Outside UNDER_REVIEW, keep the legacy behavior (all steps orange)
-    if (status !== EInternalUserPlanStatus.UNDER_REVIEW) {
-      return 'orange';
-    }
-
-    // In employee view/review under review: only the step being actively commented should be orange.
-    if (isViewOrReviewMode) {
-      if (this.isStepActivelyAddingComments(stepId)) {
-        return 'orange';
-      }
-
-      // Preserve existing semantics (green in view/review when not actively commenting)
-      if (this.hasAnyCorrectedFields()) {
-        return 'green';
-      }
-
-      return 'green';
-    }
-
-    // Not in view/review mode but status is UNDER_REVIEW (e.g., investor in resubmit mode)
-    return 'orange';
-  };
+  protected override getCommentPhaseForStepId(stepId: string): TCommentPhase {
+    if (stepId === 'overview') return this.step1CommentPhase();
+    if (stepId === 'productPlant') return this.step2CommentPhase();
+    if (stepId === 'valueChain') return this.step3CommentPhase();
+    if (stepId === 'saudization') return this.step4CommentPhase();
+    return 'none';
+  }
 
   // Used by the active step content components (they only render one step at a time)
   commentColor = computed(() => {
     const step = this.activeStep();
-    const stepId: ProductLocalizationWizardStepId =
-      step === 1 ? 'overview' :
-        step === 2 ? 'productPlant' :
-          step === 3 ? 'valueChain' :
-            step === 4 ? 'saudization' : 'summary';
-    return this.getCommentColorForStep(stepId);
+    return this.getCommentColorForStep(this.getCommentPhaseForStepId(this.getStepIdFromStepIndex(step) ?? ''));
   });
 
-  // selectedInputColor = computed<TColors>(() => {
-  //   // During comment phase (adding/editing): always orange
-  //   const currentPhase = this.currentStepCommentPhase();
-  //   if (currentPhase === 'adding' || currentPhase === 'editing') {
-  //     return 'orange';
-  //   }
-
-  //   // Otherwise, default to orange (actual field colors are determined by getFieldColor in step components)
-  //   return 'orange';
-  // });
   steps = computed<IWizardStepState[]>(() => {
-    const errors = this.validationErrors();
     this.i18nService.currentLanguage();
     return [
       {
@@ -187,7 +126,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: this.step1CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
-        commentColor: this.getCommentColorForStep('overview'),
+        commentColor: this.getCommentColorForStep(this.step1CommentPhase()),
       },
       {
         title: this.i18nService.translate('plans.wizard.step2.title'),
@@ -196,7 +135,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: this.step2CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
-        commentColor: this.getCommentColorForStep('productPlant'),
+        commentColor: this.getCommentColorForStep(this.step2CommentPhase()),
       },
       {
         title: this.i18nService.translate('plans.wizard.step3.title'),
@@ -205,7 +144,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step3_valueChain,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
-        commentColor: this.getCommentColorForStep('valueChain'),
+        commentColor: this.getCommentColorForStep(this.step3CommentPhase()),
       },
       {
         title: this.i18nService.translate('plans.wizard.step4.title'),
@@ -214,7 +153,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step4_saudization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
-        commentColor: this.getCommentColorForStep('saudization'),
+        commentColor: this.getCommentColorForStep(this.step4CommentPhase()),
       },
       {
         title: this.i18nService.translate('plans.wizard.step5.title'),
