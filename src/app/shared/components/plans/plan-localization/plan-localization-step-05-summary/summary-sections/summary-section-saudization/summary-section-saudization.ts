@@ -11,10 +11,11 @@ import { ImageErrorDirective } from 'src/app/shared/directives/image-error.direc
 import { SummaryTableCell } from 'src/app/shared/components/plans/summary-table-cell/summary-table-cell';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
 import { IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-summary-section-saudization',
-  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, TableModule, TranslatePipe, ImageErrorDirective],
+  imports: [SummarySectionHeader, CommonModule, SummaryTableCell, TableModule, TranslatePipe, ImageErrorDirective, TooltipModule],
   templateUrl: './summary-section-saudization.html',
   styleUrl: './summary-section-saudization.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -136,6 +137,9 @@ export class SummarySectionSaudization {
   hasAttachmentsError = computed(() => {
     return this.hasFieldError(`${EMaterialsFormControls.attachmentsFormGroup}.${EMaterialsFormControls.attachments}`);
   });
+
+  // Check if attachments field has a comment
+  hasAttachmentsComment = computed(() => this.hasFieldComment(EMaterialsFormControls.attachments));
 
   // Get file icon based on file type
   getFileIcon(file: any): string | null {
