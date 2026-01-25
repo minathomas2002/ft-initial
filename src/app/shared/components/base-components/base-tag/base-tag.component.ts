@@ -26,14 +26,13 @@ export class BaseTagComponent {
 			purple: 'border-purple-200 bg-purple-50 text-purple-700',
 			pink: 'border-pink-200 bg-pink-50 text-pink-700',
 			gray: 'border-gray-200 bg-gray-50 text-gray-700',
-			orange: 'border-orange-200 bg-orange-50 text-orange-700'
+			orange: 'border-orange-200 bg-orange-50 text-orange-700',
 		};
 
 		return colorMap[this.color()];
 	}
 
 	getEffectiveClasses(): string {
-		// If styleClass is provided, use it; otherwise use getBadgeClasses
-		return this.styleClass() || this.getBadgeClasses();
+		return this.styleClass() + ' ' + this.getBadgeClasses();
 	}
 }

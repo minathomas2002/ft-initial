@@ -1,8 +1,10 @@
-import { DestroyRef, inject, signal } from '@angular/core';
+import { DestroyRef, inject, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ReviewPlanRequest, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { TCommentPhase } from '../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 
 /**
@@ -70,6 +72,63 @@ export abstract class BasePlanWizard {
    * Subclasses must implement this to return 'product' or 'service'.
    */
   abstract getResubmitPlanType(): 'product' | 'service';
+
+  /** Whether the wizard is in resubmit mode. Used by onAddComment. */
+  protected abstract getIsResubmitMode(): boolean;
+
+  /** Whether the current user is an investor. Used by onAddComment. */
+  protected abstract getIsInvestorPersona(): boolean;
+
+  /** Signal controlling comment panel visibility. Used by onAddComment. */
+  protected abstract getShowCommentState(): WritableSignal<boolean>;
+
+  /** Current 1-based step index. Used by onAddComment. */
+  protected abstract getActiveStep(): number;
+
+  /** Form for the given 1-based step, or null if the step has no form (e.g. summary). */
+  protected abstract getStepFormForComment(step: number): FormGroup | null;
+
+  /** Step id for the given 1-based step index. */
+  protected abstract getStepIdFromStepIndex(step: number): string | undefined;
+
+  /** Comment phase signal for the given step id, or null for steps without comments (e.g. summary). */
+  protected abstract getCommentPhaseSignalForStepId(stepId: string): WritableSignal<TCommentPhase> | null;
+
+  /** Reset selected inputs and hasComment controls for the given step. Used when employee starts a new comment. */
+  protected abstract resetCurrentStepCommentSelections(stepId: string | undefined): void;
+
+  /**
+   * Handle Add Comment action - centralized for resubmit and non-resubmit flows.
+   * Resubmit: show comment panel and set phase from existing comment (viewing/none).
+   * Non-resubmit: reset step selections when not investor, then set phase to 'adding'.
+   */
+  onAddComment(): void {
+    if (this.getIsResubmitMode()) {
+      this.getShowCommentState().set(true);
+      const step = this.getActiveStep();
+      const stepForm = this.getStepFormForComment(step);
+      if (!stepForm) return;
+
+      const commentControl = stepForm.get(EMaterialsFormControls.comment) as FormControl<string> | null;
+      const hasComment = !!(commentControl?.value && commentControl.value.trim().length > 0);
+      const stepId = this.getStepIdFromStepIndex(step);
+      const phaseSignal = stepId ? this.getCommentPhaseSignalForStepId(stepId) : null;
+      if (phaseSignal?.() === 'none') {
+        phaseSignal.set(hasComment ? 'viewing' : 'none');
+      }
+      return;
+    }
+
+    const step = this.getActiveStep();
+    const stepId = this.getStepIdFromStepIndex(step);
+    if (!this.getIsInvestorPersona()) {
+      this.resetCurrentStepCommentSelections(stepId);
+    }
+    const phaseSignal = stepId ? this.getCommentPhaseSignalForStepId(stepId) : null;
+    if (phaseSignal) {
+      phaseSignal.set('adding');
+    }
+  }
 
   /**
    * Handle Send Back to Investor action - Template Method

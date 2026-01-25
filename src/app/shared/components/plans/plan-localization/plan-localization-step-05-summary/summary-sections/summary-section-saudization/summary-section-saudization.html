@@ -61,7 +61,13 @@
 
   <!-- Attachments -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-md font-semibold text-gray-900">{{ 'plans.summary.attachments' | translate }}</h3>
+    <div class="flex items-center gap-2">
+      <h3 class="text-md font-semibold text-gray-900">{{ 'plans.summary.attachments' | translate }}</h3>
+      @if (hasAttachmentsComment()) {
+      <i class="icon-info text-orange-600 text-xs bg-orange-50 p-1 rounded-full" pTooltip="This field has a comment"
+        tooltipPosition="top"></i>
+      }
+    </div>
     @if (hasAttachmentsError()) {
     <span class="text-sm text-red-600">{{ 'plans.summary.attachments' | translate }} is required</span>
     }
