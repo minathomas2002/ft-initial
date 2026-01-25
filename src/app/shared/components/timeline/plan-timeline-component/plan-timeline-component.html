@@ -97,6 +97,7 @@
         <div class="mt-2 flex gap-2 flex-wrap">
           @for (field of comment.fields; track field) {
           <app-base-tag
+            [styleClass]="'whitespace-normal!'"
             [value]="(field.section | camelCaseToWord) + ' - ' + field.label"
             [color]="'fadedBlue'"
           ></app-base-tag>
