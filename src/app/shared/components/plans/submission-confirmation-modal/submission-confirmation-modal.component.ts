@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, model, output, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -49,6 +49,25 @@ export class SubmissionConfirmationModalComponent {
 
   isSubmitting = signal(false);
   phoneInputValue = signal<IPhoneValue | null>(null);
+
+  constructor() {
+    // Initialize signature control when modal opens with existing signature
+    effect(() => {
+      const isVisible = this.visible();
+      const existingSig = this.existingSignature();
+      
+      if (isVisible && existingSig) {
+        // Set the form control value immediately when modal opens with existing signature
+        // This ensures validation passes and the signature is properly initialized
+        this.formService.signatureControl.setValue(existingSig, { emitEvent: false });
+        this.formService.signatureControl.markAsTouched();
+        this.formService.signatureControl.markAsDirty();
+      } else if (!isVisible) {
+        // Reset signature control when modal closes
+        this.formService.signatureControl.setValue(null, { emitEvent: false });
+      }
+    });
+  }
 
   isSubmitDisabled = computed(() => {
     return !this.formService.isFormValid() || this.isSubmitting();
