@@ -12,6 +12,9 @@
       <app-summary-field
         [label]="'Product Name (i.e. Product Targeted for Localization)'"
         [value]="productName()"
+        [beforeValue]="hasFieldComment('productName') ? getBeforeValue('productName') : null"
+        [afterValue]="productName()"
+        [showDiff]="shouldShowDiff('productName')"
         [hasError]="hasFieldError('overviewFormGroup.productName.value')"
         [hasComment]="productNameHasComment()"
         [isEmpty]="!productName()"
@@ -19,6 +22,9 @@
       <app-summary-field
         [label]="'Product Specifications (incl. voltage ratings) targeted for Localization)'"
         [value]="productSpecifications()"
+        [beforeValue]="hasFieldComment('productSpecifications') ? getBeforeValue('productSpecifications') : null"
+        [afterValue]="productSpecifications()"
+        [showDiff]="shouldShowDiff('productSpecifications')"
         [hasError]="hasFieldError('overviewFormGroup.productSpecifications.value')"
         [hasComment]="productSpecificationsHasComment()"
         [isEmpty]="!productSpecifications()"
@@ -26,6 +32,9 @@
       <app-summary-field
         [label]="'Targeted Annual Plant Capacity (Mention Unit of Measurement)'"
         [value]="targetedAnnualPlantCapacity()"
+        [beforeValue]="hasFieldComment('targetedAnnualPlantCapacity') ? getBeforeValue('targetedAnnualPlantCapacity') : null"
+        [afterValue]="targetedAnnualPlantCapacity()"
+        [showDiff]="shouldShowDiff('targetedAnnualPlantCapacity')"
         [hasError]="hasFieldError('overviewFormGroup.targetedAnnualPlantCapacity.value')"
         [hasComment]="targetedAnnualPlantCapacityHasComment()"
         [isEmpty]="!targetedAnnualPlantCapacity()"
@@ -33,6 +42,9 @@
       <app-summary-field
         [label]="'Time Required to Setup Factory (Once Localization Plan is Approved)'"
         [value]="timeRequiredToSetupFactory()"
+        [beforeValue]="hasFieldComment('timeRequiredToSetupFactory') ? getBeforeValue('timeRequiredToSetupFactory') : null"
+        [afterValue]="timeRequiredToSetupFactory()"
+        [showDiff]="shouldShowDiff('timeRequiredToSetupFactory')"
         [hasError]="hasFieldError('overviewFormGroup.timeRequiredToSetupFactory.value')"
         [hasComment]="timeRequiredToSetupFactoryHasComment()"
         [isEmpty]="!timeRequiredToSetupFactory()"
@@ -47,6 +59,9 @@
       <app-summary-field
         [label]="'Land (%)'"
         [value]="landPercentage()"
+        [beforeValue]="hasFieldComment('landPercentage') ? getBeforeValue('landPercentage') : null"
+        [afterValue]="landPercentage()"
+        [showDiff]="shouldShowDiff('landPercentage')"
         [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.landPercentage.value')"
         [hasComment]="landPercentageHasComment()"
         [isEmpty]="landPercentage() === null || landPercentage() === undefined"
@@ -54,6 +69,9 @@
       <app-summary-field
         [label]="'Building (%)'"
         [value]="buildingPercentage()"
+        [beforeValue]="hasFieldComment('buildingPercentage') ? getBeforeValue('buildingPercentage') : null"
+        [afterValue]="buildingPercentage()"
+        [showDiff]="shouldShowDiff('buildingPercentage')"
         [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.buildingPercentage.value')"
         [hasComment]="buildingPercentageHasComment()"
         [isEmpty]="buildingPercentage() === null || buildingPercentage() === undefined"
@@ -61,6 +79,9 @@
       <app-summary-field
         [label]="'Machinery / Equipment (%)'"
         [value]="machineryEquipmentPercentage()"
+        [beforeValue]="hasFieldComment('machineryEquipmentPercentage') ? getBeforeValue('machineryEquipmentPercentage') : null"
+        [afterValue]="machineryEquipmentPercentage()"
+        [showDiff]="shouldShowDiff('machineryEquipmentPercentage')"
         [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.machineryEquipmentPercentage.value')"
         [hasComment]="machineryEquipmentPercentageHasComment()"
         [isEmpty]="machineryEquipmentPercentage() === null || machineryEquipmentPercentage() === undefined"
@@ -68,6 +89,9 @@
       <app-summary-field
         [label]="'Others (%)'"
         [value]="othersPercentage()"
+        [beforeValue]="hasFieldComment('othersPercentage') ? getBeforeValue('othersPercentage') : null"
+        [afterValue]="othersPercentage()"
+        [showDiff]="shouldShowDiff('othersPercentage')"
         [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.othersPercentage.value')"
         [hasComment]="othersPercentageHasComment()"
         [isEmpty]="othersPercentage() === null || othersPercentage() === undefined"
@@ -76,6 +100,9 @@
       <app-summary-field
         [label]="'Others Description'"
         [value]="othersDescription()"
+        [beforeValue]="hasFieldComment('othersDescription') ? getBeforeValue('othersDescription') : null"
+        [afterValue]="othersDescription()"
+        [showDiff]="shouldShowDiff('othersDescription')"
         [hasError]="hasFieldError('expectedCAPEXInvestmentFormGroup.othersDescription.value')"
         [hasComment]="othersDescriptionHasComment()"
         [isEmpty]="othersDescription() === null || othersDescription() === undefined"
@@ -91,6 +118,9 @@
       <app-summary-field
         [label]="'Targeted Customer'"
         [value]="targetedCustomer()"
+        [beforeValue]="hasFieldComment('targetedCustomer') ? getBeforeValue('targetedCustomer') : null"
+        [afterValue]="targetedCustomer()"
+        [showDiff]="shouldShowDiff('targetedCustomer')"
         [hasError]="hasFieldError('targetCustomersFormGroup.targetedCustomer.value')"
         [hasComment]="targetedCustomerHasComment()"
         [isEmpty]="!targetedCustomer()"
@@ -102,6 +132,9 @@
       <app-summary-field
         [label]="'Provide names of targeted SEC\'s approved local suppliers'"
         [value]="namesOfTargetedSuppliers()"
+        [beforeValue]="hasFieldComment('namesOfTargetedSuppliers') ? getBeforeValue('namesOfTargetedSuppliers') : null"
+        [afterValue]="namesOfTargetedSuppliers()"
+        [showDiff]="shouldShowDiff('namesOfTargetedSuppliers')"
         [hasError]="hasFieldError('targetCustomersFormGroup.namesOfTargetedSuppliers.value')"
         [hasComment]="namesOfTargetedSuppliersHasComment()"
         [isEmpty]="!namesOfTargetedSuppliers()"
@@ -109,6 +142,9 @@
       <app-summary-field
         [label]="productsUtilizeLabel"
         [value]="productsUtilizeTargetedProduct()"
+        [beforeValue]="hasFieldComment('productsUtilizeTargetedProduct') ? getBeforeValue('productsUtilizeTargetedProduct') : null"
+        [afterValue]="productsUtilizeTargetedProduct()"
+        [showDiff]="shouldShowDiff('productsUtilizeTargetedProduct')"
         [hasError]="hasFieldError('targetCustomersFormGroup.productsUtilizeTargetedProduct.value')"
         [hasComment]="productsUtilizeTargetedProductHasComment()"
         [isEmpty]="!productsUtilizeTargetedProduct()"
@@ -124,6 +160,9 @@
       <app-summary-field
         [label]="'Product Manufacturing Experience'"
         [value]="productManufacturingExperience()"
+        [beforeValue]="hasFieldComment('productManufacturingExperience') ? getBeforeValue('productManufacturingExperience') : null"
+        [afterValue]="productManufacturingExperience()"
+        [showDiff]="shouldShowDiff('productManufacturingExperience')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.productManufacturingExperience.value')"
         [hasComment]="productManufacturingExperienceHasComment()"
         [isEmpty]="!productManufacturingExperience()"
@@ -139,6 +178,9 @@
       <app-summary-field
         [label]="'Qualified Plant Location (By SEC)'"
         [value]="qualifiedPlantLocationSEC()"
+        [beforeValue]="hasFieldComment('qualifiedPlantLocationSEC') ? getBeforeValue('qualifiedPlantLocationSEC') : null"
+        [afterValue]="qualifiedPlantLocationSEC()"
+        [showDiff]="shouldShowDiff('qualifiedPlantLocationSEC')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.qualifiedPlantLocationSEC.value')"
         [hasComment]="qualifiedPlantLocationSECHasComment()"
         [isEmpty]="!qualifiedPlantLocationSEC()"
@@ -146,6 +188,9 @@
       <app-summary-field
         [label]="'Approved Vendor ID (with SEC)'"
         [value]="approvedVendorIDSEC()"
+        [beforeValue]="hasFieldComment('approvedVendorIDSEC') ? getBeforeValue('approvedVendorIDSEC') : null"
+        [afterValue]="approvedVendorIDSEC()"
+        [showDiff]="shouldShowDiff('approvedVendorIDSEC')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.approvedVendorIDSEC.value')"
         [hasComment]="approvedVendorIDSECHasComment()"
         [isEmpty]="!approvedVendorIDSEC()"
@@ -153,6 +198,9 @@
       <app-summary-field
         [label]="'Years of Experience (with SEC)'"
         [value]="yearsOfExperienceSEC()"
+        [beforeValue]="hasFieldComment('yearsOfExperienceSEC') ? getBeforeValue('yearsOfExperienceSEC') : null"
+        [afterValue]="yearsOfExperienceSEC()"
+        [showDiff]="shouldShowDiff('yearsOfExperienceSEC')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.yearsOfExperienceSEC.value')"
         [hasComment]="yearsOfExperienceSECHasComment()"
         [isEmpty]="!yearsOfExperienceSEC()"
@@ -160,6 +208,9 @@
       <app-summary-field
         [label]="'Total Quantities provided to SEC (2019 onwards)'"
         [value]="totalQuantitiesSEC()"
+        [beforeValue]="hasFieldComment('totalQuantitiesSEC') ? getBeforeValue('totalQuantitiesSEC') : null"
+        [afterValue]="totalQuantitiesSEC()"
+        [showDiff]="shouldShowDiff('totalQuantitiesSEC')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.totalQuantitiesSEC.value')"
         [hasComment]="totalQuantitiesSECHasComment()"
         [isEmpty]="!totalQuantitiesSEC()"
@@ -177,6 +228,9 @@
       <app-summary-field
         [label]="'Name(s) of SEC approved local supplier(s)'"
         [value]="namesOfSECApprovedSuppliers()"
+        [beforeValue]="hasFieldComment('namesOfSECApprovedSuppliers') ? getBeforeValue('namesOfSECApprovedSuppliers') : null"
+        [afterValue]="namesOfSECApprovedSuppliers()"
+        [showDiff]="shouldShowDiff('namesOfSECApprovedSuppliers')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.namesOfSECApprovedSuppliers.value')"
         [hasComment]="namesOfSECApprovedSuppliersHasComment()"
         [isEmpty]="!namesOfSECApprovedSuppliers()"
@@ -184,6 +238,9 @@
       <app-summary-field
         [label]="'Qualified Plant Location'"
         [value]="qualifiedPlantLocation()"
+        [beforeValue]="hasFieldComment('qualifiedPlantLocation') ? getBeforeValue('qualifiedPlantLocation') : null"
+        [afterValue]="qualifiedPlantLocation()"
+        [showDiff]="shouldShowDiff('qualifiedPlantLocation')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.qualifiedPlantLocation.value')"
         [hasComment]="qualifiedPlantLocationHasComment()"
         [isEmpty]="!qualifiedPlantLocation()"
@@ -191,6 +248,9 @@
       <app-summary-field
         [label]="'Years of Experience'"
         [value]="yearsOfExperience()"
+        [beforeValue]="hasFieldComment('yearsOfExperience') ? getBeforeValue('yearsOfExperience') : null"
+        [afterValue]="yearsOfExperience()"
+        [showDiff]="shouldShowDiff('yearsOfExperience')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.yearsOfExperience.value')"
         [hasComment]="yearsOfExperienceHasComment()"
         [isEmpty]="!yearsOfExperience()"
@@ -198,6 +258,9 @@
       <app-summary-field
         [label]="'Total quantities provided to all approved local suppliers (2019 onwards)'"
         [value]="totalQuantities()"
+        [beforeValue]="hasFieldComment('totalQuantities') ? getBeforeValue('totalQuantities') : null"
+        [afterValue]="totalQuantities()"
+        [showDiff]="shouldShowDiff('totalQuantities')"
         [hasError]="hasFieldError('productManufacturingExperienceFormGroup.totalQuantities.value')"
         [hasComment]="totalQuantitiesHasComment()"
         [isEmpty]="!totalQuantities()"

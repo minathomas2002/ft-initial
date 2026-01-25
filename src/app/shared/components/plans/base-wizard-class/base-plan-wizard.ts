@@ -119,6 +119,20 @@ export abstract class BasePlanWizard {
 
     return showGreenColor ? 'green' : 'orange';
   }
+
+  /**
+   * Whether the Add Comments button should be disabled.
+   * Disabled when: comment panel is open (showCommentState) OR active step's comment phase is not 'none'.
+   * Centralized for product and service wizards.
+   */
+  isAddCommentButtonDisabled(): boolean {
+    if (this.getShowCommentState()()) return true;
+    const step = this.getActiveStep();
+    const stepId = this.getStepIdFromStepIndex(step);
+    const phase = this.getCommentPhaseForStepId(stepId ?? '');
+    return phase !== 'none';
+  }
+
   /**
    * Handle Add Comment action - centralized for resubmit and non-resubmit flows.
    * Resubmit: show comment panel and set phase from existing comment (viewing/none).
