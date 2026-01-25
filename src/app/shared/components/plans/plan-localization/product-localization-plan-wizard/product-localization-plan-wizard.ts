@@ -605,9 +605,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   onAddComment(): void {
-    this.showCommentState.set(true);
-
     if (this.isResubmitMode()) {
+      this.showCommentState.set(true);
 
       // In resubmit mode the investor opens the comment panel from the wizard actions.
       // Infer the correct phase from the existing comment so the UI shows Edit/Delete
@@ -647,6 +646,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
       return;
     }
+
     const step = this.activeStep();
     const stepId: ProductLocalizationWizardStepId =
       step === 1 ? 'overview' :
@@ -654,23 +654,26 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           step === 3 ? 'valueChain' :
             step === 4 ? 'saudization' : 'summary';
 
-    // Non-investor (internal/employee) flow: starting a new comment session should clear
+    // Non-investor (internal) flow: starting a new comment session should clear
     // any previously mapped/selected fields so counters, checkboxes and highlights reset.
     if (!this.isInvestorPersona()) {
       this.resetCurrentStepCommentSelections(stepId);
     }
 
     // Set comment phase for the current active step
-    if (step === 1 && this.step1CommentPhase() === 'none') {
+    // Step 1 is overview
+    // Step 2 is productPlant
+    // Step 3 is valueChain
+    // Step 4 is saudization
+    if (stepId === 'overview') {
       this.step1CommentPhase.set('adding');
-    } else if (step === 2 && this.step2CommentPhase() === 'none') {
+    } else if (stepId === 'productPlant') {
       this.step2CommentPhase.set('adding');
-    } else if (step === 3 && this.step3CommentPhase() === 'none') {
+    } else if (stepId === 'valueChain') {
       this.step3CommentPhase.set('adding');
-    } else if (step === 4 && this.step4CommentPhase() === 'none') {
+    } else if (stepId === 'saudization') {
       this.step4CommentPhase.set('adding');
     }
-    this.showHasCommentControl.set(true);
   }
 
   onSummarySubmitClick(): void {
