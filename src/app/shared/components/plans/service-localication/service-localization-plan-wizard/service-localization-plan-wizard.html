@@ -201,6 +201,7 @@
       icon="icon-message-circle"
       severity="secondary"
       (click)="onAddComment()"
+      [disabled]="showCommentState()"
     ></p-button>
       }
   </ng-container>

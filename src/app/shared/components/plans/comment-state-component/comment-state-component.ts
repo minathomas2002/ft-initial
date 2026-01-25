@@ -54,8 +54,13 @@ export class CommentStateComponent {
   onStartEditing() {
     this.commentPhase.set('editing');
     this.commentFormControl()!.enable();
-    // Open dialog with current comment value (FormControl already holds it).
-    this.showCommentDialog.set(true);
+    // For employee mode (non-resubmit): enable the textarea below the page, don't open dialog
+    // For investor mode (resubmit): open dialog for editing
+    if (this.isResubmitMode()) {
+      // Open dialog with current comment value (FormControl already holds it).
+      this.showCommentDialog.set(true);
+    }
+    // If not resubmit mode, the textarea below will be enabled via commentPhase === 'editing'
   }
 
   onStartEditingResubmitMode() {
@@ -73,9 +78,15 @@ export class CommentStateComponent {
   }
 
   onCommentCancelled() {
-    // Reset to initial state when user cancels without entering a comment
-    if (this.commentPhase() === 'adding') {
-      this.commentPhase.set('none');
+    // For investors (resubmit mode): Reset phase to 'none' when cancelling dialog
+    // This allows them to click "Add Comment" again without being stuck
+    if (this.isResubmitMode()) {
+      if (this.commentPhase() === 'adding' || this.commentPhase() === 'editing') {
+        this.commentPhase.set('none');
+      }
     }
+    // For employees (non-resubmit mode): Keep phase as 'adding' when cancelling
+    // This keeps checkboxes and comment state component visible so they can retry
+    // without having to click "Add Comment" again
   }
 }
