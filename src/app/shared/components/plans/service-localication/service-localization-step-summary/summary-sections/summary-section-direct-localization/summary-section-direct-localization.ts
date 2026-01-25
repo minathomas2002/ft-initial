@@ -261,7 +261,7 @@ export class SummarySectionDirectLocalization {
     );
   }
 
-  // Check if a field is resolved/corrected by investor (based on correctedFieldIds AND value change)
+  // Check if a field is resolved/corrected by investor (based on correctedFieldIds)
   isFieldResolved(fieldKey: string, section?: string, rowId?: string): boolean {
     if (this.correctedFieldIds().length === 0) return false;
 
@@ -278,8 +278,7 @@ export class SummarySectionDirectLocalization {
       return false;
     };
 
-    // Check if field is in correctedFieldIds
-    const hasCorrectedField = this.pageComments().some((comment) =>
+    return this.pageComments().some((comment) =>
       comment.fields?.some(
         (field) =>
           matchesInputKey(field.inputKey) &&
@@ -289,44 +288,6 @@ export class SummarySectionDirectLocalization {
           (rowId === undefined || field.id === rowId)
       )
     );
-
-    if (!hasCorrectedField) return false;
-
-    // Also check if the value has actually changed (before !== after)
-    // Convert rowId to index for array sections
-    let indexForValue: number | undefined = undefined;
-    if (rowId !== undefined && section) {
-      indexForValue = this.getIndexByRowId(section, rowId);
-    }
-    const beforeValue = this.getBeforeValue(fieldKey, section as any, indexForValue);
-    const afterValue = this.getAfterValue(fieldKey, section as any, indexForValue);
-
-    // Normalize values for comparison
-    const beforeStr = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
-    const afterStr = afterValue === null || afterValue === undefined ? '' : String(afterValue).trim();
-
-    // Only resolved if value has changed
-    return beforeStr !== afterStr;
-  }
-
-  // Helper to get index by rowId for different sections
-  private getIndexByRowId(section: string, rowId: string | number): number | undefined {
-    let formArray: FormArray | null = null;
-    if (section === 'localizationStrategy') {
-      formArray = this.directLocalizationServiceLevelFormArray();
-    } else if (section === 'serviceLevel') {
-      formArray = this.serviceLevelFormArray();
-    }
-
-    if (!formArray) return undefined;
-    for (let i = 0; i < formArray.length; i++) {
-      const group = formArray.at(i) as FormGroup;
-      const groupRowId = group.get('rowId')?.value;
-      if (groupRowId != null && String(groupRowId) === String(rowId)) {
-        return i;
-      }
-    }
-    return undefined;
   }
 
   // Helper methods for checking comments on array items
@@ -566,9 +527,8 @@ export class SummarySectionDirectLocalization {
 
   // Helper method to check if field should show diff (has before and after values and they differ)
   shouldShowDiff(fieldKey: string, section: 'localizationStrategy' | 'entityLevel' | 'serviceLevel', index?: number): boolean {
-    // Show diff in resubmit mode or view mode (when viewing plan details)
-    const wizardMode = this.planStore.wizardMode();
-    if (wizardMode !== 'resubmit' && wizardMode !== 'view') return false;
+    // Only show diff in resubmit mode
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
     // Only show diff if field has a comment
     if (index !== undefined) {
       if (section === 'localizationStrategy') {
@@ -583,22 +543,25 @@ export class SummarySectionDirectLocalization {
     const beforeValue = this.getBeforeValue(fieldKey, section, index);
     const afterValue = this.getAfterValue(fieldKey, section, index);
 
-    // If both values are null/undefined/empty, no diff
-    if ((beforeValue === null || beforeValue === undefined || beforeValue === '') &&
-        (afterValue === null || afterValue === undefined || afterValue === '')) {
-      return false;
+    // Compare values
+    if (beforeValue === afterValue) return false;
+    if (beforeValue === null || beforeValue === undefined || beforeValue === '') {
+      return afterValue !== null && afterValue !== undefined && afterValue !== '';
+    }
+    if (afterValue === null || afterValue === undefined || afterValue === '') {
+      return true;
     }
 
-    // For arrays, compare by JSON stringify (sorted)
+    // For arrays, compare by JSON stringify
     if (Array.isArray(beforeValue) && Array.isArray(afterValue)) {
       return JSON.stringify(beforeValue.sort()) !== JSON.stringify(afterValue.sort());
     }
 
-    // Compare values - normalize to strings for comparison
-    const beforeStr = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
-    const afterStr = afterValue === null || afterValue === undefined ? '' : String(afterValue).trim();
+    // For objects, compare by JSON stringify
+    if (typeof beforeValue === 'object' && typeof afterValue === 'object' && beforeValue !== null && afterValue !== null) {
+      return JSON.stringify(beforeValue) !== JSON.stringify(afterValue);
+    }
 
-    // Only show diff if values actually differ
-    return beforeStr !== afterStr;
+    return String(beforeValue) !== String(afterValue);
   }
 }
