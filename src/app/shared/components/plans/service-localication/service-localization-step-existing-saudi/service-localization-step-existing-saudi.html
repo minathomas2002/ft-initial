@@ -527,14 +527,18 @@
         class="rounded-xl"
       >
         <ng-template pTemplate="caption">
-          <div class="bg-primary text-white p-3 border border-gray-200 rounded-t-xl">
+          <!-- <div class="bg-primary text-white p-3 border border-gray-200 rounded-t-xl">
             <div class="flex items-center">
-              <span class="font-normal min-w-[250px] border-e-2">Metrics</span>
-              <span class="font-normal">Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</span>
+              <span class="font-normal min-w-[250px] border-e-2"></span>
+              <span class="font-normal"></span>
             </div>
-          </div>
+          </div> -->
         </ng-template>
         <ng-template pTemplate="header">
+          <tr class="bg-primary text-white p-3 border border-gray-200 rounded-t-xl">
+            <td>Metrics</td>
+            <td colspan="20">Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</td>
+          </tr>
           <tr>
             <th
               class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[250px] z-10000000"
