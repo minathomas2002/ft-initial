@@ -9,19 +9,19 @@ import { ERoles } from 'src/app/shared/enums';
   providedIn: 'root',
 })
 export class HandlePlanStatusFactory {
-   roleService = inject(RoleService);
-   Investor;
+  roleService = inject(RoleService);
+  Investor;
   constructor(
-		private managerPlanStatus: InternalUserPlanStatus,
-		private investorPlanStatus: InvestorPlanStatus,
-	) {
+    private managerPlanStatus: InternalUserPlanStatus,
+    private investorPlanStatus: InvestorPlanStatus,
+  ) {
 
     this.Investor = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()
   }
 
 
-  handleValidateStatus():IPlanStatus{
-    if(this.Investor)
+  handleValidateStatus(): IPlanStatus {
+    if (this.Investor)
       return this.investorPlanStatus;
     else
       return this.managerPlanStatus;

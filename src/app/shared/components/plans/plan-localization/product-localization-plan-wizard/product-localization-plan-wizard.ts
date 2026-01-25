@@ -396,16 +396,16 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   // Computed signals for plan status tag
-  planStatus = signal<EInternalUserPlanStatus | null>(null);
+  planStatus = signal<EInternalUserPlanStatus | EInvestorPlanStatus | null>(null);
   statusLabel = computed(() => {
     const status = this.planStatus();
-    if (status === null) return 'Draft';
+    if (status === null) return '';
     const statusService = this.planStatusFactory.handleValidateStatus();
     return statusService.getStatusLabel(status);
   });
-  statusBadgeClass = computed(() => {
+  statusBadgeClass = computed<TColors>(() => {
     const status = this.planStatus();
-    if (status === null) return 'bg-gray-50 text-gray-700 border-gray-200';
+    if (status === null) return 'gray';
     const statusService = this.planStatusFactory.handleValidateStatus();
     return statusService.getStatusBadgeClass(status);
   });
@@ -615,6 +615,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.isLoadingPlan.set(true);
     this.planStore.getProductPlan(planId)
       .pipe(
+        tap((response) => {
+          const planStatus = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? response.body.productPlan.investorStatus : response.body.productPlan?.status;
+          this.planStatus.set(planStatus ?? null);
+        }),
         switchMap((response) => {
           if (!response.body) {
             return of(null);
@@ -654,12 +658,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       )
       .subscribe((responseBody) => {
         if (responseBody) {
-          const status = responseBody.productPlan.status ?? null;
-          this.planStatus.set(status);
-          // Set plan status in store
-          if (status !== null) {
-            this.planStore.setPlanStatus(status);
-          }
           this.mapPlanDataToForm(responseBody);
         }
       });
