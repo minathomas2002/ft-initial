@@ -315,25 +315,23 @@
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
     <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
-    <div class="data-table bg-white border border-gray-200 rounded-xl table-with-caption">
+    <div class="data-table bg-white">
       <p-table
         [value]="entityLevelTableRows()"
         [scrollable]="true"
         scrollHeight="flex"
-        class="rounded-xl"
       >
-        <ng-template pTemplate="caption">
-          <div class="bg-primary text-white p-3 border border-gray-200 rounded-t-xl">
-            <div class="flex justify-between items-center">
-              <span class="font-normal">Metrics</span>
-              <span class="font-normal">Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</span>
-            </div>
-          </div>
-        </ng-template>
         <ng-template pTemplate="header">
+          <tr class="bg-primary text-white p-3 border border-gray-200">
+            <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">Metrics</td>
+            <td
+              class="p-3 !border-t-0 !border-e-0 !border-b-0"
+              colspan="20"
+            >Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</td>
+          </tr>
           <tr>
             <th
-              class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[250px] z-100000!"
+              class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[250px] "
               pFrozenColumn
             >
               <span>Category</span>
