@@ -9,6 +9,7 @@ import {
   OnInit,
   output,
   signal,
+  WritableSignal,
 } from '@angular/core';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationMethodology } from 'src/app/shared/enums';
@@ -877,78 +878,45 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     this.activeStep.set(stepNumber);
   }
 
-  onAddComment(): void {
-    if (this.isResubmitMode()) {
-      this.showCommentState.set(true);
-
-      // In resubmit mode the investor opens the comment panel from the wizard actions.
-      // Infer the correct phase from the existing comment so the UI shows Edit/Delete
-      // for saved comments, or Add Comment when empty.
-      const step = this.activeStep();
-      const stepId = this.stepsWithId()[step - 1]?.id;
-      if (!stepId) return;
-
-      const stepForm =
-        stepId === 'cover'
-          ? this.serviceLocalizationFormService.step1_coverPage
-          : stepId === 'overview'
-            ? this.serviceLocalizationFormService.step2_overview
-            : stepId === 'existingSaudi'
-              ? this.serviceLocalizationFormService.step3_existingSaudi
-              : stepId === 'directLocalization'
-                ? this.serviceLocalizationFormService.step4_directLocalization
-                : null;
-
-      if (!stepForm) return;
-
-      const commentControl = stepForm.get(EMaterialsFormControls.comment) as FormControl<string> | null;
-      const hasComment = !!(commentControl?.value && commentControl.value.trim().length > 0);
-
-      const setPhaseIfNone = (phaseSignal: typeof this.step1CommentPhase) => {
-        if (phaseSignal() === 'none') {
-          phaseSignal.set(hasComment ? 'viewing' : 'none');
-        }
-      };
-
-      if (stepId === 'cover') {
-        setPhaseIfNone(this.step1CommentPhase);
-      } else if (stepId === 'overview') {
-        setPhaseIfNone(this.step2CommentPhase);
-      } else if (stepId === 'existingSaudi') {
-        setPhaseIfNone(this.step3CommentPhase);
-      } else if (stepId === 'directLocalization') {
-        setPhaseIfNone(this.step4CommentPhase);
-      }
-
-      return;
-    }
-
-    const step = this.activeStep();
-    const stepId = this.stepsWithId()[step - 1]?.id;
-
-    // Non-investor (internal) flow: starting a new comment session should clear
-    // any previously mapped/selected fields so counters, checkboxes and highlights reset.
-    if (!this.isInvestorPersona()) {
-      this.resetCurrentStepCommentSelections(stepId);
-    }
-
-    // Set comment phase for the current active step
-    // Step 1 is cover
-    // Step 2 is overview
-    // Step 3 is existingSaudi (if shown)
-    // Step 4 is directLocalization (if shown)
-    if (stepId === 'cover') {
-      this.step1CommentPhase.set('adding');
-    } else if (stepId === 'overview') {
-      this.step2CommentPhase.set('adding');
-    } else if (stepId === 'existingSaudi') {
-      this.step3CommentPhase.set('adding');
-    } else if (stepId === 'directLocalization') {
-      this.step4CommentPhase.set('adding');
-    }
+  protected override getIsResubmitMode(): boolean {
+    return this.isResubmitMode();
   }
 
-  private resetCurrentStepCommentSelections(stepId: ServiceLocalizationWizardStepId | undefined): void {
+  protected override getIsInvestorPersona(): boolean {
+    return this.isInvestorPersona();
+  }
+
+  protected override getShowCommentState(): WritableSignal<boolean> {
+    return this.showCommentState;
+  }
+
+  protected override getActiveStep(): number {
+    return this.activeStep();
+  }
+
+  protected override getStepFormForComment(step: number): FormGroup | null {
+    const stepId = this.stepsWithId()[step - 1]?.id;
+    if (!stepId) return null;
+    if (stepId === 'cover') return this.serviceLocalizationFormService.step1_coverPage;
+    if (stepId === 'overview') return this.serviceLocalizationFormService.step2_overview;
+    if (stepId === 'existingSaudi') return this.serviceLocalizationFormService.step3_existingSaudi;
+    if (stepId === 'directLocalization') return this.serviceLocalizationFormService.step4_directLocalization;
+    return null;
+  }
+
+  protected override getStepIdFromStepIndex(step: number): string | undefined {
+    return this.stepsWithId()[step - 1]?.id;
+  }
+
+  protected override getCommentPhaseSignalForStepId(stepId: string): WritableSignal<TCommentPhase> | null {
+    if (stepId === 'cover') return this.step1CommentPhase;
+    if (stepId === 'overview') return this.step2CommentPhase;
+    if (stepId === 'existingSaudi') return this.step3CommentPhase;
+    if (stepId === 'directLocalization') return this.step4CommentPhase;
+    return null;
+  }
+
+  protected override resetCurrentStepCommentSelections(stepId: ServiceLocalizationWizardStepId | undefined): void {
     if (!stepId) return;
 
     // Reset stepper counter + highlight state (bound to selectedInputs)
