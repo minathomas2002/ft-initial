@@ -452,266 +452,268 @@
   <!-- Details of Service Provided -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Details of Service Provided</h2>
-    <app-form-array-input
-      [ft]="getDetailsFormArray()"
-      [hideAddButton]="true"
-      [hideDeleteButton]="isViewMode() || isReviewMode()"
-      [showIndexColumn]="true"
-      [indexColumnLabel]="'# of Services'"
-      [excludeKeys]="['serviceId', 'serviceProvidedToCompanyNames', 'agreementCopy']"
-      [headerTooltips]="{
-        serviceType:`1) Technical (Core) Services: Services directly related to the planning, construction, operation, maintenance, testing, or commissioning of utility infrastructure and systems
-                    2) Non-Technical (Non-Core / Support) Services: Services that support project delivery or business operations`,
-        totalBusinessDoneLast5Years: 'Mention total business done in last 5 years with top 5 entities',
-        serviceTargetedForLocalization: 'Select “Yes” if the service is currently targeted for localization; otherwise, select “No”'
-      }"
-    >
-      <ng-template
-        #itemTemplate
-        let-itemControl
-        let-index="index"
+    <div class="border border-gray-300 rounded-2xl">
+      <app-form-array-input
+        [ft]="getDetailsFormArray()"
+        [hideAddButton]="true"
+        [hideDeleteButton]="isViewMode() || isReviewMode()"
+        [showIndexColumn]="true"
+        [indexColumnLabel]="'# of Services'"
+        [excludeKeys]="['serviceId', 'serviceProvidedToCompanyNames', 'agreementCopy']"
+        [headerTooltips]="{
+              serviceType:`1) Technical (Core) Services: Services directly related to the planning, construction, operation, maintenance, testing, or commissioning of utility infrastructure and systems
+                          2) Non-Technical (Non-Core / Support) Services: Services that support project delivery or business operations`,
+              totalBusinessDoneLast5Years: 'Mention total business done in last 5 years with top 5 entities',
+              serviceTargetedForLocalization: 'Select “Yes” if the service is currently targeted for localization; otherwise, select “No”'
+            }"
       >
-        <td class="p-3 border border-gray-200 w-[48px] text-center">Service {{ index + 1 }}</td>
+        <ng-template
+          #itemTemplate
+          let-itemControl
+          let-index="index"
+        >
+          <td class="p-3 border border-gray-200 w-[48px] text-center">Service {{ index + 1 }}</td>
 
-        <td class="p-3 border border-gray-200 min-w-[200px]">
-          <input
-            type="text"
-            pInputText
-            fluid
-            [formControl]="getValueControl(itemControl.get('serviceName'))"
-            readonly
-            class="text-gray-400"
-            [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
-            [color]="selectedInputColor()"
-          />
-        </td>
-
-        <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceType'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'serviceType_' + index,
-              label: 'Service Type'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <p-select
-              [options]="serviceTypeOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get('serviceType'))"
-              placeholder="Select"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('serviceType_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
-        </td>
-
-        <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceCategory'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'serviceCategory_' + index,
-              label: 'Service Category'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <p-select
-              [options]="serviceCategoryOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get('serviceCategory'))"
-              placeholder="Select"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('serviceCategory_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
-        </td>
-
-        <td class="p-3 border border-gray-200 min-w-[250px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceDescription'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'serviceDescription_' + index,
-              label: 'Service Description'
-            }, itemControl.get('rowId')?.value)"
-          >
+          <td class="p-3 border border-gray-200 min-w-[200px]">
             <input
               type="text"
               pInputText
               fluid
-              [maxlength]="255"
-              placeholder="Brief description of the service"
-              [formControl]="getValueControl(itemControl.get('serviceDescription'))"
-              [appConditionalColorClass]="highlightInput('serviceDescription_' + index, itemControl.get('rowId')?.value)"
+              [formControl]="getValueControl(itemControl.get('serviceName'))"
+              readonly
+              class="text-gray-400"
+              [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
-          </app-group-input-with-checkbox>
-        </td>
+          </td>
 
-        <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceProvidedTo'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'serviceProvidedTo_' + index,
-              label: 'Service Provided To'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <p-multiselect
-              [options]="serviceProvidedToOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get('serviceProvidedTo'))"
-              placeholder="Select"
-              fluid
-              [appendTo]="'body'"
-              (onChange)="onServiceProvidedToChange($event.value, index)"
-              [appConditionalColorClass]="highlightInput('serviceProvidedTo_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
-
-          @if (hasServiceProvidedToOthers(getValueControl(itemControl.get('serviceProvidedTo')).value)) {
-          <div class="mt-2">
+          <td class="p-3 border border-gray-200 min-w-[200px]">
             <app-group-input-with-checkbox
-              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceProvidedToCompanyNames'))"
+              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceType'))"
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
-                section: 'serviceDetails',
-                inputKey: 'serviceProvidedToCompanyNames_' + index,
-                label: 'Company Names'
-              }, itemControl.get('rowId')?.value)"
+                    section: 'serviceDetails',
+                    inputKey: 'serviceType_' + index,
+                    label: 'Service Type'
+                  }, itemControl.get('rowId')?.value)"
+            >
+              <p-select
+                [options]="serviceTypeOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get('serviceType'))"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+                [appConditionalColorClass]="highlightInput('serviceType_' + index, itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+
+          <td class="p-3 border border-gray-200 min-w-[200px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceCategory'))"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                    section: 'serviceDetails',
+                    inputKey: 'serviceCategory_' + index,
+                    label: 'Service Category'
+                  }, itemControl.get('rowId')?.value)"
+            >
+              <p-select
+                [options]="serviceCategoryOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get('serviceCategory'))"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+                [appConditionalColorClass]="highlightInput('serviceCategory_' + index, itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+
+          <td class="p-3 border border-gray-200 min-w-[250px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceDescription'))"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                    section: 'serviceDetails',
+                    inputKey: 'serviceDescription_' + index,
+                    label: 'Service Description'
+                  }, itemControl.get('rowId')?.value)"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                [maxlength]="255"
+                placeholder="Brief description of the service"
+                [formControl]="getValueControl(itemControl.get('serviceDescription'))"
+                [appConditionalColorClass]="highlightInput('serviceDescription_' + index, itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+
+          <td class="p-3 border border-gray-200 min-w-[200px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceProvidedTo'))"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                    section: 'serviceDetails',
+                    inputKey: 'serviceProvidedTo_' + index,
+                    label: 'Service Provided To'
+                  }, itemControl.get('rowId')?.value)"
+            >
+              <p-multiselect
+                [options]="serviceProvidedToOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get('serviceProvidedTo'))"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+                (onChange)="onServiceProvidedToChange($event.value, index)"
+                [appConditionalColorClass]="highlightInput('serviceProvidedTo_' + index, itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
+
+            @if (hasServiceProvidedToOthers(getValueControl(itemControl.get('serviceProvidedTo')).value)) {
+            <div class="mt-2">
+              <app-group-input-with-checkbox
+                [hasCommentControl]="getHasCommentControl(itemControl.get('serviceProvidedToCompanyNames'))"
+                [showCheckbox]="showCheckbox()"
+                (valueChanged)="upDateSelectedInputs($event, {
+                      section: 'serviceDetails',
+                      inputKey: 'serviceProvidedToCompanyNames_' + index,
+                      label: 'Company Names'
+                    }, itemControl.get('rowId')?.value)"
+              >
+                <textarea
+                  pTextarea
+                  fluid
+                  [maxlength]="255"
+                  placeholder="Please mention company names"
+                  [formControl]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
+                  [appConditionalColorClass]="highlightInput('serviceProvidedToCompanyNames_' + index, itemControl.get('rowId')?.value)"
+                  [color]="selectedInputColor()"
+                ></textarea>
+              </app-group-input-with-checkbox>
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
+                [label]="'Company Names'"
+              />
+              <div class="text-xs text-gray-500 text-right mt-1">
+                {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
+              </div>
+            </div>
+            }
+          </td>
+
+          <td class="p-3 border border-gray-200 min-w-[200px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get('totalBusinessDoneLast5Years'))"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                    section: 'serviceDetails',
+                    inputKey: 'totalBusinessDoneLast5Years_' + index,
+                    label: 'Total Business Done Last 5 Years'
+                  }, itemControl.get('rowId')?.value)"
             >
               <textarea
                 pTextarea
                 fluid
-                [maxlength]="255"
-                placeholder="Please mention company names"
-                [formControl]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
-                [appConditionalColorClass]="highlightInput('serviceProvidedToCompanyNames_' + index, itemControl.get('rowId')?.value)"
+                [maxlength]="150"
+                placeholder="Company Name – Amount (Mn SAR) (From Year – To Year)"
+                [formControl]="getValueControl(itemControl.get('totalBusinessDoneLast5Years'))"
+                [appConditionalColorClass]="highlightInput('totalBusinessDoneLast5Years_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
-              [label]="'Company Names'"
-            />
             <div class="text-xs text-gray-500 text-right mt-1">
-              {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
+              {{ getValueControl(itemControl.get('totalBusinessDoneLast5Years')).value?.length || 0 }} / 150
             </div>
-          </div>
-          }
-        </td>
+          </td>
 
-        <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('totalBusinessDoneLast5Years'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'totalBusinessDoneLast5Years_' + index,
-              label: 'Total Business Done Last 5 Years'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <textarea
-              pTextarea
-              fluid
-              [maxlength]="150"
-              placeholder="Company Name – Amount (Mn SAR) (From Year – To Year)"
-              [formControl]="getValueControl(itemControl.get('totalBusinessDoneLast5Years'))"
-              [appConditionalColorClass]="highlightInput('totalBusinessDoneLast5Years_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            ></textarea>
-          </app-group-input-with-checkbox>
-          <div class="text-xs text-gray-500 text-right mt-1">
-            {{ getValueControl(itemControl.get('totalBusinessDoneLast5Years')).value?.length || 0 }} / 150
-          </div>
-        </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceTargetedForLocalization'))"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                    section: 'serviceDetails',
+                    inputKey: 'serviceTargetedForLocalization_' + index,
+                    label: 'Service Targeted For Localization'
+                  }, itemControl.get('rowId')?.value)"
+            >
+              <p-select
+                [options]="yesNoOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get('serviceTargetedForLocalization'))"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+                (onChange)="onServiceTargetedForLocalizationChange($event.value, index)"
+                [appConditionalColorClass]="highlightInput('serviceTargetedForLocalization_' + index, itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
+          </td>
 
-        <td class="p-3 border border-gray-200 min-w-[150px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceTargetedForLocalization'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'serviceTargetedForLocalization_' + index,
-              label: 'Service Targeted For Localization'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <p-select
-              [options]="yesNoOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get('serviceTargetedForLocalization'))"
-              placeholder="Select"
-              fluid
-              [appendTo]="'body'"
-              (onChange)="onServiceTargetedForLocalizationChange($event.value, index)"
-              [appConditionalColorClass]="highlightInput('serviceTargetedForLocalization_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
-        </td>
+          <td class="p-3 border border-gray-200 min-w-[150px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get('expectedLocalizationDate'))"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                    section: 'serviceDetails',
+                    inputKey: 'expectedLocalizationDate_' + index,
+                    label: 'Expected Localization Date'
+                  }, itemControl.get('rowId')?.value)"
+            >
+              <p-select
+                [options]="availableQuarters()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get('expectedLocalizationDate'))"
+                placeholder="Select quarter"
+                fluid
+                [appendTo]="'body'"
+                [appConditionalColorClass]="highlightInput('expectedLocalizationDate_' + index, itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
+          </td>
 
-        <td class="p-3 border border-gray-200 min-w-[150px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('expectedLocalizationDate'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'expectedLocalizationDate_' + index,
-              label: 'Expected Localization Date'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <p-select
-              [options]="availableQuarters()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get('expectedLocalizationDate'))"
-              placeholder="Select quarter"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('expectedLocalizationDate_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
-        </td>
-
-        <td class="p-3 border border-gray-200 min-w-[250px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceLocalizationMethodology'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'serviceDetails',
-              inputKey: 'serviceLocalizationMethodology_' + index,
-              label: 'Service Localization Methodology'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <p-select
-              [options]="localizationMethodologyOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get('serviceLocalizationMethodology'))"
-              placeholder="Select"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('serviceLocalizationMethodology_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
-        </td>
-      </ng-template>
-    </app-form-array-input>
+          <td class="p-3 border border-gray-200 min-w-[250px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceLocalizationMethodology'))"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                    section: 'serviceDetails',
+                    inputKey: 'serviceLocalizationMethodology_' + index,
+                    label: 'Service Localization Methodology'
+                  }, itemControl.get('rowId')?.value)"
+            >
+              <p-select
+                [options]="localizationMethodologyOptions()"
+                optionLabel="name"
+                optionValue="id"
+                [formControl]="getValueControl(itemControl.get('serviceLocalizationMethodology'))"
+                placeholder="Select"
+                fluid
+                [appendTo]="'body'"
+                [appConditionalColorClass]="highlightInput('serviceLocalizationMethodology_' + index, itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
+          </td>
+        </ng-template>
+      </app-form-array-input>
+    </div>
   </div>
 
   <app-comment-input

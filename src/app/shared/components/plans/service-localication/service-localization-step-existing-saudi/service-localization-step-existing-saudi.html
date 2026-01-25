@@ -519,23 +519,14 @@
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
     <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
-    <div class="data-table bg-white border border-gray-200 rounded-xl table-with-caption">
+    <div class="data-table bg-white">
       <p-table
         [value]="entityLevelTableRows()"
         [scrollable]="true"
         scrollHeight="flex"
-        class="rounded-xl"
       >
-        <ng-template pTemplate="caption">
-          <!-- <div class="bg-primary text-white p-3 border border-gray-200 rounded-t-xl">
-            <div class="flex items-center">
-              <span class="font-normal min-w-[250px] border-e-2"></span>
-              <span class="font-normal"></span>
-            </div>
-          </div> -->
-        </ng-template>
         <ng-template pTemplate="header">
-          <tr class="bg-primary text-white">
+          <tr class="bg-primary text-white p-3 border border-gray-200">
             <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">Metrics</td>
             <td
               class="p-3 !border-t-0 !border-e-0 !border-b-0"
@@ -609,7 +600,7 @@
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Service Level</h2>
     <p>Details to be provided for the KSA based facility responsible for delivering all services. Provide details separately for each service you intend to localize</p>
-    <div class="rounded-lg overflow-hidden">
+    <div class="border border-gray-300 rounded-2xl">
       <app-form-array-input
         [ft]="getServiceLevelFormArray()"
         [hideAddButton]="true"

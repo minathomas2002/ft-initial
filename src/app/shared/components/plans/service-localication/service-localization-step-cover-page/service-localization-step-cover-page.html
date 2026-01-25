@@ -71,49 +71,52 @@
 
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Services</h2>
-    <app-form-array-input
-      [ft]="getServicesFormArray()"
-      [hideAddButton]="isViewMode()"
-      [hideDeleteButton]="isViewMode()"
-      [addButtonMessage]="'Add Service'"
-      [createNewItem]="createServiceItem"
-      [excludeKeys]="['serviceId']"
-    >
-      <ng-template
-        #itemTemplate
-        let-itemControl
-        let-index="index"
+    <div class="border border-gray-300 rounded-2xl">
+      <app-form-array-input
+        [ft]="
+      getServicesFormArray()"
+        [hideAddButton]="isViewMode()"
+        [hideDeleteButton]="isViewMode()"
+        [addButtonMessage]="'Add Service'"
+        [createNewItem]="createServiceItem"
+        [excludeKeys]="['serviceId']"
       >
-        <td class="p-3 border border-gray-200 min-w-[300px]">
-          <app-group-input-with-checkbox
-            [hasCommentControl]="getHasCommentControl(itemControl.get('serviceName'))"
-            [showCheckbox]="showCheckbox()"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'services',
-              inputKey: 'serviceName_' + index,
-              label: 'Service Name'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <input
-              type="text"
-              pInputText
-              fluid
-              placeholder="Enter service name"
-              [maxlength]="100"
-              [formControl]="getValueControl(itemControl.get('serviceName'))"
-              trimOnBlur
-              [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
+        <ng-template
+          #itemTemplate
+          let-itemControl
+          let-index="index"
+        >
+          <td class="p-3 border border-gray-200 min-w-[300px]">
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceName'))"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                    section: 'services',
+                    inputKey: 'serviceName_' + index,
+                    label: 'Service Name'
+                  }, itemControl.get('rowId')?.value)"
+            >
+              <input
+                type="text"
+                pInputText
+                fluid
+                placeholder="Enter service name"
+                [maxlength]="100"
+                [formControl]="getValueControl(itemControl.get('serviceName'))"
+                trimOnBlur
+                [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
 
-          <app-base-error-messages
-            [control]="getValueControl(itemControl.get('serviceName'))"
-            [label]="'Service Name'"
-          />
-        </td>
-      </ng-template>
-    </app-form-array-input>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceName'))"
+              [label]="'Service Name'"
+            />
+          </td>
+        </ng-template>
+      </app-form-array-input>
+    </div>
   </div>
 
   <app-comment-input

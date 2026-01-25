@@ -204,11 +204,11 @@
   <div class="flex flex-col gap-4">
     <h3 class="text-lg font-semibold text-[#4A4E5A]">Details of Service Provided</h3>
     <div class="overflow-x-auto">
-      <div class="rounded-lg border border-gray-300">
+      <div class="rounded-2xl border border-gray-300">
         <p-table
           [value]="serviceDetails()"
           [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
-          styleClass="w-full [&_th]:!border [&_td]:!border [&_th]:!border-gray-300 [&_td]:!border-gray-300"
+          styleClass="w-full [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
         >
           <ng-template pTemplate="header">
             <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
