@@ -577,29 +577,12 @@
               [title]="'Approved Vendor ID'"
               secondaryTitle="(with SEC)"
             />
-            <app-group-input-with-checkbox
-              [showCheckbox]="showCheckbox()"
-              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
-              (valueChanged)="upDateSelectedInputs($event, {
-                section: 'productManufacturingExperience',
-                inputKey: 'approvedVendorIDSEC',
-                label: 'Approved Vendor ID (with SEC)'
-              })"
-            >
-              <input
-                type="text"
-                pInputText
-                [maxlength]="255"
-                fluid
-                placeholder="Enter approved vendor ID"
-                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
-                [appConditionalColorClass]="highlightInput('approvedVendorIDSEC')"
-                [color]="selectedInputColor()"
-              />
-            </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
-              [label]="'Approved Vendor ID'"
+            <input
+              type="text"
+              pInputText
+              fluid
+              placeholder="Enter approved vendor ID"
+              [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
             />
           </div>
 

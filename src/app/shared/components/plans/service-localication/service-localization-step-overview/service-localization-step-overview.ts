@@ -36,6 +36,7 @@ import { TColors } from 'src/app/shared/interfaces';
 import { FormsModule } from '@angular/forms';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { MultiSelect } from 'primeng/multiselect';
+import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-service-localization-step-overview',
@@ -57,7 +58,8 @@ import { MultiSelect } from 'primeng/multiselect';
     GeneralConfirmationDialogComponent,
     FormsModule,
     CommentInputComponent,
-    MultiSelect
+    MultiSelect,
+    InputNumberModule
   ],
   templateUrl: './service-localization-step-overview.html',
   styleUrl: './service-localization-step-overview.scss',

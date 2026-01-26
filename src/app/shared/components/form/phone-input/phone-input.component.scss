@@ -31,7 +31,9 @@
 
 .phone-input-container {
 	width: 100%;
-
+	.p-select {
+		background: inherit !important;
+	}
 	.unified-phone-input {
 		display: flex;
 		align-items: center;

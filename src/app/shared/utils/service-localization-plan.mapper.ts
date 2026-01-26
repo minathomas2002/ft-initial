@@ -421,7 +421,7 @@ export function mapServicePlanResponseToForm(
 
   const locationInfo = formService.locationInformationFormGroup;
   setNestedValue(locationInfo, EMaterialsFormControls.globalHQLocation, companySection?.globalHQLocation ?? '');
-  setDirectValue(locationInfo, EMaterialsFormControls.registeredVendorIDwithSEC, companySection?.secVendorId ?? '');
+  setNestedValue(locationInfo, EMaterialsFormControls.registeredVendorIDwithSEC, companySection?.secVendorId ?? '');
   setNestedValue(locationInfo, EMaterialsFormControls.benaRegisteredVendorID, companySection?.benaVendorId ?? '');
   setDirectValue(locationInfo, EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA, companySection?.hasLocalAgent ?? false);
   formService.toggleLocalAgentInformValidation(companySection?.hasLocalAgent === true);

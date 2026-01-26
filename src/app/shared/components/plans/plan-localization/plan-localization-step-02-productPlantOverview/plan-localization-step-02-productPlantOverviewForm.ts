@@ -86,7 +86,6 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   onStartEditing(): void {
     if (this.isResubmitMode()) {
       this.commentPhase.set('editing');
-
     }
   }
 
