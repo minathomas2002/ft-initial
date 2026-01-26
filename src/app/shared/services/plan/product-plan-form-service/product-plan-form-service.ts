@@ -284,18 +284,14 @@ export class ProductPlanFormService {
         submissionDateControl.disable({ emitEvent: false });
       }
     }
-    const locationInfo = this.locationInformationFormGroup;
-    if (locationInfo) {
-      const registeredVendorIDwithSECControl = locationInfo.get(EMaterialsFormControls.registeredVendorIDwithSEC);
-      if (registeredVendorIDwithSECControl) {
-        // Always set value and disable for create mode
-        registeredVendorIDwithSECControl.setValue('');
-        registeredVendorIDwithSECControl.disable({ emitEvent: false });
-      }
-    }
 
     // Reset Step 2: Product & Plant Overview
     this._step2FormGroup.reset();
+    const approvedVendorIDSEC = this.step2_productPlantOverview
+      .get(EMaterialsFormControls.manufacturingFormGroup)?.get(EMaterialsFormControls.approvedVendorIDSEC);
+    if (approvedVendorIDSEC) {
+      approvedVendorIDSEC.disable({ emitEvent: false });
+    }
 
     // Reset Step 3: Value Chain
     // Need to clear FormArrays and add back initial items
