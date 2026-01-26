@@ -30,6 +30,7 @@ import { ImageErrorDirective } from 'src/app/shared/directives/image-error.direc
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
+import { opportunityImagePlaceholder } from './opportunity-image-placeholder';
 
 @Component({
   selector: 'app-opportunity-details',
@@ -212,5 +213,13 @@ export class OpportunityDetails implements OnInit {
     this.opportunitiesStore.details()?.opportunityType === EOpportunityType.PRODUCT
       ? this.productLocalizationPlanWizardVisibility.set(true)
       : this.serviceLocalizationPlanWizardVisibility.set(true);
+  }
+
+  get opportunityAttachmentBase64() {
+    const attachment = this.opportunitiesStore.details()?.attachments[0];
+
+    return attachment?.iBMFileBase64?.fileBase64
+      ? `data:${attachment.iBMFileBase64.fileBase64MimeType};base64,${attachment.iBMFileBase64.fileBase64}`
+      : opportunityImagePlaceholder;
   }
 }
