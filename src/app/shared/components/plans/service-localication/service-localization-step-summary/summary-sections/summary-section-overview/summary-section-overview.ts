@@ -133,10 +133,12 @@ export class SummarySectionOverview {
   submissionDate = computed(() => {
     const dateValue = this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`);
     if (!dateValue) return null;
-    const date = new Date(dateValue);
-    console.log(this.datePipe.transform(date, 'dd MMM yyyy'));
 
-    return this.datePipe.transform(date, 'dd MMM yyyy') ?? null;
+    const date = new Date(dateValue);
+
+    if (!(date instanceof Date && !isNaN(date.getTime()))) return null;
+
+    return this.datePipe.transform(date, 'dd MMM yyyy') || null;
   });
 
 
