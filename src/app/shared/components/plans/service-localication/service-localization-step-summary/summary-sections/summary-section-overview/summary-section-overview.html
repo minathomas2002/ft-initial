@@ -169,7 +169,7 @@
         />
         <app-summary-field
           [label]="'Contact Number'"
-          [value]="contactNumber()?.countryCode + ' ' +contactNumber()?.phoneNumber"
+          [value]="contactNumber()"
           [hasError]="hasFieldError('localAgentInformationFormGroup.contactNumber.value')"
           [hasComment]="contactNumberHasComment()"
           [isResolved]="contactNumberIsResolved()"
