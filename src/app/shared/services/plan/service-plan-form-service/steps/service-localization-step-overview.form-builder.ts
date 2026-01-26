@@ -39,10 +39,13 @@ export class ServiceLocalizationStepOverviewFormBuilder {
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
       }),
-      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.control({ value: '', disabled: true }),
+      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', Validators.maxLength(7)),
+      }),
       [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]), // Required, disabled, auto-filled
+        [EMaterialsFormControls.value]: this.fb.control({ value: '', disabled: true }),
       }),
       [EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]: this.fb.control(null, [Validators.required]),
     });
@@ -86,7 +89,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       [EMaterialsFormControls.serviceId]: this.fb.control(''), // Service GUID from cover page
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control({value: '', disabled: true}, [Validators.required, Validators.maxLength(150)]),
+        [EMaterialsFormControls.value]: this.fb.control({ value: '', disabled: true }, [Validators.required, Validators.maxLength(150)]),
       }),
       [EMaterialsFormControls.serviceType]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),

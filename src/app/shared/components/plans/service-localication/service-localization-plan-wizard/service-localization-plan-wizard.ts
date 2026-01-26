@@ -83,7 +83,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   override readonly toasterService = inject(ToasterService);
-  private readonly authStore = inject(AuthStore);
+
 
   visibility = model(false);
   doRefresh = output<void>();
@@ -565,6 +565,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           opportunityControl.setValue(available, { emitEvent: true });
           opportunityControl.updateValueAndValidity({ emitEvent: true });
         }
+        const benaVendorIDControl = this.serviceLocalizationFormService.step2_overview.get(`${EMaterialsFormControls.locationInformationFormGroup}.${EMaterialsFormControls.benaRegisteredVendorID}.${EMaterialsFormControls.value}`);
+        if (benaVendorIDControl) {
+          benaVendorIDControl.setValue(this.authStore.userCode()!, { emitEvent: true });
+        }
       }
     });
 
@@ -645,7 +649,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         }
 
         const currentMode = this.planStore.wizardMode();
-        const planStatusValue = data.servicePlan?.status;
 
         if (['view', 'Review', 'resubmit'].includes(currentMode)) {
           // Disable all forms in view/review/resubmit mode
@@ -746,9 +749,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Keep registeredVendorIDwithSEC read-only in location information
     const locationInfo = this.serviceLocalizationFormService.locationInformationFormGroup;
     if (locationInfo) {
-      const registeredVendorIDControl = locationInfo.get(EMaterialsFormControls.registeredVendorIDwithSEC);
-      if (registeredVendorIDControl) {
-        registeredVendorIDControl.disable({ emitEvent: false });
+      const benaRegisteredVendorID = locationInfo.get(EMaterialsFormControls.benaRegisteredVendorID);
+      if (benaRegisteredVendorID) {
+        benaRegisteredVendorID.get(EMaterialsFormControls.value)?.disable({ emitEvent: false });
       }
     }
 
