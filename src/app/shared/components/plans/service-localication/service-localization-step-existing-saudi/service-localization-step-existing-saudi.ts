@@ -636,6 +636,9 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         const control = itemControl.get(`${EMaterialsFormControls.agreementType}.${EMaterialsFormControls.value}`);
         if (!control) return;
 
+        const initialValue = control.value as string | null;
+        this.planFormService?.toggleAgreementOtherDetailsValidation(initialValue ?? null, index);
+
         control.valueChanges
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((value) => {
@@ -649,6 +652,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
               }
             }
+              this.planFormService?.toggleAgreementOtherDetailsValidation(value ?? null, index);
           });
       });
     });
