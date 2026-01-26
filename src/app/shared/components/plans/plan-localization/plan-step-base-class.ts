@@ -272,6 +272,16 @@ export abstract class PlanStepBaseClass {
           }
         }
       });
+
+      // Also subscribe to value changes to handle cases where status doesn't change (e.g., file uploads)
+      control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+        if (control.status === 'VALID') {
+          const field = correctedFields.find(f => this.getControlForField(f) === control);
+          if (field) {
+            this.upDateSelectedInputs(false, field);
+          }
+        }
+      });
     });
   }
 
@@ -453,16 +463,47 @@ export abstract class PlanStepBaseClass {
         input.inputKey === inputKey &&
         (rowId === undefined || input.id === rowId)
     );
-    
-    // In resubmit mode, also check correctedFields (employee-selected fields)
-    const isCorrected = this.isResubmitMode() && this.correctedFields().some(
-      input =>
-        input.inputKey === inputKey &&
-        (rowId === undefined || input.id === rowId)
-    );
+
+    // In resubmit mode, highlight corrected fields only until the user changes them.
+    // (Some controls like file uploads may stay VALID and not emit status changes.)
+    const correctedField = this.isResubmitMode()
+      ? this.correctedFields().find(
+          input => input.inputKey === inputKey && (rowId === undefined || input.id === rowId)
+        )
+      : undefined;
+    const isCorrected = !!correctedField && !this.hasFieldValueChanged(correctedField);
     
     const phase = this.commentPhase();
     return (isSelected || isCorrected) && (phase === 'adding' || phase === 'editing' || phase === 'none');
+  }
+
+  private hasFieldValueChanged(field: IFieldInformation): boolean {
+    const originalValue = this.getOriginalValue(field);
+    const currentValue = this.getCurrentValue(field);
+    return !this.valuesEqual(originalValue, currentValue);
+  }
+
+  private valuesEqual(a: any, b: any): boolean {
+    if (a === b) {
+      return true;
+    }
+    if (a == null || b == null) {
+      return a === b;
+    }
+    // Cheap structural compare for arrays/objects; falls back safely.
+    const typeA = typeof a;
+    const typeB = typeof b;
+    if (typeA !== typeB) {
+      return false;
+    }
+    if (typeA === 'object') {
+      try {
+        return JSON.stringify(a) === JSON.stringify(b);
+      } catch {
+        return false;
+      }
+    }
+    return false;
   }
 
   /**

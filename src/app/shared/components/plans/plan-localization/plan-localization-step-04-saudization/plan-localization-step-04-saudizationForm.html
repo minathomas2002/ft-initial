@@ -14,7 +14,7 @@
     />
   </div>
 
-  @if((isViewMode() && files().length > 0) || !isViewMode()) {
+  @if(!isViewMode() || isResubmitMode() || files().length > 0) {
   <!-- Attachments Section -->
   <div class="flex flex-col gap-4">
     <div>
@@ -32,7 +32,7 @@
       })"
     >
       <app-fileupload
-        [isViewMode]="isViewMode()"
+        [isViewMode]="isViewMode() && !isResubmitMode()"
         [disabled]="isFileUploadDisabled()"
         [acceptedFileTypes]="'.pdf, .png, .jpg, .jpeg, .zip, .rar'"
         [(files)]="files"

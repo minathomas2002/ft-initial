@@ -75,6 +75,22 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     return !!(investorCommentControl?.value && investorCommentControl.value.trim().length > 0);
   });
 
+  // Computed property to determine if file upload should be disabled
+  // In resubmit mode, allow editing only if the attachments field is highlighted (selected for correction)
+  isFileUploadDisabled = computed(() => {
+    if (this.isReviewMode()) return true;
+    if (this.isViewMode() && !this.isResubmitMode()) return true;
+    if (this.isResubmitMode()) {
+      // In resubmit mode, disable unless the attachments field is part of the corrected fields.
+      // (Do not depend on orange highlight, which should disappear after the user updates the value.)
+      const canEditAttachments = this.correctedFields().some(
+        f => f.section === 'attachments' && f.inputKey === 'attachments'
+      );
+      return !canEditAttachments;
+    }
+    return false;
+  });
+
   saudiCompanyDetailsHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
       [EMaterialsFormControls.products]: 'If Manufacturer is Qualified / Under-Prequalification, specify the product(s)',

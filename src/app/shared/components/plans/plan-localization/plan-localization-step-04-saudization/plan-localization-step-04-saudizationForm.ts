@@ -45,7 +45,18 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   pageTitle = input<string>('Saudization');
 
   // Computed property to determine if file upload should be disabled
-  isFileUploadDisabled = computed(() => this.isViewMode() || this.isReviewMode());
+  // In resubmit mode, allow editing only if the attachments field is part of the corrected fields.
+  isFileUploadDisabled = computed(() => {
+    if (this.isReviewMode()) return true;
+    if (this.isViewMode() && !this.isResubmitMode()) return true;
+    if (this.isResubmitMode()) {
+      const canEditAttachments = this.correctedFields().some(
+        f => f.section === 'attachments' && f.inputKey === 'attachments'
+      );
+      return !canEditAttachments;
+    }
+    return false;
+  });
 
   formGroup = this.planFormService.step4_saudization;
   readonly EMaterialsFormControls = EMaterialsFormControls;
@@ -268,6 +279,13 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   // Implement abstract method from base class to get form control for a field (handles year-based rows)
   getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { inputKey, id: rowId } = field;
+
+    // Handle non-matrix fields (e.g., attachments)
+    if (field.section === 'attachments' && inputKey === EMaterialsFormControls.attachments) {
+      const attachmentsFormGroup = this.getAttachmentsFormGroup();
+      const attachmentsControl = attachmentsFormGroup?.get(EMaterialsFormControls.attachments);
+      return attachmentsControl ? this.getValueControl(attachmentsControl) : null;
+    }
 
     if (!rowId) {
       return null;
