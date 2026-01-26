@@ -218,8 +218,8 @@ export class OpportunityDetails implements OnInit {
   get opportunityAttachmentBase64() {
     const attachment = this.opportunitiesStore.details()?.attachments[0];
 
-    return attachment?.iBMFileBase64?.fileBase64
-      ? `data:${attachment.iBMFileBase64.fileBase64MimeType};base64,${attachment.iBMFileBase64.fileBase64}`
+    return attachment?.ibmFileBase64?.fileBase64
+      ? `data:${attachment.ibmFileBase64.fileBase64MimeType};base64,${attachment.ibmFileBase64.fileBase64}`
       : opportunityImagePlaceholder;
   }
 }

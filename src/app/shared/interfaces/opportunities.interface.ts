@@ -32,7 +32,7 @@ export interface IOpportunityAttachment {
   fileName: string;
   fileExtension: string;
   ibmIdentifier: string;
-  iBMFileBase64?: IOpportunityFileBase64;
+  ibmFileBase64?: IOpportunityFileBase64;
   objectId: string;
   fileUrl: string;
   createdDate: string;
