@@ -537,11 +537,17 @@
                 pTextarea
                 fluid
                 rows="3"
+                [maxlength]="255"
                 placeholder="Enter key measures to upskill saudis"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
                 [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
+              @if (!getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis)).disabled) {
+              <div class="text-xs text-gray-500 text-right mt-1">
+                {{ getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis)).value?.length || 0 }} / 255
+              </div>
+              }
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
