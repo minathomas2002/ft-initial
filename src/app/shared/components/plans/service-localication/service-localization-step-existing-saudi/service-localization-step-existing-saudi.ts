@@ -338,9 +338,62 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       }
     });
 
-    // Disable all conditional fields when in view mode
+    // In resubmit mode, ensure dependent "Other" fields are enabled when relevant
     effect(() => {
-      if (this.isViewMode()) {
+      if (!this.isResubmitMode()) {
+        return;
+      }
+
+      const collaborationArray = this.getCollaborationPartnershipFormArray();
+      if (!collaborationArray) {
+        return;
+      }
+
+      const correctedFieldsList = this.correctedFields();
+
+      collaborationArray.controls.forEach((control, index) => {
+        if (!(control instanceof FormGroup)) {
+          return;
+        }
+
+        const rowId = control.get('rowId')?.value || control.get('id')?.value;
+
+        // Handle agreementType and its dependent field
+        const agreementTypeControl = control.get(EMaterialsFormControls.agreementType);
+        const isAgreementTypeCorrected = correctedFieldsList.some(field =>
+          field.section === 'collaborationPartnership' &&
+          field.inputKey === `agreementType_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+        if (agreementTypeControl && isAgreementTypeCorrected) {
+          this.getValueControl(agreementTypeControl).enable({ emitEvent: false });
+        }
+
+        // Check backend response value for agreementType
+        const isAgreementTypeOther = this.isAgreementTypeOther(control);
+
+        // Check if agreementOtherDetails is corrected
+        const isAgreementOtherCorrected = correctedFieldsList.some(field =>
+          field.section === 'collaborationPartnership' &&
+          field.inputKey === `agreementOtherDetails_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+
+        const otherDetailsControl = control.get(EMaterialsFormControls.agreementOtherDetails);
+        if (otherDetailsControl) {
+          // Logic: If parent is NOT "Other" OR field is corrected, enable; otherwise disable
+          if (!isAgreementTypeOther || isAgreementOtherCorrected) {
+            this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
+          } else {
+            this.getValueControl(otherDetailsControl).disable({ emitEvent: false });
+          }
+        }
+      });
+    });
+
+    // Disable all conditional fields when in view mode (except resubmit mode)
+    effect(() => {
+      if (this.isViewMode() && !this.isResubmitMode()) {
         this.disableAllConditionalFields();
       }
     });
@@ -418,7 +471,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     // Function to update fields based on current selections
     const updateFields = () => {
       // In view mode, don't enable any fields - keep them all disabled
-      if (this.isViewMode()) {
+      if (this.isViewMode() && !this.isResubmitMode()) {
         return;
       }
 
@@ -600,6 +653,18 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     return match ? match[1] : inputKey;
   }
 
+  // Helper to map UI input keys to actual form control keys
+  private mapInputKeyToControlKey(section: string, inputKey: string): string {
+    const baseKey = this.stripIndexSuffix(inputKey);
+
+    const keyMap: Record<string, string> = {
+      agreementType: EMaterialsFormControls.agreementType,
+      whyChoseThisCompany: EMaterialsFormControls.whyChoseThisCompany,
+    };
+
+    return keyMap[baseKey] ?? baseKey;
+  }
+
   // Implement abstract method from base class to get form control for a field
   getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey, id: rowId } = field;
@@ -615,7 +680,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         if (rowIndex !== -1) {
           const rowControl = formArray.at(rowIndex);
           // Strip index suffix from inputKey (e.g., 'saudiCompanyName_0' -> 'saudiCompanyName')
-          const actualInputKey = this.stripIndexSuffix(inputKey);
+          const actualInputKey = this.mapInputKeyToControlKey(section, inputKey);
           const fieldControl = rowControl.get(actualInputKey);
           if (fieldControl) {
             return this.getValueControl(fieldControl);
@@ -632,8 +697,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         );
         if (rowIndex !== -1) {
           const rowControl = formArray.at(rowIndex);
-          // Strip index suffix from inputKey
-          const actualInputKey = this.stripIndexSuffix(inputKey);
+          // Strip index suffix from inputKey and map to actual control keys
+          const actualInputKey = this.mapInputKeyToControlKey(section, inputKey);
           const fieldControl = rowControl.get(actualInputKey);
           if (fieldControl) {
             return this.getValueControl(fieldControl);
@@ -652,7 +717,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
           const rowControl = formArray.at(rowIndex);
           // Strip index suffix from inputKey (e.g., 'expectedLocalizationDate_0' -> 'expectedLocalizationDate')
           // Also handle year-based keys like 'firstYear_headcount_0' -> 'firstYear_headcount'
-          const actualInputKey = this.stripIndexSuffix(inputKey);
+          const actualInputKey = this.mapInputKeyToControlKey(section, inputKey);
           const fieldControl = rowControl.get(actualInputKey);
           if (fieldControl) {
             return this.getValueControl(fieldControl);

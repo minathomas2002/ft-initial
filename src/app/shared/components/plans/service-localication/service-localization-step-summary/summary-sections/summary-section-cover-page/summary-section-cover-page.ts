@@ -190,8 +190,9 @@ export class SummarySectionCoverPage {
   planTitleHasComment = computed(() => this.hasFieldComment('planTitle', 'companyInformation'));
   companyNameHasComment = computed(() => this.hasFieldComment('companyName', 'companyInformation'));
 
-  planTitleIsResolved = computed(() => this.isFieldResolved('planTitle', 'companyInformation'));
-  companyNameIsResolved = computed(() => this.isFieldResolved('companyName', 'companyInformation'));
+  // A field is "resolved" only if it was commented and the user changed it (diff exists).
+  planTitleIsResolved = computed(() => this.shouldShowDiff('planTitle'));
+  companyNameIsResolved = computed(() => this.shouldShowDiff('companyName'));
 
   // For services array items
   hasServiceItemComment(index: number): boolean {
@@ -203,11 +204,7 @@ export class SummarySectionCoverPage {
   }
 
   isServiceItemResolved(index: number): boolean {
-    const servicesArray = this.servicesFormArray();
-    if (!servicesArray || index >= servicesArray.length) return false;
-    const serviceGroup = servicesArray.at(index) as FormGroup;
-    const rowId = serviceGroup.get('rowId')?.value;
-    return this.isFieldResolved('serviceName', 'services', rowId);
+    return this.shouldShowDiff('serviceName', index);
   }
 
   // Helper method to get before value (original value from plan response) for a field

@@ -254,6 +254,68 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
       }
     });
 
+    // In resubmit mode, ensure dependent "Others" fields are enabled when relevant
+    effect(() => {
+      if (!this.isResubmitMode()) {
+        return;
+      }
+      const detailsArray = this.getDetailsFormArray();
+      if (!detailsArray) {
+        return;
+      }
+
+      const correctedFieldsList = this.correctedFields();
+
+      detailsArray.controls.forEach((ctrl, index) => {
+        if (!(ctrl instanceof FormGroup)) {
+          return;
+        }
+
+        const serviceProvidedToControl = ctrl.get(EMaterialsFormControls.serviceProvidedTo);
+        const companyNamesControl = ctrl.get(EMaterialsFormControls.serviceProvidedToCompanyNames);
+        const rowId = ctrl.get('rowId')?.value || ctrl.get('id')?.value || ctrl.get(EMaterialsFormControls.serviceId)?.value;
+
+        // Check if parent field (serviceProvidedTo) is in correctedFields
+        const isParentCorrected = correctedFieldsList.some(field =>
+          field.section === 'serviceDetails' &&
+          field.inputKey === `serviceProvidedTo_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+
+        // Enable parent if it's corrected
+        if (serviceProvidedToControl && isParentCorrected) {
+          this.getValueControl(serviceProvidedToControl).enable({ emitEvent: false });
+        }
+
+        if (!companyNamesControl) {
+          return;
+        }
+
+        // Check backend response value for serviceProvidedTo
+        const serviceProvidedToValue = serviceProvidedToControl
+          ? this.getValueControl(serviceProvidedToControl).value
+          : null;
+        const hasOthersSelected = this.hasServiceProvidedToOthers(serviceProvidedToValue);
+
+        // Check if dependent field (serviceProvidedToCompanyNames) is in correctedFields
+        const isCompanyNamesFieldCorrected = correctedFieldsList.some(field =>
+          field.section === 'serviceDetails' &&
+          field.inputKey === `serviceProvidedToCompanyNames_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+
+        // Logic for dependent field:
+        // - If parent is "Others" AND field is corrected → enable
+        // - If parent is NOT "Others" → enable (so it can be cleared/viewed)
+        // - If parent is "Others" BUT field is NOT corrected → disable
+        if (!hasOthersSelected || isCompanyNamesFieldCorrected) {
+          this.getValueControl(companyNamesControl).enable({ emitEvent: false });
+        } else {
+          this.getValueControl(companyNamesControl).disable({ emitEvent: false });
+        }
+      });
+    });
+
     // Initialize and sync local agent control value to signal if control exists
     // Defer until planFormService is available
     effect(() => {

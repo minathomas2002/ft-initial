@@ -226,6 +226,104 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
     // Watch for changes to willBeAnyProprietaryToolsSystems dropdown in localization strategy FormArray
     this.setupProprietaryToolsSystemsWatcher();
+
+    // In resubmit mode, ensure dependent "Other" fields are enabled when relevant
+    effect(() => {
+      if (!this.isResubmitMode()) {
+        return;
+      }
+
+      const formArray = this.getLocalizationStrategyFormArray();
+      if (!formArray) {
+        return;
+      }
+
+      const correctedFieldsList = this.correctedFields();
+
+      formArray.controls.forEach((itemControl, index) => {
+        if (!(itemControl instanceof FormGroup)) return;
+
+        const rowId = itemControl.get('rowId')?.value || itemControl.get('id')?.value;
+
+        // Handle localizationApproach and its dependent field
+        const localizationApproachControl = itemControl.get(EMaterialsFormControls.localizationApproach);
+        const isApproachCorrected = correctedFieldsList.some(field =>
+          field.section === 'localizationStrategy' &&
+          field.inputKey === `localizationApproach_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+        if (localizationApproachControl && isApproachCorrected) {
+          this.getValueControl(localizationApproachControl).enable({ emitEvent: false });
+        }
+
+        const isApproachOther = this.isLocalizationApproachOther(itemControl);
+        const isApproachOtherCorrected = correctedFieldsList.some(field =>
+          field.section === 'localizationStrategy' &&
+          field.inputKey === `localizationApproachOtherDetails_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+        const approachOtherControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
+        if (approachOtherControl) {
+          if (!isApproachOther || isApproachOtherCorrected) {
+            this.getValueControl(approachOtherControl).enable({ emitEvent: false });
+          } else {
+            this.getValueControl(approachOtherControl).disable({ emitEvent: false });
+          }
+        }
+
+        // Handle location and its dependent field
+        const locationControl = itemControl.get(EMaterialsFormControls.location);
+        const isLocationCorrected = correctedFieldsList.some(field =>
+          field.section === 'localizationStrategy' &&
+          field.inputKey === `location_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+        if (locationControl && isLocationCorrected) {
+          this.getValueControl(locationControl).enable({ emitEvent: false });
+        }
+
+        const isLocationOther = this.isLocationOther(itemControl);
+        const isLocationOtherCorrected = correctedFieldsList.some(field =>
+          field.section === 'localizationStrategy' &&
+          field.inputKey === `locationOtherDetails_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+        const locationOtherControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
+        if (locationOtherControl) {
+          if (!isLocationOther || isLocationOtherCorrected) {
+            this.getValueControl(locationOtherControl).enable({ emitEvent: false });
+          } else {
+            this.getValueControl(locationOtherControl).disable({ emitEvent: false });
+          }
+        }
+
+        // Handle willBeAnyProprietaryToolsSystems and its dependent field
+        const willBeAnyControl = itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems);
+        const isWillBeAnyCorrected = correctedFieldsList.some(field =>
+          field.section === 'localizationStrategy' &&
+          field.inputKey === `willBeAnyProprietaryToolsSystems_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+        if (willBeAnyControl && isWillBeAnyCorrected) {
+          this.getValueControl(willBeAnyControl).enable({ emitEvent: false });
+        }
+
+        const isProprietaryToolsYes = this.isProprietaryToolsYes(itemControl);
+        const isProprietaryToolsDetailsCorrected = correctedFieldsList.some(field =>
+          field.section === 'localizationStrategy' &&
+          field.inputKey === `proprietaryToolsSystemsDetails_${index}` &&
+          (field.id === rowId || !field.id)
+        );
+        const proprietaryToolsDetailsControl = itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails);
+        if (proprietaryToolsDetailsControl) {
+          if (!isProprietaryToolsYes || isProprietaryToolsDetailsCorrected) {
+            this.getValueControl(proprietaryToolsDetailsControl).enable({ emitEvent: false });
+          } else {
+            this.getValueControl(proprietaryToolsDetailsControl).disable({ emitEvent: false });
+          }
+        }
+      });
+    });
   }
 
   private _servicesSynced = false;
@@ -421,6 +519,26 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     return match ? match[1] : inputKey;
   }
 
+  // Helper to map UI input keys to actual form control keys
+  private mapInputKeyToControlKey(inputKey: string): string {
+    let baseKey = this.stripIndexSuffix(inputKey);
+
+    const keyMap: Record<string, string> = {
+      location: EMaterialsFormControls.location,
+      capexRequired: EMaterialsFormControls.capexRequired,
+      supervisionOversightByGovernmentEntity: EMaterialsFormControls.supervisionOversightByGovernmentEntity,
+    };
+
+    // Handle legacy keys that may have index appended without underscore
+    Object.keys(keyMap).forEach((key) => {
+      if (baseKey.startsWith(key) && /\d+$/.test(baseKey.substring(key.length))) {
+        baseKey = key;
+      }
+    });
+
+    return keyMap[baseKey] ?? baseKey;
+  }
+
   // Implement abstract method from base class to get form control for a field
   getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey, id: rowId } = field;
@@ -434,7 +552,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       if (rowIndex !== -1) {
         const rowControl = formArray.at(rowIndex);
         // Strip index suffix from inputKey (e.g., 'expectedLocalizationDate_0' -> 'expectedLocalizationDate')
-        const actualInputKey = this.stripIndexSuffix(inputKey);
+        const actualInputKey = this.mapInputKeyToControlKey(inputKey);
         const fieldControl = rowControl.get(actualInputKey);
         return fieldControl ? this.getValueControl(fieldControl) : null;
       }
@@ -460,7 +578,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         const rowControl = formArray.at(rowIndex);
         // Strip index suffix from inputKey (e.g., 'serviceLevelLocalizationDate_0' -> 'serviceLevelLocalizationDate')
         // Also handle year-based keys like 'firstYear_headcount_0' -> 'firstYear_headcount'
-        const actualInputKey = this.stripIndexSuffix(inputKey);
+        const actualInputKey = this.mapInputKeyToControlKey(inputKey);
         const fieldControl = rowControl.get(actualInputKey);
         return fieldControl ? this.getValueControl(fieldControl) : null;
       }

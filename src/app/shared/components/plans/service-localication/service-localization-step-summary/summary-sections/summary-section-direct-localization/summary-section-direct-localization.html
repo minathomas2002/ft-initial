@@ -112,12 +112,12 @@
                   <app-summary-table-cell
                     [value]="strategy.capexRequired"
                     [isEmpty]="!strategy.capexRequired && strategy.capexRequired !== 0"
-                    [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'capexRequired')"
-                    [hasComment]="hasLocalizationStrategyComment(rowIndex, 'capexRequired')"
-                    [beforeValue]="getBeforeValue('capexRequired', 'localizationStrategy', rowIndex)"
-                    [afterValue]="getAfterValue('capexRequired', 'localizationStrategy', rowIndex)"
-                    [isResolved]="isLocalizationStrategyResolved(rowIndex, 'capexRequired')"
-                    [showDiff]="shouldShowDiff('capexRequired', 'localizationStrategy', rowIndex)"
+                    [hasError]="hasLocalizationStrategyFieldError(rowIndex, 'capexRequired (InSAR)')"
+                    [hasComment]="hasLocalizationStrategyComment(rowIndex, 'capexRequired (InSAR)')"
+                    [beforeValue]="getBeforeValue('capexRequired (InSAR)', 'localizationStrategy', rowIndex)"
+                    [afterValue]="getAfterValue('capexRequired (InSAR)', 'localizationStrategy', rowIndex)"
+                    [isResolved]="isLocalizationStrategyResolved(rowIndex, 'capexRequired (InSAR)')"
+                    [showDiff]="shouldShowDiff('capexRequired (InSAR)', 'localizationStrategy', rowIndex)"
                   />
                 </td>
                 <td class="border-t border-gray-300 p-3">
@@ -142,7 +142,6 @@
                     [afterValue]="getAfterValue('willBeAnyProprietaryToolsSystems', 'localizationStrategy', rowIndex)"
                     [isResolved]="isLocalizationStrategyResolved(rowIndex, 'willBeAnyProprietaryToolsSystems')"
                     [showDiff]="shouldShowDiff('willBeAnyProprietaryToolsSystems', 'localizationStrategy', rowIndex)"
-                    [isBoolean]="true"
                   />
                   @if (strategy.proprietaryToolsExplanation) {
                   <div class="mt-2 text-sm text-gray-600 flex items-center gap-2">

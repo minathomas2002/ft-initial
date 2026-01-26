@@ -34,6 +34,29 @@ export class SummarySectionOverview {
     this.serviceForm.syncServicesFromCoverPageToOverview();
   }
 
+  private formatSelectValue(raw: any, options: Array<{ id: string; name: string }>): string | null {
+    if (raw === null || raw === undefined || raw === '') return null;
+
+    const ids = Array.isArray(raw) ? raw : [raw];
+    const labels = ids
+      .map((id) => options.find((o) => o.id === String(id))?.name ?? String(id))
+      .filter((x) => x !== null && x !== undefined && String(x).trim() !== '');
+
+    return labels.length ? labels.join(', ') : null;
+  }
+
+  private toYesNoBoolean(raw: any): boolean | null {
+    if (raw === null || raw === undefined || raw === '') return null;
+    if (raw === true || raw === false) return raw;
+    const s = String(raw).toLowerCase();
+    if (s === 'true') return true;
+    if (s === 'false') return false;
+    // IDs stored as enums (e.g. EYesNo.Yes -> '1', EYesNo.No -> '2')
+    if (s === EYesNo.Yes.toString().toLowerCase()) return true;
+    if (s === EYesNo.No.toString().toLowerCase()) return false;
+    return null;
+  }
+
   // Form group accessors
   basicInformationFormGroup = computed(() => {
     return this.formGroup().get(EMaterialsFormControls.basicInformationFormGroup) as FormGroup;
@@ -366,21 +389,23 @@ export class SummarySectionOverview {
   companyLocationHasComment = computed(() => this.hasFieldComment('companyLocation', 'localAgentInformation'));
 
   // Computed properties for resolved/corrected status
-  opportunityIsResolved = computed(() => this.isFieldResolved('opportunity', 'basicInformation'));
-  submissionDateIsResolved = computed(() => this.isFieldResolved('submissionDate', 'basicInformation'));
-  companyNameIsResolved = computed(() => this.isFieldResolved('companyName', 'overviewCompanyInformation'));
-  ceoNameIsResolved = computed(() => this.isFieldResolved('ceoName', 'overviewCompanyInformation'));
-  ceoEmailIDIsResolved = computed(() => this.isFieldResolved('ceoEmailID', 'overviewCompanyInformation'));
-  globalHQLocationIsResolved = computed(() => this.isFieldResolved('globalHQLocation', 'locationInformation'));
-  registeredVendorIDIsResolved = computed(() => this.isFieldResolved('registeredVendorIDwithSEC', 'locationInformation'));
-  benaRegisteredVendorIDIsResolved = computed(() => this.isFieldResolved('benaRegisteredVendorID', 'locationInformation'));
-  hasLocalAgentIsResolved = computed(() => this.isFieldResolved('doYouCurrentlyHaveLocalAgentInKSA', 'locationInformation'));
-  localAgentDetailsIsResolved = computed(() => this.isFieldResolved('localAgentDetails', 'localAgentInformation'));
-  localAgentNameIsResolved = computed(() => this.isFieldResolved('localAgentName', 'localAgentInformation'));
-  contactPersonNameIsResolved = computed(() => this.isFieldResolved('contactPersonName', 'localAgentInformation'));
-  emailIDIsResolved = computed(() => this.isFieldResolved('emailID', 'localAgentInformation'));
-  contactNumberIsResolved = computed(() => this.isFieldResolved('contactNumber', 'localAgentInformation'));
-  companyLocationIsResolved = computed(() => this.isFieldResolved('companyLocation', 'localAgentInformation'));
+  // In summary, treat a commented field as "resolved" only when the user changed its value
+  // (i.e., there is a diff against the original plan response).
+  opportunityIsResolved = computed(() => this.shouldShowDiff('opportunity'));
+  submissionDateIsResolved = computed(() => this.shouldShowDiff('submissionDate'));
+  companyNameIsResolved = computed(() => this.shouldShowDiff('companyName'));
+  ceoNameIsResolved = computed(() => this.shouldShowDiff('ceoName'));
+  ceoEmailIDIsResolved = computed(() => this.shouldShowDiff('ceoEmailID'));
+  globalHQLocationIsResolved = computed(() => this.shouldShowDiff('globalHQLocation'));
+  registeredVendorIDIsResolved = computed(() => this.shouldShowDiff('registeredVendorIDwithSEC'));
+  benaRegisteredVendorIDIsResolved = computed(() => this.shouldShowDiff('benaRegisteredVendorID'));
+  hasLocalAgentIsResolved = computed(() => this.shouldShowDiff('doYouCurrentlyHaveLocalAgentInKSA'));
+  localAgentDetailsIsResolved = computed(() => this.shouldShowDiff('localAgentDetails'));
+  localAgentNameIsResolved = computed(() => this.shouldShowDiff('localAgentName'));
+  contactPersonNameIsResolved = computed(() => this.shouldShowDiff('contactPersonName'));
+  emailIDIsResolved = computed(() => this.shouldShowDiff('emailID'));
+  contactNumberIsResolved = computed(() => this.shouldShowDiff('contactNumber'));
+  companyLocationIsResolved = computed(() => this.shouldShowDiff('companyLocation'));
 
   // For service details array items
   hasServiceDetailComment(index: number, fieldKey: string): boolean {
@@ -392,11 +417,7 @@ export class SummarySectionOverview {
   }
 
   isServiceDetailResolved(index: number, fieldKey: string): boolean {
-    const detailsArray = this.serviceDetailsFormArray();
-    if (!detailsArray || index >= detailsArray.length) return false;
-    const serviceGroup = detailsArray.at(index) as FormGroup;
-    const rowId = serviceGroup.get('rowId')?.value;
-    return this.isFieldResolved(fieldKey, 'serviceDetails', rowId);
+    return this.shouldShowDiff(fieldKey, index);
   }
 
   // Helper method to get before value (original value from plan response) for a field
@@ -457,13 +478,13 @@ export class SummarySectionOverview {
             case 'serviceName':
               return service.serviceName ?? null;
             case 'serviceType':
-              return service.serviceType ?? null;
+              return this.formatSelectValue(service.serviceType ?? null, this.planStore.serviceTypeOptions());
             case 'serviceCategory':
-              return service.serviceCategory ?? null;
+              return this.formatSelectValue(service.serviceCategory ?? null, this.planStore.serviceCategoryOptions());
             case 'serviceDescription':
               return service.serviceDescription ?? null;
             case 'serviceProvidedTo':
-              return service.serviceProvidedTo ?? null;
+              return this.formatSelectValue(service.serviceProvidedTo ?? null, this.planStore.serviceProvidedToOptions());
             case 'totalBusinessDoneLast5Years':
               return service.totalBusinessLast5Years ?? null;
             case 'serviceTargetedForLocalization':
@@ -471,7 +492,12 @@ export class SummarySectionOverview {
             case 'expectedLocalizationDate':
               return service.expectedLocalizationDate ?? null;
             case 'serviceLocalizationMethodology':
-              return service.serviceLocalizationMethodology ?? null;
+              return this.formatSelectValue(
+                Array.isArray(service.serviceLocalizationMethodology)
+                  ? service.serviceLocalizationMethodology?.[0]
+                  : (service.serviceLocalizationMethodology ?? null),
+                this.planStore.localizationMethodologyOptions()
+              );
           }
         }
         return null;
@@ -528,21 +554,24 @@ export class SummarySectionOverview {
         case 'serviceName':
           return getValueFromControl(EMaterialsFormControls.serviceName);
         case 'serviceType':
-          return getValueFromControl(EMaterialsFormControls.serviceType);
+          return this.formatSelectValue(getValueFromControl(EMaterialsFormControls.serviceType), this.planStore.serviceTypeOptions());
         case 'serviceCategory':
-          return getValueFromControl(EMaterialsFormControls.serviceCategory);
+          return this.formatSelectValue(getValueFromControl(EMaterialsFormControls.serviceCategory), this.planStore.serviceCategoryOptions());
         case 'serviceDescription':
           return getValueFromControl(EMaterialsFormControls.serviceDescription);
         case 'serviceProvidedTo':
-          return getValueFromControl(EMaterialsFormControls.serviceProvidedTo);
+          return this.formatSelectValue(getValueFromControl(EMaterialsFormControls.serviceProvidedTo), this.planStore.serviceProvidedToOptions());
         case 'totalBusinessDoneLast5Years':
           return getValueFromControl(EMaterialsFormControls.totalBusinessDoneLast5Years);
         case 'serviceTargetedForLocalization':
-          return getValueFromControl(EMaterialsFormControls.serviceTargetedForLocalization);
+          return this.toYesNoBoolean(getValueFromControl(EMaterialsFormControls.serviceTargetedForLocalization));
         case 'expectedLocalizationDate':
           return getValueFromControl(EMaterialsFormControls.expectedLocalizationDate);
         case 'serviceLocalizationMethodology':
-          return getValueFromControl(EMaterialsFormControls.serviceLocalizationMethodology);
+          return this.formatSelectValue(
+            getValueFromControl(EMaterialsFormControls.serviceLocalizationMethodology),
+            this.planStore.localizationMethodologyOptions()
+          );
       }
     }
     return null;

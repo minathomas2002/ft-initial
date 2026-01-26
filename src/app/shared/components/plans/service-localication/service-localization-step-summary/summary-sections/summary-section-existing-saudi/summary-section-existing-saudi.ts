@@ -165,7 +165,7 @@ export class SummarySectionExistingSaudi {
         agreementType: getValueFromControl(EMaterialsFormControls.agreementType),
         agreementOtherDetails: getValueFromControl(EMaterialsFormControls.agreementOtherDetails),
         agreementSigningDate: getValueFromControl(EMaterialsFormControls.agreementSigningDate),
-        supervisionOversight: getValueFromControl(EMaterialsFormControls.supervisionOversightEntity),
+        supervisionOversightEntity: getValueFromControl(EMaterialsFormControls.supervisionOversightEntity),
         whyChoseThisCompany: getValueFromControl(EMaterialsFormControls.whyChoseThisCompany),
         summaryOfKeyAgreementClauses: getValueFromControl(EMaterialsFormControls.summaryOfKeyAgreementClauses),
         provideAgreementCopy: getValueFromControl(EMaterialsFormControls.provideAgreementCopy),
@@ -282,6 +282,9 @@ export class SummarySectionExistingSaudi {
    */
   formatYesNo(value: string | boolean | null | undefined) {
     if (value === null || value === undefined) return null;
+    // API values can come as boolean; form values usually come as yes/no ids.
+    if (value === true || value === 'true') return 'Yes';
+    if (value === false || value === 'false') return 'No';
     const options = this.planStore.yesNoOptions();
     const match = options.find((o) => String(o.id) === String(value));
     return match ? match.name : String(value);
@@ -404,11 +407,7 @@ export class SummarySectionExistingSaudi {
   }
 
   isSaudiCompanyResolved(index: number, fieldKey: string): boolean {
-    const detailsArray = this.saudiCompanyDetailsFormArray();
-    if (!detailsArray || index >= detailsArray.length) return false;
-    const companyGroup = detailsArray.at(index) as FormGroup;
-    const rowId = companyGroup.get('rowId')?.value;
-    return this.isFieldResolved(fieldKey, 'saudiCompanyDetails', rowId);
+    return this.shouldShowDiff(fieldKey, 'saudiCompanyDetails', index);
   }
 
   hasCollaborationComment(index: number, fieldKey: string): boolean {
@@ -420,11 +419,7 @@ export class SummarySectionExistingSaudi {
   }
 
   isCollaborationResolved(index: number, fieldKey: string): boolean {
-    const partnershipArray = this.collaborationPartnershipFormArray();
-    if (!partnershipArray || index >= partnershipArray.length) return false;
-    const partnershipGroup = partnershipArray.at(index) as FormGroup;
-    const rowId = partnershipGroup.get('rowId')?.value;
-    return this.isFieldResolved(fieldKey, 'collaborationPartnership', rowId);
+    return this.shouldShowDiff(fieldKey, 'collaborationPartnership', index);
   }
 
   hasEntityLevelComment(fieldKey: string): boolean {
@@ -437,11 +432,7 @@ export class SummarySectionExistingSaudi {
   }
 
   isEntityLevelResolved(fieldKey: string): boolean {
-    const entityArray = this.entityLevelFormArray();
-    if (!entityArray || entityArray.length === 0) return false;
-    const entityGroup = entityArray.at(0) as FormGroup;
-    const rowId = entityGroup.get('rowId')?.value;
-    return this.isFieldResolved(fieldKey, 'entityLevel', rowId);
+    return this.shouldShowDiff(fieldKey, 'entityLevel');
   }
 
   hasServiceLevelComment(index: number, fieldKey: string): boolean {
@@ -453,11 +444,7 @@ export class SummarySectionExistingSaudi {
   }
 
   isServiceLevelResolved(index: number, fieldKey: string): boolean {
-    const serviceArray = this.serviceLevelFormArray();
-    if (!serviceArray || index >= serviceArray.length) return false;
-    const serviceGroup = serviceArray.at(index) as FormGroup;
-    const rowId = serviceGroup.get('rowId')?.value;
-    return this.isFieldResolved(fieldKey, 'serviceLevel', rowId);
+    return this.shouldShowDiff(fieldKey, 'serviceLevel', index);
   }
 
   hasAttachmentsComment(): boolean {
@@ -531,7 +518,9 @@ export class SummarySectionExistingSaudi {
 
       case 'entityLevel':
         if (plan.entityHeadcounts && plan.entityHeadcounts.length > 0) {
-          const entity = plan.entityHeadcounts[0];
+          // Filter for Existing Saudi (pageNumber: 3)
+          const entity = plan.entityHeadcounts.find((e) => e.pageNumber === 3);
+          if (!entity) return null;
           const yearMap: Record<string, string> = {
             'firstYear_headcount': 'y1Headcount',
             'secondYear_headcount': 'y2Headcount',
@@ -548,8 +537,11 @@ export class SummarySectionExistingSaudi {
         return null;
 
       case 'serviceLevel':
-        if (index !== undefined && plan.serviceHeadcounts && plan.serviceHeadcounts[index]) {
-          const service = plan.serviceHeadcounts[index];
+        if (index !== undefined && plan.serviceHeadcounts && plan.serviceHeadcounts.length > 0) {
+          // Filter for Existing Saudi (pageNumber: 3)
+          const servicesForExistingSaudi = plan.serviceHeadcounts.filter((s) => s.pageNumber === 3);
+          if (index >= servicesForExistingSaudi.length) return null;
+          const service = servicesForExistingSaudi[index];
           const yearMap: Record<string, string> = {
             'firstYear_headcount': 'y1Headcount',
             'secondYear_headcount': 'y2Headcount',
@@ -565,13 +557,15 @@ export class SummarySectionExistingSaudi {
             'sixthYear_saudization': 'y6Saudization',
           };
           if (fieldKey === 'serviceName') {
-            // Find service name from services array
-            if (plan.services && plan.services[index]) {
-              return plan.services[index].serviceName ?? null;
+            // Find service name from services array by matching planServiceTypeId
+            if (plan.services && service.planServiceTypeId) {
+              const matchingService = plan.services.find((s) => s.id === service.planServiceTypeId);
+              return matchingService?.serviceName ?? null;
             }
           } else if (fieldKey === 'expectedLocalizationDate') {
-            if (plan.services && plan.services[index]) {
-              return plan.services[index].expectedLocalizationDate ?? null;
+            if (plan.services && service.planServiceTypeId) {
+              const matchingService = plan.services.find((s) => s.id === service.planServiceTypeId);
+              return matchingService?.expectedLocalizationDate ?? null;
             }
           } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {
             return service.measuresUpSkillSaudis ?? null;

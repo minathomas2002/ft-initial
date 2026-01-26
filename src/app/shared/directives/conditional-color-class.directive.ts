@@ -89,6 +89,7 @@ export class ConditionalColorClassDirective {
    * Gets the target element to apply classes to.
    * For PrimeNG components like p-inputnumber, p-select, etc.,
    * finds the nested input element. File inputs are excluded.
+   * For p-multiselect, targets the .p-multiselect wrapper element.
    * Otherwise, returns the element itself.
    */
   private getTargetElement(): HTMLElement {
@@ -99,6 +100,15 @@ export class ConditionalColorClassDirective {
       element.tagName.toLowerCase() === 'textarea' ||
       element.tagName.toLowerCase() === 'select'
     ) {
+      return element;
+    }
+
+    // Handle p-multiselect component - target the .p-multiselect wrapper
+    if (element.tagName.toLowerCase() === 'p-multiselect') {
+      const multiselectWrapper = element.querySelector('.p-multiselect') as HTMLElement | null;
+      if (multiselectWrapper) {
+        return multiselectWrapper;
+      }
       return element;
     }
 

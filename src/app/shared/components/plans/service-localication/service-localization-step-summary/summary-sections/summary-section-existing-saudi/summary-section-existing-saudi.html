@@ -232,8 +232,8 @@
                 </td>
                 <td class="border-t border-gray-300 p-3">
                   <app-summary-table-cell
-                    [value]="partner.supervisionOversight"
-                    [isEmpty]="!partner.supervisionOversight"
+                    [value]="partner.supervisionOversightEntity"
+                    [isEmpty]="!partner.supervisionOversightEntity"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'supervisionOversightEntity')"
                     [hasComment]="hasCollaborationComment(rowIndex, 'supervisionOversightEntity')"
                     [isResolved]="isCollaborationResolved(rowIndex, 'supervisionOversightEntity')"

@@ -434,64 +434,6 @@ export abstract class PlanStepBaseClass {
   }
 
   /**
-   * Finds a field in selectedInputs by inputKey and optional rowId.
-   */
-  private findFieldInSelectedInputs(inputKey: string, rowId?: string): IFieldInformation | undefined {
-    return this.selectedInputs().find(
-      input =>
-        input.inputKey === inputKey &&
-        (rowId === undefined || input.id === rowId)
-    );
-  }
-
-  /**
-   * Checks if comment phase is active (adding or editing).
-   */
-  private isCommentPhaseActive(): boolean {
-    const phase = this.commentPhase();
-    return phase === 'adding' || phase === 'editing';
-  }
-
-  /**
-   * Gets the state of a field (whether value changed and if investor added comment).
-   */
-  private getFieldState(field: IFieldInformation): { valueChanged: boolean; hasInvestorComment: boolean } {
-    const originalValue = this.getOriginalValue(field);
-    const currentValue = this.getCurrentValue(field);
-    const valueChanged = originalValue !== undefined && 
-                        originalValue !== null && 
-                        JSON.stringify(originalValue) !== JSON.stringify(currentValue);
-
-    const formGroup = this.getFormGroup();
-    const investorCommentControl = formGroup.get('comment') as FormControl<string> | null;
-    const hasInvestorComment = !!(investorCommentControl?.value?.trim());
-
-    return { valueChanged, hasInvestorComment };
-  }
-
-  /**
-   * Determines the color based on view mode and field state.
-   */
-  private determineColorByViewMode(fieldState: { valueChanged: boolean; hasInvestorComment: boolean }): TColors {
-    const isViewMode = this.isViewMode();
-    const isResubmitMode = this.isResubmitMode();
-    const { valueChanged, hasInvestorComment } = fieldState;
-
-    // Employee view (isViewMode and not resubmit): Green if investor changed value OR added comment
-    if (isViewMode && !isResubmitMode) {
-      return (valueChanged || hasInvestorComment) ? 'green' : 'orange';
-    }
-
-    // Investor view (isResubmitMode and not view mode): Gray if changed or comment added, Orange otherwise
-    if (isResubmitMode && !isViewMode) {
-      return (valueChanged || hasInvestorComment) ? 'gray' : 'orange';
-    }
-
-    // Default: orange (for other cases like create mode, etc.)
-    return 'orange';
-  }
-
-  /**
    * Initiates the delete comments flow by showing the confirmation dialog.
    */
   protected onDeleteComments(): void {

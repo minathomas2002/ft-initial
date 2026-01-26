@@ -118,6 +118,9 @@ export class SummarySectionDirectLocalization {
   }
 
   formatYesNo(value: unknown): string | null {
+    // API values can come as boolean; form values usually come as yes/no ids.
+    if (value === true || value === 'true') return 'Yes';
+    if (value === false || value === 'false') return 'No';
     return this.mapOptionName(this.planStore.yesNoOptions(), value);
   }
 
@@ -300,11 +303,7 @@ export class SummarySectionDirectLocalization {
   }
 
   isLocalizationStrategyResolved(index: number, fieldKey: string): boolean {
-    const strategyArray = this.directLocalizationServiceLevelFormArray();
-    if (!strategyArray || index >= strategyArray.length) return false;
-    const strategyGroup = strategyArray.at(index) as FormGroup;
-    const rowId = strategyGroup.get('rowId')?.value;
-    return this.isFieldResolved(fieldKey, 'localizationStrategy', rowId);
+    return this.shouldShowDiff(fieldKey, 'localizationStrategy', index);
   }
 
   hasEntityLevelComment(fieldKey: string): boolean {
@@ -317,11 +316,7 @@ export class SummarySectionDirectLocalization {
   }
 
   isEntityLevelResolved(fieldKey: string): boolean {
-    const entityArray = this.entityLevelFormArray();
-    if (!entityArray || entityArray.length === 0) return false;
-    const entityGroup = entityArray.at(0) as FormGroup;
-    const rowId = entityGroup.get('rowId')?.value;
-    return this.isFieldResolved(fieldKey, 'entityLevel', rowId);
+    return this.shouldShowDiff(fieldKey, 'entityLevel');
   }
 
   hasServiceLevelComment(index: number, fieldKey: string): boolean {
@@ -333,11 +328,7 @@ export class SummarySectionDirectLocalization {
   }
 
   isServiceLevelResolved(index: number, fieldKey: string): boolean {
-    const serviceArray = this.serviceLevelFormArray();
-    if (!serviceArray || index >= serviceArray.length) return false;
-    const serviceGroup = serviceArray.at(index) as FormGroup;
-    const rowId = serviceGroup.get('rowId')?.value;
-    return this.isFieldResolved(fieldKey, 'serviceLevel', rowId);
+    return this.shouldShowDiff(fieldKey, 'serviceLevel', index);
   }
 
   // Helper methods for checking comments on "Other" detail fields
@@ -362,13 +353,21 @@ export class SummarySectionDirectLocalization {
 
     switch (section) {
       case 'localizationStrategy':
-        if (index !== undefined && plan.localizationStrategies && plan.localizationStrategies[index]) {
-          const strategy = plan.localizationStrategies[index];
+        if (index !== undefined && plan.localizationStrategies && plan.services) {
+          // Get the service ID from the form at this index
+          const formArray = this.directLocalizationServiceLevelFormArray();
+          if (!formArray || index >= formArray.length) return null;
+          const formGroup = formArray.at(index) as FormGroup;
+          const serviceId = formGroup.get(EMaterialsFormControls.serviceId)?.value;
+          if (!serviceId) return null;
+
+          // Find the matching localization strategy by planServiceTypeId
+          const strategy = plan.localizationStrategies.find((s: any) => s.planServiceTypeId === serviceId);
+          if (!strategy) return null;
+
           // Find service name from services array
-          let serviceName = null;
-          if (plan.services && plan.services[index]) {
-            serviceName = plan.services[index].serviceName ?? null;
-          }
+          const service = plan.services.find((s: any) => s.id === serviceId);
+          const serviceName = service?.serviceName ?? null;
 
           switch (fieldKey) {
             case 'serviceName':
@@ -397,18 +396,22 @@ export class SummarySectionDirectLocalization {
 
       case 'entityLevel':
         if (plan.entityHeadcounts && plan.entityHeadcounts.length > 0) {
-          const entity = plan.entityHeadcounts[0];
+          // Filter for Direct Localization (pageNumber: 4)
+          const entity = plan.entityHeadcounts.find((e: any) => e.pageNumber === 4);
+          if (!entity) return null;
           const yearMap: Record<string, string> = {
             'firstYear_headcount': 'y1Headcount',
             'secondYear_headcount': 'y2Headcount',
             'thirdYear_headcount': 'y3Headcount',
             'fourthYear_headcount': 'y4Headcount',
             'fifthYear_headcount': 'y5Headcount',
+            'sixthYear_headcount': 'y6Headcount',
             'firstYear_saudization': 'y1Saudization',
             'secondYear_saudization': 'y2Saudization',
             'thirdYear_saudization': 'y3Saudization',
             'fourthYear_saudization': 'y4Saudization',
             'fifthYear_saudization': 'y5Saudization',
+            'sixthYear_saudization': 'y6Saudization',
           };
           const yearKey = yearMap[fieldKey];
           if (yearKey && entity[yearKey as keyof typeof entity] !== undefined) {
@@ -418,8 +421,11 @@ export class SummarySectionDirectLocalization {
         return null;
 
       case 'serviceLevel':
-        if (index !== undefined && plan.serviceHeadcounts && plan.serviceHeadcounts[index]) {
-          const service = plan.serviceHeadcounts[index];
+        if (index !== undefined && plan.serviceHeadcounts && plan.serviceHeadcounts.length > 0) {
+          // Filter for Direct Localization (pageNumber: 4)
+          const servicesForDirectLocalization = plan.serviceHeadcounts.filter((s: any) => s.pageNumber === 4);
+          if (index >= servicesForDirectLocalization.length) return null;
+          const service = servicesForDirectLocalization[index];
           const yearMap: Record<string, string> = {
             'firstYear_headcount': 'y1Headcount',
             'secondYear_headcount': 'y2Headcount',
@@ -435,9 +441,10 @@ export class SummarySectionDirectLocalization {
             'sixthYear_saudization': 'y6Saudization',
           };
           if (fieldKey === 'serviceName') {
-            // Find service name from services array
-            if (plan.services && plan.services[index]) {
-              return plan.services[index].serviceName ?? null;
+            // Find service name from services array by matching planServiceTypeId
+            if (plan.services && service.planServiceTypeId) {
+              const matchingService = plan.services.find((s: any) => s.id === service.planServiceTypeId);
+              return matchingService?.serviceName ?? null;
             }
           } else if (fieldKey === 'expectedLocalizationDate') {
             return service.localizationDate ?? null;
