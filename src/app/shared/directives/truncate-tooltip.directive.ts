@@ -16,12 +16,13 @@ export class TruncateTooltipDirective {
 
   // Input signals
   appTruncateTooltip = input.required<string>();
-  maxChars = input<number>(15);
+  maxChars = input<number>(0);
 
   // Computed signals
   private readonly value = computed(() => this.appTruncateTooltip() ?? '');
   private readonly isTruncated = computed(() => this.value().length > this.maxChars());
   private readonly truncatedText = computed(() => {
+    if (this.maxChars() === 0) return this.value();
     const val = this.value();
     const max = this.maxChars();
     return val.length > max ? val.slice(0, max) + '...' : val;

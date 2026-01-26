@@ -15,6 +15,7 @@ export class BaseTagComponent {
 	value = input<string>('');
 	styleClass = input<string>('');
 	maxChars = input<number>(25);
+	disableTruncateTooltip = input<boolean>(false);
 
 	getBadgeClasses(): string {
 		const colorMap: Record<TColors, string> = {
