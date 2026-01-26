@@ -73,7 +73,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
-  private readonly authStore = inject(AuthStore);
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
@@ -495,6 +494,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         this.isSubmitted.set(false);
         this.existingSignature.set(null);
         this.planStatus.set(null);
+        const approvedVendorIDSEC = this.productPlanFormService.step2_productPlantOverview.get(EMaterialsFormControls.productManufacturingExperienceFormGroup)?.get(EMaterialsFormControls.approvedVendorIDSEC)?.get(EMaterialsFormControls.value)
+        if (approvedVendorIDSEC) {
+          approvedVendorIDSEC.setValue(this.authStore.userCode());
+          approvedVendorIDSEC.disable({ emitEvent: false });
+        }
 
         // Handle opportunity based on whether user is applying to an opportunity or creating from scratch
         const appliedOpportunity = this.planStore.appliedOpportunity();
@@ -850,16 +854,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         submissionDateControl.disable({ emitEvent: false });
       }
     }
-
-    const locationInfo = this.productPlanFormService.locationInformationFormGroup;
-    if (locationInfo) {
-      const registeredVendorIDControl = locationInfo.get(EMaterialsFormControls.registeredVendorIDwithSEC);
-      if (registeredVendorIDControl) {
-        if (!preserveValues) {
-          registeredVendorIDControl.setValue('');
-        }
-        registeredVendorIDControl.disable({ emitEvent: false });
-      }
+    const approvedVendorIDSEC = this.productPlanFormService.step2_productPlantOverview.get(EMaterialsFormControls.productManufacturingExperienceFormGroup)?.get(EMaterialsFormControls.approvedVendorIDSEC)?.get(EMaterialsFormControls.value)
+    if (approvedVendorIDSEC) {
+      approvedVendorIDSEC.disable({ emitEvent: false });
     }
   }
 

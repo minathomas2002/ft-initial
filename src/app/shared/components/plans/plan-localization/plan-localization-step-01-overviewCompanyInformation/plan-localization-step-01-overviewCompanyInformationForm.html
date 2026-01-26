@@ -209,14 +209,33 @@
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
-        <div><app-base-label [title]="'Registered Vendor ID with SEC'" /> <span class="text-sm text-gray-600 ms-2">(If available)</span> </div>
-        <input
-          type="text"
-          pInputText
-          fluid
-          placeholder="Enter registered vendor ID with SEC"
-          [maxlength]="50"
-          [formControl]="getFormControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+        <div>
+          <app-base-label [title]="'Registered Vendor ID with SEC'" />
+          <span class="text-sm text-gray-600 ms-2">(If available)</span>
+        </div>
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+          (valueChanged)="upDateSelectedInputs($event, {
+            section: 'locationInformation',
+            inputKey: 'registeredVendorIDwithSEC',
+            label: 'Registered Vendor ID with SEC'
+          })"
+        >
+          <input
+            type="text"
+            pInputText
+            fluid
+            placeholder="Enter registered vendor ID with SEC"
+            [maxlength]="7"
+            [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+            [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
+            [color]="selectedInputColor()"
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+          [label]="'Registered Vendor ID with SEC'"
         />
       </div>
     </div>

@@ -46,8 +46,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass {
-  isViewMode = input<boolean>(false);
-  isReviewMode = input<boolean>(false);
 
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
@@ -61,6 +59,16 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   correctedFieldIds = input<string[]>([]);
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
+  isViewMode = input<boolean>(false);
+  isReviewMode = input<boolean>(false);
+
+  EMaterialsFormControls = EMaterialsFormControls;
+  yesNoOptions = this.planStore.yesNoOptions;
+  localizationApproachOptions = this.planStore.localizationApproachOptions;
+  locationOptions = this.planStore.locationOptions;
+
+  private _servicesSynced = false;
+  private _userChangedDropdowns = new Set<string>();
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -104,10 +112,6 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   get formGroup() {
     return this.planFormService?.step4_directLocalization ?? new FormGroup({});
   }
-  EMaterialsFormControls = EMaterialsFormControls;
-  yesNoOptions = this.planStore.yesNoOptions;
-  localizationApproachOptions = this.planStore.localizationApproachOptions;
-  locationOptions = this.planStore.locationOptions;
 
   yearColumns = computed(() => this.planFormService?.upcomingYears(6) ?? []);
 
@@ -227,100 +231,59 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     // Watch for changes to willBeAnyProprietaryToolsSystems dropdown in localization strategy FormArray
     this.setupProprietaryToolsSystemsWatcher();
 
-    // In resubmit mode, ensure dependent "Other" fields are enabled when relevant
+    // In resubmit mode, ensure dependent "Other" fields are properly enabled/disabled
+    // Logic: If field is in correctedFields OR user has changed the dropdown => enable
+    //        Otherwise => disable initially
     effect(() => {
-      if (!this.isResubmitMode()) {
-        return;
-      }
+      if (!this.isResubmitMode()) return;
 
       const formArray = this.getLocalizationStrategyFormArray();
-      if (!formArray) {
-        return;
-      }
-
-      const correctedFieldsList = this.correctedFields();
+      if (!formArray) return;
 
       formArray.controls.forEach((itemControl, index) => {
         if (!(itemControl instanceof FormGroup)) return;
 
         const rowId = itemControl.get('rowId')?.value || itemControl.get('id')?.value;
 
-        // Handle localizationApproach and its dependent field
-        const localizationApproachControl = itemControl.get(EMaterialsFormControls.localizationApproach);
-        const isApproachCorrected = correctedFieldsList.some(field =>
-          field.section === 'localizationStrategy' &&
-          field.inputKey === `localizationApproach_${index}` &&
-          (field.id === rowId || !field.id)
-        );
-        if (localizationApproachControl && isApproachCorrected) {
-          this.getValueControl(localizationApproachControl).enable({ emitEvent: false });
-        }
+        // Helper to check if field is corrected
+        const isFieldShouldbeCorrected = (inputKey: string): boolean => {
+          return this.correctedFields().some(field =>
+            field.section === 'localizationStrategy' &&
+            field.inputKey === inputKey &&
+            (field.id === rowId || !field.id)
+          );
+        };
 
-        const isApproachOther = this.isLocalizationApproachOther(itemControl);
-        const isApproachOtherCorrected = correctedFieldsList.some(field =>
-          field.section === 'localizationStrategy' &&
-          field.inputKey === `localizationApproachOtherDetails_${index}` &&
-          (field.id === rowId || !field.id)
-        );
+        // Helper to check if user changed the dropdown
+        const hasUserChangedDropdown = (key: string): boolean => this._userChangedDropdowns.has(key);
+
+        // Helper to determine if conditional field should be enabled
+        const shouldEnableConditional = (inputKey: string, dropdownKey: string): boolean => {
+          return isFieldShouldbeCorrected(inputKey) || hasUserChangedDropdown(dropdownKey);
+        };
+
+        // localizationApproachOtherDetails
         const approachOtherControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
-        if (approachOtherControl) {
-          if (!isApproachOther || isApproachOtherCorrected) {
-            this.getValueControl(approachOtherControl).enable({ emitEvent: false });
-          } else {
-            this.getValueControl(approachOtherControl).disable({ emitEvent: false });
-          }
+        if (approachOtherControl && this.isLocalizationApproachOther(itemControl)) {
+          const canEdit = shouldEnableConditional(`localizationApproachOtherDetails_${index}`, `localizationApproach_${index}`);
+          canEdit ? this.getValueControl(approachOtherControl).enable({ emitEvent: false })
+                  : this.getValueControl(approachOtherControl).disable({ emitEvent: false });
         }
 
-        // Handle location and its dependent field
-        const locationControl = itemControl.get(EMaterialsFormControls.location);
-        const isLocationCorrected = correctedFieldsList.some(field =>
-          field.section === 'localizationStrategy' &&
-          field.inputKey === `location_${index}` &&
-          (field.id === rowId || !field.id)
-        );
-        if (locationControl && isLocationCorrected) {
-          this.getValueControl(locationControl).enable({ emitEvent: false });
-        }
-
-        const isLocationOther = this.isLocationOther(itemControl);
-        const isLocationOtherCorrected = correctedFieldsList.some(field =>
-          field.section === 'localizationStrategy' &&
-          field.inputKey === `locationOtherDetails_${index}` &&
-          (field.id === rowId || !field.id)
-        );
+        // locationOtherDetails
         const locationOtherControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
-        if (locationOtherControl) {
-          if (!isLocationOther || isLocationOtherCorrected) {
-            this.getValueControl(locationOtherControl).enable({ emitEvent: false });
-          } else {
-            this.getValueControl(locationOtherControl).disable({ emitEvent: false });
-          }
+        if (locationOtherControl && this.isLocationOther(itemControl)) {
+          const canEdit = shouldEnableConditional(`locationOtherDetails_${index}`, `location_${index}`);
+          canEdit ? this.getValueControl(locationOtherControl).enable({ emitEvent: false })
+                  : this.getValueControl(locationOtherControl).disable({ emitEvent: false });
         }
 
-        // Handle willBeAnyProprietaryToolsSystems and its dependent field
-        const willBeAnyControl = itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems);
-        const isWillBeAnyCorrected = correctedFieldsList.some(field =>
-          field.section === 'localizationStrategy' &&
-          field.inputKey === `willBeAnyProprietaryToolsSystems_${index}` &&
-          (field.id === rowId || !field.id)
-        );
-        if (willBeAnyControl && isWillBeAnyCorrected) {
-          this.getValueControl(willBeAnyControl).enable({ emitEvent: false });
-        }
-
-        const isProprietaryToolsYes = this.isProprietaryToolsYes(itemControl);
-        const isProprietaryToolsDetailsCorrected = correctedFieldsList.some(field =>
-          field.section === 'localizationStrategy' &&
-          field.inputKey === `proprietaryToolsSystemsDetails_${index}` &&
-          (field.id === rowId || !field.id)
-        );
-        const proprietaryToolsDetailsControl = itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails);
-        if (proprietaryToolsDetailsControl) {
-          if (!isProprietaryToolsYes || isProprietaryToolsDetailsCorrected) {
-            this.getValueControl(proprietaryToolsDetailsControl).enable({ emitEvent: false });
-          } else {
-            this.getValueControl(proprietaryToolsDetailsControl).disable({ emitEvent: false });
-          }
+        // proprietaryToolsSystemsDetails
+        const proprietaryDetailsControl = itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails);
+        if (proprietaryDetailsControl && this.isProprietaryToolsYes(itemControl)) {
+          const canEdit = shouldEnableConditional(`proprietaryToolsSystemsDetails_${index}`, `willBeAnyProprietaryToolsSystems_${index}`);
+          canEdit ? this.getValueControl(proprietaryDetailsControl).enable({ emitEvent: false })
+                  : this.getValueControl(proprietaryDetailsControl).disable({ emitEvent: false });
         }
       });
     });
@@ -329,7 +292,6 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     this.setupLocationWatcher();
   }
 
-  private _servicesSynced = false;
 
   /**
    * Sets up watchers for localizationApproach dropdown changes.
@@ -356,6 +318,17 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((value) => {
             this.planFormService.toggleLocalizationApproachOtherDetailsValidation(value ?? null, index);
+
+            // Track that user changed this dropdown
+            if (this.isResubmitMode()) {
+              this._userChangedDropdowns.add(`localizationApproach_${index}`);
+              // Enable the conditional field if dropdown is now "Other"
+              const isOther = value === ELocalizationApproach.Other.toString();
+              const otherDetailsControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
+              if (otherDetailsControl && isOther) {
+                this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
+              }
+            }
           });
       });
     });
@@ -386,6 +359,17 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((value) => {
             this.planFormService.toggleLocationOtherDetailsValidation(value ?? null, index);
+
+            // Track that user changed this dropdown
+            if (this.isResubmitMode()) {
+              this._userChangedDropdowns.add(`location_${index}`);
+              // Enable the conditional field if dropdown is now "Other"
+              const isOther = value === ELocation.Other.toString();
+              const otherDetailsControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
+              if (otherDetailsControl && isOther) {
+                this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
+              }
+            }
           });
       });
     });
@@ -474,6 +458,16 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     } else {
       // If value is "Yes", ensure validation is set correctly
       this.planFormService.toggleProprietaryToolsSystemsDetailsValidation(value, index);
+
+      // Track that user changed this dropdown and enable conditional field
+      if (this.isResubmitMode()) {
+        this._userChangedDropdowns.add(`willBeAnyProprietaryToolsSystems_${index}`);
+        const isYes = value === EYesNo.Yes.toString();
+        const detailsControl = itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails);
+        if (detailsControl && isYes) {
+          this.getValueControl(detailsControl).enable({ emitEvent: false });
+        }
+      }
     }
 
     // Mark the form control as dirty to ensure change detection
@@ -548,7 +542,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   };
 
   // Helper method to check if a field should be highlighted in view mode
-  override isFieldCorrected(inputKey: string, section?: string): boolean {
+  override isFieldShouldbeCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
     // Check if any comment field matches this inputKey (and section if provided)
     const matchingFields = this.pageComments()

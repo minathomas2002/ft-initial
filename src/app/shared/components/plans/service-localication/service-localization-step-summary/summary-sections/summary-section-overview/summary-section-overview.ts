@@ -244,7 +244,8 @@ export class SummarySectionOverview {
     const localAgentInfo = this.localAgentInformationFormGroup();
     const contactNumberControl = localAgentInfo?.get(EMaterialsFormControls.contactNumber);
     if (contactNumberControl instanceof FormGroup) {
-      return contactNumberControl.get(EMaterialsFormControls.value)?.value;
+      const contactNumberObject = contactNumberControl.get(EMaterialsFormControls.value)?.value;
+      return contactNumberObject?.countryCode + ' ' + contactNumberObject?.phoneNumber;
     }
     return null;
   });

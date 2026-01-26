@@ -143,7 +143,7 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
   }
 
   // Helper method to check if a field should be highlighted in view mode
-  override isFieldCorrected(inputKey: string, section?: string): boolean {
+  override isFieldShouldbeCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
     // Check if any comment field matches this inputKey (and section if provided)
     const matchingFields = this.pageComments()
