@@ -1,5 +1,6 @@
 import { Directive, effect, ElementRef, inject, input } from '@angular/core';
 import { FileuploadComponent } from '../components/utility-components/fileupload/fileupload.component';
+import { PhoneInputComponent } from '../components/form/phone-input/phone-input.component';
 
 /**
  * Directive that conditionally applies background and border color classes
@@ -9,6 +10,7 @@ import { FileuploadComponent } from '../components/utility-components/fileupload
  * <input [appConditionalColorClass]="true" [color]="'orange'" />
  * <input [appConditionalColorClass]="someCondition" [color]="'red'" />
  * <p-multiselect [appConditionalColorClass]="highlightInput('field')" [color]="selectedInputColor()" ... />
+ * <app-phone-input [appConditionalColorClass]="highlightInput('phone')" [color]="selectedInputColor()" ... />
  * <app-fileupload [appConditionalColorClass]="highlightInput('attachments')" [color]="selectedInputColor()" ... />
  *
  * When the boolean is true, it adds:
@@ -16,7 +18,9 @@ import { FileuploadComponent } from '../components/utility-components/fileupload
  * - border-{color}-500! (border color)
  *
  * For app-fileupload, classes are set or removed via the component's styleClass
- * input (merged with any existing styleClass). For p-multiselect, classes are
+ * input (merged with any existing styleClass). For app-phone-input, classes are
+ * applied to both the p-select (country code) and the text input (phone number),
+ * with the border applied to the unified container. For p-multiselect, classes are
  * applied to the MultiSelect root container (the visible trigger). For other
  * components, classes are applied to the DOM (nested input when present; file inputs excluded).
  *
@@ -57,6 +61,7 @@ export class ConditionalColorClassDirective {
 
   private elementRef = inject(ElementRef<HTMLElement>);
   private fileupload = inject(FileuploadComponent, { host: true, optional: true });
+  private phoneInput = inject(PhoneInputComponent, { host: true, optional: true });
 
   constructor() {
     // Use effect to reactively update classes based on condition and color
@@ -75,6 +80,12 @@ export class ConditionalColorClassDirective {
         return;
       }
 
+      if (this.phoneInput) {
+        // app-phone-input: apply to both p-select and text input, plus border on container
+        this.applyPhoneInputClasses(shouldApply, colorValue);
+        return;
+      }
+
       // Other elements: apply/remove classes on DOM
       const targetElement = this.getTargetElement();
       this.removeColorClasses(targetElement);
@@ -89,10 +100,6 @@ export class ConditionalColorClassDirective {
 
   /**
    * Gets the target element to apply classes to.
-   * For PrimeNG components like p-inputnumber, p-select, etc.,
-   * finds the nested input element. File inputs are excluded.
-   * For p-multiselect, targets the .p-multiselect wrapper element.
-   * Otherwise, returns the element itself.
    * - p-multiselect: the root container (visible trigger); never a nested filter input.
    * - input/textarea/select: the element itself.
    * - Other PrimeNG (p-inputnumber, p-select, etc.): nested input when present; file inputs excluded.
@@ -112,15 +119,6 @@ export class ConditionalColorClassDirective {
       return element;
     }
 
-    // Handle p-multiselect component - target the .p-multiselect wrapper
-    if (element.tagName.toLowerCase() === 'p-multiselect') {
-      const multiselectWrapper = element.querySelector('.p-multiselect') as HTMLElement | null;
-      if (multiselectWrapper) {
-        return multiselectWrapper;
-      }
-      return element;
-    }
-
     const nestedInput = element.querySelector(
       'input:not([type="file"]), textarea, select',
     ) as HTMLElement | null;
@@ -129,6 +127,82 @@ export class ConditionalColorClassDirective {
     }
 
     return element;
+  }
+
+  /**
+   * Applies or removes color classes for app-phone-input component.
+   * Applies background to both p-select (including wrapper, label, and trigger) and text input,
+   * and border to the unified container.
+   */
+  private applyPhoneInputClasses(shouldApply: boolean, colorValue: string): void {
+    const element = this.elementRef.nativeElement;
+    
+    // Find the unified container (has the border)
+    const unifiedContainer = element.querySelector('.unified-phone-input') as HTMLElement | null;
+    
+    // Find the country selector wrapper (needs background)
+    const countryWrapper = element.querySelector('.country-selector-wrapper') as HTMLElement | null;
+    
+    // Find the p-select element - PrimeNG Select renders as p-select custom element,
+    // and inside it there's a .p-select div. We query from the country-selector-wrapper.
+    // Try multiple selectors to handle different rendering scenarios
+    let selectWrapper = element.querySelector('.country-selector-wrapper p-select .p-select') as HTMLElement | null;
+    if (!selectWrapper) {
+      // Fallback: query directly for .p-select inside the component
+      selectWrapper = element.querySelector('p-select .p-select') as HTMLElement | null;
+    }
+    if (!selectWrapper) {
+      // Another fallback: query for .p-select anywhere in the component
+      selectWrapper = element.querySelector('.p-select') as HTMLElement | null;
+    }
+    
+    // Find the p-select label (the visible trigger area)
+    const selectLabel = element.querySelector('.country-selector-wrapper .p-select-label') as HTMLElement | null;
+    
+    // Find the p-select trigger (the button area)
+    const selectTrigger = element.querySelector('.country-selector-wrapper .p-select-trigger') as HTMLElement | null;
+    
+    // Find the text input (phone number)
+    const textInput = element.querySelector('input[type="tel"]') as HTMLElement | null;
+
+    const colorClasses = colorValue ? this.colorClassMap[colorValue] : null;
+
+    // Remove classes from all elements first
+    const elementsToClean = [unifiedContainer, countryWrapper, selectWrapper, selectLabel, selectTrigger, textInput].filter(Boolean) as HTMLElement[];
+    elementsToClean.forEach(el => this.removeColorClasses(el));
+
+    // Apply classes if needed
+    if (shouldApply && colorClasses) {
+      // Border on the unified container
+      if (unifiedContainer) {
+        unifiedContainer.classList.add(colorClasses.border);
+      }
+      
+      // Background on the country wrapper (ensures the entire select area has background)
+      if (countryWrapper) {
+        countryWrapper.classList.add(colorClasses.bg);
+      }
+      
+      // Background on the select wrapper (the actual .p-select div)
+      if (selectWrapper) {
+        selectWrapper.classList.add(colorClasses.bg);
+      }
+      
+      // Background on the select label (the visible trigger area)
+      if (selectLabel) {
+        selectLabel.classList.add(colorClasses.bg);
+      }
+      
+      // Background on the select trigger (the button area)
+      if (selectTrigger) {
+        selectTrigger.classList.add(colorClasses.bg);
+      }
+      
+      // Background on the text input
+      if (textInput) {
+        textInput.classList.add(colorClasses.bg);
+      }
+    }
   }
 
   /**

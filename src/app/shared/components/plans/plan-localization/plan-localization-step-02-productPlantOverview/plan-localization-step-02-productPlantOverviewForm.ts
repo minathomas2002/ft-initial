@@ -83,7 +83,6 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   onStartEditing(): void {
     if (this.isResubmitMode()) {
       this.commentPhase.set('editing');
-
     }
   }
 
@@ -150,7 +149,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     // Show SEC fields if radio button is Yes OR if any SEC field is selected for comment
     const radioValue = this.provideToSECSignal() === true;
     if (radioValue) return true;
-    
+
     // Check if any SEC field is in correctedFields (selected by employee)
     if (this.isResubmitMode()) {
       const correctedFields = this.correctedFields();
@@ -160,12 +159,12 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
         'yearsOfExperienceSEC',
         'totalQuantitiesSEC'
       ];
-      return correctedFields.some(field => 
-        field.section === 'productManufacturingExperience' && 
+      return correctedFields.some(field =>
+        field.section === 'productManufacturingExperience' &&
         secFieldKeys.includes(field.inputKey)
       );
     }
-    
+
     return false;
   });
 
@@ -173,7 +172,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     // Show Local Suppliers fields if radio button is Yes OR if any Local Suppliers field is selected for comment
     const radioValue = this.provideToLocalSuppliersSignal() === true;
     if (radioValue) return true;
-    
+
     // Check if any Local Suppliers field is in correctedFields (selected by employee)
     if (this.isResubmitMode()) {
       const correctedFields = this.correctedFields();
@@ -183,12 +182,12 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
         'yearsOfExperience',
         'totalQuantities'
       ];
-      return correctedFields.some(field => 
-        field.section === 'productManufacturingExperience' && 
+      return correctedFields.some(field =>
+        field.section === 'productManufacturingExperience' &&
         localSuppliersFieldKeys.includes(field.inputKey)
       );
     }
-    
+
     return false;
   });
 
