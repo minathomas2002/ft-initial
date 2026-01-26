@@ -206,7 +206,7 @@
                     [showDiff]="shouldShowDiff('agreementType', 'collaborationPartnership', rowIndex)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[200px]">
                   <app-summary-table-cell
                     [value]="partner.agreementOtherDetails"
                     [isEmpty]="!partner.agreementOtherDetails"
@@ -242,7 +242,7 @@
                     [showDiff]="shouldShowDiff('supervisionOversightEntity', 'collaborationPartnership', rowIndex)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[500px]">
                   <app-summary-table-cell
                     [value]="partner.whyChoseThisCompany"
                     [isEmpty]="!partner.whyChoseThisCompany"
@@ -254,7 +254,7 @@
                     [showDiff]="shouldShowDiff('whyChoseThisCompany', 'collaborationPartnership', rowIndex)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[500px]">
                   <app-summary-table-cell
                     [value]="partner.summaryOfKeyAgreementClauses"
                     [isEmpty]="!partner.summaryOfKeyAgreementClauses"
@@ -351,7 +351,7 @@
           <p-table
             [value]="serviceLevel()"
             [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
-            styleClass="w-full [&_th]:min-w-[150px] [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
+            styleClass="w-full [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
             [scrollable]="true"
           >
             <ng-template pTemplate="header">
@@ -450,7 +450,7 @@
                   />
                 </td>
                 }
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[300px]">
                   <app-summary-table-cell
                     [value]="service.keyMeasuresToUpskillSaudis"
                     [isEmpty]="!service.keyMeasuresToUpskillSaudis"
@@ -462,7 +462,7 @@
                     [showDiff]="shouldShowDiff('keyMeasuresToUpskillSaudis', 'serviceLevel', service.index)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[300px]">
                   <app-summary-table-cell
                     [value]="service.mentionSupportRequiredFromSEC"
                     [isEmpty]="!service.mentionSupportRequiredFromSEC"

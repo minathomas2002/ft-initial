@@ -72,7 +72,7 @@
                     [showDiff]="shouldShowDiff('localizationApproach', 'localizationStrategy', rowIndex)"
                   />
                   @if (strategy.localizationApproachOther) {
-                  <div class="mt-2 text-sm text-gray-600 flex items-center gap-2">
+                  <div class="mt-2 text-sm text-gray-600 flex flex-col items-center gap-2 max-h-[100px] overflow-auto">
                     <span class="font-semibold">Description: </span>{{ strategy.localizationApproachOther }}
                     @if (hasLocalizationApproachOtherComment(rowIndex)) {
                     <i
@@ -96,7 +96,7 @@
                     [showDiff]="shouldShowDiff('location', 'localizationStrategy', rowIndex)"
                   />
                   @if (strategy.locationOther) {
-                  <div class="mt-2 text-sm text-gray-600 flex items-center gap-2">
+                  <div class="mt-2 text-sm text-gray-600 flex flex-col items-center gap-2 max-h-[100px] overflow-auto">
                     <span class="font-semibold">Description: </span>{{ strategy.locationOther }}
                     @if (hasLocationOtherComment(rowIndex)) {
                     <i
@@ -144,7 +144,7 @@
                     [showDiff]="shouldShowDiff('willBeAnyProprietaryToolsSystems', 'localizationStrategy', rowIndex)"
                   />
                   @if (strategy.proprietaryToolsExplanation) {
-                  <div class="mt-2 text-sm text-gray-600 flex items-center gap-2">
+                  <div class="mt-2 text-sm text-gray-600 flex flex-col items-center gap-2 max-h-[100px] overflow-auto">
                     <span class="font-semibold">Explanation: </span>{{ strategy.proprietaryToolsExplanation }}
                     @if (hasProprietaryToolsExplanationComment(rowIndex)) {
                     <i
@@ -329,7 +329,7 @@
                   />
                 </td>
                 }
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[300px]">
                   <app-summary-table-cell
                     [value]="service.keyMeasuresToUpskillSaudis"
                     [isEmpty]="!service.keyMeasuresToUpskillSaudis"
@@ -341,7 +341,7 @@
                     [showDiff]="shouldShowDiff('keyMeasuresToUpskillSaudis', 'serviceLevel', service.index)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[300px]">
                   <app-summary-table-cell
                     [value]="service.mentionSupportRequiredFromSEC"
                     [isEmpty]="!service.mentionSupportRequiredFromSEC"
