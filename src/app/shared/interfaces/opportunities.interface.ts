@@ -32,9 +32,15 @@ export interface IOpportunityAttachment {
   fileName: string;
   fileExtension: string;
   ibmIdentifier: string;
+  ibmFileBase64?: IOpportunityFileBase64;
   objectId: string;
   fileUrl: string;
   createdDate: string;
+}
+
+export interface IOpportunityFileBase64 {
+  fileBase64?: string;
+  fileBase64MimeType?: string;
 }
 
 export interface IOpportunityDetails {
