@@ -115,10 +115,20 @@ export abstract class PlanStepBaseClass {
     if (!this.stepCommentSyncInitialized) {
       this.stepCommentSyncInitialized = true;
       this.stepCommentControl.setValue(this.commentFormControl.value ?? '', { emitEvent: false });
+      // Sync from commentFormControl to stepCommentControl (for display)
       this.commentFormControl.valueChanges
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(value => {
           this.stepCommentControl.setValue(value ?? '', { emitEvent: false });
+        });
+      // Sync from stepCommentControl back to commentFormControl (when user edits in app-comment-input)
+      this.stepCommentControl.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(value => {
+          // Only sync if stepCommentControl is enabled (i.e., in editing mode)
+          if (this.stepCommentControl.enabled) {
+            this.commentFormControl.setValue(value ?? '', { emitEvent: false });
+          }
         });
     }
 
@@ -378,10 +388,22 @@ export abstract class PlanStepBaseClass {
         this.comment.set(commentValue);
         this.commentFormControl.setValue(commentValue, { emitEvent: false });
         this.commentFormControl.disable({ emitEvent: false });
+        // Also disable the step comment control (used by app-comment-input)
+        this.stepCommentControl.disable({ emitEvent: false });
         this.formUtilityService.disableHasCommentControls(this.getFormGroup());
       }
       if (['adding', 'editing'].includes(this.commentPhase())) {
         this.commentFormControl.enable();
+        // Also enable the step comment control (used by app-comment-input) when editing
+        if (this.commentPhase() === 'editing') {
+          // Sync the value from commentFormControl to stepCommentControl before enabling
+          const commentValue = this.commentFormControl.value ?? '';
+          this.stepCommentControl.setValue(commentValue, { emitEvent: false });
+          this.stepCommentControl.enable({ emitEvent: false });
+          // Sync any changes from stepCommentControl back to commentFormControl
+          // This happens automatically via the subscription in ngOnInit, but we ensure
+          // the initial value is synced here
+        }
         this.formUtilityService.enableHasCommentControls(this.getFormGroup());
       }
     });
@@ -422,15 +444,25 @@ export abstract class PlanStepBaseClass {
   /**
    * Determines if an input should be highlighted based on selection and comment phase.
    * Supports both simple fields and fields with row IDs (for FormArrays).
+   * In resubmit mode, also checks correctedFields() for employee-selected fields.
    */
   protected highlightInput(inputKey: string, rowId?: string): boolean {
+    // Check selectedInputs (for employee adding comments)
     const isSelected = this.selectedInputs().some(
       input =>
         input.inputKey === inputKey &&
         (rowId === undefined || input.id === rowId)
     );
+    
+    // In resubmit mode, also check correctedFields (employee-selected fields)
+    const isCorrected = this.isResubmitMode() && this.correctedFields().some(
+      input =>
+        input.inputKey === inputKey &&
+        (rowId === undefined || input.id === rowId)
+    );
+    
     const phase = this.commentPhase();
-    return isSelected && (phase === 'adding' || phase === 'editing' || phase === 'none');
+    return (isSelected || isCorrected) && (phase === 'adding' || phase === 'editing' || phase === 'none');
   }
 
   /**

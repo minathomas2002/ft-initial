@@ -7,14 +7,12 @@ import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/tabl
 import { EInvestorPlanStatus, EInternalUserPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
 import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
-import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
-import { EOpportunityType, ERoles, ERoutes } from 'src/app/shared/enums';
+import { EOpportunityType, ERoles } from 'src/app/shared/enums';
 import { DatePipe, NgClass } from '@angular/common';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
-import { RoleService } from 'src/app/shared/services/role/role-service';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
@@ -27,6 +25,8 @@ import { AbstractServiceFilter } from 'src/app/shared/classes/abstract-service-f
 import { IPlanFilter } from 'src/app/shared/interfaces';
 import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 import { AssignReassignManualEmployee } from "../../components/assign-reassign-manual-employee/assign-reassign-manual-employee";
+import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
+import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 
 @Component({
   selector: 'app-plans-list',
@@ -49,13 +49,14 @@ import { AssignReassignManualEmployee } from "../../components/assign-reassign-m
     ServiceLocalizationPlanWizard,
     TimelineDialog,
     TruncateTooltipDirective,
-    AssignReassignManualEmployee
+    AssignReassignManualEmployee,
+    BaseTagComponent
   ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlansList implements OnInit {
+export class PlansList extends PlanDashboardBase implements OnInit {
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
@@ -70,20 +71,12 @@ export class PlansList implements OnInit {
   eInternalUserPlanStatus = EInternalUserPlanStatus;
   EInternalUserPlanStatus = EInternalUserPlanStatus;
 
-  private readonly planStore = inject(PlanStore);
   private readonly investorFilterService = inject(InvestorPlansFilterService);
   private readonly internalUsersFilterService = inject(InternalUsersPlansFilterService);
   private readonly i18nService = inject(I18nService);
-  private readonly roleService = inject(RoleService);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
   private readonly toastService = inject(ToasterService);
-
-  // Determine if user is investor or internal user based on role
-  readonly isInvestor = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
-  readonly isInternalUser = computed(() =>
-    this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE, ERoles.ADMIN])()
-  );
 
   // Get the appropriate filter service based on role
   readonly filterService = computed<AbstractServiceFilter<IPlanFilter>>(() => {
@@ -142,6 +135,7 @@ export class PlansList implements OnInit {
   readonly isLoading = computed(() => this.planStore.loading());
 
   constructor() {
+    super();
     effect(() => {
       if (
         !this.productLocalizationPlanWizardVisibility() &&
@@ -153,12 +147,7 @@ export class PlansList implements OnInit {
   }
 
   ngOnInit(): void {
-    // Only apply filter if no query params are present
-    // If query params exist, the filter component will handle them via listenToQueryParamChanges()
-    // const hasQueryParams = Object.keys(this.route.snapshot.queryParams).length > 0;
-    // if (!hasQueryParams) {
     this.filterService().applyFilter();
-    // }
   }
 
   createNewPlan() {
@@ -193,10 +182,6 @@ export class PlansList implements OnInit {
       : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
-  resetPlanWizard() {
-    this.planStore.resetWizardState();
-  }
-
   applyFilter() {
     this.filterService().applyFilter();
   }
@@ -205,75 +190,6 @@ export class PlansList implements OnInit {
   getPlanTypeLabel(planType: EOpportunityType): string {
     const planTypeOption = this.planStore.planTypeOptions().find(option => option.value === planType);
     return planTypeOption?.label ?? '';
-  }
-
-  getStatusLabel(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
-    if (this.isInvestor()) {
-      const statusMap = {
-        [EInvestorPlanStatus.SUBMITTED]: this.i18nService.translate('plans.status.submitted'),
-        [EInvestorPlanStatus.PENDING]: this.i18nService.translate('plans.status.pendingWithInvestor'),
-        [EInvestorPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
-        [EInvestorPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
-        [EInvestorPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
-        [EInvestorPlanStatus.DRAFT]: this.i18nService.translate('plans.status.draft'),
-      };
-      return statusMap[status as EInvestorPlanStatus] || '';
-    } else {
-      const statusMap = {
-        [EInternalUserPlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pendingWithInvestor'),
-        [EInternalUserPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.employee_status.underReview'),
-        [EInternalUserPlanStatus.APPROVED]: this.i18nService.translate('plans.employee_status.approved'),
-        [EInternalUserPlanStatus.REJECTED]: this.i18nService.translate('plans.employee_status.rejected'),
-        [EInternalUserPlanStatus.UNASSIGNED]: this.i18nService.translate('plans.employee_status.unassigned'),
-        [EInternalUserPlanStatus.ASSIGNED]: this.i18nService.translate('plans.employee_status.assigned'),
-        [EInternalUserPlanStatus.DEPT_APPROVED]: this.i18nService.translate('plans.employee_status.deptApproved'),
-        [EInternalUserPlanStatus.DEPT_REJECTED]: this.i18nService.translate('plans.employee_status.deptRejected'),
-        [EInternalUserPlanStatus.DV_APPROVED]: this.i18nService.translate('plans.employee_status.dvApproved'),
-        [EInternalUserPlanStatus.DV_REJECTED]: this.i18nService.translate('plans.employee_status.dvRejected'),
-        [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
-        [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
-        [EInternalUserPlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
-      };
-      return statusMap[status as EInternalUserPlanStatus] || '';
-    }
-  }
-
-  getAssigneeName(assignee: string): string {
-    if (assignee && assignee.length > 0)
-      return assignee;
-    else
-      return '-';
-  }
-
-  getStatusBadgeClass(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
-    if (this.isInvestor()) {
-      const classMap = {
-        [EInvestorPlanStatus.SUBMITTED]: 'bg-primary-50 text-primary-700 border-primary-200',
-        [EInvestorPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-        [EInvestorPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
-        [EInvestorPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-        [EInvestorPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-        [EInvestorPlanStatus.DRAFT]: 'bg-gray-50 text-gray-700 border-gray-200',
-      };
-      return classMap[status as EInvestorPlanStatus] || 'bg-gray-50 text-gray-700 border-gray-200';
-    } else {
-      const classMap = {
-        [EInternalUserPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-        [EInternalUserPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
-        [EInternalUserPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-        [EInternalUserPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-        [EInternalUserPlanStatus.UNASSIGNED]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-        [EInternalUserPlanStatus.ASSIGNED]: 'bg-orange-50 text-orange-700 border-orange-200',
-        [EInternalUserPlanStatus.DEPT_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-        [EInternalUserPlanStatus.DEPT_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-        [EInternalUserPlanStatus.DV_APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-        [EInternalUserPlanStatus.DV_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-        [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: 'bg-red-50 text-red-700 border-red-200',
-        [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: 'bg-primary-50 text-primary-700 border-primary-200',
-        [EInternalUserPlanStatus.EMPLOYEE_REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-      };
-      return classMap[status as EInternalUserPlanStatus] || 'bg-gray-50 text-gray-700 border-gray-200';
-    }
   }
 
   onViewDetails(plan: IPlanRecord) {

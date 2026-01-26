@@ -60,11 +60,9 @@ export class CommentDialog implements OnInit {
         control.markAsPristine();
         control.markAsUntouched();
       }
-      // Notify parent that dialog was cancelled without saving
-      // Only emit if the initial value was empty (meaning no comment existed)
-      if (!this.initialValue()) {
-        this.cancelled.emit();
-      }
+      // Always emit cancelled when dialog is closed without saving
+      // The parent component will decide what to do based on the mode (investor vs employee)
+      this.cancelled.emit();
     }
   }
 

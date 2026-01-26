@@ -8,12 +8,14 @@ import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-summary-section-overview',
   imports: [SummarySectionHeader, SummaryField, SummaryTableCell, TableModule],
   templateUrl: './summary-section-overview.html',
   styleUrl: './summary-section-overview.scss',
+  providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionOverview {
@@ -28,6 +30,7 @@ export class SummarySectionOverview {
   planYesOrNoEnum = EYesNo;
   planStore = inject(PlanStore);
   serviceForm = inject(ServicePlanFormService);
+  private datePipe = inject(DatePipe);
 
   constructor() {
     // Ensure service names are synced even if the user never visited the step component
@@ -125,7 +128,17 @@ export class SummarySectionOverview {
 
   // Basic Information
   opportunity = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.opportunity}`));
-  submissionDate = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`));
+  // submissionDate = computed(() => this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`));
+
+  submissionDate = computed(() => {
+    const dateValue = this.getValue(`basicInformationFormGroup.${EMaterialsFormControls.submissionDate}`);
+    if (!dateValue) return null;
+    const date = new Date(dateValue);
+    console.log(this.datePipe.transform(date, 'dd MMM yyyy'));
+
+    return this.datePipe.transform(date, 'dd MMM yyyy') ?? null;
+  });
+
 
   // Company Information
   companyName = computed(() => {

@@ -797,12 +797,19 @@
     <app-group-input-with-checkbox
       [hasCommentControl]="getHasCommentControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
       [showCheckbox]="showCheckbox()"
+      (valueChanged)="upDateSelectedInputs($event, {
+        section: 'attachments',
+        inputKey: 'attachments',
+        label: 'Attachments'
+      })"
     >
       <app-fileupload
         [isViewMode]="isViewMode()"
         [acceptedFileTypes]="'.pdf, .png, .jpg, .jpeg, .zip, .rar'"
         [(files)]="files"
         class="w-full"
+        [appConditionalColorClass]="highlightInput('attachments')"
+        [color]="selectedInputColor()"
         [placeholder]="'You can upload any file type (images, documents, archives).'"
         [multiple]="true"
       />

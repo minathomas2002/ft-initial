@@ -8,9 +8,8 @@ import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { EInternalUserPlanStatus, EInvestorPlanStatus, IPlanRecord, ITableHeaderItem, TColors, TPlansSortingKeys } from 'src/app/shared/interfaces';
+import { EInternalUserPlanStatus, EInvestorPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
 import { EOpportunityType, ERoles, ERoutes } from 'src/app/shared/enums';
-import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { DashboardPlansStore } from 'src/app/shared/stores/dashboard-plans/dashboard-plans.store';
 import { InternalUsersDashboardPlansFilter } from '../../components/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter';
 import { InvestorDashboardPlansFilter } from '../../components/investor-dashboard-plans-filter/investor-dashboard-plans-filter';
@@ -22,9 +21,7 @@ import { AssignReassignManualEmployee } from 'src/app/features/plans/components/
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 import { TimelineDialog } from "src/app/shared/components/timeline/timeline-dialog/timeline-dialog";
-import { EmployeePlanStatusMapper } from '../../classes/employee-plan-status.mapper';
 import { BaseTagComponent } from "src/app/shared/components/base-components/base-tag/base-tag.component";
-import { RoleService } from 'src/app/shared/services/role/role-service';
 import { InternalUsersDashboardPlansFilterService } from '../../services/internal-users-dashboard-plans-filter/internal-users-dashboard-plans-filter-service';
 import { DashboardPlansFilterService } from '../../services/dashboard-plans-filter/dashboard-plans-filter-service';
 import { DashboardPlanActionMenu } from '../../components/dashboard-plan-action-menu/dashboard-plan-action-menu';
@@ -32,6 +29,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
+import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -65,7 +63,7 @@ import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-too
   providers: [InternalUsersDashboardPlansFilterService, DashboardPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserDashboard implements OnInit {
+export class UserDashboard extends PlanDashboardBase implements OnInit {
   //#region Visibility signals
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
@@ -84,21 +82,17 @@ export class UserDashboard implements OnInit {
   //#endregion
 
   //#region Services
-  private readonly planStore = inject(PlanStore);
   private readonly dashboardPlansStore = inject(DashboardPlansStore);
   private readonly i18nService = inject(I18nService);
-  private readonly roleService = inject(RoleService);
   private readonly toasterService = inject(ToasterService);
   private readonly router = inject(Router);
-  private readonly employeePlanStatusMapper = new EmployeePlanStatusMapper(this.i18nService);
 
   private readonly internalUsersFilterService = inject(InternalUsersDashboardPlansFilterService);
   private readonly investorFilterService = inject(DashboardPlansFilterService);
   //#endregion
 
-  //#region Computed signals for role detection
-  readonly isInvestor = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
-  readonly isInternalUser = computed(() =>
+  //#region Computed signals for role detection (isInternalUser excludes ADMIN for dashboard)
+  override readonly isInternalUser = computed(() =>
     this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.EMPLOYEE])()
   );
   readonly isManager = computed(() =>
@@ -166,6 +160,7 @@ export class UserDashboard implements OnInit {
   //#endregion
 
   constructor() {
+    super();
     effect(() => {
       if (
         !this.productLocalizationPlanWizardVisibility() &&
@@ -193,55 +188,6 @@ export class UserDashboard implements OnInit {
       return this.i18nService.translate('opportunity.type.product');
 
     return '';
-  }
-  //#endregion
-
-  //#region Status label - different for investor vs internal users
-  getStatusLabel(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
-    if (this.isInvestor()) {
-      const statusMap = {
-        [EInvestorPlanStatus.SUBMITTED]: this.i18nService.translate('plans.status.submitted'),
-        [EInvestorPlanStatus.PENDING]: this.i18nService.translate('plans.status.pendingWithInvestor'),
-        [EInvestorPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
-        [EInvestorPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
-        [EInvestorPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
-        [EInvestorPlanStatus.DRAFT]: this.i18nService.translate('plans.status.draft'),
-      };
-      return statusMap[status as EInvestorPlanStatus] || '';
-    } else {
-      return this.employeePlanStatusMapper.getStatusLabel(status as EInternalUserPlanStatus);
-    }
-  }
-  //#endregion
-
-  //#region Status badge - different for investor vs internal users
-  getStatusBadge(status: EInvestorPlanStatus | EInternalUserPlanStatus): { label: string; color?: TColors; class?: string } {
-    if (this.isInvestor()) {
-      return {
-        label: this.getStatusLabel(status),
-        class: this.getStatusBadgeClass(status as EInvestorPlanStatus)
-      };
-    } else {
-      const color = this.employeePlanStatusMapper.getStatusBadgeColor(status as EInternalUserPlanStatus);
-      return {
-        label: this.getStatusLabel(status),
-        color: color || 'gray' as TColors
-      };
-    }
-  }
-  //#endregion
-
-  //#region Status badge class - different for investor vs internal users
-  getStatusBadgeClass(status: EInvestorPlanStatus): string {
-    const classMap = {
-      [EInvestorPlanStatus.SUBMITTED]: 'bg-primary-50 text-primary-700 border-primary-200',
-      [EInvestorPlanStatus.PENDING]: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-      [EInvestorPlanStatus.UNDER_REVIEW]: 'bg-blue-50 text-blue-700 border-blue-200',
-      [EInvestorPlanStatus.APPROVED]: 'bg-green-50 text-green-700 border-green-200',
-      [EInvestorPlanStatus.REJECTED]: 'bg-red-50 text-red-700 border-red-200',
-      [EInvestorPlanStatus.DRAFT]: 'bg-gray-50 text-gray-700 border-gray-200',
-    };
-    return classMap[status] || 'bg-gray-50 text-gray-700 border-gray-200';
   }
   //#endregion
 
@@ -336,10 +282,6 @@ export class UserDashboard implements OnInit {
     this.filterService().applyFilter();
   }
 
-  resetPlanWizard() {
-    this.planStore.resetWizardState();
-  }
-
   //#region Create new plan flow (investor only)
   createNewPlan() {
     this.planStore.resetAppliedOpportunity();
@@ -374,13 +316,6 @@ export class UserDashboard implements OnInit {
 
   onSubmitProductLocalizationPlanWizard() {
     console.log('Submit product localization plan wizard');
-  }
-
-  getAssigneeName(assignee: string): string {
-    if (assignee && assignee.length > 0)
-      return assignee;
-    else
-      return '-';
   }
 
   //#region Navigation methods for statistics cards - different for investor vs internal users

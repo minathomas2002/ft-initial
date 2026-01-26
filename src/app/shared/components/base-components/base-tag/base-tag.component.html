@@ -1,3 +1,7 @@
-<span class="text-sm font-medium inline-block border-1 whitespace-nowrap {{getEffectiveClasses()}} px-[10px] py-[2px] rounded-xl">
+<span
+  [appTruncateTooltip]="value()"
+  [maxChars]="maxChars()"
+  class="text-sm font-medium inline-block border-1 whitespace-nowrap {{getEffectiveClasses()}} px-[10px] py-[2px] rounded-xl"
+>
   {{value()}}
 </span>

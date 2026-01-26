@@ -8,10 +8,12 @@ import { SummarySectionHeader } from '../../../../summary-section-header/summary
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
+import { TranslatePipe } from 'src/app/shared/pipes';
+import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 
 @Component({
   selector: 'app-summary-section-existing-saudi',
-  imports: [SummarySectionHeader, SummaryTableCell, TableModule],
+  imports: [SummarySectionHeader, SummaryTableCell, TableModule, TranslatePipe, ImageErrorDirective],
   templateUrl: './summary-section-existing-saudi.html',
   styleUrl: './summary-section-existing-saudi.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -305,6 +307,9 @@ export class SummarySectionExistingSaudi {
     return value ? [value] : [];
   });
 
+  // Check if attachments exist
+  hasAttachments = computed(() => this.attachments().length > 0);
+
   // Check if attachments field has validation errors
   hasAttachmentsError = computed(() => {
     const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
@@ -325,6 +330,28 @@ export class SummarySectionExistingSaudi {
 
     return false;
   });
+
+  // Get file icon based on file type
+  getFileIcon(file: { name?: string; type?: string }): string | null {
+    if (!file) return null;
+
+    if (
+      file.name?.toLowerCase().endsWith('.zip') ||
+      file.type === 'application/zip' ||
+      file.type === 'application/x-zip-compressed'
+    ) {
+      return 'assets/images/zip.png';
+    }
+
+    if (
+      file.name?.toLowerCase().endsWith('.pdf') ||
+      file.type === 'application/pdf'
+    ) {
+      return 'assets/images/pdf.png';
+    }
+
+    return null;
+  }
 
   // Check if a field has a comment
   hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {

@@ -378,12 +378,12 @@ export function mapServicePlanResponseToForm(
   options?: { opportunityItem?: { id: string; name: string } | null }
 ): void {
   const servicePlan: IServicePlanResponse = response.servicePlan;
+  const submissionDate = new Date(response.submissionDate);
 
   // Step 1: Cover Page
   const step1Company = formService.coverPageCompanyInformationFormGroup;
   setNestedValue(step1Company, EMaterialsFormControls.planTitle, servicePlan.planTitle ?? '');
   setNestedValue(step1Company, EMaterialsFormControls.companyName, servicePlan.companyInformationSection?.companyName ?? '');
-
   const servicesArray = formService.getServicesFormArray();
   clearAndRebuildFormArray(servicesArray, servicePlan.services?.length ?? 1, () => formService.createServiceItem());
   (servicePlan.services ?? []).forEach((svc: IServicePlanServiceItem, idx: number) => {
@@ -410,6 +410,7 @@ export function mapServicePlanResponseToForm(
     if (opportunity) {
       basicInfo.get(EMaterialsFormControls.opportunity)?.setValue(opportunity, { emitEvent: false });
     }
+    basicInfo.get(EMaterialsFormControls.submissionDate)?.setValue(submissionDate, { emitEvent: false });
   }
 
   const companyInfo = formService.overviewCompanyInformationFormGroup;
@@ -808,7 +809,7 @@ function mapExistingSaudiData(formService: ServicePlanFormService): {
       const y6Saudization = toNumberOrEmpty(getControlValue(serviceGroup, `${EMaterialsFormControls.sixthYear}_saudization`));
 
       const hasServiceValues = [
-        y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization,  y6Headcount, y6Saudization,
+        y1Headcount, y1Saudization, y2Headcount, y2Saudization, y3Headcount, y3Saudization, y4Headcount, y4Saudization, y5Headcount, y5Saudization, y6Headcount, y6Saudization,
       ].some((v) => typeof v === 'number')
         || (measuresUpSkillSaudis && measuresUpSkillSaudis.toString().trim() !== '')
         || (mentionSupportRequiredSEC && mentionSupportRequiredSEC.toString().trim() !== '')

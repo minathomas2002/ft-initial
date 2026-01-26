@@ -147,11 +147,49 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
 
   // Conditional visibility computed signals
   showSECFields = computed(() => {
-    return this.provideToSECSignal() === true;
+    // Show SEC fields if radio button is Yes OR if any SEC field is selected for comment
+    const radioValue = this.provideToSECSignal() === true;
+    if (radioValue) return true;
+    
+    // Check if any SEC field is in correctedFields (selected by employee)
+    if (this.isResubmitMode()) {
+      const correctedFields = this.correctedFields();
+      const secFieldKeys = [
+        'qualifiedPlantLocationSEC',
+        'approvedVendorIDSEC',
+        'yearsOfExperienceSEC',
+        'totalQuantitiesSEC'
+      ];
+      return correctedFields.some(field => 
+        field.section === 'productManufacturingExperience' && 
+        secFieldKeys.includes(field.inputKey)
+      );
+    }
+    
+    return false;
   });
 
   showLocalSuppliersFields = computed(() => {
-    return this.provideToLocalSuppliersSignal() === true;
+    // Show Local Suppliers fields if radio button is Yes OR if any Local Suppliers field is selected for comment
+    const radioValue = this.provideToLocalSuppliersSignal() === true;
+    if (radioValue) return true;
+    
+    // Check if any Local Suppliers field is in correctedFields (selected by employee)
+    if (this.isResubmitMode()) {
+      const correctedFields = this.correctedFields();
+      const localSuppliersFieldKeys = [
+        'namesOfSECApprovedSuppliers',
+        'qualifiedPlantLocation',
+        'yearsOfExperience',
+        'totalQuantities'
+      ];
+      return correctedFields.some(field => 
+        field.section === 'productManufacturingExperience' && 
+        localSuppliersFieldKeys.includes(field.inputKey)
+      );
+    }
+    
+    return false;
   });
 
   showTargetedSuppliersFields = computed(() => {
@@ -206,13 +244,17 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   protected override initializeStepSpecificLogic(): void {
     // Effect to handle validation toggles
     effect(() => {
-      const provideToSECValue = this.provideToSECSignal();
-      this.planFormService.toggleSECFieldsValidation(provideToSECValue === true);
+      // Check if SEC fields should be shown (radio Yes OR fields selected for comment)
+      const shouldShowSECFields = this.showSECFields();
+      // Toggle validation to enable/disable fields based on visibility
+      this.planFormService.toggleSECFieldsValidation(shouldShowSECFields);
     });
 
     effect(() => {
-      const provideToLocalSuppliersValue = this.provideToLocalSuppliersSignal();
-      this.planFormService.toggleLocalSuppliersFieldsValidation(provideToLocalSuppliersValue === true);
+      // Check if Local Suppliers fields should be shown (radio Yes OR fields selected for comment)
+      const shouldShowLocalSuppliersFields = this.showLocalSuppliersFields();
+      // Toggle validation to enable/disable fields based on visibility
+      this.planFormService.toggleLocalSuppliersFieldsValidation(shouldShowLocalSuppliersFields);
     });
 
     effect(() => {
@@ -250,7 +292,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
       if (controls && controls[inputKey]) {
         return this.getValueControl(controls[inputKey]);
       }
-    } else if (section === 'manufacturingExperience') {
+    } else if (section === 'productManufacturingExperience') {
       const controls = this.productManufacturingExperienceFormGroupControls;
       if (controls && controls[inputKey]) {
         return this.getValueControl(controls[inputKey]);

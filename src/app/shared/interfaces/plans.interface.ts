@@ -1,6 +1,7 @@
 import { EOpportunityType, EStatusPlanTimeLine, ETargetedCustomer } from "../enums"
 import { EActionPlanTimeLine } from "../enums/action-plan-timeline.enum"
-import { EInternalUserPlanStatus } from "./dashboard-plans.interface"
+import { TColors } from "./colors.interface"
+import { EInternalUserPlanStatus, EInvestorPlanStatus } from "./dashboard-plans.interface"
 
 export interface IProductLocalizationPlanRequest {
   productPlan: ProductPlan
@@ -11,6 +12,7 @@ export interface ProductPlan {
   id: string;
   isDraft?: boolean;
   status?: EInternalUserPlanStatus;
+  investorStatus?: EInvestorPlanStatus;
   overviewCompanyInfo: OverviewCompanyInfo
   productPlantOverview: ProductPlantOverview
   valueChainStep: ValueChainStep
@@ -158,6 +160,11 @@ export interface IProductPlanResponse {
 export interface IServiceLocalizationPlanResponse {
   signature: Signature;
   servicePlan: IServicePlanResponse;
+  submissionDate: string;
+  planCode: number;
+  investorName: string;
+  investorId: string;
+  statusValue: string | null;
 }
 
 export interface IServicePlanGetResponse {
@@ -171,7 +178,8 @@ export interface IServicePlanResponse {
   isDraft: boolean;
   opportunityId: string;
   planTitle: string;
-  status: number;
+  status: EInternalUserPlanStatus;
+  investorStatus: EInvestorPlanStatus;
   services: IServicePlanServiceItem[];
   companyInformationSection: IServicePlanCompanyInformationSection;
   localAgentDetailSection?: IServicePlanLocalAgentDetailSection;
@@ -320,7 +328,7 @@ export interface ITimeLineResponse {
 
 export interface IPlanStatus {
   getStatusLabel(status: number): string;
-  getStatusBadgeClass(status: number): string;
+  getStatusBadgeClass(status: number): TColors;
 }
 
 export interface ReviewPlanRequest {

@@ -324,9 +324,72 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         }
       });
     });
+    // Watch for changes to localizationApproach and location to toggle conditional "Other" validations
+    this.setupLocalizationApproachWatcher();
+    this.setupLocationWatcher();
   }
 
   private _servicesSynced = false;
+
+  /**
+   * Sets up watchers for localizationApproach dropdown changes.
+   * Calls toggleLocalizationApproachOtherDetailsValidation when the value changes
+   * to require/clear localizationApproachOtherDetails based on "Other" selection.
+   */
+  private setupLocalizationApproachWatcher(): void {
+    effect(() => {
+      const formArray = this.getLocalizationStrategyFormArray();
+      if (!formArray || formArray.length === 0) {
+        return;
+      }
+
+      formArray.controls.forEach((itemControl, index) => {
+        if (!(itemControl instanceof FormGroup)) return;
+
+        const control = itemControl.get(`${EMaterialsFormControls.localizationApproach}.${EMaterialsFormControls.value}`);
+        if (!control) return;
+
+        // Initial call so validators are correct when form is patched (e.g. edit mode)
+        this.planFormService.toggleLocalizationApproachOtherDetailsValidation(control.value ?? null, index);
+
+        control.valueChanges
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((value) => {
+            this.planFormService.toggleLocalizationApproachOtherDetailsValidation(value ?? null, index);
+          });
+      });
+    });
+  }
+
+  /**
+   * Sets up watchers for location dropdown changes.
+   * Calls toggleLocationOtherDetailsValidation when the value changes
+   * to require/clear locationOtherDetails based on "Other" selection.
+   */
+  private setupLocationWatcher(): void {
+    effect(() => {
+      const formArray = this.getLocalizationStrategyFormArray();
+      if (!formArray || formArray.length === 0) {
+        return;
+      }
+
+      formArray.controls.forEach((itemControl, index) => {
+        if (!(itemControl instanceof FormGroup)) return;
+
+        const control = itemControl.get(`${EMaterialsFormControls.location}.${EMaterialsFormControls.value}`);
+        if (!control) return;
+
+        // Initial call so validators are correct when form is patched (e.g. edit mode)
+        this.planFormService.toggleLocationOtherDetailsValidation(control.value ?? null, index);
+
+        control.valueChanges
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((value) => {
+            this.planFormService.toggleLocationOtherDetailsValidation(value ?? null, index);
+          });
+      });
+    });
+  }
 
   /**
    * Sets up watchers for willBeAnyProprietaryToolsSystems dropdown changes

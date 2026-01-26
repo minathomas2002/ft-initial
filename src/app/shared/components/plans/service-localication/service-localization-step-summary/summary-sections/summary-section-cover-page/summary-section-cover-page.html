@@ -18,8 +18,8 @@
           [hasComment]="planTitleHasComment()"
           [isResolved]="planTitleIsResolved()"
           [isEmpty]="!planTitle()"
-          [beforeValue]="getBeforeValue('planTitle')"
-          [afterValue]="getAfterValue('planTitle')"
+          [beforeValue]="planTitleHasComment() ? getBeforeValue('planTitle') : null"
+          [afterValue]="planTitle()"
           [showDiff]="shouldShowDiff('planTitle')"
         />
         <app-summary-field
@@ -29,8 +29,8 @@
           [hasComment]="companyNameHasComment()"
           [isResolved]="companyNameIsResolved()"
           [isEmpty]="!companyName()"
-          [beforeValue]="getBeforeValue('companyName')"
-          [afterValue]="getAfterValue('companyName')"
+          [beforeValue]="companyNameHasComment() ? getBeforeValue('companyName') : null"
+          [afterValue]="companyName()"
           [showDiff]="shouldShowDiff('companyName')"
         />
       </div>
@@ -64,7 +64,7 @@
                     [hasError]="hasServiceItemFieldError(rowIndex, 'serviceName')"
                     [hasComment]="hasServiceItemComment(rowIndex)"
                     [isResolved]="isServiceItemResolved(rowIndex)"
-                    [beforeValue]="getBeforeValue('serviceName', rowIndex)"
+                    [beforeValue]="hasServiceItemComment(rowIndex) ? getBeforeValue('serviceName', rowIndex) : null"
                     [afterValue]="getAfterValue('serviceName', rowIndex)"
                     [showDiff]="shouldShowDiff('serviceName', rowIndex)"
                   />

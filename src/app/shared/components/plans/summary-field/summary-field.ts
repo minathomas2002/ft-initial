@@ -23,6 +23,11 @@ export class SummaryField {
   isEmpty = input<boolean>(false);
 
   displayValue = computed(() => {
+    // If has comment but no diff, show the old value (beforeValue)
+    if (this.hasComment() && !this.showDiff() && this.beforeValue() !== null && this.beforeValue() !== undefined) {
+      return this.displayBeforeValue();
+    }
+
     if (this.isEmpty()) {
       return '-';
     }

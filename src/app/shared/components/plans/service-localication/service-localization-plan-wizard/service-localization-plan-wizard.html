@@ -16,7 +16,7 @@
   <ng-container ngProjectAs="status">
     <app-base-tag
       [value]="statusLabel()"
-      [styleClass]="statusBadgeClass()"
+      [color]="statusBadgeClass()"
     />
   </ng-container>
   }
@@ -201,6 +201,7 @@
       icon="icon-message-circle"
       severity="secondary"
       (click)="onAddComment()"
+      [disabled]="isAddCommentButtonDisabled()"
     ></p-button>
       }
   </ng-container>

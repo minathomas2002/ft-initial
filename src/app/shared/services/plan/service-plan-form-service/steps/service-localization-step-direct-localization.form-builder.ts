@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { ELocalizationApproach, ELocation, EMaterialsFormControls, EYesNo } from 'src/app/shared/enums';
 import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
 
 export class ServiceLocalizationStepDirectLocalizationFormBuilder {
@@ -256,7 +256,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
 
     if (!otherDetailsControl) return;
 
-    if (localizationApproach === 'Other') {
+    if (localizationApproach === ELocalizationApproach.Other.toString()) {
       otherDetailsControl.setValidators([Validators.required, Validators.maxLength(250)]);
     } else {
       otherDetailsControl.clearValidators();
@@ -279,7 +279,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
 
     if (!otherDetailsControl) return;
 
-    if (location === 'Other') {
+    if (location === ELocation.Other.toString()) {
       otherDetailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       otherDetailsControl.clearValidators();
@@ -301,8 +301,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     const detailsControl = itemFormGroup.get(`${EMaterialsFormControls.proprietaryToolsSystemsDetails}.${EMaterialsFormControls.value}`);
 
     if (!detailsControl) return;
-
-    const isYes = willBeAnyProprietaryToolsSystems === 'Yes' || willBeAnyProprietaryToolsSystems === true || willBeAnyProprietaryToolsSystems === 'true';
+    const isYes = willBeAnyProprietaryToolsSystems === EYesNo.Yes.toString();
     if (isYes) {
       detailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {

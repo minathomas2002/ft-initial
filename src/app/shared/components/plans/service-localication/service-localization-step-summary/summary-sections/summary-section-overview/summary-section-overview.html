@@ -21,13 +21,7 @@
       <app-summary-field
         [label]="'Submission Date'"
         [value]="submissionDate()"
-        [isDate]="true"
-        [hasComment]="submissionDateHasComment()"
-        [isResolved]="submissionDateIsResolved()"
         [isEmpty]="!submissionDate()"
-        [beforeValue]="getBeforeValue('submissionDate')"
-        [afterValue]="getAfterValue('submissionDate')"
-        [showDiff]="shouldShowDiff('submissionDate')"
       />
     </div>
   </div>

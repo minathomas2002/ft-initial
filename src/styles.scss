@@ -3,4 +3,23 @@
 @use "./assets/scss/style.scss";
 @plugin "tailwindcss-primeui";
 
+/* Override Tailwind's default orange palette with our design tokens.
+   Tailwind's --color-orange-* comes from its built-in theme (oklch), not from
+   primeng-config. This @theme override ensures bg-orange-50, text-orange-600, etc.
+   use the hex values from our design system. */
+@theme {
+  --color-orange-25: #fff9f4;
+  --color-orange-50: #fef4eb;
+  --color-orange-100: #fde0c8;
+  --color-orange-200: #fbcba4;
+  --color-orange-300: #fab781;
+  --color-orange-400: #f8a35d;
+  --color-orange-500: #f78f3a;
+  --color-orange-600: #d47b32;
+  --color-orange-700: #b2672a;
+  --color-orange-800: #8f5322;
+  --color-orange-900: #5e3616;
+  --color-orange-950: #4a2b11;
+}
+
 /* Importing Own styles */

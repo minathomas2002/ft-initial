@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, model, OnDestroy, output, signal, viewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, effect, inject, model, OnDestroy, output, signal, viewChild, WritableSignal } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { ButtonModule } from "primeng/button";
@@ -102,82 +102,21 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return 'none';
   });
 
-  private readonly hasAnyCorrectedFields = computed(() => {
-    return (
-      this.step1CorrectedFieldsFiltered().length +
-      this.step2CorrectedFieldsFiltered().length +
-      this.step3CorrectedFieldsFiltered().length +
-      this.step4CorrectedFieldsFiltered().length
-    ) > 0;
-  });
-
-  private readonly isStepActivelyAddingComments = (stepId: ProductLocalizationWizardStepId): boolean => {
-    // Treat 'viewing' as comment-present so the badge stays orange after save.
-    const activePhases: TCommentPhase[] = ['adding', 'editing', 'viewing'];
-    const phase =
-      stepId === 'overview'
-        ? this.step1CommentPhase()
-        : stepId === 'productPlant'
-          ? this.step2CommentPhase()
-          : stepId === 'valueChain'
-            ? this.step3CommentPhase()
-            : stepId === 'saudization'
-              ? this.step4CommentPhase()
-              : 'none';
-
-    return activePhases.includes(phase);
-  };
-
-  private readonly getCommentColorForStep = (stepId: ProductLocalizationWizardStepId): 'green' | 'orange' => {
-    const status = this.planStore.planStatus();
-    const isViewOrReviewMode = this.isViewMode() || this.isReviewMode();
-
-    // Outside UNDER_REVIEW, keep the legacy behavior (all steps orange)
-    if (status !== EInternalUserPlanStatus.UNDER_REVIEW) {
-      return 'orange';
-    }
-
-    // In employee view/review under review: only the step being actively commented should be orange.
-    if (isViewOrReviewMode) {
-      if (this.isStepActivelyAddingComments(stepId)) {
-        return 'orange';
-      }
-
-      // Preserve existing semantics (green in view/review when not actively commenting)
-      if (this.hasAnyCorrectedFields()) {
-        return 'green';
-      }
-
-      return 'green';
-    }
-
-    // Not in view/review mode but status is UNDER_REVIEW (e.g., investor in resubmit mode)
-    return 'orange';
-  };
+  protected override getCommentPhaseForStepId(stepId: string): TCommentPhase {
+    if (stepId === 'overview') return this.step1CommentPhase();
+    if (stepId === 'productPlant') return this.step2CommentPhase();
+    if (stepId === 'valueChain') return this.step3CommentPhase();
+    if (stepId === 'saudization') return this.step4CommentPhase();
+    return 'none';
+  }
 
   // Used by the active step content components (they only render one step at a time)
   commentColor = computed(() => {
     const step = this.activeStep();
-    const stepId: ProductLocalizationWizardStepId =
-      step === 1 ? 'overview' :
-        step === 2 ? 'productPlant' :
-          step === 3 ? 'valueChain' :
-            step === 4 ? 'saudization' : 'summary';
-    return this.getCommentColorForStep(stepId);
+    return this.getCommentColorForStep(this.getCommentPhaseForStepId(this.getStepIdFromStepIndex(step) ?? ''));
   });
 
-  // selectedInputColor = computed<TColors>(() => {
-  //   // During comment phase (adding/editing): always orange
-  //   const currentPhase = this.currentStepCommentPhase();
-  //   if (currentPhase === 'adding' || currentPhase === 'editing') {
-  //     return 'orange';
-  //   }
-
-  //   // Otherwise, default to orange (actual field colors are determined by getFieldColor in step components)
-  //   return 'orange';
-  // });
   steps = computed<IWizardStepState[]>(() => {
-    const errors = this.validationErrors();
     this.i18nService.currentLanguage();
     return [
       {
@@ -187,7 +126,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.overviewCompanyInformation,
         hasErrors: this.step1CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
-        commentColor: this.getCommentColorForStep('overview'),
+        commentColor: this.getCommentColorForStep(this.step1CommentPhase()),
       },
       {
         title: this.i18nService.translate('plans.wizard.step2.title'),
@@ -196,7 +135,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step2_productPlantOverview,
         hasErrors: this.step2CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
-        commentColor: this.getCommentColorForStep('productPlant'),
+        commentColor: this.getCommentColorForStep(this.step2CommentPhase()),
       },
       {
         title: this.i18nService.translate('plans.wizard.step3.title'),
@@ -205,7 +144,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step3_valueChain,
         hasErrors: this.step3CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
-        commentColor: this.getCommentColorForStep('valueChain'),
+        commentColor: this.getCommentColorForStep(this.step3CommentPhase()),
       },
       {
         title: this.i18nService.translate('plans.wizard.step4.title'),
@@ -214,7 +153,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         formState: this.productPlanFormService.step4_saudization,
         hasErrors: this.step4CommentPhase() === 'none',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
-        commentColor: this.getCommentColorForStep('saudization'),
+        commentColor: this.getCommentColorForStep(this.step4CommentPhase()),
       },
       {
         title: this.i18nService.translate('plans.wizard.step5.title'),
@@ -457,16 +396,16 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   // Computed signals for plan status tag
-  planStatus = signal<EInternalUserPlanStatus | null>(null);
+  planStatus = signal<EInternalUserPlanStatus | EInvestorPlanStatus | null>(null);
   statusLabel = computed(() => {
     const status = this.planStatus();
-    if (status === null) return 'Draft';
+    if (status === null) return '';
     const statusService = this.planStatusFactory.handleValidateStatus();
     return statusService.getStatusLabel(status);
   });
-  statusBadgeClass = computed(() => {
+  statusBadgeClass = computed<TColors>(() => {
     const status = this.planStatus();
-    if (status === null) return 'bg-gray-50 text-gray-700 border-gray-200';
+    if (status === null) return 'gray';
     const statusService = this.planStatusFactory.handleValidateStatus();
     return statusService.getStatusBadgeClass(status);
   });
@@ -604,72 +543,45 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.activeStep.set(stepNumber);
   }
 
-  onAddComment(): void {
-    if (this.isResubmitMode()) {
-      this.showCommentState.set(true);
+  protected override getIsResubmitMode(): boolean {
+    return this.isResubmitMode();
+  }
 
-      // In resubmit mode the investor opens the comment panel from the wizard actions.
-      // Infer the correct phase from the existing comment so the UI shows Edit/Delete
-      // for saved comments, or Add Comment when empty.
-      const step = this.activeStep();
-      const stepForm =
-        step === 1
-          ? this.productPlanFormService.step1_overviewCompanyInformation
-          : step === 2
-            ? this.productPlanFormService.step2_productPlantOverview
-            : step === 3
-              ? this.productPlanFormService.step3_valueChain
-              : step === 4
-                ? this.productPlanFormService.step4_saudization
-                : null;
+  protected override getIsInvestorPersona(): boolean {
+    return this.isInvestorPersona();
+  }
 
-      if (!stepForm) return;
+  protected override getShowCommentState(): WritableSignal<boolean> {
+    return this.showCommentState;
+  }
 
-      const commentControl = stepForm.get(EMaterialsFormControls.comment) as FormControl<string> | null;
-      const hasComment = !!(commentControl?.value && commentControl.value.trim().length > 0);
+  protected override getActiveStep(): number {
+    return this.activeStep();
+  }
 
-      const setPhaseIfNone = (phaseSignal: typeof this.step1CommentPhase) => {
-        if (phaseSignal() === 'none') {
-          phaseSignal.set(hasComment ? 'viewing' : 'none');
-        }
-      };
+  protected override getStepFormForComment(step: number): FormGroup | null {
+    if (step === 1) return this.productPlanFormService.step1_overviewCompanyInformation;
+    if (step === 2) return this.productPlanFormService.step2_productPlantOverview;
+    if (step === 3) return this.productPlanFormService.step3_valueChain;
+    if (step === 4) return this.productPlanFormService.step4_saudization;
+    return null;
+  }
 
-      if (step === 1) {
-        setPhaseIfNone(this.step1CommentPhase);
-      } else if (step === 2) {
-        setPhaseIfNone(this.step2CommentPhase);
-      } else if (step === 3) {
-        setPhaseIfNone(this.step3CommentPhase);
-      } else if (step === 4) {
-        setPhaseIfNone(this.step4CommentPhase);
-      }
+  protected override getStepIdFromStepIndex(step: number): string | undefined {
+    if (step === 1) return 'overview';
+    if (step === 2) return 'productPlant';
+    if (step === 3) return 'valueChain';
+    if (step === 4) return 'saudization';
+    if (step === 5) return 'summary';
+    return undefined;
+  }
 
-      return;
-    }
-    const step = this.activeStep();
-    const stepId: ProductLocalizationWizardStepId =
-      step === 1 ? 'overview' :
-        step === 2 ? 'productPlant' :
-          step === 3 ? 'valueChain' :
-            step === 4 ? 'saudization' : 'summary';
-
-    // Non-investor (internal) flow: starting a new comment session should clear
-    // any previously mapped/selected fields so counters, checkboxes and highlights reset.
-    if (!this.isInvestorPersona()) {
-      this.resetCurrentStepCommentSelections(stepId);
-    }
-
-    // Set comment phase for the current active step
-    if (step === 1 && this.step1CommentPhase() === 'none') {
-      this.step1CommentPhase.set('adding');
-    } else if (step === 2 && this.step2CommentPhase() === 'none') {
-      this.step2CommentPhase.set('adding');
-    } else if (step === 3 && this.step3CommentPhase() === 'none') {
-      this.step3CommentPhase.set('adding');
-    } else if (step === 4 && this.step4CommentPhase() === 'none') {
-      this.step4CommentPhase.set('adding');
-    }
-    this.showHasCommentControl.set(true);
+  protected override getCommentPhaseSignalForStepId(stepId: string): WritableSignal<TCommentPhase> | null {
+    if (stepId === 'overview') return this.step1CommentPhase;
+    if (stepId === 'productPlant') return this.step2CommentPhase;
+    if (stepId === 'valueChain') return this.step3CommentPhase;
+    if (stepId === 'saudization') return this.step4CommentPhase;
+    return null;
   }
 
   onSummarySubmitClick(): void {
@@ -703,6 +615,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.isLoadingPlan.set(true);
     this.planStore.getProductPlan(planId)
       .pipe(
+        tap((response) => {
+          const planStatus = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? response.body.productPlan.investorStatus : response.body.productPlan?.status;
+          this.planStatus.set(planStatus ?? null);
+        }),
         switchMap((response) => {
           if (!response.body) {
             return of(null);
@@ -742,20 +658,14 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       )
       .subscribe((responseBody) => {
         if (responseBody) {
-          const status = responseBody.productPlan.status ?? null;
-          this.planStatus.set(status);
-          // Set plan status in store
-          if (status !== null) {
-            this.planStore.setPlanStatus(status);
-          }
           this.mapPlanDataToForm(responseBody);
         }
       });
   }
 
   private mapPlanDataToForm(response: IProductPlanResponse): void {
-    // Store original plan response for before/after comparison
-    if (this.isResubmitMode()) {
+    // Store original plan response for before/after comparison in resubmit mode or view mode
+    if (this.isResubmitMode() || this.isViewMode()) {
       // Store original plan response for before/after comparison
       this.originalPlanResponse.set(response);
     }
@@ -1522,7 +1432,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
    * Resets selected inputs and hasComment controls for the current step
    * Called when employee clicks Add Comment to clear previous investor comment selections
    */
-  private resetCurrentStepCommentSelections(stepId: ProductLocalizationWizardStepId | undefined): void {
+  protected override resetCurrentStepCommentSelections(stepId: ProductLocalizationWizardStepId | undefined): void {
     if (!stepId) return;
 
     // Reset stepper counter + highlight state (bound to selectedInputs)
