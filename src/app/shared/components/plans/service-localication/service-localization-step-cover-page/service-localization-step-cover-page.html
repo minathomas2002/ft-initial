@@ -25,7 +25,7 @@
             maxlength="150"
             trimOnBlur
             [appConditionalColorClass]="highlightInput('planTitle')"
-            [color]="isViewMode() && isFieldCorrected('planTitle', 'companyInformation') ? 'green' : selectedInputColor()"
+            [color]="isViewMode() && isFieldShouldbeCorrected('planTitle', 'companyInformation') ? 'green' : selectedInputColor()"
           />
         </app-group-input-with-checkbox>
 
@@ -57,7 +57,7 @@
             maxlength="100"
             trimOnBlur
             [appConditionalColorClass]="highlightInput('companyName')"
-            [color]="isViewMode() && isFieldCorrected('companyName', 'companyInformation') ? 'green' : selectedInputColor()"
+            [color]="isViewMode() && isFieldShouldbeCorrected('companyName', 'companyInformation') ? 'green' : selectedInputColor()"
           />
         </app-group-input-with-checkbox>
 
