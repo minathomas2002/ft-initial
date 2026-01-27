@@ -32,19 +32,19 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
     return this.fb.group({
       [EMaterialsFormControls.landPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.min(0), Validators.max(100)]),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.max(100)]),
       }),
       [EMaterialsFormControls.buildingPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.min(0), Validators.max(100)]),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.max(100)]),
       }),
       [EMaterialsFormControls.machineryEquipmentPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.min(0), Validators.max(100)]),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required, Validators.max(100)]),
       }),
       [EMaterialsFormControls.othersPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.min(0), Validators.max(100)]),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.max(100)]),
       }),
       [EMaterialsFormControls.othersDescription]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -136,8 +136,8 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
 
     if (provideToSEC) {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
-      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.min(1)]);
-      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.min(1), Validators.max(1000000000)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.max(1000000000)]);
     } else {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
@@ -168,7 +168,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required]);
-      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.min(1), Validators.max(1000000000)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.max(1000000000)]);
     } else {
       experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.clearValidators();

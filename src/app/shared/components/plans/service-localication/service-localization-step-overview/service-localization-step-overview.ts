@@ -19,9 +19,8 @@ import { FormArrayInput } from 'src/app/shared/components/utility-components/for
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
-import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
@@ -31,8 +30,9 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
+import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { FormsModule } from '@angular/forms';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { MultiSelect } from 'primeng/multiselect';
@@ -82,6 +82,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   correctedFieldIds = input<string[]>([]);
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
+  originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -253,12 +254,12 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
             // Preserve expectedLocalizationDate value before toggling validation
             // (toggle may reset it if serviceTargetedForLocalization is not "Yes")
             const expectedLocalizationDateControl = ctrl.get(EMaterialsFormControls.expectedLocalizationDate);
-            const expectedLocalizationDateValue = expectedLocalizationDateControl 
-              ? this.getValueControl(expectedLocalizationDateControl)?.value ?? null 
+            const expectedLocalizationDateValue = expectedLocalizationDateControl
+              ? this.getValueControl(expectedLocalizationDateControl)?.value ?? null
               : null;
-            
+
             service.toggleExpectedLocalizationDateValidation(val, idx);
-            
+
             // Restore the value if it was cleared by the toggle
             if (expectedLocalizationDateValue && expectedLocalizationDateControl) {
               const valueControl = this.getValueControl(expectedLocalizationDateControl);
@@ -407,6 +408,10 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     // Match pattern: _ followed by one or more digits at the end
     const match = inputKey.match(/^(.+)_(\d+)$/);
     return match ? match[1] : inputKey;
+  }
+
+  getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
+    return getFieldValueFromServicePlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field

@@ -40,6 +40,7 @@
         [commentTitle]="commentTitle() || ''"
         [showCommentState]="showCommentState()"
         [correctedFields]="step1CommentFields()"
+        [originalPlanResponse]="originalPlanResponse()"
       />
     </div>
   </ng-template>
@@ -62,6 +63,7 @@
         [commentTitle]="commentTitle() || ''"
         [showCommentState]="showCommentState()"
         [correctedFields]="step2CommentFields()"
+        [originalPlanResponse]="originalPlanResponse()"
       />
     </div>
   </ng-template>
@@ -84,6 +86,7 @@
         [commentTitle]="commentTitle() || ''"
         [showCommentState]="showCommentState()"
         [correctedFields]="step3CommentFields()"
+        [originalPlanResponse]="originalPlanResponse()"
       />
     </div>
   </ng-template>
@@ -107,6 +110,7 @@
         [commentTitle]="commentTitle() || ''"
         [showCommentState]="showCommentState()"
         [correctedFields]="step4CommentFields()"
+        [originalPlanResponse]="originalPlanResponse()"
       />
     </div>
   </ng-template>
@@ -197,6 +201,7 @@
 <app-submission-confirmation-modal
   [(visible)]="showSubmissionModal"
   [(existingSignature)]="existingSignature"
+  [contactInfo]="contactInfo()"
   (onConfirm)="onSubmissionConfirm($event)"
   (onCancel)="onSubmissionCancel()"
 />

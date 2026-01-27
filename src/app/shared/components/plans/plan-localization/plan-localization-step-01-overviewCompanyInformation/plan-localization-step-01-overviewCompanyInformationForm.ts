@@ -18,7 +18,8 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TextareaModule } from 'primeng/textarea';
 import { TColors } from 'src/app/shared/interfaces';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
@@ -71,6 +72,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   correctedFieldIds = input<string[]>([]);
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
+  originalPlanResponse = input<IProductPlanResponse | null>(null);
 
   formGroup = this.planFormService.overviewCompanyInformation;
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes();
@@ -217,6 +219,10 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     if (!this.isViewMode() || this.pageComments().length === 0) return '';
     const allLabels = this.pageComments().flatMap(c => c.fields.map(f => f.label));
     return [...new Set(allLabels)].join(', ');
+  }
+
+  getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
+    return getFieldValueFromProductPlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field
