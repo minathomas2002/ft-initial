@@ -551,7 +551,7 @@ export class SummarySectionOverview {
     } else if (fieldKey === 'emailID') {
       return this.emailID();
     } else if (fieldKey === 'contactNumber') {
-      return this.contactNumber();
+      return this.contactNumber()?.toString().replace(' ', '');
     } else if (fieldKey === 'companyLocation') {
       return this.companyLocation();
     } else if (index !== undefined) {
