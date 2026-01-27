@@ -83,7 +83,8 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       }),
       [EMaterialsFormControls.approvedVendorIDSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        // Numeric vendor id, up to 7 digits
+        [EMaterialsFormControls.value]: this.fb.control(null),
       }),
       [EMaterialsFormControls.yearsOfExperienceSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -142,11 +143,13 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.reset();
+      experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.reset();
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.reset();
       experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.reset();
     }
 
     experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
+    experienceFormGroup.get(`${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
     experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
     experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.updateValueAndValidity();
   }

@@ -577,11 +577,14 @@
               [title]="'Approved Vendor ID'"
               secondaryTitle="(with SEC)"
             />
-            <input
-              type="text"
-              pInputText
+            <p-inputnumber
               fluid
               placeholder="Enter approved vendor ID"
+              [min]="0"
+              [maxlength]="7"
+              [useGrouping]="false"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="0"
               [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
             />
           </div>
