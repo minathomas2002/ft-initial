@@ -354,58 +354,42 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       }
     });
 
-    // In resubmit mode, ensure dependent "Other" fields are enabled when relevant
+    // In resubmit mode, ensure dependent "Other" fields are properly enabled/disabled
+    // Logic: If field is in correctedFields OR user has changed the dropdown => enable
+    //        Otherwise => disable initially
     effect(() => {
-      if (!this.isResubmitMode()) {
-        return;
-      }
+      if (!this.isResubmitMode()) return;
 
       const collaborationArray = this.getCollaborationPartnershipFormArray();
-      if (!collaborationArray) {
-        return;
-      }
-
-      const correctedFieldsList = this.correctedFields();
+      if (!collaborationArray) return;
 
       collaborationArray.controls.forEach((control, index) => {
-        if (!(control instanceof FormGroup)) {
-          return;
-        }
+        if (!(control instanceof FormGroup)) return;
 
         const rowId = control.get('rowId')?.value || control.get('id')?.value;
 
-        // Handle agreementType and its dependent field
-        const agreementTypeControl = control.get(EMaterialsFormControls.agreementType);
-        const isAgreementTypeCorrected = correctedFieldsList.some(field =>
-          field.section === 'collaborationPartnership' &&
-          field.inputKey === `agreementType_${index}` &&
-          (field.id === rowId || !field.id)
-        );
-        if (agreementTypeControl && isAgreementTypeCorrected) {
-          this.getValueControl(agreementTypeControl).enable({ emitEvent: false });
-        }
+        // Helper to check if field is corrected
+        const isFieldShouldbeCorrected = (inputKey: string): boolean => {
+          return this.correctedFields().some(field =>
+            field.section === 'collaborationPartnership' &&
+            field.inputKey === inputKey &&
+            (field.id === rowId || !field.id)
+          );
+        };
 
-        // Check backend response value for agreementType
-        const isAgreementTypeOther = this.isAgreementTypeOther(control);
-
-        // Check if agreementOtherDetails is corrected
-        const isAgreementOtherCorrected = correctedFieldsList.some(field =>
-          field.section === 'collaborationPartnership' &&
-          field.inputKey === `agreementOtherDetails_${index}` &&
-          (field.id === rowId || !field.id)
-        );
-
+        // agreementOtherDetails
         const otherDetailsControl = control.get(EMaterialsFormControls.agreementOtherDetails);
-        if (otherDetailsControl) {
-          // Logic: If parent is NOT "Other" OR field is corrected, enable; otherwise disable
-          if (!isAgreementTypeOther || isAgreementOtherCorrected) {
-            this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
-          } else {
-            this.getValueControl(otherDetailsControl).disable({ emitEvent: false });
-          }
+        if (otherDetailsControl && this.isAgreementTypeOther(control)) {
+          const canEdit = isFieldShouldbeCorrected(`agreementOtherDetails_${index}`) ||
+                         this._userChangedDropdowns.has(`agreementType_${index}`);
+          canEdit ? this.getValueControl(otherDetailsControl).enable({ emitEvent: false })
+                  : this.getValueControl(otherDetailsControl).disable({ emitEvent: false });
         }
       });
     });
+
+    // Setup watcher to enable conditional field when user changes dropdown in resubmit mode
+    this.setupAgreementTypeWatcher();
 
     // Disable all conditional fields when in view mode (except resubmit mode)
     effect(() => {
@@ -484,12 +468,35 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     const companyOverviewKeyProjectControl = companyOverviewKeyProjectCtrl ? this.getValueControl(companyOverviewKeyProjectCtrl) : null;
     const companyOverviewOtherControl = companyOverviewOtherCtrl ? this.getValueControl(companyOverviewOtherCtrl) : null;
 
+    const rowId = rowControl.get('rowId')?.value || rowControl.get('id')?.value;
+    const formArray = this.getSaudiCompanyDetailsFormArray();
+    const index = formArray.controls.indexOf(rowControl);
+
+    // Keys for tracking user interactions
+    const companyTypeChangedKey = `saudiCompanyDetails_companyType_changed_${rowId || index}`;
+    const qualificationStatusChangedKey = `saudiCompanyDetails_qualificationStatus_changed_${rowId || index}`;
+
+    // Helper: Check if field is in correctedFields
+    const isFieldShouldbeCorrected = (inputKey: string): boolean => {
+      return this.correctedFields().some(field =>
+        field.section === 'saudiCompanyDetails' &&
+        field.inputKey === inputKey &&
+        (field.id === rowId || !field.id)
+      );
+    };
+
+    // Helper: Determine if a conditional field should be enabled in resubmit mode
+    const shouldEnableInResubmit = (inputKey: string, parentChangedKey: string, secondaryChangedKey?: string): boolean => {
+      if (!this.isResubmitMode()) return true;
+      // Enable if: field is corrected OR user has changed the parent dropdown
+      return isFieldShouldbeCorrected(inputKey) ||
+             this._userChangedDropdowns.has(parentChangedKey) ||
+             (secondaryChangedKey ? this._userChangedDropdowns.has(secondaryChangedKey) : false);
+    };
+
     // Function to update fields based on current selections
     const updateFields = () => {
-      // In view mode, don't enable any fields - keep them all disabled
-      if (this.isViewMode() && !this.isResubmitMode()) {
-        return;
-      }
+      if (this.isViewMode() && !this.isResubmitMode()) return;
 
       const companyTypes: string[] = companyTypeControl?.value || [];
       const qualificationStatus = qualificationStatusControl?.value;
@@ -498,67 +505,88 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       const isContractor = companyTypes.includes(EServiceCompanyType.Contractors.toString());
       const isOther = companyTypes.includes(EServiceCompanyType.Others.toString());
 
-      // Qualification Status - only for Manufacturer
-      if (isManufacturer) {
-        qualificationStatusControl?.enable({ emitEvent: false });
-      } else {
-        qualificationStatusControl?.disable({ emitEvent: false });
-        qualificationStatusControl?.setValue(null, { emitEvent: false });
-      }
+      // Qualification Status - Manufacturer only
+      this.updateConditionalField(
+        qualificationStatusControl,
+        isManufacturer,
+        shouldEnableInResubmit(`qualificationStatus_${index}`, companyTypeChangedKey)
+      );
 
       // Products - Manufacturer + (Qualified or Under Pre-Qualification)
-      if (isManufacturer && (
+      const showProducts = isManufacturer && (
         qualificationStatus === EServiceQualificationStatus.Qualified.toString() ||
         qualificationStatus === EServiceQualificationStatus.UnderPreQualification.toString()
-      )) {
-        productsControl?.enable({ emitEvent: false });
-      } else {
-        productsControl?.disable({ emitEvent: false });
-        productsControl?.setValue(null, { emitEvent: false });
-      }
+      );
+      this.updateConditionalField(
+        productsControl,
+        showProducts,
+        shouldEnableInResubmit(`products_${index}`, companyTypeChangedKey, qualificationStatusChangedKey)
+      );
 
       // Company Overview - Manufacturer + Not Qualified
-      if (isManufacturer && qualificationStatus === EServiceQualificationStatus.NotQualified.toString()) {
-        companyOverviewControl?.enable({ emitEvent: false });
-      } else {
-        companyOverviewControl?.disable({ emitEvent: false });
-        companyOverviewControl?.setValue(null, { emitEvent: false });
-      }
+      const showCompanyOverview = isManufacturer && qualificationStatus === EServiceQualificationStatus.NotQualified.toString();
+      this.updateConditionalField(
+        companyOverviewControl,
+        showCompanyOverview,
+        shouldEnableInResubmit(`companyOverview_${index}`, companyTypeChangedKey, qualificationStatusChangedKey)
+      );
 
       // Key Projects Executed - Contractor
-      if (isContractor) {
-        keyProjectsControl?.enable({ emitEvent: false });
-      } else {
-        keyProjectsControl?.disable({ emitEvent: false });
-        keyProjectsControl?.setValue(null, { emitEvent: false });
-      }
+      this.updateConditionalField(
+        keyProjectsControl,
+        isContractor,
+        shouldEnableInResubmit(`keyProjectsExecutedByContractorForSEC_${index}`, companyTypeChangedKey)
+      );
 
       // Company Overview, Key Project Details - Contractor
-      if (isContractor) {
-        companyOverviewKeyProjectControl?.enable({ emitEvent: false });
-      } else {
-        companyOverviewKeyProjectControl?.disable({ emitEvent: false });
-        companyOverviewKeyProjectControl?.setValue(null, { emitEvent: false });
-      }
+      this.updateConditionalField(
+        companyOverviewKeyProjectControl,
+        isContractor,
+        shouldEnableInResubmit(`companyOverviewKeyProjectDetails_${index}`, companyTypeChangedKey)
+      );
 
       // Company Overview - Other
-      if (isOther) {
-        companyOverviewOtherControl?.enable({ emitEvent: false });
-      } else {
-        companyOverviewOtherControl?.disable({ emitEvent: false });
-        companyOverviewOtherControl?.setValue(null, { emitEvent: false });
-      }
+      this.updateConditionalField(
+        companyOverviewOtherControl,
+        isOther,
+        shouldEnableInResubmit(`companyOverviewOther_${index}`, companyTypeChangedKey)
+      );
     };
 
     // Initial update
     updateFields();
 
-    // Subscribe to changes
+    // Subscribe to changes and track user interactions
     if (companyTypeControl) {
-      companyTypeControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => updateFields());
+      companyTypeControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+        this._userChangedDropdowns.add(companyTypeChangedKey);
+        updateFields();
+      });
     }
     if (qualificationStatusControl) {
-      qualificationStatusControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => updateFields());
+      qualificationStatusControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+        this._userChangedDropdowns.add(qualificationStatusChangedKey);
+        updateFields();
+      });
+    }
+  }
+
+  /**
+   * Helper to update a conditional field's enabled/disabled state
+   * @param control The form control to update
+   * @param shouldShow Whether the field should be visible based on parent selection
+   * @param canEdit Whether the field should be editable (true in normal mode, conditional in resubmit)
+   */
+  private updateConditionalField(control: FormControl | null, shouldShow: boolean, canEdit: boolean): void {
+    if (!control) return;
+
+    if (shouldShow && canEdit) {
+      control.enable({ emitEvent: false });
+    } else {
+      control.disable({ emitEvent: false });
+      if (!shouldShow) {
+        control.setValue(null, { emitEvent: false });
+      }
     }
   }
 
@@ -591,6 +619,43 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     if (!control) return false;
     const agreementTypeValue = this.getValueControl(control)?.value;
     return agreementTypeValue === AgreementType.Other.toString();
+  }
+
+  /**
+   * Sets up watchers for agreementType dropdown changes.
+   * In resubmit mode, tracks user interaction and enables the conditional "Other" details field.
+   */
+  private setupAgreementTypeWatcher(): void {
+    effect(() => {
+      const formArray = this.getCollaborationPartnershipFormArray();
+      if (!formArray || formArray.length === 0) return;
+
+      formArray.controls.forEach((itemControl, index) => {
+        if (!(itemControl instanceof FormGroup)) return;
+
+        const control = itemControl.get(`${EMaterialsFormControls.agreementType}.${EMaterialsFormControls.value}`);
+        if (!control) return;
+
+        const initialValue = control.value as string | null;
+        this.planFormService?.toggleAgreementOtherDetailsValidation(initialValue ?? null, index);
+
+        control.valueChanges
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((value) => {
+            // Track that user changed this dropdown
+            if (this.isResubmitMode()) {
+              this._userChangedDropdowns.add(`agreementType_${index}`);
+              // Enable the conditional field if dropdown is now "Other"
+              const isOther = value === AgreementType.Other.toString();
+              const otherDetailsControl = itemControl.get(EMaterialsFormControls.agreementOtherDetails);
+              if (otherDetailsControl && isOther) {
+                this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
+              }
+            }
+              this.planFormService?.toggleAgreementOtherDetailsValidation(value ?? null, index);
+          });
+      });
+    });
   }
 
   getEntityLevelFormArray(): FormArray {
@@ -633,9 +698,10 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
   private _servicesSynced = false;
   private _conditionalFieldsSetup = false;
+  private _userChangedDropdowns = new Set<string>();
 
   // Helper method to check if a field should be highlighted in view mode
-  override isFieldCorrected(inputKey: string, section?: string): boolean {
+  override isFieldShouldbeCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
     // Check if any comment field matches this inputKey (and section if provided)
     const matchingFields = this.pageComments()

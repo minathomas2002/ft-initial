@@ -192,7 +192,7 @@ export class SummarySectionDirectLocalization {
   serviceLevel = computed(() => {
     const serviceArray = this.serviceLevelFormArray();
     if (!serviceArray) return [];
-
+    
     return Array.from({ length: serviceArray.length }, (_, i) => {
       const group = serviceArray.at(i) as FormGroup;
       const getValueFromControl = (controlName: string) => {
@@ -206,7 +206,7 @@ export class SummarySectionDirectLocalization {
       return {
         index: i,
         serviceName: getValueFromControl(EMaterialsFormControls.serviceName),
-        expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.expectedLocalizationDate),
+        expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.serviceLevelLocalizationDate),
         headcountYears: this.yearControlKeys.map((key) => ({
           value: getValueFromControl(`${key}_headcount`),
           controlName: `${key}_headcount`,
@@ -300,10 +300,6 @@ export class SummarySectionDirectLocalization {
     const strategyGroup = strategyArray.at(index) as FormGroup;
     const rowId = strategyGroup.get('rowId')?.value;
     return this.hasFieldComment(fieldKey, 'localizationStrategy', rowId);
-  }
-
-  isLocalizationStrategyResolved(index: number, fieldKey: string): boolean {
-    return this.shouldShowDiff(fieldKey, 'localizationStrategy', index);
   }
 
   hasEntityLevelComment(fieldKey: string): boolean {
@@ -446,9 +442,13 @@ export class SummarySectionDirectLocalization {
               const matchingService = plan.services.find((s: any) => s.id === service.planServiceTypeId);
               return matchingService?.serviceName ?? null;
             }
-          } else if (fieldKey === 'expectedLocalizationDate') {
-            return service.localizationDate ?? null;
-          } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {
+            } else if (fieldKey === 'expectedLocalizationDate') {
+              // For service level, the backend field is localizationDate (mapped from serviceLevelLocalizationDate)
+              if (plan.services && service.planServiceTypeId) {          
+                const matchingService = servicesForDirectLocalization.find((s) => s.planServiceTypeId === service.planServiceTypeId);
+                return matchingService?.localizationDate ?? null;
+              }
+            } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {
             return service.measuresUpSkillSaudis ?? null;
           } else if (fieldKey === 'mentionSupportRequiredFromSEC') {
             return service.mentionSupportRequiredSEC ?? null;
@@ -513,6 +513,7 @@ export class SummarySectionDirectLocalization {
       case 'serviceLevel':
         if (index !== undefined) {
           const services = this.serviceLevel();
+          
           if (services[index]) {
             if (fieldKey === 'serviceName' || fieldKey === 'expectedLocalizationDate' ||
               fieldKey === 'keyMeasuresToUpskillSaudis' || fieldKey === 'mentionSupportRequiredFromSEC') {
@@ -536,15 +537,18 @@ export class SummarySectionDirectLocalization {
   shouldShowDiff(fieldKey: string, section: 'localizationStrategy' | 'entityLevel' | 'serviceLevel', index?: number): boolean {
     // Only show diff in resubmit mode
     if (this.planStore.wizardMode() !== 'resubmit') return false;
-    // Only show diff if field has a comment
+    // For array items, validate index
     if (index !== undefined) {
       if (section === 'localizationStrategy') {
-        if (!this.hasLocalizationStrategyComment(index, fieldKey)) return false;
+        const strategyArray = this.directLocalizationServiceLevelFormArray();
+        if (!strategyArray || index >= strategyArray.length) return false;
       } else if (section === 'serviceLevel') {
-        if (!this.hasServiceLevelComment(index, fieldKey)) return false;
+        const serviceArray = this.serviceLevelFormArray();
+        if (!serviceArray || index >= serviceArray.length) return false;
       }
     } else if (section === 'entityLevel') {
-      if (!this.hasEntityLevelComment(fieldKey)) return false;
+      const entityArray = this.entityLevelFormArray();
+      if (!entityArray || entityArray.length === 0) return false;
     }
 
     const beforeValue = this.getBeforeValue(fieldKey, section, index);

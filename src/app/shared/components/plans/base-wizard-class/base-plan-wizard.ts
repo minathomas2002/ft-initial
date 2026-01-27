@@ -8,6 +8,7 @@ import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { TCommentPhase } from '../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { RoleService } from 'src/app/shared/services/role/role-service';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 /**
  * Abstract base class for plan wizard components using Template Method pattern.
@@ -19,6 +20,7 @@ export abstract class BasePlanWizard {
   protected readonly toasterService = inject(ToasterService);
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly roleService = inject(RoleService);
+  protected readonly authStore = inject(AuthStore);
 
   // Common signals - subclasses should initialize these
   protected isProcessing = signal(false);

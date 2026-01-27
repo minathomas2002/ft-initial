@@ -228,9 +228,8 @@ export class SummarySectionValueChain {
 
   // Helper method to check if field should show diff
   shouldShowDiff(fieldKey: string, sectionName: string, rowId?: string, currentValue?: any): boolean {
-    // Show diff in resubmit mode or view mode (when viewing plan details)
-    const wizardMode = this.planStore.wizardMode();
-    if (wizardMode !== 'resubmit' && wizardMode !== 'view') return false;
+    // Only show diff in resubmit mode
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
     // Only show diff if field has a comment
     if (!this.hasFieldComment(fieldKey, sectionName, rowId)) return false;
 

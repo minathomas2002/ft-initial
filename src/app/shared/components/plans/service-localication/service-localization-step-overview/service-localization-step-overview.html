@@ -139,6 +139,7 @@
   <!-- Location Information -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">Location Information</h2>
+
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
         <app-base-label [title]="'Global HQ Location'" />
@@ -174,51 +175,50 @@
           <app-base-label [title]="'Registered Vendor ID with SEC'" />
           <span class="text-sm text-gray-600 ms-2">(If available)</span>
         </div>
+        <app-group-input-with-checkbox
+          [showCheckbox]="showCheckbox()"
+          [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+          (valueChanged)="upDateSelectedInputs($event, {
+              section: 'locationInformation',
+              inputKey: 'registeredVendorIDwithSEC',
+              label: 'Registered Vendor ID with SEC'
+            })"
+        >
+          <p-inputnumber
+            [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+            [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
+            [color]="selectedInputColor()"
+            [maxlength]="7"
+            [useGrouping]="false"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="0"
+            fluid
+            placeholder="Enter registered vendor ID with SEC"
+          />
+        </app-group-input-with-checkbox>
+        <app-base-error-messages
+          [control]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+          [label]="'Registered Vendor ID with SEC'"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+      <div class="flex flex-col gap-2 col-span-1">
+        <app-base-label [title]="'BENA Registered Vendor ID'" />
         <input
           type="text"
           pInputText
           fluid
-          placeholder="Enter registered vendor ID with SEC"
+          placeholder="Enter BENA registered vendor ID"
           [maxlength]="50"
-          [formControl]="getFormControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
-          [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
+          [formControl]="getValueControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
+          [appConditionalColorClass]="highlightInput('benaRegisteredVendorID')"
           [color]="selectedInputColor()"
         />
       </div>
     </div>
 
-    <div class="flex flex-col gap-4 md:flex-row">
-      <div class="flex flex-col gap-2 flex-1">
-        <div>
-          <app-base-label [title]="'BENA Registered Vendor ID'" />
-          <span class="text-sm text-gray-600 ms-2">(Required)</span>
-        </div>
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
-          (valueChanged)="upDateSelectedInputs($event, {
-            section: 'locationInformation',
-            inputKey: 'benaRegisteredVendorID',
-            label: 'BENA Registered Vendor ID'
-          })"
-        >
-          <input
-            type="text"
-            pInputText
-            fluid
-            placeholder="Enter BENA registered vendor ID"
-            [maxlength]="50"
-            [formControl]="getValueControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
-            [appConditionalColorClass]="highlightInput('benaRegisteredVendorID')"
-            [color]="selectedInputColor()"
-          />
-        </app-group-input-with-checkbox>
-        <app-base-error-messages
-          [control]="getValueControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
-          [label]="'BENA Registered Vendor ID'"
-        />
-      </div>
-    </div>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
         <div>
@@ -287,7 +287,7 @@
           <textarea
             pTextarea
             fluid
-            [maxlength]="500"
+            [maxlength]="255"
             placeholder="Enter local agent details"
             [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentDetails'])"
             [appConditionalColorClass]="highlightInput('localAgentDetails')"
@@ -298,6 +298,11 @@
           [control]="getValueControl(localAgentInformationFormGroupControls['localAgentDetails'])"
           [label]="'Local Agent Details'"
         />
+        @if (!getValueControl(localAgentInformationFormGroupControls['localAgentDetails']).disabled) {
+          <div class="text-xs text-gray-500 text-right mt-1">
+            {{ getValueControl(localAgentInformationFormGroupControls['localAgentDetails']).value?.length || 0 }} / 255
+          </div>
+        }
       </div>
 
       <div class="flex flex-col gap-4 md:flex-row">
@@ -607,9 +612,11 @@
                 [control]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
                 [label]="'Company Names'"
               />
-              <div class="text-xs text-gray-500 text-right mt-1">
-                {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
-              </div>
+              @if (!getValueControl(itemControl.get('serviceProvidedToCompanyNames')).disabled) {
+                <div class="text-xs text-gray-500 text-right mt-1">
+                  {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
+                </div>
+                }
             </div>
             }
           </td>
@@ -634,9 +641,11 @@
                 [color]="selectedInputColor()"
               ></textarea>
             </app-group-input-with-checkbox>
+            @if (!getValueControl(itemControl.get('totalBusinessDoneLast5Years')).disabled) {
             <div class="text-xs text-gray-500 text-right mt-1">
               {{ getValueControl(itemControl.get('totalBusinessDoneLast5Years')).value?.length || 0 }} / 150
             </div>
+            }
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[150px]">

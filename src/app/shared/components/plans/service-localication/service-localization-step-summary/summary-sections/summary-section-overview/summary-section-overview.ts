@@ -244,7 +244,8 @@ export class SummarySectionOverview {
     const localAgentInfo = this.localAgentInformationFormGroup();
     const contactNumberControl = localAgentInfo?.get(EMaterialsFormControls.contactNumber);
     if (contactNumberControl instanceof FormGroup) {
-      return contactNumberControl.get(EMaterialsFormControls.value)?.value;
+      const contactNumberObject = contactNumberControl.get(EMaterialsFormControls.value)?.value;
+      return contactNumberObject?.countryCode + ' ' + contactNumberObject?.phoneNumber;
     }
     return null;
   });
@@ -550,7 +551,7 @@ export class SummarySectionOverview {
     } else if (fieldKey === 'emailID') {
       return this.emailID();
     } else if (fieldKey === 'contactNumber') {
-      return this.contactNumber();
+      return this.contactNumber()?.toString().replace(' ', '');
     } else if (fieldKey === 'companyLocation') {
       return this.companyLocation();
     } else if (index !== undefined) {
@@ -596,27 +597,10 @@ export class SummarySectionOverview {
   shouldShowDiff(fieldKey: string, index?: number): boolean {
     // Only show diff in resubmit mode
     if (this.planStore.wizardMode() !== 'resubmit') return false;
-    // Only show diff if field has a comment
+    // For array items, validate index
     if (index !== undefined) {
-      // For array items, check comment with rowId
       const detailsArray = this.serviceDetailsFormArray();
       if (!detailsArray || index >= detailsArray.length) return false;
-      const serviceGroup = detailsArray.at(index) as FormGroup;
-      const rowId = serviceGroup.get('rowId')?.value;
-      if (!this.hasFieldComment(fieldKey, 'serviceDetails', rowId)) return false;
-    } else {
-      // Determine section based on fieldKey
-      let section: string | undefined;
-      if (['opportunity', 'submissionDate'].includes(fieldKey)) {
-        section = 'basicInformation';
-      } else if (['companyName', 'ceoName', 'ceoEmailID'].includes(fieldKey)) {
-        section = 'overviewCompanyInformation';
-      } else if (['globalHQLocation', 'registeredVendorIDwithSEC', 'benaRegisteredVendorID', 'doYouCurrentlyHaveLocalAgentInKSA'].includes(fieldKey)) {
-        section = 'locationInformation';
-      } else if (['localAgentDetails', 'localAgentName', 'contactPersonName', 'emailID', 'contactNumber', 'companyLocation'].includes(fieldKey)) {
-        section = 'localAgentInformation';
-      }
-      if (!this.hasFieldComment(fieldKey, section)) return false;
     }
 
     const beforeValue = this.getBeforeValue(fieldKey, index);

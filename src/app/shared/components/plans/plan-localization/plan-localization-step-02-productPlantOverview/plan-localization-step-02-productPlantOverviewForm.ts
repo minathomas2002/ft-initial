@@ -57,6 +57,9 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
 
   pageTitle = input<string>('Product & Plant Overview');
 
+  // Track user interactions with dropdowns for resubmit mode
+  private _userChangedDropdowns = new Set<string>();
+
   // Expose enum to template
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
@@ -241,6 +244,9 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
+    // Setup resubmit mode watchers for conditional fields
+    this.setupResubmitModeWatchers();
+
     // Effect to handle validation toggles
     effect(() => {
       // Check if SEC fields should be shown (radio Yes OR fields selected for comment)
@@ -265,6 +271,89 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
       const othersPercentageValue = this.othersPercentageSignal();
       this.planFormService.toggleOthersDescriptionValidation(othersPercentageValue);
     });
+  }
+
+  /**
+   * Setup watchers to track dropdown changes for resubmit mode
+   * Also handles enable/disable logic for conditional fields
+   */
+  private setupResubmitModeWatchers(): void {
+    // Watch othersPercentage changes for othersDescription
+    effect(() => {
+      const value = this.othersPercentageSignal();
+      // Mark dropdown as changed if user interacts with it
+      if (value !== null) {
+        this._userChangedDropdowns.add('othersPercentage');
+      }
+
+      // Handle resubmit mode enable/disable
+      if (this.isResubmitMode() && this.showOthersDescription()) {
+        const othersDescriptionControl = this.getValueControl(
+          this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]
+        );
+        this.updateConditionalField(
+          othersDescriptionControl,
+          true,
+          this.isFieldCorrected('othersDescription') || this._userChangedDropdowns.has('othersPercentage')
+        );
+      }
+    });
+
+    // Watch targetedCustomer changes for namesOfTargetedSuppliers and productsUtilizeTargetedProduct
+    effect(() => {
+      const value = this.targetedCustomerSignal();
+      // Mark dropdown as changed if user interacts with it
+      if (value !== null && value.length > 0) {
+        this._userChangedDropdowns.add('targetedCustomer');
+      }
+
+      // Handle resubmit mode enable/disable
+      if (this.isResubmitMode() && this.showTargetedSuppliersFields()) {
+        const namesOfTargetedSuppliersControl = this.getValueControl(
+          this.targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]
+        );
+        const productsUtilizeTargetedProductControl = this.getValueControl(
+          this.targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]
+        );
+        const canEdit = this._userChangedDropdowns.has('targetedCustomer');
+
+        this.updateConditionalField(
+          namesOfTargetedSuppliersControl,
+          true,
+          this.isFieldCorrected('namesOfTargetedSuppliers') || canEdit
+        );
+        this.updateConditionalField(
+          productsUtilizeTargetedProductControl,
+          true,
+          this.isFieldCorrected('productsUtilizeTargetedProduct') || canEdit
+        );
+      }
+    });
+  }
+
+  /**
+   * Helper method to update conditional field state
+   * @param control - The form control to update
+   * @param shouldShow - Whether the field should be visible
+   * @param canEdit - Whether the field should be editable (for resubmit mode)
+   */
+  private updateConditionalField(control: FormControl | null, shouldShow: boolean, canEdit: boolean): void {
+    if (!control) return;
+
+    if (!shouldShow) {
+      control.disable();
+    } else if (canEdit) {
+      control.enable();
+    } else {
+      control.disable();
+    }
+  }
+
+  /**
+   * Check if a specific field is in the correctedFields list
+   */
+  private isFieldCorrected(inputKey: string): boolean {
+    return this.correctedFields().some(field => field.inputKey === inputKey);
   }
 
   // Dropdown options

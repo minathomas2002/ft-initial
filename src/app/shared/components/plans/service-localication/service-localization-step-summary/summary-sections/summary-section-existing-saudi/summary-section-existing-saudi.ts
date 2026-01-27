@@ -590,9 +590,9 @@ export class SummarySectionExistingSaudi {
               return matchingService?.serviceName ?? null;
             }
           } else if (fieldKey === 'expectedLocalizationDate') {
-            if (plan.services && service.planServiceTypeId) {
-              const matchingService = plan.services.find((s) => s.id === service.planServiceTypeId);
-              return matchingService?.expectedLocalizationDate ?? null;
+            if (plan.services && service.planServiceTypeId) {          
+              const matchingService = servicesForExistingSaudi.find((s) => s.planServiceTypeId === service.planServiceTypeId);              
+              return matchingService?.localizationDate ?? null;
             }
           } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {
             return service.measuresUpSkillSaudis ?? null;
@@ -681,17 +681,21 @@ export class SummarySectionExistingSaudi {
   shouldShowDiff(fieldKey: string, section: 'saudiCompanyDetails' | 'collaborationPartnership' | 'entityLevel' | 'serviceLevel', index?: number): boolean {
     // Only show diff in resubmit mode
     if (this.planStore.wizardMode() !== 'resubmit') return false;
-    // Only show diff if field has a comment
+    // For array items, validate index
     if (index !== undefined) {
       if (section === 'saudiCompanyDetails') {
-        if (!this.hasSaudiCompanyComment(index, fieldKey)) return false;
+        const detailsArray = this.saudiCompanyDetailsFormArray();
+        if (!detailsArray || index >= detailsArray.length) return false;
       } else if (section === 'collaborationPartnership') {
-        if (!this.hasCollaborationComment(index, fieldKey)) return false;
+        const partnershipArray = this.collaborationPartnershipFormArray();
+        if (!partnershipArray || index >= partnershipArray.length) return false;
       } else if (section === 'serviceLevel') {
-        if (!this.hasServiceLevelComment(index, fieldKey)) return false;
+        const serviceArray = this.serviceLevelFormArray();
+        if (!serviceArray || index >= serviceArray.length) return false;
       }
     } else if (section === 'entityLevel') {
-      if (!this.hasEntityLevelComment(fieldKey)) return false;
+      const entityArray = this.entityLevelFormArray();
+      if (!entityArray || entityArray.length === 0) return false;
     }
 
     const beforeValue = this.getBeforeValue(fieldKey, section, index);

@@ -258,11 +258,6 @@ export class SummarySectionCoverPage {
       // For array items, check comment with rowId
       const servicesArray = this.servicesFormArray();
       if (!servicesArray || index >= servicesArray.length) return false;
-      const serviceGroup = servicesArray.at(index) as FormGroup;
-      const rowId = serviceGroup.get('rowId')?.value;
-      if (!this.hasFieldComment(fieldKey, 'services', rowId)) return false;
-    } else {
-      if (!this.hasFieldComment(fieldKey, 'companyInformation')) return false;
     }
 
     const beforeValue = this.getBeforeValue(fieldKey, index);

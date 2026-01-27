@@ -472,7 +472,7 @@ export abstract class PlanStepBaseClass {
         )
       : undefined;
     const isCorrected = !!correctedField && !this.hasFieldValueChanged(correctedField);
-    
+
     const phase = this.commentPhase();
     return (isSelected || isCorrected) && (phase === 'adding' || phase === 'editing' || phase === 'none');
   }
@@ -656,7 +656,7 @@ export abstract class PlanStepBaseClass {
    * Helper method to check if a field should be highlighted in view mode.
    * Determines if a field is part of the corrected fields list.
    */
-  isFieldCorrected(inputKey: string, section?: string): boolean {
+  isFieldShouldbeCorrected(inputKey: string, section?: string): boolean {
     if (!this.isViewMode()) return false;
 
     // Check if any comment field matches this inputKey (and section if provided)

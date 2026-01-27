@@ -73,7 +73,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
-  private readonly authStore = inject(AuthStore);
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
@@ -848,17 +847,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           submissionDateControl.setValue(new Date());
         }
         submissionDateControl.disable({ emitEvent: false });
-      }
-    }
-
-    const locationInfo = this.productPlanFormService.locationInformationFormGroup;
-    if (locationInfo) {
-      const registeredVendorIDControl = locationInfo.get(EMaterialsFormControls.registeredVendorIDwithSEC);
-      if (registeredVendorIDControl) {
-        if (!preserveValues) {
-          registeredVendorIDControl.setValue('');
-        }
-        registeredVendorIDControl.disable({ emitEvent: false });
       }
     }
   }

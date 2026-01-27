@@ -44,7 +44,6 @@
                     [isEmpty]="!company.saudiCompanyName"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'saudiCompanyName')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'saudiCompanyName')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'saudiCompanyName')"
                     [beforeValue]="getBeforeValue('saudiCompanyName', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('saudiCompanyName', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('saudiCompanyName', 'saudiCompanyDetails', rowIndex)"
@@ -56,7 +55,6 @@
                     [isEmpty]="!company.registeredVendorIDwithSEC"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'registeredVendorIDwithSEC')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'registeredVendorIDwithSEC')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'registeredVendorIDwithSEC')"
                     [beforeValue]="getBeforeValue('registeredVendorIDwithSEC', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('registeredVendorIDwithSEC', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('registeredVendorIDwithSEC', 'saudiCompanyDetails', rowIndex)"
@@ -68,7 +66,6 @@
                     [isEmpty]="!company.benaRegisteredVendorID"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'benaRegisteredVendorID')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'benaRegisteredVendorID')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'benaRegisteredVendorID')"
                     [beforeValue]="getBeforeValue('benaRegisteredVendorID', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('benaRegisteredVendorID', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('benaRegisteredVendorID', 'saudiCompanyDetails', rowIndex)"
@@ -80,7 +77,6 @@
                     [isEmpty]="!formatCompanyType(company.companyType)"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'companyType')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'companyType')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'companyType')"
                     [beforeValue]="getBeforeValue('companyType', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('companyType', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('companyType', 'saudiCompanyDetails', rowIndex)"
@@ -92,7 +88,6 @@
                     [isEmpty]="!formatQualificationStatus(company.qualificationStatus)"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'qualificationStatus')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'qualificationStatus')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'qualificationStatus')"
                     [beforeValue]="getBeforeValue('qualificationStatus', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('qualificationStatus', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('qualificationStatus', 'saudiCompanyDetails', rowIndex)"
@@ -104,7 +99,6 @@
                     [isEmpty]="!company.products"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'products')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'products')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'products')"
                     [beforeValue]="getBeforeValue('products', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('products', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('products', 'saudiCompanyDetails', rowIndex)"
@@ -116,7 +110,6 @@
                     [isEmpty]="!company.companyOverview"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'companyOverview')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'companyOverview')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'companyOverview')"
                     [beforeValue]="getBeforeValue('companyOverview', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('companyOverview', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('companyOverview', 'saudiCompanyDetails', rowIndex)"
@@ -128,7 +121,6 @@
                     [isEmpty]="!company.keyProjectsExecutedByContractorForSEC"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'keyProjectsExecutedByContractorForSEC')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'keyProjectsExecutedByContractorForSEC')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'keyProjectsExecutedByContractorForSEC')"
                     [beforeValue]="getBeforeValue('keyProjectsExecutedByContractorForSEC', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('keyProjectsExecutedByContractorForSEC', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('keyProjectsExecutedByContractorForSEC', 'saudiCompanyDetails', rowIndex)"
@@ -140,7 +132,6 @@
                     [isEmpty]="!company.companyOverviewKeyProjectDetails"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'companyOverviewKeyProjectDetails')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'companyOverviewKeyProjectDetails')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'companyOverviewKeyProjectDetails')"
                     [beforeValue]="getBeforeValue('companyOverviewKeyProjectDetails', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('companyOverviewKeyProjectDetails', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('companyOverviewKeyProjectDetails', 'saudiCompanyDetails', rowIndex)"
@@ -152,7 +143,6 @@
                     [isEmpty]="!company.companyOverviewOther"
                     [hasError]="hasSaudiCompanyFieldError(rowIndex, 'companyOverviewOther')"
                     [hasComment]="hasSaudiCompanyComment(rowIndex, 'companyOverviewOther')"
-                    [isResolved]="isSaudiCompanyResolved(rowIndex, 'companyOverviewOther')"
                     [beforeValue]="getBeforeValue('companyOverviewOther', 'saudiCompanyDetails', rowIndex)"
                     [afterValue]="getAfterValue('companyOverviewOther', 'saudiCompanyDetails', rowIndex)"
                     [showDiff]="shouldShowDiff('companyOverviewOther', 'saudiCompanyDetails', rowIndex)"
@@ -200,19 +190,17 @@
                     [isEmpty]="!partner.agreementType"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'agreementType')"
                     [hasComment]="hasCollaborationComment(rowIndex, 'agreementType')"
-                    [isResolved]="isCollaborationResolved(rowIndex, 'agreementType')"
                     [beforeValue]="getBeforeValue('agreementType', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('agreementType', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('agreementType', 'collaborationPartnership', rowIndex)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[200px]">
                   <app-summary-table-cell
                     [value]="partner.agreementOtherDetails"
                     [isEmpty]="!partner.agreementOtherDetails"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'agreementOtherDetails')"
                     [hasComment]="hasCollaborationComment(rowIndex, 'agreementOtherDetails')"
-                    [isResolved]="isCollaborationResolved(rowIndex, 'agreementOtherDetails')"
                     [beforeValue]="getBeforeValue('agreementOtherDetails', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('agreementOtherDetails', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('agreementOtherDetails', 'collaborationPartnership', rowIndex)"
@@ -224,7 +212,6 @@
                     [isEmpty]="!partner.agreementSigningDate"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'agreementSigningDate')"
                     [hasComment]="hasCollaborationComment(rowIndex, 'agreementSigningDate')"
-                    [isResolved]="isCollaborationResolved(rowIndex, 'agreementSigningDate')"
                     [beforeValue]="getBeforeValue('agreementSigningDate', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('agreementSigningDate', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('agreementSigningDate', 'collaborationPartnership', rowIndex)"
@@ -235,32 +222,29 @@
                     [value]="partner.supervisionOversightEntity"
                     [isEmpty]="!partner.supervisionOversightEntity"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'supervisionOversightEntity')"
-                    [hasComment]="hasCollaborationComment(rowIndex, 'supervisionOversightEntity')"
-                    [isResolved]="isCollaborationResolved(rowIndex, 'supervisionOversightEntity')"
+                    [hasComment]="hasCollaborationComment(rowIndex, 'supervisionOversightEntity')"        
                     [beforeValue]="getBeforeValue('supervisionOversightEntity', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('supervisionOversightEntity', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('supervisionOversightEntity', 'collaborationPartnership', rowIndex)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[500px]">
                   <app-summary-table-cell
                     [value]="partner.whyChoseThisCompany"
                     [isEmpty]="!partner.whyChoseThisCompany"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'whyChoseThisCompany')"
                     [hasComment]="hasCollaborationComment(rowIndex, 'whyChoseThisCompany')"
-                    [isResolved]="isCollaborationResolved(rowIndex, 'whyChoseThisCompany')"
                     [beforeValue]="getBeforeValue('whyChoseThisCompany', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('whyChoseThisCompany', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('whyChoseThisCompany', 'collaborationPartnership', rowIndex)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[500px]">
                   <app-summary-table-cell
                     [value]="partner.summaryOfKeyAgreementClauses"
                     [isEmpty]="!partner.summaryOfKeyAgreementClauses"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'summaryOfKeyAgreementClauses')"
                     [hasComment]="hasCollaborationComment(rowIndex, 'summaryOfKeyAgreementClauses')"
-                    [isResolved]="isCollaborationResolved(rowIndex, 'summaryOfKeyAgreementClauses')"
                     [beforeValue]="getBeforeValue('summaryOfKeyAgreementClauses', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('summaryOfKeyAgreementClauses', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('summaryOfKeyAgreementClauses', 'collaborationPartnership', rowIndex)"
@@ -272,7 +256,6 @@
                     [isEmpty]="partner.provideAgreementCopy === null || partner.provideAgreementCopy === undefined"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'provideAgreementCopy')"
                     [hasComment]="hasCollaborationComment(rowIndex, 'provideAgreementCopy')"
-                    [isResolved]="isCollaborationResolved(rowIndex, 'provideAgreementCopy')"
                     [beforeValue]="getBeforeValue('provideAgreementCopy', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('provideAgreementCopy', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('provideAgreementCopy', 'collaborationPartnership', rowIndex)"
@@ -327,7 +310,6 @@
                     [isEmpty]="!headcount.value && headcount.value !== 0"
                     [hasError]="hasEntityFieldError(headcount.controlName)"
                     [hasComment]="hasEntityLevelComment(headcount.controlName)"
-                    [isResolved]="isEntityLevelResolved(headcount.controlName)"
                     [beforeValue]="getBeforeValue(headcount.controlName, 'entityLevel')"
                     [afterValue]="getAfterValue(headcount.controlName, 'entityLevel')"
                     [showDiff]="shouldShowDiff(headcount.controlName, 'entityLevel')"
@@ -351,7 +333,7 @@
           <p-table
             [value]="serviceLevel()"
             [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
-            styleClass="w-full [&_th]:min-w-[150px] [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
+            styleClass="w-full [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
             [scrollable]="true"
           >
             <ng-template pTemplate="header">
@@ -404,7 +386,6 @@
                     [isEmpty]="!service.serviceName"
                     [hasError]="hasServiceLevelFieldError(service.index, 'serviceName')"
                     [hasComment]="hasServiceLevelComment(service.index, 'serviceName')"
-                    [isResolved]="isServiceLevelResolved(service.index, 'serviceName')"
                     [beforeValue]="getBeforeValue('serviceName', 'serviceLevel', service.index)"
                     [afterValue]="getAfterValue('serviceName', 'serviceLevel', service.index)"
                     [showDiff]="shouldShowDiff('serviceName', 'serviceLevel', service.index)"
@@ -416,7 +397,6 @@
                     [isEmpty]="!service.expectedLocalizationDate"
                     [hasError]="hasServiceLevelFieldError(service.index, 'expectedLocalizationDate')"
                     [hasComment]="hasServiceLevelComment(service.index, 'expectedLocalizationDate')"
-                    [isResolved]="isServiceLevelResolved(service.index, 'expectedLocalizationDate')"
                     [beforeValue]="getBeforeValue('expectedLocalizationDate', 'serviceLevel', service.index)"
                     [afterValue]="getAfterValue('expectedLocalizationDate', 'serviceLevel', service.index)"
                     [showDiff]="shouldShowDiff('expectedLocalizationDate', 'serviceLevel', service.index)"
@@ -428,8 +408,7 @@
                     [value]="yearCell.value"
                     [isEmpty]="!yearCell.value && yearCell.value !== 0"
                     [hasError]="hasServiceLevelFieldError(service.index, yearCell.controlName)"
-                    [hasComment]="hasServiceLevelComment(service.index, yearCell.controlName)"
-                    [isResolved]="isServiceLevelResolved(service.index, yearCell.controlName)"
+                    [hasComment]="hasServiceLevelComment(service.index, yearCell.controlName)"      
                     [beforeValue]="getBeforeValue(yearCell.controlName, 'serviceLevel', service.index)"
                     [afterValue]="getAfterValue(yearCell.controlName, 'serviceLevel', service.index)"
                     [showDiff]="shouldShowDiff(yearCell.controlName, 'serviceLevel', service.index)"
@@ -443,32 +422,29 @@
                     [isEmpty]="!year.value && year.value !== 0"
                     [hasError]="hasServiceLevelFieldError(service.index, year.controlName)"
                     [hasComment]="hasServiceLevelComment(service.index, year.controlName)"
-                    [isResolved]="isServiceLevelResolved(service.index, year.controlName)"
                     [beforeValue]="getBeforeValue(year.controlName, 'serviceLevel', service.index)"
                     [afterValue]="getAfterValue(year.controlName, 'serviceLevel', service.index)"
                     [showDiff]="shouldShowDiff(year.controlName, 'serviceLevel', service.index)"
                   />
                 </td>
                 }
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[300px]">
                   <app-summary-table-cell
                     [value]="service.keyMeasuresToUpskillSaudis"
                     [isEmpty]="!service.keyMeasuresToUpskillSaudis"
                     [hasError]="hasServiceLevelFieldError(service.index, 'keyMeasuresToUpskillSaudis')"
                     [hasComment]="hasServiceLevelComment(service.index, 'keyMeasuresToUpskillSaudis')"
-                    [isResolved]="isServiceLevelResolved(service.index, 'keyMeasuresToUpskillSaudis')"
                     [beforeValue]="getBeforeValue('keyMeasuresToUpskillSaudis', 'serviceLevel', service.index)"
                     [afterValue]="getAfterValue('keyMeasuresToUpskillSaudis', 'serviceLevel', service.index)"
                     [showDiff]="shouldShowDiff('keyMeasuresToUpskillSaudis', 'serviceLevel', service.index)"
                   />
                 </td>
-                <td class="border-t border-gray-300 p-3">
+                <td class="border-t border-gray-300 p-3 min-w-[300px]">
                   <app-summary-table-cell
                     [value]="service.mentionSupportRequiredFromSEC"
                     [isEmpty]="!service.mentionSupportRequiredFromSEC"
                     [hasError]="hasServiceLevelFieldError(service.index, 'mentionSupportRequiredFromSEC')"
-                    [hasComment]="hasServiceLevelComment(service.index, 'mentionSupportRequiredFromSEC')"
-                    [isResolved]="isServiceLevelResolved(service.index, 'mentionSupportRequiredFromSEC')"
+                    [hasComment]="hasServiceLevelComment(service.index, 'mentionSupportRequiredFromSEC')" 
                     [beforeValue]="getBeforeValue('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"
                     [afterValue]="getAfterValue('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"
                     [showDiff]="shouldShowDiff('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"

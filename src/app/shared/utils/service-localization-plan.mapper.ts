@@ -421,7 +421,7 @@ export function mapServicePlanResponseToForm(
 
   const locationInfo = formService.locationInformationFormGroup;
   setNestedValue(locationInfo, EMaterialsFormControls.globalHQLocation, companySection?.globalHQLocation ?? '');
-  setDirectValue(locationInfo, EMaterialsFormControls.registeredVendorIDwithSEC, companySection?.secVendorId ?? '');
+  setNestedValue(locationInfo, EMaterialsFormControls.registeredVendorIDwithSEC, companySection?.secVendorId ?? '');
   setNestedValue(locationInfo, EMaterialsFormControls.benaRegisteredVendorID, companySection?.benaVendorId ?? '');
   setDirectValue(locationInfo, EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA, companySection?.hasLocalAgent ?? false);
   formService.toggleLocalAgentInformValidation(companySection?.hasLocalAgent === true);
@@ -482,7 +482,7 @@ export function mapServicePlanResponseToForm(
     row.get(EMaterialsFormControls.rowId)?.setValue(co.id ?? null, { emitEvent: false });
     // Set values in the same order as form builder creates controls to preserve key order
     setNestedValue(row, EMaterialsFormControls.saudiCompanyName, co.companyName ?? '');
-    setDirectValue(row, EMaterialsFormControls.registeredVendorIDwithSEC, co.vendorIdWithSEC ?? '');
+    setNestedValue(row, EMaterialsFormControls.registeredVendorIDwithSEC, co.vendorIdWithSEC ? co.vendorIdWithSEC : null);
     setNestedValue(row, EMaterialsFormControls.benaRegisteredVendorID, co.benaRegisterVendorId ?? '');
     setNestedValue(row, EMaterialsFormControls.companyType, (co.companyType ?? []).map((x) => String(x)));
     setNestedValue(row, EMaterialsFormControls.qualificationStatus, co.qualificationStatus != null ? String(co.qualificationStatus) : null);

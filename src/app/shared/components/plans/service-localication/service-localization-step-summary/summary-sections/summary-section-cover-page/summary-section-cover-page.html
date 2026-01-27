@@ -16,9 +16,8 @@
           [value]="planTitle()"
           [hasError]="hasFieldError('coverPageCompanyInformationFormGroup.planTitle.value')"
           [hasComment]="planTitleHasComment()"
-          [isResolved]="planTitleIsResolved()"
           [isEmpty]="!planTitle()"
-          [beforeValue]="planTitleHasComment() ? getBeforeValue('planTitle') : null"
+          [beforeValue]="getBeforeValue('planTitle')"
           [afterValue]="planTitle()"
           [showDiff]="shouldShowDiff('planTitle')"
         />
@@ -27,9 +26,8 @@
           [value]="companyName()"
           [hasError]="hasFieldError('coverPageCompanyInformationFormGroup.companyName.value')"
           [hasComment]="companyNameHasComment()"
-          [isResolved]="companyNameIsResolved()"
           [isEmpty]="!companyName()"
-          [beforeValue]="companyNameHasComment() ? getBeforeValue('companyName') : null"
+          [beforeValue]="getBeforeValue('companyName')"
           [afterValue]="companyName()"
           [showDiff]="shouldShowDiff('companyName')"
         />
@@ -63,8 +61,7 @@
                     [isEmpty]="!service.serviceName"
                     [hasError]="hasServiceItemFieldError(rowIndex, 'serviceName')"
                     [hasComment]="hasServiceItemComment(rowIndex)"
-                    [isResolved]="isServiceItemResolved(rowIndex)"
-                    [beforeValue]="hasServiceItemComment(rowIndex) ? getBeforeValue('serviceName', rowIndex) : null"
+                    [beforeValue]="getBeforeValue('serviceName', rowIndex)"
                     [afterValue]="getAfterValue('serviceName', rowIndex)"
                     [showDiff]="shouldShowDiff('serviceName', rowIndex)"
                   />

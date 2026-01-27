@@ -39,10 +39,13 @@ export class ServiceLocalizationStepOverviewFormBuilder {
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
       }),
-      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.control({ value: '', disabled: true }),
+      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control('', Validators.maxLength(7)),
+      }),
       [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required]), // Required, disabled, auto-filled
+        [EMaterialsFormControls.value]: this.fb.control({ value: '', disabled: true }),
       }),
       [EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]: this.fb.control(null, [Validators.required]),
     });
@@ -52,7 +55,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.localAgentDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''), // Text area, conditional
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Text area, conditional
       }),
       [EMaterialsFormControls.localAgentName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -86,7 +89,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       [EMaterialsFormControls.serviceId]: this.fb.control(''), // Service GUID from cover page
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control({value: '', disabled: true}, [Validators.required, Validators.maxLength(150)]),
+        [EMaterialsFormControls.value]: this.fb.control({ value: '', disabled: true }, [Validators.required, Validators.maxLength(150)]),
       }),
       [EMaterialsFormControls.serviceType]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -213,7 +216,8 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       const localAgentDetailsValueControl = (localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails) as FormGroup)?.get(EMaterialsFormControls.value);
       if (localAgentDetailsValueControl) {
         localAgentDetailsValueControl.reset();
-        localAgentDetailsValueControl.clearValidators();
+        // Keep max length constraint even when section is not required
+        localAgentDetailsValueControl.setValidators([Validators.maxLength(255)]);
         localAgentDetailsValueControl.updateValueAndValidity();
       }
 
