@@ -25,6 +25,7 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -46,7 +47,8 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     FormsModule,
     TextareaModule,
     GeneralConfirmationDialogComponent,
-    CommentInputComponent
+    CommentInputComponent,
+    InputNumberModule,
   ],
   templateUrl: './plan-localization-step-01-overviewCompanyInformationForm.html',
   styleUrl: './plan-localization-step-01-overviewCompanyInformationForm.scss',

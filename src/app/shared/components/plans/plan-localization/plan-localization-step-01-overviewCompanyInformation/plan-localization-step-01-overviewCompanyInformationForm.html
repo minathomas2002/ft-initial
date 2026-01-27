@@ -222,9 +222,13 @@
             label: 'Registered Vendor ID with SEC'
           })"
         >
-          <input
+          <p-inputnumber
+            [useGrouping]="false"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="0"
+            [allowEmpty]="true"
+            mode="decimal"
             type="text"
-            pInputText
             fluid
             placeholder="Enter registered vendor ID with SEC"
             [maxlength]="7"
@@ -233,6 +237,7 @@
             [color]="selectedInputColor()"
           />
         </app-group-input-with-checkbox>
+
         <app-base-error-messages
           [control]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
           [label]="'Registered Vendor ID with SEC'"
