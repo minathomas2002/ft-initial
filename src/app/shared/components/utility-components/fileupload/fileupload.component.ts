@@ -22,6 +22,7 @@ import { TranslatePipe } from "../../../pipes";
 export class FileuploadComponent {
   isViewMode = input<boolean>(false);
   disabled = input<boolean>(false);
+  showDownloadButton = input<boolean>(false);
   maxFileSize = input<number>(1024 * 1024 * 10); // 10MB default
   acceptedFileTypes = input<string>("*/*");
   files = model<File[]>([]);
@@ -272,5 +273,11 @@ export class FileuploadComponent {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+  }
+
+  downloadFile(file: File): void {
+    // TODO: Implement download logic
+    console.log('file : ',file);
+    
   }
 }
