@@ -90,11 +90,11 @@ export class OpportunityFormService {
         opportunityType: [null, Validators.required],
         shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
         opportunityCategory: ['', Validators.required],
-        spendSAR: ['', [Validators.required, Validators.max(10), Validators.min(0.001)]],
-        minQuantity: ['', [Validators.required, Validators.min(0)]],
-        maxQuantity: ['', [Validators.required, Validators.min(0)]],
-        localSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(1000000000)]],
-        globalSuppliers: ['', [Validators.required, Validators.min(1), Validators.max(1000000000)]],
+        spendSAR: ['', [Validators.required, Validators.max(10)]],
+        minQuantity: ['', [Validators.required]],
+        maxQuantity: ['', [Validators.required]],
+        localSuppliers: ['', [Validators.required, Validators.max(1000000000)]],
+        globalSuppliers: ['', [Validators.required, Validators.max(1000000000)]],
         startDate: [null, [Validators.required, this.startDateRestrictionValidator]],
         endDate: [null, [Validators.required, this.endDateAfterStartDateValidator, this.endDateRestrictionValidator]],
         image: [null, Validators.required],
@@ -471,11 +471,11 @@ export class OpportunityFormService {
     infoGroup.get('opportunityType')?.setValidators([Validators.required]);
     infoGroup.get('shortDescription')?.setValidators([Validators.required, Validators.maxLength(255)]);
     infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
-    infoGroup.get('spendSAR')?.setValidators([Validators.required, Validators.max(10), Validators.min(0.001)]);
-    infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.min(0)]);
-    infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.min(0)]);
-    infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(1000000000)]);
-    infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.min(1), Validators.max(1000000000)]);
+    infoGroup.get('spendSAR')?.setValidators([Validators.required, Validators.max(10)]);
+    infoGroup.get('minQuantity')?.setValidators([Validators.required]);
+    infoGroup.get('maxQuantity')?.setValidators([Validators.required]);
+    infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.max(1000000000)]);
+    infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.max(1000000000)]);
     infoGroup.get('startDate')?.setValidators([Validators.required, this.startDateRestrictionValidator]);
     infoGroup.get('endDate')?.setValidators([Validators.required, this.endDateAfterStartDateValidator, this.endDateRestrictionValidator]);
     infoGroup.get('image')?.setValidators([Validators.required]);
