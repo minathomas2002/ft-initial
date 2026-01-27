@@ -82,16 +82,18 @@
           {{ comment.pageTitleForTL }}
         </div>
 
-        <div class="mt-1">
-          <label class="block text-sm text-[#414651] font-medium mb-1">Comment</label>
-          <textarea
-            pTextarea
-            [value]="comment.comment"
-            disabled
-            rows="3"
-            fluid
-          ></textarea>
-        </div>
+        @if (comment.comment) {
+          <div class="mt-1">
+            <label class="block text-sm text-[#414651] font-medium mb-1">Comment</label>
+            <textarea
+              pTextarea
+              [value]="comment.comment"
+              disabled
+              rows="3"
+              fluid
+            ></textarea>
+          </div>
+        }
 
         @if (comment.fields?.length > 0) {
         <div class="mt-2 flex gap-2 flex-wrap">
