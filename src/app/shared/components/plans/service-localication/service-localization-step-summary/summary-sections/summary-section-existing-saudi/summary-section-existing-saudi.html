@@ -515,6 +515,16 @@
             </div>
           </div>
         </div>
+        <div class="flex items-center gap-3 flex-1 min-w-0">
+          <button
+          type="button"
+          class="p-2 rounded-md hover:bg-gray-100 transition-colors flex-shrink-0"
+          (click)="downloadFile(file)"
+          [attr.aria-label]="'Download ' + file.name"
+        >
+          <i class="icon-save text-gray-600"></i>
+          </button>
+        </div>
         }
       </div>
       } @else {

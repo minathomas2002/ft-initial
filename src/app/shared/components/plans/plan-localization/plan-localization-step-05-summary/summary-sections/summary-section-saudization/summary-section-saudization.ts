@@ -306,4 +306,9 @@ export class SummarySectionSaudization {
       },
     ];
   });
+
+  downloadFile(file: File): void {
+    // TODO: Implement download logic
+    console.log('file : ',file);
+  }
 }

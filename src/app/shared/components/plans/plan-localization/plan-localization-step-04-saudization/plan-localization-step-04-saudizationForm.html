@@ -34,6 +34,7 @@
       <app-fileupload
         [isViewMode]="isViewMode() && !isResubmitMode()"
         [disabled]="isFileUploadDisabled()"
+        [showDownloadButton]="((isViewMode() || isResubmitMode() || isReviewMode()) && isFileUploadDisabled())"
         [acceptedFileTypes]="'.pdf, .png, .jpg, .jpeg, .zip, .rar'"
         [(files)]="files"
         class="w-full"

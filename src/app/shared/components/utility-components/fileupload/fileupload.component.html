@@ -80,15 +80,29 @@
               </span>
               }
             </div>
-            @if(!isDisabled()){
-            <p-button
-              icon="icon-x-close"
-              (onClick)="removeUploadedFile(i)"
-              [outlined]="true"
-              [rounded]="true"
-              severity="danger"
-            />
-            }
+            <div class="flex gap-2 items-center">
+              @if(showDownloadButton()){
+              <button
+                type="button"
+                class="p-2 rounded-md hover:bg-gray-100 transition-colors flex-shrink-0"
+                (click)="downloadFile(file)"
+                [attr.aria-label]="'Download ' + file.name"
+                pTooltip="Download"
+                tooltipPosition="top"
+              >
+                <i class="icon-save text-gray-600"></i>
+              </button>
+              }
+              @if(!isDisabled()){
+              <p-button
+                icon="icon-x-close"
+                (onClick)="removeUploadedFile(i)"
+                [outlined]="true"
+                [rounded]="true"
+                severity="danger"
+              />
+              }
+            </div>
           </div>
           }
         </div>
