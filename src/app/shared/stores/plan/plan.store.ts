@@ -74,9 +74,9 @@ const initialState: {
     },
   ],
   productManufacturingExperienceOptions: [
-    { id: EExperienceRange.Years_5.toString(), name: '5 Years or less' },
-    { id: EExperienceRange.Years_5_10.toString(), name: '5 - 10 Years' },
-    { id: EExperienceRange.Years_10.toString(), name: '10 Years or more' }
+    { id: EExperienceRange.Years_5.toString(), name: 'Less than 5 years' },
+    { id: EExperienceRange.Years_5_10.toString(), name: '5 to 10 years' },
+    { id: EExperienceRange.Years_10.toString(), name: 'More than 10 years' }
   ],
   inHouseProcuredOptions: [
     { id: EInHouseProcuredType.InHouse.toString(), name: 'In-house' },
