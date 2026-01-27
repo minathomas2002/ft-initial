@@ -605,9 +605,11 @@
                 [control]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
                 [label]="'Company Names'"
               />
-              <div class="text-xs text-gray-500 text-right mt-1">
-                {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
-              </div>
+              @if (!getValueControl(itemControl.get('serviceProvidedToCompanyNames')).disabled) {
+                <div class="text-xs text-gray-500 text-right mt-1">
+                  {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
+                </div>
+                }
             </div>
             }
           </td>
