@@ -299,9 +299,9 @@
           [label]="'Local Agent Details'"
         />
         @if (!getValueControl(localAgentInformationFormGroupControls['localAgentDetails']).disabled) {
-          <div class="text-xs text-gray-500 text-right mt-1">
-            {{ getValueControl(localAgentInformationFormGroupControls['localAgentDetails']).value?.length || 0 }} / 255
-          </div>
+        <div class="text-xs text-gray-500 text-right mt-1">
+          {{ getValueControl(localAgentInformationFormGroupControls['localAgentDetails']).value?.length || 0 }} / 255
+        </div>
         }
       </div>
 
@@ -613,10 +613,10 @@
                 [label]="'Company Names'"
               />
               @if (!getValueControl(itemControl.get('serviceProvidedToCompanyNames')).disabled) {
-                <div class="text-xs text-gray-500 text-right mt-1">
-                  {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
-                </div>
-                }
+              <div class="text-xs text-gray-500 text-right mt-1">
+                {{ getValueControl(itemControl.get('serviceProvidedToCompanyNames')).value?.length || 0 }} / 255
+              </div>
+              }
             </div>
             }
           </td>
@@ -698,27 +698,17 @@
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[250px]">
-            <app-group-input-with-checkbox
-              [hasCommentControl]="getHasCommentControl(itemControl.get('serviceLocalizationMethodology'))"
-              [showCheckbox]="showCheckbox()"
-              (valueChanged)="upDateSelectedInputs($event, {
-                    section: 'serviceDetails',
-                    inputKey: 'serviceLocalizationMethodology_' + index,
-                    label: 'Service Localization Methodology'
-                  }, itemControl.get('rowId')?.value)"
-            >
-              <p-select
-                [options]="localizationMethodologyOptions()"
-                optionLabel="name"
-                optionValue="id"
-                [formControl]="getValueControl(itemControl.get('serviceLocalizationMethodology'))"
-                placeholder="Select"
-                fluid
-                [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('serviceLocalizationMethodology_' + index, itemControl.get('rowId')?.value)"
-                [color]="selectedInputColor()"
-              />
-            </app-group-input-with-checkbox>
+            <p-select
+              [options]="localizationMethodologyOptions()"
+              optionLabel="name"
+              optionValue="id"
+              [formControl]="getValueControl(itemControl.get('serviceLocalizationMethodology'))"
+              placeholder="Select"
+              fluid
+              [appendTo]="'body'"
+              [appConditionalColorClass]="highlightInput('serviceLocalizationMethodology_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
+            />
           </td>
         </ng-template>
       </app-form-array-input>

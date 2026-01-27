@@ -15,7 +15,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TColors } from 'src/app/shared/interfaces';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { FormsModule } from '@angular/forms';
@@ -73,6 +74,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   correctedFields = input<IFieldInformation[]>([]);
   isViewMode = input<boolean>(false);
   showCommentState = input<boolean>(false);
+  originalPlanResponse = input<IProductPlanResponse | null>(null);
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -359,6 +361,10 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   // Dropdown options
   targetedCustomerOptions = this.planStore.targetedCustomerOptions;
   productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptions;
+
+  getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
+    return getFieldValueFromProductPlanResponse(field, this.originalPlanResponse());
+  }
 
   // Implement abstract method from base class to get form control for a field
   getControlForField(field: IFieldInformation): FormControl<any> | null {

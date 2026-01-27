@@ -6,7 +6,8 @@ import { SaudizationMatrixComponent } from './saudization-matrix/saudization-mat
 import { BaseErrorMessages } from '../../../base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { FileuploadComponent } from '../../../utility-components/fileupload/fileupload.component';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TColors } from 'src/app/shared/interfaces';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { FormsModule } from '@angular/forms';
@@ -69,6 +70,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   correctedFieldIds = input<string[]>([]);
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
+  originalPlanResponse = input<IProductPlanResponse | null>(null);
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -274,6 +276,10 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   // Expose highlightInput as public method
   override highlightInput(inputKey: string, rowId?: string): boolean {
     return super.highlightInput(inputKey, rowId);
+  }
+
+  getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
+    return getFieldValueFromProductPlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field (handles year-based rows)
