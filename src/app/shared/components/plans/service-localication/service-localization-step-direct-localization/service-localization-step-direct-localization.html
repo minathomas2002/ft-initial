@@ -108,9 +108,6 @@
                 [appConditionalColorClass]="highlightInput('localizationApproachOtherDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
-              <div class="text-xs text-gray-500 text-right mt-1">
-                {{ getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails)).value?.length || 0 }} / 250
-              </div>
             </app-group-input-with-checkbox>
             }
           </div>
@@ -236,9 +233,11 @@
               [appConditionalColorClass]="highlightInput('supervisionOversightByGovernmentEntity' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity)).disabled) {
             <div class="text-xs text-gray-500 text-right mt-1">
               {{ getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity)).value?.length || 0 }} / 255
             </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity))"
@@ -290,9 +289,11 @@
                 [appConditionalColorClass]="highlightInput('proprietaryToolsSystemsDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
+              @if (!getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails)).disabled) {
               <div class="text-xs text-gray-500 text-right mt-1">
                 {{ getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails)).value?.length || 0 }} / 255
               </div>
+              }
             </app-group-input-with-checkbox>
             }
           </div>
@@ -576,9 +577,11 @@
                 [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
+              @if (!getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).disabled) {
               <div class="text-xs text-gray-500 text-right mt-1">
                 {{ getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).value?.length || 0 }} / 500
-              </div>
+                </div>
+                }
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
