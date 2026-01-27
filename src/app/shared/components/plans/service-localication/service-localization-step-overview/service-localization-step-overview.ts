@@ -19,9 +19,8 @@ import { FormArrayInput } from 'src/app/shared/components/utility-components/for
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
-import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
@@ -255,12 +254,12 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
             // Preserve expectedLocalizationDate value before toggling validation
             // (toggle may reset it if serviceTargetedForLocalization is not "Yes")
             const expectedLocalizationDateControl = ctrl.get(EMaterialsFormControls.expectedLocalizationDate);
-            const expectedLocalizationDateValue = expectedLocalizationDateControl 
-              ? this.getValueControl(expectedLocalizationDateControl)?.value ?? null 
+            const expectedLocalizationDateValue = expectedLocalizationDateControl
+              ? this.getValueControl(expectedLocalizationDateControl)?.value ?? null
               : null;
-            
+
             service.toggleExpectedLocalizationDateValidation(val, idx);
-            
+
             // Restore the value if it was cleared by the toggle
             if (expectedLocalizationDateValue && expectedLocalizationDateControl) {
               const valueControl = this.getValueControl(expectedLocalizationDateControl);
