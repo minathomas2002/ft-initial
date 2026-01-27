@@ -285,7 +285,7 @@
           <textarea
             pTextarea
             fluid
-            [maxlength]="500"
+            [maxlength]="255"
             placeholder="Enter local agent details"
             [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentDetails'])"
             [appConditionalColorClass]="highlightInput('localAgentDetails')"
@@ -296,6 +296,11 @@
           [control]="getValueControl(localAgentInformationFormGroupControls['localAgentDetails'])"
           [label]="'Local Agent Details'"
         />
+        @if (!getValueControl(localAgentInformationFormGroupControls['localAgentDetails']).disabled) {
+          <div class="text-xs text-gray-500 text-right mt-1">
+            {{ getValueControl(localAgentInformationFormGroupControls['localAgentDetails']).value?.length || 0 }} / 255
+          </div>
+        }
       </div>
 
       <div class="flex flex-col gap-4 md:flex-row">

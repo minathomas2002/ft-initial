@@ -55,7 +55,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.localAgentDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''), // Text area, conditional
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Text area, conditional
       }),
       [EMaterialsFormControls.localAgentName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -216,7 +216,8 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       const localAgentDetailsValueControl = (localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails) as FormGroup)?.get(EMaterialsFormControls.value);
       if (localAgentDetailsValueControl) {
         localAgentDetailsValueControl.reset();
-        localAgentDetailsValueControl.clearValidators();
+        // Keep max length constraint even when section is not required
+        localAgentDetailsValueControl.setValidators([Validators.maxLength(255)]);
         localAgentDetailsValueControl.updateValueAndValidity();
       }
 
