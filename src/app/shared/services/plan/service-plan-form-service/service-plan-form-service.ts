@@ -90,6 +90,86 @@ export class ServicePlanFormService {
 
     // Ensure BENA Vendor ID is initialized/locked for initial rows.
     this.ensureExistingSaudiBenaVendorIds();
+
+    // Keep Step 3 registeredVendorIDwithSEC locked and synced from Step 2 location information.
+    this.initExistingSaudiRegisteredVendorIdWithSecSync();
+  }
+
+  private initExistingSaudiRegisteredVendorIdWithSecSync(): void {
+    const sourceControl = this.getOverviewRegisteredVendorIdWithSecValueControl();
+    if (!sourceControl) return;
+
+    // Initial sync (covers edit/view prefills as well).
+    this.syncAndLockExistingSaudiRegisteredVendorIdWithSec(sourceControl.value);
+
+    // React to overview changes.
+    sourceControl.valueChanges
+      .pipe(distinctUntilChanged(), takeUntilDestroyed(this._destroyRef))
+      .subscribe((value) => {
+        this.syncAndLockExistingSaudiRegisteredVendorIdWithSec(value);
+      });
+
+    // Ensure newly added Saudi company rows also get the synced value.
+    const saudiCompanyDetailsArray = this.saudiCompanyDetailsFormGroup;
+    if (!saudiCompanyDetailsArray) return;
+
+    let previousLength = saudiCompanyDetailsArray.length;
+    saudiCompanyDetailsArray.valueChanges
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        const currentLength = saudiCompanyDetailsArray.length;
+        if (currentLength > previousLength) {
+          for (let i = previousLength; i < currentLength; i++) {
+            const itemFormGroup = saudiCompanyDetailsArray.at(i) as FormGroup;
+            this.applyRegisteredVendorIdWithSecToExistingSaudiRow(itemFormGroup, sourceControl.value);
+          }
+        }
+        previousLength = currentLength;
+      });
+  }
+
+  private getOverviewRegisteredVendorIdWithSecValueControl() {
+    const locationInfo = this.locationInformationFormGroup;
+    if (!locationInfo) return null;
+
+    return locationInfo.get(
+      `${EMaterialsFormControls.registeredVendorIDwithSEC}.${EMaterialsFormControls.value}`
+    ) as FormControl<any> | null;
+  }
+
+  private syncAndLockExistingSaudiRegisteredVendorIdWithSec(value: number): void {
+    const array = this.saudiCompanyDetailsFormGroup;
+    if (!array) return;
+
+    array.controls.forEach((ctrl) => {
+      if (ctrl instanceof FormGroup) {
+        this.applyRegisteredVendorIdWithSecToExistingSaudiRow(ctrl, value);
+      }
+    });
+  }
+
+  private applyRegisteredVendorIdWithSecToExistingSaudiRow(companyGroup: FormGroup, value: number): void {
+    const valueControl = companyGroup.get(
+      `${EMaterialsFormControls.registeredVendorIDwithSEC}.${EMaterialsFormControls.value}`
+    ) as FormControl<any> | null;
+
+    if (!valueControl) return;
+
+    const normalizedValue = value === undefined || value === null ? null : value;
+    valueControl.setValue(normalizedValue, { emitEvent: false });
+
+    // Always keep this field locked in Existing Saudi.
+    valueControl.disable({ emitEvent: false });
+  }
+
+  /**
+   * Re-apply the one-way sync + lock of Step 3 Vendor ID With SEC from Step 2.
+   * Useful after a bulk enable() call (e.g., when switching modes) which re-enables nested controls.
+   */
+  syncExistingSaudiRegisteredVendorIdWithSecFromOverview(): void {
+    const sourceControl = this.getOverviewRegisteredVendorIdWithSecValueControl();
+    if (!sourceControl) return;
+    this.syncAndLockExistingSaudiRegisteredVendorIdWithSec(sourceControl.value);
   }
 
   private ensureExistingSaudiBenaVendorIds(): void {
