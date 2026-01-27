@@ -19,7 +19,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
-
+import { normalizedLength } from 'src/app/shared/utils/normalize-textarea-counter';
 @Component({
   selector: 'app-opportunity-information-form',
   imports: [
@@ -38,12 +38,13 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
     InputGroupModule,
     InputGroupAddonModule,
     InputNumberModule,
-    BaseErrorMessages
+    BaseErrorMessages,
   ],
   templateUrl: './opportunity-information-form.html',
   styleUrl: './opportunity-information-form.scss',
 })
 export class OpportunityInformationForm implements OnInit {
+  normalizedLength = normalizedLength;
   opportunityFormService = inject(OpportunityFormService);
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   opportunitiesStore = inject(OpportunitiesStore);
