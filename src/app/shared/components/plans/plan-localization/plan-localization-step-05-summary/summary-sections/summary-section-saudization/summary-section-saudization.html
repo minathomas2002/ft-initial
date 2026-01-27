@@ -72,7 +72,7 @@
     <span class="text-sm text-red-600">{{ 'plans.summary.attachments' | translate }} is required</span>
     }
     @if (hasAttachments()) {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
       @for (file of attachments(); track $index) {
       <div class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full">
         <div class="flex items-center gap-3 flex-1 min-w-0">
