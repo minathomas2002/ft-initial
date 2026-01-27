@@ -760,10 +760,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     if (saudiCompanyDetailsArray) {
       saudiCompanyDetailsArray.controls.forEach((itemControl) => {
         if (itemControl instanceof FormGroup) {
-          const registeredVendorIDControl = itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC);
-          if (registeredVendorIDControl) {
-            registeredVendorIDControl.disable({ emitEvent: false });
-          }
+          const benaVendorIdValueControl = itemControl.get(
+            `${EMaterialsFormControls.benaRegisteredVendorID}.${EMaterialsFormControls.value}`
+          );
+          benaVendorIdValueControl?.disable({ emitEvent: false });
         }
       });
     }

@@ -46,40 +46,46 @@
           />
         </td>
 
-        <!-- Vendor ID with SEC (Readonly) -->
+        <td class="p-3 border border-gray-200 min-w-[200px]">
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'saudiCompanyDetails',
+              inputKey: 'registeredVendorIDwithSEC_' + index,
+              label: 'Vendor ID With SEC'
+            }, itemControl.get('rowId')?.value)"
+          >
+            <p-inputnumber
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+              [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
+              [color]="selectedInputColor()"
+              [maxlength]="7"
+              [useGrouping]="false"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="0"
+              [allowEmpty]="true"
+              mode="decimal"
+              fluid
+              placeholder="Registered Vendor ID with SEC"
+            />
+          </app-group-input-with-checkbox>
+          <app-base-error-messages
+            [control]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+            [label]="'Vendor ID With SEC'"
+          />
+        </td>
+
+        <!-- Vendor ID with SEC -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
           <input
             type="text"
             pInputText
             fluid
-            placeholder=""
-            [formControl]="getFormControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+            placeholder="BENA Registered Vendor ID"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
             class="bg-gray-100 text-gray-500"
           />
-        </td>
-
-        <!-- Bena register Vendor ID (Readonly) -->
-        <td class="p-3 border border-gray-200 min-w-[200px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'saudiCompanyDetails',
-              inputKey: 'benaRegisteredVendorID_' + index,
-              label: 'BENA Registered Vendor ID'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <input
-              type="text"
-              pInputText
-              fluid
-              placeholder=""
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
-              class="bg-gray-100 text-gray-500"
-              [appConditionalColorClass]="highlightInput('benaRegisteredVendorID_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
         </td>
 
         <!-- Company Type (Multi-select) -->
