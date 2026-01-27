@@ -210,6 +210,8 @@
           placeholder="Enter BENA registered vendor ID"
           [maxlength]="50"
           [formControl]="getValueControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
+          [appConditionalColorClass]="highlightInput('benaRegisteredVendorID')"
+          [color]="selectedInputColor()"
         />
       </div>
     </div>

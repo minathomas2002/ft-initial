@@ -192,7 +192,7 @@ export class SummarySectionDirectLocalization {
   serviceLevel = computed(() => {
     const serviceArray = this.serviceLevelFormArray();
     if (!serviceArray) return [];
-
+    
     return Array.from({ length: serviceArray.length }, (_, i) => {
       const group = serviceArray.at(i) as FormGroup;
       const getValueFromControl = (controlName: string) => {
@@ -206,7 +206,7 @@ export class SummarySectionDirectLocalization {
       return {
         index: i,
         serviceName: getValueFromControl(EMaterialsFormControls.serviceName),
-        expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.expectedLocalizationDate),
+        expectedLocalizationDate: getValueFromControl(EMaterialsFormControls.serviceLevelLocalizationDate),
         headcountYears: this.yearControlKeys.map((key) => ({
           value: getValueFromControl(`${key}_headcount`),
           controlName: `${key}_headcount`,
@@ -442,9 +442,13 @@ export class SummarySectionDirectLocalization {
               const matchingService = plan.services.find((s: any) => s.id === service.planServiceTypeId);
               return matchingService?.serviceName ?? null;
             }
-          } else if (fieldKey === 'expectedLocalizationDate') {
-            return service.localizationDate ?? null;
-          } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {
+            } else if (fieldKey === 'expectedLocalizationDate') {
+              // For service level, the backend field is localizationDate (mapped from serviceLevelLocalizationDate)
+              if (plan.services && service.planServiceTypeId) {          
+                const matchingService = servicesForDirectLocalization.find((s) => s.planServiceTypeId === service.planServiceTypeId);
+                return matchingService?.localizationDate ?? null;
+              }
+            } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {
             return service.measuresUpSkillSaudis ?? null;
           } else if (fieldKey === 'mentionSupportRequiredFromSEC') {
             return service.mentionSupportRequiredSEC ?? null;
@@ -509,6 +513,7 @@ export class SummarySectionDirectLocalization {
       case 'serviceLevel':
         if (index !== undefined) {
           const services = this.serviceLevel();
+          
           if (services[index]) {
             if (fieldKey === 'serviceName' || fieldKey === 'expectedLocalizationDate' ||
               fieldKey === 'keyMeasuresToUpskillSaudis' || fieldKey === 'mentionSupportRequiredFromSEC') {

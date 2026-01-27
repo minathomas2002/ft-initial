@@ -590,9 +590,9 @@ export class SummarySectionExistingSaudi {
               return matchingService?.serviceName ?? null;
             }
           } else if (fieldKey === 'expectedLocalizationDate') {
-            if (plan.services && service.planServiceTypeId) {
-              const matchingService = plan.services.find((s) => s.id === service.planServiceTypeId);
-              return matchingService?.expectedLocalizationDate ?? null;
+            if (plan.services && service.planServiceTypeId) {          
+              const matchingService = servicesForExistingSaudi.find((s) => s.planServiceTypeId === service.planServiceTypeId);              
+              return matchingService?.localizationDate ?? null;
             }
           } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {
             return service.measuresUpSkillSaudis ?? null;

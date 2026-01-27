@@ -250,7 +250,22 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
           );
           if (serviceTargetedForLocalizationControl) {
             const val = this.getValueControl(serviceTargetedForLocalizationControl)?.value ?? null;
+            // Preserve expectedLocalizationDate value before toggling validation
+            // (toggle may reset it if serviceTargetedForLocalization is not "Yes")
+            const expectedLocalizationDateControl = ctrl.get(EMaterialsFormControls.expectedLocalizationDate);
+            const expectedLocalizationDateValue = expectedLocalizationDateControl 
+              ? this.getValueControl(expectedLocalizationDateControl)?.value ?? null 
+              : null;
+            
             service.toggleExpectedLocalizationDateValidation(val, idx);
+            
+            // Restore the value if it was cleared by the toggle
+            if (expectedLocalizationDateValue && expectedLocalizationDateControl) {
+              const valueControl = this.getValueControl(expectedLocalizationDateControl);
+              if (valueControl && !valueControl.value) {
+                valueControl.setValue(expectedLocalizationDateValue, { emitEvent: false });
+              }
+            }
           }
         });
       }
