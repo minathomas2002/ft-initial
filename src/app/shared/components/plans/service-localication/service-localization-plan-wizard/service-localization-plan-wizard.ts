@@ -746,7 +746,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const submissionDateControl = basicInfo?.get(EMaterialsFormControls.submissionDate);
     submissionDateControl?.disable({ emitEvent: false });
 
-    // Keep registeredVendorIDwithSEC read-only in location information
+    // Keep BENA Registered Vendor ID read-only in location information
     const locationInfo = this.serviceLocalizationFormService.locationInformationFormGroup;
     if (locationInfo) {
       const benaRegisteredVendorID = locationInfo.get(EMaterialsFormControls.benaRegisteredVendorID);
@@ -755,15 +755,15 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       }
     }
 
-    // Keep registeredVendorIDwithSEC read-only in all Saudi company details items
+    // Keep Vendor ID with SEC read-only and synced in all Saudi company details items
     const saudiCompanyDetailsArray = this.serviceLocalizationFormService.saudiCompanyDetailsFormGroup;
     if (saudiCompanyDetailsArray) {
       saudiCompanyDetailsArray.controls.forEach((itemControl) => {
         if (itemControl instanceof FormGroup) {
-          const benaVendorIdValueControl = itemControl.get(
-            `${EMaterialsFormControls.benaRegisteredVendorID}.${EMaterialsFormControls.value}`
+          const vendorIdWithSecValueControl = itemControl.get(
+            `${EMaterialsFormControls.registeredVendorIDwithSEC}.${EMaterialsFormControls.value}`
           );
-          benaVendorIdValueControl?.disable({ emitEvent: false });
+          vendorIdWithSecValueControl?.disable({ emitEvent: false });
         }
       });
     }
@@ -771,6 +771,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Re-enabling the whole step also enables nested read-only controls.
     // Keep Step 2 company name disabled and synced with Step 1.
     this.serviceLocalizationFormService.syncCompanyNameFromCoverPageToOverview();
+
+    // Keep Step 3 Vendor ID with SEC locked and synced from Step 2.
+    this.serviceLocalizationFormService.syncExistingSaudiRegisteredVendorIdWithSecFromOverview();
   }
 
   // Initialize watcher on service details form array to set flags

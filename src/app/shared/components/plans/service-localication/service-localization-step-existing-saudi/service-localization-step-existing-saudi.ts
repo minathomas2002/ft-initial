@@ -66,6 +66,10 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
   files = signal<File[]>([]);
+  private _servicesSynced = false;
+  private _conditionalFieldsSetup = false;
+  private _benaVendorIdLockSetup = false;
+  private _userChangedDropdowns = new Set<string>();
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -305,6 +309,18 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       if (!this._conditionalFieldsSetup) {
         this.setupConditionalFields();
         this._conditionalFieldsSetup = true;
+      }
+
+      // Always keep BENA Registered Vendor ID disabled (all rows).
+      if (!this._benaVendorIdLockSetup) {
+        this.lockBenaRegisteredVendorIds();
+
+        const saudiCompanyDetailsArray = service.saudiCompanyDetailsFormGroup;
+        saudiCompanyDetailsArray?.valueChanges
+          ?.pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => this.lockBenaRegisteredVendorIds());
+
+        this._benaVendorIdLockSetup = true;
       }
     });
 
@@ -696,9 +712,19 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     return this.planFormService?.attachmentsFormGroup ?? new FormGroup({});
   }
 
-  private _servicesSynced = false;
-  private _conditionalFieldsSetup = false;
-  private _userChangedDropdowns = new Set<string>();
+  private lockBenaRegisteredVendorIds(): void {
+    const formArray = this.getSaudiCompanyDetailsFormArray();
+    if (!formArray) return;
+
+    formArray.controls.forEach((control) => {
+      if (!(control instanceof FormGroup)) return;
+
+      const benaGroup = control.get(EMaterialsFormControls.benaRegisteredVendorID);
+      if (!(benaGroup instanceof FormGroup)) return;
+
+      this.getValueControl(benaGroup).disable({ emitEvent: false });
+    });
+  }
 
   // Helper method to check if a field should be highlighted in view mode
   override isFieldShouldbeCorrected(inputKey: string, section?: string): boolean {
