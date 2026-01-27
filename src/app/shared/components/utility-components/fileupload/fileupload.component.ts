@@ -8,6 +8,7 @@ import {
 } from "primeng/fileupload";
 import { ToastModule } from "primeng/toast";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
+import { AttachmentService } from "src/app/shared/services/attachment/attachment.service";
 import { ImageErrorDirective } from "../../../directives/image-error.directive";
 import { TranslatePipe } from "../../../pipes";
 
@@ -53,6 +54,7 @@ export class FileuploadComponent {
 
   private fileupload = viewChild<FileUpload>("fileupload");
   private toasterService = inject(ToasterService);
+  private attachmentService = inject(AttachmentService);
 
   constructor() {
     // Sync PrimeNG's internal files array when the model signal changes
@@ -276,8 +278,20 @@ export class FileuploadComponent {
   }
 
   downloadFile(file: File): void {
-    // TODO: Implement download logic
-    console.log('file : ',file);
-    
+    const fileId = (file as any).id;
+
+    if (!fileId) {
+      this.toasterService.error("Unable to download file: missing attachment id.");
+      return;
+    }
+
+    this.attachmentService.downloadAndSaveAttachment(fileId, file.name).subscribe({
+      next: () => {
+        // Download handled in service
+      },
+      error: () => {
+        this.toasterService.error("An error occurred while downloading the file.");
+      },
+    });
   }
 }

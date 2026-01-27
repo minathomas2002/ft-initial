@@ -13,6 +13,7 @@ import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-se
 import { IPageComment, IProductPlanResponse, SaudizationRow } from 'src/app/shared/interfaces/plans.interface';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TooltipModule } from 'primeng/tooltip';
+import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
 
 @Component({
   selector: 'app-summary-section-saudization',
@@ -38,6 +39,7 @@ export class SummarySectionSaudization {
 
   // Years array for table columns
   readonly years = [1, 2, 3, 4, 5, 6, 7];
+  private readonly attachmentService = inject(AttachmentService);
 
   // Form group accessors
   saudizationFormGroup = computed(() => {
@@ -308,7 +310,20 @@ export class SummarySectionSaudization {
   });
 
   downloadFile(file: File): void {
-    // TODO: Implement download logic
-    console.log('file : ',file);
+    const fileId = (file as any).id;
+
+    if (!fileId) {
+      console.error('Unable to download file: missing attachment id.', file);
+      return;
+    }
+
+    this.attachmentService.downloadAndSaveAttachment(fileId, file.name).subscribe({
+      next: () => {
+        // Download handled in service
+      },
+      error: (err) => {
+        console.error('An error occurred while downloading the file.', err);
+      },
+    });
   }
 }

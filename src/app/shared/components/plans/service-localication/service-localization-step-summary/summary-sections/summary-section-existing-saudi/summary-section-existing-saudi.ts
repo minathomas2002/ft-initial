@@ -10,6 +10,7 @@ import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-c
 import { TableModule } from 'primeng/table';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
+import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
 
 @Component({
   selector: 'app-summary-section-existing-saudi',
@@ -30,6 +31,7 @@ export class SummarySectionExistingSaudi {
   EMaterialsFormControls = EMaterialsFormControls;
   serviceForm = inject(ServicePlanFormService);
   planStore = inject(PlanStore);
+  private attachmentService = inject(AttachmentService);
 
   constructor() {
     // Ensure service names are synced even if the user never visited the step component
@@ -724,7 +726,20 @@ export class SummarySectionExistingSaudi {
   }
 
   downloadFile(file: File): void {
-    // TODO: Implement download logic
-    console.log('file : ',file);
+    const fileId = (file as any).id;
+
+    if (!fileId) {
+      console.error('Unable to download file: missing attachment id.', file);
+      return;
+    }
+
+    this.attachmentService.downloadAndSaveAttachment(fileId, file.name).subscribe({
+      next: () => {
+        // Download handled in service
+      },
+      error: (err) => {
+        console.error('An error occurred while downloading the file.', err);
+      },
+    });
   }
 }
