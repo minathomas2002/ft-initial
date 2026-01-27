@@ -9,12 +9,14 @@ import { ServiceLocalizationStepOverviewFormBuilder } from './steps/service-loca
 import { ServiceLocalizationStepExistingSaudiFormBuilder } from './steps/service-localization-step-existing-saudi.form-builder';
 import { ServiceLocalizationStepDirectLocalizationFormBuilder } from './steps/service-localization-step-direct-localization.form-builder';
 import { ELocalizationMethodology } from 'src/app/shared/enums/plan.enum';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServicePlanFormService {
   private readonly _planStore = inject(PlanStore);
+  private readonly _authStore = inject(AuthStore);
 
   private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
@@ -85,6 +87,36 @@ export class ServicePlanFormService {
 
     // Subscribe to qualificationStatus changes in Step 3 (Existing Saudi) to toggle validation
     this.subscribeToQualificationStatusChanges();
+
+    // Ensure BENA Vendor ID is initialized/locked for initial rows.
+    this.ensureExistingSaudiBenaVendorIds();
+  }
+
+  private ensureExistingSaudiBenaVendorIds(): void {
+    const array = this.saudiCompanyDetailsFormGroup;
+    if (!array) return;
+    array.controls.forEach((ctrl) => {
+      if (ctrl instanceof FormGroup) {
+        this.populateAndLockBenaVendorId(ctrl);
+      }
+    });
+  }
+
+  private populateAndLockBenaVendorId(companyGroup: FormGroup): void {
+    const valueControl = companyGroup.get(
+      `${EMaterialsFormControls.benaRegisteredVendorID}.${EMaterialsFormControls.value}`
+    ) as FormControl<string> | null;
+
+    if (!valueControl) return;
+
+    const userCode = (this._authStore.userCode() ?? '').toString();
+
+    if (userCode) {
+      valueControl.setValue(userCode, { emitEvent: false });
+    }
+
+    // Always keep this field locked.
+    valueControl.disable({ emitEvent: false });
   }
 
   // Expose sub-form groups for Step 1
@@ -196,7 +228,9 @@ export class ServicePlanFormService {
 
   // Step 3 methods
   createSaudiCompanyDetailItem(): FormGroup {
-    return this._step3Builder.createSaudiCompanyDetailItem();
+    const group = this._step3Builder.createSaudiCompanyDetailItem();
+    this.populateAndLockBenaVendorId(group);
+    return group;
   }
 
   addSaudiCompanyDetailItem(): void {
@@ -489,7 +523,7 @@ export class ServicePlanFormService {
         }
         // Add back one empty item based on section type
         if (sectionName === EMaterialsFormControls.saudiCompanyDetailsFormGroup) {
-          sectionArray.push(this._step3Builder.createSaudiCompanyDetailItem());
+          sectionArray.push(this.createSaudiCompanyDetailItem());
         } else if (sectionName === EMaterialsFormControls.collaborationPartnershipFormGroup) {
           sectionArray.push(this._step3Builder.createCollaborationPartnershipItem());
         } else if (sectionName === EMaterialsFormControls.entityLevelFormGroup) {

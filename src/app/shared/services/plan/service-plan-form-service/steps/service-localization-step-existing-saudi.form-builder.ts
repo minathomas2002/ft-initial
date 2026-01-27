@@ -17,10 +17,13 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
       }),
-      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.control({ value: '', disabled: true }),
+      [EMaterialsFormControls.registeredVendorIDwithSEC]:  this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
+      }),
       [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''), // Required, auto-filled, dimmed
+        [EMaterialsFormControls.value]: this.fb.control({ value: '', disabled: true }),
       }),
       [EMaterialsFormControls.companyType]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
