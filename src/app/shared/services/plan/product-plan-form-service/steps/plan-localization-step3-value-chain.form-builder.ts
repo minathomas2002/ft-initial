@@ -26,7 +26,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
       }),
       [EMaterialsFormControls.costPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100)]],
       }),
     };
 
