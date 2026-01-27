@@ -705,12 +705,12 @@
       "selectPlanType": "Select Plan Type",
       "selectStatus": "Select Status",
       "selectSubmissionDate": "Select Submission Date",
-      "allTypes": "All Types",
+      "allTypes": "Plan Type",
       "service": "Service",
       "material": "Material",
-      "allStatuses": "All Statuses",
+      "allStatuses": "Status",
       "selectAssignee": "Select Assignee",
-      "allAssignees": "All Assignees"
+      "allAssignees": "Assignee"
     },
     "wizard": {
       "step1": {
