@@ -10,8 +10,9 @@ import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
+import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { TextareaModule } from 'primeng/textarea';
@@ -55,6 +56,7 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
   correctedFieldIds = input<string[]>([]);
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
+  originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -175,6 +177,10 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
     // Match pattern: _ followed by one or more digits at the end
     const match = inputKey.match(/^(.+)_(\d+)$/);
     return match ? match[1] : inputKey;
+  }
+
+  getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
+    return getFieldValueFromServicePlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field

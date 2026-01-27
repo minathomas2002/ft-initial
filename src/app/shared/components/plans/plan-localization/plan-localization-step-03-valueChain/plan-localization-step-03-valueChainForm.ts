@@ -12,7 +12,8 @@ import { ButtonModule } from 'primeng/button';
 import { ValueChainSummaryComponent } from './value-chain-summary/value-chain-summary.component';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TColors } from 'src/app/shared/interfaces';
 import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
@@ -71,6 +72,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   correctedFieldIds = input<string[]>([]);
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
+  originalPlanResponse = input<IProductPlanResponse | null>(null);
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -178,6 +180,10 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
     // Step-specific logic can be added here if needed
+  }
+
+  getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
+    return getFieldValueFromProductPlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field (handles FormArray rows)

@@ -42,6 +42,13 @@ export abstract class PlanStepBaseClass {
   // Abstract method - must be implemented by subclasses to map field information to form control
   abstract getControlForField(field: IFieldInformation): FormControl<any> | null;
 
+  /**
+   * Abstract method - must be implemented by subclasses to get the original value of a field
+   * from the plan's originalPlanResponse (BE response before corrections).
+   * Used for before/after comparison in resubmit mode.
+   */
+  abstract getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any;
+
   // Common signals
   showCheckbox = computed(() => this.commentPhase() !== 'none' && !this.isResubmitMode());
   comment = signal<string>('');
@@ -339,17 +346,15 @@ export abstract class PlanStepBaseClass {
 
   /**
    * Stores original values of corrected fields for before/after comparison.
+   * Values are taken from the BE originalPlanResponse via getOriginalFieldValueFromPlanResponse.
    */
   private storeOriginalValues(correctedFields: IFieldInformation[]): void {
     const originalValues = new Map<string, any>();
 
     correctedFields.forEach(field => {
-      const control = this.getControlForField(field);
-      if (control) {
-        // Create a unique key for the field
-        const fieldKey = this.getFieldKey(field);
-        originalValues.set(fieldKey, control.value);
-      }
+      const fieldKey = this.getFieldKey(field);
+      const value = this.getOriginalFieldValueFromPlanResponse(field);
+      originalValues.set(fieldKey, value);
     });
 
     this.originalFieldValues.set(originalValues);

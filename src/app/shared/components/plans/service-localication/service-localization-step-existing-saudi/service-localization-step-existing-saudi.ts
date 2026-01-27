@@ -19,8 +19,9 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
-import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
+import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { FormsModule } from '@angular/forms';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
@@ -65,6 +66,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   correctedFieldIds = input<string[]>([]);
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
+  originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
   files = signal<File[]>([]);
   private _servicesSynced = false;
   private _conditionalFieldsSetup = false;
@@ -771,6 +773,10 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     };
 
     return keyMap[baseKey] ?? baseKey;
+  }
+
+  getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
+    return getFieldValueFromServicePlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field
