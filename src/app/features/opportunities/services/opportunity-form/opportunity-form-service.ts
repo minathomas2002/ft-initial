@@ -101,24 +101,19 @@ export class OpportunityFormService {
       }, { validators: [this.quantityRangeValidator] }),
       opportunityLocalization: this.fb.group({
         designEngineerings: this.fb.array(
-          [this.createKeyActivityControl()],
-          [this.keyActivityArrayValidator('Design engineering is required')]
+          [this.createKeyActivityControl()]
         ),
         sourcings: this.fb.array(
-          [this.createKeyActivityControl()],
-          [this.keyActivityArrayValidator('Sourcing is required')]
+          [this.createKeyActivityControl()]
         ),
         manufacturings: this.fb.array(
-          [this.createKeyActivityControl()],
-          [this.keyActivityArrayValidator('Manufacturing is required')]
+          [this.createKeyActivityControl()]
         ),
         assemblyTestings: this.fb.array(
-          [this.createKeyActivityControl()],
-          [this.keyActivityArrayValidator('Assembly testing is required')]
+          [this.createKeyActivityControl()]
         ),
         afterSalesServices: this.fb.array(
-          [this.createKeyActivityControl()],
-          [this.keyActivityArrayValidator('After sales services is required')]
+          [this.createKeyActivityControl()]
         ),
       }),
     });
@@ -234,21 +229,10 @@ export class OpportunityFormService {
     return null;
   };
 
-  private keyActivityArrayValidator = (errorMessage: string) => {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const array = control.value as IKeyActivityRecord[];
-      if (!array || array.length === 0) {
-        return { required: { message: errorMessage } };
-      }
-      const isValid = array.every(item => item.keyActivity && item.keyActivity.trim() !== '');
-      return isValid ? null : { invalidArray: { message: errorMessage } };
-    };
-  };
-
   // Create a FormGroup for a single key activity record
   createKeyActivityControl(): FormGroup {
     return this.fb.group({
-      keyActivity: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(500)]]
+      keyActivity: ['', [Validators.minLength(3), Validators.maxLength(500)]]
     });
   }
 
@@ -482,23 +466,6 @@ export class OpportunityFormService {
 
     //Group-level validator
     infoGroup.setValidators([this.quantityRangeValidator]);
-
-    // -------- Opportunity Localization Arrays --------
-    const arrays = [
-      'designEngineerings',
-      'sourcings',
-      'manufacturings',
-      'assemblyTestings',
-      'afterSalesServices'
-    ];
-
-    arrays.forEach(key => {
-      const arr = locGroup.get(key);
-      arr?.setValidators([
-        this.keyActivityArrayValidator(`${key} is required`)
-      ]);
-      arr?.updateValueAndValidity({ emitEvent: false });
-    });
 
     //  Update validation for all controls
     Object.values(infoGroup.controls).forEach(control => {
