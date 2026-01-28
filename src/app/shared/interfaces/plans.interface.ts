@@ -135,6 +135,7 @@ export interface Attachment {
   id: string
   fileName: string
   fileExtension: string
+  ibmIdentifier: string;
   fileUrl: string
   file: string
 }

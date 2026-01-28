@@ -3,7 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { Attachment, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -298,7 +298,6 @@ export class SummarySectionExistingSaudi {
   attachments = computed(() => {
     const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
     let value: unknown = null;
-
     if (attachmentsControl instanceof FormGroup) {
       value = attachmentsControl.get(EMaterialsFormControls.value)?.value;
     } else {
@@ -725,15 +724,15 @@ export class SummarySectionExistingSaudi {
     return String(beforeValue) !== String(afterValue);
   }
 
-  downloadFile(file: File): void {
-    const fileId = (file as any).id;
+  downloadFile(file: Attachment): void {
+    const fileId = file.ibmIdentifier;
 
     if (!fileId) {
       console.error('Unable to download file: missing attachment id.', file);
       return;
     }
 
-    this.attachmentService.downloadAndSaveAttachment(fileId, file.name).subscribe({
+    this.attachmentService.downloadAndSaveAttachment(fileId, file.fileName).subscribe({
       next: () => {
         // Download handled in service
       },

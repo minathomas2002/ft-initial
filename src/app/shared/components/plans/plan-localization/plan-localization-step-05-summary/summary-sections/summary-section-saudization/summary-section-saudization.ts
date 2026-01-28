@@ -10,7 +10,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 import { SummaryTableCell } from 'src/app/shared/components/plans/summary-table-cell/summary-table-cell';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
-import { IPageComment, IProductPlanResponse, SaudizationRow } from 'src/app/shared/interfaces/plans.interface';
+import { Attachment, IPageComment, IProductPlanResponse, SaudizationRow } from 'src/app/shared/interfaces/plans.interface';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TooltipModule } from 'primeng/tooltip';
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
@@ -189,6 +189,7 @@ export class SummarySectionSaudization {
   // Get attachments value
   attachments = computed(() => {
     const attachmentsControl = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+    
     if (attachmentsControl instanceof FormGroup) {
       const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
       return valueControl ? valueControl.value : attachmentsControl.value;
@@ -309,15 +310,15 @@ export class SummarySectionSaudization {
     ];
   });
 
-  downloadFile(file: File): void {
-    const fileId = (file as any).id;
-
+  downloadFile(file: Attachment): void {
+    const fileId = file.ibmIdentifier;
+    
     if (!fileId) {
       console.error('Unable to download file: missing attachment id.', file);
       return;
     }
 
-    this.attachmentService.downloadAndSaveAttachment(fileId, file.name).subscribe({
+    this.attachmentService.downloadAndSaveAttachment(fileId, file.fileName).subscribe({
       next: () => {
         // Download handled in service
       },
