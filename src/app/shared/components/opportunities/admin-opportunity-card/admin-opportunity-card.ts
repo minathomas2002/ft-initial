@@ -10,6 +10,7 @@ import { OpportunityDetailItem } from '../opportunity-detail-item/opportunity-de
 import { OpportunityActionMenuComponent } from '../opportunity-action-menu/opportunity-action-menu.component';
 import { TColors } from 'src/app/shared/interfaces';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
+import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 
 @Component({
   selector: 'app-admin-opportunity-card',
@@ -20,7 +21,8 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
     TranslatePipe,
     BaseTagComponent,
     OpportunityDetailItem,
-    OpportunityActionMenuComponent
+    OpportunityActionMenuComponent,
+    TruncateTooltipDirective
   ],
   templateUrl: './admin-opportunity-card.html',
   styleUrl: './admin-opportunity-card.scss',
