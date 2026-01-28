@@ -9,6 +9,7 @@ import { ValueChainSummaryComponent } from '../../../plan-localization-step-03-v
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-section-header/summary-section-header';
 import { IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { findRowGroupByRowId, shouldHideSummaryCommentIcon } from 'src/app/shared/utils/summary-comment-icon.utils';
 
 @Component({
   selector: 'app-summary-section-value-chain',
@@ -21,6 +22,7 @@ export class SummarySectionValueChain {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   commentTitle = input<string>('Comments');
   originalPlanResponse = input<IProductPlanResponse | null>(null);
   onEdit = output<void>();
@@ -160,13 +162,67 @@ export class SummarySectionValueChain {
   // Helper method to check if a field has comments
   hasFieldComment(fieldKey: string, section: string, rowId?: string): boolean {
     const sectionName = this.mapFormGroupToSection(section);
-    return this.pageComments().some(comment =>
+    const hasComment = this.pageComments().some(comment =>
       comment.fields?.some(field =>
         field.section === sectionName &&
         field.inputKey === fieldKey &&
         (rowId === undefined || field.id === rowId)
       )
     );
+
+    if (!hasComment) return false;
+
+    // If the field is already resolved/corrected, hide the orange warning icon.
+    // if (this.isFieldResolved(fieldKey, section, rowId)) {
+    //   return false;
+    // }
+
+    const control = this.getControlForDirtyCheck(fieldKey, section, rowId);
+    if (shouldHideSummaryCommentIcon(this.planStore.wizardMode(), control, EMaterialsFormControls.value)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private isFieldResolved(fieldKey: string, section: string, rowId?: string): boolean {
+    if (this.correctedFieldIds().length === 0) return false;
+    const sectionName = this.mapFormGroupToSection(section);
+
+    return this.pageComments().some((comment) =>
+      comment.fields?.some(
+        (field) =>
+          field.section === sectionName &&
+          field.inputKey === fieldKey &&
+          !!field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (rowId === undefined || field.id === rowId)
+      )
+    );
+  }
+
+  private getControlForDirtyCheck(fieldKey: string, section: string, rowId?: string): any {
+    const sectionFormGroup = this.getSectionFormGroupByName(section);
+    const itemsArray = sectionFormGroup?.get('items') as FormArray | null;
+    const rowGroup = findRowGroupByRowId(itemsArray, rowId, 'rowId');
+    return rowGroup?.get(fieldKey) ?? null;
+  }
+
+  private getSectionFormGroupByName(section: string): FormGroup | null {
+    switch (section) {
+      case 'designEngineeringFormGroup':
+        return this.designEngineeringFormGroup();
+      case 'sourcingFormGroup':
+        return this.sourcingFormGroup();
+      case 'manufacturingFormGroup':
+        return this.manufacturingFormGroup();
+      case 'assemblyTestingFormGroup':
+        return this.assemblyTestingFormGroup();
+      case 'afterSalesFormGroup':
+        return this.afterSalesFormGroup();
+      default:
+        return null;
+    }
   }
 
   // Helper to get row ID from form group

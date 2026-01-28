@@ -4,6 +4,7 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { Attachment, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { findRowGroupByRowId, shouldHideSummaryCommentIcon } from 'src/app/shared/utils/summary-comment-icon.utils';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -356,6 +357,23 @@ export class SummarySectionExistingSaudi {
 
   // Check if a field has a comment
   hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {
+    // In resubmit mode: once the investor changed the field (dirty), hide the orange warning icon in summary
+    // even if they revert back to the original value.
+    if (
+      shouldHideSummaryCommentIcon(
+        this.planStore.wizardMode(),
+        this.getControlForDirtyCheck(fieldKey, section, rowId),
+        EMaterialsFormControls.value
+      )
+    ) {
+      return false;
+    }
+
+    // If the field is already resolved/corrected, hide the orange warning icon.
+    // if (this.isFieldResolved(fieldKey, section, rowId)) {
+    //   return false;
+    // }
+
     // Helper function to check if inputKey matches the fieldKey
     // Handles cases where inputKey might have an index suffix (e.g., 'fieldName_0', 'fieldName_1')
     const matchesInputKey = (inputKey: string): boolean => {
@@ -370,22 +388,6 @@ export class SummarySectionExistingSaudi {
       return false;
     };
 
-    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
-    if (this.correctedFieldIds().length > 0) {
-      const hasCorrectedField = this.pageComments().some(comment =>
-        comment.fields?.some(field =>
-          matchesInputKey(field.inputKey) &&
-          (!section || field.section === section) &&
-          field.id &&
-          this.correctedFieldIds().includes(field.id) &&
-          (rowId === undefined || field.id === rowId)
-        )
-      );
-      if (hasCorrectedField) {
-        return true;
-      }
-    }
-
     // Check if field has comments
     return this.pageComments().some(comment =>
       comment.fields?.some(field =>
@@ -394,6 +396,35 @@ export class SummarySectionExistingSaudi {
         (rowId === undefined || field.id === rowId)
       )
     );
+  }
+
+  private getControlForDirtyCheck(fieldKey: string, section?: string, rowId?: string) {
+    if (section === 'attachments') {
+      return this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments) ?? null;
+    }
+
+    if (section === 'saudiCompanyDetails') {
+      const rowGroup = findRowGroupByRowId(this.saudiCompanyDetailsFormArray(), rowId);
+      return rowGroup?.get(fieldKey) ?? null;
+    }
+
+    if (section === 'collaborationPartnership') {
+      const rowGroup = findRowGroupByRowId(this.collaborationPartnershipFormArray(), rowId);
+      return rowGroup?.get(fieldKey) ?? null;
+    }
+
+    if (section === 'serviceLevel') {
+      const rowGroup = findRowGroupByRowId(this.serviceLevelFormArray(), rowId);
+      return rowGroup?.get(fieldKey) ?? null;
+    }
+
+    if (section === 'entityLevel') {
+      const entityArray = this.entityLevelFormArray();
+      const group = entityArray?.length ? (entityArray.at(0) as FormGroup) : null;
+      return group?.get(fieldKey) ?? null;
+    }
+
+    return null;
   }
 
   // Check if a field is resolved/corrected by investor (based on correctedFieldIds)
@@ -591,8 +622,8 @@ export class SummarySectionExistingSaudi {
               return matchingService?.serviceName ?? null;
             }
           } else if (fieldKey === 'expectedLocalizationDate') {
-            if (plan.services && service.planServiceTypeId) {          
-              const matchingService = servicesForExistingSaudi.find((s) => s.planServiceTypeId === service.planServiceTypeId);              
+            if (plan.services && service.planServiceTypeId) {
+              const matchingService = servicesForExistingSaudi.find((s) => s.planServiceTypeId === service.planServiceTypeId);
               return matchingService?.localizationDate ?? null;
             }
           } else if (fieldKey === 'keyMeasuresToUpskillSaudis') {

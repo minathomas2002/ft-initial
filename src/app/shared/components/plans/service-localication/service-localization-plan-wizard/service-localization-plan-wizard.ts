@@ -104,7 +104,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
-  
+
   // Extract contactInfo from planSignature for submission modal
   contactInfo = computed(() => {
     const signature = this.planSignature();
@@ -665,21 +665,23 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           }
 
           // Fetch comments in review, view, and resubmit modes
-          this.planStore.getPlanComments(planId)
-            .pipe(
-              takeUntilDestroyed(this.destroyRef),
-              catchError((error) => {
-                console.error('Error loading plan comments:', error);
-                return of(null);
-              })
-            )
-            .subscribe(() => {
-              // Map comment fields to selectedInputs for each step when comments are loaded
-              this.mapCommentFieldsToSelectedInputs();
-            });
+          if (!(this.planStatus() === EInvestorPlanStatus.UNDER_REVIEW && this.isInvestorPersona())) {
+            this.planStore.getPlanComments(planId)
+              .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                catchError((error) => {
+                  console.error('Error loading plan comments:', error);
+                  return of(null);
+                })
+              )
+              .subscribe(() => {
+                // Map comment fields to selectedInputs for each step when comments are loaded
+                this.mapCommentFieldsToSelectedInputs();
+              });
 
-          // Re-evaluate conditional steps after disabling forms (getRawValue() will work correctly)
-          this.evaluateConditionalSteps();
+            // Re-evaluate conditional steps after disabling forms (getRawValue() will work correctly)
+            this.evaluateConditionalSteps();
+          }
         } else if (currentMode === 'edit') {
           this.enableAllForms();
           const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;

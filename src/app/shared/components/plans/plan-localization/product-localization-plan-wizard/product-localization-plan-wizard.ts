@@ -352,7 +352,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
-  
+
   // Extract contactInfo from planSignature for submission modal
   contactInfo = computed(() => {
     const signature = this.planSignature();
@@ -700,18 +700,20 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       const planId = this.planStore.selectedPlanId();
       if (planId) {
         // Always fetch comments in these modes
-        this.planStore.getPlanComments(planId)
-          .pipe(
-            takeUntilDestroyed(this.destroyRef),
-            catchError((error) => {
-              console.error('Error loading plan comments:', error);
-              return of(null);
-            })
-          )
-          .subscribe(() => {
-            // Map comment fields to selectedInputs for each step when comments are loaded
-            this.mapCommentFieldsToSelectedInputs();
-          });
+        if (!(this.planStatus() === EInvestorPlanStatus.UNDER_REVIEW && this.isInvestorPersona())) {
+          this.planStore.getPlanComments(planId)
+            .pipe(
+              takeUntilDestroyed(this.destroyRef),
+              catchError((error) => {
+                console.error('Error loading plan comments:', error);
+                return of(null);
+              })
+            )
+            .subscribe(() => {
+              // Map comment fields to selectedInputs for each step when comments are loaded
+              this.mapCommentFieldsToSelectedInputs();
+            });
+        }
       }
     } else if (currentMode === 'edit') {
       // Enable all forms in edit mode without resetting read-only field values
