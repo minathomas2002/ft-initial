@@ -5,6 +5,7 @@ import { SummarySectionHeader } from 'src/app/shared/components/plans/summary-se
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { shouldHideSummaryCommentIcon } from 'src/app/shared/utils/summary-comment-icon.utils';
 
 @Component({
   selector: 'app-summary-section-product-plant',
@@ -17,6 +18,7 @@ export class SummarySectionProductPlant {
   isViewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   commentTitle = input<string>('Comments');
   originalPlanResponse = input<IProductPlanResponse | null>(null);
   onEdit = output<void>();
@@ -149,12 +151,77 @@ export class SummarySectionProductPlant {
 
   // Helper method to check if a field has comments
   hasFieldComment(fieldKey: string, fieldId?: string): boolean {
-    return this.pageComments().some(comment =>
+    const hasComment = this.pageComments().some(comment =>
       comment.fields?.some(field =>
         field.inputKey === fieldKey &&
         (fieldId === undefined || field.id === fieldId)
       )
     );
+
+    if (!hasComment) return false;
+
+    // If the field is already resolved/corrected, hide the orange warning icon.
+    // if (this.isFieldResolved(fieldKey, fieldId)) {
+    //   return false;
+    // }
+
+    const control = this.getControlForDirtyCheck(fieldKey);
+    if (shouldHideSummaryCommentIcon(this.planStore.wizardMode(), control, EMaterialsFormControls.value)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private isFieldResolved(fieldKey: string, fieldId?: string): boolean {
+    if (this.correctedFieldIds().length === 0) return false;
+
+    return this.pageComments().some((comment) =>
+      comment.fields?.some(
+        (field) =>
+          field.inputKey === fieldKey &&
+          !!field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (fieldId === undefined || field.id === fieldId)
+      )
+    );
+  }
+
+  private getControlForDirtyCheck(fieldKey: string): any {
+    switch (fieldKey) {
+      case 'productName':
+      case 'productSpecifications':
+      case 'targetedAnnualPlantCapacity':
+      case 'timeRequiredToSetupFactory':
+        return this.overviewFormGroup()?.get(fieldKey);
+
+      case 'landPercentage':
+      case 'buildingPercentage':
+      case 'machineryEquipmentPercentage':
+      case 'othersPercentage':
+      case 'othersDescription':
+        return this.expectedCAPEXInvestmentFormGroup()?.get(fieldKey);
+
+      case 'targetedCustomer':
+      case 'namesOfTargetedSuppliers':
+      case 'productsUtilizeTargetedProduct':
+        return this.targetCustomersFormGroup()?.get(fieldKey);
+
+      case 'productManufacturingExperience':
+      case 'qualifiedPlantLocationSEC':
+      case 'approvedVendorIDSEC':
+      case 'yearsOfExperienceSEC':
+      case 'totalQuantitiesSEC':
+      case 'namesOfSECApprovedSuppliers':
+      case 'qualifiedPlantLocation':
+      case 'yearsOfExperience':
+      case 'totalQuantities':
+        return this.productManufacturingExperienceFormGroup()?.get(fieldKey);
+
+      default:
+        // Fallback: try to locate at root (defensive)
+        return this.formGroup().get(fieldKey);
+    }
   }
 
   // Helper method to get before value (original value from plan response) for a field
@@ -175,7 +242,7 @@ export class SummarySectionProductPlant {
         return productPlant.overview?.targetedAnnualPlantCapacity ?? null;
       case 'timeRequiredToSetupFactory':
         return productPlant.overview?.timeRequiredToSetupFactory ?? null;
-      
+
       // Expected CAPEX fields
       case 'landPercentage':
         return productPlant.expectedCapex?.landPercent ?? null;
@@ -187,7 +254,7 @@ export class SummarySectionProductPlant {
         return productPlant.expectedCapex?.othersPercent ?? null;
       case 'othersDescription':
         return productPlant.expectedCapex?.othersDescription ?? null;
-      
+
       // Target Customers fields
       case 'targetedCustomer':
         // Convert ETargetedCustomer[] to display string
@@ -200,7 +267,7 @@ export class SummarySectionProductPlant {
         return productPlant.targetCustomers?.targetedLocalSupplierNames ?? null;
       case 'productsUtilizeTargetedProduct':
         return productPlant.targetCustomers?.productsUtilizingTargetProduct ?? null;
-      
+
       // Manufacturing Experience fields
       case 'productManufacturingExperience':
         const expRange = productPlant.manufacturingExperience?.experienceRange;
@@ -225,7 +292,7 @@ export class SummarySectionProductPlant {
         return productPlant.manufacturingExperience?.yearsExperience_LocalSupplier ?? null;
       case 'totalQuantities':
         return productPlant.manufacturingExperience?.totalQuantitiesToLocalSuppliers ?? null;
-      
+
       default:
         return null;
     }

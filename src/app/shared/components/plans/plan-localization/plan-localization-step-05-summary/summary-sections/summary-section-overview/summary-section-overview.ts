@@ -7,6 +7,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
 import { IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { shouldHideSummaryCommentIcon } from 'src/app/shared/utils/summary-comment-icon.utils';
 
 @Component({
   selector: 'app-summary-section-overview',
@@ -21,6 +22,7 @@ export class SummarySectionOverview {
   isReviewMode = input<boolean>(false);
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   commentTitle = input<string>('Comments');
   originalPlanResponse = input<IProductPlanResponse | null>(null);
   onEdit = output<void>();
@@ -203,12 +205,45 @@ export class SummarySectionOverview {
   // Helper method to check if a field has comments (without using IDs except for table rows)
   hasFieldComment(fieldKey: string, fieldId?: string): boolean {
     // Check if field has comments - use fieldId only for table rows (value chain, etc.)
-    return this.pageComments().some(comment =>
+    const hasComment = this.pageComments().some(comment =>
       comment.fields?.some(field =>
         field.inputKey === fieldKey &&
         (fieldId === undefined || field.id === fieldId)
       )
     );
+
+    if (!hasComment) return false;
+
+    // If the field is already resolved/corrected, hide the orange warning icon.
+    // if (this.isFieldResolved(fieldKey, fieldId)) {
+    //   return false;
+    // }
+
+    const control = this.getControlForDirtyCheck(fieldKey);
+    if (shouldHideSummaryCommentIcon(this.planStore.wizardMode(), control, EMaterialsFormControls.value)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private isFieldResolved(fieldKey: string, fieldId?: string): boolean {
+    if (this.correctedFieldIds().length === 0) return false;
+
+    return this.pageComments().some((comment) =>
+      comment.fields?.some(
+        (field) =>
+          field.inputKey === fieldKey &&
+          !!field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (fieldId === undefined || field.id === fieldId)
+      )
+    );
+  }
+
+  private getControlForDirtyCheck(fieldKey: string): any {
+    const controlPath = this.getControlPathForField(fieldKey);
+    return this.formGroup().get(controlPath);
   }
 
   // Helper method to get before value (original value from plan response) for a field

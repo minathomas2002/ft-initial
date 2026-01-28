@@ -41,6 +41,12 @@ export class PlanLocalizationStep05Summary {
   step3Comments = input<IPageComment[]>([]);
   step4Comments = input<IPageComment[]>([]);
 
+  // Corrected/resolved field IDs per step (from wizard)
+  step1CorrectedFields = input<string[]>([]);
+  step2CorrectedFields = input<string[]>([]);
+  step3CorrectedFields = input<string[]>([]);
+  step4CorrectedFields = input<string[]>([]);
+
   // Original plan response for before/after comparison
   originalPlanResponse = input<IProductPlanResponse | null>(null);
 

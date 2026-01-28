@@ -4,6 +4,7 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { findRowGroupByRowId, shouldHideSummaryCommentIcon } from 'src/app/shared/utils/summary-comment-icon.utils';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
 import { TableModule } from 'primeng/table';
@@ -192,7 +193,7 @@ export class SummarySectionDirectLocalization {
   serviceLevel = computed(() => {
     const serviceArray = this.serviceLevelFormArray();
     if (!serviceArray) return [];
-    
+
     return Array.from({ length: serviceArray.length }, (_, i) => {
       const group = serviceArray.at(i) as FormGroup;
       const getValueFromControl = (controlName: string) => {
@@ -224,6 +225,23 @@ export class SummarySectionDirectLocalization {
 
   // Check if a field has a comment
   hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {
+    // In resubmit mode: once the investor changed the field (dirty), hide the orange warning icon in summary
+    // even if they revert back to the original value.
+    if (
+      shouldHideSummaryCommentIcon(
+        this.planStore.wizardMode(),
+        this.getControlForDirtyCheck(fieldKey, section, rowId),
+        EMaterialsFormControls.value
+      )
+    ) {
+      return false;
+    }
+
+    // If the field is already resolved/corrected, hide the orange warning icon.
+    // if (this.isFieldResolved(fieldKey, section, rowId)) {
+    //   return false;
+    // }
+
     // Helper function to check if inputKey matches the fieldKey
     // Handles cases where inputKey might have an index suffix (e.g., 'fieldName_0', 'fieldName_1')
     const matchesInputKey = (inputKey: string): boolean => {
@@ -238,22 +256,6 @@ export class SummarySectionDirectLocalization {
       return false;
     };
 
-    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
-    if (this.correctedFieldIds().length > 0) {
-      const hasCorrectedField = this.pageComments().some(comment =>
-        comment.fields?.some(field =>
-          matchesInputKey(field.inputKey) &&
-          (!section || field.section === section) &&
-          field.id &&
-          this.correctedFieldIds().includes(field.id) &&
-          (rowId === undefined || field.id === rowId)
-        )
-      );
-      if (hasCorrectedField) {
-        return true;
-      }
-    }
-
     // Check if field has comments
     return this.pageComments().some(comment =>
       comment.fields?.some(field =>
@@ -262,6 +264,26 @@ export class SummarySectionDirectLocalization {
         (rowId === undefined || field.id === rowId)
       )
     );
+  }
+
+  private getControlForDirtyCheck(fieldKey: string, section?: string, rowId?: string) {
+    if (section === 'localizationStrategy') {
+      const rowGroup = findRowGroupByRowId(this.directLocalizationServiceLevelFormArray(), rowId);
+      return rowGroup?.get(fieldKey) ?? null;
+    }
+
+    if (section === 'serviceLevel') {
+      const rowGroup = findRowGroupByRowId(this.serviceLevelFormArray(), rowId);
+      return rowGroup?.get(fieldKey) ?? null;
+    }
+
+    if (section === 'entityLevel') {
+      const entityArray = this.entityLevelFormArray();
+      const group = entityArray?.length ? (entityArray.at(0) as FormGroup) : null;
+      return group?.get(fieldKey) ?? null;
+    }
+
+    return null;
   }
 
   // Check if a field is resolved/corrected by investor (based on correctedFieldIds)
@@ -444,7 +466,7 @@ export class SummarySectionDirectLocalization {
             }
             } else if (fieldKey === 'expectedLocalizationDate') {
               // For service level, the backend field is localizationDate (mapped from serviceLevelLocalizationDate)
-              if (plan.services && service.planServiceTypeId) {          
+              if (plan.services && service.planServiceTypeId) {
                 const matchingService = servicesForDirectLocalization.find((s) => s.planServiceTypeId === service.planServiceTypeId);
                 return matchingService?.localizationDate ?? null;
               }
@@ -513,7 +535,7 @@ export class SummarySectionDirectLocalization {
       case 'serviceLevel':
         if (index !== undefined) {
           const services = this.serviceLevel();
-          
+
           if (services[index]) {
             if (fieldKey === 'serviceName' || fieldKey === 'expectedLocalizationDate' ||
               fieldKey === 'keyMeasuresToUpskillSaudis' || fieldKey === 'mentionSupportRequiredFromSEC') {

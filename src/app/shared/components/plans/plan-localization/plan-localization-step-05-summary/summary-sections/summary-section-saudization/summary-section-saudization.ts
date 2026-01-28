@@ -14,6 +14,7 @@ import { IPageComment, IProductPlanResponse, SaudizationRow } from 'src/app/shar
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TooltipModule } from 'primeng/tooltip';
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
+import { shouldHideSummaryCommentIcon } from 'src/app/shared/utils/summary-comment-icon.utils';
 
 @Component({
   selector: 'app-summary-section-saudization',
@@ -30,6 +31,7 @@ export class SummarySectionSaudization {
 
   formGroup = input.required<FormGroup>();
   pageComments = input<IPageComment[]>([]);
+  correctedFieldIds = input<string[]>([]);
   commentTitle = input<string>('Comments');
   originalPlanResponse = input<IProductPlanResponse | null>(null);
   onEdit = output<void>();
@@ -107,10 +109,41 @@ export class SummarySectionSaudization {
 
   // Helper method to check if a field has comments
   hasFieldComment(fieldKey: string, rowId?: string): boolean {
-    return this.pageComments().some(comment =>
+    const hasComment = this.pageComments().some(comment =>
       comment.fields?.some(field =>
         field.inputKey === fieldKey &&
         (rowId === undefined || field.id === rowId)
+      )
+    );
+
+    if (!hasComment) return false;
+
+    // If the field is already resolved/corrected, hide the orange warning icon.
+    // if (this.isFieldResolved(fieldKey, rowId)) {
+    //   return false;
+    // }
+
+    // Only attachments use simple fieldKey-based comments in this summary.
+    if (fieldKey === EMaterialsFormControls.attachments) {
+      const control = this.attachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+      if (shouldHideSummaryCommentIcon(this.planStore.wizardMode(), control, EMaterialsFormControls.value)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private isFieldResolved(fieldKey: string, rowId?: string): boolean {
+    if (this.correctedFieldIds().length === 0) return false;
+
+    return this.pageComments().some((comment) =>
+      comment.fields?.some(
+        (field) =>
+          field.inputKey === fieldKey &&
+          !!field.id &&
+          this.correctedFieldIds().includes(field.id) &&
+          (rowId === undefined || field.id === rowId)
       )
     );
   }
@@ -118,7 +151,33 @@ export class SummarySectionSaudization {
   // Helper method to check if a year cell has comments
   hasYearComment(controlName: string, year: number, rowId?: string): boolean {
     const yearKey = `${controlName}_year${year}`;
-    return this.hasFieldComment(yearKey, rowId);
+    const hasComment = this.hasFieldComment(yearKey, rowId);
+    if (!hasComment) return false;
+
+    const control = this.getYearRowControl(controlName, year);
+    if (shouldHideSummaryCommentIcon(this.planStore.wizardMode(), control, EMaterialsFormControls.value)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private getYearRowControl(controlName: string, year: number): FormGroup | null {
+    const yearControlMap: Record<number, string> = {
+      1: EMaterialsFormControls.year1,
+      2: EMaterialsFormControls.year2,
+      3: EMaterialsFormControls.year3,
+      4: EMaterialsFormControls.year4,
+      5: EMaterialsFormControls.year5,
+      6: EMaterialsFormControls.year6,
+      7: EMaterialsFormControls.year7,
+    };
+
+    const yearKey = yearControlMap[year];
+    const yearFormGroup = this.saudizationFormGroup()?.get(yearKey) as FormGroup | null;
+    if (!yearFormGroup) return null;
+
+    return yearFormGroup.get(controlName) as FormGroup | null;
   }
 
   // Helper method to get before value from original plan response
@@ -248,7 +307,7 @@ export class SummarySectionSaudization {
       const hasComment = this.hasYearComment(controlName, year);
       const beforeValue = hasComment ? this.getBeforeValue(controlName, year) : null;
       const formattedBeforeValue = beforeValue !== null && beforeValue !== undefined ? this.formatValue(beforeValue) : null;
-      
+
       return {
         [`year${year}`]: formattedValue,
         [`year${year}BeforeValue`]: formattedBeforeValue,

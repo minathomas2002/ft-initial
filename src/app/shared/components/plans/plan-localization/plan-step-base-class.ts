@@ -21,6 +21,8 @@ import { TCommentPhase } from './product-localization-plan-wizard/product-locali
  */
 @Directive()
 export abstract class PlanStepBaseClass {
+  private static readonly RESUBMIT_CHANGED_ONCE_FLAG = '__ftResubmitChangedOnce';
+
   // Injected services
   protected readonly formUtilityService = inject(FormUtilityService);
   protected readonly toasterService = inject(ToasterService);
@@ -57,6 +59,25 @@ export abstract class PlanStepBaseClass {
   // Store original values for before/after comparison in resubmit mode
   private originalFieldValues = signal<Map<string, any>>(new Map());
   private previousCorrectedFieldsLength = signal<number>(-1);
+
+  // Resubmit-mode highlight tracking: once a corrected field is changed (or becomes dirty),
+  // it should never be highlighted again, even if reverted back to its initial/original value.
+  private correctedFieldInitialValues = signal<Map<string, any>>(new Map());
+  private correctedFieldChangedOnce = signal<Set<string>>(new Set());
+
+  private hasResubmitChangedOnce(control: AbstractControl | null | undefined): boolean {
+    if (!control) {
+      return false;
+    }
+    return !!(control as any)[PlanStepBaseClass.RESUBMIT_CHANGED_ONCE_FLAG];
+  }
+
+  private setResubmitChangedOnce(control: AbstractControl | null | undefined): void {
+    if (!control) {
+      return;
+    }
+    (control as any)[PlanStepBaseClass.RESUBMIT_CHANGED_ONCE_FLAG] = true;
+  }
 
   // Resubmit mode check
   isResubmitMode = computed(() => {
@@ -191,6 +212,9 @@ export abstract class PlanStepBaseClass {
       this.storeOriginalValues(correctedFields);
     }
 
+    // Reset / initialize resubmit highlight tracking each time corrected fields are (re)processed.
+    this.initializeResubmitCorrectedFieldTracking(correctedFields);
+
     // Disable all controls first
     formGroup.disable({ emitEvent: false });
 
@@ -206,6 +230,54 @@ export abstract class PlanStepBaseClass {
 
     // Disable siblings that don't have enabled descendants
     this.disableUnselectedSiblings(enabledParentChains, enabledControls);
+  }
+
+  /**
+   * Captures initial values for corrected fields and resets the "changed once" set.
+   * We track "changed once" instead of doing before/after comparisons to avoid
+   * re-highlighting when the investor reverts back to the original value.
+   */
+  private initializeResubmitCorrectedFieldTracking(correctedFields: IFieldInformation[]): void {
+    const initialValues = new Map<string, any>();
+    (correctedFields ?? []).forEach(field => {
+      const control = this.getControlForField(field);
+      if (!control) {
+        return;
+      }
+      initialValues.set(this.getFieldKey(field), control.value);
+    });
+
+    this.correctedFieldInitialValues.set(initialValues);
+    this.correctedFieldChangedOnce.set(new Set());
+  }
+
+  private markCorrectedFieldChangedOnce(field: IFieldInformation, control: AbstractControl): void {
+    const fieldKey = this.getFieldKey(field);
+    const alreadyChanged = this.correctedFieldChangedOnce().has(fieldKey);
+    if (alreadyChanged) {
+      return;
+    }
+
+    // If the control was previously changed in a prior visit to this step,
+    // keep that state (the form control instance typically persists across navigation).
+    if (this.hasResubmitChangedOnce(control)) {
+      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
+      return;
+    }
+
+    // Prefer Angular's dirtiness signal for user-originated changes.
+    if (control.dirty) {
+      this.setResubmitChangedOnce(control);
+      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
+      return;
+    }
+
+    const initialValue = this.correctedFieldInitialValues().get(fieldKey);
+    const currentValue = control.value;
+    if (!this.valuesEqual(initialValue, currentValue)) {
+      this.setResubmitChangedOnce(control);
+      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
+    }
   }
 
   /**
@@ -260,6 +332,8 @@ export abstract class PlanStepBaseClass {
     correctedFields: IFieldInformation[]
   ): void {
     enabledParentChains.forEach((parentChain, control) => {
+      const fieldForControl = correctedFields.find(f => this.getControlForField(f) === control);
+
       // Enable parent chain
       parentChain.forEach(parent => {
         parent.enable({ emitEvent: false, onlySelf: true });
@@ -278,6 +352,11 @@ export abstract class PlanStepBaseClass {
             this.upDateSelectedInputs(false, field);
           }
         }
+
+        // Also mark "changed once" if this control became dirty.
+        if (fieldForControl) {
+          this.markCorrectedFieldChangedOnce(fieldForControl, control);
+        }
       });
 
       // Also subscribe to value changes to handle cases where status doesn't change (e.g., file uploads)
@@ -287,6 +366,10 @@ export abstract class PlanStepBaseClass {
           if (field) {
             this.upDateSelectedInputs(false, field);
           }
+        }
+
+        if (fieldForControl) {
+          this.markCorrectedFieldChangedOnce(fieldForControl, control);
         }
       });
     });
@@ -469,23 +552,25 @@ export abstract class PlanStepBaseClass {
         (rowId === undefined || input.id === rowId)
     );
 
-    // In resubmit mode, highlight corrected fields only until the user changes them.
-    // (Some controls like file uploads may stay VALID and not emit status changes.)
+    // In resubmit mode, highlight corrected fields only until the investor changes them once.
+    // After first change, do NOT re-highlight even if the value is reverted.
     const correctedField = this.isResubmitMode()
-      ? this.correctedFields().find(
-          input => input.inputKey === inputKey && (rowId === undefined || input.id === rowId)
-        )
+      ? this.correctedFields().find(input => input.inputKey === inputKey && (rowId === undefined || input.id === rowId))
       : undefined;
-    const isCorrected = !!correctedField && !this.hasFieldValueChanged(correctedField);
+
+    let isCorrected = false;
+    if (correctedField) {
+      const fieldKey = this.getFieldKey(correctedField);
+      const control = this.getControlForField(correctedField);
+      const changedOnce =
+        this.correctedFieldChangedOnce().has(fieldKey) ||
+        this.hasResubmitChangedOnce(control) ||
+        !!control?.dirty;
+      isCorrected = !changedOnce;
+    }
 
     const phase = this.commentPhase();
     return (isSelected || isCorrected) && (phase === 'adding' || phase === 'editing' || phase === 'none');
-  }
-
-  private hasFieldValueChanged(field: IFieldInformation): boolean {
-    const originalValue = this.getOriginalValue(field);
-    const currentValue = this.getCurrentValue(field);
-    return !this.valuesEqual(originalValue, currentValue);
   }
 
   private valuesEqual(a: any, b: any): boolean {
