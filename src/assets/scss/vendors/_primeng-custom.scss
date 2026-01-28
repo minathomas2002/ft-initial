@@ -101,6 +101,10 @@
     inset-inline-end: calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size)) !important;
   }
 
+  &:has(input:disabled) .p-datepicker-dropdown {
+    cursor: default !important;
+  }
+
   .p-datepicker-day-view {
     @include primengInputsFontSize;
   }
