@@ -77,7 +77,7 @@
                 icon="icon-data"
                 [cardTitle]="'opportunity.details.quantityUnits' | translate"
                 cardClass="bg-white"
-                cardDescription="{{ opportunitiesStore.details()?.maxQuantityFormatted }} - {{
+                cardDescription="{{ opportunitiesStore.details()?.minQuantityFormatted }} - {{
                   opportunitiesStore.details()?.maxQuantityFormatted
                 }}"
               >
@@ -94,7 +94,8 @@
                 [cardTitle]="'opportunity.details.local' | translate"
                 cardClass="bg-white"
                 cardDescription="{{ 
-                  opportunitiesStore.details()?.localSuppliersFormatted == '0' ?
+                  (opportunitiesStore.details()?.localSuppliersFormatted == '0' ||
+                   opportunitiesStore.details()?.localSuppliersFormatted == null) ?
                   '-':
                    opportunitiesStore.details()?.localSuppliersFormatted + '+'
                 }}"
@@ -105,7 +106,8 @@
                 [cardTitle]="'opportunity.details.global' | translate"
                 cardClass="bg-white"
                 cardDescription="{{
-                  opportunitiesStore.details()?.globalSuppliersFormatted == '0' ?
+                  (opportunitiesStore.details()?.globalSuppliersFormatted == '0' ||
+                  opportunitiesStore.details()?.globalSuppliersFormatted == null) ?
                   '-':
                    opportunitiesStore.details()?.globalSuppliersFormatted + '+'
                 }}"
@@ -131,7 +133,19 @@
         <h5 class="text-[20px] font-semibold mb-5">
           {{ 'opportunity.details.localizationAreas' | translate }}
         </h5>
+
+        @if (
+          !(opportunitiesStore.details()?.designEngineerings?.length ||
+            opportunitiesStore.details()?.sourcings?.length ||
+            opportunitiesStore.details()?.manufacturings?.length ||
+            opportunitiesStore.details()?.assemblyTestings?.length ||
+            opportunitiesStore.details()?.afterSalesServices?.length)
+        ) {
+        <p class="text-md text-gray-600 mb-2">No data available</p>
+        }
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @if (opportunitiesStore.details()?.designEngineerings?.length) {
           <app-base-card
             icon="icon-lighting-02"
             [cardTitle]="'opportunity.details.designEngineering' | translate"
@@ -148,6 +162,8 @@
               </div>
             </ng-container>
           </app-base-card>
+          }
+          @if (opportunitiesStore.details()?.sourcings?.length) {
           <app-base-card
             icon="icon-lighting-02"
             [cardTitle]="'opportunity.details.sourcing' | translate"
@@ -164,6 +180,8 @@
               </div>
             </ng-container>
           </app-base-card>
+          }
+          @if (opportunitiesStore.details()?.manufacturings?.length) {
           <app-base-card
             icon="icon-lighting-02"
             [cardTitle]="'opportunity.details.manufacturing' | translate"
@@ -180,6 +198,8 @@
               </div>
             </ng-container>
           </app-base-card>
+          }
+          @if (opportunitiesStore.details()?.assemblyTestings?.length) {
           <app-base-card
             icon="icon-lighting-02"
             [cardTitle]="'opportunity.details.assemblyTesting' | translate"
@@ -196,6 +216,8 @@
               </div>
             </ng-container>
           </app-base-card>
+          }
+          @if (opportunitiesStore.details()?.afterSalesServices?.length) {
           <app-base-card
             icon="icon-lighting-02"
             [cardTitle]="'opportunity.details.afterSalesServices' | translate"
@@ -212,6 +234,7 @@
               </div>
             </ng-container>
           </app-base-card>
+          }
         </div>
       </div>
     </div>
