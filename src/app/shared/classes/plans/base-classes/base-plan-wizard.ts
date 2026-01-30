@@ -5,7 +5,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ReviewPlanRequest, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
-import { TCommentPhase } from '../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase } from '../../../components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
