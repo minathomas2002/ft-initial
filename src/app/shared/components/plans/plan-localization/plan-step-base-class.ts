@@ -125,7 +125,8 @@ export abstract class PlanStepBaseClass {
     // Setup resubmit mode effect to handle correctedFields when they become available
     this.setupResubmitModeEffect();
 
-    // Call hook for step-specific initialization
+    // Call hook for step-specific initialization (must only register effects/setup here;
+    // logic that needs planFormService etc. should run in ngOnInit in the subclass)
     this.initializeStepSpecificLogic();
 
     // Always keep the step comment control disabled.

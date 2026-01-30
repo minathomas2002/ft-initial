@@ -115,6 +115,14 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     return this.doYouHaveLocalAgentInKSASignal() === true;
   });
 
+  // Registered in field initializer (injection context) so effect() is valid; runs after construction when dependencies are set
+  // private readonly _localAgentValidationEffect = effect(() => {
+  //   const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
+  //   if (doYouHaveLocalAgentInKSA !== null && this.planFormService) {
+  //     this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+  //   }
+  // });
+
   // Computed signal for opportunity disabled state
   isOpportunityDisabled = computed(() => {
     return this.planStore?.appliedOpportunity() !== null;
@@ -175,35 +183,19 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     }
   }
 
-  // Override hook method for step-specific initialization
-  protected override initializeStepSpecificLogic(): void {
-    // Ensure form service is available before accessing form groups
-    if (!this.planFormService) {
-      return;
-    }
-
-    // Local agent validation effect - reactive to signal changes
-    effect(() => {
-      const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
-      if (doYouHaveLocalAgentInKSA !== null && this.planFormService) {
-        this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
-      }
-    });
-
-    // Initialize opportunity value based on appliedOpportunity
-    // Check if form controls and store are available (may not be initialized in review mode or during construction)
-    // Note: planStore is injected, but property initializers run after base constructor, so we need to check
+  override ngOnInit(): void {
+    super.ngOnInit();
+    if (!this.planFormService) return;
     const planStore = this.planStore;
-    if (this.basicInformationFormGroupControls && planStore) {
-      const opportunityFormControl = this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity];
-      if (opportunityFormControl) {
-        const opportunityControl = this.getFormControl(opportunityFormControl);
-        const appliedOpportunity = planStore.appliedOpportunity();
-        const availableOpportunities = planStore.availableOpportunities();
-        if (appliedOpportunity && availableOpportunities.length > 0) {
-          opportunityControl.setValue(availableOpportunities[0]);
-        }
-      }
+    const basicInfoControls = this.basicInformationFormGroupControls;
+    if (!basicInfoControls || !planStore) return;
+    const opportunityFormControl = basicInfoControls[EMaterialsFormControls.opportunity];
+    if (!opportunityFormControl) return;
+    const opportunityControl = this.getFormControl(opportunityFormControl);
+    const appliedOpportunity = planStore.appliedOpportunity();
+    const availableOpportunities = planStore.availableOpportunities();
+    if (appliedOpportunity && availableOpportunities.length > 0) {
+      opportunityControl.setValue(availableOpportunities[0]);
     }
   }
 
