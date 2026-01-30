@@ -20,7 +20,7 @@ export class PlanTimelineActionsMapper {
     [EActionPlanTimeLine.DeptRejected]: 'Department Rejected',
     [EActionPlanTimeLine.DVApproved]: 'DV Approved',
     [EActionPlanTimeLine.DeptApproved]: 'Department Approved',
-    [EActionPlanTimeLine.EmployeeApproved]: 'Employee Approved',
+    [EActionPlanTimeLine.EmployeeApproved]: 'Plan Approved and Forwarded to DV Manager',
     [EActionPlanTimeLine.EditPlan]: 'Edited the plan',
   };
 

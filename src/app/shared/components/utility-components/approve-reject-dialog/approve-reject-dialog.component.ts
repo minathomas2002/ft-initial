@@ -25,6 +25,7 @@ export class ApproveRejectDialogComponent {
   onCancel = output();
   isLoading = input(false);
   isRequired = input(false);
+  confirmButtonSeverity = input<'primary' | 'secondary' | 'success' | 'info' | 'danger' | 'help'>("primary");
 
   onConfirm(): void {
     if (this.isRequired() && !this.note().trim()) {
