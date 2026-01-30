@@ -177,11 +177,6 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
-    // Ensure form service is available before accessing form groups
-    if (!this.planFormService) {
-      return;
-    }
-
     // Local agent validation effect - reactive to signal changes
     effect(() => {
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
