@@ -1,0 +1,44 @@
+<div class="flex flex-col gap-6 bg-white">
+  <app-summary-section-header
+    [title]="pageTitleForTL"
+    [isViewMode]="isViewMode()"
+    (onEdit)=" onEdit.emit()"
+  />
+  <!-- Basic Information -->
+  <app-basic-information-summary-section
+    [sectionFormGroup]="basicInformationFormGroup()"
+    [sectionSummaryFields]="basicInformationSummaryFields()"
+  />
+
+  <!-- Company Information -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-lg font-semibold text-gray-900">Company Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Company Information Form Group -->
+    </div>
+  </div>
+
+  <!-- Location Information -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-lg font-semibold text-gray-900">Location Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!--  -->
+    </div>
+
+    @if (true) {
+    <div class="flex flex-col gap-4">
+      <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Local Agent Information Form Group -->
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (commentForPage()) {
+  <app-page-comment-box
+    [commentTitle]="commentForPage()!.title"
+    [commentText]="commentForPage()!.text"
+  />
+  }
+</div>
