@@ -24,7 +24,7 @@ import { StepContentDirective } from 'src/app/shared/directives';
 import { ServiceLocalizationStepCoverPage } from '../service-localization-step-cover-page/service-localization-step-cover-page';
 import { ServiceLocalizationStepOverview } from '../service-localization-step-overview/service-localization-step-overview';
 import { ServiceLocalizationStepExistingSaudi } from '../service-localization-step-existing-saudi/service-localization-step-existing-saudi';
-import { ServiceLocalizationStepSummary } from '../service-localization-step-summary/service-localization-step-summary';
+import { ServicePlanSummaryPage } from '../service-plan-summary-page/service-plan-summary-page';
 import { ServiceLocalizationStepDirectLocalization } from '../service-localization-step-direct-localization/service-localization-step-direct-localization';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { ButtonModule } from 'primeng/button';
@@ -63,7 +63,7 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
     ServiceLocalizationStepCoverPage,
     ServiceLocalizationStepOverview,
     ServiceLocalizationStepExistingSaudi,
-    ServiceLocalizationStepSummary,
+    ServicePlanSummaryPage,
     ServiceLocalizationStepDirectLocalization,
     ButtonModule,
     TimelineDialog,

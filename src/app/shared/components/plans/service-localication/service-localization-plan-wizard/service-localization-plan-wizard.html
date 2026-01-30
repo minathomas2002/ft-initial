@@ -124,30 +124,11 @@
 
   <!-- Summary step is always last -->
   <ng-template [appStepContent]="summaryStepIndex()">
-    <app-service-localization-step-summary
-      [isViewMode]="isViewMode()"
-      [commentTitle]="commentTitle() || 'Comments' "
-      [signature]="planSignature()"
-      [pageComments]="collectAllPageComments()"
+    <app-service-plan-summary-page
       [includeExistingSaudi]="showExistingSaudiStep()"
       [includeDirectLocalization]="showDirectLocalizationStep()"
-      [coverStepNumber]="stepIndex('cover')"
-      [overviewStepNumber]="stepIndex('overview')"
-      [existingSaudiStepNumber]="stepIndex('existingSaudi')"
-      [directLocalizationStepNumber]="stepIndex('directLocalization')"
-      [step1Comments]="step1Comments()"
-      [step2Comments]="step2Comments()"
-      [step3Comments]="step3Comments()"
-      [step4Comments]="step4Comments()"
-      [step1CorrectedFields]="step1CorrectedFieldIds()"
-      [step2CorrectedFields]="step2CorrectedFieldIds()"
-      [step3CorrectedFields]="step3CorrectedFieldIds()"
-      [step4CorrectedFields]="step4CorrectedFieldIds()"
-      [originalPlanResponse]="originalPlanResponse()"
-      #summaryComponent
-      (onEditStep)="navigateToStep($event)"
-      (onValidationErrorsChange)="updateValidationErrors($event)"
-    ></app-service-localization-step-summary>
+      [signature]="planSignature()"
+    />
   </ng-template>
 
   <ng-container ngProjectAs="final-step-action">

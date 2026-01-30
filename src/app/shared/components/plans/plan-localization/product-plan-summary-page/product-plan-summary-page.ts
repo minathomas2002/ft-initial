@@ -6,7 +6,12 @@ import { SaudizationStepSummary } from '../product-localization-plan-wizard/summ
 
 @Component({
   selector: 'app-product-plan-summary-page',
-  imports: [OverviewCompanyStepSummary, ProductPlantOverviewStepSummary, ValueChainStepSummary, SaudizationStepSummary],
+  imports: [
+    OverviewCompanyStepSummary,
+    ProductPlantOverviewStepSummary,
+    ValueChainStepSummary,
+    SaudizationStepSummary,
+  ],
   templateUrl: './product-plan-summary-page.html',
   styleUrl: './product-plan-summary-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
