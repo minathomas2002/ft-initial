@@ -25,6 +25,8 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     currantValue: this.planTitleControl()?.value,
     hasError: this.planTitleControl().invalid,
     hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle),
+    isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
+    showDifference: !!this.planTitleControl().dirty
   }));
 
   opportunityTypeSummaryField = computed<IPlanSummaryField>(() => ({
@@ -33,6 +35,8 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     currantValue: this.mapOpportunityTypeToLabel(this.opportunityTypeControl()?.value),
     hasError: false,
     hasComment: false,
+    isResolved: false,
+    showDifference: false
   }));
 
   opportunitySummaryField = computed<IPlanSummaryField>(() => ({
@@ -41,6 +45,8 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     currantValue: this.opportunityControl()?.value.name,
     hasError: false,
     hasComment: false,
+    isResolved: false,
+    showDifference: false
   }));
 
   submissionDateSummaryField = computed<IPlanSummaryField>(() => ({
@@ -49,6 +55,8 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     currantValue: this.getFormattedDate(this.submissionDateControl()?.value) || 'Invalid Date',
     hasError: false,
     hasComment: false,
+    isResolved: false,
+    showDifference: false
   }));
 
   private mapOpportunityTypeToLabel(opportunityType: string): string {
