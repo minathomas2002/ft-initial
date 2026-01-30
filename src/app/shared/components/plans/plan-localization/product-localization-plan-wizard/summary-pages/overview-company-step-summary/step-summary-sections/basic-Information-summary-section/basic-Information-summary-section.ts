@@ -23,7 +23,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     label: this.i18nService.translate('plans.newPlan.planTitle'),
     beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.basicInfo.planTitle ?? '',
     currantValue: this.planTitleControl()?.value,
-    hasError: this.planTitleControl().invalid,
+    hasError: this.isFieldHasError(this.planTitleControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle),
     isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
     showDifference: !!this.planTitleControl().dirty

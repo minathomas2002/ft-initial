@@ -13,25 +13,28 @@
   <!-- Company Information -->
   <div class="flex flex-col gap-4">
     <h3 class="text-lg font-semibold text-gray-900">Company Information</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Company Information Form Group -->
-    </div>
+    <app-company-information-summary-section
+    [sectionFormGroup]="companyInformationFormGroup()"
+    [sectionSummaryFields]="companyInformationSummaryFields()"
+    />
   </div>
 
   <!-- Location Information -->
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-6">
     <h3 class="text-lg font-semibold text-gray-900">Location Information</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!--  -->
-    </div>
+    <app-location-information-summary-section
+      [sectionFormGroup]="locationInformationFormGroup()"
+      [sectionSummaryFields]="locationInformationSummaryFields()"
+    />
 
-    @if (true) {
-    <div class="flex flex-col gap-4">
-      <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Local Agent Information Form Group -->
+    @if (showLocalAgentInformation()) {
+      <div class="flex flex-col gap-4">
+        <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
+        <app-local-agent-information-summary-section
+          [sectionFormGroup]="localAgentInformationFormGroup()"
+          [sectionSummaryFields]="localAgentInformationSummaryFields()"
+        />
       </div>
-    </div>
     }
   </div>
 

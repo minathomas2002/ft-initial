@@ -44,6 +44,10 @@ export abstract class SummarySectionBaseClass {
     return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && summaryField.id === rowId);
   }
 
+  isFieldHasError(formControl: FormControl): boolean {
+    return formControl.invalid && formControl.dirty;
+  }
+
   protected getFormattedDate(dateValue: string): string | null {
     const date = new Date(dateValue);
     return this.datePipe.transform(date, 'dd MMM yyyy');
