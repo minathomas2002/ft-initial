@@ -26,7 +26,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     hasError: this.isFieldHasError(this.planTitleControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle),
     isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
-    showDifference: !!this.planTitleControl().dirty
+    showDifference: this.shouldShowDifference(this.planTitleControl()),
   }));
 
   opportunityTypeSummaryField = computed<IPlanSummaryField>(() => ({

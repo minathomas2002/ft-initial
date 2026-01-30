@@ -27,7 +27,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     hasError: this.isFieldHasError(this.localAgentNameControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.localAgentName),
     isResolved: this.isResolvedField(EMaterialsFormControls.localAgentName),
-    showDifference: !!this.localAgentNameControl().dirty,
+    showDifference: this.shouldShowDifference(this.localAgentNameControl()),
   }));
 
   contactPersonNameSummaryField = computed<IPlanSummaryField>(() => ({
@@ -37,7 +37,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     hasError: this.isFieldHasError(this.contactPersonNameControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.contactPersonName),
     isResolved: this.isResolvedField(EMaterialsFormControls.contactPersonName),
-    showDifference: !!this.contactPersonNameControl().dirty,
+    showDifference: this.shouldShowDifference(this.contactPersonNameControl()),
   }));
 
   emailIDSummaryField = computed<IPlanSummaryField>(() => ({
@@ -47,7 +47,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     hasError: this.isFieldHasError(this.emailIDControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.emailID),
     isResolved: this.isResolvedField(EMaterialsFormControls.emailID),
-    showDifference: !!this.emailIDControl().dirty,
+    showDifference: this.shouldShowDifference(this.emailIDControl()),
   }));
 
   contactNumberSummaryField = computed<IPlanSummaryField>(() => ({
@@ -57,7 +57,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     hasError: this.isFieldHasError(this.contactNumberControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.contactNumber),
     isResolved: this.isResolvedField(EMaterialsFormControls.contactNumber),
-    showDifference: !!this.contactNumberControl().dirty,
+    showDifference: this.shouldShowDifference(this.contactNumberControl()),
   }));
 
   companyHQLocationSummaryField = computed<IPlanSummaryField>(() => ({
@@ -67,6 +67,6 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     hasError: this.isFieldHasError(this.companyHQLocationControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.companyHQLocation),
     isResolved: this.isResolvedField(EMaterialsFormControls.companyHQLocation),
-    showDifference: !!this.companyHQLocationControl().dirty,
+    showDifference: this.shouldShowDifference(this.companyHQLocationControl()),
   }));
 }

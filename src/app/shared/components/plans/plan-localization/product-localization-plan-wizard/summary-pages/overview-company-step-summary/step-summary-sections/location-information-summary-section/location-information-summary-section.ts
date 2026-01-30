@@ -25,7 +25,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
     hasError: this.isFieldHasError(this.globalHQLocationControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.globalHQLocation),
     isResolved: this.isResolvedField(EMaterialsFormControls.globalHQLocation),
-    showDifference: !!this.globalHQLocationControl().dirty,
+    showDifference: this.shouldShowDifference(this.globalHQLocationControl()),
   }));
 
   registeredVendorIDSummaryField = computed<IPlanSummaryField>(() => ({
@@ -35,7 +35,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
     hasError: this.isFieldHasError(this.registeredVendorIDControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.registeredVendorIDwithSEC),
     isResolved: this.isResolvedField(EMaterialsFormControls.registeredVendorIDwithSEC),
-    showDifference: !!this.registeredVendorIDControl().dirty,
+    showDifference: this.shouldShowDifference(this.registeredVendorIDControl()),
   }));
 
   doYouCurrentlyHaveLocalAgentSummaryField = computed<IPlanSummaryField>(() => {
@@ -50,7 +50,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
       hasError: this.isFieldHasError(this.doYouCurrentlyHaveLocalAgentControl()),
       hasComment: this.isFieldHasComment(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
       isResolved: this.isResolvedField(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
-      showDifference: !!this.doYouCurrentlyHaveLocalAgentControl().dirty,
+      showDifference: this.shouldShowDifference(this.doYouCurrentlyHaveLocalAgentControl()),
     };
   });
 }

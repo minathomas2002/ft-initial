@@ -44,7 +44,11 @@ export abstract class SummarySectionBaseClass {
     return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && summaryField.id === rowId);
   }
 
-  isFieldHasError(formControl: FormControl): boolean {
+  protected shouldShowDifference(formControl: FormControl): boolean {
+    return formControl.dirty && this.planStore.wizardMode() === 'resubmit';
+  }
+
+  protected isFieldHasError(formControl: FormControl): boolean {
     return formControl.invalid && formControl.dirty;
   }
 

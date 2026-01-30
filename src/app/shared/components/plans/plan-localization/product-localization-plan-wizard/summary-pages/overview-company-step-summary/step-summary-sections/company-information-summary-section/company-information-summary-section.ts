@@ -25,7 +25,7 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
     hasError: this.isFieldHasError(this.companyNameControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName),
     isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
-    showDifference: !!this.companyNameControl().dirty,
+    showDifference: this.shouldShowDifference(this.companyNameControl()),
   }));
 
   ceoNameSummaryField = computed<IPlanSummaryField>(() => ({
@@ -35,7 +35,7 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
     hasError: this.isFieldHasError(this.ceoNameControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoName),
     isResolved: this.isResolvedField(EMaterialsFormControls.ceoName),
-    showDifference: !!this.ceoNameControl().dirty,
+    showDifference: this.shouldShowDifference(this.ceoNameControl()),
   }));
 
   ceoEmailSummaryField = computed<IPlanSummaryField>(() => ({
@@ -45,6 +45,6 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
     hasError: this.isFieldHasError(this.ceoEmailIDControl()),
     hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoEmailID),
     isResolved: this.isResolvedField(EMaterialsFormControls.ceoEmailID),
-    showDifference: !!this.ceoEmailIDControl().dirty,
+    showDifference: this.shouldShowDifference(this.ceoEmailIDControl()),
   }));
 }
