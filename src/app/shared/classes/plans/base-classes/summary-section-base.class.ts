@@ -1,9 +1,10 @@
 import { DatePipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, input } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
-import { EMaterialsFormControls } from "src/app/shared/enums";
+import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
+import { EMaterialsFormControls, ERoles } from "src/app/shared/enums";
 import { IFieldInformation } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n";
+import { RoleService } from "src/app/shared/services/role/role-service";
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 
 @Component({
@@ -17,6 +18,7 @@ export abstract class SummarySectionBaseClass {
   protected readonly planStore = inject(PlanStore);
   public readonly sectionFormGroup = input.required<FormGroup>();
   public readonly sectionSummaryFields = input.required<IFieldInformation[]>();
+  protected readonly roleService = inject(RoleService);
 
 
   protected getFormControl(controlName: string): FormControl {
@@ -25,6 +27,17 @@ export abstract class SummarySectionBaseClass {
 
   protected getValueFormControl(controlName: string): FormControl {
     return this.getFormControl(controlName).get(EMaterialsFormControls.value) as FormControl;
+  }
+
+  protected isHasCommentControlChecked(controlName: string): boolean {
+    return this.getFormControl(controlName).get(EMaterialsFormControls.hasComment)?.value;
+  }
+
+  protected isResolvedField(controlName: string): boolean {
+    return this.isFieldHasComment(controlName) &&
+      !this.isHasCommentControlChecked(controlName) &&
+      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 
   protected isFieldHasComment(inputKey: string, rowId: string | null = null): boolean {
