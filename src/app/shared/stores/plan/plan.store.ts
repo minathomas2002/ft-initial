@@ -53,6 +53,8 @@ const initialState: {
   selectedPlanId: string | null;
   planStatus: number | null;
   planComments: IPlanCommentResponse | null;
+  productPlanData: IProductPlanResponse | null;
+  servicePlanData: IServiceLocalizationPlanResponse | null;
 } = {
   newPlanOpportunityType: null,
   appliedOpportunity: null,
@@ -154,6 +156,8 @@ const initialState: {
   selectedPlanId: null,
   planStatus: null,
   planComments: null,
+  productPlanData: null,
+  servicePlanData: null,
 };
 
 export const PlanStore = signalStore(
@@ -510,6 +514,9 @@ export const PlanStore = signalStore(
       getProductPlan(planId: string): Observable<IBaseApiResponse<IProductPlanResponse>> {
         patchState(store, { isLoading: true, error: null });
         return planApiService.getProductPlan({ planId }).pipe(
+          tap((res) => {
+            patchState(store, { productPlanData: res.body || null });
+          }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading product plan' });
             return throwError(() => new Error('Error loading product plan'));
@@ -524,6 +531,9 @@ export const PlanStore = signalStore(
       getServicePlan(planId: string): Observable<IBaseApiResponse<IServiceLocalizationPlanResponse>> {
         patchState(store, { isLoading: true, error: null });
         return planApiService.getServicePlan({ planId }).pipe(
+          tap((res) => {
+            patchState(store, { servicePlanData: res.body || null });
+          }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading service plan' });
             return throwError(() => new Error('Error loading service plan'));
