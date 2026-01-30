@@ -362,4 +362,6 @@ export interface IPlanSummaryField {
   currantValue: string;
   hasError: boolean;
   hasComment: boolean;
+  isResolved: boolean;
+  showDifference: boolean;
 }
