@@ -115,3 +115,8 @@ export enum EemployeePlanAction {
   Approve = 7,
   Reject = 10
 }
+
+export enum ECommentType {
+  inComingComment = 1,
+  outGoingComment = 2,
+}
