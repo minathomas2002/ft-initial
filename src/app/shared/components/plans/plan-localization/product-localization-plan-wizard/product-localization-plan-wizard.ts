@@ -32,7 +32,8 @@ import { AuthStore } from "src/app/shared/stores/auth/auth.store";
 import { ERoles } from "src/app/shared/enums/roles.enum";
 import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
-import { BasePlanWizard } from '../../base-wizard-class/base-plan-wizard';
+import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
+import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 
@@ -51,7 +52,7 @@ type ProductLocalizationWizardStepId =
     PlanLocalizationStep02ProductPlantOverviewForm,
     PlanLocalizationStep03ValueChainForm,
     PlanLocalizationStep04SaudizationForm,
-    PlanLocalizationStep05Summary,
+    ProductPlanSummaryPage,
     ButtonModule,
     BaseTagComponent,
     StepContentDirective,
