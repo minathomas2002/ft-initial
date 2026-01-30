@@ -1,6 +1,8 @@
 <div class="flex items-center gap-3">
   <div class="flex flex-col gap-1">
+    @if (label()) {
     <span class="text-sm text-gray-700">{{ label() }}</span>
+    }
     @if (showDiff() && hasDiff()) {
     <div class="flex items-center gap-2">
       <span class="text-sm font-medium text-gray-500 line-through wrap-break-word border border-gray-200 bg-gray-50 p-1 rounded-md">{{ displayBeforeValue() }}</span>
@@ -8,12 +10,10 @@
       <span class="text-sm font-medium text-green-600 wrap-break-word border border-success-200 bg-success-50 p-1 rounded-md">{{ displayAfterValue() }}</span>
     </div>
     } @else {
-    <span
-  [ngClass]="{
+    <span [ngClass]="{
     'text-[#1D1E23] font-medium border border-[#ABEFC6] bg-[#ECFDF3] px-2 w-fit py-1 rounded-md': isResolved(),
     'text-gray-900': !isResolved()
-  }"
-    >{{ displayValue() }}</span>
+  }">{{ displayValue() }}</span>
     }
   </div>
   @if (hasComment() && !showDiff() && !isResolved()) {
