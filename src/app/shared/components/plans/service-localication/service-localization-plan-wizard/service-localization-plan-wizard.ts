@@ -42,7 +42,7 @@ import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
-import { BasePlanWizard } from '../../base-wizard-class/base-plan-wizard';
+import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { EInternalUserPlanStatus, EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
 
 type ServiceLocalizationWizardStepId =
