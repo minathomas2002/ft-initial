@@ -355,3 +355,11 @@ export interface IPlanCommentResponse {
   comments: IPageComment[];
   creatorRole: number;
 }
+
+export interface IPlanSummaryField {
+  label?: string;
+  beforeValue: string;
+  currantValue: string;
+  hasError: boolean;
+  hasComment: boolean;
+}
