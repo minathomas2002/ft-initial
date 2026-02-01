@@ -275,7 +275,7 @@
                   [value]="service.totalBusinessDoneLast5Years"
                   [isEmpty]="!service.totalBusinessDoneLast5Years"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'totalBusinessDoneLast5Years')"
-                  [hasComment]="hasServiceDetailComment(rowIndex, 'totalBusinessDoneLast5Years')" 
+                  [hasComment]="hasServiceDetailComment(rowIndex, 'totalBusinessDoneLast5Years')"
                   [beforeValue]="getBeforeValue('totalBusinessDoneLast5Years', rowIndex)"
                   [afterValue]="getAfterValue('totalBusinessDoneLast5Years', rowIndex)"
                   [showDiff]="shouldShowDiff('totalBusinessDoneLast5Years', rowIndex)"
@@ -285,7 +285,6 @@
               <td class="border-t border-gray-300 p-4">
                 <app-summary-table-cell
                   [value]="service.serviceTargetedForLocalization"
-                  [isBoolean]="true"
                   [isEmpty]="!service.serviceTargetedForLocalization"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceTargetedForLocalization')"
                   [hasComment]="hasServiceDetailComment(rowIndex, 'serviceTargetedForLocalization')"
@@ -313,7 +312,6 @@
                   [isEmpty]="!service.serviceLocalizationMethodology"
                   [hasError]="hasServiceDetailFieldError(rowIndex, 'serviceLocalizationMethodology')"
                   [hasComment]="hasServiceDetailComment(rowIndex, 'serviceLocalizationMethodology')"
-
                   [beforeValue]="getBeforeValue('serviceLocalizationMethodology', rowIndex)"
                   [afterValue]="getAfterValue('serviceLocalizationMethodology', rowIndex)"
                   [showDiff]="shouldShowDiff('serviceLocalizationMethodology', rowIndex)"

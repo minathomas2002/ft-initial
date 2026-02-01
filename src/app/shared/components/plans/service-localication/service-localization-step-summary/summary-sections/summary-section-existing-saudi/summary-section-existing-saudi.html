@@ -222,7 +222,7 @@
                     [value]="partner.supervisionOversightEntity"
                     [isEmpty]="!partner.supervisionOversightEntity"
                     [hasError]="hasCollaborationFieldError(rowIndex, 'supervisionOversightEntity')"
-                    [hasComment]="hasCollaborationComment(rowIndex, 'supervisionOversightEntity')"        
+                    [hasComment]="hasCollaborationComment(rowIndex, 'supervisionOversightEntity')"
                     [beforeValue]="getBeforeValue('supervisionOversightEntity', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('supervisionOversightEntity', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('supervisionOversightEntity', 'collaborationPartnership', rowIndex)"
@@ -259,7 +259,6 @@
                     [beforeValue]="getBeforeValue('provideAgreementCopy', 'collaborationPartnership', rowIndex)"
                     [afterValue]="getAfterValue('provideAgreementCopy', 'collaborationPartnership', rowIndex)"
                     [showDiff]="shouldShowDiff('provideAgreementCopy', 'collaborationPartnership', rowIndex)"
-                    [isBoolean]="true"
                   />
                 </td>
               </tr>
@@ -408,7 +407,7 @@
                     [value]="yearCell.value"
                     [isEmpty]="!yearCell.value && yearCell.value !== 0"
                     [hasError]="hasServiceLevelFieldError(service.index, yearCell.controlName)"
-                    [hasComment]="hasServiceLevelComment(service.index, yearCell.controlName)"      
+                    [hasComment]="hasServiceLevelComment(service.index, yearCell.controlName)"
                     [beforeValue]="getBeforeValue(yearCell.controlName, 'serviceLevel', service.index)"
                     [afterValue]="getAfterValue(yearCell.controlName, 'serviceLevel', service.index)"
                     [showDiff]="shouldShowDiff(yearCell.controlName, 'serviceLevel', service.index)"
@@ -444,7 +443,7 @@
                     [value]="service.mentionSupportRequiredFromSEC"
                     [isEmpty]="!service.mentionSupportRequiredFromSEC"
                     [hasError]="hasServiceLevelFieldError(service.index, 'mentionSupportRequiredFromSEC')"
-                    [hasComment]="hasServiceLevelComment(service.index, 'mentionSupportRequiredFromSEC')" 
+                    [hasComment]="hasServiceLevelComment(service.index, 'mentionSupportRequiredFromSEC')"
                     [beforeValue]="getBeforeValue('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"
                     [afterValue]="getAfterValue('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"
                     [showDiff]="shouldShowDiff('mentionSupportRequiredFromSEC', 'serviceLevel', service.index)"
@@ -517,12 +516,12 @@
         </div>
         <div class="flex items-center gap-3 flex-1 min-w-0">
           <button
-          type="button"
-          class="p-2 rounded-md hover:bg-gray-100 transition-colors flex-shrink-0"
-          (click)="downloadFile(file)"
-          [attr.aria-label]="'Download ' + file.name"
-        >
-          <i class="icon-save text-gray-600"></i>
+            type="button"
+            class="p-2 rounded-md hover:bg-gray-100 transition-colors flex-shrink-0"
+            (click)="downloadFile(file)"
+            [attr.aria-label]="'Download ' + file.name"
+          >
+            <i class="icon-save text-gray-600"></i>
           </button>
         </div>
         }
