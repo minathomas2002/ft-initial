@@ -36,9 +36,9 @@ export class CoverPageServicesSummarySection extends SummarySectionBaseClass {
       const showDiff = valueCtrl ? (valueCtrl.dirty && this.planStore.wizardMode() === 'resubmit') : false;
 
       return {
-        label: `Service ${i + 1}`,
+        label: ``,
         summaryField: {
-          label: 'Service Name',
+          label: '',
           beforeValue: String(beforeValue ?? ''),
           currantValue: value ?? '',
           hasError,
