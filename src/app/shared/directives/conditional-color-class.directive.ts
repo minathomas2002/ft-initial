@@ -49,7 +49,7 @@ export class ConditionalColorClassDirective {
    */
   private readonly colorClassMap: Record<string, { bg: string; border: string }> = {
     orange: { bg: 'bg-orange-50!', border: 'border-orange-500!' },
-    green: { bg: 'bg-[var(--p-success-50)]!', border: 'border-[var(--p-success-500)]!'},
+    green: { bg: 'bg-success-50!', border: 'border-success-500!' },
     red: { bg: 'bg-red-50!', border: 'border-red-500!' },
     blue: { bg: 'bg-blue-50!', border: 'border-blue-500!' },
     yellow: { bg: 'bg-yellow-50!', border: 'border-yellow-500!' },
