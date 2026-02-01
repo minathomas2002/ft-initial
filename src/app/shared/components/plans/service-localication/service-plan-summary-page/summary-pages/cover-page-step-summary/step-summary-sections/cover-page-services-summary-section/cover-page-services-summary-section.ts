@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { TableModule } from 'primeng/table';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-cover-page-services-summary-section',
-  imports: [PlanSummaryFlied],
+  imports: [PlanSummaryFlied, TableModule],
   templateUrl: './cover-page-services-summary-section.html',
   styleUrl: './cover-page-services-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,12 +44,25 @@ export class CoverPageServicesSummarySection extends SummarySectionBaseClass {
           currantValue: value ?? '',
           hasError,
           hasComment,
-          isResolved: false,
+          isResolved: this.isResolvedFieldForService(EMaterialsFormControls.serviceName, rowId, i, group),
           showDifference: showDiff,
         } as IPlanSummaryField,
       };
     });
   });
+
+  private isResolvedFieldForService(fieldKey: string, rowId: string | null, index: number, rowGroup: FormGroup): boolean {
+    const fieldCtrl = rowGroup.get(fieldKey);
+    const hasCommentControl = fieldCtrl instanceof FormGroup
+      ? fieldCtrl.get(EMaterialsFormControls.hasComment)
+      : null;
+    const isHasCommentChecked = hasCommentControl?.value ?? false;
+
+    return this.isFieldHasCommentForService(fieldKey, rowId, index) &&
+      !isHasCommentChecked &&
+      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+  }
 
   private isFieldHasCommentForService(fieldKey: string, rowId: string | null = null, index?: number): boolean {
     return this.sectionSummaryFields().some((f) => {

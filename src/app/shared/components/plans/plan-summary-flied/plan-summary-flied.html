@@ -3,19 +3,21 @@
     @if (planSummaryField().label) {
     <span class="text-sm text-gray-700">{{ planSummaryField().label }}</span>
     }
-    @if (planSummaryField().isResolved) {
-    <span class="text-sm font-medium text-green-600 wrap-break-word border border-success-200 bg-success-50 p-1 rounded-md">{{ planSummaryField().currantValue }}</span>
-    } @else {
-    @if (planSummaryField().showDifference && !planSummaryField().hasError) {
-    <div class="flex items-center gap-2">
-      <span class="text-sm font-medium text-gray-500 line-through wrap-break-word border border-gray-200 bg-gray-50 p-1 rounded-md">{{ planSummaryField().beforeValue }}</span>
-      <i class="icon-arrow-right text-gray-500 text-xs"></i>
+    <div>
+      @if (planSummaryField().isResolved) {
       <span class="text-sm font-medium text-green-600 wrap-break-word border border-success-200 bg-success-50 p-1 rounded-md">{{ planSummaryField().currantValue }}</span>
+      } @else {
+      @if (planSummaryField().showDifference && !planSummaryField().hasError) {
+      <div class="flex items-center gap-2">
+        <span class="text-sm font-medium text-gray-500 line-through wrap-break-word border border-gray-200 bg-gray-50 p-1 rounded-md">{{ planSummaryField().beforeValue }}</span>
+        <i class="icon-arrow-right text-gray-500 text-xs"></i>
+        <span class="text-sm font-medium text-green-600 wrap-break-word border border-success-200 bg-success-50 p-1 rounded-md">{{ planSummaryField().currantValue }}</span>
+      </div>
+      } @else {
+      <span class="text-gray-900">{{ planSummaryField().currantValue || '-' }}</span>
+      }
+      }
     </div>
-    } @else {
-    <span class="text-gray-900">{{ planSummaryField().currantValue || '-' }}</span>
-    }
-    }
   </div>
   @if (planSummaryField().hasComment && !planSummaryField().showDifference && !planSummaryField().isResolved) {
   <i
