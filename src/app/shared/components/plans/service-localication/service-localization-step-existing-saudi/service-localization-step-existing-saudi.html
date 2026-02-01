@@ -115,6 +115,7 @@
 
         <!-- Product(s) - Manufacturer + Qualified or Under Pre-Qualification -->
         <td class="p-3 border border-gray-200 min-w-[250px]">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.products)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.products))"
@@ -139,10 +140,22 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
             [label]="'Product(s)'"
           />
+          } @else {
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter specify the product(s)"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
+              class="bg-gray-100 text-gray-500"
+            />
+          }
         </td>
 
         <!-- Company Overview - Manufacturer + Not Qualified -->
         <td class="p-3 border border-gray-200 min-w-[300px]">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverview)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverview))"
@@ -155,7 +168,6 @@
             <input
               type="text"
               pInputText
-              fluid
               [maxlength]="255"
               placeholder="Enter company overview"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
@@ -167,10 +179,22 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
             [label]="'Company Overview'"
           />
+          } @else {
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter company overview"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
+              class="bg-gray-100 text-gray-500"
+            />
+          }
         </td>
 
         <!-- Key Projects Executed - Contractor -->
         <td class="p-3 border border-gray-200 min-w-[300px]">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
@@ -195,10 +219,22 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
             [label]="'Key Projects Executed'"
           />
+          } @else {
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter key projects executed by contractor for SEC"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
+              class="bg-gray-100 text-gray-500"
+            />
+          }
         </td>
 
         <!-- Company Overview, Key Project Details - Contractor -->
         <td class="p-3 border border-gray-200 min-w-[300px]">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewKeyProjectDetails)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
@@ -223,10 +259,22 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
             [label]="'Company Overview, Key Project Details'"
           />
+          } @else {
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter company overview, key project details etc."
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
+              class="bg-gray-100 text-gray-500"
+            />
+          }
         </td>
 
         <!-- Company Overview - Other -->
         <td class="p-3 border border-gray-200 min-w-[300px]">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewOther)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
@@ -251,6 +299,17 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
             [label]="'Company Overview'"
           />
+          } @else {
+            <input
+              type="text"
+              pInputText
+              fluid
+              [maxlength]="255"
+              placeholder="Enter company overview"
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
+              class="bg-gray-100 text-gray-500"
+            />
+          }
         </td>
       </ng-template>
     </app-form-array-input>
