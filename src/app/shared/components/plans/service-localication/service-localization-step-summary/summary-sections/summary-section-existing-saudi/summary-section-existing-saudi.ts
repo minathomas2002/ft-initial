@@ -182,6 +182,12 @@ export class SummarySectionExistingSaudi {
     return this.hasFieldError(`collaborationPartnershipFormGroup.${index}.${controlName}.value`);
   }
 
+  // Entity Level table rows: Expected Annual Headcount, Expected Saudization (%)
+  entityLevelTableRows = [
+    { label: 'Expected Annual Headcount', controlKey: 'headcount' },
+    { label: 'Expected Saudization (%)', controlKey: 'saudization' },
+  ] as const;
+
   // Entity Level data
   entityLevel = computed(() => {
     const entityArray = this.entityLevelFormArray();
@@ -197,9 +203,13 @@ export class SummarySectionExistingSaudi {
     };
 
     return {
-      headcount: this.yearControlKeys.map((key) => ({
-        value: getValueFromControl(`${key}_headcount`),
-        controlName: `${key}_headcount`,
+      rows: this.entityLevelTableRows.map((rowConfig) => ({
+        label: rowConfig.label,
+        controlKey: rowConfig.controlKey,
+        yearValues: this.yearControlKeys.map((key) => ({
+          value: getValueFromControl(`${key}_${rowConfig.controlKey}`),
+          controlName: `${key}_${rowConfig.controlKey}`,
+        })),
       })),
     };
   });
@@ -587,6 +597,12 @@ export class SummarySectionExistingSaudi {
             'fourthYear_headcount': 'y4Headcount',
             'fifthYear_headcount': 'y5Headcount',
             'sixthYear_headcount': 'y6Headcount',
+            'firstYear_saudization': 'y1Saudization',
+            'secondYear_saudization': 'y2Saudization',
+            'thirdYear_saudization': 'y3Saudization',
+            'fourthYear_saudization': 'y4Saudization',
+            'fifthYear_saudization': 'y5Saudization',
+            'sixthYear_saudization': 'y6Saudization',
           };
           const yearKey = yearMap[fieldKey];
           if (yearKey && entity[yearKey as keyof typeof entity] !== undefined) {
@@ -682,8 +698,10 @@ export class SummarySectionExistingSaudi {
       case 'entityLevel':
         const entity = this.entityLevel();
         if (entity) {
-          const headcount = entity.headcount.find(h => h.controlName === fieldKey);
-          return headcount?.value ?? null;
+          for (const row of entity.rows) {
+            const cell = row.yearValues.find((c) => c.controlName === fieldKey);
+            if (cell) return cell.value ?? null;
+          }
         }
         return null;
 
