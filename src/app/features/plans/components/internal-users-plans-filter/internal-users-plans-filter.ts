@@ -52,7 +52,6 @@ export class InternalUsersPlansFilter implements OnInit {
 
   assigneeOptions = computed<IAssigneeOption[]>(() => {
     return [
-      { label: this.i18nService.translate('plans.filter.allAssignees'), value: null },
       ...this.assignees().map(assignee => ({
         label: assignee.name_En || assignee.name_Ar || '',
         value: assignee.id
