@@ -24,6 +24,7 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
   private readonly attachmentService = inject(AttachmentService);
 
   attachments = computed(() => {
+    this.doRefresh();
     const attachmentsControl = this.sectionFormGroup().get(EMaterialsFormControls.attachments);
     let value: unknown = null;
     if (attachmentsControl instanceof FormGroup) {
@@ -38,6 +39,7 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
   hasAttachments = computed(() => this.attachments().length > 0);
 
   hasAttachmentsError = computed(() => {
+    this.doRefresh();
     const attachmentsControl = this.sectionFormGroup().get(EMaterialsFormControls.attachments);
     if (!attachmentsControl) return false;
     if (attachmentsControl.invalid && (attachmentsControl.dirty || attachmentsControl.touched)) return true;
@@ -49,6 +51,7 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
   });
 
   attachmentsSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const hasComment = this.isFieldHasComment(EMaterialsFormControls.attachments, null);
     const fileNames = this.attachments().map((f) => f.fileName || f.name || '').filter(Boolean).join(', ');
     return {
@@ -78,7 +81,7 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
     const fileId = file.ibmIdentifier;
     if (!fileId) return;
     this.attachmentService.downloadAndSaveAttachment(fileId, file.fileName).subscribe({
-      next: () => {},
+      next: () => { },
       error: (err) => console.error('Error downloading file.', err),
     });
   }

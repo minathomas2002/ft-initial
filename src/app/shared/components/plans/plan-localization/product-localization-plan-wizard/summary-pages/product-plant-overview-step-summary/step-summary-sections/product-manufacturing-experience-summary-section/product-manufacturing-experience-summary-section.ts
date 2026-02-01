@@ -33,6 +33,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   }
 
   productManufacturingExperienceSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.productManufacturingExperienceControl()?.value ?? '';
     const beforeValue = this.mfg()?.experienceRange ?? '';
     return {
@@ -47,6 +48,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   provideToSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.yesNo(this.provideToSECControl()?.value);
     const beforeValue = this.yesNo(this.mfg()?.provideToSEC);
     return {
@@ -61,6 +63,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   qualifiedPlantLocationSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.qualifiedPlantLocationSECControl()?.value ?? '';
     const beforeValue = this.mfg()?.qualifiedPlantLocation_SEC ?? '';
     return {
@@ -75,6 +78,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   approvedVendorIDSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.approvedVendorIDSECControl()?.value ?? '';
     const beforeValue = this.mfg()?.approvedVendorId_SEC ?? '';
     return {
@@ -89,6 +93,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   yearsOfExperienceSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.yearsOfExperienceSECControl()?.value ?? '';
     const beforeValue = this.mfg()?.yearsExperience_SEC?.toString() || '';
     return {
@@ -103,6 +108,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   totalQuantitiesSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.totalQuantitiesSECControl()?.value ?? '';
     const beforeValue = this.mfg()?.totalQuantitiesToSEC?.toString() || '';
     return {
@@ -117,6 +123,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   provideToLocalSuppliersSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.yesNo(this.provideToLocalSuppliersControl()?.value);
     const beforeValue = this.yesNo(this.mfg()?.provideToLocalSuppliers);
     return {
@@ -131,6 +138,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   namesOfSECApprovedSuppliersSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.namesOfSECApprovedSuppliersControl()?.value ?? '';
     const beforeValue = this.mfg()?.localSupplierNames || '';
     return {
@@ -145,6 +153,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   qualifiedPlantLocationSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.qualifiedPlantLocationControl()?.value ?? '';
     const beforeValue = this.mfg()?.qualifiedPlantLocation_LocalSupplier || '';
     return {
@@ -159,6 +168,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   yearsOfExperienceSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.yearsOfExperienceControl()?.value ?? '';
     const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '';
     return {
@@ -173,6 +183,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   totalQuantitiesSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.totalQuantitiesControl()?.value ?? '';
     const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '';
     return {

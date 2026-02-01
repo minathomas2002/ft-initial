@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
@@ -28,12 +29,12 @@ export class SaudizationStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   readonly pageTitleForTL = this.i18nService.translate('plans.wizard.step4.title');
   formGroup = this.productPlanFormService.step4_saudization;
-  private readonly formChangeTrigger = signal(0);
+  doRefresh = signal(new Date());
 
   constructor() {
     super();
     this.formGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
-      this.formChangeTrigger.update(v => v + 1);
+      this.doRefresh.set(new Date());
     });
   }
 
@@ -42,8 +43,12 @@ export class SaudizationStepSummary extends SummaryStepBaseClass {
   }
 
   saudizationFormGroup = toSignal<FormGroup>(
-    this._saudizationFormGroup.valueChanges.pipe(
-      startWith(this._saudizationFormGroup.value),
+    merge(
+      this._saudizationFormGroup.valueChanges,
+      this._saudizationFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._saudizationFormGroup)
     ),
     { requireSync: true }
@@ -64,7 +69,7 @@ export class SaudizationStepSummary extends SummaryStepBaseClass {
   ]);
 
   attachments = computed(() => {
-    this.formChangeTrigger();
+    this.doRefresh();
     const attachmentsControl = this._attachmentsFormGroup.get(EMaterialsFormControls.attachments);
     if (attachmentsControl instanceof FormGroup) {
       const valueControl = attachmentsControl.get(EMaterialsFormControls.value);

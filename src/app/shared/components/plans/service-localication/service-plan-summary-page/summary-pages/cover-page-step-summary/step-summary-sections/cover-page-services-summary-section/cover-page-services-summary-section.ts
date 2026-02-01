@@ -20,6 +20,7 @@ export class CoverPageServicesSummarySection extends SummarySectionBaseClass {
   }
 
   serviceRows = computed(() => {
+    this.doRefresh();
     const arr = this.servicesFormArray;
     if (!arr || !arr.controls.length) return [];
 

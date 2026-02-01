@@ -39,6 +39,7 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
   }
 
   serviceLevelRows = computed(() => {
+    this.doRefresh();
     const arr = this.serviceLevelFormArray;
     if (!arr?.controls?.length) return [];
 

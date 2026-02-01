@@ -8,11 +8,13 @@
   <app-cover-page-company-information-summary-section
     [sectionFormGroup]="coverPageCompanyInformationFormGroup()"
     [sectionSummaryFields]="coverPageCompanyInformationSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <app-cover-page-services-summary-section
     [sectionFormGroup]="coverPageFormGroup()"
     [sectionSummaryFields]="coverPageServicesSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   @if (commentForPage().text) {

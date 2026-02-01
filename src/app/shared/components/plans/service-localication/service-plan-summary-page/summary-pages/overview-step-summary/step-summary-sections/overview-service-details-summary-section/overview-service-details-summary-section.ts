@@ -40,6 +40,7 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
   }
 
   serviceDetailsRows = computed(() => {
+    this.doRefresh();
     const arr = this.serviceDetailsFormArray;
     if (!arr?.controls?.length) return [];
 

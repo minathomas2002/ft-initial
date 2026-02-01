@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
@@ -31,6 +32,7 @@ export class OverviewCompanyStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   readonly pageTitleForTL = this.i18nService.translate('plans.wizard.step1.title');
   formGroup = this.productPlanFormService.overviewCompanyInformation;
+  doRefresh = signal(new Date());
   private readonly _basicInfoFormGroup = this.formGroup.get(EMaterialsFormControls.basicInformationFormGroup) as FormGroup;
   private readonly _companyInfoFormGroup = this.formGroup.get(EMaterialsFormControls.companyInformationFormGroup) as FormGroup;
   private readonly _locationInfoFormGroup = this.formGroup.get(EMaterialsFormControls.locationInformationFormGroup) as FormGroup;
@@ -38,32 +40,48 @@ export class OverviewCompanyStepSummary extends SummaryStepBaseClass {
 
   /* Signals */
   basicInformationFormGroup = toSignal<FormGroup>(
-    this._basicInfoFormGroup.valueChanges.pipe(
-      startWith(this._basicInfoFormGroup.value),
+    merge(
+      this._basicInfoFormGroup.valueChanges,
+      this._basicInfoFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._basicInfoFormGroup)
     ),
     { requireSync: true }
   );
 
   companyInformationFormGroup = toSignal<FormGroup>(
-    this._companyInfoFormGroup.valueChanges.pipe(
-      startWith(this._companyInfoFormGroup.value),
+    merge(
+      this._companyInfoFormGroup.valueChanges,
+      this._companyInfoFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._companyInfoFormGroup)
     ),
     { requireSync: true }
   );
 
   locationInformationFormGroup = toSignal<FormGroup>(
-    this._locationInfoFormGroup.valueChanges.pipe(
-      startWith(this._locationInfoFormGroup.value),
+    merge(
+      this._locationInfoFormGroup.valueChanges,
+      this._locationInfoFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._locationInfoFormGroup)
     ),
     { requireSync: true }
   );
 
   localAgentInformationFormGroup = toSignal<FormGroup>(
-    this._localAgentFormGroup.valueChanges.pipe(
-      startWith(this._localAgentFormGroup.value),
+    merge(
+      this._localAgentFormGroup.valueChanges,
+      this._localAgentFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._localAgentFormGroup)
     ),
     { requireSync: true }

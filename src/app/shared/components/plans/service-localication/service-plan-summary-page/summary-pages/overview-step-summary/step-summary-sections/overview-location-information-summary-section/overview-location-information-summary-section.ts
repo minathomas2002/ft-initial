@@ -24,6 +24,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
   }
 
   globalHQLocationSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.globalHQLocationControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.globalHQLocation ?? '';
     return {
@@ -38,6 +39,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
   });
 
   registeredVendorIDSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.registeredVendorIDControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.secVendorId ?? '';
     return {
@@ -52,6 +54,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
   });
 
   benaRegisteredVendorIDSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.benaRegisteredVendorIDControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.benaVendorId ?? '';
     return {
@@ -66,6 +69,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
   });
 
   hasLocalAgentSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const val = this.hasLocalAgentControl()?.value;
     const display = this.formatYesNo(val);
     const beforeVal = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.hasLocalAgent;

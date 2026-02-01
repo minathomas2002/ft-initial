@@ -8,6 +8,7 @@
   <app-basic-information-summary-section
     [sectionFormGroup]="basicInformationFormGroup()"
     [sectionSummaryFields]="basicInformationSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <!-- Company Information -->
@@ -16,6 +17,7 @@
     <app-company-information-summary-section
       [sectionFormGroup]="companyInformationFormGroup()"
       [sectionSummaryFields]="companyInformationSummaryFields()"
+      [doRefresh]="doRefresh()"
     />
   </div>
 
@@ -25,6 +27,7 @@
     <app-location-information-summary-section
       [sectionFormGroup]="locationInformationFormGroup()"
       [sectionSummaryFields]="locationInformationSummaryFields()"
+      [doRefresh]="doRefresh()"
     />
 
     @if (showLocalAgentInformation()) {
@@ -33,6 +36,7 @@
       <app-local-agent-information-summary-section
         [sectionFormGroup]="localAgentInformationFormGroup()"
         [sectionSummaryFields]="localAgentInformationSummaryFields()"
+        [doRefresh]="doRefresh()"
       />
     </div>
     }

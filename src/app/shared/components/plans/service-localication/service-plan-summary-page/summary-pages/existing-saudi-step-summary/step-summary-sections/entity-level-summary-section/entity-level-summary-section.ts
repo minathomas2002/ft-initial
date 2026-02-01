@@ -56,6 +56,7 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
   }
 
   entityLevel = computed(() => {
+    this.doRefresh();
     const arr = this.entityLevelFormArray;
     if (!arr?.length) return null;
 

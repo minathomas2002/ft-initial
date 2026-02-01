@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
@@ -30,15 +31,16 @@ export class DirectLocalizationStepSummary extends SummaryStepBaseClass {
 
   override readonly pageTitleForTL = 'Direct Localization';
   override readonly formGroup: FormGroup = this.servicePlanFormService.step4_directLocalization;
-
+  doRefresh = signal(new Date());
   constructor() {
     super();
     this.servicePlanFormService.syncServicesFromCoverPageToDirectLocalization();
   }
 
   directLocalizationFormGroup = toSignal<FormGroup>(
-    this.formGroup.valueChanges.pipe(
-      startWith(this.formGroup.value),
+    merge(this.formGroup.valueChanges, this.formGroup.statusChanges).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this.formGroup)
     ),
     { requireSync: true }

@@ -8,26 +8,31 @@
   <app-saudi-company-details-summary-section
     [sectionFormGroup]="existingSaudiFormGroup()"
     [sectionSummaryFields]="saudiCompanyDetailsSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <app-collaboration-partnership-summary-section
     [sectionFormGroup]="existingSaudiFormGroup()"
     [sectionSummaryFields]="collaborationPartnershipSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <app-entity-level-summary-section
     [sectionFormGroup]="existingSaudiFormGroup()"
     [sectionSummaryFields]="entityLevelSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <app-service-level-summary-section
     [sectionFormGroup]="existingSaudiFormGroup()"
     [sectionSummaryFields]="serviceLevelSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <app-attachments-summary-section
     [sectionFormGroup]="attachmentsFormGroup()"
     [sectionSummaryFields]="attachmentsSummaryFields()"
+    [doRefresh]="doRefresh()"
     [translateKey]="'plans.summary.attachments'"
   />
 

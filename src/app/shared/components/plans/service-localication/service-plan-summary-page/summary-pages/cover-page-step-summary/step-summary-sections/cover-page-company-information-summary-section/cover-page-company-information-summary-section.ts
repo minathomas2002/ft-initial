@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
@@ -17,6 +16,7 @@ export class CoverPageCompanyInformationSummarySection extends SummarySectionBas
   private readonly companyNameControl = computed(() => this.getValueFormControl(EMaterialsFormControls.companyName));
 
   planTitleSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.planTitleControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.planTitle ?? '';
     return {
@@ -31,6 +31,7 @@ export class CoverPageCompanyInformationSummarySection extends SummarySectionBas
   });
 
   companyNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.companyNameControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.companyName ?? '';
     return {

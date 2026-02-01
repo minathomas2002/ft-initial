@@ -38,6 +38,7 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
   }
 
   saudiCompanyDetailsRows = computed(() => {
+    this.doRefresh();
     const arr = this.saudiCompanyDetailsFormArray;
     if (!arr?.controls?.length) return [];
 

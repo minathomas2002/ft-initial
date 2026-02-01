@@ -20,6 +20,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
   private readonly opportunityControl = computed(() => this.getFormControl(EMaterialsFormControls.opportunity));
   private readonly submissionDateControl = computed(() => this.getFormControl(EMaterialsFormControls.submissionDate));
   planTitleSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.planTitleControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.basicInfo.planTitle ?? '';
     return {
@@ -33,35 +34,44 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     };
   });
 
-  opportunityTypeSummaryField = computed<IPlanSummaryField>(() => ({
-    label: this.i18nService.translate('plans.newPlan.opportunityType'),
-    beforeValue: '',
-    currantValue: this.mapOpportunityTypeToLabel(this.opportunityTypeControl()?.value),
-    hasError: false,
-    hasComment: false,
-    isResolved: false,
-    showDifference: false
-  }));
+  opportunityTypeSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    return {
+      label: this.i18nService.translate('plans.newPlan.opportunityType'),
+      beforeValue: '',
+      currantValue: this.mapOpportunityTypeToLabel(this.opportunityTypeControl()?.value),
+      hasError: false,
+      hasComment: false,
+      isResolved: false,
+      showDifference: false
+    };
+  });
 
-  opportunitySummaryField = computed<IPlanSummaryField>(() => ({
-    label: this.i18nService.translate('plans.newPlan.opportunity'),
-    beforeValue: '',
-    currantValue: this.opportunityControl()?.value.name,
-    hasError: false,
-    hasComment: false,
-    isResolved: false,
-    showDifference: false
-  }));
+  opportunitySummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    return {
+      label: this.i18nService.translate('plans.newPlan.opportunity'),
+      beforeValue: '',
+      currantValue: this.opportunityControl()?.value.name,
+      hasError: false,
+      hasComment: false,
+      isResolved: false,
+      showDifference: false
+    };
+  });
 
-  submissionDateSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Submission Date',
-    beforeValue: '',
-    currantValue: this.getFormattedDate(this.submissionDateControl()?.value) || 'Invalid Date',
-    hasError: false,
-    hasComment: false,
-    isResolved: false,
-    showDifference: false
-  }));
+  submissionDateSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    return {
+      label: 'Submission Date',
+      beforeValue: '',
+      currantValue: this.getFormattedDate(this.submissionDateControl()?.value) || 'Invalid Date',
+      hasError: false,
+      hasComment: false,
+      isResolved: false,
+      showDifference: false
+    };
+  });
 
   private mapOpportunityTypeToLabel(opportunityType: string): string {
     const enumValue = EOpportunityType[opportunityType as keyof typeof EOpportunityType];

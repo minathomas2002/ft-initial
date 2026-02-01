@@ -20,6 +20,7 @@ export class OverviewLocalAgentInformationSummarySection extends SummarySectionB
   private readonly companyLocationControl = computed(() => this.getValueFormControl(EMaterialsFormControls.companyLocation));
 
   localAgentDetailsSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.localAgentDetailsControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.localAgentDetails ?? '';
     return {
@@ -34,6 +35,7 @@ export class OverviewLocalAgentInformationSummarySection extends SummarySectionB
   });
 
   localAgentNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.localAgentNameControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.localAgentName ?? '';
     return {
@@ -48,6 +50,7 @@ export class OverviewLocalAgentInformationSummarySection extends SummarySectionB
   });
 
   contactPersonNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.contactPersonNameControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentContactPerson ?? '';
     return {
@@ -62,6 +65,7 @@ export class OverviewLocalAgentInformationSummarySection extends SummarySectionB
   });
 
   emailIDSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.emailIDControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentEmail ?? '';
     return {
@@ -76,6 +80,7 @@ export class OverviewLocalAgentInformationSummarySection extends SummarySectionB
   });
 
   contactNumberSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const val = this.contactNumberControl()?.value;
     const display = val?.countryCode && val?.phoneNumber ? `${val.countryCode} ${val.phoneNumber}` : (val ?? '');
     const currantValue = typeof display === 'string' ? display : String(display ?? '');
@@ -92,6 +97,7 @@ export class OverviewLocalAgentInformationSummarySection extends SummarySectionB
   });
 
   companyLocationSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.companyLocationControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentCompanyLocation ?? '';
     return {

@@ -25,6 +25,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   }
 
   landPercentageSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.formatPercent(this.landPercentageControl()?.value);
     const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.landPercent);
     return {
@@ -39,6 +40,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   });
 
   buildingPercentageSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.formatPercent(this.buildingPercentageControl()?.value);
     const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.buildingPercent);
     return {
@@ -53,6 +55,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   });
 
   machineryEquipmentPercentageSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.formatPercent(this.machineryEquipmentPercentageControl()?.value);
     const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.machineryPercent);
     return {
@@ -67,6 +70,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   });
 
   othersPercentageSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.formatPercent(this.othersPercentageControl()?.value);
     const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.othersPercent);
     return {
@@ -81,6 +85,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   });
 
   othersDescriptionSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.othersDescriptionControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.othersDescription ?? '';
     return {

@@ -17,6 +17,7 @@ export class OverviewCompanyInformationSummarySection extends SummarySectionBase
   private readonly ceoEmailIDControl = computed(() => this.getValueFormControl(EMaterialsFormControls.ceoEmailID));
 
   companyNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.companyNameControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.companyName ?? '';
     return {
@@ -31,6 +32,7 @@ export class OverviewCompanyInformationSummarySection extends SummarySectionBase
   });
 
   ceoNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.ceoNameControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.ceoName ?? '';
     return {
@@ -45,6 +47,7 @@ export class OverviewCompanyInformationSummarySection extends SummarySectionBase
   });
 
   ceoEmailSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.ceoEmailIDControl()?.value ?? '';
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.ceoEmail ?? '';
     return {

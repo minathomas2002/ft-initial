@@ -29,6 +29,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
   }
 
   targetedCustomerSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const value = this.targetedCustomerControl()?.value;
     const currantValue = Array.isArray(value) ? this.formatTargetedCustomers(value) : '';
     const targetSEC = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.targetSEC;
@@ -45,6 +46,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
   });
 
   namesOfTargetedSuppliersSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.namesOfTargetedSuppliersControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames ?? '';
     return {
@@ -59,6 +61,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
   });
 
   productsUtilizeTargetedProductSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.productsUtilizeTargetedProductControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.productsUtilizingTargetProduct ?? '';
     return {

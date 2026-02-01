@@ -8,23 +8,27 @@
   <app-overview-basic-information-summary-section
     [sectionFormGroup]="basicInformationFormGroup()"
     [sectionSummaryFields]="basicInformationSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <app-overview-company-information-summary-section
     [sectionFormGroup]="overviewCompanyInformationFormGroup()"
     [sectionSummaryFields]="overviewCompanyInformationSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <div class="flex flex-col gap-6">
     <app-overview-location-information-summary-section
       [sectionFormGroup]="locationInformationFormGroup()"
       [sectionSummaryFields]="locationInformationSummaryFields()"
+      [doRefresh]="doRefresh()"
     />
 
     @if (showLocalAgentInformation()) {
     <app-overview-local-agent-information-summary-section
       [sectionFormGroup]="localAgentInformationFormGroup()"
       [sectionSummaryFields]="localAgentInformationSummaryFields()"
+      [doRefresh]="doRefresh()"
     />
     }
   </div>
@@ -32,6 +36,7 @@
   <app-overview-service-details-summary-section
     [sectionFormGroup]="overviewFormGroup()"
     [sectionSummaryFields]="serviceDetailsSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   @if (commentForPage().text) {

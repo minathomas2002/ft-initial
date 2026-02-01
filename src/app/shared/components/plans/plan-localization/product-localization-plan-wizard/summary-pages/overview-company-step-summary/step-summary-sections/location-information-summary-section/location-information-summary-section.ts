@@ -19,6 +19,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
   private readonly doYouCurrentlyHaveLocalAgentControl = computed(() => this.getFormControl(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA));
 
   globalHQLocationSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.globalHQLocationControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.globalHQLocation ?? '';
     return {
@@ -33,6 +34,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
   });
 
   registeredVendorIDSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.registeredVendorIDControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.vendorIdWithSEC ?? '';
     return {
@@ -47,6 +49,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
   });
 
   doYouCurrentlyHaveLocalAgentSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const value = this.doYouCurrentlyHaveLocalAgentControl()?.value;
     const displayValue = value === true ? 'Yes' : value === false ? 'No' : '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.hasLocalAgent;

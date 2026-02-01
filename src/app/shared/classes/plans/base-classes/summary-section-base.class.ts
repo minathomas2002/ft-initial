@@ -19,7 +19,7 @@ export abstract class SummarySectionBaseClass {
   public readonly sectionFormGroup = input.required<FormGroup>();
   public readonly sectionSummaryFields = input.required<IFieldInformation[]>();
   protected readonly roleService = inject(RoleService);
-
+  public readonly doRefresh = input.required<Date>();
 
   protected getFormControl(controlName: string): FormControl {
     return this.sectionFormGroup().get(controlName) as FormControl;

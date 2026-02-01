@@ -35,6 +35,7 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
   }
 
   collaborationPartnershipRows = computed(() => {
+    this.doRefresh();
     const arr = this.collaborationPartnershipFormArray;
     if (!arr?.controls?.length) return [];
 

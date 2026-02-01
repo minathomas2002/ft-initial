@@ -20,6 +20,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
   private readonly timeRequiredToSetupFactoryControl = computed(() => this.getValueFormControl(EMaterialsFormControls.timeRequiredToSetupFactory));
 
   productNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.productNameControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.productName ?? '';
     return {
@@ -34,6 +35,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
   });
 
   productSpecificationsSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.productSpecificationsControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.productSpecifications ?? '';
     return {
@@ -48,6 +50,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
   });
 
   targetedAnnualPlantCapacitySummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.targetedAnnualPlantCapacityControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.targetedAnnualPlantCapacity ?? '';
     return {
@@ -62,6 +65,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
   });
 
   timeRequiredToSetupFactorySummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.timeRequiredToSetupFactoryControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.timeRequiredToSetupFactory ?? '';
     return {

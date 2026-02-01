@@ -8,11 +8,13 @@
   <app-localization-strategy-summary-section
     [sectionFormGroup]="directLocalizationFormGroup()"
     [sectionSummaryFields]="localizationStrategySummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <app-entity-level-summary-section
     [sectionFormGroup]="directLocalizationFormGroup()"
     [sectionSummaryFields]="entityLevelSummaryFields()"
+    [doRefresh]="doRefresh()"
     [pageNumber]="4"
   />
 
@@ -20,6 +22,7 @@
     [sectionFormGroup]="directLocalizationFormGroup()"
     [sectionSummaryFields]="serviceLevelSummaryFields()"
     [pageNumber]="4"
+    [doRefresh]="doRefresh()"
     expectedDateControlKey="serviceLevelLocalizationDate"
   />
 

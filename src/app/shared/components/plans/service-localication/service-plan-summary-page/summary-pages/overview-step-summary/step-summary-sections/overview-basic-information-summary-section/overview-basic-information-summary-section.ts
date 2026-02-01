@@ -18,6 +18,7 @@ export class OverviewBasicInformationSummarySection extends SummarySectionBaseCl
   private readonly submissionDateControl = computed(() => this.getFormControl(EMaterialsFormControls.submissionDate));
 
   opportunitySummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const val = this.opportunityControl()?.value;
     const display = val?.name ?? val ?? '';
     return {
@@ -32,6 +33,7 @@ export class OverviewBasicInformationSummarySection extends SummarySectionBaseCl
   });
 
   submissionDateSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const dateVal = this.submissionDateControl()?.value;
     const display = dateVal ? (this.getFormattedDate(String(dateVal)) || 'Invalid Date') : '';
     return {

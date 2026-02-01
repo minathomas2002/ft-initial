@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
@@ -40,19 +41,29 @@ export class ExistingSaudiStepSummary extends SummaryStepBaseClass {
     this.servicePlanFormService.syncServicesFromCoverPageToExistingSaudi();
   }
 
+  doRefresh = signal(new Date());
   private readonly _existingSaudiFormGroup = this.formGroup;
   existingSaudiFormGroup = toSignal<FormGroup>(
-    this._existingSaudiFormGroup.valueChanges.pipe(
-      startWith(this._existingSaudiFormGroup.value),
+    merge(
+      this._existingSaudiFormGroup.valueChanges,
+      this._existingSaudiFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._existingSaudiFormGroup)
     ),
     { requireSync: true }
   );
 
+  private readonly _attachmentsFormGroup = this.servicePlanFormService.attachmentsFormGroup;
   attachmentsFormGroup = toSignal<FormGroup>(
-    this.servicePlanFormService.attachmentsFormGroup.valueChanges.pipe(
-      startWith(this.servicePlanFormService.attachmentsFormGroup.value),
-      map(() => this.servicePlanFormService.attachmentsFormGroup)
+    merge(
+      this._attachmentsFormGroup.valueChanges,
+      this._attachmentsFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
+      map(() => this._attachmentsFormGroup)
     ),
     { requireSync: true }
   );

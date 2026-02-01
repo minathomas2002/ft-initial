@@ -41,6 +41,7 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
   }
 
   localizationStrategyRows = computed(() => {
+    this.doRefresh();
     const arr = this.serviceLevelFormArray;
     if (!arr?.controls?.length) return [];
 

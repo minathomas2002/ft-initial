@@ -21,6 +21,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
   private readonly companyHQLocationControl = computed(() => this.getValueFormControl(EMaterialsFormControls.companyHQLocation));
 
   localAgentNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.localAgentNameControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentName ?? '';
     return {
@@ -35,6 +36,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
   });
 
   contactPersonNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.contactPersonNameControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.contactPersonName ?? '';
     return {
@@ -49,6 +51,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
   });
 
   emailIDSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.emailIDControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentEmail ?? '';
     return {
@@ -63,6 +66,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
   });
 
   contactNumberSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.contactNumberControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentContactNumber ?? '';
     return {
@@ -77,6 +81,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
   });
 
   companyHQLocationSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const currantValue = this.companyHQLocationControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.companyHQLocation ?? '';
     return {
