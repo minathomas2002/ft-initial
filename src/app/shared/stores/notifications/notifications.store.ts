@@ -136,11 +136,6 @@ export const NotificationsStore = signalStore(
       },
 
       markAllAsRead() {
-        const unreadNotifications = store.notifications().filter(n => !n.isRead);
-        if (unreadNotifications.length === 0) {
-          return;
-        }
-
         const previousState = {
           notifications: [...store.notifications()],
           unreadCount: store.unreadCount(),
