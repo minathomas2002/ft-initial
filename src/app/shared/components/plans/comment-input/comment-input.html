@@ -13,15 +13,17 @@
         [formControl]="commentFormControl()"
         maxlength="255"
       ></textarea>
-      @if(commentPhase() === 'editing'){
-      <div class="text-xs text-gray-500 text-right mt-1">
-        {{ commentFormControl().value.length || 0 }} / 255
+      <div class="flex justify-between items-center">
+          <app-base-error-messages
+            [control]="commentFormControl()"
+            [label]="'Your Comment'"
+          />
+          @if(commentPhase() === 'editing'){
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ commentFormControl().value.length || 0 }} / 255
+            </div>
+          }
       </div>
-      }
-      <app-base-error-messages
-        [control]="commentFormControl()"
-        [label]="'Your Comment'"
-      />
     </div>
   </div>
 </div>
