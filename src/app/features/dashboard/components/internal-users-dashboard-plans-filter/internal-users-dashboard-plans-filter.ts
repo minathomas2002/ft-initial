@@ -51,11 +51,14 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   statusOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
 
+    // Base option: "All Statuses"
+    const allStatusesOption: IDropdownOption =
+      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null };
 
     // Get role-specific status options
     const roleSpecificOptions = this.getRoleSpecificStatusOptions();
 
-    return [...roleSpecificOptions];
+    return [allStatusesOption, ...roleSpecificOptions];
   });
 
   /**
