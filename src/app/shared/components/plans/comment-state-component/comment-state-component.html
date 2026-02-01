@@ -34,9 +34,17 @@
     severity="warn"
     icon="icon-check-circle"
     rounded
-    [disabled]="commentFormControl().invalid"
+    [disabled]="isCommentFormControlInvalid() || !commentFormControl().value"
     (click)="onSaveComment()"
   />
+
+  <!-- <p-button
+    label="Cancel"
+    variant="outlined"
+    rounded
+    styleClass="border-0! bg-white!"
+    (click)="onCancelEditing()"
+  /> -->
   }
   } @else {
   <!-- Normal mode: Show full comment state with checkboxes -->
@@ -87,9 +95,17 @@
     severity="warn"
     icon="icon-check-circle"
     rounded
-    [disabled]="commentFormControl().invalid || (mode() === 'fieldSelection' && !checked())"
+    [disabled]="isCommentFormControlInvalid() || (mode() === 'fieldSelection' && !checked())"
     (click)="onSaveComment()"
   />
+
+  <!-- <p-button
+    label="Cancel"
+    variant="outlined"
+    rounded
+    styleClass="border-0! bg-white!"
+    (click)="onCancelEditing()"
+  /> -->
   }
   }
   }
