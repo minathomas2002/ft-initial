@@ -1,0 +1,50 @@
+<div class="flex flex-col gap-4">
+  <h3 class="text-lg font-semibold text-[#4A4E5A]">Service Level</h3>
+  @if (serviceLevelRows().length > 0) {
+  <div class="overflow-x-auto">
+    <div class="rounded-xl overflow-hidden border border-gray-300">
+      <p-table
+        [value]="serviceLevelRows()"
+        [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
+        styleClass="w-full [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
+        [scrollable]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr class="[&>th:not([data-group])]:bg-[#F9FAFA]! [&>th:not([data-group])]:text-[#4A4E5A]!">
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]" rowspan="2">Service Name</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]" rowspan="2">Expected Localization Date</th>
+            <th class="p-3 text-center text-sm font-semibold bg-primary! text-white!" colspan="6" data-group="true">Expected Annual Headcount (To be filled for the KSA based facility only)</th>
+            <th class="p-3 text-center text-sm font-semibold bg-primary! text-white!" colspan="6" data-group="true">Mention Y-o-Y expected Saudization % (To be filled for the KSA based facility only)</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]" rowspan="2">Key Measures to Upskill Saudis</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]" rowspan="2">Support Required from SEC</th>
+          </tr>
+          <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
+            @for (year of yearColumns(); track $index) {
+            <th class="p-3 text-center text-sm font-semibold text-[#4A4E5A]">{{ year }}</th>
+            }
+            @for (year of yearColumns(); track $index) {
+            <th class="p-3 text-center text-sm font-semibold text-[#4A4E5A]">{{ year }}</th>
+            }
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.serviceName" /></td>
+            <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.expectedLocalizationDate" /></td>
+            @for (yearCell of row.headcountYears; track yearCell.controlName) {
+            <td class="border-t border-gray-300 p-3 text-center"><app-plan-summary-flied [planSummaryField]="yearCell.summaryField" /></td>
+            }
+            @for (yearCell of row.saudizationYears; track yearCell.controlName) {
+            <td class="border-t border-gray-300 p-3 text-center"><app-plan-summary-flied [planSummaryField]="yearCell.summaryField" /></td>
+            }
+            <td class="border-t border-gray-300 p-3 min-w-[300px]"><app-plan-summary-flied [planSummaryField]="row.keyMeasuresToUpskillSaudis" /></td>
+            <td class="border-t border-gray-300 p-3 min-w-[300px]"><app-plan-summary-flied [planSummaryField]="row.mentionSupportRequiredFromSEC" /></td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  } @else {
+  <p class="text-sm text-gray-500">No service level details added</p>
+  }
+</div>
