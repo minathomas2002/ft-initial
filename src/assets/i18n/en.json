@@ -711,6 +711,7 @@
       "service": "Service",
       "material": "Material",
       "allStatuses":"All Statuses",
+      "allAssignees":"All Assignees",
       "selectAssignee": "Assignee"
     },
     "wizard": {
