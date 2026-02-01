@@ -59,9 +59,7 @@ export class ExistingSaudiStepSummary extends SummaryStepBaseClass {
 
   saudiCompanyDetailsSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('saudiCompanyDetails'));
   collaborationPartnershipSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('collaborationPartnership'));
-  entityLevelSummaryFields = computed<IFieldInformation[]>(() => {
-    return this.getSectionSummaryFields('entityLevel')
-  });
+  entityLevelSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('entityLevel'));
   serviceLevelSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('serviceLevel'));
   attachmentsSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('attachments'));
 }

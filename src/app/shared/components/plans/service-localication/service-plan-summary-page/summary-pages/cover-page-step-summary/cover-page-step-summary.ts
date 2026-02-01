@@ -49,8 +49,6 @@ export class CoverPageStepSummary extends SummaryStepBaseClass {
     { requireSync: true }
   );
 
-  coverPageCompanyInformationSummaryFields = computed<IFieldInformation[]>(() => {
-    return this.getSectionSummaryFields('companyInformation')
-  });
+  coverPageCompanyInformationSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('companyInformation'));
   coverPageServicesSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('services'));
 }
