@@ -18,6 +18,7 @@ export class NotificationItemFactory {
       ERoles.DEPARTMENT_MANAGER,
       ERoles.Division_MANAGER,
       ERoles.EMPLOYEE,
+      ERoles.ADMIN
     ];
 
     // internal roles
