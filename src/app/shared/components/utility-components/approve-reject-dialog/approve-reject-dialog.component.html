@@ -9,6 +9,7 @@
   [confirmButtonClass]="'max-w-[200px]'"
   [cancelButtonClass]="'w-[75px]'"
   (onCancel)="onCancelClick()"
+  [confirmButtonSeverity]="confirmButtonSeverity()"
   [isConfirmationDisabled]="isRequired() && !note().trim()"
 >
   <div class="max-w-[30rem]">

@@ -183,9 +183,19 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     }
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
-    if (!this.planFormService) return;
+  // Override hook method for step-specific initialization
+  protected override initializeStepSpecificLogic(): void {
+    // Local agent validation effect - reactive to signal changes
+    effect(() => {
+      const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
+      if (doYouHaveLocalAgentInKSA !== null && this.planFormService) {
+        this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+      }
+    });
+
+    // Initialize opportunity value based on appliedOpportunity
+    // Check if form controls and store are available (may not be initialized in review mode or during construction)
+    // Note: planStore is injected, but property initializers run after base constructor, so we need to check
     const planStore = this.planStore;
     const basicInfoControls = this.basicInformationFormGroupControls;
     if (!basicInfoControls || !planStore) return;
