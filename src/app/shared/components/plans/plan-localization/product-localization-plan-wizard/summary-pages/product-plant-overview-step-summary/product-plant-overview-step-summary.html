@@ -37,10 +37,10 @@
     />
   </div>
 
-  @if (commentForPage()) {
-    <app-page-comment-box
-      [commentTitle]="commentForPage()!.title"
-      [commentText]="commentForPage()!.text"
-    />
+  @if (commentForPage().text) {
+  <app-page-comment-box
+    [commentTitle]="commentForPage().title"
+    [commentText]="commentForPage().text || 'No comment found'"
+  />
   }
 </div>

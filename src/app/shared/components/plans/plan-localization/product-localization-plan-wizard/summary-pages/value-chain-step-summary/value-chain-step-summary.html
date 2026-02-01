@@ -57,18 +57,18 @@
     <h3 class="text-base font-semibold text-gray-900">{{ 'plans.summary.summary' | translate }}</h3>
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
       @for (y of [1,2,3,4,5,6,7]; track y) {
-        <div class="flex flex-col gap-1 p-3 bg-white rounded border border-gray-200">
-          <span class="text-xs font-medium text-gray-600">{{ 'plans.summary.year' | translate }} {{ y }}</span>
-          <span class="text-lg font-bold text-gray-900">{{ (y === 1 ? year1Total() : y === 2 ? year2Total() : y === 3 ? year3Total() : y === 4 ? year4Total() : y === 5 ? year5Total() : y === 6 ? year6Total() : year7Total()) }}%</span>
-        </div>
+      <div class="flex flex-col gap-1 p-3 bg-white rounded border border-gray-200">
+        <span class="text-xs font-medium text-gray-600">{{ 'plans.summary.year' | translate }} {{ y }}</span>
+        <span class="text-lg font-bold text-gray-900">{{ (y === 1 ? year1Total() : y === 2 ? year2Total() : y === 3 ? year3Total() : y === 4 ? year4Total() : y === 5 ? year5Total() : y === 6 ? year6Total() : year7Total()) }}%</span>
+      </div>
       }
     </div>
   </div>
 
-  @if (commentForPage()) {
-    <app-page-comment-box
-      [commentTitle]="commentForPage()!.title"
-      [commentText]="commentForPage()!.text"
-    />
+  @if (commentForPage().text) {
+  <app-page-comment-box
+    [commentTitle]="commentForPage().title"
+    [commentText]="commentForPage().text || 'No comment found'"
+  />
   }
 </div>

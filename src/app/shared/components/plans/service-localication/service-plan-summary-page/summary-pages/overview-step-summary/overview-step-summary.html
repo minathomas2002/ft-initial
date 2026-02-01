@@ -34,10 +34,10 @@
     [sectionSummaryFields]="serviceDetailsSummaryFields()"
   />
 
-  @if (commentForPage()) {
+  @if (commentForPage().text) {
   <app-page-comment-box
-    [commentTitle]="commentForPage()!.title"
-    [commentText]="commentForPage()!.text"
+    [commentTitle]="commentForPage().title"
+    [commentText]="commentForPage().text || 'No comment found'"
   />
   }
 </div>
