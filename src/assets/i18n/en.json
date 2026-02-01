@@ -710,7 +710,7 @@
       "allTypes": "All Plan Types",
       "service": "Service",
       "material": "Material",
-      "allStatuses":"All Status",
+      "allStatuses":"All Statuses",
       "selectAssignee": "Assignee"
     },
     "wizard": {
