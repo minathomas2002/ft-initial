@@ -55,7 +55,7 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
     const hasComment = this.isFieldHasComment(EMaterialsFormControls.attachments, null);
     const fileNames = this.attachments().map((f) => f.fileName || f.name || '').filter(Boolean).join(', ');
     return {
-      label: this.i18nService.translate(this.translateKey()),
+      label: '',
       beforeValue: '',
       currantValue: fileNames || '-',
       hasError: this.hasAttachmentsError(),

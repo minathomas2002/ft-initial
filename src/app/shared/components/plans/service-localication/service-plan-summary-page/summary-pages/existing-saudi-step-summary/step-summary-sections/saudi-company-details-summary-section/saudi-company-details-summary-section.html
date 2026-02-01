@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-4">
-  <h3 class="text-lg font-semibold text-[#4A4E5A]">Saudi Company Details</h3>
+  <h3 class="text-md font-semibold text-gray-900">Saudi Company Details</h3>
   <div class="overflow-x-auto">
     <div class="rounded-2xl overflow-hidden border border-gray-300">
       <p-table
@@ -21,7 +21,10 @@
             <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Company Overview (Other)</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-row>
+        <ng-template
+          pTemplate="body"
+          let-row
+        >
           <tr>
             <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.saudiCompanyName" /></td>
             <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.registeredVendorIDwithSEC" /></td>
