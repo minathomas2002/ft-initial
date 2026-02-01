@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, linkedSignal, model, OnDestroy, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, linkedSignal, model, output, signal } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -6,7 +6,7 @@ import { CommentDialog } from '../comment-dialog/comment-dialog';
 import { TCommentPhase } from '../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, takeUntil } from 'rxjs';
+import { merge, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-comment-state-component',
@@ -20,7 +20,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './comment-state-component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentStateComponent implements OnDestroy {
+export class CommentStateComponent {
   commentsCount = input<number>(0);
   checked = linkedSignal<boolean>(() => this.commentsCount() > 0);
   showCommentDialog = model<boolean>(false);
@@ -35,12 +35,14 @@ export class CommentStateComponent implements OnDestroy {
   isResubmitMode = input<boolean>(false);
   hasInvestorComment = input<boolean>(false);
   private readonly initialCommentValue = signal<string>('');
-  private readonly destroy$ = new Subject<void>()
+  private readonly destroyRef = inject(DestroyRef);
 
 
   // Track form control validity reactively
   private commentFormControlInvalid = signal<boolean>(true);
-  isCommentFormControlInvalid = computed(() => this.commentFormControlInvalid());
+  isCommentFormControlInvalid = computed(() => {
+    return this.commentFormControlInvalid();
+  });
 
   constructor() {
     effect(() => {
@@ -49,16 +51,22 @@ export class CommentStateComponent implements OnDestroy {
       }
     });
 
-        // Subscribe to form control status changes to update the signal
+    // Subscribe to form control status changes to update the signal
     effect(() => {
       const control = this.commentFormControl();
-      // Update initial state
       this.commentFormControlInvalid.set(control.invalid);
 
-      // Subscribe to status changes
-      control.valueChanges.pipe(takeUntil(this.destroy$))
+      merge(
+        control.valueChanges,
+        control.statusChanges
+      ).pipe(
+        startWith(control.invalid),
+        takeUntilDestroyed(this.destroyRef)
+      )
         .subscribe(() => {
-          this.commentFormControlInvalid.set(control.invalid);
+          this.commentFormControlInvalid.set(
+            control.invalid
+          );
         });
     });
   }
@@ -125,11 +133,6 @@ export class CommentStateComponent implements OnDestroy {
     control.markAsUntouched();
     this.commentPhase.set('viewing');
     control.disable({ emitEvent: false });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
 }
