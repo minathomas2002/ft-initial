@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 
@@ -65,13 +65,14 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
         const valueControl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
         const hasError = !!(valueControl && (valueControl as { invalid?: boolean }).invalid && (valueControl as { dirty?: boolean }).dirty);
         const hasComment = this.hasServiceDetailComment(controlName, rowId, i);
+        const isResolved = this.isResolvedFieldForServiceDetail(controlName, rowId, i, group);
         return {
           label,
           beforeValue: String(beforeVal ?? ''),
           currantValue: currantVal ?? '',
           hasError,
           hasComment,
-          isResolved: false,
+          isResolved,
           showDifference: this.shouldShowDifference(currantVal, beforeVal),
         };
       };
@@ -132,5 +133,18 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
       if (rowId != null) return f.id === rowId;
       return f.inputKey === `${fieldKey}_${index}` || f.id === rowId;
     });
+  }
+
+  private isResolvedFieldForServiceDetail(fieldKey: string, rowId: string | null, index: number, rowGroup: FormGroup): boolean {
+    const fieldCtrl = rowGroup.get(fieldKey);
+    const hasCommentControl = fieldCtrl instanceof FormGroup
+      ? fieldCtrl.get(EMaterialsFormControls.hasComment)
+      : null;
+    const isHasCommentChecked = hasCommentControl?.value ?? false;
+
+    return this.hasServiceDetailComment(fieldKey, rowId, index) &&
+      !isHasCommentChecked &&
+      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 }
