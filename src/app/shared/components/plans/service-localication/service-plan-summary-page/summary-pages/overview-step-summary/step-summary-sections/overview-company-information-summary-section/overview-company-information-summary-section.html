@@ -1,0 +1,8 @@
+<div class="flex flex-col gap-4">
+  <h3 class="text-lg font-semibold text-gray-900">Company Information</h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <app-plan-summary-flied [planSummaryField]="companyNameSummaryField()" class="col-span-2" />
+    <app-plan-summary-flied [planSummaryField]="ceoNameSummaryField()" />
+    <app-plan-summary-flied [planSummaryField]="ceoEmailSummaryField()" />
+  </div>
+</div>

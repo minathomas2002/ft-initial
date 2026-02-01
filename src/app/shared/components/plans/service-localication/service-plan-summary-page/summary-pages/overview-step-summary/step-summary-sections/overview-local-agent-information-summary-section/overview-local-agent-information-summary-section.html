@@ -1,0 +1,11 @@
+<div class="flex flex-col gap-4">
+  <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <app-plan-summary-flied [planSummaryField]="localAgentDetailsSummaryField()" class="col-span-2" />
+    <app-plan-summary-flied [planSummaryField]="localAgentNameSummaryField()" />
+    <app-plan-summary-flied [planSummaryField]="contactPersonNameSummaryField()" />
+    <app-plan-summary-flied [planSummaryField]="emailIDSummaryField()" />
+    <app-plan-summary-flied [planSummaryField]="contactNumberSummaryField()" />
+    <app-plan-summary-flied [planSummaryField]="companyLocationSummaryField()" />
+  </div>
+</div>
