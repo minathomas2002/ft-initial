@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { FormArray, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
+import { findRowGroupByRowId, shouldHideSummaryCommentIcon } from 'src/app/shared/utils/summary-comment-icon.utils';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SummaryField } from '../../../../summary-field/summary-field';
 import { SummaryTableCell } from '../../../../summary-table-cell/summary-table-cell';
@@ -95,6 +96,23 @@ export class SummarySectionCoverPage {
 
   // Check if a field has a comment
   hasFieldComment(fieldKey: string, section?: string, rowId?: string): boolean {
+    // In resubmit mode: once the investor changed the field (dirty), hide the orange warning icon in summary
+    // even if they revert back to the original value.
+    if (
+      shouldHideSummaryCommentIcon(
+        this.planStore.wizardMode(),
+        this.getControlForDirtyCheck(fieldKey, section, rowId),
+        EMaterialsFormControls.value
+      )
+    ) {
+      return false;
+    }
+
+    // If the field is already resolved/corrected, hide the orange warning icon.
+    // if (this.isFieldResolved(fieldKey, section, rowId)) {
+    //   return false;
+    // }
+
     // Helper function to check if inputKey matches the fieldKey
     // Handles cases where inputKey might have an index suffix (e.g., 'fieldName_0', 'fieldName_1')
     const matchesInputKey = (inputKey: string): boolean => {
@@ -109,22 +127,6 @@ export class SummarySectionCoverPage {
       return false;
     };
 
-    // For investor view mode, check if any field with this inputKey has an ID in correctedFieldIds
-    if (this.correctedFieldIds().length > 0) {
-      const hasCorrectedField = this.pageComments().some(comment =>
-        comment.fields?.some(field =>
-          matchesInputKey(field.inputKey) &&
-          (!section || field.section === section) &&
-          field.id &&
-          this.correctedFieldIds().includes(field.id) &&
-          (rowId === undefined || field.id === rowId)
-        )
-      );
-      if (hasCorrectedField) {
-        return true;
-      }
-    }
-
     // Check if field has comments
     return this.pageComments().some(comment =>
       comment.fields?.some(field =>
@@ -133,6 +135,19 @@ export class SummarySectionCoverPage {
         (rowId === undefined || field.id === rowId)
       )
     );
+  }
+
+  private getControlForDirtyCheck(fieldKey: string, section?: string, rowId?: string) {
+    if (section === 'companyInformation') {
+      return this.coverPageCompanyInformationFormGroup()?.get(fieldKey) ?? null;
+    }
+
+    if (section === 'services') {
+      const rowGroup = findRowGroupByRowId(this.servicesFormArray(), rowId);
+      return rowGroup?.get(fieldKey) ?? null;
+    }
+
+    return null;
   }
 
   // Check if a field is resolved/corrected by investor (based on correctedFieldIds)

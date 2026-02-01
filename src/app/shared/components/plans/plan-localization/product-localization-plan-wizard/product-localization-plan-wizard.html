@@ -116,20 +116,7 @@
   </ng-template>
 
   <ng-template [appStepContent]="5">
-    <app-plan-localization-step-05-summary
-      [isViewMode]="isViewMode()"
-      [pageComments]="collectAllPageComments()"
-      [commentTitle]="commentTitle() || ''"
-      [signature]="planSignature()"
-      [step1Comments]="step1Comments()"
-      [step2Comments]="step2Comments()"
-      [step3Comments]="step3Comments()"
-      [step4Comments]="step4Comments()"
-      [originalPlanResponse]="originalPlanResponse()"
-      #summaryComponent
-      (onEditStep)="navigateToStep($event)"
-      (onValidationErrorsChange)="updateValidationErrors($event)"
-    />
+    <app-product-plan-summary-page />
   </ng-template>
 
   <ng-container ngProjectAs="final-step-action">
@@ -201,7 +188,6 @@
 <app-submission-confirmation-modal
   [(visible)]="showSubmissionModal"
   [(existingSignature)]="existingSignature"
-  [contactInfo]="contactInfo()"
   (onConfirm)="onSubmissionConfirm($event)"
   (onCancel)="onSubmissionCancel()"
 />
@@ -274,6 +260,7 @@
   (confirmed)="onProceedReject()"
   (onCancel)="onCancelRejectReason()"
   [isLoading]="isProcessing()"
+  [confirmButtonSeverity]="'danger'"
 />
 }
 

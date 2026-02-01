@@ -35,7 +35,11 @@
     <h5 class="text-xl font-semibold text-gray-900 line-clamp-1">
       {{ opportunity().title }}
     </h5>
-    <p class="text-opportunity text-gray-600 overflow-y-auto break-word max-h-[110px]">
+    <p
+      class="text-opportunity text-gray-600 overflow-y-auto break-word max-h-[110px]"
+      [appTruncateTooltip]="opportunity().shortDescription"
+      [maxChars]="220"
+    >
       {{ opportunity().shortDescription }}
     </p>
   </div>

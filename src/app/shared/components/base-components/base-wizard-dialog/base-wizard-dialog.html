@@ -12,8 +12,8 @@
     (click)="handleCloseClick()"
   ></span>
   <div class="flex !max-h-full h-full">
-    <div class="steps-container bg-gray-50 ps-5 py-6 border-e-1 border-gray-200 max-w-[300px]">
-      <div class="inline-flex items-center mb-[80px]">
+    <div class="steps-container bg-gray-50 ps-5 py-6 border-e-1 border-gray-200 max-w-[300px] flex flex-col">
+      <div class="inline-flex items-start flex-1">
         <img
           src="assets/images/long-logo.svg"
           alt="logo"
@@ -21,7 +21,7 @@
           appImageError
         />
       </div>
-      <div class="flex flex-col bg-gray-50">
+      <div class="flex flex-col bg-gray-50 overflow-auto flex-6">
         @if(activeStep()){
         <p-stepper
           [value]="activeStep()"

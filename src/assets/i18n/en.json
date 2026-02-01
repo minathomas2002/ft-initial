@@ -624,6 +624,8 @@
     "subtitle": "Track and manage your submitted localization plans and their review status",
     "subtitleInvestor":"Track the status of your submitted localization plans.",
     "subtitleInternalUser":"Track the status of all localization plans.",
+    "subtitleInternalUsers": "Track the status of all localization plans.",
+    "subTitleDvManager": "Track and manage submitted localization plans that require your action",
     "submitNewPlan": "Submit New Plan",
     "assigndPlanTitle": "Assigned Pending Plans",
     "underReviewPlanTitle": "Under Review Plans",

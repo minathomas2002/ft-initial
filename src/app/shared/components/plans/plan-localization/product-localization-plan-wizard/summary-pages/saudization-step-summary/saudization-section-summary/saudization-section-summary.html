@@ -1,0 +1,26 @@
+<div class="flex flex-col gap-2 overflow-x-auto">
+  <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden text-sm">
+    <thead class="bg-gray-100 border-b border-gray-200">
+      <tr>
+        <th class="text-left py-2 px-3 font-medium text-gray-700"></th>
+        @for (y of [1,2,3,4,5,6,7]; track y) {
+        <th class="text-left py-2 px-3 font-medium text-gray-700">{{ 'plans.summary.year' | translate }} {{ y }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track row.rowKey) {
+      <tr class="border-b border-gray-100 hover:bg-gray-50/50">
+        <td class="py-2 px-3 font-medium text-gray-700">{{ row.label }}</td>
+        @for (y of [row.year1, row.year2, row.year3, row.year4, row.year5, row.year6, row.year7]; track $index) {
+        <td class="py-2 px-3">
+          <app-plan-summary-flied
+            [planSummaryField]="getSummaryField(y, formatDisplayValue(y.value, row.rowKey === 'saudizationPercentage' || row.rowKey === 'saudiCompensationPercentage'))"
+          />
+        </td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -10,7 +10,7 @@ import { TooltipModule } from 'primeng/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryField {
-  label = input.required<string>();
+  label = input<string | null>(null);
   value = input<any>(null);
   beforeValue = input<any>(null);
   afterValue = input<any>(null);

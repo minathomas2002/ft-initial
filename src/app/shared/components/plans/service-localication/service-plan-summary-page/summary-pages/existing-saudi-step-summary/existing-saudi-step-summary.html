@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-6 bg-white">
+  <app-summary-section-existing-saudi
+    [formGroup]="formGroup"
+    [pageComments]="pageCommentsArray()"
+    [correctedFieldIds]="[]"
+    [originalPlanResponse]="originalPlanResponse()"
+    [isViewMode]="isViewMode()"
+    (onEdit)="onEdit.emit()"
+  />
+  @if (commentForPage()) {
+  <app-page-comment-box
+    [commentTitle]="commentForPage()!.title"
+    [commentText]="commentForPage()!.text"
+  />
+  }
+</div>

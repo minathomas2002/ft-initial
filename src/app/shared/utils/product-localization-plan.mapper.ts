@@ -785,6 +785,8 @@ export function mapProductPlanResponseToForm(
           const blob = new Blob([], { type: fileType });
           const file = new File([blob], fileName, { type: fileType });
 
+          const ibmIdentifier = att.ibmIdentifier;
+
           // Construct full file URL if it's a relative path
           let fullFileUrl = att.fileUrl || '';
           if (fullFileUrl && !fullFileUrl.startsWith('http://') && !fullFileUrl.startsWith('https://')) {
@@ -795,6 +797,7 @@ export function mapProductPlanResponseToForm(
 
           // Attach attachment metadata as additional properties
           (file as any).id = att.id;
+          (file as any).ibmIdentifier = ibmIdentifier;
           (file as any).fileUrl = fullFileUrl;
           (file as any).fileExtension = att.fileExtension;
           (file as any).isExistingAttachment = true;

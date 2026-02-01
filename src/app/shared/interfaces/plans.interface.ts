@@ -135,6 +135,7 @@ export interface Attachment {
   id: string
   fileName: string
   fileExtension: string
+  ibmIdentifier: string;
   fileUrl: string
   file: string
 }
@@ -353,4 +354,14 @@ export interface IFieldInformation {
 export interface IPlanCommentResponse {
   comments: IPageComment[];
   creatorRole: number;
+}
+
+export interface IPlanSummaryField {
+  label?: string;
+  beforeValue: string;
+  currantValue: string;
+  hasError: boolean;
+  hasComment: boolean;
+  isResolved: boolean;
+  showDifference: boolean;
 }

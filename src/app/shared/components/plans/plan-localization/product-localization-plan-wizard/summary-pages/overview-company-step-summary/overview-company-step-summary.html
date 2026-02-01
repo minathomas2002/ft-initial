@@ -1,0 +1,47 @@
+<div class="flex flex-col gap-6 bg-white">
+  <app-summary-section-header
+    [title]="pageTitleForTL"
+    [isViewMode]="isViewMode()"
+    (onEdit)=" onEdit.emit()"
+  />
+  <!-- Basic Information -->
+  <app-basic-information-summary-section
+    [sectionFormGroup]="basicInformationFormGroup()"
+    [sectionSummaryFields]="basicInformationSummaryFields()"
+  />
+
+  <!-- Company Information -->
+  <div class="flex flex-col gap-4">
+    <h3 class="text-lg font-semibold text-gray-900">Company Information</h3>
+    <app-company-information-summary-section
+    [sectionFormGroup]="companyInformationFormGroup()"
+    [sectionSummaryFields]="companyInformationSummaryFields()"
+    />
+  </div>
+
+  <!-- Location Information -->
+  <div class="flex flex-col gap-6">
+    <h3 class="text-lg font-semibold text-gray-900">Location Information</h3>
+    <app-location-information-summary-section
+      [sectionFormGroup]="locationInformationFormGroup()"
+      [sectionSummaryFields]="locationInformationSummaryFields()"
+    />
+
+    @if (showLocalAgentInformation()) {
+      <div class="flex flex-col gap-4">
+        <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
+        <app-local-agent-information-summary-section
+          [sectionFormGroup]="localAgentInformationFormGroup()"
+          [sectionSummaryFields]="localAgentInformationSummaryFields()"
+        />
+      </div>
+    }
+  </div>
+
+  @if (commentForPage()) {
+  <app-page-comment-box
+    [commentTitle]="commentForPage()!.title"
+    [commentText]="commentForPage()!.text"
+  />
+  }
+</div>

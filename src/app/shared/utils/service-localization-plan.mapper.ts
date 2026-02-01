@@ -310,6 +310,7 @@ function toExistingFile(att: Attachment): File {
   const fileType = getMimeTypeFromExtension(fileExtension);
   const blob = new Blob([], { type: fileType });
   const file = new File([blob], fileName, { type: fileType });
+  const ibmIdentifier = att.ibmIdentifier;
 
   let fullFileUrl = att.fileUrl || '';
   if (fullFileUrl && !fullFileUrl.startsWith('http://') && !fullFileUrl.startsWith('https://')) {
@@ -318,6 +319,7 @@ function toExistingFile(att: Attachment): File {
   }
 
   (file as any).id = att.id;
+  (file as any).ibmIdentifier = ibmIdentifier;
   (file as any).fileUrl = fullFileUrl;
   (file as any).fileExtension = fileExtension;
   (file as any).isExistingAttachment = true;

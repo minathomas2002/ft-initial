@@ -24,7 +24,7 @@ import { StepContentDirective } from 'src/app/shared/directives';
 import { ServiceLocalizationStepCoverPage } from '../service-localization-step-cover-page/service-localization-step-cover-page';
 import { ServiceLocalizationStepOverview } from '../service-localization-step-overview/service-localization-step-overview';
 import { ServiceLocalizationStepExistingSaudi } from '../service-localization-step-existing-saudi/service-localization-step-existing-saudi';
-import { ServiceLocalizationStepSummary } from '../service-localization-step-summary/service-localization-step-summary';
+import { ServicePlanSummaryPage } from '../service-plan-summary-page/service-plan-summary-page';
 import { ServiceLocalizationStepDirectLocalization } from '../service-localization-step-direct-localization/service-localization-step-direct-localization';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { ButtonModule } from 'primeng/button';
@@ -42,7 +42,7 @@ import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
-import { BasePlanWizard } from '../../base-wizard-class/base-plan-wizard';
+import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { EInternalUserPlanStatus, EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
 
 type ServiceLocalizationWizardStepId =
@@ -63,7 +63,7 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
     ServiceLocalizationStepCoverPage,
     ServiceLocalizationStepOverview,
     ServiceLocalizationStepExistingSaudi,
-    ServiceLocalizationStepSummary,
+    ServicePlanSummaryPage,
     ServiceLocalizationStepDirectLocalization,
     ButtonModule,
     TimelineDialog,
@@ -104,12 +104,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
-  
-  // Extract contactInfo from planSignature for submission modal
-  contactInfo = computed(() => {
-    const signature = this.planSignature();
-    return signature?.contactInfo ?? {};
-  });
+
+
   showConfirmLeaveDialog = model(false);
   // Store original plan response for before/after comparison
   originalPlanResponse = signal<IServiceLocalizationPlanResponse | null>(null);
@@ -665,21 +661,23 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           }
 
           // Fetch comments in review, view, and resubmit modes
-          this.planStore.getPlanComments(planId)
-            .pipe(
-              takeUntilDestroyed(this.destroyRef),
-              catchError((error) => {
-                console.error('Error loading plan comments:', error);
-                return of(null);
-              })
-            )
-            .subscribe(() => {
-              // Map comment fields to selectedInputs for each step when comments are loaded
-              this.mapCommentFieldsToSelectedInputs();
-            });
+          if (!(this.planStatus() === EInvestorPlanStatus.UNDER_REVIEW && this.isInvestorPersona())) {
+            this.planStore.getPlanComments(planId)
+              .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                catchError((error) => {
+                  console.error('Error loading plan comments:', error);
+                  return of(null);
+                })
+              )
+              .subscribe(() => {
+                // Map comment fields to selectedInputs for each step when comments are loaded
+                this.mapCommentFieldsToSelectedInputs();
+              });
 
-          // Re-evaluate conditional steps after disabling forms (getRawValue() will work correctly)
-          this.evaluateConditionalSteps();
+            // Re-evaluate conditional steps after disabling forms (getRawValue() will work correctly)
+            this.evaluateConditionalSteps();
+          }
         } else if (currentMode === 'edit') {
           this.enableAllForms();
           const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;

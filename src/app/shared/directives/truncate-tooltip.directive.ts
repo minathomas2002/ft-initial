@@ -45,7 +45,7 @@ export class TruncateTooltipDirective {
       const element = this.el.nativeElement;
 
       // Apply truncation styles
-      element.style.whiteSpace = 'nowrap';
+      // element.style.whiteSpace = 'nowrap';
       element.style.overflow = 'hidden';
       element.style.textOverflow = 'ellipsis';
 

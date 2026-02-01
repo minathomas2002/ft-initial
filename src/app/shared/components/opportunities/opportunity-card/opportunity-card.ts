@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
+import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 
 @Component({
   selector: 'app-opportunity-card',
   imports: [
-    TooltipModule
+    TooltipModule,
+    TruncateTooltipDirective
   ],
   templateUrl: './opportunity-card.html',
   styleUrl: './opportunity-card.scss',

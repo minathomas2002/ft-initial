@@ -1,7 +1,7 @@
 import { ICreateOpportunity, IOpportunityDraftRequest } from "src/app/shared/interfaces";
 
 export class OpportunityRequestsAdapter {
-  async toOpportunityRequest(formValue: ICreateOpportunity): Promise<IOpportunityDraftRequest> {
+  async toOpportunityRequest(formValue: ICreateOpportunity): Promise<Partial<IOpportunityDraftRequest>> {
     // Extract File from image - handle both File objects and objects with objectURL
     const imageValue = formValue.opportunityInformationFrom.image;
     let image: File | null = null;

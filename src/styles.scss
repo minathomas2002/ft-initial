@@ -23,3 +23,14 @@
 }
 
 /* Importing Own styles */
+/* Importing Own styles */
+/* Edge / IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
+
+/* Chrome */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden !important;
+}

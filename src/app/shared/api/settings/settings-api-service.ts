@@ -9,10 +9,10 @@ import { API_ENDPOINTS } from '../api-endpoints';
   providedIn: 'root',
 })
 export class SettingsApiService {
-  
+
   private readonly baseHttpService = inject(BaseHttpService);
 
-  //Get admin settings 
+  //Get admin settings
 
   // get sla setting
     getSLASetting(): Observable<IBaseApiResponse<ISettingSla>> {
@@ -43,11 +43,11 @@ export class SettingsApiService {
     }
 
     updateHoliday(req: IHolidayCreating): Observable<IBaseApiResponse<IHolidaysManagementRecord>> {
-      return this.baseHttpService.put<IHolidaysManagementRecord, IHolidayCreating, unknown>(API_ENDPOINTS.AdminSettings.updateHoliday, req);
+      return this.baseHttpService.post<IHolidaysManagementRecord, IHolidayCreating, unknown>(API_ENDPOINTS.AdminSettings.updateHoliday, req);
     }
 
     deleteHoliday(id: string): Observable<IBaseApiResponse<boolean>> {
-      return this.baseHttpService.delete<boolean, unknown>(`${API_ENDPOINTS.AdminSettings.deleteHoliday}/${id}`);
+      return this.baseHttpService.post<boolean, {id: string}, unknown>(`${API_ENDPOINTS.AdminSettings.deleteHoliday}`, { id });
     }
 
     getNotificationSetting(channelId: number):Observable<IBaseApiResponse<INotificationSettingResponse[]>>{

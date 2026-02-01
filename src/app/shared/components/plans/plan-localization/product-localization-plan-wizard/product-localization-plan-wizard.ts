@@ -32,7 +32,8 @@ import { AuthStore } from "src/app/shared/stores/auth/auth.store";
 import { ERoles } from "src/app/shared/enums/roles.enum";
 import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
-import { BasePlanWizard } from '../../base-wizard-class/base-plan-wizard';
+import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
+import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 
@@ -51,7 +52,7 @@ type ProductLocalizationWizardStepId =
     PlanLocalizationStep02ProductPlantOverviewForm,
     PlanLocalizationStep03ValueChainForm,
     PlanLocalizationStep04SaudizationForm,
-    PlanLocalizationStep05Summary,
+    ProductPlanSummaryPage,
     ButtonModule,
     BaseTagComponent,
     StepContentDirective,
@@ -352,12 +353,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
-  
-  // Extract contactInfo from planSignature for submission modal
-  contactInfo = computed(() => {
-    const signature = this.planSignature();
-    return signature?.contactInfo ?? {};
-  });
+
   showConfirmLeaveDialog = model(false);
   // Store original plan response for before/after comparison
   originalPlanResponse = signal<IProductPlanResponse | null>(null);
@@ -700,18 +696,20 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       const planId = this.planStore.selectedPlanId();
       if (planId) {
         // Always fetch comments in these modes
-        this.planStore.getPlanComments(planId)
-          .pipe(
-            takeUntilDestroyed(this.destroyRef),
-            catchError((error) => {
-              console.error('Error loading plan comments:', error);
-              return of(null);
-            })
-          )
-          .subscribe(() => {
-            // Map comment fields to selectedInputs for each step when comments are loaded
-            this.mapCommentFieldsToSelectedInputs();
-          });
+        if (!(this.planStatus() === EInvestorPlanStatus.UNDER_REVIEW && this.isInvestorPersona())) {
+          this.planStore.getPlanComments(planId)
+            .pipe(
+              takeUntilDestroyed(this.destroyRef),
+              catchError((error) => {
+                console.error('Error loading plan comments:', error);
+                return of(null);
+              })
+            )
+            .subscribe(() => {
+              // Map comment fields to selectedInputs for each step when comments are loaded
+              this.mapCommentFieldsToSelectedInputs();
+            });
+        }
       }
     } else if (currentMode === 'edit') {
       // Enable all forms in edit mode without resetting read-only field values
