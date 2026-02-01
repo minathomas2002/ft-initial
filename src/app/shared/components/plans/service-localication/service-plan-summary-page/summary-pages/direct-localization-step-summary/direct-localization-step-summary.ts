@@ -28,7 +28,7 @@ import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 export class DirectLocalizationStepSummary extends SummaryStepBaseClass {
   private readonly servicePlanFormService = inject(ServicePlanFormService);
 
-  override readonly pageTitleForTL = 'Direct Localization by Foreign Entity';
+  override readonly pageTitleForTL = 'Direct Localization';
   override readonly formGroup: FormGroup = this.servicePlanFormService.step4_directLocalization;
 
   constructor() {

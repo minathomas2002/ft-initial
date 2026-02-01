@@ -48,7 +48,7 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
 
     return arr.controls.map((ctrl, i) => {
       const group = ctrl as FormGroup;
-      const rowId = group.get('rowId')?.value ?? null;
+      const rowId = group.get('rowId')?.value ?? group.get('id')?.value ?? null;
       const serviceId = group.get(EMaterialsFormControls.serviceId)?.value;
       const strategy = plan?.localizationStrategies?.find((s: { planServiceTypeId: string }) => s.planServiceTypeId === serviceId);
       const service = plan?.services?.find((s: { id: string }) => s.id === serviceId);
@@ -124,7 +124,8 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
     return this.sectionSummaryFields().some((f) => {
       const matchKey = f.inputKey === expectedInputKey || f.inputKey === expectedInputKeyAlt || f.inputKey === fieldKey;
       if (!matchKey) return false;
-      return rowId == null ? f.id == null : f.id === rowId;
+      // Match by row id when present; when field has no id, match only rows with no id (e.g. create mode)
+      return f.id === rowId;
     });
   }
 }

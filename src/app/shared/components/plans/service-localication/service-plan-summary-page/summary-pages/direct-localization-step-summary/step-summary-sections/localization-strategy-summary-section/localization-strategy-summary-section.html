@@ -19,7 +19,10 @@
             <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Proprietary Tools/Systems</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-row>
+        <ng-template
+          pTemplate="body"
+          let-row
+        >
           <tr>
             <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.serviceName" /></td>
             <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.expectedLocalizationDate" /></td>
@@ -34,9 +37,7 @@
             <td class="border-t border-gray-300 p-3">
               <app-plan-summary-flied [planSummaryField]="row.location" />
               @if (row.locationOther) {
-              <div class="mt-2 text-sm text-gray-600 flex flex-col items-start gap-2 max-h-[100px] overflow-auto">
-                <span class="font-semibold">Description: </span>{{ row.locationOther.currant || row.locationOther.before }}
-              </div>
+              <app-plan-summary-flied [planSummaryField]="row.locationOther" />
               }
             </td>
             <td class="border-t border-gray-300 p-3 text-center"><app-plan-summary-flied [planSummaryField]="row.capexRequired" /></td>
@@ -44,9 +45,7 @@
             <td class="border-t border-gray-300 p-3">
               <app-plan-summary-flied [planSummaryField]="row.proprietaryTools" />
               @if (row.proprietaryToolsExplanation) {
-              <div class="mt-2 text-sm text-gray-600 flex flex-col items-start gap-2 max-h-[100px] overflow-auto">
-                <span class="font-semibold">Explanation: </span>{{ row.proprietaryToolsExplanation.currant || row.proprietaryToolsExplanation.before }}
-              </div>
+              <app-plan-summary-flied [planSummaryField]="row.proprietaryToolsExplanation" />
               }
             </td>
           </tr>
