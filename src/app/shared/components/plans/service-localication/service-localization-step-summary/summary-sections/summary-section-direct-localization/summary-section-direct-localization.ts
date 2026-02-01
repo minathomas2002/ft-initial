@@ -164,6 +164,12 @@ export class SummarySectionDirectLocalization {
     return this.hasFieldError(`localizationStrategyFormGroup.${index}.${controlName}.value`);
   }
 
+  // Entity Level table rows: Expected Annual Headcount, Expected Saudization (%)
+  entityLevelTableRows = [
+    { label: 'Expected Annual Headcount', controlKey: 'headcount' },
+    { label: 'Expected Saudization (%)', controlKey: 'saudization' },
+  ] as const;
+
   // Entity Level data
   entityLevel = computed(() => {
     const entityArray = this.entityLevelFormArray();
@@ -179,8 +185,14 @@ export class SummarySectionDirectLocalization {
     };
 
     return {
-      headcount: this.yearControlKeys.map(key => ({ value: getValueFromControl(`${key}_headcount`), controlName: `${key}_headcount` })),
-      saudization: this.yearControlKeys.map(key => ({ value: getValueFromControl(`${key}_saudization`), controlName: `${key}_saudization` })),
+      rows: this.entityLevelTableRows.map((rowConfig) => ({
+        label: rowConfig.label,
+        controlKey: rowConfig.controlKey,
+        yearValues: this.yearControlKeys.map((key) => ({
+          value: getValueFromControl(`${key}_${rowConfig.controlKey}`),
+          controlName: `${key}_${rowConfig.controlKey}`,
+        })),
+      })),
     };
   });
 
@@ -525,10 +537,10 @@ export class SummarySectionDirectLocalization {
       case 'entityLevel':
         const entity = this.entityLevel();
         if (entity) {
-          const headcount = entity.headcount.find(h => h.controlName === fieldKey);
-          if (headcount) return headcount.value ?? null;
-          const saudization = entity.saudization.find(s => s.controlName === fieldKey);
-          return saudization?.value ?? null;
+          for (const row of entity.rows) {
+            const cell = row.yearValues.find((c) => c.controlName === fieldKey);
+            if (cell) return cell.value ?? null;
+          }
         }
         return null;
 

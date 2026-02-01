@@ -164,7 +164,7 @@
       <div class="overflow-x-auto">
         <div class="rounded-2xl overflow-hidden border border-gray-300">
           <p-table
-            [value]="entityLevel() ? [entityLevel()!] : []"
+            [value]="entityLevel()!.rows"
             [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
             styleClass="w-full [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
           >
@@ -172,13 +172,14 @@
               <tr class="bg-primary">
                 <th
                   class="p-3 text-start text-sm font-medium text-white"
-                  colspan="6"
-                >
-                  Expected Annual Headcount (upto 2030)
-                  <span class="font-normal text-xs">(To be filled for the KSA based facility only)</span>
-                </th>
+                >Metrics</th>
+                <th
+                  class="p-3 text-start text-sm font-medium text-white"
+                  [attr.colspan]="yearColumns().length"
+                >Years ({{ yearColumns()[0] }}-{{ yearColumns()[yearColumns().length - 1] }})</th>
               </tr>
               <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
+                <th class="p-3 text-start text-sm font-medium text-[#4A4E5A]">Category</th>
                 @for (year of yearColumns(); track $index) {
                 <th class="p-3 text-start text-sm font-medium text-[#4A4E5A]">{{ year }}</th>
                 }
@@ -190,16 +191,17 @@
               let-row
             >
               <tr>
-                @for (headcount of row.headcount; track $index) {
+                <td class="border-t border-gray-300 p-3 font-medium text-[#4A4E5A]">{{ row.label }}</td>
+                @for (yearCell of row.yearValues; track yearCell.controlName) {
                 <td class="border-t border-gray-300 p-3 text-center">
                   <app-summary-table-cell
-                    [value]="headcount.value"
-                    [isEmpty]="!headcount.value && headcount.value !== 0"
-                    [hasError]="hasEntityFieldError(headcount.controlName)"
-                    [hasComment]="hasEntityLevelComment(headcount.controlName)"
-                    [beforeValue]="getBeforeValue(headcount.controlName, 'entityLevel')"
-                    [afterValue]="getAfterValue(headcount.controlName, 'entityLevel')"
-                    [showDiff]="shouldShowDiff(headcount.controlName, 'entityLevel')"
+                    [value]="yearCell.value"
+                    [isEmpty]="!yearCell.value && yearCell.value !== 0"
+                    [hasError]="hasEntityFieldError(yearCell.controlName)"
+                    [hasComment]="hasEntityLevelComment(yearCell.controlName)"
+                    [beforeValue]="getBeforeValue(yearCell.controlName, 'entityLevel')"
+                    [afterValue]="getAfterValue(yearCell.controlName, 'entityLevel')"
+                    [showDiff]="shouldShowDiff(yearCell.controlName, 'entityLevel')"
                   />
                 </td>
                 }
