@@ -116,7 +116,6 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
     }
   }
-  EMaterialsFormControls = EMaterialsFormControls;
   EServiceProvidedTo = EServiceProvidedTo;
   EServiceQualificationStatus = EServiceQualificationStatus;
   EYesNo = EYesNo;
@@ -399,9 +398,9 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         const otherDetailsControl = control.get(EMaterialsFormControls.agreementOtherDetails);
         if (otherDetailsControl && this.isAgreementTypeOther(control)) {
           const canEdit = isFieldShouldbeCorrected(`agreementOtherDetails_${index}`) ||
-                         this._userChangedDropdowns.has(`agreementType_${index}`);
+            this._userChangedDropdowns.has(`agreementType_${index}`);
           canEdit ? this.getValueControl(otherDetailsControl).enable({ emitEvent: false })
-                  : this.getValueControl(otherDetailsControl).disable({ emitEvent: false });
+            : this.getValueControl(otherDetailsControl).disable({ emitEvent: false });
         }
       });
     });
@@ -508,8 +507,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       if (!this.isResubmitMode()) return true;
       // Enable if: field is corrected OR user has changed the parent dropdown
       return isFieldShouldbeCorrected(inputKey) ||
-             this._userChangedDropdowns.has(parentChangedKey) ||
-             (secondaryChangedKey ? this._userChangedDropdowns.has(secondaryChangedKey) : false);
+        this._userChangedDropdowns.has(parentChangedKey) ||
+        (secondaryChangedKey ? this._userChangedDropdowns.has(secondaryChangedKey) : false);
     };
 
     // Function to update fields based on current selections
@@ -621,6 +620,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   };
 
   getCollaborationPartnershipFormArray(): FormArray {
+    console.log(this.planFormService?.collaborationPartnershipFormGroup);
     return this.planFormService?.collaborationPartnershipFormGroup ?? new FormArray<any>([]);
   }
 
@@ -670,7 +670,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
               }
             }
-              this.planFormService?.toggleAgreementOtherDetailsValidation(value ?? null, index);
+            this.planFormService?.toggleAgreementOtherDetailsValidation(value ?? null, index);
           });
       });
     });

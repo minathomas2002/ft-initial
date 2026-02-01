@@ -41,7 +41,7 @@ export abstract class SummarySectionBaseClass {
   }
 
   protected isFieldHasComment(inputKey: string, rowId: string | null = null): boolean {
-    return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && summaryField.id === rowId);
+    return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && (summaryField.id ? summaryField.id === rowId : true));
   }
 
   protected shouldShowDifference(formControl: FormControl): boolean {
