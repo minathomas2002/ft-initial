@@ -48,19 +48,19 @@
 
         <!-- Vendor ID with SEC -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
-            <p-inputnumber
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
-              [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-              [maxlength]="7"
-              [useGrouping]="false"
-              [minFractionDigits]="0"
-              [maxFractionDigits]="0"
-              [allowEmpty]="true"
-              mode="decimal"
-              fluid
-              placeholder="Registered Vendor ID with SEC"
-            />
+          <p-inputnumber
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+            [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
+            [color]="selectedInputColor()"
+            [maxlength]="7"
+            [useGrouping]="false"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="0"
+            [allowEmpty]="true"
+            mode="decimal"
+            fluid
+            placeholder="Registered Vendor ID with SEC"
+          />
         </td>
 
         <!-- BENA Registered ID -->
@@ -306,7 +306,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementType))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'collaborationPartnership',
-                inputKey: 'agreementType_' + index,
+                inputKey: EMaterialsFormControls.agreementType,
                 label: 'Agreement Type with Saudi Company'
               }, itemControl.get('rowId')?.value)"
             >
@@ -364,7 +364,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: 'agreementSigningDate_' + index,
+              inputKey: EMaterialsFormControls.agreementSigningDate,
               label: 'Agreement Signing Date'
             }, itemControl.get('rowId')?.value)"
           >
@@ -393,7 +393,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: 'supervisionOversightEntity_' + index,
+              inputKey: EMaterialsFormControls.supervisionOversightEntity,
               label: 'Supervision / Oversight'
             }, itemControl.get('rowId')?.value)"
           >
@@ -421,7 +421,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: 'whyChoseThisCompany_' + index,
+              inputKey: EMaterialsFormControls.whyChoseThisCompany,
               label: 'Why Did You Chose This Particular Saudi Company As Your Partner?'
             }, itemControl.get('rowId')?.value)"
           >
@@ -566,7 +566,7 @@
                   section: 'entityLevel',
                   inputKey: uniqueInputKey,
                   label: row.label + ' - ' + yearColumns()[i]
-                })"
+                }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
                   fluid

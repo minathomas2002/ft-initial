@@ -64,7 +64,6 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   isViewMode = input<boolean>(false);
   isReviewMode = input<boolean>(false);
 
-  EMaterialsFormControls = EMaterialsFormControls;
   yesNoOptions = this.planStore.yesNoOptions;
   localizationApproachOptions = this.planStore.localizationApproachOptions;
   locationOptions = this.planStore.locationOptions;
@@ -269,7 +268,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         if (approachOtherControl && this.isLocalizationApproachOther(itemControl)) {
           const canEdit = shouldEnableConditional(`localizationApproachOtherDetails_${index}`, `localizationApproach_${index}`);
           canEdit ? this.getValueControl(approachOtherControl).enable({ emitEvent: false })
-                  : this.getValueControl(approachOtherControl).disable({ emitEvent: false });
+            : this.getValueControl(approachOtherControl).disable({ emitEvent: false });
         }
 
         // locationOtherDetails
@@ -277,7 +276,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         if (locationOtherControl && this.isLocationOther(itemControl)) {
           const canEdit = shouldEnableConditional(`locationOtherDetails_${index}`, `location_${index}`);
           canEdit ? this.getValueControl(locationOtherControl).enable({ emitEvent: false })
-                  : this.getValueControl(locationOtherControl).disable({ emitEvent: false });
+            : this.getValueControl(locationOtherControl).disable({ emitEvent: false });
         }
 
         // proprietaryToolsSystemsDetails
@@ -285,7 +284,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         if (proprietaryDetailsControl && this.isProprietaryToolsYes(itemControl)) {
           const canEdit = shouldEnableConditional(`proprietaryToolsSystemsDetails_${index}`, `willBeAnyProprietaryToolsSystems_${index}`);
           canEdit ? this.getValueControl(proprietaryDetailsControl).enable({ emitEvent: false })
-                  : this.getValueControl(proprietaryDetailsControl).disable({ emitEvent: false });
+            : this.getValueControl(proprietaryDetailsControl).disable({ emitEvent: false });
         }
       });
     });

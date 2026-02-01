@@ -60,7 +60,6 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   });
 
   formGroup = this.planFormService.step4_saudization;
-  readonly EMaterialsFormControls = EMaterialsFormControls;
 
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');

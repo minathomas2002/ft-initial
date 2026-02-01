@@ -366,7 +366,7 @@
                   section: 'entityLevel',
                   inputKey: uniqueInputKey,
                   label: row.label + ' - ' + yearColumns()[i]
-                })"
+                }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
                   fluid
@@ -580,8 +580,8 @@
               @if (!getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).disabled) {
               <div class="text-xs text-gray-500 text-right mt-1">
                 {{ getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).value?.length || 0 }} / 500
-                </div>
-                }
+              </div>
+              }
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"

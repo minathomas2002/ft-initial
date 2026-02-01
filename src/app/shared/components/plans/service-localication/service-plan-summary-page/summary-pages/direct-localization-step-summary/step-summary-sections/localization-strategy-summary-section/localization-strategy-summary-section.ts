@@ -64,7 +64,7 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
         const valueCtrl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
         const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
         const showDiff = !!(valueCtrl && this.planStore.wizardMode() === 'resubmit' && (valueCtrl as { dirty?: boolean }).dirty);
-        const hasComment = this.hasArrayFieldComment(fieldKey, 'localizationStrategy', rowId);
+        const hasComment = this.hasLocalizationStrategyFieldComment(fieldKey, i, rowId);
         return {
           label,
           beforeValue: String(before ?? ''),
@@ -101,21 +101,28 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
         serviceName: buildField('', currantServiceName, beforeServiceName, EMaterialsFormControls.serviceName),
         expectedLocalizationDate: buildField('', currantExpectedDate, beforeExpectedDate, EMaterialsFormControls.expectedLocalizationDate),
         localizationApproach: buildField('', currantApproach, beforeApproach, EMaterialsFormControls.localizationApproach),
-        localizationApproachOther: currantApproachOther || beforeApproachOther ? { currant: currantApproachOther, before: beforeApproachOther, hasComment: this.hasArrayFieldComment(EMaterialsFormControls.localizationApproachOtherDetails, 'localizationStrategy', rowId) } : null,
+        localizationApproachOther: currantApproachOther || beforeApproachOther ? { currant: currantApproachOther, before: beforeApproachOther, hasComment: this.hasLocalizationStrategyFieldComment(EMaterialsFormControls.localizationApproachOtherDetails, i, rowId) } : null,
         location: buildField('Location', currantLocation, beforeLocation, EMaterialsFormControls.location),
-        locationOther: currantLocationOther || beforeLocationOther ? { currant: currantLocationOther, before: beforeLocationOther, hasComment: this.hasArrayFieldComment(EMaterialsFormControls.locationOtherDetails, 'localizationStrategy', rowId) } : null,
+        locationOther: currantLocationOther || beforeLocationOther ? { currant: currantLocationOther, before: beforeLocationOther, hasComment: this.hasLocalizationStrategyFieldComment(EMaterialsFormControls.locationOtherDetails, i, rowId) } : null,
         capexRequired: buildField('', currantCapex != null ? String(currantCapex) : null, beforeCapex != null ? String(beforeCapex) : null, EMaterialsFormControls.capexRequired),
         supervisionOversight: buildField('', currantSupervision, beforeSupervision, EMaterialsFormControls.supervisionOversightByGovernmentEntity),
         proprietaryTools: buildField('', currantProprietary, beforeProprietary, EMaterialsFormControls.willBeAnyProprietaryToolsSystems),
-        proprietaryToolsExplanation: currantProprietaryExplanation || beforeProprietaryExplanation ? { currant: currantProprietaryExplanation, before: beforeProprietaryExplanation, hasComment: this.hasArrayFieldComment(EMaterialsFormControls.proprietaryToolsSystemsDetails, 'localizationStrategy', rowId) } : null,
+        proprietaryToolsExplanation: currantProprietaryExplanation || beforeProprietaryExplanation ? { currant: currantProprietaryExplanation, before: beforeProprietaryExplanation, hasComment: this.hasLocalizationStrategyFieldComment(EMaterialsFormControls.proprietaryToolsSystemsDetails, i, rowId) } : null,
       };
     });
   });
 
-  private hasArrayFieldComment(fieldKey: string, section: string, rowId: string | null): boolean {
+  /**
+   * Check if the localization strategy field has a comment.
+   * Input key in sectionSummaryFields matches step form: fieldKey_index
+   * (e.g. expectedLocalizationDate_0, localizationApproach_0, capexRequired_0)
+   * Note: supervisionOversightByGovernmentEntity may use fieldKey+index without underscore.
+   */
+  private hasLocalizationStrategyFieldComment(fieldKey: string, index: number, rowId: string | null): boolean {
+    const expectedInputKey = `${fieldKey}_${index}`;
+    const expectedInputKeyAlt = `${fieldKey}${index}`; // fallback for supervisionOversightByGovernmentEntity0
     return this.sectionSummaryFields().some((f) => {
-      const matchKey = f.inputKey === fieldKey || f.inputKey === `${section}.${fieldKey}` ||
-        (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1)));
+      const matchKey = f.inputKey === expectedInputKey || f.inputKey === expectedInputKeyAlt || f.inputKey === fieldKey;
       if (!matchKey) return false;
       return rowId == null ? f.id == null : f.id === rowId;
     });

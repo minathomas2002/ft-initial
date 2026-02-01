@@ -100,9 +100,15 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
     };
   });
 
-  private hasEntityFieldComment(fieldKey: string, rowId: string | null): boolean {
+  /**
+   * Check if the entity level field has a comment.
+   * Input key in sectionSummaryFields matches step form: 'entityLevel_' + controlName
+   * (e.g. entityLevel_firstYear_headcount, entityLevel_firstYear_saudization)
+   */
+  private hasEntityFieldComment(controlName: string, rowId: string | null): boolean {
+    const expectedInputKey = `entityLevel_${controlName}`;
     return this.sectionSummaryFields().some((f) => {
-      const matchKey = f.inputKey === fieldKey || f.inputKey?.startsWith(fieldKey + '_');
+      const matchKey = f.inputKey === expectedInputKey || f.inputKey === controlName;
       if (!matchKey) return false;
       return rowId == null ? f.id == null : f.id === rowId;
     });
