@@ -19,15 +19,19 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
   private readonly opportunityTypeControl = computed(() => this.getFormControl(EMaterialsFormControls.opportunityType));
   private readonly opportunityControl = computed(() => this.getFormControl(EMaterialsFormControls.opportunity));
   private readonly submissionDateControl = computed(() => this.getFormControl(EMaterialsFormControls.submissionDate));
-  planTitleSummaryField = computed<IPlanSummaryField>(() => ({
-    label: this.i18nService.translate('plans.newPlan.planTitle'),
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.basicInfo.planTitle ?? '',
-    currantValue: this.planTitleControl()?.value,
-    hasError: this.isFieldHasError(this.planTitleControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle),
-    isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
-    showDifference: this.shouldShowDifference(this.planTitleControl()),
-  }));
+  planTitleSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.planTitleControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.basicInfo.planTitle ?? '';
+    return {
+      label: this.i18nService.translate('plans.newPlan.planTitle'),
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.planTitleControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle),
+      isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
   opportunityTypeSummaryField = computed<IPlanSummaryField>(() => ({
     label: this.i18nService.translate('plans.newPlan.opportunityType'),

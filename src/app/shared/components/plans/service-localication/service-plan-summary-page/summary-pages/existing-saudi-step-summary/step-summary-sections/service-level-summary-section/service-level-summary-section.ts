@@ -60,7 +60,6 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
         const ctrl = group.get(fieldKey);
         const valueCtrl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
         const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
-        const showDiff = !!(valueCtrl && this.planStore.wizardMode() === 'resubmit' && (valueCtrl as { dirty?: boolean }).dirty);
         const hasComment = this.hasArrayFieldComment(fieldKey, 'serviceLevel', rowId);
         return {
           label,
@@ -69,7 +68,7 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
           hasError,
           hasComment,
           isResolved: false,
-          showDifference: showDiff,
+          showDifference: this.shouldShowDifference(currant, before),
         };
       };
 

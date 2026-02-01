@@ -16,23 +16,31 @@ export class CoverPageCompanyInformationSummarySection extends SummarySectionBas
   private readonly planTitleControl = computed(() => this.getValueFormControl(EMaterialsFormControls.planTitle));
   private readonly companyNameControl = computed(() => this.getValueFormControl(EMaterialsFormControls.companyName));
 
-  planTitleSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Plan Title',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.planTitle ?? '',
-    currantValue: this.planTitleControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.planTitleControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
-    showDifference: this.shouldShowDifference(this.planTitleControl()),
-  }));
+  planTitleSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.planTitleControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.planTitle ?? '';
+    return {
+      label: 'Plan Title',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.planTitleControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  companyNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Company Name',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.companyName ?? '',
-    currantValue: this.companyNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.companyNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
-    showDifference: this.shouldShowDifference(this.companyNameControl()),
-  }));
+  companyNameSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.companyNameControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.companyName ?? '';
+    return {
+      label: 'Company Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.companyNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }

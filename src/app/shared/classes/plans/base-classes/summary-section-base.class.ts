@@ -44,8 +44,15 @@ export abstract class SummarySectionBaseClass {
     return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && (summaryField.id ? summaryField.id === rowId : true));
   }
 
-  protected shouldShowDifference(formControl: FormControl): boolean {
-    return formControl.dirty && this.planStore.wizardMode() === 'resubmit';
+  /**
+   * Whether to show before/after difference in resubmit mode.
+   * Compares currantValue and beforeValue - no dirty check required.
+   */
+  protected shouldShowDifference(currantValue: unknown, beforeValue: unknown): boolean {
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
+    const currant = currantValue === null || currantValue === undefined ? '' : String(currantValue).trim();
+    const before = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
+    return currant !== before;
   }
 
   protected isFieldHasError(formControl: FormControl): boolean {

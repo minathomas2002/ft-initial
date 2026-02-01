@@ -30,22 +30,21 @@ export class CoverPageServicesSummarySection extends SummarySectionBaseClass {
       const valueCtrl = serviceNameCtrl instanceof FormGroup
         ? serviceNameCtrl.get(EMaterialsFormControls.value)
         : null;
-      const value = valueCtrl?.value ?? '';
+      const currantValue = valueCtrl?.value ?? '';
       const beforeValue = this.planStore.servicePlanData()?.servicePlan?.services?.[i]?.serviceName ?? '';
       const hasError = valueCtrl ? (valueCtrl.invalid && valueCtrl.dirty) : false;
       const hasComment = this.isFieldHasCommentForService(EMaterialsFormControls.serviceName, rowId, i);
-      const showDiff = valueCtrl ? (valueCtrl.dirty && this.planStore.wizardMode() === 'resubmit') : false;
 
       return {
         label: ``,
         summaryField: {
           label: '',
           beforeValue: String(beforeValue ?? ''),
-          currantValue: value ?? '',
+          currantValue: String(currantValue ?? ''),
           hasError,
           hasComment,
           isResolved: this.isResolvedFieldForService(EMaterialsFormControls.serviceName, rowId, i, group),
-          showDifference: showDiff,
+          showDifference: this.shouldShowDifference(currantValue, beforeValue),
         } as IPlanSummaryField,
       };
     });

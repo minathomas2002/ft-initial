@@ -60,9 +60,14 @@ export class ValueChainSectionSummaryComponent {
         const ctrl = getValueControl(inputKey);
         const hasComment = summaryFields.some(f => f.inputKey === inputKey && (f.id === rowId || (f.id == null && rowId == null)));
         const hasError = ctrl ? (ctrl.invalid && ctrl.dirty) : false;
-        const showDiff = ctrl ? (ctrl.dirty && this.planStore.wizardMode() === 'resubmit') : false;
         const value = ctrl?.value ?? '';
-        return { value, beforeValue: beforeVal ?? '', hasError, hasComment, showDifference: showDiff };
+        const beforeValue = beforeVal ?? '';
+        const showDiff = this.planStore.wizardMode() === 'resubmit' && (() => {
+          const currant = value === null || value === undefined ? '' : String(value).trim();
+          const before = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
+          return currant !== before;
+        })();
+        return { value, beforeValue: String(beforeValue), hasError, hasComment, showDifference: showDiff };
       };
 
       return {

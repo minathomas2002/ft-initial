@@ -64,7 +64,6 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
         const ctrl = group.get(controlName);
         const valueControl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
         const hasError = !!(valueControl && (valueControl as { invalid?: boolean }).invalid && (valueControl as { dirty?: boolean }).dirty);
-        const showDiff = !!(valueControl && this.planStore.wizardMode() === 'resubmit' && (valueControl as { dirty?: boolean }).dirty);
         const hasComment = this.hasServiceDetailComment(controlName, rowId, i);
         return {
           label,
@@ -73,7 +72,7 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
           hasError,
           hasComment,
           isResolved: false,
-          showDifference: showDiff,
+          showDifference: this.shouldShowDifference(currantVal, beforeVal),
         };
       };
 

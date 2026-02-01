@@ -76,7 +76,6 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
       const currantVal = getValue(controlName);
       const beforeVal = entity && YEAR_MAP[controlName] ? (entity as unknown as Record<string, unknown>)[YEAR_MAP[controlName]] : null;
       const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
-      const showDiff = !!(valueCtrl && this.planStore.wizardMode() === 'resubmit' && (valueCtrl as { dirty?: boolean }).dirty);
       const hasComment = this.hasEntityFieldComment(controlName, rowId);
       return {
         label: '',
@@ -85,7 +84,7 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
         hasError,
         hasComment,
         isResolved: false,
-        showDifference: showDiff,
+        showDifference: this.shouldShowDifference(currantVal, beforeVal),
       };
     };
 

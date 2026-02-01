@@ -40,27 +40,35 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
       hasError: this.isFieldHasError(this.targetedCustomerControl()),
       hasComment: this.isFieldHasComment(EMaterialsFormControls.targetedCustomer),
       isResolved: this.isResolvedField(EMaterialsFormControls.targetedCustomer),
-      showDifference: this.shouldShowDifference(this.targetedCustomerControl()),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
   });
 
-  namesOfTargetedSuppliersSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Names of Targeted Suppliers',
-    beforeValue: this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames ?? '',
-    currantValue: this.namesOfTargetedSuppliersControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.namesOfTargetedSuppliersControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.namesOfTargetedSuppliers),
-    isResolved: this.isResolvedField(EMaterialsFormControls.namesOfTargetedSuppliers),
-    showDifference: this.shouldShowDifference(this.namesOfTargetedSuppliersControl()),
-  }));
+  namesOfTargetedSuppliersSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.namesOfTargetedSuppliersControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames ?? '';
+    return {
+      label: 'Names of Targeted Suppliers',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.namesOfTargetedSuppliersControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.namesOfTargetedSuppliers),
+      isResolved: this.isResolvedField(EMaterialsFormControls.namesOfTargetedSuppliers),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  productsUtilizeTargetedProductSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Products Utilize Targeted Product',
-    beforeValue: this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.productsUtilizingTargetProduct ?? '',
-    currantValue: this.productsUtilizeTargetedProductControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.productsUtilizeTargetedProductControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.productsUtilizeTargetedProduct),
-    isResolved: this.isResolvedField(EMaterialsFormControls.productsUtilizeTargetedProduct),
-    showDifference: this.shouldShowDifference(this.productsUtilizeTargetedProductControl()),
-  }));
+  productsUtilizeTargetedProductSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.productsUtilizeTargetedProductControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.productsUtilizingTargetProduct ?? '';
+    return {
+      label: 'Products Utilize Targeted Product',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.productsUtilizeTargetedProductControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.productsUtilizeTargetedProduct),
+      isResolved: this.isResolvedField(EMaterialsFormControls.productsUtilizeTargetedProduct),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }
