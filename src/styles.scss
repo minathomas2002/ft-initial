@@ -20,6 +20,19 @@
   --color-orange-800: #8f5322;
   --color-orange-900: #5e3616;
   --color-orange-950: #4a2b11;
+
+  /* Custom green palette using CSS variables (can be mapped to PrimeNG success colors or custom values) */
+  --color-custom-green-50: var(--p-success-50, #f0fdf4);
+  --color-custom-green-100: var(--p-success-100, #dcfce7);
+  --color-custom-green-200: var(--p-success-200, #bbf7d0);
+  --color-custom-green-300: var(--p-success-300, #86efac);
+  --color-custom-green-400: var(--p-success-400, #4ade80);
+  --color-custom-green-500: var(--p-success-500, #22c55e);
+  --color-custom-green-600: var(--p-success-600, #16a34a);
+  --color-custom-green-700: var(--p-success-700, #15803d);
+  --color-custom-green-800: var(--p-success-800, #166534);
+  --color-custom-green-900: var(--p-success-900, #14532d);
+  --color-custom-green-950: var(--p-success-950, #052e16);
 }
 
 /* Importing Own styles */
