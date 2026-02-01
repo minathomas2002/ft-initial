@@ -52,7 +52,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     return {
       label: this.i18nService.translate('plans.newPlan.opportunity'),
       beforeValue: '',
-      currantValue: this.opportunityControl()?.value.name,
+      currantValue: this.opportunityControl()?.value?.name ?? '',
       hasError: false,
       hasComment: false,
       isResolved: false,
