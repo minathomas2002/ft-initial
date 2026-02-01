@@ -704,14 +704,14 @@
     "filter": {
       "searchPlaceholder": "Search by Plan ID or Title",
       "dvsearchPlaceholder": "Search by Plan ID or Title or Investor Name",
-      "selectPlanType": "Select Plan Type",
-      "selectStatus": "Select Status",
+      "selectPlanType": "Plan Type",
+      "selectStatus": "Status",
       "selectSubmissionDate": "Select Submission Date",
       "allTypes": "Plan Type",
       "service": "Service",
       "material": "Material",
       "allStatuses": "Status",
-      "selectAssignee": "Select Assignee",
+      "selectAssignee": "Assignee",
       "allAssignees": "Assignee"
     },
     "wizard": {

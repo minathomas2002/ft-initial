@@ -41,7 +41,6 @@ export class InvestorPlansFilter implements OnInit {
   statusOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
     return [
-      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null },
       { label: this.i18nService.translate('plans.status.submitted'), value: EInvestorPlanStatus.SUBMITTED },
       { label: this.i18nService.translate('plans.status.draft'), value: EInvestorPlanStatus.DRAFT },
       { label: this.i18nService.translate('plans.status.pendingWithInvestor'), value: EInvestorPlanStatus.PENDING },
