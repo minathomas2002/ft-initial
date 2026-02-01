@@ -77,17 +77,17 @@
 
         <!-- Company Type (Multi-select) -->
         <td class="p-3 border border-gray-200 min-w-[250px]">
-            <p-multiselect
-              [options]="companyTypeOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
-              placeholder="Select company type(s)"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('companyType_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
+          <p-multiselect
+            [options]="companyTypeOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
+            placeholder="Select company type(s)"
+            fluid
+            [appendTo]="'body'"
+            [appConditionalColorClass]="highlightInput('companyType_' + index, itemControl.get('rowId')?.value)"
+            [color]="selectedInputColor()"
+          />
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
             [label]="'Company Type'"
@@ -96,17 +96,17 @@
 
         <!-- Qualification Status with SEC (Enabled only if Manufacturer) -->
         <td class="p-3 border border-gray-200 min-w-[250px]">
-            <p-select
-              [options]="qualificationStatusOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
-              placeholder="Select qualification status"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('qualificationStatus_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
+          <p-select
+            [options]="qualificationStatusOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
+            placeholder="Select qualification status"
+            fluid
+            [appendTo]="'body'"
+            [appConditionalColorClass]="highlightInput('qualificationStatus_' + index, itemControl.get('rowId')?.value)"
+            [color]="selectedInputColor()"
+          />
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
             [label]="'Qualification Status with SEC'"
@@ -125,31 +125,35 @@
               label: 'Product(s)'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
-              type="text"
-              pInputText
+            <textarea
+              pTextarea
               fluid
+              rows="3"
               [maxlength]="255"
               placeholder="Enter specify the product(s)"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
               [appConditionalColorClass]="highlightInput('products_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.products)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.products)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
             [label]="'Product(s)'"
           />
           } @else {
-            <input
-              type="text"
-              pInputText
-              fluid
-              [maxlength]="255"
-              placeholder="Enter specify the product(s)"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
-              class="bg-gray-100 text-gray-500"
-            />
+          <textarea
+            pTextarea
+            fluid
+            [maxlength]="255"
+            placeholder="Enter specify the product(s)"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
+            class="bg-gray-100 text-gray-500"
+          ></textarea>
           }
         </td>
 
@@ -165,30 +169,39 @@
               label: 'Company Overview'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
+              fluid
+              rows="3"
               [maxlength]="255"
               placeholder="Enter company overview"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
               [appConditionalColorClass]="highlightInput('companyOverview_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverview)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.companyOverview)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
             [label]="'Company Overview'"
           />
           } @else {
-            <input
-              type="text"
-              pInputText
-              fluid
-              [maxlength]="255"
-              placeholder="Enter company overview"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
-              class="bg-gray-100 text-gray-500"
-            />
+          <textarea
+            type="text"
+            pTextarea
+            fluid
+            rows="3"
+            fluid
+            [maxlength]="255"
+            placeholder="Enter company overview"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
+            class="bg-gray-100 text-gray-500"
+          ></textarea>
           }
         </td>
 
@@ -204,31 +217,40 @@
               label: 'Key Projects Executed'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
+              fluid
+              rows="3"
               fluid
               [maxlength]="255"
               placeholder="Enter key projects executed by contractor for SEC"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
               [appConditionalColorClass]="highlightInput('keyProjectsExecutedByContractorForSEC_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
             [label]="'Key Projects Executed'"
           />
           } @else {
-            <input
-              type="text"
-              pInputText
-              fluid
-              [maxlength]="255"
-              placeholder="Enter key projects executed by contractor for SEC"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
-              class="bg-gray-100 text-gray-500"
-            />
+          <textarea
+            type="text"
+            pTextarea
+            fluid
+            rows="3"
+            fluid
+            [maxlength]="255"
+            placeholder="Enter key projects executed by contractor for SEC"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
+            class="bg-gray-100 text-gray-500"
+          ></textarea>
           }
         </td>
 
@@ -244,31 +266,41 @@
               label: 'Company Overview, Key Project Details'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
+              fluid
+              rows="3"
+              fluid
               fluid
               [maxlength]="255"
               placeholder="Enter company overview, key project details etc."
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
               [appConditionalColorClass]="highlightInput('companyOverviewKeyProjectDetails_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
             [label]="'Company Overview, Key Project Details'"
           />
           } @else {
-            <input
-              type="text"
-              pInputText
-              fluid
-              [maxlength]="255"
-              placeholder="Enter company overview, key project details etc."
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
-              class="bg-gray-100 text-gray-500"
-            />
+          <textarea
+            type="text"
+            pTextarea
+            fluid
+            rows="3"
+            fluid
+            [maxlength]="255"
+            placeholder="Enter company overview, key project details etc."
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
+            class="bg-gray-100 text-gray-500"
+          ></textarea>
           }
         </td>
 
@@ -284,31 +316,40 @@
               label: 'Company Overview'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
+              fluid
+              rows="3"
               fluid
               [maxlength]="255"
               placeholder="Enter company overview"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
               [appConditionalColorClass]="highlightInput('companyOverviewOther_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
             [label]="'Company Overview'"
           />
           } @else {
-            <input
-              type="text"
-              pInputText
-              fluid
-              [maxlength]="255"
-              placeholder="Enter company overview"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
-              class="bg-gray-100 text-gray-500"
-            />
+          <textarea
+            type="text"
+            pTextarea
+            fluid
+            rows="3"
+            fluid
+            [maxlength]="255"
+            placeholder="Enter company overview"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
+            class="bg-gray-100 text-gray-500"
+          ></textarea>
           }
         </td>
       </ng-template>
