@@ -55,7 +55,6 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
         const ctrl = group.get(fieldKey);
         const valueCtrl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
         const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
-        const showDiff = !!(valueCtrl && this.planStore.wizardMode() === 'resubmit' && (valueCtrl as { dirty?: boolean }).dirty);
         const hasComment = this.hasArrayFieldComment(fieldKey, 'collaborationPartnership', rowId);
         return {
           label,
@@ -64,7 +63,7 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
           hasError,
           hasComment,
           isResolved: false,
-          showDifference: showDiff,
+          showDifference: this.shouldShowDifference(currant, before),
         };
       };
 

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { FormArray, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
@@ -63,16 +63,16 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
         const ctrl = group.get(fieldKey);
         const valueCtrl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
         const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
-        const showDiff = !!(valueCtrl && this.planStore.wizardMode() === 'resubmit' && (valueCtrl as { dirty?: boolean }).dirty);
         const hasComment = this.hasLocalizationStrategyFieldComment(fieldKey, i, rowId);
+        const isResolved = this.isResolvedFieldForLocalizationStrategy(fieldKey, i, rowId, group);
         return {
           label,
           beforeValue: String(before ?? ''),
           currantValue: currant != null && currant !== '' ? String(currant) : '',
           hasError,
           hasComment,
-          isResolved: false,
-          showDifference: showDiff,
+          isResolved,
+          showDifference: this.shouldShowDifference(currant, before),
         };
       };
 
@@ -125,7 +125,20 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
       const matchKey = f.inputKey === expectedInputKey || f.inputKey === expectedInputKeyAlt || f.inputKey === fieldKey;
       if (!matchKey) return false;
       // Match by row id when present; when field has no id, match only rows with no id (e.g. create mode)
-      return f.id === rowId;
+      return f.id ? f.id === rowId : rowId == null;
     });
+  }
+
+  private isResolvedFieldForLocalizationStrategy(fieldKey: string, index: number, rowId: string | null, rowGroup: FormGroup): boolean {
+    const fieldCtrl = rowGroup.get(fieldKey);
+    const hasCommentControl = fieldCtrl instanceof FormGroup
+      ? fieldCtrl.get(EMaterialsFormControls.hasComment)
+      : null;
+    const isHasCommentChecked = hasCommentControl?.value ?? false;
+
+    return this.hasLocalizationStrategyFieldComment(fieldKey, index, rowId) &&
+      !isHasCommentChecked &&
+      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 }

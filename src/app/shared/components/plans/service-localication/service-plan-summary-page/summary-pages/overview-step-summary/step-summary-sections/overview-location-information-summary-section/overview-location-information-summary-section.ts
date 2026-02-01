@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
@@ -16,7 +15,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
   private readonly globalHQLocationControl = computed(() => this.getValueFormControl(EMaterialsFormControls.globalHQLocation));
   private readonly registeredVendorIDControl = computed(() => this.getValueFormControl(EMaterialsFormControls.registeredVendorIDwithSEC));
   private readonly benaRegisteredVendorIDControl = computed(() => this.getValueFormControl(EMaterialsFormControls.benaRegisteredVendorID));
-  private readonly hasLocalAgentControl = computed(() => this.getFormControl(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA) as FormControl);
+  private readonly hasLocalAgentControl = computed(() => this.getFormControl(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA));
 
   private formatYesNo(val: boolean | null | undefined): string {
     if (val === true) return 'Yes';
@@ -24,35 +23,47 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
     return '';
   }
 
-  globalHQLocationSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Global HQ Location',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.globalHQLocation ?? '',
-    currantValue: this.globalHQLocationControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.globalHQLocationControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.globalHQLocation, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.globalHQLocation),
-    showDifference: this.shouldShowDifference(this.globalHQLocationControl()),
-  }));
+  globalHQLocationSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.globalHQLocationControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.globalHQLocation ?? '';
+    return {
+      label: 'Global HQ Location',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.globalHQLocationControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.globalHQLocation, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.globalHQLocation),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  registeredVendorIDSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Registered Vendor ID with SEC (if available)',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.secVendorId ?? '',
-    currantValue: this.registeredVendorIDControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.registeredVendorIDControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.registeredVendorIDwithSEC, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.registeredVendorIDwithSEC),
-    showDifference: this.shouldShowDifference(this.registeredVendorIDControl()),
-  }));
+  registeredVendorIDSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.registeredVendorIDControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.secVendorId ?? '';
+    return {
+      label: 'Registered Vendor ID with SEC (if available)',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.registeredVendorIDControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.registeredVendorIDwithSEC, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.registeredVendorIDwithSEC),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  benaRegisteredVendorIDSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'BENA Registered Vendor ID (Required)',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.benaVendorId ?? '',
-    currantValue: this.benaRegisteredVendorIDControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.benaRegisteredVendorIDControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.benaRegisteredVendorID, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.benaRegisteredVendorID),
-    showDifference: this.shouldShowDifference(this.benaRegisteredVendorIDControl()),
-  }));
+  benaRegisteredVendorIDSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.benaRegisteredVendorIDControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.benaVendorId ?? '';
+    return {
+      label: 'BENA Registered Vendor ID (Required)',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.benaRegisteredVendorIDControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.benaRegisteredVendorID, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.benaRegisteredVendorID),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
   hasLocalAgentSummaryField = computed<IPlanSummaryField>(() => {
     const val = this.hasLocalAgentControl()?.value;
@@ -66,7 +77,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
       hasError: this.hasLocalAgentControl() ? this.isFieldHasError(this.hasLocalAgentControl()) : false,
       hasComment: this.isFieldHasComment(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
-      showDifference: this.hasLocalAgentControl() ? this.shouldShowDifference(this.hasLocalAgentControl()) : false,
+      showDifference: this.shouldShowDifference(display, beforeDisplay),
     };
   });
 }

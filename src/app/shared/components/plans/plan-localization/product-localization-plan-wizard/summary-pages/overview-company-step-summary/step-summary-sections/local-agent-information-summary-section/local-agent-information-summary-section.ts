@@ -20,53 +20,73 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
   private readonly contactNumberControl = computed(() => this.getValueFormControl(EMaterialsFormControls.contactNumber));
   private readonly companyHQLocationControl = computed(() => this.getValueFormControl(EMaterialsFormControls.companyHQLocation));
 
-  localAgentNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Local Agent Name',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentName ?? '',
-    currantValue: this.localAgentNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.localAgentNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.localAgentName),
-    isResolved: this.isResolvedField(EMaterialsFormControls.localAgentName),
-    showDifference: this.shouldShowDifference(this.localAgentNameControl()),
-  }));
+  localAgentNameSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.localAgentNameControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentName ?? '';
+    return {
+      label: 'Local Agent Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.localAgentNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.localAgentName),
+      isResolved: this.isResolvedField(EMaterialsFormControls.localAgentName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  contactPersonNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Contact Person Name',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.contactPersonName ?? '',
-    currantValue: this.contactPersonNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.contactPersonNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.contactPersonName),
-    isResolved: this.isResolvedField(EMaterialsFormControls.contactPersonName),
-    showDifference: this.shouldShowDifference(this.contactPersonNameControl()),
-  }));
+  contactPersonNameSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.contactPersonNameControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.contactPersonName ?? '';
+    return {
+      label: 'Contact Person Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.contactPersonNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.contactPersonName),
+      isResolved: this.isResolvedField(EMaterialsFormControls.contactPersonName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  emailIDSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Email ID',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentEmail ?? '',
-    currantValue: this.emailIDControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.emailIDControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.emailID),
-    isResolved: this.isResolvedField(EMaterialsFormControls.emailID),
-    showDifference: this.shouldShowDifference(this.emailIDControl()),
-  }));
+  emailIDSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.emailIDControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentEmail ?? '';
+    return {
+      label: 'Email ID',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.emailIDControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.emailID),
+      isResolved: this.isResolvedField(EMaterialsFormControls.emailID),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  contactNumberSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Contact Number',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentContactNumber ?? '',
-    currantValue: this.contactNumberControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.contactNumberControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.contactNumber),
-    isResolved: this.isResolvedField(EMaterialsFormControls.contactNumber),
-    showDifference: this.shouldShowDifference(this.contactNumberControl()),
-  }));
+  contactNumberSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.contactNumberControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentContactNumber ?? '';
+    return {
+      label: 'Contact Number',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.contactNumberControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.contactNumber),
+      isResolved: this.isResolvedField(EMaterialsFormControls.contactNumber),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  companyHQLocationSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Company HQ Location',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.companyHQLocation ?? '',
-    currantValue: this.companyHQLocationControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.companyHQLocationControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.companyHQLocation),
-    isResolved: this.isResolvedField(EMaterialsFormControls.companyHQLocation),
-    showDifference: this.shouldShowDifference(this.companyHQLocationControl()),
-  }));
+  companyHQLocationSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.companyHQLocationControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.companyHQLocation ?? '';
+    return {
+      label: 'Company HQ Location',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.companyHQLocationControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.companyHQLocation),
+      isResolved: this.isResolvedField(EMaterialsFormControls.companyHQLocation),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }

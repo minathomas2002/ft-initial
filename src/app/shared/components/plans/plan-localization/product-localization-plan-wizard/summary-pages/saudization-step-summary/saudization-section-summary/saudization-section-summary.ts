@@ -75,9 +75,13 @@ export class SaudizationSectionSummaryComponent {
         const inputKey = `${rowKey}_year${yearNum}`;
         const hasComment = summaryFields.some(f => f.inputKey === inputKey);
         const hasError = valueControl ? (valueControl.invalid && valueControl.dirty) : false;
-        const showDiff = valueControl ? (valueControl.dirty && this.planStore.wizardMode() === 'resubmit') : false;
         const beforeVal = beforeRow ? (beforeRow as SaudizationRow)[`year${yearNum}` as keyof SaudizationRow] : null;
         const beforeValue: string | number = (beforeVal != null && (typeof beforeVal === 'number' || typeof beforeVal === 'string')) ? beforeVal : '';
+        const showDiff = this.planStore.wizardMode() === 'resubmit' && (() => {
+          const currant = value === null || value === undefined ? '' : String(value).trim();
+          const before = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
+          return currant !== before;
+        })();
         return { value, beforeValue, hasError, hasComment, showDifference: showDiff };
       };
 

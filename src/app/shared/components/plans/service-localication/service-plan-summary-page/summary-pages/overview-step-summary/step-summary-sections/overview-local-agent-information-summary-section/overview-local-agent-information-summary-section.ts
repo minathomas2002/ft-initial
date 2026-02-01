@@ -19,67 +19,89 @@ export class OverviewLocalAgentInformationSummarySection extends SummarySectionB
   private readonly contactNumberControl = computed(() => this.getValueFormControl(EMaterialsFormControls.contactNumber));
   private readonly companyLocationControl = computed(() => this.getValueFormControl(EMaterialsFormControls.companyLocation));
 
-  localAgentDetailsSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Local Agent Details',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.localAgentDetails ?? '',
-    currantValue: this.localAgentDetailsControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.localAgentDetailsControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.localAgentDetails, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.localAgentDetails),
-    showDifference: this.shouldShowDifference(this.localAgentDetailsControl()),
-  }));
+  localAgentDetailsSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.localAgentDetailsControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.localAgentDetails ?? '';
+    return {
+      label: 'Local Agent Details',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.localAgentDetailsControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.localAgentDetails, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.localAgentDetails),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  localAgentNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Local Agent Name',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.localAgentName ?? '',
-    currantValue: this.localAgentNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.localAgentNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.localAgentName, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.localAgentName),
-    showDifference: this.shouldShowDifference(this.localAgentNameControl()),
-  }));
+  localAgentNameSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.localAgentNameControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.localAgentName ?? '';
+    return {
+      label: 'Local Agent Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.localAgentNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.localAgentName, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.localAgentName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  contactPersonNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Contact Person Name',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentContactPerson ?? '',
-    currantValue: this.contactPersonNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.contactPersonNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.contactPersonName, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.contactPersonName),
-    showDifference: this.shouldShowDifference(this.contactPersonNameControl()),
-  }));
+  contactPersonNameSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.contactPersonNameControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentContactPerson ?? '';
+    return {
+      label: 'Contact Person Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.contactPersonNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.contactPersonName, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.contactPersonName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  emailIDSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Email ID',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentEmail ?? '',
-    currantValue: this.emailIDControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.emailIDControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.emailID, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.emailID),
-    showDifference: this.shouldShowDifference(this.emailIDControl()),
-  }));
+  emailIDSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.emailIDControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentEmail ?? '';
+    return {
+      label: 'Email ID',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.emailIDControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.emailID, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.emailID),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
   contactNumberSummaryField = computed<IPlanSummaryField>(() => {
     const val = this.contactNumberControl()?.value;
     const display = val?.countryCode && val?.phoneNumber ? `${val.countryCode} ${val.phoneNumber}` : (val ?? '');
+    const currantValue = typeof display === 'string' ? display : String(display ?? '');
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentContactNumber ?? '';
     return {
       label: 'Contact Number',
-      beforeValue: this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentContactNumber ?? '',
-      currantValue: typeof display === 'string' ? display : String(display ?? ''),
+      beforeValue: String(beforeValue),
+      currantValue,
       hasError: this.isFieldHasError(this.contactNumberControl()),
       hasComment: this.isFieldHasComment(EMaterialsFormControls.contactNumber, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.contactNumber),
-      showDifference: this.shouldShowDifference(this.contactNumberControl()),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
   });
 
-  companyLocationSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Company HQ Location',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentCompanyLocation ?? '',
-    currantValue: this.companyLocationControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.companyLocationControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.companyLocation, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.companyLocation),
-    showDifference: this.shouldShowDifference(this.companyLocationControl()),
-  }));
+  companyLocationSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.companyLocationControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentCompanyLocation ?? '';
+    return {
+      label: 'Company HQ Location',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.companyLocationControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.companyLocation, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.companyLocation),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }

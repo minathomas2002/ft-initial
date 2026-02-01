@@ -19,43 +19,59 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
   private readonly targetedAnnualPlantCapacityControl = computed(() => this.getValueFormControl(EMaterialsFormControls.targetedAnnualPlantCapacity));
   private readonly timeRequiredToSetupFactoryControl = computed(() => this.getValueFormControl(EMaterialsFormControls.timeRequiredToSetupFactory));
 
-  productNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Product Name',
-    beforeValue: this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.productName ?? '',
-    currantValue: this.productNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.productNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.productName),
-    isResolved: this.isResolvedField(EMaterialsFormControls.productName),
-    showDifference: this.shouldShowDifference(this.productNameControl()),
-  }));
+  productNameSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.productNameControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.productName ?? '';
+    return {
+      label: 'Product Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.productNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.productName),
+      isResolved: this.isResolvedField(EMaterialsFormControls.productName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  productSpecificationsSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Product Specifications',
-    beforeValue: this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.productSpecifications ?? '',
-    currantValue: this.productSpecificationsControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.productSpecificationsControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.productSpecifications),
-    isResolved: this.isResolvedField(EMaterialsFormControls.productSpecifications),
-    showDifference: this.shouldShowDifference(this.productSpecificationsControl()),
-  }));
+  productSpecificationsSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.productSpecificationsControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.productSpecifications ?? '';
+    return {
+      label: 'Product Specifications',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.productSpecificationsControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.productSpecifications),
+      isResolved: this.isResolvedField(EMaterialsFormControls.productSpecifications),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  targetedAnnualPlantCapacitySummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Targeted Annual Plant Capacity',
-    beforeValue: this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.targetedAnnualPlantCapacity ?? '',
-    currantValue: this.targetedAnnualPlantCapacityControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.targetedAnnualPlantCapacityControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.targetedAnnualPlantCapacity),
-    isResolved: this.isResolvedField(EMaterialsFormControls.targetedAnnualPlantCapacity),
-    showDifference: this.shouldShowDifference(this.targetedAnnualPlantCapacityControl()),
-  }));
+  targetedAnnualPlantCapacitySummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.targetedAnnualPlantCapacityControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.targetedAnnualPlantCapacity ?? '';
+    return {
+      label: 'Targeted Annual Plant Capacity',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.targetedAnnualPlantCapacityControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.targetedAnnualPlantCapacity),
+      isResolved: this.isResolvedField(EMaterialsFormControls.targetedAnnualPlantCapacity),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  timeRequiredToSetupFactorySummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Time Required to Setup Factory',
-    beforeValue: this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.timeRequiredToSetupFactory ?? '',
-    currantValue: this.timeRequiredToSetupFactoryControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.timeRequiredToSetupFactoryControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.timeRequiredToSetupFactory),
-    isResolved: this.isResolvedField(EMaterialsFormControls.timeRequiredToSetupFactory),
-    showDifference: this.shouldShowDifference(this.timeRequiredToSetupFactoryControl()),
-  }));
+  timeRequiredToSetupFactorySummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.timeRequiredToSetupFactoryControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.timeRequiredToSetupFactory ?? '';
+    return {
+      label: 'Time Required to Setup Factory',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.timeRequiredToSetupFactoryControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.timeRequiredToSetupFactory),
+      isResolved: this.isResolvedField(EMaterialsFormControls.timeRequiredToSetupFactory),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }

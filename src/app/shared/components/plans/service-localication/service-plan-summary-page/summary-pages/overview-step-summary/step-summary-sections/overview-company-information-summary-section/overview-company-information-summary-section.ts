@@ -16,33 +16,45 @@ export class OverviewCompanyInformationSummarySection extends SummarySectionBase
   private readonly ceoNameControl = computed(() => this.getValueFormControl(EMaterialsFormControls.ceoName));
   private readonly ceoEmailIDControl = computed(() => this.getValueFormControl(EMaterialsFormControls.ceoEmailID));
 
-  companyNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Company Name',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.companyName ?? '',
-    currantValue: this.companyNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.companyNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
-    showDifference: this.shouldShowDifference(this.companyNameControl()),
-  }));
+  companyNameSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.companyNameControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.companyName ?? '';
+    return {
+      label: 'Company Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.companyNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  ceoNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'CEO Name',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.ceoName ?? '',
-    currantValue: this.ceoNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.ceoNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoName, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.ceoName),
-    showDifference: this.shouldShowDifference(this.ceoNameControl()),
-  }));
+  ceoNameSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.ceoNameControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.ceoName ?? '';
+    return {
+      label: 'CEO Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.ceoNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoName, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.ceoName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  ceoEmailSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'CEO Email',
-    beforeValue: this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.ceoEmail ?? '',
-    currantValue: this.ceoEmailIDControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.ceoEmailIDControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoEmailID, null),
-    isResolved: this.isResolvedField(EMaterialsFormControls.ceoEmailID),
-    showDifference: this.shouldShowDifference(this.ceoEmailIDControl()),
-  }));
+  ceoEmailSummaryField = computed<IPlanSummaryField>(() => {
+    const currantValue = this.ceoEmailIDControl()?.value ?? '';
+    const beforeValue = this.planStore.servicePlanData()?.servicePlan?.companyInformationSection?.ceoEmail ?? '';
+    return {
+      label: 'CEO Email',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.ceoEmailIDControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoEmailID, null),
+      isResolved: this.isResolvedField(EMaterialsFormControls.ceoEmailID),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }

@@ -77,15 +77,6 @@
 
         <!-- Company Type (Multi-select) -->
         <td class="p-3 border border-gray-200 min-w-[250px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyType))"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'saudiCompanyDetails',
-              inputKey: 'companyType_' + index,
-              label: 'Company Type'
-            }, itemControl.get('rowId')?.value)"
-          >
             <p-multiselect
               [options]="companyTypeOptions()"
               optionLabel="name"
@@ -97,7 +88,6 @@
               [appConditionalColorClass]="highlightInput('companyType_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
-          </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
             [label]="'Company Type'"
@@ -106,15 +96,6 @@
 
         <!-- Qualification Status with SEC (Enabled only if Manufacturer) -->
         <td class="p-3 border border-gray-200 min-w-[250px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'saudiCompanyDetails',
-              inputKey: 'qualificationStatus_' + index,
-              label: 'Qualification Status with SEC'
-            }, itemControl.get('rowId')?.value)"
-          >
             <p-select
               [options]="qualificationStatusOptions()"
               optionLabel="name"
@@ -126,7 +107,6 @@
               [appConditionalColorClass]="highlightInput('qualificationStatus_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
-          </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
             [label]="'Qualification Status with SEC'"
