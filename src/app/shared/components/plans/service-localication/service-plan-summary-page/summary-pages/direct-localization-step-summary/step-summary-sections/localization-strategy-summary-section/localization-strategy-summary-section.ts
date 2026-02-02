@@ -87,8 +87,9 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
       const beforeApproachOther = strategy?.otherLocalizationApproach ?? null;
       const currantLocation = this.formatLocation(getValue(EMaterialsFormControls.location));
       const beforeLocation = this.formatLocation(strategy?.locationType ?? null);
-      const currantLocationOther = getValue(EMaterialsFormControls.locationOtherDetails) ?? '';
-      const beforeLocationOther = strategy?.otherLocationType ?? null;
+      const currantLocationOtherRaw = String(getValue(EMaterialsFormControls.locationOtherDetails) ?? '');
+      const beforeLocationOtherRaw = String(strategy?.otherLocationType ?? '');
+      const shouldShowLocationOther = !!(currantLocationOtherRaw.trim() || beforeLocationOtherRaw.trim());
       const currantCapex = getValue(EMaterialsFormControls.capexRequired);
       const beforeCapex = strategy?.capexRequired ?? null;
       const currantSupervision = getValue(EMaterialsFormControls.supervisionOversightByGovernmentEntity) ?? '';
@@ -107,8 +108,10 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
         expectedLocalizationDate: buildField('', currantExpectedDate, beforeExpectedDate, EMaterialsFormControls.expectedLocalizationDate),
         localizationApproach: buildField('', currantApproach, beforeApproach, EMaterialsFormControls.localizationApproach),
         localizationApproachOther: currantApproachOther || beforeApproachOther ? { currant: currantApproachOther, before: beforeApproachOther, hasComment: this.hasLocalizationStrategyFieldComment(EMaterialsFormControls.localizationApproachOtherDetails, i, rowId) } : null,
-        location: buildField('Location', currantLocation, beforeLocation, EMaterialsFormControls.location),
-        locationOther: currantLocationOther || beforeLocationOther ? { currant: currantLocationOther, before: beforeLocationOther, hasComment: this.hasLocalizationStrategyFieldComment(EMaterialsFormControls.locationOtherDetails, i, rowId) } : null,
+        location: buildField('', currantLocation, beforeLocation, EMaterialsFormControls.location),
+        locationOther: shouldShowLocationOther
+          ? buildField('Description: ', currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
+          : null,
         capexRequired: buildField('', currantCapex != null ? String(currantCapex) : null, beforeCapex != null ? String(beforeCapex) : null, EMaterialsFormControls.capexRequired),
         supervisionOversight: buildField('', currantSupervision, beforeSupervision, EMaterialsFormControls.supervisionOversightByGovernmentEntity),
         proprietaryTools: buildField('', currantProprietary, beforeProprietary, EMaterialsFormControls.willBeAnyProprietaryToolsSystems),
