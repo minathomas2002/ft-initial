@@ -102,12 +102,17 @@
                 pTextarea
                 fluid
                 rows="3"
-                [maxlength]="250"
+                [maxlength]="255"
                 placeholder="Please specify other localization approach"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails))"
                 [appConditionalColorClass]="highlightInput('localizationApproachOtherDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
+              @if (!getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails)).disabled) {
+              <div class="text-xs text-gray-500 text-right mt-1">
+                {{ getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails)).value?.length || 0 }} / 255
+              </div>
+              }
             </app-group-input-with-checkbox>
             }
           </div>

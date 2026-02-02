@@ -412,16 +412,21 @@
                 label: 'Other Agreement Details'
               }, itemControl.get('rowId')?.value)"
             >
-              <input
+              <textarea
                 type="text"
-                pInputText
+                pTextarea
                 fluid
                 [maxlength]="100"
                 placeholder="Enter other agreement details"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
                 [appConditionalColorClass]="highlightInput('agreementOtherDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
-              />
+              ></textarea>
+              @if (!getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails)).disabled) {
+              <div class="text-xs text-gray-500 text-right mt-1">
+                {{ getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails)).value?.length || 0 }} / 100
+              </div>
+              }
             </app-group-input-with-checkbox>
             }
           </div>
@@ -477,16 +482,22 @@
               label: 'Supervision / Oversight'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
               fluid
+              rows="3"
               [maxlength]="100"
               placeholder="E.g., MoEn, PIF, etc."
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
               [appConditionalColorClass]="highlightInput('supervisionOversightEntity_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity)).value?.length || 0 }} / 100
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
