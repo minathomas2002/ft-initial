@@ -10,7 +10,7 @@ import { SaudiCompanyDetailsSummarySection } from './step-summary-sections/saudi
 import { CollaborationPartnershipSummarySection } from './step-summary-sections/collaboration-partnership-summary-section/collaboration-partnership-summary-section';
 import { EntityLevelSummarySection } from './step-summary-sections/entity-level-summary-section/entity-level-summary-section';
 import { ServiceLevelSummarySection } from './step-summary-sections/service-level-summary-section/service-level-summary-section';
-import { AttachmentsSummarySection } from './step-summary-sections/attachments-summary-section/attachments-summary-section';
+import { AttachmentsSummarySection } from '../../../../attachments-summary-section/attachments-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';

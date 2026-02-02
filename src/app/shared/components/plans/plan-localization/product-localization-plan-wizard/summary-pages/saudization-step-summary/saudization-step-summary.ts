@@ -12,7 +12,7 @@ import { SaudizationSectionSummaryComponent } from './saudization-section-summar
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
 import { PlanSummaryFlied } from '../../../../plan-summary-flied/plan-summary-flied';
-import { AttachmentsSummarySection } from '../../../../service-localication/service-plan-summary-page/summary-pages/existing-saudi-step-summary/step-summary-sections/attachments-summary-section/attachments-summary-section';
+import { AttachmentsSummarySection } from '../../../../attachments-summary-section/attachments-summary-section';
 
 @Component({
   selector: 'app-saudization-step-summary',
