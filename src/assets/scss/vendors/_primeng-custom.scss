@@ -5,7 +5,7 @@
 // We override at multiple levels to ensure it works regardless of the cascade
 :root {
   // Override form field disabled background (used by all form components)
-  --p-form-field-disabled-background: var(--p-gray-50) !important;
+  --p-form-field-disabled-background: #ECEDF0 !important;
 }
 
 @mixin primengInputsFontSize {
