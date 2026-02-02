@@ -244,7 +244,6 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
 
   // Override upDateSelectedInputs to expose as public method
   override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation, rowId?: string): void {
-    debugger
     super.upDateSelectedInputs(value, fieldInformation, rowId);
   }
 
