@@ -115,9 +115,9 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
         localizationApproachOther: currantApproachOther || beforeApproachOther
           ? buildField('', currantApproachOther, beforeApproachOther ?? null, EMaterialsFormControls.localizationApproachOtherDetails)
           : null,
-        location: buildField('Location', currantLocation, beforeLocation, EMaterialsFormControls.location),
+        location: buildField('', currantLocation, beforeLocation, EMaterialsFormControls.location),
         locationOther: shouldShowLocationOther
-          ? buildField('', currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
+          ? buildField('Description: ', currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
           : null,
         capexRequired: buildField('', currantCapex != null ? String(currantCapex) : null, beforeCapex != null ? String(beforeCapex) : null, EMaterialsFormControls.capexRequired),
         supervisionOversight: buildField('', currantSupervision, beforeSupervision, EMaterialsFormControls.supervisionOversightByGovernmentEntity),
