@@ -9,7 +9,7 @@
       [createNewItem]="createLocalizationStrategyItem"
       [scrollHeight]="'600px'"
       [excludeKeys]="['serviceId', 'serviceHeadcountRowId','serviceLevelLocalizationDate', 'localizationApproachOtherDetails', 'locationOtherDetails', 'proprietaryToolsSystemsDetails', 'firstYear_headcount', 'firstYear_saudization', 'secondYear_headcount', 'secondYear_saudization', 'thirdYear_headcount', 'thirdYear_saudization', 'fourthYear_headcount', 'fourthYear_saudization', 'fifthYear_headcount', 'fifthYear_saudization', 'sixthYear_headcount', 'sixthYear_saudization', 'keyMeasuresToUpskillSaudis', 'mentionSupportRequiredFromSEC']"
-      [customHeaderLabels]="{'locationType': 'Location'}"
+      [customHeaderLabels]="customHeaderLabels()"
       [headerTooltips]="localizationStrategyHeaderTooltips()"
     >
       <ng-template
@@ -465,7 +465,7 @@
 
           <!-- Year Columns (Expected Annual Headcount) -->
           @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td class="p-3 border border-gray-200 min-w-[200px]">
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(itemControl.get(yearKey + '_headcount'))"

@@ -743,7 +743,7 @@
 
           <!-- Year Columns (Expected Annual Headcount) -->
           @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td class="p-3 border border-gray-200 min-w-[200px]">
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(itemControl.get(yearKey + '_headcount'))"

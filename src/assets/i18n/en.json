@@ -764,6 +764,7 @@
       "emailId": "Email ID",
       "emailIdPlaceholder": "Enter Email ID",
       "signature": "Signature",
+      "signatureSectionHeader": "Plan Owner Information and Signature",
       "drawSignature": "Draw your signature",
       "signaturePlaceholder": "Draw your signature using your mouse",
       "change": "Change",
