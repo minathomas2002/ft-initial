@@ -3,10 +3,10 @@ import { CoverPageStepSummary } from './summary-pages/cover-page-step-summary/co
 import { OverviewStepSummary } from './summary-pages/overview-step-summary/overview-step-summary';
 import { ExistingSaudiStepSummary } from './summary-pages/existing-saudi-step-summary/existing-saudi-step-summary';
 import { DirectLocalizationStepSummary } from './summary-pages/direct-localization-step-summary/direct-localization-step-summary';
-import { SummarySectionSignature } from '../service-localization-step-summary/summary-sections/summary-section-signature/summary-section-signature';
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { inject } from '@angular/core';
+import { SummarySectionSignature } from "../../plan-localization/plan-localization-step-05-summary/summary-sections/summary-section-signature/summary-section-signature";
 
 @Component({
   selector: 'app-service-plan-summary-page',
@@ -15,8 +15,8 @@ import { inject } from '@angular/core';
     OverviewStepSummary,
     ExistingSaudiStepSummary,
     DirectLocalizationStepSummary,
-    SummarySectionSignature,
-  ],
+    SummarySectionSignature
+],
   templateUrl: './service-plan-summary-page.html',
   styleUrl: './service-plan-summary-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

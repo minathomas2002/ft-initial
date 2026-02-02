@@ -138,7 +138,12 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   // Computed signal to check if incoming comments should be shown
   shouldShowIncomingComments = computed(() => {
     const mode = this.planStore.wizardMode();
-    return mode === 'view' || mode === 'Review' || mode === 'resubmit';
+
+    const creatorRole = this.planStore.planComments()?.creatorRole;
+    const currentSignedUser = this.authStore.jwtUserDetails()
+    const isSameUserRole = currentSignedUser?.RoleCodes.toString() === creatorRole?.toString()
+
+    return (mode === 'view' || mode === 'Review' || mode === 'resubmit') && !isSameUserRole;
   });
 
   // Computed signals to check if incoming comments exist and have content

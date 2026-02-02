@@ -59,7 +59,7 @@
             [allowEmpty]="true"
             mode="decimal"
             fluid
-            placeholder="Registered Vendor ID with SEC"
+            [placeholder]="isReviewMode() ? '' : 'Registered Vendor ID with SEC'"
           />
         </td>
 
@@ -95,7 +95,8 @@
         </td>
 
         <!-- Qualification Status with SEC (Enabled only if Manufacturer) -->
-        <td class="p-3 border border-gray-200 min-w-[250px]">
+        <td class="p-3 border border-gray-200 min-w-[250px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.qualificationStatus)">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.qualificationStatus)) {
           <p-select
             [options]="qualificationStatusOptions()"
             optionLabel="name"
@@ -111,10 +112,11 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
             [label]="'Qualification Status with SEC'"
           />
+          }
         </td>
 
         <!-- Product(s) - Manufacturer + Qualified or Under Pre-Qualification -->
-        <td class="p-3 border border-gray-200 min-w-[250px]">
+        <td class="p-3 border border-gray-200 min-w-[250px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.products)">
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.products)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -145,20 +147,11 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
             [label]="'Product(s)'"
           />
-          } @else {
-          <textarea
-            pTextarea
-            fluid
-            [maxlength]="255"
-            placeholder="Enter specify the product(s)"
-            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
-            class="bg-gray-100 text-gray-500"
-          ></textarea>
           }
         </td>
 
         <!-- Company Overview - Manufacturer + Not Qualified -->
-        <td class="p-3 border border-gray-200 min-w-[300px]">
+        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverview)">
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverview)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -190,23 +183,11 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
             [label]="'Company Overview'"
           />
-          } @else {
-          <textarea
-            type="text"
-            pTextarea
-            fluid
-            rows="3"
-            fluid
-            [maxlength]="255"
-            placeholder="Enter company overview"
-            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
-            class="bg-gray-100 text-gray-500"
-          ></textarea>
           }
         </td>
 
         <!-- Key Projects Executed - Contractor -->
-        <td class="p-3 border border-gray-200 min-w-[300px]">
+        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)">
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -239,23 +220,11 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
             [label]="'Key Projects Executed'"
           />
-          } @else {
-          <textarea
-            type="text"
-            pTextarea
-            fluid
-            rows="3"
-            fluid
-            [maxlength]="255"
-            placeholder="Enter key projects executed by contractor for SEC"
-            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
-            class="bg-gray-100 text-gray-500"
-          ></textarea>
           }
         </td>
 
         <!-- Company Overview, Key Project Details - Contractor -->
-        <td class="p-3 border border-gray-200 min-w-[300px]">
+        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewKeyProjectDetails)">
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewKeyProjectDetails)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -289,23 +258,11 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
             [label]="'Company Overview, Key Project Details'"
           />
-          } @else {
-          <textarea
-            type="text"
-            pTextarea
-            fluid
-            rows="3"
-            fluid
-            [maxlength]="255"
-            placeholder="Enter company overview, key project details etc."
-            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
-            class="bg-gray-100 text-gray-500"
-          ></textarea>
           }
         </td>
 
         <!-- Company Overview - Other -->
-        <td class="p-3 border border-gray-200 min-w-[300px]">
+        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewOther)">
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewOther)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -338,18 +295,6 @@
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
             [label]="'Company Overview'"
           />
-          } @else {
-          <textarea
-            type="text"
-            pTextarea
-            fluid
-            rows="3"
-            fluid
-            [maxlength]="255"
-            placeholder="Enter company overview"
-            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
-            class="bg-gray-100 text-gray-500"
-          ></textarea>
           }
         </td>
       </ng-template>
@@ -482,7 +427,7 @@
               pInputText
               fluid
               [maxlength]="100"
-              placeholder="E.g., MoEn, PIF, etc."
+              [placeholder]="isReviewMode() ? '' : 'E.g., MoEn, PIF, etc.'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
               [appConditionalColorClass]="highlightInput('supervisionOversightEntity_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -850,7 +795,7 @@
                 fluid
                 rows="3"
                 [maxlength]="500"
-                placeholder="Mention Support required from SEC to localize the service (if any)"
+                [placeholder]="isReviewMode() ? '' : 'Mention Support required from SEC to localize the service (if any)'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
                 [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"

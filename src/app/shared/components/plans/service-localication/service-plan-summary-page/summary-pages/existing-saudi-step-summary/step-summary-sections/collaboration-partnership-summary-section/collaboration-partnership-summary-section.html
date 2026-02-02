@@ -24,7 +24,11 @@
         >
           <tr>
             <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.agreementType" /></td>
-            <td class="border-t border-gray-300 p-3 min-w-[200px]"><app-plan-summary-flied [planSummaryField]="row.agreementOtherDetails" /></td>
+            <td class="border-t border-gray-300 p-3 min-w-[200px]" [class.bg-gray-100]="!(row.agreementOtherDetails?.currantValue?.trim())">
+              @if (row.agreementOtherDetails?.currantValue?.trim()) {
+                <app-plan-summary-flied [planSummaryField]="row.agreementOtherDetails" />
+              }
+            </td>
             <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.agreementSigningDate" /></td>
             <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.supervisionOversightEntity" /></td>
             <td class="border-t border-gray-300 p-3 min-w-[500px]"><app-plan-summary-flied [planSummaryField]="row.whyChoseThisCompany" /></td>
