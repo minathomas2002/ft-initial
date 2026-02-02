@@ -95,8 +95,12 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
       const beforeSupervision = strategy?.governmentSupervision ?? null;
       const currantProprietary = this.formatYesNo(getValue(EMaterialsFormControls.willBeAnyProprietaryToolsSystems));
       const beforeProprietary = this.formatYesNo(strategy?.hasProprietaryTools ?? null);
-      const currantProprietaryExplanation = getValue(EMaterialsFormControls.proprietaryToolsSystemsDetails) ?? '';
-      const beforeProprietaryExplanation = strategy?.proprietaryToolsDetails ?? null;
+      const currantProprietaryExplanationRaw = String(getValue(EMaterialsFormControls.proprietaryToolsSystemsDetails) ?? '');
+      const beforeProprietaryExplanationRaw = String(strategy?.proprietaryToolsDetails ?? '');
+      const shouldShowProprietaryExplanation = !!(
+        currantProprietaryExplanationRaw.trim() ||
+        beforeProprietaryExplanationRaw.trim()
+      );
 
       return {
         serviceName: buildField('', currantServiceName, beforeServiceName, EMaterialsFormControls.serviceName),
@@ -108,7 +112,9 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
         capexRequired: buildField('', currantCapex != null ? String(currantCapex) : null, beforeCapex != null ? String(beforeCapex) : null, EMaterialsFormControls.capexRequired),
         supervisionOversight: buildField('', currantSupervision, beforeSupervision, EMaterialsFormControls.supervisionOversightByGovernmentEntity),
         proprietaryTools: buildField('', currantProprietary, beforeProprietary, EMaterialsFormControls.willBeAnyProprietaryToolsSystems),
-        proprietaryToolsExplanation: currantProprietaryExplanation || beforeProprietaryExplanation ? { currant: currantProprietaryExplanation, before: beforeProprietaryExplanation, hasComment: this.hasLocalizationStrategyFieldComment(EMaterialsFormControls.proprietaryToolsSystemsDetails, i, rowId) } : null,
+        proprietaryToolsExplanation: shouldShowProprietaryExplanation
+          ? buildField('', currantProprietaryExplanationRaw, beforeProprietaryExplanationRaw, EMaterialsFormControls.proprietaryToolsSystemsDetails)
+          : null,
       };
     });
   });
