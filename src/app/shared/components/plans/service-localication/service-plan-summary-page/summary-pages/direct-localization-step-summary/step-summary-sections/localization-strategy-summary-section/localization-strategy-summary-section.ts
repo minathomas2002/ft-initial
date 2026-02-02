@@ -128,8 +128,23 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
   private hasLocalizationStrategyFieldComment(fieldKey: string, index: number, rowId: string | null): boolean {
     const expectedInputKey = `${fieldKey}_${index}`;
     const expectedInputKeyAlt = `${fieldKey}${index}`; // fallback for supervisionOversightByGovernmentEntity0
+
+    // Some step templates intentionally use simplified aliases (not the raw enum string)
+    // when sending/saving comments. Support those here for backward compatibility.
+    const aliasKeys: string[] = [];
+    if (fieldKey === EMaterialsFormControls.location) {
+      aliasKeys.push(`location_${index}`, `location${index}`, 'location');
+    }
+    if (fieldKey === EMaterialsFormControls.capexRequired) {
+      aliasKeys.push(`capexRequired_${index}`, `capexRequired${index}`, 'capexRequired');
+    }
+
     return this.sectionSummaryFields().some((f) => {
-      const matchKey = f.inputKey === expectedInputKey || f.inputKey === expectedInputKeyAlt || f.inputKey === fieldKey;
+      const matchKey =
+        f.inputKey === expectedInputKey ||
+        f.inputKey === expectedInputKeyAlt ||
+        f.inputKey === fieldKey ||
+        aliasKeys.includes(f.inputKey);
       if (!matchKey) return false;
       // Match by row id when present; when field has no id, match only rows with no id (e.g. create mode)
       return f.id ? f.id === rowId : rowId == null;
