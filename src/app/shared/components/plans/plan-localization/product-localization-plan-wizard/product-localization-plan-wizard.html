@@ -116,7 +116,7 @@
   </ng-template>
 
   <ng-template [appStepContent]="5">
-    <app-product-plan-summary-page />
+    <app-product-plan-summary-page (onEditStep)="onEditStepFromSummary($event)" />
   </ng-template>
 
   <ng-container ngProjectAs="final-step-action">

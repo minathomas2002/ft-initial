@@ -257,7 +257,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     if (!otherDetailsControl) return;
 
     if (localizationApproach === ELocalizationApproach.Other.toString()) {
-      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(250)]);
+      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       otherDetailsControl.clearValidators();
       otherDetailsControl.reset();

@@ -84,15 +84,16 @@ export class OverviewLocalAgentInformationSummarySection extends SummarySectionB
     const val = this.contactNumberControl()?.value;
     const display = val?.countryCode && val?.phoneNumber ? `${val.countryCode} ${val.phoneNumber}` : (val ?? '');
     const currantValue = typeof display === 'string' ? display : String(display ?? '');
+    const currantValueWithoutSpaces = currantValue.replace(' ', '');
     const beforeValue = this.planStore.servicePlanData()?.servicePlan?.localAgentDetailSection?.agentContactNumber ?? '';
     return {
       label: 'Contact Number',
       beforeValue: String(beforeValue),
-      currantValue,
+      currantValue: currantValueWithoutSpaces,
       hasError: this.isFieldHasError(this.contactNumberControl()),
       hasComment: this.isFieldHasComment(EMaterialsFormControls.contactNumber, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.contactNumber),
-      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+      showDifference: this.shouldShowDifference(currantValueWithoutSpaces, beforeValue),
     };
   });
 

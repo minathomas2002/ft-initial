@@ -165,7 +165,7 @@ export enum EMaterialsFormControls {
   agreementOtherDetails = 'agreementOtherDetails',
   agreementSigningDate = 'agreementSigningDate',
   supervisionOversightEntity = 'supervisionOversightEntity',
-  supervisionOversightByGovernmentEntity = 'Supervision / OversightByGovernmentEntity',
+  supervisionOversightByGovernmentEntity = 'supervisionOversightByGovernmentEntity',
   whyChoseThisCompany = 'WhyDidYouChoseThisParticularSaudiCompanyAsYourPartner',
   summaryOfKeyAgreementClauses = 'summaryOfKeyAgreementClauses',
   agreementCopy = 'agreementCopy',

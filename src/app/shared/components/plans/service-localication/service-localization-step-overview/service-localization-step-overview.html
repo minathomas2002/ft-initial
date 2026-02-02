@@ -550,17 +550,23 @@
                     label: 'Service Description'
                   }, itemControl.get('rowId')?.value)"
             >
-              <input
-                type="text"
-                pInputText
+              <textarea
+                pTextarea
+                fluid
+                rows="3"
                 fluid
                 [maxlength]="255"
                 placeholder="Brief description of the service"
                 [formControl]="getValueControl(itemControl.get('serviceDescription'))"
                 [appConditionalColorClass]="highlightInput('serviceDescription_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
-              />
+              ></textarea>
             </app-group-input-with-checkbox>
+            @if (!getValueControl(itemControl.get('serviceDescription')).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get('serviceDescription')).value?.length || 0 }} / 255
+            </div>
+            }
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[200px]">

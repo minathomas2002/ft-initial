@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CoverPageStepSummary } from './summary-pages/cover-page-step-summary/cover-page-step-summary';
 import { OverviewStepSummary } from './summary-pages/overview-step-summary/overview-step-summary';
 import { ExistingSaudiStepSummary } from './summary-pages/existing-saudi-step-summary/existing-saudi-step-summary';
@@ -23,10 +23,15 @@ import { SummarySectionSignature } from "../../plan-localization/plan-localizati
 })
 export class ServicePlanSummaryPage {
   private readonly planStore = inject(PlanStore);
+  onEditStep = output<number>();
 
   includeExistingSaudi = input<boolean>(true);
   includeDirectLocalization = input<boolean>(true);
   signature = input<Signature | null>(null);
 
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
+
+  onEditStepClick(stepNumber: number): void {
+    this.onEditStep.emit(stepNumber);
+  }
 }
