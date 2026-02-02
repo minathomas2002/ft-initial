@@ -12,6 +12,7 @@
         [sectionSummaryFields]="designEngineeringSummaryFields()"
         [sectionTitle]="'plans.summary.valueChain.designEngineering' | translate"
         sectionKey="designEngineeringFormGroup"
+        [doRefresh]="doRefresh()"
       />
     </div>
     <div class="flex flex-col gap-3">
@@ -20,6 +21,7 @@
         [sectionSummaryFields]="sourcingSummaryFields()"
         [sectionTitle]="'plans.summary.valueChain.sourcing' | translate"
         sectionKey="sourcingFormGroup"
+        [doRefresh]="doRefresh()"
       />
     </div>
     <div class="flex flex-col gap-3">
@@ -28,6 +30,7 @@
         [sectionSummaryFields]="manufacturingSummaryFields()"
         [sectionTitle]="'plans.summary.valueChain.manufacturing' | translate"
         sectionKey="manufacturingFormGroup"
+        [doRefresh]="doRefresh()"
       />
     </div>
     <div class="flex flex-col gap-3">
@@ -36,6 +39,7 @@
         [sectionSummaryFields]="assemblyTestingSummaryFields()"
         [sectionTitle]="'plans.summary.valueChain.assemblyTesting' | translate"
         sectionKey="assemblyTestingFormGroup"
+        [doRefresh]="doRefresh()"
       />
     </div>
     <div class="flex flex-col gap-3">
@@ -44,6 +48,7 @@
         [sectionSummaryFields]="afterSalesSummaryFields()"
         [sectionTitle]="'plans.summary.valueChain.afterSales' | translate"
         sectionKey="afterSalesFormGroup"
+        [doRefresh]="doRefresh()"
       />
     </div>
   </div>

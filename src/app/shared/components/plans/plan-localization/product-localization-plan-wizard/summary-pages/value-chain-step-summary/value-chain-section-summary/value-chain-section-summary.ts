@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, Signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IFieldInformation, IPlanSummaryField, ValueChainRow } from 'src/app/shared/interfaces/plans.interface';
@@ -8,6 +8,7 @@ import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-f
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { TableModule } from 'primeng/table';
+import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 
 const SECTION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.designEngineeringFormGroup]: 1,
@@ -24,33 +25,16 @@ const SECTION_TYPE_BY_KEY: Record<string, number> = {
   styleUrl: './value-chain-section-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ValueChainSectionSummaryComponent {
-  private readonly planStore = inject(PlanStore);
-  private readonly roleService = inject(RoleService);
-  private readonly i18nService = inject(I18nService);
-
-  readonly sectionFormGroup = input.required<FormGroup>();
-  readonly sectionSummaryFields = input.required<IFieldInformation[]>();
-  readonly sectionTitle = input.required<string>();
+export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
   readonly sectionKey = input.required<string>();
-
-  // Computed signal to get corrected field IDs from step 3 comments
-  private correctedFieldIds = computed<string[]>(() => {
-    const step3Comments = this.planStore.planComments()?.comments
-      .find(comment => comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title'));
-    if (!step3Comments) return [];
-    return step3Comments.fields
-      .filter(field => field.id)
-      .map(field => field.id!)
-      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
-  });
-
+  readonly sectionTitle = input.required<string>();
   itemsArray = computed<FormArray>(() => {
     const section = this.sectionFormGroup().get('items');
     return section instanceof FormArray ? section : (null as unknown as FormArray);
   });
 
   rows = computed(() => {
+    this.doRefresh()
     const items = this.itemsArray();
     if (!items || !items.controls.length) return [];
     const sectionKey = this.sectionKey();
@@ -64,43 +48,45 @@ export class ValueChainSectionSummaryComponent {
       const sectionRows = valueChainRows.filter((r: ValueChainRow) => r.sectionType === sectionType);
       const beforeRow = (rowId ? sectionRows.find((r: ValueChainRow) => r.id === rowId) : sectionRows[index]) as ValueChainRow | undefined;
 
-      const getValueControl = (key: string): FormControl | null => {
-        const c = item.get(key);
-        if (c instanceof FormGroup && c.get(EMaterialsFormControls.value)) {
-          return c.get(EMaterialsFormControls.value) as FormControl;
-        }
-        return null;
+
+      const cell = (
+        inputKey: string,
+        beforeVal: string | number | null | undefined,
+        formatCurrentForCompare: (v: unknown) => string
+      ) => {
+        const fieldGroup = item.get(inputKey);
+        const ctrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
+        const matchingField = summaryFields.find(f => f.inputKey === inputKey && (f.id === rowId || (f.id == null && rowId == null)));
+        const hasComment = this.isFieldHasComment(inputKey, matchingField?.id);
+        const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
+        const hasError = ctrl ? this.isFieldHasError(ctrl) : false;
+        const value = ctrl?.value ?? '';
+        const currentFormatted = formatCurrentForCompare(value);
+        const beforeFormatted = beforeVal != null && beforeVal !== '' ? String(beforeVal) : '';
+        const showDiff = this.shouldShowDifference(currentFormatted, beforeFormatted);
+        const isResolved =
+          hasComment &&
+          !hasCommentChecked &&
+          ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+          this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+        return { value, beforeValue: beforeFormatted || '-', hasError, hasComment, showDifference: showDiff, isResolved };
       };
 
-      const cell = (inputKey: string, beforeVal: string | number | null | undefined) => {
-        const ctrl = getValueControl(inputKey);
-        const matchingField = summaryFields.find(f => f.inputKey === inputKey && (f.id === rowId || (f.id == null && rowId == null)));
-        const hasComment = !!matchingField;
-        const hasError = ctrl ? (ctrl.invalid && ctrl.dirty) : false;
-        const value = ctrl?.value ?? '';
-        const beforeValue = beforeVal ?? '';
-        const showDiff = this.planStore.wizardMode() === 'resubmit' && (() => {
-          const currant = value === null || value === undefined ? '' : String(value).trim();
-          const before = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
-          return currant !== before;
-        })();
-        const isResolved = hasComment && !!matchingField?.id && this.correctedFieldIds().includes(matchingField.id) &&
-          ['view', 'Review'].includes(this.planStore.wizardMode()) && this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
-        return { value, beforeValue: String(beforeValue), hasError, hasComment, showDifference: showDiff, isResolved };
-      };
+      const formatCostPercentForCompare = (v: unknown): string =>
+        v != null && v !== '' ? `${v}%` : '-';
 
       return {
         rowId,
-        expenseHeader: cell(EMaterialsFormControls.expenseHeader, beforeRow?.expenseHeader),
-        inHouseOrProcured: cell(EMaterialsFormControls.inHouseOrProcured, beforeRow != null ? this.formatInHouseProcured(beforeRow.inHouseOrProcured) : null),
-        costPercentage: cell(EMaterialsFormControls.costPercentage, beforeRow?.costPercent),
-        year1: cell(EMaterialsFormControls.year1, beforeRow != null ? this.formatYearValue(beforeRow.year1) : null),
-        year2: cell(EMaterialsFormControls.year2, beforeRow != null ? this.formatYearValue(beforeRow.year2) : null),
-        year3: cell(EMaterialsFormControls.year3, beforeRow != null ? this.formatYearValue(beforeRow.year3) : null),
-        year4: cell(EMaterialsFormControls.year4, beforeRow != null ? this.formatYearValue(beforeRow.year4) : null),
-        year5: cell(EMaterialsFormControls.year5, beforeRow != null ? this.formatYearValue(beforeRow.year5) : null),
-        year6: cell(EMaterialsFormControls.year6, beforeRow != null ? this.formatYearValue(beforeRow.year6) : null),
-        year7: cell(EMaterialsFormControls.year7, beforeRow != null ? this.formatYearValue(beforeRow.year7) : null),
+        expenseHeader: cell(EMaterialsFormControls.expenseHeader, beforeRow != null ? this.formatCellValue(beforeRow.expenseHeader) : null, v => this.formatCellValue(v)),
+        inHouseOrProcured: cell(EMaterialsFormControls.inHouseOrProcured, beforeRow != null ? this.formatInHouseProcured(beforeRow.inHouseOrProcured) : null, v => this.formatInHouseProcured(v as number)),
+        costPercentage: cell(EMaterialsFormControls.costPercentage, beforeRow?.costPercent != null ? `${beforeRow.costPercent}%` : null, formatCostPercentForCompare),
+        year1: cell(EMaterialsFormControls.year1, beforeRow != null ? this.formatYearValue(beforeRow.year1) : null, v => this.formatYearValue(v as number)),
+        year2: cell(EMaterialsFormControls.year2, beforeRow != null ? this.formatYearValue(beforeRow.year2) : null, v => this.formatYearValue(v as number)),
+        year3: cell(EMaterialsFormControls.year3, beforeRow != null ? this.formatYearValue(beforeRow.year3) : null, v => this.formatYearValue(v as number)),
+        year4: cell(EMaterialsFormControls.year4, beforeRow != null ? this.formatYearValue(beforeRow.year4) : null, v => this.formatYearValue(v as number)),
+        year5: cell(EMaterialsFormControls.year5, beforeRow != null ? this.formatYearValue(beforeRow.year5) : null, v => this.formatYearValue(v as number)),
+        year6: cell(EMaterialsFormControls.year6, beforeRow != null ? this.formatYearValue(beforeRow.year6) : null, v => this.formatYearValue(v as number)),
+        year7: cell(EMaterialsFormControls.year7, beforeRow != null ? this.formatYearValue(beforeRow.year7) : null, v => this.formatYearValue(v as number)),
       };
     });
   });

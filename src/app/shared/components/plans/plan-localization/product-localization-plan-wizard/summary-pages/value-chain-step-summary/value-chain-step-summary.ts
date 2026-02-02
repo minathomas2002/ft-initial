@@ -42,7 +42,9 @@ export class ValueChainStepSummary extends SummaryStepBaseClass {
       this._designEngineeringFormGroup.statusChanges
     ).pipe(
       startWith(null),
-      tap(() => this.doRefresh.set(new Date())),
+      tap(() => {
+        this.doRefresh.set(new Date())
+      }),
       map(() => this._designEngineeringFormGroup)
     ),
     { requireSync: true }
