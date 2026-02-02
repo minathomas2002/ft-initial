@@ -544,6 +544,23 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.activeStep.set(stepNumber);
   }
 
+  /**
+   * Handles edit step event from summary page
+   * Maps summary step numbers (1-4) to actual wizard step indices
+   */
+  onEditStepFromSummary(summaryStepNumber: number): void {
+    // For product localization, all steps are always present:
+    // Step 1 = Overview & Company Information (always step 1)
+    // Step 2 = Product & Plant Overview (always step 2)
+    // Step 3 = Value Chain (always step 3)
+    // Step 4 = Saudization (always step 4)
+    
+    // Navigate directly to the step number (no conditional steps to handle)
+    if (summaryStepNumber >= 1 && summaryStepNumber <= 4) {
+      this.navigateToStep(summaryStepNumber);
+    }
+  }
+
   protected override getIsResubmitMode(): boolean {
     return this.isResubmitMode();
   }
