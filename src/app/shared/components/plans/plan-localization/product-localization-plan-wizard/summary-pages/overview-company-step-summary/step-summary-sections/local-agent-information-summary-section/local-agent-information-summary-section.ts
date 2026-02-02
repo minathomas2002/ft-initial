@@ -70,7 +70,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     const val = this.contactNumberControl()?.value;
     const display = val?.countryCode && val?.phoneNumber ? `${val.countryCode} ${val.phoneNumber}` : (val ?? '');
     const currantValue = typeof display === 'string' ? display : String(display ?? '');
-    const currantValueWithoutSpaces = currantValue.replace(/\s+/g, '');
+    const currantValueWithoutSpaces = currantValue.replace(' ', '');
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentContactNumber ?? '';
     return {
       label: 'Contact Number',
