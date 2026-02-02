@@ -6,7 +6,11 @@
 :root {
   // Override form field disabled background (used by all form components)
   --p-form-field-disabled-background: #ECEDF0 !important;
+  --p-checkbox-width: 1.25rem !important;
+  --p-checkbox-height: 1.25rem !important;
+  --p-checkbox-icon-size: 0.75rem !important;
 }
+
 
 @mixin primengInputsFontSize {
   font-size: 0.875rem !important;
