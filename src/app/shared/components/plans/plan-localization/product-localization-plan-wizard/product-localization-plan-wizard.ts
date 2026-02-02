@@ -19,7 +19,6 @@ import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
 import { EInternalUserPlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
-import { PlanLocalizationStep05Summary } from "../plan-localization-step-05-summary/plan-localization-step-05-summary";
 import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
 import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
 import { PlanLocalizationStep02ProductPlantOverviewForm } from "../plan-localization-step-02-productPlantOverview/plan-localization-step-02-productPlantOverviewForm";
@@ -346,9 +345,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   isLoading = signal(false);
   isLoadingPlan = signal(false);
 
-  // Reference to Step 5 Summary component
-  summaryComponent = viewChild<PlanLocalizationStep05Summary>('summaryComponent');
-
   // Submission confirmation modal
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
@@ -554,7 +550,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     // Step 2 = Product & Plant Overview (always step 2)
     // Step 3 = Value Chain (always step 3)
     // Step 4 = Saudization (always step 4)
-    
+
     // Navigate directly to the step number (no conditional steps to handle)
     if (summaryStepNumber >= 1 && summaryStepNumber <= 4) {
       this.navigateToStep(summaryStepNumber);
