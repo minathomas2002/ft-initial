@@ -22,40 +22,21 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
 
   attachments = computed(() => {
     this.doRefresh();
-    const attachmentsControl = this.sectionFormGroup().get(EMaterialsFormControls.attachments);
-    let value: unknown = null;
-    if (attachmentsControl instanceof FormGroup) {
-      value = attachmentsControl.get(EMaterialsFormControls.value)?.value;
-    } else {
-      value = attachmentsControl?.value;
-    }
+    const value = this.getValueFormControl(EMaterialsFormControls.attachments).value;
     if (Array.isArray(value)) return value as AttachmentItem[];
     return value ? [value as AttachmentItem] : [];
   });
 
   hasAttachments = computed(() => this.attachments().length > 0);
 
-  hasAttachmentsError = computed(() => {
-    this.doRefresh();
-    const attachmentsControl = this.sectionFormGroup().get(EMaterialsFormControls.attachments);
-    if (!attachmentsControl) return false;
-    if (attachmentsControl.invalid && (attachmentsControl.dirty || attachmentsControl.touched)) return true;
-    if (attachmentsControl instanceof FormGroup) {
-      const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
-      return !!(valueControl && valueControl.invalid && (valueControl.dirty || valueControl.touched));
-    }
-    return false;
-  });
-
   attachmentsSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const hasComment = this.isFieldHasComment(EMaterialsFormControls.attachments, null);
     return {
       label: '',
       beforeValue: '',
       currantValue: '',
-      hasError: this.hasAttachmentsError(),
-      hasComment,
+      hasError: this.isFieldHasError(this.getValueFormControl(EMaterialsFormControls.attachments)),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.attachments),
       isResolved: this.isResolvedField(EMaterialsFormControls.attachments),
       showDifference: false,
     };
