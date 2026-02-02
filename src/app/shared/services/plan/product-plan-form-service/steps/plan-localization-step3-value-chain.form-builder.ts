@@ -309,7 +309,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
         grandTotal += this.calculateSectionTotalCostPercentage(formGroup, sectionName);
       });
 
-      if (grandTotal > 100) {
+      if (grandTotal !== 100) {
         return {
           totalExceeds100: true
         };
