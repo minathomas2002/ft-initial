@@ -79,7 +79,7 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
       };
 
       const currantServiceName = String(getValue(EMaterialsFormControls.serviceName) ?? '');
-      const beforeServiceName = service?.serviceName ?? null;
+      const beforeServiceName = currantServiceName
 
       const currantServiceType = this.formatSelectValue(getValue(EMaterialsFormControls.serviceType), this.planStore.serviceTypeOptions());
       const beforeServiceType = this.formatSelectValue(service?.serviceType ?? null, this.planStore.serviceTypeOptions());

@@ -50,7 +50,13 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
     return arr.controls.map((ctrl, i) => {
       const group = ctrl as FormGroup;
       const rowId = group.get('rowId')?.value ?? null;
-      const service = servicesForPage[i];
+      const serviceId = group.get(EMaterialsFormControls.serviceId)?.value ?? null;
+      // Match by identity (rowId or planServiceTypeId), not by array index, so reordered rows show correct before/current
+      const service = servicesForPage.find(
+        (h: { id?: string; planServiceTypeId: string; pageNumber?: number }) =>
+          (rowId != null && h.id === rowId) ||
+          (serviceId != null && h.planServiceTypeId === serviceId && h.pageNumber === this.pageNumber())
+      );
 
       const getValue = (controlName: string) => {
         const c = group.get(controlName);
@@ -82,9 +88,7 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
       };
 
       const serviceName = getValue(EMaterialsFormControls.serviceName) ?? '';
-      const beforeServiceName = plan?.services && service?.planServiceTypeId
-        ? plan.services.find((s: { id: string }) => s.id === service.planServiceTypeId)?.serviceName ?? null
-        : null;
+      const beforeServiceName = serviceName
 
       const expectedDate = getValue(this.expectedDateControlKey()) ?? '';
       const beforeExpectedDate = service?.localizationDate ?? null;

@@ -83,7 +83,7 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
       };
 
       const currantServiceName = getValue(EMaterialsFormControls.serviceName) ?? '';
-      const beforeServiceName = service?.serviceName ?? null;
+      const beforeServiceName = currantServiceName
       const currantExpectedDate = getValue(EMaterialsFormControls.expectedLocalizationDate) ?? '';
       const beforeExpectedDate = strategy?.expectedLocalizationDate ?? null;
       const currantApproach = this.formatLocalizationApproach(getValue(EMaterialsFormControls.localizationApproach));

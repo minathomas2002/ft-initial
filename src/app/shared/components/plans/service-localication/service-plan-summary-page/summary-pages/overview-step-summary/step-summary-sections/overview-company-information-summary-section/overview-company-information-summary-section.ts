@@ -26,8 +26,8 @@ export class OverviewCompanyInformationSummarySection extends SummarySectionBase
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.companyNameControl()),
       hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName, null),
-      isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
-      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+      isResolved: false,
+      showDifference: false,
     };
   });
 

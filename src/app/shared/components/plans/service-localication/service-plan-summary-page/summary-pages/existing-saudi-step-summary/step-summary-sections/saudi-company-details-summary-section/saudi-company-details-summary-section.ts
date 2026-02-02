@@ -61,7 +61,7 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
         const fieldGroup = group.get(fieldKey);
         const valueCtrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
         const hasError = valueCtrl ? this.isFieldHasError(valueCtrl) : false;
-        const hasComment = this.isFieldHasComment(fieldKey, rowId);
+        const hasComment = this.findMatchingField(fieldKey, 'saudiCompanyDetails', rowId) != null;
         const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
         const isResolved =
           hasComment &&
@@ -81,7 +81,7 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
 
       return {
         saudiCompanyName: buildField('', getValue(EMaterialsFormControls.saudiCompanyName) ?? null, company?.companyName ?? null, EMaterialsFormControls.saudiCompanyName),
-        registeredVendorIDwithSEC: buildField('', getValue(EMaterialsFormControls.registeredVendorIDwithSEC) ?? null, company?.vendorIdWithSEC ?? null, EMaterialsFormControls.registeredVendorIDwithSEC),
+        registeredVendorIDwithSEC: buildField('', getValue(EMaterialsFormControls.registeredVendorIDwithSEC) ?? null, getValue(EMaterialsFormControls.registeredVendorIDwithSEC) ?? null, EMaterialsFormControls.registeredVendorIDwithSEC),
         benaRegisteredVendorID: buildField('', getValue(EMaterialsFormControls.benaRegisteredVendorID) ?? null, company?.benaRegisterVendorId ?? null, EMaterialsFormControls.benaRegisteredVendorID),
         companyType: buildField('', this.formatCompanyType(getValue(EMaterialsFormControls.companyType)), this.formatCompanyType(company?.companyType ?? null), EMaterialsFormControls.companyType),
         qualificationStatus: buildField('', this.formatQualificationStatus(getValue(EMaterialsFormControls.qualificationStatus)), this.formatQualificationStatus(company?.qualificationStatus ? String(company.qualificationStatus) : null), EMaterialsFormControls.qualificationStatus),
@@ -138,5 +138,20 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
       default:
         return true;
     }
+  }
+
+  /**
+   * Finds the matching field from sectionSummaryFields based on fieldKey, section, and rowId.
+   * Step template passes inputKey with index suffix (e.g. saudiCompanyName_0); this matches that format.
+   */
+  private findMatchingField(fieldKey: string, section: string, rowId: string | null) {
+    return this.sectionSummaryFields().find((f) => {
+      const matchKey =
+        f.inputKey === fieldKey ||
+        f.inputKey === `${section}.${fieldKey}` ||
+        (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1)));
+      if (!matchKey) return false;
+      return rowId == null ? f.id == null : f.id === rowId;
+    });
   }
 }
