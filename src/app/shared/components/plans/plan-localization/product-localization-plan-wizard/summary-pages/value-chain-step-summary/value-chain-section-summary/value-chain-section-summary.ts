@@ -7,6 +7,7 @@ import { EInHouseProcuredType, ELocalizationStatusType } from 'src/app/shared/en
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { TableModule } from 'primeng/table';
 
 const SECTION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.designEngineeringFormGroup]: 1,
@@ -18,7 +19,7 @@ const SECTION_TYPE_BY_KEY: Record<string, number> = {
 
 @Component({
   selector: 'app-value-chain-section-summary',
-  imports: [PlanSummaryFlied],
+  imports: [PlanSummaryFlied, TableModule],
   templateUrl: './value-chain-section-summary.html',
   styleUrl: './value-chain-section-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

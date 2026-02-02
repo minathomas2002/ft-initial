@@ -7,6 +7,7 @@ import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-f
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { TableModule } from 'primeng/table';
 
 const SAUDIZATION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.annualHeadcount]: 1,
@@ -34,7 +35,7 @@ const YEAR_KEYS = [
 
 @Component({
   selector: 'app-saudization-section-summary',
-  imports: [PlanSummaryFlied, TranslatePipe],
+  imports: [PlanSummaryFlied, TranslatePipe, TableModule],
   templateUrl: './saudization-section-summary.html',
   styleUrl: './saudization-section-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
