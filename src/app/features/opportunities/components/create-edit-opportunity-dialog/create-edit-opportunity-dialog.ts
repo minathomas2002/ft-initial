@@ -139,11 +139,36 @@ export class CreateEditOpportunityDialog implements OnInit {
   async saveAsDraft() {
     this.opportunityFormService.enableDraftValidators();
     const opportunityTitleField = this.opportunityFormService.opportunityInformationForm.get('title');
+    const startDateField = this.opportunityFormService.opportunityInformationForm.get('startDate');
+    const endDateField = this.opportunityFormService.opportunityInformationForm.get('endDate');
+
+    // Ensure cross-field date validation runs before checking.
+    endDateField?.updateValueAndValidity({ emitEvent: false });
+
     // Check if the field is invalid
     if (opportunityTitleField?.invalid) {
       // Mark as touched to show validation errors
       this.toasterService.error("Title field is required.")
       opportunityTitleField.markAsTouched();
+      return;
+    }
+
+    const hasStartDate = !!startDateField?.value;
+    const hasEndDate = !!endDateField?.value;
+
+    // Draft should require both dates if the user entered either one.
+    if (hasStartDate !== hasEndDate) {
+      this.toasterService.error('Please provide both start date and end date.');
+      startDateField?.markAsTouched();
+      endDateField?.markAsTouched();
+      return;
+    }
+
+    // Draft should still enforce a valid date range when both dates are provided.
+    if (hasStartDate && hasEndDate && endDateField?.hasError('dateRangeInvalid')) {
+      this.toasterService.error('End date must be after start date.');
+      startDateField.markAsTouched();
+      endDateField.markAsTouched();
       return;
     }
 

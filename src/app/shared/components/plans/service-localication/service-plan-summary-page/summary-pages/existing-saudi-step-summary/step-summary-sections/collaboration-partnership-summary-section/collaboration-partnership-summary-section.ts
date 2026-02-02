@@ -104,9 +104,16 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
    * Returns the matching field or undefined if not found.
    */
   private findMatchingField(fieldKey: string, section: string, rowId: string | null) {
+    const aliases: string[] = [];
+    if (fieldKey === EMaterialsFormControls.whyChoseThisCompany) aliases.push('whyChoseThisCompany');
+
     return this.sectionSummaryFields().find((f) => {
       const matchKey = f.inputKey === fieldKey || f.inputKey === `${section}.${fieldKey}` ||
-        (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1)));
+        (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1))) ||
+        aliases.some((alias) =>
+          f.inputKey === alias ||
+          f.inputKey === `${section}.${alias}` ||
+          (f.inputKey?.startsWith(alias + '_') && /^\d+$/.test(f.inputKey.substring(alias.length + 1))));
       if (!matchKey) return false;
       return rowId == null ? f.id == null : f.id === rowId;
     });

@@ -154,12 +154,12 @@ export class OpportunityFormService {
 
     if (!startDateValue || !endDateValue) return null;
 
-    const startDate = startDateValue instanceof Date ? startDateValue : new Date(startDateValue);
-    const endDate = endDateValue instanceof Date ? endDateValue : new Date(endDateValue);
+    const startDate = this.toDateOnly(startDateValue);
+    const endDate = this.toDateOnly(endDateValue);
+    if (!startDate || !endDate) return null;
 
-    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return null;
-
-    return endDate >= startDate ? null : { dateRangeInvalid: true };
+    // Strict ordering: endDate must be AFTER startDate (not equal).
+    return endDate > startDate ? null : { dateRangeInvalid: true };
   };
 
   private startDateRestrictionValidator = (control: AbstractControl): ValidationErrors | null => {
@@ -440,6 +440,11 @@ export class OpportunityFormService {
       control.clearValidators(); // removes keyActivityArrayValidator
       control.updateValueAndValidity({ emitEvent: false });
     });
+
+    // Keep strict date ordering validation active even in draft mode.
+    infoGroup.get('endDate')?.setValidators([this.endDateAfterStartDateValidator]);
+    infoGroup.get('endDate')?.updateValueAndValidity({ emitEvent: false });
+
     infoGroup.get('title')?.setValidators([Validators.required]);
     infoGroup.get('title')?.updateValueAndValidity({ emitEvent: false });
 
