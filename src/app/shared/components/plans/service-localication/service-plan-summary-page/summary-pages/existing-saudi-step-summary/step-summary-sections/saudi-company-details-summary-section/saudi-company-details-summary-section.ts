@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
@@ -18,16 +18,6 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
     return this.sectionFormGroup().get(EMaterialsFormControls.saudiCompanyDetailsFormGroup) as FormArray;
   }
 
-  // Computed signal to get corrected field IDs from step 3 comments (Existing Saudi)
-  private correctedFieldIds = computed<string[]>(() => {
-    const stepComments = this.planStore.planComments()?.comments
-      .find(comment => comment.pageTitleForTL === 'Existing Saudi Co.');
-    if (!stepComments) return [];
-    return stepComments.fields
-      .filter(field => field.id)
-      .map(field => field.id!)
-      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
-  });
 
   private formatCompanyType(companyType: string | string[] | number | number[] | null): string | null {
     if (!companyType) return null;
@@ -68,12 +58,16 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
       };
 
       const buildField = (label: string, currant: string | null, before: string | null, fieldKey: string): IPlanSummaryField => {
-        const ctrl = group.get(fieldKey);
-        const valueCtrl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
-        const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
-        const matchingField = this.findMatchingField(fieldKey, 'saudiCompanyDetails', rowId);
-        const hasComment = !!matchingField;
-        const isResolved = this.isFieldResolved(matchingField);
+        const fieldGroup = group.get(fieldKey);
+        const valueCtrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
+        const hasError = valueCtrl ? this.isFieldHasError(valueCtrl) : false;
+        const hasComment = this.isFieldHasComment(fieldKey, rowId);
+        const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
+        const isResolved =
+          hasComment &&
+          !hasCommentChecked &&
+          ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+          this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return {
           label,
           beforeValue: String(before ?? ''),
@@ -99,31 +93,6 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
       };
     });
   });
-
-  /**
-   * Finds the matching field from sectionSummaryFields based on fieldKey, section, and rowId.
-   * Returns the matching field or undefined if not found.
-   */
-  private findMatchingField(fieldKey: string, section: string, rowId: string | null) {
-    return this.sectionSummaryFields().find((f) => {
-      const matchKey = f.inputKey === fieldKey || f.inputKey === `${section}.${fieldKey}` ||
-        (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1)));
-      if (!matchKey) return false;
-      return rowId == null ? f.id == null : f.id === rowId;
-    });
-  }
-
-  /**
-   * Checks if a field is resolved (corrected by investor).
-   * A field is resolved if it has a comment, has an id, the id is in correctedFieldIds,
-   * and the wizard is in view/Review mode with an employee user.
-   */
-  private isFieldResolved(matchingField: { id?: string } | undefined): boolean {
-    if (!matchingField?.id) return false;
-    return this.correctedFieldIds().includes(matchingField.id) &&
-      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
-      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
-  }
 
   /**
    * Checks if a conditional field should be visible/selectable in the Saudi Company Details summary.

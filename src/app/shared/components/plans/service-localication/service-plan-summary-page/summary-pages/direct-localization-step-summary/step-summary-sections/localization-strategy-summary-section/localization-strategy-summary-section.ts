@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
@@ -61,11 +61,16 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
       };
 
       const buildField = (label: string, currant: string | number | null, before: string | number | null, fieldKey: string): IPlanSummaryField => {
-        const ctrl = group.get(fieldKey);
-        const valueCtrl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
-        const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
+        const fieldGroup = group.get(fieldKey);
+        const valueCtrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
+        const hasError = valueCtrl ? this.isFieldHasError(valueCtrl) : false;
         const hasComment = this.hasLocalizationStrategyFieldComment(fieldKey, i, rowId);
-        const isResolved = this.isResolvedFieldForLocalizationStrategy(fieldKey, i, rowId, group);
+        const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
+        const isResolved =
+          hasComment &&
+          !hasCommentChecked &&
+          ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+          this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return {
           label,
           beforeValue: String(before ?? ''),
@@ -107,10 +112,12 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
         serviceName: buildField('', currantServiceName, beforeServiceName, EMaterialsFormControls.serviceName),
         expectedLocalizationDate: buildField('', currantExpectedDate, beforeExpectedDate, EMaterialsFormControls.expectedLocalizationDate),
         localizationApproach: buildField('', currantApproach, beforeApproach, EMaterialsFormControls.localizationApproach),
-        localizationApproachOther: currantApproachOther || beforeApproachOther ? { currant: currantApproachOther, before: beforeApproachOther, hasComment: this.hasLocalizationStrategyFieldComment(EMaterialsFormControls.localizationApproachOtherDetails, i, rowId) } : null,
-        location: buildField('', currantLocation, beforeLocation, EMaterialsFormControls.location),
+        localizationApproachOther: currantApproachOther || beforeApproachOther
+          ? buildField('', currantApproachOther, beforeApproachOther ?? null, EMaterialsFormControls.localizationApproachOtherDetails)
+          : null,
+        location: buildField('Location', currantLocation, beforeLocation, EMaterialsFormControls.location),
         locationOther: shouldShowLocationOther
-          ? buildField('Description: ', currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
+          ? buildField('', currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
           : null,
         capexRequired: buildField('', currantCapex != null ? String(currantCapex) : null, beforeCapex != null ? String(beforeCapex) : null, EMaterialsFormControls.capexRequired),
         supervisionOversight: buildField('', currantSupervision, beforeSupervision, EMaterialsFormControls.supervisionOversightByGovernmentEntity),
@@ -141,6 +148,12 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
     if (fieldKey === EMaterialsFormControls.capexRequired) {
       aliasKeys.push(`capexRequired_${index}`, `capexRequired${index}`, 'capexRequired');
     }
+    if (fieldKey === EMaterialsFormControls.localizationApproachOtherDetails) {
+      aliasKeys.push(`localizationApproachOtherDetails_${index}`, `localizationApproachOther_${index}`, `localizationApproachOther${index}`);
+    }
+    if (fieldKey === EMaterialsFormControls.locationOtherDetails) {
+      aliasKeys.push(`locationOtherDetails_${index}`, `locationOther_${index}`, `locationOther${index}`);
+    }
 
     return this.sectionSummaryFields().some((f) => {
       const matchKey =
@@ -154,16 +167,4 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
     });
   }
 
-  private isResolvedFieldForLocalizationStrategy(fieldKey: string, index: number, rowId: string | null, rowGroup: FormGroup): boolean {
-    const fieldCtrl = rowGroup.get(fieldKey);
-    const hasCommentControl = fieldCtrl instanceof FormGroup
-      ? fieldCtrl.get(EMaterialsFormControls.hasComment)
-      : null;
-    const isHasCommentChecked = hasCommentControl?.value ?? false;
-
-    return this.hasLocalizationStrategyFieldComment(fieldKey, index, rowId) &&
-      !isHasCommentChecked &&
-      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
-      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
-  }
 }

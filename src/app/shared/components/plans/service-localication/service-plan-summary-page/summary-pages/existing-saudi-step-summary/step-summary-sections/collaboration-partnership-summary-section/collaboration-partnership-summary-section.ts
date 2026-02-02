@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
@@ -17,17 +17,6 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
   private get collaborationPartnershipFormArray(): FormArray {
     return this.sectionFormGroup().get(EMaterialsFormControls.collaborationPartnershipFormGroup) as FormArray;
   }
-
-  // Computed signal to get corrected field IDs from step 3 comments (Existing Saudi)
-  private correctedFieldIds = computed<string[]>(() => {
-    const stepComments = this.planStore.planComments()?.comments
-      .find(comment => comment.pageTitleForTL === 'Existing Saudi Co.');
-    if (!stepComments) return [];
-    return stepComments.fields
-      .filter(field => field.id)
-      .map(field => field.id!)
-      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
-  });
 
   private formatAgreementType(agreementTypeId: string | number | null): string | null {
     if (!agreementTypeId) return null;
@@ -64,12 +53,17 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
       };
 
       const buildField = (label: string, currant: string | null, before: string | null, fieldKey: string): IPlanSummaryField => {
-        const ctrl = group.get(fieldKey);
-        const valueCtrl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
-        const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
+        const fieldGroup = group.get(fieldKey);
+        const valueCtrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
+        const hasError = valueCtrl ? this.isFieldHasError(valueCtrl) : false;
         const matchingField = this.findMatchingField(fieldKey, 'collaborationPartnership', rowId);
-        const hasComment = !!matchingField;
-        const isResolved = this.isFieldResolved(matchingField);
+        const hasComment = matchingField != null;
+        const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
+        const isResolved =
+          hasComment &&
+          !hasCommentChecked &&
+          ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+          this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return {
           label,
           beforeValue: String(before ?? ''),
@@ -117,17 +111,5 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
       if (!matchKey) return false;
       return rowId == null ? f.id == null : f.id === rowId;
     });
-  }
-
-  /**
-   * Checks if a field is resolved (corrected by investor).
-   * A field is resolved if it has a comment, has an id, the id is in correctedFieldIds,
-   * and the wizard is in view/Review mode with an employee user.
-   */
-  private isFieldResolved(matchingField: { id?: string } | undefined): boolean {
-    if (!matchingField?.id) return false;
-    return this.correctedFieldIds().includes(matchingField.id) &&
-      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
-      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 }

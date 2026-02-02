@@ -30,14 +30,17 @@
               <app-plan-summary-flied [planSummaryField]="row.localizationApproach" />
               @if (row.localizationApproachOther) {
               <div class="mt-2 text-sm text-gray-600 flex flex-col items-start gap-2 max-h-[100px] overflow-auto">
-                <span class="font-semibold">Description: </span>{{ row.localizationApproachOther.currant || row.localizationApproachOther.before }}
+                <span class="font-semibold">Description: </span>
+                <app-plan-summary-flied [planSummaryField]="row.localizationApproachOther" />
               </div>
               }
             </td>
             <td class="border-t border-gray-300 p-3">
               <app-plan-summary-flied [planSummaryField]="row.location" />
               @if (row.locationOther) {
-              <app-plan-summary-flied [planSummaryField]="row.locationOther" />
+              <div class="mt-2">
+                <app-plan-summary-flied [planSummaryField]="row.locationOther" />
+              </div>
               }
             </td>
             <td class="border-t border-gray-300 p-3 text-center"><app-plan-summary-flied [planSummaryField]="row.capexRequired" /></td>
