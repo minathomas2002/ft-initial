@@ -56,7 +56,7 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
       currantValue: '',
       hasError: this.hasAttachmentsError(),
       hasComment,
-      isResolved: false,
+      isResolved: this.isResolvedField(EMaterialsFormControls.attachments),
       showDifference: false,
     };
   });

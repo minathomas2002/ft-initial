@@ -33,8 +33,8 @@ export abstract class SummarySectionBaseClass {
     return this.getFormControl(controlName).get(EMaterialsFormControls.hasComment)?.value;
   }
 
-  protected isResolvedField(controlName: string): boolean {
-    return this.isFieldHasComment(controlName) &&
+  protected isResolvedField(controlName: string, rowId: string | null = null): boolean {
+    return this.isFieldHasComment(controlName, rowId) &&
       !this.isHasCommentControlChecked(controlName) &&
       ['view', 'Review'].includes(this.planStore.wizardMode()) &&
       this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
