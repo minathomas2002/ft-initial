@@ -11,7 +11,10 @@
   @if (hasAttachments()) {
   <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
     @for (file of attachments(); track $index) {
-    <div class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full">
+    <div
+      class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full"
+      [class.bg-success-50.border-success-500.border]="isResolved()"
+    >
       <div class="flex items-center gap-3 flex-1 min-w-0">
         @if (file.type && file.type.startsWith('image/')) {
         <img

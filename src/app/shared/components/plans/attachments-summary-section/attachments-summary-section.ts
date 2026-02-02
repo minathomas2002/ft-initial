@@ -36,11 +36,13 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
       beforeValue: '',
       currantValue: '',
       hasError: this.isFieldHasError(this.getValueFormControl(EMaterialsFormControls.attachments)),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.attachments),
-      isResolved: this.isResolvedField(EMaterialsFormControls.attachments),
+      hasComment: !this.isResolved() && this.isFieldHasComment(EMaterialsFormControls.attachments),
+      isResolved: false,
       showDifference: false,
     };
   });
+
+  isResolved = computed(() => this.isResolvedField(EMaterialsFormControls.attachments));
 
   getFileIcon(file: AttachmentItem): string | null {
     if (!file) return null;
