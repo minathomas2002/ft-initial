@@ -8,19 +8,16 @@ import { Attachment } from 'src/app/shared/interfaces/plans.interface';
 
 type AttachmentItem = Attachment & { name?: string; type?: string; size?: number; objectURL?: string; url?: string };
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
-import { TranslatePipe } from 'src/app/shared/pipes';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 
 @Component({
   selector: 'app-attachments-summary-section',
-  imports: [PlanSummaryFlied, TranslatePipe, ImageErrorDirective],
+  imports: [PlanSummaryFlied, ImageErrorDirective],
   templateUrl: './attachments-summary-section.html',
   styleUrl: './attachments-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AttachmentsSummarySection extends SummarySectionBaseClass {
-  readonly translateKey = input<string>('plans.summary.attachments');
-
   private readonly attachmentService = inject(AttachmentService);
 
   attachments = computed(() => {
@@ -53,11 +50,10 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
   attachmentsSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
     const hasComment = this.isFieldHasComment(EMaterialsFormControls.attachments, null);
-    const fileNames = this.attachments().map((f) => f.fileName || f.name || '').filter(Boolean).join(', ');
     return {
       label: '',
       beforeValue: '',
-      currantValue: fileNames || '-',
+      currantValue: '',
       hasError: this.hasAttachmentsError(),
       hasComment,
       isResolved: false,

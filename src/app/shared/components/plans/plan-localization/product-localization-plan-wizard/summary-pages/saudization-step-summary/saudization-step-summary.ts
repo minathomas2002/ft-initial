@@ -11,12 +11,13 @@ import { SummarySectionHeader } from '../../../../summary-section-header/summary
 import { SaudizationSectionSummaryComponent } from './saudization-section-summary/saudization-section-summary';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
-import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { PlanSummaryFlied } from '../../../../plan-summary-flied/plan-summary-flied';
+import { AttachmentsSummarySection } from '../../../../service-localication/service-plan-summary-page/summary-pages/existing-saudi-step-summary/step-summary-sections/attachments-summary-section/attachments-summary-section';
 
 @Component({
   selector: 'app-saudization-step-summary',
   imports: [
-    TranslatePipe,
+    AttachmentsSummarySection,
     SummarySectionHeader,
     SaudizationSectionSummaryComponent,
     PageCommentBox,
@@ -54,9 +55,8 @@ export class SaudizationStepSummary extends SummaryStepBaseClass {
     { requireSync: true }
   );
 
-  private get _attachmentsFormGroup(): FormGroup {
-    return this.productPlanFormService.attachmentsFormGroup;
-  }
+  attachmentsFormGroup = computed(() => this.productPlanFormService.attachmentsFormGroup);
+  attachmentsSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('attachments'));
 
   /** Step 04 comment fields (inputKey e.g. annualHeadcount_year1) */
   sectionSummaryFields = computed<IFieldInformation[]>(() => this.stepComments()?.fields ?? []);
@@ -67,19 +67,4 @@ export class SaudizationStepSummary extends SummaryStepBaseClass {
     { label: this.i18nService.translate('plans.summary.saudization.annualTotalCompensation'), rowKey: EMaterialsFormControls.annualTotalCompensation },
     { label: this.i18nService.translate('plans.summary.saudization.saudiCompensationPercentage'), rowKey: EMaterialsFormControls.saudiCompensationPercentage },
   ]);
-
-  attachments = computed(() => {
-    this.doRefresh();
-    const attachmentsControl = this._attachmentsFormGroup.get(EMaterialsFormControls.attachments);
-    if (attachmentsControl instanceof FormGroup) {
-      const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
-      return valueControl ? valueControl.value : attachmentsControl.value;
-    }
-    return attachmentsControl?.value ?? null;
-  });
-
-  hasAttachments = computed(() => {
-    const atts = this.attachments();
-    return atts && Array.isArray(atts) && atts.length > 0;
-  });
 }
