@@ -8,6 +8,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { TableModule } from 'primeng/table';
+import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 
 const SAUDIZATION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.annualHeadcount]: 1,
@@ -40,27 +41,11 @@ const YEAR_KEYS = [
   styleUrl: './saudization-section-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SaudizationSectionSummaryComponent {
-  private readonly planStore = inject(PlanStore);
-  private readonly roleService = inject(RoleService);
-  private readonly i18nService = inject(I18nService);
+export class SaudizationSectionSummaryComponent extends SummarySectionBaseClass {
 
-  readonly saudizationFormGroup = input.required<FormGroup>();
-  readonly sectionSummaryFields = input.required<IFieldInformation[]>();
 
   /** Row labels in order: Annual Headcount, Saudization %, Annual Total Compensation, Saudi Compensation % */
   readonly rowLabels = input.required<{ label: string; rowKey: string }[]>();
-
-  // Computed signal to get corrected field IDs from step 4 comments
-  private correctedFieldIds = computed<string[]>(() => {
-    const step4Comments = this.planStore.planComments()?.comments
-      .find(comment => comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title'));
-    if (!step4Comments) return [];
-    return step4Comments.fields
-      .filter(field => field.id)
-      .map(field => field.id!)
-      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
-  });
 
   /** Build before-value lookup from plan data (saudizationRows by saudizationType) */
   private beforeRowsByType = computed(() => {
@@ -72,7 +57,8 @@ export class SaudizationSectionSummaryComponent {
 
   /** One row per metric (4 rows), each with year1..year7 cell data */
   rows = computed(() => {
-    const formGroup = this.saudizationFormGroup();
+    this.doRefresh();
+    const formGroup = this.sectionFormGroup();
     const summaryFields = this.sectionSummaryFields();
     const beforeMap = this.beforeRowsByType();
     const labels = this.rowLabels();
@@ -90,17 +76,12 @@ export class SaudizationSectionSummaryComponent {
         const yearNum = yearIndex + 1;
         const inputKey = `${rowKey}_year${yearNum}`;
         const matchingField = summaryFields.find(f => f.inputKey === inputKey);
-        const hasComment = !!matchingField;
-        const hasError = valueControl ? (valueControl.invalid && valueControl.dirty) : false;
+        const hasComment = this.isFieldHasComment(inputKey, matchingField?.id);
+        const hasError = this.isFieldHasError(valueControl!);
         const beforeVal = beforeRow ? (beforeRow as SaudizationRow)[`year${yearNum}` as keyof SaudizationRow] : null;
         const beforeValue: string | number = (beforeVal != null && (typeof beforeVal === 'number' || typeof beforeVal === 'string')) ? beforeVal : '';
-        const showDiff = this.planStore.wizardMode() === 'resubmit' && (() => {
-          const currant = value === null || value === undefined ? '' : String(value).trim();
-          const before = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
-          return currant !== before;
-        })();
-        const isResolved = hasComment && !!matchingField?.id && this.correctedFieldIds().includes(matchingField.id) &&
-          ['view', 'Review'].includes(this.planStore.wizardMode()) && this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+        const showDiff = this.shouldShowDifference(value, beforeValue);
+        const isResolved = this.isResolvedField(rowKey, matchingField?.id);
         return { value, beforeValue, hasError, hasComment, showDifference: showDiff, isResolved };
       };
 
