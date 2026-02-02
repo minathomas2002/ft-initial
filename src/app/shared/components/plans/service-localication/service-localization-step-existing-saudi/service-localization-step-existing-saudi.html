@@ -331,7 +331,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementType))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'collaborationPartnership',
-                inputKey: EMaterialsFormControls.agreementType,
+                inputKey: 'agreementTypeWithSaudiCompany',
                 label: 'Agreement Type with Saudi Company'
               }, itemControl.get('rowId')?.value)"
             >
@@ -343,7 +343,7 @@
                 placeholder="Select agreement type with Saudi Company"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('agreementType_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('agreementTypeWithSaudiCompany', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -394,7 +394,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: EMaterialsFormControls.agreementSigningDate,
+              inputKey: 'agreementSigningDate',
               label: 'Agreement Signing Date'
             }, itemControl.get('rowId')?.value)"
           >
@@ -406,7 +406,7 @@
               placeholder="Select quarter"
               fluid
               [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('agreementSigningDate_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('agreementSigningDate', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
@@ -423,7 +423,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: EMaterialsFormControls.supervisionOversightEntity,
+              inputKey: 'supervisionOversightEntity',
               label: 'Supervision / Oversight'
             }, itemControl.get('rowId')?.value)"
           >
@@ -435,7 +435,7 @@
               [maxlength]="100"
               [placeholder]="isReviewMode() ? '' : 'E.g., MoEn, PIF, etc.'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
-              [appConditionalColorClass]="highlightInput('supervisionOversightEntity_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('supervisionOversightEntity', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             @if (!getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity)).disabled) {
@@ -457,7 +457,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: EMaterialsFormControls.whyChoseThisCompany,
+              inputKey: 'whyChoseThisCompany_' + index,
               label: 'Why Did You Chose This Particular Saudi Company As Your Partner?'
             }, itemControl.get('rowId')?.value)"
           >
