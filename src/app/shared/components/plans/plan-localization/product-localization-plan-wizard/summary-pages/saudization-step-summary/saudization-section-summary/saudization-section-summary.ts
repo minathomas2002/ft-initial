@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IFieldInformation, IPlanSummaryField, SaudizationRow } from 'src/app/shared/interfaces/plans.interface';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { RoleService } from 'src/app/shared/services/role/role-service';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 const SAUDIZATION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.annualHeadcount]: 1,
@@ -39,12 +41,25 @@ const YEAR_KEYS = [
 })
 export class SaudizationSectionSummaryComponent {
   private readonly planStore = inject(PlanStore);
+  private readonly roleService = inject(RoleService);
+  private readonly i18nService = inject(I18nService);
 
   readonly saudizationFormGroup = input.required<FormGroup>();
   readonly sectionSummaryFields = input.required<IFieldInformation[]>();
 
   /** Row labels in order: Annual Headcount, Saudization %, Annual Total Compensation, Saudi Compensation % */
   readonly rowLabels = input.required<{ label: string; rowKey: string }[]>();
+
+  // Computed signal to get corrected field IDs from step 4 comments
+  private correctedFieldIds = computed<string[]>(() => {
+    const step4Comments = this.planStore.planComments()?.comments
+      .find(comment => comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step4.title'));
+    if (!step4Comments) return [];
+    return step4Comments.fields
+      .filter(field => field.id)
+      .map(field => field.id!)
+      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
+  });
 
   /** Build before-value lookup from plan data (saudizationRows by saudizationType) */
   private beforeRowsByType = computed(() => {
@@ -73,7 +88,8 @@ export class SaudizationSectionSummaryComponent {
         const value = valueControl?.value ?? '';
         const yearNum = yearIndex + 1;
         const inputKey = `${rowKey}_year${yearNum}`;
-        const hasComment = summaryFields.some(f => f.inputKey === inputKey);
+        const matchingField = summaryFields.find(f => f.inputKey === inputKey);
+        const hasComment = !!matchingField;
         const hasError = valueControl ? (valueControl.invalid && valueControl.dirty) : false;
         const beforeVal = beforeRow ? (beforeRow as SaudizationRow)[`year${yearNum}` as keyof SaudizationRow] : null;
         const beforeValue: string | number = (beforeVal != null && (typeof beforeVal === 'number' || typeof beforeVal === 'string')) ? beforeVal : '';
@@ -82,7 +98,9 @@ export class SaudizationSectionSummaryComponent {
           const before = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
           return currant !== before;
         })();
-        return { value, beforeValue, hasError, hasComment, showDifference: showDiff };
+        const isResolved = hasComment && !!matchingField?.id && this.correctedFieldIds().includes(matchingField.id) &&
+          ['view', 'Review'].includes(this.planStore.wizardMode()) && this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+        return { value, beforeValue, hasError, hasComment, showDifference: showDiff, isResolved };
       };
 
       return {
@@ -108,7 +126,7 @@ export class SaudizationSectionSummaryComponent {
   }
 
   getSummaryField(
-    cell: { beforeValue: string | number; hasError: boolean; hasComment: boolean; showDifference: boolean },
+    cell: { beforeValue: string | number; hasError: boolean; hasComment: boolean; showDifference: boolean; isResolved: boolean },
     currentValueDisplay: string
   ): IPlanSummaryField {
     return {
@@ -117,7 +135,7 @@ export class SaudizationSectionSummaryComponent {
       currantValue: currentValueDisplay || '-',
       hasError: cell.hasError,
       hasComment: cell.hasComment,
-      isResolved: false,
+      isResolved: cell.isResolved,
       showDifference: cell.showDifference,
     };
   }
