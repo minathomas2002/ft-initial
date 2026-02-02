@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { FormArray, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 const YEAR_CONTROL_KEYS = [
   EMaterialsFormControls.firstYear,
@@ -51,6 +52,19 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
 
   yearColumns = computed(() => this.serviceForm.upcomingYears(6));
 
+  // Computed signal to get corrected field IDs based on page number
+  private correctedFieldIds = computed<string[]>(() => {
+    const pageNum = this.pageNumber();
+    const pageTitle = pageNum === 3 ? 'Existing Saudi Co.' : 'Direct Localization';
+    const stepComments = this.planStore.planComments()?.comments
+      .find(comment => comment.pageTitleForTL === pageTitle);
+    if (!stepComments) return [];
+    return stepComments.fields
+      .filter(field => field.id)
+      .map(field => field.id!)
+      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
+  });
+
   private get entityLevelFormArray(): FormArray {
     return this.sectionFormGroup().get(EMaterialsFormControls.entityLevelFormGroup) as FormArray;
   }
@@ -77,14 +91,16 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
       const currantVal = getValue(controlName);
       const beforeVal = entity && YEAR_MAP[controlName] ? (entity as unknown as Record<string, unknown>)[YEAR_MAP[controlName]] : null;
       const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
-      const hasComment = this.hasEntityFieldComment(controlName, rowId);
+      const matchingField = this.findMatchingField(controlName, 'entityLevel', rowId);
+      const hasComment = !!matchingField;
+      const isResolved = this.isFieldResolved(matchingField);
       return {
         label: '',
         beforeValue: String(beforeVal ?? ''),
         currantValue: currantVal != null && currantVal !== '' ? String(currantVal) : '',
         hasError,
         hasComment,
-        isResolved: false,
+        isResolved,
         showDifference: this.shouldShowDifference(currantVal, beforeVal),
       };
     };
@@ -100,17 +116,30 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
     };
   });
 
+
   /**
-   * Check if the entity level field has a comment.
-   * Input key in sectionSummaryFields matches step form: 'entityLevel_' + controlName
-   * (e.g. entityLevel_firstYear_headcount, entityLevel_firstYear_saudization)
+   * Finds the matching field from sectionSummaryFields based on fieldKey, section, and rowId.
+   * For entity level, the expected input key format is 'entityLevel_' + controlName.
+   * Returns the matching field or undefined if not found.
    */
-  private hasEntityFieldComment(controlName: string, rowId: string | null): boolean {
-    const expectedInputKey = `entityLevel_${controlName}`;
-    return this.sectionSummaryFields().some((f) => {
-      const matchKey = f.inputKey === expectedInputKey || f.inputKey === controlName;
+  private findMatchingField(fieldKey: string, section: string, rowId: string | null) {
+    const expectedInputKey = `${section}_${fieldKey}`;
+    return this.sectionSummaryFields().find((f) => {
+      const matchKey = f.inputKey === expectedInputKey || f.inputKey === fieldKey;
       if (!matchKey) return false;
       return rowId == null ? f.id == null : f.id === rowId;
     });
+  }
+
+  /**
+   * Checks if a field is resolved (corrected by investor).
+   * A field is resolved if it has a comment, has an id, the id is in correctedFieldIds,
+   * and the wizard is in view/Review mode with an employee user.
+   */
+  private isFieldResolved(matchingField: { id?: string } | undefined): boolean {
+    if (!matchingField?.id) return false;
+    return this.correctedFieldIds().includes(matchingField.id) &&
+      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 }

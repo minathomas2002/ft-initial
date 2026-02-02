@@ -1,35 +1,42 @@
 <div class="flex flex-col gap-2 overflow-x-auto">
   <h4 class="text-base font-semibold text-gray-800">{{ sectionTitle() }}</h4>
-  <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden text-sm">
-    <thead class="bg-gray-100 border-b border-gray-200">
-      <tr>
-        <th class="text-left py-2 px-3 font-medium text-gray-700">Expense Header</th>
-        <th class="text-left py-2 px-3 font-medium text-gray-700">In-house / Procured</th>
-        <th class="text-left py-2 px-3 font-medium text-gray-700">Cost %</th>
-        @for (y of [1,2,3,4,5,6,7]; track y) {
-        <th class="text-left py-2 px-3 font-medium text-gray-700">Year {{ y }}</th>
-        }
-      </tr>
-    </thead>
-    <tbody>
-      @for (row of rows(); track row.rowId ?? $index) {
-      <tr class="border-b border-gray-100 hover:bg-gray-50/50">
-        <td class="py-2 px-3">
-          <app-plan-summary-flied [planSummaryField]="getSummaryField(row.expenseHeader, formatCellValue(row.expenseHeader.value))" />
-        </td>
-        <td class="py-2 px-3">
-          <app-plan-summary-flied [planSummaryField]="getSummaryField(row.inHouseOrProcured, formatInHouseProcured(row.inHouseOrProcured.value))" />
-        </td>
-        <td class="py-2 px-3">
-          <app-plan-summary-flied [planSummaryField]="getSummaryField(row.costPercentage, row.costPercentage.value != null ? row.costPercentage.value + '%' : '-')" />
-        </td>
-        @for (y of [row.year1, row.year2, row.year3, row.year4, row.year5, row.year6, row.year7]; track $index) {
-        <td class="py-2 px-3">
-          <app-plan-summary-flied [planSummaryField]="getSummaryField(y, formatYearValue(y.value))" />
-        </td>
-        }
-      </tr>
-      }
-    </tbody>
-  </table>
+  <div class="rounded-2xl overflow-hidden border border-gray-300">
+    <p-table
+      [value]="rows()"
+      [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
+      styleClass="w-full text-sm [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
+    >
+      <ng-template pTemplate="header">
+        <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
+          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Expense Header</th>
+          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">In-house / Procured</th>
+          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Cost %</th>
+          @for (y of [1,2,3,4,5,6,7]; track y) {
+          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Year {{ y }}</th>
+          }
+        </tr>
+      </ng-template>
+      <ng-template
+        pTemplate="body"
+        let-row
+      >
+        <tr class="hover:bg-gray-50/50">
+          <td class="border-t border-gray-300 p-3">
+            <app-plan-summary-flied [planSummaryField]="getSummaryField(row.expenseHeader, formatCellValue(row.expenseHeader.value))" />
+          </td>
+          <td class="border-t border-gray-300 p-3">
+            <app-plan-summary-flied [planSummaryField]="getSummaryField(row.inHouseOrProcured, formatInHouseProcured(row.inHouseOrProcured.value))" />
+          </td>
+          <td class="border-t border-gray-300 p-3">
+            <app-plan-summary-flied [planSummaryField]="getSummaryField(row.costPercentage, row.costPercentage.value != null ? row.costPercentage.value + '%' : '-')" />
+          </td>
+          @for (y of [row.year1, row.year2, row.year3, row.year4, row.year5, row.year6, row.year7]; track $index) {
+          <td class="border-t border-gray-300 p-3">
+            <app-plan-summary-flied [planSummaryField]="getSummaryField(y, formatYearValue(y.value))" />
+          </td>
+          }
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>

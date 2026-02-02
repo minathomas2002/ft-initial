@@ -24,7 +24,7 @@ export const VALIDATION_MESSAGES = {
     `${label} has missing or invalid fields`,
 
   totalExceeds100: (label: string) =>
-    `${label} can not exceed 100%`,
+    `${label} must be 100%`,
 
   invalidPhoneNumber: (label: string, error: any) =>
     `Please enter a valid ${label}`,

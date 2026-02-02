@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IFieldInformation, IPlanSummaryField, ValueChainRow } from 'src/app/shared/interfaces/plans.interface';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EInHouseProcuredType, ELocalizationStatusType } from 'src/app/shared/enums/plan.enum';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
+import { RoleService } from 'src/app/shared/services/role/role-service';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { TableModule } from 'primeng/table';
 
 const SECTION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.designEngineeringFormGroup]: 1,
@@ -16,18 +19,31 @@ const SECTION_TYPE_BY_KEY: Record<string, number> = {
 
 @Component({
   selector: 'app-value-chain-section-summary',
-  imports: [PlanSummaryFlied],
+  imports: [PlanSummaryFlied, TableModule],
   templateUrl: './value-chain-section-summary.html',
   styleUrl: './value-chain-section-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ValueChainSectionSummaryComponent {
   private readonly planStore = inject(PlanStore);
+  private readonly roleService = inject(RoleService);
+  private readonly i18nService = inject(I18nService);
 
   readonly sectionFormGroup = input.required<FormGroup>();
   readonly sectionSummaryFields = input.required<IFieldInformation[]>();
   readonly sectionTitle = input.required<string>();
   readonly sectionKey = input.required<string>();
+
+  // Computed signal to get corrected field IDs from step 3 comments
+  private correctedFieldIds = computed<string[]>(() => {
+    const step3Comments = this.planStore.planComments()?.comments
+      .find(comment => comment.pageTitleForTL === this.i18nService.translate('plans.wizard.step3.title'));
+    if (!step3Comments) return [];
+    return step3Comments.fields
+      .filter(field => field.id)
+      .map(field => field.id!)
+      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
+  });
 
   itemsArray = computed<FormArray>(() => {
     const section = this.sectionFormGroup().get('items');
@@ -58,7 +74,8 @@ export class ValueChainSectionSummaryComponent {
 
       const cell = (inputKey: string, beforeVal: string | number | null | undefined) => {
         const ctrl = getValueControl(inputKey);
-        const hasComment = summaryFields.some(f => f.inputKey === inputKey && (f.id === rowId || (f.id == null && rowId == null)));
+        const matchingField = summaryFields.find(f => f.inputKey === inputKey && (f.id === rowId || (f.id == null && rowId == null)));
+        const hasComment = !!matchingField;
         const hasError = ctrl ? (ctrl.invalid && ctrl.dirty) : false;
         const value = ctrl?.value ?? '';
         const beforeValue = beforeVal ?? '';
@@ -67,7 +84,9 @@ export class ValueChainSectionSummaryComponent {
           const before = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
           return currant !== before;
         })();
-        return { value, beforeValue: String(beforeValue), hasError, hasComment, showDifference: showDiff };
+        const isResolved = hasComment && !!matchingField?.id && this.correctedFieldIds().includes(matchingField.id) &&
+          ['view', 'Review'].includes(this.planStore.wizardMode()) && this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+        return { value, beforeValue: String(beforeValue), hasError, hasComment, showDifference: showDiff, isResolved };
       };
 
       return {
@@ -111,7 +130,7 @@ export class ValueChainSectionSummaryComponent {
 
   /** Maps a table cell to IPlanSummaryField for use with app-plan-summary-flied */
   getSummaryField(
-    cell: { beforeValue: string | number; hasError: boolean; hasComment: boolean; showDifference: boolean },
+    cell: { beforeValue: string | number; hasError: boolean; hasComment: boolean; showDifference: boolean; isResolved: boolean },
     currantValueDisplay: string
   ): IPlanSummaryField {
     return {
@@ -120,7 +139,7 @@ export class ValueChainSectionSummaryComponent {
       currantValue: currantValueDisplay || '-',
       hasError: cell.hasError,
       hasComment: cell.hasComment,
-      isResolved: false,
+      isResolved: cell.isResolved,
       showDifference: cell.showDifference,
     };
   }

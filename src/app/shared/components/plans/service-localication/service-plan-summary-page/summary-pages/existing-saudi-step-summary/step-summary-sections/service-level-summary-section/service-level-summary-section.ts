@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { FormArray, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 const YEAR_CONTROL_KEYS = [
   EMaterialsFormControls.firstYear,
@@ -34,6 +35,19 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
 
   yearColumns = computed(() => this.serviceForm.upcomingYears(6));
 
+  // Computed signal to get corrected field IDs based on page number
+  private correctedFieldIds = computed<string[]>(() => {
+    const pageNum = this.pageNumber();
+    const pageTitle = pageNum === 3 ? 'Existing Saudi Co.' : 'Direct Localization';
+    const stepComments = this.planStore.planComments()?.comments
+      .find(comment => comment.pageTitleForTL === pageTitle);
+    if (!stepComments) return [];
+    return stepComments.fields
+      .filter(field => field.id)
+      .map(field => field.id!)
+      .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
+  });
+
   private get serviceLevelFormArray(): FormArray {
     return this.sectionFormGroup().get(EMaterialsFormControls.serviceLevelFormGroup) as FormArray;
   }
@@ -61,14 +75,16 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
         const ctrl = group.get(fieldKey);
         const valueCtrl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
         const hasError = !!(valueCtrl && (valueCtrl as { invalid?: boolean }).invalid && (valueCtrl as { dirty?: boolean }).dirty);
-        const hasComment = this.hasArrayFieldComment(fieldKey, 'serviceLevel', rowId);
+        const matchingField = this.findMatchingField(fieldKey, 'serviceLevel', rowId);
+        const hasComment = !!matchingField;
+        const isResolved = this.isFieldResolved(matchingField);
         return {
           label,
           beforeValue: String(before ?? ''),
           currantValue: currant != null && currant !== '' ? String(currant) : '',
           hasError,
           hasComment,
-          isResolved: false,
+          isResolved,
           showDifference: this.shouldShowDifference(currant, before),
         };
       };
@@ -116,12 +132,28 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
     });
   });
 
-  private hasArrayFieldComment(fieldKey: string, section: string, rowId: string | null): boolean {
-    return this.sectionSummaryFields().some((f) => {
+  /**
+   * Finds the matching field from sectionSummaryFields based on fieldKey, section, and rowId.
+   * Returns the matching field or undefined if not found.
+   */
+  private findMatchingField(fieldKey: string, section: string, rowId: string | null) {
+    return this.sectionSummaryFields().find((f) => {
       const matchKey = f.inputKey === fieldKey || f.inputKey === `${section}.${fieldKey}` ||
         (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1)));
       if (!matchKey) return false;
       return rowId == null ? f.id == null : f.id === rowId;
     });
+  }
+
+  /**
+   * Checks if a field is resolved (corrected by investor).
+   * A field is resolved if it has a comment, has an id, the id is in correctedFieldIds,
+   * and the wizard is in view/Review mode with an employee user.
+   */
+  private isFieldResolved(matchingField: { id?: string } | undefined): boolean {
+    if (!matchingField?.id) return false;
+    return this.correctedFieldIds().includes(matchingField.id) &&
+      ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 }
