@@ -670,7 +670,6 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   };
 
   getCollaborationPartnershipFormArray(): FormArray {
-    console.log(this.planFormService?.collaborationPartnershipFormGroup);
     return this.planFormService?.collaborationPartnershipFormGroup ?? new FormArray<any>([]);
   }
 

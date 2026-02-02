@@ -95,8 +95,12 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
       const beforeSupervision = strategy?.governmentSupervision ?? null;
       const currantProprietary = this.formatYesNo(getValue(EMaterialsFormControls.willBeAnyProprietaryToolsSystems));
       const beforeProprietary = this.formatYesNo(strategy?.hasProprietaryTools ?? null);
-      const currantProprietaryExplanation = getValue(EMaterialsFormControls.proprietaryToolsSystemsDetails) ?? '';
-      const beforeProprietaryExplanation = strategy?.proprietaryToolsDetails ?? null;
+      const currantProprietaryExplanationRaw = String(getValue(EMaterialsFormControls.proprietaryToolsSystemsDetails) ?? '');
+      const beforeProprietaryExplanationRaw = String(strategy?.proprietaryToolsDetails ?? '');
+      const shouldShowProprietaryExplanation = !!(
+        currantProprietaryExplanationRaw.trim() ||
+        beforeProprietaryExplanationRaw.trim()
+      );
 
       return {
         serviceName: buildField('', currantServiceName, beforeServiceName, EMaterialsFormControls.serviceName),
@@ -108,7 +112,9 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
         capexRequired: buildField('', currantCapex != null ? String(currantCapex) : null, beforeCapex != null ? String(beforeCapex) : null, EMaterialsFormControls.capexRequired),
         supervisionOversight: buildField('', currantSupervision, beforeSupervision, EMaterialsFormControls.supervisionOversightByGovernmentEntity),
         proprietaryTools: buildField('', currantProprietary, beforeProprietary, EMaterialsFormControls.willBeAnyProprietaryToolsSystems),
-        proprietaryToolsExplanation: currantProprietaryExplanation || beforeProprietaryExplanation ? { currant: currantProprietaryExplanation, before: beforeProprietaryExplanation, hasComment: this.hasLocalizationStrategyFieldComment(EMaterialsFormControls.proprietaryToolsSystemsDetails, i, rowId) } : null,
+        proprietaryToolsExplanation: shouldShowProprietaryExplanation
+          ? buildField('', currantProprietaryExplanationRaw, beforeProprietaryExplanationRaw, EMaterialsFormControls.proprietaryToolsSystemsDetails)
+          : null,
       };
     });
   });
@@ -122,8 +128,23 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
   private hasLocalizationStrategyFieldComment(fieldKey: string, index: number, rowId: string | null): boolean {
     const expectedInputKey = `${fieldKey}_${index}`;
     const expectedInputKeyAlt = `${fieldKey}${index}`; // fallback for supervisionOversightByGovernmentEntity0
+
+    // Some step templates intentionally use simplified aliases (not the raw enum string)
+    // when sending/saving comments. Support those here for backward compatibility.
+    const aliasKeys: string[] = [];
+    if (fieldKey === EMaterialsFormControls.location) {
+      aliasKeys.push(`location_${index}`, `location${index}`, 'location');
+    }
+    if (fieldKey === EMaterialsFormControls.capexRequired) {
+      aliasKeys.push(`capexRequired_${index}`, `capexRequired${index}`, 'capexRequired');
+    }
+
     return this.sectionSummaryFields().some((f) => {
-      const matchKey = f.inputKey === expectedInputKey || f.inputKey === expectedInputKeyAlt || f.inputKey === fieldKey;
+      const matchKey =
+        f.inputKey === expectedInputKey ||
+        f.inputKey === expectedInputKeyAlt ||
+        f.inputKey === fieldKey ||
+        aliasKeys.includes(f.inputKey);
       if (!matchKey) return false;
       // Match by row id when present; when field has no id, match only rows with no id (e.g. create mode)
       return f.id ? f.id === rowId : rowId == null;

@@ -8,7 +8,6 @@ import { SummaryField } from 'src/app/shared/components/plans/summary-field/summ
   selector: 'app-summary-section-signature',
   imports: [SummarySectionHeader, SummaryField, TranslatePipe],
   templateUrl: './summary-section-signature.html',
-  styleUrl: './summary-section-signature.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionSignature {

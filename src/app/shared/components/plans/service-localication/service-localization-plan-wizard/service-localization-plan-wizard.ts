@@ -113,8 +113,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showExistingSaudiStep = signal(false);
   showDirectLocalizationStep = signal(false);
 
-
-
   // Comment phase signals for each step
   step1CommentPhase = signal<TCommentPhase>('none');
   step2CommentPhase = signal<TCommentPhase>('none');
@@ -138,7 +136,12 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   // Computed signal to check if incoming comments should be shown
   shouldShowIncomingComments = computed(() => {
     const mode = this.planStore.wizardMode();
-    return mode === 'view' || mode === 'Review' || mode === 'resubmit';
+
+    const creatorRole = this.planStore.planComments()?.creatorRole;
+    const currentSignedUser = this.authStore.jwtUserDetails()
+    const isSameUserRole = currentSignedUser?.RoleCodes.toString() === creatorRole?.toString()
+
+    return (mode === 'view' || mode === 'Review' || mode === 'resubmit') && !isSameUserRole;
   });
 
   // Computed signals to check if incoming comments exist and have content
@@ -1487,5 +1490,41 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     this.step2SelectedInputs.set(this.step2CommentFields());
     this.step3SelectedInputs.set(this.step3CommentFields());
     this.step4SelectedInputs.set(this.step4CommentFields());
+  }
+
+  /**
+   * Handles edit step event from summary page
+   * Maps summary step numbers (1-4) to actual wizard step indices
+   */
+  onEditStepFromSummary(summaryStepNumber: number): void {
+    // Map summary step numbers to wizard step IDs
+    // Step 1 = Cover Page (always step 1)
+    // Step 2 = Overview (always step 2)
+    // Step 3 = Existing Saudi (conditional, use existingSaudiStepIndex)
+    // Step 4 = Direct Localization (conditional, use directLocalizationStepIndex)
+    
+    let targetStepIndex: number;
+    
+    if (summaryStepNumber === 1) {
+      // Cover Page is always step 1
+      targetStepIndex = 1;
+    } else if (summaryStepNumber === 2) {
+      // Overview is always step 2
+      targetStepIndex = 2;
+    } else if (summaryStepNumber === 3) {
+      // Existing Saudi - use computed step index
+      targetStepIndex = this.existingSaudiStepIndex();
+    } else if (summaryStepNumber === 4) {
+      // Direct Localization - use computed step index
+      targetStepIndex = this.directLocalizationStepIndex();
+    } else {
+      // Fallback: use the summary step number as-is
+      targetStepIndex = summaryStepNumber;
+    }
+    
+    // Navigate to the target step
+    if (targetStepIndex > 0) {
+      this.navigateToStep(targetStepIndex);
+    }
   }
 }

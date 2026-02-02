@@ -193,7 +193,7 @@
             [minFractionDigits]="0"
             [maxFractionDigits]="0"
             fluid
-            placeholder="Enter registered vendor ID with SEC"
+            [placeholder]="isReviewMode() ? '' : 'Enter registered vendor ID with SEC'"
           />
         </app-group-input-with-checkbox>
         <app-base-error-messages

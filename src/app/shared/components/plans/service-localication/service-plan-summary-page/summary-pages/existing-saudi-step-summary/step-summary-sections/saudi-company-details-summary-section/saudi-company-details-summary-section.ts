@@ -3,6 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EServiceCompanyType, EServiceQualificationStatus } from 'src/app/shared/enums/plan.enum';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 @Component({
@@ -93,5 +94,51 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
       if (!matchKey) return false;
       return rowId == null ? f.id == null : f.id === rowId;
     });
+  }
+
+  /**
+   * Checks if a conditional field should be visible/selectable in the Saudi Company Details summary.
+   * Returns false for fields that should be grayed out based on company type and qualification status.
+   */
+  isSaudiCompanyFieldSelectable(rowIndex: number, field: string): boolean {
+    const rows = this.saudiCompanyDetailsRows();
+    if (!rows[rowIndex]) return true;
+
+    const arr = this.saudiCompanyDetailsFormArray;
+    if (!arr?.controls?.[rowIndex]) return true;
+
+    const group = arr.controls[rowIndex] as FormGroup;
+    const getValue = (controlName: string) => {
+      const c = group.get(controlName);
+      if (c instanceof FormGroup) return c.get(EMaterialsFormControls.value)?.value;
+      return c?.value;
+    };
+
+    const companyTypes: string[] = getValue(EMaterialsFormControls.companyType) || [];
+    const qualificationStatus: string | null = getValue(EMaterialsFormControls.qualificationStatus) ?? null;
+
+    const isManufacturer = companyTypes.includes(EServiceCompanyType.Manufacturers.toString());
+    const isContractor = companyTypes.includes(EServiceCompanyType.Contractors.toString());
+    const isOther = companyTypes.includes(EServiceCompanyType.Others.toString());
+
+    switch (field) {
+      case 'qualificationStatus':
+        return isManufacturer;
+      case 'products':
+        return isManufacturer && (
+          qualificationStatus === EServiceQualificationStatus.Qualified.toString() ||
+          qualificationStatus === EServiceQualificationStatus.UnderPreQualification.toString()
+        );
+      case 'companyOverview':
+        return isManufacturer && qualificationStatus === EServiceQualificationStatus.NotQualified.toString();
+      case 'keyProjectsExecutedByContractorForSEC':
+        return isContractor;
+      case 'companyOverviewKeyProjectDetails':
+        return isContractor;
+      case 'companyOverviewOther':
+        return isOther;
+      default:
+        return true;
+    }
   }
 }

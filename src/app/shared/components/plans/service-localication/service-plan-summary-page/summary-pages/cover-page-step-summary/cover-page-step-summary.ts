@@ -56,4 +56,8 @@ export class CoverPageStepSummary extends SummaryStepBaseClass {
     return this.getSectionSummaryFields('companyInformation')
   });
   coverPageServicesSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('services'));
+
+  onEditClick(): void {
+    this.onEdit.emit();
+  }
 }
