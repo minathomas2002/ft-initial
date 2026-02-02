@@ -86,9 +86,21 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
   });
 
   private hasArrayFieldComment(fieldKey: string, section: string, rowId: string | null): boolean {
+    // In the edit step, some fields use a UI-friendly inputKey (e.g. `whyChoseThisCompany_{index}`)
+    // even if the underlying form control key is a different enum value.
+    const aliases: string[] = [];
+    if (fieldKey === EMaterialsFormControls.whyChoseThisCompany) aliases.push('whyChoseThisCompany');
+
     return this.sectionSummaryFields().some((f) => {
-      const matchKey = f.inputKey === fieldKey || f.inputKey === `${section}.${fieldKey}` ||
-        (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1)));
+      const matchKey =
+        f.inputKey === fieldKey ||
+        f.inputKey === `${section}.${fieldKey}` ||
+        (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1))) ||
+        aliases.some((alias) =>
+          f.inputKey === alias ||
+          f.inputKey === `${section}.${alias}` ||
+          (f.inputKey?.startsWith(alias + '_') && /^\d+$/.test(f.inputKey.substring(alias.length + 1)))
+        );
       if (!matchKey) return false;
       return rowId == null ? f.id == null : f.id === rowId;
     });

@@ -351,30 +351,33 @@ export abstract class PlanStepBaseClass {
 
       // Subscribe to status changes to track when field becomes valid
       control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        if (control.status === 'VALID') {
+        // Also mark "changed once" if this control became dirty.
+        if (fieldForControl) {
+          this.markCorrectedFieldChangedOnce(fieldForControl, control);
+        }
+
+        // Only remove from selectedInputs if the control is VALID AND has been changed by the user
+        // This prevents premature removal when the form re-renders or status changes without user input
+        if (control.status === 'VALID' && control.dirty) {
           const field = correctedFields.find(f => this.getControlForField(f) === control);
           if (field) {
             this.upDateSelectedInputs(false, field);
           }
-        }
-
-        // Also mark "changed once" if this control became dirty.
-        if (fieldForControl) {
-          this.markCorrectedFieldChangedOnce(fieldForControl, control);
         }
       });
 
       // Also subscribe to value changes to handle cases where status doesn't change (e.g., file uploads)
       control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        if (control.status === 'VALID') {
+        if (fieldForControl) {
+          this.markCorrectedFieldChangedOnce(fieldForControl, control);
+        }
+
+        // Only remove from selectedInputs if the control is VALID AND has been changed by the user
+        if (control.status === 'VALID' && control.dirty) {
           const field = correctedFields.find(f => this.getControlForField(f) === control);
           if (field) {
             this.upDateSelectedInputs(false, field);
           }
-        }
-
-        if (fieldForControl) {
-          this.markCorrectedFieldChangedOnce(fieldForControl, control);
         }
       });
     });
