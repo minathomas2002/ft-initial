@@ -1169,6 +1169,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       // Emit statusChanges so the stepper can update its error counter.
       opportunityControl.updateValueAndValidity({ emitEvent: true });
       step2Overview.updateValueAndValidity({ emitEvent: true });
+
+      this.toasterService.error('Please select opportunity to save as draft');
       return;
     }
 
@@ -1502,9 +1504,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Step 2 = Overview (always step 2)
     // Step 3 = Existing Saudi (conditional, use existingSaudiStepIndex)
     // Step 4 = Direct Localization (conditional, use directLocalizationStepIndex)
-    
+
     let targetStepIndex: number;
-    
+
     if (summaryStepNumber === 1) {
       // Cover Page is always step 1
       targetStepIndex = 1;
@@ -1521,7 +1523,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       // Fallback: use the summary step number as-is
       targetStepIndex = summaryStepNumber;
     }
-    
+
     // Navigate to the target step
     if (targetStepIndex > 0) {
       this.navigateToStep(targetStepIndex);
