@@ -425,7 +425,9 @@
 
         <!-- Products Utilize Targeted Product -->
         <div class="flex flex-col gap-2">
-          <app-base-label [title]="'Which product(S) manufactured by SEC\'s approved local suppliers will utilize your \'Targeted Product\''" />
+          <span class="font-medium text-sm mb-[6px] inline-block text-gray-700">
+            Which product(S) manufactured by SEC's approved local suppliers will utilize your 'Targeted Product'
+          </span>
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
@@ -438,7 +440,7 @@
             <textarea
               pInputTextarea
               fluid
-              placeholder="Enter product(S)"
+              placeholder="Enter product(s)"
               [rows]="4"
               [maxlength]="255"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
@@ -452,7 +454,7 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
-            [label]="'product(S) manufactured'"
+            [label]="'product(s) manufactured'"
           />
         </div>
       </div>
@@ -702,21 +704,23 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Name(s) of SEC approved local supplier(s) -->
           <div class="flex flex-col gap-2">
-            <app-base-label [title]="'Name(S) of SEC approved local supplier(S)'" />
+            <span class="font-medium text-sm mb-[6px] inline-block text-gray-700">
+              Name(s) of SEC approved local supplier(s)
+            </span>
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'namesOfSECApprovedSuppliers',
-                label: 'Name(S) of SEC approved local supplier(S)'
+                label: 'Name(s) of SEC approved local supplier(s)'
               })"
             >
               <input
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter name(S) of SEC approved local supplier(S)"
+                placeholder="Enter name(s) of SEC approved local supplier(s)"
                 [maxlength]="255"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
                 [appConditionalColorClass]="highlightInput('namesOfSECApprovedSuppliers')"
@@ -725,7 +729,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
-              [label]="'Name(S) of SEC approved local supplier(S)'"
+              [label]="'Name(s) of SEC approved local supplier(s)'"
             />
           </div>
 

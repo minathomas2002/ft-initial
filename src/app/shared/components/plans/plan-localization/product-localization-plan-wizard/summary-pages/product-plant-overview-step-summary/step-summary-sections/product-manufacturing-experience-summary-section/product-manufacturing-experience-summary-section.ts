@@ -142,7 +142,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const currantValue = this.namesOfSECApprovedSuppliersControl()?.value ?? '';
     const beforeValue = this.mfg()?.localSupplierNames || '';
     return {
-      label: "Name(S) of SEC approved local supplier(S)",
+      label: "Name(s) of SEC approved local supplier(s)",
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.namesOfSECApprovedSuppliersControl()),
