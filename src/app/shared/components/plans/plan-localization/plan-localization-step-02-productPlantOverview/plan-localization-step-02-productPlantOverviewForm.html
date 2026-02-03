@@ -355,29 +355,17 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex flex-col gap-2 col-span-1">
           <app-base-label [title]="'Targeted Customer'" />
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'targetCustomers',
-              inputKey: 'targetedCustomer',
-              label: 'Targeted Customer'
-            })"
-          >
-            <p-multiselect
-              [options]="targetedCustomerOptions()"
-              [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
-              optionLabel="name"
-              optionValue="id"
-              display="chip"
-              dropdownIcon="icon-chevron-down"
-              fluid
-              [filter]="false"
-              [appHidePlaceholderWhenDisabledEmpty]="'Select targeted customer'"
-              [appConditionalColorClass]="highlightInput('targetedCustomer')"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
+          <p-multiselect
+            [options]="targetedCustomerOptions()"
+            [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+            optionLabel="name"
+            optionValue="id"
+            display="chip"
+            dropdownIcon="icon-chevron-down"
+            fluid
+            [filter]="false"
+            [appHidePlaceholderWhenDisabledEmpty]="'Select targeted customer'"
+          />
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
             [label]="'Targeted Customer'"
