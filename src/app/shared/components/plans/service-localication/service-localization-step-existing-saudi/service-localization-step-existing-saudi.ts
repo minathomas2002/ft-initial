@@ -114,7 +114,6 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   onStartEditing(): void {
     if (this.isResubmitMode()) {
       this.commentPhase.set('editing');
-
     }
   }
   EServiceProvidedTo = EServiceProvidedTo;

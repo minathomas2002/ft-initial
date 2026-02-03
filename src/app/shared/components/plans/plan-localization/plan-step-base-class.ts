@@ -346,8 +346,14 @@ export abstract class PlanStepBaseClass {
 
       // Enable the control itself
       control.enable({ emitEvent: false, onlySelf: true });
-      control.markAsPristine();
-      control.markAsUntouched();
+      // If the control is invalid (e.g. after failed submit + markAllControlsAsDirty), keep it dirty
+      // so that base-error-messages shows validation errors when the user opens the step.
+      if (control.status === 'VALID') {
+        control.markAsPristine();
+        control.markAsUntouched();
+      } else {
+        control.markAsDirty();
+      }
 
       // Subscribe to status changes to track when field becomes valid
       control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
