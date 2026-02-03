@@ -423,7 +423,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       title: 'Cover Page',
       description: 'Enter high-level submission and plan details',
       formState: this.serviceLocalizationFormService.step1_coverPage,
-      hasErrors: this.step1CommentPhase() === 'none',
+      hasErrors: this.step1CommentPhase() === 'none' || this.step1CommentPhase() === 'viewing',
       commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
       commentColor: this.getCommentColorForStep(this.step1CommentPhase()),
     });
@@ -433,7 +433,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       title: 'Overview',
       description: 'Provide an overview of the localization plan',
       formState: this.serviceLocalizationFormService.step2_overview,
-      hasErrors: this.step2CommentPhase() === 'none',
+      hasErrors: this.step2CommentPhase() === 'none' || this.step2CommentPhase() === 'viewing',
       commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
       commentColor: this.getCommentColorForStep(this.step2CommentPhase()),
     });
@@ -444,7 +444,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         title: 'Existing Saudi Co.',
         description: 'Enter details of your existing presence in Saudi Arabia',
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
-        hasErrors: this.step3CommentPhase() === 'none',
+        hasErrors: this.step3CommentPhase() === 'none' || this.step3CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step3CommentPhase()),
       });
@@ -456,7 +456,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         title: 'Direct Localization',
         description: 'Provide direct localization and investment details',
         formState: this.serviceLocalizationFormService.step4_directLocalization,
-        hasErrors: this.step4CommentPhase() === 'none',
+        hasErrors: this.step4CommentPhase() === 'none' || this.step4CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step4CommentPhase()),
       });

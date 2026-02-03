@@ -123,7 +123,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         description: this.i18nService.translate('plans.wizard.step1.description'),
         isActive: this.activeStep() === 1,
         formState: this.productPlanFormService.overviewCompanyInformation,
-        hasErrors: this.step1CommentPhase() === 'none',
+        hasErrors: this.step1CommentPhase() === 'none' || this.step1CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step1CommentPhase()),
       },
@@ -132,7 +132,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         description: this.i18nService.translate('plans.wizard.step2.description'),
         isActive: this.activeStep() === 2,
         formState: this.productPlanFormService.step2_productPlantOverview,
-        hasErrors: this.step2CommentPhase() === 'none',
+        hasErrors: this.step2CommentPhase() === 'none' || this.step2CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step2CommentPhase()),
       },
@@ -141,7 +141,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         description: this.i18nService.translate('plans.wizard.step3.description'),
         isActive: this.activeStep() === 3,
         formState: this.productPlanFormService.step3_valueChain,
-        hasErrors: this.step3CommentPhase() === 'none',
+        hasErrors: this.step3CommentPhase() === 'none' || this.step3CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step3CommentPhase()),
       },
@@ -150,7 +150,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         description: this.i18nService.translate('plans.wizard.step4.description'),
         isActive: this.activeStep() === 4,
         formState: this.productPlanFormService.step4_saudization,
-        hasErrors: this.step4CommentPhase() === 'none',
+        hasErrors: this.step4CommentPhase() === 'none' || this.step4CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step4CommentPhase()),
       },
@@ -181,7 +181,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   // Computed signal to check if incoming comments should be shown
   shouldShowIncomingComments = computed(() => {
     const mode = this.planStore.wizardMode();
-
     const creatorRole = this.planStore.planComments()?.creatorRole;
     const currentSignedUser = this.authStore.jwtUserDetails()
     const isSameUserRole = currentSignedUser?.RoleCodes.toString() === creatorRole?.toString()
