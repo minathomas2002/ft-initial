@@ -64,7 +64,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       // expectedLocalizationDate is for the Localization Strategy table
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(50)]], // Required, quarters and years only, future date
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, quarters and years only, future date
       }),
       // serviceLevelLocalizationDate is for the Service Level table (sent as LocalizationDate to backend)
       [EMaterialsFormControls.serviceLevelLocalizationDate]: this.fb.group({

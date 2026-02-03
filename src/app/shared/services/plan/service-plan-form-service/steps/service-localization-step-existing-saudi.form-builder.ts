@@ -17,7 +17,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
       }),
-      [EMaterialsFormControls.registeredVendorIDwithSEC]:  this.fb.group({
+      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(null, [Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
       }),
@@ -173,7 +173,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(50)]], // Required, Quarter & Year
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, Quarter & Year
       }),
     };
 
