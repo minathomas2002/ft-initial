@@ -328,11 +328,21 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
           .subscribe((value) => {
             this.planFormService.toggleLocalizationApproachOtherDetailsValidation(value ?? null, index);
 
+            // When user changes away from "Other", remove the Other details field from selectedInputs
+            // so the wizard indicator updates correctly (description is no longer a required field).
+            const isOther = value === ELocalizationApproach.Other.toString();
+            if (!isOther) {
+              const inputKey = `localizationApproachOtherDetails_${index}`;
+              const current = this.selectedInputs();
+              const updated = current.filter(
+                input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
+              );
+              if (updated.length !== current.length) this.selectedInputs.set(updated);
+            }
+
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
               this._userChangedDropdowns.add(`localizationApproach_${index}`);
-              // Enable the conditional field if dropdown is now "Other"
-              const isOther = value === ELocalizationApproach.Other.toString();
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
@@ -369,11 +379,21 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
           .subscribe((value) => {
             this.planFormService.toggleLocationOtherDetailsValidation(value ?? null, index);
 
+            // When user changes away from "Other", remove the Other details field from selectedInputs
+            // so the wizard indicator updates correctly.
+            const isOther = value === ELocation.Other.toString();
+            if (!isOther) {
+              const inputKey = `locationOtherDetails_${index}`;
+              const current = this.selectedInputs();
+              const updated = current.filter(
+                input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
+              );
+              if (updated.length !== current.length) this.selectedInputs.set(updated);
+            }
+
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
               this._userChangedDropdowns.add(`location_${index}`);
-              // Enable the conditional field if dropdown is now "Other"
-              const isOther = value === ELocation.Other.toString();
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });

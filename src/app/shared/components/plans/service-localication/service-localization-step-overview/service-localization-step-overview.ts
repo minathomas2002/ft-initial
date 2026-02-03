@@ -207,6 +207,19 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
 
   onServiceProvidedToChange(value: Array<string | number> | null, index: number): void {
     this.planFormService.toggleServiceProvidedToCompanyNamesValidation(value, index);
+
+    // When user deselects "Others", remove the Company Names field from selectedInputs
+    // so the wizard indicator updates correctly (description is no longer a required field).
+    if (!this.hasServiceProvidedToOthers(value)) {
+      const inputKey = `serviceProvidedToCompanyNames_${index}`;
+      const current = this.selectedInputs();
+      const updated = current.filter(
+        input => !(input.section === 'serviceDetails' && input.inputKey === inputKey)
+      );
+      if (updated.length !== current.length) {
+        this.selectedInputs.set(updated);
+      }
+    }
   }
 
   onServiceTargetedForLocalizationChange(value: string | boolean | number | null, index: number): void {

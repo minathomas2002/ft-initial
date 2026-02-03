@@ -713,11 +713,20 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         control.valueChanges
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((value) => {
+            const isOther = value === AgreementType.Other.toString();
+            // When user changes away from "Other", remove the Other details field from selectedInputs
+            // so the wizard indicator updates correctly.
+            if (!isOther) {
+              const inputKey = `agreementOtherDetails_${index}`;
+              const current = this.selectedInputs();
+              const updated = current.filter(
+                input => !(input.section === 'collaborationPartnership' && input.inputKey === inputKey)
+              );
+              if (updated.length !== current.length) this.selectedInputs.set(updated);
+            }
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
               this._userChangedDropdowns.add(`agreementType_${index}`);
-              // Enable the conditional field if dropdown is now "Other"
-              const isOther = value === AgreementType.Other.toString();
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.agreementOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
