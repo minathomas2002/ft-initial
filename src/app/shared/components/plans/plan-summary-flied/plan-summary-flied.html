@@ -9,7 +9,7 @@
         <span class="text-sm font-medium bg-success-50 border-success-500 break-words border p-1 rounded-md">{{ planSummaryField().currantValue }}</span>
       </div>
       } @else {
-      @if (planSummaryField().showDifference && !planSummaryField().hasError) {
+      @if (planSummaryField().showDifference && !planSummaryField().hasError && !isAttachment()) {
       <div class="flex items-center gap-2">
         <span class="text-sm font-medium text-gray-500 line-through break-words border border-gray-200 bg-gray-50 p-1 rounded-md">{{ planSummaryField().beforeValue }}</span>
         <i class="icon-arrow-right text-gray-500 text-xs"></i>

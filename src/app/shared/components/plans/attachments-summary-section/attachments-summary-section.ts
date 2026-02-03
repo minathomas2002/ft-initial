@@ -29,6 +29,37 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
 
   hasAttachments = computed(() => this.attachments().length > 0);
 
+  /** Original attachments from plan response (service or product) for before/after comparison. */
+  private beforeAttachments = computed<AttachmentItem[]>(() => {
+    const servicePlan = this.planStore.servicePlanData()?.servicePlan;
+    if (servicePlan?.attachments?.length) {
+      return servicePlan.attachments as AttachmentItem[];
+    }
+    const productPlan = this.planStore.productPlanData()?.productPlan;
+    const saudization = productPlan?.saudization;
+    if (saudization?.attachments?.length) {
+      return saudization.attachments as AttachmentItem[];
+    }
+    return [];
+  });
+
+  /** Comparable string for attachment list (sorted file names/ids) for difference check. */
+  private attachmentSignature(items: AttachmentItem[]): string {
+    if (!items?.length) return '';
+    const sorted = [...items]
+      .map((a) => a.fileName || a.name || a.id || '')
+      .filter(Boolean)
+      .sort();
+    return sorted.join('\n');
+  }
+
+  /** True in resubmit mode when current attachments differ from original. */
+  shouldShowDifferenceForAttachments = computed(() => {
+    const current = this.attachmentSignature(this.attachments());
+    const before = this.attachmentSignature(this.beforeAttachments());
+    return this.shouldShowDifference(current, before);
+  });
+
   attachmentsSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
     return {
@@ -37,8 +68,8 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
       currantValue: '',
       hasError: this.isFieldHasError(this.getValueFormControl(EMaterialsFormControls.attachments)),
       hasComment: !this.isResolved() && this.isFieldHasComment(EMaterialsFormControls.attachments),
-      isResolved: false,
-      showDifference: false,
+      isResolved: this.isResolved(),
+      showDifference: this.shouldShowDifferenceForAttachments(),
     };
   });
 
