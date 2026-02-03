@@ -4,12 +4,7 @@
   [(activeStep)]="activeStep"
   [steps]="steps()"
   [wizardTitle]="wizardTitle()"
-  (onNextStep)="nextStep()"
-  (onPreviousStep)="previousStep()"
-  (onSaveAsDraft)="saveAsDraft()"
-  [isLoading]="isLoading() || isLoadingPlan()"
-  [isProcessing]="isProcessing()"
-  [hideSaveAsDraft]="isViewMode() || isReviewMode() || isResubmitMode()"
+  [actions]="wizardActions()"
   (onClose)="onClose()"
 >
   @if (shouldShowStatusTag()) {
@@ -131,66 +126,6 @@
       (onEditStep)="onEditStepFromSummary($event)"
     />
   </ng-template>
-
-  <ng-container ngProjectAs="final-step-action">
-    @if (activeStep() === summaryStepIndex() && !isViewMode()) {
-    @if (isReviewMode()) {
-    <p-button
-      [label]="'Reject'"
-      severity="danger"
-      [disabled]="!canApproveOrReject()"
-      (click)="onReject()"
-    ></p-button>
-    <p-button
-      [label]="'Approve & Forward'"
-      [disabled]="!canApproveOrReject()"
-      (click)="onApproveAndForward()"
-    ></p-button>
-    } @else if (isResubmitMode()) {
-    <p-button
-      [label]="'Resubmit'"
-      (click)="onSummarySubmitClick()"
-      [disabled]="!allowUserToResubmit()"
-    ></p-button>
-    } @else {
-    <p-button
-      [label]="'Submit'"
-      (click)="onSummarySubmitClick()"
-    ></p-button>
-    }
-    }
-  </ng-container>
-
-  <ng-container ngProjectAs="more-actions">
-    @if(canOpenTimeline()){
-    <p-button
-      label="Timeline"
-      icon="icon-list"
-      text
-      severity="secondary"
-      (click)="timelineVisibility.set(true)"
-    ></p-button>
-    }
-    @if (isReviewMode() && activeStep() === stepsCount()) {
-    <p-button
-      text
-      (click)="onSendBackToInvestor()"
-      styleClass="p-0!"
-    >
-      <span class="underline text-md font-semibold">Send Back to Investor</span>
-    </p-button>
-    }
-    @if((isReviewMode() || isResubmitMode()) && activeStep() <stepsCount()){
-      <p-button
-      [label]="'Add Comments'"
-      text
-      icon="icon-message-circle"
-      severity="secondary"
-      (click)="onAddComment()"
-      [disabled]="isAddCommentButtonDisabled()"
-    ></p-button>
-      }
-  </ng-container>
 </app-base-wizard-dialog>
 }
 

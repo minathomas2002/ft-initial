@@ -740,6 +740,16 @@
         "view": "View Plan",
         "create": "Product Localization Plan"
       },
+      "saveAsDraft": "Save as Draft",
+      "back": "Back",
+      "next": "Next",
+      "submit": "Submit",
+      "resubmit": "Resubmit",
+      "approveAndForward": "Approve & Forward",
+      "reject": "Reject",
+      "sendBackToInvestor": "Send Back to Investor",
+      "addComments": "Add Comments",
+      "timeline": "Timeline",
       "messages": {
         "fixValidationErrors": "Please fix all validation errors before submitting",
         "errorLoadingPlan": "Error loading plan data. Please try again.",

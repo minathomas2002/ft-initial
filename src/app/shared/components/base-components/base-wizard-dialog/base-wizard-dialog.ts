@@ -10,6 +10,7 @@ import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interfa
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { ImageErrorDirective } from '../../../directives/image-error.directive';
+import { BaseWizardActions, IBaseWizardAction } from '../base-wizard-actions/base-wizard-actions';
 
 
 
@@ -22,8 +23,8 @@ import { ImageErrorDirective } from '../../../directives/image-error.directive';
     CommonModule,
     ScrollPanelModule,
     WizardStepStateComponent,
-    TranslatePipe,
-    ImageErrorDirective
+    ImageErrorDirective,
+    BaseWizardActions
   ],
   templateUrl: './base-wizard-dialog.html',
   styleUrl: './base-wizard-dialog.scss',
@@ -33,19 +34,14 @@ export class BaseWizardDialog {
   private i18nService = inject(I18nService);
   activeStep = model<number>(1);
   visible = model<boolean>(false);
-  finalStepLabel = input<string>('Submit');
   isFinalStep = computed(() => this.activeStep() === this.steps().length);
   isFirstStep = computed(() => this.activeStep() === 1);
   onClose = output<void>();
   onShow = output<void>();
-  onNextStep = output<void>();
-  onPreviousStep = output<void>();
-  onSaveAsDraft = output<void>();
-  isLoading = input<boolean>(false);
-  isProcessing = input<boolean>(false);
-  isSavingAsDraft = input<boolean>(false);
   wizardTitle = input<string>('Create Opportunity');
-  hideSaveAsDraft = input<boolean>(false);
+
+  // Centralized actions
+  actions = input<IBaseWizardAction[]>([]);
 
   /**
    * Handles the close button click.
@@ -56,9 +52,6 @@ export class BaseWizardDialog {
     this.onClose.emit();
   }
 
-  // Computed to get current language for icon direction
-  currentLanguage = computed(() => this.i18nService.currentLanguage());
-  nextButtonIcon = computed(() => this.currentLanguage() === 'ar' ? 'icon-arrow-left' : 'icon-arrow-right');
   pt: DialogPassThrough = {
     header: {
       class: '!ps-0 !pt-0 !pb-0',
@@ -139,15 +132,5 @@ export class BaseWizardDialog {
     } catch (error) {
       console.warn('Failed to reset scroll position:', error);
     }
-  }
-
-  previousStep = () => {
-    this.onPreviousStep.emit();
-  }
-  nextStep = () => {
-    this.onNextStep.emit();
-  }
-  saveAsDraft = () => {
-    this.onSaveAsDraft.emit();
   }
 }
