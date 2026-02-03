@@ -19,6 +19,8 @@ import { IOpportunityDetails } from 'src/app/shared/interfaces/opportunities.int
 import { TColors } from 'src/app/shared/interfaces/colors.interface';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { WizardActionFactory } from 'src/app/shared/services/wizard/wizard-action-factory.service';
+import { IBaseWizardAction } from 'src/app/shared/components/base-components/base-wizard-actions/base-wizard-actions';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -44,6 +46,7 @@ export class CreateEditOpportunityDialog implements OnInit {
   toasterService = inject(ToasterService);
   i18nService = inject(I18nService);
   opportunityFilterService = inject(OpportunitiesFilterService);
+  private readonly wizardActionFactory = inject(WizardActionFactory);
   viewMode = this.adminOpportunitiesStore.viewMode;
   opportunity = signal<IOpportunityDetails | null>(null);
   steps = computed<IWizardStepState[]>(() => [
@@ -66,6 +69,24 @@ export class CreateEditOpportunityDialog implements OnInit {
   onSuccess = output<void>();
   wizardTitle = computed(() => (this.viewMode() === EViewMode.Edit ? this.i18nService.translate('opportunity.wizard.editOpportunity') : this.i18nService.translate('opportunity.wizard.createOpportunity')));
   showConfirmLeaveDialog = signal<boolean>(false);
+
+  // Total steps computed signal
+  totalSteps = computed(() => this.steps().length);
+
+  // Centralized wizard actions using the action factory
+  wizardActions = this.wizardActionFactory.generateActions({
+    context: 'opportunity-wizard',
+    mode: this.viewMode() === EViewMode.Edit ? 'edit' : 'create',
+    activeStep: this.activeStep,
+    totalSteps: this.totalSteps,
+    isLoading: this.adminOpportunitiesStore.isLoading,
+    isProcessing: this.adminOpportunitiesStore.isProcessing,
+    isSavingAsDraft: this.adminOpportunitiesStore.isSavingAsDraft,
+    onPrevious: () => this.previousStep(),
+    onNext: () => this.nextStep(),
+    onSaveAsDraft: () => this.saveAsDraft(),
+    onPublish: () => this.publishOpportunity()
+  });
 
   constructor() {
     // Reset form and handle mode changes when dialog becomes visible

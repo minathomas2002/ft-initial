@@ -33,6 +33,8 @@ import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.i
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
+import { WizardActionFactory, IWizardActionConfig } from "src/app/shared/services/wizard/wizard-action-factory.service";
+import { IBaseWizardAction } from "../../../base-components/base-wizard-actions/base-wizard-actions";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 
@@ -73,6 +75,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
+  private readonly wizardActionFactory = inject(WizardActionFactory);
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
@@ -467,6 +470,40 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step4HasComment = step4CommentControl?.value && step4CommentControl.value.trim().length > 0;
 
     return step1HasComment || step2HasComment || step3HasComment || step4HasComment;
+  });
+
+  // Computed signal for total steps count
+  totalSteps = computed(() => this.steps().length);
+
+  // Computed signal to check if Add Comment button should be disabled
+  override isAddCommentButtonDisabled = computed(() => {
+    return this.currentStepCommentPhase() !== 'none';
+  });
+
+  wizardActions = this.wizardActionFactory.generateActions({
+    context: 'product-plan',
+    mode: this.mode(),
+    activeStep: this.activeStep,
+    totalSteps: this.totalSteps,
+    isLoading: this.isLoading,
+    isProcessing: this.isProcessing,
+    hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode() || this.isInvestorViewMode()),
+    canApproveOrReject: this.canApproveOrReject,
+    allowUserToResubmit: this.allowUserToResubmit,
+    canOpenTimeline: this.canOpenTimeline,
+    isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
+    isInvestorViewMode: this.isInvestorViewMode,
+
+    onPrevious: () => this.previousStep(),
+    onNext: () => this.nextStep(),
+    onSaveAsDraft: () => this.saveAsDraft(),
+    onSubmit: () => this.onSummarySubmitClick(),
+    onApproveAndForward: () => this.onApproveAndForward(),
+    onReject: () => this.onReject(),
+    onSendBackToInvestor: () => this.onSendBackToInvestor(),
+    onAddComment: () => this.onAddComment(),
+    onOpenTimeline: () => this.timelineVisibility.set(true),
+    onResubmit: () => this.onSummarySubmitClick()
   });
 
   constructor() {

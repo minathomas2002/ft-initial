@@ -44,6 +44,8 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { EInternalUserPlanStatus, EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
+import { WizardActionFactory, IWizardActionConfig } from 'src/app/shared/services/wizard/wizard-action-factory.service';
+import { IBaseWizardAction } from '../../../base-components/base-wizard-actions/base-wizard-actions';
 
 type ServiceLocalizationWizardStepId =
   | 'cover'
@@ -83,6 +85,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   override readonly toasterService = inject(ToasterService);
+  private readonly wizardActionFactory = inject(WizardActionFactory);
 
 
   visibility = model(false);
@@ -522,6 +525,40 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
 
   validationErrors = signal<Map<number, boolean>>(new Map());
+
+  // Computed signal to check if Add Comment button should be disabled
+  override isAddCommentButtonDisabled = computed(() => {
+    const stepId = this.stepsWithId()[this.activeStep() - 1]?.id;
+    if (!stepId) return false;
+    const currentStepCommentPhase = this.getCommentPhaseForStepId(stepId);
+    return currentStepCommentPhase !== 'none';
+  });
+
+  // Centralized wizard actions using the action factory
+  wizardActions = this.wizardActionFactory.generateActions({
+    context: 'service-plan',
+    mode: this.mode(),
+    activeStep: this.activeStep,
+    totalSteps: this.stepsCount,
+    isLoading: this.isLoading,
+    isProcessing: this.isProcessing,
+    hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode()),
+    canApproveOrReject: this.canApproveOrReject,
+    allowUserToResubmit: this.allowUserToResubmit,
+    canOpenTimeline: this.canOpenTimeline,
+    isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
+
+    onPrevious: () => this.previousStep(),
+    onNext: () => this.nextStep(),
+    onSaveAsDraft: () => this.saveAsDraft(),
+    onSubmit: () => this.onSummarySubmitClick(),
+    onApproveAndForward: () => this.onApproveAndForward(),
+    onReject: () => this.onReject(),
+    onSendBackToInvestor: () => this.onSendBackToInvestor(),
+    onAddComment: () => this.onAddComment(),
+    onOpenTimeline: () => this.timelineVisibility.set(true),
+    onResubmit: () => this.onSummarySubmitClick(),
+  });
 
   constructor() {
     super();
