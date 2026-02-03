@@ -76,42 +76,8 @@
         <ng-container *ngTemplateOutlet="content.templateRef"></ng-container>
         } } } }
       </div>
-      <div class="actions flex justify-between items-center pt-[16px] border-t border-gray-200">
-        <div class="flex-1">
-          @if (!hideSaveAsDraft()) {
-          <p-button
-            text
-            icon="icon-save"
-            [label]="'opportunity.wizard.saveAsDraft' | translate"
-            severity="secondary"
-            (click)="saveAsDraft()"
-            [disabled]="isSavingAsDraft() || isProcessing()"
-            [loading]="isSavingAsDraft()"
-          />
-          }
-          <ng-content select="more-actions"></ng-content>
-        </div>
-        <div class="flex gap-4">
-          @if (!isFirstStep()) {
-          <p-button
-            (click)="previousStep()"
-            severity="secondary"
-            [icon]="currentLanguage() === 'ar' ? 'icon-arrow-right' : 'icon-arrow-left'"
-            [label]="'opportunity.wizard.back' | translate"
-            [disabled]="isLoading()"
-          />
-          } @if (!isFinalStep()) {
-          <p-button
-            (click)="nextStep()"
-            [icon]="nextButtonIcon()"
-            [label]="'opportunity.wizard.next' | translate"
-            [disabled]="isLoading()"
-            [loading]="isLoading()"
-          />
-          } @if (isFinalStep()) {
-          <ng-content select="final-step-action"></ng-content>
-          }
-        </div>
+      <div class="pt-[16px] border-t border-gray-200">
+        <app-base-wizard-actions [actions]="actions()" />
       </div>
     </div>
   </div>
