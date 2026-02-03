@@ -42,6 +42,9 @@
             </td>
             <td class="border-t border-gray-300 p-4 min-w-[400px]">
               <app-plan-summary-flied [planSummaryField]="row.serviceProvidedTo" />
+              @if (row.showServiceProvidedToCompanyNames) {
+              <app-plan-summary-flied [planSummaryField]="row.serviceProvidedToCompanyNames" />
+              }
             </td>
             <td class="border-t border-gray-300 p-4 min-w-[400px]">
               <app-plan-summary-flied [planSummaryField]="row.totalBusiness" />
