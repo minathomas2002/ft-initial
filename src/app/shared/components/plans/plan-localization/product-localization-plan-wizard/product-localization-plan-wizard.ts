@@ -1064,9 +1064,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   /**
-   * Validates step 03 value chain form arrays
-   * If any form array item has dirty controls (cost, inhouse, or years) but expenseHeader is empty,
-   * marks expenseHeader as dirty and returns error message
+   * Validates step 03 value chain form arrays.
+   * For every form array item that has a value in cost, in-house, or years but empty expenseHeader,
+   * marks that expenseHeader control as dirty. Marks all invalid expenseHeader controls across all
+   * sections, then returns a single error message if any were invalid.
    */
   private validateStep03ValueChain(): string | null {
     const formArrays = [
@@ -1076,6 +1077,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       { name: 'Assembly & Testing', formArray: this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.assemblyTestingFormGroup) },
       { name: 'After-Sales', formArray: this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.afterSalesFormGroup) }
     ];
+
+    const invalidExpenseHeaderControls: { control: FormControl<unknown>; sectionName: string }[] = [];
 
     for (const section of formArrays) {
       if (!section.formArray) {
@@ -1088,7 +1091,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           continue;
         }
 
-        // Get form controls
         const expenseHeaderControl = itemControl.get(EMaterialsFormControls.expenseHeader);
         const costPercentageControl = itemControl.get(EMaterialsFormControls.costPercentage);
         const inHouseOrProcuredControl = itemControl.get(EMaterialsFormControls.inHouseOrProcured);
@@ -1102,7 +1104,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           itemControl.get(EMaterialsFormControls.year7)
         ];
 
-        // Get actual value controls using getValueControl helper
         const expenseHeaderValueControl = expenseHeaderControl ? this.productPlanFormService.getValueControl(expenseHeaderControl) : null;
         const costPercentageValueControl = costPercentageControl ? this.productPlanFormService.getValueControl(costPercentageControl) : null;
         const inHouseOrProcuredValueControl = inHouseOrProcuredControl ? this.productPlanFormService.getValueControl(inHouseOrProcuredControl) : null;
@@ -1110,23 +1111,32 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           .filter(control => control !== null)
           .map(control => this.productPlanFormService.getValueControl(control!));
 
-        // Check if any of these controls are dirty
         const hasDirtyControl =
           (costPercentageValueControl?.dirty) ||
           (inHouseOrProcuredValueControl?.dirty) ||
           yearValueControls.some(control => control?.dirty);
 
-        // If any control is dirty, check if expenseHeader is filled
         if (hasDirtyControl && expenseHeaderValueControl) {
           const expenseHeaderValue = expenseHeaderValueControl.value;
           if (!expenseHeaderValue || (typeof expenseHeaderValue === 'string' && expenseHeaderValue.trim() === '')) {
-            // Mark expenseHeader as dirty
-            expenseHeaderValueControl.markAsDirty();
-            expenseHeaderValueControl.updateValueAndValidity();
-            return `Expense Header is required in ${section.name} section. Please fill it before saving as draft.`;
+            invalidExpenseHeaderControls.push({ control: expenseHeaderValueControl, sectionName: section.name });
           }
         }
       }
+    }
+
+    // Mark all invalid expenseHeader controls as dirty
+    const sectionNames = [...new Set(invalidExpenseHeaderControls.map(x => x.sectionName))];
+    for (const { control } of invalidExpenseHeaderControls) {
+      control?.markAsDirty();
+      control?.updateValueAndValidity();
+    }
+
+    if (invalidExpenseHeaderControls.length > 0) {
+      const sectionsText = sectionNames.length === 1
+        ? sectionNames[0]
+        : sectionNames.join(', ');
+      return `Expense Header is required in ${sectionsText} section(s). Please fill it before saving as draft.`;
     }
 
     return null;
