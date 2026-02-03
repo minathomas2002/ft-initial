@@ -162,6 +162,10 @@
                 [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+                [label]="'Year 1'"
+              />
             </app-group-input-with-checkbox>
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -184,6 +188,10 @@
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
+              />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+                [label]="'Year 2'"
               />
             </app-group-input-with-checkbox>
           </td>
@@ -209,6 +217,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [label]="'Year 3'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -232,6 +244,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [label]="'Year 4'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -255,6 +271,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [label]="'Year 5'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -278,6 +298,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [label]="'Year 6'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -301,6 +325,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [label]="'Year 7'"
+            />
           </td>
         </ng-template>
       </app-form-array-input>
@@ -451,6 +479,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+              [label]="'Year 2'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -474,6 +506,14 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [label]="'Year 1'"
+            />
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [label]="'Year 3'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -497,6 +537,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [label]="'Year 4'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -520,6 +564,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [label]="'Year 5'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -543,6 +591,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [label]="'Year 6'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -566,6 +618,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [label]="'Year 7'"
+            />
           </td>
         </ng-template>
       </app-form-array-input>
@@ -693,6 +749,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [label]="'Year 1'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -716,6 +776,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+              [label]="'Year 2'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -739,6 +803,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [label]="'Year 3'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -762,6 +830,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [label]="'Year 4'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -785,6 +857,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [label]="'Year 5'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -808,6 +884,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [label]="'Year 6'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -831,6 +911,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [label]="'Year 7'"
+            />
           </td>
         </ng-template>
       </app-form-array-input>
@@ -957,6 +1041,10 @@
                 [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+                [label]="'Year 1'"
+              />
             </app-group-input-with-checkbox>
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -979,6 +1067,10 @@
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
+              />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+                [label]="'Year 2'"
               />
             </app-group-input-with-checkbox>
           </td>
@@ -1004,6 +1096,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [label]="'Year 3'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1027,6 +1123,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [label]="'Year 4'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1050,6 +1150,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [label]="'Year 5'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1073,6 +1177,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [label]="'Year 6'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1096,6 +1204,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [label]="'Year 7'"
+            />
           </td>
         </ng-template>
       </app-form-array-input>
@@ -1223,6 +1335,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [label]="'Year 1'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1246,6 +1362,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+              [label]="'Year 2'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1269,6 +1389,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+              [label]="'Year 3'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1292,6 +1416,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+              [label]="'Year 4'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1315,6 +1443,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+              [label]="'Year 5'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1338,6 +1470,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+              [label]="'Year 6'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -1361,6 +1497,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+              [label]="'Year 7'"
+            />
           </td>
         </ng-template>
       </app-form-array-input>
