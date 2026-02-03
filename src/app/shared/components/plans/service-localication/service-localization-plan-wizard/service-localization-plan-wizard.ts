@@ -986,7 +986,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         }
         : undefined;
 
-    debugger
     // Check if all forms are valid
     if (!this.serviceLocalizationFormService.areAllFormsValid({
       includeExistingSaudi,
