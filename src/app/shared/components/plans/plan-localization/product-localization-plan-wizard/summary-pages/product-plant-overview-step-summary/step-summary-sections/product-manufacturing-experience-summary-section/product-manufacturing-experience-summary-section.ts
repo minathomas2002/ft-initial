@@ -169,7 +169,6 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   yearsOfExperienceSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    debugger
     const currantValue = this.yearsOfExperienceControl()?.value ?? '0';
     const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '0';
     return {
