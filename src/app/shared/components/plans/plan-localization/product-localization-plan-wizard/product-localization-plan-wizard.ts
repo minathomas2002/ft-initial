@@ -5,20 +5,15 @@ import { ButtonModule } from "primeng/button";
 import { BaseTagComponent } from "../../../base-components/base-tag/base-tag.component";
 import { StepContentDirective } from "src/app/shared/directives";
 import { ProductPlanFormService } from "src/app/shared/services/plan/product-plan-form-service/product-plan-form-service";
-import { ProductPlanValidationService } from "src/app/shared/services/plan/validation/product-plan-validation.service";
 import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
-import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
-import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
 import { IFieldInformation, IPageComment, IProductPlanResponse, Signature } from "src/app/shared/interfaces/plans.interface";
-import { I18nService } from "src/app/shared/services/i18n/i18n.service";
-import { HandlePlanStatusFactory } from "src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory";
 import { TimelineDialog } from "../../../timeline/timeline-dialog/timeline-dialog";
-import { EInternalUserPlanStatus, IPlanRecord } from "src/app/shared/interfaces/dashboard-plans.interface";
+import { EInternalUserPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PlanLocalizationStep04SaudizationForm } from "../plan-localization-step-04-saudization/plan-localization-step-04-saudizationForm";
 import { PlanLocalizationStep01OverviewCompanyInformationForm } from "../plan-localization-step-01-overviewCompanyInformation/plan-localization-step-01-overviewCompanyInformationForm";
 import { PlanLocalizationStep02ProductPlantOverviewForm } from "../plan-localization-step-02-productPlantOverview/plan-localization-step-02-productPlantOverviewForm";
@@ -27,7 +22,6 @@ import { GeneralConfirmationDialogComponent } from "../../../utility-components/
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TColors } from "src/app/shared/interfaces";
-import { AuthStore } from "src/app/shared/stores/auth/auth.store";
 import { ERoles } from "src/app/shared/enums/roles.enum";
 import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
@@ -68,18 +62,15 @@ type ProductLocalizationWizardStepId =
 })
 export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnDestroy {
   productPlanFormService = inject(ProductPlanFormService);
-  override readonly toasterService = inject(ToasterService);
-  override readonly planStore = inject(PlanStore);
-  validationService = inject(ProductPlanValidationService);
-  private readonly i18nService = inject(I18nService);
-  private readonly planStatusFactory = inject(HandlePlanStatusFactory);
+
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
   isSubmitted = signal<boolean>(false);
-
+  isLoading = signal(false);
+  isLoadingPlan = signal(false);
   timelineVisibility = signal(false);
-  selectedPlan = signal<IPlanRecord | null>(null);
+
 
   // Mode and plan ID from store
   mode = this.planStore.wizardMode;
@@ -87,6 +78,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   canOpenTimeline = computed(() => {
     return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.activeStep() < 5)
   })
+
+  // Submission confirmation modal
+  showSubmissionModal = signal(false);
+  existingSignature = signal<string | null>(null);
+  planSignature = signal<Signature | null>(null);
 
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
@@ -342,13 +338,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     if (currentMode === 'resubmit') return 'Resubmit Product Localization Plan';
     return this.i18nService.translate('plans.wizard.title.create');
   });
-  isLoading = signal(false);
-  isLoadingPlan = signal(false);
-
-  // Submission confirmation modal
-  showSubmissionModal = signal(false);
-  existingSignature = signal<string | null>(null);
-  planSignature = signal<Signature | null>(null);
 
   showConfirmLeaveDialog = model(false);
   // Store original plan response for before/after comparison

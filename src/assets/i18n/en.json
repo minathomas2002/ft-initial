@@ -825,7 +825,9 @@
       "submitted": "Submitted",
       "pendingOnInvestor": "Pending on Investor",
       "pendingWithInvestor": "Pending with Investor",
-      "draft": "Draft"
+      "draft": "Draft", 
+      "returnedByDV": "Returned by DV Manager",
+      "returnedByDEPTManager": "Returned by DEPT Manager"
     },
     "type": {
       "services": "Services",

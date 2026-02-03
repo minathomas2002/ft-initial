@@ -22,6 +22,7 @@ export class PlanTimelineStatusMapper {
       [EStatusPlanTimeLine.DVRejected]: 'red',
       [EStatusPlanTimeLine.DEPTRejected]: 'red',
       [EStatusPlanTimeLine.DVRejectionAcknowledged]: 'orange',
+      [EStatusPlanTimeLine.ReturnedByDV]: 'blue',
     };
     return classMap[status] as TColors || 'primary';
   }
@@ -42,6 +43,7 @@ export class PlanTimelineStatusMapper {
       [EStatusPlanTimeLine.Reassigned]: this.i18nService.translate('plans.employee_status.reassigned'),
       [EStatusPlanTimeLine.assigned]: this.i18nService.translate('plans.employee_status.assigned'),
       [EStatusPlanTimeLine.Submitted]: this.i18nService.translate('plans.employee_status.submitted'),
+      [EStatusPlanTimeLine.ReturnedByDV]: this.i18nService.translate('plans.employee_status.returnedByDV'),
     };
     return statusMap[status] || '';
   }

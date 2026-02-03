@@ -109,6 +109,9 @@ export class PlanApiService {
   sendPlanBackToInvestor(req: ReviewPlanRequest): Observable<IBaseApiResponse<boolean>> {
     return this.baseHttpService.post<boolean, ReviewPlanRequest, unknown>(API_ENDPOINTS.plans.reviewPlan, req);
   }
+  sendPlanBackToEmployee(req: ReviewPlanRequest): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, ReviewPlanRequest, unknown>(API_ENDPOINTS.plans.reviewPlan, req);
+  }
   getInvestorPlans(
     filter: IPlanFilterRequest
   ): Observable<IBaseApiResponse<IPlansResponse<IPlanRecord[]>>> {

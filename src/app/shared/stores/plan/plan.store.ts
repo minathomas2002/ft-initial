@@ -474,6 +474,25 @@ export const PlanStore = signalStore(
         );
       },
 
+      /* Send Plan Back to Employee*/
+      sendPlanBackToEmployee(request: ReviewPlanRequest): Observable<IBaseApiResponse<boolean>> {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.sendPlanBackToEmployee(request).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error sending plan back to employee',
+            });
+            return throwError(() => new Error('Error sending plan back to employee'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
       employeeApprovePlan(planId: string, reason?: string) {
         patchState(store, { isProcessing: true, error: null });
         return planApiService.employeeTogglePlanStatus({ planId, status: EemployeePlanAction.Approve, reason }).pipe(

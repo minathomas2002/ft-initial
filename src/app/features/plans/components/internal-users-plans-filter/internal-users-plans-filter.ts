@@ -101,6 +101,7 @@ export class InternalUsersPlansFilter implements OnInit {
       // { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
       { label: this.i18nService.translate('plans.employee_status.employeeRejected'), value: EInternalUserPlanStatus.EMPLOYEE_REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.returnedByDV'), value: EInternalUserPlanStatus.RETURNED_BY_DV },
     ];
   }
 
@@ -120,6 +121,7 @@ export class InternalUsersPlansFilter implements OnInit {
       // { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
       { label: this.i18nService.translate('plans.employee_status.employeeRejected'), value: EInternalUserPlanStatus.EMPLOYEE_REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.returnedByDV'), value: EInternalUserPlanStatus.RETURNED_BY_DV },
     ];
   }
 

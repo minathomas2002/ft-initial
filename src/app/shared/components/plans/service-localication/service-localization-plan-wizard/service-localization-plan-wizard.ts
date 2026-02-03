@@ -11,15 +11,12 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationMethodology } from 'src/app/shared/enums';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
-import { I18nService } from 'src/app/shared/services/i18n';
 import { BaseTagComponent } from '../../../base-components/base-tag/base-tag.component';
-import { HandlePlanStatusFactory } from 'src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory';
 import { StepContentDirective } from 'src/app/shared/directives';
 import { ServiceLocalizationStepCoverPage } from '../service-localization-step-cover-page/service-localization-step-cover-page';
 import { ServiceLocalizationStepOverview } from '../service-localization-step-overview/service-localization-step-overview';
@@ -32,7 +29,6 @@ import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialo
 import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
 import { Signature, IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
-import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { switchMap, of, map, catchError, finalize, tap } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
@@ -40,7 +36,6 @@ import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
-import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { EInternalUserPlanStatus, EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
@@ -78,20 +73,16 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnInit, OnDestroy {
-  override readonly planStore = inject(PlanStore);
-  private readonly i18nService = inject(I18nService);
-  private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
-  override readonly toasterService = inject(ToasterService);
-
 
   visibility = model(false);
   doRefresh = output<void>();
-  isLoading = signal(false);
   activeStep = signal<number>(1);
-
-  timelineVisibility = signal(false);
   isSubmitted = signal(false);
+  isLoading = signal(false);
+  isLoadingPlan = signal(false);
+  timelineVisibility = signal(false);
+  
 
   // Mode and plan ID from store
   mode = this.planStore.wizardMode;
@@ -105,6 +96,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
 
+  // Track validation errors for stepper indicators
+  validationErrors = signal<Map<number, boolean>>(new Map());
 
   showConfirmLeaveDialog = model(false);
   // Store original plan response for before/after comparison
@@ -500,7 +493,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return 'Service Localization Plan';
   });
 
-  isLoadingPlan = signal(false);
   planStatus = signal<EInvestorPlanStatus | EInternalUserPlanStatus>(EInvestorPlanStatus.DRAFT);
   statusLabel = computed(() => {
     const status = this.planStatus();
@@ -521,7 +513,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
 
-  validationErrors = signal<Map<number, boolean>>(new Map());
 
   constructor() {
     super();

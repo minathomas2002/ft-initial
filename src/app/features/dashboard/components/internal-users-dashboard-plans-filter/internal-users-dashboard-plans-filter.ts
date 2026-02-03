@@ -80,6 +80,10 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
       {
         label: this.i18nService.translate('plans.employee_status.underReview'),
         value: EInternalUserPlanStatus.UNDER_REVIEW,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.returnedByDV'),
+        value: EInternalUserPlanStatus.RETURNED_BY_DV,
       }
     ];
   }
@@ -88,18 +92,18 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   // Division Manager Statuses Options
   private getDivisionManagerStatusOptions(): IDropdownOption[] {
     return [
-      // {
-      //   label: this.i18nService.translate('plans.employee_status.employeeApproved'),
-      //   value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
-      // },
-      // {
-      //   label: this.i18nService.translate('plans.employee_status.deptRejected'),
-      //   value: EInternalUserPlanStatus.DEPT_REJECTED,
-      // },
       {
         label: this.i18nService.translate('plans.employee_status.unassigned'),
         value: EInternalUserPlanStatus.UNASSIGNED,
       },
+      {
+        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
+        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+      },
+      // {
+      //   label: this.i18nService.translate('plans.employee_status.deptRejected'),
+      //   value: EInternalUserPlanStatus.DEPT_REJECTED,
+      // }
     ];
   }
 

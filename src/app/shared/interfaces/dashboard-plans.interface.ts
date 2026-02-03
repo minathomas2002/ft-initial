@@ -24,7 +24,9 @@ export enum EInternalUserPlanStatus {
   REJECTED = 10,
   UNASSIGNED = 11,
   UNDER_REVIEW = 12,
-  ASSIGNED = 13
+  ASSIGNED = 13,
+  RETURNED_BY_DV = 14,
+  RETURNED_BY_DEPT_MANAGER = 15,
 }
 
 export interface IPlanRecord {

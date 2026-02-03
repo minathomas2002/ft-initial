@@ -9,6 +9,8 @@ import { TCommentPhase } from '../../../components/plans/plan-localization/produ
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { HandlePlanStatusFactory } from 'src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory';
 
 /**
  * Abstract base class for plan wizard components using Template Method pattern.
@@ -17,10 +19,12 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
  */
 export abstract class BasePlanWizard {
   protected readonly planStore = inject(PlanStore);
-  protected readonly toasterService = inject(ToasterService);
-  protected readonly destroyRef = inject(DestroyRef);
-  protected readonly roleService = inject(RoleService);
   protected readonly authStore = inject(AuthStore);
+  protected readonly destroyRef = inject(DestroyRef);
+  protected readonly i18nService = inject(I18nService);
+  protected readonly roleService = inject(RoleService);
+  protected readonly toasterService = inject(ToasterService);
+  protected readonly planStatusFactory = inject(HandlePlanStatusFactory);
 
   // Common signals - subclasses should initialize these
   protected isProcessing = signal(false);
@@ -184,6 +188,17 @@ export abstract class BasePlanWizard {
     this.showSendBackConfirmationDialog.set(true);
   }
 
+  onSendBackToEmployee(): void {
+    const validationError = this.validateCommentSubmission();
+    if (validationError) {
+      this.toasterService.error(validationError);
+      return;
+    }
+
+    // Show confirmation dialog
+    this.showSendBackConfirmationDialog.set(true);
+  }
+
 
   protected getSendBackErrorMessage(pageTitle: string, commentPhase: TCommentPhase): string {
     return `${pageTitle} has selected fields but the comment has not been submitted. Please ${commentPhase === 'adding' ? 'add' : 'save'} the comment before sending back.`;
@@ -220,6 +235,39 @@ export abstract class BasePlanWizard {
         error: (error) => {
           this.isProcessing.set(false);
           this.toasterService.error('Error sending plan back to investor. Please try again.');
+          console.error('Error sending plan back:', error);
+        }
+      });
+  }
+
+  onConfirmSendBackToEmployee(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const comments = this.collectAllPageComments();
+    const request: ReviewPlanRequest = {
+      planId: planId,
+      comments: comments,
+    };
+
+    this.isProcessing.set(true);
+    this.planStore.sendPlanBackToEmployee(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showSendBackConfirmationDialog.set(false);
+          this.toasterService.success('Plan has been sent back to employee successfully.');
+          this.refresh();
+          this.closeWizard();
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error sending plan back to employee. Please try again.');
           console.error('Error sending plan back:', error);
         }
       });
