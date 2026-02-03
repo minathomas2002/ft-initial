@@ -11,5 +11,6 @@ import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 })
 export class PlanSummaryFlied {
   planSummaryField = input.required<IPlanSummaryField>();
+  isAttachment = input<boolean>(false);
 }
 

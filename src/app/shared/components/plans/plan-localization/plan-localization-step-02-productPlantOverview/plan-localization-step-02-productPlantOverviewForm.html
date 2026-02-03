@@ -186,6 +186,7 @@
         >
           <p-inputnumber
             fluid
+            [allowEmpty]="false"
             placeholder="Enter land"
             [min]="0"
             mode="decimal"
@@ -220,6 +221,7 @@
         >
           <p-inputnumber
             fluid
+            [allowEmpty]="false"
             placeholder="Enter building"
             [min]="0"
             mode="decimal"
@@ -254,6 +256,7 @@
         >
           <p-inputnumber
             fluid
+            [allowEmpty]="false"
             placeholder="Enter machinery / equipment"
             [min]="0"
             [maxlength]="5"
@@ -288,6 +291,7 @@
         >
           <p-inputnumber
             fluid
+            [allowEmpty]="false"
             placeholder="Enter others"
             [min]="0"
             [maxlength]="5"
@@ -421,7 +425,7 @@
 
         <!-- Products Utilize Targeted Product -->
         <div class="flex flex-col gap-2">
-          <app-base-label [title]="'Which product(s) manufactured by SEC\'s approved local suppliers will utilize your \'Targeted Product\''" />
+          <app-base-label [title]="'Which product(S) manufactured by SEC\'s approved local suppliers will utilize your \'Targeted Product\''" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
@@ -434,7 +438,7 @@
             <textarea
               pInputTextarea
               fluid
-              placeholder="Enter product(s)"
+              placeholder="Enter product(S)"
               [rows]="4"
               [maxlength]="255"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
@@ -448,7 +452,7 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
-            [label]="'product(s) manufactured'"
+            [label]="'product(S) manufactured'"
           />
         </div>
       </div>
@@ -579,6 +583,7 @@
             />
             <p-inputnumber
               fluid
+              [allowEmpty]="false"
               placeholder="Enter approved vendor ID"
               [min]="0"
               [maxlength]="7"
@@ -606,6 +611,7 @@
             >
               <p-inputnumber
                 fluid
+                [allowEmpty]="false"
                 placeholder="Enter years of experience"
                 [maxlength]="2"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
@@ -637,6 +643,7 @@
               <p-inputnumber
                 fluid
                 [maxlength]="10"
+                [allowEmpty]="false"
                 placeholder="Enter total quantities provided to SEC"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
                 [appConditionalColorClass]="highlightInput('totalQuantitiesSEC')"
@@ -695,21 +702,21 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Name(s) of SEC approved local supplier(s) -->
           <div class="flex flex-col gap-2">
-            <app-base-label [title]="'Name(s) of SEC approved local supplier(s)'" />
+            <app-base-label [title]="'Name(S) of SEC approved local supplier(S)'" />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'namesOfSECApprovedSuppliers',
-                label: 'Name(s) of SEC approved local supplier(s)'
+                label: 'Name(S) of SEC approved local supplier(S)'
               })"
             >
               <input
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter name(s) of SEC approved local supplier(s)"
+                placeholder="Enter name(S) of SEC approved local supplier(S)"
                 [maxlength]="255"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
                 [appConditionalColorClass]="highlightInput('namesOfSECApprovedSuppliers')"
@@ -718,7 +725,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
-              [label]="'Name(s) of SEC approved local supplier(s)'"
+              [label]="'Name(S) of SEC approved local supplier(S)'"
             />
           </div>
 
@@ -765,6 +772,7 @@
             >
               <p-inputnumber
                 fluid
+                [allowEmpty]="false"
                 [maxlength]="2"
                 placeholder="Enter years of experience"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
@@ -796,6 +804,7 @@
               <p-inputnumber
                 fluid
                 [maxlength]="10"
+                [allowEmpty]="false"
                 placeholder="Enter total quantities provided"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
                 [appConditionalColorClass]="highlightInput('totalQuantities')"

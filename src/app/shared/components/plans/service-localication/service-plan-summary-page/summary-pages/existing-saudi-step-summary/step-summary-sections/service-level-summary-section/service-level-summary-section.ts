@@ -60,8 +60,8 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
 
       const getValue = (controlName: string) => {
         const c = group.get(controlName);
-        if (c instanceof FormGroup) return c.get(EMaterialsFormControls.value)?.value;
-        return c?.value;
+        if (c instanceof FormGroup) return c.get(EMaterialsFormControls.value)?.value ?? '0';
+        return c?.value ?? '0';
       };
 
       const buildField = (label: string, currant: string | number | null, before: string | number | null, fieldKey: string): IPlanSummaryField => {

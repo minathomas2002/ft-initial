@@ -22,7 +22,7 @@
   />
   } @else if(!hasInvestorComment() && commentPhase() === 'none'){
   <p-button
-    label="Add"
+    label="Add Comment"
     severity="warn"
     icon="icon-message-circle"
     rounded
@@ -37,14 +37,6 @@
     [disabled]="isCommentFormControlInvalid() || !commentFormControl().value"
     (click)="onSaveComment()"
   />
-
-  <!-- <p-button
-    label="Cancel"
-    variant="outlined"
-    rounded
-    styleClass="border-0! bg-white!"
-    (click)="onCancelEditing()"
-  /> -->
   }
   } @else {
   <!-- Normal mode: Show full comment state with checkboxes -->

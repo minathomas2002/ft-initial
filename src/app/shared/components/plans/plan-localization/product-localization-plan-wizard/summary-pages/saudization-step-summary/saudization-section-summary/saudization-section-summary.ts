@@ -72,7 +72,7 @@ export class SaudizationSectionSummaryComponent extends SummarySectionBaseClass 
         const yearFormGroup = formGroup.get(yearKey) as FormGroup | null;
         const rowFormGroup = yearFormGroup?.get(rowKey) as FormGroup | null;
         const valueControl = rowFormGroup?.get(EMaterialsFormControls.value) as FormControl | null;
-        const value = valueControl?.value ?? '';
+        const value = valueControl?.value ?? 0;
         const yearNum = yearIndex + 1;
         const inputKey = `${rowKey}_year${yearNum}`;
         const matchingField = summaryFields.find(f => f.inputKey === inputKey);
@@ -100,11 +100,7 @@ export class SaudizationSectionSummaryComponent extends SummarySectionBaseClass 
   });
 
   formatDisplayValue(value: unknown, isPercentage: boolean): string {
-    if (value == null || value === '') return '-';
-    if (typeof value === 'number') {
-      return isPercentage ? `${value}%` : value.toLocaleString();
-    }
-    return String(value);
+    return isPercentage ? `${value}%` : String(value).toLocaleString();
   }
 
   getSummaryField(

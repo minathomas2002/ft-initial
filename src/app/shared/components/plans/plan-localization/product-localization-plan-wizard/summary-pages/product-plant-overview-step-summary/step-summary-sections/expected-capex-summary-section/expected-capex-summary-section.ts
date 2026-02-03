@@ -21,7 +21,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   private readonly othersDescriptionControl = computed(() => this.getValueFormControl(EMaterialsFormControls.othersDescription));
 
   private formatPercent(value: number | null | undefined): string {
-    return (value != null && value.toString().trim() !== '') ? `${value}%` : '';
+    return (value != null && value.toString().trim() !== '') ? `${value}%` : '0%';
   }
 
   landPercentageSummaryField = computed<IPlanSummaryField>(() => {

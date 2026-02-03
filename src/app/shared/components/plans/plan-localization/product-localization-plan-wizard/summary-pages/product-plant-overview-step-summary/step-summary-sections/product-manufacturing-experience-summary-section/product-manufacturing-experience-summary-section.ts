@@ -142,7 +142,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const currantValue = this.namesOfSECApprovedSuppliersControl()?.value ?? '';
     const beforeValue = this.mfg()?.localSupplierNames || '';
     return {
-      label: "Name(s) of SEC approved local supplier(s)",
+      label: "Name(S) of SEC approved local supplier(S)",
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.namesOfSECApprovedSuppliersControl()),
@@ -169,8 +169,9 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   yearsOfExperienceSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.yearsOfExperienceControl()?.value ?? '';
-    const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '';
+    debugger
+    const currantValue = this.yearsOfExperienceControl()?.value ?? '0';
+    const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '0';
     return {
       label: 'Years of Experience',
       beforeValue,
@@ -184,8 +185,8 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   totalQuantitiesSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.totalQuantitiesControl()?.value ?? '';
-    const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '';
+    const currantValue = this.totalQuantitiesControl()?.value ?? '0';
+    const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '0';
     return {
       label: 'Total quantities provided to all approved local suppliers',
       beforeValue,

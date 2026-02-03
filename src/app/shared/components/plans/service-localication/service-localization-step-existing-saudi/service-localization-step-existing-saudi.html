@@ -49,6 +49,7 @@
         <!-- Vendor ID with SEC -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
           <p-inputnumber
+            [allowEmpty]="false"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
             [color]="selectedInputColor()"
@@ -95,7 +96,10 @@
         </td>
 
         <!-- Qualification Status with SEC (Enabled only if Manufacturer) -->
-        <td class="p-3 border border-gray-200 min-w-[250px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.qualificationStatus)">
+        <td
+          class="p-3 border border-gray-200 min-w-[250px]"
+          [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.qualificationStatus)"
+        >
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.qualificationStatus)) {
           <p-select
             [options]="qualificationStatusOptions()"
@@ -116,7 +120,10 @@
         </td>
 
         <!-- Product(s) - Manufacturer + Qualified or Under Pre-Qualification -->
-        <td class="p-3 border border-gray-200 min-w-[250px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.products)">
+        <td
+          class="p-3 border border-gray-200 min-w-[250px]"
+          [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.products)"
+        >
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.products)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -151,7 +158,10 @@
         </td>
 
         <!-- Company Overview - Manufacturer + Not Qualified -->
-        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverview)">
+        <td
+          class="p-3 border border-gray-200 min-w-[300px]"
+          [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverview)"
+        >
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverview)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -187,7 +197,10 @@
         </td>
 
         <!-- Key Projects Executed - Contractor -->
-        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)">
+        <td
+          class="p-3 border border-gray-200 min-w-[300px]"
+          [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)"
+        >
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -224,7 +237,10 @@
         </td>
 
         <!-- Company Overview, Key Project Details - Contractor -->
-        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewKeyProjectDetails)">
+        <td
+          class="p-3 border border-gray-200 min-w-[300px]"
+          [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewKeyProjectDetails)"
+        >
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewKeyProjectDetails)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -262,7 +278,10 @@
         </td>
 
         <!-- Company Overview - Other -->
-        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewOther)">
+        <td
+          class="p-3 border border-gray-200 min-w-[300px]"
+          [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewOther)"
+        >
           @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewOther)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -605,6 +624,7 @@
                 }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
+                  [allowEmpty]="false"
                   fluid
                   [placeholder]="row.placeholder"
                   [min]="0"
@@ -710,6 +730,7 @@
               }, itemControl.get('rowId')?.value)"
             >
               <p-inputnumber
+                [allowEmpty]="false"
                 fluid
                 [min]="0"
                 inputId="integeronly"
@@ -739,6 +760,7 @@
               }, itemControl.get('rowId')?.value)"
             >
               <p-inputnumber
+                [allowEmpty]="false"
                 fluid
                 [min]="0"
                 mode="decimal"

@@ -185,6 +185,7 @@
             })"
         >
           <p-inputnumber
+            [allowEmpty]="false"
             [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
             [color]="selectedInputColor()"

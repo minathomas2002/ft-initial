@@ -68,8 +68,8 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
 
     const getValue = (controlName: string) => {
       const c = group.get(controlName);
-      if (c instanceof FormGroup) return c.get(EMaterialsFormControls.value)?.value;
-      return c?.value;
+      if (c instanceof FormGroup) return c.get(EMaterialsFormControls.value)?.value ?? '0';
+      return c?.value ?? '0';
     };
 
     const buildField = (controlName: string): IPlanSummaryField => {
