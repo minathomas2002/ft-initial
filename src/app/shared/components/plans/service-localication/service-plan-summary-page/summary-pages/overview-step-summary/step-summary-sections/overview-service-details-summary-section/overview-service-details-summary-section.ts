@@ -5,6 +5,7 @@ import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-f
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-overview-service-details-summary-section',
@@ -146,6 +147,7 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
     return this.hasServiceDetailComment(fieldKey, rowId, index) &&
       !isHasCommentChecked &&
       ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
       this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 }

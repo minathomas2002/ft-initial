@@ -32,7 +32,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     GeneralConfirmationDialogComponent,
     TextareaModule,
     CommentInputComponent,
-    ConditionalColorClassDirective
+    ConditionalColorClassDirective,
   ],
   templateUrl: './plan-localization-step-04-saudizationForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
-import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
@@ -36,6 +36,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     TextareaModule,
     FormsModule,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     CommentInputComponent,
   ],
   templateUrl: './service-localization-step-cover-page.html',

@@ -74,7 +74,7 @@
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter expense item name"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
@@ -101,7 +101,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Enter In-house / Procured"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
                 [appendTo]="'body'"
                 fluid
                 [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
@@ -126,7 +126,7 @@
               <p-inputnumber
                 [allowEmpty]="false"
                 fluid
-                placeholder="Enter cost"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
                 [min]="0"
                 mode="decimal"
                 [minFractionDigits]="0"
@@ -156,7 +156,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
@@ -179,7 +179,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
@@ -202,7 +202,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
@@ -225,7 +225,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
@@ -248,7 +248,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
@@ -271,7 +271,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
@@ -294,7 +294,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
@@ -339,7 +339,7 @@
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter expense item name"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
@@ -366,7 +366,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Enter In-house / Procured"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
@@ -391,7 +391,7 @@
               <p-inputnumber
                 [allowEmpty]="false"
                 fluid
-                placeholder="Enter cost"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
                 [min]="0"
                 mode="decimal"
                 [minFractionDigits]="0"
@@ -421,7 +421,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
@@ -444,7 +444,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
@@ -467,7 +467,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
@@ -490,7 +490,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
@@ -513,7 +513,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
@@ -536,7 +536,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
@@ -559,7 +559,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
@@ -604,7 +604,7 @@
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter expense item name"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
@@ -631,7 +631,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Enter In-house / Procured"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
@@ -656,7 +656,7 @@
               <p-inputnumber
                 [allowEmpty]="false"
                 fluid
-                placeholder="Enter cost"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
                 [min]="0"
                 mode="decimal"
                 [minFractionDigits]="0"
@@ -686,7 +686,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
@@ -709,7 +709,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
@@ -732,7 +732,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
@@ -755,7 +755,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
@@ -778,7 +778,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
@@ -801,7 +801,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
@@ -824,7 +824,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
@@ -869,7 +869,7 @@
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter expense item name"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
@@ -896,7 +896,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Enter In-house / Procured"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
@@ -921,7 +921,7 @@
               <p-inputnumber
                 [allowEmpty]="false"
                 fluid
-                placeholder="Enter cost"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
                 [min]="0"
                 mode="decimal"
                 [minFractionDigits]="0"
@@ -951,7 +951,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
@@ -974,7 +974,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
@@ -997,7 +997,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
@@ -1020,7 +1020,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
@@ -1043,7 +1043,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
@@ -1066,7 +1066,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
@@ -1089,7 +1089,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
@@ -1134,7 +1134,7 @@
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter expense item name"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
@@ -1161,7 +1161,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Enter In-house / Procured"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
@@ -1186,7 +1186,7 @@
               <p-inputnumber
                 [allowEmpty]="false"
                 fluid
-                placeholder="Enter cost"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
                 [min]="0"
                 mode="decimal"
                 [minFractionDigits]="0"
@@ -1216,7 +1216,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
@@ -1239,7 +1239,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
@@ -1262,7 +1262,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
@@ -1285,7 +1285,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
@@ -1308,7 +1308,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
@@ -1331,7 +1331,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
@@ -1354,7 +1354,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"

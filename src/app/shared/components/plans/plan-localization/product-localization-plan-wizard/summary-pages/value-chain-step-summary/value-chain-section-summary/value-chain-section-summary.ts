@@ -9,6 +9,7 @@ import { RoleService } from 'src/app/shared/services/role/role-service';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { TableModule } from 'primeng/table';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 const SECTION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.designEngineeringFormGroup]: 1,
@@ -67,6 +68,7 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
         const isResolved =
           hasComment &&
           !hasCommentChecked &&
+          this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
           ['view', 'Review'].includes(this.planStore.wizardMode()) &&
           this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return { value, beforeValue: beforeFormatted || '-', hasError, hasComment, showDifference: showDiff, isResolved };

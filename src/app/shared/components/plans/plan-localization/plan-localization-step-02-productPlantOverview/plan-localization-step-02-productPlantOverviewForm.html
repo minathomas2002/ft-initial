@@ -43,7 +43,7 @@
             type="text"
             pInputText
             fluid
-            placeholder="Enter product name"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter product name'"
             [maxlength]="100"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
             [appConditionalColorClass]="highlightInput('productName')"
@@ -74,7 +74,7 @@
           <textarea
             pTextarea
             fluid
-            placeholder="Enter product specifications"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter product specifications'"
             [maxlength]="500"
             [rows]="4"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
@@ -115,7 +115,7 @@
               pInputText
               fluid
               [maxlength]="50"
-              placeholder="Enter targeted annual plant capacity"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter targeted annual plant capacity'"
               [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
               [appConditionalColorClass]="highlightInput('targetedAnnualPlantCapacity')"
               [color]="selectedInputColor()"
@@ -149,7 +149,7 @@
               pInputText
               fluid
               maxlength="50"
-              placeholder="Enter time required to setup factory"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter time required to setup factory'"
               [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
               [appConditionalColorClass]="highlightInput('timeRequiredToSetupFactory')"
               [color]="selectedInputColor()"
@@ -187,7 +187,7 @@
           <p-inputnumber
             fluid
             [allowEmpty]="false"
-            placeholder="Enter land"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter land'"
             [min]="0"
             mode="decimal"
             [minFractionDigits]="0"
@@ -222,7 +222,7 @@
           <p-inputnumber
             fluid
             [allowEmpty]="false"
-            placeholder="Enter building"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter building'"
             [min]="0"
             mode="decimal"
             [maxlength]="5"
@@ -257,7 +257,7 @@
           <p-inputnumber
             fluid
             [allowEmpty]="false"
-            placeholder="Enter machinery / equipment"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter machinery / equipment'"
             [min]="0"
             [maxlength]="5"
             mode="decimal"
@@ -292,7 +292,7 @@
           <p-inputnumber
             fluid
             [allowEmpty]="false"
-            placeholder="Enter others"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter others'"
             [min]="0"
             [maxlength]="5"
             mode="decimal"
@@ -327,7 +327,7 @@
           pInputTextarea
           fluid
           [maxlength]="255"
-          placeholder="Enter others description"
+          [appHidePlaceholderWhenDisabledEmpty]="'Enter others description'"
           [rows]="4"
           [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
           [appConditionalColorClass]="highlightInput('othersDescription')"
@@ -373,7 +373,7 @@
               dropdownIcon="icon-chevron-down"
               fluid
               [filter]="false"
-              placeholder="Select targeted customer"
+              [appHidePlaceholderWhenDisabledEmpty]="'Select targeted customer'"
               [appConditionalColorClass]="highlightInput('targetedCustomer')"
               [color]="selectedInputColor()"
             />
@@ -406,7 +406,7 @@
               pInputTextarea
               fluid
               [maxlength]="255"
-              placeholder="Enter provide names of targeted SEC's"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter provide names of targeted SEC\'s'"
               [rows]="4"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
               [appConditionalColorClass]="highlightInput('namesOfTargetedSuppliers')"
@@ -440,7 +440,7 @@
             <textarea
               pInputTextarea
               fluid
-              placeholder="Enter product(s)"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter product(s)'"
               [rows]="4"
               [maxlength]="255"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
@@ -486,7 +486,7 @@
               optionLabel="name"
               optionValue="id"
               dropdownIcon="icon-chevron-down"
-              placeholder="Select product manufacturing experience"
+              [appHidePlaceholderWhenDisabledEmpty]="'Select product manufacturing experience'"
               fluid
               [appConditionalColorClass]="highlightInput('productManufacturingExperience')"
               [color]="selectedInputColor()"
@@ -565,7 +565,7 @@
                 pInputText
                 [maxlength]="255"
                 fluid
-                placeholder="Enter qualified plant location"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter qualified plant location'"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
                 [appConditionalColorClass]="highlightInput('qualifiedPlantLocationSEC')"
                 [color]="selectedInputColor()"
@@ -586,7 +586,7 @@
             <p-inputnumber
               fluid
               [allowEmpty]="false"
-              placeholder="Enter approved vendor ID"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter approved vendor ID'"
               [min]="0"
               [maxlength]="7"
               [useGrouping]="false"
@@ -614,7 +614,7 @@
               <p-inputnumber
                 fluid
                 [allowEmpty]="false"
-                placeholder="Enter years of experience"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter years of experience'"
                 [maxlength]="2"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
                 [appConditionalColorClass]="highlightInput('yearsOfExperienceSEC')"
@@ -646,7 +646,7 @@
                 fluid
                 [maxlength]="10"
                 [allowEmpty]="false"
-                placeholder="Enter total quantities provided to SEC"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter total quantities provided to SEC'"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
                 [appConditionalColorClass]="highlightInput('totalQuantitiesSEC')"
                 [color]="selectedInputColor()"
@@ -720,7 +720,7 @@
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter name(s) of SEC approved local supplier(s)"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter name(s) of SEC approved local supplier(s)'"
                 [maxlength]="255"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
                 [appConditionalColorClass]="highlightInput('namesOfSECApprovedSuppliers')"
@@ -750,7 +750,7 @@
                 pInputText
                 [maxlength]="255"
                 fluid
-                placeholder="Enter qualified plant location"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter qualified plant location'"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
                 [appConditionalColorClass]="highlightInput('qualifiedPlantLocation')"
                 [color]="selectedInputColor()"
@@ -778,7 +778,7 @@
                 fluid
                 [allowEmpty]="false"
                 [maxlength]="2"
-                placeholder="Enter years of experience"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter years of experience'"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
                 [appConditionalColorClass]="highlightInput('yearsOfExperience')"
                 [color]="selectedInputColor()"
@@ -809,7 +809,7 @@
                 fluid
                 [maxlength]="10"
                 [allowEmpty]="false"
-                placeholder="Enter total quantities provided"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter total quantities provided'"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
                 [appConditionalColorClass]="highlightInput('totalQuantities')"
                 [color]="selectedInputColor()"

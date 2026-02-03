@@ -647,12 +647,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
         // Store signature for summary display
         this.planSignature.set(data.signature ?? null);
-
-        // Set plan status in store
-        if (data.servicePlan?.status !== undefined) {
-          this.planStore.setPlanStatus(data.servicePlan.status);
-        }
-
         const currentMode = this.planStore.wizardMode();
 
         if (['view', 'Review', 'resubmit'].includes(currentMode)) {

@@ -19,7 +19,7 @@
         >
           <input
             pInputText
-            placeholder="Enter plan title"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter plan title'"
             [formControl]="getCoverPageValueControl('planTitle')"
             fluid
             maxlength="150"
@@ -51,7 +51,7 @@
         >
           <input
             pInputText
-            placeholder="Enter company name"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter company name'"
             [formControl]="getCoverPageValueControl('companyName')"
             fluid
             maxlength="100"
@@ -100,7 +100,7 @@
                 type="text"
                 pInputText
                 fluid
-                placeholder="Enter service name"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter service name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get('serviceName'))"
                 trimOnBlur

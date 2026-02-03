@@ -20,7 +20,7 @@ import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-
 import { FormsModule } from '@angular/forms';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
-import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -40,6 +40,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     GeneralConfirmationDialogComponent,
     FormsModule,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     CommentInputComponent
   ],
   templateUrl: './service-localization-step-direct-localization.html',

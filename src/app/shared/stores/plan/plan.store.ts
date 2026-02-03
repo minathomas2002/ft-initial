@@ -515,6 +515,7 @@ export const PlanStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
+            store.setPlanStatus(res.body?.productPlan?.investorStatus ?? null);
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {
@@ -533,6 +534,7 @@ export const PlanStore = signalStore(
         return planApiService.getServicePlan({ planId }).pipe(
           tap((res) => {
             patchState(store, { servicePlanData: res.body || null });
+            store.setPlanStatus(res.body?.servicePlan?.status ?? null);
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading service plan' });

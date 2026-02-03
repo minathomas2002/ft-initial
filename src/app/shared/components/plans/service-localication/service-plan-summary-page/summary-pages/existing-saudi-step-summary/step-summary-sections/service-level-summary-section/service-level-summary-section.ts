@@ -7,6 +7,7 @@ import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 const YEAR_CONTROL_KEYS = [
   EMaterialsFormControls.firstYear,
@@ -75,6 +76,7 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
           hasComment &&
           !hasCommentChecked &&
           ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+          this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
           this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return {
           label,

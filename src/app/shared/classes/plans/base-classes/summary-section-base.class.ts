@@ -2,6 +2,7 @@ import { DatePipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, input } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 import { EMaterialsFormControls, ERoles } from "src/app/shared/enums";
+import { EInternalUserPlanStatus, EInvestorPlanStatus } from "src/app/shared/interfaces";
 import { IFieldInformation } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n";
 import { RoleService } from "src/app/shared/services/role/role-service";
@@ -37,6 +38,7 @@ export abstract class SummarySectionBaseClass {
     return this.isFieldHasComment(controlName, rowId) &&
       !this.isHasCommentControlChecked(controlName) &&
       ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
       this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 

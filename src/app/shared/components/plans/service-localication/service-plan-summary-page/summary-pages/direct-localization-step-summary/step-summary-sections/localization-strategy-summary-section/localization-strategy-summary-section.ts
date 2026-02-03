@@ -6,6 +6,7 @@ import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-localization-strategy-summary-section',
@@ -70,6 +71,7 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
           hasComment &&
           !hasCommentChecked &&
           ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+          this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
           this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return {
           label,

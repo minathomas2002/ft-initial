@@ -8,7 +8,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -38,6 +38,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     ReactiveFormsModule,
     TrimOnBlurDirective,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     GroupInputWithCheckbox,
     RadioButtonModule,
     TooltipModule,

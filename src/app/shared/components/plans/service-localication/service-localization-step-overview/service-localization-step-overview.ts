@@ -18,7 +18,7 @@ import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-inp
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
@@ -52,6 +52,7 @@ import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
     RadioButtonModule,
     TrimOnBlurDirective,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     PhoneInputComponent,
     TextareaModule,
     CommentStateComponent,

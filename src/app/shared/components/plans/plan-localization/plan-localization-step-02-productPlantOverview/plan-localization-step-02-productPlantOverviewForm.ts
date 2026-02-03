@@ -14,7 +14,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
-import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TColors } from 'src/app/shared/interfaces';
@@ -43,6 +43,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     BaseLabelComponent,
     TrimOnBlurDirective,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     CommentStateComponent,
     FormsModule,
     GeneralConfirmationDialogComponent,

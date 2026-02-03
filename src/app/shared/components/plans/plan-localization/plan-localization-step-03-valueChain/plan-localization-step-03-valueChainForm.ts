@@ -11,7 +11,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { ValueChainSummaryComponent } from './value-chain-summary/value-chain-summary.component';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TColors } from 'src/app/shared/interfaces';
@@ -40,6 +40,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     BaseErrorMessages,
     TrimOnBlurDirective,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     TextareaModule,
     FormsModule,
     GeneralConfirmationDialogComponent,

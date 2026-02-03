@@ -34,7 +34,7 @@
               pInputText
               fluid
               [maxlength]="100"
-              placeholder="Enter Saudi company name"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter Saudi company name'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
               [appConditionalColorClass]="highlightInput('saudiCompanyName_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -70,7 +70,7 @@
             type="text"
             pInputText
             fluid
-            placeholder="BENA Registered Vendor ID"
+            [appHidePlaceholderWhenDisabledEmpty]="'BENA Registered Vendor ID'"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
             class="bg-gray-100 text-gray-500"
           />
@@ -83,7 +83,7 @@
             optionLabel="name"
             optionValue="id"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
-            placeholder="Select company type(s)"
+            [appHidePlaceholderWhenDisabledEmpty]="'Select company type(s)'"
             fluid
             [appendTo]="'body'"
             [appConditionalColorClass]="highlightInput('companyType_' + index, itemControl.get('rowId')?.value)"
@@ -106,7 +106,7 @@
             optionLabel="name"
             optionValue="id"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
-            placeholder="Select qualification status"
+            [appHidePlaceholderWhenDisabledEmpty]="'Select qualification status'"
             fluid
             [appendTo]="'body'"
             [appConditionalColorClass]="highlightInput('qualificationStatus_' + index, itemControl.get('rowId')?.value)"
@@ -139,7 +139,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              placeholder="Enter specify the product(s)"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter specify the product(s)'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
               [appConditionalColorClass]="highlightInput('products_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -178,7 +178,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              placeholder="Enter company overview"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
               [appConditionalColorClass]="highlightInput('companyOverview_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -218,7 +218,7 @@
               rows="3"
               fluid
               [maxlength]="255"
-              placeholder="Enter key projects executed by contractor for SEC"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter key projects executed by contractor for SEC'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
               [appConditionalColorClass]="highlightInput('keyProjectsExecutedByContractorForSEC_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -259,7 +259,7 @@
               fluid
               fluid
               [maxlength]="255"
-              placeholder="Enter company overview, key project details etc."
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview, key project details etc.'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
               [appConditionalColorClass]="highlightInput('companyOverviewKeyProjectDetails_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -299,7 +299,7 @@
               rows="3"
               fluid
               [maxlength]="255"
-              placeholder="Enter company overview"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
               [appConditionalColorClass]="highlightInput('companyOverviewOther_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -359,7 +359,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
-                placeholder="Select agreement type with Saudi Company"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select agreement type with Saudi Company'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('agreementTypeWithSaudiCompany', itemControl.get('rowId')?.value)"
@@ -381,7 +381,7 @@
                 pTextarea
                 fluid
                 [maxlength]="100"
-                placeholder="Enter other agreement details"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter other agreement details'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
                 [appConditionalColorClass]="highlightInput('agreementOtherDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -422,7 +422,7 @@
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
-              placeholder="Select quarter"
+              [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
               fluid
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('agreementSigningDate', itemControl.get('rowId')?.value)"
@@ -485,7 +485,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              placeholder="Why did you chose this particular Saudi Company as your partner?"
+              [appHidePlaceholderWhenDisabledEmpty]="'Why did you chose this particular Saudi Company as your partner?'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
               [appConditionalColorClass]="highlightInput('whyChoseThisCompany_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -518,7 +518,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              placeholder="Brief summary ownership %, key responsibilities, technology / IP sharing etc.)"
+              [appHidePlaceholderWhenDisabledEmpty]="'Brief summary ownership %, key responsibilities, technology / IP sharing etc.)'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
               [appConditionalColorClass]="highlightInput('summaryOfKeyAgreementClauses_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -551,7 +551,7 @@
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
-              placeholder="Select"
+              [appHidePlaceholderWhenDisabledEmpty]="'Select'"
               fluid
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('provideAgreementCopy_' + index, itemControl.get('rowId')?.value)"
@@ -676,7 +676,7 @@
               type="text"
               pInputText
               fluid
-              placeholder=""
+              [appHidePlaceholderWhenDisabledEmpty]="''"
               class="text-gray-400"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
               [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
@@ -704,7 +704,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-                placeholder="Select quarter"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('expectedLocalizationDate_' + index, itemControl.get('rowId')?.value)"
@@ -734,7 +734,7 @@
                 fluid
                 [min]="0"
                 inputId="integeronly"
-                placeholder="Enter headcount"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter headcount'"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_headcount'))"
                 [appConditionalColorClass]="highlightInput(yearKey + '_headcount_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -764,7 +764,7 @@
                 fluid
                 [min]="0"
                 mode="decimal"
-                placeholder="Enter %"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter %'"
                 [maxFractionDigits]="2"
                 [maxlength]="5"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_saudization'))"
@@ -795,7 +795,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                placeholder="Enter key measures to upskill saudis"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill saudis'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
                 [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"

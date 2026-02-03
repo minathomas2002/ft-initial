@@ -23,7 +23,7 @@ import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } fro
 import { TColors } from 'src/app/shared/interfaces';
 import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { FormsModule } from '@angular/forms';
-import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
@@ -44,6 +44,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     GeneralConfirmationDialogComponent,
     FormsModule,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     CommentInputComponent,
   ],
   templateUrl: './service-localization-step-existing-saudi.html',

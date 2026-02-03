@@ -22,7 +22,7 @@
           <input
             type="text"
             pInputText
-            placeholder="Enter your plan title"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter your plan title'"
             [formControl]="getValueControl(basicInformationFormGroupControls['planTitle'])"
             fluid
             maxlength="150"
@@ -66,7 +66,7 @@
           [options]="availableOpportunities()"
           [formControl]="getFormControl(basicInformationFormGroupControls['opportunity'])"
           optionLabel="name"
-          placeholder="Select opportunity"
+          [appHidePlaceholderWhenDisabledEmpty]="'Select opportunity'"
           [loading]="isLoadingAvailableOpportunities()"
           [disabled]="isOpportunityDisabled()"
           fluid
@@ -107,7 +107,7 @@
             pInputText
             fluid
             [maxlength]="100"
-            placeholder="Enter company name"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter company name'"
             [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
             [appConditionalColorClass]="highlightInput('companyName')"
             [color]="selectedInputColor()"
@@ -135,7 +135,7 @@
             type="text"
             pInputText
             fluid
-            placeholder="Enter CEO name"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO name'"
             [maxlength]="100"
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
             [appConditionalColorClass]="highlightInput('ceoName')"
@@ -162,7 +162,7 @@
             type="email"
             pInputText
             fluid
-            placeholder="Enter CEO email ID"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO email ID'"
             maxlength="100"
             [appConditionalColorClass]="highlightInput('ceoEmailID')"
             [color]="selectedInputColor()"
@@ -196,7 +196,7 @@
             type="text"
             pInputText
             fluid
-            placeholder="Enter global HQ location"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter global HQ location'"
             [maxlength]="255"
             [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
             [appConditionalColorClass]="highlightInput('globalHQLocation')"
@@ -231,7 +231,7 @@
             mode="decimal"
             type="text"
             fluid
-            placeholder="Enter registered vendor ID with SEC"
+            [appHidePlaceholderWhenDisabledEmpty]="'Enter registered vendor ID with SEC'"
             [maxlength]="7"
             [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
@@ -318,7 +318,7 @@
               type="text"
               pInputText
               fluid
-              placeholder="Enter local agent name"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter local agent name'"
               maxlength="100"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
               [appConditionalColorClass]="highlightInput('localAgentName')"
@@ -346,7 +346,7 @@
               pInputText
               fluid
               [maxlength]="100"
-              placeholder="Enter contact person name"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter contact person name'"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
               [appConditionalColorClass]="highlightInput('contactPersonName')"
               [color]="selectedInputColor()"
@@ -374,7 +374,7 @@
               type="text"
               pInputText
               fluid
-              placeholder="Enter email ID"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter email ID'"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
               [appConditionalColorClass]="highlightInput('emailID')"
               [color]="selectedInputColor()"
@@ -426,7 +426,7 @@
                 pInputText
                 fluid
                 maxlength="255"
-                placeholder="Enter company HQ location"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter company HQ location'"
                 [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
                 [appConditionalColorClass]="highlightInput('companyHQLocation')"
                 [color]="selectedInputColor()"
