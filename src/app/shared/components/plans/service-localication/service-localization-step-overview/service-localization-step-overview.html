@@ -516,6 +516,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceType'))"
+              [label]="'Service Type'"
+            />
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[200px]">
@@ -540,6 +544,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceCategory'))"
+              [label]="'Service Category'"
+            />
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[250px]">
@@ -569,6 +577,10 @@
               {{ getValueControl(itemControl.get('serviceDescription')).value?.length || 0 }} / 255
             </div>
             }
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceDescription'))"
+              [label]="'Service Description'"
+            />
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[200px]">
@@ -592,6 +604,10 @@
                 (onChange)="onServiceProvidedToChange($event.value, index)"
                 [appConditionalColorClass]="highlightInput('serviceProvidedTo_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
+              />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get('serviceProvidedTo'))"
+                [label]="'Service Provided To'"
               />
             </app-group-input-with-checkbox>
 
@@ -627,6 +643,10 @@
               }
             </div>
             }
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
+              [label]="'Company Names'"
+            />
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[200px]">
@@ -654,6 +674,10 @@
               {{ getValueControl(itemControl.get('totalBusinessDoneLast5Years')).value?.length || 0 }} / 150
             </div>
             }
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('totalBusinessDoneLast5Years'))"
+              [label]="'Total Business Done Last 5 Years'"
+            />
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -679,6 +703,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceTargetedForLocalization'))"
+              [label]="'Service Targeted For Localization'"
+            />
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -703,6 +731,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('expectedLocalizationDate'))"
+              [label]="'Expected Localization Date'"
+            />
           </td>
 
           <td class="p-3 border border-gray-200 min-w-[250px]">
@@ -716,6 +748,10 @@
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('serviceLocalizationMethodology_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
+            />
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get('serviceLocalizationMethodology'))"
+              [label]="'Service Localization Methodology'"
             />
           </td>
         </ng-template>

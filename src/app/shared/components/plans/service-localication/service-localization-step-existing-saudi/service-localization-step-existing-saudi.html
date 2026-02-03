@@ -333,8 +333,11 @@
       [scrollHeight]="'600px'"
       [excludeKeys]="['agreementOtherDetails', 'agreementCopy']"
       [headerTooltips]="{
-        'supervisionOversightEntity': 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.)',
-        'provideAgreementCopy': 'If “Yes”, please attach the agreement copy at the end of the plan in the Attachment section.',
+        'supervisionOversightEntity': 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.) if any',
+        'provideAgreementCopy': 'If “Yes”, please attach the agreement copy at the end of the plan in the Attachment section.', 
+      }"
+      [customHeaderLabels]="{
+        'supervisionOversightEntity': 'Supervision / Oversight by Government Entity (if any)'
       }"
     >
       <ng-template
