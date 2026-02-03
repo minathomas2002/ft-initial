@@ -3,36 +3,52 @@
   [(activeStep)]="activeStep"
   [steps]="steps()"
   [wizardTitle]="wizardTitle()"
-  (onNextStep)="nextStep()"
-  (onPreviousStep)="previousStep()"
-  (onSaveAsDraft)="saveAsDraft()"
-  [isLoading]="isLoadingPlan()"
-  [isProcessing]="isProcessing()"
-  [hideSaveAsDraft]="isViewMode() || isReviewMode() || isResubmitMode() || isInvestorViewMode()"
+  [actions]="wizardActions()"
   (onClose)="onClose()"
 >
 
   <ng-container ngProjectAs="status">
     @if (isLoadingPlan()) {
-      <p-skeleton width="120px" height="26px" />
+    <p-skeleton
+      width="120px"
+      height="26px"
+    />
     } @else if (shouldShowStatusTag()) {
-      <app-base-tag
-        [value]="statusLabel()"
-        [color]="statusBadgeClass()"
-      />
+    <app-base-tag
+      [value]="statusLabel()"
+      [color]="statusBadgeClass()"
+    />
     }
   </ng-container>
 
   <ng-template [appStepContent]="1">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="220px" height="20px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
+      <p-skeleton
+        width="220px"
+        height="20px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <p-skeleton width="100%" height="40px" />
-        <p-skeleton width="100%" height="40px" />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
       </div>
     </div>
     } @else {
@@ -62,14 +78,32 @@
   <ng-template [appStepContent]="2">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="240px" height="20px" />
+      <p-skeleton
+        width="240px"
+        height="20px"
+      />
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <p-skeleton width="100%" height="40px" />
-        <p-skeleton width="100%" height="40px" />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
       </div>
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="70%" height="40px" />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="70%"
+        height="40px"
+      />
     </div>
     } @else {
     <div class="flex flex-col gap-8">
@@ -98,13 +132,31 @@
   <ng-template [appStepContent]="3">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="200px" height="20px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
+      <p-skeleton
+        width="200px"
+        height="20px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <p-skeleton width="100%" height="40px" />
-        <p-skeleton width="100%" height="40px" />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
       </div>
     </div>
     } @else {
@@ -134,11 +186,26 @@
   <ng-template [appStepContent]="4">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="220px" height="20px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="80%" height="40px" />
+      <p-skeleton
+        width="220px"
+        height="20px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="80%"
+        height="40px"
+      />
     </div>
     } @else {
     <div class="flex flex-col gap-8">
@@ -168,10 +235,22 @@
   <ng-template [appStepContent]="5">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="220px" height="20px" />
-      <p-skeleton width="100%" height="48px" />
-      <p-skeleton width="100%" height="48px" />
-      <p-skeleton width="70%" height="48px" />
+      <p-skeleton
+        width="220px"
+        height="20px"
+      />
+      <p-skeleton
+        width="100%"
+        height="48px"
+      />
+      <p-skeleton
+        width="100%"
+        height="48px"
+      />
+      <p-skeleton
+        width="70%"
+        height="48px"
+      />
     </div>
     } @else {
     <app-product-plan-summary-page
@@ -184,68 +263,6 @@
     />
     }
   </ng-template>
-
-  <ng-container ngProjectAs="final-step-action">
-    @if (activeStep() === 5 && !isViewMode() && !isInvestorViewMode()) {
-    @if (isReviewMode()) {
-    <p-button
-      [label]="'Reject'"
-      severity="danger"
-      [disabled]="!canApproveOrReject()"
-      (click)="onReject()"
-    ></p-button>
-    <p-button
-      [label]="'Approve & Forward'"
-      [disabled]="!canApproveOrReject()"
-      (click)="onApproveAndForward()"
-    ></p-button>
-    }
-    @else if ( isResubmitMode()){
-    <p-button
-      [label]="'Resubmit'"
-      (click)="onSummarySubmitClick()"
-      [disabled]="!allowUserToResubmit()"
-    ></p-button>
-    }
-    @else {
-    <p-button
-      [label]="'Submit'"
-      (click)="onSummarySubmitClick()"
-    ></p-button>
-    }
-    }
-  </ng-container>
-
-  <ng-container ngProjectAs="more-actions">
-    @if(canOpenTimeline() || isInvestorViewMode()){
-    <p-button
-      [label]="'Timeline'"
-      icon="icon-list"
-      text
-      severity="secondary"
-      (click)="timelineVisibility.set(true)"
-    ></p-button>
-    }
-    @if (isReviewMode() && activeStep() === 5) {
-    <p-button
-      text
-      (click)="onSendBackToInvestor()"
-      styleClass="p-0!"
-    >
-      <span class="underline text-md font-semibold">Send Back to Investor</span>
-    </p-button>
-    }
-    @if((isReviewMode() || isResubmitMode()) && activeStep() <5){
-      <p-button
-      [label]="'Add Comments'"
-      text
-      icon="icon-message-circle"
-      severity="secondary"
-      (click)="onAddComment()"
-      [disabled]="isAddCommentButtonDisabled()"
-    ></p-button>
-      }
-  </ng-container>
 </app-base-wizard-dialog>
 
 @if(showSubmissionModal()){
