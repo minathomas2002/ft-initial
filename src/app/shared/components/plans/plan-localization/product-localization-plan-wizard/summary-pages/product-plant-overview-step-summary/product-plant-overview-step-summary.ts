@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
@@ -33,38 +34,55 @@ export class ProductPlantOverviewStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   readonly pageTitleForTL = this.i18nService.translate('plans.wizard.step2.title');
   formGroup = this.productPlanFormService.step2_productPlantOverview;
+  doRefresh = signal(new Date());
   private readonly _overviewFormGroup = this.formGroup.get(EMaterialsFormControls.overviewFormGroup) as FormGroup;
   private readonly _expectedCAPEXFormGroup = this.formGroup.get(EMaterialsFormControls.expectedCAPEXInvestmentFormGroup) as FormGroup;
   private readonly _targetCustomersFormGroup = this.formGroup.get(EMaterialsFormControls.targetCustomersFormGroup) as FormGroup;
   private readonly _productManufacturingFormGroup = this.formGroup.get(EMaterialsFormControls.productManufacturingExperienceFormGroup) as FormGroup;
 
   overviewFormGroup = toSignal<FormGroup>(
-    this._overviewFormGroup.valueChanges.pipe(
-      startWith(this._overviewFormGroup.value),
+    merge(
+      this._overviewFormGroup.valueChanges,
+      this._overviewFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._overviewFormGroup)
     ),
     { requireSync: true }
   );
 
   expectedCAPEXInvestmentFormGroup = toSignal<FormGroup>(
-    this._expectedCAPEXFormGroup.valueChanges.pipe(
-      startWith(this._expectedCAPEXFormGroup.value),
+    merge(
+      this._expectedCAPEXFormGroup.valueChanges,
+      this._expectedCAPEXFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._expectedCAPEXFormGroup)
     ),
     { requireSync: true }
   );
 
   targetCustomersFormGroup = toSignal<FormGroup>(
-    this._targetCustomersFormGroup.valueChanges.pipe(
-      startWith(this._targetCustomersFormGroup.value),
+    merge(
+      this._targetCustomersFormGroup.valueChanges,
+      this._targetCustomersFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._targetCustomersFormGroup)
     ),
     { requireSync: true }
   );
 
   productManufacturingExperienceFormGroup = toSignal<FormGroup>(
-    this._productManufacturingFormGroup.valueChanges.pipe(
-      startWith(this._productManufacturingFormGroup.value),
+    merge(
+      this._productManufacturingFormGroup.valueChanges,
+      this._productManufacturingFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._productManufacturingFormGroup)
     ),
     { requireSync: true }

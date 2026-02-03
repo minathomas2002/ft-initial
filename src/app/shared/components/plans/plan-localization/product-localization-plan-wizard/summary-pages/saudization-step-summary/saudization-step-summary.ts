@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
@@ -10,12 +11,13 @@ import { SummarySectionHeader } from '../../../../summary-section-header/summary
 import { SaudizationSectionSummaryComponent } from './saudization-section-summary/saudization-section-summary';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
-import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { PlanSummaryFlied } from '../../../../plan-summary-flied/plan-summary-flied';
+import { AttachmentsSummarySection } from '../../../../attachments-summary-section/attachments-summary-section';
 
 @Component({
   selector: 'app-saudization-step-summary',
   imports: [
-    TranslatePipe,
+    AttachmentsSummarySection,
     SummarySectionHeader,
     SaudizationSectionSummaryComponent,
     PageCommentBox,
@@ -28,12 +30,12 @@ export class SaudizationStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   readonly pageTitleForTL = this.i18nService.translate('plans.wizard.step4.title');
   formGroup = this.productPlanFormService.step4_saudization;
-  private readonly formChangeTrigger = signal(0);
+  doRefresh = signal(new Date());
 
   constructor() {
     super();
     this.formGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
-      this.formChangeTrigger.update(v => v + 1);
+      this.doRefresh.set(new Date());
     });
   }
 
@@ -42,16 +44,19 @@ export class SaudizationStepSummary extends SummaryStepBaseClass {
   }
 
   saudizationFormGroup = toSignal<FormGroup>(
-    this._saudizationFormGroup.valueChanges.pipe(
-      startWith(this._saudizationFormGroup.value),
+    merge(
+      this._saudizationFormGroup.valueChanges,
+      this._saudizationFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
       map(() => this._saudizationFormGroup)
     ),
     { requireSync: true }
   );
 
-  private get _attachmentsFormGroup(): FormGroup {
-    return this.productPlanFormService.attachmentsFormGroup;
-  }
+  attachmentsFormGroup = computed(() => this.productPlanFormService.attachmentsFormGroup);
+  attachmentsSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('attachments'));
 
   /** Step 04 comment fields (inputKey e.g. annualHeadcount_year1) */
   sectionSummaryFields = computed<IFieldInformation[]>(() => this.stepComments()?.fields ?? []);
@@ -62,19 +67,4 @@ export class SaudizationStepSummary extends SummaryStepBaseClass {
     { label: this.i18nService.translate('plans.summary.saudization.annualTotalCompensation'), rowKey: EMaterialsFormControls.annualTotalCompensation },
     { label: this.i18nService.translate('plans.summary.saudization.saudiCompensationPercentage'), rowKey: EMaterialsFormControls.saudiCompensationPercentage },
   ]);
-
-  attachments = computed(() => {
-    this.formChangeTrigger();
-    const attachmentsControl = this._attachmentsFormGroup.get(EMaterialsFormControls.attachments);
-    if (attachmentsControl instanceof FormGroup) {
-      const valueControl = attachmentsControl.get(EMaterialsFormControls.value);
-      return valueControl ? valueControl.value : attachmentsControl.value;
-    }
-    return attachmentsControl?.value ?? null;
-  });
-
-  hasAttachments = computed(() => {
-    const atts = this.attachments();
-    return atts && Array.isArray(atts) && atts.length > 0;
-  });
 }

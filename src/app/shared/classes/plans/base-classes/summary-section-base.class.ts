@@ -19,7 +19,7 @@ export abstract class SummarySectionBaseClass {
   public readonly sectionFormGroup = input.required<FormGroup>();
   public readonly sectionSummaryFields = input.required<IFieldInformation[]>();
   protected readonly roleService = inject(RoleService);
-
+  public readonly doRefresh = input.required<Date>();
 
   protected getFormControl(controlName: string): FormControl {
     return this.sectionFormGroup().get(controlName) as FormControl;
@@ -33,19 +33,26 @@ export abstract class SummarySectionBaseClass {
     return this.getFormControl(controlName).get(EMaterialsFormControls.hasComment)?.value;
   }
 
-  protected isResolvedField(controlName: string): boolean {
-    return this.isFieldHasComment(controlName) &&
+  protected isResolvedField(controlName: string, rowId: string | null = null): boolean {
+    return this.isFieldHasComment(controlName, rowId) &&
       !this.isHasCommentControlChecked(controlName) &&
       ['view', 'Review'].includes(this.planStore.wizardMode()) &&
       this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 
   protected isFieldHasComment(inputKey: string, rowId: string | null = null): boolean {
-    return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && summaryField.id === rowId);
+    return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && (summaryField.id ? summaryField.id === rowId : true));
   }
 
-  protected shouldShowDifference(formControl: FormControl): boolean {
-    return formControl.dirty && this.planStore.wizardMode() === 'resubmit';
+  /**
+   * Whether to show before/after difference in resubmit mode.
+   * Compares currantValue and beforeValue - no dirty check required.
+   */
+  protected shouldShowDifference(currantValue: unknown, beforeValue: unknown): boolean {
+    if (this.planStore.wizardMode() !== 'resubmit') return false;
+    const currant = currantValue === null || currantValue === undefined ? '' : String(currantValue).trim();
+    const before = beforeValue === null || beforeValue === undefined ? '' : String(beforeValue).trim();
+    return currant !== before;
   }
 
   protected isFieldHasError(formControl: FormControl): boolean {

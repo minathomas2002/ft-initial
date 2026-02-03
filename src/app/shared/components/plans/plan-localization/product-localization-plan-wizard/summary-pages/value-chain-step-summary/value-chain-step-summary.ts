@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { merge } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
@@ -28,51 +28,68 @@ export class ValueChainStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
   readonly pageTitleForTL = this.i18nService.translate('plans.wizard.step3.title');
   formGroup = this.productPlanFormService.step3_valueChain;
-  private readonly formChangeTrigger = signal(0);
+  doRefresh = signal(new Date());
 
-  constructor() {
-    super();
-    this.formGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
-      this.formChangeTrigger.update(v => v + 1);
-    });
-  }
-
-  private sectionFormGroup(sectionKey: string): FormGroup {
-    return this.formGroup.get(sectionKey) as FormGroup;
-  }
+  private readonly _designEngineeringFormGroup = this.formGroup.get(EMaterialsFormControls.designEngineeringFormGroup) as FormGroup;
+  private readonly _sourcingFormGroup = this.formGroup.get(EMaterialsFormControls.sourcingFormGroup) as FormGroup;
+  private readonly _manufacturingFormGroup = this.formGroup.get(EMaterialsFormControls.manufacturingFormGroup) as FormGroup;
+  private readonly _assemblyTestingFormGroup = this.formGroup.get(EMaterialsFormControls.assemblyTestingFormGroup) as FormGroup;
+  private readonly _afterSalesFormGroup = this.formGroup.get(EMaterialsFormControls.afterSalesFormGroup) as FormGroup;
 
   designEngineeringFormGroup = toSignal<FormGroup>(
-    this.sectionFormGroup(EMaterialsFormControls.designEngineeringFormGroup).valueChanges.pipe(
-      startWith(this.sectionFormGroup(EMaterialsFormControls.designEngineeringFormGroup).value),
-      map(() => this.sectionFormGroup(EMaterialsFormControls.designEngineeringFormGroup))
+    merge(
+      this._designEngineeringFormGroup.valueChanges,
+      this._designEngineeringFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => {
+        this.doRefresh.set(new Date())
+      }),
+      map(() => this._designEngineeringFormGroup)
     ),
     { requireSync: true }
   );
   sourcingFormGroup = toSignal<FormGroup>(
-    this.sectionFormGroup(EMaterialsFormControls.sourcingFormGroup).valueChanges.pipe(
-      startWith(this.sectionFormGroup(EMaterialsFormControls.sourcingFormGroup).value),
-      map(() => this.sectionFormGroup(EMaterialsFormControls.sourcingFormGroup))
+    merge(
+      this._sourcingFormGroup.valueChanges,
+      this._sourcingFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
+      map(() => this._sourcingFormGroup)
     ),
     { requireSync: true }
   );
   manufacturingFormGroup = toSignal<FormGroup>(
-    this.sectionFormGroup(EMaterialsFormControls.manufacturingFormGroup).valueChanges.pipe(
-      startWith(this.sectionFormGroup(EMaterialsFormControls.manufacturingFormGroup).value),
-      map(() => this.sectionFormGroup(EMaterialsFormControls.manufacturingFormGroup))
+    merge(
+      this._manufacturingFormGroup.valueChanges,
+      this._manufacturingFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
+      map(() => this._manufacturingFormGroup)
     ),
     { requireSync: true }
   );
   assemblyTestingFormGroup = toSignal<FormGroup>(
-    this.sectionFormGroup(EMaterialsFormControls.assemblyTestingFormGroup).valueChanges.pipe(
-      startWith(this.sectionFormGroup(EMaterialsFormControls.assemblyTestingFormGroup).value),
-      map(() => this.sectionFormGroup(EMaterialsFormControls.assemblyTestingFormGroup))
+    merge(
+      this._assemblyTestingFormGroup.valueChanges,
+      this._assemblyTestingFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
+      map(() => this._assemblyTestingFormGroup)
     ),
     { requireSync: true }
   );
   afterSalesFormGroup = toSignal<FormGroup>(
-    this.sectionFormGroup(EMaterialsFormControls.afterSalesFormGroup).valueChanges.pipe(
-      startWith(this.sectionFormGroup(EMaterialsFormControls.afterSalesFormGroup).value),
-      map(() => this.sectionFormGroup(EMaterialsFormControls.afterSalesFormGroup))
+    merge(
+      this._afterSalesFormGroup.valueChanges,
+      this._afterSalesFormGroup.statusChanges
+    ).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
+      map(() => this._afterSalesFormGroup)
     ),
     { requireSync: true }
   );
@@ -84,31 +101,31 @@ export class ValueChainStepSummary extends SummaryStepBaseClass {
   afterSalesSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('afterSales'));
 
   year1Total = computed(() => {
-    this.formChangeTrigger();
+    this.doRefresh();
     return this.productPlanFormService.calculateYearTotalLocalization(1);
   });
   year2Total = computed(() => {
-    this.formChangeTrigger();
+    this.doRefresh();
     return this.productPlanFormService.calculateYearTotalLocalization(2);
   });
   year3Total = computed(() => {
-    this.formChangeTrigger();
+    this.doRefresh();
     return this.productPlanFormService.calculateYearTotalLocalization(3);
   });
   year4Total = computed(() => {
-    this.formChangeTrigger();
+    this.doRefresh();
     return this.productPlanFormService.calculateYearTotalLocalization(4);
   });
   year5Total = computed(() => {
-    this.formChangeTrigger();
+    this.doRefresh();
     return this.productPlanFormService.calculateYearTotalLocalization(5);
   });
   year6Total = computed(() => {
-    this.formChangeTrigger();
+    this.doRefresh();
     return this.productPlanFormService.calculateYearTotalLocalization(6);
   });
   year7Total = computed(() => {
-    this.formChangeTrigger();
+    this.doRefresh();
     return this.productPlanFormService.calculateYearTotalLocalization(7);
   });
 }

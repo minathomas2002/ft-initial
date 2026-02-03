@@ -19,45 +19,59 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
   private readonly opportunityTypeControl = computed(() => this.getFormControl(EMaterialsFormControls.opportunityType));
   private readonly opportunityControl = computed(() => this.getFormControl(EMaterialsFormControls.opportunity));
   private readonly submissionDateControl = computed(() => this.getFormControl(EMaterialsFormControls.submissionDate));
-  planTitleSummaryField = computed<IPlanSummaryField>(() => ({
-    label: this.i18nService.translate('plans.newPlan.planTitle'),
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.basicInfo.planTitle ?? '',
-    currantValue: this.planTitleControl()?.value,
-    hasError: this.isFieldHasError(this.planTitleControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle),
-    isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
-    showDifference: this.shouldShowDifference(this.planTitleControl()),
-  }));
+  planTitleSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.planTitleControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.basicInfo.planTitle ?? '';
+    return {
+      label: this.i18nService.translate('plans.newPlan.planTitle'),
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.planTitleControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle),
+      isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  opportunityTypeSummaryField = computed<IPlanSummaryField>(() => ({
-    label: this.i18nService.translate('plans.newPlan.opportunityType'),
-    beforeValue: '',
-    currantValue: this.mapOpportunityTypeToLabel(this.opportunityTypeControl()?.value),
-    hasError: false,
-    hasComment: false,
-    isResolved: false,
-    showDifference: false
-  }));
+  opportunityTypeSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    return {
+      label: this.i18nService.translate('plans.newPlan.opportunityType'),
+      beforeValue: '',
+      currantValue: this.mapOpportunityTypeToLabel(this.opportunityTypeControl()?.value),
+      hasError: false,
+      hasComment: false,
+      isResolved: false,
+      showDifference: false
+    };
+  });
 
-  opportunitySummaryField = computed<IPlanSummaryField>(() => ({
-    label: this.i18nService.translate('plans.newPlan.opportunity'),
-    beforeValue: '',
-    currantValue: this.opportunityControl()?.value.name,
-    hasError: false,
-    hasComment: false,
-    isResolved: false,
-    showDifference: false
-  }));
+  opportunitySummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    return {
+      label: this.i18nService.translate('plans.newPlan.opportunity'),
+      beforeValue: '',
+      currantValue: this.opportunityControl()?.value?.name ?? '',
+      hasError: false,
+      hasComment: false,
+      isResolved: false,
+      showDifference: false
+    };
+  });
 
-  submissionDateSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Submission Date',
-    beforeValue: '',
-    currantValue: this.getFormattedDate(this.submissionDateControl()?.value) || 'Invalid Date',
-    hasError: false,
-    hasComment: false,
-    isResolved: false,
-    showDifference: false
-  }));
+  submissionDateSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    return {
+      label: 'Submission Date',
+      beforeValue: '',
+      currantValue: this.getFormattedDate(this.submissionDateControl()?.value) || 'Invalid Date',
+      hasError: false,
+      hasComment: false,
+      isResolved: false,
+      showDifference: false
+    };
+  });
 
   private mapOpportunityTypeToLabel(opportunityType: string): string {
     const enumValue = EOpportunityType[opportunityType as keyof typeof EOpportunityType];

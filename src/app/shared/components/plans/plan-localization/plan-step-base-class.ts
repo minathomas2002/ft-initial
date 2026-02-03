@@ -1,11 +1,12 @@
 import { computed, effect, inject, OnInit, signal, InputSignal, ModelSignal, Directive } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { PlanCommentSyncService } from 'src/app/shared/services/plan/plan-comment-sync.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
@@ -26,6 +27,7 @@ export abstract class PlanStepBaseClass {
   // Injected services
   protected readonly formUtilityService = inject(FormUtilityService);
   protected readonly toasterService = inject(ToasterService);
+  private readonly planCommentSyncService = inject(PlanCommentSyncService);
   readonly planStore = inject(PlanStore);
   protected readonly destroyRef = inject(DestroyRef);
 
@@ -37,7 +39,9 @@ export abstract class PlanStepBaseClass {
   abstract readonly isViewMode: InputSignal<boolean>;
   abstract readonly correctedFieldIds: InputSignal<string[]>;
   abstract readonly correctedFields: InputSignal<IFieldInformation[]>;
-
+  get EMaterialsFormControls() {
+    return EMaterialsFormControls;
+  }
   // Abstract property for plan form service - subclasses must provide either ProductPlanFormService or ServicePlanFormService
   abstract readonly planFormService: ProductPlanFormService | ServicePlanFormService;
 
@@ -347,30 +351,33 @@ export abstract class PlanStepBaseClass {
 
       // Subscribe to status changes to track when field becomes valid
       control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        if (control.status === 'VALID') {
+        // Also mark "changed once" if this control became dirty.
+        if (fieldForControl) {
+          this.markCorrectedFieldChangedOnce(fieldForControl, control);
+        }
+
+        // Only remove from selectedInputs if the control is VALID AND has been changed by the user
+        // This prevents premature removal when the form re-renders or status changes without user input
+        if (control.status === 'VALID' && control.dirty) {
           const field = correctedFields.find(f => this.getControlForField(f) === control);
           if (field) {
             this.upDateSelectedInputs(false, field);
           }
-        }
-
-        // Also mark "changed once" if this control became dirty.
-        if (fieldForControl) {
-          this.markCorrectedFieldChangedOnce(fieldForControl, control);
         }
       });
 
       // Also subscribe to value changes to handle cases where status doesn't change (e.g., file uploads)
       control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        if (control.status === 'VALID') {
+        if (fieldForControl) {
+          this.markCorrectedFieldChangedOnce(fieldForControl, control);
+        }
+
+        // Only remove from selectedInputs if the control is VALID AND has been changed by the user
+        if (control.status === 'VALID' && control.dirty) {
           const field = correctedFields.find(f => this.getControlForField(f) === control);
           if (field) {
             this.upDateSelectedInputs(false, field);
           }
-        }
-
-        if (fieldForControl) {
-          this.markCorrectedFieldChangedOnce(fieldForControl, control);
         }
       });
     });
@@ -657,6 +664,9 @@ export abstract class PlanStepBaseClass {
     this.commentPhase.set('viewing');
     this.commentFormControl.disable();
 
+    // Merge this page's comment into planComments (add/remove fields as user selected)
+    this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
+
     // In resubmit (investor) flow, reset any current orange selections and counters
     if (this.isResubmitMode()) {
       // Clear the selected inputs so step highlights/counts reset
@@ -694,6 +704,9 @@ export abstract class PlanStepBaseClass {
     this.commentFormControl.setValue(commentValue, { emitEvent: false });
     this.commentPhase.set('viewing');
     this.commentFormControl.disable();
+
+    // Merge this page's comment into planComments (add/remove fields as user selected)
+    this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
     // In resubmit (investor) flow, reset any current orange selections and counters
     if (this.isResubmitMode()) {

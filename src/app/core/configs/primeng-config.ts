@@ -678,7 +678,7 @@ const MY_PRESET = definePreset(Lara, {
     },
     success: {
       25: "#F6FEF9",
-      50: "#F2F8F6",
+      50: "#E6F1ED",
       100: "#B9D9CB",
       200: "#8CC0AA",
       300: "#60A789",

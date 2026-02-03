@@ -58,7 +58,6 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   pageTitle = input<string>('Value Chain');
 
   formGroup = this.planFormService.step3_valueChain;
-  readonly EMaterialsFormControls = EMaterialsFormControls;
 
   // Dropdown options
   inHouseOrProcuredOptions = this.planStore.inHouseProcuredOptions;

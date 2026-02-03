@@ -1,13 +1,27 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
+import { merge } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
-import { SummarySectionDirectLocalization } from '../../../service-localization-step-summary/summary-sections/summary-section-direct-localization/summary-section-direct-localization';
+import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
+import { LocalizationStrategySummarySection } from './step-summary-sections/localization-strategy-summary-section/localization-strategy-summary-section';
+import { EntityLevelSummarySection } from '../existing-saudi-step-summary/step-summary-sections/entity-level-summary-section/entity-level-summary-section';
+import { ServiceLevelSummarySection } from '../existing-saudi-step-summary/step-summary-sections/service-level-summary-section/service-level-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
+import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
   selector: 'app-direct-localization-step-summary',
-  imports: [SummarySectionDirectLocalization, PageCommentBox],
+  imports: [
+    SummarySectionHeader,
+    LocalizationStrategySummarySection,
+    EntityLevelSummarySection,
+    ServiceLevelSummarySection,
+    PageCommentBox,
+  ],
   templateUrl: './direct-localization-step-summary.html',
   styleUrl: './direct-localization-step-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,11 +31,22 @@ export class DirectLocalizationStepSummary extends SummaryStepBaseClass {
 
   override readonly pageTitleForTL = 'Direct Localization';
   override readonly formGroup: FormGroup = this.servicePlanFormService.step4_directLocalization;
+  doRefresh = signal(new Date());
+  constructor() {
+    super();
+    this.servicePlanFormService.syncServicesFromCoverPageToDirectLocalization();
+  }
 
-  pageCommentsArray = computed(() => {
-    const c = this.stepComments();
-    return c ? [c] : [];
-  });
+  directLocalizationFormGroup = toSignal<FormGroup>(
+    merge(this.formGroup.valueChanges, this.formGroup.statusChanges).pipe(
+      startWith(null),
+      tap(() => this.doRefresh.set(new Date())),
+      map(() => this.formGroup)
+    ),
+    { requireSync: true }
+  );
 
-  originalPlanResponse = computed(() => this.planStore.servicePlanData());
+  localizationStrategySummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('localizationStrategy'));
+  entityLevelSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('entityLevel'));
+  serviceLevelSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('serviceLevel'));
 }

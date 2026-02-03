@@ -18,27 +18,38 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
   private readonly registeredVendorIDControl = computed(() => this.getValueFormControl(EMaterialsFormControls.registeredVendorIDwithSEC));
   private readonly doYouCurrentlyHaveLocalAgentControl = computed(() => this.getFormControl(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA));
 
-  globalHQLocationSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Global HQ Location',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.globalHQLocation ?? '',
-    currantValue: this.globalHQLocationControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.globalHQLocationControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.globalHQLocation),
-    isResolved: this.isResolvedField(EMaterialsFormControls.globalHQLocation),
-    showDifference: this.shouldShowDifference(this.globalHQLocationControl()),
-  }));
+  globalHQLocationSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.globalHQLocationControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.globalHQLocation ?? '';
+    return {
+      label: 'Global HQ Location',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.globalHQLocationControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.globalHQLocation),
+      isResolved: this.isResolvedField(EMaterialsFormControls.globalHQLocation),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  registeredVendorIDSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Registered Vendor ID with SEC',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.vendorIdWithSEC ?? '',
-    currantValue: this.registeredVendorIDControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.registeredVendorIDControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.registeredVendorIDwithSEC),
-    isResolved: this.isResolvedField(EMaterialsFormControls.registeredVendorIDwithSEC),
-    showDifference: this.shouldShowDifference(this.registeredVendorIDControl()),
-  }));
+  registeredVendorIDSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.registeredVendorIDControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.vendorIdWithSEC ?? '';
+    return {
+      label: 'Registered Vendor ID with SEC',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.registeredVendorIDControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.registeredVendorIDwithSEC),
+      isResolved: this.isResolvedField(EMaterialsFormControls.registeredVendorIDwithSEC),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
   doYouCurrentlyHaveLocalAgentSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
     const value = this.doYouCurrentlyHaveLocalAgentControl()?.value;
     const displayValue = value === true ? 'Yes' : value === false ? 'No' : '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.hasLocalAgent;
@@ -50,7 +61,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
       hasError: this.isFieldHasError(this.doYouCurrentlyHaveLocalAgentControl()),
       hasComment: this.isFieldHasComment(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
       isResolved: this.isResolvedField(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
-      showDifference: this.shouldShowDifference(this.doYouCurrentlyHaveLocalAgentControl()),
+      showDifference: this.shouldShowDifference(displayValue, beforeDisplay),
     };
   });
 }

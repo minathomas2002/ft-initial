@@ -32,113 +32,168 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     return value === true ? 'Yes' : value === false ? 'No' : '';
   }
 
-  productManufacturingExperienceSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Product Manufacturing Experience',
-    beforeValue: this.mfg()?.experienceRange ?? '',
-    currantValue: this.productManufacturingExperienceControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.productManufacturingExperienceControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.productManufacturingExperience),
-    isResolved: this.isResolvedField(EMaterialsFormControls.productManufacturingExperience),
-    showDifference: this.shouldShowDifference(this.productManufacturingExperienceControl()),
-  }));
+  productManufacturingExperienceSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.productManufacturingExperienceControl()?.value ?? '';
+    const beforeValue = this.mfg()?.experienceRange ?? '';
+    return {
+      label: 'Product Manufacturing Experience',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.productManufacturingExperienceControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.productManufacturingExperience),
+      isResolved: this.isResolvedField(EMaterialsFormControls.productManufacturingExperience),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  provideToSECSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Do you currently provide this product to SEC?',
-    beforeValue: this.yesNo(this.mfg()?.provideToSEC),
-    currantValue: this.yesNo(this.provideToSECControl()?.value),
-    hasError: this.isFieldHasError(this.provideToSECControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.provideToSEC),
-    isResolved: this.isResolvedField(EMaterialsFormControls.provideToSEC),
-    showDifference: this.shouldShowDifference(this.provideToSECControl()),
-  }));
+  provideToSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.yesNo(this.provideToSECControl()?.value);
+    const beforeValue = this.yesNo(this.mfg()?.provideToSEC);
+    return {
+      label: 'Do you currently provide this product to SEC?',
+      beforeValue,
+      currantValue,
+      hasError: this.isFieldHasError(this.provideToSECControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.provideToSEC),
+      isResolved: this.isResolvedField(EMaterialsFormControls.provideToSEC),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  qualifiedPlantLocationSECSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Qualified Plant Location (By SEC)',
-    beforeValue: this.mfg()?.qualifiedPlantLocation_SEC ?? '',
-    currantValue: this.qualifiedPlantLocationSECControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.qualifiedPlantLocationSECControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.qualifiedPlantLocationSEC),
-    isResolved: this.isResolvedField(EMaterialsFormControls.qualifiedPlantLocationSEC),
-    showDifference: this.shouldShowDifference(this.qualifiedPlantLocationSECControl()),
-  }));
+  qualifiedPlantLocationSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.qualifiedPlantLocationSECControl()?.value ?? '';
+    const beforeValue = this.mfg()?.qualifiedPlantLocation_SEC ?? '';
+    return {
+      label: 'Qualified Plant Location (By SEC)',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.qualifiedPlantLocationSECControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.qualifiedPlantLocationSEC),
+      isResolved: this.isResolvedField(EMaterialsFormControls.qualifiedPlantLocationSEC),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  approvedVendorIDSECSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Approved Vendor ID (with SEC)',
-    beforeValue: this.mfg()?.approvedVendorId_SEC ?? '',
-    currantValue: this.approvedVendorIDSECControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.approvedVendorIDSECControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.approvedVendorIDSEC),
-    isResolved: this.isResolvedField(EMaterialsFormControls.approvedVendorIDSEC),
-    showDifference: this.shouldShowDifference(this.approvedVendorIDSECControl()),
-  }));
+  approvedVendorIDSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.approvedVendorIDSECControl()?.value ?? '';
+    const beforeValue = this.mfg()?.approvedVendorId_SEC ?? '';
+    return {
+      label: 'Approved Vendor ID (with SEC)',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.approvedVendorIDSECControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.approvedVendorIDSEC),
+      isResolved: this.isResolvedField(EMaterialsFormControls.approvedVendorIDSEC),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  yearsOfExperienceSECSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Years of Experience (with SEC)',
-    beforeValue: this.mfg()?.yearsExperience_SEC?.toString() || '',
-    currantValue: this.yearsOfExperienceSECControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.yearsOfExperienceSECControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.yearsOfExperienceSEC),
-    isResolved: this.isResolvedField(EMaterialsFormControls.yearsOfExperienceSEC),
-    showDifference: this.shouldShowDifference(this.yearsOfExperienceSECControl()),
-  }));
+  yearsOfExperienceSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.yearsOfExperienceSECControl()?.value ?? '';
+    const beforeValue = this.mfg()?.yearsExperience_SEC?.toString() || '';
+    return {
+      label: 'Years of Experience (with SEC)',
+      beforeValue,
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.yearsOfExperienceSECControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.yearsOfExperienceSEC),
+      isResolved: this.isResolvedField(EMaterialsFormControls.yearsOfExperienceSEC),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  totalQuantitiesSECSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Total Quantities provided to SEC',
-    beforeValue: this.mfg()?.totalQuantitiesToSEC?.toString() || '',
-    currantValue: this.totalQuantitiesSECControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.totalQuantitiesSECControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.totalQuantitiesSEC),
-    isResolved: this.isResolvedField(EMaterialsFormControls.totalQuantitiesSEC),
-    showDifference: this.shouldShowDifference(this.totalQuantitiesSECControl()),
-  }));
+  totalQuantitiesSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.totalQuantitiesSECControl()?.value ?? '';
+    const beforeValue = this.mfg()?.totalQuantitiesToSEC?.toString() || '';
+    return {
+      label: 'Total Quantities provided to SEC',
+      beforeValue,
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.totalQuantitiesSECControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.totalQuantitiesSEC),
+      isResolved: this.isResolvedField(EMaterialsFormControls.totalQuantitiesSEC),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  provideToLocalSuppliersSummaryField = computed<IPlanSummaryField>(() => ({
-    label: "Do you currently provide this product to SEC's approved local suppliers?",
-    beforeValue: this.yesNo(this.mfg()?.provideToLocalSuppliers),
-    currantValue: this.yesNo(this.provideToLocalSuppliersControl()?.value),
-    hasError: this.isFieldHasError(this.provideToLocalSuppliersControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.provideToLocalSuppliers),
-    isResolved: this.isResolvedField(EMaterialsFormControls.provideToLocalSuppliers),
-    showDifference: this.shouldShowDifference(this.provideToLocalSuppliersControl()),
-  }));
+  provideToLocalSuppliersSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.yesNo(this.provideToLocalSuppliersControl()?.value);
+    const beforeValue = this.yesNo(this.mfg()?.provideToLocalSuppliers);
+    return {
+      label: "Do you currently provide this product to SEC's approved local suppliers?",
+      beforeValue,
+      currantValue,
+      hasError: this.isFieldHasError(this.provideToLocalSuppliersControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.provideToLocalSuppliers),
+      isResolved: this.isResolvedField(EMaterialsFormControls.provideToLocalSuppliers),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  namesOfSECApprovedSuppliersSummaryField = computed<IPlanSummaryField>(() => ({
-    label: "Name(s) of SEC approved local supplier(s)",
-    beforeValue: this.mfg()?.localSupplierNames || '',
-    currantValue: this.namesOfSECApprovedSuppliersControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.namesOfSECApprovedSuppliersControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.namesOfSECApprovedSuppliers),
-    isResolved: this.isResolvedField(EMaterialsFormControls.namesOfSECApprovedSuppliers),
-    showDifference: this.shouldShowDifference(this.namesOfSECApprovedSuppliersControl()),
-  }));
+  namesOfSECApprovedSuppliersSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.namesOfSECApprovedSuppliersControl()?.value ?? '';
+    const beforeValue = this.mfg()?.localSupplierNames || '';
+    return {
+      label: "Name(s) of SEC approved local supplier(s)",
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.namesOfSECApprovedSuppliersControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.namesOfSECApprovedSuppliers),
+      isResolved: this.isResolvedField(EMaterialsFormControls.namesOfSECApprovedSuppliers),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  qualifiedPlantLocationSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Qualified Plant Location',
-    beforeValue: this.mfg()?.qualifiedPlantLocation_LocalSupplier || '',
-    currantValue: this.qualifiedPlantLocationControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.qualifiedPlantLocationControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.qualifiedPlantLocation),
-    isResolved: this.isResolvedField(EMaterialsFormControls.qualifiedPlantLocation),
-    showDifference: this.shouldShowDifference(this.qualifiedPlantLocationControl()),
-  }));
+  qualifiedPlantLocationSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.qualifiedPlantLocationControl()?.value ?? '';
+    const beforeValue = this.mfg()?.qualifiedPlantLocation_LocalSupplier || '';
+    return {
+      label: 'Qualified Plant Location',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.qualifiedPlantLocationControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.qualifiedPlantLocation),
+      isResolved: this.isResolvedField(EMaterialsFormControls.qualifiedPlantLocation),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  yearsOfExperienceSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Years of Experience',
-    beforeValue: this.mfg()?.yearsExperience_LocalSupplier?.toString() || '',
-    currantValue: this.yearsOfExperienceControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.yearsOfExperienceControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.yearsOfExperience),
-    isResolved: this.isResolvedField(EMaterialsFormControls.yearsOfExperience),
-    showDifference: this.shouldShowDifference(this.yearsOfExperienceControl()),
-  }));
+  yearsOfExperienceSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.yearsOfExperienceControl()?.value ?? '';
+    const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '';
+    return {
+      label: 'Years of Experience',
+      beforeValue,
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.yearsOfExperienceControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.yearsOfExperience),
+      isResolved: this.isResolvedField(EMaterialsFormControls.yearsOfExperience),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  totalQuantitiesSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Total quantities provided to all approved local suppliers',
-    beforeValue: this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '',
-    currantValue: this.totalQuantitiesControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.totalQuantitiesControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.totalQuantities),
-    isResolved: this.isResolvedField(EMaterialsFormControls.totalQuantities),
-    showDifference: this.shouldShowDifference(this.totalQuantitiesControl()),
-  }));
+  totalQuantitiesSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.totalQuantitiesControl()?.value ?? '';
+    const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '';
+    return {
+      label: 'Total quantities provided to all approved local suppliers',
+      beforeValue,
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.totalQuantitiesControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.totalQuantities),
+      isResolved: this.isResolvedField(EMaterialsFormControls.totalQuantities),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }

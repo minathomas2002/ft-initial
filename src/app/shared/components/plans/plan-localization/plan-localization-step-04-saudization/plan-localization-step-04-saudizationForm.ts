@@ -60,7 +60,6 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   });
 
   formGroup = this.planFormService.step4_saudization;
-  readonly EMaterialsFormControls = EMaterialsFormControls;
 
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');
@@ -98,8 +97,14 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
 
   constructor() {
     super();
+    // Check if attachments form group is available (may not be initialized during construction)
+    const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
+    if (!attachmentsFormGroup) {
+      return;
+    }
+
     // Initialize files from form control value
-    const attachmentsControl = this.getAttachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+    const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
     if (attachmentsControl) {
       const control = this.getValueControl(attachmentsControl);
       const formValue = control.value;
@@ -111,17 +116,28 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
     // Sync files signal changes to form control
     effect(() => {
       const filesValue = this.files();
-      const attachmentsControl = this.getAttachmentsFormGroup()?.get(EMaterialsFormControls.attachments);
+      if (!this.planFormService) {
+        return;
+      }
+      const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
+      if (!attachmentsFormGroup) {
+        return;
+      }
+      const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
       if (attachmentsControl) {
         const control = this.getValueControl(attachmentsControl);
         // Compare arrays by length and content to avoid infinite loops
         const currentValue = control.value;
-        const isDifferent = !Array.isArray(currentValue) ||
+        const currentEmpty = currentValue == null || (Array.isArray(currentValue) && currentValue.length === 0);
+        const filesEmpty = filesValue == null || (Array.isArray(filesValue) && filesValue.length === 0);
+        const isDifferent = (currentEmpty && filesEmpty)
+          ? false
+          : !Array.isArray(currentValue) ||
           currentValue.length !== filesValue.length ||
           currentValue.some((file: File, index: number) => file !== filesValue[index]);
 
         if (isDifferent) {
-          control.setValue(filesValue, { emitEvent: true });
+          control.setValue(filesValue);
           // Mark as dirty and trigger validation to show errors
           control.markAsDirty();
           control.updateValueAndValidity();
@@ -218,49 +234,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
       return;
     }
 
-    // Check if attachments form group is available (may not be initialized during construction)
-    const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
-    if (!attachmentsFormGroup) {
-      return;
-    }
 
-    // Initialize files from form control value
-    const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
-    if (attachmentsControl) {
-      const control = this.getValueControl(attachmentsControl);
-      const formValue = control.value;
-      if (Array.isArray(formValue)) {
-        this.files.set(formValue);
-      }
-    }
-
-    // Sync files signal changes to form control
-    effect(() => {
-      const filesValue = this.files();
-      if (!this.planFormService) {
-        return;
-      }
-      const attachmentsFormGroup = this.planFormService.attachmentsFormGroup;
-      if (!attachmentsFormGroup) {
-        return;
-      }
-      const attachmentsControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
-      if (attachmentsControl) {
-        const control = this.getValueControl(attachmentsControl);
-        // Compare arrays by length and content to avoid infinite loops
-        const currentValue = control.value;
-        const isDifferent = !Array.isArray(currentValue) ||
-          currentValue.length !== filesValue.length ||
-          currentValue.some((file: File, index: number) => file !== filesValue[index]);
-
-        if (isDifferent) {
-          control.setValue(filesValue, { emitEvent: true });
-          // Mark as dirty and trigger validation to show errors
-          control.markAsDirty();
-          control.updateValueAndValidity();
-        }
-      }
-    });
   }
 
   // Helper to get year control names

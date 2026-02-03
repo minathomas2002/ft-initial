@@ -3,7 +3,7 @@
   <!-- Resubmit mode: Show Add/Edit comment button without checkboxes -->
   @if(commentPhase() === 'viewing'){
   <p-button
-    label="Edit Comment"
+    label="Edit"
     variant="outlined"
     icon="icon-edit"
     rounded
@@ -12,7 +12,7 @@
   />
 
   <p-button
-    label="Delete Comment"
+    label="Delete"
     severity="danger"
     icon="icon-trash-2"
     rounded
@@ -22,7 +22,7 @@
   />
   } @else if(!hasInvestorComment() && commentPhase() === 'none'){
   <p-button
-    label="Add Comment"
+    label="Add"
     severity="warn"
     icon="icon-message-circle"
     rounded
@@ -30,13 +30,21 @@
   />
   } @else if(commentPhase() === 'adding' || commentPhase() === 'editing'){
   <p-button
-    label="Save Comment"
+    label="Save"
     severity="warn"
     icon="icon-check-circle"
     rounded
-    [disabled]="commentFormControl().invalid"
+    [disabled]="isCommentFormControlInvalid() || !commentFormControl().value"
     (click)="onSaveComment()"
   />
+
+  <!-- <p-button
+    label="Cancel"
+    variant="outlined"
+    rounded
+    styleClass="border-0! bg-white!"
+    (click)="onCancelEditing()"
+  /> -->
   }
   } @else {
   <!-- Normal mode: Show full comment state with checkboxes -->
@@ -51,7 +59,7 @@
   />
 
   <p-button
-    label="Delete Comment"
+    label="Delete"
     severity="danger"
     icon="icon-trash-2"
     rounded
@@ -74,7 +82,7 @@
   }
   @if(commentPhase() === 'adding'){
   <p-button
-    label="Add Comment"
+    label="Add"
     severity="warn"
     icon="icon-message-circle"
     rounded
@@ -83,13 +91,21 @@
   />
   }@else{
   <p-button
-    label="Save Comment"
+    label="Save"
     severity="warn"
     icon="icon-check-circle"
     rounded
-    [disabled]="commentFormControl().invalid || (mode() === 'fieldSelection' && !checked())"
+    [disabled]="isCommentFormControlInvalid() || (mode() === 'fieldSelection' && !checked())"
     (click)="onSaveComment()"
   />
+
+  <!-- <p-button
+    label="Cancel"
+    variant="outlined"
+    rounded
+    styleClass="border-0! bg-white!"
+    (click)="onCancelEditing()"
+  /> -->
   }
   }
   }

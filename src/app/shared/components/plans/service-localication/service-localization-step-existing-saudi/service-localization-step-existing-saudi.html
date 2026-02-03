@@ -48,19 +48,19 @@
 
         <!-- Vendor ID with SEC -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
-            <p-inputnumber
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
-              [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-              [maxlength]="7"
-              [useGrouping]="false"
-              [minFractionDigits]="0"
-              [maxFractionDigits]="0"
-              [allowEmpty]="true"
-              mode="decimal"
-              fluid
-              placeholder="Registered Vendor ID with SEC"
-            />
+          <p-inputnumber
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
+            [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
+            [color]="selectedInputColor()"
+            [maxlength]="7"
+            [useGrouping]="false"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="0"
+            [allowEmpty]="true"
+            mode="decimal"
+            fluid
+            [placeholder]="isReviewMode() ? '' : 'Registered Vendor ID with SEC'"
+          />
         </td>
 
         <!-- BENA Registered ID -->
@@ -77,27 +77,17 @@
 
         <!-- Company Type (Multi-select) -->
         <td class="p-3 border border-gray-200 min-w-[250px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyType))"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'saudiCompanyDetails',
-              inputKey: 'companyType_' + index,
-              label: 'Company Type'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <p-multiselect
-              [options]="companyTypeOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
-              placeholder="Select company type(s)"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('companyType_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
+          <p-multiselect
+            [options]="companyTypeOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
+            placeholder="Select company type(s)"
+            fluid
+            [appendTo]="'body'"
+            [appConditionalColorClass]="highlightInput('companyType_' + index, itemControl.get('rowId')?.value)"
+            [color]="selectedInputColor()"
+          />
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
             [label]="'Company Type'"
@@ -105,36 +95,29 @@
         </td>
 
         <!-- Qualification Status with SEC (Enabled only if Manufacturer) -->
-        <td class="p-3 border border-gray-200 min-w-[250px]">
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
-            (valueChanged)="upDateSelectedInputs($event, {
-              section: 'saudiCompanyDetails',
-              inputKey: 'qualificationStatus_' + index,
-              label: 'Qualification Status with SEC'
-            }, itemControl.get('rowId')?.value)"
-          >
-            <p-select
-              [options]="qualificationStatusOptions()"
-              optionLabel="name"
-              optionValue="id"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
-              placeholder="Select qualification status"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('qualificationStatus_' + index, itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
-          </app-group-input-with-checkbox>
+        <td class="p-3 border border-gray-200 min-w-[250px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.qualificationStatus)">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.qualificationStatus)) {
+          <p-select
+            [options]="qualificationStatusOptions()"
+            optionLabel="name"
+            optionValue="id"
+            [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
+            placeholder="Select qualification status"
+            fluid
+            [appendTo]="'body'"
+            [appConditionalColorClass]="highlightInput('qualificationStatus_' + index, itemControl.get('rowId')?.value)"
+            [color]="selectedInputColor()"
+          />
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
             [label]="'Qualification Status with SEC'"
           />
+          }
         </td>
 
         <!-- Product(s) - Manufacturer + Qualified or Under Pre-Qualification -->
-        <td class="p-3 border border-gray-200 min-w-[250px]">
+        <td class="p-3 border border-gray-200 min-w-[250px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.products)">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.products)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.products))"
@@ -144,25 +127,32 @@
               label: 'Product(s)'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
-              type="text"
-              pInputText
+            <textarea
+              pTextarea
               fluid
+              rows="3"
               [maxlength]="255"
               placeholder="Enter specify the product(s)"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
               [appConditionalColorClass]="highlightInput('products_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.products)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.products)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
             [label]="'Product(s)'"
           />
+          }
         </td>
 
         <!-- Company Overview - Manufacturer + Not Qualified -->
-        <td class="p-3 border border-gray-200 min-w-[300px]">
+        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverview)">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverview)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverview))"
@@ -172,25 +162,33 @@
               label: 'Company Overview'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
               fluid
+              rows="3"
               [maxlength]="255"
               placeholder="Enter company overview"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
               [appConditionalColorClass]="highlightInput('companyOverview_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverview)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.companyOverview)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
             [label]="'Company Overview'"
           />
+          }
         </td>
 
         <!-- Key Projects Executed - Contractor -->
-        <td class="p-3 border border-gray-200 min-w-[300px]">
+        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
@@ -200,25 +198,34 @@
               label: 'Key Projects Executed'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
+              fluid
+              rows="3"
               fluid
               [maxlength]="255"
               placeholder="Enter key projects executed by contractor for SEC"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
               [appConditionalColorClass]="highlightInput('keyProjectsExecutedByContractorForSEC_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
             [label]="'Key Projects Executed'"
           />
+          }
         </td>
 
         <!-- Company Overview, Key Project Details - Contractor -->
-        <td class="p-3 border border-gray-200 min-w-[300px]">
+        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewKeyProjectDetails)">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewKeyProjectDetails)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
@@ -228,25 +235,35 @@
               label: 'Company Overview, Key Project Details'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
+              fluid
+              rows="3"
+              fluid
               fluid
               [maxlength]="255"
               placeholder="Enter company overview, key project details etc."
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
               [appConditionalColorClass]="highlightInput('companyOverviewKeyProjectDetails_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
             [label]="'Company Overview, Key Project Details'"
           />
+          }
         </td>
 
         <!-- Company Overview - Other -->
-        <td class="p-3 border border-gray-200 min-w-[300px]">
+        <td class="p-3 border border-gray-200 min-w-[300px]" [class.bg-gray-100]="!isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewOther)">
+          @if (isSaudiCompanyDetailsFieldSelectable(itemControl, EMaterialsFormControls.companyOverviewOther)) {
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
@@ -256,21 +273,29 @@
               label: 'Company Overview'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
+              fluid
+              rows="3"
               fluid
               [maxlength]="255"
               placeholder="Enter company overview"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
               [appConditionalColorClass]="highlightInput('companyOverviewOther_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther)).value?.length || 0 }} / 255
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
             [label]="'Company Overview'"
           />
+          }
         </td>
       </ng-template>
     </app-form-array-input>
@@ -306,7 +331,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementType))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'collaborationPartnership',
-                inputKey: 'agreementType_' + index,
+                inputKey: 'agreementTypeWithSaudiCompany',
                 label: 'Agreement Type with Saudi Company'
               }, itemControl.get('rowId')?.value)"
             >
@@ -318,7 +343,7 @@
                 placeholder="Select agreement type with Saudi Company"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('agreementType_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('agreementTypeWithSaudiCompany', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -332,16 +357,21 @@
                 label: 'Other Agreement Details'
               }, itemControl.get('rowId')?.value)"
             >
-              <input
+              <textarea
                 type="text"
-                pInputText
+                pTextarea
                 fluid
                 [maxlength]="100"
                 placeholder="Enter other agreement details"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
                 [appConditionalColorClass]="highlightInput('agreementOtherDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
-              />
+              ></textarea>
+              @if (!getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails)).disabled) {
+              <div class="text-xs text-gray-500 text-right mt-1">
+                {{ getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails)).value?.length || 0 }} / 100
+              </div>
+              }
             </app-group-input-with-checkbox>
             }
           </div>
@@ -364,7 +394,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: 'agreementSigningDate_' + index,
+              inputKey: 'agreementSigningDate',
               label: 'Agreement Signing Date'
             }, itemControl.get('rowId')?.value)"
           >
@@ -376,7 +406,7 @@
               placeholder="Select quarter"
               fluid
               [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('agreementSigningDate_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('agreementSigningDate', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
@@ -393,20 +423,26 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: 'supervisionOversightEntity_' + index,
+              inputKey: 'supervisionOversightEntity',
               label: 'Supervision / Oversight'
             }, itemControl.get('rowId')?.value)"
           >
-            <input
+            <textarea
               type="text"
-              pInputText
+              pTextarea
               fluid
+              rows="3"
               [maxlength]="100"
-              placeholder="E.g., MoEn, PIF, etc."
+              [placeholder]="isReviewMode() ? '' : 'E.g., MoEn, PIF, etc.'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
-              [appConditionalColorClass]="highlightInput('supervisionOversightEntity_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('supervisionOversightEntity', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
-            />
+            ></textarea>
+            @if (!getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity)).disabled) {
+            <div class="text-xs text-gray-500 text-right mt-1">
+              {{ getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity)).value?.length || 0 }} / 100
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
@@ -566,7 +602,7 @@
                   section: 'entityLevel',
                   inputKey: uniqueInputKey,
                   label: row.label + ' - ' + yearColumns()[i]
-                })"
+                }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
                   fluid
@@ -663,7 +699,7 @@
 
           <!-- Year Columns (Expected Annual Headcount) -->
           @for (yearKey of yearControlKeys; track yearKey; let i = $index) {
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td class="p-3 border border-gray-200 min-w-[200px]">
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(itemControl.get(yearKey + '_headcount'))"
@@ -770,7 +806,7 @@
                 fluid
                 rows="3"
                 [maxlength]="500"
-                placeholder="Mention Support required from SEC to localize the service (if any)"
+                [placeholder]="isReviewMode() ? '' : 'Mention Support required from SEC to localize the service (if any)'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
                 [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -829,7 +865,7 @@
   }
 
   <app-comment-input
-    [commentFormControl]="stepCommentFormControl"
+    [commentFormControl]="commentFormControl"
     [commentPhase]="commentPhase()"
   />
 

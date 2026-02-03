@@ -305,7 +305,7 @@
       "createOpportunity": "Create Opportunity",
       "editOpportunity": "Edit Opportunity",
       "addOpportunity": "Add Opportunity",
-      "saveAsDraft": "Save a draft",
+      "saveAsDraft": "Save as draft",
       "back": "Back",
       "next": "Next",
       "publish": "Publish",
@@ -707,12 +707,12 @@
       "selectPlanType": "Select Plan Type",
       "selectStatus": "Select Status",
       "selectSubmissionDate": "Select Submission Date",
-      "allTypes": "Plan Type",
+      "allTypes": "All Plan Types",
       "service": "Service",
       "material": "Material",
-      "allStatuses": "Status",
-      "selectAssignee": "Select Assignee",
-      "allAssignees": "Assignee"
+      "allStatuses":"All Statuses",
+      "allAssignees":"All Assignees",
+      "selectAssignee": "Assignee"
     },
     "wizard": {
       "step1": {
@@ -764,6 +764,7 @@
       "emailId": "Email ID",
       "emailIdPlaceholder": "Enter Email ID",
       "signature": "Signature",
+      "signatureSectionHeader": "Plan Owner Information and Signature",
       "drawSignature": "Draw your signature",
       "signaturePlaceholder": "Draw your signature using your mouse",
       "change": "Change",

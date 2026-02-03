@@ -18,33 +18,48 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
   private readonly ceoNameControl = computed(() => this.getValueFormControl(EMaterialsFormControls.ceoName));
   private readonly ceoEmailIDControl = computed(() => this.getValueFormControl(EMaterialsFormControls.ceoEmailID));
 
-  companyNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Company Name',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.companyName ?? '',
-    currantValue: this.companyNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.companyNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName),
-    isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
-    showDifference: this.shouldShowDifference(this.companyNameControl()),
-  }));
+  companyNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.companyNameControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.companyName ?? '';
+    return {
+      label: 'Company Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.companyNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName),
+      isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  ceoNameSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'CEO Name',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.ceoName ?? '',
-    currantValue: this.ceoNameControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.ceoNameControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoName),
-    isResolved: this.isResolvedField(EMaterialsFormControls.ceoName),
-    showDifference: this.shouldShowDifference(this.ceoNameControl()),
-  }));
+  ceoNameSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.ceoNameControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.ceoName ?? '';
+    return {
+      label: 'CEO Name',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.ceoNameControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoName),
+      isResolved: this.isResolvedField(EMaterialsFormControls.ceoName),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  ceoEmailSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'CEO Email',
-    beforeValue: this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.ceoEmail ?? '',
-    currantValue: this.ceoEmailIDControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.ceoEmailIDControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoEmailID),
-    isResolved: this.isResolvedField(EMaterialsFormControls.ceoEmailID),
-    showDifference: this.shouldShowDifference(this.ceoEmailIDControl()),
-  }));
+  ceoEmailSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.ceoEmailIDControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.ceoEmail ?? '';
+    return {
+      label: 'CEO Email',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.ceoEmailIDControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoEmailID),
+      isResolved: this.isResolvedField(EMaterialsFormControls.ceoEmailID),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }

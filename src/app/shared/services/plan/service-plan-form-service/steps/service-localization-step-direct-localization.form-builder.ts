@@ -257,7 +257,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     if (!otherDetailsControl) return;
 
     if (localizationApproach === ELocalizationApproach.Other.toString()) {
-      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(250)]);
+      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
     } else {
       otherDetailsControl.clearValidators();
       otherDetailsControl.reset();
@@ -429,9 +429,9 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
         ? (existingDataMap.get(service.id) ?? cache?.get(service.id))
         : existingDataByIndex[index];
       if (existingData) {
-        // Restore all fields except serviceName and serviceId
+        // Restore all fields except serviceName and serviceId (include rowId so comment matching works on summary)
         Object.keys(existingData).forEach(key => {
-          if (key !== EMaterialsFormControls.rowId && key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
+          if (key !== EMaterialsFormControls.serviceName && key !== EMaterialsFormControls.serviceId) {
             const targetControl = newServiceLevel.get(key);
             if (targetControl) {
               targetControl.patchValue(existingData[key]);

@@ -2,20 +2,22 @@
   <app-summary-section-header
     [title]="pageTitleForTL"
     [isViewMode]="isViewMode()"
-    (onEdit)=" onEdit.emit()"
+    (onEdit)="onEdit.emit()"
   />
   <!-- Basic Information -->
   <app-basic-information-summary-section
     [sectionFormGroup]="basicInformationFormGroup()"
     [sectionSummaryFields]="basicInformationSummaryFields()"
+    [doRefresh]="doRefresh()"
   />
 
   <!-- Company Information -->
   <div class="flex flex-col gap-4">
     <h3 class="text-lg font-semibold text-gray-900">Company Information</h3>
     <app-company-information-summary-section
-    [sectionFormGroup]="companyInformationFormGroup()"
-    [sectionSummaryFields]="companyInformationSummaryFields()"
+      [sectionFormGroup]="companyInformationFormGroup()"
+      [sectionSummaryFields]="companyInformationSummaryFields()"
+      [doRefresh]="doRefresh()"
     />
   </div>
 
@@ -25,23 +27,25 @@
     <app-location-information-summary-section
       [sectionFormGroup]="locationInformationFormGroup()"
       [sectionSummaryFields]="locationInformationSummaryFields()"
+      [doRefresh]="doRefresh()"
     />
 
     @if (showLocalAgentInformation()) {
-      <div class="flex flex-col gap-4">
-        <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
-        <app-local-agent-information-summary-section
-          [sectionFormGroup]="localAgentInformationFormGroup()"
-          [sectionSummaryFields]="localAgentInformationSummaryFields()"
-        />
-      </div>
+    <div class="flex flex-col gap-4">
+      <h4 class="text-lg font-semibold text-gray-700">Local Agent Information</h4>
+      <app-local-agent-information-summary-section
+        [sectionFormGroup]="localAgentInformationFormGroup()"
+        [sectionSummaryFields]="localAgentInformationSummaryFields()"
+        [doRefresh]="doRefresh()"
+      />
+    </div>
     }
   </div>
 
-  @if (commentForPage()) {
+  @if (commentForPage().text) {
   <app-page-comment-box
-    [commentTitle]="commentForPage()!.title"
-    [commentText]="commentForPage()!.text"
+    [commentTitle]="commentForPage().title"
+    [commentText]="commentForPage().text || 'No comment found'"
   />
   }
 </div>

@@ -8,7 +8,7 @@ import { authInterceptor } from './core/interceptors/auth/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error/error.interceptor';
 import { cultureInterceptor } from './core/interceptors/culture/culture.interceptor';
 import { MessageService } from 'primeng/api';
-import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
+import { DatePipe, DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: "disabled",
 };
@@ -29,6 +29,7 @@ export const appConfig: ApplicationConfig = {
       ),
     ),
     MessageService,
+    DatePipe,
     {
       provide: DATE_PIPE_DEFAULT_OPTIONS,
       useValue: { dateFormat: "dd MMM yyyy" },

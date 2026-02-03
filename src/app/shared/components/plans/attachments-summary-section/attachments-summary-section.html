@@ -1,0 +1,69 @@
+<div class="flex flex-col gap-4">
+  <div class="flex items-center gap-1">
+    <h3 class="text-md font-semibold text-gray-900">
+      Attachments
+    </h3>
+    <app-plan-summary-flied
+      class="inline-block!"
+      [planSummaryField]="attachmentsSummaryField()"
+    />
+  </div>
+  @if (hasAttachments()) {
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+    @for (file of attachments(); track $index) {
+    <div
+      class="p-3 rounded-border flex border border-surface justify-between items-center gap-4 w-full"
+      [class.bg-success-50.border-success-500.border]="isResolved()"
+    >
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        @if (file.type && file.type.startsWith('image/')) {
+        <img
+          role="presentation"
+          [alt]="file.fileName || file.name || 'File ' + ($index + 1)"
+          [src]="file.objectURL || file.url"
+          width="32"
+          height="32"
+          class="flex-shrink-0"
+          appImageError
+        />
+        } @else if (getFileIcon(file)) {
+        <img
+          role="presentation"
+          [alt]="file.fileName || file.name || 'File ' + ($index + 1)"
+          [src]="getFileIcon(file)"
+          width="32"
+          height="32"
+          class="flex-shrink-0"
+          appImageError
+        />
+        } @else {
+        <span
+          class="pi pi-file flex-shrink-0"
+          style="font-size: 2em"
+        ></span>
+        }
+        <div class="flex flex-col min-w-0 flex-1">
+          <span class="font-semibold text-ellipsis whitespace-nowrap overflow-hidden text-sm text-gray-700">
+            {{ file.fileName || file.name || 'File ' + ($index + 1) }}
+          </span>
+          @if (file.size) {
+          <span class="text-xs text-gray-500">({{ (file.size / 1024).toFixed(0) }} KB)</span>
+          }
+        </div>
+      </div>
+      <button
+        type="button"
+        class="p-2 rounded-md hover:bg-gray-100 transition-colors flex-shrink-0"
+        (click)="downloadFile(file)"
+        [attr.aria-label]="'Download ' + (file.fileName || file.name)"
+      >
+        <i class="icon-save text-gray-600"></i>
+      </button>
+    </div>
+    }
+  </div>
+  }
+  @else{
+  <span class="text-sm text-gray-500">-</span>
+  }
+</div>

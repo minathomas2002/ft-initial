@@ -64,13 +64,19 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   isViewMode = input<boolean>(false);
   isReviewMode = input<boolean>(false);
 
-  EMaterialsFormControls = EMaterialsFormControls;
   yesNoOptions = this.planStore.yesNoOptions;
   localizationApproachOptions = this.planStore.localizationApproachOptions;
   locationOptions = this.planStore.locationOptions;
 
   private _servicesSynced = false;
   private _userChangedDropdowns = new Set<string>();
+
+  customHeaderLabels = computed(() => {
+    return {
+      'locationType': 'Location',
+      'supervisionOversightByGovernmentEntity': 'Supervision / Oversight by Government Entity (if any)'
+    };
+  });
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -83,7 +89,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   localizationStrategyHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
       [EMaterialsFormControls.willBeAnyProprietaryToolsSystems]: 'mention if any proprietary tools / platforms / systems etc. will be transferred locally as part of localizing the service? If yes, provide details',
-      [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: 'mention whether the localization of the service is being supervised / overseen by any government entity (e.g., MoEn, PIF etc.) ',
+      [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: 'mention whether the localization of the service is being supervised / overseen by any government entity (if any) (e.g., MoEn, PIF etc.) ',
       [EMaterialsFormControls.capexRequired]: "Provide details of the CAPEX required (in SAR) to establish local operations. Avoid duplicating CAPEX entries across services; if the same CAPEX applies to multiple services, please indicate it by stating 'included above'"
     }
   });
@@ -269,7 +275,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         if (approachOtherControl && this.isLocalizationApproachOther(itemControl)) {
           const canEdit = shouldEnableConditional(`localizationApproachOtherDetails_${index}`, `localizationApproach_${index}`);
           canEdit ? this.getValueControl(approachOtherControl).enable({ emitEvent: false })
-                  : this.getValueControl(approachOtherControl).disable({ emitEvent: false });
+            : this.getValueControl(approachOtherControl).disable({ emitEvent: false });
         }
 
         // locationOtherDetails
@@ -277,7 +283,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         if (locationOtherControl && this.isLocationOther(itemControl)) {
           const canEdit = shouldEnableConditional(`locationOtherDetails_${index}`, `location_${index}`);
           canEdit ? this.getValueControl(locationOtherControl).enable({ emitEvent: false })
-                  : this.getValueControl(locationOtherControl).disable({ emitEvent: false });
+            : this.getValueControl(locationOtherControl).disable({ emitEvent: false });
         }
 
         // proprietaryToolsSystemsDetails
@@ -285,7 +291,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         if (proprietaryDetailsControl && this.isProprietaryToolsYes(itemControl)) {
           const canEdit = shouldEnableConditional(`proprietaryToolsSystemsDetails_${index}`, `willBeAnyProprietaryToolsSystems_${index}`);
           canEdit ? this.getValueControl(proprietaryDetailsControl).enable({ emitEvent: false })
-                  : this.getValueControl(proprietaryDetailsControl).disable({ emitEvent: false });
+            : this.getValueControl(proprietaryDetailsControl).disable({ emitEvent: false });
         }
       });
     });

@@ -1,16 +1,35 @@
 <div class="flex flex-col gap-6 bg-white">
-  <app-summary-section-direct-localization
-    [formGroup]="formGroup"
-    [pageComments]="pageCommentsArray()"
-    [correctedFieldIds]="[]"
-    [originalPlanResponse]="originalPlanResponse()"
+  <app-summary-section-header
+    [title]="pageTitleForTL"
     [isViewMode]="isViewMode()"
     (onEdit)="onEdit.emit()"
   />
-  @if (commentForPage()) {
+
+  <app-localization-strategy-summary-section
+    [sectionFormGroup]="directLocalizationFormGroup()"
+    [sectionSummaryFields]="localizationStrategySummaryFields()"
+    [doRefresh]="doRefresh()"
+  />
+
+  <app-entity-level-summary-section
+    [sectionFormGroup]="directLocalizationFormGroup()"
+    [sectionSummaryFields]="entityLevelSummaryFields()"
+    [doRefresh]="doRefresh()"
+    [pageNumber]="4"
+  />
+
+  <app-service-level-summary-section
+    [sectionFormGroup]="directLocalizationFormGroup()"
+    [sectionSummaryFields]="serviceLevelSummaryFields()"
+    [pageNumber]="4"
+    [doRefresh]="doRefresh()"
+    expectedDateControlKey="serviceLevelLocalizationDate"
+  />
+
+  @if (commentForPage().text) {
   <app-page-comment-box
-    [commentTitle]="commentForPage()!.title"
-    [commentText]="commentForPage()!.text"
+    [commentTitle]="commentForPage().title"
+    [commentText]="commentForPage().text || 'No comment found'"
   />
   }
 </div>

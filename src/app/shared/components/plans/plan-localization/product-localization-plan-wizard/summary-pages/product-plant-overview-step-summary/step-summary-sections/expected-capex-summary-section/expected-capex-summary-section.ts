@@ -21,56 +21,81 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   private readonly othersDescriptionControl = computed(() => this.getValueFormControl(EMaterialsFormControls.othersDescription));
 
   private formatPercent(value: number | null | undefined): string {
-    return value != null ? `${value}%` : '';
+    return (value != null && value.toString().trim() !== '') ? `${value}%` : '';
   }
 
-  landPercentageSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Land %',
-    beforeValue: this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.landPercent),
-    currantValue: this.formatPercent(this.landPercentageControl()?.value),
-    hasError: this.isFieldHasError(this.landPercentageControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.landPercentage),
-    isResolved: this.isResolvedField(EMaterialsFormControls.landPercentage),
-    showDifference: this.shouldShowDifference(this.landPercentageControl()),
-  }));
+  landPercentageSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.formatPercent(this.landPercentageControl()?.value);
+    const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.landPercent);
+    return {
+      label: 'Land %',
+      beforeValue,
+      currantValue,
+      hasError: this.isFieldHasError(this.landPercentageControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.landPercentage),
+      isResolved: this.isResolvedField(EMaterialsFormControls.landPercentage),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  buildingPercentageSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Building %',
-    beforeValue: this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.buildingPercent),
-    currantValue: this.formatPercent(this.buildingPercentageControl()?.value),
-    hasError: this.isFieldHasError(this.buildingPercentageControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.buildingPercentage),
-    isResolved: this.isResolvedField(EMaterialsFormControls.buildingPercentage),
-    showDifference: this.shouldShowDifference(this.buildingPercentageControl()),
-  }));
+  buildingPercentageSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.formatPercent(this.buildingPercentageControl()?.value);
+    const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.buildingPercent);
+    return {
+      label: 'Building %',
+      beforeValue,
+      currantValue,
+      hasError: this.isFieldHasError(this.buildingPercentageControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.buildingPercentage),
+      isResolved: this.isResolvedField(EMaterialsFormControls.buildingPercentage),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  machineryEquipmentPercentageSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Machinery & Equipment %',
-    beforeValue: this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.machineryPercent),
-    currantValue: this.formatPercent(this.machineryEquipmentPercentageControl()?.value),
-    hasError: this.isFieldHasError(this.machineryEquipmentPercentageControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.machineryEquipmentPercentage),
-    isResolved: this.isResolvedField(EMaterialsFormControls.machineryEquipmentPercentage),
-    showDifference: this.shouldShowDifference(this.machineryEquipmentPercentageControl()),
-  }));
+  machineryEquipmentPercentageSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.formatPercent(this.machineryEquipmentPercentageControl()?.value);
+    const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.machineryPercent);
+    return {
+      label: 'Machinery & Equipment %',
+      beforeValue,
+      currantValue,
+      hasError: this.isFieldHasError(this.machineryEquipmentPercentageControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.machineryEquipmentPercentage),
+      isResolved: this.isResolvedField(EMaterialsFormControls.machineryEquipmentPercentage),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  othersPercentageSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Others %',
-    beforeValue: this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.othersPercent),
-    currantValue: this.formatPercent(this.othersPercentageControl()?.value),
-    hasError: this.isFieldHasError(this.othersPercentageControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.othersPercentage),
-    isResolved: this.isResolvedField(EMaterialsFormControls.othersPercentage),
-    showDifference: this.shouldShowDifference(this.othersPercentageControl()),
-  }));
+  othersPercentageSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.formatPercent(this.othersPercentageControl()?.value);
+    const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.othersPercent);
+    return {
+      label: 'Others %',
+      beforeValue,
+      currantValue,
+      hasError: this.isFieldHasError(this.othersPercentageControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.othersPercentage),
+      isResolved: this.isResolvedField(EMaterialsFormControls.othersPercentage),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
-  othersDescriptionSummaryField = computed<IPlanSummaryField>(() => ({
-    label: 'Others Description',
-    beforeValue: this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.othersDescription ?? '',
-    currantValue: this.othersDescriptionControl()?.value ?? '',
-    hasError: this.isFieldHasError(this.othersDescriptionControl()),
-    hasComment: this.isFieldHasComment(EMaterialsFormControls.othersDescription),
-    isResolved: this.isResolvedField(EMaterialsFormControls.othersDescription),
-    showDifference: this.shouldShowDifference(this.othersDescriptionControl()),
-  }));
+  othersDescriptionSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.othersDescriptionControl()?.value ?? '';
+    const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.othersDescription ?? '';
+    return {
+      label: 'Others Description',
+      beforeValue: String(beforeValue),
+      currantValue: String(currantValue),
+      hasError: this.isFieldHasError(this.othersDescriptionControl()),
+      hasComment: this.isFieldHasComment(EMaterialsFormControls.othersDescription),
+      isResolved: this.isResolvedField(EMaterialsFormControls.othersDescription),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 }

@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   inject,
+  OnDestroy,
   OnInit,
   signal,
 } from '@angular/core';
@@ -21,7 +22,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { EOpportunityAction, EOpportunityType, ERoutes, EViewMode } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { OpportunityActionsService } from '../../services/opportunity-actions/opportunity-actions-service';
-import { take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { OpportunityActionMenuComponent } from 'src/app/shared/components/opportunities/opportunity-action-menu/opportunity-action-menu.component';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
@@ -53,9 +54,9 @@ import { opportunityImagePlaceholder } from './opportunity-image-placeholder';
   styleUrl: './opportunity-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpportunityDetails implements OnInit {
+export class OpportunityDetails implements OnInit, OnDestroy {
   router = inject(Router);
-  route = inject(ActivatedRoute);
+  activatedRoute = inject(ActivatedRoute);
   opportunitiesStore = inject(OpportunitiesStore);
   permissionService = inject(PermissionService);
   planStore = inject(PlanStore);
@@ -76,6 +77,8 @@ export class OpportunityDetails implements OnInit {
     return EOpportunityAction;
   }
 
+  private readonly destroy$ = new Subject<void>()
+
   today = new Date();
 
   forecastedDemand = computed(() => {
@@ -83,11 +86,18 @@ export class OpportunityDetails implements OnInit {
   });
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.opportunityId.set(id);
-      this.getOpportunityDetails();
-    }
+    this.activatedRoute.paramMap
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: res => {
+        const id = res.get('id');
+
+        if (id) {
+          this.opportunityId.set(id);
+          this.getOpportunityDetails();
+        }
+      }
+    })
   }
 
   getOpportunityDetails() {
@@ -221,5 +231,10 @@ export class OpportunityDetails implements OnInit {
     return attachment?.ibmFileBase64?.fileBase64
       ? `data:${attachment.ibmFileBase64.fileBase64MimeType};base64,${attachment.ibmFileBase64.fileBase64}`
       : opportunityImagePlaceholder;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

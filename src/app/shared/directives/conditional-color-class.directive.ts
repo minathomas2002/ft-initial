@@ -49,7 +49,7 @@ export class ConditionalColorClassDirective {
    */
   private readonly colorClassMap: Record<string, { bg: string; border: string }> = {
     orange: { bg: 'bg-orange-50!', border: 'border-orange-500!' },
-    green: { bg: 'bg-green-50!', border: 'border-green-500!' },
+    green: { bg: 'bg-success-50!', border: 'border-success-500!' },
     red: { bg: 'bg-red-50!', border: 'border-red-500!' },
     blue: { bg: 'bg-blue-50!', border: 'border-blue-500!' },
     yellow: { bg: 'bg-yellow-50!', border: 'border-yellow-500!' },
@@ -136,13 +136,13 @@ export class ConditionalColorClassDirective {
    */
   private applyPhoneInputClasses(shouldApply: boolean, colorValue: string): void {
     const element = this.elementRef.nativeElement;
-    
+
     // Find the unified container (has the border)
     const unifiedContainer = element.querySelector('.unified-phone-input') as HTMLElement | null;
-    
+
     // Find the country selector wrapper (needs background)
     const countryWrapper = element.querySelector('.country-selector-wrapper') as HTMLElement | null;
-    
+
     // Find the p-select element - PrimeNG Select renders as p-select custom element,
     // and inside it there's a .p-select div. We query from the country-selector-wrapper.
     // Try multiple selectors to handle different rendering scenarios
@@ -155,13 +155,13 @@ export class ConditionalColorClassDirective {
       // Another fallback: query for .p-select anywhere in the component
       selectWrapper = element.querySelector('.p-select') as HTMLElement | null;
     }
-    
+
     // Find the p-select label (the visible trigger area)
     const selectLabel = element.querySelector('.country-selector-wrapper .p-select-label') as HTMLElement | null;
-    
+
     // Find the p-select trigger (the button area)
     const selectTrigger = element.querySelector('.country-selector-wrapper .p-select-trigger') as HTMLElement | null;
-    
+
     // Find the text input (phone number)
     const textInput = element.querySelector('input[type="tel"]') as HTMLElement | null;
 
@@ -177,27 +177,27 @@ export class ConditionalColorClassDirective {
       if (unifiedContainer) {
         unifiedContainer.classList.add(colorClasses.border);
       }
-      
+
       // Background on the country wrapper (ensures the entire select area has background)
       if (countryWrapper) {
         countryWrapper.classList.add(colorClasses.bg);
       }
-      
+
       // Background on the select wrapper (the actual .p-select div)
       if (selectWrapper) {
         selectWrapper.classList.add(colorClasses.bg);
       }
-      
+
       // Background on the select label (the visible trigger area)
       if (selectLabel) {
         selectLabel.classList.add(colorClasses.bg);
       }
-      
+
       // Background on the select trigger (the button area)
       if (selectTrigger) {
         selectTrigger.classList.add(colorClasses.bg);
       }
-      
+
       // Background on the text input
       if (textInput) {
         textInput.classList.add(colorClasses.bg);

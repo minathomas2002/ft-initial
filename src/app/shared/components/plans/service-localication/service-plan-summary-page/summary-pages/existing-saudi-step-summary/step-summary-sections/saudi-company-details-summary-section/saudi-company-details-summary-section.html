@@ -1,0 +1,69 @@
+<div class="flex flex-col gap-4">
+  <h3 class="text-md font-semibold text-gray-900">Saudi Company Details</h3>
+  <div class="overflow-x-auto">
+    <div class="rounded-2xl overflow-hidden border border-gray-300">
+      <p-table
+        [value]="saudiCompanyDetailsRows()"
+        [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
+        styleClass="w-full [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
+      >
+        <ng-template pTemplate="header">
+          <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Saudi Company Name</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Vendor ID with SEC</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Bena Vendor ID</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Company Type</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Qualification Status</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Product(s)</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Company Overview</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Key Projects Executed</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Company Overview Key Project Details</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Company Overview (Other)</th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-row
+          let-rowIndex="rowIndex"
+        >
+          <tr>
+            <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.saudiCompanyName" /></td>
+            <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.registeredVendorIDwithSEC" /></td>
+            <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.benaRegisteredVendorID" /></td>
+            <td class="border-t border-gray-300 p-3"><app-plan-summary-flied [planSummaryField]="row.companyType" /></td>
+            <td class="border-t border-gray-300 p-3" [class.bg-gray-100]="!isSaudiCompanyFieldSelectable(rowIndex, 'qualificationStatus')">
+              @if (isSaudiCompanyFieldSelectable(rowIndex, 'qualificationStatus')) {
+              <app-plan-summary-flied [planSummaryField]="row.qualificationStatus" />
+              }
+            </td>
+            <td class="border-t border-gray-300 p-3" [class.bg-gray-100]="!isSaudiCompanyFieldSelectable(rowIndex, 'products')">
+              @if (isSaudiCompanyFieldSelectable(rowIndex, 'products')) {
+              <app-plan-summary-flied [planSummaryField]="row.products" />
+              }
+            </td>
+            <td class="border-t border-gray-300 p-3" [class.bg-gray-100]="!isSaudiCompanyFieldSelectable(rowIndex, 'companyOverview')">
+              @if (isSaudiCompanyFieldSelectable(rowIndex, 'companyOverview')) {
+              <app-plan-summary-flied [planSummaryField]="row.companyOverview" />
+              }
+            </td>
+            <td class="border-t border-gray-300 p-3" [class.bg-gray-100]="!isSaudiCompanyFieldSelectable(rowIndex, 'keyProjectsExecutedByContractorForSEC')">
+              @if (isSaudiCompanyFieldSelectable(rowIndex, 'keyProjectsExecutedByContractorForSEC')) {
+              <app-plan-summary-flied [planSummaryField]="row.keyProjectsExecutedByContractorForSEC" />
+              }
+            </td>
+            <td class="border-t border-gray-300 p-3" [class.bg-gray-100]="!isSaudiCompanyFieldSelectable(rowIndex, 'companyOverviewKeyProjectDetails')">
+              @if (isSaudiCompanyFieldSelectable(rowIndex, 'companyOverviewKeyProjectDetails')) {
+              <app-plan-summary-flied [planSummaryField]="row.companyOverviewKeyProjectDetails" />
+              }
+            </td>
+            <td class="border-t border-gray-300 p-3" [class.bg-gray-100]="!isSaudiCompanyFieldSelectable(rowIndex, 'companyOverviewOther')">
+              @if (isSaudiCompanyFieldSelectable(rowIndex, 'companyOverviewOther')) {
+              <app-plan-summary-flied [planSummaryField]="row.companyOverviewOther" />
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

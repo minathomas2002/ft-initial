@@ -61,9 +61,6 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   // Track user interactions with dropdowns for resubmit mode
   private _userChangedDropdowns = new Set<string>();
 
-  // Expose enum to template
-  readonly EMaterialsFormControls = EMaterialsFormControls;
-
   formGroup = this.planFormService.step2_productPlantOverview;
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');

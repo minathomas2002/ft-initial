@@ -116,7 +116,6 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
     }
   }
-  EMaterialsFormControls = EMaterialsFormControls;
   EServiceProvidedTo = EServiceProvidedTo;
   EServiceQualificationStatus = EServiceQualificationStatus;
   EYesNo = EYesNo;
@@ -125,6 +124,56 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   qualificationStatusOptions = this.planStore.qualificationStatusOptions;
   yesNoOptions = this.planStore.yesNoOptions;
   agreementTypeOptions = this.planStore.agreementTypeOptions;
+
+  isSaudiCompanyDetailsFieldSelectable(
+    itemControl: AbstractControl,
+    field: EMaterialsFormControls
+  ): boolean {
+    const target = itemControl.get(field);
+    if (!target) return false;
+
+    const targetValueControl = this.getValueControl(target);
+
+    // In non-review modes, we can trust actual control enabled/disabled state.
+    // In review mode, the wizard disables the whole form, so rely on the builder's
+    // conditional logic (based on dropdown selections) to decide selectability.
+    if (!this.isReviewMode()) {
+      return !targetValueControl.disabled;
+    }
+
+    const companyTypeGroup = itemControl.get(EMaterialsFormControls.companyType);
+    const qualificationStatusGroup = itemControl.get(EMaterialsFormControls.qualificationStatus);
+
+    const companyTypes: string[] = companyTypeGroup
+      ? (this.getValueControl(companyTypeGroup).value || [])
+      : [];
+
+    const qualificationStatus: string | null = qualificationStatusGroup
+      ? (this.getValueControl(qualificationStatusGroup).value ?? null)
+      : null;
+
+    const isManufacturer = companyTypes.includes(EServiceCompanyType.Manufacturers.toString());
+    const isContractor = companyTypes.includes(EServiceCompanyType.Contractors.toString());
+    const isOther = companyTypes.includes(EServiceCompanyType.Others.toString());
+
+    switch (field) {
+      case EMaterialsFormControls.products:
+        return isManufacturer && (
+          qualificationStatus === EServiceQualificationStatus.Qualified.toString() ||
+          qualificationStatus === EServiceQualificationStatus.UnderPreQualification.toString()
+        );
+      case EMaterialsFormControls.companyOverview:
+        return isManufacturer && qualificationStatus === EServiceQualificationStatus.NotQualified.toString();
+      case EMaterialsFormControls.keyProjectsExecutedByContractorForSEC:
+        return isContractor;
+      case EMaterialsFormControls.companyOverviewKeyProjectDetails:
+        return isContractor;
+      case EMaterialsFormControls.companyOverviewOther:
+        return isOther;
+      default:
+        return !targetValueControl.disabled;
+    }
+  }
 
   get formGroup() {
     return this.planFormService?.step3_existingSaudi ?? new FormGroup({});
@@ -270,12 +319,16 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         const control = this.getValueControl(attachmentsControl);
         // Compare arrays by length and content to avoid infinite loops
         const currentValue = control.value;
-        const isDifferent = !Array.isArray(currentValue) ||
+        const currentEmpty = currentValue == null || (Array.isArray(currentValue) && currentValue.length === 0);
+        const filesEmpty = filesValue == null || (Array.isArray(filesValue) && filesValue.length === 0);
+        const isDifferent = (currentEmpty && filesEmpty)
+          ? false
+          : !Array.isArray(currentValue) ||
           currentValue.length !== filesValue.length ||
           currentValue.some((file: File, index: number) => file !== filesValue[index]);
 
         if (isDifferent) {
-          control.setValue(filesValue, { emitEvent: true });
+          control.setValue(filesValue);
           // Mark as dirty and trigger validation to show errors
           control.markAsDirty();
           control.updateValueAndValidity();
@@ -399,9 +452,9 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         const otherDetailsControl = control.get(EMaterialsFormControls.agreementOtherDetails);
         if (otherDetailsControl && this.isAgreementTypeOther(control)) {
           const canEdit = isFieldShouldbeCorrected(`agreementOtherDetails_${index}`) ||
-                         this._userChangedDropdowns.has(`agreementType_${index}`);
+            this._userChangedDropdowns.has(`agreementType_${index}`);
           canEdit ? this.getValueControl(otherDetailsControl).enable({ emitEvent: false })
-                  : this.getValueControl(otherDetailsControl).disable({ emitEvent: false });
+            : this.getValueControl(otherDetailsControl).disable({ emitEvent: false });
         }
       });
     });
@@ -508,8 +561,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       if (!this.isResubmitMode()) return true;
       // Enable if: field is corrected OR user has changed the parent dropdown
       return isFieldShouldbeCorrected(inputKey) ||
-             this._userChangedDropdowns.has(parentChangedKey) ||
-             (secondaryChangedKey ? this._userChangedDropdowns.has(secondaryChangedKey) : false);
+        this._userChangedDropdowns.has(parentChangedKey) ||
+        (secondaryChangedKey ? this._userChangedDropdowns.has(secondaryChangedKey) : false);
     };
 
     // Function to update fields based on current selections
@@ -670,7 +723,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
               }
             }
-              this.planFormService?.toggleAgreementOtherDetailsValidation(value ?? null, index);
+            this.planFormService?.toggleAgreementOtherDetailsValidation(value ?? null, index);
           });
       });
     });

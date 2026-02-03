@@ -1,11 +1,11 @@
 <div class="flex flex-col gap-8 pb-10">
-  <app-cover-page-step-summary />
-  <app-overview-step-summary />
+  <app-cover-page-step-summary (onEdit)="onEditStepClick(1)" />
+  <app-overview-step-summary (onEdit)="onEditStepClick(2)" />
   @if (includeExistingSaudi()) {
-  <app-existing-saudi-step-summary />
+  <app-existing-saudi-step-summary (onEdit)="onEditStepClick(3)" />
   }
   @if (includeDirectLocalization()) {
-  <app-direct-localization-step-summary />
+  <app-direct-localization-step-summary (onEdit)="onEditStepClick(4)" />
   }
   @if (signature() && isViewMode()) {
   <app-summary-section-signature [signature]="signature()" />
