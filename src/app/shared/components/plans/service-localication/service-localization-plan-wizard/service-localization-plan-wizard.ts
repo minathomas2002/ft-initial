@@ -775,6 +775,19 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
     // Keep Step 3 Vendor ID with SEC locked and synced from Step 2.
     this.serviceLocalizationFormService.syncExistingSaudiRegisteredVendorIdWithSecFromOverview();
+
+    // Keep Service Name read-only in overview service details (synced from cover page).
+    const serviceDetailsArray = this.serviceLocalizationFormService.getServiceDetailsFormArray();
+    if (serviceDetailsArray) {
+      serviceDetailsArray.controls.forEach((itemControl) => {
+        if (itemControl instanceof FormGroup) {
+          const serviceNameValueControl = itemControl.get(
+            `${EMaterialsFormControls.serviceName}.${EMaterialsFormControls.value}`
+          );
+          serviceNameValueControl?.disable({ emitEvent: false });
+        }
+      });
+    }
   }
 
   // Initialize watcher on service details form array to set flags
