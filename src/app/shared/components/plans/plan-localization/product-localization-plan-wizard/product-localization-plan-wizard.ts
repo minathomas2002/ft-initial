@@ -475,12 +475,12 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     totalSteps: this.totalSteps,
     isLoading: this.isLoading,
     isProcessing: this.isProcessing,
-    hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode() || this.isInvestorViewMode()),
+    hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode()),
     canApproveOrReject: this.canApproveOrReject,
     allowUserToResubmit: this.allowUserToResubmit,
     canOpenTimeline: this.canOpenTimeline,
     isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
-    isInvestorViewMode: this.isInvestorViewMode,
+    isEmployeeViewMode: this.isEmployeePersona,
 
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),
@@ -489,6 +489,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     onApproveAndForward: () => this.onApproveAndForward(),
     onReject: () => this.onReject(),
     onSendBackToInvestor: () => this.onSendBackToInvestor(),
+    onSendBackToEmployee: () => this.onSendBackToEmployee(),
     onAddComment: () => this.onAddComment(),
     onOpenTimeline: () => this.timelineVisibility.set(true),
     onResubmit: () => this.onSummarySubmitClick()

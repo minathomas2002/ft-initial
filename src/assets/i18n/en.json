@@ -748,6 +748,7 @@
       "approveAndForward": "Approve & Forward",
       "reject": "Reject",
       "sendBackToInvestor": "Send Back to Investor",
+      "sendBackToEmployee": "Send Back to Employee",
       "addComments": "Add Comments",
       "timeline": "Timeline",
       "messages": {

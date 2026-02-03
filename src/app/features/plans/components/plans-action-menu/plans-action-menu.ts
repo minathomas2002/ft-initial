@@ -46,6 +46,9 @@ export class PlansActionMenu {
   onRemoveAssignee = output<IPlanRecord>();
   onDelete = output<IPlanRecord>();
   onAutoRejected = output<IPlanRecord>();
+  onSystemReminder = output<IPlanRecord>();
+  onDeptManagerReview = output<IPlanRecord>();
+  onDVReview = output<IPlanRecord>();
 
   handleEventsMapper = {
     [EActionPlanTimeLine.EditPlan]: this.onEdit,
@@ -71,6 +74,9 @@ export class PlansActionMenu {
     [EActionPlanTimeLine.RemoveAssignee]: this.onRemoveAssignee,
     [EActionPlanTimeLine.Delete]: this.onDelete,
     [EActionPlanTimeLine.AutoRejected]: this.onAutoRejected,
+    [EActionPlanTimeLine.SystemReminder]: this.onSystemReminder,
+    [EActionPlanTimeLine.DeptManagerReview]: this.onDeptManagerReview,
+    [EActionPlanTimeLine.ReturnedByDV]: this.onDVReview,
   };
 
   menuItems = computed<MenuItem[]>(() => {

@@ -179,6 +179,20 @@
 />
 }
 
+@if(showSendBackToEmployeeConfirmationDialog()){
+  <app-general-confirmation-dialog
+    [(visible)]="showSendBackToEmployeeConfirmationDialog"
+    [title]="'Are you sure you want to send back the plan?'"
+    [description]="'This action cannot be undone and the plan will go directly to the employee.'"
+    [confirmationLabel]="'Send Back'"
+    [cancelLabel]="'Cancel'"
+    [icon]="'icon-info'"
+    (confirmed)="onConfirmSendBackToEmployee()"
+    (onCancel)="onCancelSendBack()"
+    [isLoading]="isProcessing()"
+  />
+}
+
 <!-- Approve Confirmation Dialog -->
 @if(showApproveConfirmationDialog()){
 <app-approve-reject-dialog

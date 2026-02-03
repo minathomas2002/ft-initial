@@ -23,7 +23,7 @@ export interface IWizardActionConfig {
   allowUserToResubmit?: Signal<boolean>;
   canOpenTimeline?: Signal<boolean>;
   isAddCommentButtonDisabled?: Signal<boolean>;
-  isInvestorViewMode?: Signal<boolean>;
+  isEmployeeViewMode?: Signal<boolean>;
 
   // Action handlers
   onPrevious?: () => void;
@@ -34,6 +34,7 @@ export interface IWizardActionConfig {
   onApproveAndForward?: () => void;
   onReject?: () => void;
   onSendBackToInvestor?: () => void;
+  onSendBackToEmployee?: () => void;
   onAddComment?: () => void;
   onOpenTimeline?: () => void;
   onResubmit?: () => void;
@@ -99,7 +100,7 @@ export class WizardActionFactory {
       });
     }
 
-    const shouldShowSendBackToInvestor = mode === 'Review' && isFinalStep && !!config.onSendBackToInvestor;
+    const shouldShowSendBackToInvestor = mode === 'Review' && isFinalStep && !!config.onSendBackToInvestor && config.isEmployeeViewMode?.();
     if (shouldShowSendBackToInvestor) {
       actions.push({
         id: 'send-back-to-investor',
@@ -107,6 +108,19 @@ export class WizardActionFactory {
         text: true,
         severity: 'secondary',
         onClick: config.onSendBackToInvestor,
+        position: 'left',
+        styleClass: 'underline-action',
+      });
+    }
+
+    const shouldShowSendBackToEmployee = mode === 'Review' && isFinalStep && !!config.onSendBackToEmployee && !config.isEmployeeViewMode?.();
+    if (shouldShowSendBackToEmployee) {
+      actions.push({
+        id: 'send-back-to-employee',
+        label: this.i18nService.translate('plans.wizard.sendBackToEmployee'),
+        text: true,
+        severity: 'secondary',
+        onClick: config.onSendBackToEmployee,
         position: 'left',
         styleClass: 'underline-action',
       });
@@ -177,7 +191,7 @@ export class WizardActionFactory {
         });
       }
 
-      else if (mode === 'Review' && !config.isInvestorViewMode?.()) {
+      else if (mode === 'Review') {
         const canApproveOrReject = config.canApproveOrReject?.() ?? true;
 
         if (config.onReject) {

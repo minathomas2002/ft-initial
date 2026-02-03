@@ -539,6 +539,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     allowUserToResubmit: this.allowUserToResubmit,
     canOpenTimeline: this.canOpenTimeline,
     isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
+    isEmployeeViewMode: this.isEmployeePersona,
 
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),
@@ -547,6 +548,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     onApproveAndForward: () => this.onApproveAndForward(),
     onReject: () => this.onReject(),
     onSendBackToInvestor: () => this.onSendBackToInvestor(),
+    onSendBackToEmployee: () => this.onSendBackToEmployee(),
     onAddComment: () => this.onAddComment(),
     onOpenTimeline: () => this.timelineVisibility.set(true),
     onResubmit: () => this.onSummarySubmitClick(),

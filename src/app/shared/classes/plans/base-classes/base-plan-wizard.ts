@@ -29,6 +29,7 @@ export abstract class BasePlanWizard {
   // Common signals - subclasses should initialize these
   protected isProcessing = signal(false);
   protected showSendBackConfirmationDialog = signal<boolean>(false);
+  protected showSendBackToEmployeeConfirmationDialog = signal<boolean>(false);
   protected showApproveConfirmationDialog = signal<boolean>(false);
   protected showRejectReasonDialog = signal<boolean>(false);
   protected showRejectConfirmationDialog = signal<boolean>(false);
@@ -196,7 +197,7 @@ export abstract class BasePlanWizard {
     }
 
     // Show confirmation dialog
-    this.showSendBackConfirmationDialog.set(true);
+    this.showSendBackToEmployeeConfirmationDialog.set(true);
   }
 
 
@@ -259,7 +260,7 @@ export abstract class BasePlanWizard {
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.showSendBackConfirmationDialog.set(false);
+          this.showSendBackToEmployeeConfirmationDialog.set(false);
           this.toasterService.success('Plan has been sent back to employee successfully.');
           this.refresh();
           this.closeWizard();
@@ -278,6 +279,7 @@ export abstract class BasePlanWizard {
    */
   onCancelSendBack(): void {
     this.showSendBackConfirmationDialog.set(false);
+    this.showSendBackToEmployeeConfirmationDialog.set(false);
   }
 
   /**

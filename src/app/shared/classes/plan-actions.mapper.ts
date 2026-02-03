@@ -34,6 +34,9 @@ export class PlanActionsMapper {
         [EActionPlanTimeLine.RemoveAssignee]: { labelKey: 'plans.actions.removeAssignee' },
         [EActionPlanTimeLine.Delete]: { labelKey: 'plans.actions.delete' },
         [EActionPlanTimeLine.AutoRejected]: { labelKey: 'Plan Auto Rejected' },
+        [EActionPlanTimeLine.SystemReminder]: { labelKey: 'plans.actions.systemReminder' },
+        [EActionPlanTimeLine.DeptManagerReview]: { labelKey: 'plans.actions.deptManagerReview' },
+        [EActionPlanTimeLine.ReturnedByDV]: { labelKey: 'plans.actions.returnedByDV' },
     };
 
     getActions(
