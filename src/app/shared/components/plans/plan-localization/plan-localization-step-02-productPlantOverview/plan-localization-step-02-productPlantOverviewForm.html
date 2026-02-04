@@ -355,17 +355,29 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex flex-col gap-2 col-span-1">
           <app-base-label [title]="'Targeted Customer'" />
-          <p-multiselect
-            [options]="targetedCustomerOptions()"
-            [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
-            optionLabel="name"
-            optionValue="id"
-            display="chip"
-            dropdownIcon="icon-chevron-down"
-            fluid
-            [filter]="false"
-            [appHidePlaceholderWhenDisabledEmpty]="'Select targeted customer'"
-          />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'targetCustomers',
+              inputKey: 'targetedCustomer',
+              label: 'Targeted Customer'
+            })"
+          >
+            <p-multiselect
+              [options]="targetedCustomerOptions()"
+              [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
+              optionLabel="name"
+              optionValue="id"
+              display="chip"
+              dropdownIcon="icon-chevron-down"
+              fluid
+              [filter]="false"
+              [appHidePlaceholderWhenDisabledEmpty]="'Select targeted customer'"
+              [appConditionalColorClass]="highlightInput('targetedCustomer')"
+              [color]="selectedInputColor()"
+            />
+          </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
             [label]="'Targeted Customer'"
@@ -571,16 +583,32 @@
               [title]="'Approved Vendor ID'"
               secondaryTitle="(with SEC)"
             />
-            <p-inputnumber
-              fluid
-              [allowEmpty]="false"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter approved vendor ID'"
-              [min]="0"
-              [maxlength]="7"
-              [useGrouping]="false"
-              [minFractionDigits]="0"
-              [maxFractionDigits]="0"
-              [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'productManufacturingExperience',
+                inputKey: 'approvedVendorIDSEC',
+                label: 'Approved Vendor ID (with SEC)'
+              })"
+            >
+              <p-inputnumber
+                fluid
+                [allowEmpty]="false"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter approved vendor ID'"
+                [min]="0"
+                [maxlength]="7"
+                [useGrouping]="false"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="0"
+                [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
+                [appConditionalColorClass]="highlightInput('approvedVendorIDSEC')"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
+              [label]="'Approved Vendor ID'"
             />
           </div>
 
