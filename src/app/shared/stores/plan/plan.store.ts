@@ -515,7 +515,7 @@ export const PlanStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
-            store.setPlanStatus(res.body?.productPlan?.investorStatus ?? null);
+            store.setPlanStatus(res.body?.productPlan?.status ?? null);
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {

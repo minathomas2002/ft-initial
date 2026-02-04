@@ -111,8 +111,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   // Used by the active step content components (they only render one step at a time)
   commentColor = computed(() => {
-    const step = this.activeStep();
-    return this.getCommentColorForStep(this.getCommentPhaseForStepId(this.getStepIdFromStepIndex(step) ?? ''));
+    const stepId = this.getStepIdFromStepIndex(this.activeStep());
+    return stepId ? this.getCommentColorForStep(this.getCommentPhaseForStepId(stepId)) : 'orange';
   });
 
   steps = computed<IWizardStepState[]>(() => {
