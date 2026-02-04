@@ -1133,7 +1133,12 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           (inHouseOrProcuredValueControl?.dirty) ||
           yearValueControls.some(control => control?.dirty);
 
-        if (hasDirtyControl && expenseHeaderValueControl) {
+        const hasValue =
+          (costPercentageValueControl?.value) ||
+          (inHouseOrProcuredValueControl?.value) ||
+          yearValueControls.some(control => control?.value);
+
+        if (hasDirtyControl && expenseHeaderValueControl && hasValue) {
           const expenseHeaderValue = expenseHeaderValueControl.value;
           if (!expenseHeaderValue || (typeof expenseHeaderValue === 'string' && expenseHeaderValue.trim() === '')) {
             invalidExpenseHeaderControls.push({ control: expenseHeaderValueControl, sectionName: section.name });
