@@ -355,6 +355,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   planSignature = signal<Signature | null>(null);
 
   showConfirmLeaveDialog = model(false);
+
+  // Value Chain: non-investor add-comments info dialog
+  showValueChainAddCommentInfoDialog = signal<boolean>(false);
   // Store original plan response for before/after comparison
   originalPlanResponse = signal<IProductPlanResponse | null>(null);
   // Computed signal for view mode
@@ -395,6 +398,20 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   isInvestorViewMode = computed(() => {
     return this.isViewMode() && this.isInvestorPersona() && this.isPendingStatusForInvestor();
   });
+
+  override onAddComment(): void {
+    // Requirement: For non-investors, show an info/confirmation dialog when starting comments on Value Chain step.
+    if (!this.isInvestorPersona() && this.activeStep() === 3 && !this.showValueChainAddCommentInfoDialog()) {
+      this.showValueChainAddCommentInfoDialog.set(true);
+      return;
+    }
+    super.onAddComment();
+  }
+
+  onConfirmValueChainAddCommentInfo(): void {
+    this.showValueChainAddCommentInfoDialog.set(false);
+    super.onAddComment();
+  }
 
   // Computed signals for plan status tag
   planStatus = signal<EInternalUserPlanStatus | EInvestorPlanStatus | null>(null);

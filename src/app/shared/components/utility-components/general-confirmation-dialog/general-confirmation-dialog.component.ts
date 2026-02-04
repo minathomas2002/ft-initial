@@ -22,4 +22,10 @@ export class GeneralConfirmationDialogComponent {
   classes = input('max-w-[25rem]')
   cancelLabel = input<string>("Cancel");
 
+  showCloseButton = input<boolean>(true);
+  showConfirmButton = input<boolean>(true);
+  closable = input<boolean>(true);
+  closeOnEscape = input<boolean>(true);
+  dismissableMask = input<boolean>(false);
+
 }

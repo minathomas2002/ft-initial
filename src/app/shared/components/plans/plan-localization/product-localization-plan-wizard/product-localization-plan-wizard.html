@@ -212,6 +212,21 @@
   [planId]="planId()"
 />
 
+@if(showValueChainAddCommentInfoDialog()){
+<app-general-confirmation-dialog
+  [(visible)]="showValueChainAddCommentInfoDialog"
+  [title]="''"
+  [description]="'Any change request to a cost percentage requires corresponding updates from the investor to the remaining cost percentage fields to ensure the total equals 100%. Please select all other cost percentage cells that need to be updated'"
+  [confirmationLabel]="'I understand'"
+  [showCloseButton]="false"
+  [closable]="false"
+  [closeOnEscape]="false"
+  [dismissableMask]="false"
+  (confirmed)="onConfirmValueChainAddCommentInfo()"
+  [icon]="'icon-info'"
+></app-general-confirmation-dialog>
+}
+
 @if(showSendBackConfirmationDialog()){
 <app-general-confirmation-dialog
   [(visible)]="showSendBackConfirmationDialog"
