@@ -29,7 +29,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.localAgentNameControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.localAgentName),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.localAgentName),
       isResolved: this.isResolvedField(EMaterialsFormControls.localAgentName),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -44,7 +44,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.contactPersonNameControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.contactPersonName),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.contactPersonName),
       isResolved: this.isResolvedField(EMaterialsFormControls.contactPersonName),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -59,7 +59,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.emailIDControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.emailID),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.emailID),
       isResolved: this.isResolvedField(EMaterialsFormControls.emailID),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -77,7 +77,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
       beforeValue: String(beforeValue),
       currantValue: currantValueWithoutSpaces,
       hasError: this.isFieldHasError(this.contactNumberControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.contactNumber),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.contactNumber),
       isResolved: this.isResolvedField(EMaterialsFormControls.contactNumber),
       showDifference: this.shouldShowDifference(currantValueWithoutSpaces, beforeValue),
     };
@@ -92,7 +92,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.companyHQLocationControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.companyHQLocation),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.companyHQLocation),
       isResolved: this.isResolvedField(EMaterialsFormControls.companyHQLocation),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };

@@ -32,7 +32,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.globalHQLocationControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.globalHQLocation, null),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.globalHQLocation, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.globalHQLocation),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -47,7 +47,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.registeredVendorIDControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.registeredVendorIDwithSEC, null),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.registeredVendorIDwithSEC, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.registeredVendorIDwithSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -62,7 +62,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.benaRegisteredVendorIDControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.benaRegisteredVendorID, null),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.benaRegisteredVendorID, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.benaRegisteredVendorID),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -79,7 +79,7 @@ export class OverviewLocationInformationSummarySection extends SummarySectionBas
       beforeValue: beforeDisplay,
       currantValue: display,
       hasError: this.hasLocalAgentControl() ? this.isFieldHasError(this.hasLocalAgentControl()) : false,
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA, null),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
       showDifference: this.shouldShowDifference(display, beforeDisplay),
     };

@@ -58,7 +58,7 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
         const fieldGroup = item.get(inputKey);
         const ctrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
         const matchingField = summaryFields.find(f => f.inputKey === inputKey && (f.id === rowId || (f.id == null && rowId == null)));
-        const hasComment = this.isFieldHasComment(inputKey, matchingField?.id);
+        const hasComment = this.shouldShowCommentIcon(inputKey, matchingField?.id ?? null);
         const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
         const hasError = ctrl ? this.isFieldHasError(ctrl) : false;
         const value = ctrl?.value ?? '';

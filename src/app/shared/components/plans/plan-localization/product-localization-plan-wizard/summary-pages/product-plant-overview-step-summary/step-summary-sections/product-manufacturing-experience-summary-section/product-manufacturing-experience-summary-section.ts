@@ -54,7 +54,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.productManufacturingExperienceControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.productManufacturingExperience),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.productManufacturingExperience),
       isResolved: this.isResolvedField(EMaterialsFormControls.productManufacturingExperience),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -69,7 +69,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.provideToSECControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.provideToSEC),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.provideToSEC),
       isResolved: this.isResolvedField(EMaterialsFormControls.provideToSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -84,7 +84,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.qualifiedPlantLocationSECControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.qualifiedPlantLocationSEC),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.qualifiedPlantLocationSEC),
       isResolved: this.isResolvedField(EMaterialsFormControls.qualifiedPlantLocationSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -99,7 +99,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.approvedVendorIDSECControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.approvedVendorIDSEC),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.approvedVendorIDSEC),
       isResolved: this.isResolvedField(EMaterialsFormControls.approvedVendorIDSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -114,7 +114,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue,
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.yearsOfExperienceSECControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.yearsOfExperienceSEC),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.yearsOfExperienceSEC),
       isResolved: this.isResolvedField(EMaterialsFormControls.yearsOfExperienceSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -129,7 +129,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue,
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.totalQuantitiesSECControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.totalQuantitiesSEC),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.totalQuantitiesSEC),
       isResolved: this.isResolvedField(EMaterialsFormControls.totalQuantitiesSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -144,7 +144,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.provideToLocalSuppliersControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.provideToLocalSuppliers),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.provideToLocalSuppliers),
       isResolved: this.isResolvedField(EMaterialsFormControls.provideToLocalSuppliers),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -159,7 +159,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.namesOfSECApprovedSuppliersControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.namesOfSECApprovedSuppliers),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.namesOfSECApprovedSuppliers),
       isResolved: this.isResolvedField(EMaterialsFormControls.namesOfSECApprovedSuppliers),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -174,7 +174,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.qualifiedPlantLocationControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.qualifiedPlantLocation),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.qualifiedPlantLocation),
       isResolved: this.isResolvedField(EMaterialsFormControls.qualifiedPlantLocation),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -182,14 +182,14 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   yearsOfExperienceSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.yearsOfExperienceControl()?.value ?? '';
-    const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '';
+    const currantValue = this.yearsOfExperienceControl()?.value ?? '0';
+    const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '0';
     return {
       label: 'Years of Experience',
       beforeValue,
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.yearsOfExperienceControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.yearsOfExperience),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.yearsOfExperience),
       isResolved: this.isResolvedField(EMaterialsFormControls.yearsOfExperience),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -197,14 +197,14 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   totalQuantitiesSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.totalQuantitiesControl()?.value ?? '';
-    const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '';
+    const currantValue = this.totalQuantitiesControl()?.value ?? '0';
+    const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '0';
     return {
       label: 'Total quantities provided to all approved local suppliers',
       beforeValue,
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.totalQuantitiesControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.totalQuantities),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.totalQuantities),
       isResolved: this.isResolvedField(EMaterialsFormControls.totalQuantities),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
