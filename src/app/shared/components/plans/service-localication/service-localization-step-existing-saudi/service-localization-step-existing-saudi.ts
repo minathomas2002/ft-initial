@@ -100,12 +100,12 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
   saudiCompanyDetailsHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
-      [EMaterialsFormControls.products]: 'If Manufacturer is Qualified / Under-Prequalification, specify the product(s)',
-      [EMaterialsFormControls.companyOverview]: 'If Manufacturer is Not Qualified, provide Company Overview',
+      [EMaterialsFormControls.products]: 'If the Company Type is “Manufacturer” and Qualification Status is “Qualified / Under-Prequalification” Specify the products(s)',
+      [EMaterialsFormControls.companyOverview]: 'If the Company Type is “Manufacturer” and Qualification Status is “Not Qualified” provide Company Overview',
       [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: 'If Company Type is Contractor, Mention few key projects executed by the Contractor for SEC',
       [EMaterialsFormControls.companyOverviewKeyProjectDetails]: 'If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.',
       [EMaterialsFormControls.companyOverviewOther]: 'If Company Type is Other Provide company overview',
-      [EMaterialsFormControls.qualificationStatus]: '(Qualified / Under-Prequalification / Not Qualified)',
+      [EMaterialsFormControls.qualificationStatus]: 'If the Company Type is “Manufacturer” select “Qualification Status”',
       [EMaterialsFormControls.supervisionOversightEntity]: 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.)',
     };
   });
