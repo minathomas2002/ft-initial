@@ -354,6 +354,12 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
 
+  // Extract contactInfo from planSignature for submission modal
+  contactInfo = computed(() => {
+    const signature = this.planSignature();
+    return signature?.contactInfo ?? {};
+  });
+  
   showConfirmLeaveDialog = model(false);
 
   // Value Chain: non-investor add-comments info dialog

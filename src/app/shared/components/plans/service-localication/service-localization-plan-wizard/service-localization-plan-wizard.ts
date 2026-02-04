@@ -105,6 +105,11 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
 
+  // Extract contactInfo from planSignature for submission modal
+  contactInfo = computed(() => {
+    const signature = this.planSignature();
+    return signature?.contactInfo ?? {};
+  });
 
   showConfirmLeaveDialog = model(false);
   // Store original plan response for before/after comparison
