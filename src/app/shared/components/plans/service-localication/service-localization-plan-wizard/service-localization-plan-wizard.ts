@@ -146,23 +146,35 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   // Computed signals to check if incoming comments exist and have content
   hasIncomingStep1Comments = computed(() => {
-    const comments = this.step1Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[0];
+    return this.step1Comments().length > 0 && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0
+    );
   });
 
   hasIncomingStep2Comments = computed(() => {
-    const comments = this.step2Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[1];
+    return this.step2Comments().length > 0 && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0
+    );
   });
 
   hasIncomingStep3Comments = computed(() => {
-    const comments = this.step3Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[2];
+    return this.step3Comments().length > 0 && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0
+    );
   });
 
   hasIncomingStep4Comments = computed(() => {
-    const comments = this.step4Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[3];
+    return this.step4Comments().length > 0 && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0
+    );
   });
 
   // Helper methods to get combined incoming comment text for each step

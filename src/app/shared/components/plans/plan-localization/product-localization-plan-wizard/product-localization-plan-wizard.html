@@ -30,7 +30,6 @@
         [commentText]="getIncomingStep1CommentText()"
       />
       }
-      {{step1SelectedInputs().length}}
       <app-plan-localization-step-01-overview-company-information-form
         [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
         [pageTitle]="steps()[0].title"
@@ -48,7 +47,7 @@
 
   <ng-template [appStepContent]="2">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep2Comments() && !showCommentState()) {
+      @if (hasIncomingStep2Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep2CommentText()"
@@ -71,7 +70,7 @@
 
   <ng-template [appStepContent]="3">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep3Comments() && !showCommentState()) {
+      @if (hasIncomingStep3Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep3CommentText()"
@@ -94,7 +93,7 @@
 
   <ng-template [appStepContent]="4">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep4Comments() && !showCommentState()) {
+      @if (hasIncomingStep4Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep4CommentText()"
