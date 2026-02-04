@@ -16,7 +16,7 @@ import { inject } from '@angular/core';
     ExistingSaudiStepSummary,
     DirectLocalizationStepSummary,
     SummarySectionSignature
-],
+  ],
   templateUrl: './service-plan-summary-page.html',
   styleUrl: './service-plan-summary-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,6 +28,12 @@ export class ServicePlanSummaryPage {
   includeExistingSaudi = input<boolean>(true);
   includeDirectLocalization = input<boolean>(true);
   signature = input<Signature | null>(null);
+
+  /** From wizard: selectedInputs().length per step (indicator for selected/commented fields). */
+  step1CommentCount = input<number>(0);
+  step2CommentCount = input<number>(0);
+  step3CommentCount = input<number>(0);
+  step4CommentCount = input<number>(0);
 
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
 
