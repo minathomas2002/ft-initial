@@ -404,6 +404,7 @@
             [dateFormat]="'dd M yy'"
             [minDate]="(getControl('startDate').value && getControl('startDate').value > today) ? getControl('startDate').value : today"
             class="w-full"
+            [disabledDates]="[disabledEndDate()]"
             keepInvalid
             [invalid]="getControl('endDate').invalid && getControl('endDate').dirty"
             fluid
