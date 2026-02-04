@@ -169,8 +169,8 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   yearsOfExperienceSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.yearsOfExperienceControl()?.value ?? '0';
-    const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '0';
+    const currantValue = this.yearsOfExperienceControl()?.value ?? '';
+    const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '';
     return {
       label: 'Years of Experience',
       beforeValue,
@@ -184,8 +184,8 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   totalQuantitiesSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.totalQuantitiesControl()?.value ?? '0';
-    const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '0';
+    const currantValue = this.totalQuantitiesControl()?.value ?? '';
+    const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '';
     return {
       label: 'Total quantities provided to all approved local suppliers',
       beforeValue,
