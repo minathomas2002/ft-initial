@@ -137,7 +137,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     // In non-review modes, we can trust actual control enabled/disabled state.
     // In review mode, the wizard disables the whole form, so rely on the builder's
     // conditional logic (based on dropdown selections) to decide selectability.
-    if (!this.isReviewMode()) {
+    if (!this.isReviewMode() && !this.isViewMode()) {
       return !targetValueControl.disabled;
     }
 
