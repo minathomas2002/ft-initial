@@ -45,6 +45,9 @@ export const VALIDATION_MESSAGES = {
     const maxSizeMB = Math.round(error.maxSize / (1024 * 1024));
     return `All uploaded files in ${label} should be less than ${maxSizeMB} MB`;
   },
+
+  dateRangeInvalid: (label: string) =>
+    `${label} must be after the start date`,
 } as const;
 
 type ValidationMessageKey = keyof typeof VALIDATION_MESSAGES;
