@@ -67,7 +67,7 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
       beforeValue: '',
       currantValue: '',
       hasError: this.isFieldHasError(this.getValueFormControl(EMaterialsFormControls.attachments)),
-      hasComment: !this.isResolved() && this.isFieldHasComment(EMaterialsFormControls.attachments),
+      hasComment: !this.isResolved() && this.shouldShowCommentIcon(EMaterialsFormControls.attachments),
       isResolved: this.isResolved(),
       showDifference: this.shouldShowDifferenceForAttachments(),
     };

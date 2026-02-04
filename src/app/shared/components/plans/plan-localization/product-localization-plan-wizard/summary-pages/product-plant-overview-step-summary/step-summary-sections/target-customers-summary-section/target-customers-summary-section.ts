@@ -39,7 +39,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.targetedCustomerControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.targetedCustomer),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.targetedCustomer),
       isResolved: this.isResolvedField(EMaterialsFormControls.targetedCustomer),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -54,7 +54,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.namesOfTargetedSuppliersControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.namesOfTargetedSuppliers),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.namesOfTargetedSuppliers),
       isResolved: this.isResolvedField(EMaterialsFormControls.namesOfTargetedSuppliers),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -69,7 +69,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.productsUtilizeTargetedProductControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.productsUtilizeTargetedProduct),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.productsUtilizeTargetedProduct),
       isResolved: this.isResolvedField(EMaterialsFormControls.productsUtilizeTargetedProduct),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
