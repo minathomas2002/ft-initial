@@ -12,7 +12,7 @@ import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interfa
 import { ButtonModule } from 'primeng/button';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
-import { EOpportunityStatus, EViewMode } from 'src/app/shared/enums';
+import { EOpportunityStatus, EPlanPageTitle, EViewMode } from 'src/app/shared/enums';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
 import { IOpportunityDetails } from 'src/app/shared/interfaces/opportunities.interface';
@@ -48,14 +48,14 @@ export class CreateEditOpportunityDialog implements OnInit {
   opportunity = signal<IOpportunityDetails | null>(null);
   steps = computed<IWizardStepState[]>(() => [
     {
-      title: this.i18nService.translate('opportunity.wizard.opportunityInformation'),
+      title: EPlanPageTitle.OpportunityInformation,
       description: this.i18nService.translate('opportunity.wizard.opportunityInformationDescription'),
       isActive: this.activeStep() === 1,
       formState: this.opportunityFormService.opportunityInformationForm,
       hasErrors: true,
     },
     {
-      title: this.i18nService.translate('opportunity.wizard.opportunityLocalization'),
+      title: EPlanPageTitle.OpportunityLocalization,
       description: this.i18nService.translate('opportunity.wizard.opportunityLocalizationDescription'),
       isActive: this.activeStep() === 2,
       formState: this.opportunityFormService.opportunityLocalizationForm,

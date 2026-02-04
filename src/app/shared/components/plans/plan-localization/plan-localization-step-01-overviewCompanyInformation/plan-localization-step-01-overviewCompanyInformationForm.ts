@@ -12,7 +12,7 @@ import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhe
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
@@ -63,7 +63,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
 
   readonly planFormService = inject(ProductPlanFormService);
 
-  pageTitle = input.required<string>();
+  pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);

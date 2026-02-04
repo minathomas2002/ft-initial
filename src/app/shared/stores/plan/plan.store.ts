@@ -1,6 +1,6 @@
 import { computed, inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType, EPlanPageTitle } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
@@ -17,7 +17,6 @@ export interface IPlanTypeDropdownOption {
 }
 
 export type TWizardMode = 'create' | 'edit' | 'view' | 'Review' | 'resubmit';
-
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null;
   appliedOpportunity: IOpportunity | null;
@@ -53,6 +52,7 @@ const initialState: {
   selectedPlanId: string | null;
   planStatus: number | null;
   planComments: IPlanCommentResponse | null;
+  currentUserPageComments: EPlanPageTitle[];
   productPlanData: IProductPlanResponse | null;
   servicePlanData: IServiceLocalizationPlanResponse | null;
 } = {
@@ -68,6 +68,7 @@ const initialState: {
   list: [],
   timeLineList: [],
   statistics: null,
+  currentUserPageComments: [],
   targetedCustomerOptions: [
     { id: ETargetedCustomer.SEC.toString(), name: 'SEC' },
     {
@@ -266,6 +267,9 @@ export const PlanStore = signalStore(
       },
       resetWizardState(): void {
         patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null });
+      },
+      updateCurrentUserPageComments(newPageComments: EPlanPageTitle[]): void {
+        patchState(store, { currentUserPageComments: newPageComments });
       },
     };
   }),
@@ -623,6 +627,7 @@ export const PlanStore = signalStore(
         return planApiService.getPlanComment(planId).pipe(
           tap((res) => {
             patchState(store, { isLoading: false, planComments: res.body || null });
+            patchState(store, { currentUserPageComments: [] })
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading plan comments', isLoading: false });

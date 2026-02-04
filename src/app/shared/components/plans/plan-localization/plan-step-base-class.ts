@@ -8,7 +8,7 @@ import { FormUtilityService } from 'src/app/shared/services/form-utility/form-ut
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { PlanCommentSyncService } from 'src/app/shared/services/plan/plan-comment-sync.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { TCommentPhase } from './product-localization-plan-wizard/product-localization-plan-wizard';
@@ -32,7 +32,7 @@ export abstract class PlanStepBaseClass {
   protected readonly destroyRef = inject(DestroyRef);
 
   // Abstract properties - must be provided by subclasses (defined as inputs/models in @Component)
-  abstract readonly pageTitle: InputSignal<string>;
+  abstract readonly pageTitle: InputSignal<EPlanPageTitle>;
   abstract readonly commentPhase: ModelSignal<TCommentPhase>;
   abstract readonly selectedInputs: ModelSignal<IFieldInformation[]>;
   abstract readonly pageComments: InputSignal<IPageComment[]>;
@@ -116,7 +116,7 @@ export abstract class PlanStepBaseClass {
   // Computed page comment for timeline
   pageComment = computed<IPageComment>(() => {
     return {
-      pageTitleForTL: this.pageTitle() ?? '',
+      pageTitleForTL: this.pageTitle(),
       comment: this.comment() ?? '',
       fields: this.selectedInputs(),
     };
@@ -627,10 +627,12 @@ export abstract class PlanStepBaseClass {
     if (this.isResubmitMode()) {
       this.commentPhase.set('none');
       this.commentFormControl.disable({ emitEvent: false });
+      this.selectedInputs.set(this.correctedFields())
     } else {
       this.commentPhase.set('adding');
     }
     this.showDeleteConfirmationDialog.set(false);
+    this.planStore.updateCurrentUserPageComments(this.planStore.currentUserPageComments().filter(c => c !== this.pageTitle()));
     this.toasterService.success('Your comments and selected fields were removed successfully.');
   }
 

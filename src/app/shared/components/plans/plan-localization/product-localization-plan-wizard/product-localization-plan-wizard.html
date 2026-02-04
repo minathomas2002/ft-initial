@@ -24,12 +24,13 @@
 
   <ng-template [appStepContent]="1">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep1Comments() && !showCommentState()) {
+      @if (hasIncomingStep1Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep1CommentText()"
       />
       }
+      {{step1SelectedInputs().length}}
       <app-plan-localization-step-01-overview-company-information-form
         [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
         [pageTitle]="steps()[0].title"

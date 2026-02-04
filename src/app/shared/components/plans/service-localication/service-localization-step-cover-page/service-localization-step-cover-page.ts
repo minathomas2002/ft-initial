@@ -19,6 +19,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { EPlanPageTitle } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-service-localization-step-cover-page',
@@ -48,7 +49,7 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
 
   readonly planFormService = inject(ServicePlanFormService);
 
-  pageTitle = input.required<string>();
+  pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
