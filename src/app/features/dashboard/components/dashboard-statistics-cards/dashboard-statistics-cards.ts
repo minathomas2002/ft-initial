@@ -32,6 +32,7 @@ export class DashboardStatisticsCards {
   readonly onViewRejectedPlans = output<void>();
   readonly onViewPendingAssignedPlans = output<void>();
   readonly onViewAssignedPlans = output<void>();
+  readonly onViewTotalApprovedPlansInInternalUser = output<void>();
 
   /**
    * Computed signal to determine if user is an Employee
@@ -82,7 +83,7 @@ export class DashboardStatisticsCards {
     {
       titleKey: 'Total Approved Plans',
       valueKey: 'totalPlans',
-      outputEvent: () => this.onViewApprovedPlans.emit()
+      outputEvent: () => this.onViewTotalApprovedPlansInInternalUser.emit()
     },
     {
       titleKey: 'plans.statistics.assignedPending',

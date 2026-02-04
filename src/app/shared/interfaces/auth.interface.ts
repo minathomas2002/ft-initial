@@ -41,6 +41,7 @@ export interface IJwtUserDetails {
   Roles: string[];
   UserId: string;
   UserType: string;
+  EmpID: string;
 
   // Standard JWT claims
   aud: string;

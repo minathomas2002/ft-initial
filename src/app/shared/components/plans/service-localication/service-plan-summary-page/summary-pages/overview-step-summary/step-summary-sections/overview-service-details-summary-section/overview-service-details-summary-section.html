@@ -38,11 +38,13 @@
               <app-plan-summary-flied [planSummaryField]="row.serviceCategory" />
             </td>
             <td class="border-t border-gray-300 p-4 min-w-[360px]">
+              <span class="font-medium text-gray-700">Description: </span>
               <app-plan-summary-flied [planSummaryField]="row.serviceDescription" />
             </td>
             <td class="border-t border-gray-300 p-4 min-w-[400px]">
               <app-plan-summary-flied [planSummaryField]="row.serviceProvidedTo" />
               @if (row.showServiceProvidedToCompanyNames) {
+              <span class="font-medium text-gray-700">Description: </span>
               <app-plan-summary-flied [planSummaryField]="row.serviceProvidedToCompanyNames" />
               }
             </td>
