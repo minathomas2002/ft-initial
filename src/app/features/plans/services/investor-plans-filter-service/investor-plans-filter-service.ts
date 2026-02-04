@@ -5,9 +5,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InvestorPlansFilter } from '../../classes/investor-plans-filter';
 import { take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class InvestorPlansFilterService extends AbstractServiceFilter<IPlanFilter> {
   store = inject(PlanStore);
   filterClass = new InvestorPlansFilter();

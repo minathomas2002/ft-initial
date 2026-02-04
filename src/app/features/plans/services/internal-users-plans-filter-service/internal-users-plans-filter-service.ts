@@ -5,9 +5,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InternalUsersPlansFilter } from '../../classes/internal-users-plans-filter';
 import { take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class InternalUsersPlansFilterService extends AbstractServiceFilter<IPlanFilter> {
   store = inject(PlanStore);
   filterClass = new InternalUsersPlansFilter();

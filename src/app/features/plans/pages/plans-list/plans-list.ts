@@ -54,6 +54,7 @@ import { BaseTagComponent } from 'src/app/shared/components/base-components/base
   ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
+  providers: [InvestorPlansFilterService, InternalUsersPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlansList extends PlanDashboardBase implements OnInit {
