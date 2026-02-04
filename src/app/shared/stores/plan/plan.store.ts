@@ -199,6 +199,28 @@ export const PlanStore = signalStore(
         };
         return roleMap[role] || 'Comment';
       }),
+      /**
+       * Get persona label for a specific role.
+       * Use this for per-comment persona instead of the global commentPersona.
+       */
+      getCommentPersonaByRole: computed(() => {
+        return (role: number | undefined): string => {
+          if (!role) return 'Comment';
+
+          if (roleService.hasAnyRoleSignal([role])()) {
+            return 'Your Comment';
+          }
+
+          const roleMap: Record<number, string> = {
+            [ERoles.ADMIN]: 'Admin Comment',
+            [ERoles.INVESTOR]: 'Investor Comment',
+            [ERoles.EMPLOYEE]: 'Employee Comment',
+            [ERoles.Division_MANAGER]: 'Division Manager Comment',
+            [ERoles.DEPARTMENT_MANAGER]: 'Department Manager Comment',
+          };
+          return roleMap[role] || 'Comment';
+        };
+      }),
     };
   }),
   withMethods((store) => {

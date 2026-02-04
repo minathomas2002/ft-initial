@@ -23,19 +23,26 @@ export class PlanCommentSyncService {
     const existing = this.planStore.planComments();
     const existingComments = existing?.comments ?? [];
 
-    // Merge: keep other pages, replace this page's entry
+    // Merge: keep other pages (with their existing creatorRole), replace this page's entry
     const otherPages = existingComments.filter(
       (c) => c.pageTitleForTL !== currentPageComment.pageTitleForTL
     );
-    const mergedComments: IPageComment[] = [...otherPages, currentPageComment];
 
-    // Creator role from current user's persona (AuthStore)
-    const creatorRole =
-      this.authStore.userProfile()?.roleCodes?.[0] ?? 0;
+    // Creator role from current user's persona (AuthStore) - set on the current page comment
+    const currentUserRole = this.authStore.userProfile()?.roleCodes?.[0] ?? 0;
+    const updatedCurrentPageComment: IPageComment = {
+      ...currentPageComment,
+      creatorRole: currentUserRole,
+    };
+
+    const mergedComments: IPageComment[] = [...otherPages, updatedCurrentPageComment];
+
+    // Keep the global creatorRole from existing or use current user's role
+    const globalCreatorRole = existing?.creatorRole ?? currentUserRole;
 
     const payload: IPlanCommentResponse = {
       comments: mergedComments,
-      creatorRole,
+      creatorRole: globalCreatorRole,
     };
 
     this.planStore.setPlanComments(payload);

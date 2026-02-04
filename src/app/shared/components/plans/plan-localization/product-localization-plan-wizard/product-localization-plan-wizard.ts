@@ -85,7 +85,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
-    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.activeStep() < 5)
+    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.planStatus() !== EInvestorPlanStatus.DRAFT && this.activeStep() < 5)
   })
 
   // Track validation errors for stepper indicators

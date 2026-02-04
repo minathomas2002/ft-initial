@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -242,6 +243,54 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     super.resetAllHasCommentControls();
   }
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+    // Targeted-customer subscription runs here so planFormService.targetCustomersFormGroup is available.
+    this.setupTargetedCustomerWatcher();
+  }
+
+  /**
+   * Subscribe to targetedCustomer valueChanges once form is ready (called from ngOnInit).
+   * When user changes away from "SEC's approved local suppliers", remove conditional fields from selectedInputs.
+   */
+  private setupTargetedCustomerWatcher(): void {
+    const targetedCustomerControl = this.getValueControl(
+      this.targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer]
+    );
+    if (!targetedCustomerControl) return;
+    targetedCustomerControl.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value: string[] | null) => {
+        const isSecSuppliers = value?.includes(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString()) ?? false;
+        if (!isSecSuppliers) {
+          const current = this.selectedInputs();
+          const updated = current.filter(
+            input =>
+              !(
+                input.section === 'targetCustomers' &&
+                (input.inputKey === EMaterialsFormControls.namesOfTargetedSuppliers ||
+                  input.inputKey === EMaterialsFormControls.productsUtilizeTargetedProduct)
+              )
+          );
+          if (updated.length !== current.length) this.selectedInputs.set(updated);
+        }
+        if (this.isResubmitMode()) {
+          this._userChangedDropdowns.add('targetedCustomer');
+          if (isSecSuppliers) {
+            const namesOfTargetedSuppliersControl = this.getValueControl(
+              this.targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]
+            );
+            const productsUtilizeTargetedProductControl = this.getValueControl(
+              this.targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]
+            );
+            namesOfTargetedSuppliersControl?.enable({ emitEvent: false });
+            productsUtilizeTargetedProductControl?.enable({ emitEvent: false });
+          }
+        }
+        this.planFormService.toggleTargetedSuppliersFieldsValidation(value ?? []);
+      });
+  }
+
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
     // Setup resubmit mode watchers for conditional fields
@@ -275,7 +324,8 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
 
   /**
    * Setup watchers to track dropdown changes for resubmit mode
-   * Also handles enable/disable logic for conditional fields
+   * Also handles enable/disable logic for conditional fields.
+   * Note: targetedCustomer subscription is in ngOnInit (form must be available).
    */
   private setupResubmitModeWatchers(): void {
     // Watch othersPercentage changes for othersDescription
