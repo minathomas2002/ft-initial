@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject, output } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { ECommentType, EMaterialsFormControls } from "src/app/shared/enums";
+import { EPlanPageTitle } from "src/app/shared/enums";
 import { IFieldInformation, IPageComment } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n";
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
@@ -23,10 +23,13 @@ export abstract class SummaryStepBaseClass {
     .find(comment => comment.pageTitleForTL === this.pageTitleForTL));
 
   commentForPage = computed(() => {
-    const stepComment = this.stepComments();
+    let stepComment = this.stepComments();
+    let persona = 'Your Comment';
+    if (!this.planStore.currentUserPageComments().includes(this.pageTitleForTL as EPlanPageTitle)) {
+      const commentRole = stepComment?.creatorRole ?? this.planStore.planComments()?.creatorRole;
+      persona = this.planStore.getCommentPersonaByRole()(commentRole);
+    }
     // Use the per-comment creatorRole if available, otherwise fallback to global
-    const commentRole = stepComment?.creatorRole ?? this.planStore.planComments()?.creatorRole;
-    const persona = this.planStore.getCommentPersonaByRole()(commentRole);
     return {
       title: persona || 'No Persona Found',
       text: stepComment?.comment

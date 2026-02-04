@@ -12,7 +12,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { ELocalizationMethodology } from 'src/app/shared/enums';
+import { ELocalizationMethodology, EPlanPageTitle } from 'src/app/shared/enums';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
@@ -420,7 +420,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Always present steps
     pushStep({
       id: 'cover',
-      title: 'Cover Page',
+      title: EPlanPageTitle.CoverPage,
       description: 'Enter high-level submission and plan details',
       formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: this.step1CommentPhase() === 'none' || this.step1CommentPhase() === 'viewing',
@@ -430,7 +430,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
     pushStep({
       id: 'overview',
-      title: 'Overview',
+      title: EPlanPageTitle.Overview,
       description: 'Provide an overview of the localization plan',
       formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: this.step2CommentPhase() === 'none' || this.step2CommentPhase() === 'viewing',
@@ -441,7 +441,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     if (this.showExistingSaudiStep()) {
       pushStep({
         id: 'existingSaudi',
-        title: 'Existing Saudi Co.',
+        title: EPlanPageTitle.ExistingSaudi,
         description: 'Enter details of your existing presence in Saudi Arabia',
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: this.step3CommentPhase() === 'none' || this.step3CommentPhase() === 'viewing',
@@ -453,7 +453,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     if (this.showDirectLocalizationStep()) {
       pushStep({
         id: 'directLocalization',
-        title: 'Direct Localization',
+        title: EPlanPageTitle.DirectLocalization,
         description: 'Provide direct localization and investment details',
         formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: this.step4CommentPhase() === 'none' || this.step4CommentPhase() === 'viewing',
@@ -465,7 +465,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Summary always last
     pushStep({
       id: 'summary',
-      title: 'Summary',
+      title: EPlanPageTitle.Summary,
       description: 'Review the plan before final submission',
       formState: null,
       hasErrors: false,
@@ -1229,7 +1229,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step1CommentValue = step1CommentControl?.value?.trim() || '';
     if (step1CommentValue && (this.isResubmitMode() || step1Fields.length > 0)) {
       comments.push({
-        pageTitleForTL: this.steps()[0].title,
+        pageTitleForTL: this.steps()[0].title as EPlanPageTitle,
         comment: step1CommentValue,
         fields: step1Fields,
       });
@@ -1244,7 +1244,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step2CommentValue = step2CommentControl?.value?.trim() || '';
     if (step2CommentValue && (this.isResubmitMode() || step2Fields.length > 0)) {
       comments.push({
-        pageTitleForTL: this.steps()[1].title,
+        pageTitleForTL: this.steps()[1].title as EPlanPageTitle,
         comment: step2CommentValue,
         fields: step2Fields,
       });
@@ -1261,7 +1261,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       if (step3CommentValue && (this.isResubmitMode() || step3Fields.length > 0)) {
         const step3Index = this.existingSaudiStepIndex();
         comments.push({
-          pageTitleForTL: this.steps()[step3Index - 1].title,
+          pageTitleForTL: this.steps()[step3Index - 1].title as EPlanPageTitle,
           comment: step3CommentValue,
           fields: step3Fields,
         });
@@ -1279,7 +1279,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       if (step4CommentValue && (this.isResubmitMode() || step4Fields.length > 0)) {
         const step4Index = this.directLocalizationStepIndex();
         comments.push({
-          pageTitleForTL: this.steps()[step4Index - 1].title,
+          pageTitleForTL: this.steps()[step4Index - 1].title as EPlanPageTitle,
           comment: step4CommentValue,
           fields: step4Fields,
         });
@@ -1378,7 +1378,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       if (investorComment.length > 0) {
         // Case 1: Investor added comments - use new investor comments
         Comments.push({
-          pageTitleForTL: this.steps()[stepIndex].title,
+          pageTitleForTL: this.steps()[stepIndex].title as EPlanPageTitle,
           comment: investorComment,
           fields: correctedFields,
         });

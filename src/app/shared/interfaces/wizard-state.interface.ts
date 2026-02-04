@@ -1,8 +1,9 @@
 import { FormGroup } from "@angular/forms";
 import { TColors } from "./colors.interface";
+import { EPlanPageTitle } from "../enums";
 
 export interface IWizardStepState {
-  title: string;
+  title: EPlanPageTitle;
   description: string;
   isActive: boolean;
   formState: FormGroup | null;

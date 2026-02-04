@@ -28,23 +28,23 @@ export class PlanCommentSyncService {
       (c) => c.pageTitleForTL !== currentPageComment.pageTitleForTL
     );
 
-    // Creator role from current user's persona (AuthStore) - set on the current page comment
-    const currentUserRole = this.authStore.userProfile()?.roleCodes?.[0] ?? 0;
+    // // Creator role from current user's persona (AuthStore) - set on the current page comment
+    // const currentUserRole = this.authStore.userProfile()?.roleCodes?.[0] ?? 0;
     const updatedCurrentPageComment: IPageComment = {
       ...currentPageComment,
-      creatorRole: currentUserRole,
     };
 
     const mergedComments: IPageComment[] = [...otherPages, updatedCurrentPageComment];
 
-    // Keep the global creatorRole from existing or use current user's role
-    const globalCreatorRole = existing?.creatorRole ?? currentUserRole;
+    // // Keep the global creatorRole from existing or use current user's role
+    // const globalCreatorRole = existing?.creatorRole ?? currentUserRole;
 
     const payload: IPlanCommentResponse = {
       comments: mergedComments,
-      creatorRole: globalCreatorRole,
+      creatorRole: existing!.creatorRole
     };
 
     this.planStore.setPlanComments(payload);
+    this.planStore.updateCurrentUserPageComments([...this.planStore.currentUserPageComments(), currentPageComment.pageTitleForTL]);
   }
 }

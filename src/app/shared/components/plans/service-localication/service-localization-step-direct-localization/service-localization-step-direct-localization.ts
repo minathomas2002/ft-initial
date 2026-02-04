@@ -7,7 +7,7 @@ import { SelectModule } from 'primeng/select';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { ELocalizationApproach, ELocation, EYesNo } from 'src/app/shared/enums/plan.enum';
+import { ELocalizationApproach, ELocation, EPlanPageTitle, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -52,7 +52,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
 
-  pageTitle = input.required<string>();
+  pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);

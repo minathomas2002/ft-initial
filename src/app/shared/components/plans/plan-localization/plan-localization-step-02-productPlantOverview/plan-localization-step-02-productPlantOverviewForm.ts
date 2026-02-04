@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
-import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle, ETargetedCustomer } from 'src/app/shared/enums';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TextareaModule } from 'primeng/textarea';
@@ -58,7 +58,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
 
-  pageTitle = input<string>('Product & Plant Overview');
+  pageTitle = input<EPlanPageTitle>(EPlanPageTitle.ProductAndPlantOverview);
 
   // Track user interactions with dropdowns for resubmit mode
   private _userChangedDropdowns = new Set<string>();
