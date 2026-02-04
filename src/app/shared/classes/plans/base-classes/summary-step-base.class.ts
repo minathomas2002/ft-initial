@@ -23,9 +23,13 @@ export abstract class SummaryStepBaseClass {
     .find(comment => comment.pageTitleForTL === this.pageTitleForTL));
 
   commentForPage = computed(() => {
+    const stepComment = this.stepComments();
+    // Use the per-comment creatorRole if available, otherwise fallback to global
+    const commentRole = stepComment?.creatorRole ?? this.planStore.planComments()?.creatorRole;
+    const persona = this.planStore.getCommentPersonaByRole()(commentRole);
     return {
-      title: this.planStore.commentPersona() || 'No Persona Found',
-      text: this.stepComments()?.comment
+      title: persona || 'No Persona Found',
+      text: stepComment?.comment
     }
   });
 

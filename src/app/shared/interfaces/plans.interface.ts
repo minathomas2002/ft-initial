@@ -341,6 +341,7 @@ export interface IPageComment {
   pageTitleForTL: string;
   comment: string;
   fields: IFieldInformation[];
+  creatorRole?: number;
 }
 
 export interface IFieldInformation {
