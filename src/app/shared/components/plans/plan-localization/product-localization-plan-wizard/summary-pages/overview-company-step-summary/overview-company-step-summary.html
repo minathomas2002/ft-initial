@@ -46,7 +46,7 @@
     }
   </div>
 
-  @if (commentForPage().text) {
+  @if (commentForPage().text && stepCommentCountFromWizard()! > 0) {
   <app-page-comment-box
     [commentTitle]="commentForPage().title"
     [commentText]="commentForPage().text || 'No comment found'"
