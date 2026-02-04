@@ -23,7 +23,7 @@
 
   <ng-template [appStepContent]="1">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep1Comments() && !showCommentState()) {
+      @if (hasIncomingStep1Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep1CommentText()"
@@ -46,7 +46,7 @@
 
   <ng-template [appStepContent]="2">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep2Comments() && !showCommentState()) {
+      @if (hasIncomingStep2Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep2CommentText()"
@@ -72,7 +72,7 @@
   @if (showExistingSaudiStep() && existingSaudiStepIndex() > 0) {
   <ng-template [appStepContent]="existingSaudiStepIndex()">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep3Comments() && !showCommentState()) {
+      @if (hasIncomingStep3Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep3CommentText()"
@@ -99,7 +99,7 @@
   @if (showDirectLocalizationStep() && directLocalizationStepIndex() > 0) {
   <ng-template [appStepContent]="directLocalizationStepIndex()">
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep4Comments() && !showCommentState()) {
+      @if (hasIncomingStep4Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep4CommentText()"
