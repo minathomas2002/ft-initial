@@ -33,7 +33,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
     const value = this.targetedCustomerControl()?.value;
     const currantValue = Array.isArray(value) ? this.formatTargetedCustomers(value) : '';
     const targetSEC = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.targetSEC;
-    const beforeValue = Array.isArray(targetSEC) ? targetSEC.map((id: number) => ETargetedCustomer[id as unknown as keyof typeof ETargetedCustomer] ?? id).join(', ') : '';
+    const beforeValue = Array.isArray(targetSEC) ? this.formatTargetedCustomers(targetSEC) : '';
     return {
       label: 'Targeted Customer',
       beforeValue,
