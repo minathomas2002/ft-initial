@@ -92,7 +92,6 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
       const serviceName = getValue(EMaterialsFormControls.serviceName) ?? '';
       const beforeServiceName = serviceName
 
-      debugger;
       const expectedDate = getValue(this.expectedDateControlKey()) === '0' ? '' : getValue(this.expectedDateControlKey());
       const beforeExpectedDate = service?.localizationDate ?? '';
 
