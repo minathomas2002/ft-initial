@@ -472,7 +472,7 @@
           />
         </td>
 
-        <!-- Why did you chose this particular Saudi Company -->
+        <!-- Why did you choose this particular Saudi Company -->
         <td class="p-3 border border-gray-200 min-w-[350px]">
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -480,7 +480,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'whyChoseThisCompany_' + index,
-              label: 'Why Did You Chose This Particular Saudi Company As Your Partner?'
+              label: 'Why did you choose this particular Saudi Company as your partner?'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -488,7 +488,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Why did you chose this particular Saudi Company as your partner?'"
+              [appHidePlaceholderWhenDisabledEmpty]="'Why did you choose this particular Saudi Company as your partner?'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
               [appConditionalColorClass]="highlightInput('whyChoseThisCompany_' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -501,7 +501,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
-            [label]="'Why Did You Chose This Particular Saudi Company As Your Partner?'"
+            [label]="'Why did you choose this particular Saudi Company as your partner?'"
           />
         </td>
 
@@ -790,7 +790,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'keyMeasuresToUpskillSaudis_' + index,
-                label: 'Key Measures to Upskill Saudis'
+                label: 'Key measures to upskill Saudis'
               }, itemControl.get('rowId')?.value)"
             >
               <textarea
@@ -798,7 +798,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill saudis'"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill Saudis'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
                 [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -811,7 +811,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-              [label]="'Key Measures to Upskill Saudis'"
+              [label]="'Key measures to upskill Saudis'"
             />
           </td>
 

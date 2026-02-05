@@ -176,7 +176,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
       { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
       { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
-      { label: 'Key Measures to Upskill Saudis', rowspan: 2, dataGroup: false },
+      { label: 'Key measures to upskill Saudis', rowspan: 2, dataGroup: false },
       { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
     ];
   });
