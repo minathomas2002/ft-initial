@@ -53,7 +53,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
   showNamesOfTargetedSuppliersAndProducts = computed(() => {
     this.doRefresh();
     const value = this.targetedCustomerControl()?.value;
-    return value.includes(String(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS));
+    return value?.includes(String(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS));
   });
 
   namesOfTargetedSuppliersSummaryField = computed<IPlanSummaryField>(() => {
