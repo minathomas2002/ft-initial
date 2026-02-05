@@ -15,4 +15,7 @@
     [stepCommentsCountAndPhaseFromWizard]="step4CommentsCountAndPhase()"
     (onEdit)="onEditStepClick(4)"
   />
+  @if (signature()) {
+    <app-summary-section-signature [signature]="signature()" />
+    }
 </div>
