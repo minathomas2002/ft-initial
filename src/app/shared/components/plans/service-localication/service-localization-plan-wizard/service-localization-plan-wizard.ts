@@ -37,7 +37,7 @@ import { switchMap, of, map, catchError, finalize, tap } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
-import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ICommentsCountAndPhase, TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
@@ -130,6 +130,31 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   step3SelectedInputs = signal<IFieldInformation[]>([]);
   step4SelectedInputs = signal<IFieldInformation[]>([]);
 
+  step1CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.step1Comments().length,
+      phase: this.step1CommentPhase()
+    };
+  });
+  step2CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.step2Comments().length,
+      phase: this.step2CommentPhase()
+    };
+  });
+  step3CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.step3Comments().length,
+      phase: this.step3CommentPhase()
+    };
+  });
+  step4CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.step4Comments().length,
+      phase: this.step4CommentPhase()
+    };
+  });
+
   // Plan comments from API
   planComments = this.planStore.planComments;
   incomingCommentPersona = this.planStore.commentPersona;
@@ -154,7 +179,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step = this.steps()[0];
     return this.step1Comments().length > 0 && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
     );
   });
 
@@ -162,7 +187,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step = this.steps()[1];
     return this.step2Comments().length > 0 && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0
+      ((step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase()))
     );
   });
 
@@ -170,7 +195,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step = this.steps()[2];
     return this.step3Comments().length > 0 && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
     );
   });
 
@@ -178,7 +203,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step = this.steps()[3];
     return this.step4Comments().length > 0 && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
     );
   });
 

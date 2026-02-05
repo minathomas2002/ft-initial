@@ -19,7 +19,7 @@
     [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
-  @if (commentForPage().text) {
+  @if (shouldShowCommentBox()) {
   <app-page-comment-box
     [commentTitle]="commentForPage().title"
     [commentText]="commentForPage().text || 'No comment found'"

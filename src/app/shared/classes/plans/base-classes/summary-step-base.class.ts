@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { ICommentsCountAndPhase } from "src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard";
 import { EPlanPageTitle } from "src/app/shared/enums";
 import { IFieldInformation, IPageComment } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n";
@@ -22,7 +23,7 @@ export abstract class SummaryStepBaseClass {
    * When provided by the wizard (selectedInputs.length for this step), used as the step comment count
    * so summary reflects current selection instead of plan store (store is not updated when user fixes inputs).
    */
-  readonly stepCommentCountFromWizard = input<number | undefined>(undefined);
+  readonly stepCommentsCountAndPhaseFromWizard = input<ICommentsCountAndPhase>({ count: 0, phase: 'none' });
 
   /* Signals */
   stepComments = computed<IPageComment | undefined>(() => this.planStore.planComments()?.comments
@@ -40,6 +41,10 @@ export abstract class SummaryStepBaseClass {
       title: persona || 'No Persona Found',
       text: stepComment?.comment
     }
+  });
+
+  shouldShowCommentBox = computed(() => {
+    return !!this.commentForPage().text && this.stepCommentsCountAndPhaseFromWizard().count > 0 && !['adding', 'editing'].includes(this.stepCommentsCountAndPhaseFromWizard().phase);
   });
 
   // /** Fallback count from plan store when wizard does not pass stepCommentCountFromWizard. */

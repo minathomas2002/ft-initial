@@ -35,7 +35,10 @@ import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan
 import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
-
+export interface ICommentsCountAndPhase {
+  count: number;
+  phase: TCommentPhase;
+}
 type ProductLocalizationWizardStepId =
   | 'overview'
   | 'productPlant'
@@ -298,6 +301,34 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   step4CommentText = computed<string>(() => {
     return this.step4Comments().map(c => c.comment).join('\n\n');
+  });
+
+  step1CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.step1Comments().length,
+      phase: this.step1CommentPhase()
+    };
+  });
+
+  step2CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.step2Comments().length,
+      phase: this.step2CommentPhase()
+    };
+  });
+
+  step3CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.step3Comments().length,
+      phase: this.step3CommentPhase()
+    };
+  });
+
+  step4CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.step4Comments().length,
+      phase: this.step4CommentPhase()
+    };
   });
 
   // Computed signals to check if incoming comments exist and have content
