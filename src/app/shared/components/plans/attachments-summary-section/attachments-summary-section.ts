@@ -43,11 +43,11 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
     return [];
   });
 
-  /** Comparable string for attachment list (sorted file names/ids) for difference check. */
+  /** Comparable string for attachment list (sorted identifiers) for difference check. */
   private attachmentSignature(items: AttachmentItem[]): string {
     if (!items?.length) return '';
     const sorted = [...items]
-      .map((a) => a.fileName || a.name || a.id || '')
+      .map((a) => a.ibmIdentifier || a.id || '')
       .filter(Boolean)
       .sort();
     return sorted.join('\n');

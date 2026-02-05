@@ -1099,7 +1099,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.submitSuccess'));
+          this.toasterService.success(this.i18nService.translate('Service localization plan submitted successfully'));
           // Reset all forms after successful submission
           this.serviceLocalizationFormService.resetAllForms();
           // Reset wizard state
