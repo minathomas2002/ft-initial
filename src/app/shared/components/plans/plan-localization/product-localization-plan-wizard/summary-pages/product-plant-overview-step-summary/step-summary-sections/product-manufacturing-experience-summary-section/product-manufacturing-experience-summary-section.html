@@ -1,48 +1,19 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
   <app-plan-summary-flied [planSummaryField]="productManufacturingExperienceSummaryField()" />
-
   <app-plan-summary-flied [planSummaryField]="provideToSECSummaryField()" />
 
-
-  @let qualifiedPlantLocationSEC = qualifiedPlantLocationSECSummaryField();
-  @if (qualifiedPlantLocationSEC.currantValue.toString().trim()) {
-    <app-plan-summary-flied [planSummaryField]="qualifiedPlantLocationSEC" />
+  @if(showProvideToSECSummaryField()){
+  <app-plan-summary-flied [planSummaryField]="qualifiedPlantLocationSECSummaryField()" />
+  <app-plan-summary-flied [planSummaryField]="approvedVendorIDSECSummaryField()" />
+  <app-plan-summary-flied [planSummaryField]="yearsOfExperienceSECSummaryField()" />
+  <app-plan-summary-flied [planSummaryField]="totalQuantitiesSECSummaryField()" />
   }
 
-  @let approvedVendorIDSEC = approvedVendorIDSECSummaryField();
-  @if (approvedVendorIDSEC.currantValue.toString().trim()) {
-    <app-plan-summary-flied [planSummaryField]="approvedVendorIDSEC" />
-  }
-
-  @let yearsOfExperienceSEC = yearsOfExperienceSECSummaryField();
-  @if (yearsOfExperienceSEC.currantValue.toString().trim()) {
-    <app-plan-summary-flied [planSummaryField]="yearsOfExperienceSEC" />
-  }
-
-  @let totalQuantitiesSEC = totalQuantitiesSECSummaryField();
-  @if (totalQuantitiesSEC.currantValue.toString().trim()) {
-    <app-plan-summary-flied [planSummaryField]="totalQuantitiesSEC" />
-  }
-  
   <app-plan-summary-flied [planSummaryField]="provideToLocalSuppliersSummaryField()" />
-
-  @let namesOfSECApprovedSuppliers = namesOfSECApprovedSuppliersSummaryField();
-  @if (namesOfSECApprovedSuppliers.currantValue.toString().trim()) {
-    <app-plan-summary-flied [planSummaryField]="namesOfSECApprovedSuppliers" />
-  }
-
-  @let qualifiedPlantLocation = qualifiedPlantLocationSummaryField();
-  @if (qualifiedPlantLocation.currantValue.toString().trim()) {
-    <app-plan-summary-flied [planSummaryField]="qualifiedPlantLocation" />
-  }
-
-  @let yearsOfExperience = yearsOfExperienceSummaryField();
-  @if (yearsOfExperience.currantValue.toString().trim()) {
-    <app-plan-summary-flied [planSummaryField]="yearsOfExperience" />
-  }
-
-  @let totalQuantities = totalQuantitiesSummaryField();
-  @if (totalQuantities.currantValue.toString().trim()) {
-    <app-plan-summary-flied [planSummaryField]="totalQuantities" />
+  @if (showApprovedLocalSuppliersSummaryField()) {
+  <app-plan-summary-flied [planSummaryField]="namesOfSECApprovedSuppliersSummaryField()" />
+  <app-plan-summary-flied [planSummaryField]="qualifiedPlantLocationSummaryField()" />
+  <app-plan-summary-flied [planSummaryField]="yearsOfExperienceSummaryField()" />
+  <app-plan-summary-flied [planSummaryField]="totalQuantitiesSummaryField()" />
   }
 </div>

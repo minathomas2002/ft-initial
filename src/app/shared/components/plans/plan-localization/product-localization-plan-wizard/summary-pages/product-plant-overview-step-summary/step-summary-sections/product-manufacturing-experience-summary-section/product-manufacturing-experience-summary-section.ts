@@ -34,13 +34,13 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   private formatProductManufacturingExperience(value: number | unknown): string {
     if (value === null || value === undefined || value === '') return '';
-    
+
     const labelMap: Record<number, string> = {
       [EProductManufacturingExperience.Years_5]: 'Less than 5 years',
       [EProductManufacturingExperience.Years_5_10]: '5 to 10 years',
       [EProductManufacturingExperience.Years_10]: 'More than 10 years',
     };
-    
+
     return labelMap[value as number] ?? String(value);
   }
 
@@ -75,6 +75,10 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     };
   });
 
+  showProvideToSECSummaryField = computed(() => {
+    return this.provideToSECSummaryField().currantValue === 'Yes';
+  });
+
   qualifiedPlantLocationSECSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
     const currantValue = this.qualifiedPlantLocationSECControl()?.value ?? '';
@@ -92,8 +96,8 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   approvedVendorIDSECSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.approvedVendorIDSECControl()?.value ?? '';
-    const beforeValue = this.mfg()?.approvedVendorId_SEC ?? '';
+    const currantValue = this.approvedVendorIDSECControl()?.value ?? '0';
+    const beforeValue = this.mfg()?.approvedVendorId_SEC ?? '0';
     return {
       label: 'Approved Vendor ID (with SEC)',
       beforeValue: String(beforeValue),
@@ -107,8 +111,8 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   yearsOfExperienceSECSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.yearsOfExperienceSECControl()?.value ?? '';
-    const beforeValue = this.mfg()?.yearsExperience_SEC?.toString() || '';
+    const currantValue = this.yearsOfExperienceSECControl()?.value ?? '0';
+    const beforeValue = this.mfg()?.yearsExperience_SEC?.toString() || '0';
     return {
       label: 'Years of Experience (with SEC)',
       beforeValue,
@@ -122,8 +126,8 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   totalQuantitiesSECSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.totalQuantitiesSECControl()?.value ?? '';
-    const beforeValue = this.mfg()?.totalQuantitiesToSEC?.toString() || '';
+    const currantValue = this.totalQuantitiesSECControl()?.value ?? '0';
+    const beforeValue = this.mfg()?.totalQuantitiesToSEC?.toString() || '0';
     return {
       label: 'Total Quantities provided to SEC',
       beforeValue,
@@ -133,6 +137,10 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       isResolved: this.isResolvedField(EMaterialsFormControls.totalQuantitiesSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
+  });
+
+  showApprovedLocalSuppliersSummaryField = computed(() => {
+    return this.provideToLocalSuppliersSummaryField().currantValue === 'Yes';
   });
 
   provideToLocalSuppliersSummaryField = computed<IPlanSummaryField>(() => {

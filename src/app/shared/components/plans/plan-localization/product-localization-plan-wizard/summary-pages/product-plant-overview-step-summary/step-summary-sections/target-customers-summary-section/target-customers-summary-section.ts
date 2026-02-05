@@ -20,10 +20,15 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
 
   private formatTargetedCustomers(value: number[] | unknown): string {
     if (!Array.isArray(value) || value.length === 0) return '';
+    
+    const labelMap: Record<number, string> = {
+      [ETargetedCustomer.SEC]: 'SEC',
+      [ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS]: "SEC's approved local suppliers",
+    };
+    
     return value
       .map((id: number) => {
-        const label = ETargetedCustomer[id as unknown as keyof typeof ETargetedCustomer];
-        return label != null ? String(label).replace(/_/g, ' ') : String(id);
+        return labelMap[id] ?? String(id);
       })
       .join(', ');
   }
@@ -43,6 +48,12 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
       isResolved: this.isResolvedField(EMaterialsFormControls.targetedCustomer),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
+  });
+  
+  showNamesOfTargetedSuppliersAndProducts = computed(() => {
+    this.doRefresh();
+    const value = this.targetedCustomerControl()?.value;
+    return value?.includes(String(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS));
   });
 
   namesOfTargetedSuppliersSummaryField = computed<IPlanSummaryField>(() => {
