@@ -1,6 +1,18 @@
 <div class="flex flex-col gap-8 pb-10">
-  <app-overview-company-step-summary (onEdit)="onEditStepClick(1)" />
-  <app-product-plant-overview-step-summary (onEdit)="onEditStepClick(2)" />
-  <app-value-chain-step-summary (onEdit)="onEditStepClick(3)" />
-  <app-saudization-step-summary (onEdit)="onEditStepClick(4)" />
+  <app-overview-company-step-summary
+    [stepCommentsCountAndPhaseFromWizard]="step1CommentsCountAndPhase()"
+    (onEdit)="onEditStepClick(1)"
+  />
+  <app-product-plant-overview-step-summary
+    [stepCommentsCountAndPhaseFromWizard]="step2CommentsCountAndPhase()"
+    (onEdit)="onEditStepClick(2)"
+  />
+  <app-value-chain-step-summary
+    [stepCommentsCountAndPhaseFromWizard]="step3CommentsCountAndPhase()"
+    (onEdit)="onEditStepClick(3)"
+  />
+  <app-saudization-step-summary
+    [stepCommentsCountAndPhaseFromWizard]="step4CommentsCountAndPhase()"
+    (onEdit)="onEditStepClick(4)"
+  />
 </div>

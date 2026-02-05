@@ -121,3 +121,17 @@ export enum ECommentType {
   inComingComment = 1,
   outGoingComment = 2,
 }
+
+export enum EPlanPageTitle {
+  OverviewAndCompanyInformation = 'Overview & Company Information',
+  ProductAndPlantOverview = 'Product & Plant Overview',
+  ValueChain = 'Value Chain',
+  Saudization = 'Saudization',
+  CoverPage = 'Cover Page',
+  Overview = 'Overview',
+  ExistingSaudi = 'Existing Saudi Co.',
+  DirectLocalization = 'Direct Localization',
+  Summary = 'Summary',
+  OpportunityInformation = 'Opportunity Information',
+  OpportunityLocalization = 'Opportunity Localization',
+}

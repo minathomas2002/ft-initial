@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
@@ -56,7 +56,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
 
-  pageTitle = input<string>('Value Chain');
+  pageTitle = input<EPlanPageTitle>(EPlanPageTitle.ValueChain);
 
   formGroup = this.planFormService.step3_valueChain;
 

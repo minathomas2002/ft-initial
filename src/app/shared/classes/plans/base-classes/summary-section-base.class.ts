@@ -19,6 +19,8 @@ export abstract class SummarySectionBaseClass {
   protected readonly planStore = inject(PlanStore);
   public readonly sectionFormGroup = input.required<FormGroup>();
   public readonly sectionSummaryFields = input.required<IFieldInformation[]>();
+  /** When true (e.g. resubmit mode and employee's own comment page), comment icon is hidden on fields. */
+  public readonly hideCommentIcons = input<boolean>(false);
   protected readonly roleService = inject(RoleService);
   public readonly doRefresh = input.required<Date>();
 
@@ -44,6 +46,11 @@ export abstract class SummarySectionBaseClass {
 
   protected isFieldHasComment(inputKey: string, rowId: string | null = null): boolean {
     return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && (summaryField.id ? summaryField.id === rowId : true));
+  }
+
+  /** Whether to show the comment icon for this field (false when employee's own comment page in resubmit). */
+  protected shouldShowCommentIcon(inputKey: string, rowId: string | null = null): boolean {
+    return this.isFieldHasComment(inputKey, rowId) && !this.hideCommentIcons();
   }
 
   /**

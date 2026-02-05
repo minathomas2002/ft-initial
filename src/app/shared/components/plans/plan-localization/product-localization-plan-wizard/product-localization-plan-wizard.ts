@@ -12,7 +12,7 @@ import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapP
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
-import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
+import { EMaterialsFormControls, EOpportunityType, EPlanPageTitle } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
 import { IFieldInformation, IPageComment, IProductPlanResponse, Signature } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
@@ -35,7 +35,10 @@ import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan
 import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
-
+export interface ICommentsCountAndPhase {
+  count: number;
+  phase: TCommentPhase;
+}
 type ProductLocalizationWizardStepId =
   | 'overview'
   | 'productPlant'
@@ -119,7 +122,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.i18nService.currentLanguage();
     return [
       {
-        title: this.i18nService.translate('plans.wizard.step1.title'),
+        title: EPlanPageTitle.OverviewAndCompanyInformation,
         description: this.i18nService.translate('plans.wizard.step1.description'),
         isActive: this.activeStep() === 1,
         formState: this.productPlanFormService.overviewCompanyInformation,
@@ -128,7 +131,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         commentColor: this.getCommentColorForStep(this.step1CommentPhase()),
       },
       {
-        title: this.i18nService.translate('plans.wizard.step2.title'),
+        title: EPlanPageTitle.ProductAndPlantOverview,
         description: this.i18nService.translate('plans.wizard.step2.description'),
         isActive: this.activeStep() === 2,
         formState: this.productPlanFormService.step2_productPlantOverview,
@@ -137,7 +140,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         commentColor: this.getCommentColorForStep(this.step2CommentPhase()),
       },
       {
-        title: this.i18nService.translate('plans.wizard.step3.title'),
+        title: EPlanPageTitle.ValueChain,
         description: this.i18nService.translate('plans.wizard.step3.description'),
         isActive: this.activeStep() === 3,
         formState: this.productPlanFormService.step3_valueChain,
@@ -146,7 +149,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         commentColor: this.getCommentColorForStep(this.step3CommentPhase()),
       },
       {
-        title: this.i18nService.translate('plans.wizard.step4.title'),
+        title: EPlanPageTitle.Saudization,
         description: this.i18nService.translate('plans.wizard.step4.description'),
         isActive: this.activeStep() === 4,
         formState: this.productPlanFormService.step4_saudization,
@@ -155,7 +158,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         commentColor: this.getCommentColorForStep(this.step4CommentPhase()),
       },
       {
-        title: this.i18nService.translate('plans.wizard.step5.title'),
+        title: EPlanPageTitle.Summary,
         description: this.i18nService.translate('plans.wizard.step5.description'),
         isActive: this.activeStep() === 5,
         formState: null,
@@ -193,27 +196,27 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const comments = this.planComments()?.comments || [];
     // Match by step title translation key or actual title
     return comments.filter(c => {
-      const stepTitle = this.i18nService.translate('plans.wizard.step1.title');
-      return c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Overview & Company Information';
+      const stepTitle = EPlanPageTitle.OverviewAndCompanyInformation;
+      return c.pageTitleForTL === stepTitle;
     });
   });
 
   step2Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
     const stepTitle = this.i18nService.translate('plans.wizard.step2.title');
-    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Product Plant Overview');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === EPlanPageTitle.ProductAndPlantOverview);
   });
 
   step3Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
     const stepTitle = this.i18nService.translate('plans.wizard.step3.title');
-    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Value Chain');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === EPlanPageTitle.ValueChain);
   });
 
   step4Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
     const stepTitle = this.i18nService.translate('plans.wizard.step4.title');
-    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Saudization');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === EPlanPageTitle.Saudization);
   });
 
   // Computed signals to map comment fields to selectedInputs for each step
@@ -300,25 +303,65 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return this.step4Comments().map(c => c.comment).join('\n\n');
   });
 
+  step1CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[0].commentsCount ?? 0,
+      phase: this.step1CommentPhase()
+    };
+  });
+
+  step2CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[1].commentsCount ?? 0,
+      phase: this.step2CommentPhase()
+    };
+  });
+
+  step3CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[2].commentsCount ?? 0,
+      phase: this.step3CommentPhase()
+    };
+  });
+
+  step4CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[3].commentsCount ?? 0,
+      phase: this.step4CommentPhase()
+    };
+  });
+
   // Computed signals to check if incoming comments exist and have content
   hasIncomingStep1Comments = computed(() => {
-    const comments = this.step1Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[0];
+    return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
+    );
   });
 
   hasIncomingStep2Comments = computed(() => {
-    const comments = this.step2Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[1];
+    return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase())
+    );
   });
 
   hasIncomingStep3Comments = computed(() => {
-    const comments = this.step3Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[2];
+    return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
+    );
   });
 
   hasIncomingStep4Comments = computed(() => {
-    const comments = this.step4Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[3];
+    return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
+    );
   });
 
   // Helper methods to get combined incoming comment text for each step

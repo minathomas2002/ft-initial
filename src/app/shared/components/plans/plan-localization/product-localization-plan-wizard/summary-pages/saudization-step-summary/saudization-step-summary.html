@@ -12,6 +12,7 @@
         [sectionSummaryFields]="sectionSummaryFields()"
         [rowLabels]="rowLabels()"
         [doRefresh]="doRefresh()"
+        [hideCommentIcons]="isEmployeeCommentPage()"
       />
     </div>
 
@@ -20,10 +21,11 @@
         [sectionFormGroup]="attachmentsFormGroup()"
         [sectionSummaryFields]="attachmentsSummaryFields()"
         [doRefresh]="doRefresh()"
+        [hideCommentIcons]="isEmployeeCommentPage()"
       />
     </div>
 
-    @if (commentForPage().text) {
+    @if (shouldShowCommentBox()) {
     <app-page-comment-box
       [commentTitle]="commentForPage().title"
       [commentText]="commentForPage().text || 'No comment found'"

@@ -76,7 +76,7 @@ export class SaudizationSectionSummaryComponent extends SummarySectionBaseClass 
         const yearNum = yearIndex + 1;
         const inputKey = `${rowKey}_year${yearNum}`;
         const matchingField = summaryFields.find(f => f.inputKey === inputKey);
-        const hasComment = this.isFieldHasComment(inputKey, matchingField?.id);
+        const hasComment = this.shouldShowCommentIcon(inputKey, matchingField?.id ?? null);
         const hasError = this.isFieldHasError(valueControl!);
         const beforeVal = beforeRow ? (beforeRow as SaudizationRow)[`year${yearNum}` as keyof SaudizationRow] : null;
         const beforeValue: string | number = (beforeVal != null && (typeof beforeVal === 'number' || typeof beforeVal === 'string')) ? beforeVal : '';

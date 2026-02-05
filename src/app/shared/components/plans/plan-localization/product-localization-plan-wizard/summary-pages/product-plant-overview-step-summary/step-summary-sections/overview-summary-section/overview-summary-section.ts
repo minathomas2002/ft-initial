@@ -28,7 +28,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.productNameControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.productName),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.productName),
       isResolved: this.isResolvedField(EMaterialsFormControls.productName),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -43,7 +43,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.productSpecificationsControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.productSpecifications),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.productSpecifications),
       isResolved: this.isResolvedField(EMaterialsFormControls.productSpecifications),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -58,7 +58,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.targetedAnnualPlantCapacityControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.targetedAnnualPlantCapacity),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.targetedAnnualPlantCapacity),
       isResolved: this.isResolvedField(EMaterialsFormControls.targetedAnnualPlantCapacity),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -73,7 +73,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.timeRequiredToSetupFactoryControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.timeRequiredToSetupFactory),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.timeRequiredToSetupFactory),
       isResolved: this.isResolvedField(EMaterialsFormControls.timeRequiredToSetupFactory),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };

@@ -12,7 +12,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { ELocalizationMethodology } from 'src/app/shared/enums';
+import { ELocalizationMethodology, EPlanPageTitle } from 'src/app/shared/enums';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
@@ -37,7 +37,7 @@ import { switchMap, of, map, catchError, finalize, tap } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
-import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ICommentsCountAndPhase, TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
@@ -130,6 +130,31 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   step3SelectedInputs = signal<IFieldInformation[]>([]);
   step4SelectedInputs = signal<IFieldInformation[]>([]);
 
+  step1CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[0].commentsCount ?? 0,
+      phase: this.step1CommentPhase()
+    };
+  });
+  step2CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[1].commentsCount ?? 0,
+      phase: this.step2CommentPhase()
+    };
+  });
+  step3CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[2].commentsCount ?? 0,
+      phase: this.step3CommentPhase()
+    };
+  });
+  step4CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[3].commentsCount ?? 0,
+      phase: this.step4CommentPhase()
+    };
+  });
+
   // Plan comments from API
   planComments = this.planStore.planComments;
   incomingCommentPersona = this.planStore.commentPersona;
@@ -151,23 +176,36 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   // Computed signals to check if incoming comments exist and have content
   hasIncomingStep1Comments = computed(() => {
-    const comments = this.step1Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[0];
+    return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
+      this.isViewMode() ||
+
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
+    );
   });
 
   hasIncomingStep2Comments = computed(() => {
-    const comments = this.step2Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[1];
+    return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
+      this.isViewMode() ||
+      ((step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase()))
+    );
   });
 
   hasIncomingStep3Comments = computed(() => {
-    const comments = this.step3Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[2];
+    return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
+    );
   });
 
   hasIncomingStep4Comments = computed(() => {
-    const comments = this.step4Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[3];
+    return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
+    );
   });
 
   // Helper methods to get combined incoming comment text for each step
@@ -425,7 +463,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Always present steps
     pushStep({
       id: 'cover',
-      title: 'Cover Page',
+      title: EPlanPageTitle.CoverPage,
       description: 'Enter high-level submission and plan details',
       formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: this.step1CommentPhase() === 'none' || this.step1CommentPhase() === 'viewing',
@@ -435,7 +473,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
     pushStep({
       id: 'overview',
-      title: 'Overview',
+      title: EPlanPageTitle.Overview,
       description: 'Provide an overview of the localization plan',
       formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: this.step2CommentPhase() === 'none' || this.step2CommentPhase() === 'viewing',
@@ -446,7 +484,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     if (this.showExistingSaudiStep()) {
       pushStep({
         id: 'existingSaudi',
-        title: 'Existing Saudi Co.',
+        title: EPlanPageTitle.ExistingSaudi,
         description: 'Enter details of your existing presence in Saudi Arabia',
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: this.step3CommentPhase() === 'none' || this.step3CommentPhase() === 'viewing',
@@ -458,7 +496,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     if (this.showDirectLocalizationStep()) {
       pushStep({
         id: 'directLocalization',
-        title: 'Direct Localization',
+        title: EPlanPageTitle.DirectLocalization,
         description: 'Provide direct localization and investment details',
         formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: this.step4CommentPhase() === 'none' || this.step4CommentPhase() === 'viewing',
@@ -470,7 +508,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Summary always last
     pushStep({
       id: 'summary',
-      title: 'Summary',
+      title: EPlanPageTitle.Summary,
       description: 'Review the plan before final submission',
       formState: null,
       hasErrors: false,
@@ -1234,7 +1272,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step1CommentValue = step1CommentControl?.value?.trim() || '';
     if (step1CommentValue && (this.isResubmitMode() || step1Fields.length > 0)) {
       comments.push({
-        pageTitleForTL: this.steps()[0].title,
+        pageTitleForTL: this.steps()[0].title as EPlanPageTitle,
         comment: step1CommentValue,
         fields: step1Fields,
       });
@@ -1249,7 +1287,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step2CommentValue = step2CommentControl?.value?.trim() || '';
     if (step2CommentValue && (this.isResubmitMode() || step2Fields.length > 0)) {
       comments.push({
-        pageTitleForTL: this.steps()[1].title,
+        pageTitleForTL: this.steps()[1].title as EPlanPageTitle,
         comment: step2CommentValue,
         fields: step2Fields,
       });
@@ -1266,7 +1304,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       if (step3CommentValue && (this.isResubmitMode() || step3Fields.length > 0)) {
         const step3Index = this.existingSaudiStepIndex();
         comments.push({
-          pageTitleForTL: this.steps()[step3Index - 1].title,
+          pageTitleForTL: this.steps()[step3Index - 1].title as EPlanPageTitle,
           comment: step3CommentValue,
           fields: step3Fields,
         });
@@ -1284,7 +1322,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       if (step4CommentValue && (this.isResubmitMode() || step4Fields.length > 0)) {
         const step4Index = this.directLocalizationStepIndex();
         comments.push({
-          pageTitleForTL: this.steps()[step4Index - 1].title,
+          pageTitleForTL: this.steps()[step4Index - 1].title as EPlanPageTitle,
           comment: step4CommentValue,
           fields: step4Fields,
         });
@@ -1383,7 +1421,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       if (investorComment.length > 0) {
         // Case 1: Investor added comments - use new investor comments
         Comments.push({
-          pageTitleForTL: this.steps()[stepIndex].title,
+          pageTitleForTL: this.steps()[stepIndex].title as EPlanPageTitle,
           comment: investorComment,
           fields: correctedFields,
         });

@@ -10,7 +10,7 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { AgreementType, EServiceCompanyType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
+import { AgreementType, EPlanPageTitle, EServiceCompanyType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
@@ -58,7 +58,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
 
-  pageTitle = input.required<string>();
+  pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);

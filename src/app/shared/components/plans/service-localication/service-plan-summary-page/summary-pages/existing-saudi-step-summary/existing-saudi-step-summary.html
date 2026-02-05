@@ -9,33 +9,38 @@
     [sectionFormGroup]="existingSaudiFormGroup()"
     [sectionSummaryFields]="saudiCompanyDetailsSummaryFields()"
     [doRefresh]="doRefresh()"
+    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-collaboration-partnership-summary-section
     [sectionFormGroup]="existingSaudiFormGroup()"
     [sectionSummaryFields]="collaborationPartnershipSummaryFields()"
     [doRefresh]="doRefresh()"
+    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-entity-level-summary-section
     [sectionFormGroup]="existingSaudiFormGroup()"
     [sectionSummaryFields]="entityLevelSummaryFields()"
     [doRefresh]="doRefresh()"
+    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-service-level-summary-section
     [sectionFormGroup]="existingSaudiFormGroup()"
     [sectionSummaryFields]="serviceLevelSummaryFields()"
     [doRefresh]="doRefresh()"
+    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-attachments-summary-section
     [sectionFormGroup]="attachmentsFormGroup()"
     [sectionSummaryFields]="attachmentsSummaryFields()"
     [doRefresh]="doRefresh()"
+    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
-  @if (commentForPage().text) {
+  @if (shouldShowCommentBox()) {
   <app-page-comment-box
     [commentTitle]="commentForPage().title"
     [commentText]="commentForPage().text || 'No comment found'"

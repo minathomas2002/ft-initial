@@ -24,7 +24,7 @@ export class CoverPageCompanyInformationSummarySection extends SummarySectionBas
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.planTitleControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle, null),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.planTitle, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -39,7 +39,7 @@ export class CoverPageCompanyInformationSummarySection extends SummarySectionBas
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.companyNameControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName, null),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.companyName, null),
       isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };

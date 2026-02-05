@@ -9,15 +9,17 @@
     [sectionFormGroup]="coverPageCompanyInformationFormGroup()"
     [sectionSummaryFields]="coverPageCompanyInformationSummaryFields()"
     [doRefresh]="doRefresh()"
+    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-cover-page-services-summary-section
     [sectionFormGroup]="coverPageFormGroup()"
     [sectionSummaryFields]="coverPageServicesSummaryFields()"
     [doRefresh]="doRefresh()"
+    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
-  @if (commentForPage().text) {
+  @if (shouldShowCommentBox()) {
   <app-page-comment-box
     [commentTitle]="commentForPage().title"
     [commentText]="commentForPage().text || 'No comment found'"

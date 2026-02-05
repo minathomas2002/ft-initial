@@ -11,6 +11,7 @@
       [sectionFormGroup]="overviewFormGroup()"
       [sectionSummaryFields]="overviewSummaryFields()"
       [doRefresh]="doRefresh()"
+      [hideCommentIcons]="isEmployeeCommentPage()"
     />
   </div>
 
@@ -20,6 +21,7 @@
       [sectionFormGroup]="expectedCAPEXInvestmentFormGroup()"
       [sectionSummaryFields]="expectedCAPEXInvestmentSummaryFields()"
       [doRefresh]="doRefresh()"
+      [hideCommentIcons]="isEmployeeCommentPage()"
     />
   </div>
 
@@ -29,6 +31,7 @@
       [sectionFormGroup]="targetCustomersFormGroup()"
       [sectionSummaryFields]="targetCustomersSummaryFields()"
       [doRefresh]="doRefresh()"
+      [hideCommentIcons]="isEmployeeCommentPage()"
     />
   </div>
 
@@ -38,10 +41,11 @@
       [sectionFormGroup]="productManufacturingExperienceFormGroup()"
       [sectionSummaryFields]="productManufacturingExperienceSummaryFields()"
       [doRefresh]="doRefresh()"
+      [hideCommentIcons]="isEmployeeCommentPage()"
     />
   </div>
 
-  @if (commentForPage().text) {
+  @if (shouldShowCommentBox()) {
   <app-page-comment-box
     [commentTitle]="commentForPage().title"
     [commentText]="commentForPage().text || 'No comment found'"

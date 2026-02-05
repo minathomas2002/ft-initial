@@ -1,11 +1,23 @@
 <div class="flex flex-col gap-8 pb-10">
-  <app-cover-page-step-summary (onEdit)="onEditStepClick(1)" />
-  <app-overview-step-summary (onEdit)="onEditStepClick(2)" />
+  <app-cover-page-step-summary
+    [stepCommentsCountAndPhaseFromWizard]="step1CommentsCountAndPhase()"
+    (onEdit)="onEditStepClick(1)"
+  />
+  <app-overview-step-summary
+    [stepCommentsCountAndPhaseFromWizard]="step2CommentsCountAndPhase()"
+    (onEdit)="onEditStepClick(2)"
+  />
   @if (includeExistingSaudi()) {
-  <app-existing-saudi-step-summary (onEdit)="onEditStepClick(3)" />
+  <app-existing-saudi-step-summary
+    [stepCommentsCountAndPhaseFromWizard]="step3CommentsCountAndPhase()"
+    (onEdit)="onEditStepClick(3)"
+  />
   }
   @if (includeDirectLocalization()) {
-  <app-direct-localization-step-summary (onEdit)="onEditStepClick(4)" />
+  <app-direct-localization-step-summary
+    [stepCommentsCountAndPhaseFromWizard]="step4CommentsCountAndPhase()"
+    (onEdit)="onEditStepClick(4)"
+  />
   }
   @if (signature() && isViewMode()) {
   <app-summary-section-signature [signature]="signature()" />
