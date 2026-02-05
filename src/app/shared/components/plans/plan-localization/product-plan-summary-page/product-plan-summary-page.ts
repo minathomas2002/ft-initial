@@ -3,6 +3,7 @@ import { OverviewCompanyStepSummary } from '../product-localization-plan-wizard/
 import { ProductPlantOverviewStepSummary } from '../product-localization-plan-wizard/summary-pages/product-plant-overview-step-summary/product-plant-overview-step-summary';
 import { ValueChainStepSummary } from '../product-localization-plan-wizard/summary-pages/value-chain-step-summary/value-chain-step-summary';
 import { SaudizationStepSummary } from '../product-localization-plan-wizard/summary-pages/saudization-step-summary/saudization-step-summary';
+import { ICommentsCountAndPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 
 @Component({
   selector: 'app-product-plan-summary-page',
@@ -18,10 +19,10 @@ import { SaudizationStepSummary } from '../product-localization-plan-wizard/summ
 })
 export class ProductPlanSummaryPage {
   /** From wizard: selectedInputs().length per step (indicator for selected/commented fields). */
-  step1CommentCount = input<number>(0);
-  step2CommentCount = input<number>(0);
-  step3CommentCount = input<number>(0);
-  step4CommentCount = input<number>(0);
+  step1CommentsCountAndPhase = input<ICommentsCountAndPhase>({ count: 0, phase: 'none' });
+  step2CommentsCountAndPhase = input<ICommentsCountAndPhase>({ count: 0, phase: 'none' });
+  step3CommentsCountAndPhase = input<ICommentsCountAndPhase>({ count: 0, phase: 'none' });
+  step4CommentsCountAndPhase = input<ICommentsCountAndPhase>({ count: 0, phase: 'none' });
 
   onEditStep = output<number>();
 

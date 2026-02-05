@@ -128,10 +128,10 @@
       [includeExistingSaudi]="showExistingSaudiStep()"
       [includeDirectLocalization]="showDirectLocalizationStep()"
       [signature]="planSignature()"
-      [step1CommentCount]="step1SelectedInputs().length"
-      [step2CommentCount]="step2SelectedInputs().length"
-      [step3CommentCount]="step3SelectedInputs().length"
-      [step4CommentCount]="step4SelectedInputs().length"
+      [step1CommentsCountAndPhase]="step1CommentsCountAndPhase()"
+      [step2CommentsCountAndPhase]="step2CommentsCountAndPhase()"
+      [step3CommentsCountAndPhase]="step3CommentsCountAndPhase()"
+      [step4CommentsCountAndPhase]="step4CommentsCountAndPhase()"
       (onEditStep)="onEditStepFromSummary($event)"
     />
   </ng-template>
