@@ -9,14 +9,12 @@
     [sectionFormGroup]="basicInformationFormGroup()"
     [sectionSummaryFields]="basicInformationSummaryFields()"
     [doRefresh]="doRefresh()"
-    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-overview-company-information-summary-section
     [sectionFormGroup]="overviewCompanyInformationFormGroup()"
     [sectionSummaryFields]="overviewCompanyInformationSummaryFields()"
     [doRefresh]="doRefresh()"
-    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <div class="flex flex-col gap-6">
@@ -24,7 +22,6 @@
       [sectionFormGroup]="locationInformationFormGroup()"
       [sectionSummaryFields]="locationInformationSummaryFields()"
       [doRefresh]="doRefresh()"
-      [hideCommentIcons]="isEmployeeCommentPage()"
     />
 
     @if (showLocalAgentInformation()) {
@@ -32,7 +29,6 @@
       [sectionFormGroup]="localAgentInformationFormGroup()"
       [sectionSummaryFields]="localAgentInformationSummaryFields()"
       [doRefresh]="doRefresh()"
-      [hideCommentIcons]="isEmployeeCommentPage()"
     />
     }
   </div>
