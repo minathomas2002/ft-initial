@@ -14,7 +14,6 @@
     />
   </div>
 
-  @if(!isViewMode() || isResubmitMode() || files().length > 0) {
   <!-- Attachments Section -->
   <div class="flex flex-col gap-4">
     <div>
@@ -51,7 +50,6 @@
     />
     }
   </div>
-  }
 
   <app-comment-input
     [commentFormControl]="commentFormControl"
