@@ -9,7 +9,6 @@
     [sectionFormGroup]="basicInformationFormGroup()"
     [sectionSummaryFields]="basicInformationSummaryFields()"
     [doRefresh]="doRefresh()"
-    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <!-- Company Information -->
@@ -19,7 +18,6 @@
       [sectionFormGroup]="companyInformationFormGroup()"
       [sectionSummaryFields]="companyInformationSummaryFields()"
       [doRefresh]="doRefresh()"
-      [hideCommentIcons]="isEmployeeCommentPage()"
     />
   </div>
 
@@ -30,7 +28,6 @@
       [sectionFormGroup]="locationInformationFormGroup()"
       [sectionSummaryFields]="locationInformationSummaryFields()"
       [doRefresh]="doRefresh()"
-      [hideCommentIcons]="isEmployeeCommentPage()"
     />
 
     @if (showLocalAgentInformation()) {
@@ -40,7 +37,6 @@
         [sectionFormGroup]="localAgentInformationFormGroup()"
         [sectionSummaryFields]="localAgentInformationSummaryFields()"
         [doRefresh]="doRefresh()"
-        [hideCommentIcons]="isEmployeeCommentPage()"
       />
     </div>
     }

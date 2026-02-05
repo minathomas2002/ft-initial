@@ -9,14 +9,12 @@
     [sectionFormGroup]="coverPageCompanyInformationFormGroup()"
     [sectionSummaryFields]="coverPageCompanyInformationSummaryFields()"
     [doRefresh]="doRefresh()"
-    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-cover-page-services-summary-section
     [sectionFormGroup]="coverPageFormGroup()"
     [sectionSummaryFields]="coverPageServicesSummaryFields()"
     [doRefresh]="doRefresh()"
-    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   @if (shouldShowCommentBox()) {
