@@ -212,14 +212,14 @@ function mapProductPlantOverview(formService: ProductPlanFormService): ProductPl
     experienceRange: experienceRangeId,
     provideToSEC: provideToSEC ?? null,
     qualifiedPlantLocation_SEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.qualifiedPlantLocationSEC) ?? null) : null,
-    approvedVendorId_SEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.approvedVendorIDSEC) ?? null) : null,
-    yearsExperience_SEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.yearsOfExperienceSEC) ?? null) : null,
-    totalQuantitiesToSEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.totalQuantitiesSEC) ?? null) : null,
+    approvedVendorId_SEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.approvedVendorIDSEC) || 0) : null,
+    yearsExperience_SEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.yearsOfExperienceSEC) || 0) : null,
+    totalQuantitiesToSEC: provideToSEC ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.totalQuantitiesSEC) || 0) : null,
     provideToLocalSuppliers: provideToLocalSuppliers ?? null,
     localSupplierNames: provideToLocalSuppliers ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.namesOfSECApprovedSuppliers) ?? null) : null,
     qualifiedPlantLocation_LocalSupplier: provideToLocalSuppliers ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.qualifiedPlantLocation) ?? null) : null,
-    yearsExperience_LocalSupplier: provideToLocalSuppliers ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.yearsOfExperience) ?? null) : null,
-    totalQuantitiesToLocalSuppliers: provideToLocalSuppliers ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.totalQuantities) ?? null) : null,
+    yearsExperience_LocalSupplier: provideToLocalSuppliers ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.yearsOfExperience) || 0) : null,
+    totalQuantitiesToLocalSuppliers: provideToLocalSuppliers ? (getFormValue(manufacturingExpForm, EMaterialsFormControls.totalQuantities) || 0) : null,
   } as any; // Allow null values for FormData conversion
 
   return {
@@ -511,7 +511,7 @@ export function mapProductPlanResponseToForm(
       basicInfoForm.get(EMaterialsFormControls.opportunity)?.setValue({
         id: basicInfo.opportunityId,
         name: basicInfo.opportunityTitle
-      });      
+      });
     }
 
     // Set submissionDate from creationDate if available (for view/edit mode)
@@ -922,6 +922,7 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
   targetSECValue?.forEach((value, i) => {
     appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetSEC' + `[${i}]`, value);
   });
+  appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetLocalSuppliers', productPlan.productPlantOverview.targetCustomers.targetLocalSuppliers);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.TargetedLocalSupplierNames', productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.TargetCustomers.ProductsUtilizingTargetProduct', productPlan.productPlantOverview.targetCustomers.productsUtilizingTargetProduct);
 
