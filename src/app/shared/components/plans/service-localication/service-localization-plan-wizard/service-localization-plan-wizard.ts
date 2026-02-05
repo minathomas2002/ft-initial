@@ -177,15 +177,16 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   // Computed signals to check if incoming comments exist and have content
   hasIncomingStep1Comments = computed(() => {
     const step = this.steps()[0];
-    return this.step1Comments().length > 0 && (
+    return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
       this.isViewMode() ||
+
       (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
     );
   });
 
   hasIncomingStep2Comments = computed(() => {
     const step = this.steps()[1];
-    return this.step2Comments().length > 0 && (
+    return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
       this.isViewMode() ||
       ((step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase()))
     );
@@ -193,7 +194,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   hasIncomingStep3Comments = computed(() => {
     const step = this.steps()[2];
-    return this.step3Comments().length > 0 && (
+    return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
       this.isViewMode() ||
       (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
     );
@@ -201,7 +202,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   hasIncomingStep4Comments = computed(() => {
     const step = this.steps()[3];
-    return this.step4Comments().length > 0 && (
+    return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
       this.isViewMode() ||
       (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
     );
