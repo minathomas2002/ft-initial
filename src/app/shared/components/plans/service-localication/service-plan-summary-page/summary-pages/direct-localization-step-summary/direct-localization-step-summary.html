@@ -9,7 +9,6 @@
     [sectionFormGroup]="directLocalizationFormGroup()"
     [sectionSummaryFields]="localizationStrategySummaryFields()"
     [doRefresh]="doRefresh()"
-    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-entity-level-summary-section
@@ -17,7 +16,6 @@
     [sectionSummaryFields]="entityLevelSummaryFields()"
     [doRefresh]="doRefresh()"
     [pageNumber]="4"
-    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   <app-service-level-summary-section
@@ -26,7 +24,6 @@
     [pageNumber]="4"
     [doRefresh]="doRefresh()"
     expectedDateControlKey="serviceLevelLocalizationDate"
-    [hideCommentIcons]="isEmployeeCommentPage()"
   />
 
   @if (shouldShowCommentBox()) {
