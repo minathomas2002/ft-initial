@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EProductManufacturingExperience } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
@@ -32,14 +32,27 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     return value === true ? 'Yes' : value === false ? 'No' : '';
   }
 
+  private formatProductManufacturingExperience(value: number | unknown): string {
+    if (value === null || value === undefined || value === '') return '';
+    
+    const labelMap: Record<number, string> = {
+      [EProductManufacturingExperience.Years_5]: 'Less than 5 years',
+      [EProductManufacturingExperience.Years_5_10]: '5 to 10 years',
+      [EProductManufacturingExperience.Years_10]: 'More than 10 years',
+    };
+    
+    return labelMap[value as number] ?? String(value);
+  }
+
   productManufacturingExperienceSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.productManufacturingExperienceControl()?.value ?? '';
-    const beforeValue = this.mfg()?.experienceRange ?? '';
+    const value = this.productManufacturingExperienceControl()?.value;
+    const currantValue = this.formatProductManufacturingExperience(value);
+    const beforeValue = this.formatProductManufacturingExperience(this.mfg()?.experienceRange);
     return {
       label: 'Product Manufacturing Experience',
-      beforeValue: String(beforeValue),
-      currantValue: String(currantValue),
+      beforeValue,
+      currantValue,
       hasError: this.isFieldHasError(this.productManufacturingExperienceControl()),
       hasComment: this.isFieldHasComment(EMaterialsFormControls.productManufacturingExperience),
       isResolved: this.isResolvedField(EMaterialsFormControls.productManufacturingExperience),
