@@ -2,12 +2,12 @@
   <app-plan-summary-flied [planSummaryField]="targetedCustomerSummaryField()" />
 
   @let namesOfTargetedSuppliers = namesOfTargetedSuppliersSummaryField();
-  @if (namesOfTargetedSuppliers.currantValue.toString().trim()) {
+  @if (showNamesOfTargetedSuppliersAndProducts()) {
     <app-plan-summary-flied [planSummaryField]="namesOfTargetedSuppliers" />
   }
 
   @let productsUtilizeTargetedProduct = productsUtilizeTargetedProductSummaryField();
-  @if (productsUtilizeTargetedProduct.currantValue.toString().trim()) {
+  @if (showNamesOfTargetedSuppliersAndProducts()) {
     <app-plan-summary-flied [planSummaryField]="productsUtilizeTargetedProduct" />
   }
 </div>

@@ -84,6 +84,12 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
     };
   });
 
+  showOthersDescription = computed(() => {
+    this.doRefresh();
+    const currantValue = this.othersPercentageSummaryField().currantValue.replace('%', '');
+    return Number(currantValue) > 0;
+  });
+
   othersDescriptionSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
     const currantValue = this.othersDescriptionControl()?.value ?? '';
