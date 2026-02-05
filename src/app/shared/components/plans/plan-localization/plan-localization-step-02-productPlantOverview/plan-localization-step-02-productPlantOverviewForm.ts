@@ -331,13 +331,30 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     // Watch othersPercentage changes for othersDescription
     effect(() => {
       const value = this.othersPercentageSignal();
+      const shouldShowOthersDescription = this.showOthersDescription();
       // Mark dropdown as changed if user interacts with it
       if (value !== null) {
         this._userChangedDropdowns.add('othersPercentage');
       }
 
+      // If the conditional input is hidden, also clear its selection/highlight state.
+      // Otherwise, the step can keep showing an orange indicator for a field the user can no longer see.
+      if (!shouldShowOthersDescription) {
+        const current = this.selectedInputs();
+        const updated = current.filter(
+          input => !(input.section === 'expectedCAPEXInvestment' && input.inputKey === EMaterialsFormControls.othersDescription)
+        );
+        if (updated.length !== current.length) this.selectedInputs.set(updated);
+
+        const othersDescriptionGroup = this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription];
+        const hasCommentControl = this.getHasCommentControl(othersDescriptionGroup);
+        hasCommentControl?.setValue(false, { emitEvent: false });
+        hasCommentControl?.markAsPristine();
+        hasCommentControl?.markAsUntouched();
+      }
+
       // Handle resubmit mode enable/disable
-      if (this.isResubmitMode() && this.showOthersDescription()) {
+      if (this.isResubmitMode() && shouldShowOthersDescription) {
         const othersDescriptionControl = this.getValueControl(
           this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]
         );
@@ -346,6 +363,11 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
           true,
           this.isFieldCorrected('othersDescription') || this._userChangedDropdowns.has('othersPercentage')
         );
+      } else if (this.isResubmitMode() && !shouldShowOthersDescription) {
+        const othersDescriptionControl = this.getValueControl(
+          this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]
+        );
+        this.updateConditionalField(othersDescriptionControl, false, false);
       }
     });
 

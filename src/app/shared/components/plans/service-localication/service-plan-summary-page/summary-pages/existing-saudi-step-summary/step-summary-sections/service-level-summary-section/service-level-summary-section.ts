@@ -92,8 +92,9 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
       const serviceName = getValue(EMaterialsFormControls.serviceName) ?? '';
       const beforeServiceName = serviceName
 
-      const expectedDate = getValue(this.expectedDateControlKey()) ?? '';
-      const beforeExpectedDate = service?.localizationDate ?? null;
+      debugger;
+      const expectedDate = getValue(this.expectedDateControlKey()) === '0' ? '' : getValue(this.expectedDateControlKey());
+      const beforeExpectedDate = service?.localizationDate ?? '';
 
       const yearMapHeadcount: Record<string, string> = {
         firstYear_headcount: 'y1Headcount', secondYear_headcount: 'y2Headcount', thirdYear_headcount: 'y3Headcount',
