@@ -4,8 +4,9 @@ export enum ETargetedCustomer {
 }
 
 export enum EProductManufacturingExperience {
-  YES = 1,
-  NO = 2,
+  Years_5 = 1,
+  Years_5_10 = 2,
+  Years_10 = 3,
 }
 
 export enum EExperienceRange {
