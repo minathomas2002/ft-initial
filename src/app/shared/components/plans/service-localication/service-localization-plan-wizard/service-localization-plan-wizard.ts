@@ -127,25 +127,25 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   step1CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
     return {
-      count: this.step1Comments().length,
+      count: this.steps()[0].commentsCount ?? 0,
       phase: this.step1CommentPhase()
     };
   });
   step2CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
     return {
-      count: this.step2Comments().length,
+      count: this.steps()[1].commentsCount ?? 0,
       phase: this.step2CommentPhase()
     };
   });
   step3CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
     return {
-      count: this.step3Comments().length,
+      count: this.steps()[2].commentsCount ?? 0,
       phase: this.step3CommentPhase()
     };
   });
   step4CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
     return {
-      count: this.step4Comments().length,
+      count: this.steps()[3].commentsCount ?? 0,
       phase: this.step4CommentPhase()
     };
   });
