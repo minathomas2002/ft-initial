@@ -34,13 +34,13 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   private formatProductManufacturingExperience(value: number | unknown): string {
     if (value === null || value === undefined || value === '') return '';
-    
+
     const labelMap: Record<number, string> = {
       [EProductManufacturingExperience.Years_5]: 'Less than 5 years',
       [EProductManufacturingExperience.Years_5_10]: '5 to 10 years',
       [EProductManufacturingExperience.Years_10]: 'More than 10 years',
     };
-    
+
     return labelMap[value as number] ?? String(value);
   }
 
@@ -73,6 +73,10 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       isResolved: this.isResolvedField(EMaterialsFormControls.provideToSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
+  });
+
+  showProvideToSECSummaryField = computed(() => {
+    return this.provideToSECSummaryField().currantValue === 'Yes';
   });
 
   qualifiedPlantLocationSECSummaryField = computed<IPlanSummaryField>(() => {
@@ -133,6 +137,10 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
       isResolved: this.isResolvedField(EMaterialsFormControls.totalQuantitiesSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
+  });
+
+  showApprovedLocalSuppliersSummaryField = computed(() => {
+    return this.provideToLocalSuppliersSummaryField().currantValue === 'Yes';
   });
 
   provideToLocalSuppliersSummaryField = computed<IPlanSummaryField>(() => {
