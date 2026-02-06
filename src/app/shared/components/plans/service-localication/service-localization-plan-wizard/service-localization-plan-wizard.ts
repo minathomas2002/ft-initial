@@ -46,6 +46,7 @@ import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan
 import { EInternalUserPlanStatus, EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
 import { WizardActionFactory, IWizardActionConfig } from 'src/app/shared/services/wizard/wizard-action-factory.service';
 import { IBaseWizardAction } from '../../../base-components/base-wizard-actions/base-wizard-actions';
+import { Skeleton } from "primeng/skeleton";
 
 type ServiceLocalizationWizardStepId =
   | 'cover'
@@ -73,8 +74,9 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
     GeneralConfirmationDialogComponent,
     ApproveRejectDialogComponent,
     TranslatePipe,
-    PageCommentBox
-  ],
+    PageCommentBox,
+    Skeleton
+],
   templateUrl: './service-localization-plan-wizard.html',
   styleUrl: './service-localization-plan-wizard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -90,7 +92,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   visibility = model(false);
   doRefresh = output<void>();
-  isLoading = signal(false);
   activeStep = signal<number>(1);
 
   timelineVisibility = signal(false);
@@ -540,7 +541,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     mode: this.mode(),
     activeStep: this.activeStep,
     totalSteps: this.stepsCount,
-    isLoading: this.isLoading,
+    isLoading: this.isLoadingPlan,
     isProcessing: this.isProcessing,
     hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode()),
     canApproveOrReject: this.canApproveOrReject,

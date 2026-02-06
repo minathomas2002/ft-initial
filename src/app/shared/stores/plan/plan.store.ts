@@ -595,17 +595,17 @@ export const PlanStore = signalStore(
 
       /* Get Plan Comments*/
       getPlanComments(planId: string): Observable<IBaseApiResponse<IPlanCommentResponse>> {
-        patchState(store, { isLoading: true, error: null });
+        patchState(store, {  error: null });
         return planApiService.getPlanComment(planId).pipe(
           tap((res) => {
-            patchState(store, { isLoading: false, planComments: res.body || null });
+            patchState(store, { planComments: res.body || null });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading plan comments', isLoading: false });
+            patchState(store, { error: error.errorMessage || 'Error loading plan comments' });
             return throwError(() => new Error('Error loading plan comments'));
           }),
           finalize(() => {
-            patchState(store, { isLoading: false });
+            patchState(store);
           })
         );
       },
