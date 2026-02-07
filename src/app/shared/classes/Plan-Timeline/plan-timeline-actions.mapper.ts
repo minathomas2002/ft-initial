@@ -14,7 +14,7 @@ export class PlanTimelineActionsMapper {
     [EActionPlanTimeLine.AutoAssign]: 'timeline.actions.autoAssign',
     [EActionPlanTimeLine.InternalReview]: 'Submitted comment on the plan and sent back to investor',
     [EActionPlanTimeLine.AutoRejected]: 'Plan Auto Rejected',
-    [EActionPlanTimeLine.Resubmitted]: 'Reassigned plan to employee',
+    [EActionPlanTimeLine.Resubmitted]: 'Plan Updated and Resubmitted by Investor',
     [EActionPlanTimeLine.DVRejected]: 'DV Rejected',
     [EActionPlanTimeLine.DVRejectionAcknowledged]: 'DV Rejection Acknowledged',
     [EActionPlanTimeLine.DeptRejected]: 'Department Rejected',

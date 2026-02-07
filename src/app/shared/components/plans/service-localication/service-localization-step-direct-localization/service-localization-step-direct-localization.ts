@@ -7,7 +7,7 @@ import { SelectModule } from 'primeng/select';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { ELocalizationApproach, ELocation, EYesNo } from 'src/app/shared/enums/plan.enum';
+import { ELocalizationApproach, ELocation, EPlanPageTitle, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -20,7 +20,7 @@ import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-
 import { FormsModule } from '@angular/forms';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
-import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -40,6 +40,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     GeneralConfirmationDialogComponent,
     FormsModule,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     CommentInputComponent
   ],
   templateUrl: './service-localization-step-direct-localization.html',
@@ -51,7 +52,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
 
-  pageTitle = input.required<string>();
+  pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
@@ -175,7 +176,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
       { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
       { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
-      { label: 'Key Measures to Upskill Saudis', rowspan: 2, dataGroup: false },
+      { label: 'Key measures to upskill Saudis', rowspan: 2, dataGroup: false },
       { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
     ];
   });
@@ -327,11 +328,21 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
           .subscribe((value) => {
             this.planFormService.toggleLocalizationApproachOtherDetailsValidation(value ?? null, index);
 
+            // When user changes away from "Other", remove the Other details field from selectedInputs
+            // so the wizard indicator updates correctly (description is no longer a required field).
+            const isOther = value === ELocalizationApproach.Other.toString();
+            if (!isOther) {
+              const inputKey = `localizationApproachOtherDetails_${index}`;
+              const current = this.selectedInputs();
+              const updated = current.filter(
+                input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
+              );
+              if (updated.length !== current.length) this.selectedInputs.set(updated);
+            }
+
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
               this._userChangedDropdowns.add(`localizationApproach_${index}`);
-              // Enable the conditional field if dropdown is now "Other"
-              const isOther = value === ELocalizationApproach.Other.toString();
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
@@ -368,11 +379,21 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
           .subscribe((value) => {
             this.planFormService.toggleLocationOtherDetailsValidation(value ?? null, index);
 
+            // When user changes away from "Other", remove the Other details field from selectedInputs
+            // so the wizard indicator updates correctly.
+            const isOther = value === ELocation.Other.toString();
+            if (!isOther) {
+              const inputKey = `locationOtherDetails_${index}`;
+              const current = this.selectedInputs();
+              const updated = current.filter(
+                input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
+              );
+              if (updated.length !== current.length) this.selectedInputs.set(updated);
+            }
+
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
               this._userChangedDropdowns.add(`location_${index}`);
-              // Enable the conditional field if dropdown is now "Other"
-              const isOther = value === ELocation.Other.toString();
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });

@@ -28,11 +28,11 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     yearControls.forEach(yearControl => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, Integer only
+        [EMaterialsFormControls.value]: [0, [Validators.required]], // Required, Integer only
       });
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100)]], // Required, Percentage 0-100
+        [EMaterialsFormControls.value]: [0, [Validators.required, Validators.max(100)]], // Required, Percentage 0-100
       });
     });
 
@@ -64,7 +64,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       // expectedLocalizationDate is for the Localization Strategy table
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(50)]], // Required, quarters and years only, future date
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, quarters and years only, future date
       }),
       // serviceLevelLocalizationDate is for the Service Level table (sent as LocalizationDate to backend)
       [EMaterialsFormControls.serviceLevelLocalizationDate]: this.fb.group({
@@ -89,7 +89,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       }),
       [EMaterialsFormControls.capexRequired]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, numeric only
+        [EMaterialsFormControls.value]: [0, [Validators.required]], // Required, numeric only
       }),
       [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -119,7 +119,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]],
+        [EMaterialsFormControls.value]: [0, [Validators.required]],
       });
     });
 
@@ -127,7 +127,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100)]],
+        [EMaterialsFormControls.value]: [0, [Validators.required, Validators.max(100)]],
       });
     });
 

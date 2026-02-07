@@ -20,7 +20,7 @@ export class FormUtilityService {
 
     // First, count errors in child controls
     const childErrorCount = this.countChildControlErrors(formGroup);
-    
+
     // Count errors on the FormGroup itself only if:
     // 1. It's interacted with
     // 2. It has errors
@@ -29,26 +29,26 @@ export class FormUtilityService {
     if ((formGroup.dirty || formGroup.touched) && formGroup.errors) {
       const formGroupErrors = formGroup.errors;
       const errorKeys = Object.keys(formGroupErrors);
-      
+
       // Check if this is a cross-field validation error that's already represented by child control errors
       // Known cross-field validation error keys: quantityRange, dateRange.
       // Also exclude FormArray validator errors (totalExceeds100, inComplete) as they're already represented by child control errors
-      const isCrossFieldError = errorKeys.some(key => 
-        key === 'quantityRange' || 
-        key === 'dateRange' || 
+      const isCrossFieldError = errorKeys.some(key =>
+        key === 'quantityRange' ||
+        key === 'dateRange' ||
         key === 'totalExceeds100' ||
         key === 'inComplete' ||
         key.toLowerCase().includes('range') ||
         key.toLowerCase().includes('crossfield')
       );
-      
+
       // Only count FormGroup errors if they're not cross-field errors OR if there are no child control errors
       // This ensures cross-field validations that set errors on individual fields are only counted once
       if (!isCrossFieldError || childErrorCount === 0) {
         errorCount += errorKeys.length;
       }
     }
-    
+
     // Add child control errors
     errorCount += childErrorCount;
 
@@ -62,7 +62,7 @@ export class FormUtilityService {
    */
   private countChildControlErrors(formGroup: FormGroup): number {
     let errorCount = 0;
-    
+
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
       if (!control) return;
@@ -114,7 +114,7 @@ export class FormUtilityService {
         }
       }
     });
-    
+
     return errorCount;
   }
 
@@ -197,19 +197,23 @@ export class FormUtilityService {
           if (hasCommentControl instanceof FormControl) {
             // Enable hasComment control
             hasCommentControl.enable({ emitEvent: false });
+            hasCommentControl.markAsDirty({ emitEvent: false });
           }
           // Continue recursively to handle nested structures
           this.enableHasCommentControls(childControl);
+          childControl.markAsDirty({ emitEvent: false });
         } else if (childControl instanceof FormArray) {
           // Handle FormArrays
           childControl.controls.forEach(arrayControl => {
             this.enableHasCommentControls(arrayControl);
+            arrayControl.markAsDirty({ emitEvent: false });
           });
         }
       });
     } else if (control instanceof FormArray) {
       control.controls.forEach(arrayControl => {
         this.enableHasCommentControls(arrayControl);
+        arrayControl.markAsDirty({ emitEvent: false });
       });
     }
   }

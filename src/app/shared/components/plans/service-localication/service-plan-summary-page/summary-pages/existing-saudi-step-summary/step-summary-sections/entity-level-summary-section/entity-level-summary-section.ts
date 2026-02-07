@@ -7,6 +7,7 @@ import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 const YEAR_CONTROL_KEYS = [
   EMaterialsFormControls.firstYear,
@@ -68,8 +69,8 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
 
     const getValue = (controlName: string) => {
       const c = group.get(controlName);
-      if (c instanceof FormGroup) return c.get(EMaterialsFormControls.value)?.value;
-      return c?.value;
+      if (c instanceof FormGroup) return c.get(EMaterialsFormControls.value)?.value ?? '0';
+      return c?.value ?? '0';
     };
 
     const buildField = (controlName: string): IPlanSummaryField => {
@@ -84,6 +85,7 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
       const isResolved =
         hasComment &&
         !hasCommentChecked &&
+        this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
         ['view', 'Review'].includes(this.planStore.wizardMode()) &&
         this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
       return {

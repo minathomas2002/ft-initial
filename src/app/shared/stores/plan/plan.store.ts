@@ -1,6 +1,6 @@
 import { computed, inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType, EPlanPageTitle } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
@@ -17,7 +17,6 @@ export interface IPlanTypeDropdownOption {
 }
 
 export type TWizardMode = 'create' | 'edit' | 'view' | 'Review' | 'resubmit';
-
 const initialState: {
   newPlanOpportunityType: EOpportunityType | null;
   appliedOpportunity: IOpportunity | null;
@@ -53,6 +52,7 @@ const initialState: {
   selectedPlanId: string | null;
   planStatus: number | null;
   planComments: IPlanCommentResponse | null;
+  currentUserPageComments: EPlanPageTitle[];
   productPlanData: IProductPlanResponse | null;
   servicePlanData: IServiceLocalizationPlanResponse | null;
 } = {
@@ -68,6 +68,7 @@ const initialState: {
   list: [],
   timeLineList: [],
   statistics: null,
+  currentUserPageComments: [],
   targetedCustomerOptions: [
     { id: ETargetedCustomer.SEC.toString(), name: 'SEC' },
     {
@@ -199,6 +200,28 @@ export const PlanStore = signalStore(
         };
         return roleMap[role] || 'Comment';
       }),
+      /**
+       * Get persona label for a specific role.
+       * Use this for per-comment persona instead of the global commentPersona.
+       */
+      getCommentPersonaByRole: computed(() => {
+        return (role: number | undefined): string => {
+          if (!role) return 'Comment';
+
+          if (roleService.hasAnyRoleSignal([role])()) {
+            return 'Your Comment';
+          }
+
+          const roleMap: Record<number, string> = {
+            [ERoles.ADMIN]: 'Admin Comment',
+            [ERoles.INVESTOR]: 'Investor Comment',
+            [ERoles.EMPLOYEE]: 'Employee Comment',
+            [ERoles.Division_MANAGER]: 'Division Manager Comment',
+            [ERoles.DEPARTMENT_MANAGER]: 'Department Manager Comment',
+          };
+          return roleMap[role] || 'Comment';
+        };
+      }),
     };
   }),
   withMethods((store) => {
@@ -244,6 +267,9 @@ export const PlanStore = signalStore(
       },
       resetWizardState(): void {
         patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null });
+      },
+      updateCurrentUserPageComments(newPageComments: EPlanPageTitle[]): void {
+        patchState(store, { currentUserPageComments: newPageComments });
       },
     };
   }),
@@ -515,6 +541,7 @@ export const PlanStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
+            store.setPlanStatus(res.body?.productPlan?.status ?? null);
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {
@@ -533,6 +560,7 @@ export const PlanStore = signalStore(
         return planApiService.getServicePlan({ planId }).pipe(
           tap((res) => {
             patchState(store, { servicePlanData: res.body || null });
+            store.setPlanStatus(res.body?.servicePlan?.status ?? null);
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading service plan' });
@@ -598,7 +626,8 @@ export const PlanStore = signalStore(
         patchState(store, {  error: null });
         return planApiService.getPlanComment(planId).pipe(
           tap((res) => {
-            patchState(store, { planComments: res.body || null });
+            patchState(store, { isLoading: false, planComments: res.body || null });
+            patchState(store, { currentUserPageComments: [] })
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading plan comments' });

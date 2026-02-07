@@ -21,6 +21,9 @@ export class BaseDialogComponent {
   cancelLabel = input<string>("Cancel");
   showCloseButton = input<boolean>(true);
   showConfirmButton = input<boolean>(true);
+  closable = input<boolean>(true);
+  closeOnEscape = input<boolean>(true);
+  dismissableMask = input<boolean>(false);
   isLoading = input<boolean>(false);
   contentStyleClass = input<string>("");
   styleClass = input<string>("");

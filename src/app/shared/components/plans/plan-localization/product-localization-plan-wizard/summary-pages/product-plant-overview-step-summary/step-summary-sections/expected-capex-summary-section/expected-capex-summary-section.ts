@@ -21,7 +21,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   private readonly othersDescriptionControl = computed(() => this.getValueFormControl(EMaterialsFormControls.othersDescription));
 
   private formatPercent(value: number | null | undefined): string {
-    return (value != null && value.toString().trim() !== '') ? `${value}%` : '';
+    return (value != null && value.toString().trim() !== '') ? `${value}%` : '0%';
   }
 
   landPercentageSummaryField = computed<IPlanSummaryField>(() => {
@@ -33,7 +33,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.landPercentageControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.landPercentage),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.landPercentage),
       isResolved: this.isResolvedField(EMaterialsFormControls.landPercentage),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -48,7 +48,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.buildingPercentageControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.buildingPercentage),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.buildingPercentage),
       isResolved: this.isResolvedField(EMaterialsFormControls.buildingPercentage),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -63,7 +63,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.machineryEquipmentPercentageControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.machineryEquipmentPercentage),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.machineryEquipmentPercentage),
       isResolved: this.isResolvedField(EMaterialsFormControls.machineryEquipmentPercentage),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -78,10 +78,16 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.othersPercentageControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.othersPercentage),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.othersPercentage),
       isResolved: this.isResolvedField(EMaterialsFormControls.othersPercentage),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
+  });
+
+  showOthersDescription = computed(() => {
+    this.doRefresh();
+    const currantValue = this.othersPercentageSummaryField().currantValue.replace('%', '');
+    return Number(currantValue) > 0;
   });
 
   othersDescriptionSummaryField = computed<IPlanSummaryField>(() => {
@@ -93,7 +99,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.othersDescriptionControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.othersDescription),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.othersDescription),
       isResolved: this.isResolvedField(EMaterialsFormControls.othersDescription),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };

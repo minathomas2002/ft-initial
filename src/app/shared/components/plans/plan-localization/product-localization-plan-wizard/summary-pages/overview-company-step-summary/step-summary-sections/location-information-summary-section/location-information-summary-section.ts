@@ -27,7 +27,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.globalHQLocationControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.globalHQLocation),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.globalHQLocation),
       isResolved: this.isResolvedField(EMaterialsFormControls.globalHQLocation),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -42,7 +42,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.registeredVendorIDControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.registeredVendorIDwithSEC),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.registeredVendorIDwithSEC),
       isResolved: this.isResolvedField(EMaterialsFormControls.registeredVendorIDwithSEC),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -59,7 +59,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
       beforeValue: beforeDisplay,
       currantValue: displayValue,
       hasError: this.isFieldHasError(this.doYouCurrentlyHaveLocalAgentControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
       isResolved: this.isResolvedField(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA),
       showDifference: this.shouldShowDifference(displayValue, beforeDisplay),
     };

@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
-import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
@@ -19,6 +19,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { EPlanPageTitle } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-service-localization-step-cover-page',
@@ -36,6 +37,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     TextareaModule,
     FormsModule,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     CommentInputComponent,
   ],
   templateUrl: './service-localization-step-cover-page.html',
@@ -47,7 +49,7 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
 
   readonly planFormService = inject(ServicePlanFormService);
 
-  pageTitle = input.required<string>();
+  pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);

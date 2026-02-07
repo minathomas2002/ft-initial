@@ -1,4 +1,3 @@
-@if(!planStore.isLoading()) {
 <app-base-wizard-dialog
   [(visible)]="visibility"
   [(activeStep)]="activeStep"
@@ -8,7 +7,11 @@
   (onClose)="onClose()"
 >
 
-  @if (shouldShowStatusTag()) {
+  @if (isLoadingPlan()) {
+  <ng-container ngProjectAs="status">
+    <p-skeleton width="6rem" height="1.5rem"></p-skeleton>
+  </ng-container>
+  } @else if (shouldShowStatusTag()) {
   <ng-container ngProjectAs="status">
     <app-base-tag
       [value]="statusLabel()"
@@ -18,8 +21,14 @@
   }
 
   <ng-template [appStepContent]="1">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-8 p-4">
+      <p-skeleton width="30%" height="2rem"></p-skeleton>
+      <p-skeleton width="100%" height="12rem"></p-skeleton>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep1Comments() && !showCommentState()) {
+      @if (hasIncomingStep1Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep1CommentText()"
@@ -38,11 +47,18 @@
         [originalPlanResponse]="originalPlanResponse()"
       />
     </div>
+    }
   </ng-template>
 
   <ng-template [appStepContent]="2">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-8 p-4">
+      <p-skeleton width="30%" height="2rem"></p-skeleton>
+      <p-skeleton width="100%" height="10rem"></p-skeleton>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep2Comments() && !showCommentState()) {
+      @if (hasIncomingStep2Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep2CommentText()"
@@ -61,11 +77,18 @@
         [originalPlanResponse]="originalPlanResponse()"
       />
     </div>
+    }
   </ng-template>
 
   <ng-template [appStepContent]="3">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-8 p-4">
+      <p-skeleton width="30%" height="2rem"></p-skeleton>
+      <p-skeleton width="100%" height="10rem"></p-skeleton>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep3Comments() && !showCommentState()) {
+      @if (hasIncomingStep3Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep3CommentText()"
@@ -84,11 +107,18 @@
         [originalPlanResponse]="originalPlanResponse()"
       />
     </div>
+    }
   </ng-template>
 
   <ng-template [appStepContent]="4">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-8 p-4">
+      <p-skeleton width="30%" height="2rem"></p-skeleton>
+      <p-skeleton width="100%" height="12rem"></p-skeleton>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep4Comments() && !showCommentState()) {
+      @if (hasIncomingStep4Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep4CommentText()"
@@ -108,19 +138,38 @@
         [originalPlanResponse]="originalPlanResponse()"
       />
     </div>
+    }
   </ng-template>
 
   <ng-template [appStepContent]="5">
-    <app-product-plan-summary-page (onEditStep)="onEditStepFromSummary($event)" />
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-4 p-4">
+      <p-skeleton width="60%" height="2.5rem"></p-skeleton>
+      <div class="flex gap-4">
+        <p-skeleton width="10rem" height="1rem"></p-skeleton>
+        <p-skeleton width="10rem" height="1rem"></p-skeleton>
+      </div>
+      <p-skeleton width="100%" height="8rem"></p-skeleton>
+    </div>
+    } @else {
+    <app-product-plan-summary-page
+      [signature]="planSignature()"
+      [step1CommentsCountAndPhase]="step1CommentsCountAndPhase()"
+      [step2CommentsCountAndPhase]="step2CommentsCountAndPhase()"
+      [step3CommentsCountAndPhase]="step3CommentsCountAndPhase()"
+      [step4CommentsCountAndPhase]="step4CommentsCountAndPhase()"
+      (onEditStep)="onEditStepFromSummary($event)"
+    />
+    }
   </ng-template>
 </app-base-wizard-dialog>
-}
 
 @if(showSubmissionModal()){
 <!-- Submission Confirmation Modal -->
 <app-submission-confirmation-modal
   [(visible)]="showSubmissionModal"
   [(existingSignature)]="existingSignature"
+  [contactInfo]="contactInfo()"
   (onConfirm)="onSubmissionConfirm($event)"
   (onCancel)="onSubmissionCancel()"
 />
@@ -144,6 +193,21 @@
   [(dialogVisible)]="timelineVisibility"
   [planId]="planId()"
 />
+
+@if(showValueChainAddCommentInfoDialog()){
+<app-general-confirmation-dialog
+  [(visible)]="showValueChainAddCommentInfoDialog"
+  [title]="''"
+  [description]="'Any change request to a cost percentage requires corresponding updates from the investor to the remaining cost percentage fields to ensure the total equals 100%. Please select all other cost percentage cells that need to be updated'"
+  [confirmationLabel]="'I Understand'"
+  [showCloseButton]="false"
+  [closable]="false"
+  [closeOnEscape]="false"
+  [dismissableMask]="false"
+  (confirmed)="onConfirmValueChainAddCommentInfo()"
+  [icon]="'icon-info'"
+></app-general-confirmation-dialog>
+}
 
 @if(showSendBackConfirmationDialog()){
 <app-general-confirmation-dialog

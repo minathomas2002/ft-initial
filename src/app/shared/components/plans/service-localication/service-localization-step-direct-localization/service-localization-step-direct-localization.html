@@ -23,7 +23,7 @@
             type="text"
             pInputText
             fluid
-            placeholder=""
+            [appHidePlaceholderWhenDisabledEmpty]="''"
             class="bg-gray-100 text-gray-500"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
             [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
@@ -51,7 +51,7 @@
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-              placeholder="Select quarter"
+              [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
               fluid
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('expectedLocalizationDate_' + index, itemControl.get('rowId')?.value)"
@@ -81,7 +81,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproach))"
-                placeholder="Select localization approach"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select localization approach'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('localizationApproach_' + index, itemControl.get('rowId')?.value)"
@@ -103,7 +103,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                placeholder="Please specify other localization approach"
+                [appHidePlaceholderWhenDisabledEmpty]="'Please specify other localization approach'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails))"
                 [appConditionalColorClass]="highlightInput('localizationApproachOtherDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -145,7 +145,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.location))"
-                placeholder="Enter location"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter location'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('location_' + index, itemControl.get('rowId')?.value)"
@@ -167,7 +167,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                placeholder="Kindly provide details"
+                [appHidePlaceholderWhenDisabledEmpty]="'Kindly provide details'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails))"
                 [appConditionalColorClass]="highlightInput('locationOtherDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -202,8 +202,9 @@
             }, itemControl.get('rowId')?.value)"
           >
             <p-inputnumber
+              [allowEmpty]="false"
               fluid
-              placeholder="Enter CAPEX amount"
+              [appHidePlaceholderWhenDisabledEmpty]="'Enter CAPEX amount'"
               [min]="0"
               mode="decimal"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.capexRequired))"
@@ -233,7 +234,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              placeholder="E.g., MoEn, PIF, etc."
+              [appHidePlaceholderWhenDisabledEmpty]="'E.g., MoEn, PIF, etc.'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity))"
               [appConditionalColorClass]="highlightInput('supervisionOversightByGovernmentEntity' + index, itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -267,7 +268,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems))"
-                placeholder="Select"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('willBeAnyProprietaryToolsSystems_' + index, itemControl.get('rowId')?.value)"
@@ -289,7 +290,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                placeholder="Please provide details about the proprietary tools/systems"
+                [appHidePlaceholderWhenDisabledEmpty]="'Please provide details about the proprietary tools/systems'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails))"
                 [appConditionalColorClass]="highlightInput('proprietaryToolsSystemsDetails_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -374,8 +375,9 @@
                 }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
+                  [allowEmpty]="false"
                   fluid
-                  [placeholder]="row.placeholder"
+                  [appHidePlaceholderWhenDisabledEmpty]="row.placeholder"
                   [min]="0"
                   [mode]="row.mode ?? undefined"
                   [minFractionDigits]="row.minFractionDigits"
@@ -427,7 +429,7 @@
               pInputText
               fluid
               readonly
-              placeholder=""
+              [appHidePlaceholderWhenDisabledEmpty]="''"
               class="bg-gray-100 text-gray-500"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
               [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
@@ -455,7 +457,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceLevelLocalizationDate))"
-                placeholder="Select quarter"
+                [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('serviceLevelLocalizationDate_' + index, itemControl.get('rowId')?.value)"
@@ -481,10 +483,11 @@
               }, itemControl.get('rowId')?.value)"
             >
               <p-inputnumber
+                [allowEmpty]="false"
                 fluid
                 [min]="0"
                 inputId="integeronly"
-                placeholder="Enter headcount"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter headcount'"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_headcount'))"
                 [appConditionalColorClass]="highlightInput(yearKey + '_headcount_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -510,10 +513,11 @@
               }, itemControl.get('rowId')?.value)"
             >
               <p-inputnumber
+                [allowEmpty]="false"
                 fluid
                 [min]="0"
                 mode="decimal"
-                placeholder="Enter %"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter %'"
                 [maxFractionDigits]="2"
                 [maxlength]="5"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_saudization'))"
@@ -536,7 +540,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'keyMeasuresToUpskillSaudis_' + index,
-                label: 'Key Measures to Upskill Saudis'
+                label: 'Key measures to upskill Saudis'
               }, itemControl.get('rowId')?.value)"
             >
               <textarea
@@ -544,7 +548,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                placeholder="Enter key measures to upskill saudis"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill saudis'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
                 [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -557,7 +561,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-              [label]="'Key Measures to Upskill Saudis'"
+              [label]="'Key measures to upskill Saudis'"
             />
           </td>
 
@@ -577,7 +581,7 @@
                 fluid
                 rows="3"
                 [maxlength]="500"
-                placeholder="Mention Support required from SEC to localize the service (if any)"
+                [appHidePlaceholderWhenDisabledEmpty]="'Mention Support required from SEC to localize the service (if any)'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
                 [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC_' + index, itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"

@@ -1,13 +1,19 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
   <app-plan-summary-flied [planSummaryField]="productManufacturingExperienceSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="provideToSECSummaryField()" />
+
+  @if(showProvideToSECSummaryField()){
   <app-plan-summary-flied [planSummaryField]="qualifiedPlantLocationSECSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="approvedVendorIDSECSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="yearsOfExperienceSECSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="totalQuantitiesSECSummaryField()" />
+  }
+
   <app-plan-summary-flied [planSummaryField]="provideToLocalSuppliersSummaryField()" />
+  @if (showApprovedLocalSuppliersSummaryField()) {
   <app-plan-summary-flied [planSummaryField]="namesOfSECApprovedSuppliersSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="qualifiedPlantLocationSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="yearsOfExperienceSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="totalQuantitiesSummaryField()" />
+  }
 </div>

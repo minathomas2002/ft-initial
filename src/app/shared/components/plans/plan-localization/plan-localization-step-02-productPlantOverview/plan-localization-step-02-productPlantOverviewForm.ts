@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
-import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle, ETargetedCustomer } from 'src/app/shared/enums';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TextareaModule } from 'primeng/textarea';
@@ -14,7 +15,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
-import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TColors } from 'src/app/shared/interfaces';
@@ -43,6 +44,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     BaseLabelComponent,
     TrimOnBlurDirective,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     CommentStateComponent,
     FormsModule,
     GeneralConfirmationDialogComponent,
@@ -56,7 +58,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
 
-  pageTitle = input<string>('Product & Plant Overview');
+  pageTitle = input<EPlanPageTitle>(EPlanPageTitle.ProductAndPlantOverview);
 
   // Track user interactions with dropdowns for resubmit mode
   private _userChangedDropdowns = new Set<string>();
@@ -241,6 +243,54 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     super.resetAllHasCommentControls();
   }
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+    // Targeted-customer subscription runs here so planFormService.targetCustomersFormGroup is available.
+    this.setupTargetedCustomerWatcher();
+  }
+
+  /**
+   * Subscribe to targetedCustomer valueChanges once form is ready (called from ngOnInit).
+   * When user changes away from "SEC's approved local suppliers", remove conditional fields from selectedInputs.
+   */
+  private setupTargetedCustomerWatcher(): void {
+    const targetedCustomerControl = this.getValueControl(
+      this.targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer]
+    );
+    if (!targetedCustomerControl) return;
+    targetedCustomerControl.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value: string[] | null) => {
+        const isSecSuppliers = value?.includes(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString()) ?? false;
+        if (!isSecSuppliers) {
+          const current = this.selectedInputs();
+          const updated = current.filter(
+            input =>
+              !(
+                input.section === 'targetCustomers' &&
+                (input.inputKey === EMaterialsFormControls.namesOfTargetedSuppliers ||
+                  input.inputKey === EMaterialsFormControls.productsUtilizeTargetedProduct)
+              )
+          );
+          if (updated.length !== current.length) this.selectedInputs.set(updated);
+        }
+        if (this.isResubmitMode()) {
+          this._userChangedDropdowns.add('targetedCustomer');
+          if (isSecSuppliers) {
+            const namesOfTargetedSuppliersControl = this.getValueControl(
+              this.targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]
+            );
+            const productsUtilizeTargetedProductControl = this.getValueControl(
+              this.targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]
+            );
+            namesOfTargetedSuppliersControl?.enable({ emitEvent: false });
+            productsUtilizeTargetedProductControl?.enable({ emitEvent: false });
+          }
+        }
+        this.planFormService.toggleTargetedSuppliersFieldsValidation(value ?? []);
+      });
+  }
+
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
     // Setup resubmit mode watchers for conditional fields
@@ -274,19 +324,37 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
 
   /**
    * Setup watchers to track dropdown changes for resubmit mode
-   * Also handles enable/disable logic for conditional fields
+   * Also handles enable/disable logic for conditional fields.
+   * Note: targetedCustomer subscription is in ngOnInit (form must be available).
    */
   private setupResubmitModeWatchers(): void {
     // Watch othersPercentage changes for othersDescription
     effect(() => {
       const value = this.othersPercentageSignal();
+      const shouldShowOthersDescription = this.showOthersDescription();
       // Mark dropdown as changed if user interacts with it
       if (value !== null) {
         this._userChangedDropdowns.add('othersPercentage');
       }
 
+      // If the conditional input is hidden, also clear its selection/highlight state.
+      // Otherwise, the step can keep showing an orange indicator for a field the user can no longer see.
+      if (!shouldShowOthersDescription) {
+        const current = this.selectedInputs();
+        const updated = current.filter(
+          input => !(input.section === 'expectedCAPEXInvestment' && input.inputKey === EMaterialsFormControls.othersDescription)
+        );
+        if (updated.length !== current.length) this.selectedInputs.set(updated);
+
+        const othersDescriptionGroup = this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription];
+        const hasCommentControl = this.getHasCommentControl(othersDescriptionGroup);
+        hasCommentControl?.setValue(false, { emitEvent: false });
+        hasCommentControl?.markAsPristine();
+        hasCommentControl?.markAsUntouched();
+      }
+
       // Handle resubmit mode enable/disable
-      if (this.isResubmitMode() && this.showOthersDescription()) {
+      if (this.isResubmitMode() && shouldShowOthersDescription) {
         const othersDescriptionControl = this.getValueControl(
           this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]
         );
@@ -295,6 +363,11 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
           true,
           this.isFieldCorrected('othersDescription') || this._userChangedDropdowns.has('othersPercentage')
         );
+      } else if (this.isResubmitMode() && !shouldShowOthersDescription) {
+        const othersDescriptionControl = this.getValueControl(
+          this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription]
+        );
+        this.updateConditionalField(othersDescriptionControl, false, false);
       }
     });
 

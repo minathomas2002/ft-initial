@@ -2,6 +2,9 @@
   [(visible)]="visible"
   [modal]="true"
   [resizable]="false"
+  [closable]="closable()"
+  [closeOnEscape]="closeOnEscape()"
+  [dismissableMask]="dismissableMask()"
   #dialogRef
   (onHide)="onClose.emit()"
   (onShow)="onShow.emit()"

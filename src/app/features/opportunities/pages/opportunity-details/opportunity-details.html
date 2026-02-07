@@ -1,5 +1,8 @@
 <div class="page-layout px-[32px] py-[24px]">
-  <app-cards-skeleton [isLoading]="opportunitiesStore.loading()" [count]="6">
+  <app-cards-skeleton
+    [isLoading]="opportunitiesStore.loading()"
+    [count]="6"
+  >
     <div class="page-layout--header mb-[20px]">
       <div class="flex items-center justify-between">
         <span
@@ -21,7 +24,10 @@
           [hasLabel]="true"
         />
         } }@else{
-        <p-button [label]="'opportunity.details.apply' | translate" (click)="onApply()"></p-button>
+        <p-button
+          [label]="'opportunity.details.apply' | translate"
+          (click)="onApply()"
+        ></p-button>
         }
       </div>
 
@@ -133,13 +139,13 @@
         </h5>
 
         @if (
-          !(opportunitiesStore.details()?.designEngineerings?.length ||
-            opportunitiesStore.details()?.sourcings?.length ||
-            opportunitiesStore.details()?.manufacturings?.length ||
-            opportunitiesStore.details()?.assemblyTestings?.length ||
-            opportunitiesStore.details()?.afterSalesServices?.length)
+        !(opportunitiesStore.details()?.designEngineerings?.length ||
+        opportunitiesStore.details()?.sourcings?.length ||
+        opportunitiesStore.details()?.manufacturings?.length ||
+        opportunitiesStore.details()?.assemblyTestings?.length ||
+        opportunitiesStore.details()?.afterSalesServices?.length)
         ) {
-        <p class="text-md text-gray-600 mb-2">No data available</p>
+        <p class="text-md text-gray-600 mb-2">-</p>
         }
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -276,7 +282,13 @@
 />
 
 @if(productLocalizationPlanWizardVisibility()){
-<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" (doRefresh)="getOpportunityDetails()" />
+<app-product-localization-plan-wizard
+  [(visibility)]="productLocalizationPlanWizardVisibility"
+  (doRefresh)="getOpportunityDetails()"
+/>
 } @if(serviceLocalizationPlanWizardVisibility()){
-<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility" (doRefresh)="getOpportunityDetails()" />
+<app-service-localization-plan-wizard
+  [(visibility)]="serviceLocalizationPlanWizardVisibility"
+  (doRefresh)="getOpportunityDetails()"
+/>
 }

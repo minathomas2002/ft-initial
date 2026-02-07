@@ -1,6 +1,7 @@
 <div
   class="phone-input-container"
   [class]="styleClass()"
+  [class.disabled]="disabled() || _isDisabled"
 >
   <div class="unified-phone-input">
     <!-- Country Code Selector (Left Side) -->

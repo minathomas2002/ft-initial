@@ -6,7 +6,7 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
-import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 
@@ -35,6 +35,7 @@ interface TableRow {
     InputNumberModule,
     TableModule,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
   ],
   templateUrl: './saudization-matrix.component.html',
   styleUrl: './saudization-matrix.component.scss',

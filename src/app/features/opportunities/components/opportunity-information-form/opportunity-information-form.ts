@@ -20,6 +20,9 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { normalizedLength } from 'src/app/shared/utils/normalize-textarea-counter';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map, of } from 'rxjs';
+
 @Component({
   selector: 'app-opportunity-information-form',
   imports: [
@@ -54,6 +57,12 @@ export class OpportunityInformationForm implements OnInit {
   opportunityInformationForm = this.opportunityFormService.opportunityInformationForm;
   isLoading = this.opportunitiesStore.loading;
 
+  disabledEndDate = toSignal(
+    (this.opportunityInformationForm.get('startDate')?.valueChanges ?? of(new Date())).pipe(
+      map((value) => (value ? new Date(value) : new Date()))
+    ),
+    { initialValue: new Date() as Date, requireSync: false }
+  );
   files = signal<File[]>([]);
   placeholder = computed(() => this.i18nService.translate('opportunity.form.fileUploadPlaceholder'));
 

@@ -4,6 +4,7 @@ import { TableModule } from 'primeng/table';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
@@ -57,10 +58,11 @@ export class CoverPageServicesSummarySection extends SummarySectionBaseClass {
       ? fieldCtrl.get(EMaterialsFormControls.hasComment)
       : null;
     const isHasCommentChecked = hasCommentControl?.value ?? false;
-
+  
     return this.isFieldHasCommentForService(fieldKey, rowId, index) &&
       !isHasCommentChecked &&
       ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
       this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 

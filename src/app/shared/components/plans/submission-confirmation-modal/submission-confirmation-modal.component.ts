@@ -35,6 +35,12 @@ import { parsePhoneNumber } from '../../../data/countries.data';
 export class SubmissionConfirmationModalComponent {
   visible = model<boolean>(false);
   existingSignature = model<string | null>(null);
+  contactInfo = input<{
+    name?: string;
+    jobTitle?: string;
+    contactNumber?: string;
+    emailId?: string;
+  }>({});
   onConfirm = output<{
     name: string;
     jobTitle: string;
@@ -56,10 +62,55 @@ export class SubmissionConfirmationModalComponent {
     effect(() => {
       const isVisible = this.visible();
       const existingSig = this.existingSignature();
+      const contactInfoData = this.contactInfo();
 
-      this.formService.resetForm();
-      this.phoneInputValue.set(null);
+      if (isVisible) {
+        // Pre-fill form with contactInfo from API response
+        if (contactInfoData && Object.keys(contactInfoData).length > 0) {
+          if (contactInfoData.name) {
+            this.formService.nameControl.setValue(contactInfoData.name, { emitEvent: false });
+            this.formService.nameControl.markAsTouched();
+            this.formService.nameControl.markAsDirty();
+          }
 
+          if (contactInfoData.jobTitle) {
+            this.formService.jobTitleControl.setValue(contactInfoData.jobTitle, { emitEvent: false });
+            this.formService.jobTitleControl.markAsTouched();
+            this.formService.jobTitleControl.markAsDirty();
+          }
+
+          if (contactInfoData.emailId) {
+            this.formService.emailIdControl.setValue(contactInfoData.emailId, { emitEvent: false });
+            this.formService.emailIdControl.markAsTouched();
+            this.formService.emailIdControl.markAsDirty();
+          }
+
+          // Parse and set phone number
+          if (contactInfoData.contactNumber) {
+            const parsedPhone = parsePhoneNumber(contactInfoData.contactNumber);
+            if (parsedPhone) {
+              this.phoneInputValue.set({
+                countryCode: parsedPhone.countryCode,
+                phoneNumber: parsedPhone.phoneNumber
+              });
+              this.formService.contactNumberControl.setValue(contactInfoData.contactNumber, { emitEvent: false });
+              this.formService.contactNumberControl.markAsTouched();
+              this.formService.contactNumberControl.markAsDirty();
+            }
+          }
+        }
+
+        // Set signature if exists
+        if (existingSig) {
+          this.formService.signatureControl.setValue(existingSig, { emitEvent: false });
+          this.formService.signatureControl.markAsTouched();
+          this.formService.signatureControl.markAsDirty();
+        }
+      } else if (!isVisible) {
+        // Reset form when modal closes
+        this.formService.resetForm();
+        this.phoneInputValue.set(null);
+      }
     });
   }
 

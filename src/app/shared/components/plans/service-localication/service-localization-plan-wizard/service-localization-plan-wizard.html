@@ -1,4 +1,3 @@
-@if (!planStore.isLoading()) {
 <app-base-wizard-dialog
   [(visible)]="visibility"
   [(activeStep)]="activeStep"
@@ -21,8 +20,14 @@
   }
 
   <ng-template [appStepContent]="1">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-8 p-4">
+      <p-skeleton width="30%" height="2rem"></p-skeleton>
+      <p-skeleton width="100%" height="12rem"></p-skeleton>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep1Comments() && !showCommentState()) {
+      @if (hasIncomingStep1Comments()) {
       @if (isLoadingPlan()) {
       <div class="flex flex-col gap-4">
         <p-skeleton width="40%" height="2rem"></p-skeleton>
@@ -30,32 +35,37 @@
         <p-skeleton width="100%" height="12rem"></p-skeleton>
       </div>
       } @else {
-      @if (hasIncomingStep1Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
         [commentText]="getIncomingStep1CommentText()"
       />
-      }
     }
-      <app-service-localization-step-cover-page
-        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-        [pageTitle]="steps()[0].title"
-        [(commentPhase)]="step1CommentPhase"
-        [(selectedInputs)]="step1SelectedInputs"
-        [selectedInputColor]="commentColor()"
-        [pageComments]="step1Comments()"
-        [commentTitle]="commentTitle() || 'Comments'"
-        [showCommentState]="showCommentState()"
-        [correctedFields]="step1CorrectedFields()"
-        [originalPlanResponse]="originalPlanResponse()"
-      ></app-service-localization-step-cover-page>
-      }
+  }
+  <app-service-localization-step-cover-page
+    [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+    [pageTitle]="steps()[0].title"
+    [(commentPhase)]="step1CommentPhase"
+    [(selectedInputs)]="step1SelectedInputs"
+    [selectedInputColor]="commentColor()"
+    [pageComments]="step1Comments()"
+    [commentTitle]="commentTitle() || 'Comments'"
+    [showCommentState]="showCommentState()"
+    [correctedFields]="step1CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
+  ></app-service-localization-step-cover-page>
     </div>
+    }
   </ng-template>
 
   <ng-template [appStepContent]="2">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-8 p-4">
+      <p-skeleton width="30%" height="2rem"></p-skeleton>
+      <p-skeleton width="100%" height="10rem"></p-skeleton>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep2Comments() && !showCommentState()) {
+      @if (hasIncomingStep2Comments()) {
       @if (isLoadingPlan()) {
       <div class="flex flex-col gap-4">
         <p-skeleton width="40%" height="2rem"></p-skeleton>
@@ -68,28 +78,35 @@
         [commentText]="getIncomingStep2CommentText()"
       />
     }
-      <app-service-localization-step-overview
-        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-        [isReviewMode]="isReviewMode()"
-        [pageTitle]="steps()[1].title"
-        [(commentPhase)]="step2CommentPhase"
-        [(selectedInputs)]="step2SelectedInputs"
-        [selectedInputColor]="commentColor()"
-        [pageComments]="step2Comments()"
-        [commentTitle]="commentTitle() || 'Comments'"
-        [showCommentState]="showCommentState()"
-        [correctedFields]="step2CorrectedFields()"
-        [originalPlanResponse]="originalPlanResponse()"
-      ></app-service-localization-step-overview>
-      }
+  }
+  <app-service-localization-step-overview
+    [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+    [isReviewMode]="isReviewMode()"
+    [pageTitle]="steps()[1].title"
+    [(commentPhase)]="step2CommentPhase"
+    [(selectedInputs)]="step2SelectedInputs"
+    [selectedInputColor]="commentColor()"
+    [pageComments]="step2Comments()"
+    [commentTitle]="commentTitle() || 'Comments'"
+    [showCommentState]="showCommentState()"
+    [correctedFields]="step2CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
+  ></app-service-localization-step-overview>
     </div>
+    }
   </ng-template>
 
   <!-- Conditional step: Existing Saudi (appears before Direct Localization in step order) -->
   @if (showExistingSaudiStep() && existingSaudiStepIndex() > 0) {
   <ng-template [appStepContent]="existingSaudiStepIndex()">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-8 p-4">
+      <p-skeleton width="30%" height="2rem"></p-skeleton>
+      <p-skeleton width="100%" height="12rem"></p-skeleton>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep3Comments() && !showCommentState()) {
+      @if (hasIncomingStep3Comments()) {
       @if (isLoadingPlan()) {
       <div class="flex flex-col gap-4">
         <p-skeleton width="40%" height="2rem"></p-skeleton>
@@ -102,29 +119,36 @@
         [commentText]="getIncomingStep3CommentText()"
       />
     }
-      <app-service-localization-step-existing-saudi
-        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-        [isReviewMode]="isReviewMode()"
-        [pageTitle]="steps()[existingSaudiStepIndex() - 1].title"
-        [(commentPhase)]="step3CommentPhase"
-        [(selectedInputs)]="step3SelectedInputs"
-        [selectedInputColor]="commentColor()"
-        [pageComments]="step3Comments()"
-        [commentTitle]="commentTitle() || 'Comments'"
-        [showCommentState]="showCommentState()"
-        [correctedFields]="step3CorrectedFields()"
-        [originalPlanResponse]="originalPlanResponse()"
-      ></app-service-localization-step-existing-saudi>
-      }
+  }
+  <app-service-localization-step-existing-saudi
+    [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+    [isReviewMode]="isReviewMode()"
+    [pageTitle]="steps()[existingSaudiStepIndex() - 1].title"
+    [(commentPhase)]="step3CommentPhase"
+    [(selectedInputs)]="step3SelectedInputs"
+    [selectedInputColor]="commentColor()"
+    [pageComments]="step3Comments()"
+    [commentTitle]="commentTitle() || 'Comments'"
+    [showCommentState]="showCommentState()"
+    [correctedFields]="step3CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
+  ></app-service-localization-step-existing-saudi>
     </div>
+    }
   </ng-template>
   }
 
   <!-- Conditional step: Direct Localization -->
   @if (showDirectLocalizationStep() && directLocalizationStepIndex() > 0) {
   <ng-template [appStepContent]="directLocalizationStepIndex()">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-8 p-4">
+      <p-skeleton width="30%" height="2rem"></p-skeleton>
+      <p-skeleton width="100%" height="12rem"></p-skeleton>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
-      @if (shouldShowIncomingComments() && hasIncomingStep4Comments() && !showCommentState()) {
+      @if (hasIncomingStep4Comments()) {
       @if (isLoadingPlan()) {
       <div class="flex flex-col gap-4">
         <p-skeleton width="40%" height="2rem"></p-skeleton>
@@ -137,28 +161,29 @@
         [commentText]="getIncomingStep4CommentText()"
       />
     }
-      <app-service-localization-step-direct-localization
-        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
-        [isReviewMode]="isReviewMode()"
-        [pageTitle]="steps()[directLocalizationStepIndex() - 1].title"
-        [(commentPhase)]="step4CommentPhase"
-        [(selectedInputs)]="step4SelectedInputs"
-        [selectedInputColor]="commentColor()"
-        [pageComments]="step4Comments()"
-        [commentTitle]="commentTitle() || 'Comments'"
-        [showCommentState]="showCommentState()"
-        [correctedFields]="step4CorrectedFields()"
-        [originalPlanResponse]="originalPlanResponse()"
-      ></app-service-localization-step-direct-localization>
-      }
+  }
+  <app-service-localization-step-direct-localization
+    [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+    [isReviewMode]="isReviewMode()"
+    [pageTitle]="steps()[directLocalizationStepIndex() - 1].title"
+    [(commentPhase)]="step4CommentPhase"
+    [(selectedInputs)]="step4SelectedInputs"
+    [selectedInputColor]="commentColor()"
+    [pageComments]="step4Comments()"
+    [commentTitle]="commentTitle() || 'Comments'"
+    [showCommentState]="showCommentState()"
+    [correctedFields]="step4CorrectedFields()"
+    [originalPlanResponse]="originalPlanResponse()"
+  ></app-service-localization-step-direct-localization>
     </div>
+    }
   </ng-template>
   }
 
   <!-- Summary step is always last -->
   <ng-template [appStepContent]="summaryStepIndex()">
     @if (isLoadingPlan()) {
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 p-4">
       <p-skeleton width="60%" height="2.5rem"></p-skeleton>
       <div class="flex gap-4">
         <p-skeleton width="10rem" height="1rem"></p-skeleton>
@@ -171,18 +196,22 @@
       [includeExistingSaudi]="showExistingSaudiStep()"
       [includeDirectLocalization]="showDirectLocalizationStep()"
       [signature]="planSignature()"
+      [step1CommentsCountAndPhase]="step1CommentsCountAndPhase()"
+      [step2CommentsCountAndPhase]="step2CommentsCountAndPhase()"
+      [step3CommentsCountAndPhase]="step3CommentsCountAndPhase()"
+      [step4CommentsCountAndPhase]="step4CommentsCountAndPhase()"
       (onEditStep)="onEditStepFromSummary($event)"
     />
     }
   </ng-template>
 </app-base-wizard-dialog>
-}
 
 @if(showSubmissionModal()){
 <!-- Submission Confirmation Modal -->
 <app-submission-confirmation-modal
   [(visible)]="showSubmissionModal"
   [(existingSignature)]="existingSignature"
+  [contactInfo]="contactInfo()"
   (onConfirm)="onSubmissionConfirm($event)"
   (onCancel)="onSubmissionCancel()"
 />

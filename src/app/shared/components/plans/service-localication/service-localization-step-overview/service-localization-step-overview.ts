@@ -18,10 +18,10 @@ import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-inp
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { TrimOnBlurDirective, ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
@@ -52,6 +52,7 @@ import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
     RadioButtonModule,
     TrimOnBlurDirective,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     PhoneInputComponent,
     TextareaModule,
     CommentStateComponent,
@@ -73,7 +74,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   override readonly planStore = inject(PlanStore);
   override readonly destroyRef = inject(DestroyRef);
 
-  pageTitle = input.required<string>();
+  pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
@@ -206,6 +207,19 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
 
   onServiceProvidedToChange(value: Array<string | number> | null, index: number): void {
     this.planFormService.toggleServiceProvidedToCompanyNamesValidation(value, index);
+
+    // When user deselects "Others", remove the Company Names field from selectedInputs
+    // so the wizard indicator updates correctly (description is no longer a required field).
+    if (!this.hasServiceProvidedToOthers(value)) {
+      const inputKey = `serviceProvidedToCompanyNames_${index}`;
+      const current = this.selectedInputs();
+      const updated = current.filter(
+        input => !(input.section === 'serviceDetails' && input.inputKey === inputKey)
+      );
+      if (updated.length !== current.length) {
+        this.selectedInputs.set(updated);
+      }
+    }
   }
 
   onServiceTargetedForLocalizationChange(value: string | boolean | number | null, index: number): void {

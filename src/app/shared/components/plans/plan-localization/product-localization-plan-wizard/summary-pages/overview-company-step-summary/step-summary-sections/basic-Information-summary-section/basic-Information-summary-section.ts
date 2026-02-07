@@ -28,7 +28,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.planTitleControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.planTitle),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.planTitle),
       isResolved: this.isResolvedField(EMaterialsFormControls.planTitle),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
