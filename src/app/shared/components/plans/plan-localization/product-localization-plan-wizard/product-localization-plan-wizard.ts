@@ -33,6 +33,7 @@ import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.i
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
+import { SkeletonModule } from 'primeng/skeleton';
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
 export interface ICommentsCountAndPhase {
@@ -56,6 +57,7 @@ type ProductLocalizationWizardStepId =
     PlanLocalizationStep04SaudizationForm,
     ProductPlanSummaryPage,
     ButtonModule,
+    SkeletonModule,
     BaseTagComponent,
     StepContentDirective,
     SubmissionConfirmationModalComponent,
@@ -389,7 +391,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     if (currentMode === 'resubmit') return 'Resubmit Product Localization Plan';
     return this.i18nService.translate('plans.wizard.title.create');
   });
-  isLoading = signal(false);
   isLoadingPlan = signal(false);
 
   // Submission confirmation modal
@@ -402,7 +403,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const signature = this.planSignature();
     return signature?.contactInfo ?? {};
   });
-  
+
   showConfirmLeaveDialog = model(false);
 
   // Value Chain: non-investor add-comments info dialog
