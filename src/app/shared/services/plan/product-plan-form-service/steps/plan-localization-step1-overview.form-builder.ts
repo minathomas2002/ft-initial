@@ -45,7 +45,7 @@ export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control<number>(0, [Validators.maxLength(7)]),
+        [EMaterialsFormControls.value]: this.fb.control<string | null>(null, [Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
       }),
       [EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]: this.fb.control(null, [Validators.required])
     });

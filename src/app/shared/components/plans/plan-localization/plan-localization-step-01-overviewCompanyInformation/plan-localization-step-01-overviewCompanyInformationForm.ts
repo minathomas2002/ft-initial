@@ -26,7 +26,6 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
 import { CommentInputComponent } from '../../comment-input/comment-input';
-import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -50,7 +49,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TextareaModule,
     GeneralConfirmationDialogComponent,
     CommentInputComponent,
-    InputNumberModule,
   ],
   templateUrl: './plan-localization-step-01-overviewCompanyInformationForm.html',
   styleUrl: './plan-localization-step-01-overviewCompanyInformationForm.scss',
@@ -226,6 +224,31 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
 
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
     return getFieldValueFromProductPlanResponse(field, this.originalPlanResponse());
+  }
+
+  onRegisteredVendorIDWithSecInput(event: Event): void {
+    const inputEl = event.target as HTMLInputElement | null;
+    if (!inputEl) return;
+
+    const rawValue = inputEl.value ?? '';
+    const digitsOnly = rawValue.replace(/\D+/g, '').slice(0, 7);
+
+    if (digitsOnly !== rawValue) {
+      inputEl.value = digitsOnly;
+    }
+
+    const ctrl = this.getValueControl(this.locationInformationFormGroupControls?.[EMaterialsFormControls.registeredVendorIDwithSEC]);
+    if (!ctrl) return;
+
+    // Allow empty strings and nulls; user clearing the field should remain valid.
+    const nextValue: string | null = digitsOnly;
+
+    // Apply after Angular's DefaultValueAccessor runs, ensuring the FormControl ends up sanitized.
+    queueMicrotask(() => {
+      if (ctrl.value !== nextValue) {
+        ctrl.setValue(nextValue, { emitEvent: false });
+      }
+    });
   }
 
   // Implement abstract method from base class to get form control for a field

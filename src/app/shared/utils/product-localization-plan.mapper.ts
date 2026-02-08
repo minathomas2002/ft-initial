@@ -539,7 +539,7 @@ export function mapProductPlanResponseToForm(
   if (locationInfoForm && productPlan.overviewCompanyInfo?.locationInfo) {
     const locationInfo = productPlan.overviewCompanyInfo.locationInfo;
     setFormGroupValue(locationInfoForm, EMaterialsFormControls.globalHQLocation, locationInfo.globalHQLocation);
-    setFormGroupValue(locationInfoForm, EMaterialsFormControls.registeredVendorIDwithSEC, locationInfo.vendorIdWithSEC);
+    setFormGroupValue(locationInfoForm, EMaterialsFormControls.registeredVendorIDwithSEC, locationInfo.vendorIdWithSEC || null);
     locationInfoForm.get(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA)?.setValue(locationInfo.hasLocalAgent ?? null);
 
     // Toggle local agent validation based on hasLocalAgent
