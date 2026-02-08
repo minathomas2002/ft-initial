@@ -1,4 +1,3 @@
-@if (!planStore.isLoading()) {
 <app-base-wizard-dialog
   [(visible)]="visibility"
   [(activeStep)]="activeStep"
@@ -12,16 +11,30 @@
   [hideSaveAsDraft]="isViewMode() || isReviewMode() || isResubmitMode()"
   (onClose)="onClose()"
 >
-  @if (shouldShowStatusTag()) {
   <ng-container ngProjectAs="status">
-    <app-base-tag
-      [value]="statusLabel()"
-      [color]="statusBadgeClass()"
-    />
+    @if (isLoadingPlan()) {
+      <p-skeleton width="120px" height="26px" />
+    } @else if (shouldShowStatusTag()) {
+      <app-base-tag
+        [value]="statusLabel()"
+        [color]="statusBadgeClass()"
+      />
+    }
   </ng-container>
-  }
 
   <ng-template [appStepContent]="1">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-4">
+      <p-skeleton width="220px" height="20px" />
+      <p-skeleton width="100%" height="40px" />
+      <p-skeleton width="100%" height="40px" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p-skeleton width="100%" height="40px" />
+        <p-skeleton width="100%" height="40px" />
+      </div>
+      <p-skeleton width="70%" height="40px" />
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep1Comments()) {
       <app-page-comment-box
@@ -42,9 +55,22 @@
         [originalPlanResponse]="originalPlanResponse()"
       ></app-service-localization-step-cover-page>
     </div>
+    }
   </ng-template>
 
   <ng-template [appStepContent]="2">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-4">
+      <p-skeleton width="240px" height="20px" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p-skeleton width="100%" height="40px" />
+        <p-skeleton width="100%" height="40px" />
+      </div>
+      <p-skeleton width="100%" height="40px" />
+      <p-skeleton width="100%" height="40px" />
+      <p-skeleton width="70%" height="40px" />
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep2Comments()) {
       <app-page-comment-box
@@ -66,11 +92,23 @@
         [originalPlanResponse]="originalPlanResponse()"
       ></app-service-localization-step-overview>
     </div>
+    }
   </ng-template>
 
   <!-- Conditional step: Existing Saudi (appears before Direct Localization in step order) -->
   @if (showExistingSaudiStep() && existingSaudiStepIndex() > 0) {
   <ng-template [appStepContent]="existingSaudiStepIndex()">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-4">
+      <p-skeleton width="220px" height="20px" />
+      <p-skeleton width="100%" height="40px" />
+      <p-skeleton width="100%" height="40px" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p-skeleton width="100%" height="40px" />
+        <p-skeleton width="100%" height="40px" />
+      </div>
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep3Comments()) {
       <app-page-comment-box
@@ -92,12 +130,21 @@
         [originalPlanResponse]="originalPlanResponse()"
       ></app-service-localization-step-existing-saudi>
     </div>
+    }
   </ng-template>
   }
 
   <!-- Conditional step: Direct Localization -->
   @if (showDirectLocalizationStep() && directLocalizationStepIndex() > 0) {
   <ng-template [appStepContent]="directLocalizationStepIndex()">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-4">
+      <p-skeleton width="220px" height="20px" />
+      <p-skeleton width="100%" height="40px" />
+      <p-skeleton width="100%" height="40px" />
+      <p-skeleton width="70%" height="40px" />
+    </div>
+    } @else {
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep4Comments()) {
       <app-page-comment-box
@@ -119,11 +166,20 @@
         [originalPlanResponse]="originalPlanResponse()"
       ></app-service-localization-step-direct-localization>
     </div>
+    }
   </ng-template>
   }
 
   <!-- Summary step is always last -->
   <ng-template [appStepContent]="summaryStepIndex()">
+    @if (isLoadingPlan()) {
+    <div class="flex flex-col gap-4">
+      <p-skeleton width="220px" height="20px" />
+      <p-skeleton width="100%" height="48px" />
+      <p-skeleton width="100%" height="48px" />
+      <p-skeleton width="70%" height="48px" />
+    </div>
+    } @else {
     <app-service-plan-summary-page
       [includeExistingSaudi]="showExistingSaudiStep()"
       [includeDirectLocalization]="showDirectLocalizationStep()"
@@ -134,6 +190,7 @@
       [step4CommentsCountAndPhase]="step4CommentsCountAndPhase()"
       (onEditStep)="onEditStepFromSummary($event)"
     />
+    }
   </ng-template>
 
   <ng-container ngProjectAs="final-step-action">
@@ -196,7 +253,6 @@
       }
   </ng-container>
 </app-base-wizard-dialog>
-}
 
 @if(showSubmissionModal()){
 <!-- Submission Confirmation Modal -->

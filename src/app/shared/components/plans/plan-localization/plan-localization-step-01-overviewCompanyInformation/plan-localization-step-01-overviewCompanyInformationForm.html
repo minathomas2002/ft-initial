@@ -222,18 +222,16 @@
             label: 'Registered Vendor ID with SEC'
           })"
         >
-          <p-inputnumber
-            [allowEmpty]="false"
-            [useGrouping]="false"
-            [minFractionDigits]="0"
-            [maxFractionDigits]="0"
-            [allowEmpty]="true"
-            mode="decimal"
+          <input
             type="text"
+            pInputText
             fluid
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="7"
             [appHidePlaceholderWhenDisabledEmpty]="'Enter registered vendor ID with SEC'"
-            [maxlength]="7"
             [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
+            (input)="onRegisteredVendorIDWithSecInput($event)"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
             [color]="selectedInputColor()"
           />

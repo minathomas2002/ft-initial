@@ -28,6 +28,7 @@ import { ServicePlanSummaryPage } from '../service-plan-summary-page/service-pla
 import { ServiceLocalizationStepDirectLocalization } from '../service-localization-step-direct-localization/service-localization-step-direct-localization';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { ButtonModule } from 'primeng/button';
+import { SkeletonModule } from 'primeng/skeleton';
 import { TimelineDialog } from '../../../timeline/timeline-dialog/timeline-dialog';
 import { SubmissionConfirmationModalComponent } from '../../submission-confirmation-modal/submission-confirmation-modal.component';
 import { Signature, IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
@@ -66,6 +67,7 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
     ServicePlanSummaryPage,
     ServiceLocalizationStepDirectLocalization,
     ButtonModule,
+    SkeletonModule,
     TimelineDialog,
     SubmissionConfirmationModalComponent,
     GeneralConfirmationDialogComponent,
