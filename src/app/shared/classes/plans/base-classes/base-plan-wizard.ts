@@ -9,6 +9,7 @@ import { TCommentPhase } from '../../../components/plans/plan-localization/produ
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { WizardActionFactory } from 'src/app/shared/services/wizard/wizard-action-factory.service';
 
 /**
  * Abstract base class for plan wizard components using Template Method pattern.
@@ -21,6 +22,8 @@ export abstract class BasePlanWizard {
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly roleService = inject(RoleService);
   protected readonly authStore = inject(AuthStore);
+  protected readonly wizardActionFactory = inject(WizardActionFactory);
+
 
   // Common signals - subclasses should initialize these
   protected isProcessing = signal(false);
@@ -100,7 +103,7 @@ export abstract class BasePlanWizard {
   protected abstract getCommentPhaseSignalForStepId(stepId: string): WritableSignal<TCommentPhase> | null;
 
   /** Reset selected inputs and hasComment controls for the given step. Used when employee starts a new comment. */
-  protected abstract resetCurrentStepCommentSelections(stepId: string | undefined): void;
+  // protected abstract resetCurrentStepCommentSelections(stepId: string | undefined): void;
 
   /** Comment phase for the given step id. Used by getCommentColorForStep. */
   protected abstract getCommentPhaseForStepId(stepId: string): TCommentPhase;
@@ -159,9 +162,9 @@ export abstract class BasePlanWizard {
 
     const step = this.getActiveStep();
     const stepId = this.getStepIdFromStepIndex(step);
-    if (!this.getIsInvestorPersona()) {
-      this.resetCurrentStepCommentSelections(stepId);
-    }
+    // if (!this.getIsInvestorPersona()) {
+    //   this.resetCurrentStepCommentSelections(stepId);
+    // }
     const phaseSignal = stepId ? this.getCommentPhaseSignalForStepId(stepId) : null;
     if (phaseSignal) {
       phaseSignal.set('adding');

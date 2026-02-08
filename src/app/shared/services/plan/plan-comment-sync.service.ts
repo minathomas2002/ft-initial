@@ -11,7 +11,6 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 @Injectable({ providedIn: 'root' })
 export class PlanCommentSyncService {
   private readonly planStore = inject(PlanStore);
-  private readonly authStore = inject(AuthStore);
 
   /**
    * Merge the current page's comment into planComments.
@@ -28,16 +27,7 @@ export class PlanCommentSyncService {
       (c) => c.pageTitleForTL !== currentPageComment.pageTitleForTL
     );
 
-    // // Creator role from current user's persona (AuthStore) - set on the current page comment
-    // const currentUserRole = this.authStore.userProfile()?.roleCodes?.[0] ?? 0;
-    const updatedCurrentPageComment: IPageComment = {
-      ...currentPageComment,
-    };
-
-    const mergedComments: IPageComment[] = [...otherPages, updatedCurrentPageComment];
-
-    // // Keep the global creatorRole from existing or use current user's role
-    // const globalCreatorRole = existing?.creatorRole ?? currentUserRole;
+    const mergedComments: IPageComment[] = [...otherPages, { ...currentPageComment } ];
 
     const payload: IPlanCommentResponse = {
       comments: mergedComments,

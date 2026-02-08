@@ -75,12 +75,10 @@ type ProductLocalizationWizardStepId =
 })
 export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnDestroy {
   productPlanFormService = inject(ProductPlanFormService);
-  override readonly toasterService = inject(ToasterService);
-  override readonly planStore = inject(PlanStore);
   validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
-  private readonly wizardActionFactory = inject(WizardActionFactory);
+
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
@@ -340,32 +338,28 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   hasIncomingStep1Comments = computed(() => {
     const step = this.steps()[0];
     return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
-      this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['editing'].includes(this.step1CommentPhase())
     );
   });
 
   hasIncomingStep2Comments = computed(() => {
     const step = this.steps()[1];
     return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
-      this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase())
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['editing'].includes(this.step2CommentPhase())
     );
   });
 
   hasIncomingStep3Comments = computed(() => {
     const step = this.steps()[2];
     return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
-      this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['editing'].includes(this.step3CommentPhase())
     );
   });
 
   hasIncomingStep4Comments = computed(() => {
     const step = this.steps()[3];
     return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
-      this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['editing'].includes(this.step4CommentPhase())
     );
   });
 
@@ -1398,18 +1392,15 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   // Base class provides all the review/approval/rejection methods
   // We only need to implement the abstract methods and step-specific logic
 
-  // Track original values for resubmit mode
-  private originalValuesMap = new Map<string, any>();
-  private updatedFieldsSet = new Set<string>();
-
   // Computed signal for remaining fields requiring update
+  // For resubmit mode, this returns the count of corrected fields requiring update
   remainingFieldsRequiringUpdate = computed(() => {
     if (!this.isResubmitMode()) return 0;
     const totalCorrected = this.step1CorrectedFieldsFiltered().length +
       this.step2CorrectedFieldsFiltered().length +
       this.step3CorrectedFieldsFiltered().length +
       this.step4CorrectedFieldsFiltered().length;
-    return totalCorrected - this.updatedFieldsSet.size;
+    return totalCorrected;
   });
 
   // Collect investor page comments (from investorCommentControl in each step)
@@ -1558,34 +1549,34 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
    * Resets selected inputs and hasComment controls for the current step
    * Called when employee clicks Add Comment to clear previous investor comment selections
    */
-  protected override resetCurrentStepCommentSelections(stepId: ProductLocalizationWizardStepId | undefined): void {
-    if (!stepId) return;
+  // protected override resetCurrentStepCommentSelections(stepId: ProductLocalizationWizardStepId | undefined): void {
+  //   if (!stepId) return;
 
-    // Reset stepper counter + highlight state (bound to selectedInputs)
-    if (stepId === 'overview') {
-      this.step1SelectedInputs.set([]);
-      this.resetHasCommentControls(this.productPlanFormService.step1_overviewCompanyInformation);
-      return;
-    }
+  //   // Reset stepper counter + highlight state (bound to selectedInputs)
+  //   if (stepId === 'overview') {
+  //     this.step1SelectedInputs.set([]);
+  //     this.resetHasCommentControls(this.productPlanFormService.step1_overviewCompanyInformation);
+  //     return;
+  //   }
 
-    if (stepId === 'productPlant') {
-      this.step2SelectedInputs.set([]);
-      this.resetHasCommentControls(this.productPlanFormService.step2_productPlantOverview);
-      return;
-    }
+  //   if (stepId === 'productPlant') {
+  //     this.step2SelectedInputs.set([]);
+  //     this.resetHasCommentControls(this.productPlanFormService.step2_productPlantOverview);
+  //     return;
+  //   }
 
-    if (stepId === 'valueChain') {
-      this.step3SelectedInputs.set([]);
-      this.resetHasCommentControls(this.productPlanFormService.step3_valueChain);
-      return;
-    }
+  //   if (stepId === 'valueChain') {
+  //     this.step3SelectedInputs.set([]);
+  //     this.resetHasCommentControls(this.productPlanFormService.step3_valueChain);
+  //     return;
+  //   }
 
-    if (stepId === 'saudization') {
-      this.step4SelectedInputs.set([]);
-      this.resetHasCommentControls(this.productPlanFormService.step4_saudization);
-      return;
-    }
-  }
+  //   if (stepId === 'saudization') {
+  //     this.step4SelectedInputs.set([]);
+  //     this.resetHasCommentControls(this.productPlanFormService.step4_saudization);
+  //     return;
+  //   }
+  // }
 
   /**
    * Recursively resets all hasComment controls in a form to false

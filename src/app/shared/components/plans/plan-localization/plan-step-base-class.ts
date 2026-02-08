@@ -583,8 +583,7 @@ export abstract class PlanStepBaseClass {
       isCorrected = !changedOnce;
     }
 
-    const phase = this.commentPhase();
-    return (isSelected || isCorrected) && (phase === 'adding' || phase === 'editing' || phase === 'none');
+    return isSelected || isCorrected
   }
 
   private valuesEqual(a: any, b: any): boolean {
@@ -675,17 +674,17 @@ export abstract class PlanStepBaseClass {
     // Merge this page's comment into planComments (add/remove fields as user selected)
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
-    // In resubmit (investor) flow, reset any current orange selections and counters
-    if (this.isResubmitMode()) {
-      // Clear the selected inputs so step highlights/counts reset
-      try {
-        this.selectedInputs.set([]);
-        this.resetAllHasCommentControls();
-      } catch (e) {
-        // Defensive: should not block save UX if resetting fails
-        console.warn('Failed to reset selected inputs after saving investor comment', e);
-      }
-    }
+    // // In resubmit (investor) flow, reset any current orange selections and counters
+    // if (this.isResubmitMode()) {
+    //   // Clear the selected inputs so step highlights/counts reset
+    //   try {
+    //     // this.selectedInputs.set([]);
+    //     // this.resetAllHasCommentControls();
+    //   } catch (e) {
+    //     // Defensive: should not block save UX if resetting fails
+    //     console.warn('Failed to reset selected inputs after saving investor comment', e);
+    //   }
+    // }
 
     this.toasterService.success('Your comments have been saved successfully.');
   }
@@ -696,6 +695,7 @@ export abstract class PlanStepBaseClass {
   protected onSaveEditedComment(): void {
     // Validate comment text
     const commentValue = this.commentFormControl.value?.trim() || '';
+
     if (!commentValue) {
       this.commentFormControl.markAsTouched();
       this.toasterService.error('Please enter a comment.');
@@ -716,15 +716,15 @@ export abstract class PlanStepBaseClass {
     // Merge this page's comment into planComments (add/remove fields as user selected)
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
-    // In resubmit (investor) flow, reset any current orange selections and counters
-    if (this.isResubmitMode()) {
-      try {
-        this.selectedInputs.set([]);
-        this.resetAllHasCommentControls();
-      } catch (e) {
-        console.warn('Failed to reset selected inputs after editing investor comment', e);
-      }
-    }
+    // // In resubmit (investor) flow, reset any current orange selections and counters
+    // if (this.isResubmitMode()) {
+    //   try {
+    //     // this.selectedInputs.set([]);
+    //     // this.resetAllHasCommentControls();
+    //   } catch (e) {
+    //     console.warn('Failed to reset selected inputs after editing investor comment', e);
+    //   }
+    // }
 
     this.toasterService.success('Your updates have been saved successfully.');
   }

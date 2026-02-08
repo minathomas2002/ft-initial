@@ -82,13 +82,9 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnInit, OnDestroy {
-  override readonly planStore = inject(PlanStore);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
-  override readonly toasterService = inject(ToasterService);
-  private readonly wizardActionFactory = inject(WizardActionFactory);
-
 
   visibility = model(false);
   doRefresh = output<void>();
@@ -162,53 +158,36 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   // Plan comments from API
   planComments = this.planStore.planComments;
   incomingCommentPersona = this.planStore.commentPersona;
-  showHasCommentControl = signal<boolean>(false);
-
-  // Computed signal to get creatorRole from planComments
-  creatorRole = computed(() => this.planComments()?.creatorRole ?? null);
-
-  // Computed signal to check if incoming comments should be shown
-  shouldShowIncomingComments = computed(() => {
-    const mode = this.planStore.wizardMode();
-
-    const creatorRole = this.planStore.planComments()?.creatorRole;
-    const currentSignedUser = this.authStore.jwtUserDetails()
-    const isSameUserRole = currentSignedUser?.RoleCodes.toString() === creatorRole?.toString()
-
-    return (mode === 'view' || mode === 'Review' || mode === 'resubmit') && !isSameUserRole;
-  });
 
   // Computed signals to check if incoming comments exist and have content
   hasIncomingStep1Comments = computed(() => {
     const step = this.steps()[0];
     return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
-      this.isViewMode() ||
-
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['editing'].includes(this.step1CommentPhase())
     );
   });
 
   hasIncomingStep2Comments = computed(() => {
     const step = this.steps()[1];
     return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
-      this.isViewMode() ||
-      ((step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase()))
+      ((step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['editing'].includes(this.step2CommentPhase()))
     );
   });
 
   hasIncomingStep3Comments = computed(() => {
     const step = this.steps()[2];
+    console.log('step', step)
+    console.log('step3Comments', this.step3Comments());
+    console.log('currentUserPageComments', this.planStore.currentUserPageComments());
     return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
-      this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['editing'].includes(this.step3CommentPhase())
     );
   });
 
   hasIncomingStep4Comments = computed(() => {
     const step = this.steps()[3];
     return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
-      this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['editing'].includes(this.step4CommentPhase())
     );
   });
 
@@ -230,6 +209,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   }
 
   // Computed signals to map comments to each step based on pageTitleForTL
+
   step1Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
     return comments.filter(c => c.pageTitleForTL === 'Cover Page');
@@ -430,6 +410,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const stepId = this.stepsWithId()[this.activeStep() - 1]?.id;
     return stepId ? this.getCommentColorForStep(this.getCommentPhaseForStepId(stepId)) : 'orange';
   });
+
   canApproveOrReject = computed(() => {
     return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
   });
@@ -957,34 +938,34 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return null;
   }
 
-  protected override resetCurrentStepCommentSelections(stepId: ServiceLocalizationWizardStepId | undefined): void {
-    if (!stepId) return;
+  // protected override resetCurrentStepCommentSelections(stepId: ServiceLocalizationWizardStepId | undefined): void {
+  //   if (!stepId) return;
 
-    // Reset stepper counter + highlight state (bound to selectedInputs)
-    if (stepId === 'cover') {
-      this.step1SelectedInputs.set([]);
-      this.resetHasCommentControls(this.serviceLocalizationFormService.step1_coverPage);
-      return;
-    }
+  //   // Reset stepper counter + highlight state (bound to selectedInputs)
+  //   if (stepId === 'cover') {
+  //     this.step1SelectedInputs.set([]);
+  //     this.resetHasCommentControls(this.serviceLocalizationFormService.step1_coverPage);
+  //     return;
+  //   }
 
-    if (stepId === 'overview') {
-      this.step2SelectedInputs.set([]);
-      this.resetHasCommentControls(this.serviceLocalizationFormService.step2_overview);
-      return;
-    }
+  //   if (stepId === 'overview') {
+  //     this.step2SelectedInputs.set([]);
+  //     this.resetHasCommentControls(this.serviceLocalizationFormService.step2_overview);
+  //     return;
+  //   }
 
-    if (stepId === 'existingSaudi') {
-      this.step3SelectedInputs.set([]);
-      this.resetHasCommentControls(this.serviceLocalizationFormService.step3_existingSaudi);
-      return;
-    }
+  //   if (stepId === 'existingSaudi') {
+  //     // this.step3SelectedInputs.set([]);
+  //     // this.resetHasCommentControls(this.serviceLocalizationFormService.step3_existingSaudi);
+  //     return;
+  //   }
 
-    if (stepId === 'directLocalization') {
-      this.step4SelectedInputs.set([]);
-      this.resetHasCommentControls(this.serviceLocalizationFormService.step4_directLocalization);
-      return;
-    }
-  }
+  //   if (stepId === 'directLocalization') {
+  //     this.step4SelectedInputs.set([]);
+  //     this.resetHasCommentControls(this.serviceLocalizationFormService.step4_directLocalization);
+  //     return;
+  //   }
+  // }
 
   private resetHasCommentControls(control: AbstractControl): void {
     if (control instanceof FormGroup) {
@@ -1422,7 +1403,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   }
 
   // Track original values for resubmit mode
-  private originalValuesMap = new Map<string, any>();
   private updatedFieldsSet = new Set<string>();
 
   // Computed signal for remaining fields requiring update
