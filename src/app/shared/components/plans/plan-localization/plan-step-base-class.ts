@@ -632,6 +632,7 @@ export abstract class PlanStepBaseClass {
       this.commentPhase.set('adding');
     }
     this.showDeleteConfirmationDialog.set(false);
+    this.planCommentSyncService.syncPageCommentToStore(this.pageComment())
     this.planStore.updateCurrentUserPageComments(this.planStore.currentUserPageComments().filter(c => c !== this.pageTitle()));
     this.toasterService.success('Your comments and selected fields were removed successfully.');
   }
