@@ -44,10 +44,26 @@ export abstract class SummaryStepBaseClass {
   });
 
   shouldShowCommentBox = computed(() => {
-    return !!this.commentForPage().text &&
-      !['adding', 'editing'].includes(this.stepCommentsCountAndPhaseFromWizard().phase) &&
-      this.planStore.currentUserPageComments().includes(this.pageTitleForTL as EPlanPageTitle) ? true :
-      (this.stepCommentsCountAndPhaseFromWizard().count > 0 && this.planStore.wizardMode() === 'resubmit')
+    const commentForPage = this.commentForPage();
+    const phase = this.stepCommentsCountAndPhaseFromWizard().phase;
+    const isAddingOrEditing = ['adding', 'editing'].includes(phase);
+    const hasComment = !!commentForPage.text;
+    const hasUserComment = this.planStore.currentUserPageComments().includes(this.pageTitleForTL as EPlanPageTitle);
+    const hasComments = this.stepCommentsCountAndPhaseFromWizard().count > 0;
+    const isResubmit = this.planStore.wizardMode() === 'resubmit';
+    const isViewOrReviewMode = this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review';
+
+    if (isAddingOrEditing) {
+      return false
+    }
+
+    if (isViewOrReviewMode) {
+      return hasComment
+    }
+    if (isResubmit) {
+      return hasUserComment ? true : hasComments;
+    }
+    return false
   });
 
   // /** Fallback count from plan store when wizard does not pass stepCommentCountFromWizard. */
