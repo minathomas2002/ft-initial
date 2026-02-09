@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { IPageComment, IPlanCommentResponse } from 'src/app/shared/interfaces/plans.interface';
+import { EPlanPageTitle } from 'src/app/shared/enums';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
@@ -41,10 +42,63 @@ export class PlanCommentSyncService {
 
     const payload: IPlanCommentResponse = {
       comments: mergedComments,
-      creatorRole: existing!.creatorRole
+      creatorRole: existing?.creatorRole ?? 0
     };
 
     this.planStore.setPlanComments(payload);
-    this.planStore.updateCurrentUserPageComments([...this.planStore.currentUserPageComments(), currentPageComment.pageTitleForTL]);
+    // Deduplicate: only add the page if not already tracked
+    const currentPages = this.planStore.currentUserPageComments();
+    if (!currentPages.includes(currentPageComment.pageTitleForTL)) {
+      this.planStore.updateCurrentUserPageComments([...currentPages, currentPageComment.pageTitleForTL]);
+    }
+  }
+
+  /**
+   * Remove a page's comment entry from the store entirely.
+   * Used when a non-resubmit user (e.g. employee) deletes their comment.
+   * Also removes the page from currentUserPageComments.
+   */
+  removePageCommentFromStore(pageTitleForTL: EPlanPageTitle): void {
+    const existing = this.planStore.planComments();
+    if (!existing) return;
+
+    const filtered = existing.comments.filter(
+      (c) => c.pageTitleForTL !== pageTitleForTL
+    );
+
+    const payload: IPlanCommentResponse = {
+      comments: filtered,
+      creatorRole: existing.creatorRole
+    };
+
+    this.planStore.setPlanComments(payload);
+    this.planStore.updateCurrentUserPageComments(
+      this.planStore.currentUserPageComments().filter(c => c !== pageTitleForTL)
+    );
+  }
+
+  /**
+   * Clear only the comment text for a page in the store, keeping fields intact.
+   * Used when an investor deletes their comment in resubmit mode —
+   * fields must remain so the correctedFields derivation is not disrupted.
+   * Also removes the page from currentUserPageComments.
+   */
+  clearPageCommentTextInStore(pageTitleForTL: EPlanPageTitle): void {
+    const existing = this.planStore.planComments();
+    if (!existing) return;
+
+    const updatedComments = existing.comments.map(c =>
+      c.pageTitleForTL === pageTitleForTL ? { ...c, comment: '' } : c
+    );
+
+    const payload: IPlanCommentResponse = {
+      comments: updatedComments,
+      creatorRole: existing.creatorRole
+    };
+
+    this.planStore.setPlanComments(payload);
+    this.planStore.updateCurrentUserPageComments(
+      this.planStore.currentUserPageComments().filter(c => c !== pageTitleForTL)
+    );
   }
 }

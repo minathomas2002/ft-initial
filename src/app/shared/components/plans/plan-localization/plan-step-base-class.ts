@@ -627,13 +627,17 @@ export abstract class PlanStepBaseClass {
     if (this.isResubmitMode()) {
       this.commentPhase.set('none');
       this.commentFormControl.disable({ emitEvent: false });
-      this.selectedInputs.set(this.correctedFields())
+      this.selectedInputs.set(this.correctedFields());
+      // In resubmit mode, keep fields in the store (needed for correctedFields derivation)
+      // but clear the comment text and remove from currentUserPageComments
+      this.planCommentSyncService.clearPageCommentTextInStore(this.pageTitle());
     } else {
       this.commentPhase.set('adding');
+      this.selectedInputs.set([]);
+      // In non-resubmit mode, remove the entry entirely from the store
+      this.planCommentSyncService.removePageCommentFromStore(this.pageTitle());
     }
     this.showDeleteConfirmationDialog.set(false);
-    this.planCommentSyncService.syncPageCommentToStore(this.pageComment())
-    this.planStore.updateCurrentUserPageComments(this.planStore.currentUserPageComments().filter(c => c !== this.pageTitle()));
     this.toasterService.success('Your comments and selected fields were removed successfully.');
   }
 
@@ -674,7 +678,7 @@ export abstract class PlanStepBaseClass {
     this.commentFormControl.disable();
 
     // Merge this page's comment into planComments (add/remove fields as user selected)
-    // this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
+    this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
     // In resubmit (investor) flow, reset any current orange selections and counters
     if (this.isResubmitMode()) {
