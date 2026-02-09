@@ -120,9 +120,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
+
 
   // Get section FormArrays
   getDesignEngineeringFormArray(): FormArray | null {

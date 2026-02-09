@@ -201,10 +201,6 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
-
   onServiceProvidedToChange(value: Array<string | number> | null, index: number): void {
     this.planFormService.toggleServiceProvidedToCompanyNamesValidation(value, index);
 

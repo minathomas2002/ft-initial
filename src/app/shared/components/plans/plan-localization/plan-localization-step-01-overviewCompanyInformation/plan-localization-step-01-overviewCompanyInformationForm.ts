@@ -162,9 +162,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
+
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {

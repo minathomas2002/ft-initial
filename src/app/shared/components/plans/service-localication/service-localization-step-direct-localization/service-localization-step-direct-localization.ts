@@ -215,10 +215,6 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
-
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
     // Defer service-dependent initialization until after component is fully constructed
