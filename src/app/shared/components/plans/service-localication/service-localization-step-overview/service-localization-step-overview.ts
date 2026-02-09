@@ -226,6 +226,31 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     this.planFormService.toggleExpectedLocalizationDateValidation(value, index);
   }
 
+  onRegisteredVendorIDWithSecInput(event: Event): void {
+    const inputEl = event.target as HTMLInputElement | null;
+    if (!inputEl) return;
+
+    const rawValue = inputEl.value ?? '';
+    const digitsOnly = rawValue.replace(/\D+/g, '').slice(0, 7);
+
+    if (digitsOnly !== rawValue) {
+      inputEl.value = digitsOnly;
+    }
+
+    const ctrl = this.getValueControl(this.locationInformationFormGroupControls?.[EMaterialsFormControls.registeredVendorIDwithSEC]);
+    if (!ctrl) return;
+
+    // Allow empty strings and nulls; user clearing the field should remain valid.
+    const nextValue: string | null = digitsOnly;
+
+    // Apply after Angular's DefaultValueAccessor runs, ensuring the FormControl ends up sanitized.
+    queueMicrotask(() => {
+      if (ctrl.value !== nextValue) {
+        ctrl.setValue(nextValue, { emitEvent: false });
+      }
+    });
+  }
+
   hasServiceProvidedToOthers(value: unknown): boolean {
     const list = Array.isArray(value) ? value : [];
     const selected = list.map((v) => String(v));
