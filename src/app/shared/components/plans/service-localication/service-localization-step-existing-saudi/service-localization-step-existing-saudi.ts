@@ -295,10 +295,6 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
-
   constructor() {
     super();
     // Initialize files from form control value

@@ -239,9 +239,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
+
 
   override ngOnInit(): void {
     super.ngOnInit();

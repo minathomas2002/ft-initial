@@ -115,9 +115,7 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
+
 
   // Get services form array
   getServicesFormArray(): FormArray {

@@ -167,9 +167,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
+
 
   // Arrow function wrappers for comment functionality to pass to child components
   // Using arrow functions to preserve 'this' context when passed to child components
