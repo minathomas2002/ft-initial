@@ -1399,16 +1399,23 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       const investorCommentControl = stepForm.get('comment') as FormControl<string> | null;
       const investorComment = investorCommentControl?.value?.trim() || '';
 
-      if (investorComment.length > 0 || correctedFields.length > 0) {
+      // If this step has no corrected/highlighted fields, don't include a comment object at all.
+      // Otherwise we end up sending `Comments[i].pageTitleForTL` + empty `comment` and no `fields`,
+      // which breaks the API binding.
+      if (!correctedFields || correctedFields.length === 0) return;
+
+      if (investorComment.length > 0) {
         // Case 1: Investor added comments - use new investor comments
         Comments.push({
-          pageTitleForTL: this.steps()[stepIndex].title,
+          pageTitleForTL: this.steps()[stepIndex].title as EPlanPageTitle,
           comment: investorComment,
           fields: correctedFields,
         });
       } else if (employeeComments.length > 0) {
         // Case 2: Investor didn't add comments - use employee comments with empty comment
         employeeComments.forEach(employeeComment => {
+          // Defensive: skip empty-field comments so we never send a comment object without fields.
+          if (!employeeComment.fields || employeeComment.fields.length === 0) return;
           Comments.push({
             pageTitleForTL: employeeComment.pageTitleForTL,
             comment: '', // Empty string as per requirement
@@ -1490,8 +1497,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
    * Format: Comments[index].pageTitleForTL, Comments[index].comment, Comments[index].fields[index].section, etc.
    */
   private appendCommentsToFormData(formData: FormData, comments: IPageComment[]): void {
+    // Only append comments that actually contain fields, and reindex them to keep
+    // `Comments[0]..Comments[n]` contiguous for backend model binding.
+    const filteredComments = (comments ?? []).filter((c) => (c.fields?.length ?? 0) > 0);
 
-    comments.forEach((comment, commentIndex) => {
+    filteredComments.forEach((comment, commentIndex) => {
       // Append comment-level properties
       formData.append(`Comments[${commentIndex}].pageTitleForTL`, comment.pageTitleForTL || '');
       formData.append(`Comments[${commentIndex}].comment`, comment.comment || '');
