@@ -98,7 +98,7 @@ export abstract class PlanStepBaseClass {
     if (!control) {
       // Create a new control if it doesn't exist (shouldn't happen in normal flow, but defensive)
       // Use nonNullable: true to ensure type is FormControl<string> not FormControl<string | null>
-      control = new FormControl('', { nonNullable: true }) as FormControl<string>;
+      control = new FormControl('') as FormControl<string>;
       formGroup.addControl(EMaterialsFormControls.comment, control);
     }
     return control;
@@ -106,10 +106,10 @@ export abstract class PlanStepBaseClass {
 
   // A dedicated, always-disabled control for displaying the comment inside each step.
   // This prevents editing in the step UI while keeping the dialog editable.
-  private readonly stepCommentControl = new FormControl<string>('', { nonNullable: true });
+  private readonly stepCommentControl = new FormControl<string>('');
   private stepCommentSyncInitialized = false;
 
-  protected get stepCommentFormControl(): FormControl<string> {
+  protected get stepCommentFormControl(): FormControl<string | null> {
     return this.stepCommentControl;
   }
 
