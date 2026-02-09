@@ -680,7 +680,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         step4: this.step4CorrectedFieldsFiltered().length > 0,
       }
       : undefined;
-
+    console.log(this.productPlanFormService.step1_overviewCompanyInformation);
+    console.log(this.productPlanFormService.step2_productPlantOverview);
+    console.log(this.productPlanFormService.step3_valueChain);
+    console.log(this.productPlanFormService.step4_saudization);
     // Check if all forms are valid
     if (!this.productPlanFormService.areAllFormsValid({ resubmitStepsToValidate })) {
       // Mark all controls as dirty to show validation errors

@@ -674,7 +674,7 @@ export abstract class PlanStepBaseClass {
     this.commentFormControl.disable();
 
     // Merge this page's comment into planComments (add/remove fields as user selected)
-    this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
+    // this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
     // In resubmit (investor) flow, reset any current orange selections and counters
     if (this.isResubmitMode()) {
