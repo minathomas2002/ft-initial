@@ -46,10 +46,10 @@ export class CommentDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    const control = this.commentFormControl();
-    if (control) {
-      control.addValidators(Validators.required);
-    }
+    // const control = this.commentFormControl();
+    // if (control) {
+    //   control.addValidators(Validators.required);
+    // }
   }
 
   onClose() {
