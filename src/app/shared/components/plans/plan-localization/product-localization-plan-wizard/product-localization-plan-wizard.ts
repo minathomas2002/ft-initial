@@ -672,12 +672,15 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   onSummarySubmitClick(): void {
     // In resubmit mode, only validate steps that have corrected fields. Steps with no comments
     // or highlighted inputs are fully disabled; we must not block resubmit due to their validity.
+    // Use actual corrected field count (not comment entry count) to decide which
+    // steps need validation. A step with a comment but zero fields has nothing to
+    // validate and its FormGroup may be fully DISABLED.
     const resubmitStepsToValidate = this.isResubmitMode()
       ? {
-        step1: this.step1CorrectedFieldsFiltered().length > 0,
-        step2: this.step2CorrectedFieldsFiltered().length > 0,
-        step3: this.step3CorrectedFieldsFiltered().length > 0,
-        step4: this.step4CorrectedFieldsFiltered().length > 0,
+        step1: this.step1CommentFields().length > 0,
+        step2: this.step2CommentFields().length > 0,
+        step3: this.step3CommentFields().length > 0,
+        step4: this.step4CommentFields().length > 0,
       }
       : undefined;
     console.log(this.productPlanFormService.step1_overviewCompanyInformation);

@@ -91,15 +91,22 @@ export abstract class PlanStepBaseClass {
   // Abstract method - must be implemented by subclasses
   abstract getFormGroup(): FormGroup;
 
-  // Get comment form control from the form group
+  // Get comment form control from the form group.
+  // Always ensures the control has no validators so it can never
+  // make the parent FormGroup invalid and block plan submission.
   protected get commentFormControl(): FormControl<string> {
     const formGroup = this.getFormGroup();
     let control = formGroup.get(EMaterialsFormControls.comment) as FormControl<string> | null;
     if (!control) {
       // Create a new control if it doesn't exist (shouldn't happen in normal flow, but defensive)
-      // Use nonNullable: true to ensure type is FormControl<string> not FormControl<string | null>
       control = new FormControl('') as FormControl<string>;
       formGroup.addControl(EMaterialsFormControls.comment, control);
+    }
+    // Defensively strip any validators that may have been attached elsewhere.
+    if (control.validator || control.asyncValidator) {
+      control.clearValidators();
+      control.clearAsyncValidators();
+      control.updateValueAndValidity({ emitEvent: false });
     }
     return control;
   }

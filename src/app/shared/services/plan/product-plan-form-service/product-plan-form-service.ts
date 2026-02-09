@@ -211,10 +211,20 @@ export class ProductPlanFormService {
   /**
    * Recursively mark a control and all its nested controls as dirty
    */
-  private markControlAsDirty(control: AbstractControl): void {
+  /** Controls that should never participate in form validation. */
+  private static readonly EXCLUDED_CONTROL_KEYS = new Set([
+    EMaterialsFormControls.comment,
+    EMaterialsFormControls.commentsCount,
+  ]);
+
+  private markControlAsDirty(control: AbstractControl, key?: string): void {
+    // Skip comment-related controls — they must never affect form validity.
+    if (key && ProductPlanFormService.EXCLUDED_CONTROL_KEYS.has(key as EMaterialsFormControls)) {
+      return;
+    }
     if (control instanceof FormGroup) {
-      Object.keys(control.controls).forEach(key => {
-        this.markControlAsDirty(control.controls[key]);
+      Object.keys(control.controls).forEach(k => {
+        this.markControlAsDirty(control.controls[k], k);
       });
     } else if (control instanceof FormArray) {
       control.controls.forEach(arrayControl => {
@@ -236,10 +246,14 @@ export class ProductPlanFormService {
   }): boolean {
     const resubmit = options?.resubmitStepsToValidate;
 
-    const step1Valid = resubmit ? (!resubmit.step1 || this._step1FormGroup.valid) : this._step1FormGroup.valid;
-    const step2Valid = resubmit ? (!resubmit.step2 || this._step2FormGroup.valid) : this._step2FormGroup.valid;
-    const step3Valid = resubmit ? (!resubmit.step3 || this._step3FormGroup.valid) : this._step3FormGroup.valid;
-    const step4Valid = resubmit ? (!resubmit.step4 || this._step4FormGroup.valid) : this._step4FormGroup.valid;
+    // A DISABLED FormGroup has .valid === false even though it has no validation
+    // errors. Treat DISABLED as passing validation since disabled controls cannot be invalid.
+    const isValidOrDisabled = (fg: FormGroup) => fg.valid || fg.disabled;
+
+    const step1Valid = resubmit ? (!resubmit.step1 || isValidOrDisabled(this._step1FormGroup)) : isValidOrDisabled(this._step1FormGroup);
+    const step2Valid = resubmit ? (!resubmit.step2 || isValidOrDisabled(this._step2FormGroup)) : isValidOrDisabled(this._step2FormGroup);
+    const step3Valid = resubmit ? (!resubmit.step3 || isValidOrDisabled(this._step3FormGroup)) : isValidOrDisabled(this._step3FormGroup);
+    const step4Valid = resubmit ? (!resubmit.step4 || isValidOrDisabled(this._step4FormGroup)) : isValidOrDisabled(this._step4FormGroup);
 
     return step1Valid && step2Valid && step3Valid && step4Valid;
   }
