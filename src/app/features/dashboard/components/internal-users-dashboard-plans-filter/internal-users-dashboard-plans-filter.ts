@@ -20,6 +20,7 @@ import { EOpportunityType, ERoles } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PlanStore, IPlanTypeDropdownOption } from 'src/app/shared/stores/plan/plan.store';
 import { RoleService } from 'src/app/shared/services/role/role-service';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 interface IDropdownOption {
   label: string;
@@ -28,7 +29,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-internal-users-dashboard-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe],
+  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe,MultiSelectModule],
   templateUrl: './internal-users-dashboard-plans-filter.html',
   styleUrl: './internal-users-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,20 +46,13 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   readonly filter = this.filterService.filter;
 
   planTypeOptions = computed<IDropdownOption[]>(() => {
-    return this.planStore.planTypeOptions() as IDropdownOption[];
+    var list = this.planStore.planTypeOptions() as IDropdownOption[];
+    return list.filter(x=>x.value !== null);
   });
 
   statusOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
-
-    // Base option: "All Statuses"
-    const allStatusesOption: IDropdownOption =
-      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null };
-
-    // Get role-specific status options
-    const roleSpecificOptions = this.getRoleSpecificStatusOptions();
-
-    return [allStatusesOption, ...roleSpecificOptions];
+    return this.getRoleSpecificStatusOptions();
   });
 
   /**
@@ -80,6 +74,22 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
       {
         label: this.i18nService.translate('plans.employee_status.underReview'),
         value: EInternalUserPlanStatus.UNDER_REVIEW,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.returnedByDV'),
+        value: EInternalUserPlanStatus.ReturnedByDV,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.dvRejected'),
+        value: EInternalUserPlanStatus.DV_REJECTED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
+        value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.deptApproved'),
+        value: EInternalUserPlanStatus.DEPT_APPROVED,
       }
     ];
   }
@@ -88,17 +98,21 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   // Division Manager Statuses Options
   private getDivisionManagerStatusOptions(): IDropdownOption[] {
     return [
-      // {
-      //   label: this.i18nService.translate('plans.employee_status.employeeApproved'),
-      //   value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
-      // },
-      // {
-      //   label: this.i18nService.translate('plans.employee_status.deptRejected'),
-      //   value: EInternalUserPlanStatus.DEPT_REJECTED,
-      // },
+      {
+        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
+        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.deptRejected'),
+        value: EInternalUserPlanStatus.DEPT_REJECTED,
+      },
       {
         label: this.i18nService.translate('plans.employee_status.unassigned'),
         value: EInternalUserPlanStatus.UNASSIGNED,
+      },
+      {
+        label: this.i18nService.translate('plans.employee_status.returnedByDEPTManager'),
+        value: EInternalUserPlanStatus.ReturnedByDEPTManager,
       },
     ];
   }
