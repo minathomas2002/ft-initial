@@ -1,0 +1,65 @@
+---
+description: State management with NgRx Signals and Angular signals
+globs: **/*.ts
+alwaysApply: false
+---
+
+# State Management (NgRx / Signals)
+
+Use **NgRx Signal Store** for global or feature-level state. Use **Angular signals** for local, component-only state and one-off derived values.
+
+## When to Use What
+
+| Use case | Approach |
+|----------|----------|
+| Shared state across routes/features (auth, plans, opportunities) | NgRx Signal Store |
+| API-driven state, loading/error, server cache | NgRx Signal Store |
+| Form state or UI state in a single component | `signal()`, `computed()`, `effect()` |
+| Derived values from store or local state | `computed()` |
+
+## NgRx Signal Store Conventions
+
+- **Store definition**: `signalStore({ providedIn: 'root' }, withState(...), withComputed(...), withMethods(...))`.
+- **Initial state**: Define a typed `initialState` constant and pass it to `withState(initialState)`.
+- **Updates**: Use `patchState(store, { ... })` inside store methods; avoid mutating state directly.
+- **Computed state**: Use `withComputed((store) => ({ ... }))` and Angular `computed()` for derived values.
+- **Side effects / API calls**: Implement in `withMethods((store) => { ... })`; call `patchState` for loading/error/success.
+- **Inject store**: `readonly store = inject(MyStore)` in components; use `store.property()` and `store.method()` in templates or code.
+
+```typescript
+// Store: typed initialState + signalStore
+const initialState = { list: [], loading: false, error: null };
+export const MyStore = signalStore(
+  { providedIn: 'root' },
+  withState(initialState),
+  withComputed((store) => ({
+    hasItems: computed(() => store.list().length > 0),
+  })),
+  withMethods((store) => {
+    const api = inject(MyApiService);
+    return {
+      load() {
+        patchState(store, { loading: true });
+        api.getList().pipe(
+          tap((list) => patchState(store, { list, loading: false })),
+          catchError((err) => { patchState(store, { error: err.message, loading: false }); return of([]); })
+        ).subscribe();
+      },
+    };
+  })
+);
+```
+
+## Angular Signals in Components
+
+- **Local state**: `readonly count = signal(0);` then `this.count.set(1)` or `this.count.update(v => v + 1)`.
+- **Derived state**: `readonly doubled = computed(() => this.count() * 2);`
+- **Reactions**: Use `effect()` for sync with store or DOM; avoid business logic in effects. Prefer `computed` when possible.
+- **Unsubscribe**: Prefer `async` pipe or signals; if subscribing to Observables, use `takeUntilDestroyed()` or manual cleanup.
+
+## Rules of Thumb
+
+- One store per feature/domain (e.g. `AuthStore`, `PlanStore`); keep state shape flat where reasonable.
+- Prefer exposing store as signals (e.g. `store.list()`) and using `computed()` in the store or component rather than duplicating logic.
+- Do not put NgRx Store and component signals in the same file for the same state; choose one source of truth.
+- Use strong typing for store state and method parameters; avoid `any`.
