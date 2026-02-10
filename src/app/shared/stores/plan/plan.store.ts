@@ -502,7 +502,7 @@ export const PlanStore = signalStore(
 
       employeeApprovePlan(planId: string, reason?: string) {
         patchState(store, { isProcessing: true, error: null });
-        return planApiService.employeeTogglePlanStatus({ planId, status: EemployeePlanAction.Approve, reason }).pipe(
+        return planApiService.internalApprovePlanStatus({ planId, status: EemployeePlanAction.Approve, reason }).pipe(
           tap(() => {
             patchState(store, { isProcessing: false });
           }),
@@ -519,8 +519,9 @@ export const PlanStore = signalStore(
       },
 
       employeeRejectPlan(planId: string, reason: string) {
+        debugger
         patchState(store, { isProcessing: true, error: null });
-        return planApiService.employeeTogglePlanStatus({ planId, status: EemployeePlanAction.Reject, reason }).pipe(
+        return planApiService.internalRejectPlanStatus({ planId, status: EemployeePlanAction.Reject, reason }).pipe(
           tap(() => {
             patchState(store, { isProcessing: false });
           }),

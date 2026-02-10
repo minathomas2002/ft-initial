@@ -109,7 +109,8 @@ function handlePlansNotificationFlow(notification: INotification) {
     EPlanAction.DeptRejected,
     EPlanAction.DVRejected,
     EPlanAction.DVRejectionAcknowledged,
-    EPlanAction.SystemReminder
+    EPlanAction.SystemReminder,
+    EPlanAction.Approved,
   ]);
 
   if (actionsToNavigate.has(action)) {
