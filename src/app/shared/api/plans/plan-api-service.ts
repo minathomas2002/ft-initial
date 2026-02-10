@@ -54,8 +54,13 @@ export class PlanApiService {
     return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.reSubmitServicePlan, req);
   }
 
-  employeeTogglePlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined }): Observable<IBaseApiResponse<boolean>> {
-    return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined }, unknown>(API_ENDPOINTS.plans.employeeTogglePlanStatus, req);
+  internalApprovePlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined }): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined }, unknown>(API_ENDPOINTS.plans.internalApprovePlan, req);
+  }
+
+  internalRejectPlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined }): Observable<IBaseApiResponse<boolean>> {
+    debugger
+    return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined }, unknown>(API_ENDPOINTS.plans.internalRejectPlan, req);
   }
 
   getProductPlan(req: { planId: string }): Observable<IBaseApiResponse<IProductPlanResponse>> {
