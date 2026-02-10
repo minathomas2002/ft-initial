@@ -331,6 +331,19 @@ function findByPage<T extends { pageNumber: number }>(items: T[] | undefined, pa
   return (items ?? []).find((x) => x.pageNumber === pageNumber);
 }
 
+function inferIncludedStepsFromServices(services: ServiceItem[]): {
+  includeExistingSaudi: boolean;
+  includeDirectLocalization: boolean;
+} {
+  const collaboration = Number(ELocalizationMethodology.Collaboration);
+  const direct = Number(ELocalizationMethodology.Direct);
+
+  const includeExistingSaudi = (services ?? []).some((s) => (s.serviceLocalizationMethodology ?? []).includes(collaboration));
+  const includeDirectLocalization = (services ?? []).some((s) => (s.serviceLocalizationMethodology ?? []).includes(direct));
+
+  return { includeExistingSaudi, includeDirectLocalization };
+}
+
 function findByServiceId<T extends { planServiceTypeId: string; pageNumber?: number }>(
   items: T[] | undefined,
   planServiceTypeId: string,
@@ -1069,9 +1082,6 @@ export function mapServiceLocalizationPlanFormToRequest(
     includeDirectLocalization?: boolean;
   }
 ): IServiceLocalizationPlanRequest {
-  const includeExistingSaudi = options?.includeExistingSaudi ?? true;
-  const includeDirectLocalization = options?.includeDirectLocalization ?? true;
-
   const basicInfoGroup = formService.basicInformationFormGroup;
   const coverCompanyInfoGroup = formService.coverPageCompanyInformationFormGroup;
 
@@ -1081,6 +1091,12 @@ export function mapServiceLocalizationPlanFormToRequest(
 
   // Map services and company info
   const { services, companyInformationSection, localAgentDetailSection } = mapServicesAndCompanyInfo(formService);
+
+  // Determine whether step 3/4 should be included.
+  // If options are omitted, infer from selected localization methodologies (same as wizard logic).
+  const inferred = inferIncludedStepsFromServices(services);
+  const includeExistingSaudi = options?.includeExistingSaudi ?? inferred.includeExistingSaudi;
+  const includeDirectLocalization = options?.includeDirectLocalization ?? inferred.includeDirectLocalization;
 
   // Map existing saudi data
   const existingSaudiData = includeExistingSaudi ? mapExistingSaudiData(formService) : undefined;

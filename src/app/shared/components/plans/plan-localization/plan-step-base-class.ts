@@ -91,25 +91,32 @@ export abstract class PlanStepBaseClass {
   // Abstract method - must be implemented by subclasses
   abstract getFormGroup(): FormGroup;
 
-  // Get comment form control from the form group
+  // Get comment form control from the form group.
+  // Always ensures the control has no validators so it can never
+  // make the parent FormGroup invalid and block plan submission.
   protected get commentFormControl(): FormControl<string> {
     const formGroup = this.getFormGroup();
     let control = formGroup.get(EMaterialsFormControls.comment) as FormControl<string> | null;
     if (!control) {
       // Create a new control if it doesn't exist (shouldn't happen in normal flow, but defensive)
-      // Use nonNullable: true to ensure type is FormControl<string> not FormControl<string | null>
-      control = new FormControl('', { nonNullable: true }) as FormControl<string>;
+      control = new FormControl('') as FormControl<string>;
       formGroup.addControl(EMaterialsFormControls.comment, control);
+    }
+    // Defensively strip any validators that may have been attached elsewhere.
+    if (control.validator || control.asyncValidator) {
+      control.clearValidators();
+      control.clearAsyncValidators();
+      control.updateValueAndValidity({ emitEvent: false });
     }
     return control;
   }
 
   // A dedicated, always-disabled control for displaying the comment inside each step.
   // This prevents editing in the step UI while keeping the dialog editable.
-  private readonly stepCommentControl = new FormControl<string>('', { nonNullable: true });
+  private readonly stepCommentControl = new FormControl<string>('');
   private stepCommentSyncInitialized = false;
 
-  protected get stepCommentFormControl(): FormControl<string> {
+  protected get stepCommentFormControl(): FormControl<string | null> {
     return this.stepCommentControl;
   }
 
@@ -626,13 +633,17 @@ export abstract class PlanStepBaseClass {
     if (this.isResubmitMode()) {
       this.commentPhase.set('none');
       this.commentFormControl.disable({ emitEvent: false });
-      this.selectedInputs.set(this.correctedFields())
+      this.selectedInputs.set(this.correctedFields());
+      // In resubmit mode, keep fields in the store (needed for correctedFields derivation)
+      // but clear the comment text and remove from currentUserPageComments
+      this.planCommentSyncService.clearPageCommentTextInStore(this.pageTitle());
     } else {
       this.commentPhase.set('adding');
+      this.selectedInputs.set([]);
+      // In non-resubmit mode, remove the entry entirely from the store
+      this.planCommentSyncService.removePageCommentFromStore(this.pageTitle());
     }
     this.showDeleteConfirmationDialog.set(false);
-    this.planCommentSyncService.syncPageCommentToStore(this.pageComment())
-    this.planStore.updateCurrentUserPageComments(this.planStore.currentUserPageComments().filter(c => c !== this.pageTitle()));
     this.toasterService.success('Your comments and selected fields were removed successfully.');
   }
 

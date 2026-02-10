@@ -596,6 +596,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter approved vendor ID'"
                 [min]="0"
                 [maxlength]="7"
+                [allowEmpty]="false"
                 [useGrouping]="false"
                 [minFractionDigits]="0"
                 [maxFractionDigits]="0"
@@ -629,6 +630,7 @@
                 fluid
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter years of experience'"
                 [maxlength]="2"
+                [allowEmpty]="false"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
                 [appConditionalColorClass]="highlightInput('yearsOfExperienceSEC')"
                 [color]="selectedInputColor()"
@@ -658,6 +660,7 @@
               <p-inputnumber
                 fluid
                 [maxlength]="10"
+                [allowEmpty]="false"
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter total quantities provided to SEC'"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
                 [appConditionalColorClass]="highlightInput('totalQuantitiesSEC')"
