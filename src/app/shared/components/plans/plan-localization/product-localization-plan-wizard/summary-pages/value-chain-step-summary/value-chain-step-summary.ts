@@ -94,6 +94,15 @@ export class ValueChainStepSummary extends SummaryStepBaseClass {
     { requireSync: true }
   );
 
+  /** True when step 3 form has validateTotalCostPercentage error (total cost % !== 100). */
+  hasTotalCostPercentageError = toSignal(
+    merge(this.formGroup.valueChanges, this.formGroup.statusChanges).pipe(
+      startWith(null),
+      map(() => !!(this.formGroup.errors?.['totalExceeds100']))
+    ),
+    { initialValue: !!(this.formGroup.errors?.['totalExceeds100']) }
+  );
+
   designEngineeringSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('designEngineering'));
   sourcingSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('sourcing'));
   manufacturingSummaryFields = computed<IFieldInformation[]>(() => this.getSectionSummaryFields('manufacturing'));

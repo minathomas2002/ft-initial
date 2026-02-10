@@ -10,7 +10,7 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { AgreementType, EServiceCompanyType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
+import { AgreementType, EPlanPageTitle, EServiceCompanyType, EServiceProvidedTo, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums/plan.enum';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
@@ -23,7 +23,7 @@ import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } fro
 import { TColors } from 'src/app/shared/interfaces';
 import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { FormsModule } from '@angular/forms';
-import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 
 @Component({
@@ -44,6 +44,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
     GeneralConfirmationDialogComponent,
     FormsModule,
     ConditionalColorClassDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     CommentInputComponent,
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
@@ -57,7 +58,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
 
-  pageTitle = input.required<string>();
+  pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
   commentPhase = model<TCommentPhase>('none');
   selectedInputs = model<IFieldInformation[]>([]);
@@ -99,12 +100,12 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
   saudiCompanyDetailsHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
-      [EMaterialsFormControls.products]: 'If Manufacturer is Qualified / Under-Prequalification, specify the product(s)',
-      [EMaterialsFormControls.companyOverview]: 'If Manufacturer is Not Qualified, provide Company Overview',
+      [EMaterialsFormControls.products]: 'If the Company Type is “Manufacturer” and Qualification Status is “Qualified / Under-Prequalification” Specify the products(s)',
+      [EMaterialsFormControls.companyOverview]: 'If the Company Type is “Manufacturer” and Qualification Status is “Not Qualified” provide Company Overview',
       [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: 'If Company Type is Contractor, Mention few key projects executed by the Contractor for SEC',
       [EMaterialsFormControls.companyOverviewKeyProjectDetails]: 'If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.',
       [EMaterialsFormControls.companyOverviewOther]: 'If Company Type is Other Provide company overview',
-      [EMaterialsFormControls.qualificationStatus]: '(Qualified / Under-Prequalification / Not Qualified)',
+      [EMaterialsFormControls.qualificationStatus]: 'If the Company Type is “Manufacturer” select “Qualification Status”',
       [EMaterialsFormControls.supervisionOversightEntity]: 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.)',
     };
   });
@@ -113,7 +114,6 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   onStartEditing(): void {
     if (this.isResubmitMode()) {
       this.commentPhase.set('editing');
-
     }
   }
   EServiceProvidedTo = EServiceProvidedTo;
@@ -137,7 +137,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     // In non-review modes, we can trust actual control enabled/disabled state.
     // In review mode, the wizard disables the whole form, so rely on the builder's
     // conditional logic (based on dropdown selections) to decide selectability.
-    if (!this.isReviewMode()) {
+    if (!this.isReviewMode() && !this.isViewMode()) {
       return !targetValueControl.disabled;
     }
 
@@ -254,7 +254,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
       { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
       { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
-      { label: 'Key Measures to Upskill Saudis', rowspan: 2, dataGroup: false },
+      { label: 'Key measures to upskill Saudis', rowspan: 2, dataGroup: false },
       { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
     ];
   });
@@ -713,11 +713,20 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         control.valueChanges
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((value) => {
+            const isOther = value === AgreementType.Other.toString();
+            // When user changes away from "Other", remove the Other details field from selectedInputs
+            // so the wizard indicator updates correctly.
+            if (!isOther) {
+              const inputKey = `agreementOtherDetails_${index}`;
+              const current = this.selectedInputs();
+              const updated = current.filter(
+                input => !(input.section === 'collaborationPartnership' && input.inputKey === inputKey)
+              );
+              if (updated.length !== current.length) this.selectedInputs.set(updated);
+            }
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
               this._userChangedDropdowns.add(`agreementType_${index}`);
-              // Enable the conditional field if dropdown is now "Other"
-              const isOther = value === AgreementType.Other.toString();
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.agreementOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });

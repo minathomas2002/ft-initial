@@ -5,6 +5,7 @@ import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-f
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-collaboration-partnership-summary-section',
@@ -62,6 +63,7 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
         const isResolved =
           hasComment &&
           !hasCommentChecked &&
+          this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
           ['view', 'Review'].includes(this.planStore.wizardMode()) &&
           this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return {

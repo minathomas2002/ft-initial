@@ -17,7 +17,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
       }),
-      [EMaterialsFormControls.registeredVendorIDwithSEC]:  this.fb.group({
+      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(null, [Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
       }),
@@ -139,11 +139,11 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach(yearControl => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, Integer only
+        [EMaterialsFormControls.value]: [0, [Validators.required]], // Required, Integer only
       });
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100)]], // Required, Percentage 0-100
+        [EMaterialsFormControls.value]: [0, [Validators.required, Validators.max(100)]], // Required, Percentage 0-100
       });
     });
 
@@ -173,7 +173,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(50)]], // Required, Quarter & Year
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, Quarter & Year
       }),
     };
 
@@ -191,7 +191,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]],
+        [EMaterialsFormControls.value]: [0, [Validators.required]],
       });
     });
 
@@ -199,7 +199,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100)]],
+        [EMaterialsFormControls.value]: [0, [Validators.required, Validators.max(100)]],
       });
     });
 

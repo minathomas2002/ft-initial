@@ -1,5 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { ITimeLineResponse } from 'src/app/shared/interfaces/plans.interface';
+import { ICommentFields, ITimeLineResponse } from 'src/app/shared/interfaces/plans.interface';
 import { Timeline } from "../../utility-components/timeline/timeline";
 import { EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
 import { Divider } from "primeng/divider";
@@ -26,9 +26,9 @@ import { TextareaModule } from 'primeng/textarea';
     Divider,
     IdentifyUserComponent,
     BaseTagComponent,
-    CamelCaseToWordPipe,
     TextareaModule
   ],
+  providers: [CamelCaseToWordPipe],
   templateUrl: './plan-timeline-component.html',
   styleUrl: './plan-timeline-component.scss',
 })
@@ -39,6 +39,7 @@ export class TimelineComponent {
   private readonly actionPlanMapper = new PlanTimelineActionsMapper(this.i18nService);
   private readonly planTimelineStatusMapper = new PlanTimelineStatusMapper(this.i18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
+  private readonly camelCaseToWordPipe = inject(CamelCaseToWordPipe);
   planStatus = computed(() => this.planStatusFactory.handleValidateStatus());
   events = computed<{ color: TColors; item: ITimeLineResponse }[]>(() => {
     const requestData = this.timelineRequests();
@@ -87,4 +88,10 @@ export class TimelineComponent {
     return this.planTimelineStatusMapper.getStatusLabel(status);
   }
 
+  getCommentFieldLabel(field: ICommentFields) {
+    if (field.section.toLowerCase() === field.label.toLowerCase()) {
+      return field.label
+    }
+    return this.camelCaseToWordPipe.transform(field.section) + ' - ' + field.label
+  }
 }

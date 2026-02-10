@@ -6,6 +6,7 @@ import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { EServiceCompanyType, EServiceQualificationStatus } from 'src/app/shared/enums/plan.enum';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 @Component({
   selector: 'app-saudi-company-details-summary-section',
   imports: [PlanSummaryFlied, TableModule],
@@ -67,6 +68,7 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
           hasComment &&
           !hasCommentChecked &&
           ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+          this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
           this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return {
           label,

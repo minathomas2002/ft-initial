@@ -3,8 +3,9 @@
   <app-plan-summary-flied [planSummaryField]="buildingPercentageSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="machineryEquipmentPercentageSummaryField()" />
   <app-plan-summary-flied [planSummaryField]="othersPercentageSummaryField()" />
+
   @let othersDescription = othersDescriptionSummaryField();
-  @if (othersDescription.currantValue.toString().trim()) {
+  @if (showOthersDescription()) {
     <app-plan-summary-flied [planSummaryField]="othersDescription" />
   }
 </div>

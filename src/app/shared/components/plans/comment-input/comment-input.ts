@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
+import { distinctUntilChanged } from 'rxjs';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { TCommentPhase } from '../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
-import { trimmedRequiredValidator } from 'src/app/shared/validators/trimmed-required-validator';
 
 @Component({
   selector: 'app-comment-input',
@@ -19,22 +20,31 @@ import { trimmedRequiredValidator } from 'src/app/shared/validators/trimmed-requ
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentInputComponent {
+  private readonly destroyRef = inject(DestroyRef);
+
   commentFormControl = input.required<FormControl<string>>();
   commentPhase = input.required<TCommentPhase>();
 
   constructor() {
-    // Add trimmedRequired validator when editing, remove when not editing
     effect(() => {
       const control = this.commentFormControl();
-      const phase = this.commentPhase();
-    
-      const validators =
-        phase === 'editing' || phase === 'adding'
-          ? [trimmedRequiredValidator]
-          : [];
-    
-      control.setValidators(validators);
-      control.updateValueAndValidity({ emitEvent: false });
+
+      // Clear any leftover validators to ensure the control
+      // never taints the parent FormGroup's validity.
+      if (control.validator) {
+        control.clearValidators();
+        control.updateValueAndValidity({ emitEvent: false });
+      }
+
+      // Reactively reject whitespace-only input as the user types.
+      // If the value is purely whitespace, reset to empty string.
+      control.valueChanges
+        .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+        .subscribe((value) => {
+          if (value && value.length > 0 && value.trim().length === 0) {
+            control.setValue('', { emitEvent: false });
+          }
+        });
     });
   }
 }

@@ -121,7 +121,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.expectedLocalizationDate]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(50)]),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]),
       }),
       [EMaterialsFormControls.serviceLocalizationMethodology]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),

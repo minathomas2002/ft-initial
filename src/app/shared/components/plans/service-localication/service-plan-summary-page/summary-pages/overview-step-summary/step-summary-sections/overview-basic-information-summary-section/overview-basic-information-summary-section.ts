@@ -26,7 +26,7 @@ export class OverviewBasicInformationSummarySection extends SummarySectionBaseCl
       beforeValue: '',
       currantValue: display,
       hasError: this.opportunityControl() ? this.isFieldHasError(this.opportunityControl()) : false,
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.opportunity, null),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.opportunity, null),
       isResolved: false,
       showDifference: false,
     };

@@ -12,7 +12,7 @@ import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapP
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
-import { EMaterialsFormControls, EOpportunityType } from "src/app/shared/enums";
+import { EMaterialsFormControls, EOpportunityType, EPlanPageTitle } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
 import { IFieldInformation, IPageComment, IProductPlanResponse, Signature } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
@@ -35,9 +35,13 @@ import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan
 import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
 import { WizardActionFactory, IWizardActionConfig } from "src/app/shared/services/wizard/wizard-action-factory.service";
 import { IBaseWizardAction } from "../../../base-components/base-wizard-actions/base-wizard-actions";
+import { SkeletonModule } from "primeng/skeleton";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
-
+export interface ICommentsCountAndPhase {
+  count: number;
+  phase: TCommentPhase;
+}
 type ProductLocalizationWizardStepId =
   | 'overview'
   | 'productPlant'
@@ -55,6 +59,7 @@ type ProductLocalizationWizardStepId =
     PlanLocalizationStep04SaudizationForm,
     ProductPlanSummaryPage,
     ButtonModule,
+    SkeletonModule,
     BaseTagComponent,
     StepContentDirective,
     SubmissionConfirmationModalComponent,
@@ -88,7 +93,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
-    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.activeStep() < 5)
+    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.planStatus() !== EInvestorPlanStatus.DRAFT && this.activeStep() < 5)
   })
 
   // Track validation errors for stepper indicators
@@ -114,51 +119,51 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   // Used by the active step content components (they only render one step at a time)
   commentColor = computed(() => {
-    const step = this.activeStep();
-    return this.getCommentColorForStep(this.getCommentPhaseForStepId(this.getStepIdFromStepIndex(step) ?? ''));
+    const stepId = this.getStepIdFromStepIndex(this.activeStep());
+    return stepId ? this.getCommentColorForStep(this.getCommentPhaseForStepId(stepId)) : 'orange';
   });
 
   steps = computed<IWizardStepState[]>(() => {
     this.i18nService.currentLanguage();
     return [
       {
-        title: this.i18nService.translate('plans.wizard.step1.title'),
+        title: EPlanPageTitle.OverviewAndCompanyInformation,
         description: this.i18nService.translate('plans.wizard.step1.description'),
         isActive: this.activeStep() === 1,
         formState: this.productPlanFormService.overviewCompanyInformation,
-        hasErrors: this.step1CommentPhase() === 'none',
+        hasErrors: this.step1CommentPhase() === 'none' || this.step1CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step1CommentPhase()),
       },
       {
-        title: this.i18nService.translate('plans.wizard.step2.title'),
+        title: EPlanPageTitle.ProductAndPlantOverview,
         description: this.i18nService.translate('plans.wizard.step2.description'),
         isActive: this.activeStep() === 2,
         formState: this.productPlanFormService.step2_productPlantOverview,
-        hasErrors: this.step2CommentPhase() === 'none',
+        hasErrors: this.step2CommentPhase() === 'none' || this.step2CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step2CommentPhase()),
       },
       {
-        title: this.i18nService.translate('plans.wizard.step3.title'),
+        title: EPlanPageTitle.ValueChain,
         description: this.i18nService.translate('plans.wizard.step3.description'),
         isActive: this.activeStep() === 3,
         formState: this.productPlanFormService.step3_valueChain,
-        hasErrors: this.step3CommentPhase() === 'none',
+        hasErrors: this.step3CommentPhase() === 'none' || this.step3CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step3CommentPhase()),
       },
       {
-        title: this.i18nService.translate('plans.wizard.step4.title'),
+        title: EPlanPageTitle.Saudization,
         description: this.i18nService.translate('plans.wizard.step4.description'),
         isActive: this.activeStep() === 4,
         formState: this.productPlanFormService.step4_saudization,
-        hasErrors: this.step4CommentPhase() === 'none',
+        hasErrors: this.step4CommentPhase() === 'none' || this.step4CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
         commentColor: this.getCommentColorForStep(this.step4CommentPhase()),
       },
       {
-        title: this.i18nService.translate('plans.wizard.step5.title'),
+        title: EPlanPageTitle.Summary,
         description: this.i18nService.translate('plans.wizard.step5.description'),
         isActive: this.activeStep() === 5,
         formState: null,
@@ -184,7 +189,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   // Computed signal to check if incoming comments should be shown
   shouldShowIncomingComments = computed(() => {
     const mode = this.planStore.wizardMode();
-    return mode === 'view' || mode === 'Review' || mode === 'resubmit';
+    const creatorRole = this.planStore.planComments()?.creatorRole;
+    const currentSignedUser = this.authStore.jwtUserDetails()
+    const isSameUserRole = currentSignedUser?.RoleCodes.toString() === creatorRole?.toString()
+
+    return (mode === 'view' || mode === 'Review' || mode === 'resubmit') && !isSameUserRole;
   });
 
   // Computed signals to map comments to each step based on pageTitleForTL
@@ -192,27 +201,27 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const comments = this.planComments()?.comments || [];
     // Match by step title translation key or actual title
     return comments.filter(c => {
-      const stepTitle = this.i18nService.translate('plans.wizard.step1.title');
-      return c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Overview & Company Information';
+      const stepTitle = EPlanPageTitle.OverviewAndCompanyInformation;
+      return c.pageTitleForTL === stepTitle;
     });
   });
 
   step2Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
     const stepTitle = this.i18nService.translate('plans.wizard.step2.title');
-    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Product Plant Overview');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === EPlanPageTitle.ProductAndPlantOverview);
   });
 
   step3Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
     const stepTitle = this.i18nService.translate('plans.wizard.step3.title');
-    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Value Chain');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === EPlanPageTitle.ValueChain);
   });
 
   step4Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
     const stepTitle = this.i18nService.translate('plans.wizard.step4.title');
-    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === 'Saudization');
+    return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === EPlanPageTitle.Saudization);
   });
 
   // Computed signals to map comment fields to selectedInputs for each step
@@ -299,25 +308,65 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return this.step4Comments().map(c => c.comment).join('\n\n');
   });
 
+  step1CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[0].commentsCount ?? 0,
+      phase: this.step1CommentPhase()
+    };
+  });
+
+  step2CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[1].commentsCount ?? 0,
+      phase: this.step2CommentPhase()
+    };
+  });
+
+  step3CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[2].commentsCount ?? 0,
+      phase: this.step3CommentPhase()
+    };
+  });
+
+  step4CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    return {
+      count: this.steps()[3].commentsCount ?? 0,
+      phase: this.step4CommentPhase()
+    };
+  });
+
   // Computed signals to check if incoming comments exist and have content
   hasIncomingStep1Comments = computed(() => {
-    const comments = this.step1Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[0];
+    return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
+    );
   });
 
   hasIncomingStep2Comments = computed(() => {
-    const comments = this.step2Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[1];
+    return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase())
+    );
   });
 
   hasIncomingStep3Comments = computed(() => {
-    const comments = this.step3Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[2];
+    return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
+    );
   });
 
   hasIncomingStep4Comments = computed(() => {
-    const comments = this.step4Comments();
-    return comments.length > 0 && comments.some(c => c.comment && c.comment.trim().length > 0);
+    const step = this.steps()[3];
+    return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
+      this.isViewMode() ||
+      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
+    );
   });
 
   // Helper methods to get combined incoming comment text for each step
@@ -345,7 +394,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     if (currentMode === 'resubmit') return 'Resubmit Product Localization Plan';
     return this.i18nService.translate('plans.wizard.title.create');
   });
-  isLoading = signal(false);
   isLoadingPlan = signal(false);
 
   // Submission confirmation modal
@@ -353,7 +401,16 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
 
+  // Extract contactInfo from planSignature for submission modal
+  contactInfo = computed(() => {
+    const signature = this.planSignature();
+    return signature?.contactInfo ?? {};
+  });
+
   showConfirmLeaveDialog = model(false);
+
+  // Value Chain: non-investor add-comments info dialog
+  showValueChainAddCommentInfoDialog = signal<boolean>(false);
   // Store original plan response for before/after comparison
   originalPlanResponse = signal<IProductPlanResponse | null>(null);
   // Computed signal for view mode
@@ -394,6 +451,20 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   isInvestorViewMode = computed(() => {
     return this.isViewMode() && this.isInvestorPersona() && this.isPendingStatusForInvestor();
   });
+
+  override onAddComment(): void {
+    // Requirement: For non-investors, show an info/confirmation dialog when starting comments on Value Chain step.
+    if (!this.isInvestorPersona() && this.activeStep() === 3 && !this.showValueChainAddCommentInfoDialog()) {
+      this.showValueChainAddCommentInfoDialog.set(true);
+      return;
+    }
+    super.onAddComment();
+  }
+
+  onConfirmValueChainAddCommentInfo(): void {
+    this.showValueChainAddCommentInfoDialog.set(false);
+    super.onAddComment();
+  }
 
   // Computed signals for plan status tag
   planStatus = signal<EInternalUserPlanStatus | EInvestorPlanStatus | null>(null);
@@ -485,7 +556,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     mode: this.mode(),
     activeStep: this.activeStep,
     totalSteps: this.totalSteps,
-    isLoading: this.isLoading,
+    isLoading: this.isLoadingPlan,
     isProcessing: this.isProcessing,
     hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode() || this.isInvestorViewMode()),
     canApproveOrReject: this.canApproveOrReject,
@@ -638,15 +709,21 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   onSummarySubmitClick(): void {
     // In resubmit mode, only validate steps that have corrected fields. Steps with no comments
     // or highlighted inputs are fully disabled; we must not block resubmit due to their validity.
+    // Use actual corrected field count (not comment entry count) to decide which
+    // steps need validation. A step with a comment but zero fields has nothing to
+    // validate and its FormGroup may be fully DISABLED.
     const resubmitStepsToValidate = this.isResubmitMode()
       ? {
-        step1: this.step1CorrectedFieldsFiltered().length > 0,
-        step2: this.step2CorrectedFieldsFiltered().length > 0,
-        step3: this.step3CorrectedFieldsFiltered().length > 0,
-        step4: this.step4CorrectedFieldsFiltered().length > 0,
+        step1: this.step1CommentFields().length > 0,
+        step2: this.step2CommentFields().length > 0,
+        step3: this.step3CommentFields().length > 0,
+        step4: this.step4CommentFields().length > 0,
       }
       : undefined;
-
+    console.log(this.productPlanFormService.step1_overviewCompanyInformation);
+    console.log(this.productPlanFormService.step2_productPlantOverview);
+    console.log(this.productPlanFormService.step3_valueChain);
+    console.log(this.productPlanFormService.step4_saudization);
     // Check if all forms are valid
     if (!this.productPlanFormService.areAllFormsValid({ resubmitStepsToValidate })) {
       // Mark all controls as dirty to show validation errors
@@ -1097,9 +1174,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   /**
-   * Validates step 03 value chain form arrays
-   * If any form array item has dirty controls (cost, inhouse, or years) but expenseHeader is empty,
-   * marks expenseHeader as dirty and returns error message
+   * Validates step 03 value chain form arrays.
+   * For every form array item that has a value in cost, in-house, or years but empty expenseHeader,
+   * marks that expenseHeader control as dirty. Marks all invalid expenseHeader controls across all
+   * sections, then returns a single error message if any were invalid.
    */
   private validateStep03ValueChain(): string | null {
     const formArrays = [
@@ -1109,6 +1187,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       { name: 'Assembly & Testing', formArray: this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.assemblyTestingFormGroup) },
       { name: 'After-Sales', formArray: this.productPlanFormService.getValueChainSectionFormArray(EMaterialsFormControls.afterSalesFormGroup) }
     ];
+
+    const invalidExpenseHeaderControls: { control: FormControl<unknown>; sectionName: string }[] = [];
 
     for (const section of formArrays) {
       if (!section.formArray) {
@@ -1121,7 +1201,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           continue;
         }
 
-        // Get form controls
         const expenseHeaderControl = itemControl.get(EMaterialsFormControls.expenseHeader);
         const costPercentageControl = itemControl.get(EMaterialsFormControls.costPercentage);
         const inHouseOrProcuredControl = itemControl.get(EMaterialsFormControls.inHouseOrProcured);
@@ -1135,7 +1214,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           itemControl.get(EMaterialsFormControls.year7)
         ];
 
-        // Get actual value controls using getValueControl helper
         const expenseHeaderValueControl = expenseHeaderControl ? this.productPlanFormService.getValueControl(expenseHeaderControl) : null;
         const costPercentageValueControl = costPercentageControl ? this.productPlanFormService.getValueControl(costPercentageControl) : null;
         const inHouseOrProcuredValueControl = inHouseOrProcuredControl ? this.productPlanFormService.getValueControl(inHouseOrProcuredControl) : null;
@@ -1143,23 +1221,37 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           .filter(control => control !== null)
           .map(control => this.productPlanFormService.getValueControl(control!));
 
-        // Check if any of these controls are dirty
         const hasDirtyControl =
           (costPercentageValueControl?.dirty) ||
           (inHouseOrProcuredValueControl?.dirty) ||
           yearValueControls.some(control => control?.dirty);
 
-        // If any control is dirty, check if expenseHeader is filled
-        if (hasDirtyControl && expenseHeaderValueControl) {
+        const hasValue =
+          (costPercentageValueControl?.value) ||
+          (inHouseOrProcuredValueControl?.value) ||
+          yearValueControls.some(control => control?.value);
+
+        if (hasDirtyControl && expenseHeaderValueControl && hasValue) {
           const expenseHeaderValue = expenseHeaderValueControl.value;
           if (!expenseHeaderValue || (typeof expenseHeaderValue === 'string' && expenseHeaderValue.trim() === '')) {
-            // Mark expenseHeader as dirty
-            expenseHeaderValueControl.markAsDirty();
-            expenseHeaderValueControl.updateValueAndValidity();
-            return `Expense Header is required in ${section.name} section. Please fill it before saving as draft.`;
+            invalidExpenseHeaderControls.push({ control: expenseHeaderValueControl, sectionName: section.name });
           }
         }
       }
+    }
+
+    // Mark all invalid expenseHeader controls as dirty
+    const sectionNames = [...new Set(invalidExpenseHeaderControls.map(x => x.sectionName))];
+    for (const { control } of invalidExpenseHeaderControls) {
+      control?.markAsDirty();
+      control?.updateValueAndValidity();
+    }
+
+    if (invalidExpenseHeaderControls.length > 0) {
+      const sectionsText = sectionNames.length === 1
+        ? sectionNames[0]
+        : sectionNames.join(', ');
+      return `Expense Header is required in ${sectionsText} section(s). Please fill it before saving as draft.`;
     }
 
     return null;
@@ -1344,16 +1436,23 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       const investorCommentControl = stepForm.get('comment') as FormControl<string> | null;
       const investorComment = investorCommentControl?.value?.trim() || '';
 
-      if (investorComment.length > 0 || correctedFields.length > 0) {
+      // If this step has no corrected/highlighted fields, don't include a comment object at all.
+      // Otherwise we end up sending `Comments[i].pageTitleForTL` + empty `comment` and no `fields`,
+      // which breaks the API binding.
+      if (!correctedFields || correctedFields.length === 0) return;
+
+      if (investorComment.length > 0) {
         // Case 1: Investor added comments - use new investor comments
         Comments.push({
-          pageTitleForTL: this.steps()[stepIndex].title,
+          pageTitleForTL: this.steps()[stepIndex].title as EPlanPageTitle,
           comment: investorComment,
           fields: correctedFields,
         });
       } else if (employeeComments.length > 0) {
         // Case 2: Investor didn't add comments - use employee comments with empty comment
         employeeComments.forEach(employeeComment => {
+          // Defensive: skip empty-field comments so we never send a comment object without fields.
+          if (!employeeComment.fields || employeeComment.fields.length === 0) return;
           Comments.push({
             pageTitleForTL: employeeComment.pageTitleForTL,
             comment: '', // Empty string as per requirement
@@ -1435,8 +1534,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
    * Format: Comments[index].pageTitleForTL, Comments[index].comment, Comments[index].fields[index].section, etc.
    */
   private appendCommentsToFormData(formData: FormData, comments: IPageComment[]): void {
+    // Only append comments that actually contain fields, and reindex them to keep
+    // `Comments[0]..Comments[n]` contiguous for backend model binding.
+    const filteredComments = (comments ?? []).filter((c) => (c.fields?.length ?? 0) > 0);
 
-    comments.forEach((comment, commentIndex) => {
+    filteredComments.forEach((comment, commentIndex) => {
       // Append comment-level properties
       formData.append(`Comments[${commentIndex}].pageTitleForTL`, comment.pageTitleForTL || '');
       formData.append(`Comments[${commentIndex}].comment`, comment.comment || '');

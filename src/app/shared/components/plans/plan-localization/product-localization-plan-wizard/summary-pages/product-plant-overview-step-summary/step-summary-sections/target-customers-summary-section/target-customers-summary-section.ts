@@ -20,10 +20,15 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
 
   private formatTargetedCustomers(value: number[] | unknown): string {
     if (!Array.isArray(value) || value.length === 0) return '';
+    
+    const labelMap: Record<number, string> = {
+      [ETargetedCustomer.SEC]: 'SEC',
+      [ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS]: "SEC's approved local suppliers",
+    };
+    
     return value
       .map((id: number) => {
-        const label = ETargetedCustomer[id as unknown as keyof typeof ETargetedCustomer];
-        return label != null ? String(label).replace(/_/g, ' ') : String(id);
+        return labelMap[id] ?? String(id);
       })
       .join(', ');
   }
@@ -33,16 +38,22 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
     const value = this.targetedCustomerControl()?.value;
     const currantValue = Array.isArray(value) ? this.formatTargetedCustomers(value) : '';
     const targetSEC = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.targetSEC;
-    const beforeValue = Array.isArray(targetSEC) ? targetSEC.map((id: number) => ETargetedCustomer[id as unknown as keyof typeof ETargetedCustomer] ?? id).join(', ') : '';
+    const beforeValue = Array.isArray(targetSEC) ? this.formatTargetedCustomers(targetSEC) : '';
     return {
       label: 'Targeted Customer',
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.targetedCustomerControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.targetedCustomer),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.targetedCustomer),
       isResolved: this.isResolvedField(EMaterialsFormControls.targetedCustomer),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
+  });
+  
+  showNamesOfTargetedSuppliersAndProducts = computed(() => {
+    this.doRefresh();
+    const value = this.targetedCustomerControl()?.value;
+    return value?.includes(String(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS));
   });
 
   namesOfTargetedSuppliersSummaryField = computed<IPlanSummaryField>(() => {
@@ -54,7 +65,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.namesOfTargetedSuppliersControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.namesOfTargetedSuppliers),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.namesOfTargetedSuppliers),
       isResolved: this.isResolvedField(EMaterialsFormControls.namesOfTargetedSuppliers),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -69,7 +80,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.productsUtilizeTargetedProductControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.productsUtilizeTargetedProduct),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.productsUtilizeTargetedProduct),
       isResolved: this.isResolvedField(EMaterialsFormControls.productsUtilizeTargetedProduct),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };

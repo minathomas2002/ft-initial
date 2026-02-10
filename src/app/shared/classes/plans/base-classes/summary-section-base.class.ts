@@ -2,6 +2,7 @@ import { DatePipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, input } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 import { EMaterialsFormControls, ERoles } from "src/app/shared/enums";
+import { EInternalUserPlanStatus, EInvestorPlanStatus } from "src/app/shared/interfaces";
 import { IFieldInformation } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n";
 import { RoleService } from "src/app/shared/services/role/role-service";
@@ -18,6 +19,8 @@ export abstract class SummarySectionBaseClass {
   protected readonly planStore = inject(PlanStore);
   public readonly sectionFormGroup = input.required<FormGroup>();
   public readonly sectionSummaryFields = input.required<IFieldInformation[]>();
+  /** When true (e.g. resubmit mode and employee's own comment page), comment icon is hidden on fields. */
+  public readonly hideCommentIcons = input<boolean>(false);
   protected readonly roleService = inject(RoleService);
   public readonly doRefresh = input.required<Date>();
 
@@ -37,11 +40,17 @@ export abstract class SummarySectionBaseClass {
     return this.isFieldHasComment(controlName, rowId) &&
       !this.isHasCommentControlChecked(controlName) &&
       ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
       this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 
   protected isFieldHasComment(inputKey: string, rowId: string | null = null): boolean {
     return this.sectionSummaryFields().some(summaryField => summaryField.inputKey === inputKey && (summaryField.id ? summaryField.id === rowId : true));
+  }
+
+  /** Whether to show the comment icon for this field (false when employee's own comment page in resubmit). */
+  protected shouldShowCommentIcon(inputKey: string, rowId: string | null = null): boolean {
+    return this.isFieldHasComment(inputKey, rowId) && !this.hideCommentIcons();
   }
 
   /**

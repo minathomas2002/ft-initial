@@ -158,6 +158,22 @@
 			}
 		}
 	}
+
+	&.disabled {
+		.unified-phone-input {
+			background: var(--p-form-field-disabled-background, #ECEDF0);
+		}
+
+		.country-selector-wrapper {
+			.country-select {
+				::ng-deep {
+					.p-select {
+						background: var(--p-form-field-disabled-background, #ECEDF0) !important;
+					}
+				}
+			}
+		}
+	}
 }
 
 :host::ng-deep {

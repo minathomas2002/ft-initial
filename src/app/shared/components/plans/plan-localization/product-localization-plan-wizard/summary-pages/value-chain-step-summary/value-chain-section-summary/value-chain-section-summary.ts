@@ -9,6 +9,7 @@ import { RoleService } from 'src/app/shared/services/role/role-service';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { TableModule } from 'primeng/table';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 const SECTION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.designEngineeringFormGroup]: 1,
@@ -57,7 +58,7 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
         const fieldGroup = item.get(inputKey);
         const ctrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
         const matchingField = summaryFields.find(f => f.inputKey === inputKey && (f.id === rowId || (f.id == null && rowId == null)));
-        const hasComment = this.isFieldHasComment(inputKey, matchingField?.id);
+        const hasComment = this.shouldShowCommentIcon(inputKey, matchingField?.id ?? null);
         const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
         const hasError = ctrl ? this.isFieldHasError(ctrl) : false;
         const value = ctrl?.value ?? '';
@@ -67,6 +68,7 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
         const isResolved =
           hasComment &&
           !hasCommentChecked &&
+          this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
           ['view', 'Review'].includes(this.planStore.wizardMode()) &&
           this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
         return { value, beforeValue: beforeFormatted || '-', hasError, hasComment, showDifference: showDiff, isResolved };

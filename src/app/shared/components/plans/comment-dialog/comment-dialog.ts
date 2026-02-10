@@ -3,7 +3,7 @@ import { BaseDialogComponent } from '../../base-components/base-dialog/base-dial
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
-import { TrimOnBlurDirective } from 'src/app/shared/directives';
+import { HidePlaceholderWhenDisabledEmptyDirective, TrimOnBlurDirective } from 'src/app/shared/directives';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
@@ -15,6 +15,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     ReactiveFormsModule,
     TextareaModule,
     TrimOnBlurDirective,
+    HidePlaceholderWhenDisabledEmptyDirective,
     BaseErrorMessages
   ],
   templateUrl: './comment-dialog.html',
@@ -45,10 +46,10 @@ export class CommentDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    const control = this.commentFormControl();
-    if (control) {
-      control.addValidators(Validators.required);
-    }
+    // const control = this.commentFormControl();
+    // if (control) {
+    //   control.addValidators(Validators.required);
+    // }
   }
 
   onClose() {

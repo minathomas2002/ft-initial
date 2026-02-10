@@ -8,7 +8,7 @@ import { FormUtilityService } from 'src/app/shared/services/form-utility/form-ut
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { PlanCommentSyncService } from 'src/app/shared/services/plan/plan-comment-sync.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { TCommentPhase } from './product-localization-plan-wizard/product-localization-plan-wizard';
@@ -32,7 +32,7 @@ export abstract class PlanStepBaseClass {
   protected readonly destroyRef = inject(DestroyRef);
 
   // Abstract properties - must be provided by subclasses (defined as inputs/models in @Component)
-  abstract readonly pageTitle: InputSignal<string>;
+  abstract readonly pageTitle: InputSignal<EPlanPageTitle>;
   abstract readonly commentPhase: ModelSignal<TCommentPhase>;
   abstract readonly selectedInputs: ModelSignal<IFieldInformation[]>;
   abstract readonly pageComments: InputSignal<IPageComment[]>;
@@ -91,32 +91,39 @@ export abstract class PlanStepBaseClass {
   // Abstract method - must be implemented by subclasses
   abstract getFormGroup(): FormGroup;
 
-  // Get comment form control from the form group
+  // Get comment form control from the form group.
+  // Always ensures the control has no validators so it can never
+  // make the parent FormGroup invalid and block plan submission.
   protected get commentFormControl(): FormControl<string> {
     const formGroup = this.getFormGroup();
     let control = formGroup.get(EMaterialsFormControls.comment) as FormControl<string> | null;
     if (!control) {
       // Create a new control if it doesn't exist (shouldn't happen in normal flow, but defensive)
-      // Use nonNullable: true to ensure type is FormControl<string> not FormControl<string | null>
-      control = new FormControl('', { nonNullable: true }) as FormControl<string>;
+      control = new FormControl('') as FormControl<string>;
       formGroup.addControl(EMaterialsFormControls.comment, control);
+    }
+    // Defensively strip any validators that may have been attached elsewhere.
+    if (control.validator || control.asyncValidator) {
+      control.clearValidators();
+      control.clearAsyncValidators();
+      control.updateValueAndValidity({ emitEvent: false });
     }
     return control;
   }
 
   // A dedicated, always-disabled control for displaying the comment inside each step.
   // This prevents editing in the step UI while keeping the dialog editable.
-  private readonly stepCommentControl = new FormControl<string>('', { nonNullable: true });
+  private readonly stepCommentControl = new FormControl<string>('');
   private stepCommentSyncInitialized = false;
 
-  protected get stepCommentFormControl(): FormControl<string> {
+  protected get stepCommentFormControl(): FormControl<string | null> {
     return this.stepCommentControl;
   }
 
   // Computed page comment for timeline
   pageComment = computed<IPageComment>(() => {
     return {
-      pageTitleForTL: this.pageTitle() ?? '',
+      pageTitleForTL: this.pageTitle(),
       comment: this.comment() ?? '',
       fields: this.selectedInputs(),
     };
@@ -346,8 +353,14 @@ export abstract class PlanStepBaseClass {
 
       // Enable the control itself
       control.enable({ emitEvent: false, onlySelf: true });
-      control.markAsPristine();
-      control.markAsUntouched();
+      // If the control is invalid (e.g. after failed submit + markAllControlsAsDirty), keep it dirty
+      // so that base-error-messages shows validation errors when the user opens the step.
+      if (control.status === 'VALID') {
+        control.markAsPristine();
+        control.markAsUntouched();
+      } else {
+        control.markAsDirty();
+      }
 
       // Subscribe to status changes to track when field becomes valid
       control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
@@ -621,8 +634,15 @@ export abstract class PlanStepBaseClass {
     if (this.isResubmitMode()) {
       this.commentPhase.set('none');
       this.commentFormControl.disable({ emitEvent: false });
+      this.selectedInputs.set(this.correctedFields());
+      // In resubmit mode, keep fields in the store (needed for correctedFields derivation)
+      // but clear the comment text and remove from currentUserPageComments
+      this.planCommentSyncService.clearPageCommentTextInStore(this.pageTitle());
     } else {
       this.commentPhase.set('adding');
+      this.selectedInputs.set([]);
+      // In non-resubmit mode, remove the entry entirely from the store
+      this.planCommentSyncService.removePageCommentFromStore(this.pageTitle());
     }
     this.showDeleteConfirmationDialog.set(false);
     this.toasterService.success('Your comments and selected fields were removed successfully.');

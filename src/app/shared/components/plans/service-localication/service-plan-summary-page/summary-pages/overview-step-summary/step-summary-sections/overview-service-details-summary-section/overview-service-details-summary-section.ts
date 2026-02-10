@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
-import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
+import { EMaterialsFormControls, ERoles, EServiceProvidedTo } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-overview-service-details-summary-section',
@@ -26,6 +27,12 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
       .map((id) => options.find((o) => o.id === String(id))?.name ?? String(id))
       .filter((x) => x !== null && x !== undefined && String(x).trim() !== '');
     return labels.length ? labels.join(', ') : null;
+  }
+
+  private hasServiceProvidedToOthers(value: unknown): boolean {
+    const list = Array.isArray(value) ? value : [];
+    const selected = list.map((v) => String(v));
+    return selected.includes(EServiceProvidedTo.Others.toString());
   }
 
   private toYesNoDisplay(raw: unknown): string {
@@ -90,8 +97,13 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
       const currantDescription = getValue(EMaterialsFormControls.serviceDescription) ?? '';
       const beforeDescription = service?.serviceDescription ?? null;
 
-      const currantProvidedTo = this.formatSelectValue(getValue(EMaterialsFormControls.serviceProvidedTo), this.planStore.serviceProvidedToOptions());
+      const rawProvidedTo = getValue(EMaterialsFormControls.serviceProvidedTo);
+      const currantProvidedTo = this.formatSelectValue(rawProvidedTo, this.planStore.serviceProvidedToOptions());
       const beforeProvidedTo = this.formatSelectValue(service?.serviceProvidedTo ?? null, this.planStore.serviceProvidedToOptions());
+      const showServiceProvidedToCompanyNames = this.hasServiceProvidedToOthers(rawProvidedTo);
+
+      const currantCompanyNames = getValue(EMaterialsFormControls.serviceProvidedToCompanyNames) ?? '';
+      const beforeCompanyNames = service?.otherProvidedTo ?? null;
 
       const currantBusiness = getValue(EMaterialsFormControls.totalBusinessDoneLast5Years) ?? '';
       const beforeBusiness = service?.totalBusinessLast5Years ?? null;
@@ -120,6 +132,8 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
         serviceCategory: buildField('', currantServiceCategory, beforeServiceCategory, EMaterialsFormControls.serviceCategory),
         serviceDescription: buildField('', currantDescription, beforeDescription, EMaterialsFormControls.serviceDescription),
         serviceProvidedTo: buildField('', currantProvidedTo, beforeProvidedTo, EMaterialsFormControls.serviceProvidedTo),
+        showServiceProvidedToCompanyNames,
+        serviceProvidedToCompanyNames: buildField('', currantCompanyNames, beforeCompanyNames, EMaterialsFormControls.serviceProvidedToCompanyNames),
         totalBusiness: buildField('', currantBusiness, beforeBusiness, EMaterialsFormControls.totalBusinessDoneLast5Years),
         targetedForLocalization: buildField('', currantTargeted, beforeTargeted, EMaterialsFormControls.serviceTargetedForLocalization),
         expectedDate: buildField('', currantDate, beforeDate, EMaterialsFormControls.expectedLocalizationDate),
@@ -127,6 +141,11 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
       };
     });
   });
+
+  /** True if any row has "Others" in Service Provided to, so the Company Names column is shown. */
+  showServiceProvidedToCompanyNamesColumn = computed(() =>
+    this.serviceDetailsRows().some((row) => row.showServiceProvidedToCompanyNames)
+  );
 
   private hasServiceDetailComment(fieldKey: string, rowId: string | null, index: number): boolean {
     return this.sectionSummaryFields().some((f) => {
@@ -146,6 +165,7 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
     return this.hasServiceDetailComment(fieldKey, rowId, index) &&
       !isHasCommentChecked &&
       ['view', 'Review'].includes(this.planStore.wizardMode()) &&
+      this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
       this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
   }
 }

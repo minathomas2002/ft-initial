@@ -2,11 +2,8 @@
   <h3 class="text-md font-semibold text-gray-900">Details of Service Provided</h3>
   <div class="overflow-x-auto">
     <div class="rounded-2xl border border-gray-300">
-      <p-table
-        [value]="serviceDetailsRows()"
-        [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
-        styleClass="w-full [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300"
-      >
+      <p-table [value]="serviceDetailsRows()" [tableStyle]="{ 'border-collapse': 'collapse', width: '100%' }"
+        styleClass="w-full [&_th]:!border-e [&_td]:!border-e [&_th]:!border-gray-300 [&_td]:!border-gray-300">
         <ng-template pTemplate="header">
           <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
             <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]"># of Services</th>
@@ -15,17 +12,15 @@
             <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[150px]">Service Category</th>
             <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[360px]">Service Description</th>
             <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[220px]">Service Provided to</th>
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[240px]">Total Business Done (Last 5 Years)</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[240px]">Total Business Done (Last 5
+              Years)</th>
             <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[160px]">Targeted for Localization</th>
             <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[160px]">Expected Localization Date</th>
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[260px]">Service Localization Methodology</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A] min-w-[260px]">Service Localization
+              Methodology</th>
           </tr>
         </ng-template>
-        <ng-template
-          pTemplate="body"
-          let-row
-          let-rowIndex="rowIndex"
-        >
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
           <tr>
             <td class="border-t border-gray-300 p-4">{{ row.index }}</td>
             <td class="border-t border-gray-300 p-4 min-w-[220px]">
@@ -38,10 +33,21 @@
               <app-plan-summary-flied [planSummaryField]="row.serviceCategory" />
             </td>
             <td class="border-t border-gray-300 p-4 min-w-[360px]">
-              <app-plan-summary-flied [planSummaryField]="row.serviceDescription" />
+              <div class="mt-2 text-sm text-gray-600 flex flex-col items-start gap-2 max-h-[100px] overflow-auto">
+                @if (row.serviceDescription.currantValue.toString().trim()) {
+                  <span class="font-medium text-gray-700">Description: </span>
+                  }
+                  <app-plan-summary-flied [planSummaryField]="row.serviceDescription" />
+              </div>
             </td>
             <td class="border-t border-gray-300 p-4 min-w-[400px]">
               <app-plan-summary-flied [planSummaryField]="row.serviceProvidedTo" />
+              <div class="mt-2 text-sm text-gray-600 flex flex-col items-start gap-2 max-h-[100px] overflow-auto">
+                @if (row.showServiceProvidedToCompanyNames) {
+                  <span class="font-medium text-gray-700">Description: </span>
+                  <app-plan-summary-flied [planSummaryField]="row.serviceProvidedToCompanyNames" />
+                  }
+              </div>
             </td>
             <td class="border-t border-gray-300 p-4 min-w-[400px]">
               <app-plan-summary-flied [planSummaryField]="row.totalBusiness" />

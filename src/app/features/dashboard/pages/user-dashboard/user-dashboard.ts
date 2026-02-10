@@ -30,6 +30,7 @@ import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/n
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -86,6 +87,7 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   private readonly i18nService = inject(I18nService);
   private readonly toasterService = inject(ToasterService);
   private readonly router = inject(Router);
+  private readonly authStore = inject(AuthStore);
 
   private readonly internalUsersFilterService = inject(InternalUsersDashboardPlansFilterService);
   private readonly investorFilterService = inject(DashboardPlansFilterService);
@@ -343,6 +345,22 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     });
   }
 
+  onViewApprovedPlansInInternalUser() {
+    const currentUserId = this.authStore.jwtUserDetails()?.EmpID;
+    this.router.navigate([ERoutes.plans], {
+      queryParams: {
+        status: EInternalUserPlanStatus.APPROVED,
+        assignee: currentUserId
+      }
+    });
+  }
+
+  onViewTotalApprovedPlansInInternalUser() {
+    this.router.navigate([ERoutes.plans], {
+      queryParams: { status: EInternalUserPlanStatus.APPROVED }
+    });
+  }
+
   onViewRejectedPlans() {
     this.router.navigate([ERoutes.plans], {
       queryParams: { status: this.isInvestor() ? EInvestorPlanStatus.REJECTED : EInternalUserPlanStatus.REJECTED }
@@ -351,13 +369,14 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
 
   onViewPendingAssignedPlans() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: EInternalUserPlanStatus.PENDING }
+      queryParams: { status: EInternalUserPlanStatus.UNDER_REVIEW }
     });
   }
 
   onViewAssignedPlans() {
+    const currentUserId = this.authStore.jwtUserDetails()?.EmpID;
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: EInternalUserPlanStatus.UNDER_REVIEW }
+      queryParams: { assignee: currentUserId }
     });
   }
   //#endregion

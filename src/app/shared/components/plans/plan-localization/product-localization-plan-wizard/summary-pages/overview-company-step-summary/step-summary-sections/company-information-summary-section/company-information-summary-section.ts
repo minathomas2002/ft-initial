@@ -27,7 +27,7 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.companyNameControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.companyName),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.companyName),
       isResolved: this.isResolvedField(EMaterialsFormControls.companyName),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -42,7 +42,7 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.ceoNameControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoName),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.ceoName),
       isResolved: this.isResolvedField(EMaterialsFormControls.ceoName),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };
@@ -57,7 +57,7 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.ceoEmailIDControl()),
-      hasComment: this.isFieldHasComment(EMaterialsFormControls.ceoEmailID),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.ceoEmailID),
       isResolved: this.isResolvedField(EMaterialsFormControls.ceoEmailID),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
     };

@@ -57,8 +57,9 @@
             }, rowId)"
           >
             <p-inputnumber
+              [allowEmpty]="false"
               fluid
-              [placeholder]="row.placeholder"
+              [appHidePlaceholderWhenDisabledEmpty]="row.placeholder"
               [mode]="row.mode"
               [minFractionDigits]="row.minFractionDigits"
               [maxFractionDigits]="row.maxFractionDigits"

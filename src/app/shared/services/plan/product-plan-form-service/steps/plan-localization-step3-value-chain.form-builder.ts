@@ -26,7 +26,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
       }),
       [EMaterialsFormControls.costPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100)]],
+        [EMaterialsFormControls.value]: [0, [Validators.min(0), Validators.max(100)]],
       }),
     };
 
@@ -57,7 +57,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
   buildSectionFormArray(): FormArray {
     return this.fb.array(
       [this.createValueChainItemFormGroup()],
-      [this.costPercentageArrayValidator(), this.incompleteFormArrayValidator()]
+      [this.incompleteFormArrayValidator()]
     );
   }
 

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { SaudizationMatrixComponent } from './saudization-matrix/saudization-matrix.component';
 import { BaseErrorMessages } from '../../../base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
@@ -32,7 +32,7 @@ import { ConditionalColorClassDirective } from 'src/app/shared/directives';
     GeneralConfirmationDialogComponent,
     TextareaModule,
     CommentInputComponent,
-    ConditionalColorClassDirective
+    ConditionalColorClassDirective,
   ],
   templateUrl: './plan-localization-step-04-saudizationForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,7 +43,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
   override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
 
-  pageTitle = input<string>('Saudization');
+  pageTitle = input<EPlanPageTitle>(EPlanPageTitle.Saudization);
 
   // Computed property to determine if file upload should be disabled
   // In resubmit mode, allow editing only if the attachments field is part of the corrected fields.

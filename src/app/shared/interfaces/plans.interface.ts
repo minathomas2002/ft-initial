@@ -1,4 +1,4 @@
-import { EOpportunityType, EStatusPlanTimeLine, ETargetedCustomer } from "../enums"
+import { EOpportunityType, EPlanPageTitle, EStatusPlanTimeLine, ETargetedCustomer } from "../enums"
 import { EActionPlanTimeLine } from "../enums/action-plan-timeline.enum"
 import { TColors } from "./colors.interface"
 import { EInternalUserPlanStatus, EInvestorPlanStatus } from "./dashboard-plans.interface"
@@ -338,9 +338,10 @@ export interface ReviewPlanRequest {
 }
 
 export interface IPageComment {
-  pageTitleForTL: string;
+  pageTitleForTL: EPlanPageTitle;
   comment: string;
   fields: IFieldInformation[];
+  creatorRole?: number;
 }
 
 export interface IFieldInformation {

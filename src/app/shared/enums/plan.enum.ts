@@ -4,8 +4,9 @@ export enum ETargetedCustomer {
 }
 
 export enum EProductManufacturingExperience {
-  YES = 1,
-  NO = 2,
+  Years_5 = 1,
+  Years_5_10 = 2,
+  Years_10 = 3,
 }
 
 export enum EExperienceRange {
@@ -119,4 +120,18 @@ export enum EemployeePlanAction {
 export enum ECommentType {
   inComingComment = 1,
   outGoingComment = 2,
+}
+
+export enum EPlanPageTitle {
+  OverviewAndCompanyInformation = 'Overview & Company Information',
+  ProductAndPlantOverview = 'Product & Plant Overview',
+  ValueChain = 'Value Chain',
+  Saudization = 'Saudization',
+  CoverPage = 'Cover Page',
+  Overview = 'Overview',
+  ExistingSaudi = 'Existing Saudi Co.',
+  DirectLocalization = 'Direct Localization',
+  Summary = 'Summary',
+  OpportunityInformation = 'Opportunity Information',
+  OpportunityLocalization = 'Opportunity Localization',
 }
