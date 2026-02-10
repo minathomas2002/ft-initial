@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { ICommentsCountAndPhase } from "src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard";
+import { ICommentsCountAndPhase } from "src/app/shared/types/plan-comments.types";
 import { EPlanPageTitle } from "src/app/shared/enums";
 import { IFieldInformation, IPageComment } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n";

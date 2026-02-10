@@ -11,7 +11,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
-import { TCommentPhase } from './product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 
 /**
  * Abstract base class for plan localization step forms.
@@ -687,7 +687,6 @@ export abstract class PlanStepBaseClass {
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
     this.toasterService.success('Your comments have been saved successfully.');
-    console.log(this.planStore.planComments())
   }
 
   /**

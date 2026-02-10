@@ -3,7 +3,7 @@ import { OverviewCompanyStepSummary } from '../product-localization-plan-wizard/
 import { ProductPlantOverviewStepSummary } from '../product-localization-plan-wizard/summary-pages/product-plant-overview-step-summary/product-plant-overview-step-summary';
 import { ValueChainStepSummary } from '../product-localization-plan-wizard/summary-pages/value-chain-step-summary/value-chain-step-summary';
 import { SaudizationStepSummary } from '../product-localization-plan-wizard/summary-pages/saudization-step-summary/saudization-step-summary';
-import { ICommentsCountAndPhase } from '../product-localization-plan-wizard/product-localization-plan-wizard';
+import { ICommentsCountAndPhase } from 'src/app/shared/types/plan-comments.types';
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionSignature } from '../../summary-section-signature/summary-section-signature';
 

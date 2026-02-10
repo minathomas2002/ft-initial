@@ -627,14 +627,11 @@ export const PlanStore = signalStore(
         return planApiService.getPlanComment(planId).pipe(
           tap((res) => {
             patchState(store, { planComments: res.body || null });
-            patchState(store, { currentUserPageComments: [] })
+            patchState(store, { currentUserPageComments: [] });
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading plan comments' });
             return throwError(() => new Error('Error loading plan comments'));
-          }),
-          finalize(() => {
-            patchState(store);
           })
         );
       },

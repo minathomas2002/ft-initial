@@ -38,7 +38,7 @@ import { switchMap, of, map, catchError, finalize, tap } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
-import { ICommentsCountAndPhase, TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase, ICommentsCountAndPhase } from 'src/app/shared/types/plan-comments.types';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
@@ -653,9 +653,12 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           opportunityControl.setValue(available, { emitEvent: true });
           opportunityControl.updateValueAndValidity({ emitEvent: true });
         }
-        const benaVendorIDControl = this.serviceLocalizationFormService.step2_overview.get(`${EMaterialsFormControls.locationInformationFormGroup}.${EMaterialsFormControls.benaRegisteredVendorID}.${EMaterialsFormControls.value}`);
-        if (benaVendorIDControl) {
-          benaVendorIDControl.setValue(this.authStore.userCode()!, { emitEvent: true });
+        const benaVendorIDControl = this.serviceLocalizationFormService.step2_overview.get(
+          `${EMaterialsFormControls.locationInformationFormGroup}.${EMaterialsFormControls.benaRegisteredVendorID}.${EMaterialsFormControls.value}`
+        );
+        const userCode = this.authStore.userCode();
+        if (benaVendorIDControl && userCode) {
+          benaVendorIDControl.setValue(userCode, { emitEvent: true });
         }
       }
     });
@@ -1520,7 +1523,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   override buildResubmitFormData(): FormData {
     const planId = this.planStore.selectedPlanId() ?? '';
 
-    // Build request (same as submit)
+    // Build request (same shape as submit: include conditional steps so resubmit payload matches backend expectations)
     const request = mapServiceLocalizationPlanFormToRequest(
       this.serviceLocalizationFormService,
       planId,
@@ -1533,6 +1536,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           contactNumber: '',
           emailId: '',
         },
+      },
+      {
+        includeExistingSaudi: this.showExistingSaudiStep(),
+        includeDirectLocalization: this.showDirectLocalizationStep(),
       }
     );
 

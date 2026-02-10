@@ -4,7 +4,7 @@ import { OverviewStepSummary } from './summary-pages/overview-step-summary/overv
 import { ExistingSaudiStepSummary } from './summary-pages/existing-saudi-step-summary/existing-saudi-step-summary';
 import { DirectLocalizationStepSummary } from './summary-pages/direct-localization-step-summary/direct-localization-step-summary';
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
-import { ICommentsCountAndPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ICommentsCountAndPhase } from 'src/app/shared/types/plan-comments.types';
 import { SummarySectionSignature } from '../../summary-section-signature/summary-section-signature';
 
 @Component({

@@ -36,12 +36,7 @@ import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-pla
 import { WizardActionFactory, IWizardActionConfig } from "src/app/shared/services/wizard/wizard-action-factory.service";
 import { IBaseWizardAction } from "../../../base-components/base-wizard-actions/base-wizard-actions";
 import { SkeletonModule } from "primeng/skeleton";
-
-export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
-export interface ICommentsCountAndPhase {
-  count: number;
-  phase: TCommentPhase;
-}
+import { TCommentPhase, ICommentsCountAndPhase } from "src/app/shared/types/plan-comments.types";
 type ProductLocalizationWizardStepId =
   | 'overview'
   | 'productPlant'
@@ -721,10 +716,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         step4: this.step4CommentFields().length > 0,
       }
       : undefined;
-    console.log(this.productPlanFormService.step1_overviewCompanyInformation);
-    console.log(this.productPlanFormService.step2_productPlantOverview);
-    console.log(this.productPlanFormService.step3_valueChain);
-    console.log(this.productPlanFormService.step4_saudization);
     // Check if all forms are valid
     if (!this.productPlanFormService.areAllFormsValid({ resubmitStepsToValidate })) {
       // Mark all controls as dirty to show validation errors
