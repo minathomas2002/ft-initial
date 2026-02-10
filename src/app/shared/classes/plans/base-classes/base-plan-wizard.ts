@@ -4,8 +4,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ReviewPlanRequest, IPageComment } from 'src/app/shared/interfaces/plans.interface';
-import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
-import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
+import { EMaterialsFormControls, EPlanPageTitle, ERoles } from 'src/app/shared/enums';
+import { TCommentPhase, IPlanWizardStepCommentDescriptor } from 'src/app/shared/types/plan-comments.types';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
@@ -188,6 +188,109 @@ export abstract class BasePlanWizard {
   protected getSendBackErrorMessage(pageTitle: string, commentPhase: TCommentPhase): string {
     return `${pageTitle} has selected fields but the comment has not been submitted. Please ${commentPhase === 'adding' ? 'add' : 'save'} the comment before sending back.`;
   }
+
+  /**
+   * Shared: collect all page comments from step descriptors.
+   * Used by product and service wizards to avoid duplicated per-step logic.
+   */
+  protected collectAllPageCommentsFromDescriptors(
+    descriptors: IPlanWizardStepCommentDescriptor[],
+    isResubmitMode: boolean
+  ): IPageComment[] {
+    const comments: IPageComment[] = [];
+    for (const d of descriptors) {
+      if (d.isVisible && !d.isVisible()) continue;
+      const form = d.getForm();
+      if (!form) continue;
+      const commentControl = isResubmitMode
+        ? (form.get('comment') as FormControl<string> | null)
+        : (form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
+      const fields = d.getSelectedInputs();
+      const commentValue = commentControl?.value?.trim() || '';
+      if (commentValue && (isResubmitMode || fields.length > 0)) {
+        comments.push({
+          pageTitleForTL: d.getStepTitle() as EPlanPageTitle,
+          comment: commentValue,
+          fields,
+        });
+      }
+    }
+    return comments;
+  }
+
+  /**
+   * Shared: validate that steps with selected inputs have submitted comments.
+   * Returns error message or null if valid.
+   */
+  protected validateCommentSubmissionFromDescriptors(
+    descriptors: IPlanWizardStepCommentDescriptor[],
+    getSendBackErrorMessage: (pageTitle: string, phase: TCommentPhase) => string
+  ): string | null {
+    for (const d of descriptors) {
+      if (d.isVisible && !d.isVisible()) continue;
+      const selected = d.getSelectedInputs();
+      const phase = d.getCommentPhase();
+      if (selected.length > 0 && (phase === 'adding' || phase === 'editing')) {
+        return getSendBackErrorMessage(d.getStepTitle(), phase);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Shared: collect investor page comments for resubmit (corrected fields + investor comment or empty).
+   */
+  protected collectInvestorPageCommentsFromDescriptors(
+    descriptors: IPlanWizardStepCommentDescriptor[]
+  ): IPageComment[] {
+    const result: IPageComment[] = [];
+    for (const d of descriptors) {
+      if (d.isVisible && !d.isVisible()) continue;
+      const form = d.getForm();
+      if (!form) continue;
+      const investorCommentControl = form.get('comment') as FormControl<string> | null;
+      const investorComment = investorCommentControl?.value?.trim() || '';
+      const correctedFields = d.getCommentFields();
+      const employeeComments = d.getComments();
+      if (!correctedFields?.length) continue;
+      if (investorComment.length > 0) {
+        result.push({
+          pageTitleForTL: d.getStepTitle() as EPlanPageTitle,
+          comment: investorComment,
+          fields: correctedFields,
+        });
+      } else if (employeeComments.length > 0) {
+        employeeComments.forEach(ec => {
+          if (ec.fields?.length) {
+            result.push({ pageTitleForTL: ec.pageTitleForTL, comment: '', fields: ec.fields });
+          }
+        });
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Shared: append comments to FormData in nested structure for API.
+   * Format: Comments[index].pageTitleForTL, Comments[index].comment, Comments[index].fields[index].*
+   */
+  protected appendCommentsToFormData(formData: FormData, comments: IPageComment[]): void {
+    const filtered = (comments ?? []).filter(c => (c.fields?.length ?? 0) > 0);
+    filtered.forEach((comment, i) => {
+      formData.append(`Comments[${i}].pageTitleForTL`, comment.pageTitleForTL || '');
+      formData.append(`Comments[${i}].comment`, comment.comment || '');
+      if (comment.fields?.length) {
+        comment.fields.forEach((field, fi) => {
+          formData.append(`Comments[${i}].fields[${fi}].section`, field.section || '');
+          formData.append(`Comments[${i}].fields[${fi}].inputKey`, field.inputKey || '');
+          formData.append(`Comments[${i}].fields[${fi}].label`, field.label || '');
+          if (field.id) formData.append(`Comments[${i}].fields[${fi}].id`, field.id);
+          if (field.value) formData.append(`Comments[${i}].fields[${fi}].value`, field.value);
+        });
+      }
+    });
+  }
+
   /**
    * Confirm sending plan back to investor - Template Method
    * Common implementation for both wizards
