@@ -743,7 +743,7 @@
       "messages": {
         "fixValidationErrors": "Please fix all validation errors before submitting",
         "errorLoadingPlan": "Error loading plan data. Please try again.",
-        "submitSuccess": "Product localization plan submitted successfully",
+        "submitSuccess": "Localization plan submitted successfully",
         "submitError": "Error submitting plan. Please try again.",
         "selectPlanTitleAndOpportunity": "Please select a plan title and opportunity",
         "draftUpdatedSuccess": "Draft updated successfully.",
