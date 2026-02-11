@@ -52,7 +52,7 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
   /** Page number for entity headcounts (3 = Existing Saudi, 4 = Direct Localization) */
   pageNumber = input<number>(3);
 
-  yearColumns = computed(() => this.serviceForm?.upcomingYears(6, new Date(this.planStore.servicePlanData()?.createdDate?? new Date()).getFullYear()) ?? []);
+  yearColumns = computed(() => this.serviceForm?.upcomingYears(6) ?? []);
 
   private get entityLevelFormArray(): FormArray {
     return this.sectionFormGroup().get(EMaterialsFormControls.entityLevelFormGroup) as FormArray;

@@ -179,11 +179,13 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     return this.planFormService?.step3_existingSaudi ?? new FormGroup({});
   }
 
+  startYear = computed(() => (new Date(this.planStore.servicePlanData()?.createdDate?? new Date())).getFullYear());
+  startMonth = computed(() => (new Date(this.planStore.servicePlanData()?.createdDate?? new Date())).getMonth());
   availableQuartersWithPast = computed(() => this.planFormService?.getAvailableQuartersWithPast(5, 5) ?? []);
 
   availableQuarters = computed(() => this.planFormService?.getAvailableQuarters(5) ?? []);
 
-  yearColumns = computed(() => this.planFormService?.upcomingYears(6, new Date(this.planStore.servicePlanData()?.createdDate?? new Date()).getFullYear()) ?? []);
+  yearColumns = computed(() => this.planFormService?.upcomingYears(6));
 
   // Custom header labels for Saudi Company Details table to ensure correct order
   saudiCompanyDetailsHeaderLabels: Record<string, string> = {

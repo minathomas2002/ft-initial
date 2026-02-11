@@ -34,7 +34,7 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
   /** Control for expected localization date - 'expectedLocalizationDate' for Existing Saudi, 'serviceLevelLocalizationDate' for Direct Localization */
   expectedDateControlKey = input<string>(EMaterialsFormControls.expectedLocalizationDate);
 
-  yearColumns = computed(() => this.serviceForm?.upcomingYears(6, new Date(this.planStore.servicePlanData()?.createdDate?? new Date()).getFullYear()) ?? []);
+  yearColumns = computed(() => this.serviceForm?.upcomingYears(6) ?? []);
 
   private get serviceLevelFormArray(): FormArray {
     return this.sectionFormGroup().get(EMaterialsFormControls.serviceLevelFormGroup) as FormArray;
