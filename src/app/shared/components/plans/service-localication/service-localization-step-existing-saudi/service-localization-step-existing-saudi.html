@@ -25,7 +25,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
-              inputKey: 'saudiCompanyName_' + index,
+              inputKey: 'saudiCompanyName',
               label: 'Saudi Company Name'
             }, itemControl.get('rowId')?.value)"
           >
@@ -36,7 +36,7 @@
               [maxlength]="100"
               [appHidePlaceholderWhenDisabledEmpty]="'Enter Saudi company name'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
-              [appConditionalColorClass]="highlightInput('saudiCompanyName_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('saudiCompanyName', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
@@ -51,7 +51,7 @@
           <p-inputnumber
             [allowEmpty]="false"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
-            [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC_' + index, itemControl.get('rowId')?.value)"
+            [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC', itemControl.get('rowId')?.value)"
             [color]="selectedInputColor()"
             [maxlength]="7"
             [useGrouping]="false"
@@ -86,7 +86,7 @@
             [appHidePlaceholderWhenDisabledEmpty]="'Select company type(s)'"
             fluid
             [appendTo]="'body'"
-            [appConditionalColorClass]="highlightInput('companyType_' + index, itemControl.get('rowId')?.value)"
+            [appConditionalColorClass]="highlightInput('companyType', itemControl.get('rowId')?.value)"
             [color]="selectedInputColor()"
           />
           <app-base-error-messages
@@ -109,7 +109,7 @@
             [appHidePlaceholderWhenDisabledEmpty]="'Select qualification status'"
             fluid
             [appendTo]="'body'"
-            [appConditionalColorClass]="highlightInput('qualificationStatus_' + index, itemControl.get('rowId')?.value)"
+            [appConditionalColorClass]="highlightInput('qualificationStatus', itemControl.get('rowId')?.value)"
             [color]="selectedInputColor()"
           />
           <app-base-error-messages
@@ -130,7 +130,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.products))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
-              inputKey: 'products_' + index,
+              inputKey: 'products',
               label: 'Product(s)'
             }, itemControl.get('rowId')?.value)"
           >
@@ -141,7 +141,7 @@
               [maxlength]="255"
               [appHidePlaceholderWhenDisabledEmpty]="'Enter specify the product(s)'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
-              [appConditionalColorClass]="highlightInput('products_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('products', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             @if (!getValueControl(itemControl.get(EMaterialsFormControls.products)).disabled) {
@@ -168,7 +168,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverview))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
-              inputKey: 'companyOverview_' + index,
+              inputKey: 'companyOverview',
               label: 'Company Overview'
             }, itemControl.get('rowId')?.value)"
           >
@@ -180,7 +180,7 @@
               [maxlength]="255"
               [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
-              [appConditionalColorClass]="highlightInput('companyOverview_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('companyOverview', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverview)).disabled) {
@@ -207,7 +207,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
-              inputKey: 'keyProjectsExecutedByContractorForSEC_' + index,
+              inputKey: 'keyProjectsExecutedByContractorForSEC',
               label: 'Key Projects Executed'
             }, itemControl.get('rowId')?.value)"
           >
@@ -220,7 +220,7 @@
               [maxlength]="255"
               [appHidePlaceholderWhenDisabledEmpty]="'Enter key projects executed by contractor for SEC'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
-              [appConditionalColorClass]="highlightInput('keyProjectsExecutedByContractorForSEC_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('keyProjectsExecutedByContractorForSEC', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             @if (!getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC)).disabled) {
@@ -247,7 +247,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
-              inputKey: 'companyOverviewKeyProjectDetails_' + index,
+              inputKey: 'companyOverviewKeyProjectDetails',
               label: 'Company Overview, Key Project Details'
             }, itemControl.get('rowId')?.value)"
           >
@@ -261,7 +261,7 @@
               [maxlength]="255"
               [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview, key project details etc.'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
-              [appConditionalColorClass]="highlightInput('companyOverviewKeyProjectDetails_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('companyOverviewKeyProjectDetails', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails)).disabled) {
@@ -288,7 +288,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
-              inputKey: 'companyOverviewOther_' + index,
+              inputKey: 'companyOverviewOther',
               label: 'Company Overview'
             }, itemControl.get('rowId')?.value)"
           >
@@ -301,7 +301,7 @@
               [maxlength]="255"
               [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
-              [appConditionalColorClass]="highlightInput('companyOverviewOther_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('companyOverviewOther', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             @if (!getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther)).disabled) {
@@ -375,7 +375,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'collaborationPartnership',
-                inputKey: 'agreementOtherDetails_' + index,
+                inputKey: 'agreementOtherDetails',
                 label: 'Other Agreement Details'
               }, itemControl.get('rowId')?.value)"
             >
@@ -386,7 +386,7 @@
                 [maxlength]="100"
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter other agreement details'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
-                [appConditionalColorClass]="highlightInput('agreementOtherDetails_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('agreementOtherDetails', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
               @if (!getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails)).disabled) {
@@ -479,7 +479,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: 'whyChoseThisCompany_' + index,
+              inputKey: 'whyChoseThisCompany',
               label: 'Why did you choose this particular Saudi Company as your partner?'
             }, itemControl.get('rowId')?.value)"
           >
@@ -490,7 +490,7 @@
               [maxlength]="255"
               [appHidePlaceholderWhenDisabledEmpty]="'Why did you choose this particular Saudi Company as your partner?'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
-              [appConditionalColorClass]="highlightInput('whyChoseThisCompany_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('whyChoseThisCompany', itemControl.get('rowId')?.value || itemControl.get('id')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             @if (!getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany)).disabled) {
@@ -512,7 +512,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: 'summaryOfKeyAgreementClauses_' + index,
+              inputKey: 'summaryOfKeyAgreementClauses',
               label: 'Summary of Key Agreement Clauses'
             }, itemControl.get('rowId')?.value)"
           >
@@ -523,7 +523,7 @@
               [maxlength]="255"
               [appHidePlaceholderWhenDisabledEmpty]="'Brief summary ownership %, key responsibilities, technology / IP sharing etc.)'"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
-              [appConditionalColorClass]="highlightInput('summaryOfKeyAgreementClauses_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('summaryOfKeyAgreementClauses', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             ></textarea>
             @if (!getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses)).disabled) {
@@ -545,7 +545,7 @@
             [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
-              inputKey: 'provideAgreementCopy_' + index,
+              inputKey: 'provideAgreementCopy',
               label: 'Provide Agreement Copy'
             }, itemControl.get('rowId')?.value)"
           >
@@ -557,7 +557,7 @@
               [appHidePlaceholderWhenDisabledEmpty]="'Select'"
               fluid
               [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('provideAgreementCopy_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('provideAgreementCopy', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>
@@ -616,7 +616,7 @@
             @for(yearKey of yearControlKeys; track yearKey; let i = $index) {
             <td class="p-3 !border !border-gray-200">
               @let controlKey = yearKey + '_' + row.controlKey;
-              @let uniqueInputKey = 'entityLevel_' + controlKey;
+              @let uniqueInputKey = controlKey;
               <app-group-input-with-checkbox
                 [showCheckbox]="showCheckbox()"
                 [hasCommentControl]="getHasCommentControl(getEntityLevelItem().get(controlKey))"
@@ -636,7 +636,7 @@
                   [maxFractionDigits]="row.maxFractionDigits"
                   [maxlength]="row.mode === 'decimal' ? 5 : null"
                   [formControl]="getEntityLevelValueControl(controlKey)"
-                  [appConditionalColorClass]="highlightInput(uniqueInputKey)"
+                  [appConditionalColorClass]="highlightInput(uniqueInputKey, getEntityLevelItem().get('rowId')?.value)"
                   [color]="selectedInputColor()"
                 />
               </app-group-input-with-checkbox>
@@ -682,7 +682,7 @@
               [appHidePlaceholderWhenDisabledEmpty]="''"
               class="text-gray-400"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
-              [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('serviceName', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
             <app-base-error-messages
@@ -698,7 +698,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
-                inputKey: 'expectedLocalizationDate_' + index,
+                inputKey: 'expectedLocalizationDate',
                 label: 'Expected Localization Date'
               }, itemControl.get('rowId')?.value)"
             >
@@ -710,7 +710,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('expectedLocalizationDate_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('expectedLocalizationDate', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -728,7 +728,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(yearKey + '_headcount'))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
-                inputKey: yearKey + '_headcount_' + index,
+                inputKey: yearKey + '_headcount',
                 label: 'Headcount ' + yearColumns()[i]
               }, itemControl.get('rowId')?.value)"
             >
@@ -739,7 +739,7 @@
                 inputId="integeronly"
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter headcount'"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_headcount'))"
-                [appConditionalColorClass]="highlightInput(yearKey + '_headcount_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(yearKey + '_headcount', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -758,7 +758,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(yearKey + '_saudization'))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
-                inputKey: yearKey + '_saudization_' + index,
+                inputKey: yearKey + '_saudization',
                 label: 'Saudization % ' + yearColumns()[i]
               }, itemControl.get('rowId')?.value)"
             >
@@ -771,7 +771,7 @@
                 [maxFractionDigits]="2"
                 [maxlength]="5"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_saudization'))"
-                [appConditionalColorClass]="highlightInput(yearKey + '_saudization_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(yearKey + '_saudization', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -789,7 +789,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
-                inputKey: 'keyMeasuresToUpskillSaudis_' + index,
+                inputKey: 'keyMeasuresToUpskillSaudis',
                 label: 'Key measures to upskill Saudis'
               }, itemControl.get('rowId')?.value)"
             >
@@ -800,7 +800,7 @@
                 [maxlength]="255"
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill Saudis'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-                [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
               @if (!getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis)).disabled) {
@@ -822,7 +822,7 @@
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
-                inputKey: 'mentionSupportRequiredFromSEC_' + index,
+                inputKey: 'mentionSupportRequiredFromSEC',
                 label: 'Support Required from SEC'
               }, itemControl.get('rowId')?.value)"
             >
@@ -833,7 +833,7 @@
                 [maxlength]="500"
                 [placeholder]="isReviewMode() ? '' : 'Mention Support required from SEC to localize the service (if any)'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
-                [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
               @if (!getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).disabled) {

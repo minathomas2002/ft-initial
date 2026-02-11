@@ -172,19 +172,12 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
     return [...new Set(allLabels)].join(', ');
   }
 
-  // Helper method to strip index suffix from inputKey (e.g., 'serviceName_0' -> 'serviceName')
-  private stripIndexSuffix(inputKey: string): string {
-    // Match pattern: _ followed by one or more digits at the end
-    const match = inputKey.match(/^(.+)_(\d+)$/);
-    return match ? match[1] : inputKey;
-  }
-
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
     return getFieldValueFromServicePlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field
-  getControlForField(field: IFieldInformation): FormControl<any> | null {
+  override getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey, id: rowId } = field;
 
     // Handle FormArray items (services)

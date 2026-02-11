@@ -264,6 +264,8 @@ export interface IServicePlanEntityHeadcount {
   y4Saudization: number;
   y5Headcount: number;
   y5Saudization: number;
+  y6Headcount?: number;
+  y6Saudization?: number;
 }
 
 export interface IServicePlanServiceHeadcount {
@@ -283,6 +285,8 @@ export interface IServicePlanServiceHeadcount {
   y4Saudization: number;
   y5Headcount: number;
   y5Saudization: number;
+  y6Headcount?: number;
+  y6Saudization?: number;
 }
 
 export interface IServicePlanLocalizationStrategy {

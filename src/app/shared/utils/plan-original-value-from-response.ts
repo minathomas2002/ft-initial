@@ -140,7 +140,8 @@ export function getFieldValueFromServicePlanResponse(
     if (key === EMaterialsFormControls.agreementSigningDate) return pm.agreementSigningDate ?? undefined;
     if (key === EMaterialsFormControls.agreementOtherDetails) return pm.otherAgreementType ?? undefined;
     if (key === EMaterialsFormControls.supervisionOversightEntity) return pm.supervisionEntity ?? undefined;
-    if (key === EMaterialsFormControls.whyChoseThisCompany) return pm.selectionJustification ?? undefined;
+    // whyChoseThisCompany: accept enum and short key 'whyChoseThisCompany' (template/correctedFields use short form)
+    if (key === EMaterialsFormControls.whyChoseThisCompany || key === 'whyChoseThisCompany') return pm.selectionJustification ?? undefined;
     if (key === EMaterialsFormControls.summaryOfKeyAgreementClauses) return pm.keyAgreementClauses ?? undefined;
     if (key === EMaterialsFormControls.provideAgreementCopy) return toYesNoId(pm.agreementCopyProvided);
     return undefined;
@@ -165,6 +166,8 @@ export function getFieldValueFromServicePlanResponse(
       [`${EMaterialsFormControls.fourthYear}_saudization`]: 'y4Saudization',
       [`${EMaterialsFormControls.fifthYear}_headcount`]: 'y5Headcount',
       [`${EMaterialsFormControls.fifthYear}_saudization`]: 'y5Saudization',
+      [`${EMaterialsFormControls.sixthYear}_headcount`]: 'y6Headcount',
+      [`${EMaterialsFormControls.sixthYear}_saudization`]: 'y6Saudization',
     };
     const yearKey = yearMap[k as keyof typeof yearMap];
     if (yearKey) return (entity as any)[yearKey];
@@ -185,6 +188,7 @@ export function getFieldValueFromServicePlanResponse(
       [`${EMaterialsFormControls.thirdYear}_headcount`]: 'y3Headcount', [`${EMaterialsFormControls.thirdYear}_saudization`]: 'y3Saudization',
       [`${EMaterialsFormControls.fourthYear}_headcount`]: 'y4Headcount', [`${EMaterialsFormControls.fourthYear}_saudization`]: 'y4Saudization',
       [`${EMaterialsFormControls.fifthYear}_headcount`]: 'y5Headcount', [`${EMaterialsFormControls.fifthYear}_saudization`]: 'y5Saudization',
+      [`${EMaterialsFormControls.sixthYear}_headcount`]: 'y6Headcount', [`${EMaterialsFormControls.sixthYear}_saudization`]: 'y6Saudization',
     };
     const yKey = yMap[key as keyof typeof yMap];
     if (yKey) return (head as any)[yKey];
@@ -204,9 +208,11 @@ export function getFieldValueFromServicePlanResponse(
     if (key === EMaterialsFormControls.expectedLocalizationDate) return st.expectedLocalizationDate ?? undefined;
     if (key === EMaterialsFormControls.localizationApproach) return st.localizationApproach != null ? String(st.localizationApproach) : undefined;
     if (key === EMaterialsFormControls.localizationApproachOtherDetails) return st.otherLocalizationApproach ?? undefined;
-    if (key === EMaterialsFormControls.location || key === 'locationType') return st.locationType != null ? String(st.locationType) : undefined;
+    // location: accept enum 'locationType' and short key 'location' (template/correctedFields use short form)
+    if (key === EMaterialsFormControls.location || key === 'locationType' || key === 'location') return st.locationType != null ? String(st.locationType) : undefined;
     if (key === EMaterialsFormControls.locationOtherDetails) return st.otherLocationType ?? undefined;
-    if (key === EMaterialsFormControls.capexRequired || key === 'capexRequired (InSAR)') return st.capexRequired ?? undefined;
+    // capexRequired: accept enum 'capexRequired (InSAR)' and short key 'capexRequired' (template/correctedFields use short form)
+    if (key === EMaterialsFormControls.capexRequired || key === 'capexRequired (InSAR)' || key === 'capexRequired') return st.capexRequired ?? undefined;
     if (key === EMaterialsFormControls.supervisionOversightByGovernmentEntity) return st.governmentSupervision ?? undefined;
     if (key === EMaterialsFormControls.willBeAnyProprietaryToolsSystems) return toYesNoId(st.hasProprietaryTools);
     if (key === EMaterialsFormControls.proprietaryToolsSystemsDetails) return st.proprietaryToolsDetails ?? undefined;
