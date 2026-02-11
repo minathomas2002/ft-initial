@@ -9,7 +9,7 @@ import { TableModule } from 'primeng/table';
 import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
-
+import { SAUDIZATION_YEAR_KEYS } from '../saudization.constants';
 
 interface TableRow {
   label: string;
@@ -58,8 +58,8 @@ export class SaudizationMatrixComponent {
   // Enum reference
   readonly EMaterialsFormControls = EMaterialsFormControls;
 
-  // Years array for table columns
-  readonly years = [1, 2, 3, 4, 5, 6, 7];
+  /** Year keys for table columns – single source of truth for comment field matching (yearKey + id) */
+  readonly years: string[] = [...SAUDIZATION_YEAR_KEYS];
 
   // Table rows configuration
   readonly tableRows: TableRow[] = [

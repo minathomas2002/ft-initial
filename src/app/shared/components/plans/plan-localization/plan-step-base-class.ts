@@ -72,16 +72,6 @@ export abstract class PlanStepBaseClass {
   private correctedFieldInitialValues = signal<Map<string, unknown>>(new Map());
   private correctedFieldChangedOnce = signal<Set<string>>(new Set());
 
-  private hasResubmitChangedOnce(control: AbstractControl | null | undefined): boolean {
-    return control ? this.resubmitChangedOnceMap.get(control) === true : false;
-  }
-
-  private setResubmitChangedOnce(control: AbstractControl | null | undefined): void {
-    if (control) {
-      this.resubmitChangedOnceMap.set(control, true);
-    }
-  }
-
   // Resubmit mode check
   isResubmitMode = computed(() => {
     return this.planStore.wizardMode() === 'resubmit';
@@ -263,35 +253,6 @@ export abstract class PlanStepBaseClass {
     this.correctedFieldChangedOnce.set(new Set());
   }
 
-  private markCorrectedFieldChangedOnce(field: IFieldInformation, control: AbstractControl): void {
-    const fieldKey = this.getFieldKey(field);
-    const alreadyChanged = this.correctedFieldChangedOnce().has(fieldKey);
-    if (alreadyChanged) {
-      return;
-    }
-
-    // If the control was previously changed in a prior visit to this step,
-    // keep that state (the form control instance typically persists across navigation).
-    if (this.hasResubmitChangedOnce(control)) {
-      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
-      return;
-    }
-
-    // Prefer Angular's dirtiness signal for user-originated changes.
-    if (control.dirty) {
-      this.setResubmitChangedOnce(control);
-      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
-      return;
-    }
-
-    const initialValue = this.correctedFieldInitialValues().get(fieldKey);
-    const currentValue = control.value;
-    if (!this.valuesEqual(initialValue, currentValue)) {
-      this.setResubmitChangedOnce(control);
-      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
-    }
-  }
-
   /**
    * Collects all controls and their parent chains that should be enabled.
    */
@@ -443,8 +404,13 @@ export abstract class PlanStepBaseClass {
     const originalValues = new Map<string, unknown>();
 
     correctedFields.forEach(field => {
+      console.log({ field });
+
       const fieldKey = this.getFieldKey(field);
       const value = this.getOriginalFieldValueFromPlanResponse(field);
+      if (!value) {
+        console.log(field);
+      }
       originalValues.set(fieldKey, value);
     });
 
@@ -570,11 +536,31 @@ export abstract class PlanStepBaseClass {
 
     let isCorrected = false;
     if (correctedField) {
-      const fieldKey = this.getFieldKey(correctedField);
       const control = this.getControlForField(correctedField);
-      const currentValue = control?.value;
-      const originalValue = this.getOriginalValue(correctedField);
-      isCorrected = currentValue !== originalValue;
+      const isAttachmentsField =
+        (correctedField.section === 'attachments' && correctedField.inputKey === 'attachments') ||
+        inputKey === 'attachments';
+
+      if (isAttachmentsField) {
+        // Attachments: use dirty flag—value comparison fails (File[] vs BE objects, ref equality)
+        isCorrected = control?.dirty ?? false;
+      } else {
+        const currentValue = control?.value;
+        const originalValue = this.getOriginalValue(correctedField);
+        isCorrected = !this.valuesEqual(currentValue?.toString(), originalValue?.toString());
+      }
+
+      console.log(this.originalFieldValues());
+      console.log({
+        inputKey,
+        rowId,
+        correctedField,
+        isSelected,
+        isCorrected,
+        oldValue: this.getOriginalValue(correctedField),
+        newValue: control?.value,
+      });
+
     }
 
     return this.isResubmitMode() ? isSelected && !isCorrected : isSelected;

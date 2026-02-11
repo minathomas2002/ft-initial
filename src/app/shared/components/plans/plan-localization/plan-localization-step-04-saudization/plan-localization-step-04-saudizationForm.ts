@@ -18,6 +18,7 @@ import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
+import { SAUDIZATION_ROW_KEYS } from './saudization.constants';
 
 @Component({
   selector: 'app-plan-localization-step-04-saudization-form',
@@ -245,9 +246,18 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
     super.upDateSelectedInputs(value, fieldInformation, rowId);
   }
 
-  // Expose highlightInput as public method
+  /**
+   * Override to support legacy formats (year "1"-"7", controlName_yearN) for backward compatibility
+   * when matching correctedFields. Primary format is yearKey (year1-year7) + id.
+   */
   override highlightInput(inputKey: string, rowId?: string): boolean {
-    return super.highlightInput(inputKey, rowId);
+    if (super.highlightInput(inputKey, rowId)) return true;
+    if (!rowId || !this.isResubmitMode()) return false;
+    const yearKeyMatch = inputKey.match(/^year([1-7])$/);
+    if (yearKeyMatch) {
+      return super.highlightInput(yearKeyMatch[1], rowId);
+    }
+    return false;
   }
 
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
@@ -274,10 +284,43 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
       return null;
     }
 
+    // YearKey format: "year1"-"year7" – find row by rowId in that year
+    const yearKeyMatch = inputKey.match(/^year([1-7])$/);
+    if (yearKeyMatch) {
+      return this.findControlByRowIdInYear(saudizationFormGroup, parseInt(yearKeyMatch[1], 10), rowId);
+    }
+
+    // Legacy format: "1"-"7" (year only)
+    const legacyYearNum = /^[1-7]$/.test(inputKey) ? parseInt(inputKey, 10) : null;
+    if (legacyYearNum != null) {
+      return this.findControlByRowIdInYear(saudizationFormGroup, legacyYearNum, rowId);
+    }
+
     const { baseControlName, yearNumber } = this.parseSaudizationInputKey(inputKey);
     const yearsToCheck = this.getYearsToCheck(yearNumber);
 
     return this.findControlInYears(saudizationFormGroup, yearsToCheck, baseControlName, rowId);
+  }
+
+  /**
+   * Finds control when inputKey is yearKey or year-only. Searches row types in the given year.
+   */
+  private findControlByRowIdInYear(
+    saudizationFormGroup: FormGroup,
+    year: number,
+    rowId: string
+  ): FormControl<any> | null {
+    const yearGroup = saudizationFormGroup.get(`year${year}`);
+    if (!(yearGroup instanceof FormGroup)) return null;
+
+    for (const rowName of SAUDIZATION_ROW_KEYS) {
+      const rowControl = yearGroup.get(rowName);
+      if (!(rowControl instanceof FormGroup)) continue;
+      if (rowControl.get('rowId')?.value === rowId) {
+        return this.getValueControl(rowControl);
+      }
+    }
+    return null;
   }
 
   /**

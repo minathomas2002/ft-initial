@@ -356,8 +356,20 @@ export function getFieldValueFromProductPlanResponse(
     const sRows: SaudizationRow[] = pp.saudization?.saudizationRows ?? [];
     const sRow: SaudizationRow | undefined = rowId ? sRows.find((r) => (r as any).id === rowId) : undefined;
     if (sRow) {
+      // Support "controlName_yearN" format (extract year)
+      const yearMatch = inputKey.match(/_year(\d+)$/);
+      if (yearMatch) {
+        const yearKey = `year${yearMatch[1]}` as keyof SaudizationRow;
+        if (['year1', 'year2', 'year3', 'year4', 'year5', 'year6', 'year7'].includes(yearKey)) {
+          return (sRow as any)[yearKey];
+        }
+      }
+      // Support legacy "1"-"7" format
+      if (/^[1-7]$/.test(inputKey)) {
+        return (sRow as any)[`year${inputKey}`];
+      }
       const yKey = key as keyof SaudizationRow;
-      if (['year1','year2','year3','year4','year5','year6','year7','saudizationType'].includes(yKey)) return (sRow as any)[yKey];
+      if (['year1', 'year2', 'year3', 'year4', 'year5', 'year6', 'year7', 'saudizationType'].includes(yKey)) return (sRow as any)[yKey];
     }
     // By type: annualHeadcount->1, saudizationPercentage->2, annualTotalCompensation->3, saudiCompensationPercentage->4
     const typeByKey: Record<string, number> = {
