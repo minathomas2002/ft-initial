@@ -551,16 +551,16 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   isLoadingPlan = signal(false);
-  planStatus = signal<EInvestorPlanStatus | EInternalUserPlanStatus>(EInvestorPlanStatus.DRAFT);
+  planStatus = this.planStore.planStatus;
   statusLabel = computed(() => {
     const status = this.planStatus();
     const statusService = this.planStatusFactory.handleValidateStatus();
-    return statusService.getStatusLabel(status);
+    return statusService.getStatusLabel(status ?? EInvestorPlanStatus.DRAFT);
   });
   statusBadgeClass = computed<TColors>(() => {
     const status = this.planStatus();
     const statusService = this.planStatusFactory.handleValidateStatus();
-    return statusService.getStatusBadgeClass(status);
+    return statusService.getStatusBadgeClass(status ?? EInvestorPlanStatus.DRAFT);
   });
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
   isReviewMode = computed(() => this.planStore.wizardMode() === 'Review');
@@ -649,7 +649,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           this.isSubmitted.set(false);
           this.existingSignature.set(null);
           this.planSignature.set(null);
-          this.planStore.setPlanStatus(null);
           const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
           const opportunityControl = basicInfo?.get(EMaterialsFormControls.opportunity);
           const applied = this.planStore.appliedOpportunity();
@@ -680,16 +679,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   private loadPlanData$(planId: string) {
     this.isLoadingPlan.set(true);
     return this.planStore.getServicePlan(planId).pipe(
-      tap((response) => {
-        const planStatus = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? response.body?.servicePlan?.investorStatus : response.body?.servicePlan?.status;
-        this.planStatus.set(planStatus ?? null);
-      }),
       map((response) => response?.body ?? null),
-      catchError((error) => {
-        this.toasterService.error(this.i18nService.translate('plans.wizard.messages.errorLoadingPlan'));
-        this.visibility.set(false);
-        return of(null);
-      }),
       finalize(() => this.isLoadingPlan.set(false))
     );
   }

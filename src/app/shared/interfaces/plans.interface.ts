@@ -178,7 +178,7 @@ export interface IServicePlanResponse {
   id: string;
   isDraft: boolean;
   opportunityId: string;
-  opportunityTitle: string;
+  opportunityName: string;
   planTitle: string;
   status: EInternalUserPlanStatus;
   investorStatus: EInvestorPlanStatus;

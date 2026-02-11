@@ -462,7 +462,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   // Computed signals for plan status tag
-  planStatus = signal<EInternalUserPlanStatus | EInvestorPlanStatus | null>(null);
+  planStatus = this.planStore.planStatus;
   statusLabel = computed(() => {
     const status = this.planStatus();
     if (status === null) return '';
@@ -597,7 +597,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           this.activeStep.set(1);
           this.isSubmitted.set(false);
           this.existingSignature.set(null);
-          this.planStatus.set(null);
           const appliedOpportunity = this.planStore.appliedOpportunity();
           if (appliedOpportunity) this.initializeOpportunityFromApplied();
           else this.loadAvailableOpportunities();
@@ -733,27 +732,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   private loadPlanData$(planId: string) {
     this.isLoadingPlan.set(true);
     return this.planStore.getProductPlan(planId).pipe(
-      tap((response) => {
-        const planStatus = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? response.body?.productPlan?.investorStatus : response.body?.productPlan?.status;
-        this.planStatus.set(planStatus ?? null);
-      }),
-      switchMap((response) => {
-        if (!response.body) return of(null);
-        const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-        const isEditOrViewOrReviewOrResubmitMode = ['edit', 'view', 'Review', 'resubmit'].includes(this.planStore.wizardMode());
-        if (opportunityId && isEditOrViewOrReviewOrResubmitMode) {
-          return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId).pipe(
-            map(() => response.body),
-            catchError(() => of(response.body))
-          );
-        }
-        return of(response.body);
-      }),
-      catchError(() => {
-        this.toasterService.error(this.i18nService.translate('plans.wizard.messages.errorLoadingPlan'));
-        this.visibility.set(false);
-        return of(null);
-      }),
+      map((response) => response?.body ?? null),
       finalize(() => this.isLoadingPlan.set(false))
     );
   }
@@ -777,7 +756,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     }
 
     const currentMode = this.planStore.wizardMode();
-    const planStatusValue = response.productPlan?.status;
 
     // Handle forms based on mode
     if (['view', 'Review', 'resubmit'].includes(currentMode)) {
@@ -909,13 +887,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     if (opportunityType) {
       this.planStore.getActiveOpportunityLookUps()
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: () => {
-            // Opportunities loaded successfully - opportunity field remains enabled
-          },
-          error: (error) => {
-          }
-        });
+        .subscribe();
     }
   }
 

@@ -569,7 +569,7 @@ export const PlanStore = signalStore(
             const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.servicePlan?.investorStatus : res.body?.servicePlan?.status;
             const opportunityItem: ISelectItem = {
               id: res.body?.servicePlan?.opportunityId ?? '',
-              name: res.body?.servicePlan?.opportunityTitle ?? '',
+              name: res.body?.servicePlan?.opportunityName ?? '',
             }
             patchState(store, { availableOpportunities: [opportunityItem] });
             patchState(store, { servicePlanData: res.body || null });
