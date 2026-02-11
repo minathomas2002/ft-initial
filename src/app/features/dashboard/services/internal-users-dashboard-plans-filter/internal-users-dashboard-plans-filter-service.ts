@@ -24,7 +24,7 @@ export class InternalUsersDashboardPlansFilterService extends AbstractServiceFil
     
     // Department Managers always filter by DV_APPROVED status
     if (this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
-      adapted.status = EInternalUserPlanStatus.DV_APPROVED;
+     // adapted.status = EInternalUserPlanStatus.DV_APPROVED;
     }
     
     return adapted;

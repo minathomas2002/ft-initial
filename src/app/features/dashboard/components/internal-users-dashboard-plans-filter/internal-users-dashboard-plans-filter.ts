@@ -139,7 +139,7 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   private initializeDepartmentManagerFilter(): void {
     if (this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
       this.filterService.updateFilterSignal({
-        status: EInternalUserPlanStatus.DV_APPROVED,
+        //status: EInternalUserPlanStatus.DV_APPROVED,
         pageNumber: 1,
       });
       this.filterService.applyFilterWithPaging();
