@@ -162,6 +162,7 @@ export interface IServiceLocalizationPlanResponse {
   signature: Signature;
   servicePlan: IServicePlanResponse;
   submissionDate: string;
+  createdDate: string;
   planCode: number;
   investorName: string;
   investorId: string;
