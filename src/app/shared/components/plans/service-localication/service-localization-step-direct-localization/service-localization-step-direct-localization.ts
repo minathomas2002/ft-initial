@@ -123,7 +123,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   }
 
   yearColumns = computed(() => this.planFormService?.upcomingYears(6) ?? []);
-
+  
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
     EMaterialsFormControls.secondYear,
@@ -594,17 +594,8 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     return [...new Set(allLabels)].join(', ');
   }
 
-  // Helper method to strip index suffix from inputKey (e.g., 'expectedLocalizationDate_0' -> 'expectedLocalizationDate')
-  private stripIndexSuffix(inputKey: string): string {
-    // Match pattern: _ followed by one or more digits at the end
-    const match = inputKey.match(/^(.+)_(\d+)$/);
-    return match ? match[1] : inputKey;
-  }
-
   // Helper to map UI input keys to actual form control keys
   private mapInputKeyToControlKey(inputKey: string): string {
-    let baseKey = this.stripIndexSuffix(inputKey);
-
     const keyMap: Record<string, string> = {
       location: EMaterialsFormControls.location,
       capexRequired: EMaterialsFormControls.capexRequired,
@@ -613,12 +604,12 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
     // Handle legacy keys that may have index appended without underscore
     Object.keys(keyMap).forEach((key) => {
-      if (baseKey.startsWith(key) && /\d+$/.test(baseKey.substring(key.length))) {
-        baseKey = key;
+      if (inputKey.startsWith(key) && /\d+$/.test(inputKey.substring(key.length))) {
+        inputKey = key;
       }
     });
 
-    return keyMap[baseKey] ?? baseKey;
+    return keyMap[inputKey] ?? inputKey;
   }
 
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {

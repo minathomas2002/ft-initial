@@ -438,19 +438,12 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     return [...new Set(allLabels)].join(', ');
   }
 
-  // Helper method to strip index suffix from inputKey (e.g., 'serviceType_0' -> 'serviceType')
-  private stripIndexSuffix(inputKey: string): string {
-    // Match pattern: _ followed by one or more digits at the end
-    const match = inputKey.match(/^(.+)_(\d+)$/);
-    return match ? match[1] : inputKey;
-  }
-
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
     return getFieldValueFromServicePlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field
-  getControlForField(field: IFieldInformation): FormControl<any> | null {
+  override getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey, id: rowId } = field;
 
     // Helper to safely get value control - handles both FormGroup and FormControl
@@ -467,15 +460,16 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
 
     // Handle FormArray items (service details)
     if (section === 'serviceDetails' && rowId) {
+      {
+
+      }
       const formArray = this.getDetailsFormArray();
       const rowIndex = formArray.controls.findIndex(
         control => control.get('rowId')?.value === rowId
       );
       if (rowIndex !== -1) {
         const rowControl = formArray.at(rowIndex);
-        // Strip index suffix from inputKey (e.g., 'serviceType_0' -> 'serviceType')
-        const actualInputKey = this.stripIndexSuffix(inputKey);
-        const fieldControl = rowControl.get(actualInputKey);
+        const fieldControl = rowControl.get(inputKey);
         if (fieldControl) {
           return getValueControlSafe(fieldControl);
         }

@@ -404,13 +404,8 @@ export abstract class PlanStepBaseClass {
     const originalValues = new Map<string, unknown>();
 
     correctedFields.forEach(field => {
-      console.log({ field });
-
       const fieldKey = this.getFieldKey(field);
       const value = this.getOriginalFieldValueFromPlanResponse(field);
-      if (!value) {
-        console.log(field);
-      }
       originalValues.set(fieldKey, value);
     });
 
@@ -516,9 +511,19 @@ export abstract class PlanStepBaseClass {
   }
 
   /**
+   * Strips numeric index suffix from inputKey (e.g. 'whyChoseThisCompany_0' -> 'whyChoseThisCompany').
+   * Enables flexible matching when correctedFields use base key or index-suffixed format.
+   */
+  protected stripIndexSuffix(inputKey: string): string {
+    const match = inputKey.match(/^(.+)_(\d+)$/);
+    return match ? match[1] : inputKey;
+  }
+
+  /**
    * Determines if an input should be highlighted based on selection and comment phase.
    * Supports both simple fields and fields with row IDs (for FormArrays).
    * In resubmit mode, also checks correctedFields() for employee-selected fields.
+   * Matches inputKey flexibly: exact match or normalized (strip index suffix) when rowId matches.
    */
   protected highlightInput(inputKey: string, rowId?: string): boolean {
     // Check selectedInputs (for employee adding comments)
@@ -548,18 +553,19 @@ export abstract class PlanStepBaseClass {
         const currentValue = control?.value;
         const originalValue = this.getOriginalValue(correctedField);
         isCorrected = !this.valuesEqual(currentValue?.toString(), originalValue?.toString());
-      }
+        console.log(
+          {
+            inputKey,
+            rowId,
+            correctedField,
+            isSelected,
+            isCorrected,
+            currentValue,
+            originalValue,
+          }
+        );
 
-      console.log(this.originalFieldValues());
-      console.log({
-        inputKey,
-        rowId,
-        correctedField,
-        isSelected,
-        isCorrected,
-        oldValue: this.getOriginalValue(correctedField),
-        newValue: control?.value,
-      });
+      }
 
     }
 

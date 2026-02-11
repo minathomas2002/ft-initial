@@ -492,7 +492,7 @@
               [formControl]="getValueControl(itemControl.get('serviceName'))"
               readonly
               class="text-gray-400"
-              [appConditionalColorClass]="highlightInput('serviceName_', itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('serviceName', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
           </td>
@@ -503,7 +503,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'serviceDetails',
-                    inputKey: 'serviceType_',
+                    inputKey: 'serviceType',
                     label: 'Service Type'
                   }, itemControl.get('rowId')?.value)"
             >
@@ -515,7 +515,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('serviceType_', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('serviceType', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -531,7 +531,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'serviceDetails',
-                    inputKey: 'serviceCategory_',
+                    inputKey: 'serviceCategory',
                     label: 'Service Category'
                   }, itemControl.get('rowId')?.value)"
             >
@@ -543,7 +543,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('serviceCategory_', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('serviceCategory', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -559,7 +559,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'serviceDetails',
-                    inputKey: 'serviceDescription_',
+                    inputKey: 'serviceDescription',
                     label: 'Service Description'
                   }, itemControl.get('rowId')?.value)"
             >
@@ -592,7 +592,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'serviceDetails',
-                    inputKey: 'serviceProvidedTo_' + index,
+                    inputKey: 'serviceProvidedTo',
                     label: 'Service Provided To'
                   }, itemControl.get('rowId')?.value)"
             >
@@ -605,7 +605,7 @@
                 fluid
                 [appendTo]="'body'"
                 (onChange)="onServiceProvidedToChange($event.value, index)"
-                [appConditionalColorClass]="highlightInput('serviceProvidedTo_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('serviceProvidedTo', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
               <app-base-error-messages
@@ -621,7 +621,7 @@
                 [showCheckbox]="showCheckbox()"
                 (valueChanged)="upDateSelectedInputs($event, {
                       section: 'serviceDetails',
-                      inputKey: 'serviceProvidedToCompanyNames_' + index,
+                      inputKey: 'serviceProvidedToCompanyNames',
                       label: 'Company Names'
                     }, itemControl.get('rowId')?.value)"
               >
@@ -631,7 +631,7 @@
                   [maxlength]="255"
                   [appHidePlaceholderWhenDisabledEmpty]="'Please mention company names'"
                   [formControl]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
-                  [appConditionalColorClass]="highlightInput('serviceProvidedToCompanyNames_' + index, itemControl.get('rowId')?.value)"
+                  [appConditionalColorClass]="highlightInput('serviceProvidedToCompanyNames', itemControl.get('rowId')?.value)"
                   [color]="selectedInputColor()"
                 ></textarea>
               </app-group-input-with-checkbox>
@@ -654,7 +654,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'serviceDetails',
-                    inputKey: 'totalBusinessDoneLast5Years_' + index,
+                    inputKey: 'totalBusinessDoneLast5Years',
                     label: 'Total Business Done Last 5 Years'
                   }, itemControl.get('rowId')?.value)"
             >
@@ -664,7 +664,7 @@
                 [maxlength]="150"
                 [appHidePlaceholderWhenDisabledEmpty]="'Company Name – Amount (Mn SAR) (From Year – To Year)'"
                 [formControl]="getValueControl(itemControl.get('totalBusinessDoneLast5Years'))"
-                [appConditionalColorClass]="highlightInput('totalBusinessDoneLast5Years_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('totalBusinessDoneLast5Years', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
             </app-group-input-with-checkbox>
@@ -685,7 +685,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'serviceDetails',
-                    inputKey: 'serviceTargetedForLocalization_' + index,
+                    inputKey: 'serviceTargetedForLocalization',
                     label: 'Service Targeted For Localization'
                   }, itemControl.get('rowId')?.value)"
             >
@@ -698,7 +698,7 @@
                 fluid
                 [appendTo]="'body'"
                 (onChange)="onServiceTargetedForLocalizationChange($event.value, index)"
-                [appConditionalColorClass]="highlightInput('serviceTargetedForLocalization_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('serviceTargetedForLocalization', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -714,7 +714,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'serviceDetails',
-                    inputKey: 'expectedLocalizationDate_' + index,
+                    inputKey: 'expectedLocalizationDate',
                     label: 'Expected Localization Date'
                   }, itemControl.get('rowId')?.value)"
             >
@@ -726,7 +726,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('expectedLocalizationDate_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('expectedLocalizationDate', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -745,7 +745,7 @@
               [appHidePlaceholderWhenDisabledEmpty]="'Select'"
               fluid
               [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('serviceLocalizationMethodology_' + index, itemControl.get('rowId')?.value)"
+              [appConditionalColorClass]="highlightInput('serviceLocalizationMethodology', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
             />
             <app-base-error-messages

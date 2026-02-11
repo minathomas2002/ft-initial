@@ -186,7 +186,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   availableQuarters = computed(() => this.planFormService?.getAvailableQuarters(5) ?? []);
 
   yearColumns = computed(() => this.planFormService?.upcomingYears(6));
-
+  
   // Custom header labels for Saudi Company Details table to ensure correct order
   saudiCompanyDetailsHeaderLabels: Record<string, string> = {
     [EMaterialsFormControls.saudiCompanyName]: 'Saudi Company Name',
@@ -816,23 +816,15 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     return [...new Set(allLabels)].join(', ');
   }
 
-  // Helper method to strip index suffix from inputKey (e.g., 'saudiCompanyName_0' -> 'saudiCompanyName')
-  private stripIndexSuffix(inputKey: string): string {
-    // Match pattern: _ followed by one or more digits at the end
-    const match = inputKey.match(/^(.+)_(\d+)$/);
-    return match ? match[1] : inputKey;
-  }
-
   // Helper to map UI input keys to actual form control keys
   private mapInputKeyToControlKey(section: string, inputKey: string): string {
-    const baseKey = this.stripIndexSuffix(inputKey);
-
     const keyMap: Record<string, string> = {
       agreementType: EMaterialsFormControls.agreementType,
       whyChoseThisCompany: EMaterialsFormControls.whyChoseThisCompany,
+      [EMaterialsFormControls.whyChoseThisCompany]: EMaterialsFormControls.whyChoseThisCompany, // enum value alias
     };
 
-    return keyMap[baseKey] ?? baseKey;
+    return keyMap[inputKey] ?? inputKey;
   }
 
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
@@ -840,7 +832,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   }
 
   // Implement abstract method from base class to get form control for a field
-  getControlForField(field: IFieldInformation): FormControl<any> | null {
+  override getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey, id: rowId } = field;
 
     // Handle FormArray items with rowId
