@@ -118,6 +118,7 @@
               (onInternalReview)="onReview($event)"
               (onAssignToEmployee)="onAssignToEmployee($event)"
               (onReAssign)="onReAssign($event)"
+              (onDelete)="onDelete($event)"
               (onResubmitted)="onResubmitted($event)"
             />
           </td>
@@ -171,3 +172,15 @@
   (onSuccess)="applyFilter()"
 ></app-assign-reassign-manual-employee>
 }
+@if(viewDeleteDialog()){
+  <app-general-confirmation-dialog
+    [(visible)]="viewDeleteDialog"
+    [title]="'Are you sure you want to delete the plan?'"
+    [confirmationLabel]="'Delete'"
+    [cancelLabel]="'Cancel'"
+    [confirmButtonSeverity]="'danger'"
+    [icon]="'icon-trash-2'"
+    (confirmed)="onConfirmDeletePlan()"
+    (onCancel)="onCancelDeletePlan()"
+  />
+  }

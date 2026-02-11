@@ -59,7 +59,6 @@ export class PlanApiService {
   }
 
   internalRejectPlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined }): Observable<IBaseApiResponse<boolean>> {
-    debugger
     return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined }, unknown>(API_ENDPOINTS.plans.internalRejectPlan, req);
   }
 
@@ -144,6 +143,11 @@ export class PlanApiService {
 
   getPlanComment(planId: string): Observable<IBaseApiResponse<IPlanCommentResponse>> {
     return this.baseHttpService.post<IPlanCommentResponse, { planId: string }, unknown>(API_ENDPOINTS.plans.getPlanComment, { planId });
+  }
+
+
+  deleteDraftPlan(planId: string): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, { planId: string }, unknown>(API_ENDPOINTS.plans.deleteDraftPlan, { planId });
   }
 
 }
