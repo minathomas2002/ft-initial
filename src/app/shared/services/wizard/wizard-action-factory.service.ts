@@ -11,7 +11,8 @@ export type WizardMode = 'create' | 'edit' | 'view' | 'Review' | 'resubmit';
 
 export interface IWizardActionConfig {
   context: WizardActionContext;
-  mode: WizardMode;
+  /** Mode as a signal so toolbar actions react to mode changes without regenerating the config. */
+  mode: Signal<WizardMode>;
   activeStep: Signal<number>;
   totalSteps: Signal<number>;
   isLoading?: Signal<boolean>;
@@ -59,7 +60,8 @@ export class WizardActionFactory {
     const isProcessing = config.isProcessing?.() ?? false;
     const isSavingAsDraft = config.isSavingAsDraft?.() ?? false;
 
-    const { context, mode } = config;
+    const context = config.context;
+    const mode = config.mode();
     const currentLanguage = this.i18nService.currentLanguage();
     const isPlanWizard = context === 'product-plan' || context === 'service-plan';
 
