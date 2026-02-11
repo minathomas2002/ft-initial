@@ -81,21 +81,18 @@ export class PlanCommentSyncService {
    * Also removes the page from currentUserPageComments (except when restoring).
    */
   clearPageCommentTextInStore(pageTitleForTL: EPlanPageTitle): void {
-    if (this.planStore.originalPlanComments()) {
-      this.planStore.restorePlanCommentsFromOriginal();
-      return;
-    }
-
     const existing = this.planStore.planComments();
     if (!existing) return;
 
-    const updatedComments = existing.comments.map(c =>
-      c.pageTitleForTL === pageTitleForTL ? { ...c, comment: '' } : c
-    );
+    const original = this.planStore.originalPlanComments();
+    const originalPageComments = original?.comments?.find(oc => oc.pageTitleForTL === pageTitleForTL);
 
+    const updatedComments = existing.comments.map(c =>
+      c.pageTitleForTL === pageTitleForTL ? { ...c, comment: originalPageComments?.comment ?? '' } : c
+    );
     const payload: IPlanCommentResponse = {
       comments: updatedComments,
-      creatorRole: existing.creatorRole
+      creatorRole: original?.creatorRole ?? 0
     };
 
     this.planStore.setPlanComments(payload);

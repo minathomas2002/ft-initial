@@ -208,7 +208,8 @@ export abstract class PlanStepBaseClass {
 
       // Process if this is the first time (previousLength === -1) or if correctedFields changed
       if (previousLength === -1 || currentLength !== previousLength) {
-        this.handleResubmitModeFields(formGroup, correctedFields);
+        const fields = this.planStore.originalPlanComments()?.comments.find(c => c.pageTitleForTL === this.pageTitle())?.fields
+        this.handleResubmitModeFields(formGroup, fields!);
         this.previousCorrectedFieldsLength.set(currentLength);
       }
     });
@@ -361,17 +362,21 @@ export abstract class PlanStepBaseClass {
       if (!this.resubmitSubscribedControls.has(control)) {
         this.resubmitSubscribedControls.add(control);
         control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-          if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
+          // if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
           if (control.status === 'VALID' && control.dirty) {
             const field = correctedFields.find(f => this.getControlForField(f) === control);
-            if (field) this.upDateSelectedInputs(false, field);
+            const currentValue = control.value;
+            const originalValue = this.getOriginalValue(field!);
+            if (field) this.upDateSelectedInputs(originalValue == currentValue, field);
           }
         });
         control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-          if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
+          // if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
           if (control.status === 'VALID' && control.dirty) {
             const field = correctedFields.find(f => this.getControlForField(f) === control);
-            if (field) this.upDateSelectedInputs(false, field);
+            const currentValue = control.value;
+            const originalValue = this.getOriginalValue(field!);
+            if (field) this.upDateSelectedInputs(originalValue == currentValue, field);
           }
         });
       }
@@ -491,7 +496,9 @@ export abstract class PlanStepBaseClass {
         this.commentFormControl.disable({ emitEvent: false });
         // Also disable the step comment control (used by app-comment-input)
         this.stepCommentControl.disable({ emitEvent: false });
-        this.formUtilityService.disableHasCommentControls(this.getFormGroup());
+        if (!this.isResubmitMode()) {
+          this.formUtilityService.disableHasCommentControls(this.getFormGroup());
+        }
       }
       if (['adding', 'editing'].includes(this.commentPhase())) {
         this.commentFormControl.enable();
@@ -565,15 +572,12 @@ export abstract class PlanStepBaseClass {
     if (correctedField) {
       const fieldKey = this.getFieldKey(correctedField);
       const control = this.getControlForField(correctedField);
-      const changedOnce =
-        this.correctedFieldChangedOnce().has(fieldKey) ||
-        this.hasResubmitChangedOnce(control) ||
-        !!control?.dirty;
-      isCorrected = !changedOnce;
+      const currentValue = control?.value;
+      const originalValue = this.getOriginalValue(correctedField);
+      isCorrected = currentValue !== originalValue;
     }
 
-    const phase = this.commentPhase();
-    return isSelected || isCorrected && (phase === 'adding' || phase === 'editing' || phase === 'none');
+    return this.isResubmitMode() ? isSelected && !isCorrected : isSelected;
   }
 
   private valuesEqual(a: any, b: any): boolean {
@@ -616,7 +620,7 @@ export abstract class PlanStepBaseClass {
     if (this.isResubmitMode()) {
       this.commentPhase.set('none');
       this.commentFormControl.disable({ emitEvent: false });
-      this.selectedInputs.set(this.correctedFields());
+      // this.selectedInputs.set(this.correctedFields());
       // In resubmit mode, keep fields in the store (needed for correctedFields derivation)
       // but clear the comment text and remove from currentUserPageComments
       this.planCommentSyncService.clearPageCommentTextInStore(this.pageTitle());
@@ -665,9 +669,9 @@ export abstract class PlanStepBaseClass {
     this.commentFormControl.setValue(commentValue, { emitEvent: false });
     this.commentPhase.set('viewing');
     this.commentFormControl.disable();
-
-    // Merge this page's comment into planComments (add/remove fields as user selected)
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
+    // Merge this page's comment into planComments (add/remove fields as user selected)
+    // this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
     this.toasterService.success('Your comments have been saved successfully.');
   }
