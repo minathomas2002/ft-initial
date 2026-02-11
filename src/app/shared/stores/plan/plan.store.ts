@@ -4,7 +4,7 @@ import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApp
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
-import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { EInternalUserPlanStatus, IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { IProductPlanResponse, IServiceLocalizationPlanResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
@@ -50,11 +50,13 @@ const initialState: {
   isProcessing: boolean;
   wizardMode: TWizardMode;
   selectedPlanId: string | null;
-  planStatus: number | null;
+  planStatus: EInternalUserPlanStatus | null;
   planComments: IPlanCommentResponse | null;
   currentUserPageComments: EPlanPageTitle[];
   productPlanData: IProductPlanResponse | null;
   servicePlanData: IServiceLocalizationPlanResponse | null;
+  actionNote: string | null;
+  acknowledgeRejectionNote: string | null;
 } = {
   newPlanOpportunityType: null,
   appliedOpportunity: null,
@@ -159,6 +161,8 @@ const initialState: {
   planComments: null,
   productPlanData: null,
   servicePlanData: null,
+  actionNote: null,
+  acknowledgeRejectionNote: null
 };
 
 export const PlanStore = signalStore(
@@ -261,6 +265,12 @@ export const PlanStore = signalStore(
       },
       setPlanStatus(status: number | null): void {
         patchState(store, { planStatus: status });
+      },
+      setActionNote(actionNote: string | null): void {
+        patchState(store, { actionNote });
+      },
+      setAcknowledgeRejectionNote(acknowledgeRejectionNote: string | null): void {
+        patchState(store, { acknowledgeRejectionNote });
       },
       setPlanComments(comments: IPlanCommentResponse | null): void {
         patchState(store, { planComments: comments });
@@ -543,6 +553,8 @@ export const PlanStore = signalStore(
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
             store.setPlanStatus(res.body?.productPlan?.status ?? null);
+            store.setActionNote(res.body?.productPlan?.actionNote ?? null);
+            store.setAcknowledgeRejectionNote(res.body?.productPlan?.acknowledgeRejectionNote ?? null);
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {
@@ -562,6 +574,8 @@ export const PlanStore = signalStore(
           tap((res) => {
             patchState(store, { servicePlanData: res.body || null });
             store.setPlanStatus(res.body?.servicePlan?.status ?? null);
+            store.setActionNote(res.body?.actionNote ?? null);
+            store.setAcknowledgeRejectionNote(res.body?.acknowledgeRejectionNote ?? null);
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading service plan' });

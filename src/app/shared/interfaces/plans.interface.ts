@@ -16,7 +16,9 @@ export interface ProductPlan {
   overviewCompanyInfo: OverviewCompanyInfo
   productPlantOverview: ProductPlantOverview
   valueChainStep: ValueChainStep
-  saudization: Saudization
+  saudization: Saudization,
+  actionNote?: string,
+  acknowledgeRejectionNote?: string,
 }
 
 export interface OverviewCompanyInfo {
@@ -166,6 +168,8 @@ export interface IServiceLocalizationPlanResponse {
   investorName: string;
   investorId: string;
   statusValue: string | null;
+  actionNote?: string,
+  acknowledgeRejectionNote?: string,
 }
 
 export interface IServicePlanGetResponse {

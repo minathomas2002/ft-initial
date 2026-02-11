@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { CoverPageStepSummary } from './summary-pages/cover-page-step-summary/cover-page-step-summary';
 import { OverviewStepSummary } from './summary-pages/overview-step-summary/overview-step-summary';
 import { ExistingSaudiStepSummary } from './summary-pages/existing-saudi-step-summary/existing-saudi-step-summary';
@@ -6,6 +6,9 @@ import { DirectLocalizationStepSummary } from './summary-pages/direct-localizati
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
 import { ICommentsCountAndPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { SummarySectionSignature } from '../../summary-section-signature/summary-section-signature';
+import { PageCommentBox } from "../../page-comment-box/page-comment-box";
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-service-plan-summary-page',
@@ -14,13 +17,19 @@ import { SummarySectionSignature } from '../../summary-section-signature/summary
     OverviewStepSummary,
     ExistingSaudiStepSummary,
     DirectLocalizationStepSummary,
-    SummarySectionSignature
-  ],
+    SummarySectionSignature,
+    PageCommentBox
+],
   templateUrl: './service-plan-summary-page.html',
   styleUrl: './service-plan-summary-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicePlanSummaryPage {
+  readonly planStore = inject(PlanStore);
+  readonly planRejectionsStatus = signal([EInternalUserPlanStatus.DEPT_REJECTED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.EMPLOYEE_REJECTED, EInternalUserPlanStatus.REJECTED])
+
+  readonly isRejected = computed(() => this.planRejectionsStatus().includes(this.planStore.planStatus()!));
+
   onEditStep = output<number>();
 
   includeExistingSaudi = input<boolean>(true);
