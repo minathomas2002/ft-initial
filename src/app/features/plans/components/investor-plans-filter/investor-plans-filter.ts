@@ -56,7 +56,7 @@ export class InvestorPlansFilter implements OnInit {
     this.listenToQueryParamChanges();
   }
 
-  private listenToQueryParamChanges() {
+  private listenToQueryParamChanges() {    
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(queryParams => {
