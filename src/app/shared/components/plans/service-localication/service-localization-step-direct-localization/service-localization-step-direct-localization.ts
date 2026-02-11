@@ -122,7 +122,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     return this.planFormService?.step4_directLocalization ?? new FormGroup({});
   }
 
-  yearColumns = computed(() => this.planFormService?.upcomingYears(6) ?? []);
+  yearColumns = computed(() => this.planFormService?.upcomingYears(6, new Date(this.planStore.servicePlanData()?.submissionDate?? new Date()).getFullYear()) ?? []);
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,

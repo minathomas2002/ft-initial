@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 
 const YEAR_CONTROL_KEYS = [
   EMaterialsFormControls.firstYear,
@@ -47,11 +48,11 @@ const YEAR_MAP: Record<string, string> = {
 })
 export class EntityLevelSummarySection extends SummarySectionBaseClass {
   private readonly serviceForm = inject(ServicePlanFormService);
-
+  
   /** Page number for entity headcounts (3 = Existing Saudi, 4 = Direct Localization) */
   pageNumber = input<number>(3);
 
-  yearColumns = computed(() => this.serviceForm.upcomingYears(6));
+  yearColumns = computed(() => this.serviceForm?.upcomingYears(6, new Date(this.planStore.servicePlanData()?.submissionDate?? new Date()).getFullYear()) ?? []);
 
   private get entityLevelFormArray(): FormArray {
     return this.sectionFormGroup().get(EMaterialsFormControls.entityLevelFormGroup) as FormArray;
