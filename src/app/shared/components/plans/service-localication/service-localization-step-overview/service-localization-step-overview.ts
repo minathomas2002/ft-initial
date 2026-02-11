@@ -467,15 +467,21 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
 
     // Handle FormArray items (service details)
     if (section === 'serviceDetails' && rowId) {
+      {
+
+      }
       const formArray = this.getDetailsFormArray();
       const rowIndex = formArray.controls.findIndex(
         control => control.get('rowId')?.value === rowId
       );
       if (rowIndex !== -1) {
         const rowControl = formArray.at(rowIndex);
-        // Strip index suffix from inputKey (e.g., 'serviceType_0' -> 'serviceType')
-        const actualInputKey = this.stripIndexSuffix(inputKey);
-        const fieldControl = rowControl.get(actualInputKey);
+        const fieldControl = rowControl.get(inputKey);
+        console.log({
+          inputKey,
+          rowControl,
+          fieldControl,
+        });
         if (fieldControl) {
           return getValueControlSafe(fieldControl);
         }
