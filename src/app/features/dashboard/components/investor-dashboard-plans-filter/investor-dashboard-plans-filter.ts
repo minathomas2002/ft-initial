@@ -11,6 +11,7 @@ import { EInvestorPlanStatus } from 'src/app/shared/interfaces';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PlanStore, IPlanTypeDropdownOption } from 'src/app/shared/stores/plan/plan.store';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 interface IDropdownOption {
   label: string;
@@ -19,7 +20,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-investor-dashboard-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe],
+  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe,MultiSelectModule],
   templateUrl: './investor-dashboard-plans-filter.html',
   styleUrl: './investor-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,17 +34,17 @@ export class InvestorDashboardPlansFilter implements OnInit {
   readonly filter = this.filterService.filter;
 
   planTypeOptions = computed<IDropdownOption[]>(() => {
-    return this.planStore.planTypeOptions() as IDropdownOption[];
+    return this.planStore.planTypeOptions().filter(x=>x.value !== null) as IDropdownOption[];
   });
 
   statusOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
     return [
-      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null },
       { label: this.i18nService.translate('plans.status.submitted'), value: EInvestorPlanStatus.SUBMITTED },
       { label: this.i18nService.translate('plans.status.draft'), value: EInvestorPlanStatus.DRAFT },
       { label: this.i18nService.translate('plans.status.pendingWithInvestor'), value: EInvestorPlanStatus.PENDING },
       { label: this.i18nService.translate('plans.status.underReview'), value: EInvestorPlanStatus.UNDER_REVIEW },
+      
     ];
   });
 
