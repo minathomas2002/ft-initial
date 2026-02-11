@@ -4,7 +4,7 @@ import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApp
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
-import { IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { IProductPlanResponse, IServiceLocalizationPlanResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
@@ -276,6 +276,7 @@ export const PlanStore = signalStore(
   withMethods((store) => {
     const opportunitiesApiService = inject(OpportunitiesApiService);
     const planApiService = inject(PlanApiService);
+    const roleService = inject(RoleService);
     return {
       getActiveOpportunityLookUps(): Observable<IBaseApiResponse<ISelectItem[]>> {
         if (!store.newPlanOpportunityType()) return of({} as IBaseApiResponse<ISelectItem[]>);
@@ -317,7 +318,7 @@ export const PlanStore = signalStore(
       },
 
       /* Get Active Employees  For plans*/
-      getActiveEmployeesForPlans(planId: string) {
+      getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IAssignReassignActiveEmployee>> {
         patchState(store, { isLoading: true, error: null });
         return planApiService.getActiveEmployeesForPlans(planId).pipe(
           tap((res) => {
@@ -335,7 +336,7 @@ export const PlanStore = signalStore(
         );
       },
       /* assign Employee  For plan*/
-      assignEmployeeToPlan(request: IAssignRequest) {
+      assignEmployeeToPlan(request: IAssignRequest): Observable<IBaseApiResponse<boolean>> {
         patchState(store, { isProcessing: true, error: null });
         return planApiService.assignEmployeeToPlan(request).pipe(
           tap((res) => {
@@ -351,7 +352,7 @@ export const PlanStore = signalStore(
         );
       },
       /* reassign Employee  For plan*/
-      reassignEmployeeToPlan(request: IAssignRequest) {
+      reassignEmployeeToPlan(request: IAssignRequest): Observable<IBaseApiResponse<boolean>> {
         patchState(store, { isProcessing: true, error: null });
         return planApiService.reassignEmployeeToPlan(request).pipe(
           tap((res) => {
@@ -541,7 +542,13 @@ export const PlanStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
-            store.setPlanStatus(res.body?.productPlan?.status ?? null);
+            const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.productPlan?.investorStatus : res.body?.productPlan?.status;
+            store.setPlanStatus(planStatus ?? null);
+            const opportunityItem: ISelectItem = {
+              id: res.body?.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId ?? '',
+              name: res.body?.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityTitle ?? '',
+            }
+            patchState(store, { availableOpportunities: [opportunityItem] });
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {
@@ -559,8 +566,14 @@ export const PlanStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return planApiService.getServicePlan({ planId }).pipe(
           tap((res) => {
+            const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.servicePlan?.investorStatus : res.body?.servicePlan?.status;
+            const opportunityItem: ISelectItem = {
+              id: res.body?.servicePlan?.opportunityId ?? '',
+              name: res.body?.servicePlan?.opportunityTitle ?? '',
+            }
+            patchState(store, { availableOpportunities: [opportunityItem] });
             patchState(store, { servicePlanData: res.body || null });
-            store.setPlanStatus(res.body?.servicePlan?.status ?? null);
+            store.setPlanStatus(planStatus ?? null);
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading service plan' });
