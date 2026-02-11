@@ -747,6 +747,7 @@
       "resubmit": "Resubmit",
       "approveAndForward": "Approve & Forward",
       "reject": "Reject",
+      "acknowledge": "Acknowledge",
       "sendBackToInvestor": "Send Back to Investor",
       "addComments": "Add Comments",
       "timeline": "Timeline",

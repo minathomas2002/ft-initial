@@ -19,6 +19,7 @@ export interface IWizardActionConfig {
   isSavingAsDraft?: Signal<boolean>;
   hideSaveAsDraft?: Signal<boolean>;
 
+  canAcknowledgeRejection?: Signal<boolean>;
   canApproveOrReject?: Signal<boolean>;
   allowUserToResubmit?: Signal<boolean>;
   canOpenTimeline?: Signal<boolean>;
@@ -37,6 +38,7 @@ export interface IWizardActionConfig {
   onAddComment?: () => void;
   onOpenTimeline?: () => void;
   onResubmit?: () => void;
+  onAcknowledge?:()=>void;
 }
 
 @Injectable({
@@ -99,7 +101,21 @@ export class WizardActionFactory {
       });
     }
 
-    const shouldShowSendBackToInvestor = mode === 'Review' && isFinalStep && !!config.onSendBackToInvestor;
+    const shouldShowAcknowledge =
+      mode === 'Review' && config.canAcknowledgeRejection?.();
+
+    if (shouldShowAcknowledge) {
+      actions.push({
+        id: 'acknowledge',
+        label: this.i18nService.translate('plans.wizard.acknowledge'),
+        severity: 'danger',
+        onClick: config.onAcknowledge,
+        position: 'right'
+      });
+    }
+
+    const shouldShowSendBackToInvestor = mode === 'Review' && isFinalStep && !!config.onSendBackToInvestor &&
+             !config.canAcknowledgeRejection;
     if (shouldShowSendBackToInvestor) {
       actions.push({
         id: 'send-back-to-investor',
@@ -115,7 +131,7 @@ export class WizardActionFactory {
     const shouldShowAddComment =
       (mode === 'Review' || mode === 'resubmit') &&
       activeStep < totalSteps &&
-      !!config.onAddComment;
+      !!config.onAddComment && !config.canAcknowledgeRejection;
 
     if (shouldShowAddComment) {
       const isDisabled = config.isAddCommentButtonDisabled?.() ?? false;
@@ -177,7 +193,7 @@ export class WizardActionFactory {
         });
       }
 
-      else if (mode === 'Review' && !config.isInvestorViewMode?.()) {
+      else if (mode === 'Review' && !config.isInvestorViewMode?.() && !config.canAcknowledgeRejection) {
         const canApproveOrReject = config.canApproveOrReject?.() ?? true;
 
         if (config.onReject) {

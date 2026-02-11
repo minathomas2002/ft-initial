@@ -26,7 +26,7 @@ import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 })
 export class ProductPlanSummaryPage {
   readonly planStore = inject(PlanStore);
-  readonly planRejectionsStatus = signal([EInternalUserPlanStatus.DEPT_REJECTED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.EMPLOYEE_REJECTED, EInternalUserPlanStatus.REJECTED])
+  readonly planRejectionsStatus = signal([EInternalUserPlanStatus.DEPT_REJECTED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED])
 
   readonly isRejected = computed(() => this.planRejectionsStatus().includes(this.planStore.planStatus()!));
   signature = input<Signature | null>(null);

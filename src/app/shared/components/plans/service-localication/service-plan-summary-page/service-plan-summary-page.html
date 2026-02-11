@@ -7,9 +7,9 @@
     [colorsClassesConfig]="{
       border: isRejected() ? 'border-[#B42318]' : 'border-green-200',
       background: isRejected() ? 'bg-[#F7E9E8]' : 'bg-green-50',
-      iconColor: isRejected() ? 'text-[#A22016] rotate-180 ' : 'text-green-700 rotate-180 ',
+      iconColor: isRejected() ? 'text-[#A22016] rotate-180 ' : 'text-green-700 ',
     }"
-    [iconType]="'icon-info'"
+    [iconType]="isRejected() ? 'icon-info' : 'icon-message-circle'"
     >
     </app-page-comment-box>
   }

@@ -8,7 +8,7 @@
       background: isRejected() ? 'bg-[#F7E9E8]' : 'bg-green-50',
       iconColor: isRejected() ? 'text-[#A22016] rotate-180 ' : 'text-green-700 rotate-180 ',
     }"
-    [iconType]="'icon-info'"
+    [iconType]="isRejected() ? 'icon-info' : ''"
     >
   </app-page-comment-box>
 }
