@@ -28,9 +28,12 @@ export abstract class BasePlanWizard {
   protected showApproveConfirmationDialog = signal<boolean>(false);
   protected showRejectReasonDialog = signal<boolean>(false);
   protected showRejectConfirmationDialog = signal<boolean>(false);
+  protected showAcknowledgeRejectDialog = signal<boolean>(false);
   protected showInvestorResubmitConfirmationDialog = signal<boolean>(false);
   protected approvalNote = signal<string>('');
   protected rejectionReason = signal<string>('');
+  protected acknowledgeReason = signal<string>('');
+
 
   protected readonly commentTitle = this.planStore.commentPersona
 
@@ -59,6 +62,13 @@ export abstract class BasePlanWizard {
    * When implemented as a computed signal, it can be called like a method: canApproveOrReject()
    */
   abstract canApproveOrReject(): boolean;
+
+    /**
+   * Template method: Check if the wizard can Acknowledge.
+   * Subclasses must implement this as a computed signal or method.
+   * When implemented as a computed signal, it can be called like a method: canAcknowledgeRejection()
+   */
+  abstract canAcknowledgeRejection(): boolean;
 
   /**
    * Template method: Check if investor can submit resubmission.
@@ -294,6 +304,7 @@ export abstract class BasePlanWizard {
     this.showRejectReasonDialog.set(true);
   }
 
+
   /**
    * Proceed to rejection confirmation after entering reason - Common implementation
    */
@@ -422,5 +433,63 @@ export abstract class BasePlanWizard {
    */
   onCancelInvestorResubmit(): void {
     this.showInvestorResubmitConfirmationDialog.set(false);
+  }
+
+
+  /**
+   * dv acknowledge rejection
+   */
+    onAcknowledgeReject(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const reason = this.acknowledgeReason().trim();
+    if (!reason) {
+      this.toasterService.error('Acknowledgement reason is required.');
+      return;
+    }
+
+    this.isProcessing.set(true);
+    this.planStore.DvRejecttionAcknowledgePlan(planId, reason)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showAcknowledgeRejectDialog.set(false);
+          this.acknowledgeReason.set('');
+          this.toasterService.success('Plan has been rejected acknowledge successfully.');
+          this.refresh();
+          this.closeWizard();
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error rejecting acknowledge plan. Please try again.');
+          console.error('Error rejecting acknowledge plan:', error);
+        }
+      });
+  }
+
+    /**
+   * Cancel rejection acknowledge confirmation - 
+   */
+  onCancelRejectAcknowledgment(): void {
+    this.showRejectConfirmationDialog.set(false);
+    // Return to reason entry dialog
+    this.rejectionReason.set('');
+  }
+
+  /**
+   * Handle Reject Acknowledge action - Template Method
+   */
+  onAcknowledge(): void {
+    if (!this.canAcknowledgeRejection()) {
+      return;
+    }
+    this.rejectionReason.set('');
+    this.showAcknowledgeRejectDialog.set(true);
   }
 }

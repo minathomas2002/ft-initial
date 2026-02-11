@@ -439,6 +439,14 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return hasEmployeeId || hasEmployeeRole;
   });
 
+    // Check if user is Division MANAGER persona
+  isDVManagerPersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    // Check if user has employeeID or has EMPLOYEE role
+    const hasMangerRole = userProfile.roleCodes?.includes(ERoles.Division_MANAGER) ?? false;
+    return hasMangerRole;
+  });
   // Check if plan is in pending status for investor
   isPendingStatusForInvestor = computed(() => {
     const status = this.planStatus();
@@ -521,6 +529,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
   });
 
+  canAcknowledgeRejection = computed(() => {
+    return ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments()) && 
+    this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
+  
+  });
   hasComments = computed(() => {
     // Check if any step has saved comments (comment phase is 'viewing' and comment exists)
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
@@ -564,6 +577,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     canOpenTimeline: this.canOpenTimeline,
     isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
     isInvestorViewMode: this.isInvestorViewMode,
+    canAcknowledgeRejection : this.canAcknowledgeRejection,
 
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),
@@ -574,7 +588,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     onSendBackToInvestor: () => this.onSendBackToInvestor(),
     onAddComment: () => this.onAddComment(),
     onOpenTimeline: () => this.timelineVisibility.set(true),
-    onResubmit: () => this.onSummarySubmitClick()
+    onResubmit: () => this.onSummarySubmitClick(),
+     onAcknowledge: () => this.onAcknowledge(),
   });
 
   constructor() {

@@ -519,7 +519,6 @@ export const PlanStore = signalStore(
       },
 
       employeeRejectPlan(planId: string, reason: string) {
-        debugger
         patchState(store, { isProcessing: true, error: null });
         return planApiService.internalRejectPlanStatus({ planId, status: EemployeePlanAction.Reject, reason }).pipe(
           tap(() => {
@@ -530,6 +529,25 @@ export const PlanStore = signalStore(
               error: error.errorMessage || 'Error rejecting plan',
             });
             return throwError(() => new Error('Error rejecting plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      },
+
+      /* rejection acknowledge by dv*/
+        DvRejecttionAcknowledgePlan(planId: string, acknowledgeNote: string) {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.DvRejectionAcknowledge({ planId, acknowledgeNote }).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error rejecting Acknowledge plan',
+            });
+            return throwError(() => new Error('Error rejecting Acknowledge plan'));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });

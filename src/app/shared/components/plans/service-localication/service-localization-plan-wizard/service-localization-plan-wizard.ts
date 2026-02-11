@@ -435,6 +435,14 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
   });
 
+   canAcknowledgeRejection = computed(() => {
+    console.log(this.planStatus(), "this.planStatus()");
+    console.log(this.isDVManagerPersona() ,"this.isDVManagerPersona");
+    return ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments()) && 
+    this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
+
+  });
+
   // Check if user is investor persona
   isInvestorPersona = computed(() => {
     const userProfile = this.authStore.userProfile();
@@ -452,6 +460,15 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const hasEmployeeId = !!userProfile.employeeID;
     const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
     return hasEmployeeId || hasEmployeeRole;
+  });
+
+      // Check if user is Division MANAGER persona
+  isDVManagerPersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    // Check if user has employeeID or has EMPLOYEE role
+    const hasMangerRole = userProfile.roleCodes?.includes(ERoles.Division_MANAGER) ?? false;
+    return hasMangerRole;
   });
 
   private readonly stepsWithId = computed<ServiceLocalizationWizardStepState[]>(() => {
@@ -592,6 +609,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     allowUserToResubmit: this.allowUserToResubmit,
     canOpenTimeline: this.canOpenTimeline,
     isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
+    canAcknowledgeRejection : this.canAcknowledgeRejection,
 
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),
@@ -603,6 +621,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     onAddComment: () => this.onAddComment(),
     onOpenTimeline: () => this.timelineVisibility.set(true),
     onResubmit: () => this.onSummarySubmitClick(),
+    onAcknowledge: () => this.onAcknowledge(),
   });
 
   constructor() {
