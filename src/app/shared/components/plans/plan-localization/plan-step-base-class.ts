@@ -22,7 +22,10 @@ import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
  */
 @Directive()
 export abstract class PlanStepBaseClass {
-  private static readonly RESUBMIT_CHANGED_ONCE_FLAG = '__ftResubmitChangedOnce';
+  /** Tracks which controls have been marked as "changed once" in resubmit mode (avoids mutating control objects). */
+  private readonly resubmitChangedOnceMap = new WeakMap<AbstractControl, boolean>();
+  /** Ensures we only attach status/value subscriptions once per control to avoid duplicate handlers. */
+  private readonly resubmitSubscribedControls = new WeakSet<AbstractControl>();
 
   // Injected services
   protected readonly formUtilityService = inject(FormUtilityService);
@@ -61,26 +64,22 @@ export abstract class PlanStepBaseClass {
   showDeleteConfirmationDialog = signal<boolean>(false);
 
   // Store original values for before/after comparison in resubmit mode
-  private originalFieldValues = signal<Map<string, any>>(new Map());
+  private originalFieldValues = signal<Map<string, unknown>>(new Map());
   private previousCorrectedFieldsLength = signal<number>(-1);
 
   // Resubmit-mode highlight tracking: once a corrected field is changed (or becomes dirty),
   // it should never be highlighted again, even if reverted back to its initial/original value.
-  private correctedFieldInitialValues = signal<Map<string, any>>(new Map());
+  private correctedFieldInitialValues = signal<Map<string, unknown>>(new Map());
   private correctedFieldChangedOnce = signal<Set<string>>(new Set());
 
   private hasResubmitChangedOnce(control: AbstractControl | null | undefined): boolean {
-    if (!control) {
-      return false;
-    }
-    return !!(control as any)[PlanStepBaseClass.RESUBMIT_CHANGED_ONCE_FLAG];
+    return control ? this.resubmitChangedOnceMap.get(control) === true : false;
   }
 
   private setResubmitChangedOnce(control: AbstractControl | null | undefined): void {
-    if (!control) {
-      return;
+    if (control) {
+      this.resubmitChangedOnceMap.set(control, true);
     }
-    (control as any)[PlanStepBaseClass.RESUBMIT_CHANGED_ONCE_FLAG] = true;
   }
 
   // Resubmit mode check
@@ -250,7 +249,7 @@ export abstract class PlanStepBaseClass {
    * re-highlighting when the investor reverts back to the original value.
    */
   private initializeResubmitCorrectedFieldTracking(correctedFields: IFieldInformation[]): void {
-    const initialValues = new Map<string, any>();
+    const initialValues = new Map<string, unknown>();
     (correctedFields ?? []).forEach(field => {
       const control = this.getControlForField(field);
       if (!control) {
@@ -346,15 +345,11 @@ export abstract class PlanStepBaseClass {
     enabledParentChains.forEach((parentChain, control) => {
       const fieldForControl = correctedFields.find(f => this.getControlForField(f) === control);
 
-      // Enable parent chain
       parentChain.forEach(parent => {
         parent.enable({ emitEvent: false, onlySelf: true });
       });
 
-      // Enable the control itself
       control.enable({ emitEvent: false, onlySelf: true });
-      // If the control is invalid (e.g. after failed submit + markAllControlsAsDirty), keep it dirty
-      // so that base-error-messages shows validation errors when the user opens the step.
       if (control.status === 'VALID') {
         control.markAsPristine();
         control.markAsUntouched();
@@ -362,37 +357,24 @@ export abstract class PlanStepBaseClass {
         control.markAsDirty();
       }
 
-      // Subscribe to status changes to track when field becomes valid
-      control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        // Also mark "changed once" if this control became dirty.
-        if (fieldForControl) {
-          this.markCorrectedFieldChangedOnce(fieldForControl, control);
-        }
-
-        // Only remove from selectedInputs if the control is VALID AND has been changed by the user
-        // This prevents premature removal when the form re-renders or status changes without user input
-        if (control.status === 'VALID' && control.dirty) {
-          const field = correctedFields.find(f => this.getControlForField(f) === control);
-          if (field) {
-            this.upDateSelectedInputs(false, field);
+      // Attach subscriptions only once per control to avoid duplicate handlers and leaks
+      if (!this.resubmitSubscribedControls.has(control)) {
+        this.resubmitSubscribedControls.add(control);
+        control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+          if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
+          if (control.status === 'VALID' && control.dirty) {
+            const field = correctedFields.find(f => this.getControlForField(f) === control);
+            if (field) this.upDateSelectedInputs(false, field);
           }
-        }
-      });
-
-      // Also subscribe to value changes to handle cases where status doesn't change (e.g., file uploads)
-      control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        if (fieldForControl) {
-          this.markCorrectedFieldChangedOnce(fieldForControl, control);
-        }
-
-        // Only remove from selectedInputs if the control is VALID AND has been changed by the user
-        if (control.status === 'VALID' && control.dirty) {
-          const field = correctedFields.find(f => this.getControlForField(f) === control);
-          if (field) {
-            this.upDateSelectedInputs(false, field);
+        });
+        control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+          if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
+          if (control.status === 'VALID' && control.dirty) {
+            const field = correctedFields.find(f => this.getControlForField(f) === control);
+            if (field) this.upDateSelectedInputs(false, field);
           }
-        }
-      });
+        });
+      }
     });
   }
 
@@ -453,7 +435,7 @@ export abstract class PlanStepBaseClass {
    * Values are taken from the BE originalPlanResponse via getOriginalFieldValueFromPlanResponse.
    */
   private storeOriginalValues(correctedFields: IFieldInformation[]): void {
-    const originalValues = new Map<string, any>();
+    const originalValues = new Map<string, unknown>();
 
     correctedFields.forEach(field => {
       const fieldKey = this.getFieldKey(field);
@@ -590,7 +572,8 @@ export abstract class PlanStepBaseClass {
       isCorrected = !changedOnce;
     }
 
-    return isSelected || isCorrected
+    const phase = this.commentPhase();
+    return isSelected || isCorrected && (phase === 'adding' || phase === 'editing' || phase === 'none');
   }
 
   private valuesEqual(a: any, b: any): boolean {
