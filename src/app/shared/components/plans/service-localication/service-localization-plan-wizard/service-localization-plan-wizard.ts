@@ -710,6 +710,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
             catchError(() => of(null))
           )
           .subscribe(() => {
+            this.captureOriginalPlanCommentsForResubmit();
             this.mapCommentFieldsToSelectedInputs();
           });
         this.evaluateConditionalSteps();

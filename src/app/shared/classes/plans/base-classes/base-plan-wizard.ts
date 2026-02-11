@@ -32,7 +32,30 @@ export abstract class BasePlanWizard {
   protected approvalNote = signal<string>('');
   protected rejectionReason = signal<string>('');
 
-  protected readonly commentTitle = this.planStore.commentPersona
+  protected readonly commentTitle = this.planStore.commentPersona;
+
+  /**
+   * Snapshot of plan comments captured when entering resubmit mode.
+   * Used for: (1) restoring comments when investor deletes (via PlanStore.restorePlanCommentsFromOriginal),
+   * (2) retrieving corrected fields from original when collecting investor page comments for resubmit payload.
+   * Cleared when exiting resubmit (resetWizardState).
+   */
+  protected readonly originalPlanComment = this.planStore.originalPlanComments;
+
+  /**
+   * Captures current plan comments as the original snapshot when entering resubmit mode.
+   * Call this after plan comments are loaded (e.g. in getPlanComments subscribe) when in resubmit mode.
+   * Uses immutable copy to avoid accidental mutation.
+   */
+  protected captureOriginalPlanCommentsForResubmit(): void {
+    if (!this.getIsResubmitMode()) return;
+    const current = this.planStore.planComments();
+    if (!current) return;
+    this.planStore.setOriginalPlanComments({
+      ...current,
+      comments: current.comments.map(c => ({ ...c, fields: [...c.fields] }))
+    });
+  }
 
   /**
    * Abstract methods for component-specific behavior
@@ -239,10 +262,15 @@ export abstract class BasePlanWizard {
 
   /**
    * Shared: collect investor page comments for resubmit (corrected fields + investor comment or empty).
+   * When in resubmit mode for investor, retrieves fields from OriginalPlanComment for each page
+   * instead of current selectedInputs/commentFields, ensuring consistency after delete/restore flows.
    */
   protected collectInvestorPageCommentsFromDescriptors(
     descriptors: IPlanWizardStepCommentDescriptor[]
   ): IPageComment[] {
+    const isResubmitInvestor = this.getIsResubmitMode() && this.getIsInvestorPersona();
+    const original = isResubmitInvestor ? this.planStore.originalPlanComments() : null;
+
     const result: IPageComment[] = [];
     for (const d of descriptors) {
       if (d.isVisible && !d.isVisible()) continue;
@@ -250,21 +278,32 @@ export abstract class BasePlanWizard {
       if (!form) continue;
       const investorCommentControl = form.get('comment') as FormControl<string> | null;
       const investorComment = investorCommentControl?.value?.trim() || '';
-      const correctedFields = d.getCommentFields();
-      const employeeComments = d.getComments();
+      const pageTitle = d.getStepTitle() as EPlanPageTitle;
+
+      // In resubmit mode for investor: use fields from OriginalPlanComment for this page
+      let correctedFields = d.getCommentFields();
+      if (original?.comments?.length) {
+        const originalPageComments = original.comments.filter(c => c.pageTitleForTL === pageTitle);
+        const originalFields = originalPageComments.flatMap(c => c.fields ?? []);
+        if (originalFields.length > 0) {
+          correctedFields = originalFields;
+        }
+      }
+
       if (!correctedFields?.length) continue;
       if (investorComment.length > 0) {
-        result.push({
-          pageTitleForTL: d.getStepTitle() as EPlanPageTitle,
-          comment: investorComment,
-          fields: correctedFields,
-        });
-      } else if (employeeComments.length > 0) {
-        employeeComments.forEach(ec => {
-          if (ec.fields?.length) {
-            result.push({ pageTitleForTL: ec.pageTitleForTL, comment: '', fields: ec.fields });
-          }
-        });
+        result.push({ pageTitleForTL: pageTitle, comment: investorComment, fields: correctedFields });
+      } else {
+        const employeeComments = d.getComments();
+        if (employeeComments.length > 0) {
+          employeeComments.forEach(ec => {
+            if (ec.fields?.length) {
+              result.push({ pageTitleForTL: ec.pageTitleForTL, comment: '', fields: ec.fields });
+            }
+          });
+        } else if (isResubmitInvestor && correctedFields.length > 0) {
+          result.push({ pageTitleForTL: pageTitle, comment: '', fields: correctedFields });
+        }
       }
     }
     return result;

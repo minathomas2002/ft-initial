@@ -775,7 +775,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
               catchError(() => of(null))
             )
             .subscribe(() => {
-              // Map comment fields to selectedInputs for each step when comments are loaded
+              this.captureOriginalPlanCommentsForResubmit();
               this.mapCommentFieldsToSelectedInputs();
             });
         }

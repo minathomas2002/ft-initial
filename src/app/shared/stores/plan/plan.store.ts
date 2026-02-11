@@ -52,6 +52,11 @@ const initialState: {
   selectedPlanId: string | null;
   planStatus: number | null;
   planComments: IPlanCommentResponse | null;
+  /**
+   * Snapshot of plan comments when entering resubmit mode.
+   * Used for: (1) restoring comments when investor deletes, (2) collecting fields from original in collectInvestorPageComments.
+   */
+  originalPlanComments: IPlanCommentResponse | null;
   currentUserPageComments: EPlanPageTitle[];
   productPlanData: IProductPlanResponse | null;
   servicePlanData: IServiceLocalizationPlanResponse | null;
@@ -157,6 +162,7 @@ const initialState: {
   selectedPlanId: null,
   planStatus: null,
   planComments: null,
+  originalPlanComments: null,
   productPlanData: null,
   servicePlanData: null,
 };
@@ -265,8 +271,19 @@ export const PlanStore = signalStore(
       setPlanComments(comments: IPlanCommentResponse | null): void {
         patchState(store, { planComments: comments });
       },
+      /** Store original plan comments when entering resubmit mode; used for restoration and investor collection. */
+      setOriginalPlanComments(comments: IPlanCommentResponse | null): void {
+        patchState(store, { originalPlanComments: comments });
+      },
+      /** Restore planComments from originalPlanComments (used when investor deletes a comment in resubmit). */
+      restorePlanCommentsFromOriginal(): void {
+        const original = store.originalPlanComments();
+        if (original) {
+          patchState(store, { planComments: { ...original, comments: [...original.comments] } });
+        }
+      },
       resetWizardState(): void {
-        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null });
+        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null, originalPlanComments: null });
       },
       updateCurrentUserPageComments(newPageComments: EPlanPageTitle[]): void {
         patchState(store, { currentUserPageComments: newPageComments });

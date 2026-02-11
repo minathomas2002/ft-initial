@@ -46,9 +46,15 @@ export class PlanCommentSyncService {
   /**
    * Remove a page's comment entry from the store entirely.
    * Used when a non-resubmit user (e.g. employee) deletes their comment.
-   * Also removes the page from currentUserPageComments.
+   * In resubmit mode with originalPlanComments set, restores planComments from original instead.
+   * Also removes the page from currentUserPageComments (except when restoring).
    */
   removePageCommentFromStore(pageTitleForTL: EPlanPageTitle): void {
+    if (this.planStore.wizardMode() === 'resubmit' && this.planStore.originalPlanComments()) {
+      this.planStore.restorePlanCommentsFromOriginal();
+      return;
+    }
+
     const existing = this.planStore.planComments();
     if (!existing) return;
 
@@ -71,9 +77,15 @@ export class PlanCommentSyncService {
    * Clear only the comment text for a page in the store, keeping fields intact.
    * Used when an investor deletes their comment in resubmit mode —
    * fields must remain so the correctedFields derivation is not disrupted.
-   * Also removes the page from currentUserPageComments.
+   * When originalPlanComments is set, restores planComments from original instead.
+   * Also removes the page from currentUserPageComments (except when restoring).
    */
   clearPageCommentTextInStore(pageTitleForTL: EPlanPageTitle): void {
+    if (this.planStore.originalPlanComments()) {
+      this.planStore.restorePlanCommentsFromOriginal();
+      return;
+    }
+
     const existing = this.planStore.planComments();
     if (!existing) return;
 
