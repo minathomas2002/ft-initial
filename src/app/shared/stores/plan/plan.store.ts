@@ -172,7 +172,7 @@ export const PlanStore = signalStore(
       planTypeOptions: computed<IPlanTypeDropdownOption[]>(() => {
         i18nService.currentLanguage();
         return [
-          { label: i18nService.translate('plans.filter.allTypes'), value: null },
+         // { label: i18nService.translate('plans.filter.allTypes'), value: null },
           {
             label: i18nService.translate('plans.filter.service'),
             value: EOpportunityType.SERVICES,

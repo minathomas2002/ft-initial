@@ -46,8 +46,8 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   readonly filter = this.filterService.filter;
 
   planTypeOptions = computed<IDropdownOption[]>(() => {
-    var list = this.planStore.planTypeOptions() as IDropdownOption[];
-    return list.filter(x=>x.value !== null);
+    return this.planStore.planTypeOptions() as IDropdownOption[];
+    //return list.filter(x=>x.value !== null);
   });
 
   statusOptions = computed<IDropdownOption[]>(() => {

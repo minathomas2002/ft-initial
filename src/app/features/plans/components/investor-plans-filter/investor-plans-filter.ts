@@ -35,7 +35,7 @@ export class InvestorPlansFilter implements OnInit {
   readonly filter = this.filterService.filter;
 
   planTypeOptions = computed<IDropdownOption[]>(() => {
-    return this.planStore.planTypeOptions().filter(x=> x.value !==null) as IDropdownOption[];
+    return this.planStore.planTypeOptions() as IDropdownOption[];
   });
 
   statusOptions = computed<IDropdownOption[]>(() => {
