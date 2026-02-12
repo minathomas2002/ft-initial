@@ -596,7 +596,6 @@ export abstract class PlanStepBaseClass {
    * Confirms and executes the deletion of comments and selected fields.
    */
   protected onConfirmDeleteComment(): void {
-    this.formUtilityService.resetHasCommentControls(this.getFormGroup());
     this.comment.set('');
     this.commentFormControl.reset();
     if (this.isResubmitMode()) {
@@ -607,6 +606,7 @@ export abstract class PlanStepBaseClass {
       // but clear the comment text and remove from currentUserPageComments
       this.planCommentSyncService.clearPageCommentTextInStore(this.pageTitle());
     } else {
+      this.formUtilityService.resetHasCommentControls(this.getFormGroup());
       this.commentPhase.set('adding');
       this.selectedInputs.set([]);
       // In non-resubmit mode, remove the entry entirely from the store
