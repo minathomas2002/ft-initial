@@ -179,14 +179,14 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     return this.planFormService?.step3_existingSaudi ?? new FormGroup({});
   }
 
-  startYear = computed(() => (new Date(this.planStore.servicePlanData()?.createdDate?? new Date())).getFullYear());
-  startMonth = computed(() => (new Date(this.planStore.servicePlanData()?.createdDate?? new Date())).getMonth());
+  startYear = computed(() => (new Date(this.planStore.servicePlanData()?.createdDate ?? new Date())).getFullYear());
+  startMonth = computed(() => (new Date(this.planStore.servicePlanData()?.createdDate ?? new Date())).getMonth());
   availableQuartersWithPast = computed(() => this.planFormService?.getAvailableQuartersWithPast(5, 5) ?? []);
 
   availableQuarters = computed(() => this.planFormService?.getAvailableQuarters(5) ?? []);
 
   yearColumns = computed(() => this.planFormService?.upcomingYears(6));
-  
+
   // Custom header labels for Saudi Company Details table to ensure correct order
   saudiCompanyDetailsHeaderLabels: Record<string, string> = {
     [EMaterialsFormControls.saudiCompanyName]: 'Saudi Company Name',
@@ -449,8 +449,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
         // agreementOtherDetails
         const otherDetailsControl = control.get(EMaterialsFormControls.agreementOtherDetails);
         if (otherDetailsControl && this.isAgreementTypeOther(control)) {
-          const canEdit = isFieldShouldbeCorrected(`agreementOtherDetails_${index}`) ||
-            this._userChangedDropdowns.has(`agreementType_${index}`);
+          const canEdit = isFieldShouldbeCorrected(`agreementOtherDetails`) ||
+            this._userChangedDropdowns.has(`agreementType`);
           canEdit ? this.getValueControl(otherDetailsControl).enable({ emitEvent: false })
             : this.getValueControl(otherDetailsControl).disable({ emitEvent: false });
         }
@@ -578,7 +578,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       this.updateConditionalField(
         qualificationStatusControl,
         isManufacturer,
-        shouldEnableInResubmit(`qualificationStatus_${index}`, companyTypeChangedKey)
+        shouldEnableInResubmit(`qualificationStatus`, companyTypeChangedKey)
       );
 
       // Products - Manufacturer + (Qualified or Under Pre-Qualification)
@@ -589,7 +589,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       this.updateConditionalField(
         productsControl,
         showProducts,
-        shouldEnableInResubmit(`products_${index}`, companyTypeChangedKey, qualificationStatusChangedKey)
+        shouldEnableInResubmit(`products`, companyTypeChangedKey, qualificationStatusChangedKey)
       );
 
       // Company Overview - Manufacturer + Not Qualified
@@ -597,28 +597,28 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       this.updateConditionalField(
         companyOverviewControl,
         showCompanyOverview,
-        shouldEnableInResubmit(`companyOverview_${index}`, companyTypeChangedKey, qualificationStatusChangedKey)
+        shouldEnableInResubmit(`companyOverview`, companyTypeChangedKey, qualificationStatusChangedKey)
       );
 
       // Key Projects Executed - Contractor
       this.updateConditionalField(
         keyProjectsControl,
         isContractor,
-        shouldEnableInResubmit(`keyProjectsExecutedByContractorForSEC_${index}`, companyTypeChangedKey)
+        shouldEnableInResubmit(`keyProjectsExecutedByContractorForSEC`, companyTypeChangedKey)
       );
 
       // Company Overview, Key Project Details - Contractor
       this.updateConditionalField(
         companyOverviewKeyProjectControl,
         isContractor,
-        shouldEnableInResubmit(`companyOverviewKeyProjectDetails_${index}`, companyTypeChangedKey)
+        shouldEnableInResubmit(`companyOverviewKeyProjectDetails`, companyTypeChangedKey)
       );
 
       // Company Overview - Other
       this.updateConditionalField(
         companyOverviewOtherControl,
         isOther,
-        shouldEnableInResubmit(`companyOverviewOther_${index}`, companyTypeChangedKey)
+        shouldEnableInResubmit(`companyOverviewOther`, companyTypeChangedKey)
       );
     };
 
@@ -715,7 +715,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
             // When user changes away from "Other", remove the Other details field from selectedInputs
             // so the wizard indicator updates correctly.
             if (!isOther) {
-              const inputKey = `agreementOtherDetails_${index}`;
+              const inputKey = `agreementOtherDetails`;
               const current = this.selectedInputs();
               const updated = current.filter(
                 input => !(input.section === 'collaborationPartnership' && input.inputKey === inputKey)
@@ -724,7 +724,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
             }
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
-              this._userChangedDropdowns.add(`agreementType_${index}`);
+              this._userChangedDropdowns.add(`agreementType`);
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.agreementOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });

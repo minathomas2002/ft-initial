@@ -207,7 +207,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     // When user deselects "Others", remove the Company Names field from selectedInputs
     // so the wizard indicator updates correctly (description is no longer a required field).
     if (!this.hasServiceProvidedToOthers(value)) {
-      const inputKey = `serviceProvidedToCompanyNames_${index}`;
+      const inputKey = `serviceProvidedToCompanyNames`;
       const current = this.selectedInputs();
       const updated = current.filter(
         input => !(input.section === 'serviceDetails' && input.inputKey === inputKey)
@@ -331,7 +331,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
         // Check if parent field (serviceProvidedTo) is in correctedFields
         const isParentCorrected = correctedFieldsList.some(field =>
           field.section === 'serviceDetails' &&
-          field.inputKey === `serviceProvidedTo_${index}` &&
+          field.inputKey === `serviceProvidedTo` &&
           (field.id === rowId || !field.id)
         );
 
@@ -353,7 +353,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
         // Check if dependent field (serviceProvidedToCompanyNames) is in correctedFields
         const isCompanyNamesFieldCorrected = correctedFieldsList.some(field =>
           field.section === 'serviceDetails' &&
-          field.inputKey === `serviceProvidedToCompanyNames_${index}` &&
+          field.inputKey === `serviceProvidedToCompanyNames` &&
           (field.id === rowId || !field.id)
         );
 
