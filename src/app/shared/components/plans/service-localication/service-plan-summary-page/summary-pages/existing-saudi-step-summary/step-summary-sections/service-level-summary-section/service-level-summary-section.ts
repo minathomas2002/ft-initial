@@ -51,11 +51,14 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
     return arr.controls.map((ctrl, i) => {
       const group = ctrl as FormGroup;
       const rowId = group.get('rowId')?.value ?? null;
+      // Step 04 (Direct Localization) has serviceHeadcountRowId and localizationStrategyRowId; Step 03 (Existing Saudi) only has rowId
+      const rowIdForMatch = group.get(EMaterialsFormControls.serviceHeadcountRowId)?.value ?? rowId;
+      const localizationStrategyRowId = group.get(EMaterialsFormControls.localizationStrategyRowId)?.value ?? null;
       const serviceId = group.get(EMaterialsFormControls.serviceId)?.value ?? null;
       // Match by identity (rowId or planServiceTypeId), not by array index, so reordered rows show correct before/current
       const service = servicesForPage.find(
         (h: { id?: string; planServiceTypeId: string; pageNumber?: number }) =>
-          (rowId != null && h.id === rowId) ||
+          (rowIdForMatch != null && h.id === rowIdForMatch) ||
           (serviceId != null && h.planServiceTypeId === serviceId && h.pageNumber === this.pageNumber())
       );
 
@@ -69,7 +72,7 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
         const fieldGroup = group.get(fieldKey);
         const valueCtrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
         const hasError = valueCtrl ? this.isFieldHasError(valueCtrl) : false;
-        const matchingField = this.findMatchingField(fieldKey, 'serviceLevel', rowId);
+        const matchingField = this.findMatchingField(fieldKey, 'serviceLevel', rowIdForMatch, localizationStrategyRowId);
         const hasComment = matchingField != null;
         const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
         const isResolved =
@@ -132,14 +135,16 @@ export class ServiceLevelSummarySection extends SummarySectionBaseClass {
 
   /**
    * Finds the matching field from sectionSummaryFields based on fieldKey, section, and rowId.
+   * For Step 04 (Direct Localization), also matches by localizationStrategyRowId when f.id is legacy strategy id.
    * Returns the matching field or undefined if not found.
    */
-  private findMatchingField(fieldKey: string, section: string, rowId: string | null) {
+  private findMatchingField(fieldKey: string, section: string, rowId: string | null, localizationStrategyRowId?: string | null) {
     return this.sectionSummaryFields().find((f) => {
       const matchKey = f.inputKey === fieldKey || f.inputKey === `${section}.${fieldKey}` ||
         (f.inputKey?.startsWith(fieldKey + '_') && /^\d+$/.test(f.inputKey.substring(fieldKey.length + 1)));
       if (!matchKey) return false;
-      return rowId == null ? f.id == null : f.id === rowId;
+      if (f.id == null) return rowId == null;
+      return f.id === rowId || (localizationStrategyRowId != null && f.id === localizationStrategyRowId);
     });
   }
 }
