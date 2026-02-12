@@ -1,4 +1,32 @@
 <div class="flex flex-col gap-8 pb-10">
+  @if (planStore.actionNote()) {
+    <app-page-comment-box
+    [commentTitle]="isRejected() ? 'Rejection Reason' : 'Approval Note'"
+    [commentText]="planStore.actionNote()!"
+    [colorsClassesConfig]="{
+      border: isRejected() ? 'border-[#B42318]' : 'border-green-200',
+      background: isRejected() ? 'bg-[#F7E9E8]' : 'bg-green-50',
+      iconColor: isRejected() ? 'text-[#A22016] rotate-180 ' : 'text-green-700 rotate-180 ',
+    }"
+    [iconType]="isRejected() ? 'icon-info' : ''"
+    >
+  </app-page-comment-box>
+}
+
+@if (planStore.acknowledgeRejectionNote()) {
+  <app-page-comment-box
+    [commentTitle]="'Acknowledge Rejection Note'"
+    [commentText]="planStore.acknowledgeRejectionNote()!"
+    [colorsClassesConfig]="{
+      border: 'border-[#B42318]',
+      background: 'bg-[#F7E9E8]',
+      iconColor: 'text-[#A22016] rotate-180',
+    }"
+    [iconType]="'icon-info'"
+    >
+    </app-page-comment-box>
+  }
+
   <app-overview-company-step-summary
     [stepCommentsCountAndPhaseFromWizard]="step1CommentsCountAndPhase()"
     (onEdit)="onEditStepClick(1)"

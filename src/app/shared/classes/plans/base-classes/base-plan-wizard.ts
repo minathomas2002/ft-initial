@@ -181,7 +181,7 @@ export abstract class BasePlanWizard {
    * Handle Send Back to Investor action - Template Method
    * Validates comment submission and shows confirmation dialog
    */
-  onSendBackToInvestor(): void {
+  onSendBack(): void {
     // Validate that steps with selected inputs have submitted comments
     const validationError = this.validateCommentSubmission();
     if (validationError) {
@@ -228,7 +228,6 @@ export abstract class BasePlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error sending plan back to investor. Please try again.');
           console.error('Error sending plan back:', error);
         }
       });
@@ -278,7 +277,6 @@ export abstract class BasePlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error approving plan. Please try again.');
           console.error('Error approving plan:', error);
         }
       });
@@ -360,7 +358,6 @@ export abstract class BasePlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error rejecting plan. Please try again.');
           console.error('Error rejecting plan:', error);
         }
       });
@@ -421,7 +418,6 @@ export abstract class BasePlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error resubmitting plan. Please try again.');
           console.error('Error resubmitting plan:', error);
         }
       });

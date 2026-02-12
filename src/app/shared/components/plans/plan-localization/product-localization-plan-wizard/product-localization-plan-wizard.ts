@@ -476,7 +476,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   // Computed signals for plan status tag
-  planStatus = signal<EInternalUserPlanStatus | EInvestorPlanStatus | null>(null);
+  planStatus = signal<EInvestorPlanStatus | EInternalUserPlanStatus | null>(null);
   statusLabel = computed(() => {
     const status = this.planStatus();
     if (status === null) return '';
@@ -536,13 +536,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   canAcknowledgeRejection = computed(() => {
-        console.log(this.planStatus(), "this.planStatus()");
-    console.log(this.isDVManagerPersona() ,"this.isDVManagerPersona");
-    // return ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments()) && 
-    // this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
-     return (this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
-  
-  });
+    return this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona()
+  })
+
   hasComments = computed(() => {
     // Check if any step has saved comments (comment phase is 'viewing' and comment exists)
     const step1Form = this.productPlanFormService.overviewCompanyInformation;
@@ -589,17 +585,20 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     canAcknowledgeRejection : this.canAcknowledgeRejection,
     onlonlyReject: this.onlyReject,
     
+    persona: this.authStore?.userProfile()?.roleCodes,
+    status: this.planStatus,
+
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),
     onSaveAsDraft: () => this.saveAsDraft(),
     onSubmit: () => this.onSummarySubmitClick(),
     onApproveAndForward: () => this.onApproveAndForward(),
     onReject: () => this.onReject(),
-    onSendBackToInvestor: () => this.onSendBackToInvestor(),
+    onSendBack: () => this.onSendBack(),
     onAddComment: () => this.onAddComment(),
     onOpenTimeline: () => this.timelineVisibility.set(true),
     onResubmit: () => this.onSummarySubmitClick(),
-     onAcknowledge: () => this.onAcknowledge(),
+    onAcknowledge: () => this.onAcknowledge(),
   });
 
   constructor() {
@@ -624,7 +623,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         this.activeStep.set(1);
         this.isSubmitted.set(false);
         this.existingSignature.set(null);
-        this.planStatus.set(null);
+        this.planStore.setPlanStatus(null);
 
         // Handle opportunity based on whether user is applying to an opportunity or creating from scratch
         const appliedOpportunity = this.planStore.appliedOpportunity();
@@ -770,7 +769,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       .pipe(
         tap((response) => {
           const planStatus = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? response.body.productPlan.investorStatus : response.body.productPlan?.status;
-          this.planStatus.set(planStatus ?? null);
+          this.planStore.setPlanStatus(planStatus ?? null)
         }),
         switchMap((response) => {
           if (!response.body) {
