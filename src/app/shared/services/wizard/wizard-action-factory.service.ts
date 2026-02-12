@@ -22,6 +22,7 @@ export interface IWizardActionConfig {
   hideSaveAsDraft?: Signal<boolean>;
 
   canAcknowledgeRejection?: Signal<boolean>;
+  onlonlyReject? :Signal<boolean>;
   canApproveOrReject?: Signal<boolean>;
   allowUserToResubmit?: Signal<boolean>;
   canOpenTimeline?: Signal<boolean>;
@@ -109,15 +110,7 @@ export class WizardActionFactory {
     const shouldShowAcknowledge =
       mode === 'Review' && config.canAcknowledgeRejection?.() && isFinalStep
 
-    if (shouldShowAcknowledge) {
-      actions.push({
-        id: 'acknowledge',
-        label: this.i18nService.translate('plans.wizard.acknowledge'),
-        severity: 'danger',
-        onClick: config.onAcknowledge,
-        position: 'right'
-      });
-    }
+  
 
     const shouldShowSendBack = mode === 'Review' && isFinalStep && !!config.onSendBack && !config.canAcknowledgeRejection?.() && !isPlanRejectedFromManager;
 
@@ -199,8 +192,10 @@ export class WizardActionFactory {
         });
       }
 
-      else if (mode === 'Review' && !config.isInvestorViewMode?.() && !config.canAcknowledgeRejection?.()) {
+      else if (mode === 'Review' && !config.isInvestorViewMode?.() ) {
         const canApproveOrReject = config.canApproveOrReject?.() ?? true;
+
+        if (config.onReject && !shouldShowAcknowledge) {
 
           actions.push({
             id: 'reject',
@@ -210,17 +205,38 @@ export class WizardActionFactory {
             onClick: config.onReject,
             position: 'right'
           });
-
-          if (!isPlanRejectedFromManager) {
-            actions.push({
-              id: 'approve-and-forward',
-              label: this.i18nService.translate('plans.wizard.approveAndForward'),
-              disabled: !canApproveOrReject,
-              onClick: config.onApproveAndForward,
-              position: 'right'
-            });
-          }
         }
+        if (config.onApproveAndForward && !shouldShowAcknowledge && !config.onlonlyReject?.() ) {
+          actions.push({
+            id: 'approve-and-forward',
+            label: this.i18nService.translate('plans.wizard.approveAndForward'),
+            disabled: !canApproveOrReject ,
+            onClick: config.onApproveAndForward,
+            position: 'right'
+          });
+        }
+
+        
+        if (shouldShowAcknowledge) {
+          actions.push({
+            id: 'acknowledge',
+            label: this.i18nService.translate('plans.wizard.acknowledge'),
+            severity: 'danger',
+            onClick: config.onAcknowledge,
+            position: 'right'
+          });
+        }
+
+        if (!isPlanRejectedFromManager) {
+          actions.push({
+            id: 'approve-and-forward',
+            label: this.i18nService.translate('plans.wizard.approveAndForward'),
+            disabled: !canApproveOrReject,
+            onClick: config.onApproveAndForward,
+            position: 'right'
+          });
+        }
+    }
 
       else if (mode === 'resubmit' && config.onResubmit) {
         const allowResubmit = config.allowUserToResubmit?.() ?? true;

@@ -62,7 +62,6 @@ export abstract class BasePlanWizard {
    * When implemented as a computed signal, it can be called like a method: canApproveOrReject()
    */
   abstract canApproveOrReject(): boolean;
-
     /**
    * Template method: Check if the wizard can Acknowledge.
    * Subclasses must implement this as a computed signal or method.
