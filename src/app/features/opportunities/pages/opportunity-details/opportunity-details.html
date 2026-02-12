@@ -280,7 +280,12 @@
   (confirmed)="publishOpportunity()"
   [isLoading]="adminOpportunitiesStore.isProcessing()"
 />
-
+@if(planTermsAndConditionsDialogVisibility()){
+<app-plan-terms-and-conditions-dialog
+  [(visibility)]="planTermsAndConditionsDialogVisibility"
+  (onConfirm)="onUserReadAndApproved()"
+/>
+}
 @if(productLocalizationPlanWizardVisibility()){
 <app-product-localization-plan-wizard
   [(visibility)]="productLocalizationPlanWizardVisibility"
