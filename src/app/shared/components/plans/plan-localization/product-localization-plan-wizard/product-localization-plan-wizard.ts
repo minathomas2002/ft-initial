@@ -530,8 +530,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   canAcknowledgeRejection = computed(() => {
-    return ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments()) && 
-    this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
+        console.log(this.planStatus(), "this.planStatus()");
+    console.log(this.isDVManagerPersona() ,"this.isDVManagerPersona");
+    // return ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments()) && 
+    // this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
+     return (this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
   
   });
   hasComments = computed(() => {

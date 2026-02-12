@@ -438,9 +438,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
    canAcknowledgeRejection = computed(() => {
     console.log(this.planStatus(), "this.planStatus()");
     console.log(this.isDVManagerPersona() ,"this.isDVManagerPersona");
-    return ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments()) && 
-    this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
-
+    // return ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments()) && 
+    // this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
+    return this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona();
   });
 
   // Check if user is investor persona

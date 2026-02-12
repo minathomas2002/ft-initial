@@ -117,7 +117,7 @@ export class WizardActionFactory {
     }
 
     const shouldShowSendBackToInvestor = mode === 'Review' && isFinalStep && !!config.onSendBackToInvestor &&
-             !config.canAcknowledgeRejection;
+             !shouldShowAcknowledge;
     if (shouldShowSendBackToInvestor) {
       actions.push({
         id: 'send-back-to-investor',
@@ -133,7 +133,7 @@ export class WizardActionFactory {
     const shouldShowAddComment =
       (mode === 'Review' || mode === 'resubmit') &&
       activeStep < totalSteps &&
-      !!config.onAddComment && !config.canAcknowledgeRejection;
+      !!config.onAddComment && !shouldShowAcknowledge;
 
     if (shouldShowAddComment) {
       const isDisabled = config.isAddCommentButtonDisabled?.() ?? false;
@@ -195,7 +195,7 @@ export class WizardActionFactory {
         });
       }
 
-      else if (mode === 'Review' && !config.isInvestorViewMode?.() && !config.canAcknowledgeRejection) {
+      else if (mode === 'Review' && !config.isInvestorViewMode?.() && !shouldShowAcknowledge) {
         const canApproveOrReject = config.canApproveOrReject?.() ?? true;
 
         if (config.onReject) {
