@@ -92,7 +92,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'services',
-                    inputKey: 'serviceName_' + index,
+                    inputKey: 'serviceName',
                     label: 'Service Name'
                   }, itemControl.get('rowId')?.value)"
             >
@@ -104,7 +104,7 @@
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get('serviceName'))"
                 trimOnBlur
-                [appConditionalColorClass]="highlightInput('serviceName_' + index, itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('serviceName', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
