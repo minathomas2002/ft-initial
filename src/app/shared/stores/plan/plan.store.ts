@@ -276,7 +276,7 @@ export const PlanStore = signalStore(
         patchState(store, { planComments: comments });
       },
       resetWizardState(): void {
-        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null });
+        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null, actionNote: null, acknowledgeRejectionNote: null });
       },
       updateCurrentUserPageComments(newPageComments: EPlanPageTitle[]): void {
         patchState(store, { currentUserPageComments: newPageComments });
@@ -570,9 +570,9 @@ export const PlanStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
-            store.setPlanStatus(res.body?.productPlan?.status ?? null);
-            store.setActionNote(res.body?.productPlan?.actionNote ?? null);
-            store.setAcknowledgeRejectionNote(res.body?.productPlan?.acknowledgeRejectionNote ?? null);
+            store.setPlanStatus(res.body?.productPlan?.status || null);
+            store.setActionNote(res.body?.productPlan?.actionNote || null);
+            store.setAcknowledgeRejectionNote(res.body?.productPlan?.acknowledgeRejectionNote || null);
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {

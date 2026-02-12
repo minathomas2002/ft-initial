@@ -435,12 +435,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
   });
 
-   canAcknowledgeRejection = computed(() => {
-    console.log(this.planStatus(), "this.planStatus()");
-    console.log(this.isDVManagerPersona() ,"this.isDVManagerPersona");
-    return ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments()) && 
-    this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona());
-
+  canAcknowledgeRejection = computed(() => {
+    return this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona();
   });
 
   // Check if user is investor persona
@@ -610,6 +606,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     canOpenTimeline: this.canOpenTimeline,
     isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
     canAcknowledgeRejection : this.canAcknowledgeRejection,
+    persona: this.authStore?.userProfile()?.roleCodes,
+    status: this.planStatus,
 
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),
@@ -617,7 +615,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     onSubmit: () => this.onSummarySubmitClick(),
     onApproveAndForward: () => this.onApproveAndForward(),
     onReject: () => this.onReject(),
-    onSendBackToInvestor: () => this.onSendBackToInvestor(),
+    onSendBack: () => this.onSendBack(),
     onAddComment: () => this.onAddComment(),
     onOpenTimeline: () => this.timelineVisibility.set(true),
     onResubmit: () => this.onSummarySubmitClick(),
@@ -1209,7 +1207,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
           console.error('Error submitting plan:', error);
         },
       });
@@ -1236,7 +1233,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
           console.error('Error resubmitting plan:', error);
         },
       });

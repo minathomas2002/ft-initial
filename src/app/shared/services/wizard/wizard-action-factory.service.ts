@@ -1,6 +1,8 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { IBaseWizardAction } from '../../components/base-components/base-wizard-actions/base-wizard-actions';
 import { I18nService } from '../i18n/i18n.service';
+import { ERoles } from 'src/app/shared/enums';
+import { EInternalUserPlanStatus, EInvestorPlanStatus } from 'src/app/shared/interfaces';
 
 export type WizardActionContext =
   | 'opportunity-wizard'
@@ -25,6 +27,8 @@ export interface IWizardActionConfig {
   canOpenTimeline?: Signal<boolean>;
   isAddCommentButtonDisabled?: Signal<boolean>;
   isInvestorViewMode?: Signal<boolean>;
+  persona?: ERoles[];
+  status?: Signal<EInvestorPlanStatus | EInternalUserPlanStatus | null>
 
   // Action handlers
   onPrevious?: () => void;
@@ -34,7 +38,7 @@ export interface IWizardActionConfig {
   onSubmit?: () => void;
   onApproveAndForward?: () => void;
   onReject?: () => void;
-  onSendBackToInvestor?: () => void;
+  onSendBack?: () => void;
   onAddComment?: () => void;
   onOpenTimeline?: () => void;
   onResubmit?: () => void;
@@ -64,6 +68,7 @@ export class WizardActionFactory {
     const { context, mode } = config;
     const currentLanguage = this.i18nService.currentLanguage();
     const isPlanWizard = context === 'product-plan' || context === 'service-plan';
+    const isPlanRejectedFromManager = [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED, EInternalUserPlanStatus.DV_REJECTED].includes(config.status?.() as EInternalUserPlanStatus)
 
     const shouldShowSaveAsDraft = !!config.onSaveAsDraft && !config.hideSaveAsDraft?.();
     if (shouldShowSaveAsDraft) {
@@ -102,7 +107,7 @@ export class WizardActionFactory {
     }
 
     const shouldShowAcknowledge =
-      mode === 'Review' && config.canAcknowledgeRejection?.();
+      mode === 'Review' && config.canAcknowledgeRejection?.() && isFinalStep
 
     if (shouldShowAcknowledge) {
       actions.push({
@@ -114,15 +119,16 @@ export class WizardActionFactory {
       });
     }
 
-    const shouldShowSendBackToInvestor = mode === 'Review' && isFinalStep && !!config.onSendBackToInvestor &&
-             !config.canAcknowledgeRejection;
-    if (shouldShowSendBackToInvestor) {
+    const shouldShowSendBack = mode === 'Review' && isFinalStep && !!config.onSendBack && !config.canAcknowledgeRejection?.() && !isPlanRejectedFromManager;
+
+    if (shouldShowSendBack) {
+    const label = config.persona?.includes(ERoles.EMPLOYEE) ? this.i18nService.translate('plans.wizard.sendBackToInvestor') : 'Send Back to Employee';
       actions.push({
-        id: 'send-back-to-investor',
-        label: this.i18nService.translate('plans.wizard.sendBackToInvestor'),
+        id: 'send-back',
+        label,
         text: true,
         severity: 'secondary',
-        onClick: config.onSendBackToInvestor,
+        onClick: config.onSendBack,
         position: 'left',
         styleClass: 'underline-action',
       });
@@ -131,7 +137,7 @@ export class WizardActionFactory {
     const shouldShowAddComment =
       (mode === 'Review' || mode === 'resubmit') &&
       activeStep < totalSteps &&
-      !!config.onAddComment && !config.canAcknowledgeRejection;
+      !!config.onAddComment && !config.canAcknowledgeRejection?.();
 
     if (shouldShowAddComment) {
       const isDisabled = config.isAddCommentButtonDisabled?.() ?? false;
@@ -193,10 +199,9 @@ export class WizardActionFactory {
         });
       }
 
-      else if (mode === 'Review' && !config.isInvestorViewMode?.() && !config.canAcknowledgeRejection) {
+      else if (mode === 'Review' && !config.isInvestorViewMode?.() && !config.canAcknowledgeRejection?.()) {
         const canApproveOrReject = config.canApproveOrReject?.() ?? true;
 
-        if (config.onReject) {
           actions.push({
             id: 'reject',
             label: this.i18nService.translate('plans.wizard.reject'),
@@ -205,18 +210,17 @@ export class WizardActionFactory {
             onClick: config.onReject,
             position: 'right'
           });
-        }
 
-        if (config.onApproveAndForward) {
-          actions.push({
-            id: 'approve-and-forward',
-            label: this.i18nService.translate('plans.wizard.approveAndForward'),
-            disabled: !canApproveOrReject,
-            onClick: config.onApproveAndForward,
-            position: 'right'
-          });
+          if (!isPlanRejectedFromManager) {
+            actions.push({
+              id: 'approve-and-forward',
+              label: this.i18nService.translate('plans.wizard.approveAndForward'),
+              disabled: !canApproveOrReject,
+              onClick: config.onApproveAndForward,
+              position: 'right'
+            });
+          }
         }
-      }
 
       else if (mode === 'resubmit' && config.onResubmit) {
         const allowResubmit = config.allowUserToResubmit?.() ?? true;
