@@ -74,6 +74,7 @@ type ProductLocalizationWizardStepId =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnDestroy {
+
   productPlanFormService = inject(ProductPlanFormService);
   override readonly toasterService = inject(ToasterService);
   override readonly planStore = inject(PlanStore);
@@ -529,6 +530,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
   });
 
+  onlyReject = computed(()=> {
+    return this.canApproveOrReject() && (this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED || this.planStatus() === EInternalUserPlanStatus.DV_REJECTED ||
+  this.planStatus() === EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED)
+  });
+
   canAcknowledgeRejection = computed(() => {
         console.log(this.planStatus(), "this.planStatus()");
     console.log(this.isDVManagerPersona() ,"this.isDVManagerPersona");
@@ -581,7 +587,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
     isInvestorViewMode: this.isInvestorViewMode,
     canAcknowledgeRejection : this.canAcknowledgeRejection,
-
+    onlonlyReject: this.onlyReject,
+    
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),
     onSaveAsDraft: () => this.saveAsDraft(),

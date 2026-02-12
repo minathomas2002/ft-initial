@@ -434,6 +434,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   canApproveOrReject = computed(() => {
     return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
   });
+  onlyReject = computed(()=> {
+    return this.canApproveOrReject() && (this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED || this.planStatus() === EInternalUserPlanStatus.DV_REJECTED ||
+  this.planStatus() === EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED)
+  });
 
    canAcknowledgeRejection = computed(() => {
     console.log(this.planStatus(), "this.planStatus()");
@@ -610,6 +614,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     canOpenTimeline: this.canOpenTimeline,
     isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
     canAcknowledgeRejection : this.canAcknowledgeRejection,
+    onlonlyReject: this.onlyReject,
 
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),

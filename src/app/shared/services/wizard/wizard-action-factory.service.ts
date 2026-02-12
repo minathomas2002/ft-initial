@@ -20,6 +20,7 @@ export interface IWizardActionConfig {
   hideSaveAsDraft?: Signal<boolean>;
 
   canAcknowledgeRejection?: Signal<boolean>;
+  onlonlyReject? :Signal<boolean>;
   canApproveOrReject?: Signal<boolean>;
   allowUserToResubmit?: Signal<boolean>;
   canOpenTimeline?: Signal<boolean>;
@@ -106,15 +107,7 @@ export class WizardActionFactory {
     const shouldShowAcknowledge =
       mode === 'Review' && config.canAcknowledgeRejection?.() ;
 
-    if (shouldShowAcknowledge) {
-      actions.push({
-        id: 'acknowledge',
-        label: this.i18nService.translate('plans.wizard.acknowledge'),
-        severity: 'danger',
-        onClick: config.onAcknowledge,
-        position: 'right'
-      });
-    }
+  
 
     const shouldShowSendBackToInvestor = mode === 'Review' && isFinalStep && !!config.onSendBackToInvestor &&
              !shouldShowAcknowledge;
@@ -195,10 +188,10 @@ export class WizardActionFactory {
         });
       }
 
-      else if (mode === 'Review' && !config.isInvestorViewMode?.() && !shouldShowAcknowledge) {
+      else if (mode === 'Review' && !config.isInvestorViewMode?.() ) {
         const canApproveOrReject = config.canApproveOrReject?.() ?? true;
 
-        if (config.onReject) {
+        if (config.onReject && !shouldShowAcknowledge) {
           actions.push({
             id: 'reject',
             label: this.i18nService.translate('plans.wizard.reject'),
@@ -209,15 +202,29 @@ export class WizardActionFactory {
           });
         }
 
-        if (config.onApproveAndForward) {
+        config.canAcknowledgeRejection
+        if (config.onApproveAndForward && !shouldShowAcknowledge && !config.onlonlyReject?.() ) {
           actions.push({
             id: 'approve-and-forward',
             label: this.i18nService.translate('plans.wizard.approveAndForward'),
-            disabled: !canApproveOrReject,
+            disabled: !canApproveOrReject ,
             onClick: config.onApproveAndForward,
             position: 'right'
           });
         }
+
+        
+        if (shouldShowAcknowledge) {
+          actions.push({
+            id: 'acknowledge',
+            label: this.i18nService.translate('plans.wizard.acknowledge'),
+            severity: 'danger',
+            onClick: config.onAcknowledge,
+            position: 'right'
+          });
+        }
+
+
       }
 
       else if (mode === 'resubmit' && config.onResubmit) {
