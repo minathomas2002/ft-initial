@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, effect, input, model, DestroyRef } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArrayInput } from 'src/app/shared/components/utility-components/form-array-input/form-array-input';
 import { InputTextModule } from 'primeng/inputtext';
@@ -651,8 +651,10 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
     if (shouldShow && canEdit) {
       control.enable({ emitEvent: false });
+      control.addValidators([Validators.required]);
     } else {
       control.disable({ emitEvent: false });
+      control.clearValidators();
       if (!shouldShow) {
         control.setValue(null, { emitEvent: false });
       }
