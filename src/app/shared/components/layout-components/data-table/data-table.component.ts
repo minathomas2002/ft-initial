@@ -63,23 +63,25 @@ export class DataTableComponent<T> {
     );
   }
 
+  /**
+   * Cycles through 3 phases: asc -> desc -> no sorting (default)
+   */
   setSortingKey(column: ITableHeaderItem<unknown>) {
-    if (column.isSortable) {
-      let key = column.sortingKey;
-      this.filter.update((res) => {
-        const isSameKey = res.sortField === key;
-        const newSortOrder = isSameKey
-          ? res.sortOrder === ESortingOrder.asc
-            ? ESortingOrder.desc
-            : ESortingOrder.asc
-          : ESortingOrder.asc;
+    if (!column.isSortable) return;
 
-        return {
-          ...res,
-          sortField: key,
-          sortOrder: newSortOrder,
-        };
-      });
-    }
+    const key = column.sortingKey;
+    this.filter.update((res) => {
+      const isSameKey = res.sortField === key;
+
+      if (!isSameKey) {
+        return { ...res, sortField: key, sortOrder: ESortingOrder.asc };
+      }
+
+      if (res.sortOrder === ESortingOrder.asc) {
+        return { ...res, sortField: key, sortOrder: ESortingOrder.desc };
+      }
+
+      return { ...res, sortField: null, sortOrder: ESortingOrder.desc };
+    });
   }
 }
