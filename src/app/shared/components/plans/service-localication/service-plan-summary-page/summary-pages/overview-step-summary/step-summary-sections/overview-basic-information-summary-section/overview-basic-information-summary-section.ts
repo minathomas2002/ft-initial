@@ -25,7 +25,7 @@ export class OverviewBasicInformationSummarySection extends SummarySectionBaseCl
       label: 'Opportunity',
       beforeValue: '',
       currantValue: display,
-      hasError: this.opportunityControl() ? this.isFieldHasError(this.opportunityControl()) : false,
+      hasError: this.isFieldHasError(this.opportunityControl()),
       hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.opportunity, null),
       isResolved: false,
       showDifference: false,

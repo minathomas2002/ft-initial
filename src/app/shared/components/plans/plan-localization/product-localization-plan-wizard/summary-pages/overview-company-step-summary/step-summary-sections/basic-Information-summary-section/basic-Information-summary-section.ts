@@ -53,7 +53,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
       label: this.i18nService.translate('plans.newPlan.opportunity'),
       beforeValue: '',
       currantValue: this.opportunityControl()?.value?.name ?? '',
-      hasError: false,
+      hasError: this.isFieldHasError(this.opportunityControl()),
       hasComment: false,
       isResolved: false,
       showDifference: false
