@@ -202,7 +202,7 @@
             }, itemControl.get('rowId')?.value)"
           >
             <p-inputnumber
-              [allowEmpty]="false"
+              [allowEmpty]="true"
               fluid
               [appHidePlaceholderWhenDisabledEmpty]="'Enter CAPEX amount'"
               [min]="0"
@@ -375,7 +375,6 @@
                 }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
-                  [allowEmpty]="false"
                   fluid
                   [appHidePlaceholderWhenDisabledEmpty]="row.placeholder"
                   [min]="0"
@@ -483,7 +482,6 @@
               }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <p-inputnumber
-                [allowEmpty]="false"
                 fluid
                 [min]="0"
                 inputId="integeronly"
@@ -513,7 +511,6 @@
               }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <p-inputnumber
-                [allowEmpty]="false"
                 fluid
                 [min]="0"
                 mode="decimal"

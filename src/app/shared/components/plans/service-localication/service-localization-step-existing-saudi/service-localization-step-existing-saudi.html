@@ -49,7 +49,6 @@
         <!-- Vendor ID with SEC -->
         <td class="p-3 border border-gray-200 min-w-[200px]">
           <p-inputnumber
-            [allowEmpty]="false"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.registeredVendorIDwithSEC))"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC', itemControl.get('rowId')?.value)"
             [color]="selectedInputColor()"
@@ -57,7 +56,6 @@
             [useGrouping]="false"
             [minFractionDigits]="0"
             [maxFractionDigits]="0"
-            [allowEmpty]="true"
             mode="decimal"
             fluid
             [placeholder]="isReviewMode() ? '' : 'Registered Vendor ID with SEC'"
@@ -627,7 +625,6 @@
                 }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
-                  [allowEmpty]="false"
                   fluid
                   [placeholder]="row.placeholder"
                   [min]="0"
@@ -733,7 +730,6 @@
               }, itemControl.get('rowId')?.value)"
             >
               <p-inputnumber
-                [allowEmpty]="false"
                 fluid
                 [min]="0"
                 inputId="integeronly"
@@ -763,7 +759,6 @@
               }, itemControl.get('rowId')?.value)"
             >
               <p-inputnumber
-                [allowEmpty]="false"
                 fluid
                 [min]="0"
                 mode="decimal"

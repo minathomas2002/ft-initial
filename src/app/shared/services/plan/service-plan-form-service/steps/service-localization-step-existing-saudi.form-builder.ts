@@ -139,11 +139,11 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach(yearControl => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [0, [Validators.required]], // Required, Integer only
+        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, Integer only
       });
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [0, [Validators.required, Validators.max(100)]], // Required, Percentage 0-100
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100)]], // Required, Percentage 0-100
       });
     });
 
@@ -191,7 +191,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [0, [Validators.required]],
+        [EMaterialsFormControls.value]: [null, [Validators.required]],
       });
     });
 
@@ -199,7 +199,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [0, [Validators.required, Validators.max(100)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100)]],
       });
     });
 
