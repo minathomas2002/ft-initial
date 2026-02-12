@@ -549,8 +549,11 @@ export abstract class PlanStepBaseClass {
         // Attachments: use dirty flag—value comparison fails (File[] vs BE objects, ref equality)
         isCorrected = control?.dirty ?? false;
       } else {
-        const currentValue = control?.value;
+        let currentValue = control?.value;
         const originalValue = this.getOriginalValue(correctedField);
+        if (correctedField.inputKey === 'contactNumber') {
+          currentValue = currentValue?.countryCode + '' + currentValue?.phoneNumber;
+        }
         isCorrected = !this.valuesEqual(currentValue?.toString(), originalValue?.toString());
       }
 
