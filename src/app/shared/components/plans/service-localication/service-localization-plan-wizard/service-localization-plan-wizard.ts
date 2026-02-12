@@ -1198,6 +1198,24 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   saveAsDraft(): void {
     const isEditMode = this.planStore.wizardMode() === 'edit';
 
+    const step1CoverPage = this.serviceLocalizationFormService.step1_coverPage;
+    const coverPageCompanyInfo = step1CoverPage?.get(EMaterialsFormControls.coverPageCompanyInformationFormGroup) as FormGroup | null;
+    const planTitleGroup = coverPageCompanyInfo?.get(EMaterialsFormControls.planTitle);
+    const planTitleValueControl = planTitleGroup instanceof FormGroup
+      ? (planTitleGroup.get(EMaterialsFormControls.value) as FormControl | null)
+      : null;
+
+    if (planTitleValueControl && planTitleValueControl.invalid) {
+      planTitleValueControl.markAsDirty();
+      planTitleValueControl.markAsTouched();
+      coverPageCompanyInfo?.markAsDirty();
+      coverPageCompanyInfo?.markAllAsTouched();
+      step1CoverPage?.updateValueAndValidity({ emitEvent: true });
+
+      this.toasterService.error('Please enter plan title to save as draft');
+      return;
+    }
+
     const step2Overview = this.serviceLocalizationFormService.step2_overview;
     const basicInformationFormGroup = step2Overview.get(EMaterialsFormControls.basicInformationFormGroup) as FormGroup | null;
     const opportunityControl = basicInformationFormGroup?.get(EMaterialsFormControls.opportunity) as FormControl | null;

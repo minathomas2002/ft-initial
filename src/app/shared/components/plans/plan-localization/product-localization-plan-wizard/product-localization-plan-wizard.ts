@@ -1035,18 +1035,21 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   saveAsDraft(): void {
     // Access nested form controls correctly
     const basicInfoFormGroup = this.productPlanFormService.basicInformationFormGroup;
-    const planTitleControl = basicInfoFormGroup?.get(EMaterialsFormControls.planTitle);
-    const planTitle = planTitleControl instanceof FormGroup
-      ? planTitleControl.get(EMaterialsFormControls.value)?.value
-      : planTitleControl?.value;
+    const planTitleControl = basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.get(EMaterialsFormControls.value)
+    const planTitle = planTitleControl?.value;
+    const opportunityControl = basicInfoFormGroup?.get(EMaterialsFormControls.opportunity);
     const opportunity = basicInfoFormGroup?.get(EMaterialsFormControls.opportunity)?.value;
-
     // Check if plan title and opportunity are selected
     if (!planTitle) {
-      this.toasterService.error('Plan title is required');
+      planTitleControl?.markAsDirty()
+      planTitleControl?.markAsTouched();
+      basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.updateValueAndValidity()
+      this.toasterService.error('Plan title is required to save as draft');
       return;
     }
-    if (!planTitle || !opportunity) {
+    if (!opportunity) {
+      opportunityControl?.markAsDirty();
+      opportunityControl?.markAsTouched();
       this.toasterService.error('Please select opportunity to save as draft');
       return;
     }
