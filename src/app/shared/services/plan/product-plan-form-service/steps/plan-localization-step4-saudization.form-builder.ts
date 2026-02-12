@@ -14,22 +14,22 @@ export class PlanLocalizationStep4SaudizationFormBuilder extends BasicPlanBuilde
       [EMaterialsFormControls.annualHeadcount]: this.fb.group({
         rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [0, [Validators.min(0)]], // Integer only, >= 0
+        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.required]], // Integer only, >= 0
       }),
       [EMaterialsFormControls.saudizationPercentage]: this.fb.group({
         rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [0, [Validators.min(0), Validators.max(100)]], // Range: 0-100%
+        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100), Validators.required]], // Range: 0-100%
       }),
       [EMaterialsFormControls.annualTotalCompensation]: this.fb.group({
         rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [0, [Validators.min(0)]], // Decimal allowed, >= 0
+        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.required]], // Decimal allowed, >= 0
       }),
       [EMaterialsFormControls.saudiCompensationPercentage]: this.fb.group({
         rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [0, [Validators.min(0), Validators.max(100)]], // Range: 0-100%
+        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100), Validators.required]], // Range: 0-100%
       }),
     });
   }
