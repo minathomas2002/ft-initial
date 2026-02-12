@@ -270,7 +270,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         // localizationApproachOtherDetails
         const approachOtherControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
         if (approachOtherControl && this.isLocalizationApproachOther(itemControl)) {
-          const canEdit = shouldEnableConditional(`localizationApproachOtherDetails_${index}`, `localizationApproach_${index}`);
+          const canEdit = shouldEnableConditional(`localizationApproachOtherDetails`, `localizationApproach`);
           canEdit ? this.getValueControl(approachOtherControl).enable({ emitEvent: false })
             : this.getValueControl(approachOtherControl).disable({ emitEvent: false });
         }
@@ -278,7 +278,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         // locationOtherDetails
         const locationOtherControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
         if (locationOtherControl && this.isLocationOther(itemControl)) {
-          const canEdit = shouldEnableConditional(`locationOtherDetails_${index}`, `location_${index}`);
+          const canEdit = shouldEnableConditional(`locationOtherDetails`, `location`);
           canEdit ? this.getValueControl(locationOtherControl).enable({ emitEvent: false })
             : this.getValueControl(locationOtherControl).disable({ emitEvent: false });
         }
@@ -286,7 +286,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         // proprietaryToolsSystemsDetails
         const proprietaryDetailsControl = itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails);
         if (proprietaryDetailsControl && this.isProprietaryToolsYes(itemControl)) {
-          const canEdit = shouldEnableConditional(`proprietaryToolsSystemsDetails_${index}`, `willBeAnyProprietaryToolsSystems_${index}`);
+          const canEdit = shouldEnableConditional(`proprietaryToolsSystemsDetails`, `willBeAnyProprietaryToolsSystems`);
           canEdit ? this.getValueControl(proprietaryDetailsControl).enable({ emitEvent: false })
             : this.getValueControl(proprietaryDetailsControl).disable({ emitEvent: false });
         }
@@ -328,7 +328,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
             // so the wizard indicator updates correctly (description is no longer a required field).
             const isOther = value === ELocalizationApproach.Other.toString();
             if (!isOther) {
-              const inputKey = `localizationApproachOtherDetails_${index}`;
+              const inputKey = `localizationApproachOtherDetails`;
               const current = this.selectedInputs();
               const updated = current.filter(
                 input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
@@ -338,7 +338,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
-              this._userChangedDropdowns.add(`localizationApproach_${index}`);
+              this._userChangedDropdowns.add(`localizationApproach`);
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
@@ -379,7 +379,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
             // so the wizard indicator updates correctly.
             const isOther = value === ELocation.Other.toString();
             if (!isOther) {
-              const inputKey = `locationOtherDetails_${index}`;
+              const inputKey = `locationOtherDetails`;
               const current = this.selectedInputs();
               const updated = current.filter(
                 input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
@@ -389,7 +389,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
-              this._userChangedDropdowns.add(`location_${index}`);
+              this._userChangedDropdowns.add(`location`);
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
@@ -462,7 +462,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       }
 
       // Remove proprietaryToolsSystemsDetails from selected inputs if it was selected
-      const inputKey = `proprietaryToolsSystemsDetails_${index}`;
+      const inputKey = `proprietaryToolsSystemsDetails`;
       const currentSelectedInputs = this.selectedInputs();
       const updatedSelectedInputs = currentSelectedInputs.filter(
         input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
@@ -486,7 +486,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
       // Track that user changed this dropdown and enable conditional field
       if (this.isResubmitMode()) {
-        this._userChangedDropdowns.add(`willBeAnyProprietaryToolsSystems_${index}`);
+        this._userChangedDropdowns.add(`willBeAnyProprietaryToolsSystems`);
         const isYes = value === EYesNo.Yes.toString();
         const detailsControl = itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails);
         if (detailsControl && isYes) {
@@ -624,7 +624,10 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     if (section === 'localizationStrategy' && rowId) {
       const formArray = this.getLocalizationStrategyFormArray();
       const rowIndex = formArray.controls.findIndex(
-        control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+        control =>
+          control.get('id')?.value === rowId ||
+          control.get(EMaterialsFormControls.localizationStrategyRowId)?.value === rowId ||
+          control.get('rowId')?.value === rowId
       );
       if (rowIndex !== -1) {
         const rowControl = formArray.at(rowIndex);
@@ -640,16 +643,21 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     if (section === 'entityLevel') {
       const entityLevelItem = this.getEntityLevelItem();
       // Strip 'entityLevel_' prefix from inputKey (e.g., 'entityLevel_firstYear_headcount' -> 'firstYear_headcount')
-      const actualInputKey = inputKey.startsWith('entityLevel_') ? inputKey.substring('entityLevel_'.length) : inputKey;
+      const actualInputKey = inputKey.startsWith('entityLevel') ? inputKey.substring('entityLevel'.length) : inputKey;
       const fieldControl = entityLevelItem.get(actualInputKey);
       return fieldControl ? this.getValueControl(fieldControl) : null;
     }
 
     // Service level (FormArray)
+    // field.id can be headcount id (rowId/serviceHeadcountRowId) or legacy strategy id (localizationStrategyRowId)
     if (section === 'serviceLevel' && rowId) {
       const formArray = this.getServiceLevelFormArray();
       const rowIndex = formArray.controls.findIndex(
-        control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+        control =>
+          control.get('id')?.value === rowId ||
+          control.get('rowId')?.value === rowId ||
+          control.get(EMaterialsFormControls.serviceHeadcountRowId)?.value === rowId ||
+          control.get(EMaterialsFormControls.localizationStrategyRowId)?.value === rowId
       );
       if (rowIndex !== -1) {
         const rowControl = formArray.at(rowIndex);

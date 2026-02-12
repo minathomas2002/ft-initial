@@ -480,7 +480,7 @@
                 section: 'serviceLevel',
                 inputKey: yearKey + '_headcount',
                 label: 'Headcount ' + yearColumns()[i]
-              }, itemControl.get('rowId')?.value)"
+              }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <p-inputnumber
                 [allowEmpty]="false"
@@ -489,7 +489,7 @@
                 inputId="integeronly"
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter headcount'"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_headcount'))"
-                [appConditionalColorClass]="highlightInput(yearKey + '_headcount', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(yearKey + '_headcount', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -510,7 +510,7 @@
                 section: 'serviceLevel',
                 inputKey: yearKey + '_saudization',
                 label: 'Saudization % ' + yearColumns()[i]
-              }, itemControl.get('rowId')?.value)"
+              }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <p-inputnumber
                 [allowEmpty]="false"
@@ -521,7 +521,7 @@
                 [maxFractionDigits]="2"
                 [maxlength]="5"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_saudization'))"
-                [appConditionalColorClass]="highlightInput(yearKey + '_saudization', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(yearKey + '_saudization', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -541,7 +541,7 @@
                 section: 'serviceLevel',
                 inputKey: 'keyMeasuresToUpskillSaudis',
                 label: 'Key measures to upskill Saudis'
-              }, itemControl.get('rowId')?.value)"
+              }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <textarea
                 pTextarea
@@ -550,7 +550,7 @@
                 [maxlength]="255"
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill saudis'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-                [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
               @if (!getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis)).disabled) {
@@ -574,7 +574,7 @@
                 section: 'serviceLevel',
                 inputKey: 'mentionSupportRequiredFromSEC',
                 label: 'Support Required from SEC'
-              }, itemControl.get('rowId')?.value)"
+              }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <textarea
                 pTextarea
@@ -583,7 +583,7 @@
                 [maxlength]="500"
                 [appHidePlaceholderWhenDisabledEmpty]="'Mention Support required from SEC to localize the service (if any)'"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
-                [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
               ></textarea>
               @if (!getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC)).disabled) {

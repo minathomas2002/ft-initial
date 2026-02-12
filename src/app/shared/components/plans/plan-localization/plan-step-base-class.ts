@@ -538,7 +538,6 @@ export abstract class PlanStepBaseClass {
     const correctedField = this.isResubmitMode()
       ? this.correctedFields().find(input => input.inputKey === inputKey && (rowId === undefined || input.id === rowId))
       : undefined;
-
     let isCorrected = false;
     if (correctedField) {
       const control = this.getControlForField(correctedField);
@@ -553,18 +552,6 @@ export abstract class PlanStepBaseClass {
         const currentValue = control?.value;
         const originalValue = this.getOriginalValue(correctedField);
         isCorrected = !this.valuesEqual(currentValue?.toString(), originalValue?.toString());
-        console.log(
-          {
-            inputKey,
-            rowId,
-            correctedField,
-            isSelected,
-            isCorrected,
-            currentValue,
-            originalValue,
-          }
-        );
-
       }
 
     }

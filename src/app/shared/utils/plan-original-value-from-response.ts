@@ -174,10 +174,22 @@ export function getFieldValueFromServicePlanResponse(
     return undefined;
   }
 
-  // Existing Saudi / Direct: serviceLevel (page 3 or 4) – rowId is headcount id or planServiceTypeId
+  // Existing Saudi / Direct: serviceLevel (page 3 or 4) – rowId is headcount id, planServiceTypeId, or legacy strategy id
   if (section === 'serviceLevel' && rowId) {
-    const head: IServicePlanServiceHeadcount | undefined = (sp.serviceHeadcounts ?? []).find((h) => h.id === rowId) ??
-      (sp.serviceHeadcounts ?? []).find((h) => h.planServiceTypeId === rowId);
+    const heads = sp.serviceHeadcounts ?? [];
+    let head: IServicePlanServiceHeadcount | undefined = heads.find((h) => h.id === rowId) ??
+      heads.find((h) => (h as any).Id === rowId) ??
+      heads.find((h) => h.planServiceTypeId === rowId) ??
+      heads.find((h) => (h as any).PlanServiceTypeId === rowId);
+    if (!head) {
+      // Legacy: field.id may be strategy id – resolve via planServiceTypeId
+      const strategy = (sp.localizationStrategies ?? []).find((s) => s.id === rowId);
+      const serviceId = strategy?.planServiceTypeId ?? (strategy as any)?.PlanServiceTypeId;
+      if (serviceId) {
+        head = heads.find((h) => h.planServiceTypeId === serviceId && h.pageNumber === 4) ??
+          heads.find((h) => (h as any).PlanServiceTypeId === serviceId && h.pageNumber === 4);
+      }
+    }
     if (!head) return undefined;
     if (key === EMaterialsFormControls.expectedLocalizationDate || key === EMaterialsFormControls.serviceLevelLocalizationDate) return head.localizationDate ?? undefined;
     if (key === EMaterialsFormControls.keyMeasuresToUpskillSaudis) return head.measuresUpSkillSaudis ?? undefined;
