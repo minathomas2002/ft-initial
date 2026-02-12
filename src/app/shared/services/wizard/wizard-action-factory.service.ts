@@ -137,7 +137,7 @@ export class WizardActionFactory {
     const shouldShowAddComment =
       (mode === 'Review' || mode === 'resubmit') &&
       activeStep < totalSteps &&
-      !!config.onAddComment && !config.canAcknowledgeRejection?.();
+      !!config.onAddComment && !config.canAcknowledgeRejection?.() && !isPlanRejectedFromManager;
 
     if (shouldShowAddComment) {
       const isDisabled = config.isAddCommentButtonDisabled?.() ?? false;
