@@ -68,7 +68,7 @@ export class WizardActionFactory {
     const { context, mode } = config;
     const currentLanguage = this.i18nService.currentLanguage();
     const isPlanWizard = context === 'product-plan' || context === 'service-plan';
-    const isPlanRejectedFromManager = [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED, EInternalUserPlanStatus.DV_REJECTED].includes(config.status?.() as EInternalUserPlanStatus)
+    const isPlanRejectedFromManager = [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.DEPT_REJECTED].includes(config.status?.() as EInternalUserPlanStatus)
 
     const shouldShowSaveAsDraft = !!config.onSaveAsDraft && !config.hideSaveAsDraft?.();
     if (shouldShowSaveAsDraft) {
@@ -109,17 +109,7 @@ export class WizardActionFactory {
     const shouldShowAcknowledge =
       mode === 'Review' && config.canAcknowledgeRejection?.() && isFinalStep
 
-    if (shouldShowAcknowledge) {
-      actions.push({
-        id: 'acknowledge',
-        label: this.i18nService.translate('plans.wizard.acknowledge'),
-        severity: 'danger',
-        onClick: config.onAcknowledge,
-        position: 'right'
-      });
-    }
-
-    const shouldShowSendBack = mode === 'Review' && isFinalStep && !!config.onSendBack && !config.canAcknowledgeRejection?.() && !isPlanRejectedFromManager;
+    const shouldShowSendBack = mode === 'Review' && isFinalStep && !!config.onSendBack && !config.canAcknowledgeRejection?.() && !isPlanRejectedFromManager && config.status?.() !== EInternalUserPlanStatus.DEPT_APPROVED;
 
     if (shouldShowSendBack) {
     const label = config.persona?.includes(ERoles.EMPLOYEE) ? this.i18nService.translate('plans.wizard.sendBackToInvestor') : 'Send Back to Employee';
@@ -154,6 +144,7 @@ export class WizardActionFactory {
     }
 
     if (!isFirstStep && config.onPrevious) {
+
       actions.push({
         id: 'previous',
         label: this.i18nService.translate(
@@ -188,6 +179,16 @@ export class WizardActionFactory {
 
     if (isFinalStep) {
 
+      if (shouldShowAcknowledge) {
+      actions.push({
+        id: 'acknowledge',
+        label: this.i18nService.translate('plans.wizard.acknowledge'),
+        severity: 'danger',
+        onClick: config.onAcknowledge,
+        position: 'right'
+        });
+      }
+
       if (context === 'opportunity-wizard' && config.onPublish) {
         actions.push({
           id: 'publish',
@@ -202,19 +203,23 @@ export class WizardActionFactory {
       else if (mode === 'Review' && !config.isInvestorViewMode?.() && !config.canAcknowledgeRejection?.()) {
         const canApproveOrReject = config.canApproveOrReject?.() ?? true;
 
-          actions.push({
-            id: 'reject',
-            label: this.i18nService.translate('plans.wizard.reject'),
-            severity: 'danger',
-            disabled: !canApproveOrReject,
-            onClick: config.onReject,
-            position: 'right'
-          });
+
+        if (config.status?.() !== EInternalUserPlanStatus.DEPT_APPROVED) {
+            actions.push({
+              id: 'reject',
+              label: this.i18nService.translate('plans.wizard.reject'),
+              severity: 'danger',
+              disabled: !canApproveOrReject,
+              onClick: config.onReject,
+              position: 'right'
+            });
+          }
 
           if (!isPlanRejectedFromManager) {
+            const label = config.status?.() !== EInternalUserPlanStatus.DEPT_APPROVED ? this.i18nService.translate('plans.wizard.approveAndForward') : 'Approve'
             actions.push({
               id: 'approve-and-forward',
-              label: this.i18nService.translate('plans.wizard.approveAndForward'),
+              label,
               disabled: !canApproveOrReject,
               onClick: config.onApproveAndForward,
               position: 'right'

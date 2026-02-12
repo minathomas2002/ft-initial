@@ -89,6 +89,20 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   override readonly toasterService = inject(ToasterService);
   private readonly wizardActionFactory = inject(WizardActionFactory);
 
+  readonly approvalDialogTitle = computed(() => {
+    if (this.isDVManagerPersona()) {
+      return "'Are you sure you want to approve this plan and forward it to the Department Manager for review?'"
+    }
+
+    if (this.isEmployeePersona()) {
+      return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
+       ? "Are you sure you want to approve this plan and forward it to the Investor?"
+      : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+    }
+
+    return "'Are you sure you want to approve this plan and forward it to the Employee for review?'"
+  })
+
 
   visibility = model(false);
   doRefresh = output<void>();
@@ -431,8 +445,12 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const stepId = this.stepsWithId()[this.activeStep() - 1]?.id;
     return stepId ? this.getCommentColorForStep(this.getCommentPhaseForStepId(stepId)) : 'orange';
   });
+
   canApproveOrReject = computed(() => {
-    return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
+    return (![EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager].includes(this.planStatus() as EInternalUserPlanStatus))
+    && ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none')
+    || (!this.hasSelectedFields() &&
+     !this.hasComments()))
   });
 
   canAcknowledgeRejection = computed(() => {
@@ -453,16 +471,14 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   isEmployeePersona = computed(() => {
     const userProfile = this.authStore.userProfile();
     if (!userProfile) return false;
-    const hasEmployeeId = !!userProfile.employeeID;
     const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
-    return hasEmployeeId || hasEmployeeRole;
+    return hasEmployeeRole;
   });
 
       // Check if user is Division MANAGER persona
   isDVManagerPersona = computed(() => {
     const userProfile = this.authStore.userProfile();
     if (!userProfile) return false;
-    // Check if user has employeeID or has EMPLOYEE role
     const hasMangerRole = userProfile.roleCodes?.includes(ERoles.Division_MANAGER) ?? false;
     return hasMangerRole;
   });
@@ -1643,5 +1659,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     if (targetStepIndex > 0) {
       this.navigateToStep(targetStepIndex);
     }
+  }
+
+  get EInternalUserPlanStatus() {
+    return EInternalUserPlanStatus;
   }
 }

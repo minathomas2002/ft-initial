@@ -97,6 +97,20 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.planStatus() !== EInvestorPlanStatus.DRAFT && this.activeStep() < 5)
   })
 
+  readonly approvalDialogTitle = computed(() => {
+    if (this.isDVManagerPersona()) {
+      return "'Are you sure you want to approve this plan and forward it to the Department Manager for review?'"
+    }
+
+    if (this.isEmployeePersona()) {
+      return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
+        ? "Are you sure you want to approve this plan and forward it to the Investor?"
+      : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+    }
+
+    return "'Are you sure you want to approve this plan and forward it to the Employee for review?'"
+  })
+
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
 
@@ -435,9 +449,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const userProfile = this.authStore.userProfile();
     if (!userProfile) return false;
     // Check if user has employeeID or has EMPLOYEE role
-    const hasEmployeeId = !!userProfile.employeeID;
     const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
-    return hasEmployeeId || hasEmployeeRole;
+    return hasEmployeeRole;
   });
 
     // Check if user is Division MANAGER persona
@@ -527,7 +540,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   canApproveOrReject = computed(() => {
-    return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
+    return (![EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager].includes(this.planStatus() as EInternalUserPlanStatus))
+    && ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none')
+    || (!this.hasSelectedFields() &&
+     !this.hasComments()))
   });
 
   canAcknowledgeRejection = computed(() => {
@@ -763,7 +779,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       .pipe(
         tap((response) => {
           const planStatus = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? response.body.productPlan.investorStatus : response.body.productPlan?.status;
-          this.planStore.setPlanStatus(planStatus ?? null)
+          this.planStatus.set(planStatus!)
         }),
         switchMap((response) => {
           if (!response.body) {
@@ -1652,5 +1668,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   protected refresh(): void {
     this.doRefresh.emit();
+  }
+
+  get EInternalUserPlanStatus() {
+    return EInternalUserPlanStatus;
   }
 }

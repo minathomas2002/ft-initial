@@ -322,12 +322,12 @@
 @if(showApproveConfirmationDialog()){
 <app-approve-reject-dialog
   [(visible)]="showApproveConfirmationDialog"
-  [title]="'Are you sure you want to approve this plan and forward it to the Division Manager for review?'"
+  [title]="approvalDialogTitle()"
   [label]="'Approval Note'"
   [placeholder]="'Enter approval note'"
   [maxLength]="255"
   [(note)]="approvalNote"
-  [confirmationLabel]="'Approve and Forward'"
+  [confirmationLabel]="planStatus() === EInternalUserPlanStatus.DEPT_APPROVED ? 'Approve' : 'Approve and Forward'"
   [cancelLabel]="'Cancel'"
   [icon]="'icon-info'"
   (confirmed)="onConfirmApprove()"
