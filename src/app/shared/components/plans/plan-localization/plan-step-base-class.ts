@@ -11,7 +11,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
-import { TCommentPhase } from './product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 
 /**
  * Abstract base class for plan localization step forms.
@@ -22,7 +22,10 @@ import { TCommentPhase } from './product-localization-plan-wizard/product-locali
  */
 @Directive()
 export abstract class PlanStepBaseClass {
-  private static readonly RESUBMIT_CHANGED_ONCE_FLAG = '__ftResubmitChangedOnce';
+  /** Tracks which controls have been marked as "changed once" in resubmit mode (avoids mutating control objects). */
+  private readonly resubmitChangedOnceMap = new WeakMap<AbstractControl, boolean>();
+  /** Ensures we only attach status/value subscriptions once per control to avoid duplicate handlers. */
+  private readonly resubmitSubscribedControls = new WeakSet<AbstractControl>();
 
   // Injected services
   protected readonly formUtilityService = inject(FormUtilityService);
@@ -61,27 +64,13 @@ export abstract class PlanStepBaseClass {
   showDeleteConfirmationDialog = signal<boolean>(false);
 
   // Store original values for before/after comparison in resubmit mode
-  private originalFieldValues = signal<Map<string, any>>(new Map());
+  private originalFieldValues = signal<Map<string, unknown>>(new Map());
   private previousCorrectedFieldsLength = signal<number>(-1);
 
   // Resubmit-mode highlight tracking: once a corrected field is changed (or becomes dirty),
   // it should never be highlighted again, even if reverted back to its initial/original value.
-  private correctedFieldInitialValues = signal<Map<string, any>>(new Map());
+  private correctedFieldInitialValues = signal<Map<string, unknown>>(new Map());
   private correctedFieldChangedOnce = signal<Set<string>>(new Set());
-
-  private hasResubmitChangedOnce(control: AbstractControl | null | undefined): boolean {
-    if (!control) {
-      return false;
-    }
-    return !!(control as any)[PlanStepBaseClass.RESUBMIT_CHANGED_ONCE_FLAG];
-  }
-
-  private setResubmitChangedOnce(control: AbstractControl | null | undefined): void {
-    if (!control) {
-      return;
-    }
-    (control as any)[PlanStepBaseClass.RESUBMIT_CHANGED_ONCE_FLAG] = true;
-  }
 
   // Resubmit mode check
   isResubmitMode = computed(() => {
@@ -209,7 +198,8 @@ export abstract class PlanStepBaseClass {
 
       // Process if this is the first time (previousLength === -1) or if correctedFields changed
       if (previousLength === -1 || currentLength !== previousLength) {
-        this.handleResubmitModeFields(formGroup, correctedFields);
+        const fields = this.planStore.originalPlanComments()?.comments.find(c => c.pageTitleForTL === this.pageTitle())?.fields
+        this.handleResubmitModeFields(formGroup, fields!);
         this.previousCorrectedFieldsLength.set(currentLength);
       }
     });
@@ -250,7 +240,7 @@ export abstract class PlanStepBaseClass {
    * re-highlighting when the investor reverts back to the original value.
    */
   private initializeResubmitCorrectedFieldTracking(correctedFields: IFieldInformation[]): void {
-    const initialValues = new Map<string, any>();
+    const initialValues = new Map<string, unknown>();
     (correctedFields ?? []).forEach(field => {
       const control = this.getControlForField(field);
       if (!control) {
@@ -261,35 +251,6 @@ export abstract class PlanStepBaseClass {
 
     this.correctedFieldInitialValues.set(initialValues);
     this.correctedFieldChangedOnce.set(new Set());
-  }
-
-  private markCorrectedFieldChangedOnce(field: IFieldInformation, control: AbstractControl): void {
-    const fieldKey = this.getFieldKey(field);
-    const alreadyChanged = this.correctedFieldChangedOnce().has(fieldKey);
-    if (alreadyChanged) {
-      return;
-    }
-
-    // If the control was previously changed in a prior visit to this step,
-    // keep that state (the form control instance typically persists across navigation).
-    if (this.hasResubmitChangedOnce(control)) {
-      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
-      return;
-    }
-
-    // Prefer Angular's dirtiness signal for user-originated changes.
-    if (control.dirty) {
-      this.setResubmitChangedOnce(control);
-      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
-      return;
-    }
-
-    const initialValue = this.correctedFieldInitialValues().get(fieldKey);
-    const currentValue = control.value;
-    if (!this.valuesEqual(initialValue, currentValue)) {
-      this.setResubmitChangedOnce(control);
-      this.correctedFieldChangedOnce.set(new Set([...this.correctedFieldChangedOnce(), fieldKey]));
-    }
   }
 
   /**
@@ -346,15 +307,11 @@ export abstract class PlanStepBaseClass {
     enabledParentChains.forEach((parentChain, control) => {
       const fieldForControl = correctedFields.find(f => this.getControlForField(f) === control);
 
-      // Enable parent chain
       parentChain.forEach(parent => {
         parent.enable({ emitEvent: false, onlySelf: true });
       });
 
-      // Enable the control itself
       control.enable({ emitEvent: false, onlySelf: true });
-      // If the control is invalid (e.g. after failed submit + markAllControlsAsDirty), keep it dirty
-      // so that base-error-messages shows validation errors when the user opens the step.
       if (control.status === 'VALID') {
         control.markAsPristine();
         control.markAsUntouched();
@@ -362,37 +319,28 @@ export abstract class PlanStepBaseClass {
         control.markAsDirty();
       }
 
-      // Subscribe to status changes to track when field becomes valid
-      control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        // Also mark "changed once" if this control became dirty.
-        if (fieldForControl) {
-          this.markCorrectedFieldChangedOnce(fieldForControl, control);
-        }
-
-        // Only remove from selectedInputs if the control is VALID AND has been changed by the user
-        // This prevents premature removal when the form re-renders or status changes without user input
-        if (control.status === 'VALID' && control.dirty) {
-          const field = correctedFields.find(f => this.getControlForField(f) === control);
-          if (field) {
-            this.upDateSelectedInputs(false, field);
+      // Attach subscriptions only once per control to avoid duplicate handlers and leaks
+      if (!this.resubmitSubscribedControls.has(control)) {
+        this.resubmitSubscribedControls.add(control);
+        control.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+          // if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
+          if (control.status === 'VALID' && control.dirty) {
+            const field = correctedFields.find(f => this.getControlForField(f) === control);
+            const currentValue = control.value;
+            const originalValue = this.getOriginalValue(field!);
+            if (field) this.upDateSelectedInputs(originalValue == currentValue, field);
           }
-        }
-      });
-
-      // Also subscribe to value changes to handle cases where status doesn't change (e.g., file uploads)
-      control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        if (fieldForControl) {
-          this.markCorrectedFieldChangedOnce(fieldForControl, control);
-        }
-
-        // Only remove from selectedInputs if the control is VALID AND has been changed by the user
-        if (control.status === 'VALID' && control.dirty) {
-          const field = correctedFields.find(f => this.getControlForField(f) === control);
-          if (field) {
-            this.upDateSelectedInputs(false, field);
+        });
+        control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+          // if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
+          if (control.status === 'VALID' && control.dirty) {
+            const field = correctedFields.find(f => this.getControlForField(f) === control);
+            const currentValue = control.value;
+            const originalValue = this.getOriginalValue(field!);
+            if (field) this.upDateSelectedInputs(originalValue == currentValue, field);
           }
-        }
-      });
+        });
+      }
     });
   }
 
@@ -453,7 +401,7 @@ export abstract class PlanStepBaseClass {
    * Values are taken from the BE originalPlanResponse via getOriginalFieldValueFromPlanResponse.
    */
   private storeOriginalValues(correctedFields: IFieldInformation[]): void {
-    const originalValues = new Map<string, any>();
+    const originalValues = new Map<string, unknown>();
 
     correctedFields.forEach(field => {
       const fieldKey = this.getFieldKey(field);
@@ -509,7 +457,9 @@ export abstract class PlanStepBaseClass {
         this.commentFormControl.disable({ emitEvent: false });
         // Also disable the step comment control (used by app-comment-input)
         this.stepCommentControl.disable({ emitEvent: false });
-        this.formUtilityService.disableHasCommentControls(this.getFormGroup());
+        if (!this.isResubmitMode()) {
+          this.formUtilityService.disableHasCommentControls(this.getFormGroup());
+        }
       }
       if (['adding', 'editing'].includes(this.commentPhase())) {
         this.commentFormControl.enable();
@@ -561,9 +511,19 @@ export abstract class PlanStepBaseClass {
   }
 
   /**
+   * Strips numeric index suffix from inputKey (e.g. 'whyChoseThisCompany_0' -> 'whyChoseThisCompany').
+   * Enables flexible matching when correctedFields use base key or index-suffixed format.
+   */
+  protected stripIndexSuffix(inputKey: string): string {
+    const match = inputKey.match(/^(.+)_(\d+)$/);
+    return match ? match[1] : inputKey;
+  }
+
+  /**
    * Determines if an input should be highlighted based on selection and comment phase.
    * Supports both simple fields and fields with row IDs (for FormArrays).
    * In resubmit mode, also checks correctedFields() for employee-selected fields.
+   * Matches inputKey flexibly: exact match or normalized (strip index suffix) when rowId matches.
    */
   protected highlightInput(inputKey: string, rowId?: string): boolean {
     // Check selectedInputs (for employee adding comments)
@@ -578,20 +538,28 @@ export abstract class PlanStepBaseClass {
     const correctedField = this.isResubmitMode()
       ? this.correctedFields().find(input => input.inputKey === inputKey && (rowId === undefined || input.id === rowId))
       : undefined;
-
     let isCorrected = false;
     if (correctedField) {
-      const fieldKey = this.getFieldKey(correctedField);
       const control = this.getControlForField(correctedField);
-      const changedOnce =
-        this.correctedFieldChangedOnce().has(fieldKey) ||
-        this.hasResubmitChangedOnce(control) ||
-        !!control?.dirty;
-      isCorrected = !changedOnce;
+      const isAttachmentsField =
+        (correctedField.section === 'attachments' && correctedField.inputKey === 'attachments') ||
+        inputKey === 'attachments';
+
+      if (isAttachmentsField) {
+        // Attachments: use dirty flag—value comparison fails (File[] vs BE objects, ref equality)
+        isCorrected = control?.dirty ?? false;
+      } else {
+        let currentValue = control?.value;
+        const originalValue = this.getOriginalValue(correctedField);
+        if (correctedField.inputKey === 'contactNumber') {
+          currentValue = currentValue?.countryCode + '' + currentValue?.phoneNumber;
+        }
+        isCorrected = !this.valuesEqual(currentValue?.toString(), originalValue?.toString());
+      }
+
     }
 
-    const phase = this.commentPhase();
-    return (isSelected || isCorrected) && (phase === 'adding' || phase === 'editing' || phase === 'none');
+    return this.isResubmitMode() ? isSelected && !isCorrected : isSelected;
   }
 
   private valuesEqual(a: any, b: any): boolean {
@@ -634,7 +602,7 @@ export abstract class PlanStepBaseClass {
     if (this.isResubmitMode()) {
       this.commentPhase.set('none');
       this.commentFormControl.disable({ emitEvent: false });
-      this.selectedInputs.set(this.correctedFields());
+      // this.selectedInputs.set(this.correctedFields());
       // In resubmit mode, keep fields in the store (needed for correctedFields derivation)
       // but clear the comment text and remove from currentUserPageComments
       this.planCommentSyncService.clearPageCommentTextInStore(this.pageTitle());
@@ -683,21 +651,9 @@ export abstract class PlanStepBaseClass {
     this.commentFormControl.setValue(commentValue, { emitEvent: false });
     this.commentPhase.set('viewing');
     this.commentFormControl.disable();
-
-    // Merge this page's comment into planComments (add/remove fields as user selected)
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
-
-    // In resubmit (investor) flow, reset any current orange selections and counters
-    if (this.isResubmitMode()) {
-      // Clear the selected inputs so step highlights/counts reset
-      try {
-        this.selectedInputs.set([]);
-        this.resetAllHasCommentControls();
-      } catch (e) {
-        // Defensive: should not block save UX if resetting fails
-        console.warn('Failed to reset selected inputs after saving investor comment', e);
-      }
-    }
+    // Merge this page's comment into planComments (add/remove fields as user selected)
+    // this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
     this.toasterService.success('Your comments have been saved successfully.');
   }
@@ -728,24 +684,7 @@ export abstract class PlanStepBaseClass {
     // Merge this page's comment into planComments (add/remove fields as user selected)
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
-    // In resubmit (investor) flow, reset any current orange selections and counters
-    if (this.isResubmitMode()) {
-      try {
-        this.selectedInputs.set([]);
-        this.resetAllHasCommentControls();
-      } catch (e) {
-        console.warn('Failed to reset selected inputs after editing investor comment', e);
-      }
-    }
-
     this.toasterService.success('Your updates have been saved successfully.');
-  }
-
-  /**
-   * Resets all hasComment controls in the form group.
-   */
-  protected resetAllHasCommentControls(): void {
-    this.formUtilityService.resetHasCommentControls(this.getFormGroup());
   }
 
   /**

@@ -4,6 +4,7 @@ import {
   computed,
   effect,
   inject,
+  Injector,
   model,
   OnDestroy,
   OnInit,
@@ -14,7 +15,7 @@ import {
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationMethodology, EPlanPageTitle } from 'src/app/shared/enums';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { BaseWizardDialog } from '../../../base-components/base-wizard-dialog/base-wizard-dialog';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { I18nService } from 'src/app/shared/services/i18n';
@@ -34,17 +35,17 @@ import { SubmissionConfirmationModalComponent } from '../../submission-confirmat
 import { Signature, IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { switchMap, of, map, catchError, finalize, tap } from 'rxjs';
+import { switchMap, of, map, catchError, finalize, tap, combineLatest, EMPTY, distinctUntilChanged } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
-import { ICommentsCountAndPhase, TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase, ICommentsCountAndPhase, IPlanWizardStepCommentDescriptor, IStepValidationStatus } from 'src/app/shared/types/plan-comments.types';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
-import { EInternalUserPlanStatus, EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
+import { EInternalUserPlanStatus, EInvestorPlanStatus, ISelectItem, TColors } from 'src/app/shared/interfaces';
 import { WizardActionFactory, IWizardActionConfig } from 'src/app/shared/services/wizard/wizard-action-factory.service';
 import { IBaseWizardAction } from '../../../base-components/base-wizard-actions/base-wizard-actions';
 
@@ -247,22 +248,22 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   // Computed signals to map comments to each step based on pageTitleForTL
   step1Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
-    return comments.filter(c => c.pageTitleForTL === 'Cover Page');
+    return comments.filter(c => c.pageTitleForTL === EPlanPageTitle.CoverPage);
   });
 
   step2Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
-    return comments.filter(c => c.pageTitleForTL === 'Overview');
+    return comments.filter(c => c.pageTitleForTL === EPlanPageTitle.Overview);
   });
 
   step3Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
-    return comments.filter(c => c.pageTitleForTL === 'Existing Saudi Co.');
+    return comments.filter(c => c.pageTitleForTL === EPlanPageTitle.ExistingSaudi);
   });
 
   step4Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
-    return comments.filter(c => c.pageTitleForTL === 'Direct Localization');
+    return comments.filter(c => c.pageTitleForTL === EPlanPageTitle.DirectLocalization);
   });
 
   // Computed signals to extract corrected field IDs for each step
@@ -559,7 +560,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   allowUserToResubmit = computed(() => {
     const mode = this.planStore.wizardMode();
-    return mode === 'resubmit' && this.steps().every(step => !step.commentsCount);
+    const incomingStepsComments = [this.hasIncomingStep1Comments(), this.hasIncomingStep2Comments(), this.hasIncomingStep3Comments(), this.hasIncomingStep4Comments()];
+    return mode === 'resubmit' && (this.steps().every(step => !step.commentsCount) || (incomingStepsComments.every(step => !step)));
   });
 
   // Memoized step indices to avoid recalculation in template
@@ -578,16 +580,16 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   isLoadingPlan = signal(false);
-  planStatus = signal<EInvestorPlanStatus | EInternalUserPlanStatus>(EInvestorPlanStatus.DRAFT);
+  planStatus = this.planStore.planStatus;
   statusLabel = computed(() => {
     const status = this.planStatus();
     const statusService = this.planStatusFactory.handleValidateStatus();
-    return statusService.getStatusLabel(status);
+    return statusService.getStatusLabel(status ?? EInvestorPlanStatus.DRAFT);
   });
   statusBadgeClass = computed<TColors>(() => {
     const status = this.planStatus();
     const statusService = this.planStatusFactory.handleValidateStatus();
-    return statusService.getStatusBadgeClass(status);
+    return statusService.getStatusBadgeClass(status ?? EInvestorPlanStatus.DRAFT);
   });
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
   isReviewMode = computed(() => this.planStore.wizardMode() === 'Review');
@@ -611,7 +613,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   // Centralized wizard actions using the action factory
   wizardActions = this.wizardActionFactory.generateActions({
     context: 'service-plan',
-    mode: this.mode(),
+    mode: this.mode,
     activeStep: this.activeStep,
     totalSteps: this.stepsCount,
     isLoading: this.isLoading,
@@ -656,150 +658,103 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       }
     });
 
-    // Effect to load plan data when planId and mode are set (mirrors product localization wizard)
-    effect(() => {
-      const currentPlanId = this.planStore.selectedPlanId();
-      const currentMode = this.planStore.wizardMode();
-      const isVisible = this.visibility();
-
-      if (!isVisible) return;
-
-      if (currentPlanId && ['view', 'edit', 'Review', 'resubmit'].includes(currentMode)) {
-        this.loadPlanData(currentPlanId);
-      } else if (currentMode === 'create' && !currentPlanId) {
-        this.serviceLocalizationFormService.resetAllForms();
-        this.serviceLocalizationFormService.setInitialPlanTitle(this.planStore.newPlanTitle());
-        this.enableAllForms();
-        this.activeStep.set(1);
-        this.isSubmitted.set(false);
-        this.existingSignature.set(null);
-        this.planSignature.set(null);
-        this.planStore.setPlanStatus(null);
-        // If the user applied from an opportunity, ensure the basic info opportunity
-        // control is initialized so it becomes part of the form value immediately.
-        const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
-        const opportunityControl = basicInfo?.get(EMaterialsFormControls.opportunity);
-        const applied = this.planStore.appliedOpportunity();
-        const available = this.planStore.availableOpportunities()?.[0] ?? null;
-        if (applied && opportunityControl) {
-          opportunityControl.setValue(available, { emitEvent: true });
-          opportunityControl.updateValueAndValidity({ emitEvent: true });
+    // Single combined stream: one load at a time, guards against duplicate calls when same planId+mode re-emit
+    combineLatest([
+      toObservable(this.planStore.selectedPlanId, { injector: inject(Injector) }),
+      toObservable(this.planStore.wizardMode, { injector: inject(Injector) }),
+      toObservable(this.visibility, { injector: inject(Injector) }),
+    ]).pipe(
+      distinctUntilChanged((a, b) => a[0] === b[0] && a[1] === b[1] && a[2] === b[2]),
+      switchMap(([currentPlanId, currentMode, isVisible]) => {
+        if (!isVisible) return EMPTY;
+        if (currentPlanId && ['view', 'edit', 'Review', 'resubmit'].includes(currentMode)) {
+          return this.loadPlanData$(currentPlanId).pipe(
+            tap((data) => {
+              if (data) this.applyLoadedPlanData(data, currentPlanId);
+            })
+          );
         }
-        const benaVendorIDControl = this.serviceLocalizationFormService.step2_overview.get(`${EMaterialsFormControls.locationInformationFormGroup}.${EMaterialsFormControls.benaRegisteredVendorID}.${EMaterialsFormControls.value}`);
-        if (benaVendorIDControl) {
-          benaVendorIDControl.setValue(this.authStore.userCode()!, { emitEvent: true });
+        if (currentMode === 'create' && !currentPlanId) {
+          this.serviceLocalizationFormService.resetAllForms();
+          this.serviceLocalizationFormService.setInitialPlanTitle(this.planStore.newPlanTitle());
+          this.enableAllForms();
+          this.activeStep.set(1);
+          this.isSubmitted.set(false);
+          this.existingSignature.set(null);
+          this.planSignature.set(null);
+          const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
+          const opportunityControl = basicInfo?.get(EMaterialsFormControls.opportunity);
+          const applied = this.planStore.appliedOpportunity();
+          const available = this.planStore.availableOpportunities()?.[0] ?? null;
+          if (applied && opportunityControl) {
+            opportunityControl.setValue(available, { emitEvent: true });
+            opportunityControl.updateValueAndValidity({ emitEvent: true });
+          }
+          const benaVendorIDControl = this.serviceLocalizationFormService.step2_overview.get(
+            `${EMaterialsFormControls.locationInformationFormGroup}.${EMaterialsFormControls.benaRegisteredVendorID}.${EMaterialsFormControls.value}`
+          );
+          const userCode = this.authStore.userCode();
+          if (benaVendorIDControl && userCode) {
+            benaVendorIDControl.setValue(userCode, { emitEvent: true });
+          }
         }
-      }
-    });
-
+        return EMPTY;
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe();
   }
 
   ngOnInit(): void {
     this.listenToConditionalSteps();
   }
 
-  private loadPlanData(planId: string): void {
+  /** Returns observable that loads plan and emits response body; used by combined plan-load stream. */
+  private loadPlanData$(planId: string) {
     this.isLoadingPlan.set(true);
-    this.planStore
-      .getServicePlan(planId)
-      .pipe(
-        tap((response) => {
-          const planStatus = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? response.body.servicePlan?.investorStatus : response.body.servicePlan?.status;
-          this.planStatus.set(planStatus);
-        }),
-        switchMap((response) => {
-          if (!response?.success || !response?.body) {
-            return of(null);
-          }
+    return this.planStore.getServicePlan(planId).pipe(
+      map((response) => response?.body ?? null),
+      finalize(() => this.isLoadingPlan.set(false))
+    );
+  }
 
-          const opportunityId = response.body.servicePlan?.opportunityId;
-
-          if (opportunityId) {
-            return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId).pipe(
-              map(() => response.body),
-              catchError((error) => {
-                console.error('Error loading opportunity details:', error);
-                return of(response.body);
-              })
-            );
-          }
-
-          return of(response.body);
-        }),
-        catchError((error) => {
-          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.errorLoadingPlan'));
-          console.error('Error loading plan:', error);
-          this.visibility.set(false);
-          return of(null);
-        }),
-        finalize(() => {
-          this.isLoadingPlan.set(false);
-        }),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe((data) => {
-        if (!data) return;
-
-        if (this.isResubmitMode() || this.isViewMode()) {
-          // Store original plan response for before/after comparison
-          this.originalPlanResponse.set(data);
-        }
-
-        // Reset then map (ensures arrays match response)
-        this.serviceLocalizationFormService.resetAllForms();
-
-        const opportunityItem = this.planStore.availableOpportunities()?.[0] ?? null;
-        mapServicePlanResponseToForm(data, this.serviceLocalizationFormService, {
-          opportunityItem,
-        });
-
-        // Store existing signature if present
-        if (data.signature?.signatureValue) {
-          this.existingSignature.set(data.signature.signatureValue);
-        } else {
-          this.existingSignature.set(null);
-        }
-
-        // Store signature for summary display
-        this.planSignature.set(data.signature ?? null);
-        const currentMode = this.planStore.wizardMode();
-
-        if (['view', 'Review', 'resubmit'].includes(currentMode)) {
-          // Disable all forms in view/review/resubmit mode
-          this.disableAllForms();
-          if (currentMode === 'view' || currentMode === 'resubmit') {
-            // Default to summary page when opening in view/resubmit mode
-            this.activeStep.set(this.stepsWithId().length);
-          }
-
-          // Fetch comments in review, view, and resubmit modes
-          if (!(this.planStatus() === EInvestorPlanStatus.UNDER_REVIEW && this.isInvestorPersona())) {
-            this.planStore.getPlanComments(planId)
-              .pipe(
-                takeUntilDestroyed(this.destroyRef),
-                catchError((error) => {
-                  console.error('Error loading plan comments:', error);
-                  return of(null);
-                })
-              )
-              .subscribe(() => {
-                // Map comment fields to selectedInputs for each step when comments are loaded
-                this.mapCommentFieldsToSelectedInputs();
-              });
-
-            // Re-evaluate conditional steps after disabling forms (getRawValue() will work correctly)
-            this.evaluateConditionalSteps();
-          }
-        } else if (currentMode === 'edit') {
-          this.enableAllForms();
-          const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
-          const opportunityControl = basicInfo?.get(EMaterialsFormControls.opportunity);
-          opportunityControl?.disable({ emitEvent: true });
-        }
-
-        // Force form validity update so stepper icons reflect current state
-        this.triggerFormValidityUpdate();
-      });
+  private applyLoadedPlanData(data: IServiceLocalizationPlanResponse, planId: string): void {
+    if (this.isResubmitMode() || this.isViewMode()) {
+      this.originalPlanResponse.set(data);
+    }
+    this.serviceLocalizationFormService.resetAllForms();
+    const opportunityItem = this.planStore.availableOpportunities()?.[0] ?? null;
+    mapServicePlanResponseToForm(data, this.serviceLocalizationFormService, { opportunityItem });
+    if (data.signature?.signatureValue) {
+      this.existingSignature.set(data.signature.signatureValue);
+    } else {
+      this.existingSignature.set(null);
+    }
+    this.planSignature.set(data.signature ?? null);
+    const currentMode = this.planStore.wizardMode();
+    if (['view', 'Review', 'resubmit'].includes(currentMode)) {
+      this.disableAllForms();
+      if (currentMode === 'view' || currentMode === 'resubmit') {
+        this.activeStep.set(this.stepsWithId().length);
+      }
+      if (!(this.planStatus()! === EInternalUserPlanStatus.UNDER_REVIEW && this.isInvestorPersona())) {
+        this.planStore.getPlanComments(planId)
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            catchError(() => of(null))
+          )
+          .subscribe(() => {
+            this.captureOriginalPlanCommentsForResubmit();
+            this.mapCommentFieldsToSelectedInputs();
+          });
+        this.evaluateConditionalSteps();
+      }
+    } else if (currentMode === 'edit') {
+      this.enableAllForms();
+      const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
+      const opportunityControl = basicInfo?.get(EMaterialsFormControls.opportunity);
+      opportunityControl?.disable({ emitEvent: true });
+    }
+    this.triggerFormValidityUpdate();
   }
 
   /**
@@ -1051,7 +1006,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return idx >= 0 ? idx + 1 : 0;
   }
 
-  updateValidationErrors(errors: Map<number, any>): void {
+  updateValidationErrors(errors: Map<number, IStepValidationStatus>): void {
     const errorMap = new Map<number, boolean>();
     errors.forEach((stepErrors, stepNumber) => {
       errorMap.set(stepNumber, stepErrors.hasErrors);
@@ -1276,6 +1231,24 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   saveAsDraft(): void {
     const isEditMode = this.planStore.wizardMode() === 'edit';
 
+    const step1CoverPage = this.serviceLocalizationFormService.step1_coverPage;
+    const coverPageCompanyInfo = step1CoverPage?.get(EMaterialsFormControls.coverPageCompanyInformationFormGroup) as FormGroup | null;
+    const planTitleGroup = coverPageCompanyInfo?.get(EMaterialsFormControls.planTitle);
+    const planTitleValueControl = planTitleGroup instanceof FormGroup
+      ? (planTitleGroup.get(EMaterialsFormControls.value) as FormControl | null)
+      : null;
+
+    if (planTitleValueControl && planTitleValueControl.invalid) {
+      planTitleValueControl.markAsDirty();
+      planTitleValueControl.markAsTouched();
+      coverPageCompanyInfo?.markAsDirty();
+      coverPageCompanyInfo?.markAllAsTouched();
+      step1CoverPage?.updateValueAndValidity({ emitEvent: true });
+
+      this.toasterService.error('Please enter plan title to save as draft');
+      return;
+    }
+
     const step2Overview = this.serviceLocalizationFormService.step2_overview;
     const basicInformationFormGroup = step2Overview.get(EMaterialsFormControls.basicInformationFormGroup) as FormGroup | null;
     const opportunityControl = basicInformationFormGroup?.get(EMaterialsFormControls.opportunity) as FormControl | null;
@@ -1320,121 +1293,26 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         },
         error: (error) => {
           this.isProcessing.set(false);
-          console.error('Error saving draft:', error);
         },
       });
   }
 
-  /**
-   * Collect all page comments from step forms
-   */
-  override collectAllPageComments(): IPageComment[] {
-    const comments: IPageComment[] = [];
-
-    // Step 1 comments (Cover Page)
-    const step1Form = this.serviceLocalizationFormService.step1_coverPage;
-    // In resubmit mode the comment control may be the investor 'comment' field; otherwise use the constant enum key
-    const step1CommentControl = this.isResubmitMode()
-      ? (step1Form.get('comment') as FormControl<string> | null)
-      : (step1Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    // Always use the selected inputs (what the investor chose) when collecting new page comments
-    const step1Fields = this.step1SelectedInputs();
-    const step1CommentValue = step1CommentControl?.value?.trim() || '';
-    if (step1CommentValue && (this.isResubmitMode() || step1Fields.length > 0)) {
-      comments.push({
-        pageTitleForTL: this.steps()[0].title as EPlanPageTitle,
-        comment: step1CommentValue,
-        fields: step1Fields,
-      });
-    }
-
-    // Step 2 comments (Overview)
-    const step2Form = this.serviceLocalizationFormService.step2_overview;
-    const step2CommentControl = this.isResubmitMode()
-      ? (step2Form.get('comment') as FormControl<string> | null)
-      : (step2Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    const step2Fields = this.step2SelectedInputs();
-    const step2CommentValue = step2CommentControl?.value?.trim() || '';
-    if (step2CommentValue && (this.isResubmitMode() || step2Fields.length > 0)) {
-      comments.push({
-        pageTitleForTL: this.steps()[1].title as EPlanPageTitle,
-        comment: step2CommentValue,
-        fields: step2Fields,
-      });
-    }
-
-    // Step 3 comments (Existing Saudi)
-    if (this.showExistingSaudiStep()) {
-      const step3Form = this.serviceLocalizationFormService.step3_existingSaudi;
-      const step3CommentControl = this.isResubmitMode()
-        ? (step3Form.get('comment') as FormControl<string> | null)
-        : (step3Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-      const step3Fields = this.step3SelectedInputs();
-      const step3CommentValue = step3CommentControl?.value?.trim() || '';
-      if (step3CommentValue && (this.isResubmitMode() || step3Fields.length > 0)) {
-        const step3Index = this.existingSaudiStepIndex();
-        comments.push({
-          pageTitleForTL: this.steps()[step3Index - 1].title as EPlanPageTitle,
-          comment: step3CommentValue,
-          fields: step3Fields,
-        });
-      }
-    }
-
-    // Step 4 comments (Direct Localization)
-    if (this.showDirectLocalizationStep()) {
-      const step4Form = this.serviceLocalizationFormService.step4_directLocalization;
-      const step4CommentControl = this.isResubmitMode()
-        ? (step4Form.get('comment') as FormControl<string> | null)
-        : (step4Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-      const step4Fields = this.step4SelectedInputs();
-      const step4CommentValue = step4CommentControl?.value?.trim() || '';
-      if (step4CommentValue && (this.isResubmitMode() || step4Fields.length > 0)) {
-        const step4Index = this.directLocalizationStepIndex();
-        comments.push({
-          pageTitleForTL: this.steps()[step4Index - 1].title as EPlanPageTitle,
-          comment: step4CommentValue,
-          fields: step4Fields,
-        });
-      }
-    }
-
-    return comments;
+  /** Step comment descriptors for shared collect/validate logic (includes conditional steps). */
+  private getCommentDescriptors(): IPlanWizardStepCommentDescriptor[] {
+    return [
+      { stepIndex: 0, getForm: () => this.serviceLocalizationFormService.step1_coverPage, getCommentPhase: () => this.step1CommentPhase(), getSelectedInputs: () => this.step1SelectedInputs(), getComments: () => this.step1Comments(), getCommentFields: () => this.step1CommentFields(), getStepTitle: () => this.steps()[0]?.title ?? '' },
+      { stepIndex: 1, getForm: () => this.serviceLocalizationFormService.step2_overview, getCommentPhase: () => this.step2CommentPhase(), getSelectedInputs: () => this.step2SelectedInputs(), getComments: () => this.step2Comments(), getCommentFields: () => this.step2CommentFields(), getStepTitle: () => this.steps()[1]?.title ?? '' },
+      { stepIndex: 2, getForm: () => this.serviceLocalizationFormService.step3_existingSaudi, getCommentPhase: () => this.step3CommentPhase(), getSelectedInputs: () => this.step3SelectedInputs(), getComments: () => this.step3Comments(), getCommentFields: () => this.step3CommentFields(), getStepTitle: () => this.steps()[this.existingSaudiStepIndex() - 1]?.title ?? '', isVisible: () => this.showExistingSaudiStep() },
+      { stepIndex: 3, getForm: () => this.serviceLocalizationFormService.step4_directLocalization, getCommentPhase: () => this.step4CommentPhase(), getSelectedInputs: () => this.step4SelectedInputs(), getComments: () => this.step4Comments(), getCommentFields: () => this.step4CommentFields(), getStepTitle: () => this.steps()[this.directLocalizationStepIndex() - 1]?.title ?? '', isVisible: () => this.showDirectLocalizationStep() },
+    ];
   }
 
-  /**
-   * Validate that steps with selected inputs have submitted comments (not in 'adding' or 'editing' phase)
-   */
+  override collectAllPageComments(): IPageComment[] {
+    return this.collectAllPageCommentsFromDescriptors(this.getCommentDescriptors(), this.planStore.wizardMode() === 'resubmit');
+  }
+
   protected override validateCommentSubmission(): string | null {
-    // Check Step 1 (Cover Page)
-    if (this.step1SelectedInputs().length > 0 &&
-      (this.step1CommentPhase() === 'adding' || this.step1CommentPhase() === 'editing')) {
-      return this.getSendBackErrorMessage(this.steps()[0].title, this.step1CommentPhase());
-    }
-
-    // Check Step 2 (Overview)
-    if (this.step2SelectedInputs().length > 0 &&
-      (this.step2CommentPhase() === 'adding' || this.step2CommentPhase() === 'editing')) {
-      return this.getSendBackErrorMessage(this.steps()[1].title, this.step2CommentPhase());
-    }
-
-    // Check Step 3 (Existing Saudi) - only if step is shown
-    if (this.showExistingSaudiStep()) {
-      if (this.step3SelectedInputs().length > 0 &&
-        (this.step3CommentPhase() === 'adding' || this.step3CommentPhase() === 'editing')) {
-        return this.getSendBackErrorMessage(this.steps()[this.existingSaudiStepIndex() - 1].title, this.step3CommentPhase());
-      }
-    }
-
-    // Check Step 4 (Direct Localization) - only if step is shown
-    if (this.showDirectLocalizationStep()) {
-      if (this.step4SelectedInputs().length > 0 &&
-        (this.step4CommentPhase() === 'adding' || this.step4CommentPhase() === 'editing')) {
-        return this.getSendBackErrorMessage(this.steps()[this.directLocalizationStepIndex() - 1].title, this.step4CommentPhase());
-      }
-    }
-
-    return null;
+    return this.validateCommentSubmissionFromDescriptors(this.getCommentDescriptors(), (title, phase) => this.getSendBackErrorMessage(title, phase));
   }
 
   // Base class provides all the review/approval/rejection methods
@@ -1453,8 +1331,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     this.doRefresh.emit();
   }
 
-  // Track original values for resubmit mode
-  private originalValuesMap = new Map<string, any>();
+  // Track original values and updated field keys for resubmit mode
+  private originalValuesMap = new Map<string, unknown>();
   private updatedFieldsSet = new Set<string>();
 
   // Computed signal for remaining fields requiring update
@@ -1467,77 +1345,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return totalCorrected - this.updatedFieldsSet.size;
   });
 
-  // Collect investor page comments (from investorCommentControl in each step)
-  // If investor didn't add comments, use employee comments with empty comment string
-  // If investor added comments, use the new investor comments
   collectInvestorPageComments(): IPageComment[] {
-    const Comments: IPageComment[] = [];
-
-    // Helper function to process comments for a step
-    const processStepComments = (
-      stepForm: FormGroup,
-      stepIndex: number,
-      correctedFields: IFieldInformation[],
-      employeeComments: IPageComment[]
-    ): void => {
-      const investorCommentControl = stepForm.get('comment') as FormControl<string> | null;
-      const investorComment = investorCommentControl?.value?.trim() || '';
-
-      // If this step has no corrected/highlighted fields, don't include a comment object at all.
-      // Otherwise we end up sending `Comments[i].pageTitleForTL` + empty `comment` and no `fields`,
-      // which breaks the API binding.
-      if (!correctedFields || correctedFields.length === 0) return;
-
-      if (investorComment.length > 0) {
-        // Case 1: Investor added comments - use new investor comments
-        Comments.push({
-          pageTitleForTL: this.steps()[stepIndex].title as EPlanPageTitle,
-          comment: investorComment,
-          fields: correctedFields,
-        });
-      } else if (employeeComments.length > 0) {
-        // Case 2: Investor didn't add comments - use employee comments with empty comment
-        employeeComments.forEach(employeeComment => {
-          // Defensive: skip empty-field comments so we never send a comment object without fields.
-          if (!employeeComment.fields || employeeComment.fields.length === 0) return;
-          Comments.push({
-            pageTitleForTL: employeeComment.pageTitleForTL,
-            comment: '', // Empty string as per requirement
-            fields: employeeComment.fields, // Keep same fields from employee comments
-          });
-        });
-      }
-    };
-
-    // Step 1 comments (Cover Page)
-    const step1Form = this.serviceLocalizationFormService.step1_coverPage;
-    // Use all fields from employee comments (not just those with IDs)
-    // IDs are only needed for FormArray items, but all highlighted fields should be included
-    const step1CorrectedFields = this.step1CommentFields();
-    processStepComments(step1Form, 0, step1CorrectedFields, this.step1Comments());
-
-    // Step 2 comments (Overview)
-    const step2Form = this.serviceLocalizationFormService.step2_overview;
-    const step2CorrectedFields = this.step2CommentFields();
-    processStepComments(step2Form, 1, step2CorrectedFields, this.step2Comments());
-
-    // Step 3 comments (Existing Saudi) - only if step is shown
-    if (this.showExistingSaudiStep()) {
-      const step3Form = this.serviceLocalizationFormService.step3_existingSaudi;
-      const step3CorrectedFields = this.step3CommentFields();
-      const step3Index = this.existingSaudiStepIndex() - 1; // Convert to 0-based index
-      processStepComments(step3Form, step3Index, step3CorrectedFields, this.step3Comments());
-    }
-
-    // Step 4 comments (Direct Localization) - only if step is shown
-    if (this.showDirectLocalizationStep()) {
-      const step4Form = this.serviceLocalizationFormService.step4_directLocalization;
-      const step4CorrectedFields = this.step4CommentFields();
-      const step4Index = this.directLocalizationStepIndex() - 1; // Convert to 0-based index
-      processStepComments(step4Form, step4Index, step4CorrectedFields, this.step4Comments());
-    }
-
-    return Comments;
+    return this.collectInvestorPageCommentsFromDescriptors(this.getCommentDescriptors());
   }
 
   // Implement abstract method: canInvestorSubmit
@@ -1550,7 +1359,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   override buildResubmitFormData(): FormData {
     const planId = this.planStore.selectedPlanId() ?? '';
 
-    // Build request (same as submit)
+    // Build request (same shape as submit: include conditional steps so resubmit payload matches backend expectations)
     const request = mapServiceLocalizationPlanFormToRequest(
       this.serviceLocalizationFormService,
       planId,
@@ -1563,54 +1372,23 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           contactNumber: '',
           emailId: '',
         },
+      },
+      {
+        includeExistingSaudi: this.showExistingSaudiStep(),
+        includeDirectLocalization: this.showDirectLocalizationStep(),
       }
     );
 
     // Convert to FormData
     const formData = convertServiceRequestToFormData(request);
 
-    // Append investor page comments as nested FormData entries
-    // Comments are required by the API, so always append (even if empty array)
     const investorComments = this.collectInvestorPageComments();
     this.appendCommentsToFormData(formData, investorComments);
-
     return formData;
   }
 
-  // Implement abstract method: getResubmitPlanType
   override getResubmitPlanType(): 'product' | 'service' {
     return 'service';
-  }
-
-  /**
-   * Appends comments to FormData in nested structure format
-   * Format: Comments[index].pageTitleForTL, Comments[index].comment, Comments[index].fields[index].section, etc.
-   */
-  private appendCommentsToFormData(formData: FormData, comments: IPageComment[]): void {
-    // Only append comments that actually contain fields, and reindex them to keep
-    // `Comments[0]..Comments[n]` contiguous for backend model binding.
-    const filteredComments = (comments ?? []).filter((c) => (c.fields?.length ?? 0) > 0);
-
-    filteredComments.forEach((comment, commentIndex) => {
-      // Append comment-level properties
-      formData.append(`Comments[${commentIndex}].pageTitleForTL`, comment.pageTitleForTL || '');
-      formData.append(`Comments[${commentIndex}].comment`, comment.comment || '');
-
-      // Append fields array
-      if (comment.fields && comment.fields.length > 0) {
-        comment.fields.forEach((field, fieldIndex) => {
-          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].section`, field.section || '');
-          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].inputKey`, field.inputKey || '');
-          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].label`, field.label || '');
-          if (field.id) {
-            formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].id`, field.id);
-          }
-          if (field.value) {
-            formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].value`, field.value);
-          }
-        });
-      }
-    });
   }
 
   /**

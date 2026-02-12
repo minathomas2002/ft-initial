@@ -1,4 +1,4 @@
-import { DestroyRef, inject, Injectable } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
@@ -17,10 +17,13 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 export class ServicePlanFormService {
   private readonly _planStore = inject(PlanStore);
   private readonly _authStore = inject(AuthStore);
-
+  
   private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
 
+  startYear = computed(() => (new Date(this._planStore.servicePlanData()?.createdDate?? new Date())).getFullYear());
+  startMonth = computed(() => (new Date(this._planStore.servicePlanData()?.createdDate?? new Date())).getMonth());
+  
   private readonly _existingSaudiServiceLevelCache = new Map<string, any>();
   private readonly _directLocalizationServiceLevelCache = new Map<string, any>();
 
@@ -715,13 +718,10 @@ export class ServicePlanFormService {
    */
   getAvailableQuarters(yearsAhead: number = 5): { id: string; name: string }[] {
     const quarters: { id: string; name: string }[] = [];
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-    const currentQuarter = Math.floor(currentMonth / 3) + 1;
+    const currentQuarter = Math.floor(this.startMonth() / 3) + 1;
 
     for (let yearOffset = 0; yearOffset <= yearsAhead; yearOffset++) {
-      const year = currentYear + yearOffset;
+      const year = this.startYear() + yearOffset;
       const startQuarter = yearOffset === 0 ? currentQuarter : 1;
 
       for (let quarter = startQuarter; quarter <= 4; quarter++) {
@@ -744,13 +744,10 @@ export class ServicePlanFormService {
    */
   getAvailableQuartersWithPast(yearsPast: number = 5, yearsFuture: number = 5): { id: string; name: string }[] {
     const quarters: { id: string; name: string }[] = [];
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-    const currentQuarter = Math.floor(currentMonth / 3) + 1;
+    const currentQuarter = Math.floor(this.startMonth() / 3) + 1;
 
     for (let yearOffset = -yearsPast; yearOffset <= yearsFuture; yearOffset++) {
-      const year = currentYear + yearOffset;
+      const year = this.startYear() + yearOffset;
       const startQuarter = 1;
       const endQuarter = yearOffset === 0 ? currentQuarter : 4;
 
@@ -771,10 +768,10 @@ export class ServicePlanFormService {
    * @param count Number of years to generate (default 5)
    * @param startYear Starting year (default current year)
    */
-  upcomingYears(count = 5, startYear = new Date().getFullYear()): number[] {
+  upcomingYears(count = 5): number[] {
     const years: number[] = [];
     for (let i = 0; i < count; i++) {
-      years.push(startYear + i);
+      years.push(this.startYear() + i);
     }
     return years;
   }

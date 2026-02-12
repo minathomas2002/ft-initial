@@ -140,7 +140,8 @@ export function getFieldValueFromServicePlanResponse(
     if (key === EMaterialsFormControls.agreementSigningDate) return pm.agreementSigningDate ?? undefined;
     if (key === EMaterialsFormControls.agreementOtherDetails) return pm.otherAgreementType ?? undefined;
     if (key === EMaterialsFormControls.supervisionOversightEntity) return pm.supervisionEntity ?? undefined;
-    if (key === EMaterialsFormControls.whyChoseThisCompany) return pm.selectionJustification ?? undefined;
+    // whyChoseThisCompany: accept enum and short key 'whyChoseThisCompany' (template/correctedFields use short form)
+    if (key === EMaterialsFormControls.whyChoseThisCompany || key === 'whyChoseThisCompany') return pm.selectionJustification ?? undefined;
     if (key === EMaterialsFormControls.summaryOfKeyAgreementClauses) return pm.keyAgreementClauses ?? undefined;
     if (key === EMaterialsFormControls.provideAgreementCopy) return toYesNoId(pm.agreementCopyProvided);
     return undefined;
@@ -165,16 +166,30 @@ export function getFieldValueFromServicePlanResponse(
       [`${EMaterialsFormControls.fourthYear}_saudization`]: 'y4Saudization',
       [`${EMaterialsFormControls.fifthYear}_headcount`]: 'y5Headcount',
       [`${EMaterialsFormControls.fifthYear}_saudization`]: 'y5Saudization',
+      [`${EMaterialsFormControls.sixthYear}_headcount`]: 'y6Headcount',
+      [`${EMaterialsFormControls.sixthYear}_saudization`]: 'y6Saudization',
     };
     const yearKey = yearMap[k as keyof typeof yearMap];
     if (yearKey) return (entity as any)[yearKey];
     return undefined;
   }
 
-  // Existing Saudi / Direct: serviceLevel (page 3 or 4) – rowId is headcount id or planServiceTypeId
+  // Existing Saudi / Direct: serviceLevel (page 3 or 4) – rowId is headcount id, planServiceTypeId, or legacy strategy id
   if (section === 'serviceLevel' && rowId) {
-    const head: IServicePlanServiceHeadcount | undefined = (sp.serviceHeadcounts ?? []).find((h) => h.id === rowId) ??
-      (sp.serviceHeadcounts ?? []).find((h) => h.planServiceTypeId === rowId);
+    const heads = sp.serviceHeadcounts ?? [];
+    let head: IServicePlanServiceHeadcount | undefined = heads.find((h) => h.id === rowId) ??
+      heads.find((h) => (h as any).Id === rowId) ??
+      heads.find((h) => h.planServiceTypeId === rowId) ??
+      heads.find((h) => (h as any).PlanServiceTypeId === rowId);
+    if (!head) {
+      // Legacy: field.id may be strategy id – resolve via planServiceTypeId
+      const strategy = (sp.localizationStrategies ?? []).find((s) => s.id === rowId);
+      const serviceId = strategy?.planServiceTypeId ?? (strategy as any)?.PlanServiceTypeId;
+      if (serviceId) {
+        head = heads.find((h) => h.planServiceTypeId === serviceId && h.pageNumber === 4) ??
+          heads.find((h) => (h as any).PlanServiceTypeId === serviceId && h.pageNumber === 4);
+      }
+    }
     if (!head) return undefined;
     if (key === EMaterialsFormControls.expectedLocalizationDate || key === EMaterialsFormControls.serviceLevelLocalizationDate) return head.localizationDate ?? undefined;
     if (key === EMaterialsFormControls.keyMeasuresToUpskillSaudis) return head.measuresUpSkillSaudis ?? undefined;
@@ -185,6 +200,7 @@ export function getFieldValueFromServicePlanResponse(
       [`${EMaterialsFormControls.thirdYear}_headcount`]: 'y3Headcount', [`${EMaterialsFormControls.thirdYear}_saudization`]: 'y3Saudization',
       [`${EMaterialsFormControls.fourthYear}_headcount`]: 'y4Headcount', [`${EMaterialsFormControls.fourthYear}_saudization`]: 'y4Saudization',
       [`${EMaterialsFormControls.fifthYear}_headcount`]: 'y5Headcount', [`${EMaterialsFormControls.fifthYear}_saudization`]: 'y5Saudization',
+      [`${EMaterialsFormControls.sixthYear}_headcount`]: 'y6Headcount', [`${EMaterialsFormControls.sixthYear}_saudization`]: 'y6Saudization',
     };
     const yKey = yMap[key as keyof typeof yMap];
     if (yKey) return (head as any)[yKey];
@@ -204,9 +220,11 @@ export function getFieldValueFromServicePlanResponse(
     if (key === EMaterialsFormControls.expectedLocalizationDate) return st.expectedLocalizationDate ?? undefined;
     if (key === EMaterialsFormControls.localizationApproach) return st.localizationApproach != null ? String(st.localizationApproach) : undefined;
     if (key === EMaterialsFormControls.localizationApproachOtherDetails) return st.otherLocalizationApproach ?? undefined;
-    if (key === EMaterialsFormControls.location || key === 'locationType') return st.locationType != null ? String(st.locationType) : undefined;
+    // location: accept enum 'locationType' and short key 'location' (template/correctedFields use short form)
+    if (key === EMaterialsFormControls.location || key === 'locationType' || key === 'location') return st.locationType != null ? String(st.locationType) : undefined;
     if (key === EMaterialsFormControls.locationOtherDetails) return st.otherLocationType ?? undefined;
-    if (key === EMaterialsFormControls.capexRequired || key === 'capexRequired (InSAR)') return st.capexRequired ?? undefined;
+    // capexRequired: accept enum 'capexRequired (InSAR)' and short key 'capexRequired' (template/correctedFields use short form)
+    if (key === EMaterialsFormControls.capexRequired || key === 'capexRequired (InSAR)' || key === 'capexRequired') return st.capexRequired ?? undefined;
     if (key === EMaterialsFormControls.supervisionOversightByGovernmentEntity) return st.governmentSupervision ?? undefined;
     if (key === EMaterialsFormControls.willBeAnyProprietaryToolsSystems) return toYesNoId(st.hasProprietaryTools);
     if (key === EMaterialsFormControls.proprietaryToolsSystemsDetails) return st.proprietaryToolsDetails ?? undefined;
@@ -356,8 +374,20 @@ export function getFieldValueFromProductPlanResponse(
     const sRows: SaudizationRow[] = pp.saudization?.saudizationRows ?? [];
     const sRow: SaudizationRow | undefined = rowId ? sRows.find((r) => (r as any).id === rowId) : undefined;
     if (sRow) {
+      // Support "controlName_yearN" format (extract year)
+      const yearMatch = inputKey.match(/_year(\d+)$/);
+      if (yearMatch) {
+        const yearKey = `year${yearMatch[1]}` as keyof SaudizationRow;
+        if (['year1', 'year2', 'year3', 'year4', 'year5', 'year6', 'year7'].includes(yearKey)) {
+          return (sRow as any)[yearKey];
+        }
+      }
+      // Support legacy "1"-"7" format
+      if (/^[1-7]$/.test(inputKey)) {
+        return (sRow as any)[`year${inputKey}`];
+      }
       const yKey = key as keyof SaudizationRow;
-      if (['year1','year2','year3','year4','year5','year6','year7','saudizationType'].includes(yKey)) return (sRow as any)[yKey];
+      if (['year1', 'year2', 'year3', 'year4', 'year5', 'year6', 'year7', 'saudizationType'].includes(yKey)) return (sRow as any)[yKey];
     }
     // By type: annualHeadcount->1, saudizationPercentage->2, annualTotalCompensation->3, saudiCompensationPercentage->4
     const typeByKey: Record<string, number> = {

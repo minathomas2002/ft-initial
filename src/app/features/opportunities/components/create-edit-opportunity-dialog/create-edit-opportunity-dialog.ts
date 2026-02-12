@@ -73,10 +73,10 @@ export class CreateEditOpportunityDialog implements OnInit {
   // Total steps computed signal
   totalSteps = computed(() => this.steps().length);
 
-  // Centralized wizard actions using the action factory
+  // Centralized wizard actions using the action factory (mode as signal so actions react to mode changes)
   wizardActions = this.wizardActionFactory.generateActions({
     context: 'opportunity-wizard',
-    mode: this.viewMode() === EViewMode.Edit ? 'edit' : 'create',
+    mode: computed(() => (this.viewMode() === EViewMode.Edit ? 'edit' : 'create')),
     activeStep: this.activeStep,
     totalSteps: this.totalSteps,
     isLoading: this.adminOpportunitiesStore.isLoading,

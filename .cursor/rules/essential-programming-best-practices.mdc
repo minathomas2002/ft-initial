@@ -1,0 +1,53 @@
+---
+description: Essential programming best practices for code quality, safety, and maintainability
+alwaysApply: true
+---
+
+# Essential Programming Best Practices
+
+When writing code, focus on these critical aspects:
+
+## Code Quality & Readability
+
+- Write clear, well-organized code with meaningful variable names
+- Add helpful comments for complex logic
+- Use consistent formatting conventions that others can easily understand
+
+## Problem-Solving Approach
+
+- Before coding, fully understand the problem
+- Break it into smaller parts, consider edge cases, and plan your approach thoroughly
+
+## Testing & Debugging
+
+- Test code with various inputs including edge cases and error conditions
+- Use debugging tools effectively
+- Implement automated tests when appropriate
+
+## Error Handling
+
+- Anticipate potential failures and handle errors gracefully
+- Validate inputs, provide useful error messages, and prevent crashes
+
+## Efficiency
+
+- Consider time and space complexity for larger datasets
+- Prioritize correctness and clarity first, then optimize if performance becomes an issue
+
+## Security
+
+- Protect against vulnerabilities like SQL injection and XSS
+- Validate and sanitize user inputs
+- Use secure authentication and keep dependencies updated
+
+## Version Control
+
+- Use Git to track changes, collaborate effectively, and maintain project history
+- Write clear, descriptive commit messages
+
+## Continuous Learning
+
+- Stay current with evolving technologies
+- Read documentation, learn from others' code, and refactor when you discover better approaches
+
+Apply these principles consistently to write maintainable, secure, and efficient code.

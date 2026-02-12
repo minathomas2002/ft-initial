@@ -4,7 +4,7 @@ import { OverviewStepSummary } from './summary-pages/overview-step-summary/overv
 import { ExistingSaudiStepSummary } from './summary-pages/existing-saudi-step-summary/existing-saudi-step-summary';
 import { DirectLocalizationStepSummary } from './summary-pages/direct-localization-step-summary/direct-localization-step-summary';
 import { Signature } from 'src/app/shared/interfaces/plans.interface';
-import { ICommentsCountAndPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { ICommentsCountAndPhase } from 'src/app/shared/types/plan-comments.types';
 import { SummarySectionSignature } from '../../summary-section-signature/summary-section-signature';
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -29,7 +29,8 @@ export class ServicePlanSummaryPage {
   readonly planRejectionsStatus = signal([EInternalUserPlanStatus.DEPT_REJECTED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED])
   readonly shouldShowActionNote = signal([EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.UNDER_REVIEW])
 
-  readonly isRejected = computed(() => this.planRejectionsStatus().includes(this.planStore.planStatus()!));
+  readonly isRejected = computed(() => this.planRejectionsStatus().includes(this.planStore.planStatus() as EInternalUserPlanStatus));
+  readonly planStatus = computed(() => this.planStore.planStatus() as EInternalUserPlanStatus);
 
   onEditStep = output<number>();
 

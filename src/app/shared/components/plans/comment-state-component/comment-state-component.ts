@@ -3,7 +3,7 @@ import { FormControl, FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CommentDialog } from '../comment-dialog/comment-dialog';
-import { TCommentPhase } from '../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge, startWith } from 'rxjs';

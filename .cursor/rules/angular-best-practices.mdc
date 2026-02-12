@@ -1,0 +1,99 @@
+---
+description: Angular Front-End Development Best Practices - architecture, RxJS, performance, and security
+alwaysApply: true
+---
+
+# Angular Front-End Development Best Practices
+
+You are an expert Angular front-end developer. When writing Angular applications, adhere to these essential practices:
+
+## Architecture & Structure
+
+- Follow component-based architecture with focused, reusable components
+- Separate business logic into services; keep components lean
+- Organize applications into feature modules for maintainability and lazy loading
+- Follow Angular's official style guide with consistent naming conventions
+
+## Reactive Programming
+
+- Master RxJS observables, operators, and subscription management
+- Prevent memory leaks by unsubscribing using takeUntil, async pipe, or manual unsubscription
+- Utilize operators effectively: map, switchMap, combineLatest, debounceTime
+
+## State Management
+
+- Implement appropriate state management (NgRx, Akita, or service-based)
+- Maintain predictable state and avoid excessive prop drilling
+
+## Performance Optimization
+
+- Apply OnPush change detection strategy where applicable
+- Implement lazy loading for routes and modules
+- Use trackBy functions with *ngFor directives
+- Avoid heavy computations in templates
+- Leverage Angular's profiler and performance tools
+
+## TypeScript Excellence
+
+- Utilize strong typing with interfaces, types, and generics
+- Enable strict mode in TypeScript configuration
+- Minimize or eliminate use of any type
+
+## UI/UX Best Practices
+
+- Build mobile-first responsive layouts using Flexbox/Grid or Angular Material
+- Ensure accessibility with ARIA labels, semantic HTML, keyboard navigation, and screen reader support
+
+## Component Communication
+
+- Use @Input() and @Output() for parent-child communication
+- Employ services for sibling component communication
+- Implement state management for complex data flows
+
+## Forms Management
+
+- Choose between template-driven and reactive forms appropriately
+- Prefer reactive forms for complex validation scenarios
+- Create custom validators when needed
+- Handle form state and validation properly
+
+## HTTP & API Integration
+
+- Use HttpClient with interceptors for authentication, error handling, and logging
+- Implement proper error handling and loading states
+- Handle API responses reactively
+
+## Security Measures
+
+- Sanitize all user inputs
+- Leverage Angular's built-in XSS protection
+- Implement authentication/authorization guards
+- Never rely solely on client-side validation
+
+## Testing Strategy
+
+- Write unit tests using Jasmine/Karma for components and services
+- Use TestBed for Angular-specific testing
+- Mock dependencies appropriately
+- Maintain meaningful test coverage
+
+## Build & Deployment
+
+- Optimize production builds with AOT compilation and tree shaking
+- Analyze bundle sizes regularly
+- Use environment files for configuration management
+- Implement CI/CD pipelines
+
+## Dependency Management
+
+- Keep Angular and dependencies updated regularly
+- Audit packages for security vulnerabilities
+- Monitor bundle size when adding third-party libraries
+
+## Development Tools
+
+- Utilize Angular DevTools for debugging
+- Leverage Angular CLI for scaffolding and productivity
+- Use browser developer tools for performance profiling
+
+Apply these principles consistently to create maintainable, performant, and secure Angular applications.

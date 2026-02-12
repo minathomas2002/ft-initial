@@ -4,7 +4,7 @@ import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApp
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
-import { EInternalUserPlanStatus, IAssignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { EInternalUserPlanStatus, EInvestorPlanStatus, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { IProductPlanResponse, IServiceLocalizationPlanResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
@@ -50,8 +50,13 @@ const initialState: {
   isProcessing: boolean;
   wizardMode: TWizardMode;
   selectedPlanId: string | null;
-  planStatus: EInternalUserPlanStatus | null;
+  planStatus: EInternalUserPlanStatus | EInvestorPlanStatus | null;
   planComments: IPlanCommentResponse | null;
+  /**
+   * Snapshot of plan comments when entering resubmit mode.
+   * Used for: (1) restoring comments when investor deletes, (2) collecting fields from original in collectInvestorPageComments.
+   */
+  originalPlanComments: IPlanCommentResponse | null;
   currentUserPageComments: EPlanPageTitle[];
   productPlanData: IProductPlanResponse | null;
   servicePlanData: IServiceLocalizationPlanResponse | null;
@@ -159,6 +164,7 @@ const initialState: {
   selectedPlanId: null,
   planStatus: null,
   planComments: null,
+  originalPlanComments: null,
   productPlanData: null,
   servicePlanData: null,
   actionNote: null,
@@ -275,6 +281,17 @@ export const PlanStore = signalStore(
       setPlanComments(comments: IPlanCommentResponse | null): void {
         patchState(store, { planComments: comments });
       },
+      /** Store original plan comments when entering resubmit mode; used for restoration and investor collection. */
+      setOriginalPlanComments(comments: IPlanCommentResponse | null): void {
+        patchState(store, { originalPlanComments: comments });
+      },
+      /** Restore planComments from originalPlanComments (used when investor deletes a comment in resubmit). */
+      restorePlanCommentsFromOriginal(): void {
+        const original = store.originalPlanComments();
+        if (original) {
+          patchState(store, { planComments: { ...original, comments: [...original.comments] } });
+        }
+      },
       resetWizardState(): void {
         patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null, actionNote: null, acknowledgeRejectionNote: null });
       },
@@ -286,6 +303,7 @@ export const PlanStore = signalStore(
   withMethods((store) => {
     const opportunitiesApiService = inject(OpportunitiesApiService);
     const planApiService = inject(PlanApiService);
+    const roleService = inject(RoleService);
     return {
       getActiveOpportunityLookUps(): Observable<IBaseApiResponse<ISelectItem[]>> {
         if (!store.newPlanOpportunityType()) return of({} as IBaseApiResponse<ISelectItem[]>);
@@ -327,7 +345,7 @@ export const PlanStore = signalStore(
       },
 
       /* Get Active Employees  For plans*/
-      getActiveEmployeesForPlans(planId: string) {
+      getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IAssignReassignActiveEmployee>> {
         patchState(store, { isLoading: true, error: null });
         return planApiService.getActiveEmployeesForPlans(planId).pipe(
           tap((res) => {
@@ -345,7 +363,7 @@ export const PlanStore = signalStore(
         );
       },
       /* assign Employee  For plan*/
-      assignEmployeeToPlan(request: IAssignRequest) {
+      assignEmployeeToPlan(request: IAssignRequest): Observable<IBaseApiResponse<boolean>> {
         patchState(store, { isProcessing: true, error: null });
         return planApiService.assignEmployeeToPlan(request).pipe(
           tap((res) => {
@@ -361,7 +379,7 @@ export const PlanStore = signalStore(
         );
       },
       /* reassign Employee  For plan*/
-      reassignEmployeeToPlan(request: IAssignRequest) {
+      reassignEmployeeToPlan(request: IAssignRequest): Observable<IBaseApiResponse<boolean>> {
         patchState(store, { isProcessing: true, error: null });
         return planApiService.reassignEmployeeToPlan(request).pipe(
           tap((res) => {
@@ -570,9 +588,15 @@ export const PlanStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
-            store.setPlanStatus(res.body?.productPlan?.status || null);
             store.setActionNote(res.body?.productPlan?.actionNote || null);
             store.setAcknowledgeRejectionNote(res.body?.productPlan?.acknowledgeRejectionNote || null);
+            const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.productPlan?.investorStatus : res.body?.productPlan?.status;
+            store.setPlanStatus(planStatus ?? null);
+            const opportunityItem: ISelectItem = {
+              id: res.body?.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId ?? '',
+              name: res.body?.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityTitle ?? '',
+            }
+            patchState(store, { availableOpportunities: [opportunityItem] });
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {
@@ -590,8 +614,15 @@ export const PlanStore = signalStore(
         patchState(store, { isLoading: true, error: null });
         return planApiService.getServicePlan({ planId }).pipe(
           tap((res) => {
+            const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.servicePlan?.investorStatus : res.body?.servicePlan?.status;
+            store.setPlanStatus(planStatus ?? null);
+
+            const opportunityItem: ISelectItem = {
+              id: res.body?.servicePlan?.opportunityId ?? '',
+              name: res.body?.servicePlan?.opportunityName ?? '',
+            }
+            patchState(store, { availableOpportunities: [opportunityItem] });
             patchState(store, { servicePlanData: res.body || null });
-            store.setPlanStatus(res.body?.servicePlan?.status ?? null);
             store.setActionNote(res.body?.actionNote ?? null);
             store.setAcknowledgeRejectionNote(res.body?.acknowledgeRejectionNote ?? null);
           }),
@@ -660,14 +691,11 @@ export const PlanStore = signalStore(
         return planApiService.getPlanComment(planId).pipe(
           tap((res) => {
             patchState(store, { planComments: res.body || null });
-            patchState(store, { currentUserPageComments: [] })
+            patchState(store, { currentUserPageComments: [] });
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading plan comments' });
             return throwError(() => new Error('Error loading plan comments'));
-          }),
-          finalize(() => {
-            patchState(store);
           })
         );
       },

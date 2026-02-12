@@ -13,7 +13,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
-import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
@@ -123,7 +123,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   }
 
   yearColumns = computed(() => this.planFormService?.upcomingYears(6) ?? []);
-
+  
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
     EMaterialsFormControls.secondYear,
@@ -215,10 +215,6 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
-
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
     // Defer service-dependent initialization until after component is fully constructed
@@ -274,7 +270,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         // localizationApproachOtherDetails
         const approachOtherControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
         if (approachOtherControl && this.isLocalizationApproachOther(itemControl)) {
-          const canEdit = shouldEnableConditional(`localizationApproachOtherDetails_${index}`, `localizationApproach_${index}`);
+          const canEdit = shouldEnableConditional(`localizationApproachOtherDetails`, `localizationApproach`);
           canEdit ? this.getValueControl(approachOtherControl).enable({ emitEvent: false })
             : this.getValueControl(approachOtherControl).disable({ emitEvent: false });
         }
@@ -282,7 +278,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         // locationOtherDetails
         const locationOtherControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
         if (locationOtherControl && this.isLocationOther(itemControl)) {
-          const canEdit = shouldEnableConditional(`locationOtherDetails_${index}`, `location_${index}`);
+          const canEdit = shouldEnableConditional(`locationOtherDetails`, `location`);
           canEdit ? this.getValueControl(locationOtherControl).enable({ emitEvent: false })
             : this.getValueControl(locationOtherControl).disable({ emitEvent: false });
         }
@@ -290,7 +286,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
         // proprietaryToolsSystemsDetails
         const proprietaryDetailsControl = itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails);
         if (proprietaryDetailsControl && this.isProprietaryToolsYes(itemControl)) {
-          const canEdit = shouldEnableConditional(`proprietaryToolsSystemsDetails_${index}`, `willBeAnyProprietaryToolsSystems_${index}`);
+          const canEdit = shouldEnableConditional(`proprietaryToolsSystemsDetails`, `willBeAnyProprietaryToolsSystems`);
           canEdit ? this.getValueControl(proprietaryDetailsControl).enable({ emitEvent: false })
             : this.getValueControl(proprietaryDetailsControl).disable({ emitEvent: false });
         }
@@ -332,7 +328,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
             // so the wizard indicator updates correctly (description is no longer a required field).
             const isOther = value === ELocalizationApproach.Other.toString();
             if (!isOther) {
-              const inputKey = `localizationApproachOtherDetails_${index}`;
+              const inputKey = `localizationApproachOtherDetails`;
               const current = this.selectedInputs();
               const updated = current.filter(
                 input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
@@ -342,7 +338,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
-              this._userChangedDropdowns.add(`localizationApproach_${index}`);
+              this._userChangedDropdowns.add(`localizationApproach`);
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
@@ -383,7 +379,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
             // so the wizard indicator updates correctly.
             const isOther = value === ELocation.Other.toString();
             if (!isOther) {
-              const inputKey = `locationOtherDetails_${index}`;
+              const inputKey = `locationOtherDetails`;
               const current = this.selectedInputs();
               const updated = current.filter(
                 input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
@@ -393,7 +389,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
             // Track that user changed this dropdown
             if (this.isResubmitMode()) {
-              this._userChangedDropdowns.add(`location_${index}`);
+              this._userChangedDropdowns.add(`location`);
               const otherDetailsControl = itemControl.get(EMaterialsFormControls.locationOtherDetails);
               if (otherDetailsControl && isOther) {
                 this.getValueControl(otherDetailsControl).enable({ emitEvent: false });
@@ -466,7 +462,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       }
 
       // Remove proprietaryToolsSystemsDetails from selected inputs if it was selected
-      const inputKey = `proprietaryToolsSystemsDetails_${index}`;
+      const inputKey = `proprietaryToolsSystemsDetails`;
       const currentSelectedInputs = this.selectedInputs();
       const updatedSelectedInputs = currentSelectedInputs.filter(
         input => !(input.section === 'localizationStrategy' && input.inputKey === inputKey)
@@ -490,7 +486,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
       // Track that user changed this dropdown and enable conditional field
       if (this.isResubmitMode()) {
-        this._userChangedDropdowns.add(`willBeAnyProprietaryToolsSystems_${index}`);
+        this._userChangedDropdowns.add(`willBeAnyProprietaryToolsSystems`);
         const isYes = value === EYesNo.Yes.toString();
         const detailsControl = itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails);
         if (detailsControl && isYes) {
@@ -598,17 +594,8 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     return [...new Set(allLabels)].join(', ');
   }
 
-  // Helper method to strip index suffix from inputKey (e.g., 'expectedLocalizationDate_0' -> 'expectedLocalizationDate')
-  private stripIndexSuffix(inputKey: string): string {
-    // Match pattern: _ followed by one or more digits at the end
-    const match = inputKey.match(/^(.+)_(\d+)$/);
-    return match ? match[1] : inputKey;
-  }
-
   // Helper to map UI input keys to actual form control keys
   private mapInputKeyToControlKey(inputKey: string): string {
-    let baseKey = this.stripIndexSuffix(inputKey);
-
     const keyMap: Record<string, string> = {
       location: EMaterialsFormControls.location,
       capexRequired: EMaterialsFormControls.capexRequired,
@@ -617,12 +604,12 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
     // Handle legacy keys that may have index appended without underscore
     Object.keys(keyMap).forEach((key) => {
-      if (baseKey.startsWith(key) && /\d+$/.test(baseKey.substring(key.length))) {
-        baseKey = key;
+      if (inputKey.startsWith(key) && /\d+$/.test(inputKey.substring(key.length))) {
+        inputKey = key;
       }
     });
 
-    return keyMap[baseKey] ?? baseKey;
+    return keyMap[inputKey] ?? inputKey;
   }
 
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
@@ -637,7 +624,10 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     if (section === 'localizationStrategy' && rowId) {
       const formArray = this.getLocalizationStrategyFormArray();
       const rowIndex = formArray.controls.findIndex(
-        control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+        control =>
+          control.get('id')?.value === rowId ||
+          control.get(EMaterialsFormControls.localizationStrategyRowId)?.value === rowId ||
+          control.get('rowId')?.value === rowId
       );
       if (rowIndex !== -1) {
         const rowControl = formArray.at(rowIndex);
@@ -653,16 +643,21 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     if (section === 'entityLevel') {
       const entityLevelItem = this.getEntityLevelItem();
       // Strip 'entityLevel_' prefix from inputKey (e.g., 'entityLevel_firstYear_headcount' -> 'firstYear_headcount')
-      const actualInputKey = inputKey.startsWith('entityLevel_') ? inputKey.substring('entityLevel_'.length) : inputKey;
+      const actualInputKey = inputKey.startsWith('entityLevel') ? inputKey.substring('entityLevel'.length) : inputKey;
       const fieldControl = entityLevelItem.get(actualInputKey);
       return fieldControl ? this.getValueControl(fieldControl) : null;
     }
 
     // Service level (FormArray)
+    // field.id can be headcount id (rowId/serviceHeadcountRowId) or legacy strategy id (localizationStrategyRowId)
     if (section === 'serviceLevel' && rowId) {
       const formArray = this.getServiceLevelFormArray();
       const rowIndex = formArray.controls.findIndex(
-        control => control.get('id')?.value === rowId || control.get('rowId')?.value === rowId
+        control =>
+          control.get('id')?.value === rowId ||
+          control.get('rowId')?.value === rowId ||
+          control.get(EMaterialsFormControls.serviceHeadcountRowId)?.value === rowId ||
+          control.get(EMaterialsFormControls.localizationStrategyRowId)?.value === rowId
       );
       if (rowIndex !== -1) {
         const rowControl = formArray.at(rowIndex);
