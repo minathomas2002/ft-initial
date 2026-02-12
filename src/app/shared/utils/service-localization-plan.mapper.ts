@@ -571,7 +571,7 @@ export function mapServicePlanResponseToForm(
     const head: IServicePlanServiceHeadcount | undefined = findByServiceId(servicePlan.serviceHeadcounts, serviceId, 4);
 
     if (strategy) {
-      row.get(EMaterialsFormControls.rowId)?.setValue(strategy.id ?? null, { emitEvent: false });
+      row.get(EMaterialsFormControls.localizationStrategyRowId)?.setValue(strategy.id ?? null, { emitEvent: false });
       setNestedValue(row, EMaterialsFormControls.expectedLocalizationDate, strategy.expectedLocalizationDate ?? '');
       setNestedValue(row, EMaterialsFormControls.localizationApproach, strategy.localizationApproach != null ? String(strategy.localizationApproach) : null);
       setNestedValue(row, EMaterialsFormControls.localizationApproachOtherDetails, strategy.otherLocalizationApproach ?? '');
@@ -584,13 +584,12 @@ export function mapServicePlanResponseToForm(
     }
 
     if (head) {
-      // Store service headcount ID separately from localization strategy ID
+      // rowId = headcount id for service level lookups (aligns with Existing Saudi)
+      row.get(EMaterialsFormControls.rowId)?.setValue(strategy?.id ?? null, { emitEvent: false });
       row.get(EMaterialsFormControls.serviceHeadcountRowId)?.setValue(head.id ?? null, { emitEvent: false });
-      // Read localizationDate from serviceHeadcounts for service-level table
-      // Service level table uses the separate serviceLevelLocalizationDate control
-      if (head.localizationDate) {
-        setNestedValue(row, EMaterialsFormControls.serviceLevelLocalizationDate, head.localizationDate);
-      }
+      // Read localizationDate from serviceHeadcounts (support both camelCase and PascalCase)
+      const localizationDate = head.localizationDate ?? (head as any).LocalizationDate ?? '';
+      setNestedValue(row, EMaterialsFormControls.serviceLevelLocalizationDate, localizationDate);
       setYearValues(row, head);
       setNestedValue(row, EMaterialsFormControls.keyMeasuresToUpskillSaudis, head.measuresUpSkillSaudis ?? '');
       setNestedValue(row, EMaterialsFormControls.mentionSupportRequiredFromSEC, head.mentionSupportRequiredSEC ?? '');
@@ -935,7 +934,8 @@ function mapDirectLocalizationData(formService: ServicePlanFormService): {
 
       if (hasValues) {
         result.localizationStrategies.push({
-          id: getControlValue(strategyGroup, EMaterialsFormControls.rowId),
+          id: getControlValue(strategyGroup, EMaterialsFormControls.localizationStrategyRowId)
+            ?? getControlValue(strategyGroup, EMaterialsFormControls.rowId),
           planServiceTypeId: serviceId,
           localizationApproach,
           locationType,

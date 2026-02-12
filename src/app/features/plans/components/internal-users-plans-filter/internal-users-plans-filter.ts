@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnIni
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { EOpportunityType, ERoles } from 'src/app/shared/enums';
@@ -14,6 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
 import { PlanApiService } from 'src/app/shared/api/plans/plan-api-service';
 import { RoleService } from 'src/app/shared/services/role/role-service';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 interface IDropdownOption {
   label: string;
@@ -27,7 +27,7 @@ interface IAssigneeOption {
 
 @Component({
   selector: 'app-internal-users-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe],
+  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe],
   templateUrl: './internal-users-plans-filter.html',
   styleUrl: './internal-users-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,7 +52,6 @@ export class InternalUsersPlansFilter implements OnInit {
 
   assigneeOptions = computed<IAssigneeOption[]>(() => {
     return [
-      { label: this.i18nService.translate('plans.filter.allAssignees'), value: null },
       ...this.assignees().map(assignee => ({
         label: assignee.name_En || assignee.name_Ar || '',
         value: assignee.id
@@ -62,15 +61,7 @@ export class InternalUsersPlansFilter implements OnInit {
 
   statusOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
-
-    // Base option: "All Statuses"
-    const allStatusesOption: IDropdownOption =
-      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null };
-
-    // Get role-specific status options
-    const roleSpecificOptions = this.getRoleSpecificStatusOptions();
-
-    return [allStatusesOption, ...roleSpecificOptions];
+    return this.getRoleSpecificStatusOptions();
   });
 
   /**
@@ -94,13 +85,14 @@ export class InternalUsersPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.employee_status.underReview'), value: EInternalUserPlanStatus.UNDER_REVIEW },
       { label: this.i18nService.translate('plans.employee_status.rejected'), value: EInternalUserPlanStatus.REJECTED },
       { label: this.i18nService.translate('plans.employee_status.approved'), value: EInternalUserPlanStatus.APPROVED },
-      // { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
-      // { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
-      // { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EInternalUserPlanStatus.DV_APPROVED },
-      // { label: this.i18nService.translate('plans.employee_status.dvRejected'), value: EInternalUserPlanStatus.DV_REJECTED },
-      // { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
+      { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
+      { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EInternalUserPlanStatus.DV_APPROVED },
+      { label: this.i18nService.translate('plans.employee_status.dvRejected'), value: EInternalUserPlanStatus.DV_REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
-      { label: this.i18nService.translate('plans.employee_status.employeeRejected'), value: EInternalUserPlanStatus.EMPLOYEE_REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.returnedByDEPTManager'), value: EInternalUserPlanStatus.ReturnedByDEPTManager },
+       { label: this.i18nService.translate('plans.employee_status.returnedByDV'), value: EInternalUserPlanStatus.ReturnedByDV },
     ];
   }
 
@@ -112,14 +104,16 @@ export class InternalUsersPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.employee_status.approved'), value: EInternalUserPlanStatus.APPROVED },
       { label: this.i18nService.translate('plans.employee_status.rejected'), value: EInternalUserPlanStatus.REJECTED },
       { label: this.i18nService.translate('plans.employee_status.unassigned'), value: EInternalUserPlanStatus.UNASSIGNED },
-      // { label: this.i18nService.translate('plans.employee_status.assigned'), value: EInternalUserPlanStatus.ASSIGNED },
-      // { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
-      // { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
-      // { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EInternalUserPlanStatus.DV_APPROVED },
-      // { label: this.i18nService.translate('plans.employee_status.dvRejected'), value: EInternalUserPlanStatus.DV_REJECTED },
-      // { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
+      { label: this.i18nService.translate('plans.employee_status.assigned'), value: EInternalUserPlanStatus.ASSIGNED },
+      { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
+      { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EInternalUserPlanStatus.DV_APPROVED },
+      { label: this.i18nService.translate('plans.employee_status.dvRejected'), value: EInternalUserPlanStatus.DV_REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
-      { label: this.i18nService.translate('plans.employee_status.employeeRejected'), value: EInternalUserPlanStatus.EMPLOYEE_REJECTED },
+      { label: this.i18nService.translate('plans.employee_status.returnedByDV'), value: EInternalUserPlanStatus.ReturnedByDV },
+            { label: this.i18nService.translate('plans.employee_status.returnedByDEPTManager'), value: EInternalUserPlanStatus.ReturnedByDEPTManager },
+
     ];
   }
 

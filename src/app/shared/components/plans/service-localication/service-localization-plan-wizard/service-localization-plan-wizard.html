@@ -8,26 +8,47 @@
 >
   <ng-container ngProjectAs="status">
     @if (isLoadingPlan()) {
-      <p-skeleton width="120px" height="26px" />
+    <p-skeleton
+      width="120px"
+      height="26px"
+    />
     } @else if (shouldShowStatusTag()) {
-      <app-base-tag
-        [value]="statusLabel()"
-        [color]="statusBadgeClass()"
-      />
+    <app-base-tag
+      [value]="statusLabel()"
+      [color]="statusBadgeClass()"
+    />
     }
   </ng-container>
 
   <ng-template [appStepContent]="1">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="220px" height="20px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
+      <p-skeleton
+        width="220px"
+        height="20px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <p-skeleton width="100%" height="40px" />
-        <p-skeleton width="100%" height="40px" />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
       </div>
-      <p-skeleton width="70%" height="40px" />
+      <p-skeleton
+        width="70%"
+        height="40px"
+      />
     </div>
     } @else {
     <div class="flex flex-col gap-8">
@@ -56,14 +77,32 @@
   <ng-template [appStepContent]="2">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="240px" height="20px" />
+      <p-skeleton
+        width="240px"
+        height="20px"
+      />
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <p-skeleton width="100%" height="40px" />
-        <p-skeleton width="100%" height="40px" />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
       </div>
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="70%" height="40px" />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="70%"
+        height="40px"
+      />
     </div>
     } @else {
     <div class="flex flex-col gap-8">
@@ -95,12 +134,27 @@
   <ng-template [appStepContent]="existingSaudiStepIndex()">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="220px" height="20px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
+      <p-skeleton
+        width="220px"
+        height="20px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <p-skeleton width="100%" height="40px" />
-        <p-skeleton width="100%" height="40px" />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
+        <p-skeleton
+          width="100%"
+          height="40px"
+        />
       </div>
     </div>
     } @else {
@@ -134,10 +188,22 @@
   <ng-template [appStepContent]="directLocalizationStepIndex()">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="220px" height="20px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="100%" height="40px" />
-      <p-skeleton width="70%" height="40px" />
+      <p-skeleton
+        width="220px"
+        height="20px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="100%"
+        height="40px"
+      />
+      <p-skeleton
+        width="70%"
+        height="40px"
+      />
     </div>
     } @else {
     <div class="flex flex-col gap-8">
@@ -169,10 +235,22 @@
   <ng-template [appStepContent]="summaryStepIndex()">
     @if (isLoadingPlan()) {
     <div class="flex flex-col gap-4">
-      <p-skeleton width="220px" height="20px" />
-      <p-skeleton width="100%" height="48px" />
-      <p-skeleton width="100%" height="48px" />
-      <p-skeleton width="70%" height="48px" />
+      <p-skeleton
+        width="220px"
+        height="20px"
+      />
+      <p-skeleton
+        width="100%"
+        height="48px"
+      />
+      <p-skeleton
+        width="100%"
+        height="48px"
+      />
+      <p-skeleton
+        width="70%"
+        height="48px"
+      />
     </div>
     } @else {
     <app-service-plan-summary-page
@@ -244,12 +322,12 @@
 @if(showApproveConfirmationDialog()){
 <app-approve-reject-dialog
   [(visible)]="showApproveConfirmationDialog"
-  [title]="'Are you sure you want to approve this plan and forward it to the Division Manager for review?'"
+  [title]="approvalDialogTitle()"
   [label]="'Approval Note'"
   [placeholder]="'Enter approval note'"
   [maxLength]="255"
   [(note)]="approvalNote"
-  [confirmationLabel]="'Approve and Forward'"
+  [confirmationLabel]="planStatus() === EInternalUserPlanStatus.DEPT_APPROVED ? 'Approve' : 'Approve and Forward'"
   [cancelLabel]="'Cancel'"
   [icon]="'icon-info'"
   (confirmed)="onConfirmApprove()"
@@ -292,4 +370,24 @@
   (onCancel)="onCancelRejectConfirmation()"
   [isLoading]="isProcessing()"
 />
+}
+
+<!-- Acknowledge Rejection Dialog -->
+@if(showAcknowledgeRejectDialog()){
+<app-approve-reject-dialog
+  [(visible)]="showAcknowledgeRejectDialog"
+  [title]="'Are you sure you want to acknowledge this rejection and return the plan to the Employee for final rejection submission to the Investor?'"
+  [label]="'Acknowledgement Note '"
+  [placeholder]="'Enter acknowledgement note '"
+  [maxLength]="255"
+  [(note)]="acknowledgeReason"
+  [confirmationLabel]="'Acknowledge'"
+  [cancelLabel]="'Cancel'"
+  [icon]="'icon-info'"
+  [isRequired]="false"
+  (confirmed)="onAcknowledgeReject()"
+  [isLoading]="isProcessing()"
+  [confirmButtonSeverity]="'danger'"
+/>
+
 }

@@ -16,10 +16,12 @@ export class EmployeePlanStatusMapper {
       [EInternalUserPlanStatus.DV_APPROVED]: 'green',
       [EInternalUserPlanStatus.DV_REJECTED]: 'red',
       [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: 'red',
-      [EInternalUserPlanStatus.EMPLOYEE_REJECTED]: 'red',
+      //[EInternalUserPlanStatus.EMPLOYEE_REJECTED]: 'red',
       [EInternalUserPlanStatus.PENDING]: 'yellow',
       [EInternalUserPlanStatus.REJECTED]: 'red',
-      [EInternalUserPlanStatus.ASSIGNED]: 'orange'
+      [EInternalUserPlanStatus.ASSIGNED]: 'orange',
+       [EInternalUserPlanStatus.ReturnedByDV]: 'blue',
+      [EInternalUserPlanStatus.ReturnedByDEPTManager]: 'blue'
     };
     return classMap[status] || 'primary';
   }
@@ -37,8 +39,10 @@ export class EmployeePlanStatusMapper {
       [EInternalUserPlanStatus.DV_REJECTED]: this.i18nService.translate('plans.employee_status.dvRejected'),
       [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
       [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
-      [EInternalUserPlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
+     // [EInternalUserPlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
       [EInternalUserPlanStatus.ASSIGNED]: this.i18nService.translate('plans.employee_status.assigned'),
+      [EInternalUserPlanStatus.ReturnedByDV]: this.i18nService.translate('plans.employee_status.returnedByDV'),
+      [EInternalUserPlanStatus.ReturnedByDEPTManager]: this.i18nService.translate('plans.employee_status.returnedByDEPTManager'),
     };
     return statusMap[status] || '';
   }

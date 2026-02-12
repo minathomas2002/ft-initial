@@ -72,7 +72,7 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
         const ctrl = group.get(controlName);
         const valueControl = ctrl instanceof FormGroup ? ctrl.get(EMaterialsFormControls.value) : ctrl;
         const hasError = !!(valueControl && (valueControl as { invalid?: boolean }).invalid && (valueControl as { dirty?: boolean }).dirty);
-        const hasComment = this.hasServiceDetailComment(controlName, rowId, i);
+        const hasComment = this.hasServiceDetailComment(controlName, rowId);
         const isResolved = this.isResolvedFieldForServiceDetail(controlName, rowId, i, group);
         return {
           label,
@@ -147,11 +147,11 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
     this.serviceDetailsRows().some((row) => row.showServiceProvidedToCompanyNames)
   );
 
-  private hasServiceDetailComment(fieldKey: string, rowId: string | null, index: number): boolean {
+  private hasServiceDetailComment(fieldKey: string, rowId: string | null): boolean {
     return this.sectionSummaryFields().some((f) => {
-      if (f.inputKey !== fieldKey && f.inputKey !== `${fieldKey}_${index}` && !f.inputKey?.startsWith(`${fieldKey}_`)) return false;
+      if (f.inputKey !== fieldKey && f.inputKey !== `${fieldKey}` && !f.inputKey?.startsWith(`${fieldKey}`)) return false;
       if (rowId != null) return f.id === rowId;
-      return f.inputKey === `${fieldKey}_${index}` || f.id === rowId;
+      return f.inputKey === `${fieldKey}` || f.id === rowId;
     });
   }
 
@@ -162,7 +162,7 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
       : null;
     const isHasCommentChecked = hasCommentControl?.value ?? false;
 
-    return this.hasServiceDetailComment(fieldKey, rowId, index) &&
+    return this.hasServiceDetailComment(fieldKey, rowId) &&
       !isHasCommentChecked &&
       ['view', 'Review'].includes(this.planStore.wizardMode()) &&
       this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&

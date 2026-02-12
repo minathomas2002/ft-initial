@@ -12,7 +12,6 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 @Injectable({ providedIn: 'root' })
 export class PlanCommentSyncService {
   private readonly planStore = inject(PlanStore);
-  private readonly authStore = inject(AuthStore);
 
   /**
    * Merge the current page's comment into planComments.
@@ -29,16 +28,7 @@ export class PlanCommentSyncService {
       (c) => c.pageTitleForTL !== currentPageComment.pageTitleForTL
     );
 
-    // // Creator role from current user's persona (AuthStore) - set on the current page comment
-    // const currentUserRole = this.authStore.userProfile()?.roleCodes?.[0] ?? 0;
-    const updatedCurrentPageComment: IPageComment = {
-      ...currentPageComment,
-    };
-
-    const mergedComments: IPageComment[] = [...otherPages, updatedCurrentPageComment];
-
-    // // Keep the global creatorRole from existing or use current user's role
-    // const globalCreatorRole = existing?.creatorRole ?? currentUserRole;
+    const mergedComments: IPageComment[] = [...otherPages, { ...currentPageComment }];
 
     const payload: IPlanCommentResponse = {
       comments: mergedComments,
@@ -56,9 +46,15 @@ export class PlanCommentSyncService {
   /**
    * Remove a page's comment entry from the store entirely.
    * Used when a non-resubmit user (e.g. employee) deletes their comment.
-   * Also removes the page from currentUserPageComments.
+   * In resubmit mode with originalPlanComments set, restores planComments from original instead.
+   * Also removes the page from currentUserPageComments (except when restoring).
    */
   removePageCommentFromStore(pageTitleForTL: EPlanPageTitle): void {
+    if (this.planStore.wizardMode() === 'resubmit' && this.planStore.originalPlanComments()) {
+      this.planStore.restorePlanCommentsFromOriginal();
+      return;
+    }
+
     const existing = this.planStore.planComments();
     if (!existing) return;
 
@@ -81,19 +77,22 @@ export class PlanCommentSyncService {
    * Clear only the comment text for a page in the store, keeping fields intact.
    * Used when an investor deletes their comment in resubmit mode —
    * fields must remain so the correctedFields derivation is not disrupted.
-   * Also removes the page from currentUserPageComments.
+   * When originalPlanComments is set, restores planComments from original instead.
+   * Also removes the page from currentUserPageComments (except when restoring).
    */
   clearPageCommentTextInStore(pageTitleForTL: EPlanPageTitle): void {
     const existing = this.planStore.planComments();
     if (!existing) return;
 
-    const updatedComments = existing.comments.map(c =>
-      c.pageTitleForTL === pageTitleForTL ? { ...c, comment: '' } : c
-    );
+    const original = this.planStore.originalPlanComments();
+    const originalPageComments = original?.comments?.find(oc => oc.pageTitleForTL === pageTitleForTL);
 
+    const updatedComments = existing.comments.map(c =>
+      c.pageTitleForTL === pageTitleForTL ? { ...c, comment: originalPageComments?.comment ?? '' } : c
+    );
     const payload: IPlanCommentResponse = {
       comments: updatedComments,
-      creatorRole: existing.creatorRole
+      creatorRole: original?.creatorRole ?? 0
     };
 
     this.planStore.setPlanComments(payload);

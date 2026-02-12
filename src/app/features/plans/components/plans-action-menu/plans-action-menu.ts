@@ -71,6 +71,8 @@ export class PlansActionMenu {
     [EActionPlanTimeLine.RemoveAssignee]: this.onRemoveAssignee,
     [EActionPlanTimeLine.Delete]: this.onDelete,
     [EActionPlanTimeLine.AutoRejected]: this.onAutoRejected,
+    [EActionPlanTimeLine.DVReview]: null,
+    [EActionPlanTimeLine.DeptManagerReview]: null,
   };
 
   menuItems = computed<MenuItem[]>(() => {

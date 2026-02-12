@@ -59,7 +59,7 @@ import { GeneralConfirmationDialogComponent } from "src/app/shared/components/ut
   providers: [InvestorPlansFilterService, InternalUsersPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlansList extends PlanDashboardBase implements OnInit {
+export class PlansList extends PlanDashboardBase {
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
@@ -149,10 +149,6 @@ export class PlansList extends PlanDashboardBase implements OnInit {
         this.resetPlanWizard();
       }
     });
-  }
-
-  ngOnInit(): void {
-    this.filterService().applyFilter();
   }
 
   createNewPlan() {

@@ -9,7 +9,7 @@ import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhe
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
-import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
@@ -115,9 +115,7 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
+
 
   // Get services form array
   getServicesFormArray(): FormArray {
@@ -174,19 +172,12 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
     return [...new Set(allLabels)].join(', ');
   }
 
-  // Helper method to strip index suffix from inputKey (e.g., 'serviceName_0' -> 'serviceName')
-  private stripIndexSuffix(inputKey: string): string {
-    // Match pattern: _ followed by one or more digits at the end
-    const match = inputKey.match(/^(.+)_(\d+)$/);
-    return match ? match[1] : inputKey;
-  }
-
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
     return getFieldValueFromServicePlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field
-  getControlForField(field: IFieldInformation): FormControl<any> | null {
+  override getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey, id: rowId } = field;
 
     // Handle FormArray items (services)

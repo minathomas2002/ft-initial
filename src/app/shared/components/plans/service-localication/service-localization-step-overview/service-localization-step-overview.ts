@@ -29,7 +29,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
-import { TCommentPhase } from '../../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
@@ -201,17 +201,13 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     super.onSaveEditedComment();
   }
 
-  override resetAllHasCommentControls(): void {
-    super.resetAllHasCommentControls();
-  }
-
   onServiceProvidedToChange(value: Array<string | number> | null, index: number): void {
     this.planFormService.toggleServiceProvidedToCompanyNamesValidation(value, index);
 
     // When user deselects "Others", remove the Company Names field from selectedInputs
     // so the wizard indicator updates correctly (description is no longer a required field).
     if (!this.hasServiceProvidedToOthers(value)) {
-      const inputKey = `serviceProvidedToCompanyNames_${index}`;
+      const inputKey = `serviceProvidedToCompanyNames`;
       const current = this.selectedInputs();
       const updated = current.filter(
         input => !(input.section === 'serviceDetails' && input.inputKey === inputKey)
@@ -335,7 +331,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
         // Check if parent field (serviceProvidedTo) is in correctedFields
         const isParentCorrected = correctedFieldsList.some(field =>
           field.section === 'serviceDetails' &&
-          field.inputKey === `serviceProvidedTo_${index}` &&
+          field.inputKey === `serviceProvidedTo` &&
           (field.id === rowId || !field.id)
         );
 
@@ -357,7 +353,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
         // Check if dependent field (serviceProvidedToCompanyNames) is in correctedFields
         const isCompanyNamesFieldCorrected = correctedFieldsList.some(field =>
           field.section === 'serviceDetails' &&
-          field.inputKey === `serviceProvidedToCompanyNames_${index}` &&
+          field.inputKey === `serviceProvidedToCompanyNames` &&
           (field.id === rowId || !field.id)
         );
 
@@ -442,19 +438,12 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     return [...new Set(allLabels)].join(', ');
   }
 
-  // Helper method to strip index suffix from inputKey (e.g., 'serviceType_0' -> 'serviceType')
-  private stripIndexSuffix(inputKey: string): string {
-    // Match pattern: _ followed by one or more digits at the end
-    const match = inputKey.match(/^(.+)_(\d+)$/);
-    return match ? match[1] : inputKey;
-  }
-
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
     return getFieldValueFromServicePlanResponse(field, this.originalPlanResponse());
   }
 
   // Implement abstract method from base class to get form control for a field
-  getControlForField(field: IFieldInformation): FormControl<any> | null {
+  override getControlForField(field: IFieldInformation): FormControl<any> | null {
     const { section, inputKey, id: rowId } = field;
 
     // Helper to safely get value control - handles both FormGroup and FormControl
@@ -471,15 +460,16 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
 
     // Handle FormArray items (service details)
     if (section === 'serviceDetails' && rowId) {
+      {
+
+      }
       const formArray = this.getDetailsFormArray();
       const rowIndex = formArray.controls.findIndex(
         control => control.get('rowId')?.value === rowId
       );
       if (rowIndex !== -1) {
         const rowControl = formArray.at(rowIndex);
-        // Strip index suffix from inputKey (e.g., 'serviceType_0' -> 'serviceType')
-        const actualInputKey = this.stripIndexSuffix(inputKey);
-        const fieldControl = rowControl.get(actualInputKey);
+        const fieldControl = rowControl.get(inputKey);
         if (fieldControl) {
           return getValueControlSafe(fieldControl);
         }

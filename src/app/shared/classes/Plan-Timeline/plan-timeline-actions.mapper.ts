@@ -22,6 +22,8 @@ export class PlanTimelineActionsMapper {
     [EActionPlanTimeLine.DeptApproved]: 'Department Approved',
     [EActionPlanTimeLine.EmployeeApproved]: 'Plan Approved and Forwarded to DV Manager',
     [EActionPlanTimeLine.EditPlan]: 'Edited the plan',
+    [EActionPlanTimeLine.DVReview]: 'DV Review',
+    [EActionPlanTimeLine.DeptManagerReview]: 'Department Manager Review',
   };
 
   constructor(private i18nService: I18nService) { }

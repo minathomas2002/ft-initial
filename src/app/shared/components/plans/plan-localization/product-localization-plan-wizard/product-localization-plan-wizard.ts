@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, model, OnDestroy, output, signal, viewChild, WritableSignal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, effect, inject, Injector, model, OnDestroy, output, signal, viewChild, WritableSignal } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { BaseWizardDialog } from "../../../base-components/base-wizard-dialog/base-wizard-dialog";
 import { ButtonModule } from "primeng/button";
@@ -9,8 +9,8 @@ import { ProductPlanValidationService } from "src/app/shared/services/plan/valid
 import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { switchMap, catchError, finalize, of, map, tap } from "rxjs";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import { switchMap, catchError, finalize, of, map, tap, combineLatest, EMPTY, distinctUntilChanged } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType, EPlanPageTitle } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
@@ -42,6 +42,7 @@ export interface ICommentsCountAndPhase {
   count: number;
   phase: TCommentPhase;
 }
+import { IPlanWizardStepCommentDescriptor, IStepValidationStatus } from "src/app/shared/types/plan-comments.types";
 type ProductLocalizationWizardStepId =
   | 'overview'
   | 'productPlant'
@@ -74,6 +75,7 @@ type ProductLocalizationWizardStepId =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnDestroy {
+
   productPlanFormService = inject(ProductPlanFormService);
   override readonly toasterService = inject(ToasterService);
   override readonly planStore = inject(PlanStore);
@@ -94,6 +96,20 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
     return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.planStatus() !== EInvestorPlanStatus.DRAFT && this.activeStep() < 5)
+  })
+
+  readonly approvalDialogTitle = computed(() => {
+    if (this.isDVManagerPersona()) {
+      return "'Are you sure you want to approve this plan and forward it to the Department Manager for review?'"
+    }
+
+    if (this.isEmployeePersona()) {
+      return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
+        ? "Are you sure you want to approve this plan and forward it to the Investor?"
+      : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+    }
+
+    return "'Are you sure you want to approve this plan and forward it to the Employee for review?'"
   })
 
   // Track validation errors for stepper indicators
@@ -434,11 +450,18 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const userProfile = this.authStore.userProfile();
     if (!userProfile) return false;
     // Check if user has employeeID or has EMPLOYEE role
-    const hasEmployeeId = !!userProfile.employeeID;
     const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
-    return hasEmployeeId || hasEmployeeRole;
+    return hasEmployeeRole;
   });
 
+    // Check if user is Division MANAGER persona
+  isDVManagerPersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    // Check if user has employeeID or has EMPLOYEE role
+    const hasMangerRole = userProfile.roleCodes?.includes(ERoles.Division_MANAGER) ?? false;
+    return hasMangerRole;
+  });
   // Check if plan is in pending status for investor
   isPendingStatusForInvestor = computed(() => {
     const status = this.planStatus();
@@ -467,7 +490,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   // Computed signals for plan status tag
-  planStatus = signal<EInternalUserPlanStatus | EInvestorPlanStatus | null>(null);
+  planStatus = this.planStore.planStatus;
   statusLabel = computed(() => {
     const status = this.planStatus();
     if (status === null) return '';
@@ -487,7 +510,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   allowUserToResubmit = computed(() => {
     const mode = this.planStore.wizardMode();
-    return mode === 'resubmit' && this.steps().every(step => !step.commentsCount);
+    const incomingStepsComments = [this.hasIncomingStep1Comments(), this.hasIncomingStep2Comments(), this.hasIncomingStep3Comments(), this.hasIncomingStep4Comments()];
+    return mode === 'resubmit' && (this.steps().every(step => !step.commentsCount) || (incomingStepsComments.every(step => !step)));
   });
 
   showHasCommentControl = signal<boolean>(false);
@@ -518,8 +542,15 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   canApproveOrReject = computed(() => {
-    return (this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none') || (!this.hasSelectedFields() && !this.hasComments());
+    return (![EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager].includes(this.planStatus() as EInternalUserPlanStatus))
+    && ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none')
+    || (!this.hasSelectedFields() &&
+     !this.hasComments()))
   });
+
+  canAcknowledgeRejection = computed(() => {
+    return this.planStatus() === EInternalUserPlanStatus.DEPT_REJECTED && this.isDVManagerPersona()
+  })
 
   hasComments = computed(() => {
     // Check if any step has saved comments (comment phase is 'viewing' and comment exists)
@@ -553,7 +584,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   wizardActions = this.wizardActionFactory.generateActions({
     context: 'product-plan',
-    mode: this.mode(),
+    mode: this.mode,
     activeStep: this.activeStep,
     totalSteps: this.totalSteps,
     isLoading: this.isLoadingPlan,
@@ -564,6 +595,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     canOpenTimeline: this.canOpenTimeline,
     isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
     isInvestorViewMode: this.isInvestorViewMode,
+    canAcknowledgeRejection : this.canAcknowledgeRejection,
+
+    persona: this.authStore?.userProfile()?.roleCodes,
+    status: this.planStatus,
 
     onPrevious: () => this.previousStep(),
     onNext: () => this.nextStep(),
@@ -571,47 +606,45 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     onSubmit: () => this.onSummarySubmitClick(),
     onApproveAndForward: () => this.onApproveAndForward(),
     onReject: () => this.onReject(),
-    onSendBackToInvestor: () => this.onSendBackToInvestor(),
+    onSendBack: () => this.onSendBack(),
     onAddComment: () => this.onAddComment(),
     onOpenTimeline: () => this.timelineVisibility.set(true),
-    onResubmit: () => this.onSummarySubmitClick()
+    onResubmit: () => this.onSummarySubmitClick(),
+    onAcknowledge: () => this.onAcknowledge(),
   });
 
   constructor() {
     super();
-    // Effect to load plan data when planId and mode are set
-    effect(() => {
-      const currentPlanId = this.planStore.selectedPlanId();
-      const currentMode = this.planStore.wizardMode();
-      const isVisible = this.visibility();
-
-      // Only process when dialog is visible
-      if (!isVisible) {
-        return;
-      }
-
-      if (currentPlanId && ['view', 'edit', 'Review', 'resubmit'].includes(currentMode)) {
-        this.loadPlanData(currentPlanId);
-      } else if (currentMode === 'create' && !currentPlanId) {
-        // Reset forms for create mode - this will set opportunityType and submissionDate
-        this.productPlanFormService.resetAllForms();
-        this.enableAllForms();
-        this.activeStep.set(1);
-        this.isSubmitted.set(false);
-        this.existingSignature.set(null);
-        this.planStatus.set(null);
-
-        // Handle opportunity based on whether user is applying to an opportunity or creating from scratch
-        const appliedOpportunity = this.planStore.appliedOpportunity();
-        if (appliedOpportunity) {
-          // User is applying to an opportunity - use the opportunity from store and disable the field
-          this.initializeOpportunityFromApplied();
-        } else {
-          // User is creating new plan from scratch - load available opportunities and enable the field
-          this.loadAvailableOpportunities();
+    // Single combined stream: one load at a time, guards against duplicate calls when same planId+mode re-emit
+    combineLatest([
+      toObservable(this.planStore.selectedPlanId, { injector: inject(Injector) }),
+      toObservable(this.planStore.wizardMode, { injector: inject(Injector) }),
+      toObservable(this.visibility, { injector: inject(Injector) }),
+    ]).pipe(
+      distinctUntilChanged((a, b) => a[0] === b[0] && a[1] === b[1] && a[2] === b[2]),
+      switchMap(([currentPlanId, currentMode, isVisible]) => {
+        if (!isVisible) return EMPTY;
+        if (currentPlanId && ['view', 'edit', 'Review', 'resubmit'].includes(currentMode)) {
+          return this.loadPlanData$(currentPlanId).pipe(
+            tap((responseBody) => {
+              if (responseBody) this.mapPlanDataToForm(responseBody);
+            })
+          );
         }
-      }
-    });
+        if (currentMode === 'create' && !currentPlanId) {
+          this.productPlanFormService.resetAllForms();
+          this.enableAllForms();
+          this.activeStep.set(1);
+          this.isSubmitted.set(false);
+          this.existingSignature.set(null);
+          const appliedOpportunity = this.planStore.appliedOpportunity();
+          if (appliedOpportunity) this.initializeOpportunityFromApplied();
+          else this.loadAvailableOpportunities();
+        }
+        return EMPTY;
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe();
 
     // Effect to sync comment phase when navigating between steps
     // If showHasCommentControl is true, ensure the current step's comment phase is also active
@@ -720,10 +753,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         step4: this.step4CommentFields().length > 0,
       }
       : undefined;
-    console.log(this.productPlanFormService.step1_overviewCompanyInformation);
-    console.log(this.productPlanFormService.step2_productPlantOverview);
-    console.log(this.productPlanFormService.step3_valueChain);
-    console.log(this.productPlanFormService.step4_saudization);
     // Check if all forms are valid
     if (!this.productPlanFormService.areAllFormsValid({ resubmitStepsToValidate })) {
       // Mark all controls as dirty to show validation errors
@@ -739,56 +768,13 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.showSubmissionModal.set(true);
   }
 
-  loadPlanData(planId: string): void {
+  /** Returns observable that loads plan and emits response body; used by combined plan-load stream. */
+  private loadPlanData$(planId: string) {
     this.isLoadingPlan.set(true);
-    this.planStore.getProductPlan(planId)
-      .pipe(
-        tap((response) => {
-          const planStatus = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? response.body.productPlan.investorStatus : response.body.productPlan?.status;
-          this.planStatus.set(planStatus ?? null);
-        }),
-        switchMap((response) => {
-          if (!response.body) {
-            return of(null);
-          }
-
-          // Get opportunity details and update availableOpportunities for edit mode
-          const opportunityId = response.body.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-          const isEditOrViewOrReviewOrResubmitMode = this.planStore.wizardMode() === 'edit' || this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review'
-            || this.planStore.wizardMode() === 'resubmit';
-
-          if (opportunityId && isEditOrViewOrReviewOrResubmitMode) {
-            // Chain opportunity details loading, catch errors to continue with form mapping
-            return this.planStore.getOpportunityDetailsAndUpdateOptions(opportunityId)
-              .pipe(
-                map(() => response.body),
-                catchError((error) => {
-                  console.error('Error loading opportunity details:', error);
-                  // Return the response body so we can still map the form data even if opportunity loading fails
-                  return of(response.body);
-                })
-              );
-          } else {
-            // Map response to form directly if no opportunity ID or not in edit/view mode
-            return of(response.body);
-          }
-        }),
-        catchError((error) => {
-          this.toasterService.error(this.i18nService.translate('plans.wizard.messages.errorLoadingPlan'));
-          console.error('Error loading plan:', error);
-          this.visibility.set(false);
-          return of(null);
-        }),
-        finalize(() => {
-          this.isLoadingPlan.set(false);
-        }),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe((responseBody) => {
-        if (responseBody) {
-          this.mapPlanDataToForm(responseBody);
-        }
-      });
+    return this.planStore.getProductPlan(planId).pipe(
+      map((response) => response?.body ?? null),
+      finalize(() => this.isLoadingPlan.set(false))
+    );
   }
 
   private mapPlanDataToForm(response: IProductPlanResponse): void {
@@ -810,7 +796,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     }
 
     const currentMode = this.planStore.wizardMode();
-    const planStatusValue = response.productPlan?.status;
 
     // Handle forms based on mode
     if (['view', 'Review', 'resubmit'].includes(currentMode)) {
@@ -827,13 +812,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           this.planStore.getPlanComments(planId)
             .pipe(
               takeUntilDestroyed(this.destroyRef),
-              catchError((error) => {
-                console.error('Error loading plan comments:', error);
-                return of(null);
-              })
+              catchError(() => of(null))
             )
             .subscribe(() => {
-              // Map comment fields to selectedInputs for each step when comments are loaded
+              this.captureOriginalPlanCommentsForResubmit();
               this.mapCommentFieldsToSelectedInputs();
             });
         }
@@ -849,8 +831,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         opportunityControl.disable({ emitEvent: false });
       }
     }
-
-    this.isLoadingPlan.set(false);
   }
 
   disableAllForms(): void {
@@ -947,14 +927,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     if (opportunityType) {
       this.planStore.getActiveOpportunityLookUps()
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: () => {
-            // Opportunities loaded successfully - opportunity field remains enabled
-          },
-          error: (error) => {
-            console.error('Error loading available opportunities:', error);
-          }
-        });
+        .subscribe();
     }
   }
 
@@ -1057,7 +1030,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         error: (error) => {
           this.isProcessing.set(false);
           this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
-          console.error('Error submitting plan:', error);
         }
       });
   }
@@ -1083,7 +1055,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         error: (error) => {
           this.isProcessing.set(false);
           this.toasterService.error(this.i18nService.translate('plans.wizard.messages.submitError'));
-          console.error('Error resubmitting plan:', error);
         }
       });
   }
@@ -1092,10 +1063,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.showSubmissionModal.set(false);
   }
 
-  /**
-   * Updates validation errors map for stepper error indicators
-   */
-  updateValidationErrors(errors: Map<number, any>): void {
+  /** Updates validation errors map for stepper error indicators. */
+  updateValidationErrors(errors: Map<number, IStepValidationStatus>): void {
     const errorMap = new Map<number, boolean>();
     errors.forEach((stepErrors, stepNumber) => {
       errorMap.set(stepNumber, stepErrors.hasErrors);
@@ -1106,18 +1075,21 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   saveAsDraft(): void {
     // Access nested form controls correctly
     const basicInfoFormGroup = this.productPlanFormService.basicInformationFormGroup;
-    const planTitleControl = basicInfoFormGroup?.get(EMaterialsFormControls.planTitle);
-    const planTitle = planTitleControl instanceof FormGroup
-      ? planTitleControl.get(EMaterialsFormControls.value)?.value
-      : planTitleControl?.value;
+    const planTitleControl = basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.get(EMaterialsFormControls.value)
+    const planTitle = planTitleControl?.value;
+    const opportunityControl = basicInfoFormGroup?.get(EMaterialsFormControls.opportunity);
     const opportunity = basicInfoFormGroup?.get(EMaterialsFormControls.opportunity)?.value;
-
     // Check if plan title and opportunity are selected
     if (!planTitle) {
-      this.toasterService.error('Plan title is required');
+      planTitleControl?.markAsDirty()
+      planTitleControl?.markAsTouched();
+      basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.updateValueAndValidity()
+      this.toasterService.error('Plan title is required to save as draft');
       return;
     }
-    if (!planTitle || !opportunity) {
+    if (!opportunity) {
+      opportunityControl?.markAsDirty();
+      opportunityControl?.markAsTouched();
       this.toasterService.error('Please select opportunity to save as draft');
       return;
     }
@@ -1168,7 +1140,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         error: (error) => {
           this.isProcessing.set(false);
           this.toasterService.error(this.i18nService.translate('plans.wizard.messages.draftError'));
-          console.error('Error saving draft:', error);
         }
       });
   }
@@ -1303,111 +1274,29 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.productPlanFormService.resetAllForms();
   }
 
-  /**
-   * Collect all page comments from step forms
-   */
-  override collectAllPageComments(): IPageComment[] {
-    const comments: IPageComment[] = [];
-
-    // Step 1 comments
-    const step1Form = this.productPlanFormService.overviewCompanyInformation;
-    // In resubmit mode, use the investor 'comment' control; otherwise use the enum key
-    const step1CommentControl = this.isResubmitMode()
-      ? (step1Form.get('comment') as FormControl<string> | null)
-      : (step1Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    // Use selected inputs as fields and include comment when in resubmit mode even if no fields selected
-    const step1Fields = this.step1SelectedInputs();
-    const step1CommentValue = step1CommentControl?.value?.trim() || '';
-    if (step1CommentValue && (this.isResubmitMode() || step1Fields.length > 0)) {
-      comments.push({
-        pageTitleForTL: this.steps()[0].title,
-        comment: step1CommentValue,
-        fields: step1Fields,
-      });
-    }
-
-    // Step 2 comments
-    const step2Form = this.productPlanFormService.step2_productPlantOverview;
-    const step2CommentControl = this.isResubmitMode()
-      ? (step2Form.get('comment') as FormControl<string> | null)
-      : (step2Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    const step2Fields = this.step2SelectedInputs();
-    const step2CommentValue = step2CommentControl?.value?.trim() || '';
-    if (step2CommentValue && (this.isResubmitMode() || step2Fields.length > 0)) {
-      comments.push({
-        pageTitleForTL: this.steps()[1].title,
-        comment: step2CommentValue,
-        fields: step2Fields,
-      });
-    }
-
-    // Step 3 comments
-    const step3Form = this.productPlanFormService.step3_valueChain;
-    const step3CommentControl = this.isResubmitMode()
-      ? (step3Form.get('comment') as FormControl<string> | null)
-      : (step3Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    const step3Fields = this.step3SelectedInputs();
-    const step3CommentValue = step3CommentControl?.value?.trim() || '';
-    if (step3CommentValue && (this.isResubmitMode() || step3Fields.length > 0)) {
-      comments.push({
-        pageTitleForTL: this.steps()[2].title,
-        comment: step3CommentValue,
-        fields: step3Fields,
-      });
-    }
-
-    // Step 4 comments
-    const step4Form = this.productPlanFormService.step4_saudization;
-    const step4CommentControl = this.isResubmitMode()
-      ? (step4Form.get('comment') as FormControl<string> | null)
-      : (step4Form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
-    const step4Fields = this.step4SelectedInputs();
-    const step4CommentValue = step4CommentControl?.value?.trim() || '';
-    if (step4CommentValue && (this.isResubmitMode() || step4Fields.length > 0)) {
-      comments.push({
-        pageTitleForTL: this.steps()[3].title,
-        comment: step4CommentValue,
-        fields: step4Fields,
-      });
-    }
-    return comments;
+  /** Step comment descriptors for shared collect/validate logic. */
+  private getCommentDescriptors(): IPlanWizardStepCommentDescriptor[] {
+    return [
+      { stepIndex: 0, getForm: () => this.productPlanFormService.overviewCompanyInformation, getCommentPhase: () => this.step1CommentPhase(), getSelectedInputs: () => this.step1SelectedInputs(), getComments: () => this.step1Comments(), getCommentFields: () => this.step1CommentFields(), getStepTitle: () => this.steps()[0]?.title ?? '' },
+      { stepIndex: 1, getForm: () => this.productPlanFormService.step2_productPlantOverview, getCommentPhase: () => this.step2CommentPhase(), getSelectedInputs: () => this.step2SelectedInputs(), getComments: () => this.step2Comments(), getCommentFields: () => this.step2CommentFields(), getStepTitle: () => this.steps()[1]?.title ?? '' },
+      { stepIndex: 2, getForm: () => this.productPlanFormService.step3_valueChain, getCommentPhase: () => this.step3CommentPhase(), getSelectedInputs: () => this.step3SelectedInputs(), getComments: () => this.step3Comments(), getCommentFields: () => this.step3CommentFields(), getStepTitle: () => this.steps()[2]?.title ?? '' },
+      { stepIndex: 3, getForm: () => this.productPlanFormService.step4_saudization, getCommentPhase: () => this.step4CommentPhase(), getSelectedInputs: () => this.step4SelectedInputs(), getComments: () => this.step4Comments(), getCommentFields: () => this.step4CommentFields(), getStepTitle: () => this.steps()[3]?.title ?? '' },
+    ];
   }
-  /**
-   * Validate that steps with selected inputs have submitted comments (not in 'adding' or 'editing' phase)
-   */
+
+  override collectAllPageComments(): IPageComment[] {
+    return this.collectAllPageCommentsFromDescriptors(this.getCommentDescriptors(), this.isResubmitMode());
+  }
+
   protected override validateCommentSubmission(): string | null {
-    // Check Step 1 (Overview & Company Information)
-    if (this.step1SelectedInputs().length > 0 &&
-      (this.step1CommentPhase() === 'adding' || this.step1CommentPhase() === 'editing')) {
-      return this.getSendBackErrorMessage(this.steps()[0].title, this.step1CommentPhase());
-    }
-
-    // Check Step 2 (Product & Plant Overview)
-    if (this.step2SelectedInputs().length > 0 &&
-      (this.step2CommentPhase() === 'adding' || this.step2CommentPhase() === 'editing')) {
-      return this.getSendBackErrorMessage(this.steps()[1].title, this.step2CommentPhase());
-    }
-
-    // Check Step 3 (Value Chain)
-    if (this.step3SelectedInputs().length > 0 &&
-      (this.step3CommentPhase() === 'adding' || this.step3CommentPhase() === 'editing')) {
-      return this.getSendBackErrorMessage(this.steps()[2].title, this.step3CommentPhase());
-    }
-
-    // Check Step 4 (Saudization)
-    if (this.step4SelectedInputs().length > 0 &&
-      (this.step4CommentPhase() === 'adding' || this.step4CommentPhase() === 'editing')) {
-      return this.getSendBackErrorMessage(this.steps()[3].title, this.step4CommentPhase());
-    }
-
-    return null;
+    return this.validateCommentSubmissionFromDescriptors(this.getCommentDescriptors(), (title, phase) => this.getSendBackErrorMessage(title, phase));
   }
 
   // Base class provides all the review/approval/rejection methods
   // We only need to implement the abstract methods and step-specific logic
 
-  // Track original values for resubmit mode
-  private originalValuesMap = new Map<string, any>();
+  // Track original values and updated field keys for resubmit mode
+  private originalValuesMap = new Map<string, unknown>();
   private updatedFieldsSet = new Set<string>();
 
   // Computed signal for remaining fields requiring update
@@ -1420,71 +1309,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return totalCorrected - this.updatedFieldsSet.size;
   });
 
-  // Collect investor page comments (from investorCommentControl in each step)
-  // If investor didn't add comments, use employee comments with empty comment string
-  // If investor added comments, use the new investor comments
   collectInvestorPageComments(): IPageComment[] {
-    const Comments: IPageComment[] = [];
-
-    // Helper function to process comments for a step
-    const processStepComments = (
-      stepForm: FormGroup,
-      stepIndex: number,
-      correctedFields: IFieldInformation[],
-      employeeComments: IPageComment[]
-    ): void => {
-      const investorCommentControl = stepForm.get('comment') as FormControl<string> | null;
-      const investorComment = investorCommentControl?.value?.trim() || '';
-
-      // If this step has no corrected/highlighted fields, don't include a comment object at all.
-      // Otherwise we end up sending `Comments[i].pageTitleForTL` + empty `comment` and no `fields`,
-      // which breaks the API binding.
-      if (!correctedFields || correctedFields.length === 0) return;
-
-      if (investorComment.length > 0) {
-        // Case 1: Investor added comments - use new investor comments
-        Comments.push({
-          pageTitleForTL: this.steps()[stepIndex].title as EPlanPageTitle,
-          comment: investorComment,
-          fields: correctedFields,
-        });
-      } else if (employeeComments.length > 0) {
-        // Case 2: Investor didn't add comments - use employee comments with empty comment
-        employeeComments.forEach(employeeComment => {
-          // Defensive: skip empty-field comments so we never send a comment object without fields.
-          if (!employeeComment.fields || employeeComment.fields.length === 0) return;
-          Comments.push({
-            pageTitleForTL: employeeComment.pageTitleForTL,
-            comment: '', // Empty string as per requirement
-            fields: employeeComment.fields, // Keep same fields from employee comments
-          });
-        });
-      }
-    };
-
-    // Step 1 comments
-    const step1Form = this.productPlanFormService.overviewCompanyInformation;
-    // Use all fields from employee comments (not just those with IDs)
-    // IDs are only needed for FormArray items, but all highlighted fields should be included
-    const step1CorrectedFields = this.step1CommentFields();
-    processStepComments(step1Form, 0, step1CorrectedFields, this.step1Comments());
-
-    // Step 2 comments
-    const step2Form = this.productPlanFormService.step2_productPlantOverview;
-    const step2CorrectedFields = this.step2CommentFields();
-    processStepComments(step2Form, 1, step2CorrectedFields, this.step2Comments());
-
-    // Step 3 comments
-    const step3Form = this.productPlanFormService.step3_valueChain;
-    const step3CorrectedFields = this.step3CommentFields();
-    processStepComments(step3Form, 2, step3CorrectedFields, this.step3Comments());
-
-    // Step 4 comments
-    const step4Form = this.productPlanFormService.step4_saudization;
-    const step4CorrectedFields = this.step4CommentFields();
-    processStepComments(step4Form, 3, step4CorrectedFields, this.step4Comments());
-
-    return Comments;
+    return this.collectInvestorPageCommentsFromDescriptors(this.getCommentDescriptors());
   }
 
   // Implement abstract method: canInvestorSubmit
@@ -1516,48 +1342,13 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     // Convert to FormData
     const formData = convertRequestToFormData(request);
 
-    // Append investor page comments as nested FormData entries
-    // Comments are required by the API, so always append (even if empty array)
     const investorComments = this.collectInvestorPageComments();
     this.appendCommentsToFormData(formData, investorComments);
-
     return formData;
   }
 
-  // Implement abstract method: getResubmitPlanType
   override getResubmitPlanType(): 'product' | 'service' {
     return 'product';
-  }
-
-  /**
-   * Appends comments to FormData in nested structure format
-   * Format: Comments[index].pageTitleForTL, Comments[index].comment, Comments[index].fields[index].section, etc.
-   */
-  private appendCommentsToFormData(formData: FormData, comments: IPageComment[]): void {
-    // Only append comments that actually contain fields, and reindex them to keep
-    // `Comments[0]..Comments[n]` contiguous for backend model binding.
-    const filteredComments = (comments ?? []).filter((c) => (c.fields?.length ?? 0) > 0);
-
-    filteredComments.forEach((comment, commentIndex) => {
-      // Append comment-level properties
-      formData.append(`Comments[${commentIndex}].pageTitleForTL`, comment.pageTitleForTL || '');
-      formData.append(`Comments[${commentIndex}].comment`, comment.comment || '');
-
-      // Append fields array
-      if (comment.fields && comment.fields.length > 0) {
-        comment.fields.forEach((field, fieldIndex) => {
-          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].section`, field.section || '');
-          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].inputKey`, field.inputKey || '');
-          formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].label`, field.label || '');
-          if (field.id) {
-            formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].id`, field.id);
-          }
-          if (field.value) {
-            formData.append(`Comments[${commentIndex}].fields[${fieldIndex}].value`, field.value);
-          }
-        });
-      }
-    });
   }
 
   /**
@@ -1634,5 +1425,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   protected refresh(): void {
     this.doRefresh.emit();
+  }
+
+  get EInternalUserPlanStatus() {
+    return EInternalUserPlanStatus;
   }
 }

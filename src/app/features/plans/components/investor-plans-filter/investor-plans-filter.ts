@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnIni
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { EOpportunityType } from 'src/app/shared/enums';
@@ -12,6 +11,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 interface IDropdownOption {
   label: string;
@@ -20,7 +20,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-investor-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe],
+  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe],
   templateUrl: './investor-plans-filter.html',
   styleUrl: './investor-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +41,6 @@ export class InvestorPlansFilter implements OnInit {
   statusOptions = computed<IDropdownOption[]>(() => {
     this.i18nService.currentLanguage();
     return [
-      { label: this.i18nService.translate('plans.filter.allStatuses'), value: null },
       { label: this.i18nService.translate('plans.status.submitted'), value: EInvestorPlanStatus.SUBMITTED },
       { label: this.i18nService.translate('plans.status.draft'), value: EInvestorPlanStatus.DRAFT },
       { label: this.i18nService.translate('plans.status.pendingWithInvestor'), value: EInvestorPlanStatus.PENDING },
@@ -56,7 +55,7 @@ export class InvestorPlansFilter implements OnInit {
     this.listenToQueryParamChanges();
   }
 
-  private listenToQueryParamChanges() {
+  private listenToQueryParamChanges() {    
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(queryParams => {

@@ -12,6 +12,7 @@ export enum EStatusPlanTimeLine {
     DEPTApproved,
     DVRejected,
     DEPTRejected,
-    DVRejectionAcknowledged
-  
+    DVRejectionAcknowledged,
+    ReturnedByDV,
+    ReturnedByDEPTManager
 }

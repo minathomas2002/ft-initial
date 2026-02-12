@@ -32,6 +32,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 import { opportunityImagePlaceholder } from './opportunity-image-placeholder';
+import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 
 @Component({
   selector: 'app-opportunity-details',
@@ -49,6 +50,7 @@ import { opportunityImagePlaceholder } from './opportunity-image-placeholder';
     ImageErrorDirective,
     ProductLocalizationPlanWizard,
     ServiceLocalizationPlanWizard,
+    PlanTermsAndConditionsDialog
   ],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
@@ -73,6 +75,7 @@ export class OpportunityDetails implements OnInit, OnDestroy {
   opportunityId = signal<string | null>(null);
   productLocalizationPlanWizardVisibility = signal<boolean>(false);
   serviceLocalizationPlanWizardVisibility = signal<boolean>(false);
+  planTermsAndConditionsDialogVisibility = signal<boolean>(false);
   get EOpportunityAction() {
     return EOpportunityAction;
   }
@@ -87,17 +90,17 @@ export class OpportunityDetails implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: res => {
-        const id = res.get('id');
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: res => {
+          const id = res.get('id');
 
-        if (id) {
-          this.opportunityId.set(id);
-          this.getOpportunityDetails();
+          if (id) {
+            this.opportunityId.set(id);
+            this.getOpportunityDetails();
+          }
         }
-      }
-    })
+      })
   }
 
   getOpportunityDetails() {
@@ -206,6 +209,13 @@ export class OpportunityDetails implements OnInit, OnDestroy {
       });
   }
 
+  onUserReadAndApproved() {
+    this.planTermsAndConditionsDialogVisibility.set(false);
+    this.opportunitiesStore.details()?.opportunityType === EOpportunityType.PRODUCT
+      ? this.productLocalizationPlanWizardVisibility.set(true)
+      : this.serviceLocalizationPlanWizardVisibility.set(true);
+  }
+
   applyOpportunity(opportunityId: string, opportunityTitle: string) {
     this.planStore.setAvailableOpportunities({ id: opportunityId, name: opportunityTitle });
     this.planStore.setAppliedOpportunity({
@@ -217,12 +227,9 @@ export class OpportunityDetails implements OnInit, OnDestroy {
       isOtherOpportunity: false,
       icon: '',
     });
+    this.planTermsAndConditionsDialogVisibility.set(true)
     this.planStore.setWizardMode('create');
     this.planStore.setSelectedPlanId(null);
-
-    this.opportunitiesStore.details()?.opportunityType === EOpportunityType.PRODUCT
-      ? this.productLocalizationPlanWizardVisibility.set(true)
-      : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
   get opportunityAttachmentBase64() {

@@ -62,6 +62,10 @@ export class PlanApiService {
     return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined }, unknown>(API_ENDPOINTS.plans.internalRejectPlan, req);
   }
 
+  DvRejectionAcknowledge(req: { planId: string, acknowledgeNote: string | undefined }): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, { planId: string, acknowledgeNote: string | undefined }, unknown>(API_ENDPOINTS.plans.dvAcknowledgeRejection, req);
+  }
+
   getProductPlan(req: { planId: string }): Observable<IBaseApiResponse<IProductPlanResponse>> {
     return this.baseHttpService.post<IProductPlanResponse, { planId: string }, unknown>(API_ENDPOINTS.plans.getProductPlan, req);
   }

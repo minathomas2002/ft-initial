@@ -1,6 +1,6 @@
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { IPageComment } from 'src/app/shared/interfaces/plans.interface';
-import { TCommentPhase } from '../plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 
 /**

@@ -17,33 +17,33 @@
 
   <div class="col-span-12 md:col-span-2">
     <div class="flex flex-col">
-      <p-select
+      <p-multiselect
         name="planType"
         [options]="planTypeOptions()"
-        [ngModel]="filter().planType"
+        [(ngModel)]="filter().planType"
         (ngModelChange)="onPlanTypeChange($event)"
         [placeholder]="'plans.filter.selectPlanType' | translate"
         optionLabel="label"
         optionValue="value"
         [showClear]="true"
         appendTo="body"
-      ></p-select>
+      ></p-multiselect>
     </div>
   </div>
 
   <div class="col-span-12 md:col-span-2">
     <div class="flex flex-col">
-      <p-select
+      <p-multiselect
         name="status"
         [options]="statusOptions()"
-        [ngModel]="filter().status"
+        [(ngModel)]="filter().status"
         (ngModelChange)="onStatusChange($event)"
         [placeholder]="'plans.filter.selectStatus' | translate"
         optionLabel="label"
         optionValue="value"
         [showClear]="true"
         appendTo="body"
-      ></p-select>
+      ></p-multiselect>
     </div>
   </div>
 

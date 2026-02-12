@@ -4,8 +4,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ReviewPlanRequest, IPageComment } from 'src/app/shared/interfaces/plans.interface';
-import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
-import { TCommentPhase } from '../../../components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
+import { EMaterialsFormControls, EPlanPageTitle, ERoles } from 'src/app/shared/enums';
+import { TCommentPhase, IPlanWizardStepCommentDescriptor } from 'src/app/shared/types/plan-comments.types';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
@@ -28,11 +28,37 @@ export abstract class BasePlanWizard {
   protected showApproveConfirmationDialog = signal<boolean>(false);
   protected showRejectReasonDialog = signal<boolean>(false);
   protected showRejectConfirmationDialog = signal<boolean>(false);
+  protected showAcknowledgeRejectDialog = signal<boolean>(false);
   protected showInvestorResubmitConfirmationDialog = signal<boolean>(false);
   protected approvalNote = signal<string>('');
   protected rejectionReason = signal<string>('');
+  protected acknowledgeReason = signal<string>('');
 
-  protected readonly commentTitle = this.planStore.commentPersona
+
+  protected readonly commentTitle = this.planStore.commentPersona;
+
+  /**
+   * Snapshot of plan comments captured when entering resubmit mode.
+   * Used for: (1) restoring comments when investor deletes (via PlanStore.restorePlanCommentsFromOriginal),
+   * (2) retrieving corrected fields from original when collecting investor page comments for resubmit payload.
+   * Cleared when exiting resubmit (resetWizardState).
+   */
+  protected readonly originalPlanComment = this.planStore.originalPlanComments;
+
+  /**
+   * Captures current plan comments as the original snapshot when entering resubmit mode.
+   * Call this after plan comments are loaded (e.g. in getPlanComments subscribe) when in resubmit mode.
+   * Uses immutable copy to avoid accidental mutation.
+   */
+  protected captureOriginalPlanCommentsForResubmit(): void {
+    if (!this.getIsResubmitMode()) return;
+    const current = this.planStore.planComments();
+    if (!current) return;
+    this.planStore.setOriginalPlanComments({
+      ...current,
+      comments: current.comments.map(c => ({ ...c, fields: [...c.fields] }))
+    });
+  }
 
   /**
    * Abstract methods for component-specific behavior
@@ -59,6 +85,12 @@ export abstract class BasePlanWizard {
    * When implemented as a computed signal, it can be called like a method: canApproveOrReject()
    */
   abstract canApproveOrReject(): boolean;
+    /**
+   * Template method: Check if the wizard can Acknowledge.
+   * Subclasses must implement this as a computed signal or method.
+   * When implemented as a computed signal, it can be called like a method: canAcknowledgeRejection()
+   */
+  abstract canAcknowledgeRejection(): boolean;
 
   /**
    * Template method: Check if investor can submit resubmission.
@@ -172,7 +204,7 @@ export abstract class BasePlanWizard {
    * Handle Send Back to Investor action - Template Method
    * Validates comment submission and shows confirmation dialog
    */
-  onSendBackToInvestor(): void {
+  onSendBack(): void {
     // Validate that steps with selected inputs have submitted comments
     const validationError = this.validateCommentSubmission();
     if (validationError) {
@@ -188,6 +220,125 @@ export abstract class BasePlanWizard {
   protected getSendBackErrorMessage(pageTitle: string, commentPhase: TCommentPhase): string {
     return `${pageTitle} has selected fields but the comment has not been submitted. Please ${commentPhase === 'adding' ? 'add' : 'save'} the comment before sending back.`;
   }
+
+  /**
+   * Shared: collect all page comments from step descriptors.
+   * Used by product and service wizards to avoid duplicated per-step logic.
+   */
+  protected collectAllPageCommentsFromDescriptors(
+    descriptors: IPlanWizardStepCommentDescriptor[],
+    isResubmitMode: boolean
+  ): IPageComment[] {
+    const comments: IPageComment[] = [];
+    for (const d of descriptors) {
+      if (d.isVisible && !d.isVisible()) continue;
+      const form = d.getForm();
+      if (!form) continue;
+      const commentControl = isResubmitMode
+        ? (form.get('comment') as FormControl<string> | null)
+        : (form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
+      const fields = d.getSelectedInputs();
+      const commentValue = commentControl?.value?.trim() || '';
+      if (commentValue && (isResubmitMode || fields.length > 0)) {
+        comments.push({
+          pageTitleForTL: d.getStepTitle() as EPlanPageTitle,
+          comment: commentValue,
+          fields,
+        });
+      }
+    }
+    return comments;
+  }
+
+  /**
+   * Shared: validate that steps with selected inputs have submitted comments.
+   * Returns error message or null if valid.
+   */
+  protected validateCommentSubmissionFromDescriptors(
+    descriptors: IPlanWizardStepCommentDescriptor[],
+    getSendBackErrorMessage: (pageTitle: string, phase: TCommentPhase) => string
+  ): string | null {
+    for (const d of descriptors) {
+      if (d.isVisible && !d.isVisible()) continue;
+      const selected = d.getSelectedInputs();
+      const phase = d.getCommentPhase();
+      if (selected.length > 0 && (phase === 'adding' || phase === 'editing')) {
+        return getSendBackErrorMessage(d.getStepTitle(), phase);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Shared: collect investor page comments for resubmit (corrected fields + investor comment or empty).
+   * When in resubmit mode for investor, retrieves fields from OriginalPlanComment for each page
+   * instead of current selectedInputs/commentFields, ensuring consistency after delete/restore flows.
+   */
+  protected collectInvestorPageCommentsFromDescriptors(
+    descriptors: IPlanWizardStepCommentDescriptor[]
+  ): IPageComment[] {
+    const isResubmitInvestor = this.getIsResubmitMode() && this.getIsInvestorPersona();
+    const original = isResubmitInvestor ? this.planStore.originalPlanComments() : null;
+
+    const result: IPageComment[] = [];
+    for (const d of descriptors) {
+      if (d.isVisible && !d.isVisible()) continue;
+      const form = d.getForm();
+      if (!form) continue;
+      const investorCommentControl = form.get('comment') as FormControl<string> | null;
+      const investorComment = investorCommentControl?.value?.trim() || '';
+      const pageTitle = d.getStepTitle() as EPlanPageTitle;
+
+      // In resubmit mode for investor: use fields from OriginalPlanComment for this page
+      let correctedFields = d.getCommentFields();
+      if (original?.comments?.length) {
+        const originalPageComments = original.comments.filter(c => c.pageTitleForTL === pageTitle);
+        const originalFields = originalPageComments.flatMap(c => c.fields ?? []);
+        if (originalFields.length > 0) {
+          correctedFields = originalFields;
+        }
+      }
+
+      if (!correctedFields?.length) continue;
+      if (investorComment.length > 0) {
+        result.push({ pageTitleForTL: pageTitle, comment: investorComment, fields: correctedFields });
+      } else {
+        const employeeComments = d.getComments();
+        if (employeeComments.length > 0) {
+          employeeComments.forEach(ec => {
+            if (ec.fields?.length) {
+              result.push({ pageTitleForTL: ec.pageTitleForTL, comment: '', fields: ec.fields });
+            }
+          });
+        } else if (isResubmitInvestor && correctedFields.length > 0) {
+          result.push({ pageTitleForTL: pageTitle, comment: '', fields: correctedFields });
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Shared: append comments to FormData in nested structure for API.
+   * Format: Comments[index].pageTitleForTL, Comments[index].comment, Comments[index].fields[index].*
+   */
+  protected appendCommentsToFormData(formData: FormData, comments: IPageComment[]): void {
+    const filtered = (comments ?? []).filter(c => (c.fields?.length ?? 0) > 0);
+    filtered.forEach((comment, i) => {
+      formData.append(`Comments[${i}].pageTitleForTL`, comment.pageTitleForTL || '');
+      formData.append(`Comments[${i}].comment`, comment.comment || '');
+      if (comment.fields?.length) {
+        comment.fields.forEach((field, fi) => {
+          formData.append(`Comments[${i}].fields[${fi}].section`, field.section || '');
+          formData.append(`Comments[${i}].fields[${fi}].inputKey`, field.inputKey || '');
+          formData.append(`Comments[${i}].fields[${fi}].label`, field.label || '');
+          if (field.id) formData.append(`Comments[${i}].fields[${fi}].id`, field.id);
+          if (field.value) formData.append(`Comments[${i}].fields[${fi}].value`, field.value);
+        });
+      }
+    });
+  }
+
   /**
    * Confirm sending plan back to investor - Template Method
    * Common implementation for both wizards
@@ -219,7 +370,6 @@ export abstract class BasePlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error sending plan back to investor. Please try again.');
           console.error('Error sending plan back:', error);
         }
       });
@@ -269,7 +419,6 @@ export abstract class BasePlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error approving plan. Please try again.');
           console.error('Error approving plan:', error);
         }
       });
@@ -293,6 +442,7 @@ export abstract class BasePlanWizard {
     this.rejectionReason.set('');
     this.showRejectReasonDialog.set(true);
   }
+
 
   /**
    * Proceed to rejection confirmation after entering reason - Common implementation
@@ -350,7 +500,6 @@ export abstract class BasePlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error rejecting plan. Please try again.');
           console.error('Error rejecting plan:', error);
         }
       });
@@ -411,7 +560,6 @@ export abstract class BasePlanWizard {
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error resubmitting plan. Please try again.');
           console.error('Error resubmitting plan:', error);
         }
       });
@@ -422,5 +570,63 @@ export abstract class BasePlanWizard {
    */
   onCancelInvestorResubmit(): void {
     this.showInvestorResubmitConfirmationDialog.set(false);
+  }
+
+
+  /**
+   * dv acknowledge rejection
+   */
+    onAcknowledgeReject(): void {
+    const planId = this.planStore.selectedPlanId();
+    if (!planId) {
+      this.toasterService.error('Plan ID is required.');
+      return;
+    }
+
+    const reason = this.acknowledgeReason().trim();
+    if (!reason) {
+      this.toasterService.error('Acknowledgement reason is required.');
+      return;
+    }
+
+    this.isProcessing.set(true);
+    this.planStore.DvRejecttionAcknowledgePlan(planId, reason)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isProcessing.set(false);
+          this.showAcknowledgeRejectDialog.set(false);
+          this.acknowledgeReason.set('');
+          this.toasterService.success('Plan has been rejected acknowledge successfully.');
+          this.refresh();
+          this.closeWizard();
+          this.planStore.resetWizardState();
+        },
+        error: (error) => {
+          this.isProcessing.set(false);
+          this.toasterService.error('Error rejecting acknowledge plan. Please try again.');
+          console.error('Error rejecting acknowledge plan:', error);
+        }
+      });
+  }
+
+    /**
+   * Cancel rejection acknowledge confirmation - 
+   */
+  onCancelRejectAcknowledgment(): void {
+    this.showRejectConfirmationDialog.set(false);
+    // Return to reason entry dialog
+    this.rejectionReason.set('');
+  }
+
+  /**
+   * Handle Reject Acknowledge action - Template Method
+   */
+  onAcknowledge(): void {
+    if (!this.canAcknowledgeRejection()) {
+      return;
+    }
+    this.rejectionReason.set('');
+    this.showAcknowledgeRejectDialog.set(true);
   }
 }

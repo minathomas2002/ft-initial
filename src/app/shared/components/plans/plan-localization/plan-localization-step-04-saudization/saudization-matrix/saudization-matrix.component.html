@@ -13,12 +13,12 @@
         >
           <span class="text-sm font-semibold text-gray-900"></span>
         </th>
-        @for(year of years; track year) {
+        @for(year of years; track year; let i = $index) {
         <th
           class="p-3 !border !border-gray-200 text-center !bg-gray-50 min-w-[200px]"
-          [class.rounded-tr-xl]="$index === years.length - 1"
+          [class.rounded-tr-xl]="i === years.length - 1"
         >
-          <span class="text-sm font-semibold text-gray-900">Year {{ year }}</span>
+          <span class="text-sm font-semibold text-gray-900">Year {{ i + 1 }}</span>
         </th>
         }
       </tr>
@@ -39,32 +39,31 @@
             }
           </div>
         </td>
-        @for(year of years; track year) {
+        @for(year of years; track year; let i = $index) {
         <td
           class="p-3 !border !border-gray-200"
           [ngClass]="row.alignBaseline ? 'align-baseline' : 'text-center'"
         >
-          @let rowControl = getRowControl()(year, row.controlName);
+          @let yearNum = i + 1;
+          @let rowControl = getRowControl()(yearNum, row.controlName);
           @let rowId = rowControl?.get('rowId')?.value;
-          @let uniqueInputKey = row.controlName + '_year' + year;
           <app-group-input-with-checkbox
             [hasCommentControl]="getHasCommentControl()(rowControl!)"
             [showCheckbox]="showCheckbox()"
             (valueChanged)="upDateSelectedInputs()($event, {
               section: 'saudization',
-              inputKey: uniqueInputKey,
-              label: row.label + ' - Year ' + year
+              inputKey: year,
+              label: row.label + ' - Year ' + yearNum
             }, rowId)"
           >
             <p-inputnumber
-              [allowEmpty]="false"
               fluid
               [appHidePlaceholderWhenDisabledEmpty]="row.placeholder"
               [mode]="row.mode"
               [minFractionDigits]="row.minFractionDigits"
               [maxFractionDigits]="row.maxFractionDigits"
               [formControl]="getValueControl()(rowControl!)"
-              [appConditionalColorClass]="highlightInput()(uniqueInputKey, rowId)"
+              [appConditionalColorClass]="highlightInput()(year, rowId)"
               [color]="selectedInputColor()"
             />
           </app-group-input-with-checkbox>

@@ -44,6 +44,7 @@ export const API_ENDPOINTS = {
     reSubmitServicePlan: `${Plans}/reSubmit-servicePlan`,
     internalApprovePlan: `${Plans}/internal-approve-plan`,
     internalRejectPlan: `${Plans}/internal-reject-plan`,
+    dvAcknowledgeRejection: `${Plans}/dv-acknowledge-rejection`,
     getProductPlan: `${Plans}/get-productPlan`,
     getServicePlan: `${Plans}/get-servicePlan`,
     getTimelinePlan: `${Plans}/get-timeLine`,

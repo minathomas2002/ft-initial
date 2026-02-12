@@ -172,6 +172,7 @@
   (onSuccess)="applyFilter()"
 ></app-assign-reassign-manual-employee>
 }
+
 @if(viewDeleteDialog()){
   <app-general-confirmation-dialog
     [(visible)]="viewDeleteDialog"
@@ -184,3 +185,4 @@
     (onCancel)="onCancelDeletePlan()"
   />
   }
+

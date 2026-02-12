@@ -22,4 +22,6 @@ export enum EActionPlanTimeLine {
   RemoveAssignee = 21,
   Delete = 22,
   AutoRejected = 23,
+  DeptManagerReview = 25,
+  DVReview = 26,
 }

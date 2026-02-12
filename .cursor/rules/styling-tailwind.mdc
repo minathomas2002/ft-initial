@@ -1,0 +1,42 @@
+---
+description: Styling with Tailwind CSS utility classes
+globs: "**/*.html, **/*.scss"
+alwaysApply: false
+---
+
+# Styling with Tailwind CSS
+
+Use **Tailwind utility classes** for layout, spacing, and custom styling. Prefer Tailwind over custom CSS or inline styles.
+
+## Core Guidelines
+
+- **Use utility classes in templates**: Apply Tailwind classes directly in HTML (e.g. `class="flex flex-col gap-4"`).
+- **Mobile-first**: Use responsive breakpoints (`sm:`, `md:`, `lg:`, `xl:`) to add styles for larger screens.
+- **Consistent spacing**: Use Tailwind's scale (`p-4`, `m-2`, `gap-4`, `space-y-4`) instead of arbitrary values.
+- **Layout**: Prefer `flex` and `grid` with `gap-*` for alignment and spacing.
+
+## Do
+
+```html
+<!-- Layout and spacing -->
+<div class="flex flex-col gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <section class="p-4 rounded-lg shadow-sm">...</section>
+  </div>
+</div>
+
+<!-- Responsive -->
+<div class="text-sm md:text-base lg:text-lg">...</div>
+```
+
+## Don't
+
+- Avoid inline `style=""` when a Tailwind utility exists.
+- Avoid arbitrary values (`p-[13px]`) unless the design system does not cover the need.
+- Don't override PrimeNG component structure with Tailwind; use Tailwind for layout and spacing around PrimeNG components.
+
+## With PrimeNG
+
+- Use Tailwind for **layout** (containers, grids, gaps) and **spacing** around PrimeNG components.
+- Use PrimeNG's own styling/theming for buttons, inputs, and tables.
+- Use `::ng-deep` only when necessary to tweak PrimeNG internals; prefer wrapping with Tailwind classes.

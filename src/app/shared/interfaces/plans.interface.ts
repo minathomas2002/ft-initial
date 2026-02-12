@@ -16,7 +16,9 @@ export interface ProductPlan {
   overviewCompanyInfo: OverviewCompanyInfo
   productPlantOverview: ProductPlantOverview
   valueChainStep: ValueChainStep
-  saudization: Saudization
+  saudization: Saudization,
+  actionNote?: string,
+  acknowledgeRejectionNote?: string,
 }
 
 export interface OverviewCompanyInfo {
@@ -162,10 +164,13 @@ export interface IServiceLocalizationPlanResponse {
   signature: Signature;
   servicePlan: IServicePlanResponse;
   submissionDate: string;
+  createdDate: string;
   planCode: number;
   investorName: string;
   investorId: string;
   statusValue: string | null;
+  actionNote?: string,
+  acknowledgeRejectionNote?: string,
 }
 
 export interface IServicePlanGetResponse {
@@ -178,6 +183,7 @@ export interface IServicePlanResponse {
   id: string;
   isDraft: boolean;
   opportunityId: string;
+  opportunityName: string;
   planTitle: string;
   status: EInternalUserPlanStatus;
   investorStatus: EInvestorPlanStatus;
@@ -263,6 +269,8 @@ export interface IServicePlanEntityHeadcount {
   y4Saudization: number;
   y5Headcount: number;
   y5Saudization: number;
+  y6Headcount?: number;
+  y6Saudization?: number;
 }
 
 export interface IServicePlanServiceHeadcount {
@@ -282,6 +290,8 @@ export interface IServicePlanServiceHeadcount {
   y4Saudization: number;
   y5Headcount: number;
   y5Saudization: number;
+  y6Headcount?: number;
+  y6Saudization?: number;
 }
 
 export interface IServicePlanLocalizationStrategy {
