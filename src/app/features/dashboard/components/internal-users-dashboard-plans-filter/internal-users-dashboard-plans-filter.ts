@@ -88,10 +88,10 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
   // Division Manager Statuses Options
   private getDivisionManagerStatusOptions(): IDropdownOption[] {
     return [
-      // {
-      //   label: this.i18nService.translate('plans.employee_status.employeeApproved'),
-      //   value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
-      // },
+      {
+        label: this.i18nService.translate('plans.employee_status.employeeApproved'),
+        value: EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+      },
       // {
       //   label: this.i18nService.translate('plans.employee_status.deptRejected'),
       //   value: EInternalUserPlanStatus.DEPT_REJECTED,
@@ -138,27 +138,27 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
       .subscribe(queryParams => {
         const updates: Partial<IPlanFilter> = {};
 
-    if (queryParams['status']) {
-      const status = this.getStatusFromParam(queryParams['status']);
-      if (status !== null) updates.status = status;
-    }
+        if (queryParams['status']) {
+          const status = this.getStatusFromParam(queryParams['status']);
+          if (status !== null) updates.status = status;
+        }
 
-    if (queryParams['planType']) {
-      const planType = this.getPlanTypeFromParam(queryParams['planType']);
-      if (planType) updates.planType = planType;
-    }
+        if (queryParams['planType']) {
+          const planType = this.getPlanTypeFromParam(queryParams['planType']);
+          if (planType) updates.planType = planType;
+        }
 
-    if (queryParams['searchText']) {
-      updates.searchText = queryParams['searchText'];
-    }
+        if (queryParams['searchText']) {
+          updates.searchText = queryParams['searchText'];
+        }
 
-    if (Object.keys(updates).length > 0) {
-      this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
-      this.filterService.applyFilterWithPaging();
-    } else {
-      this.filterService.applyFilterWithPaging();
-    }
-  });
+        if (Object.keys(updates).length > 0) {
+          this.filterService.updateFilterSignal({ ...updates, pageNumber: 1 });
+          this.filterService.applyFilterWithPaging();
+        } else {
+          this.filterService.applyFilterWithPaging();
+        }
+      });
 
   }
 
