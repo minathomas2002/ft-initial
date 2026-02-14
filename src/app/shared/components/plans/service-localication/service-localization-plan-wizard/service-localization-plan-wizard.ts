@@ -46,7 +46,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { EInternalUserPlanStatus, EInvestorPlanStatus, ISelectItem, TColors } from 'src/app/shared/interfaces';
-import { WizardActionFactory, IWizardActionConfig } from 'src/app/shared/services/wizard/wizard-action-factory.service';
+import { WizardActionFactory } from 'src/app/shared/services/wizard/wizard-action-factory';
 import { IBaseWizardAction } from '../../../base-components/base-wizard-actions/base-wizard-actions';
 
 type ServiceLocalizationWizardStepId =
@@ -88,7 +88,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   override readonly toasterService = inject(ToasterService);
-  private readonly wizardActionFactory = inject(WizardActionFactory);
 
   readonly approvalDialogTitle = computed(() => {
     if (this.isDVManagerPersona()) {
@@ -611,33 +610,42 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   // Centralized wizard actions using the action factory
-  wizardActions = this.wizardActionFactory.generateActions({
+  wizardActions = new WizardActionFactory().generateActions({
     context: 'service-plan',
-    mode: this.mode,
-    activeStep: this.activeStep,
-    totalSteps: this.stepsCount,
-    isLoading: this.isLoading,
-    isProcessing: this.isProcessing,
-    hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode()),
-    canApproveOrReject: this.canApproveOrReject,
-    allowUserToResubmit: this.allowUserToResubmit,
-    canOpenTimeline: this.canOpenTimeline,
-    isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
-    canAcknowledgeRejection : this.canAcknowledgeRejection,
-    persona: this.authStore?.userProfile()?.roleCodes,
-    status: this.planStatus,
-
-    onPrevious: () => this.previousStep(),
-    onNext: () => this.nextStep(),
-    onSaveAsDraft: () => this.saveAsDraft(),
-    onSubmit: () => this.onSummarySubmitClick(),
-    onApproveAndForward: () => this.onApproveAndForward(),
-    onReject: () => this.onReject(),
-    onSendBack: () => this.onSendBack(),
-    onAddComment: () => this.onAddComment(),
-    onOpenTimeline: () => this.timelineVisibility.set(true),
-    onResubmit: () => this.onSummarySubmitClick(),
-    onAcknowledge: () => this.onAcknowledge(),
+    state: {
+      mode: this.mode,
+      activeStep: this.activeStep,
+      totalSteps: this.stepsCount,
+      isLoading: this.isLoading,
+      isProcessing: this.isProcessing,
+    },
+    visibility: {
+      hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode()),
+      canOpenTimeline: this.canOpenTimeline,
+      isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
+    },
+    permissions: {
+      canApproveOrReject: this.canApproveOrReject,
+      allowUserToResubmit: this.allowUserToResubmit,
+      canAcknowledgeRejection: this.canAcknowledgeRejection,
+    },
+    metadata: {
+      persona: this.authStore?.userProfile()?.roleCodes,
+      status: this.planStatus,
+    },
+    handlers: {
+      onPrevious: () => this.previousStep(),
+      onNext: () => this.nextStep(),
+      onSaveAsDraft: () => this.saveAsDraft(),
+      onSubmit: () => this.onSummarySubmitClick(),
+      onApproveAndForward: () => this.onApproveAndForward(),
+      onReject: () => this.onReject(),
+      onSendBack: () => this.onSendBack(),
+      onAddComment: () => this.onAddComment(),
+      onOpenTimeline: () => this.timelineVisibility.set(true),
+      onResubmit: () => this.onSummarySubmitClick(),
+      onAcknowledge: () => this.onAcknowledge(),
+    },
   });
 
   constructor() {

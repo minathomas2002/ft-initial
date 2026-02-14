@@ -11,7 +11,6 @@ export interface IBaseWizardAction {
   position: 'left' | 'right';
   disabled?: boolean;
   loading?: boolean;
-  visible?: boolean;
   styleClass?: string;
   onClick?: () => void;
 }
@@ -26,16 +25,13 @@ export interface IBaseWizardAction {
 export class BaseWizardActions {
   actions = input.required<IBaseWizardAction[]>();
 
-  // Split actions into left and right groups based on styleClass
   leftActions = computed(() =>
-    this.actions().filter(action =>
-      (action.visible ?? true) && action.position === 'left'
+    this.actions().filter(action => action.position === 'left'
     )
   );
 
   rightActions = computed(() =>
-    this.actions().filter(action =>
-      (action.visible ?? true) && action.position === 'right'
+    this.actions().filter(action => action.position === 'right'
     )
   );
 
