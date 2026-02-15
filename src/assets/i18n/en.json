@@ -921,5 +921,8 @@
     "assignSuccessMsg": "Plan has been successfully assigned to {{employee}}.",
     "reassignSuccessMsg": "Plan has been reassigned successfully to {{employee}}.",
     "currentEmployee": "Current Employee"
+  },
+  "WarningMesages":{
+    "deletedOppprtuinity": "This draft plan is no longer valid because the associated opportunity has been deleted. Please delete this plan and submit a new one for an available opportunity."
   }
 }

@@ -19,6 +19,8 @@ export interface ProductPlan {
   saudization: Saudization,
   actionNote?: string,
   acknowledgeRejectionNote?: string,
+  linkedToDeletedOpportunity?: boolean;
+
 }
 
 export interface OverviewCompanyInfo {
@@ -171,6 +173,7 @@ export interface IServiceLocalizationPlanResponse {
   statusValue: string | null;
   actionNote?: string,
   acknowledgeRejectionNote?: string,
+
 }
 
 export interface IServicePlanGetResponse {
@@ -196,6 +199,7 @@ export interface IServicePlanResponse {
   serviceHeadcounts?: IServicePlanServiceHeadcount[];
   attachments?: Attachment[];
   localizationStrategies?: IServicePlanLocalizationStrategy[];
+  linkedToDeletedOpportunity?: boolean;
 }
 
 export interface IServicePlanServiceItem {

@@ -87,6 +87,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   activeStep = signal<number>(1);
   doRefresh = output<void>();
   isSubmitted = signal<boolean>(false);
+  showWarningMesageDeletedOpportunity =computed(()=>{
+    return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT 
+  });
 
   timelineVisibility = signal(false);
   selectedPlan = signal<IPlanRecord | null>(null);
