@@ -275,6 +275,7 @@ export const PlanStore = signalStore(
         patchState(store, { planStatus: status });
       },
       setLinkedOpportunityWarning(linkedToDeletedOpportunity: boolean | false): void {
+            console.log(linkedToDeletedOpportunity, "showWarningMesageDeletedOpportunity");
         patchState(store, { linkedToDeletedOpportunity });
       },
       setActionNote(actionNote: string | null): void {
@@ -631,7 +632,7 @@ export const PlanStore = signalStore(
             patchState(store, { servicePlanData: res.body || null });
             store.setActionNote(res.body?.actionNote ?? null);
             store.setAcknowledgeRejectionNote(res.body?.acknowledgeRejectionNote ?? null);
-            store.setLinkedOpportunityWarning(res.body?.linkedToDeletedOpportunity|| false);
+            store.setLinkedOpportunityWarning(res.body?.servicePlan.linkedToDeletedOpportunity|| false);
 
           }),
           catchError((error) => {

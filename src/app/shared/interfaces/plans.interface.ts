@@ -173,7 +173,7 @@ export interface IServiceLocalizationPlanResponse {
   statusValue: string | null;
   actionNote?: string,
   acknowledgeRejectionNote?: string,
-  linkedToDeletedOpportunity?: boolean;
+
 }
 
 export interface IServicePlanGetResponse {
@@ -199,6 +199,7 @@ export interface IServicePlanResponse {
   serviceHeadcounts?: IServicePlanServiceHeadcount[];
   attachments?: Attachment[];
   localizationStrategies?: IServicePlanLocalizationStrategy[];
+  linkedToDeletedOpportunity?: boolean;
 }
 
 export interface IServicePlanServiceItem {
