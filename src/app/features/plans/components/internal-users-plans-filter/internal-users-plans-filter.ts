@@ -14,6 +14,7 @@ import { InternalUsersPlansFilterService } from '../../services/internal-users-p
 import { PlanApiService } from 'src/app/shared/api/plans/plan-api-service';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ButtonModule } from 'primeng/button';
 
 interface IDropdownOption {
   label: string;
@@ -27,7 +28,7 @@ interface IAssigneeOption {
 
 @Component({
   selector: 'app-internal-users-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe],
+  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe, ButtonModule],
   templateUrl: './internal-users-plans-filter.html',
   styleUrl: './internal-users-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

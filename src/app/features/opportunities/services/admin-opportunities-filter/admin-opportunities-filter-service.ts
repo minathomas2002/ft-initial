@@ -21,7 +21,8 @@ export class AdminOpportunitiesFilterService extends AbstractServiceFilter<IAdmi
   });
 
   showClearAll = computed(() => {
-    return false;
+    const current = this.filter();
+    return current.searchText || current.state || current.opportunityType || current.status ? true : false;
   });
 
   performFilter$() {

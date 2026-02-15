@@ -11,7 +11,7 @@ import { IAdminOpportunitiesFilter, IAdminOpportunitiesFilterRequest } from 'src
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { EOpportunityState, EOpportunityStatus, EOpportunityType } from 'src/app/shared/enums';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
-
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-admin-opportunities-filter',
   imports: [
@@ -20,7 +20,8 @@ import { AdminOpportunitiesFilterService } from '../../services/admin-opportunit
     FormsModule,
     InputTextModule,
     SelectModule,
-    TranslatePipe
+    TranslatePipe,
+    ButtonModule
   ],
   templateUrl: './admin-opportunities-filter.html',
   styleUrl: './admin-opportunities-filter.scss',
@@ -98,5 +99,10 @@ export class AdminOpportunitiesFilter {
   performFilter$() {
     return this.adminOpportunitiesFilterService.performFilter$().pipe(catchError((error) => of(error)));
   }
+
+  onClearFilters() {
+    this.adminOpportunitiesFilterService.clearAllFilters();
+  }
+
 }
 
