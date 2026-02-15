@@ -373,16 +373,12 @@ export class OpportunityFormService {
 
     // Get image from attachments (first attachment if available) and convert to File
     let image: File | null = null;
-    // For now, use placeholder image
     if (value.attachments && value.attachments.length > 0) {
-      image = await this.createFileFromUrl('/assets/images/opportunity-placeholder.png', 'opportunity-placeholder.png');
+      var attachment = value.attachments[0];
+      const fileUrl = `data:${attachment?.ibmFileBase64?.fileBase64MimeType};base64,${attachment?.ibmFileBase64?.fileBase64}`;
+      const fileName = attachment.fileName || 'image';
+      image = await this.createFileFromUrl(fileUrl, fileName);
     }
-    // if (value.attachments && value.attachments.length > 0) {
-    //   const fileUrl = value.attachments[0].fileUrl;
-    //   const fileName = value.attachments[0].fileName || 'image';
-    //   image = await this.createFileFromUrl(fileUrl, fileName);
-    // }
-
 
     // disable title and opportunityType if has active plans
     if (this.hasActivePlans) {

@@ -372,3 +372,5 @@ export interface IPlanSummaryField {
   isResolved: boolean;
   showDifference: boolean;
 }
+
+export type AttachmentItem = Attachment & { name?: string; type?: string; size?: number; objectURL?: string; url?: string };
