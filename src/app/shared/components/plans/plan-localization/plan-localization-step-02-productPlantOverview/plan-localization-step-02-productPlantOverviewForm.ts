@@ -245,6 +245,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     super.ngOnInit();
     // Targeted-customer subscription runs here so planFormService.targetCustomersFormGroup is available.
     this.setupTargetedCustomerWatcher();
+    this.setupOthersPercentageWatcher();
   }
 
   /**
@@ -273,19 +274,33 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
           if (updated.length !== current.length) this.selectedInputs.set(updated);
         }
         if (this.isResubmitMode()) {
-          this._userChangedDropdowns.add('targetedCustomer');
-          if (isSecSuppliers) {
-            const namesOfTargetedSuppliersControl = this.getValueControl(
-              this.targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]
-            );
-            const productsUtilizeTargetedProductControl = this.getValueControl(
-              this.targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]
-            );
-            namesOfTargetedSuppliersControl?.enable({ emitEvent: false });
-            productsUtilizeTargetedProductControl?.enable({ emitEvent: false });
+          // Only treat as user-driven if dropdown is dirty and investor selected
+          // SEC approved local suppliers.
+          if (targetedCustomerControl.dirty && isSecSuppliers) {
+            this._userChangedDropdowns.add('targetedCustomer');
           }
         }
         this.planFormService.toggleTargetedSuppliersFieldsValidation(value ?? []);
+      });
+  }
+
+  /**
+   * Subscribe to othersPercentage changes once form is ready.
+   * In resubmit mode, only mark this conditional branch as user-changed when
+   * the investor explicitly changes othersPercentage to a value > 0.
+   */
+  private setupOthersPercentageWatcher(): void {
+    const othersPercentageControl = this.getValueControl(
+      this.expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage]
+    );
+    if (!othersPercentageControl) return;
+
+    othersPercentageControl.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value: number | null) => {
+        if (this.isResubmitMode() && othersPercentageControl.dirty && value !== null && value > 0) {
+          this._userChangedDropdowns.add('othersPercentage');
+        }
       });
   }
 
@@ -330,10 +345,6 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     effect(() => {
       const value = this.othersPercentageSignal();
       const shouldShowOthersDescription = this.showOthersDescription();
-      // Mark dropdown as changed if user interacts with it
-      if (value !== null) {
-        this._userChangedDropdowns.add('othersPercentage');
-      }
 
       // If the conditional input is hidden, also clear its selection/highlight state.
       // Otherwise, the step can keep showing an orange indicator for a field the user can no longer see.
@@ -371,11 +382,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
 
     // Watch targetedCustomer changes for namesOfTargetedSuppliers and productsUtilizeTargetedProduct
     effect(() => {
-      const value = this.targetedCustomerSignal();
-      // Mark dropdown as changed if user interacts with it
-      if (value !== null && value.length > 0) {
-        this._userChangedDropdowns.add('targetedCustomer');
-      }
+      this.targetedCustomerSignal();
 
       // Handle resubmit mode enable/disable
       if (this.isResubmitMode() && this.showTargetedSuppliersFields()) {
@@ -397,6 +404,16 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
           true,
           this.isFieldCorrected('productsUtilizeTargetedProduct') || canEdit
         );
+      } else if (this.isResubmitMode() && !this.showTargetedSuppliersFields()) {
+        const namesOfTargetedSuppliersControl = this.getValueControl(
+          this.targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers]
+        );
+        const productsUtilizeTargetedProductControl = this.getValueControl(
+          this.targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct]
+        );
+
+        this.updateConditionalField(namesOfTargetedSuppliersControl, false, false);
+        this.updateConditionalField(productsUtilizeTargetedProductControl, false, false);
       }
     });
   }

@@ -74,10 +74,9 @@ export class PlanCommentSyncService {
   }
 
   /**
-   * Clear only the comment text for a page in the store, keeping fields intact.
-   * Used when an investor deletes their comment in resubmit mode —
-   * fields must remain so the correctedFields derivation is not disrupted.
-   * When originalPlanComments is set, restores planComments from original instead.
+   * Clear the comment text for a page and restore from original when available.
+   * Used when an investor deletes their comment in resubmit mode.
+   * When originalPlanComments is set, restores both comment and fields from original.
    * Also removes the page from currentUserPageComments (except when restoring).
    */
   clearPageCommentTextInStore(pageTitleForTL: EPlanPageTitle): void {
@@ -88,7 +87,9 @@ export class PlanCommentSyncService {
     const originalPageComments = original?.comments?.find(oc => oc.pageTitleForTL === pageTitleForTL);
 
     const updatedComments = existing.comments.map(c =>
-      c.pageTitleForTL === pageTitleForTL ? { ...c, comment: originalPageComments?.comment ?? '' } : c
+      c.pageTitleForTL === pageTitleForTL
+        ? { ...c, comment: originalPageComments?.comment ?? '', fields: structuredClone(originalPageComments?.fields ?? []) }
+        : c
     );
     const payload: IPlanCommentResponse = {
       comments: updatedComments,
