@@ -50,7 +50,7 @@
             }
           </div>
         </div>
-        <p class="text-md text-gray-600 break-word mb-1">
+        <p class="text-md text-gray-600 break-word mb-1 whitespace-pre-line!">
           {{ opportunitiesStore.details()?.shortDescription }}
         </p>
       </div>
@@ -97,7 +97,7 @@
                 icon="icon-flag"
                 [cardTitle]="'opportunity.details.local' | translate"
                 cardClass="bg-white"
-                cardDescription="{{ 
+                cardDescription="{{
                   (opportunitiesStore.details()?.localSuppliersFormatted == '0' ||
                    opportunitiesStore.details()?.localSuppliersFormatted == null) ?
                   '-':
