@@ -737,7 +737,24 @@ export const PlanStore = signalStore(
             patchState(store, { loading: false });
           })
         );
+      },
+
+      deleteDraftPlan(planId: string): Observable<IBaseApiResponse<boolean>> {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.deleteDraftPlan(planId).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error deleting draft plan' });
+            return throwError(() => new Error('Error deleting draft plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
       }
+
     };
   })
 );

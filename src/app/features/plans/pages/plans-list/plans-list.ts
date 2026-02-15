@@ -27,6 +27,7 @@ import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-too
 import { AssignReassignManualEmployee } from "../../components/assign-reassign-manual-employee/assign-reassign-manual-employee";
 import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
+import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 
 @Component({
   selector: 'app-plans-list',
@@ -50,8 +51,9 @@ import { BaseTagComponent } from 'src/app/shared/components/base-components/base
     TimelineDialog,
     TruncateTooltipDirective,
     AssignReassignManualEmployee,
-    BaseTagComponent
-  ],
+    BaseTagComponent,
+    GeneralConfirmationDialogComponent
+],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
   providers: [InvestorPlansFilterService, InternalUsersPlansFilterService],
@@ -65,7 +67,9 @@ export class PlansList extends PlanDashboardBase {
   timelineVisibility = signal(false);
   selectedPlan = signal<IPlanRecord | null>(null);
   viewAssignDialog = signal<boolean>(false);
+  viewDeleteDialog = signal<boolean>(false);
   isReassignMode = signal<boolean>(false);
+  isDeleteMode = signal<boolean>(false);
   planItem = signal<IPlanRecord | null>(null);
 
   eInvestorPlanStatus = EInvestorPlanStatus;
@@ -280,6 +284,38 @@ export class PlansList extends PlanDashboardBase {
     this.viewAssignDialog.set(true);
     this.planItem.set(plan);
     this.isReassignMode.set(true);
+  }
+ onDelete(plan: IPlanRecord) {
+    this.viewDeleteDialog.set(true);
+    this.planItem.set(plan);
+    this.isDeleteMode.set(true);
+  }
+  onCancelDeletePlan() {
+    this.viewDeleteDialog.set(false);
+    this.planItem.set(null);
+    this.isDeleteMode.set(false);
+  }
+  onConfirmDeletePlan() {
+    if (!this.planItem()) return;
+
+    this.planStore.deleteDraftPlan(this.planItem()!.id).pipe(take(1)).subscribe({
+      next: () => {
+
+        this.toastService.success('Your Plan has been removed successfully.');
+        this.applyFilter();
+        this.viewDeleteDialog.set(false);
+        this.planItem.set(null);
+        this.isDeleteMode.set(false);
+      },
+      error: (error) => {
+        this.toastService.error(error.errorMessage || 'Error deleting the plan');
+        this.viewDeleteDialog.set(false);
+        this.planItem.set(null);
+        this.isDeleteMode.set(false);
+      }
+    });
+
+
   }
 
 }
