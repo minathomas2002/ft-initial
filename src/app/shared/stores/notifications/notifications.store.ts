@@ -66,11 +66,27 @@ export const NotificationsStore = signalStore(
       },
 
       addNotification(notification: INotification): void {
-        patchState(store, (state) => ({
-          notifications: [notification, ...state.notifications],
-          totalCount: state.totalCount + 1,
-          unreadCount: state.unreadCount + 1,
-        }));
+        patchState(store, (state) => {
+          const existingIndex = state.notifications.findIndex((n) => n.id === notification.id);
+
+          if (existingIndex !== -1) {
+            const updatedNotifications = [...state.notifications];
+            updatedNotifications[existingIndex] = {
+              ...updatedNotifications[existingIndex],
+              ...notification,
+            };
+
+            return {
+              notifications: updatedNotifications,
+            };
+          }
+
+          return {
+            notifications: [notification, ...state.notifications],
+            totalCount: state.totalCount + 1,
+            unreadCount: state.unreadCount + (notification.isRead ? 0 : 1),
+          };
+        });
       },
 
       getUnreadNotification() {
