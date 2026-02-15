@@ -138,6 +138,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showExistingSaudiStep = signal(false);
   showDirectLocalizationStep = signal(false);
 
+  showWarningMesageDeletedOpportunity =computed(()=>{
+    return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT 
+  });
   // Comment phase signals for each step
   step1CommentPhase = signal<TCommentPhase>('none');
   step2CommentPhase = signal<TCommentPhase>('none');
@@ -670,6 +673,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         if (currentPlanId && ['view', 'edit', 'Review', 'resubmit'].includes(currentMode)) {
           return this.loadPlanData$(currentPlanId).pipe(
             tap((data) => {
+              
               if (data) this.applyLoadedPlanData(data, currentPlanId);
             })
           );

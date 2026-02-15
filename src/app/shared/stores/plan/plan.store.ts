@@ -62,6 +62,7 @@ const initialState: {
   servicePlanData: IServiceLocalizationPlanResponse | null;
   actionNote: string | null;
   acknowledgeRejectionNote: string | null;
+  linkedToDeletedOpportunity: boolean;
 } = {
   newPlanOpportunityType: null,
   appliedOpportunity: null,
@@ -168,7 +169,8 @@ const initialState: {
   productPlanData: null,
   servicePlanData: null,
   actionNote: null,
-  acknowledgeRejectionNote: null
+  acknowledgeRejectionNote: null,
+  linkedToDeletedOpportunity:false
 };
 
 export const PlanStore = signalStore(
@@ -272,6 +274,9 @@ export const PlanStore = signalStore(
       setPlanStatus(status: number | null): void {
         patchState(store, { planStatus: status });
       },
+      setLinkedOpportunityWarning(linkedToDeletedOpportunity: boolean | false): void {
+        patchState(store, { linkedToDeletedOpportunity });
+      },
       setActionNote(actionNote: string | null): void {
         patchState(store, { actionNote });
       },
@@ -293,7 +298,7 @@ export const PlanStore = signalStore(
         }
       },
       resetWizardState(): void {
-        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null, actionNote: null, acknowledgeRejectionNote: null });
+        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null, actionNote: null, acknowledgeRejectionNote: null , linkedToDeletedOpportunity:false});
       },
       updateCurrentUserPageComments(newPageComments: EPlanPageTitle[]): void {
         patchState(store, { currentUserPageComments: newPageComments });
@@ -589,6 +594,7 @@ export const PlanStore = signalStore(
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
             store.setActionNote(res.body?.productPlan?.actionNote || null);
+            store.setLinkedOpportunityWarning(res.body?.productPlan?.linkedToDeletedOpportunity|| false);
             store.setAcknowledgeRejectionNote(res.body?.productPlan?.acknowledgeRejectionNote || null);
             const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.productPlan?.investorStatus : res.body?.productPlan?.status;
             store.setPlanStatus(planStatus ?? null);
@@ -625,6 +631,8 @@ export const PlanStore = signalStore(
             patchState(store, { servicePlanData: res.body || null });
             store.setActionNote(res.body?.actionNote ?? null);
             store.setAcknowledgeRejectionNote(res.body?.acknowledgeRejectionNote ?? null);
+            store.setLinkedOpportunityWarning(res.body?.linkedToDeletedOpportunity|| false);
+
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading service plan' });
