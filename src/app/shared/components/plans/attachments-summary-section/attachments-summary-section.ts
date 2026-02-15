@@ -3,10 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
-import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
-import { Attachment } from 'src/app/shared/interfaces/plans.interface';
-
-type AttachmentItem = Attachment & { name?: string; type?: string; size?: number; objectURL?: string; url?: string };
+import { AttachmentItem, IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
 
@@ -90,7 +87,7 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
   downloadFile(file: AttachmentItem): void {
     const fileId = file.ibmIdentifier;
     if (!fileId) return;
-    this.attachmentService.downloadAndSaveAttachment(fileId, file.fileName).subscribe({
+    this.attachmentService.downloadAndSaveAttachment(fileId, file.name).subscribe({
       next: () => { },
       error: (err) => console.error('Error downloading file.', err),
     });
