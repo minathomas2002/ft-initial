@@ -14,6 +14,7 @@ export interface NotificationMessage {
 export class NotificationHubService {
 	private readonly localStorage = inject(LocalStorage);
 	private hubConnection: HubConnection | null = null;
+	private startConnectionPromise: Promise<void> | null = null;
 	private readonly notificationSubject = new Subject<NotificationMessage>();
 	
 	// Signal for connection state
@@ -45,72 +46,85 @@ export class NotificationHubService {
 			return;
 		}
 
+		if (this.startConnectionPromise) {
+			return this.startConnectionPromise;
+		}
+
 		const token = this.getAuthToken();
 		if (!token) {
 			console.warn('No authentication token found. Cannot establish SignalR connection.');
 			return;
 		}
 
-		const hubUrl = `${this.getHubBaseUrl()}/notificationHub`;
+		if (!this.hubConnection) {
+			const hubUrl = `${this.getHubBaseUrl()}/notificationHub`;
 
-		this.hubConnection = new HubConnectionBuilder()
-			.withUrl(hubUrl, {
-				accessTokenFactory: () => {
-					const currentToken = this.getAuthToken();
-					if (!currentToken) {
-						throw new Error('No authentication token available');
-					}
-					return currentToken;
-				},
-			})
-			.withAutomaticReconnect({
-				nextRetryDelayInMilliseconds: (retryContext: any) => {
-					// Exponential backoff: 0, 2, 10, 30 seconds
-					if (retryContext.previousRetryCount === 0) return 2000;
-					if (retryContext.previousRetryCount === 1) return 10000;
-					if (retryContext.previousRetryCount === 2) return 30000;
-					return 30000; // Max 30 seconds
-				},
-			})
-			.configureLogging(environment.enableDebug ? LogLevel.Information : LogLevel.Warning)
-			.build();
+			this.hubConnection = new HubConnectionBuilder()
+				.withUrl(hubUrl, {
+					accessTokenFactory: () => {
+						const currentToken = this.getAuthToken();
+						if (!currentToken) {
+							throw new Error('No authentication token available');
+						}
+						return currentToken;
+					},
+				})
+				.withAutomaticReconnect({
+					nextRetryDelayInMilliseconds: (retryContext: any) => {
+						// Exponential backoff: 0, 2, 10, 30 seconds
+						if (retryContext.previousRetryCount === 0) return 2000;
+						if (retryContext.previousRetryCount === 1) return 10000;
+						if (retryContext.previousRetryCount === 2) return 30000;
+						return 30000; // Max 30 seconds
+					},
+				})
+				.configureLogging(environment.enableDebug ? LogLevel.Information : LogLevel.Warning)
+				.build();
 
-		// Register ReceiveNotification event handler
-		this.hubConnection.on('ReceiveNotification', (notification: NotificationMessage) => {
-			console.log('Received notification:', notification);
-			this.notificationSubject.next(notification);
-		});
+			// Register ReceiveNotification event handler
+			this.hubConnection.on('ReceiveNotification', (notification: NotificationMessage) => {
+				console.log('Received notification:', notification);
+				this.notificationSubject.next(notification);
+			});
 
-		// Handle connection state changes
-		this.hubConnection.onclose((error: any) => {
-			console.log('SignalR connection closed', error);
-			this.connectionState.set(HubConnectionState.Disconnected);
-			this.isConnected.set(false);
-		});
+			// Handle connection state changes
+			this.hubConnection.onclose((error: any) => {
+				console.log('SignalR connection closed', error);
+				this.connectionState.set(HubConnectionState.Disconnected);
+				this.isConnected.set(false);
+			});
 
-		this.hubConnection.onreconnecting((error: any) => {
-			console.log('SignalR reconnecting...', error);
-			this.connectionState.set(HubConnectionState.Reconnecting);
-			this.isConnected.set(false);
-		});
+			this.hubConnection.onreconnecting((error: any) => {
+				console.log('SignalR reconnecting...', error);
+				this.connectionState.set(HubConnectionState.Reconnecting);
+				this.isConnected.set(false);
+			});
 
-		this.hubConnection.onreconnected((connectionId: any) => {
-			console.log('SignalR reconnected. Connection ID:', connectionId);
-			this.connectionState.set(HubConnectionState.Connected);
-			this.isConnected.set(true);
-		});
-
-		try {
-			await this.hubConnection.start();
-			console.log('SignalR connection started successfully');
-			this.connectionState.set(HubConnectionState.Connected);
-			this.isConnected.set(true);
-		} catch (error) {
-			console.error('Error starting SignalR connection:', error);
-			this.connectionState.set(HubConnectionState.Disconnected);
-			this.isConnected.set(false);
-			throw error;
+			this.hubConnection.onreconnected((connectionId: any) => {
+				console.log('SignalR reconnected. Connection ID:', connectionId);
+				this.connectionState.set(HubConnectionState.Connected);
+				this.isConnected.set(true);
+			});
 		}
+
+		this.startConnectionPromise = this.hubConnection
+			.start()
+			.then(() => {
+				console.log('SignalR connection started successfully');
+				this.connectionState.set(HubConnectionState.Connected);
+				this.isConnected.set(true);
+			})
+			.catch((error) => {
+				console.error('Error starting SignalR connection:', error);
+				this.connectionState.set(HubConnectionState.Disconnected);
+				this.isConnected.set(false);
+				throw error;
+			})
+			.finally(() => {
+				this.startConnectionPromise = null;
+			});
+
+		return this.startConnectionPromise;
 	}
 
 	/**
