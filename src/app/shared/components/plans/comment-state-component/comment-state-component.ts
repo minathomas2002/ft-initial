@@ -36,6 +36,7 @@ export class CommentStateComponent {
   mode = input<'fieldSelection' | 'pageComment'>('fieldSelection');
   isResubmitMode = input<boolean>(false);
   hasInvestorComment = input<boolean>(false);
+  incomingCommentText = input<string>('');
   private readonly initialCommentValue = signal<string>('');
   readonly commentFormControlValue = signal<string>('');
   readonly commentFormControlInvalid = signal<boolean>(true);
@@ -77,7 +78,9 @@ export class CommentStateComponent {
     ].includes(status as EInternalUserPlanStatus);
 
     const currentComment = this.commentFormControlValue()?.trim() ?? '';
-    this.commentInitialValueFromManager.set(isReturnedByManager && currentComment ? currentComment : '');
+    const incomingComment = this.incomingCommentText()?.trim() ?? '';
+    const initialComment = currentComment || incomingComment;
+    this.commentInitialValueFromManager.set(isReturnedByManager && initialComment ? initialComment : '');
     this.showCommentDialog.set(true);
   }
 

@@ -118,6 +118,14 @@ export abstract class PlanStepBaseClass {
     };
   });
 
+  // Combined incoming comments for the current step (used to prefill dialog when needed).
+  incomingCommentText = computed(() =>
+    this.pageComments()
+      .map(c => c.comment?.trim())
+      .filter((c): c is string => !!c)
+      .join('\n\n')
+  );
+
   constructor() {
     // Setup common comment phase effect
     this.setupCommentPhaseEffect();

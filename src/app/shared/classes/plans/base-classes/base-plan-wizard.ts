@@ -358,31 +358,31 @@ export abstract class BasePlanWizard {
    * Shared: hydrate each step form's comment control from loaded plan comments.
    * Keeps form state aligned with displayed incoming comments.
    */
-  protected fillStepsFormsWithIncomingComments(
-    descriptors: IPlanWizardStepCommentDescriptor[]
-  ): void {
-    for (const d of descriptors) {
-      if (d.isVisible && !d.isVisible()) continue;
+  // protected fillStepsFormsWithIncomingComments(
+  //   descriptors: IPlanWizardStepCommentDescriptor[]
+  // ): void {
+  //   for (const d of descriptors) {
+  //     if (d.isVisible && !d.isVisible()) continue;
 
-      const form = d.getForm();
-      if (!form) continue;
+  //     const form = d.getForm();
+  //     if (!form) continue;
 
-      const commentText = d.getComments()
-        .map(c => c.comment?.trim())
-        .filter((c): c is string => !!c)
-        .join('\n\n');
+  //     const commentText = d.getComments()
+  //       .map(c => c.comment?.trim())
+  //       .filter((c): c is string => !!c)
+  //       .join('\n\n');
 
-      const commentControl =
-        (form.get(EMaterialsFormControls.comment) as FormControl<string> | null) ??
-        (form.get('comment') as FormControl<string> | null);
+  //     const commentControl =
+  //       (form.get(EMaterialsFormControls.comment) as FormControl<string> | null) ??
+  //       (form.get('comment') as FormControl<string> | null);
 
-      if (commentControl) {
-        commentControl.setValue(commentText, { emitEvent: false });
-        commentControl.markAsPristine();
-        commentControl.markAsUntouched();
-      }
-    }
-  }
+  //     if (commentControl) {
+  //       commentControl.setValue(commentText, { emitEvent: false });
+  //       commentControl.markAsPristine();
+  //       commentControl.markAsUntouched();
+  //     }
+  //   }
+  // }
 
   /**
    * Shared: hydrate per-field hasComment controls from incoming comment fields.

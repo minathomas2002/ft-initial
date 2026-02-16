@@ -1363,7 +1363,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     const isSentBackFromManager = [EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager];
     if (isSentBackFromManager.includes(this.planStore.planStatus?.() as EInternalUserPlanStatus)) {
-      this.fillStepsFormsWithIncomingComments(this.getCommentDescriptors());
+      // this.fillStepsFormsWithIncomingComments(this.getCommentDescriptors());
       this.markSelectedFieldsWithCheckboxes(this.getCommentDescriptors());
     }
   }
