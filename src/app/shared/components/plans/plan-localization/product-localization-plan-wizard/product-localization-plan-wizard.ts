@@ -87,7 +87,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   doRefresh = output<void>();
   isSubmitted = signal<boolean>(false);
   showWarningMesageDeletedOpportunity =computed(()=>{
-    return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT 
+    return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT
   });
 
   timelineVisibility = signal(false);
@@ -129,7 +129,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return 'none';
   });
 
-  protected override getCommentPhaseForStepId(stepId: string): TCommentPhase {
+  protected override getCommentPhaseForStepId(stepId: ProductLocalizationWizardStepId): TCommentPhase {
     if (stepId === 'overview') return this.step1CommentPhase();
     if (stepId === 'productPlant') return this.step2CommentPhase();
     if (stepId === 'valueChain') return this.step3CommentPhase();
@@ -311,22 +311,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       .filter((id, index, self) => self.indexOf(id) === index); // Remove duplicates
   });
 
-  // Computed signals for comment text display
-  step1CommentText = computed<string>(() => {
-    return this.step1Comments().map(c => c.comment).join('\n\n');
-  });
-
-  step2CommentText = computed<string>(() => {
-    return this.step2Comments().map(c => c.comment).join('\n\n');
-  });
-
-  step3CommentText = computed<string>(() => {
-    return this.step3Comments().map(c => c.comment).join('\n\n');
-  });
-
-  step4CommentText = computed<string>(() => {
-    return this.step4Comments().map(c => c.comment).join('\n\n');
-  });
 
   step1CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
     return {
@@ -361,7 +345,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step = this.steps()[0];
     return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
+      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      !this.planStore.currentUserPageComments().includes(step.title)
     );
   });
 
@@ -369,7 +354,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step = this.steps()[1];
     return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase())
+      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      !this.planStore.currentUserPageComments().includes(step.title)
     );
   });
 
@@ -377,7 +363,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step = this.steps()[2];
     return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
+      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      !this.planStore.currentUserPageComments().includes(step.title)
     );
   });
 
@@ -385,26 +372,28 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     const step = this.steps()[3];
     return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
+      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      !this.planStore.currentUserPageComments().includes(step.title)
     );
   });
 
   // Helper methods to get combined incoming comment text for each step
   getIncomingStep1CommentText(): string {
-    return this.step1CommentText();
+    return this.step1Comments().map(c => c.comment).join('\n\n');
   }
 
   getIncomingStep2CommentText(): string {
-    return this.step2CommentText();
+    return this.step2Comments().map(c => c.comment).join('\n\n');
   }
 
   getIncomingStep3CommentText(): string {
-    return this.step3CommentText();
+    return this.step3Comments().map(c => c.comment).join('\n\n');
   }
 
   getIncomingStep4CommentText(): string {
-    return this.step4CommentText();
+    return this.step4Comments().map(c => c.comment).join('\n\n');
   }
+
   wizardTitle = computed(() => {
     const currentMode = this.planStore.wizardMode();
     this.i18nService.currentLanguage();
@@ -485,12 +474,12 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       this.showValueChainAddCommentInfoDialog.set(true);
       return;
     }
-    super.onAddComment();
+    super.onAddComment(this.commentColor());
   }
 
   onConfirmValueChainAddCommentInfo(): void {
     this.showValueChainAddCommentInfoDialog.set(false);
-    super.onAddComment();
+    super.onAddComment(this.commentColor());
   }
 
   // Computed signals for plan status tag
@@ -734,7 +723,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return null;
   }
 
-  protected override getStepIdFromStepIndex(step: number): string | undefined {
+  protected override getStepIdFromStepIndex(step: number): ProductLocalizationWizardStepId | undefined {
     if (step === 1) return 'overview';
     if (step === 2) return 'productPlant';
     if (step === 3) return 'valueChain';
@@ -1289,10 +1278,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   /** Step comment descriptors for shared collect/validate logic. */
   private getCommentDescriptors(): IPlanWizardStepCommentDescriptor[] {
     return [
-      { stepIndex: 0, getForm: () => this.productPlanFormService.overviewCompanyInformation, getCommentPhase: () => this.step1CommentPhase(), getSelectedInputs: () => this.step1SelectedInputs(), getComments: () => this.step1Comments(), getCommentFields: () => this.step1CommentFields(), getStepTitle: () => this.steps()[0]?.title ?? '' },
-      { stepIndex: 1, getForm: () => this.productPlanFormService.step2_productPlantOverview, getCommentPhase: () => this.step2CommentPhase(), getSelectedInputs: () => this.step2SelectedInputs(), getComments: () => this.step2Comments(), getCommentFields: () => this.step2CommentFields(), getStepTitle: () => this.steps()[1]?.title ?? '' },
-      { stepIndex: 2, getForm: () => this.productPlanFormService.step3_valueChain, getCommentPhase: () => this.step3CommentPhase(), getSelectedInputs: () => this.step3SelectedInputs(), getComments: () => this.step3Comments(), getCommentFields: () => this.step3CommentFields(), getStepTitle: () => this.steps()[2]?.title ?? '' },
-      { stepIndex: 3, getForm: () => this.productPlanFormService.step4_saudization, getCommentPhase: () => this.step4CommentPhase(), getSelectedInputs: () => this.step4SelectedInputs(), getComments: () => this.step4Comments(), getCommentFields: () => this.step4CommentFields(), getStepTitle: () => this.steps()[3]?.title ?? '' },
+      { stepIndex: 0, getForm: () => this.productPlanFormService.overviewCompanyInformation, getCommentPhase: () => this.step1CommentPhase(), getSelectedInputs: () => this.step1SelectedInputs(), setSelectedInputs: (inputs) => this.step1SelectedInputs.set(inputs), getComments: () => this.step1Comments(), getCommentFields: () => this.step1CommentFields(), getStepTitle: () => this.steps()[0]?.title ?? '' },
+      { stepIndex: 1, getForm: () => this.productPlanFormService.step2_productPlantOverview, getCommentPhase: () => this.step2CommentPhase(), getSelectedInputs: () => this.step2SelectedInputs(), setSelectedInputs: (inputs) => this.step2SelectedInputs.set(inputs), getComments: () => this.step2Comments(), getCommentFields: () => this.step2CommentFields(), getStepTitle: () => this.steps()[1]?.title ?? '' },
+      { stepIndex: 2, getForm: () => this.productPlanFormService.step3_valueChain, getCommentPhase: () => this.step3CommentPhase(), getSelectedInputs: () => this.step3SelectedInputs(), setSelectedInputs: (inputs) => this.step3SelectedInputs.set(inputs), getComments: () => this.step3Comments(), getCommentFields: () => this.step3CommentFields(), getStepTitle: () => this.steps()[2]?.title ?? '' },
+      { stepIndex: 3, getForm: () => this.productPlanFormService.step4_saudization, getCommentPhase: () => this.step4CommentPhase(), getSelectedInputs: () => this.step4SelectedInputs(), setSelectedInputs: (inputs) => this.step4SelectedInputs.set(inputs), getComments: () => this.step4Comments(), getCommentFields: () => this.step4CommentFields(), getStepTitle: () => this.steps()[3]?.title ?? '' },
     ];
   }
 
@@ -1373,6 +1362,12 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.step2SelectedInputs.set(this.step2CommentFields());
     this.step3SelectedInputs.set(this.step3CommentFields());
     this.step4SelectedInputs.set(this.step4CommentFields());
+
+    const isSentBackFromManager = [EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager];
+    if (isSentBackFromManager.includes(this.planStore.planStatus?.() as EInternalUserPlanStatus)) {
+      // this.fillStepsFormsWithIncomingComments(this.getCommentDescriptors());
+      this.markSelectedFieldsWithCheckboxes(this.getCommentDescriptors());
+    }
   }
 
   /**

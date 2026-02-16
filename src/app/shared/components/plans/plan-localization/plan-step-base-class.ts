@@ -118,6 +118,14 @@ export abstract class PlanStepBaseClass {
     };
   });
 
+  // Combined incoming comments for the current step (used to prefill dialog when needed).
+  incomingCommentText = computed(() =>
+    this.pageComments()
+      .map(c => c.comment?.trim())
+      .filter((c): c is string => !!c)
+      .join('\n\n')
+  );
+
   constructor() {
     // Setup common comment phase effect
     this.setupCommentPhaseEffect();
@@ -490,11 +498,14 @@ export abstract class PlanStepBaseClass {
       fieldInformation.id = rowId;
     }
 
+    const targetInputKey = this.normalizeInputKeyForComparison(fieldInformation.inputKey);
+    const targetId = this.normalizeIdForComparison(fieldInformation.id);
+
     const existingIndex = currentInputs.findIndex(
       input =>
         input.section === fieldInformation.section &&
-        input.inputKey === fieldInformation.inputKey &&
-        input.id === fieldInformation.id
+        this.normalizeInputKeyForComparison(input.inputKey) === targetInputKey &&
+        this.normalizeIdForComparison(input.id) === targetId
     );
 
     if (value) {
@@ -508,6 +519,23 @@ export abstract class PlanStepBaseClass {
         this.selectedInputs.set(currentInputs.filter((_, index) => index !== existingIndex));
       }
     }
+  }
+
+  /**
+   * Normalizes input keys for robust matching between API-loaded fields and UI field metadata.
+   * Examples:
+   * - 'section.fieldName' -> 'fieldName'
+   * - 'fieldName_0' -> 'fieldName'
+   */
+  private normalizeInputKeyForComparison(inputKey: string): string {
+    const key = inputKey ?? '';
+    const withoutPrefix = key.replace(/^.+\./, '');
+    return this.stripIndexSuffix(withoutPrefix);
+  }
+
+  /** Normalizes IDs so string/number representations compare consistently. */
+  private normalizeIdForComparison(id: unknown): string {
+    return id == null ? '' : String(id);
   }
 
   /**
@@ -559,7 +587,7 @@ export abstract class PlanStepBaseClass {
 
     }
 
-    return this.isResubmitMode() ? isSelected && !isCorrected : isSelected;
+    return this.isResubmitMode() ? (isSelected && !isCorrected) : (isSelected && this.commentPhase() !== 'viewing');
   }
 
   private valuesEqual(a: any, b: any): boolean {
@@ -626,7 +654,7 @@ export abstract class PlanStepBaseClass {
   /**
    * Validates and saves a new comment.
    */
-  protected onSaveComment(): void {
+  protected onSaveComment(commentValue: string | undefined): void {
     // Validate at least one field is selected
     if (this.selectedInputs().length === 0 && !this.isResubmitMode()) {
       this.toasterService.error('Please select at least one field before adding a comment.');
@@ -634,21 +662,22 @@ export abstract class PlanStepBaseClass {
     }
 
     // Validate comment text
-    const commentValue = this.commentFormControl.value?.trim() || '';
-    if (!commentValue) {
+    const comment =  commentValue || this.commentFormControl.value?.trim() || '';
+
+    if (!comment) {
       this.commentFormControl.markAsTouched();
       this.toasterService.error('Please enter a comment.');
       return;
     }
 
-    if (commentValue.length > 255) {
+    if (comment.length > 255) {
       this.toasterService.error('Comment cannot exceed 255 characters.');
       return;
     }
 
     // Save comment
-    this.comment.set(commentValue);
-    this.commentFormControl.setValue(commentValue, { emitEvent: false });
+    this.comment.set(comment);
+    this.commentFormControl.setValue(comment, { emitEvent: false });
     this.commentPhase.set('viewing');
     this.commentFormControl.disable();
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());

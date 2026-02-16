@@ -1,8 +1,6 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
-import { distinctUntilChanged } from 'rxjs';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
@@ -20,8 +18,6 @@ import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentInputComponent {
-  private readonly destroyRef = inject(DestroyRef);
-
   commentFormControl = input.required<FormControl<string>>();
   commentPhase = input.required<TCommentPhase>();
 
@@ -36,15 +32,8 @@ export class CommentInputComponent {
         control.updateValueAndValidity({ emitEvent: false });
       }
 
-      // Reactively reject whitespace-only input as the user types.
-      // If the value is purely whitespace, reset to empty string.
-      control.valueChanges
-        .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
-        .subscribe((value) => {
-          if (value && value.length > 0 && value.trim().length === 0) {
-            control.setValue('', { emitEvent: false });
-          }
-        });
+      // Whitespace-only comments are rejected at save time in the parent
+      // flow via trim() checks (no subscription needed here).
     });
   }
 }

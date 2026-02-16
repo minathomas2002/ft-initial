@@ -68,10 +68,14 @@ export interface ActionContext {
   currentLanguage: string;
 }
 
-export const REJECTION_STATUSES = [
+export const INTERNAL_REJECTION_STATUSES = [
   EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
   EInternalUserPlanStatus.DV_REJECTED,
   EInternalUserPlanStatus.DEPT_REJECTED
+];
+
+export const INVESTOR_REJECTION_STATUSES = [
+  EInvestorPlanStatus.REJECTED,
 ];
 
 export const TRANSLATION_KEYS = {

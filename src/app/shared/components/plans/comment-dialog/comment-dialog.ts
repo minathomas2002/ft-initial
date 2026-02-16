@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, model, OnInit, output } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -22,59 +22,38 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
   styleUrl: './comment-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentDialog implements OnInit {
+export class CommentDialog {
   visible = model<boolean>(false);
-  private readonly fb = inject(FormBuilder);
-  private readonly toaster = inject(ToasterService);
-  commentFormControl = input.required<FormControl<string | null>>();
-  commentAdded = output();
+  commentInitialValueFromManager = input<string>('');
+  commentAdded = output<string>();
   cancelled = output();
-  private commentSubmitted = signal<boolean>(false);
-  private initialValue = signal<string>('');
+
+  protected formControl = new FormControl('', [Validators.required, Validators.maxLength(255)])
 
   constructor() {
-    let wasVisible = false;
     effect(() => {
-      const isVisible = this.visible();
-      if (isVisible && !wasVisible) {
-        this.initialValue.set(this.commentFormControl()?.value ?? '');
-        this.commentSubmitted.set(false);
-      }
-      wasVisible = isVisible;
+      if (!this.visible()) return;
+
+      const initialValue = this.commentInitialValueFromManager() ?? '';
+      this.formControl.setValue(initialValue, { emitEvent: false });
+      this.formControl.markAsPristine();
+      this.formControl.markAsUntouched();
     });
 
   }
 
-  ngOnInit(): void {
-    // const control = this.commentFormControl();
-    // if (control) {
-    //   control.addValidators(Validators.required);
-    // }
-  }
-
   onClose() {
-    if (!this.commentSubmitted()) {
-      // Restore original value (important for Edit flow).
-      const control = this.commentFormControl();
-      if (control) {
-        control.setValue(this.initialValue());
-        control.markAsPristine();
-        control.markAsUntouched();
-      }
-      // Always emit cancelled when dialog is closed without saving
-      // The parent component will decide what to do based on the mode (investor vs employee)
-      this.cancelled.emit();
-    }
+    this.cancelled.emit();
+    this.formControl.reset();
   }
 
   onConfirm(): void {
-    if (!this.commentFormControl()?.valid) {
-      this.toaster.error('Please enter a comment');
+    if (this.formControl?.invalid) {
       return;
     }
-    // Success message will be shown by parent component
-    this.commentSubmitted.set(true);
-    this.commentAdded.emit();
+
+    this.commentAdded.emit(this.formControl?.value || '');
     this.visible.set(false);
+    this.formControl.reset()
   }
 }

@@ -1,12 +1,15 @@
 import { inject, Signal, computed } from "@angular/core";
 import { IBaseWizardAction } from "src/app/shared/components/base-components/base-wizard-actions/base-wizard-actions";
-import { EInternalUserPlanStatus } from "src/app/shared/interfaces";
+import { ERoles } from "src/app/shared/enums";
+import { EInternalUserPlanStatus, EInvestorPlanStatus } from "src/app/shared/interfaces";
 import { I18nService } from "src/app/shared/services/i18n";
-import { IWizardActionConfig, ActionContext, REJECTION_STATUSES } from "src/app/shared/services/wizard/wizard-action.model";
+import { RoleService } from "src/app/shared/services/role/role-service";
+import { IWizardActionConfig, ActionContext, INVESTOR_REJECTION_STATUSES, INTERNAL_REJECTION_STATUSES } from "src/app/shared/services/wizard/wizard-action.model";
 import { WIZARD_BUTTONS } from "src/app/shared/services/wizard/wizard-actions-config";
 
 export class WizardActionFactory {
   private readonly i18nService = inject(I18nService);
+  private readonly roleService = inject(RoleService)
 
   generateActions(config: IWizardActionConfig): Signal<IBaseWizardAction[]> {
     return computed(() => {
@@ -37,9 +40,12 @@ export class WizardActionFactory {
         config.context === 'product-plan' ||
         config.context === 'service-plan',
       isPlanRejectedFromManager:
-        REJECTION_STATUSES.includes(status as EInternalUserPlanStatus),
+      this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()
+           ? INVESTOR_REJECTION_STATUSES.includes(status as EInvestorPlanStatus)
+           : INTERNAL_REJECTION_STATUSES.includes(status as EInternalUserPlanStatus),
       status,
       currentLanguage: this.i18nService.currentLanguage(),
     };
   }
 }
+

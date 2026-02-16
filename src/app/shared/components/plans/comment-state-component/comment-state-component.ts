@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, linkedSignal, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, linkedSignal, model, output, signal } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CommentDialog } from '../comment-dialog/comment-dialog';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge, startWith } from 'rxjs';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 
 @Component({
   selector: 'app-comment-state-component',
@@ -29,53 +30,68 @@ export class CommentStateComponent {
   commentPhase = model<TCommentPhase>();
   startEditing = output();
   deleteComments = output();
-  saveComment = output();
+  saveComment = output<string | undefined>();
   toaster = inject(ToasterService);
+  private readonly planStore = inject(PlanStore);
   mode = input<'fieldSelection' | 'pageComment'>('fieldSelection');
   isResubmitMode = input<boolean>(false);
   hasInvestorComment = input<boolean>(false);
+  incomingCommentText = input<string>('');
   private readonly initialCommentValue = signal<string>('');
-  private readonly destroyRef = inject(DestroyRef);
+  readonly commentFormControlValue = signal<string>('');
+  readonly commentFormControlInvalid = signal<boolean>(true);
+  readonly commentInitialValueFromManager = signal<string>('');
+  readonly commentWithoutWhiteSpaces = computed(() => (this.commentFormControlValue() ?? '').trim().length > 0);
 
-
-  // Track form control validity reactively
-  private commentFormControlInvalid = signal<boolean>(true);
-  isCommentFormControlInvalid = computed(() => {
-    return this.commentFormControlInvalid();
-  });
 
   constructor() {
+    effect((onCleanup) => {
+      const control = this.commentFormControl();
+
+      const sub = merge(control.valueChanges, control.statusChanges).pipe(startWith(null)).subscribe(() => {
+        this.syncCommentControlState();
+      });
+
+      this.syncCommentControlState();
+      onCleanup(() => sub.unsubscribe());
+    });
+
     effect(() => {
       if (this.commentPhase() === 'viewing') {
         this.commentFormControl().disable();
+        this.syncCommentControlState();
       }
-    });
-
-    // Subscribe to form control status changes to update the signal
-    effect(() => {
-      const control = this.commentFormControl();
-      this.commentFormControlInvalid.set(control.invalid);
-
-      merge(
-        control.valueChanges,
-        control.statusChanges
-      ).pipe(
-        startWith(control.invalid),
-        takeUntilDestroyed(this.destroyRef)
-      )
-        .subscribe(() => {
-          this.commentFormControlInvalid.set(
-            control.invalid
-          );
-        });
     });
   }
 
-  onCommentAdded() {
-    this.saveComment.emit();
+  private syncCommentControlState() {
+    const control = this.commentFormControl();
+    this.commentFormControlValue.set(control.value ?? '');
+    this.commentFormControlInvalid.set(control.invalid);
+  }
+
+  openCommentDialog() {
+    const status = this.planStore.planStatus();
+    const isReturnedByManager = [
+      EInternalUserPlanStatus.ReturnedByDV,
+      EInternalUserPlanStatus.ReturnedByDEPTManager,
+    ].includes(status as EInternalUserPlanStatus);
+
+    const currentComment = this.commentFormControlValue()?.trim() ?? '';
+    const incomingComment = this.incomingCommentText()?.trim() ?? '';
+    const initialComment = currentComment || incomingComment;
+    this.commentInitialValueFromManager.set(isReturnedByManager && initialComment ? initialComment : '');
+    this.showCommentDialog.set(true);
+  }
+
+  onNewCommentAddedFromDialog(commentValue: string) {
+    const sanitizedComment = (commentValue ?? '').trimStart();
+    this.saveComment.emit(sanitizedComment);
     this.commentPhase.set('viewing');
-    this.initialCommentValue.set(this.commentFormControl().value ?? '');
+    this.initialCommentValue.set(sanitizedComment);
+    this.commentFormControl().setValue(sanitizedComment);
     this.commentFormControl().disable({ emitEvent: false });
+    this.syncCommentControlState();
   }
 
   onDeleteComments() {
@@ -86,6 +102,7 @@ export class CommentStateComponent {
     this.initialCommentValue.set(this.commentFormControl().value ?? '');
     this.commentPhase.set('editing');
     this.commentFormControl()!.enable({ emitEvent: false });
+    this.syncCommentControlState();
     // For employee mode (non-resubmit): enable the textarea below the page, don't open dialog
     // For investor mode (resubmit): open dialog for editing
     // if (this.isResubmitMode()) {
@@ -101,14 +118,22 @@ export class CommentStateComponent {
     this.initialCommentValue.set(this.commentFormControl().value ?? '');
     this.commentPhase.set('editing');
     this.commentFormControl()!.enable({ emitEvent: false });
+    this.syncCommentControlState();
     // this.showCommentDialog.set(true);
   }
 
   onSaveComment() {
-    this.saveComment.emit();
+    if (!this.commentWithoutWhiteSpaces()) {
+      return;
+    }
+
+    const sanitizedComment = (this.commentFormControl().value ?? '').trimStart();
+    this.commentFormControl().setValue(sanitizedComment, { emitEvent: false });
+    this.saveComment.emit(undefined);
     this.commentPhase.set('viewing');
-    this.initialCommentValue.set(this.commentFormControl().value ?? '');
+    this.initialCommentValue.set(sanitizedComment);
     this.commentFormControl().disable({ emitEvent: false });
+    this.syncCommentControlState();
   }
 
   onCommentCancelled() {
@@ -118,6 +143,7 @@ export class CommentStateComponent {
       if (this.commentPhase() === 'adding' || this.commentPhase() === 'editing') {
         this.commentPhase.set('none');
         this.commentFormControl().disable({ emitEvent: false });
+        this.syncCommentControlState();
       }
     }
     // For employees (non-resubmit mode): Keep phase as 'adding' when cancelling
@@ -133,6 +159,7 @@ export class CommentStateComponent {
     control.markAsUntouched();
     this.commentPhase.set('viewing');
     control.disable({ emitEvent: false });
+    this.syncCommentControlState();
   }
 
 }

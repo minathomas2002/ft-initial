@@ -139,7 +139,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showDirectLocalizationStep = signal(false);
 
   showWarningMesageDeletedOpportunity =computed(()=>{
-    return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT 
+    return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT
   });
   // Comment phase signals for each step
   step1CommentPhase = signal<TCommentPhase>('none');
@@ -202,8 +202,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step = this.steps()[0];
     return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
       this.isViewMode() ||
-
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
+      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
     );
   });
 
@@ -211,7 +211,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step = this.steps()[1];
     return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
       this.isViewMode() ||
-      ((step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase()))
+      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      (!this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase()))
     );
   });
 
@@ -219,7 +220,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step = this.steps()[2];
     return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
+      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
     );
   });
 
@@ -227,7 +229,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const step = this.steps()[3];
     return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
       this.isViewMode() ||
-      (step?.commentsCount ?? 0) > 0 && !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
+      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
     );
   });
 
@@ -645,7 +648,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       onApproveAndForward: () => this.onApproveAndForward(),
       onReject: () => this.onReject(),
       onSendBack: () => this.onSendBack(),
-      onAddComment: () => this.onAddComment(),
+      onAddComment: () => this.onAddComment(this.commentColor()),
       onOpenTimeline: () => this.timelineVisibility.set(true),
       onResubmit: () => this.onSummarySubmitClick(),
       onAcknowledge: () => this.onAcknowledge(),
@@ -682,7 +685,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         if (currentPlanId && ['view', 'edit', 'Review', 'resubmit'].includes(currentMode)) {
           return this.loadPlanData$(currentPlanId).pipe(
             tap((data) => {
-              
+
               if (data) this.applyLoadedPlanData(data, currentPlanId);
             })
           );
@@ -1313,10 +1316,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   /** Step comment descriptors for shared collect/validate logic (includes conditional steps). */
   private getCommentDescriptors(): IPlanWizardStepCommentDescriptor[] {
     return [
-      { stepIndex: 0, getForm: () => this.serviceLocalizationFormService.step1_coverPage, getCommentPhase: () => this.step1CommentPhase(), getSelectedInputs: () => this.step1SelectedInputs(), getComments: () => this.step1Comments(), getCommentFields: () => this.step1CommentFields(), getStepTitle: () => this.steps()[0]?.title ?? '' },
-      { stepIndex: 1, getForm: () => this.serviceLocalizationFormService.step2_overview, getCommentPhase: () => this.step2CommentPhase(), getSelectedInputs: () => this.step2SelectedInputs(), getComments: () => this.step2Comments(), getCommentFields: () => this.step2CommentFields(), getStepTitle: () => this.steps()[1]?.title ?? '' },
-      { stepIndex: 2, getForm: () => this.serviceLocalizationFormService.step3_existingSaudi, getCommentPhase: () => this.step3CommentPhase(), getSelectedInputs: () => this.step3SelectedInputs(), getComments: () => this.step3Comments(), getCommentFields: () => this.step3CommentFields(), getStepTitle: () => this.steps()[this.existingSaudiStepIndex() - 1]?.title ?? '', isVisible: () => this.showExistingSaudiStep() },
-      { stepIndex: 3, getForm: () => this.serviceLocalizationFormService.step4_directLocalization, getCommentPhase: () => this.step4CommentPhase(), getSelectedInputs: () => this.step4SelectedInputs(), getComments: () => this.step4Comments(), getCommentFields: () => this.step4CommentFields(), getStepTitle: () => this.steps()[this.directLocalizationStepIndex() - 1]?.title ?? '', isVisible: () => this.showDirectLocalizationStep() },
+      { stepIndex: 0, getForm: () => this.serviceLocalizationFormService.step1_coverPage, getCommentPhase: () => this.step1CommentPhase(), getSelectedInputs: () => this.step1SelectedInputs(), setSelectedInputs: (inputs) => this.step1SelectedInputs.set(inputs), getComments: () => this.step1Comments(), getCommentFields: () => this.step1CommentFields(), getStepTitle: () => this.steps()[0]?.title ?? '' },
+      { stepIndex: 1, getForm: () => this.serviceLocalizationFormService.step2_overview, getCommentPhase: () => this.step2CommentPhase(), getSelectedInputs: () => this.step2SelectedInputs(), setSelectedInputs: (inputs) => this.step2SelectedInputs.set(inputs), getComments: () => this.step2Comments(), getCommentFields: () => this.step2CommentFields(), getStepTitle: () => this.steps()[1]?.title ?? '' },
+      { stepIndex: 2, getForm: () => this.serviceLocalizationFormService.step3_existingSaudi, getCommentPhase: () => this.step3CommentPhase(), getSelectedInputs: () => this.step3SelectedInputs(), setSelectedInputs: (inputs) => this.step3SelectedInputs.set(inputs), getComments: () => this.step3Comments(), getCommentFields: () => this.step3CommentFields(), getStepTitle: () => this.steps()[this.existingSaudiStepIndex() - 1]?.title ?? '', isVisible: () => this.showExistingSaudiStep() },
+      { stepIndex: 3, getForm: () => this.serviceLocalizationFormService.step4_directLocalization, getCommentPhase: () => this.step4CommentPhase(), getSelectedInputs: () => this.step4SelectedInputs(), setSelectedInputs: (inputs) => this.step4SelectedInputs.set(inputs), getComments: () => this.step4Comments(), getCommentFields: () => this.step4CommentFields(), getStepTitle: () => this.steps()[this.directLocalizationStepIndex() - 1]?.title ?? '', isVisible: () => this.showDirectLocalizationStep() },
     ];
   }
 
@@ -1414,6 +1417,13 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     this.step2SelectedInputs.set(this.step2CommentFields());
     this.step3SelectedInputs.set(this.step3CommentFields());
     this.step4SelectedInputs.set(this.step4CommentFields());
+
+    const isSentBackFromManager = [EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager];
+    if (isSentBackFromManager.includes(this.planStore.planStatus?.() as EInternalUserPlanStatus)) {
+      // this.fillStepsFormsWithIncomingComments(this.getCommentDescriptors());
+      this.markSelectedFieldsWithCheckboxes(this.getCommentDescriptors());
+    }
+
   }
 
   /**
