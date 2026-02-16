@@ -3,8 +3,8 @@ export const environment = {
   //sprint 1 = http://10.15.1.68/api
   //sprint 2 = http://10.15.1.68:8092/api
   //sprint 3 = http://10.15.1.68:8094/api
-  //sprint 3 = http://10.15.1.68:8094/api
-  baseUrl: 'http://10.15.1.68:8094/api',
+  //sprint 4 = http://10.15.1.68:8092/api
+  baseUrl: 'http://10.15.1.68:8092/api',
   apiVersion: 'v1',
   appName: 'Benaa',
   enableDebug: true,
