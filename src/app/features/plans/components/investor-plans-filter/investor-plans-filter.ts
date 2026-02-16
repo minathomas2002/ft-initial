@@ -12,7 +12,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { MultiSelectModule } from 'primeng/multiselect';
-
+import { ButtonModule } from 'primeng/button';
 interface IDropdownOption {
   label: string;
   value: EOpportunityType | EInvestorPlanStatus | null;
@@ -20,7 +20,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-investor-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe],
+  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe,ButtonModule],
   templateUrl: './investor-plans-filter.html',
   styleUrl: './investor-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,7 +55,7 @@ export class InvestorPlansFilter implements OnInit {
     this.listenToQueryParamChanges();
   }
 
-  private listenToQueryParamChanges() {    
+  private listenToQueryParamChanges() {
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(queryParams => {

@@ -33,7 +33,7 @@ import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.i
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
-import { WizardActionFactory, IWizardActionConfig } from "src/app/shared/services/wizard/wizard-action-factory.service";
+import { WizardActionFactory } from "src/app/shared/services/wizard/wizard-action-factory";
 import { IBaseWizardAction } from "../../../base-components/base-wizard-actions/base-wizard-actions";
 import { SkeletonModule } from "primeng/skeleton";
 
@@ -82,7 +82,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
-  private readonly wizardActionFactory = inject(WizardActionFactory);
   visibility = model(false);
   activeStep = signal<number>(1);
   doRefresh = output<void>();
@@ -585,35 +584,43 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return this.currentStepCommentPhase() !== 'none';
   });
 
-  wizardActions = this.wizardActionFactory.generateActions({
+  wizardActions = new WizardActionFactory().generateActions({
     context: 'product-plan',
-    mode: this.mode,
-    activeStep: this.activeStep,
-    totalSteps: this.totalSteps,
-    isLoading: this.isLoadingPlan,
-    isProcessing: this.isProcessing,
-    hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode() || this.isInvestorViewMode()),
-    canApproveOrReject: this.canApproveOrReject,
-    allowUserToResubmit: this.allowUserToResubmit,
-    canOpenTimeline: this.canOpenTimeline,
-    isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
-    isInvestorViewMode: this.isInvestorViewMode,
-    canAcknowledgeRejection : this.canAcknowledgeRejection,
-
-    persona: this.authStore?.userProfile()?.roleCodes,
-    status: this.planStatus,
-
-    onPrevious: () => this.previousStep(),
-    onNext: () => this.nextStep(),
-    onSaveAsDraft: () => this.saveAsDraft(),
-    onSubmit: () => this.onSummarySubmitClick(),
-    onApproveAndForward: () => this.onApproveAndForward(),
-    onReject: () => this.onReject(),
-    onSendBack: () => this.onSendBack(),
-    onAddComment: () => this.onAddComment(),
-    onOpenTimeline: () => this.timelineVisibility.set(true),
-    onResubmit: () => this.onSummarySubmitClick(),
-    onAcknowledge: () => this.onAcknowledge(),
+    state: {
+      mode: this.mode,
+      activeStep: this.activeStep,
+      totalSteps: this.totalSteps,
+      isLoading: this.isLoadingPlan,
+      isProcessing: this.isProcessing,
+    },
+    visibility: {
+      hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode() || this.isInvestorViewMode()),
+      canOpenTimeline: this.canOpenTimeline,
+      isAddCommentButtonDisabled: this.isAddCommentButtonDisabled,
+      isInvestorViewMode: this.isInvestorViewMode,
+    },
+    permissions: {
+      canApproveOrReject: this.canApproveOrReject,
+      allowUserToResubmit: this.allowUserToResubmit,
+      canAcknowledgeRejection: this.canAcknowledgeRejection,
+    },
+    metadata: {
+      persona: this.authStore?.userProfile()?.roleCodes,
+      status: this.planStatus,
+    },
+    handlers: {
+      onPrevious: () => this.previousStep(),
+      onNext: () => this.nextStep(),
+      onSaveAsDraft: () => this.saveAsDraft(),
+      onSubmit: () => this.onSummarySubmitClick(),
+      onApproveAndForward: () => this.onApproveAndForward(),
+      onReject: () => this.onReject(),
+      onSendBack: () => this.onSendBack(),
+      onAddComment: () => this.onAddComment(),
+      onOpenTimeline: () => this.timelineVisibility.set(true),
+      onResubmit: () => this.onSummarySubmitClick(),
+      onAcknowledge: () => this.onAcknowledge(),
+    },
   });
 
   constructor() {
