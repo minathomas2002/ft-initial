@@ -17,6 +17,13 @@
       [value]="statusLabel()"
       [color]="statusBadgeClass()"
     />
+    <div class="flex flex-col gap-8">
+      @if (showWarningMesageDeletedOpportunity()) {
+      <div class="bg-yellow-50 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-md">
+        {{'WarningMesages.deletedOppprtuinity' |translate}}
+      </div>
+      }
+    </div>
     }
   </ng-container>
 
@@ -52,13 +59,6 @@
     </div>
     } @else {
     <div class="flex flex-col gap-8">
-
-      @if (showWarningMesageDeletedOpportunity()) {
-      <div class="warning">
-        {{'WarningMesages.deletedOppprtuinity' |translate}}
-      </div>
-      }
-
       @if (hasIncomingStep1Comments()) {
       <app-page-comment-box
         [commentTitle]="incomingCommentPersona() || 'Comment'"
