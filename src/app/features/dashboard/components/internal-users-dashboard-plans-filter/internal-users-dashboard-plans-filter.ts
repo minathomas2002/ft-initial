@@ -21,6 +21,7 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PlanStore, IPlanTypeDropdownOption } from 'src/app/shared/stores/plan/plan.store';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ButtonModule } from 'primeng/button';
 
 interface IDropdownOption {
   label: string;
@@ -29,7 +30,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-internal-users-dashboard-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe,MultiSelectModule],
+  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe, MultiSelectModule, ButtonModule],
   templateUrl: './internal-users-dashboard-plans-filter.html',
   styleUrl: './internal-users-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

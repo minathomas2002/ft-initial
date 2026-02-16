@@ -712,7 +712,8 @@
       "material": "Material",
       "allStatuses":"All Statuses",
       "allAssignees":"All Assignees",
-      "selectAssignee": "Assignee"
+      "selectAssignee": "Assignee",
+      "reset": "Reset Filters"
     },
     "wizard": {
       "step1": {

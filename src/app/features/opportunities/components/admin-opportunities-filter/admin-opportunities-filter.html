@@ -83,4 +83,14 @@
     </ng-template>
   </p-select>
 
+   @if(adminOpportunitiesFilterService.showClearAll()) {
+            <p-button
+                [label]="'plans.filter.reset' | translate"
+                [severity]="'secondary'"
+                (click)="onClearFilters()"
+                [styleClass]="'w-full'"
+            ></p-button>
+    }
+
+
 </div>

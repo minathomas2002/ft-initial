@@ -12,7 +12,7 @@ import { EOpportunityType } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PlanStore, IPlanTypeDropdownOption } from 'src/app/shared/stores/plan/plan.store';
 import { MultiSelectModule } from 'primeng/multiselect';
-
+import { ButtonModule } from 'primeng/button';
 interface IDropdownOption {
   label: string;
   value: EOpportunityType | EInvestorPlanStatus | null;
@@ -20,7 +20,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-investor-dashboard-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe,MultiSelectModule],
+  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe,MultiSelectModule,ButtonModule],
   templateUrl: './investor-dashboard-plans-filter.html',
   styleUrl: './investor-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,7 +44,7 @@ export class InvestorDashboardPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.status.draft'), value: EInvestorPlanStatus.DRAFT },
       { label: this.i18nService.translate('plans.status.pendingWithInvestor'), value: EInvestorPlanStatus.PENDING },
       { label: this.i18nService.translate('plans.status.underReview'), value: EInvestorPlanStatus.UNDER_REVIEW },
-      
+
     ];
   });
 
