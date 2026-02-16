@@ -9,6 +9,7 @@ import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocaliza
 import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
 import { EemployeePlanAction } from 'src/app/shared/enums';
 import { I18nService } from '../../services/i18n/i18n.service';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class PlanApiService {
   private readonly baseHttpService = inject(BaseHttpService);
   private readonly http = inject(HttpClient);
   private readonly i18nService = inject(I18nService);
+  private readonly datePipe = inject(DatePipe);
 
   getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IAssignReassignActiveEmployee>> {
     return this.baseHttpService.get<IAssignReassignActiveEmployee, string>(API_ENDPOINTS.plans.getActiveEmployeesWithPlans + planId);
@@ -79,8 +81,9 @@ export class PlanApiService {
   }
 
   generateProductPlanPdf(planId: string): Observable<{ blob: Blob; filename: string }> {
+
     return this.http
-      .get(`${API_ENDPOINTS.baseUrl}/${API_ENDPOINTS.plans.generateProductPlanPdf}${planId}`, {
+      .get(`${API_ENDPOINTS.baseUrl}/${API_ENDPOINTS.plans.generateProductPlanPdf}${planId}&clientSideDateTime=${this.getCurrentDateTime()}`, {
         responseType: 'blob',
         observe: 'response'
       })
@@ -98,7 +101,7 @@ export class PlanApiService {
 
   generateServicePlanPdf(planId: string): Observable<{ blob: Blob; filename: string }> {
     return this.http
-      .get(`${API_ENDPOINTS.baseUrl}/${API_ENDPOINTS.plans.generateServicePlanPdf}${planId}`, {
+      .get(`${API_ENDPOINTS.baseUrl}/${API_ENDPOINTS.plans.generateServicePlanPdf}${planId}&clientSideDateTime=${this.getCurrentDateTime()}`, {
         responseType: 'blob',
         observe: 'response'
       })
@@ -154,4 +157,8 @@ export class PlanApiService {
     return this.baseHttpService.post<boolean, { planId: string }, unknown>(API_ENDPOINTS.plans.deleteDraftPlan, { planId });
   }
 
+  getCurrentDateTime(): string {
+    return this.datePipe.transform(new Date(), 'dd MMM yyyy HH:mm') ?? '';
+  }
+  
 }
