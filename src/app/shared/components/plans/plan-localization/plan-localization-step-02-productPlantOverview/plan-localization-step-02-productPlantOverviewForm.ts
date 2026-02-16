@@ -344,6 +344,9 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     // Watch othersPercentage changes for othersDescription
     effect(() => {
       const value = this.othersPercentageSignal();
+      if (value === this.originalPlanResponse()?.productPlan.productPlantOverview.expectedCapex.othersPercent) {
+        return;
+      }
       const shouldShowOthersDescription = this.showOthersDescription();
 
       // If the conditional input is hidden, also clear its selection/highlight state.
