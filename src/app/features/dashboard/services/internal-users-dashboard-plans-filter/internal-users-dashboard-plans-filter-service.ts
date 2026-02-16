@@ -49,7 +49,7 @@ export class InternalUsersDashboardPlansFilterService extends AbstractServiceFil
     this.clearAll();
     // Re-apply DV_APPROVED filter for Department Managers after clearing
     if (this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
-      this.updateFilterSignal({ status: EInternalUserPlanStatus.DV_APPROVED });
+      this.updateFilterSignal({ status: [EInternalUserPlanStatus.DV_APPROVED] });
     }
     this.applyFilter();
   }

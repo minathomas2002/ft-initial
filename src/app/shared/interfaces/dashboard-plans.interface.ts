@@ -47,19 +47,19 @@ export type TPlansSortingKeys = keyof IPlanRecord;
 
 export interface IPlanFilter extends IFilterBase<TPlansSortingKeys> {
   searchText?: string;
-  planType?: EOpportunityType | null;
-  status?: EInvestorPlanStatus | EInternalUserPlanStatus | null;
+  planType?: EOpportunityType[] | null;
+  status?: EInvestorPlanStatus[] | EInternalUserPlanStatus[] | null;
   submissionDate?: Date[] | undefined;
-  assignee?: string | null;
+  assignee?: string[] | null;
 }
 
 export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {
   searchText?: string;
-  planType?: EOpportunityType | null;
-  status?: EInvestorPlanStatus | EInternalUserPlanStatus | null;
+  planType?: EOpportunityType[] | null;
+  status?: EInvestorPlanStatus[] | EInternalUserPlanStatus[] | null;
   submissionDateFrom?: string | null;
   submissionDateTo?: string | null;
-  assignee?: string | null;
+  assignee?: string[] | null;
 }
 
 export interface IPlansDashboardStatistics {

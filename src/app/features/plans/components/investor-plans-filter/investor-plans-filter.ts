@@ -64,7 +64,7 @@ export class InvestorPlansFilter implements OnInit {
         if (queryParams['status']) {
           const status = this.getStatusFromParam(queryParams['status']);
           if (status !== null) {
-            updates.status = status;
+            updates.status = [status];
           } else {
             updates.status = null;
           }
@@ -75,7 +75,7 @@ export class InvestorPlansFilter implements OnInit {
         if (queryParams['planType']) {
           const planType = this.getPlanTypeFromParam(queryParams['planType']);
           if (planType) {
-            updates.planType = planType;
+            updates.planType = [planType];
           } else {
             updates.planType = null;
           }
@@ -122,12 +122,12 @@ export class InvestorPlansFilter implements OnInit {
     this.searchSubject.next(value ?? '');
   }
 
-  onPlanTypeChange(value: EOpportunityType | null) {
+  onPlanTypeChange(value: EOpportunityType[] | null) {
     this.filterService.updateFilterSignal({ planType: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
 
-  onStatusChange(value: EInvestorPlanStatus | null) {
+  onStatusChange(value: EInvestorPlanStatus[] | null) {
     this.filterService.updateFilterSignal({ status: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }

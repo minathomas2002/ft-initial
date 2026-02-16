@@ -93,7 +93,7 @@ export class InternalUsersPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
       { label: this.i18nService.translate('plans.employee_status.returnedByDEPTManager'), value: EInternalUserPlanStatus.ReturnedByDEPTManager },
-       { label: this.i18nService.translate('plans.employee_status.returnedByDV'), value: EInternalUserPlanStatus.ReturnedByDV },
+      { label: this.i18nService.translate('plans.employee_status.returnedByDV'), value: EInternalUserPlanStatus.ReturnedByDV },
     ];
   }
 
@@ -113,15 +113,14 @@ export class InternalUsersPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'), value: EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED },
       { label: this.i18nService.translate('plans.employee_status.employeeApproved'), value: EInternalUserPlanStatus.EMPLOYEE_APPROVED },
       { label: this.i18nService.translate('plans.employee_status.returnedByDV'), value: EInternalUserPlanStatus.ReturnedByDV },
-            { label: this.i18nService.translate('plans.employee_status.returnedByDEPTManager'), value: EInternalUserPlanStatus.ReturnedByDEPTManager },
+      { label: this.i18nService.translate('plans.employee_status.returnedByDEPTManager'), value: EInternalUserPlanStatus.ReturnedByDEPTManager },
 
     ];
   }
 
   ngOnInit() {
     this.loadAssignees();
-    this.listenToSearchChanges();
-    this.listenToQueryParamChanges();
+    this.listenToSearchChanges();    
   }
 
   private loadAssignees() {
@@ -137,6 +136,7 @@ export class InternalUsersPlansFilter implements OnInit {
             userId: assignee.id,
           })));
           this.isLoadingAssignees.set(false);
+          this.listenToQueryParamChanges();
         },
         error: (error) => {
           console.error('Error loading assignees:', error);
@@ -154,7 +154,7 @@ export class InternalUsersPlansFilter implements OnInit {
         if (queryParams['status']) {
           const status = this.getStatusFromParam(queryParams['status']);
           if (status !== null) {
-            updates.status = status;
+            updates.status = [status];
           } else {
             updates.status = null;
           }
@@ -165,7 +165,7 @@ export class InternalUsersPlansFilter implements OnInit {
         if (queryParams['planType']) {
           const planType = this.getPlanTypeFromParam(queryParams['planType']);
           if (planType) {
-            updates.planType = planType;
+            updates.planType = [planType];
           } else {
             updates.planType = null;
           }
@@ -180,7 +180,9 @@ export class InternalUsersPlansFilter implements OnInit {
         }
 
         if (queryParams['assignee']) {
-          updates.assignee = queryParams['assignee'];
+          //skip if the filtered user is not existing in backend assignee list
+          if (this.assignees()?.some(x => x.id == queryParams['assignee']))
+            updates.assignee = [queryParams['assignee']];
         } else {
           updates.assignee = null;
         }
@@ -218,17 +220,17 @@ export class InternalUsersPlansFilter implements OnInit {
     this.searchSubject.next(value ?? '');
   }
 
-  onPlanTypeChange(value: EOpportunityType | null) {
+  onPlanTypeChange(value: EOpportunityType[] | null) {
     this.filterService.updateFilterSignal({ planType: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
 
-  onStatusChange(value: EInternalUserPlanStatus | null) {
+  onStatusChange(value: EInternalUserPlanStatus[] | null) {
     this.filterService.updateFilterSignal({ status: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
 
-  onAssigneeChange(value: string | null) {
+  onAssigneeChange(value: string[] | null) {
     this.filterService.updateFilterSignal({ assignee: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }

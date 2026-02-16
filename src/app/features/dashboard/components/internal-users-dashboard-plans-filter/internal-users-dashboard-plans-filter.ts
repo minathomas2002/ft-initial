@@ -155,12 +155,12 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
 
         if (queryParams['status']) {
           const status = this.getStatusFromParam(queryParams['status']);
-          if (status !== null) updates.status = status;
+          if (status !== null) updates.status = [status];
         }
 
         if (queryParams['planType']) {
           const planType = this.getPlanTypeFromParam(queryParams['planType']);
-          if (planType) updates.planType = planType;
+          if (planType) updates.planType = [planType];
         }
 
         if (queryParams['searchText']) {
@@ -182,12 +182,12 @@ export class InternalUsersDashboardPlansFilter implements OnInit {
     this.searchSubject.next(value ?? '');
   }
 
-  onPlanTypeChange(value: EOpportunityType | null) {
+  onPlanTypeChange(value: EOpportunityType[] | null) {
     this.filterService.updateFilterSignal({ planType: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
 
-  onStatusChange(value: EInternalUserPlanStatus | null) {
+  onStatusChange(value: EInternalUserPlanStatus[] | null) {
     this.filterService.updateFilterSignal({ status: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }

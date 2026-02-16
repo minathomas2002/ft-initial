@@ -20,7 +20,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-investor-dashboard-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe,MultiSelectModule,ButtonModule],
+  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe, MultiSelectModule, ButtonModule],
   templateUrl: './investor-dashboard-plans-filter.html',
   styleUrl: './investor-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,12 +57,12 @@ export class InvestorDashboardPlansFilter implements OnInit {
     this.searchSubject.next(value ?? '');
   }
 
-  onPlanTypeChange(value: EOpportunityType | null) {
+  onPlanTypeChange(value: EOpportunityType[] | null) {
     this.filterService.updateFilterSignal({ planType: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
 
-  onStatusChange(value: EInvestorPlanStatus | null) {
+  onStatusChange(value: EInvestorPlanStatus[] | null) {
     this.filterService.updateFilterSignal({ status: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
