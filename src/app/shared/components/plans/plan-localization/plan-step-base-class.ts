@@ -559,7 +559,7 @@ export abstract class PlanStepBaseClass {
 
     }
 
-    return this.isResubmitMode() ? isSelected && !isCorrected : isSelected;
+    return this.isResubmitMode() ? (isSelected && !isCorrected) : (isSelected && this.commentPhase() !== 'viewing');
   }
 
   private valuesEqual(a: any, b: any): boolean {
@@ -626,7 +626,7 @@ export abstract class PlanStepBaseClass {
   /**
    * Validates and saves a new comment.
    */
-  protected onSaveComment(): void {
+  protected onSaveComment(commentValue: string | undefined): void {
     // Validate at least one field is selected
     if (this.selectedInputs().length === 0 && !this.isResubmitMode()) {
       this.toasterService.error('Please select at least one field before adding a comment.');
@@ -634,21 +634,22 @@ export abstract class PlanStepBaseClass {
     }
 
     // Validate comment text
-    const commentValue = this.commentFormControl.value?.trim() || '';
-    if (!commentValue) {
+    const comment =  commentValue || this.commentFormControl.value?.trim() || '';
+
+    if (!comment) {
       this.commentFormControl.markAsTouched();
       this.toasterService.error('Please enter a comment.');
       return;
     }
 
-    if (commentValue.length > 255) {
+    if (comment.length > 255) {
       this.toasterService.error('Comment cannot exceed 255 characters.');
       return;
     }
 
     // Save comment
-    this.comment.set(commentValue);
-    this.commentFormControl.setValue(commentValue, { emitEvent: false });
+    this.comment.set(comment);
+    this.commentFormControl.setValue(comment, { emitEvent: false });
     this.commentPhase.set('viewing');
     this.commentFormControl.disable();
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());

@@ -154,9 +154,9 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     super.onCancelDeleteComment();
   }
 
-  override onSaveComment(): void {
-    super.onSaveComment();
-  }
+  // override onSaveComment(): void {
+  //   super.onSaveComment();
+  // }
 
   override onSaveEditedComment(): void {
     super.onSaveEditedComment();

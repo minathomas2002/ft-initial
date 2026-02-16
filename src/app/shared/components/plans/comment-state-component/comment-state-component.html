@@ -26,15 +26,15 @@
     severity="warn"
     icon="icon-message-circle"
     rounded
-    (click)="commentPhase.set('adding'); showCommentDialog.set(true)"
+    (click)="showCommentDialog.set(true)"
   />
-  } @else if(commentPhase() === 'adding' || commentPhase() === 'editing'){
+  } @else if(commentPhase() === 'editing'){
   <p-button
     label="Save"
     severity="warn"
     icon="icon-check-circle"
     rounded
-    [disabled]="isCommentFormControlInvalid() || !commentFormControl().value"
+    [disabled]="commentFormControlInvalid() || !commentFormControlValue()"
     (click)="onSaveComment()"
   />
   }
@@ -87,7 +87,7 @@
     severity="warn"
     icon="icon-check-circle"
     rounded
-    [disabled]="isCommentFormControlInvalid() || (mode() === 'fieldSelection' && !checked())"
+    [disabled]="commentFormControlInvalid() || (mode() === 'fieldSelection' && !checked())"
     (click)="onSaveComment()"
   />
 
@@ -104,7 +104,7 @@
 </div>
 <app-comment-dialog
   [(visible)]="showCommentDialog"
-  [commentFormControl]="commentFormControl()"
-  (commentAdded)="onCommentAdded()"
+  (commentAdded)="onNewCommentAddedFromDialog($event)"
   (cancelled)="onCommentCancelled()"
-></app-comment-dialog>
+  ></app-comment-dialog>
+  <!-- [commentFormControl]="commentFormControl()" -->

@@ -1,9 +1,9 @@
 import { DestroyRef, inject, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { ReviewPlanRequest, IPageComment } from 'src/app/shared/interfaces/plans.interface';
+import { ReviewPlanRequest, IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { EMaterialsFormControls, EPlanPageTitle, ERoles } from 'src/app/shared/enums';
 import { TCommentPhase, IPlanWizardStepCommentDescriptor } from 'src/app/shared/types/plan-comments.types';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
@@ -172,7 +172,7 @@ export abstract class BasePlanWizard {
    * Resubmit: show comment panel and set phase from existing comment (viewing/none).
    * Non-resubmit: reset step selections when not investor, then set phase to 'adding'.
    */
-  onAddComment(): void {
+  onAddComment(stepCommentColor: 'green' | 'orange'): void {
     if (this.getIsResubmitMode()) {
       this.getShowCommentState().set(true);
       const step = this.getActiveStep();
@@ -191,9 +191,11 @@ export abstract class BasePlanWizard {
 
     const step = this.getActiveStep();
     const stepId = this.getStepIdFromStepIndex(step);
-    if (!this.getIsInvestorPersona()) {
-      this.resetCurrentStepCommentSelections(stepId);
+
+    if (stepCommentColor === 'green') {
+        this.resetCurrentStepCommentSelections(stepId);
     }
+
     const phaseSignal = stepId ? this.getCommentPhaseSignalForStepId(stepId) : null;
     if (phaseSignal) {
       phaseSignal.set('adding');
@@ -239,7 +241,7 @@ export abstract class BasePlanWizard {
         : (form.get(EMaterialsFormControls.comment) as FormControl<string> | null);
       const fields = d.getSelectedInputs();
       const commentValue = commentControl?.value?.trim() || '';
-      if (commentValue && (isResubmitMode || fields.length > 0)) {
+      if (commentValue && (fields.length > 0)) {
         comments.push({
           pageTitleForTL: d.getStepTitle() as EPlanPageTitle,
           comment: commentValue,
@@ -261,8 +263,19 @@ export abstract class BasePlanWizard {
     for (const d of descriptors) {
       if (d.isVisible && !d.isVisible()) continue;
       const selected = d.getSelectedInputs();
+      if (selected.length === 0) continue;
+
+      const form = d.getForm();
+      const commentControl =
+        (form?.get(EMaterialsFormControls.comment) as FormControl<string> | null) ??
+        (form?.get('comment') as FormControl<string> | null);
+
+      const formComment = commentControl?.value?.trim() || '';
+      const existingPageComment = d.getComments().some(c => (c.comment?.trim()?.length ?? 0) > 0);
+      const hasComment = formComment.length > 0 || existingPageComment;
+
       const phase = d.getCommentPhase();
-      if (selected.length > 0 && (phase === 'adding' || phase === 'editing')) {
+      if (!hasComment) {
         return getSendBackErrorMessage(d.getStepTitle(), phase);
       }
     }
@@ -340,6 +353,141 @@ export abstract class BasePlanWizard {
   }
 
   /**
+   * Shared: hydrate each step form's comment control from loaded plan comments.
+   * Keeps form state aligned with displayed incoming comments.
+   */
+  protected fillStepsFormsWithIncomingComments(
+    descriptors: IPlanWizardStepCommentDescriptor[]
+  ): void {
+    for (const d of descriptors) {
+      if (d.isVisible && !d.isVisible()) continue;
+
+      const form = d.getForm();
+      if (!form) continue;
+
+      const commentText = d.getComments()
+        .map(c => c.comment?.trim())
+        .filter((c): c is string => !!c)
+        .join('\n\n');
+
+      const commentControl =
+        (form.get(EMaterialsFormControls.comment) as FormControl<string> | null) ??
+        (form.get('comment') as FormControl<string> | null);
+
+      if (commentControl) {
+        commentControl.setValue(commentText, { emitEvent: false });
+        commentControl.markAsPristine();
+        commentControl.markAsUntouched();
+      }
+    }
+  }
+
+  /**
+   * Shared: hydrate per-field hasComment controls from incoming comment fields.
+   * This makes highlighted fields appear checked when comment mode is enabled.
+   */
+  protected markSelectedFieldsWithCheckboxes(
+    descriptors: IPlanWizardStepCommentDescriptor[]
+  ): void {
+    for (const d of descriptors) {
+      if (d.isVisible && !d.isVisible()) continue;
+      const form = d.getForm();
+      if (!form) continue;
+      const commentFields = d.getCommentFields();
+      this.syncHasCommentControls(form, commentFields);
+
+      // Keep selected inputs aligned with programmatically restored checked fields,
+      // same effect as manual user checkbox selection in UI.
+      d.setSelectedInputs?.([...(commentFields ?? [])]);
+    }
+  }
+
+  private syncHasCommentControls(form: FormGroup, fields: IFieldInformation[]): void {
+    this.setAllHasCommentControls(form, false);
+    if (!fields?.length) return;
+
+    const keysWithoutRowId = new Set<string>();
+    const keyedRowIds = new Map<string, Set<string>>();
+
+    fields.forEach(field => {
+      const key = this.normalizeInputKey(field.inputKey);
+      if (!field.id) {
+        keysWithoutRowId.add(key);
+        return;
+      }
+
+      const rowIds = keyedRowIds.get(key) ?? new Set<string>();
+      rowIds.add(String(field.id));
+      keyedRowIds.set(key, rowIds);
+    });
+
+    this.applyMatchingHasCommentControls(form, undefined, undefined, keysWithoutRowId, keyedRowIds);
+  }
+
+  private setAllHasCommentControls(control: AbstractControl, value: boolean): void {
+    if (control instanceof FormGroup) {
+      const hasCommentControl = control.get(EMaterialsFormControls.hasComment) as FormControl<boolean> | null;
+      if (hasCommentControl) {
+        hasCommentControl.setValue(value, { emitEvent: false });
+      }
+      Object.keys(control.controls).forEach(key => {
+        this.setAllHasCommentControls(control.controls[key], value);
+      });
+      return;
+    }
+
+    if (control instanceof FormArray) {
+      control.controls.forEach(child => this.setAllHasCommentControls(child, value));
+    }
+  }
+
+  private applyMatchingHasCommentControls(
+    control: AbstractControl,
+    fieldKey: string | undefined,
+    inheritedRowId: string | undefined,
+    keysWithoutRowId: Set<string>,
+    keyedRowIds: Map<string, Set<string>>
+  ): void {
+    if (control instanceof FormArray) {
+      control.controls.forEach(child => {
+        this.applyMatchingHasCommentControls(child, fieldKey, inheritedRowId, keysWithoutRowId, keyedRowIds);
+      });
+      return;
+    }
+
+    if (!(control instanceof FormGroup)) return;
+
+    const rowIdControl = control.get('rowId');
+    const currentRowId = rowIdControl?.value != null ? String(rowIdControl.value) : inheritedRowId;
+    const hasCommentControl = control.get(EMaterialsFormControls.hasComment) as FormControl<boolean> | null;
+    const hasValueControl = !!control.get(EMaterialsFormControls.value);
+
+    // Leaf commentable field pattern: { hasComment, value }
+    if (hasCommentControl && hasValueControl && fieldKey) {
+      const normalizedKey = this.normalizeInputKey(fieldKey);
+      const matchedByKey = keysWithoutRowId.has(normalizedKey);
+      const matchedByRowId = !!currentRowId && (keyedRowIds.get(normalizedKey)?.has(currentRowId) ?? false);
+      hasCommentControl.setValue(matchedByKey || matchedByRowId, { emitEvent: false });
+      return;
+    }
+
+    Object.keys(control.controls).forEach(key => {
+      this.applyMatchingHasCommentControls(
+        control.controls[key],
+        key,
+        currentRowId,
+        keysWithoutRowId,
+        keyedRowIds
+      );
+    });
+  }
+
+  private normalizeInputKey(inputKey: string): string {
+    const key = inputKey ?? '';
+    return key.replace(/^.+\./, '').replace(/_\d+$/, '');
+  }
+
+  /**
    * Confirm sending plan back to investor - Template Method
    * Common implementation for both wizards
    */
@@ -355,7 +503,9 @@ export abstract class BasePlanWizard {
       planId: planId,
       comments: comments,
     };
+    console.log('request', request)
 
+    // return;
     this.isProcessing.set(true);
     this.planStore.sendPlanBackToInvestor(request)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -611,7 +761,7 @@ export abstract class BasePlanWizard {
   }
 
     /**
-   * Cancel rejection acknowledge confirmation - 
+   * Cancel rejection acknowledge confirmation -
    */
   onCancelRejectAcknowledgment(): void {
     this.showRejectConfirmationDialog.set(false);

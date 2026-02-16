@@ -123,7 +123,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   }
 
   yearColumns = computed(() => this.planFormService?.upcomingYears(6) ?? []);
-  
+
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
     EMaterialsFormControls.secondYear,
@@ -205,10 +205,6 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
   override onCancelDeleteComment(): void {
     super.onCancelDeleteComment();
-  }
-
-  override onSaveComment(): void {
-    super.onSaveComment();
   }
 
   override onSaveEditedComment(): void {

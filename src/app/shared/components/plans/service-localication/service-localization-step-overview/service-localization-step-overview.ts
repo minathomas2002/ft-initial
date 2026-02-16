@@ -193,9 +193,9 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
     super.onCancelDeleteComment();
   }
 
-  override onSaveComment(): void {
-    super.onSaveComment();
-  }
+  // override onSaveComment(): void {
+  //   super.onSaveComment();
+  // }
 
   override onSaveEditedComment(): void {
     super.onSaveEditedComment();

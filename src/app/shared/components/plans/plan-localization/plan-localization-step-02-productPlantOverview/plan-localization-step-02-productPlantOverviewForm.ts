@@ -231,10 +231,6 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     super.onCancelDeleteComment();
   }
 
-  override onSaveComment(): void {
-    super.onSaveComment();
-  }
-
   override onSaveEditedComment(): void {
     super.onSaveEditedComment();
   }

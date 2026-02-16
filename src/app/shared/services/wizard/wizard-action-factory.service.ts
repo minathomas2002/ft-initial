@@ -3,6 +3,7 @@ import { IBaseWizardAction } from '../../components/base-components/base-wizard-
 import { I18nService } from '../i18n/i18n.service';
 import { ERoles } from 'src/app/shared/enums';
 import { EInvestorPlanStatus, EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 
 export type WizardActionContext =
   | 'opportunity-wizard'
@@ -50,7 +51,8 @@ export interface IWizardActionConfig {
   providedIn: 'root'
 })
 export class WizardActionFactory {
-  private i18nService = inject(I18nService);
+  private readonly i18nService = inject(I18nService);
+  private readonly roleService = inject(RoleService)
 
   generateActions(config: IWizardActionConfig): Signal<IBaseWizardAction[]> {
     return computed(() => this.buildActions(config));
@@ -70,7 +72,9 @@ export class WizardActionFactory {
     const mode = config.mode();
     const currentLanguage = this.i18nService.currentLanguage();
     const isPlanWizard = context === 'product-plan' || context === 'service-plan';
-    const isPlanRejectedFromManager = [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.DEPT_REJECTED].includes(config.status?.() as EInternalUserPlanStatus)
+    const isPlanRejectedFromManager = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()
+     ? [EInvestorPlanStatus.REJECTED].includes(config.status?.() as EInvestorPlanStatus)
+     : [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.DEPT_REJECTED].includes(config.status?.() as EInternalUserPlanStatus)
 
     const shouldShowSaveAsDraft = !!config.onSaveAsDraft && !config.hideSaveAsDraft?.();
     if (shouldShowSaveAsDraft) {
@@ -125,6 +129,8 @@ export class WizardActionFactory {
         styleClass: 'underline-action',
       });
     }
+
+    console.log('config.status?.()', config.status?.())
 
     const shouldShowAddComment =
       (mode === 'Review' || mode === 'resubmit') &&

@@ -107,15 +107,9 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
     super.onCancelDeleteComment();
   }
 
-  override onSaveComment(): void {
-    super.onSaveComment();
-  }
-
   override onSaveEditedComment(): void {
     super.onSaveEditedComment();
   }
-
-
 
   // Get services form array
   getServicesFormArray(): FormArray {

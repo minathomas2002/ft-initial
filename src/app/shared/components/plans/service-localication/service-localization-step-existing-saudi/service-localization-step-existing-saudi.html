@@ -895,7 +895,7 @@
     [isResubmitMode]="isResubmitMode()"
     [hasInvestorComment]="hasInvestorComment()"
     (deleteComments)="onDeleteComments()"
-    (saveComment)="commentPhase() === 'editing' ? onSaveEditedComment() : onSaveComment()"
+    (saveComment)="commentPhase() === 'editing' ? onSaveEditedComment() : onSaveComment($event)"
     (startEditing)="onStartEditing()"
   />
   }

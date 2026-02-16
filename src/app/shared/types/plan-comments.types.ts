@@ -18,6 +18,8 @@ export interface IPlanWizardStepCommentDescriptor {
   getForm: () => FormGroup | null;
   getCommentPhase: () => TCommentPhase;
   getSelectedInputs: () => IFieldInformation[];
+  /** Optional setter to keep selectedInputs in sync when restoring checked fields programmatically. */
+  setSelectedInputs?: (inputs: IFieldInformation[]) => void;
   getComments: () => IPageComment[];
   getCommentFields: () => IFieldInformation[];
   getStepTitle: () => string;

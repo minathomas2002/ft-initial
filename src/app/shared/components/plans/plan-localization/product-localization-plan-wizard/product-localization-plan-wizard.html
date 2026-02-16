@@ -8,6 +8,7 @@
 >
 
   <ng-container ngProjectAs="status">
+    {{getCommentPhaseForStepId('overview')}}
     @if (isLoadingPlan()) {
     <p-skeleton
       width="120px"
