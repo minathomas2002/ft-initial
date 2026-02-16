@@ -19,7 +19,7 @@ import { IOpportunityDetails } from 'src/app/shared/interfaces/opportunities.int
 import { TColors } from 'src/app/shared/interfaces/colors.interface';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
-import { WizardActionFactory } from 'src/app/shared/services/wizard/wizard-action-factory.service';
+import { WizardActionFactory } from 'src/app/shared/services/wizard/wizard-action-factory';
 import { IBaseWizardAction } from 'src/app/shared/components/base-components/base-wizard-actions/base-wizard-actions';
 
 @Component({
@@ -46,7 +46,6 @@ export class CreateEditOpportunityDialog implements OnInit {
   toasterService = inject(ToasterService);
   i18nService = inject(I18nService);
   opportunityFilterService = inject(OpportunitiesFilterService);
-  private readonly wizardActionFactory = inject(WizardActionFactory);
   viewMode = this.adminOpportunitiesStore.viewMode;
   opportunity = signal<IOpportunityDetails | null>(null);
   steps = computed<IWizardStepState[]>(() => [
@@ -74,18 +73,22 @@ export class CreateEditOpportunityDialog implements OnInit {
   totalSteps = computed(() => this.steps().length);
 
   // Centralized wizard actions using the action factory (mode as signal so actions react to mode changes)
-  wizardActions = this.wizardActionFactory.generateActions({
+  wizardActions = new WizardActionFactory().generateActions({
     context: 'opportunity-wizard',
-    mode: computed(() => (this.viewMode() === EViewMode.Edit ? 'edit' : 'create')),
-    activeStep: this.activeStep,
-    totalSteps: this.totalSteps,
-    isLoading: this.adminOpportunitiesStore.isLoading,
-    isProcessing: this.adminOpportunitiesStore.isProcessing,
-    isSavingAsDraft: this.adminOpportunitiesStore.isSavingAsDraft,
-    onPrevious: () => this.previousStep(),
-    onNext: () => this.nextStep(),
-    onSaveAsDraft: () => this.saveAsDraft(),
-    onPublish: () => this.publishOpportunity()
+    state: {
+      mode: computed(() => (this.viewMode() === EViewMode.Edit ? 'edit' : 'create')),
+      activeStep: this.activeStep,
+      totalSteps: this.totalSteps,
+      isLoading: this.adminOpportunitiesStore.isLoading,
+      isProcessing: this.adminOpportunitiesStore.isProcessing,
+      isSavingAsDraft: this.adminOpportunitiesStore.isSavingAsDraft,
+    },
+    handlers: {
+      onPrevious: () => this.previousStep(),
+      onNext: () => this.nextStep(),
+      onSaveAsDraft: () => this.saveAsDraft(),
+      onPublish: () => this.publishOpportunity()
+    }
   });
 
   constructor() {
