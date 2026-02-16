@@ -86,7 +86,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   activeStep = signal<number>(1);
   doRefresh = output<void>();
   isSubmitted = signal<boolean>(false);
-  showWarningMesageDeletedOpportunity =computed(()=>{
+  showWarningMesageDeletedOpportunity = computed(() => {
     return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT
   });
 
@@ -99,21 +99,30 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   canOpenTimeline = computed(() => {
     return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.planStatus() !== EInvestorPlanStatus.DRAFT && this.activeStep() < 5)
   })
-  sendBackConfirmationMessage =signal("This action cannot be undone and the plan will go directly to the Dv Manager.");
-  readonly approvalDialogTitle = computed(() => {
+  sendBackConfirmationMessage = computed(() => {
     if (this.isDVManagerPersona()) {
-        this.sendBackConfirmationMessage.set("This action cannot be undone and the plan will go directly to the Employee.");
-      return "'Are you sure you want to approve this plan and forward it to the Department Manager for review?'"
+      return "This action cannot be undone and the plan will go directly to the Employee."
     }
 
     if (this.isEmployeePersona()) {
-      this.sendBackConfirmationMessage.set("This action cannot be undone and the plan will go directly to the investor.");
-      return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
-        ? "Are you sure you want to approve this plan and forward it to the Investor?"
-      : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+      return "This action cannot be undone and the plan will go directly to the investor."
     }
 
-    return "'Are you sure you want to approve this plan and forward it to the Employee for review?'"
+    return "This action cannot be undone and the plan will go directly to the Dv Manager.";
+  })
+
+  readonly approvalDialogTitle = computed(() => {
+    if (this.isDVManagerPersona()) {
+      return "Are you sure you want to approve this plan and forward it to the Department Manager for review?"
+    }
+
+    if (this.isEmployeePersona()) {
+      return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
+        ? "Are you sure you want to approve this plan and forward it to the Investor?"
+        : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+    }
+
+    return "Are you sure you want to approve this plan and forward it to the Employee for review?"
   })
 
   // Track validation errors for stepper indicators
@@ -447,7 +456,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return hasEmployeeRole;
   });
 
-    // Check if user is Division MANAGER persona
+  // Check if user is Division MANAGER persona
   isDVManagerPersona = computed(() => {
     const userProfile = this.authStore.userProfile();
     if (!userProfile) return false;
@@ -536,9 +545,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   canApproveOrReject = computed(() => {
     return (![EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager].includes(this.planStatus() as EInternalUserPlanStatus))
-    && ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none')
-    || (!this.hasSelectedFields() &&
-     !this.hasComments()))
+      && ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none')
+        || (!this.hasSelectedFields() &&
+          !this.hasComments()))
   });
 
   canAcknowledgeRejection = computed(() => {

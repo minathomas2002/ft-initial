@@ -88,20 +88,28 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   override readonly toasterService = inject(ToasterService);
-  sendBackConfirmationMessage =signal("This action cannot be undone and the plan will go directly to the Dv Manager.");
-  readonly approvalDialogTitle = computed(() => {
+  readonly sendBackConfirmationMessage = computed(() => {
     if (this.isDVManagerPersona()) {
-      this.sendBackConfirmationMessage.set("This action cannot be undone and the plan will go directly to the Employee.");
-      return "'Are you sure you want to approve this plan and forward it to the Department Manager for review?'"
+      return "This action cannot be undone and the plan will go directly to the Employee.";
     }
 
     if (this.isEmployeePersona()) {
-      this.sendBackConfirmationMessage.set("This action cannot be undone and the plan will go directly to the investor.");
-      return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
-       ? "Are you sure you want to approve this plan and forward it to the Investor?"
-      : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+      return "This action cannot be undone and the plan will go directly to the investor.";
     }
-    return "'Are you sure you want to approve this plan and forward it to the Employee for review?'"
+    return "This action cannot be undone and the plan will go directly to the Dv Manager."
+  })
+
+  readonly approvalDialogTitle = computed(() => {
+    if (this.isDVManagerPersona()) {
+      return "Are you sure you want to approve this plan and forward it to the Department Manager for review?"
+    }
+
+    if (this.isEmployeePersona()) {
+      return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
+        ? "Are you sure you want to approve this plan and forward it to the Investor?"
+        : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+    }
+    return "Are you sure you want to approve this plan and forward it to the Employee for review?"
   })
 
 
@@ -138,7 +146,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showExistingSaudiStep = signal(false);
   showDirectLocalizationStep = signal(false);
 
-  showWarningMesageDeletedOpportunity =computed(()=>{
+  showWarningMesageDeletedOpportunity = computed(() => {
     return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT
   });
   // Comment phase signals for each step
@@ -455,9 +463,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   canApproveOrReject = computed(() => {
     return (![EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager].includes(this.planStatus() as EInternalUserPlanStatus))
-    && ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none')
-    || (!this.hasSelectedFields() &&
-     !this.hasComments()))
+      && ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none')
+        || (!this.hasSelectedFields() &&
+          !this.hasComments()))
   });
 
   canAcknowledgeRejection = computed(() => {
@@ -482,7 +490,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return hasEmployeeRole;
   });
 
-      // Check if user is Division MANAGER persona
+  // Check if user is Division MANAGER persona
   isDVManagerPersona = computed(() => {
     const userProfile = this.authStore.userProfile();
     if (!userProfile) return false;
