@@ -5,6 +5,7 @@ import {
   effect,
   computed,
   inject,
+  signal,
   Renderer2
 } from '@angular/core';
 
@@ -17,16 +18,25 @@ export class TruncateTooltipDirective {
   // Input signals
   appTruncateTooltip = input.required<string>();
   maxChars = input<number>(0);
+  /** Max height in pixels. When set, content exceeding this height is hidden and tooltip shows full text on hover. */
+  maxHeight = input<number | string>(0);
 
   // Computed signals
   private readonly value = computed(() => this.appTruncateTooltip() ?? '');
-  private readonly isTruncated = computed(() => this.value().length > this.maxChars());
+  private readonly useHeightTruncation = computed(() => {
+    const mh = this.maxHeight();
+    return mh !== 0 && mh !== '0' && mh !== '';
+  });
+  private readonly isCharTruncated = computed(() => this.value().length > this.maxChars());
   private readonly truncatedText = computed(() => {
     if (this.maxChars() === 0) return this.value();
     const val = this.value();
     const max = this.maxChars();
     return val.length > max ? val.slice(0, max) + '...' : val;
   });
+
+  /** Set after measuring DOM when using maxHeight truncation */
+  private readonly isHeightTruncated = signal(false);
 
   // Injected services
   private readonly el = inject(ElementRef<HTMLElement>);
@@ -43,22 +53,73 @@ export class TruncateTooltipDirective {
     // Setup element styles and text on initialization
     effect(() => {
       const element = this.el.nativeElement;
+      const useHeight = this.useHeightTruncation();
+      const maxHeightVal = this.maxHeight();
 
-      // Apply truncation styles
-      // element.style.whiteSpace = 'nowrap';
-      element.style.overflow = 'hidden';
-      element.style.textOverflow = 'ellipsis';
+      // Reset height truncation state when not using it
+      if (!useHeight) {
+        this.isHeightTruncated.set(false);
+      }
 
-      // Update text content reactively
-      element.textContent = this.truncatedText();
+      if (useHeight) {
+        // Height-based truncation: full text, max-height, overflow hidden, ellipsis
+        element.textContent = this.value();
+        const heightCss = typeof maxHeightVal === 'number' ? `${maxHeightVal}px` : String(maxHeightVal);
+        this.renderer.setStyle(element, 'maxHeight', heightCss);
+        this.renderer.setStyle(element, 'overflow', 'hidden');
+        this.renderer.setStyle(element, 'textOverflow', 'ellipsis');
+        this.renderer.setStyle(element, 'display', '-webkit-box');
+        this.renderer.setStyle(element, '-webkit-box-orient', 'vertical');
+        const lineClamp = this.getLineClamp(element, maxHeightVal);
+        this.renderer.setStyle(element, '-webkit-line-clamp', String(lineClamp));
 
-      // Manage tooltip creation based on truncation
-      if (this.isTruncated()) {
-        this.setupTooltip();
+        // Measure after layout to detect overflow
+        this.measureHeightOverflow(element);
       } else {
+        // Char-based truncation (existing behavior)
+        this.renderer.setStyle(element, 'maxHeight', null);
+        this.renderer.setStyle(element, 'overflow', 'hidden');
+        this.renderer.setStyle(element, 'textOverflow', 'ellipsis');
+        this.renderer.setStyle(element, 'display', null);
+        this.renderer.setStyle(element, '-webkit-box-orient', null);
+        this.renderer.setStyle(element, '-webkit-line-clamp', null);
+
+        element.textContent = this.truncatedText();
+
+        if (this.isCharTruncated()) {
+          this.setupTooltip();
+        } else {
+          this.cleanupTooltip();
+        }
+      }
+    });
+
+    // React to isHeightTruncated for tooltip when using height truncation
+    effect(() => {
+      if (this.useHeightTruncation() && this.isHeightTruncated()) {
+        this.setupTooltip();
+      } else if (this.useHeightTruncation() && !this.isHeightTruncated()) {
         this.cleanupTooltip();
       }
     });
+  }
+
+  private getLineClamp(element: HTMLElement, maxHeight: number | string): number {
+    if (typeof maxHeight === 'number') {
+      const lineHeightPx = parseFloat(getComputedStyle(element).lineHeight);
+      const lineHeight = Number.isNaN(lineHeightPx) || lineHeightPx <= 0 ? 20 : lineHeightPx;
+      return Math.max(1, Math.floor(maxHeight / lineHeight));
+    }
+    return 3;
+  }
+
+  private measureHeightOverflow(element: HTMLElement): void {
+    const check = (): void => {
+      const overflowed = element.scrollHeight > element.clientHeight;
+      this.isHeightTruncated.set(overflowed);
+    };
+    // Defer measurement to after layout
+    requestAnimationFrame(() => requestAnimationFrame(check));
   }
 
   private setupTooltip(): void {
