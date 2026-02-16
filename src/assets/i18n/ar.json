@@ -530,7 +530,8 @@
 			"allTypes": "جميع الأنواع",
 			"service": "خدمة",
 			"material": "مادة",
-			"allStatuses": "جميع الحالات"
+			"allStatuses": "جميع الحالات",
+			"reset": "إعادة تعيين التصفية"
 		},
 		"status": {
 			"submitted": "مقدمة",

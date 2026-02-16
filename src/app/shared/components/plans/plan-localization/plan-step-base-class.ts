@@ -490,11 +490,14 @@ export abstract class PlanStepBaseClass {
       fieldInformation.id = rowId;
     }
 
+    const targetInputKey = this.normalizeInputKeyForComparison(fieldInformation.inputKey);
+    const targetId = this.normalizeIdForComparison(fieldInformation.id);
+
     const existingIndex = currentInputs.findIndex(
       input =>
         input.section === fieldInformation.section &&
-        input.inputKey === fieldInformation.inputKey &&
-        input.id === fieldInformation.id
+        this.normalizeInputKeyForComparison(input.inputKey) === targetInputKey &&
+        this.normalizeIdForComparison(input.id) === targetId
     );
 
     if (value) {
@@ -508,6 +511,23 @@ export abstract class PlanStepBaseClass {
         this.selectedInputs.set(currentInputs.filter((_, index) => index !== existingIndex));
       }
     }
+  }
+
+  /**
+   * Normalizes input keys for robust matching between API-loaded fields and UI field metadata.
+   * Examples:
+   * - 'section.fieldName' -> 'fieldName'
+   * - 'fieldName_0' -> 'fieldName'
+   */
+  private normalizeInputKeyForComparison(inputKey: string): string {
+    const key = inputKey ?? '';
+    const withoutPrefix = key.replace(/^.+\./, '');
+    return this.stripIndexSuffix(withoutPrefix);
+  }
+
+  /** Normalizes IDs so string/number representations compare consistently. */
+  private normalizeIdForComparison(id: unknown): string {
+    return id == null ? '' : String(id);
   }
 
   /**

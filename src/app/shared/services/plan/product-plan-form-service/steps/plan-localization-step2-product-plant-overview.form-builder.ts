@@ -137,7 +137,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
     if (provideToSEC) {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required]);
-      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required, Validators.max(1000000000)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required, Validators.max(9999999999999999)]);
     } else {
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.clearValidators();
@@ -168,7 +168,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required]);
-      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required, Validators.max(1000000000)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required, Validators.max(9999999999999999)]);
     } else {
       experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.clearValidators();
       experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.clearValidators();

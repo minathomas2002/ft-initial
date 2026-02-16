@@ -192,6 +192,8 @@ export abstract class BasePlanWizard {
     const step = this.getActiveStep();
     const stepId = this.getStepIdFromStepIndex(step);
 
+    // reset all current selection for the employee only that recieved a plan
+    // from investor with fixed inputs
     if (stepCommentColor === 'green') {
         this.resetCurrentStepCommentSelections(stepId);
     }

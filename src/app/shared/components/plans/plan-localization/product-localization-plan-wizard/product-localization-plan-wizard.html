@@ -19,6 +19,27 @@
       [value]="statusLabel()"
       [color]="statusBadgeClass()"
     />
+    @if (showWarningMesageDeletedOpportunity()) {
+    <div class="flex items-start gap-3 bg-red-50 border border-red-300 text-red-800 px-4 py-3 rounded-md">
+      <!-- Icon -->
+      <svg
+        class="w-5 h-5 mt-0.5 text-red-600"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M8.257 3.099c.765-1.36 2.72-1.36 3.485 0l6.518 11.591c.75 1.334-.213 2.99-1.742 2.99H3.48c-1.53 0-2.492-1.656-1.743-2.99L8.257 3.1zM11 13a1 1 0 10-2 0 1 1 0 002 0zm-1-7a1 1 0 00-.993.883L9 7v3a1 1 0 001.993.117L11 10V7a1 1 0 00-1-1z"
+          clip-rule="evenodd"
+        />
+      </svg>
+
+      <span>
+        {{'WarningMesages.deletedOppprtuinity' |translate}}
+      </span>
+    </div>
+    }
+
     }
   </ng-container>
 
@@ -54,11 +75,6 @@
     </div>
     } @else {
     <div class="flex flex-col gap-8">
-      @if (showWarningMesageDeletedOpportunity()) {
-      <div class="warning">
-        {{'WarningMesages.deletedOppprtuinity' |translate}}
-      </div>
-      }
 
       @if (hasIncomingStep1Comments()) {
       <app-page-comment-box

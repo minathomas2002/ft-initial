@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, linkedSignal, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, linkedSignal, model, output, signal } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -6,6 +6,8 @@ import { CommentDialog } from '../comment-dialog/comment-dialog';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { merge, startWith } from 'rxjs';
+import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 
 @Component({
   selector: 'app-comment-state-component',
@@ -30,12 +32,15 @@ export class CommentStateComponent {
   deleteComments = output();
   saveComment = output<string | undefined>();
   toaster = inject(ToasterService);
+  private readonly planStore = inject(PlanStore);
   mode = input<'fieldSelection' | 'pageComment'>('fieldSelection');
   isResubmitMode = input<boolean>(false);
   hasInvestorComment = input<boolean>(false);
   private readonly initialCommentValue = signal<string>('');
   readonly commentFormControlValue = signal<string>('');
   readonly commentFormControlInvalid = signal<boolean>(true);
+  readonly commentInitialValueFromManager = signal<string>('');
+  readonly commentWithoutWhiteSpaces = computed(() => (this.commentFormControlValue() ?? '').trim().length > 0);
 
 
   constructor() {
@@ -64,14 +69,25 @@ export class CommentStateComponent {
     this.commentFormControlInvalid.set(control.invalid);
   }
 
-  onNewCommentAddedFromDialog(commentValue: string) {
-    this.saveComment.emit(commentValue);
-    this.commentPhase.set('viewing');
-    this.initialCommentValue.set(commentValue ?? '');
-    this.commentFormControl().setValue(commentValue ?? '');
-    this.commentFormControl().disable({ emitEvent: false });
+  openCommentDialog() {
+    const status = this.planStore.planStatus();
+    const isReturnedByManager = [
+      EInternalUserPlanStatus.ReturnedByDV,
+      EInternalUserPlanStatus.ReturnedByDEPTManager,
+    ].includes(status as EInternalUserPlanStatus);
 
-    console.log(this.commentFormControl().value)
+    const currentComment = this.commentFormControlValue()?.trim() ?? '';
+    this.commentInitialValueFromManager.set(isReturnedByManager && currentComment ? currentComment : '');
+    this.showCommentDialog.set(true);
+  }
+
+  onNewCommentAddedFromDialog(commentValue: string) {
+    const sanitizedComment = (commentValue ?? '').trimStart();
+    this.saveComment.emit(sanitizedComment);
+    this.commentPhase.set('viewing');
+    this.initialCommentValue.set(sanitizedComment);
+    this.commentFormControl().setValue(sanitizedComment);
+    this.commentFormControl().disable({ emitEvent: false });
     this.syncCommentControlState();
   }
 
@@ -104,9 +120,15 @@ export class CommentStateComponent {
   }
 
   onSaveComment() {
+    if (!this.commentWithoutWhiteSpaces()) {
+      return;
+    }
+
+    const sanitizedComment = (this.commentFormControl().value ?? '').trimStart();
+    this.commentFormControl().setValue(sanitizedComment, { emitEvent: false });
     this.saveComment.emit(undefined);
     this.commentPhase.set('viewing');
-    this.initialCommentValue.set(this.commentFormControl().value ?? '');
+    this.initialCommentValue.set(sanitizedComment);
     this.commentFormControl().disable({ emitEvent: false });
     this.syncCommentControlState();
   }
