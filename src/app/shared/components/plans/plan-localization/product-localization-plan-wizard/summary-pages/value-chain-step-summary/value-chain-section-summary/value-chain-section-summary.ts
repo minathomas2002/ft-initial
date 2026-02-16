@@ -77,8 +77,14 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
       const formatCostPercentForCompare = (v: unknown): string =>
         v != null && v !== '' ? `${v}%` : '-';
 
+      const inHouseVal = item.get(EMaterialsFormControls.inHouseOrProcured);
+      const inHouseValueCtrl = inHouseVal instanceof FormGroup ? inHouseVal.get(EMaterialsFormControls.value) : null;
+      const inHouseValRaw = inHouseValueCtrl?.value;
+      const isInHouse = inHouseValRaw === '1' || inHouseValRaw === EInHouseProcuredType.InHouse;
+
       return {
         rowId,
+        isInHouse,
         expenseHeader: cell(EMaterialsFormControls.expenseHeader, beforeRow != null ? this.formatCellValue(beforeRow.expenseHeader) : null, v => this.formatCellValue(v)),
         inHouseOrProcured: cell(EMaterialsFormControls.inHouseOrProcured, beforeRow != null ? this.formatInHouseProcured(beforeRow.inHouseOrProcured) : null, v => this.formatInHouseProcured(v as number)),
         costPercentage: cell(EMaterialsFormControls.costPercentage, beforeRow?.costPercent != null ? `${beforeRow.costPercent}%` : null, formatCostPercentForCompare),
