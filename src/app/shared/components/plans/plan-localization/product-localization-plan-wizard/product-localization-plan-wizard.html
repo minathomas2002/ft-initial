@@ -337,7 +337,7 @@
 <app-general-confirmation-dialog
   [(visible)]="showSendBackConfirmationDialog"
   [title]="'Are you sure you want to send back the plan?'"
-  [description]="'This action cannot be undone and the plan will go directly to the investor.'"
+  [description]="sendBackConfirmationMessage()"
   [confirmationLabel]="'Send Back'"
   [cancelLabel]="'Cancel'"
   [icon]="'icon-info'"
