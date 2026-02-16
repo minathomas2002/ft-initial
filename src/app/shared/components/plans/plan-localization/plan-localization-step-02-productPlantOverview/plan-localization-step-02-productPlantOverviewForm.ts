@@ -344,7 +344,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     // Watch othersPercentage changes for othersDescription
     effect(() => {
       const value = this.othersPercentageSignal();
-      if (value === this.originalPlanResponse()?.productPlan.productPlantOverview.expectedCapex.othersPercent) {
+      if (!this.originalPlanResponse() || value === this.originalPlanResponse()!.productPlan.productPlantOverview.expectedCapex.othersPercent) {
         return;
       }
       const shouldShowOthersDescription = this.showOthersDescription();
