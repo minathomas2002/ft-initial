@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
+import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
@@ -163,6 +163,39 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   createAfterSalesItem = (): FormGroup => {
     return this.planFormService.createValueChainItem();
   };
+
+  /** Returns true when in-house/procured selection is In-house */
+  isInHouse(itemControl: AbstractControl): boolean {
+    const val = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
+    return val === '1' || val === EInHouseProcuredType.InHouse;
+  }
+
+  /** When in-house/procured changes: set years to No if in-house, null if procured */
+  onInHouseOrProcuredChange(itemControl: AbstractControl): void {
+    const val = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
+    const yearKeys = [
+      EMaterialsFormControls.year1,
+      EMaterialsFormControls.year2,
+      EMaterialsFormControls.year3,
+      EMaterialsFormControls.year4,
+      EMaterialsFormControls.year5,
+      EMaterialsFormControls.year6,
+      EMaterialsFormControls.year7,
+    ];
+    const targetValue = val === '1' || val === EInHouseProcuredType.InHouse
+      ? ELocalizationStatusType.No.toString()
+      : null;
+    for (const yearKey of yearKeys) {
+      const yearGroup = itemControl.get(yearKey);
+      const valueCtrl = yearGroup instanceof FormGroup ? yearGroup.get(EMaterialsFormControls.value) : null;
+      if (valueCtrl) {
+        valueCtrl.setValue(targetValue);
+        if (targetValue === null) {
+          valueCtrl.markAsPristine();
+        }
+      }
+    }
+  }
 
   // @ts-expect-error - Intentionally shadowing base class method with incompatible signature (itemControl vs rowId)
   upDateSelectedInputs = (value: boolean, fieldInformation: IFieldInformation, itemControl?: AbstractControl): void => {
