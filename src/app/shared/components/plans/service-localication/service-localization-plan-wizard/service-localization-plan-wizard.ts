@@ -430,7 +430,15 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   hasComments = computed(() => {
     // // Check if any step has saved comments
-    return this.planStore.currentUserPageComments().length > 0;
+    const planComments = this.planStore.planComments()?.comments ?? [];
+    const currentUserPageComments = this.planStore.currentUserPageComments();
+    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.ReturnedByDV];
+
+    if (returnedByManagerStatus.includes(this.planStatus() as EInternalUserPlanStatus)) {
+      return planComments.every(comment => currentUserPageComments.includes(comment.pageTitleForTL));
+    }
+
+    return currentUserPageComments.length > 0;
   });
 
   protected override getCommentPhaseForStepId(stepId: string): TCommentPhase {

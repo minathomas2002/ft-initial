@@ -505,9 +505,6 @@ export abstract class BasePlanWizard {
       planId: planId,
       comments: comments,
     };
-    console.log('request', request)
-
-    // return;
     this.isProcessing.set(true);
     this.planStore.sendPlanBackToInvestor(request)
       .pipe(takeUntilDestroyed(this.destroyRef))

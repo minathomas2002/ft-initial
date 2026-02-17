@@ -555,7 +555,16 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   })
 
   hasComments = computed(() => {
-    return this.planStore.currentUserPageComments().length > 0;
+    // // Check if any step has saved comments
+    const planComments = this.planStore.planComments()?.comments ?? [];
+    const currentUserPageComments = this.planStore.currentUserPageComments();
+    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.ReturnedByDV];
+
+    if (returnedByManagerStatus.includes(this.planStatus() as EInternalUserPlanStatus)) {
+      return planComments.every(comment => currentUserPageComments.includes(comment.pageTitleForTL));
+    }
+
+    return currentUserPageComments.length > 0;
   });
 
   // Computed signal for total steps count
