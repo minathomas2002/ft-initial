@@ -588,7 +588,16 @@ export abstract class BasePlanWizard {
     if (!this.canApproveOrReject()) {
       return;
     }
-    this.rejectionReason.set('');
+
+    const status = this.planStore.planStatus();
+    const isEmployee = this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+    const shouldPrefillFromActionNote = isEmployee && [
+      EInternalUserPlanStatus.DV_REJECTED,
+      EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+      EInternalUserPlanStatus.DEPT_REJECTED,
+    ].includes(status as EInternalUserPlanStatus);
+
+    this.rejectionReason.set(shouldPrefillFromActionNote ? (this.planStore.actionNote() ?? '') : '');
     this.showRejectReasonDialog.set(true);
   }
 
