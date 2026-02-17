@@ -6,6 +6,7 @@ import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpport
 
 const initialState: {
   loading: boolean;
+  loadingOpportunityLocalizationTablesValidation: boolean;
   error: string | null;
   count: number;
   list: IOpportunity[];
@@ -14,6 +15,7 @@ const initialState: {
   opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null;
 } = {
   loading: false,
+  loadingOpportunityLocalizationTablesValidation: false,
   error: null,
   count: 0,
   list: [],
@@ -65,11 +67,14 @@ export const OpportunitiesStore = signalStore(
         )
       },
       getOpportunityLocalizationTablesValidation(opportunityId: string) {
-        patchState(store, { loading: true, error: null });
+        patchState(store, { loadingOpportunityLocalizationTablesValidation: true, error: null });
         return opportunitiesApiService.getOpportunityLocalizationTablesValidation(opportunityId).pipe(
           tap((res) => {
             patchState(store, { opportunityLocalizationTablesValidation: res.body });
           }),
+          finalize(() => {
+            patchState(store, { loadingOpportunityLocalizationTablesValidation: false });
+          })
         )
       },
       resetOpportunityLocalizationTablesValidation() {
