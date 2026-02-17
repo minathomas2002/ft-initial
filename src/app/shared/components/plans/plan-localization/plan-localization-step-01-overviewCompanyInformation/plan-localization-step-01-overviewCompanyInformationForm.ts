@@ -21,11 +21,12 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
 import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TextareaModule } from 'primeng/textarea';
-import { TColors } from 'src/app/shared/interfaces';
+import { ISelectItem, TColors } from 'src/app/shared/interfaces';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -55,6 +56,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanStepBaseClass {
+  readonly opportunitiesStore = inject(OpportunitiesStore);
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   override readonly planStore = inject(PlanStore);
   override readonly destroyRef = inject(DestroyRef);
@@ -180,6 +182,10 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     }
   }
 
+  opportunityControlSignal = toSignal<ISelectItem | null>(this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).valueChanges, {
+    initialValue: this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).value ?? null
+  });
+
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
     // Local agent validation effect - reactive to signal changes
@@ -188,6 +194,15 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
       if (doYouHaveLocalAgentInKSA !== null && this.planFormService) {
         this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
       }
+    });
+
+    effect(() => {
+      const opportunityControlSignal = this.opportunityControlSignal();
+      if (opportunityControlSignal === null) this.opportunitiesStore.resetOpportunityLocalizationTablesValidation();
+      this.opportunitiesStore.getOpportunityLocalizationTablesValidation(opportunityControlSignal!.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((response) => {
+        });
     });
 
     // Initialize opportunity value based on appliedOpportunity

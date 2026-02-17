@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
+import { IOpportunityLocalizationTablesValidationResponse } from 'src/app/shared/interfaces/opportunities.interface';
 import { PlanLocalizationStep1OverviewFormBuilder } from './steps/plan-localization-step1-overview.form-builder';
 import { PlanLocalizationStep2ProductPlantOverviewFormBuilder } from './steps/plan-localization-step2-product-plant-overview.form-builder';
 import { PlanLocalizationStep3ValueChainFormBuilder } from './steps/plan-localization-step3-value-chain.form-builder';
@@ -148,6 +149,10 @@ export class ProductPlanFormService {
 
   createValueChainItem(): FormGroup {
     return this._step3Builder.createValueChainItemFormGroup();
+  }
+
+  updateValueChainValidation(validation: IOpportunityLocalizationTablesValidationResponse | null): void {
+    this._step3Builder.updateValueChainValidation(this._step3FormGroup, validation);
   }
 
   // Expose Step 4 sub-form groups for convenience

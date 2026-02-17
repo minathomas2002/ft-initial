@@ -1,6 +1,6 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
-import { finalize, tap } from 'rxjs';
+import { finalize, map, of, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
 import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityLocalizationTablesValidationResponse } from '../../interfaces/opportunities.interface';
 
@@ -67,11 +67,15 @@ export const OpportunitiesStore = signalStore(
         )
       },
       getOpportunityLocalizationTablesValidation(opportunityId: string) {
+        if (opportunityId === store.details()?.id && store.opportunityLocalizationTablesValidation() !== null) {
+          return of(store.opportunityLocalizationTablesValidation());
+        }
         patchState(store, { loadingOpportunityLocalizationTablesValidation: true, error: null });
         return opportunitiesApiService.getOpportunityLocalizationTablesValidation(opportunityId).pipe(
           tap((res) => {
             patchState(store, { opportunityLocalizationTablesValidation: res.body });
           }),
+          map((res) => res.body),
           finalize(() => {
             patchState(store, { loadingOpportunityLocalizationTablesValidation: false });
           })

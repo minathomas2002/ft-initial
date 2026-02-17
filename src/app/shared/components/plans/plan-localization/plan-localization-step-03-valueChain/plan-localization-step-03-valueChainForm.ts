@@ -23,6 +23,7 @@ import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -52,6 +53,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
+  readonly opportunitiesStore = inject(OpportunitiesStore);
   isViewMode = input<boolean>(false);
   override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
@@ -206,7 +208,12 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
-    // Step-specific logic can be added here if needed
+    effect(() => {
+      const validation = this.opportunitiesStore.opportunityLocalizationTablesValidation();
+      if (validation) {
+        this.planFormService.updateValueChainValidation(validation);
+      }
+    })
   }
 
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
