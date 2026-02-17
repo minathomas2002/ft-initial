@@ -31,6 +31,7 @@ import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/pl
 import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -57,7 +58,8 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
     BaseTagComponent,
     NewPlanDialog,
     PlanTermsAndConditionsDialog,
-    TruncateTooltipDirective
+    TruncateTooltipDirective,
+    GeneralConfirmationDialogComponent
   ],
   templateUrl: './user-dashboard.html',
   styleUrl: './user-dashboard.scss',
@@ -72,7 +74,9 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   serviceLocalizationPlanWizardVisibility = signal(false);
   timelineVisibility = signal(false);
   viewAssignDialog = signal<boolean>(false);
+  viewDeleteDialog = signal<boolean>(false);
   isReassignMode = signal<boolean>(false);
+  isDeleteMode = signal<boolean>(false);
   planItem = signal<IPlanRecord | null>(null);
   selectedPlan = signal<IPlanRecord | null>(null);
   //#endregion
@@ -335,8 +339,9 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
 
   onViewPlansUnderReview() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: this.isInvestor() ? [EInvestorPlanStatus.UNDER_REVIEW, EInvestorPlanStatus.PENDING] :
-         [EInternalUserPlanStatus.UNDER_REVIEW,
+      queryParams: {
+        status: this.isInvestor() ? [EInvestorPlanStatus.UNDER_REVIEW, EInvestorPlanStatus.PENDING] :
+          [EInternalUserPlanStatus.UNDER_REVIEW,
           EInternalUserPlanStatus.EMPLOYEE_APPROVED,
           EInternalUserPlanStatus.ReturnedByDV,
           EInternalUserPlanStatus.ReturnedByDEPTManager,
@@ -345,16 +350,17 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
           EInternalUserPlanStatus.DV_APPROVED,
           EInternalUserPlanStatus.DEPT_APPROVED,
           EInternalUserPlanStatus.DEPT_REJECTED,
-          EInternalUserPlanStatus.PENDING ] }
+          EInternalUserPlanStatus.PENDING]
+      }
     });
   }
 
   onViewApprovedPlans() {
     this.router.navigate([ERoutes.plans], {
       queryParams: {
-         status: this.isInvestor() ? EInvestorPlanStatus.APPROVED :
-        (this.isManager())? EInternalUserPlanStatus.APPROVED: [EInternalUserPlanStatus.APPROVED,EInternalUserPlanStatus.DEPT_APPROVED],
-       }
+        status: this.isInvestor() ? EInvestorPlanStatus.APPROVED :
+          (this.isManager()) ? EInternalUserPlanStatus.APPROVED : [EInternalUserPlanStatus.APPROVED, EInternalUserPlanStatus.DEPT_APPROVED],
+      }
     });
   }
 
@@ -362,8 +368,8 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     const currentUserId = this.authStore.jwtUserDetails()?.EmpID;
     this.router.navigate([ERoutes.plans], {
       queryParams: {
-        status: [EInternalUserPlanStatus.APPROVED,EInternalUserPlanStatus.DEPT_APPROVED],
-        assignee: this.isManager()? null : currentUserId
+        status: [EInternalUserPlanStatus.APPROVED, EInternalUserPlanStatus.DEPT_APPROVED],
+        assignee: this.isManager() ? null : currentUserId
       }
     });
   }
@@ -376,24 +382,27 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
 
   onViewRejectedPlans() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: this.isInvestor() ? EInvestorPlanStatus.REJECTED : 
-        
-        [EInternalUserPlanStatus.REJECTED, 
-        EInternalUserPlanStatus.DEPT_REJECTED, 
-        EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
-        EInternalUserPlanStatus.DV_REJECTED
-      ] }
+      queryParams: {
+        status: this.isInvestor() ? EInvestorPlanStatus.REJECTED :
+
+          [EInternalUserPlanStatus.REJECTED,
+          EInternalUserPlanStatus.DEPT_REJECTED,
+          EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+          EInternalUserPlanStatus.DV_REJECTED
+          ]
+      }
     });
   }
 
   onViewPendingAssignedPlans() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: [EInternalUserPlanStatus.UNDER_REVIEW,EInternalUserPlanStatus.ReturnedByDEPTManager,
-         EInternalUserPlanStatus.ReturnedByDV,EInternalUserPlanStatus.DEPT_APPROVED,
+      queryParams: {
+        status: [EInternalUserPlanStatus.UNDER_REVIEW, EInternalUserPlanStatus.ReturnedByDEPTManager,
+        EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.DEPT_APPROVED,
         EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED],
-       }
-       
-       
+      }
+
+
     });
   }
 
@@ -401,6 +410,38 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     const currentUserId = this.authStore.jwtUserDetails()?.EmpID;
     this.router.navigate([ERoutes.plans], {
       queryParams: { assignee: currentUserId }
+    });
+  }
+
+  onDelete(plan: IPlanRecord) {
+    this.viewDeleteDialog.set(true);
+    this.planItem.set(plan);
+    this.isDeleteMode.set(true);
+  }
+
+  onCancelDeletePlan() {
+    this.viewDeleteDialog.set(false);
+    this.planItem.set(null);
+    this.isDeleteMode.set(false);
+  }
+
+  onConfirmDeletePlan() {
+    if (!this.planItem()) return;
+
+    this.planStore.deleteDraftPlan(this.planItem()!.id).pipe(take(1)).subscribe({
+      next: () => {
+        this.toasterService.success('Your Plan has been removed successfully.');
+        this.applyFilter();
+        this.viewDeleteDialog.set(false);
+        this.planItem.set(null);
+        this.isDeleteMode.set(false);
+      },
+      error: (error) => {
+        this.toasterService.error(error.errorMessage || 'Error deleting the plan');
+        this.viewDeleteDialog.set(false);
+        this.planItem.set(null);
+        this.isDeleteMode.set(false);
+      },
     });
   }
   //#endregion

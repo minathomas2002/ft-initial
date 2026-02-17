@@ -114,6 +114,17 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return "Are you sure you want to approve this plan and forward it to the Employee for review?"
   })
 
+  readonly rejectionDialogTitle = computed(() => {
+    if (this.isDVManagerPersona()) {
+      return 'Are you sure you want to reject this plan and return it to the Employee for final rejection submission to the Investor?'
+    }
+
+    if (this.isEmployeePersona()) {
+      return 'Are you sure you want to reject the plan as final rejection?'
+    }
+
+    return 'Are you sure you want to reject this plan and return it to the DV Manager for acknowledgement?'
+  })
 
   visibility = model(false);
   doRefresh = output<void>();

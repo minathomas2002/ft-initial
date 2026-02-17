@@ -30,6 +30,7 @@ export class BaseTagComponent {
 			pink: 'border-pink-200 bg-pink-50 text-pink-700',
 			gray: 'border-gray-200 bg-gray-50 text-gray-700',
 			orange: 'border-orange-200 bg-orange-50 text-orange-700',
+			fadeGreen:'border-green-200 bg-green-50 text-[#055A36]'
 		};
 		return colorMap[this.color()];
 	}

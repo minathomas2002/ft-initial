@@ -125,6 +125,18 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return "Are you sure you want to approve this plan and forward it to the Employee for review?"
   })
 
+  readonly rejectionDialogTitle = computed(() => {
+    if (this.isDVManagerPersona()) {
+      return 'Are you sure you want to reject this plan and return it to the Employee for final rejection submission to the Investor?'
+    }
+
+    if (this.isEmployeePersona()) {
+      return 'Are you sure you want to reject the plan as final rejection?'
+    }
+
+    return 'Are you sure you want to reject this plan and return it to the Division Manager for acknowledgement?'
+  })
+
   // Track validation errors for stepper indicators
   validationErrors = signal<Map<number, boolean>>(new Map());
 
