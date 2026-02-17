@@ -21,6 +21,7 @@ const BADGE_COLOR_TO_CSS: Record<TColors, string> = {
   pink: 'bg-pink-50 text-pink-700 border-pink-200',
   gray: 'bg-gray-50 text-gray-700 border-gray-200',
   orange: 'bg-orange-50 text-orange-700 border-orange-200',
+  fadeGreen:'border-green-200 bg-green-50 text-[#055A36]'
 };
 
 /**

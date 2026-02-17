@@ -14,7 +14,7 @@ export class PlanTimelineStatusMapper {
       [EStatusPlanTimeLine.assigned]: 'yellow',
       [EStatusPlanTimeLine.Reassigned]: 'yellow',
       [EStatusPlanTimeLine.PendingOnInvestor]: 'yellow',
-      [EStatusPlanTimeLine.Approved]: 'green',
+      [EStatusPlanTimeLine.Approved]: 'fadeGreen',
       [EStatusPlanTimeLine.Rejected]: 'red',
       [EStatusPlanTimeLine.EmployeeApproved]: 'fadedBlue',
       [EStatusPlanTimeLine.DVApproved]: 'green',

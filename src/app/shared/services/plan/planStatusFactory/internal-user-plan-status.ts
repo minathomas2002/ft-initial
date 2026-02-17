@@ -37,7 +37,7 @@ export class InternalUserPlanStatus implements IPlanStatus {
       [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: 'fadedBlue',
       [EInternalUserPlanStatus.UNASSIGNED]: 'yellow',
       [EInternalUserPlanStatus.UNDER_REVIEW]: 'blue',
-      [EInternalUserPlanStatus.APPROVED]: 'green',
+      [EInternalUserPlanStatus.APPROVED]: 'fadeGreen',
       [EInternalUserPlanStatus.DEPT_APPROVED]: 'green',
       [EInternalUserPlanStatus.DEPT_REJECTED]: 'red',
       [EInternalUserPlanStatus.DV_APPROVED]: 'green',
