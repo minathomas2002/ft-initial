@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { finalize, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
 import { ISelectItem, IAdminOpportunitiesFilterRequest, IAdminOpportunity } from '../../interfaces';
-import { EOpportunityStatus, EOpportunityType, EOpportunityState } from '../../enums/opportunities.enum';
+import { EOpportunityStatus, EOpportunityType, EOpportunityState, EOpportunityQuantity } from '../../enums/opportunities.enum';
 import { EViewMode } from '../../enums';
 
 const initialState: {
@@ -15,6 +15,7 @@ const initialState: {
   list: IAdminOpportunity[];
   opportunityTypes: ISelectItem[];
   opportunityCategories: ISelectItem[];
+  opportunityUnits: ISelectItem[];
   statusOptions: ISelectItem[];
   opportunityTypeOptions: ISelectItem[];
   stateOptions: ISelectItem[];
@@ -41,6 +42,32 @@ const initialState: {
     id: EOpportunityType.PRODUCT.toString(),
     name: 'opportunity.type.product',
   }],
+  opportunityUnits:[
+    {
+      id: EOpportunityQuantity.KM.toString(),
+      name:'opportunity.units.km'
+    },
+     {
+      id: EOpportunityQuantity.Panels.toString(),
+      name:'opportunity.units.panels'
+    },
+     {
+      id: EOpportunityQuantity.CB.toString(),
+      name:'opportunity.units.cb'
+    },
+     {
+      id: EOpportunityQuantity.Discs.toString(),
+      name:'opportunity.units.discs'
+    },
+     {
+      id: EOpportunityQuantity.KTons.toString(),
+      name:'opportunity.units.ktons'
+    },
+    {
+      id: EOpportunityQuantity.Unit.toString(),
+      name:'opportunity.units.unit'
+    },
+  ],
   opportunityCategories: [
     {
       id: '1',

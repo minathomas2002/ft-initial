@@ -53,6 +53,7 @@ export interface IOpportunityInformationFrom {
   startDate: Date | null;
   endDate: Date | null;
   image: File | null;
+  quantityUnit: string | null;
 }
 
 export interface IOpportunityLocalizationFrom {

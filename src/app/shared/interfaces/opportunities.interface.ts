@@ -73,6 +73,7 @@ export interface IOpportunityDetails {
   attachments: IOpportunityAttachment[];
   linkedPlans: number;
   hasActivePlans: boolean;
+  quantityUnit: string;
 }
 
 export interface IOpportunitiesDashboardResponse<T> extends IApiPaginatedResponse<T> {

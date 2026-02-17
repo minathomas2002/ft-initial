@@ -22,6 +22,8 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { normalizedLength } from 'src/app/shared/utils/normalize-textarea-counter';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, of } from 'rxjs';
+import { opportunityUnitsMapper } from '../../classes/opportunity-units-mapper';
+import { EOpportunityQuantity } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-opportunity-information-form',
@@ -52,9 +54,11 @@ export class OpportunityInformationForm implements OnInit {
   adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   opportunitiesStore = inject(OpportunitiesStore);
   i18nService = inject(I18nService);
+  private readonly opportunityUnitMapper = new opportunityUnitsMapper(this.i18nService);
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes;
   opportunityCategories = this.adminOpportunitiesStore.opportunityCategories;
   opportunityInformationForm = this.opportunityFormService.opportunityInformationForm;
+  opportunityUnits = this.adminOpportunitiesStore.opportunityUnits;
   isLoading = this.opportunitiesStore.loading;
 
   disabledEndDate = toSignal(
@@ -123,5 +127,11 @@ export class OpportunityInformationForm implements OnInit {
   // Helper methods to get FormControls with proper typing
   getControl(controlName: string): FormControl {
     return this.opportunityInformationForm.get(controlName) as FormControl;
+  }
+
+  getUnitLabel(): string {
+      const unit = this.opportunityInformationForm.get('quantityUnit')?.value as EOpportunityQuantity | null;
+      if (unit == null) return '';
+      return this.opportunityUnitMapper.getUnitLabel(unit);
   }
 }
