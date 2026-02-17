@@ -388,7 +388,7 @@
 @if(showRejectConfirmationDialog()){
 <app-general-confirmation-dialog
   [(visible)]="showRejectConfirmationDialog"
-  [title]="'Are you sure you want to reject the plan as final rejection?'"
+  [title]="rejectionDialogTitle()"
   [description]="'This action cannot be undone, and the plan will proceed to the investor.'"
   [confirmationLabel]="'Confirm Rejection'"
   [cancelLabel]="'Cancel'"
