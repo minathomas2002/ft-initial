@@ -793,7 +793,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         const opportunityId = responseBody?.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
         if (opportunityId) {
           return this.opportunitiesStore.getOpportunityLocalizationTablesValidation(opportunityId).pipe(
-            map(() => responseBody),
+            map((validation) => {
+              return responseBody;
+            }),
             catchError(() => of(responseBody))
           );
         }

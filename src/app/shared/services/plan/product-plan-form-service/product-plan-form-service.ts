@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { IOpportunityLocalizationTablesValidationResponse } from 'src/app/shared/interfaces/opportunities.interface';
 import { PlanLocalizationStep1OverviewFormBuilder } from './steps/plan-localization-step1-overview.form-builder';
@@ -14,12 +15,16 @@ import { PlanLocalizationStep4SaudizationFormBuilder } from './steps/plan-locali
 export class ProductPlanFormService {
   private readonly _fb = inject(FormBuilder);
   private readonly _planStore = inject(PlanStore);
+  private readonly _opportunitiesStore = inject(OpportunitiesStore);
   private initialFormValue!: any;
 
   // Step builders
   private readonly _step1Builder = new PlanLocalizationStep1OverviewFormBuilder(this._fb, this._planStore.newPlanTitle());
   private readonly _step2Builder = new PlanLocalizationStep2ProductPlantOverviewFormBuilder(this._fb);
-  private readonly _step3Builder = new PlanLocalizationStep3ValueChainFormBuilder(this._fb);
+  private readonly _step3Builder = new PlanLocalizationStep3ValueChainFormBuilder(
+    this._fb,
+    () => this._opportunitiesStore.opportunityLocalizationTablesValidation(),
+  );
   private readonly _step4Builder = new PlanLocalizationStep4SaudizationFormBuilder(this._fb);
 
   // Step 1: Overview Company Information

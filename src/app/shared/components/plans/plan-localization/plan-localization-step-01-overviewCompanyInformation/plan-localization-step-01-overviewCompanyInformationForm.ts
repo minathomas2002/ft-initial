@@ -202,6 +202,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
       this.opportunitiesStore.getOpportunityLocalizationTablesValidation(opportunityControlSignal!.id)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((response) => {
+          this.planFormService.updateValueChainValidation(response);
         });
     });
 

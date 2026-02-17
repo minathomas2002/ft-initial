@@ -6,7 +6,9 @@ import { IOpportunityLocalizationTablesValidationResponse } from 'src/app/shared
 
 export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder {
   constructor(
-    fb: FormBuilder) {
+    fb: FormBuilder,
+    private readonly getLocalizationTablesValidation: () => IOpportunityLocalizationTablesValidationResponse | null,
+  ) {
     super(fb);
   }
 
@@ -139,7 +141,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
         valueControl.removeValidators(Validators.required);
       }
 
-      valueControl.markAsPristine();
+      // valueControl.markAsPristine();
       valueControl.updateValueAndValidity({ emitEvent: false });
     });
   }
@@ -156,27 +158,27 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
       sectionName: string;
       isRequired: boolean;
     }> = [
-      {
-        sectionName: EMaterialsFormControls.designEngineeringFormGroup,
-        isRequired: opportunityLocalizationTablesValidation?.designEngineeringRequired ?? false,
-      },
-      {
-        sectionName: EMaterialsFormControls.sourcingFormGroup,
-        isRequired: opportunityLocalizationTablesValidation?.sourcingRequired ?? false,
-      },
-      {
-        sectionName: EMaterialsFormControls.manufacturingFormGroup,
-        isRequired: opportunityLocalizationTablesValidation?.manufacturingRequired ?? false,
-      },
-      {
-        sectionName: EMaterialsFormControls.assemblyTestingFormGroup,
-        isRequired: opportunityLocalizationTablesValidation?.assemblyTestingRequired ?? false,
-      },
-      {
-        sectionName: EMaterialsFormControls.afterSalesFormGroup,
-        isRequired: opportunityLocalizationTablesValidation?.afterSalesRequired ?? false,
-      },
-    ];
+        {
+          sectionName: EMaterialsFormControls.designEngineeringFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.designEngineeringRequired ?? false,
+        },
+        {
+          sectionName: EMaterialsFormControls.sourcingFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.sourcingRequired ?? false,
+        },
+        {
+          sectionName: EMaterialsFormControls.manufacturingFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.manufacturingRequired ?? false,
+        },
+        {
+          sectionName: EMaterialsFormControls.assemblyTestingFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.assemblyTestingRequired ?? false,
+        },
+        {
+          sectionName: EMaterialsFormControls.afterSalesFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.afterSalesRequired ?? false,
+        },
+      ];
 
     sectionConfig.forEach(({ sectionName, isRequired }) => {
       const itemsArray = this.getSectionFormArray(formGroup, sectionName);
@@ -316,37 +318,6 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
   }
 
   /**
-   * Validate that total cost percentage doesn't exceed 100% for a section
-   */
-  private costPercentageArrayValidator() {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const array = control.value as any[];
-      if (!array || array.length === 0) {
-        return null; // Empty array is valid (will be handled by required validator if needed)
-      }
-
-      let total = 0;
-      array.forEach((item: any) => {
-        const costPercentage = item?.[EMaterialsFormControls.costPercentage]?.[EMaterialsFormControls.value];
-        if (costPercentage !== null && costPercentage !== undefined) {
-          total += parseFloat(costPercentage) || 0;
-        }
-      });
-
-      if (total > 100) {
-        return {
-          totalExceeds100: {
-            message: 'Total cost percentage cannot exceed 100%',
-            total: total
-          }
-        };
-      }
-
-      return null;
-    };
-  }
-
-  /**
    * Validator to check if any control in the form array is dirty, invalid, and has a required error
    * Returns {inComplete: true} if such a control is found
    */
@@ -369,12 +340,32 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
   }
 
   /**
-   * Validate total cost percentage across all sections
+   * Check if opportunityLocalizationTablesValidation has at least one section required (true).
+   */
+  private hasAnyLocalizationSectionRequired(validation: IOpportunityLocalizationTablesValidationResponse | null): boolean {
+    if (!validation) return false;
+    return (
+      validation.designEngineeringRequired ||
+      validation.sourcingRequired ||
+      validation.manufacturingRequired ||
+      validation.assemblyTestingRequired ||
+      validation.afterSalesRequired
+    );
+  }
+
+  /**
+   * Validate total cost percentage across all sections.
+   * Only triggers when opportunityLocalizationTablesValidation has at least one section with true.
    */
   private validateTotalCostPercentage() {
     return (control: AbstractControl): ValidationErrors | null => {
       const formGroup = control as FormGroup;
       if (!formGroup) {
+        return null;
+      }
+
+      const validation = this.getLocalizationTablesValidation();
+      if (!this.hasAnyLocalizationSectionRequired(validation)) {
         return null;
       }
 

@@ -93,7 +93,7 @@ export class WizardStepStateComponent {
 
   private updateFormState(form: any) {
     this.formStateSignal.set({
-      valid: form.valid,
+      valid: form.valid && form.dirty,
       invalid: form.invalid,
       dirty: form.dirty,
       touched: form.touched,
