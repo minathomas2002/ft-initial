@@ -249,9 +249,9 @@ export class OpportunityDetails implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-   getUnitLabel(): string {
-        const unit = this.opportunitiesStore.details()?.quantityUnit as EOpportunityQuantity;
-        if (unit == null) return '';
-        return this.opportunityUnitMapper.getUnitLabel(unit);
-    }
+  getUnitLabel(): string {
+    const unit = this.opportunitiesStore.details()?.quantityUnit as EOpportunityQuantity;
+    if (!unit) return '';
+    return '(' + this.opportunityUnitMapper.getUnitLabel(unit) + ')';
+  }
 }
