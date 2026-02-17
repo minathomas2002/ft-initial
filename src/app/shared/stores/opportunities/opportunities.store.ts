@@ -2,7 +2,7 @@ import { patchState, signalStore, withComputed, withMethods, withState } from '@
 import { computed, inject } from '@angular/core';
 import { finalize, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
-import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails } from '../../interfaces/opportunities.interface';
+import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityLocalizationTablesValidationResponse } from '../../interfaces/opportunities.interface';
 
 const initialState: {
   loading: boolean;
@@ -11,13 +11,15 @@ const initialState: {
   list: IOpportunity[];
   isCheckingApplyOpportunity: boolean;
   details: IOpportunityDetails | null;
+  opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null;
 } = {
   loading: false,
   error: null,
   count: 0,
   list: [],
   details: null,
-  isCheckingApplyOpportunity: false
+  isCheckingApplyOpportunity: false,
+  opportunityLocalizationTablesValidation: null
 };
 export const OpportunitiesStore = signalStore(
   { providedIn: 'root' },
@@ -61,6 +63,17 @@ export const OpportunitiesStore = signalStore(
             patchState(store, { isCheckingApplyOpportunity: false });
           })
         )
+      },
+      getOpportunityLocalizationTablesValidation(opportunityId: string) {
+        patchState(store, { loading: true, error: null });
+        return opportunitiesApiService.getOpportunityLocalizationTablesValidation(opportunityId).pipe(
+          tap((res) => {
+            patchState(store, { opportunityLocalizationTablesValidation: res.body });
+          }),
+        )
+      },
+      resetOpportunityLocalizationTablesValidation() {
+        patchState(store, { opportunityLocalizationTablesValidation: null });
       }
     };
   })
