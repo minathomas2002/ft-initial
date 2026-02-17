@@ -28,6 +28,7 @@ export class Timeline {
 			gray: { border: 'border-gray-700', circle: 'bg-gray-700' },
       orange: { border: 'border-orange-700', circle: 'bg-orange-700' },
 			primary: { border: 'border-primary-700', circle: 'bg-primary-700' },
+			fadeGreen:{ border: 'border-green-200', circle: 'bg-green-50 ' },
 		};
 		return colorMap[color];
 	}
