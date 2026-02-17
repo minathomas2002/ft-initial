@@ -47,7 +47,11 @@
 
     <!-- Design & Engineering Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">Design & Engineering</h3>
+      <h3 class="text-base font-semibold text-gray-900">Design & Engineering
+        @if(isRequired(EOpportunityLocalizationTablesValidation.DesignEngineering)){
+        <span class="text-red-500">*</span>
+        }
+      </h3>
       <app-form-array-input
         [ft]="getDesignEngineeringFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -359,7 +363,11 @@
 
     <!-- Sourcing Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">Sourcing</h3>
+      <h3 class="text-base font-semibold text-gray-900">Sourcing
+        @if(isRequired(EOpportunityLocalizationTablesValidation.Sourcing)){
+        <span class="text-red-500">*</span>
+        }
+      </h3>
       <app-form-array-input
         [ft]="getSourcingFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -671,7 +679,11 @@
 
     <!-- Manufacturing Section (NO years) -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">Manufacturing</h3>
+      <h3 class="text-base font-semibold text-gray-900">Manufacturing
+        @if(isRequired(EOpportunityLocalizationTablesValidation.Manufacturing)){
+        <span class="text-red-500">*</span>
+        }
+      </h3>
       <app-form-array-input
         [ft]="getManufacturingFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -983,7 +995,11 @@
 
     <!-- Assembly & Testing Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">Assembly & Testing</h3>
+      <h3 class="text-base font-semibold text-gray-900">Assembly & Testing
+        @if(isRequired(EOpportunityLocalizationTablesValidation.AssemblyTesting)){
+        <span class="text-red-500">*</span>
+        }
+      </h3>
       <app-form-array-input
         [ft]="getAssemblyTestingFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -1295,7 +1311,11 @@
 
     <!-- After-Sales Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">After-Sales</h3>
+      <h3 class="text-base font-semibold text-gray-900">After-Sales
+        @if(isRequired(EOpportunityLocalizationTablesValidation.AfterSales)){
+        <span class="text-red-500">*</span>
+        }
+      </h3>
       <app-form-array-input
         [ft]="getAfterSalesFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -1621,7 +1641,7 @@
     [commentsCount]="selectedInputs().length"
     [(commentPhase)]="commentPhase"
     [commentFormControl]="commentFormControl"
-      [incomingCommentText]="incomingCommentText()"
+    [incomingCommentText]="incomingCommentText()"
     [isResubmitMode]="isResubmitMode()"
     [hasInvestorComment]="hasInvestorComment()"
     (deleteComments)="onDeleteComments()"

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
+import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls, EOpportunityLocalizationTablesValidation, EPlanPageTitle } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
 import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
@@ -205,6 +205,14 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     // Call protected base class method with extracted rowId
     super.upDateSelectedInputs(value, fieldInformation, rowId);
   };
+
+  isRequired(item: EOpportunityLocalizationTablesValidation): boolean {
+    return this.opportunitiesStore.opportunityLocalizationTablesValidation()?.[item] ?? false;
+  }
+
+  get EOpportunityLocalizationTablesValidation() {
+    return EOpportunityLocalizationTablesValidation
+  }
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
