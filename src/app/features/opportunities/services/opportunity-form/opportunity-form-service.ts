@@ -1,6 +1,7 @@
 import { Injectable, computed, inject, output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Subject } from 'rxjs';
+import { EOpportunityQuantity } from 'src/app/shared/enums';
 import { IOpportunityInformationFrom, ISelectItem, IOpportunityLocalizationFrom, IKeyActivityRecord, IOpportunityDetails, IOpportunityActivity } from 'src/app/shared/interfaces';
 
 export interface IBasicInformation {
@@ -27,6 +28,7 @@ export class OpportunityFormService {
     startDate: null,
     endDate: null,
     image: null,
+    quantityUnit: EOpportunityQuantity.Unit.toString()
   }
   private OpportunityLocalizationFormInitialState: IOpportunityLocalizationFrom = {
     designEngineerings: [
@@ -90,6 +92,7 @@ export class OpportunityFormService {
         opportunityType: [null, Validators.required],
         shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
         opportunityCategory: ['', Validators.required],
+        quantityUnit :[null, Validators.required],
         spendSAR: [0, [Validators.min(0), Validators.max(10)]],
         minQuantity: [0, [Validators.min(0)]],
         maxQuantity: [0, [Validators.min(0)]],
@@ -394,6 +397,7 @@ export class OpportunityFormService {
       shortDescription: value.shortDescription,
       opportunityType: value.opportunityType?.toString(),
       opportunityCategory: value.opportunityCategory?.toString(), // TODO: Remove this once the API is updated
+      quantityUnit: value.quantityUnit?.toString(),
       spendSAR: value.spendSAR != null ? Number(value.spendSAR) : 0,
       minQuantity: value.minQuantity != null ? Number(value.minQuantity) : 0,
       maxQuantity: value.maxQuantity != null ? Number(value.maxQuantity) : 0,
@@ -456,6 +460,7 @@ export class OpportunityFormService {
     infoGroup.get('opportunityType')?.setValidators([Validators.required]);
     infoGroup.get('shortDescription')?.setValidators([Validators.required, Validators.maxLength(255)]);
     infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
+    infoGroup.get('quantityUnit')?.setValidators([Validators.required]);
     infoGroup.get('spendSAR')?.setValidators([Validators.required, Validators.max(10)]);
     infoGroup.get('minQuantity')?.setValidators([Validators.required]);
     infoGroup.get('maxQuantity')?.setValidators([Validators.required]);
