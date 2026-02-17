@@ -19,7 +19,7 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { EOpportunityAction, EOpportunityType, ERoutes, EViewMode } from 'src/app/shared/enums';
+import { EOpportunityAction, EOpportunityQuantity, EOpportunityType, ERoutes, EViewMode } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { OpportunityActionsService } from '../../services/opportunity-actions/opportunity-actions-service';
 import { Subject, take, takeUntil } from 'rxjs';
@@ -33,6 +33,8 @@ import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/p
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 import { opportunityImagePlaceholder } from './opportunity-image-placeholder';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { opportunityUnitsMapper } from '../../classes/opportunity-units-mapper';
 
 @Component({
   selector: 'app-opportunity-details',
@@ -76,6 +78,8 @@ export class OpportunityDetails implements OnInit, OnDestroy {
   productLocalizationPlanWizardVisibility = signal<boolean>(false);
   serviceLocalizationPlanWizardVisibility = signal<boolean>(false);
   planTermsAndConditionsDialogVisibility = signal<boolean>(false);
+  i18nService = inject(I18nService);
+  private readonly opportunityUnitMapper = new opportunityUnitsMapper(this.i18nService);
   get EOpportunityAction() {
     return EOpportunityAction;
   }
@@ -244,4 +248,10 @@ export class OpportunityDetails implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+   getUnitLabel(): string {
+        const unit = this.opportunitiesStore.details()?.quantityUnit as EOpportunityQuantity;
+        if (unit == null) return '';
+        return this.opportunityUnitMapper.getUnitLabel(unit);
+    }
 }
