@@ -381,6 +381,7 @@
             [placeholder]="'opportunity.form.selectStartDate' | translate"
             [dateFormat]="'dd M yy'"
             [minDate]="today"
+            [maxDate]="getControl('endDate').value || null"
             [disabled]="getControl('startDate').disabled"
             class="w-full"
             keepInvalid
@@ -402,9 +403,9 @@
             (ngModelChange)="onEndDateChange($event)"
             [placeholder]="'opportunity.form.selectEndDate' | translate"
             [dateFormat]="'dd M yy'"
-            [minDate]="(getControl('startDate').value && getControl('startDate').value > today) ? getControl('startDate').value : today"
-            class="w-full"
+            [minDate]="getControl('startDate').value || today"
             [disabledDates]="[disabledEndDate()]"
+            class="w-full"
             keepInvalid
             [invalid]="getControl('endDate').invalid && getControl('endDate').dirty"
             fluid
