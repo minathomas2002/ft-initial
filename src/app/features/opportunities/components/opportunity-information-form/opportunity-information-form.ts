@@ -124,4 +124,13 @@ export class OpportunityInformationForm implements OnInit {
   getControl(controlName: string): FormControl {
     return this.opportunityInformationForm.get(controlName) as FormControl;
   }
+
+  /** Returns end date as end-of-day so maxDate is inclusive for the full calendar day */
+  getStartDateMaxDate(): Date | null {
+    const endDate = this.getControl('endDate').value as Date | null;
+    if (!endDate || !(endDate instanceof Date)) return null;
+    const d = new Date(endDate);
+    d.setDate(d.getDate() - 1);
+    return d;
+  }
 }
