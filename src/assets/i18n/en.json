@@ -917,7 +917,19 @@
       "reassigned": "Reassigned plan to employee {{param}}",
       "submitComment": "Submit comment on the plan and send back to investor ",
       "rejected": "Rejected",
-      "approved": "Approved"
+      "approved": "Approved",
+      "dVRejected": "Division Rejected",
+      "internalReview": "Submitted comment on the plan and sent back to investor",
+      "autoRejected": "Plan Auto Rejected",
+      "resubmitted": "Plan Updated and Resubmitted by Investor",
+      "deptRejected": "Department Rejected",
+      "dVRejectionAcknowledged": "DV Rejection Acknowledged",
+      "dvApproved": "Division  Approved",
+      "deptApproved": "Department Approved",
+      "employeeApproved": "Plan Approved and Forwarded to DV Manager",
+      "editPlan": "Edited the plan",
+      "dVReview": "Division Review",
+      "deptManagerReview": "Department Manager Review"
     }
   },
   "assign": {
