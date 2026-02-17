@@ -150,7 +150,6 @@ export class InternalUsersPlansFilter implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(queryParams => {
         const updates: Partial<IPlanFilter> = {};
-        console.log(queryParams, "queryParams");
         if (queryParams['status']) {
           const status = this.getStatusFromParam(queryParams['status']);
           if (status !== null) {
@@ -180,8 +179,6 @@ export class InternalUsersPlansFilter implements OnInit {
         }
 
         if (queryParams['assignee']) {
-          console.log(queryParams['assignee']);
-          
           //skip if the filtered user is not existing in backend assignee list
           if (this.assignees()?.some(x => x.id == queryParams['assignee']))
             updates.assignee = [queryParams['assignee']];
