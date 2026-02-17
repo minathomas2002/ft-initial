@@ -100,15 +100,15 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.planStatus() !== EInvestorPlanStatus.DRAFT && this.activeStep() < 5)
   })
   sendBackConfirmationMessage = computed(() => {
-    if (this.isDVManagerPersona()) {
-      return "This action cannot be undone and the plan will go directly to the Employee."
-    }
+    // if (this.isDVManagerPersona()) {
+    //   return "This action cannot be undone and the plan will go directly to the Employee."
+    // }
 
     if (this.isEmployeePersona()) {
       return "This action cannot be undone and the plan will go directly to the investor."
     }
 
-    return "This action cannot be undone and the plan will go directly to the Dv Manager.";
+    return "This action cannot be undone and the plan will go directly to the Employee.";
   })
 
   readonly approvalDialogTitle = computed(() => {
@@ -555,25 +555,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   })
 
   hasComments = computed(() => {
-    // Check if any step has saved comments (comment phase is 'viewing' and comment exists)
-    const step1Form = this.productPlanFormService.overviewCompanyInformation;
-    const step1CommentControl = step1Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    const step1HasComment = step1CommentControl?.value && step1CommentControl.value.trim().length > 0;
-
-    // Step 2 comments
-    const step2Form = this.productPlanFormService.step2_productPlantOverview;
-    const step2CommentControl = step2Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    const step2HasComment = step2CommentControl?.value && step2CommentControl.value.trim().length > 0;
-
-    // Step 3 comments - check if step3SelectedInputs has items (indicates comment was saved)
-    const step3HasComment = this.step3SelectedInputs().length > 0;
-
-    // Step 4 comments
-    const step4Form = this.productPlanFormService.step4_saudization;
-    const step4CommentControl = step4Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    const step4HasComment = step4CommentControl?.value && step4CommentControl.value.trim().length > 0;
-
-    return step1HasComment || step2HasComment || step3HasComment || step4HasComment;
+    return this.planStore.currentUserPageComments().length > 0;
   });
 
   // Computed signal for total steps count
@@ -603,6 +585,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       canApproveOrReject: this.canApproveOrReject,
       allowUserToResubmit: this.allowUserToResubmit,
       canAcknowledgeRejection: this.canAcknowledgeRejection,
+      hasComments: this.hasComments,
     },
     metadata: {
       persona: this.authStore?.userProfile()?.roleCodes,

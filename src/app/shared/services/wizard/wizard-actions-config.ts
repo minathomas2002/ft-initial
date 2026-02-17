@@ -66,6 +66,7 @@ export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
       return {
         id: 'send-back',
         label,
+        disabled: !context.config.permissions?.hasComments?.(),
         text: true,
         severity: 'secondary',
         onClick: context.config.handlers.onSendBack,

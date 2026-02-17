@@ -31,6 +31,7 @@ export interface IWizardActionConfig {
     canAcknowledgeRejection?: Signal<boolean>;
     canApproveOrReject?: Signal<boolean>;
     allowUserToResubmit?: Signal<boolean>;
+    hasComments?: Signal<boolean>;
   };
   metadata?: {
     persona?: ERoles[];

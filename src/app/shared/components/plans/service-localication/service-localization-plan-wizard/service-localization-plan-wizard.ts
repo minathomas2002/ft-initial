@@ -88,15 +88,17 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   override readonly toasterService = inject(ToasterService);
+
   readonly sendBackConfirmationMessage = computed(() => {
-    if (this.isDVManagerPersona()) {
-      return "This action cannot be undone and the plan will go directly to the Employee.";
-    }
+    // if (this.isDVManagerPersona()) {
+    //   return "This action cannot be undone and the plan will go directly to the Employee."
+    // }
 
     if (this.isEmployeePersona()) {
-      return "This action cannot be undone and the plan will go directly to the investor.";
+      return "This action cannot be undone and the plan will go directly to the investor."
     }
-    return "This action cannot be undone and the plan will go directly to the Dv Manager."
+
+    return "This action cannot be undone and the plan will go directly to the Employee.";
   })
 
   readonly approvalDialogTitle = computed(() => {
@@ -427,24 +429,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   hasComments = computed(() => {
-    // Check if any step has saved comments
-    const step1Form = this.serviceLocalizationFormService.step1_coverPage;
-    const step1CommentControl = step1Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    const step1HasComment = step1CommentControl?.value && step1CommentControl.value.trim().length > 0;
-
-    const step2Form = this.serviceLocalizationFormService.step2_overview;
-    const step2CommentControl = step2Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    const step2HasComment = step2CommentControl?.value && step2CommentControl.value.trim().length > 0;
-
-    const step3Form = this.serviceLocalizationFormService.step3_existingSaudi;
-    const step3CommentControl = step3Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    const step3HasComment = step3CommentControl?.value && step3CommentControl.value.trim().length > 0;
-
-    const step4Form = this.serviceLocalizationFormService.step4_directLocalization;
-    const step4CommentControl = step4Form.get(EMaterialsFormControls.comment) as FormControl<string>;
-    const step4HasComment = step4CommentControl?.value && step4CommentControl.value.trim().length > 0;
-
-    return step1HasComment || step2HasComment || step3HasComment || step4HasComment;
+    // // Check if any step has saved comments
+    return this.planStore.currentUserPageComments().length > 0;
   });
 
   protected override getCommentPhaseForStepId(stepId: string): TCommentPhase {
@@ -643,6 +629,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       canApproveOrReject: this.canApproveOrReject,
       allowUserToResubmit: this.allowUserToResubmit,
       canAcknowledgeRejection: this.canAcknowledgeRejection,
+      hasComments: this.hasComments,
     },
     metadata: {
       persona: this.authStore?.userProfile()?.roleCodes,
