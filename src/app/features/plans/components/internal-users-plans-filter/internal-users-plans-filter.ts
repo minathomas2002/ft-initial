@@ -150,11 +150,10 @@ export class InternalUsersPlansFilter implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(queryParams => {
         const updates: Partial<IPlanFilter> = {};
-
         if (queryParams['status']) {
           const status = this.getStatusFromParam(queryParams['status']);
           if (status !== null) {
-            updates.status = [status];
+            updates.status = status;
           } else {
             updates.status = null;
           }
@@ -196,13 +195,21 @@ export class InternalUsersPlansFilter implements OnInit {
       });
   }
 
-  private getStatusFromParam(param: string | number): EInternalUserPlanStatus | null {
-    const statusNum = Number(param);
-    if (!isNaN(statusNum) && Object.values(EInternalUserPlanStatus).includes(statusNum as EInternalUserPlanStatus)) {
-      return statusNum as EInternalUserPlanStatus;
-    }
-    return null;
-  }
+private getStatusFromParam(
+  param: string | number | (string | number)[]
+): EInternalUserPlanStatus[] {
+
+  const values = Array.isArray(param) ? param : [param];
+
+  return values
+    .map(v => Number(v))
+    .filter(v =>
+      !isNaN(v) &&
+      Object.values(EInternalUserPlanStatus).includes(
+        v as EInternalUserPlanStatus
+      )
+    ) as EInternalUserPlanStatus[];
+}
 
   private getPlanTypeFromParam(param: string): EOpportunityType | null {
     switch (param.toLowerCase()) {

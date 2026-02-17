@@ -335,13 +335,26 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
 
   onViewPlansUnderReview() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: this.isInvestor() ? EInvestorPlanStatus.UNDER_REVIEW : EInternalUserPlanStatus.UNDER_REVIEW }
+      queryParams: { status: this.isInvestor() ? [EInvestorPlanStatus.UNDER_REVIEW, EInvestorPlanStatus.PENDING] :
+         [EInternalUserPlanStatus.UNDER_REVIEW,
+          EInternalUserPlanStatus.EMPLOYEE_APPROVED,
+          EInternalUserPlanStatus.ReturnedByDV,
+          EInternalUserPlanStatus.ReturnedByDEPTManager,
+          EInternalUserPlanStatus.DV_REJECTED,
+          EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+          EInternalUserPlanStatus.DV_APPROVED,
+          EInternalUserPlanStatus.DEPT_APPROVED,
+          EInternalUserPlanStatus.DEPT_REJECTED,
+          EInternalUserPlanStatus.PENDING ] }
     });
   }
 
   onViewApprovedPlans() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: this.isInvestor() ? EInvestorPlanStatus.APPROVED : EInternalUserPlanStatus.APPROVED }
+      queryParams: {
+         status: this.isInvestor() ? EInvestorPlanStatus.APPROVED :
+        (this.isManager())? EInternalUserPlanStatus.APPROVED: [EInternalUserPlanStatus.APPROVED,EInternalUserPlanStatus.DEPT_APPROVED],
+       }
     });
   }
 
@@ -349,8 +362,8 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     const currentUserId = this.authStore.jwtUserDetails()?.EmpID;
     this.router.navigate([ERoutes.plans], {
       queryParams: {
-        status: EInternalUserPlanStatus.APPROVED,
-        assignee: currentUserId
+        status: [EInternalUserPlanStatus.APPROVED,EInternalUserPlanStatus.DEPT_APPROVED],
+        assignee: this.isManager()? null : currentUserId
       }
     });
   }
@@ -363,13 +376,23 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
 
   onViewRejectedPlans() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: this.isInvestor() ? EInvestorPlanStatus.REJECTED : EInternalUserPlanStatus.REJECTED }
+      queryParams: { status: this.isInvestor() ? EInvestorPlanStatus.REJECTED : 
+        
+        [EInternalUserPlanStatus.REJECTED, 
+        EInternalUserPlanStatus.DEPT_REJECTED, 
+        EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+        EInternalUserPlanStatus.DV_REJECTED
+      ] }
     });
   }
 
   onViewPendingAssignedPlans() {
     this.router.navigate([ERoutes.plans], {
-      queryParams: { status: EInternalUserPlanStatus.UNDER_REVIEW }
+      queryParams: { status: [EInternalUserPlanStatus.UNDER_REVIEW,EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.ReturnedByDV,
+        EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.DEPT_REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED],
+       }
+       
+       
     });
   }
 
