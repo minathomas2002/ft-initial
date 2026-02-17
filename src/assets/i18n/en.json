@@ -847,8 +847,8 @@
       "pendingOnInvestor": "Pending on Investor",
       "pendingWithInvestor": "Pending with Investor",
       "draft": "Draft",
-      "returnedByDV": "Returned By DV",
-      "returnedByDEPTManager":"Returned By DEPT Manager"
+      "returnedByDV": "Returned By Division",
+      "returnedByDEPTManager":"Returned By Department"
     },
     "type": {
       "services": "Services",
