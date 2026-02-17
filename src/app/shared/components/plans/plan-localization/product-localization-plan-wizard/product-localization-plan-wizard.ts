@@ -786,21 +786,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   /** Returns observable that loads plan and emits response body; used by combined plan-load stream. */
   private loadPlanData$(planId: string): Observable<IProductPlanResponse | null> {
     this.isLoadingPlan.set(true);
-
     return this.planStore.getProductPlan(planId).pipe(
-      map(response => response?.body ?? null),
-      switchMap((responseBody) => {
-        const opportunityId = responseBody?.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId;
-        if (opportunityId) {
-          return this.opportunitiesStore.getOpportunityLocalizationTablesValidation(opportunityId).pipe(
-            map((validation) => {
-              return responseBody;
-            }),
-            catchError(() => of(responseBody))
-          );
-        }
-        return of(responseBody);
-      }),
+      map((response) => response?.body ?? null),
       finalize(() => this.isLoadingPlan.set(false))
     );
   }
