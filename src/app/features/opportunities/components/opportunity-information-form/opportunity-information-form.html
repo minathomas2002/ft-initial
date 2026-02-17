@@ -381,7 +381,7 @@
             [placeholder]="'opportunity.form.selectStartDate' | translate"
             [dateFormat]="'dd M yy'"
             [minDate]="today"
-            [maxDate]="getControl('endDate').value || null"
+            [maxDate]="getStartDateMaxDate()"
             [disabled]="getControl('startDate').disabled"
             class="w-full"
             keepInvalid
