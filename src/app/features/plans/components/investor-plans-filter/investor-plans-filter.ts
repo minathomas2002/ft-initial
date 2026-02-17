@@ -64,7 +64,7 @@ export class InvestorPlansFilter implements OnInit {
         if (queryParams['status']) {
           const status = this.getStatusFromParam(queryParams['status']);
           if (status !== null) {
-            updates.status = [status];
+            updates.status = status;
           } else {
             updates.status = null;
           }
@@ -98,13 +98,22 @@ export class InvestorPlansFilter implements OnInit {
       });
   }
 
-  private getStatusFromParam(param: string | number): EInvestorPlanStatus | null {
-    const statusNum = Number(param);
-    if (!isNaN(statusNum) && Object.values(EInvestorPlanStatus).includes(statusNum as EInvestorPlanStatus)) {
-      return statusNum as EInvestorPlanStatus;
-    }
-    return null;
+  private getStatusFromParam(
+    param: string | number | (string | number)[]
+  ): EInvestorPlanStatus[] {
+  
+    const values = Array.isArray(param) ? param : [param];
+  
+    return values
+      .map(v => Number(v))
+      .filter(v =>
+        !isNaN(v) &&
+        Object.values(EInvestorPlanStatus).includes(
+          v as EInvestorPlanStatus
+        )
+      ) as EInvestorPlanStatus[];
   }
+  
 
   private getPlanTypeFromParam(param: string): EOpportunityType | null {
     switch (param.toLowerCase()) {
