@@ -173,6 +173,14 @@
       "services": "Services",
       "product": "Product"
     },
+    "units":{
+      "km": "Km",
+      "panels": "Panels",
+      "cb": "CB",
+      "discs": "Discs",
+      "ktons": "KTons",
+      "unit": "Unit"
+    },
     "list": {
       "title": "Opportunities",
       "subtitle": "Browse all available plans and view their details",
@@ -202,7 +210,7 @@
       "forecastedDemand": "Forecasted SEC Demand (2024 – 2030)",
       "demandNote": "Demand numbers provided here are estimated and subject to change",
       "spendSAR": "Spend (SAR)",
-      "quantityUnits": "Quantity (Units)",
+      "quantityUnits": "Quantity",
       "supplierBase": "SEC Current Supplier Base",
       "local": "Local",
       "global": "Global",
@@ -226,7 +234,8 @@
       "opportunityCategory": "Opportunity Icon",
       "opportunityType": "Opportunity Type",
       "spendSAR": "Spend (SAR) in billions",
-      "quantityUnits": "Quantity (Units)",
+      "quantityUnits": "Quantity",
+      "measureUnits": "Measure Unit",
       "localSuppliers": "Local Suppliers",
       "globalSuppliers": "Global Suppliers",
       "dateRange": "Date Range",

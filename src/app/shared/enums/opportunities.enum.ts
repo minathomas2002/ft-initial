@@ -21,3 +21,12 @@ export enum EOpportunityAction {
   Apply = 5,
   SystemReminder = 6,
 }
+
+export enum EOpportunityQuantity {
+  KM = 1,
+  Panels =2,
+  CB =3,
+  Discs =4,
+  KTons =5,
+  Unit =6 
+}
