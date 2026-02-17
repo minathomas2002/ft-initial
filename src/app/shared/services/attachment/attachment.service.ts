@@ -31,24 +31,13 @@ export class AttachmentService {
    */
   downloadAndSaveAttachment(
     id: number | string,
-    fallbackFileName: string,
+    fileName: string = '',
   ): Observable<void> {
     return this.downloadAttachment(id).pipe(
       map((response) => {
         const blob = response.body;
         if (!blob) {
           throw new Error('Empty download response');
-        }
-
-        const contentDisposition = response.headers.get('content-disposition');
-        let fileName = fallbackFileName;
-
-        if (contentDisposition) {
-          const matches =
-            /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i.exec(contentDisposition);
-          if (matches && matches[1]) {
-            fileName = matches[1].replace(/['"]/g, '').trim();
-          }
         }
 
         const downloadUrl = URL.createObjectURL(blob);

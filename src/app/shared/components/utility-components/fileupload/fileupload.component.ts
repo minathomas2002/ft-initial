@@ -11,7 +11,7 @@ import { ToasterService } from "src/app/shared/services/toaster/toaster.service"
 import { AttachmentService } from "src/app/shared/services/attachment/attachment.service";
 import { ImageErrorDirective } from "../../../directives/image-error.directive";
 import { TranslatePipe } from "../../../pipes";
-import { Attachment } from "src/app/shared/interfaces/plans.interface";
+import { Attachment, AttachmentItem } from "src/app/shared/interfaces/plans.interface";
 
 @Component({
   selector: "app-fileupload",
@@ -278,7 +278,7 @@ export class FileuploadComponent {
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
   }
 
-  downloadFile(file: Attachment): void {
+  downloadFile(file: AttachmentItem): void {
     const fileId = file.ibmIdentifier;
 
     if (!fileId) {
@@ -286,7 +286,7 @@ export class FileuploadComponent {
       return;
     }
 
-    this.attachmentService.downloadAndSaveAttachment(fileId, file.fileName).subscribe({
+    this.attachmentService.downloadAndSaveAttachment(fileId, file.name).subscribe({
       next: () => {
         // Download handled in service
       },
