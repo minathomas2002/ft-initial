@@ -534,9 +534,9 @@ export const PlanStore = signalStore(
         );
       },
 
-      employeeApprovePlan(planId: string, reason?: string) {
+      employeeApprovePlan(planId: string, reason?: string, approvalSignature?: string) {
         patchState(store, { isProcessing: true, error: null });
-        return planApiService.internalApprovePlanStatus({ planId, status: EemployeePlanAction.Approve, reason }).pipe(
+        return planApiService.internalApprovePlanStatus({ planId, status: EemployeePlanAction.Approve, reason, approvalSignature }).pipe(
           tap(() => {
             patchState(store, { isProcessing: false });
           }),
