@@ -19,14 +19,13 @@ export enum EInternalUserPlanStatus {
   DV_REJECTED = 5,
   DV_REJECTION_ACKNOWLEDGED = 6,
   EMPLOYEE_APPROVED = 7,
- // EMPLOYEE_REJECTED = 8,
+  // EMPLOYEE_REJECTED = 8,
   PENDING = 9,
   REJECTED = 10,
   UNASSIGNED = 11,
   UNDER_REVIEW = 12,
-  ASSIGNED = 13,
-  ReturnedByDV= 14,
-  ReturnedByDEPTManager =15
+  ReturnedByDV = 14,
+  ReturnedByDEPTManager = 15
 }
 
 export interface IPlanRecord {

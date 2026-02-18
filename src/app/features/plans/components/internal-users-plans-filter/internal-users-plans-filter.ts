@@ -105,7 +105,6 @@ export class InternalUsersPlansFilter implements OnInit {
       { label: this.i18nService.translate('plans.employee_status.approved'), value: EInternalUserPlanStatus.APPROVED },
       { label: this.i18nService.translate('plans.employee_status.rejected'), value: EInternalUserPlanStatus.REJECTED },
       { label: this.i18nService.translate('plans.employee_status.unassigned'), value: EInternalUserPlanStatus.UNASSIGNED },
-      { label: this.i18nService.translate('plans.employee_status.assigned'), value: EInternalUserPlanStatus.ASSIGNED },
       { label: this.i18nService.translate('plans.employee_status.deptApproved'), value: EInternalUserPlanStatus.DEPT_APPROVED },
       { label: this.i18nService.translate('plans.employee_status.deptRejected'), value: EInternalUserPlanStatus.DEPT_REJECTED },
       { label: this.i18nService.translate('plans.employee_status.dvApproved'), value: EInternalUserPlanStatus.DV_APPROVED },
@@ -120,7 +119,7 @@ export class InternalUsersPlansFilter implements OnInit {
 
   ngOnInit() {
     this.loadAssignees();
-    this.listenToSearchChanges();    
+    this.listenToSearchChanges();
   }
 
   private loadAssignees() {
@@ -195,21 +194,21 @@ export class InternalUsersPlansFilter implements OnInit {
       });
   }
 
-private getStatusFromParam(
-  param: string | number | (string | number)[]
-): EInternalUserPlanStatus[] {
+  private getStatusFromParam(
+    param: string | number | (string | number)[]
+  ): EInternalUserPlanStatus[] {
 
-  const values = Array.isArray(param) ? param : [param];
+    const values = Array.isArray(param) ? param : [param];
 
-  return values
-    .map(v => Number(v))
-    .filter(v =>
-      !isNaN(v) &&
-      Object.values(EInternalUserPlanStatus).includes(
-        v as EInternalUserPlanStatus
-      )
-    ) as EInternalUserPlanStatus[];
-}
+    return values
+      .map(v => Number(v))
+      .filter(v =>
+        !isNaN(v) &&
+        Object.values(EInternalUserPlanStatus).includes(
+          v as EInternalUserPlanStatus
+        )
+      ) as EInternalUserPlanStatus[];
+  }
 
   private getPlanTypeFromParam(param: string): EOpportunityType | null {
     switch (param.toLowerCase()) {
