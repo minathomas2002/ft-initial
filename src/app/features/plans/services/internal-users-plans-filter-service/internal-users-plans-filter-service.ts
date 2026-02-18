@@ -21,11 +21,13 @@ export class InternalUsersPlansFilterService extends AbstractServiceFilter<IPlan
 
   showClearAll = computed(() => {
     const current = this.filter();
-    return Boolean(current.searchText?.trim()) ||
-      current.planType !== null ||
-      current.status !== null ||
-      current.assignee !== null ||
-      Boolean(current.submissionDate);
+    const hasSearch = Boolean(current.searchText?.trim());
+    const hasPlanType = Array.isArray(current.planType) ? current.planType.length > 0 : current.planType !== null;
+    const hasStatus = Array.isArray(current.status) ? current.status.length > 0 : current.status !== null;
+    const hasAssignee = Array.isArray(current.assignee) ? current.assignee.length > 0 : current.assignee !== null;
+    const hasSubmissionDate = Boolean(current.submissionDate);
+
+    return hasSearch || hasPlanType || hasStatus || hasAssignee || hasSubmissionDate;
   });
 
   performFilter$() {

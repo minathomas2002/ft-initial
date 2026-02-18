@@ -21,10 +21,12 @@ export class InvestorPlansFilterService extends AbstractServiceFilter<IPlanFilte
 
   showClearAll = computed(() => {
     const current = this.filter();
-    return Boolean(current.searchText?.trim()) ||
-      current.planType !== null ||
-      current.status !== null ||
-      Boolean(current.submissionDate);
+    const hasSearch = Boolean(current.searchText?.trim());
+    const hasPlanType = Array.isArray(current.planType) ? current.planType.length > 0 : current.planType !== null;
+    const hasStatus = Array.isArray(current.status) ? current.status.length > 0 : current.status !== null;
+    const hasSubmissionDate = Boolean(current.submissionDate);
+
+    return hasSearch || hasPlanType || hasStatus || hasSubmissionDate;
   });
 
   performFilter$() {
