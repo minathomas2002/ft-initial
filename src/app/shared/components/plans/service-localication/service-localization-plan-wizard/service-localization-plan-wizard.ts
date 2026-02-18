@@ -95,7 +95,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     }
 
     if (this.isEmployeePersona()) {
-      return "This action cannot be undone and the plan will go directly to the investor."
+      return "This action cannot be undone and the plan will go directly to the Investor."
     }
 
     return "This action cannot be undone and the plan will go directly to the Division Manager.";
