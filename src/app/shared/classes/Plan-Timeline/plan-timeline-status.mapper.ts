@@ -17,7 +17,7 @@ export class PlanTimelineStatusMapper {
       [EStatusPlanTimeLine.Approved]: 'fadeGreen',
       [EStatusPlanTimeLine.Rejected]: 'red',
       [EStatusPlanTimeLine.EmployeeApproved]: 'fadedBlue',
-      [EStatusPlanTimeLine.DVApproved]: 'blue',
+      [EStatusPlanTimeLine.DVApproved]: 'fadedBlue',
       [EStatusPlanTimeLine.DEPTApproved]: 'fadeGreen',
       [EStatusPlanTimeLine.DVRejected]: 'red',
       [EStatusPlanTimeLine.DEPTRejected]: 'red',
