@@ -51,6 +51,7 @@ export class DataTableComponent<T> {
   scrollHeight = input<string>("");
   messageTitle = input<string>(this.i18nService.translate('common.noDataFound'));
   onRowClick = output<{ item: T | unknown; rowIndex: number }>();
+  sortChange = output<void>();
   disabledRows = computed(() => {
     return this.rows().map(
       (item, index) => !this.rowSelectable()({ data: item, index: index }),
@@ -72,16 +73,21 @@ export class DataTableComponent<T> {
     const key = column.sortingKey;
     this.filter.update((res) => {
       const isSameKey = res.sortField === key;
+      let newFilter: any;
 
       if (!isSameKey) {
-        return { ...res, sortField: key, sortOrder: ESortingOrder.asc };
+        newFilter = { ...res, sortField: key, sortOrder: ESortingOrder.asc };
+      } else if (res.sortOrder === ESortingOrder.asc) {
+        newFilter = { ...res, sortField: key, sortOrder: ESortingOrder.desc };
+      } else {
+        newFilter = { ...res, sortField: null, sortOrder: ESortingOrder.desc };
       }
 
-      if (res.sortOrder === ESortingOrder.asc) {
-        return { ...res, sortField: key, sortOrder: ESortingOrder.desc };
-      }
-
-      return { ...res, sortField: null, sortOrder: ESortingOrder.desc };
+      // Reset pagination to page 1 when sorting changes
+      return { ...newFilter, pageNumber: 1 };
     });
+
+    // Emit sort change event to trigger applyFilter() instead of applyFilterWithPaging()
+    this.sortChange.emit();
   }
 }

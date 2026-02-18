@@ -14,6 +14,7 @@
         [(filter)]="filterService.filter"
         [totalRecords]="totalRecords()"
         (filterChange)="filterService.applyFilterWithPaging()"
+        (sortChange)="filterService.applyFilter()"
       >
         <ng-template
           #itemsTemplate

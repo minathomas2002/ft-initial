@@ -62,10 +62,21 @@
       }
     </ng-container>
 
-    <ng-container ngProjectAs="table-body">
-      <app-table-skeleton
-        [headers]="headers()"
-        [isLoading]="isLoading()"
+  <ng-container ngProjectAs="table-body">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="isLoading()"
+    >
+      <app-data-table
+        [columns]="headers()"
+        [rows]="rows()"
+        [(filter)]="filterService().filter"
+        [totalRecords]="totalRecords()"
+        (filterChange)="filterService().applyFilterWithPaging()"
+        (sortChange)="applyFilter()"
+        [messageTitle]="'plans.list.noPlansFound' | translate"
+        [showCheckBox]="false"
+        [rowsCheckable]="false"
       >
         <app-data-table
           [columns]="headers()"
