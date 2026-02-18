@@ -66,6 +66,7 @@ export abstract class SummaryStepBaseClass {
     return false
   });
 
+  hideEditButton = computed(() => this.isViewMode() || this.planStore.isFinalStatus());
   // /** Fallback count from plan store when wizard does not pass stepCommentCountFromWizard. */
   // private stepCommentCountFromStore = computed(() => {
   //   const comments = this.planStore.planComments()?.comments ?? [];

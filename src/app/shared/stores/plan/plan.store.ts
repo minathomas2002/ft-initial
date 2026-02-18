@@ -181,6 +181,14 @@ export const PlanStore = signalStore(
     const roleService = inject(RoleService);
 
     return {
+      isFinalStatus: computed(() =>
+        [
+          EInternalUserPlanStatus.DEPT_REJECTED,
+          EInternalUserPlanStatus.DEPT_APPROVED,
+          EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+          EInternalUserPlanStatus.DEPT_REJECTED,
+        ].includes(store.planStatus() as EInternalUserPlanStatus)),
+
       planTypeOptions: computed<IPlanTypeDropdownOption[]>(() => {
         i18nService.currentLanguage();
         return [

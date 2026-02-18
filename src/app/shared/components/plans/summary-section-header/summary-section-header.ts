@@ -10,7 +10,7 @@ import { TooltipModule } from 'primeng/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionHeader {
-  isViewMode = input<boolean>(false);
+  hideEditButton = input<boolean>(false);
   title = input.required<string>();
   onEdit = output<void>();
 
