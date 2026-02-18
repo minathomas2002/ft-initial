@@ -643,6 +643,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           return this.loadPlanData$(currentPlanId).pipe(
             tap((responseBody) => {
               if (responseBody) this.mapPlanDataToForm(responseBody);
+              if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
+                this.opportunitiesStore.getOpportunityLocalizationTablesValidation(this.planStore.productPlanData()?.productPlan.id ?? '')
+                  .pipe(takeUntilDestroyed(this.destroyRef))
+                  .subscribe((validation) => { })
+              }
             })
           );
         }

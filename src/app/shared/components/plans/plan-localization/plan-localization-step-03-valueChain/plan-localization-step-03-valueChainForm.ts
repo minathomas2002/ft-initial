@@ -216,12 +216,14 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
-    // effect(() => {
-    //   const validation = this.opportunitiesStore.opportunityLocalizationTablesValidation();
-    //   if (validation) {
-    //     this.planFormService.updateValueChainValidation(validation);
-    //   }
-    // })
+    effect(() => {
+      const validation = this.opportunitiesStore.opportunityLocalizationTablesValidation();
+      console.log({
+        validation
+      });
+
+      this.planFormService.updateValueChainValidation(validation);
+    })
   }
 
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
