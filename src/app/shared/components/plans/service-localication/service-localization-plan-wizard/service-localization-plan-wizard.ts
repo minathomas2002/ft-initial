@@ -123,7 +123,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       return 'Are you sure you want to reject the plan as final rejection?'
     }
 
-    return 'Are you sure you want to reject this plan and return it to the DV Manager for acknowledgement?'
+    return 'Are you sure you want to reject this plan and return it to the Division Manager for acknowledgement?'
   })
 
   visibility = model(false);
