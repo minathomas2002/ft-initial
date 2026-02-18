@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { finalize } from 'rxjs';
+import { ResetButton } from '../../components/reset-button/reset-button';
 import { ERoutes } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
@@ -9,7 +11,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 @Component({
   selector: 'app-verification',
-  imports: [ButtonModule, TranslatePipe],
+  imports: [ButtonModule, TranslatePipe, ResetButton],
   templateUrl: './verification.html',
   styleUrl: './verification.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,22 +24,28 @@ export class Verification implements OnInit {
   i18nService = inject(I18nService);
 
   email = signal<string | null>(null);
+  isButtonLoading = signal(false);
+  resendSuccessToken = 0;
 
   ngOnInit(): void {
     const emailParam = this.route.snapshot.queryParams['email'];
     if (emailParam) {
       this.email.set(emailParam);
+      this.resendVerificationEmail();
     }
   }
 
   resendVerificationEmail() {
     const email = this.email();
     if (email) {
-      this.authStore.resentVerifyEmail(email).subscribe({
+      this.isButtonLoading.set(true);
+      this.authStore.resentVerifyEmail(email)
+      .pipe(finalize(() => this.isButtonLoading.set(false)))
+      .subscribe({
         next: (response) => {
           if (response.statusCode === 200 || response.statusCode === 201) {
-            // Show success message
             this.toast.success(this.i18nService.translate('auth.login.resendVerificationSuccess'));
+            this.resendSuccessToken++;
           }
         },
         error: (error) => {

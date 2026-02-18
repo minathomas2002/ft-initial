@@ -73,6 +73,16 @@
           [routerLink]="['/auth/register']"
         />
       </div>
+
+      @if (showResendVerification()) {
+      <div class="flex justify-center items-center mt-1">
+        <p-button
+          variant="text"
+          [label]="'auth.login.resendVerificationLink' | translate"
+          (onClick)="onGoToVerification()"
+        />
+      </div>
+      }
     </form>
   </div>
 </div>
