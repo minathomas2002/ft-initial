@@ -61,7 +61,9 @@ export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
       const label =
         context.config.metadata?.persona?.includes(ERoles.EMPLOYEE)
           ? i18n.translate(TRANSLATION_KEYS.plans.sendBackToInvestor)
-          : 'Send Back to Employee';
+          : context.config.metadata?.persona?.includes(ERoles.DEPARTMENT_MANAGER)
+          ? i18n.translate(TRANSLATION_KEYS.plans.sendBackToDv):
+           i18n.translate(TRANSLATION_KEYS.plans.sendBackToEmployee);
 
       return {
         id: 'send-back',

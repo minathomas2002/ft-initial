@@ -93,6 +93,8 @@ export const TRANSLATION_KEYS = {
     submit: 'plans.wizard.submit',
     timeline: 'plans.wizard.timeline',
     sendBackToInvestor: 'plans.wizard.sendBackToInvestor',
+    sendBackToEmployee: 'plans.wizard.sendBackToEmployee',
+    sendBackToDv: 'plans.wizard.sendBackToDv',
     addComments: 'plans.wizard.addComments',
     acknowledge: 'plans.wizard.acknowledge',
     reject: 'plans.wizard.reject',

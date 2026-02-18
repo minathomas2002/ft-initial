@@ -90,15 +90,15 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   override readonly toasterService = inject(ToasterService);
 
   readonly sendBackConfirmationMessage = computed(() => {
-    // if (this.isDVManagerPersona()) {
-    //   return "This action cannot be undone and the plan will go directly to the Employee."
-    // }
+    if (this.isDVManagerPersona()) {
+      return "This action cannot be undone and the plan will go directly to the Employee."
+    }
 
     if (this.isEmployeePersona()) {
       return "This action cannot be undone and the plan will go directly to the investor."
     }
 
-    return "This action cannot be undone and the plan will go directly to the Employee.";
+    return "This action cannot be undone and the plan will go directly to the Division Manager.";
   })
 
   readonly approvalDialogTitle = computed(() => {
