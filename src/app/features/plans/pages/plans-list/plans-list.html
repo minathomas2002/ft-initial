@@ -1,133 +1,133 @@
 <div class="cards-page-layout px-[32px] py-[24px]">
-<app-table-layout
-  [tableTitle]="'plans.title' | translate"
-  [tableSubTitle]="'plans.subtitle' | translate"
-  pageTitleClass="text-[24px] font-semibold"
-  pageSubTitleClass="text-md text-gray-600"
->
-  @if (isInvestor()) { <ng-container ngProjectAs="table-actions">
-    <p-button
-      [label]="'plans.submitNewPlan' | translate"
-      [icon]="'icon-plus'"
-      [size]="'small'"
-      (onClick)="createNewPlan()"
-    />
-  </ng-container>}
+  <app-table-layout
+    [tableTitle]="'plans.title' | translate"
+    [tableSubTitle]="'plans.subtitle' | translate"
+    pageTitleClass="text-[24px] font-semibold"
+    pageSubTitleClass="text-md text-gray-600"
+  >
+    @if (isInvestor()) { <ng-container ngProjectAs="table-actions">
+      <p-button
+        [label]="'plans.submitNewPlan' | translate"
+        [icon]="'icon-plus'"
+        [size]="'small'"
+        (onClick)="createNewPlan()"
+      />
+    </ng-container>}
 
-  <ng-container ngProjectAs="table-filters">
-    <!-- Filters -->
-    @if (isInvestor()) {
-    <app-investor-plans-filter></app-investor-plans-filter>
-    } @else {
-    <app-internal-users-plans-filter></app-internal-users-plans-filter>
-    }
-  </ng-container>
+    <ng-container ngProjectAs="table-filters">
+      <!-- Filters -->
+      @if (isInvestor()) {
+      <app-investor-plans-filter></app-investor-plans-filter>
+      } @else {
+      <app-internal-users-plans-filter></app-internal-users-plans-filter>
+      }
+    </ng-container>
 
-  <ng-container ngProjectAs="table-body">
-    <app-table-skeleton
-      [headers]="headers()"
-      [isLoading]="isLoading()"
-    >
-      <app-data-table
-        [columns]="headers()"
-        [rows]="rows()"
-        [(filter)]="filterService().filter"
-        [totalRecords]="totalRecords()"
-        (filterChange)="filterService().applyFilterWithPaging()"
-        (sortChange)="applyFilter()"
-        [messageTitle]="'plans.list.noPlansFound' | translate"
-        [showCheckBox]="false"
-        [rowsCheckable]="false"
+    <ng-container ngProjectAs="table-body">
+      <app-table-skeleton
+        [headers]="headers()"
+        [isLoading]="isLoading()"
       >
-        <ng-template
-          #itemsTemplate
-          let-item="item"
+        <app-data-table
+          [columns]="headers()"
+          [rows]="rows()"
+          [(filter)]="filterService().filter"
+          [totalRecords]="totalRecords()"
+          (filterChange)="filterService().applyFilterWithPaging()"
+          (sortChange)="applyFilter()"
+          [messageTitle]="'plans.list.noPlansFound' | translate"
+          [showCheckBox]="false"
+          [rowsCheckable]="false"
         >
-          <td>
-            {{ '#' + item.planCode }}
-          </td>
-          @if (isInternalUser()) {
-          <td>
-            <p
-              class="text-sm text-gray-900 font-medium max-w-[25ch]"
-              [appTruncateTooltip]="item.investorName ?? '-'"
-              [maxChars]="20"
-            >
-              {{ item.investorName ?? '-' }}
-            </p>
-          </td>
-          }
-          <td>
-            <p
-              class="text-sm text-gray-900 font-medium max-w-[25ch]"
-              [appTruncateTooltip]="item.title"
-              [maxChars]="20"
-            >
-              {{ item.title }}
-            </p>
-          </td>
-          <td>
-            <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
-          </td>
-          <td>{{ item.submissionDate | date: 'dd MMM yyyy' }}</td>
-          @if (isInternalUser()) {
-          <td>
-            <p
-              class="text-sm text-gray-900 font-medium max-w-[25ch]"
-              [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)"
-              [maxChars]="20"
-            >
-              {{ getAssigneeName(item.assignedEmployee) }}
-            </p>
-          </td>
-          }
-          <td>
-            <app-base-tag
-              [value]="getStatusLabel(item.status)"
-              [color]="getStatusBadgeColor(item.status)"
-              [maxChars]="25"
-            ></app-base-tag>
-          </td>
-          @if (isInternalUser()) {
-          <td>
-            @if(item.status !== EInternalUserPlanStatus.UNASSIGNED) {
-            <span
-              class="text-sm font-medium"
-              [ngClass]="
+          <ng-template
+            #itemsTemplate
+            let-item="item"
+          >
+            <td>
+              {{ '#' + item.planCode }}
+            </td>
+            @if (isInternalUser()) {
+            <td>
+              <p
+                class="text-sm text-gray-900 font-medium max-w-[25ch]"
+                [appTruncateTooltip]="item.investorName ?? '-'"
+                [maxChars]="20"
+              >
+                {{ item.investorName ?? '-' }}
+              </p>
+            </td>
+            }
+            <td>
+              <p
+                class="text-sm text-gray-900 font-medium max-w-[25ch]"
+                [appTruncateTooltip]="item.title"
+                [maxChars]="20"
+              >
+                {{ item.title }}
+              </p>
+            </td>
+            <td>
+              <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
+            </td>
+            <td>{{ item.submissionDate | date: 'dd MMM yyyy' }}</td>
+            @if (isInternalUser()) {
+            <td>
+              <p
+                class="text-sm text-gray-900 font-medium max-w-[25ch]"
+                [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)"
+                [maxChars]="20"
+              >
+                {{ getAssigneeName(item.assignedEmployee) }}
+              </p>
+            </td>
+            }
+            <td>
+              <app-base-tag
+                [value]="getStatusLabel(item.status)"
+                [color]="getStatusBadgeColor(item.status)"
+                [maxChars]="25"
+              ></app-base-tag>
+            </td>
+            @if (isInternalUser()) {
+            <td>
+              @if(item.status !== EInternalUserPlanStatus.UNASSIGNED) {
+              <span
+                class="text-sm font-medium"
+                [ngClass]="
                 item.slaCountDown > 5
                   ? 'text-green-500'
                   : item.slaCountDown > 0
                   ? 'text-orange-500'
                   : 'text-red-600'
               "
-            >
-              {{ item.slaCountDown | slaCountdownNoun }}
-            </span>
-            } @else {
-            <span class="text-sm font-medium">-</span>
+              >
+                {{ item.slaCountDown | slaCountdownNoun }}
+              </span>
+              } @else {
+              <span class="text-sm font-medium">-</span>
+              }
+            </td>
             }
-          </td>
-          }
-          <td>
-            <app-plans-action-menu
-              [actions]="item.actions"
-              [plan]="item"
-              (onViewDetails)="onViewDetails($event)"
-              (onEdit)="onEdit($event)"
-              (onDownload)="onDownload($event)"
-              (onViewTimeLine)="onViewTimeline($event)"
-              (onInternalReview)="onReview($event)"
-              (onAssignToEmployee)="onAssignToEmployee($event)"
-              (onReAssign)="onReAssign($event)"
-              (onDelete)="onDelete($event)"
-              (onResubmitted)="onResubmitted($event)"
-            />
-          </td>
-        </ng-template>
-      </app-data-table>
-    </app-table-skeleton>
-  </ng-container>
-</app-table-layout>
+            <td>
+              <app-plans-action-menu
+                [actions]="item.actions"
+                [plan]="item"
+                (onViewDetails)="onViewDetails($event)"
+                (onEdit)="onEdit($event)"
+                (onDownload)="onDownload($event)"
+                (onViewTimeLine)="onViewTimeline($event)"
+                (onInternalReview)="onReview($event)"
+                (onAssignToEmployee)="onAssignToEmployee($event)"
+                (onReAssign)="onReAssign($event)"
+                (onDelete)="onDelete($event)"
+                (onResubmitted)="onResubmitted($event)"
+              />
+            </td>
+          </ng-template>
+        </app-data-table>
+      </app-table-skeleton>
+    </ng-container>
+  </app-table-layout>
 </div>
 
 @if (planTermsAndConditionsDialogVisibility()) {
@@ -175,15 +175,14 @@
 }
 
 @if(viewDeleteDialog()){
-  <app-general-confirmation-dialog
-    [(visible)]="viewDeleteDialog"
-    [title]="'Are you sure you want to delete the plan?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
-    [confirmButtonSeverity]="'danger'"
-    [icon]="'icon-trash-2'"
-    (confirmed)="onConfirmDeletePlan()"
-    (onCancel)="onCancelDeletePlan()"
-  />
-  }
-
+<app-general-confirmation-dialog
+  [(visible)]="viewDeleteDialog"
+  [title]="'Are you sure you want to delete the plan? This action cannot be undone.'"
+  [confirmationLabel]="'Delete'"
+  [cancelLabel]="'Cancel'"
+  [confirmButtonSeverity]="'danger'"
+  [icon]="'icon-trash-2'"
+  (confirmed)="onConfirmDeletePlan()"
+  (onCancel)="onCancelDeletePlan()"
+/>
+}
