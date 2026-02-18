@@ -18,6 +18,7 @@
           [(filter)]="filterService.filter"
           [totalRecords]="totalRecords()"
           (filterChange)="filterService.applyFilterWithPaging()"
+          (sortChange)="filterService.applyFilter()"
           messageTitle="No Investors Found"
           [showCheckBox]="false"
           [rowsCheckable]="false"

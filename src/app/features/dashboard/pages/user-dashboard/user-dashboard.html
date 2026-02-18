@@ -73,6 +73,7 @@
         [(filter)]="filterService().filter"
         [totalRecords]="totalRecords()"
         (filterChange)="filterService().applyFilterWithPaging()"
+        (sortChange)="applyFilter()"
         [messageTitle]="'plans.list.noPlansFound' | translate"
         [showCheckBox]="false"
         [rowsCheckable]="false"
