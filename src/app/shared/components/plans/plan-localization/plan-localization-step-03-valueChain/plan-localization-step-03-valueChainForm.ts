@@ -218,10 +218,6 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   protected override initializeStepSpecificLogic(): void {
     effect(() => {
       const validation = this.opportunitiesStore.opportunityLocalizationTablesValidation();
-      console.log({
-        validation
-      });
-
       this.planFormService.updateValueChainValidation(validation);
     })
   }
