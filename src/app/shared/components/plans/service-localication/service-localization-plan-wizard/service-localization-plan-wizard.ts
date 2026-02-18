@@ -763,9 +763,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const currentMode = this.planStore.wizardMode();
     if (['view', 'Review', 'resubmit'].includes(currentMode)) {
       this.disableAllForms();
-      if (currentMode === 'view' || currentMode === 'resubmit') {
-        this.activeStep.set(this.stepsWithId().length);
-      }
+      this.activeStep.set(this.stepsWithId().length);
       if (!(this.planStatus()! === EInternalUserPlanStatus.UNDER_REVIEW && this.isInvestorPersona())) {
         this.planStore.getPlanComments(planId)
           .pipe(
