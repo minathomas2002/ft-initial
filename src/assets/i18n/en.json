@@ -759,6 +759,8 @@
       "reject": "Reject",
       "acknowledge": "Acknowledge",
       "sendBackToInvestor": "Send Back to Investor",
+      "sendBackToEmployee": "Send Back to Employee",
+      "sendBackToDv": "Send Back to Division Manager",
       "addComments": "Add Comments",
       "timeline": "Timeline",
       "messages": {
