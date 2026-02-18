@@ -100,15 +100,15 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.planStatus() !== EInvestorPlanStatus.DRAFT && this.activeStep() < 5)
   })
   sendBackConfirmationMessage = computed(() => {
-    // if (this.isDVManagerPersona()) {
-    //   return "This action cannot be undone and the plan will go directly to the Employee."
-    // }
-
-    if (this.isEmployeePersona()) {
-      return "This action cannot be undone and the plan will go directly to the investor."
+    if (this.isDVManagerPersona()) {
+      return "This action cannot be undone and the plan will go directly to the Employee."
     }
 
-    return "This action cannot be undone and the plan will go directly to the Employee.";
+    if (this.isEmployeePersona()) {
+      return "This action cannot be undone and the plan will go directly to the Investor."
+    }
+
+    return "This action cannot be undone and the plan will go directly to the Division Manager.";
   })
 
   readonly approvalDialogTitle = computed(() => {
