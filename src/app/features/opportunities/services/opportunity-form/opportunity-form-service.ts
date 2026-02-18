@@ -28,7 +28,7 @@ export class OpportunityFormService {
     startDate: null,
     endDate: null,
     image: null,
-    quantityUnit: EOpportunityQuantity.Unit.toString()
+    quantityUnit: null
   }
   private OpportunityLocalizationFormInitialState: IOpportunityLocalizationFrom = {
     designEngineerings: [
@@ -92,7 +92,7 @@ export class OpportunityFormService {
         opportunityType: [null, Validators.required],
         shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
         opportunityCategory: ['', Validators.required],
-        quantityUnit :[null, Validators.required],
+        quantityUnit :[null],
         spendSAR: [0, [Validators.min(0), Validators.max(10)]],
         minQuantity: [0, [Validators.min(0)]],
         maxQuantity: [0, [Validators.min(0)]],
@@ -101,7 +101,7 @@ export class OpportunityFormService {
         startDate: [null, [Validators.required, this.startDateRestrictionValidator]],
         endDate: [null, [Validators.required, this.endDateAfterStartDateValidator, this.endDateRestrictionValidator]],
         image: [null, Validators.required],
-      }, { validators: [this.quantityRangeValidator] }),
+      }, { validators: [this.quantityRangeValidator, , this.quantityUnitRequiredValidator] }),
       opportunityLocalization: this.fb.group({
         designEngineerings: this.fb.array(
           [this.createKeyActivityControl()]
@@ -460,7 +460,7 @@ export class OpportunityFormService {
     infoGroup.get('opportunityType')?.setValidators([Validators.required]);
     infoGroup.get('shortDescription')?.setValidators([Validators.required, Validators.maxLength(255)]);
     infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
-    infoGroup.get('quantityUnit')?.setValidators([Validators.required]);
+    //infoGroup.get('quantityUnit')?.setValidators([Validators.required]);
     infoGroup.get('spendSAR')?.setValidators([Validators.required, Validators.max(10)]);
     infoGroup.get('minQuantity')?.setValidators([Validators.required]);
     infoGroup.get('maxQuantity')?.setValidators([Validators.required]);
@@ -471,7 +471,7 @@ export class OpportunityFormService {
     infoGroup.get('image')?.setValidators([Validators.required]);
 
     //Group-level validator
-    infoGroup.setValidators([this.quantityRangeValidator]);
+    infoGroup.setValidators([this.quantityRangeValidator, this.quantityUnitRequiredValidator ]);
 
     //  Update validation for all controls
     Object.values(infoGroup.controls).forEach(control => {
@@ -552,4 +552,32 @@ export class OpportunityFormService {
     return JSON.stringify(this.initialFormValue) !==
       JSON.stringify(this.getAllFormsRawValue());
   }
+
+  private quantityUnitRequiredValidator = (group: AbstractControl): ValidationErrors | null => {
+  const minQuantity = Number(group.get('minQuantity')?.value) || 0;
+  const maxQuantity = Number(group.get('maxQuantity')?.value) || 0;
+  const quantityUnitControl = group.get('quantityUnit');
+
+  const shouldRequire = minQuantity > 0 || maxQuantity > 0;
+
+  if (shouldRequire && !quantityUnitControl?.value) {
+    const errors = quantityUnitControl?.errors || {};
+    quantityUnitControl?.setErrors({
+      ...errors,
+      quantityUnitRequired: true
+    });
+    quantityUnitControl?.markAsDirty({ onlySelf: true });
+    quantityUnitControl?.markAsTouched({ onlySelf: true });
+    return { quantityUnitRequired: true };
+  }
+
+  // Clear only this error (do not remove others)
+  // if (quantityUnitControl?.hasError('quantityUnitRequired')) {
+  //   const errors = { ...quantityUnitControl.errors };
+  //   delete errors['quantityUnitRequired'];
+  //   quantityUnitControl.setErrors(Object.keys(errors).length ? errors : null);
+  // }
+
+  return null;
+};
 }
