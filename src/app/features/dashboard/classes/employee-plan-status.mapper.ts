@@ -7,13 +7,13 @@ export class EmployeePlanStatusMapper {
 
   getStatusBadgeColor(status: EInternalUserPlanStatus): TColors {
     const classMap: Record<EInternalUserPlanStatus, TColors> = {
-      [EInternalUserPlanStatus.APPROVED]: 'green',
-      [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: 'primary',
+      [EInternalUserPlanStatus.APPROVED]: 'fadeGreen',
+      [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: 'fadedBlue',
       [EInternalUserPlanStatus.UNASSIGNED]: 'yellow',
       [EInternalUserPlanStatus.UNDER_REVIEW]: 'blue',
-      [EInternalUserPlanStatus.DEPT_APPROVED]: 'green',
+      [EInternalUserPlanStatus.DEPT_APPROVED]: 'fadeGreen',
       [EInternalUserPlanStatus.DEPT_REJECTED]: 'red',
-      [EInternalUserPlanStatus.DV_APPROVED]: 'green',
+      [EInternalUserPlanStatus.DV_APPROVED]: 'fadedBlue',
       [EInternalUserPlanStatus.DV_REJECTED]: 'red',
       [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: 'red',
       //[EInternalUserPlanStatus.EMPLOYEE_REJECTED]: 'red',

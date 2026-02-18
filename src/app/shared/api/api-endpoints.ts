@@ -93,6 +93,7 @@ export const API_ENDPOINTS = {
     getActiveOpportunityLookUps: `${Opportunities}/GetActiveOpportunityLookUps`,
     changeStatus: `${Opportunities}/change-status`,
     checkApply_Opportunity: `${Opportunities}/checkApply_Opportunity`,
+    get_OpportunityLocalizationTablesValidation: `${Opportunities}/get_OpportunityLocalizationTablesValidation`,
   },
   auth: {
     investorLogin: `${Auth}/investor-login`,

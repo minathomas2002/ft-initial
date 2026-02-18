@@ -84,3 +84,11 @@ export interface IOpportunitiesDashboardResponse<T> extends IApiPaginatedRespons
     draftOpportunities: number;
   };
 }
+
+export interface IOpportunityLocalizationTablesValidationResponse {
+  designEngineeringRequired: boolean;
+  sourcingRequired: boolean;
+  manufacturingRequired: boolean;
+  assemblyTestingRequired: boolean;
+  afterSalesRequired: boolean;
+}

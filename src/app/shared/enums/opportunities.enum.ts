@@ -24,9 +24,17 @@ export enum EOpportunityAction {
 
 export enum EOpportunityQuantity {
   KM = 1,
-  Panels =2,
-  CB =3,
-  Discs =4,
-  KTons =5,
-  Unit =6 
+  Panels = 2,
+  CB = 3,
+  Discs = 4,
+  KTons = 5,
+  Unit = 6
+}
+
+export enum EOpportunityLocalizationTablesValidation {
+  DesignEngineering = 'designEngineeringRequired',
+  Sourcing = 'sourcingRequired',
+  Manufacturing = 'manufacturingRequired',
+  AssemblyTesting = 'assemblyTestingRequired',
+  AfterSales = 'afterSalesRequired',
 }

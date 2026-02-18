@@ -12,7 +12,7 @@ import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhe
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle, ERoles } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
@@ -21,11 +21,13 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
 import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { TextareaModule } from 'primeng/textarea';
-import { TColors } from 'src/app/shared/interfaces';
+import { ISelectItem, TColors } from 'src/app/shared/interfaces';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -55,9 +57,11 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanStepBaseClass {
+  readonly opportunitiesStore = inject(OpportunitiesStore);
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   override readonly planStore = inject(PlanStore);
   override readonly destroyRef = inject(DestroyRef);
+  readonly roleService = inject(RoleService);
 
   readonly planFormService = inject(ProductPlanFormService);
 
@@ -180,6 +184,10 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     }
   }
 
+  opportunityControlSignal = toSignal<ISelectItem | null>(this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).valueChanges, {
+    initialValue: this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).value ?? null
+  });
+
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {
     // Local agent validation effect - reactive to signal changes
@@ -187,6 +195,18 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
       const doYouHaveLocalAgentInKSA = this.doYouHaveLocalAgentInKSASignal();
       if (doYouHaveLocalAgentInKSA !== null && this.planFormService) {
         this.planFormService.toggleLocalAgentInformValidation(doYouHaveLocalAgentInKSA === true);
+      }
+    });
+
+    effect(() => {
+      const opportunityControlSignal = this.opportunityControlSignal();
+      if (opportunityControlSignal === null) this.opportunitiesStore.resetOpportunityLocalizationTablesValidation();
+      if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
+        this.opportunitiesStore.getOpportunityLocalizationTablesValidation(opportunityControlSignal!.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((response) => {
+            this.planFormService.updateValueChainValidation(response);
+          });
       }
     });
 

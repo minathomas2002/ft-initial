@@ -79,7 +79,7 @@
               </app-base-card>
               <app-base-card
                 icon="icon-data"
-                cardTitle="{{ 'opportunity.details.quantityUnits' | translate }} ({{ getUnitLabel() }})"
+                cardTitle="{{ 'opportunity.details.quantityUnits' | translate }} {{ getUnitLabel() }}"
                 cardClass="bg-white"
                 cardDescription="{{ opportunitiesStore.details()?.minQuantityFormatted }} - {{
                   opportunitiesStore.details()?.maxQuantityFormatted

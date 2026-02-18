@@ -152,7 +152,7 @@
   </ng-template>
 
   <ng-template [appStepContent]="3">
-    @if (isLoadingPlan()) {
+    @if (isLoadingPlan() || isLoadingOpportunityLocalizationTablesValidation()) {
     <div class="flex flex-col gap-4">
       <p-skeleton
         width="200px"

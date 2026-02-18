@@ -10,7 +10,7 @@ import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interfa
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
-import { switchMap, catchError, finalize, of, map, tap, combineLatest, EMPTY, distinctUntilChanged } from "rxjs";
+import { switchMap, catchError, finalize, of, map, tap, combineLatest, EMPTY, distinctUntilChanged, Observable } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType, EPlanPageTitle } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
@@ -27,14 +27,12 @@ import { GeneralConfirmationDialogComponent } from "../../../utility-components/
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
 import { TColors } from "src/app/shared/interfaces";
-import { AuthStore } from "src/app/shared/stores/auth/auth.store";
 import { ERoles } from "src/app/shared/enums/roles.enum";
 import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
 import { WizardActionFactory } from "src/app/shared/services/wizard/wizard-action-factory";
-import { IBaseWizardAction } from "../../../base-components/base-wizard-actions/base-wizard-actions";
 import { SkeletonModule } from "primeng/skeleton";
 
 export type TCommentPhase = 'none' | 'adding' | 'editing' | 'viewing';
@@ -43,6 +41,7 @@ export interface ICommentsCountAndPhase {
   phase: TCommentPhase;
 }
 import { IPlanWizardStepCommentDescriptor, IStepValidationStatus } from "src/app/shared/types/plan-comments.types";
+import { OpportunitiesStore } from "src/app/shared/stores/opportunities/opportunities.store";
 type ProductLocalizationWizardStepId =
   | 'overview'
   | 'productPlant'
@@ -76,10 +75,11 @@ type ProductLocalizationWizardStepId =
 })
 export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnDestroy {
 
-  productPlanFormService = inject(ProductPlanFormService);
+  readonly opportunitiesStore = inject(OpportunitiesStore);
+  readonly productPlanFormService = inject(ProductPlanFormService);
   override readonly toasterService = inject(ToasterService);
   override readonly planStore = inject(PlanStore);
-  validationService = inject(ProductPlanValidationService);
+  readonly validationService = inject(ProductPlanValidationService);
   private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   visibility = model(false);
@@ -425,6 +425,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return this.i18nService.translate('plans.wizard.title.create');
   });
   isLoadingPlan = signal(false);
+  isLoadingOpportunityLocalizationTablesValidation = this.opportunitiesStore.loadingOpportunityLocalizationTablesValidation;
 
   // Submission confirmation modal
   showSubmissionModal = signal(false);
@@ -642,6 +643,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           return this.loadPlanData$(currentPlanId).pipe(
             tap((responseBody) => {
               if (responseBody) this.mapPlanDataToForm(responseBody);
+              if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
+                this.opportunitiesStore.getOpportunityLocalizationTablesValidation(this.planStore.productPlanData()?.productPlan.id ?? '')
+                  .pipe(takeUntilDestroyed(this.destroyRef))
+                  .subscribe((validation) => { })
+              }
             })
           );
         }
@@ -783,7 +789,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   /** Returns observable that loads plan and emits response body; used by combined plan-load stream. */
-  private loadPlanData$(planId: string) {
+  private loadPlanData$(planId: string): Observable<IProductPlanResponse | null> {
     this.isLoadingPlan.set(true);
     return this.planStore.getProductPlan(planId).pipe(
       map((response) => response?.body ?? null),
@@ -1286,6 +1292,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   ngOnDestroy(): void {
     this.productPlanFormService.resetAllForms();
+    this.opportunitiesStore.resetOpportunityLocalizationTablesValidation();
   }
 
   /** Step comment descriptors for shared collect/validate logic. */

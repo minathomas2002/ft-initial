@@ -2,10 +2,13 @@ import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, Validat
 import { ELocalizationStatusType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { hasIncompleteControl } from 'src/app/shared/validators/form-control-helpers';
 import { BasicPlanBuilder } from './basicPlanBuilder';
+import { IOpportunityLocalizationTablesValidationResponse } from 'src/app/shared/interfaces';
 
 export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder {
   constructor(
-    fb: FormBuilder) {
+    fb: FormBuilder,
+    private readonly getLocalizationTablesValidation: () => IOpportunityLocalizationTablesValidationResponse | null,
+  ) {
     super(fb);
   }
 
@@ -18,15 +21,15 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
       rowId: [null],
       [EMaterialsFormControls.expenseHeader]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(100)]],
       }),
       [EMaterialsFormControls.inHouseOrProcured]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]],
+        [EMaterialsFormControls.value]: [null],
       }),
       [EMaterialsFormControls.costPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100)]],
       }),
     };
 
@@ -44,7 +47,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
     yearControls.forEach(yearControl => {
       itemGroup[yearControl] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, Validators.required],
+        [EMaterialsFormControls.value]: [null],
       });
     });
 
@@ -106,6 +109,87 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
     });
   }
 
+  /**
+   * Updates required validators on all value controls within an item group.
+   * @param itemGroup - The value chain item FormGroup
+   * @param isRequired - When true, adds Validators.required; when false, removes it
+   */
+  updateItemGroupValidators(itemGroup: FormGroup, isRequired: boolean): void {
+    const controlNames = [
+      EMaterialsFormControls.expenseHeader,
+      EMaterialsFormControls.inHouseOrProcured,
+      EMaterialsFormControls.costPercentage,
+      EMaterialsFormControls.year1,
+      EMaterialsFormControls.year2,
+      EMaterialsFormControls.year3,
+      EMaterialsFormControls.year4,
+      EMaterialsFormControls.year5,
+      EMaterialsFormControls.year6,
+      EMaterialsFormControls.year7,
+    ];
+
+    controlNames.forEach(controlName => {
+      const nestedGroup = itemGroup.get(controlName) as FormGroup;
+      if (!nestedGroup) return;
+
+      const valueControl = nestedGroup.get(EMaterialsFormControls.value);
+      if (!valueControl) return;
+
+      if (isRequired) {
+        valueControl.addValidators(Validators.required);
+      } else {
+        valueControl.removeValidators(Validators.required);
+      }
+
+      // valueControl.markAsPristine();
+      valueControl.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
+  /**
+   * Updates validation (required validators) for all value chain items based on
+   * opportunity localization tables validation response.
+   */
+  updateValueChainValidation(
+    formGroup: FormGroup,
+    opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null
+  ): void {
+    const sectionConfig: Array<{
+      sectionName: string;
+      isRequired: boolean;
+    }> = [
+        {
+          sectionName: EMaterialsFormControls.designEngineeringFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.designEngineeringRequired ?? false,
+        },
+        {
+          sectionName: EMaterialsFormControls.sourcingFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.sourcingRequired ?? false,
+        },
+        {
+          sectionName: EMaterialsFormControls.manufacturingFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.manufacturingRequired ?? false,
+        },
+        {
+          sectionName: EMaterialsFormControls.assemblyTestingFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.assemblyTestingRequired ?? false,
+        },
+        {
+          sectionName: EMaterialsFormControls.afterSalesFormGroup,
+          isRequired: opportunityLocalizationTablesValidation?.afterSalesRequired ?? false,
+        },
+      ];
+
+    sectionConfig.forEach(({ sectionName, isRequired }) => {
+      const itemsArray = this.getSectionFormArray(formGroup, sectionName);
+      if (!itemsArray) return;
+
+      itemsArray.controls.forEach((itemControl: AbstractControl) => {
+        const itemFormGroup = itemControl as FormGroup;
+        this.updateItemGroupValidators(itemFormGroup, isRequired);
+      });
+    });
+  }
   /**
    * Build Step 3 main form group
    */
@@ -234,37 +318,6 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
   }
 
   /**
-   * Validate that total cost percentage doesn't exceed 100% for a section
-   */
-  private costPercentageArrayValidator() {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const array = control.value as any[];
-      if (!array || array.length === 0) {
-        return null; // Empty array is valid (will be handled by required validator if needed)
-      }
-
-      let total = 0;
-      array.forEach((item: any) => {
-        const costPercentage = item?.[EMaterialsFormControls.costPercentage]?.[EMaterialsFormControls.value];
-        if (costPercentage !== null && costPercentage !== undefined) {
-          total += parseFloat(costPercentage) || 0;
-        }
-      });
-
-      if (total > 100) {
-        return {
-          totalExceeds100: {
-            message: 'Total cost percentage cannot exceed 100%',
-            total: total
-          }
-        };
-      }
-
-      return null;
-    };
-  }
-
-  /**
    * Validator to check if any control in the form array is dirty, invalid, and has a required error
    * Returns {inComplete: true} if such a control is found
    */
@@ -287,12 +340,32 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
   }
 
   /**
-   * Validate total cost percentage across all sections
+   * Check if opportunityLocalizationTablesValidation has at least one section required (true).
+   */
+  private hasAnyLocalizationSectionRequired(validation: IOpportunityLocalizationTablesValidationResponse | null): boolean {
+    if (!validation) return false;
+    return (
+      validation.designEngineeringRequired ||
+      validation.sourcingRequired ||
+      validation.manufacturingRequired ||
+      validation.assemblyTestingRequired ||
+      validation.afterSalesRequired
+    );
+  }
+
+  /**
+   * Validate total cost percentage across all sections.
+   * Only triggers when opportunityLocalizationTablesValidation has at least one section with true.
    */
   private validateTotalCostPercentage() {
     return (control: AbstractControl): ValidationErrors | null => {
       const formGroup = control as FormGroup;
       if (!formGroup) {
+        return null;
+      }
+
+      const validation = this.getLocalizationTablesValidation();
+      if (!this.hasAnyLocalizationSectionRequired(validation)) {
         return null;
       }
 

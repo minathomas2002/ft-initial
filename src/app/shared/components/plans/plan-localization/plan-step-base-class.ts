@@ -21,7 +21,7 @@ import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
  * Note: Abstract base classes using inject() don't require Angular decorators.
  */
 @Directive()
-export abstract class PlanStepBaseClass {
+export abstract class PlanStepBaseClass implements OnInit {
   /** Tracks which controls have been marked as "changed once" in resubmit mode (avoids mutating control objects). */
   private readonly resubmitChangedOnceMap = new WeakMap<AbstractControl, boolean>();
   /** Ensures we only attach status/value subscriptions once per control to avoid duplicate handlers. */
@@ -662,7 +662,7 @@ export abstract class PlanStepBaseClass {
     }
 
     // Validate comment text
-    const comment =  commentValue || this.commentFormControl.value?.trim() || '';
+    const comment = commentValue || this.commentFormControl.value?.trim() || '';
 
     if (!comment) {
       this.commentFormControl.markAsTouched();

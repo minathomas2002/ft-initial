@@ -170,7 +170,7 @@ const initialState: {
   servicePlanData: null,
   actionNote: null,
   acknowledgeRejectionNote: null,
-  linkedToDeletedOpportunity:false
+  linkedToDeletedOpportunity: false
 };
 
 export const PlanStore = signalStore(
@@ -184,7 +184,7 @@ export const PlanStore = signalStore(
       planTypeOptions: computed<IPlanTypeDropdownOption[]>(() => {
         i18nService.currentLanguage();
         return [
-         // { label: i18nService.translate('plans.filter.allTypes'), value: null },
+          // { label: i18nService.translate('plans.filter.allTypes'), value: null },
           {
             label: i18nService.translate('plans.filter.service'),
             value: EOpportunityType.SERVICES,
@@ -275,7 +275,7 @@ export const PlanStore = signalStore(
         patchState(store, { planStatus: status });
       },
       setLinkedOpportunityWarning(linkedToDeletedOpportunity: boolean | false): void {
-            console.log(linkedToDeletedOpportunity, "showWarningMesageDeletedOpportunity");
+        console.log(linkedToDeletedOpportunity, "showWarningMesageDeletedOpportunity");
         patchState(store, { linkedToDeletedOpportunity });
       },
       setActionNote(actionNote: string | null): void {
@@ -299,7 +299,7 @@ export const PlanStore = signalStore(
         }
       },
       resetWizardState(): void {
-        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null, actionNote: null, acknowledgeRejectionNote: null , linkedToDeletedOpportunity:false});
+        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null, actionNote: null, acknowledgeRejectionNote: null, linkedToDeletedOpportunity: false });
       },
       updateCurrentUserPageComments(newPageComments: EPlanPageTitle[]): void {
         patchState(store, { currentUserPageComments: newPageComments });
@@ -571,7 +571,7 @@ export const PlanStore = signalStore(
       },
 
       /* rejection acknowledge by dv*/
-        DvRejecttionAcknowledgePlan(planId: string, acknowledgeNote: string) {
+      DvRejecttionAcknowledgePlan(planId: string, acknowledgeNote: string) {
         patchState(store, { isProcessing: true, error: null });
         return planApiService.DvRejectionAcknowledge({ planId, acknowledgeNote }).pipe(
           tap(() => {
@@ -595,7 +595,7 @@ export const PlanStore = signalStore(
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
             store.setActionNote(res.body?.productPlan?.actionNote || null);
-            store.setLinkedOpportunityWarning(res.body?.productPlan?.linkedToDeletedOpportunity|| false);
+            store.setLinkedOpportunityWarning(res.body?.productPlan?.linkedToDeletedOpportunity || false);
             store.setAcknowledgeRejectionNote(res.body?.productPlan?.acknowledgeRejectionNote || null);
             const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.productPlan?.investorStatus : res.body?.productPlan?.status;
             store.setPlanStatus(planStatus ?? null);
@@ -632,7 +632,7 @@ export const PlanStore = signalStore(
             patchState(store, { servicePlanData: res.body || null });
             store.setActionNote(res.body?.actionNote ?? null);
             store.setAcknowledgeRejectionNote(res.body?.acknowledgeRejectionNote ?? null);
-            store.setLinkedOpportunityWarning(res.body?.servicePlan.linkedToDeletedOpportunity|| false);
+            store.setLinkedOpportunityWarning(res.body?.servicePlan.linkedToDeletedOpportunity || false);
 
           }),
           catchError((error) => {

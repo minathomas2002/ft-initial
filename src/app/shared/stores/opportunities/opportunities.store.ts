@@ -1,23 +1,27 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
-import { finalize, tap } from 'rxjs';
+import { finalize, map, of, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
-import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails } from '../../interfaces/opportunities.interface';
+import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityLocalizationTablesValidationResponse } from '../../interfaces/opportunities.interface';
 
 const initialState: {
   loading: boolean;
+  loadingOpportunityLocalizationTablesValidation: boolean;
   error: string | null;
   count: number;
   list: IOpportunity[];
   isCheckingApplyOpportunity: boolean;
   details: IOpportunityDetails | null;
+  opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null;
 } = {
   loading: false,
+  loadingOpportunityLocalizationTablesValidation: false,
   error: null,
   count: 0,
   list: [],
   details: null,
-  isCheckingApplyOpportunity: false
+  isCheckingApplyOpportunity: false,
+  opportunityLocalizationTablesValidation: null
 };
 export const OpportunitiesStore = signalStore(
   { providedIn: 'root' },
@@ -61,6 +65,24 @@ export const OpportunitiesStore = signalStore(
             patchState(store, { isCheckingApplyOpportunity: false });
           })
         )
+      },
+      getOpportunityLocalizationTablesValidation(opportunityId: string) {
+        if (opportunityId === store.details()?.id && store.opportunityLocalizationTablesValidation() !== null) {
+          return of(store.opportunityLocalizationTablesValidation());
+        }
+        patchState(store, { loadingOpportunityLocalizationTablesValidation: true, error: null });
+        return opportunitiesApiService.getOpportunityLocalizationTablesValidation(opportunityId).pipe(
+          tap((res) => {
+            patchState(store, { opportunityLocalizationTablesValidation: res.body });
+          }),
+          map((res) => res.body),
+          finalize(() => {
+            patchState(store, { loadingOpportunityLocalizationTablesValidation: false });
+          })
+        )
+      },
+      resetOpportunityLocalizationTablesValidation() {
+        patchState(store, { opportunityLocalizationTablesValidation: null });
       }
     };
   })

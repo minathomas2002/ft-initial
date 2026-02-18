@@ -10,7 +10,8 @@ import {
   IOpportunityDetails,
   IAdminOpportunitiesFilterRequest,
   IAdminOpportunity,
-  ISelectItem
+  ISelectItem,
+  IOpportunityLocalizationTablesValidationResponse
 } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { EOpportunityStatus, EOpportunityType } from '../../enums';
@@ -71,5 +72,11 @@ export class OpportunitiesApiService {
     return this.baseHttpService.post<boolean, unknown, {
       opportunityId: string,
     }>(`${API_ENDPOINTS.opportunities.checkApply_Opportunity}`, req);
+  }
+
+  getOpportunityLocalizationTablesValidation(opportunityId: string): Observable<IBaseApiResponse<IOpportunityLocalizationTablesValidationResponse>> {
+    return this.baseHttpService.post<IOpportunityLocalizationTablesValidationResponse, unknown, {
+      opportunityId: string,
+    }>(API_ENDPOINTS.opportunities.get_OpportunityLocalizationTablesValidation, { opportunityId });
   }
 }
