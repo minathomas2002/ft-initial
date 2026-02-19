@@ -89,7 +89,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       }),
       [EMaterialsFormControls.capexRequired]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, numeric only
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(100000000000)]], // Required, numeric only
       }),
       [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],

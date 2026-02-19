@@ -14,7 +14,7 @@ export class PlanLocalizationStep4SaudizationFormBuilder extends BasicPlanBuilde
       [EMaterialsFormControls.annualHeadcount]: this.fb.group({
         rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.required]], // Integer only, >= 0
+        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.required, Validators.max(1000000)]], // Integer only, >= 0
       }),
       [EMaterialsFormControls.saudizationPercentage]: this.fb.group({
         rowId: [null], // Hidden control to store the row ID (for edit mode)
