@@ -8,7 +8,7 @@ import { ICommentsCountAndPhase } from 'src/app/shared/types/plan-comments.types
 import { SummarySectionSignature } from '../../summary-section-signature/summary-section-signature';
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { EInternalUserPlanStatus, EInvestorPlanStatus } from 'src/app/shared/interfaces';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { ERoles } from 'src/app/shared/enums';
@@ -31,10 +31,22 @@ export class ServicePlanSummaryPage {
   readonly planStore = inject(PlanStore);
   readonly roleService = inject(RoleService)
   readonly planRejectionsStatus = signal([EInternalUserPlanStatus.DEPT_REJECTED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED])
-  readonly shouldShowActionNote = signal([EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.UNDER_REVIEW, EInternalUserPlanStatus.PENDING])
+  readonly shouldHideActionNoteForInternal = signal([EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.UNDER_REVIEW, EInternalUserPlanStatus.PENDING, EInternalUserPlanStatus.UNASSIGNED])
+  readonly shouldHideActionNoteForInvestor = signal([EInvestorPlanStatus.SUBMITTED, EInvestorPlanStatus.UNDER_REVIEW, EInvestorPlanStatus.PENDING])
+  readonly planStatus = computed(() => this.planStore.planStatus() as EInternalUserPlanStatus | EInvestorPlanStatus);
+  readonly shouldShowActionNote = computed(() => {
+    const status = this.planStatus();
 
-  readonly isRejected = computed(() => this.planRejectionsStatus().includes(this.planStore.planStatus() as EInternalUserPlanStatus));
-  readonly planStatus = computed(() => this.planStore.planStatus() as EInternalUserPlanStatus);
+    if (this.isInvestorPersona()) {
+      return !this.shouldHideActionNoteForInvestor().includes(status as EInvestorPlanStatus);
+    }
+
+    return !this.shouldHideActionNoteForInternal().includes(status as EInternalUserPlanStatus);
+  });
+
+  readonly isRejected = computed(() => this.isInvestorPersona()
+  ? this.planStore.planStatus() === EInvestorPlanStatus.REJECTED
+  : this.planRejectionsStatus().includes(this.planStore.planStatus() as EInternalUserPlanStatus));
 
   onEditStep = output<number>();
 
@@ -55,7 +67,14 @@ export class ServicePlanSummaryPage {
 
   // Check if user is employee persona
   isEmployeePersona = computed(() => {
-    console.log('yes')
     return this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE]);
   });
+
+  isInvestorPersona = computed(() => {
+    return this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])();
+  });
+
+  isDvAcknowledgedStatus = computed(() => {
+    return this.planStatus() === EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED;
+  })
 }
