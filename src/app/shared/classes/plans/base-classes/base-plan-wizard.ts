@@ -538,7 +538,14 @@ export abstract class BasePlanWizard {
     if (!this.canApproveOrReject()) {
       return;
     }
-    this.approvalNote.set('');
+
+    const status = this.planStore.planStatus();
+    const isEmployee = this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+    const shouldPrefillFromActionNote = isEmployee && [
+      EInternalUserPlanStatus.DEPT_APPROVED,
+    ].includes(status as EInternalUserPlanStatus);
+
+    this.approvalNote.set(shouldPrefillFromActionNote ? (this.planStore.actionNote() ?? '') : '');
     this.showApproveConfirmationDialog.set(true);
   }
 
