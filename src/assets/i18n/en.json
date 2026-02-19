@@ -927,7 +927,7 @@
       "deptRejected": "Department Rejected",
       "dVRejectionAcknowledged": "DV Rejection Acknowledged",
       "dvApproved": "Division  Approved",
-      "deptApproved": "Department Approved",
+      "deptApproved": "Plan approved and forwarded to employee",
       "employeeApproved": "Plan Approved and Forwarded to DV Manager",
       "editPlan": "Edited the plan",
       "dVReview": "Division Review",
