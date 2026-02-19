@@ -72,7 +72,10 @@ export const AuthStore = signalStore(
       ): Observable<IBaseApiResponse<IAuthData>> {
         return login$.pipe(
           tap((response: IBaseApiResponse<IAuthData>) => {
-            if (response.success && response.body) {
+            const hasValidToken = Boolean(response.body?.token);
+            const isEmailVerified = response.body?.isEmailVerified !== false;
+
+            if (response.success && response.body && hasValidToken && isEmailVerified) {
               this.updateAuthDataInStorage(response);
               this.getUserProfile().subscribe();
             }

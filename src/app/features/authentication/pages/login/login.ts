@@ -48,6 +48,7 @@ export class Login implements OnInit {
   isSecInternal = signal(window.location.origin == environment.secDomain);
   isFakeDev = signal(false);
   showResendVerification = signal<boolean>(false);
+  unverifiedEmail = signal<string | null>(null);
 
   loginForm = this.loginFormService.loginForm;
 
@@ -71,7 +72,18 @@ export class Login implements OnInit {
       const formValue = this.loginForm.value;
       this.authStore.login(formValue.email!, formValue.password!).subscribe({
         next: (response) => {
+          const isUnverifiedEmail = response.body?.isEmailVerified === false;
+
+          if (isUnverifiedEmail) {
+            this.toast.error(this.i18nService.translate('auth.login.verifyEmailFirst'));
+            this.unverifiedEmail.set(formValue.email!);
+            this.showResendVerification.set(true);
+            return;
+          }
+
           if (response.success) {
+            this.showResendVerification.set(false);
+            this.unverifiedEmail.set(null);
             this.router.navigate(['/', ERoutes.dashboard]);
           }
         },
@@ -99,6 +111,17 @@ export class Login implements OnInit {
   onCloseResendAlert() {
     this.router.navigate(['/', ERoutes.auth, ERoutes.login], {
       replaceUrl: true,
+    });
+  }
+
+  onGoToVerification() {
+    const email = this.unverifiedEmail();
+    if (!email) {
+      return;
+    }
+
+    this.router.navigate(['/', ERoutes.auth, ERoutes.verification], {
+      queryParams: { email },
     });
   }
 }
