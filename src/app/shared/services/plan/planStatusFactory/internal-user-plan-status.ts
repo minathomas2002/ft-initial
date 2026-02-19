@@ -45,8 +45,8 @@ export class InternalUserPlanStatus implements IPlanStatus {
       //[EInternalUserPlanStatus.EMPLOYEE_REJECTED]: 'red',
       [EInternalUserPlanStatus.PENDING]: 'yellow',
       [EInternalUserPlanStatus.REJECTED]: 'red',
-      [EInternalUserPlanStatus.ReturnedByDV]: 'blue',
-      [EInternalUserPlanStatus.ReturnedByDEPTManager]: 'blue'
+      [EInternalUserPlanStatus.ReturnedByDV]: 'cloudBlue',
+      [EInternalUserPlanStatus.ReturnedByDEPTManager]: 'cloudBlue'
     };
     return classMap[status] as TColors || classMap[EInternalUserPlanStatus.PENDING] as TColors;
   }

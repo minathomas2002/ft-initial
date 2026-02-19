@@ -13,15 +13,16 @@ const BADGE_COLOR_TO_CSS: Record<TColors, string> = {
   primary: 'bg-primary-50 text-primary-700 border-primary-200',
   blue: 'bg-blue-50 text-blue-700 border-blue-200',
   fadedBlue: 'border-slate-300 bg-slate-50 text-[#4767A5]',
-  red: 'bg-red-50 text-red-700 border-red-200',
+  red: 'border-[#DD9A95] bg-[#F7E9E8] text-[#901C13]',
   green: 'bg-green-50 text-green-700 border-green-200',
   yellow: 'bg-yellow-50 text-yellow-700 border-yellow-200',
   indigo: 'bg-indigo-50 text-indigo-700 border-indigo-200',
   purple: 'bg-purple-50 text-purple-700 border-purple-200',
   pink: 'bg-pink-50 text-pink-700 border-pink-200',
   gray: 'bg-gray-50 text-gray-700 border-gray-200',
-  orange: 'bg-orange-50 text-orange-700 border-orange-200',
-  fadeGreen:'border-green-200 bg-green-50 text-[#055A36]'
+  orange: 'bg-[#FFFAE7] text-[#AD8908] border-[#FFE68F]',
+  fadeGreen:'border-[#8CC0AA] bg-[#E6F1ED] text-[#055A36]',
+  cloudBlue:'border-[#B8DCF5] bg-[#F2F9FD] text-[#006EB8]',
 };
 
 /**

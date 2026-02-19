@@ -26,12 +26,11 @@ export class Timeline {
 			purple: { border: 'border-purple-700', circle: 'bg-purple-700' },
 			pink: { border: 'border-pink-700', circle: 'bg-pink-700' },
 			gray: { border: 'border-gray-700', circle: 'bg-gray-700' },
-      orange: { border: 'border-orange-700', circle: 'bg-orange-700' },
+      orange: { border: 'border-[#FFE68F]', circle: 'bg-[#FFFAE7]' },
 			primary: { border: 'border-primary-700', circle: 'bg-primary-700' },
-			fadeGreen:{ border: 'border-green-200', circle: 'bg-green-50 ' },
+			fadeGreen: { border: 'border-[#8CC0AA]', circle: 'bg-[#E6F1ED]' },
+			cloudBlue:{ border: 'border-[#B8DCF5]', circle: 'bg-[#F2F9FD]' },
 		};
 		return colorMap[color];
 	}
-
-
 }

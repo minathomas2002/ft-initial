@@ -22,8 +22,8 @@ export class PlanTimelineStatusMapper {
       [EStatusPlanTimeLine.DVRejected]: 'red',
       [EStatusPlanTimeLine.DEPTRejected]: 'red',
       [EStatusPlanTimeLine.DVRejectionAcknowledged]: 'red',
-      [EStatusPlanTimeLine.ReturnedByDV]: 'blue',
-      [EStatusPlanTimeLine.ReturnedByDEPTManager]: 'blue',
+      [EStatusPlanTimeLine.ReturnedByDV]: 'cloudBlue',
+      [EStatusPlanTimeLine.ReturnedByDEPTManager]: 'cloudBlue',
     };
     return classMap[status] as TColors || 'primary';
   }
