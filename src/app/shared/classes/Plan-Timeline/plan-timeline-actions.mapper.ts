@@ -20,7 +20,7 @@ export class PlanTimelineActionsMapper {
     [EActionPlanTimeLine.DeptRejected]: 'timeline.actions.deptRejected',
     [EActionPlanTimeLine.DVApproved]: 'timeline.actions.dvApproved',
     [EActionPlanTimeLine.DeptApproved]: 'timeline.actions.deptApproved',
-    [EActionPlanTimeLine.EmployeeApproved]: 'timeline.actions.employeeApproved ',
+    [EActionPlanTimeLine.EmployeeApproved]: 'timeline.actions.employeeApproved',
     [EActionPlanTimeLine.EditPlan]: 'timeline.actions.editPlan',
     [EActionPlanTimeLine.DVReview]: 'timeline.actions.dVReview',
     [EActionPlanTimeLine.DeptManagerReview]: 'timeline.actions.deptManagerReview',
