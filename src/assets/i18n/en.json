@@ -929,7 +929,7 @@
       "resubmitted": "Plan Updated and Resubmitted by Investor",
       "deptRejected": "Plan Rejected and Forwarded to {{param}}",
       "dVRejectionAcknowledged": "DV Rejection Acknowledged",
-      "dvApproved": "Plan Approved by Division and Forwarded to Department Manager",
+      "dvApproved": "Plan Approved and Forwarded to Department Manager",
       "deptApproved": "Plan approved and forwarded to employee",
       "employeeApproved": "Plan Approved and Forwarded to DV Manager",
       "editPlan": "Edited the plan",
