@@ -123,7 +123,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       return 'Are you sure you want to reject the plan as final rejection?'
     }
 
-    return 'Are you sure you want to reject this plan and return it to the DV Manager for acknowledgement?'
+    return 'Are you sure you want to reject this plan and return it to the Division Manager for acknowledgement?'
   })
 
   visibility = model(false);
@@ -138,7 +138,13 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   mode = this.planStore.wizardMode;
   planId = this.planStore.selectedPlanId;
   canOpenTimeline = computed(() => {
-    return (this.visibility() && (this.mode() == 'view' || this.mode() == 'Review' || this.mode() == 'resubmit') && this.planStatus() !== null && this.planStatus() !== EInvestorPlanStatus.DRAFT && this.activeStep() < this.stepsWithId().length)
+    return (
+      this.visibility() &&
+      (this.mode() === 'view' || this.mode() === 'Review' || this.mode() === 'resubmit') &&
+      this.planStatus() !== null &&
+      (this.isInvestorPersona() ? this.planStatus() !== EInvestorPlanStatus.DRAFT : true) &&
+      this.activeStep() < this.stepsWithId().length
+    )
   });
 
   // Submission confirmation modal

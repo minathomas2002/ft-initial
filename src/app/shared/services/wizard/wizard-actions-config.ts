@@ -1,5 +1,5 @@
 import { ERoles } from "src/app/shared/enums";
-import { EInternalUserPlanStatus } from "src/app/shared/interfaces";
+import { EInternalUserPlanStatus, EInvestorPlanStatus } from "src/app/shared/interfaces";
 import { TRANSLATION_KEYS, WizardButtonDefinition, WizardButtonKey } from "src/app/shared/services/wizard/wizard-action.model";
 
 export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
@@ -85,7 +85,8 @@ export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
       context.activeStep < context.totalSteps &&
       !!context.config.handlers.onAddComment &&
       !context.config.permissions?.canAcknowledgeRejection?.() &&
-      !context.isPlanRejectedFromManager,
+      !context.isPlanRejectedFromManager &&
+      context.config.metadata?.status?.() !== EInternalUserPlanStatus.DEPT_APPROVED,
 
     build: (context, i18n) => ({
       id: 'add-comments',
