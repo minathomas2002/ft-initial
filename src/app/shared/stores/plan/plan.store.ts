@@ -187,6 +187,7 @@ export const PlanStore = signalStore(
           EInternalUserPlanStatus.DEPT_APPROVED,
           EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
           EInternalUserPlanStatus.DEPT_REJECTED,
+          EInternalUserPlanStatus.DV_REJECTED,
         ].includes(store.planStatus() as EInternalUserPlanStatus)),
 
       planTypeOptions: computed<IPlanTypeDropdownOption[]>(() => {
