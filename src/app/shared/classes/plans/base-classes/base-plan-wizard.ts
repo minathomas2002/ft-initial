@@ -33,6 +33,7 @@ export abstract class BasePlanWizard {
   protected approvalNote = signal<string>('');
   protected rejectionReason = signal<string>('');
   protected acknowledgeReason = signal<string>('');
+  protected deptManagerSignature = signal<string | null>(null);
 
 
   protected readonly commentTitle = this.planStore.commentPersona;
@@ -560,14 +561,16 @@ export abstract class BasePlanWizard {
     }
 
     const note = this.approvalNote().trim();
+    const signature = this.deptManagerSignature();
     this.isProcessing.set(true);
-    this.planStore.employeeApprovePlan(planId, note || undefined)
+    this.planStore.employeeApprovePlan(planId, note || undefined, signature || undefined)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
           this.showApproveConfirmationDialog.set(false);
           this.approvalNote.set('');
+          this.deptManagerSignature.set(null);
           this.toasterService.success('Plan has been approved and forwarded successfully.');
           this.refresh();
           this.closeWizard();
@@ -586,6 +589,7 @@ export abstract class BasePlanWizard {
   onCancelApprove(): void {
     this.showApproveConfirmationDialog.set(false);
     this.approvalNote.set('');
+    this.deptManagerSignature.set(null);
   }
 
   /**

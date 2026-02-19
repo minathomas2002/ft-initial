@@ -56,8 +56,8 @@ export class PlanApiService {
     return this.baseHttpService.post<boolean, FormData, unknown>(API_ENDPOINTS.plans.reSubmitServicePlan, req);
   }
 
-  internalApprovePlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined }): Observable<IBaseApiResponse<boolean>> {
-    return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined }, unknown>(API_ENDPOINTS.plans.internalApprovePlan, req);
+  internalApprovePlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined, approvalSignature?: string }): Observable<IBaseApiResponse<boolean>> {
+    return this.baseHttpService.post<boolean, { planId: string, status: EemployeePlanAction, reason: string | undefined, approvalSignature?: string }, unknown>(API_ENDPOINTS.plans.internalApprovePlan, req);
   }
 
   internalRejectPlanStatus(req: { planId: string, status: EemployeePlanAction, reason: string | undefined }): Observable<IBaseApiResponse<boolean>> {
@@ -160,5 +160,5 @@ export class PlanApiService {
   getCurrentDateTime(): string {
     return this.datePipe.transform(new Date(), 'dd MMM yyyy HH:mm') ?? '';
   }
-  
+
 }
