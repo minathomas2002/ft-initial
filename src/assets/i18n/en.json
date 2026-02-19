@@ -924,7 +924,7 @@
       "internalReview": "Submitted comment on the plan and sent back to investor",
       "autoRejected": "Plan Auto Rejected",
       "resubmitted": "Plan Updated and Resubmitted by Investor",
-      "deptRejected": "Department Rejected",
+      "deptRejected": "Plan Rejected and Forwarded to {{param}}",
       "dVRejectionAcknowledged": "DV Rejection Acknowledged",
       "dvApproved": "Plan Approved by Division and Forwarded to Department Manager",
       "deptApproved": "Plan approved and forwarded to employee",
