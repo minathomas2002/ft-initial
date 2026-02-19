@@ -9,6 +9,9 @@ import { SummarySectionSignature } from '../../summary-section-signature/summary
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { RoleService } from 'src/app/shared/services/role/role-service';
+import { ERoles } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-service-plan-summary-page',
@@ -26,6 +29,7 @@ import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 })
 export class ServicePlanSummaryPage {
   readonly planStore = inject(PlanStore);
+  readonly roleService = inject(RoleService)
   readonly planRejectionsStatus = signal([EInternalUserPlanStatus.DEPT_REJECTED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED])
   readonly shouldShowActionNote = signal([EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.UNDER_REVIEW, EInternalUserPlanStatus.PENDING])
 
@@ -48,4 +52,10 @@ export class ServicePlanSummaryPage {
   onEditStepClick(stepNumber: number): void {
     this.onEditStep.emit(stepNumber);
   }
+
+  // Check if user is employee persona
+  isEmployeePersona = computed(() => {
+    console.log('yes')
+    return this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE]);
+  });
 }

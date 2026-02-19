@@ -13,7 +13,7 @@
   </app-page-comment-box>
 }
 
-@if (planStore.acknowledgeRejectionNote()) {
+@if (planStore.acknowledgeRejectionNote() && isEmployeePersona()) {
   <app-page-comment-box
     [commentTitle]="'Acknowledge Rejection Note'"
     [commentText]="planStore.acknowledgeRejectionNote()!"

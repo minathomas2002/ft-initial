@@ -9,6 +9,8 @@ import { SummarySectionSignature } from '../../summary-section-signature/summary
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
+import { ERoles } from 'src/app/shared/enums';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 
 @Component({
   selector: 'app-product-plan-summary-page',
@@ -26,8 +28,9 @@ import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 })
 export class ProductPlanSummaryPage {
   readonly planStore = inject(PlanStore);
+  readonly roleService = inject(RoleService)
   readonly planRejectionsStatus = signal([EInternalUserPlanStatus.DEPT_REJECTED, EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED])
-  readonly shouldShowActionNote = signal([EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.UNDER_REVIEW])
+  readonly shouldShowActionNote = signal([EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.UNDER_REVIEW, ...this.planRejectionsStatus()])
   readonly planStatus = computed(() => this.planStore.planStatus() as EInternalUserPlanStatus);
 
   readonly isRejected = computed(() => this.planRejectionsStatus().includes(this.planStore.planStatus() as EInternalUserPlanStatus));
@@ -44,4 +47,9 @@ export class ProductPlanSummaryPage {
   onEditStepClick(stepNumber: number): void {
     this.onEditStep.emit(stepNumber);
   }
+
+  // Check if user is employee persona
+  isEmployeePersona = computed(() => {
+    return this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+  });
 }
