@@ -6,6 +6,7 @@ import { EInternalUserPlanStatus, EInvestorPlanStatus } from "./dashboard-plans.
 export interface IProductLocalizationPlanRequest {
   productPlan: ProductPlan
   signature: Signature
+  approvalSignature?: string;
 }
 
 export interface ProductPlan {
@@ -20,7 +21,6 @@ export interface ProductPlan {
   actionNote?: string,
   acknowledgeRejectionNote?: string,
   linkedToDeletedOpportunity?: boolean;
-
 }
 
 export interface OverviewCompanyInfo {
@@ -160,6 +160,7 @@ export interface ContactInfo {
 export interface IProductPlanResponse {
   productPlan: ProductPlan
   signature: Signature
+  approvalSignature?: string;
 }
 
 export interface IServiceLocalizationPlanResponse {
@@ -173,7 +174,7 @@ export interface IServiceLocalizationPlanResponse {
   statusValue: string | null;
   actionNote?: string,
   acknowledgeRejectionNote?: string,
-
+  approvalSignature?: string;
 }
 
 export interface IServicePlanGetResponse {

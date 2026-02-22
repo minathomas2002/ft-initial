@@ -48,6 +48,7 @@ export class ProductPlanSummaryPage {
   : this.planRejectionsStatus().includes(this.planStore.planStatus() as EInternalUserPlanStatus));
 
   signature = input<Signature | null>(null);
+  approvalDepartmentSignature = input<string | null>(null);
 
   /** From wizard: selectedInputs().length per step (indicator for selected/commented fields). */
   step1CommentsCountAndPhase = input<ICommentsCountAndPhase>({ count: 0, phase: 'none' });
