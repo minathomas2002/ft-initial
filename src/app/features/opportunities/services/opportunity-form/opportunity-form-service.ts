@@ -574,12 +574,12 @@ export class OpportunityFormService {
     //return { quantityUnitRequired: true };
   }
 
-  // Clear only this error (do not remove others)
-  // if (quantityUnitControl?.hasError('quantityUnitRequired')) {
-  //   const errors = { ...quantityUnitControl.errors };
-  //   delete errors['quantityUnitRequired'];
-  //   quantityUnitControl.setErrors(Object.keys(errors).length ? errors : null);
-  // }
+  //Clear only this error (do not remove others)
+  if (quantityUnitControl?.hasError('quantityUnitRequired')) {
+    const errors = { ...quantityUnitControl.errors };
+    delete errors['quantityUnitRequired'];
+    quantityUnitControl.setErrors(Object.keys(errors).length ? errors : null);
+  }
 
   return null;
 };
