@@ -67,6 +67,15 @@ export class OpportunityInformationForm implements OnInit {
     ),
     { initialValue: new Date() as Date, requireSync: false }
   );
+
+  disabledstartDate = toSignal(
+    (this.opportunityInformationForm.get('endDate')?.valueChanges ?? of(new Date())).pipe(
+      map((value) => {
+        return value ? new Date(value) : new Date();
+      })
+    ),
+    { initialValue: new Date() as Date, requireSync: false }
+  );
   files = signal<File[]>([]);
   placeholder = computed(() => this.i18nService.translate('opportunity.form.fileUploadPlaceholder'));
 
@@ -129,14 +138,6 @@ export class OpportunityInformationForm implements OnInit {
     return this.opportunityInformationForm.get(controlName) as FormControl;
   }
 
-  /** Returns end date as end-of-day so maxDate is inclusive for the full calendar day */
-  getStartDateMaxDate(): Date | null {
-    const endDate = this.getControl('endDate').value as Date | null;
-    if (!endDate || !(endDate instanceof Date)) return null;
-    const d = new Date(endDate);
-    d.setDate(d.getDate() - 1);
-    return d;
-  }
   getUnitLabel(): string {
       const unit = this.opportunityInformationForm.get('quantityUnit')?.value as EOpportunityQuantity | null;
       if (unit == null) return '';
