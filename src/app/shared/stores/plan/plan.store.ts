@@ -308,7 +308,17 @@ export const PlanStore = signalStore(
         }
       },
       resetWizardState(): void {
-        patchState(store, { wizardMode: 'create', selectedPlanId: null, planStatus: null, planComments: null, actionNote: null, acknowledgeRejectionNote: null, linkedToDeletedOpportunity: false });
+        patchState(store, {
+          wizardMode: 'create',
+          selectedPlanId: null,
+          planStatus: null,
+          planComments: null,
+          originalPlanComments: null,
+          currentUserPageComments: [],
+          actionNote: null,
+          acknowledgeRejectionNote: null,
+          linkedToDeletedOpportunity: false
+        });
       },
       updateCurrentUserPageComments(newPageComments: EPlanPageTitle[]): void {
         patchState(store, { currentUserPageComments: newPageComments });

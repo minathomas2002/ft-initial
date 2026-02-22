@@ -24,7 +24,7 @@ export class PlanLocalizationStep4SaudizationFormBuilder extends BasicPlanBuilde
       [EMaterialsFormControls.annualTotalCompensation]: this.fb.group({
         rowId: [null], // Hidden control to store the row ID (for edit mode)
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.required]], // Decimal allowed, >= 0
+        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.required, Validators.max(1000000)]], // Decimal allowed, >= 0
       }),
       [EMaterialsFormControls.saudiCompensationPercentage]: this.fb.group({
         rowId: [null], // Hidden control to store the row ID (for edit mode)
