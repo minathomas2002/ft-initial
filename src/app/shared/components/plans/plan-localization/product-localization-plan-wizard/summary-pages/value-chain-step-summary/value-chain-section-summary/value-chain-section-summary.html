@@ -31,13 +31,9 @@
             <app-plan-summary-flied [planSummaryField]="getSummaryField(row.costPercentage, row.costPercentage.value != null ? row.costPercentage.value + '%' : '-')" />
           </td>
           @for (y of [row.year1, row.year2, row.year3, row.year4, row.year5, row.year6, row.year7]; track $index) {
-          @if (row.isInHouse) {
-          <td class="border-t border-gray-300 p-3 bg-gray-100"></td>
-          } @else {
           <td class="border-t border-gray-300 p-3">
             <app-plan-summary-flied [planSummaryField]="getSummaryField(y, formatYearValue(y.value))" />
           </td>
-          }
           }
         </tr>
       </ng-template>
