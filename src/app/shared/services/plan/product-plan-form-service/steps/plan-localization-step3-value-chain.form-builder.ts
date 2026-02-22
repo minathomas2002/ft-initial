@@ -1,10 +1,25 @@
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { ELocalizationStatusType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { hasIncompleteControl } from 'src/app/shared/validators/form-control-helpers';
 import { BasicPlanBuilder } from './basicPlanBuilder';
 import { IOpportunityLocalizationTablesValidationResponse } from 'src/app/shared/interfaces';
 
+const ALL_VALUE_CONTROL_NAMES = [
+  EMaterialsFormControls.expenseHeader,
+  EMaterialsFormControls.inHouseOrProcured,
+  EMaterialsFormControls.costPercentage,
+  EMaterialsFormControls.year1,
+  EMaterialsFormControls.year2,
+  EMaterialsFormControls.year3,
+  EMaterialsFormControls.year4,
+  EMaterialsFormControls.year5,
+  EMaterialsFormControls.year6,
+  EMaterialsFormControls.year7,
+] as const;
+
 export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder {
+  private optionalSectionsSubscription: Subscription | null = null;
   constructor(
     fb: FormBuilder,
     private readonly getLocalizationTablesValidation: () => IOpportunityLocalizationTablesValidationResponse | null,
@@ -110,7 +125,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
   }
 
   /**
-   * Updates required validators on all value controls within an item group.
+   * Updates required validators on non-year value controls within an item group.
    * @param itemGroup - The value chain item FormGroup
    * @param isRequired - When true, adds Validators.required; when false, removes it
    */
@@ -119,13 +134,6 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
       EMaterialsFormControls.expenseHeader,
       EMaterialsFormControls.inHouseOrProcured,
       EMaterialsFormControls.costPercentage,
-      EMaterialsFormControls.year1,
-      EMaterialsFormControls.year2,
-      EMaterialsFormControls.year3,
-      EMaterialsFormControls.year4,
-      EMaterialsFormControls.year5,
-      EMaterialsFormControls.year6,
-      EMaterialsFormControls.year7,
     ];
 
     controlNames.forEach(controlName => {
@@ -141,44 +149,127 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
         valueControl.removeValidators(Validators.required);
       }
 
-      // valueControl.markAsPristine();
       valueControl.updateValueAndValidity({ emitEvent: false });
     });
   }
 
   /**
+   * Updates required validators on year (Year 1-7) value controls within an item group.
+   * @param itemGroup - The value chain item FormGroup
+   * @param isRequired - When true, adds Validators.required; when false, removes it
+   */
+  updateItemGroupYearsValidators(itemGroup: FormGroup, isRequired: boolean): void {
+    const yearControlNames = [
+      EMaterialsFormControls.year1,
+      EMaterialsFormControls.year2,
+      EMaterialsFormControls.year3,
+      EMaterialsFormControls.year4,
+      EMaterialsFormControls.year5,
+      EMaterialsFormControls.year6,
+      EMaterialsFormControls.year7,
+    ];
+
+    yearControlNames.forEach(controlName => {
+      const nestedGroup = itemGroup.get(controlName) as FormGroup;
+      if (!nestedGroup) return;
+
+      const valueControl = nestedGroup.get(EMaterialsFormControls.value);
+      if (!valueControl) return;
+
+      if (isRequired) {
+        valueControl.addValidators(Validators.required);
+      } else {
+        valueControl.removeValidators(Validators.required);
+      }
+
+      valueControl.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
+  /**
+   * Check if an item has at least one value in any value field.
+   */
+  private itemHasAnyValue(itemGroup: FormGroup): boolean {
+    for (const controlName of ALL_VALUE_CONTROL_NAMES) {
+      const nestedGroup = itemGroup.get(controlName) as FormGroup;
+      const valueControl = nestedGroup?.get(EMaterialsFormControls.value);
+      const value = valueControl?.value;
+      if (value != null && value !== '') return true;
+    }
+    return false;
+  }
+
+  /**
+   * For optional sections (isRequired: false): apply conditional validation.
+   * If item has any value → add required to all value fields.
+   * If all fields are null/empty → remove required from all.
+   */
+  private applyConditionalValidationForOptionalSections(
+    formGroup: FormGroup,
+    opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null
+  ): void {
+    const sectionConfig = this.getSectionConfig(opportunityLocalizationTablesValidation);
+
+    sectionConfig.forEach(({ sectionName, isRequired }) => {
+      if (isRequired) return;
+
+      const itemsArray = this.getSectionFormArray(formGroup, sectionName);
+      if (!itemsArray) return;
+
+      itemsArray.controls.forEach((itemControl: AbstractControl) => {
+        const itemFormGroup = itemControl as FormGroup;
+        const hasValue = this.itemHasAnyValue(itemFormGroup);
+        this.updateItemGroupValidators(itemFormGroup, hasValue);
+        this.updateItemGroupYearsValidators(itemFormGroup, hasValue);
+      });
+    });
+  }
+
+  /**
+   * Set up a single subscription to form.valueChanges for optional sections.
+   * When any value field changes, re-apply conditional validation for optional section items.
+   */
+  private setupOptionalSectionsValueChangeSubscription(
+    formGroup: FormGroup,
+    opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null
+  ): void {
+    this.optionalSectionsSubscription?.unsubscribe();
+    this.optionalSectionsSubscription = null;
+
+    const sectionConfig = this.getSectionConfig(opportunityLocalizationTablesValidation);
+    const hasOptionalSections = sectionConfig.some(({ isRequired }) => !isRequired);
+    if (!hasOptionalSections) return;
+
+    // One subscription for all value changes
+    this.optionalSectionsSubscription = formGroup.valueChanges.subscribe(() => {
+      this.applyConditionalValidationForOptionalSections(formGroup, opportunityLocalizationTablesValidation);
+    });
+
+    // Apply initial state
+    this.applyConditionalValidationForOptionalSections(formGroup, opportunityLocalizationTablesValidation);
+  }
+
+  private getSectionConfig(validation: IOpportunityLocalizationTablesValidationResponse | null) {
+    return [
+      { sectionName: EMaterialsFormControls.designEngineeringFormGroup, isRequired: validation?.designEngineeringRequired ?? false },
+      { sectionName: EMaterialsFormControls.sourcingFormGroup, isRequired: validation?.sourcingRequired ?? false },
+      { sectionName: EMaterialsFormControls.manufacturingFormGroup, isRequired: validation?.manufacturingRequired ?? false },
+      { sectionName: EMaterialsFormControls.assemblyTestingFormGroup, isRequired: validation?.assemblyTestingRequired ?? false },
+      { sectionName: EMaterialsFormControls.afterSalesFormGroup, isRequired: validation?.afterSalesRequired ?? false },
+    ];
+  }
+
+  /**
    * Updates validation (required validators) for all value chain items based on
    * opportunity localization tables validation response.
+   * Required sections: always add required validators.
+   * Optional sections: conditional - add required when record has any value, remove when all empty.
    */
   updateValueChainValidation(
     formGroup: FormGroup,
     opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null
   ): void {
-    const sectionConfig: Array<{
-      sectionName: string;
-      isRequired: boolean;
-    }> = [
-        {
-          sectionName: EMaterialsFormControls.designEngineeringFormGroup,
-          isRequired: opportunityLocalizationTablesValidation?.designEngineeringRequired ?? false,
-        },
-        {
-          sectionName: EMaterialsFormControls.sourcingFormGroup,
-          isRequired: opportunityLocalizationTablesValidation?.sourcingRequired ?? false,
-        },
-        {
-          sectionName: EMaterialsFormControls.manufacturingFormGroup,
-          isRequired: opportunityLocalizationTablesValidation?.manufacturingRequired ?? false,
-        },
-        {
-          sectionName: EMaterialsFormControls.assemblyTestingFormGroup,
-          isRequired: opportunityLocalizationTablesValidation?.assemblyTestingRequired ?? false,
-        },
-        {
-          sectionName: EMaterialsFormControls.afterSalesFormGroup,
-          isRequired: opportunityLocalizationTablesValidation?.afterSalesRequired ?? false,
-        },
-      ];
+    const sectionConfig = this.getSectionConfig(opportunityLocalizationTablesValidation);
 
     sectionConfig.forEach(({ sectionName, isRequired }) => {
       const itemsArray = this.getSectionFormArray(formGroup, sectionName);
@@ -186,9 +277,17 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
 
       itemsArray.controls.forEach((itemControl: AbstractControl) => {
         const itemFormGroup = itemControl as FormGroup;
-        this.updateItemGroupValidators(itemFormGroup, isRequired);
+        if (isRequired) {
+          this.updateItemGroupValidators(itemFormGroup, true);
+          this.updateItemGroupYearsValidators(itemFormGroup, true);
+        } else {
+          this.updateItemGroupValidators(itemFormGroup, false);
+          this.updateItemGroupYearsValidators(itemFormGroup, false);
+        }
       });
     });
+
+    this.setupOptionalSectionsValueChangeSubscription(formGroup, opportunityLocalizationTablesValidation);
   }
   /**
    * Build Step 3 main form group
