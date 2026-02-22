@@ -168,7 +168,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     return val === '1' || val === EInHouseProcuredType.InHouse;
   }
 
-  /** When in-house/procured changes: set years to No if in-house, null if procured */
+  /** When in-house/procured changes: set years to null */
   onInHouseOrProcuredChange(itemControl: AbstractControl): void {
     const val = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
     const yearKeys = [
@@ -180,18 +180,21 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
       EMaterialsFormControls.year6,
       EMaterialsFormControls.year7,
     ];
-    const targetValue = val === '1' || val === EInHouseProcuredType.InHouse
-      ? ELocalizationStatusType.No.toString()
-      : null;
     for (const yearKey of yearKeys) {
       const yearGroup = itemControl.get(yearKey);
       const valueCtrl = yearGroup instanceof FormGroup ? yearGroup.get(EMaterialsFormControls.value) : null;
       if (valueCtrl) {
-        valueCtrl.setValue(targetValue);
-        if (targetValue === null) {
-          valueCtrl.markAsPristine();
+        valueCtrl.markAsPristine();
+        if (val === EInHouseProcuredType.InHouse.toString()) {
+          valueCtrl.setValue(null);
+          valueCtrl.disable();
+        } else {
+          if (valueCtrl.disabled) {
+            valueCtrl.enable();
+          }
         }
       }
+
     }
   }
 
