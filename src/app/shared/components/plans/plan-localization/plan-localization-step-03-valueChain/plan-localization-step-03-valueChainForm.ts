@@ -14,6 +14,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
+import { createValueChainFieldKey, extractValueChainControlName, extractValueChainIndex } from 'src/app/shared/utils/value-chain-field-helpers';
 import { TColors } from 'src/app/shared/interfaces';
 import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
@@ -162,6 +163,16 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     return this.planFormService.createValueChainItem();
   };
 
+  // Remove handlers - delegate to FormService so deletions sync with payload
+  removeDesignEngineeringItem = (index: number) => this.planFormService.removeValueChainItem(EMaterialsFormControls.designEngineeringFormGroup, index);
+  removeSourcingItem = (index: number) => this.planFormService.removeValueChainItem(EMaterialsFormControls.sourcingFormGroup, index);
+  removeManufacturingItem = (index: number) => this.planFormService.removeValueChainItem(EMaterialsFormControls.manufacturingFormGroup, index);
+  removeAssemblyTestingItem = (index: number) => this.planFormService.removeValueChainItem(EMaterialsFormControls.assemblyTestingFormGroup, index);
+  removeAfterSalesItem = (index: number) => this.planFormService.removeValueChainItem(EMaterialsFormControls.afterSalesFormGroup, index);
+
+  /** Create unique field key for value chain: section_control_index */
+  createFieldKey = createValueChainFieldKey;
+
   /** Returns true when in-house/procured selection is In-house */
   isInHouse(itemControl: AbstractControl): boolean {
     const val = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
@@ -170,6 +181,9 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   /** When in-house/procured changes: set years to null */
   onInHouseOrProcuredChange(itemControl: AbstractControl): void {
+    if (this.isViewMode() || this.planStore.wizardMode() === 'Review') {
+      return
+    }
     const val = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
     const yearKeys = [
       EMaterialsFormControls.year1,
@@ -189,7 +203,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
           valueCtrl.disable();
           valueCtrl.removeValidators(Validators.required);
           valueCtrl.updateValueAndValidity();
-        } else {
+        } else if (val === EInHouseProcuredType.Procured.toString()) {
           if (valueCtrl.disabled) {
             valueCtrl.enable();
             valueCtrl.addValidators(Validators.required);
@@ -272,17 +286,26 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
       formArray = this.getAfterSalesFormArray();
     }
 
-    if (!formArray || !rowId) return null;
+    if (!formArray) return null;
 
-    // Find the row with matching rowId
-    const rowIndex = formArray.controls.findIndex(
-      control => control.get('rowId')?.value === rowId
-    );
-
+    // Find the row: by rowId when available, otherwise by index from unique inputKey (for new unsaved rows)
+    let rowIndex = -1;
+    if (rowId) {
+      rowIndex = formArray.controls.findIndex(
+        control => control.get('rowId')?.value === rowId
+      );
+    }
+    if (rowIndex === -1) {
+      const indexFromKey = extractValueChainIndex(inputKey);
+      if (indexFromKey >= 0 && indexFromKey < formArray.length) {
+        rowIndex = indexFromKey;
+      }
+    }
     if (rowIndex === -1) return null;
 
     const rowControl = formArray.at(rowIndex);
-    const fieldControl = rowControl.get(inputKey);
+    const controlName = extractValueChainControlName(inputKey);
+    const fieldControl = rowControl.get(controlName);
     if (fieldControl) {
       return this.getValueControl(fieldControl);
     }

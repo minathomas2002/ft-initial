@@ -110,6 +110,16 @@ export class FormArrayInput implements OnDestroy {
     });
   }
 
+  /** Propagate structural changes through the form tree so parent forms and mappers see updated data. */
+  private propagateFormStructureChange(formArray: FormArray): void {
+    formArray.updateValueAndValidity({ emitEvent: false });
+    let parent = formArray.parent;
+    while (parent) {
+      parent.updateValueAndValidity({ emitEvent: false });
+      parent = parent.parent;
+    }
+  }
+
   // Helper method to update stable rows array when structure changes
   private updateStableRowsArray() {
     const formArray = this.formArray();
@@ -198,12 +208,12 @@ export class FormArrayInput implements OnDestroy {
     if (currentLength > 1) {
       formArray.removeAt(index);
     } else {
-      // Keep at least one item with empty values
       formArray.clear();
       const newItem = this.createNewItem()();
       formArray.push(newItem);
     }
-    // Update stable rows array when structure changes
+    this.propagateFormStructureChange(formArray);
+
     this.updateStableRowsArray();
   }
 
@@ -215,6 +225,9 @@ export class FormArrayInput implements OnDestroy {
 
     const newItem = this.createNewItem()();
     formArray.push(newItem);
+
+    this.propagateFormStructureChange(formArray);
+
     // Update stable rows array when structure changes
     this.updateStableRowsArray();
 
@@ -241,15 +254,15 @@ export class FormArrayInput implements OnDestroy {
       // Find the first focusable input element (input, textarea, select, or PrimeNG input wrapper)
       const firstInput = lastRow.querySelector<HTMLElement>(
         'input:not([type="hidden"]):not([disabled]), ' +
-          'textarea:not([disabled]), ' +
-          'select:not([disabled]), ' +
-          '.p-inputtext input, ' +
-          '.p-textarea textarea, ' +
-          '.p-select .p-select-trigger, ' +
-          '.p-autocomplete input, ' +
-          '.p-dropdown .p-dropdown-trigger, ' +
-          '.p-datepicker input, ' +
-          '.p-inputnumber input'
+        'textarea:not([disabled]), ' +
+        'select:not([disabled]), ' +
+        '.p-inputtext input, ' +
+        '.p-textarea textarea, ' +
+        '.p-select .p-select-trigger, ' +
+        '.p-autocomplete input, ' +
+        '.p-dropdown .p-dropdown-trigger, ' +
+        '.p-datepicker input, ' +
+        '.p-inputnumber input'
       );
 
       if (firstInput) {
