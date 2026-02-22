@@ -446,6 +446,10 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
+            <app-base-error-messages
+              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+              [label]="'Year 1'"
+            />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
@@ -496,10 +500,6 @@
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
-              [label]="'Year 1'"
-            />
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [label]="'Year 3'"
