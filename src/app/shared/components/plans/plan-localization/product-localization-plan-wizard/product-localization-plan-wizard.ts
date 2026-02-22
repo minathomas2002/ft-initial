@@ -558,7 +558,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   });
 
   canApproveOrReject = computed(() => {
-    return (![EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager].includes(this.planStatus() as EInternalUserPlanStatus))
+    return (![EInternalUserPlanStatus.ReturnedByDV].includes(this.planStatus() as EInternalUserPlanStatus))
       && ((this.step1CommentPhase() === 'none' && this.step2CommentPhase() === 'none' && this.step3CommentPhase() === 'none' && this.step4CommentPhase() === 'none')
         || (!this.hasSelectedFields() &&
           !this.hasComments()))
@@ -572,7 +572,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     // // Check if any step has saved comments
     const planComments = this.planStore.planComments()?.comments ?? [];
     const currentUserPageComments = this.planStore.currentUserPageComments();
-    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.ReturnedByDV];
+    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDV];
 
     if (returnedByManagerStatus.includes(this.planStatus() as EInternalUserPlanStatus)) {
       return planComments.every(comment => currentUserPageComments.includes(comment.pageTitleForTL));
