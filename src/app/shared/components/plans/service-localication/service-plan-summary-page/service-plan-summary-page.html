@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-8 pb-10">
 
-  @if (planStore.actionNote() && !(shouldShowActionNote().includes(planStatus()))) {
+  @if (planStore.actionNote() && shouldShowActionNote()) {
     <app-page-comment-box
     [commentTitle]="isRejected() ? 'Rejection Reason' : 'Approval Note'"
     [commentText]="planStore.actionNote()!"
@@ -14,7 +14,7 @@
     </app-page-comment-box>
   }
 
-  @if (planStore.acknowledgeRejectionNote()) {
+  @if (planStore.acknowledgeRejectionNote() && isEmployeePersona() && isDvAcknowledgedStatus()) {
     <app-page-comment-box
     [commentTitle]="'Acknowledge Rejection Note'"
     [commentText]="planStore.acknowledgeRejectionNote()!"

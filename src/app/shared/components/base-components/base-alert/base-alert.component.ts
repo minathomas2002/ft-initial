@@ -29,7 +29,8 @@ export class BaseAlertComponent {
 		gray: "border-gray-600 bg-gray-50",
 		orange: "border-orange-600 bg-orange-50",
 		primary: "border-primary-600 bg-primary-50",
-		fadeGreen:'border-green-200 bg-green-50 text-[#055A36]'
+		fadeGreen:'border-[#8CC0AA] bg-[#E6F1ED] text-[#055A36]',
+    cloudBlue:'border-[#B8DCF5] bg-[#F2F9FD] text-[#006EB8]',
 	};
 
 	private readonly iconClassesMap: Record<TColors, string> = {
@@ -44,7 +45,8 @@ export class BaseAlertComponent {
 		gray: "bg-[#4B556326] text-gray-600",
 		orange: "bg-[#DC680326] text-orange-600",
 		primary: "bg-[#1E469126] text-primary-600",
-		fadeGreen:'border-green-200 bg-green-50 text-[#055A36]'
+		fadeGreen:'border-[#8CC0AA] bg-[#E6F1ED] text-[#055A36]',
+    cloudBlue:'border-[#B8DCF5] bg-[#F2F9FD] text-[#006EB8]',
 	};
 
 	private readonly iconMap: Record<TColors, string> = {
@@ -60,6 +62,7 @@ export class BaseAlertComponent {
 		orange: "icon-info-circle",
 		primary: "icon-info-circle",
 		fadeGreen: "icon-info-circle",
+		cloudBlue: "icon-info-circle",
 	};
 
 	alertClasses = computed(() => {

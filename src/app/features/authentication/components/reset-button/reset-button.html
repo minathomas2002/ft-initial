@@ -1,0 +1,13 @@
+<div class="flex justify-between items-center">
+  @if (title()) {
+  <span>{{ title() }}</span>
+  }
+  <p-button
+    [styleClass]="'p-3!'"
+    link
+    (click)="onResendClick()"
+    [loading]="isLoading()"
+    [disabled]="isButtonDisabled()"
+    [label]="buttonText()"
+  />
+</div>

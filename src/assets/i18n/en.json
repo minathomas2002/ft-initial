@@ -78,7 +78,9 @@
       "signIn": "Login",
       "dontHaveAccount": "Don't have an account?",
       "signUp": "Sign up",
+      "resendVerificationLink": "Didn’t receive the e-mail? Resend verification link",
       "resendVerificationSuccess": "A new verification link has been sent to your email.",
+      "verifyEmailFirst": "Your email address is not verified yet. Please click the verification link sent to your inbox to proceed with login.",
       "generalError": "Login failed. Please try again later.",
       "devEnvironmentTitle": "Development Environment Only (Simulate Login for SEC Employees)",
       "jobNumber": "Job Number",
@@ -101,7 +103,8 @@
       "backButtonLabel": "Back to login",
       "success": "You will receive a password reset link shortly",
       "didntReceiveEmail": "Didn't receive the email?",
-      "clickToResend": "Click to resend"
+      "resendResetLink": "Resend reset link",
+      "resendResetLinkFull": "Didn’t receive the e-mail? Resend reset link"
     },
     "reset": {
       "title": "Set new password",
@@ -849,8 +852,8 @@
       "pendingOnInvestor": "Pending on Investor",
       "pendingWithInvestor": "Pending with Investor",
       "draft": "Draft",
-      "returnedByDV": "Return By Division",
-      "returnedByDEPTManager":"Return By Department"
+      "returnedByDV": "Returned By Division",
+      "returnedByDEPTManager":"Returned By Department"
     },
     "type": {
       "services": "Services",
@@ -924,9 +927,9 @@
       "internalReview": "Submitted comment on the plan and sent back to investor",
       "autoRejected": "Plan Auto Rejected",
       "resubmitted": "Plan Updated and Resubmitted by Investor",
-      "deptRejected": "Department Rejected",
+      "deptRejected": "Plan Rejected and Forwarded to {{param}}",
       "dVRejectionAcknowledged": "DV Rejection Acknowledged",
-      "dvApproved": "Division  Approved",
+      "dvApproved": "Plan Approved and Forwarded to Department Manager",
       "deptApproved": "Plan approved and forwarded to employee",
       "employeeApproved": "Plan Approved and Forwarded to DV Manager",
       "editPlan": "Edited the plan",

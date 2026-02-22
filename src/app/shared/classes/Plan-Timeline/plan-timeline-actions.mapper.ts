@@ -49,6 +49,9 @@ export class PlanTimelineActionsMapper {
       case EActionPlanTimeLine.Submitted:
         param = (item.planType == EOpportunityType.SERVICES) ? this.i18nService.translate('opportunity.type.service') : this.i18nService.translate('opportunity.type.product');
         break;
+      case EActionPlanTimeLine.DeptRejected:
+          param = item.targetUserNameEn;
+          break;
       default:
         param = '';
         break;

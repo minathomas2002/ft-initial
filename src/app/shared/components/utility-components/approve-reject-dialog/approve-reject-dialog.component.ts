@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { BaseLabelComponent } from "../../base-components/base-label/base-label.component";
+import { SignaturePadComponent } from "../../plans/submission-confirmation-modal/signature-pad/signature-pad.component";
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-approve-reject-dialog',
-  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent],
+  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent, SignaturePadComponent, TranslatePipe],
   templateUrl: './approve-reject-dialog.component.html',
   styleUrl: './approve-reject-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,9 +28,20 @@ export class ApproveRejectDialogComponent {
   isLoading = input(false);
   isRequired = input(false);
   confirmButtonSeverity = input<'primary' | 'secondary' | 'success' | 'info' | 'danger' | 'help'>("primary");
+  showSignaturePad = input(false);
+  signatureRequired = input(false);
+
+  existingSignature = model<string | null>(null);
+  signature = model<string | null>(null);
+
+  isConfirmDisabled = computed(() => {
+    const noteRequired = this.isRequired() && !this.note().trim();
+    const signatureNeeded = this.signatureRequired() && !this.signature();
+    return noteRequired || signatureNeeded;
+  });
 
   onConfirm(): void {
-    if (this.isRequired() && !this.note().trim()) {
+    if (this.isConfirmDisabled()) {
       return;
     }
     this.confirmed.emit();
@@ -36,5 +49,9 @@ export class ApproveRejectDialogComponent {
 
   onCancelClick(): void {
     this.onCancel.emit();
+  }
+
+  onSignatureChange(signatureData: string | null): void {
+    this.signature.set(signatureData);
   }
 }

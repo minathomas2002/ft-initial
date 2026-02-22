@@ -26,6 +26,8 @@ export interface IAuthData {
   userName: string;
   nameAR: string;
   nameEN: string;
+  isEmailVerified: boolean;
+  errorMessage: string;
   roleIds: string[];
   roleNames: string[];
   roleCodes: ERoles[];

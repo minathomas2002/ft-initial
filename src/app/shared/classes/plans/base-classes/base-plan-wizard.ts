@@ -33,6 +33,7 @@ export abstract class BasePlanWizard {
   protected approvalNote = signal<string>('');
   protected rejectionReason = signal<string>('');
   protected acknowledgeReason = signal<string>('');
+  protected deptManagerSignature = signal<string | null>(null);
 
 
   protected readonly commentTitle = this.planStore.commentPersona;
@@ -538,7 +539,14 @@ export abstract class BasePlanWizard {
     if (!this.canApproveOrReject()) {
       return;
     }
-    this.approvalNote.set('');
+
+    const status = this.planStore.planStatus();
+    const isEmployee = this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
+    const shouldPrefillFromActionNote = isEmployee && [
+      EInternalUserPlanStatus.DEPT_APPROVED,
+    ].includes(status as EInternalUserPlanStatus);
+
+    this.approvalNote.set(shouldPrefillFromActionNote ? (this.planStore.actionNote() ?? '') : '');
     this.showApproveConfirmationDialog.set(true);
   }
 
@@ -553,14 +561,16 @@ export abstract class BasePlanWizard {
     }
 
     const note = this.approvalNote().trim();
+    const signature = this.deptManagerSignature();
     this.isProcessing.set(true);
-    this.planStore.employeeApprovePlan(planId, note || undefined)
+    this.planStore.employeeApprovePlan(planId, note || undefined, signature || undefined)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
           this.showApproveConfirmationDialog.set(false);
           this.approvalNote.set('');
+          this.deptManagerSignature.set(null);
           this.toasterService.success('Plan has been approved and forwarded successfully.');
           this.refresh();
           this.closeWizard();
@@ -579,6 +589,7 @@ export abstract class BasePlanWizard {
   onCancelApprove(): void {
     this.showApproveConfirmationDialog.set(false);
     this.approvalNote.set('');
+    this.deptManagerSignature.set(null);
   }
 
   /**
