@@ -920,7 +920,7 @@
       "submitComment": "Submit comment on the plan and send back to investor ",
       "rejected": "Rejected",
       "approved": "Approved",
-      "dVRejected": "Division Rejected",
+      "dVRejected": " Plan rejected and forwarded to {{param}}",
       "internalReview": "Submitted comment on the plan and sent back to investor",
       "autoRejected": "Plan Auto Rejected",
       "resubmitted": "Plan Updated and Resubmitted by Investor",
