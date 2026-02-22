@@ -136,18 +136,15 @@
               [label]="'Cost %'"
             />
           </td>
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
-                section: 'designEngineering',
-                inputKey: 'year1',
-                label: 'Year 1'
-              }, itemControl)"
+                          section: 'designEngineering',
+                          inputKey: 'year1',
+                          label: 'Year 1'
+                        }, itemControl)"
             >
               <p-select
                 [options]="localizationStatusOptions()"
@@ -166,10 +163,6 @@
               />
             </app-group-input-with-checkbox>
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
@@ -197,10 +190,6 @@
               />
             </app-group-input-with-checkbox>
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
@@ -228,10 +217,6 @@
               [label]="'Year 3'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
@@ -259,10 +244,6 @@
               [label]="'Year 4'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
@@ -290,10 +271,6 @@
               [label]="'Year 5'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
@@ -321,10 +298,6 @@
               [label]="'Year 6'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
@@ -352,7 +325,6 @@
               [label]="'Year 7'"
             />
           </td>
-          }
         </ng-template>
       </app-form-array-input>
       <app-base-error-messages
@@ -452,9 +424,6 @@
               [label]="'Cost %'"
             />
           </td>
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
@@ -478,10 +447,6 @@
               />
             </app-group-input-with-checkbox>
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
@@ -509,10 +474,6 @@
               [label]="'Year 2'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
@@ -544,10 +505,6 @@
               [label]="'Year 3'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
@@ -575,10 +532,6 @@
               [label]="'Year 4'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
@@ -606,10 +559,7 @@
               [label]="'Year 5'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
+
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
@@ -637,10 +587,6 @@
               [label]="'Year 6'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
@@ -668,7 +614,6 @@
               [label]="'Year 7'"
             />
           </td>
-          }
         </ng-template>
       </app-form-array-input>
       <app-base-error-messages
@@ -768,9 +713,6 @@
               [label]="'Cost %'"
             />
           </td>
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
@@ -798,10 +740,6 @@
               [label]="'Year 1'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
@@ -829,10 +767,6 @@
               [label]="'Year 2'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
@@ -860,10 +794,6 @@
               [label]="'Year 3'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
@@ -891,10 +821,7 @@
               [label]="'Year 4'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
+
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
@@ -922,10 +849,6 @@
               [label]="'Year 5'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
@@ -953,10 +876,6 @@
               [label]="'Year 6'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
@@ -984,7 +903,6 @@
               [label]="'Year 7'"
             />
           </td>
-          }
         </ng-template>
       </app-form-array-input>
       <app-base-error-messages
@@ -1084,9 +1002,6 @@
               [label]="'Cost %'"
             />
           </td>
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
@@ -1114,10 +1029,6 @@
               />
             </app-group-input-with-checkbox>
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
@@ -1145,10 +1056,6 @@
               />
             </app-group-input-with-checkbox>
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
@@ -1176,19 +1083,16 @@
               [label]="'Year 3'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
+
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
-                section: 'assemblyTesting',
-                inputKey: 'year4',
-                label: 'Year 4'
-              }, itemControl)"
+                          section: 'assemblyTesting',
+                          inputKey: 'year4',
+                          label: 'Year 4'
+                        }, itemControl)"
             >
               <p-select
                 [options]="localizationStatusOptions()"
@@ -1207,19 +1111,15 @@
               [label]="'Year 4'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
-                section: 'assemblyTesting',
-                inputKey: 'year5',
-                label: 'Year 5'
-              }, itemControl)"
+                          section: 'assemblyTesting',
+                          inputKey: 'year5',
+                          label: 'Year 5'
+                        }, itemControl)"
             >
               <p-select
                 [options]="localizationStatusOptions()"
@@ -1238,19 +1138,15 @@
               [label]="'Year 5'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
-                section: 'assemblyTesting',
-                inputKey: 'year6',
-                label: 'Year 6'
-              }, itemControl)"
+                          section: 'assemblyTesting',
+                          inputKey: 'year6',
+                          label: 'Year 6'
+                        }, itemControl)"
             >
               <p-select
                 [options]="localizationStatusOptions()"
@@ -1269,19 +1165,15 @@
               [label]="'Year 6'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
-                section: 'assemblyTesting',
-                inputKey: 'year7',
-                label: 'Year 7'
-              }, itemControl)"
+                          section: 'assemblyTesting',
+                          inputKey: 'year7',
+                          label: 'Year 7'
+                        }, itemControl)"
             >
               <p-select
                 [options]="localizationStatusOptions()"
@@ -1300,7 +1192,6 @@
               [label]="'Year 7'"
             />
           </td>
-          }
         </ng-template>
       </app-form-array-input>
       <app-base-error-messages
@@ -1400,9 +1291,6 @@
               [label]="'Cost %'"
             />
           </td>
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
@@ -1430,10 +1318,6 @@
               [label]="'Year 1'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
@@ -1461,10 +1345,6 @@
               [label]="'Year 2'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
@@ -1492,10 +1372,6 @@
               [label]="'Year 3'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
@@ -1523,10 +1399,6 @@
               [label]="'Year 4'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
@@ -1554,10 +1426,6 @@
               [label]="'Year 5'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
@@ -1585,10 +1453,6 @@
               [label]="'Year 6'"
             />
           </td>
-          }
-          @if (isInHouse(itemControl)) {
-          <td class="p-3 border border-gray-200 min-w-[150px] bg-gray-100"></td>
-          } @else {
           <td class="p-3 border border-gray-200 min-w-[150px]">
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
@@ -1616,7 +1480,6 @@
               [label]="'Year 7'"
             />
           </td>
-          }
         </ng-template>
       </app-form-array-input>
       <app-base-error-messages

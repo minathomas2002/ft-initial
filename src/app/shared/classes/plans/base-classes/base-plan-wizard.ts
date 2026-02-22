@@ -753,10 +753,6 @@ export abstract class BasePlanWizard {
     }
 
     const reason = this.acknowledgeReason().trim();
-    if (!reason) {
-      this.toasterService.error('Acknowledgement reason is required.');
-      return;
-    }
 
     this.isProcessing.set(true);
     this.planStore.DvRejecttionAcknowledgePlan(planId, reason)
