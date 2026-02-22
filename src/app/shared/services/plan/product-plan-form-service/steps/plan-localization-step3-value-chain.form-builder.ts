@@ -357,6 +357,36 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
    * Validate total cost percentage across all sections.
    * Only triggers when opportunityLocalizationTablesValidation has at least one section with true.
    */
+  /**
+   * Check if all costPercentage value fields across all sections are null.
+   */
+  private hasAllCostPercentageValuesNull(formGroup: FormGroup): boolean {
+    const sections = [
+      EMaterialsFormControls.designEngineeringFormGroup,
+      EMaterialsFormControls.sourcingFormGroup,
+      EMaterialsFormControls.manufacturingFormGroup,
+      EMaterialsFormControls.assemblyTestingFormGroup,
+      EMaterialsFormControls.afterSalesFormGroup,
+    ];
+
+    for (const sectionName of sections) {
+      const itemsArray = this.getSectionFormArray(formGroup, sectionName);
+      if (!itemsArray) continue;
+
+      for (const itemControl of itemsArray.controls) {
+        const itemFormGroup = itemControl as FormGroup;
+        const costPercentageControl = itemFormGroup.get(
+          `${EMaterialsFormControls.costPercentage}.${EMaterialsFormControls.value}`
+        );
+        const value = costPercentageControl?.value;
+        if (value != null && value !== '') {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   private validateTotalCostPercentage() {
     return (control: AbstractControl): ValidationErrors | null => {
       const formGroup = control as FormGroup;
@@ -364,8 +394,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
         return null;
       }
 
-      const validation = this.getLocalizationTablesValidation();
-      if (!this.hasAnyLocalizationSectionRequired(validation)) {
+      if (this.hasAllCostPercentageValuesNull(formGroup)) {
         return null;
       }
 
