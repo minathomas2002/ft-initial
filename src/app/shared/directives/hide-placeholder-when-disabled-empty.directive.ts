@@ -13,12 +13,12 @@ import { MultiSelect } from 'primeng/multiselect';
 import { Select } from 'primeng/select';
 
 /**
- * Hides the placeholder when the bound form control is disabled and has no value
- * (null, undefined, or empty string).
+ * Shows the placeholder when the control is enabled (with or without value, including null).
+ * Hides the placeholder when the control is disabled.
  *
  * Use on: input (text), p-inputnumber, pTextarea, p-select, p-multiselect, etc.
- * Pass the placeholder text as the directive input; the directive will set/show
- * or hide it based on disabled + empty state.
+ * Pass the placeholder text as the directive input; the directive will show it when enabled
+ * and hide it when disabled.
  *
  * Usage:
  *   <input pInputText [formControl]="ctrl" [appHidePlaceholderWhenDisabledEmpty]="'Enter name'" />
@@ -81,12 +81,6 @@ export class HidePlaceholderWhenDisabledEmptyDirective
     this.destroy$.complete();
   }
 
-  private isEmpty(value: unknown): boolean {
-    if (value == null || value === '') return true;
-    if (Array.isArray(value)) return value.length === 0;
-    return false;
-  }
-
   private getTargetElement(): HTMLElement | null {
     const element = this.elementRef.nativeElement;
     const tag = element.tagName.toLowerCase();
@@ -124,8 +118,7 @@ export class HidePlaceholderWhenDisabledEmptyDirective
 
     const placeholderToShow = (fromInput || this.storedPlaceholder) ?? '';
 
-    const shouldHide =
-      control?.disabled && this.isEmpty(control.value);
+    const shouldHide = !!control?.disabled;
 
     const valueToApply = shouldHide ? '' : placeholderToShow;
 
