@@ -12,7 +12,9 @@ import { SummaryField } from 'src/app/shared/components/plans/summary-field/summ
 })
 export class SummarySectionSignature {
   signature = input.required<Signature | null>();
+  approvalDepartmentSignature = input<string | null>();
 
   contactInfo = computed(() => this.signature()?.contactInfo ?? null);
   signatureValue = computed(() => this.signature()?.signatureValue ?? null);
+  approvalDepartmentSignatureValue = computed(() => this.approvalDepartmentSignature() ?? null);
 }

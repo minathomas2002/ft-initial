@@ -44,4 +44,20 @@
     </div>
   </div>
 
+  @if (approvalDepartmentSignatureValue()) {
+    <div class="mt-6">
+      <app-summary-section-header [title]="'Department Manager Approval'" [hideEditButton]="true" />
+
+      <div class="flex flex-col gap-2 mt-2">
+        <span class="text-sm text-gray-700">{{ 'plans.submission.signature' | translate }}:</span>
+
+        <img
+          [src]="approvalDepartmentSignatureValue()!"
+          alt="Signature"
+          class="h-full md:w-32 w-full  object-contain border border-gray-200 rounded"
+        />
+      </div>
+    </div>
+  }
+
 </div>
