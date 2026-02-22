@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls, EOpportunityLocalizationTablesValidation, EPlanPageTitle } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
@@ -184,13 +184,16 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
       const yearGroup = itemControl.get(yearKey);
       const valueCtrl = yearGroup instanceof FormGroup ? yearGroup.get(EMaterialsFormControls.value) : null;
       if (valueCtrl) {
-        valueCtrl.markAsPristine();
         if (val === EInHouseProcuredType.InHouse.toString()) {
           valueCtrl.setValue(null);
           valueCtrl.disable();
+          valueCtrl.removeValidators(Validators.required);
+          valueCtrl.updateValueAndValidity();
         } else {
           if (valueCtrl.disabled) {
             valueCtrl.enable();
+            valueCtrl.addValidators(Validators.required);
+            valueCtrl.updateValueAndValidity();
           }
         }
       }
@@ -215,6 +218,28 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   get EOpportunityLocalizationTablesValidation() {
     return EOpportunityLocalizationTablesValidation
+  }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.updateYearsView();
+  }
+
+  updateYearsView(): void {
+    const sectionArrays = [
+      this.getDesignEngineeringFormArray(),
+      this.getSourcingFormArray(),
+      this.getManufacturingFormArray(),
+      this.getAssemblyTestingFormArray(),
+      this.getAfterSalesFormArray(),
+    ];
+
+    for (const formArray of sectionArrays) {
+      if (!formArray) continue;
+      for (const itemControl of formArray.controls) {
+        this.onInHouseOrProcuredChange(itemControl);
+      }
+    }
   }
 
   // Override hook method for step-specific initialization
