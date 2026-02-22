@@ -431,6 +431,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
+  planDepartmentApprovalSignature = signal<string | null>(null);
 
   // Extract contactInfo from planSignature for submission modal
   contactInfo = computed(() => {
@@ -809,6 +810,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
     // Store signature for summary display (view/edit modes)
     this.planSignature.set(response.signature ?? null);
+    this.planDepartmentApprovalSignature.set(response.approvalSignature ?? null);
 
     // Store existing signature if present
     if (response.signature?.signatureValue) {

@@ -151,6 +151,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showSubmissionModal = signal(false);
   existingSignature = signal<string | null>(null);
   planSignature = signal<Signature | null>(null);
+  planDepartmentApprovalSignature = signal<string | null>(null);
 
   // Extract contactInfo from planSignature for submission modal
   contactInfo = computed(() => {
@@ -718,6 +719,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           this.isSubmitted.set(false);
           this.existingSignature.set(null);
           this.planSignature.set(null);
+          this.planDepartmentApprovalSignature.set(null);
           const basicInfo = this.serviceLocalizationFormService.basicInformationFormGroup;
           const opportunityControl = basicInfo?.get(EMaterialsFormControls.opportunity);
           const applied = this.planStore.appliedOpportunity();
@@ -766,6 +768,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       this.existingSignature.set(null);
     }
     this.planSignature.set(data.signature ?? null);
+    this.planDepartmentApprovalSignature.set(data.approvalSignature ?? null);
     const currentMode = this.planStore.wizardMode();
     if (['view', 'Review', 'resubmit'].includes(currentMode)) {
       this.disableAllForms();

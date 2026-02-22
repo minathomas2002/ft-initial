@@ -53,6 +53,7 @@ export class ServicePlanSummaryPage {
   includeExistingSaudi = input<boolean>(true);
   includeDirectLocalization = input<boolean>(true);
   signature = input<Signature | null>(null);
+  approvalDepartmentSignature = input<string | null>(null);
 
   /** From wizard: selectedInputs().length per step (indicator for selected/commented fields). */
   step1CommentsCountAndPhase = input<ICommentsCountAndPhase>({ count: 0, phase: 'none' });
