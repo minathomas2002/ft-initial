@@ -208,7 +208,7 @@ export class OpportunityFormService {
     const minQuantity = minQuantityControl?.value;
     const maxQuantity = maxQuantityControl?.value;
 
-    if (minQuantity && maxQuantity && parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
+    if ((minQuantity || maxQuantity )&& parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
       // Merge errors instead of overwriting
       const minErrors = minQuantityControl?.errors || {};
       const maxErrors = maxQuantityControl?.errors || {};
@@ -561,14 +561,17 @@ export class OpportunityFormService {
   const shouldRequire = minQuantity > 0 || maxQuantity > 0;
 
   if (shouldRequire && !quantityUnitControl?.value) {
-    const errors = quantityUnitControl?.errors || {};
-    quantityUnitControl?.setErrors({
-      ...errors,
-      quantityUnitRequired: true
-    });
+    //const errors = quantityUnitControl?.errors || {};
+    // quantityUnitControl?.setErrors({
+    //   ...errors,
+    //   quantityUnitRequired: true
+    // });
+    const quantityErrors = quantityUnitControl?.errors || {};
+    quantityUnitControl?.setErrors({ ...quantityErrors, quantityUnitRequired: { message: 'Measure Unit is required' } });
     quantityUnitControl?.markAsDirty({ onlySelf: true });
     quantityUnitControl?.markAsTouched({ onlySelf: true });
-    return { quantityUnitRequired: true };
+    return null;
+    //return { quantityUnitRequired: true };
   }
 
   // Clear only this error (do not remove others)
