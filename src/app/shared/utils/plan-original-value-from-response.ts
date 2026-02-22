@@ -11,6 +11,7 @@ import {
 } from '../interfaces/plans.interface';
 import { IProductPlanResponse, ProductPlan, ValueChainRow, SaudizationRow } from '../interfaces/plans.interface';
 import { EMaterialsFormControls } from '../enums';
+import { extractValueChainControlName } from './value-chain-field-helpers';
 
 function stripIndexSuffix(inputKey: string): string {
   const match = inputKey.match(/^(.+)_(\d+)$/);
@@ -245,7 +246,7 @@ export function getFieldValueFromProductPlanResponse(
   if (!response?.productPlan) return undefined;
   const pp: ProductPlan = response.productPlan;
   const { section, inputKey, id: rowId } = field;
-  const key = stripIndexSuffix(inputKey);
+  const key = (VALUE_CHAIN_SECTION_TYPE[section] != null ? extractValueChainControlName(inputKey) : null) ?? stripIndexSuffix(inputKey);
 
   // Step 1: companyInformation -> overviewCompanyInfo.companyInfo
   if (section === 'companyInformation') {

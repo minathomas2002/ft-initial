@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, Signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { createValueChainFieldKey } from 'src/app/shared/utils/value-chain-field-helpers';
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IFieldInformation, IPlanSummaryField, ValueChainRow } from 'src/app/shared/interfaces/plans.interface';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -28,6 +29,8 @@ const SECTION_TYPE_BY_KEY: Record<string, number> = {
 })
 export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
   readonly sectionKey = input.required<string>();
+  /** Section key used for unique field keys (e.g. designEngineering, sourcing). Passed from value-chain-step-summary. */
+  readonly sectionKeyForFields = input<string>();
   readonly sectionTitle = input.required<string>();
   itemsArray = computed<FormArray>(() => {
     const section = this.sectionFormGroup().get('items');
@@ -48,17 +51,18 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
       const rowId = item.get(EMaterialsFormControls.rowId)?.value ?? null;
       const sectionRows = valueChainRows.filter((r: ValueChainRow) => r.sectionType === sectionType);
       const beforeRow = (rowId ? sectionRows.find((r: ValueChainRow) => r.id === rowId) : sectionRows[index]) as ValueChainRow | undefined;
-
+      const sectionForFields = this.sectionKeyForFields() ?? this.sectionKey().replace('FormGroup', '');
 
       const cell = (
-        inputKey: string,
+        controlName: string,
         beforeVal: string | number | null | undefined,
         formatCurrentForCompare: (v: unknown) => string
       ) => {
-        const fieldGroup = item.get(inputKey);
+        const fieldKey = createValueChainFieldKey(sectionForFields, controlName, index);
+        const fieldGroup = item.get(controlName);
         const ctrl = fieldGroup instanceof FormGroup ? (fieldGroup.get(EMaterialsFormControls.value) as FormControl) : null;
-        const matchingField = summaryFields.find(f => f.inputKey === inputKey && (f.id === rowId || (f.id == null && rowId == null)));
-        const hasComment = this.shouldShowCommentIcon(inputKey, matchingField?.id ?? null);
+        const matchingField = summaryFields.find(f => f.inputKey === fieldKey && (f.id === rowId || (f.id == null && rowId == null)));
+        const hasComment = this.shouldShowCommentIcon(fieldKey, matchingField?.id ?? null);
         const hasCommentChecked = (fieldGroup instanceof FormGroup && fieldGroup.get(EMaterialsFormControls.hasComment)?.value) ?? false;
         const hasError = ctrl ? this.isFieldHasError(ctrl) : false;
         const value = ctrl?.value ?? '';
@@ -74,20 +78,16 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
         return { value, beforeValue: beforeFormatted || '-', hasError, hasComment, showDifference: showDiff, isResolved };
       };
 
-      const formatCostPercentForCompare = (v: unknown): string =>
-        v != null && v !== '' ? `${v}%` : '-';
-
       const inHouseVal = item.get(EMaterialsFormControls.inHouseOrProcured);
       const inHouseValueCtrl = inHouseVal instanceof FormGroup ? inHouseVal.get(EMaterialsFormControls.value) : null;
       const inHouseValRaw = inHouseValueCtrl?.value;
       const isInHouse = inHouseValRaw === '1' || inHouseValRaw === EInHouseProcuredType.InHouse;
-
       return {
         rowId,
         isInHouse,
-        expenseHeader: cell(EMaterialsFormControls.expenseHeader, beforeRow != null ? this.formatCellValue(beforeRow.expenseHeader) : null, v => this.formatCellValue(v)),
+        expenseHeader: cell(EMaterialsFormControls.expenseHeader, this.formatCellValue(beforeRow?.expenseHeader), v => this.formatCellValue(v)),
         inHouseOrProcured: cell(EMaterialsFormControls.inHouseOrProcured, beforeRow != null ? this.formatInHouseProcured(beforeRow.inHouseOrProcured) : null, v => this.formatInHouseProcured(v as number)),
-        costPercentage: cell(EMaterialsFormControls.costPercentage, beforeRow?.costPercent != null ? `${beforeRow.costPercent}%` : null, formatCostPercentForCompare),
+        costPercentage: cell(EMaterialsFormControls.costPercentage, this.formatCostPercent(beforeRow?.costPercent ?? ''), v => this.formatCostPercent(v)),
         year1: cell(EMaterialsFormControls.year1, beforeRow != null ? this.formatYearValue(beforeRow.year1) : null, v => this.formatYearValue(v as number)),
         year2: cell(EMaterialsFormControls.year2, beforeRow != null ? this.formatYearValue(beforeRow.year2) : null, v => this.formatYearValue(v as number)),
         year3: cell(EMaterialsFormControls.year3, beforeRow != null ? this.formatYearValue(beforeRow.year3) : null, v => this.formatYearValue(v as number)),
@@ -105,10 +105,20 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
     return key != null ? String(key).replace(/([A-Z])/g, ' $1').trim() : String(value);
   }
 
+  formatYearColumnLabel(year: number): string {
+    const yearLabel = this.i18nService.translate('plans.summary.year');
+    const padded = year <= 9 ? `0${year}` : String(year);
+    return `${yearLabel} - ${padded}`;
+  }
+
   formatYearValue(value: number | null | undefined): string {
     if (value == null) return '';
     const key = ELocalizationStatusType[(value as unknown) as keyof typeof ELocalizationStatusType];
     return key != null ? String(key) : String(value);
+  }
+
+  formatCostPercent(value: unknown): string {
+    return value != null && String(value).trim() !== '' ? `${String(value).trim()}%` : '-';
   }
 
   formatCellValue(value: unknown): string {

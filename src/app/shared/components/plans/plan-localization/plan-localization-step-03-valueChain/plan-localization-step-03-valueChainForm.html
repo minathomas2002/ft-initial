@@ -70,7 +70,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
-                inputKey: 'expenseHeader',
+                inputKey: createFieldKey('designEngineering', 'expenseHeader', index),
                 label: 'Expense Header'
               }, itemControl)"
             >
@@ -81,7 +81,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-                [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'expenseHeader', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -91,18 +91,28 @@
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
-            <p-select
-              [options]="inHouseOrProcuredOptions()"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              optionLabel="name"
-              optionValue="id"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
-              [appendTo]="'body'"
-              fluid
-              [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-              (onChange)="onInHouseOrProcuredChange(itemControl)"
-            />
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'designEngineering',
+                inputKey: createFieldKey('designEngineering', 'inHouseOrProcured', index),
+                label: 'In-house / Procured'
+              }, itemControl)"
+            >
+              <p-select
+                [options]="inHouseOrProcuredOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appendTo]="'body'"
+                fluid
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+                (onChange)="onInHouseOrProcuredChange(itemControl)"
+              />
+            </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
               [label]="'In-house / Procured'"
@@ -114,7 +124,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
-                inputKey: 'costPercentage',
+                inputKey: createFieldKey('designEngineering', 'costPercentage', index),
                 label: 'Cost %'
               }, itemControl)"
             >
@@ -127,7 +137,7 @@
                 [minFractionDigits]="0"
                 [maxFractionDigits]="2"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-                [appConditionalColorClass]="highlightInput('costPercentage', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'costPercentage', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -142,7 +152,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'designEngineering',
-                          inputKey: 'year1',
+                          inputKey: createFieldKey('designEngineering', 'year1', index),
                           label: 'Year 1'
                         }, itemControl)"
             >
@@ -154,7 +164,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year1', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
               <app-base-error-messages
@@ -169,7 +179,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
-                inputKey: 'year2',
+                inputKey: createFieldKey('designEngineering', 'year2', index),
                 label: 'Year 2'
               }, itemControl)"
             >
@@ -181,7 +191,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year2', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
               <app-base-error-messages
@@ -196,7 +206,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
-                inputKey: 'year3',
+                inputKey: createFieldKey('designEngineering', 'year3', index),
                 label: 'Year 3'
               }, itemControl)"
             >
@@ -208,7 +218,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year3', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -223,7 +233,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
-                inputKey: 'year4',
+                inputKey: createFieldKey('designEngineering', 'year4', index),
                 label: 'Year 4'
               }, itemControl)"
             >
@@ -235,7 +245,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year4', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -250,7 +260,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
-                inputKey: 'year5',
+                inputKey: createFieldKey('designEngineering', 'year5', index),
                 label: 'Year 5'
               }, itemControl)"
             >
@@ -262,7 +272,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year5', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -277,7 +287,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
-                inputKey: 'year6',
+                inputKey: createFieldKey('designEngineering', 'year6', index),
                 label: 'Year 6'
               }, itemControl)"
             >
@@ -289,7 +299,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year6', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -304,7 +314,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
-                inputKey: 'year7',
+                inputKey: createFieldKey('designEngineering', 'year7', index),
                 label: 'Year 7'
               }, itemControl)"
             >
@@ -316,7 +326,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year7', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -358,7 +368,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'expenseHeader',
+                inputKey: createFieldKey('sourcing', 'expenseHeader', index),
                 label: 'Expense Header'
               }, itemControl)"
             >
@@ -369,7 +379,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-                [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'expenseHeader', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -379,18 +389,28 @@
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
-            <p-select
-              [options]="inHouseOrProcuredOptions()"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              optionLabel="name"
-              optionValue="id"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
-              (onChange)="onInHouseOrProcuredChange(itemControl)"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'sourcing',
+                inputKey: createFieldKey('sourcing', 'inHouseOrProcured', index),
+                label: 'In-house / Procured'
+              }, itemControl)"
+            >
+              <p-select
+                [options]="inHouseOrProcuredOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appendTo]="'body'"
+                fluid
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+                (onChange)="onInHouseOrProcuredChange(itemControl)"
+              />
+            </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
               [label]="'In-house / Procured'"
@@ -402,7 +422,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'costPercentage',
+                inputKey: createFieldKey('sourcing', 'costPercentage', index),
                 label: 'Cost %'
               }, itemControl)"
             >
@@ -415,7 +435,7 @@
                 [minFractionDigits]="0"
                 [maxFractionDigits]="2"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-                [appConditionalColorClass]="highlightInput('costPercentage', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'costPercentage', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -430,7 +450,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'year1',
+                inputKey: createFieldKey('sourcing', 'year1', index),
                 label: 'Year 1'
               }, itemControl)"
             >
@@ -442,7 +462,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year1', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -457,7 +477,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'year2',
+                inputKey: createFieldKey('sourcing', 'year2', index),
                 label: 'Year 2'
               }, itemControl)"
             >
@@ -469,7 +489,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year2', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -484,7 +504,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'year3',
+                inputKey: createFieldKey('sourcing', 'year3', index),
                 label: 'Year 3'
               }, itemControl)"
             >
@@ -496,7 +516,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year3', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -511,7 +531,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'year4',
+                inputKey: createFieldKey('sourcing', 'year4', index),
                 label: 'Year 4'
               }, itemControl)"
             >
@@ -523,7 +543,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year4', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -538,7 +558,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'year5',
+                inputKey: createFieldKey('sourcing', 'year5', index),
                 label: 'Year 5'
               }, itemControl)"
             >
@@ -550,7 +570,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year5', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -566,7 +586,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'year6',
+                inputKey: createFieldKey('sourcing', 'year6', index),
                 label: 'Year 6'
               }, itemControl)"
             >
@@ -578,7 +598,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year6', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -593,7 +613,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
-                inputKey: 'year7',
+                inputKey: createFieldKey('sourcing', 'year7', index),
                 label: 'Year 7'
               }, itemControl)"
             >
@@ -605,7 +625,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year7', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -647,7 +667,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'expenseHeader',
+                inputKey: createFieldKey('manufacturing', 'expenseHeader', index),
                 label: 'Expense Header'
               }, itemControl)"
             >
@@ -658,7 +678,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-                [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'expenseHeader', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -668,18 +688,28 @@
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
-            <p-select
-              [options]="inHouseOrProcuredOptions()"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              optionLabel="name"
-              optionValue="id"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
-              (onChange)="onInHouseOrProcuredChange(itemControl)"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'manufacturing',
+                inputKey: createFieldKey('manufacturing', 'inHouseOrProcured', index),
+                label: 'In-house / Procured'
+              }, itemControl)"
+            >
+              <p-select
+                [options]="inHouseOrProcuredOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appendTo]="'body'"
+                fluid
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+                (onChange)="onInHouseOrProcuredChange(itemControl)"
+              />
+            </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
               [label]="'In-house / Procured'"
@@ -691,7 +721,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'costPercentage',
+                inputKey: createFieldKey('manufacturing', 'costPercentage', index),
                 label: 'Cost %'
               }, itemControl)"
             >
@@ -704,7 +734,7 @@
                 [minFractionDigits]="0"
                 [maxFractionDigits]="2"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-                [appConditionalColorClass]="highlightInput('costPercentage', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'costPercentage', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -719,7 +749,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'year1',
+                inputKey: createFieldKey('manufacturing', 'year1', index),
                 label: 'Year 1'
               }, itemControl)"
             >
@@ -731,7 +761,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year1', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -746,7 +776,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'year2',
+                inputKey: createFieldKey('manufacturing', 'year2', index),
                 label: 'Year 2'
               }, itemControl)"
             >
@@ -758,7 +788,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year2', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -773,7 +803,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'year3',
+                inputKey: createFieldKey('manufacturing', 'year3', index),
                 label: 'Year 3'
               }, itemControl)"
             >
@@ -785,7 +815,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year3', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -800,7 +830,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'year4',
+                inputKey: createFieldKey('manufacturing', 'year4', index),
                 label: 'Year 4'
               }, itemControl)"
             >
@@ -812,7 +842,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year4', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -828,7 +858,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'year5',
+                inputKey: createFieldKey('manufacturing', 'year5', index),
                 label: 'Year 5'
               }, itemControl)"
             >
@@ -840,7 +870,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year5', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -855,7 +885,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'year6',
+                inputKey: createFieldKey('manufacturing', 'year6', index),
                 label: 'Year 6'
               }, itemControl)"
             >
@@ -867,7 +897,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year6', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -882,7 +912,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
-                inputKey: 'year7',
+                inputKey: createFieldKey('manufacturing', 'year7', index),
                 label: 'Year 7'
               }, itemControl)"
             >
@@ -894,7 +924,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year7', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -936,7 +966,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
-                inputKey: 'expenseHeader',
+                inputKey: createFieldKey('assemblyTesting', 'expenseHeader', index),
                 label: 'Expense Header'
               }, itemControl)"
             >
@@ -947,7 +977,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-                [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'expenseHeader', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -957,18 +987,28 @@
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
-            <p-select
-              [options]="inHouseOrProcuredOptions()"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              optionLabel="name"
-              optionValue="id"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
-              (onChange)="onInHouseOrProcuredChange(itemControl)"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'assemblyTesting',
+                inputKey: createFieldKey('assemblyTesting', 'inHouseOrProcured', index),
+                label: 'In-house / Procured'
+              }, itemControl)"
+            >
+              <p-select
+                [options]="inHouseOrProcuredOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appendTo]="'body'"
+                fluid
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+                (onChange)="onInHouseOrProcuredChange(itemControl)"
+              />
+            </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
               [label]="'In-house / Procured'"
@@ -980,7 +1020,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
-                inputKey: 'costPercentage',
+                inputKey: createFieldKey('assemblyTesting', 'costPercentage', index),
                 label: 'Cost %'
               }, itemControl)"
             >
@@ -993,7 +1033,7 @@
                 [minFractionDigits]="0"
                 [maxFractionDigits]="2"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-                [appConditionalColorClass]="highlightInput('costPercentage', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'costPercentage', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1008,7 +1048,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
-                inputKey: 'year1',
+                inputKey: createFieldKey('assemblyTesting', 'year1', index),
                 label: 'Year 1'
               }, itemControl)"
             >
@@ -1020,7 +1060,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year1', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
               <app-base-error-messages
@@ -1035,7 +1075,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
-                inputKey: 'year2',
+                inputKey: createFieldKey('assemblyTesting', 'year2', index),
                 label: 'Year 2'
               }, itemControl)"
             >
@@ -1047,7 +1087,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year2', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
               <app-base-error-messages
@@ -1062,7 +1102,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
-                inputKey: 'year3',
+                inputKey: createFieldKey('assemblyTesting', 'year3', index),
                 label: 'Year 3'
               }, itemControl)"
             >
@@ -1074,7 +1114,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year3', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1090,7 +1130,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'assemblyTesting',
-                          inputKey: 'year4',
+                          inputKey: createFieldKey('assemblyTesting', 'year4', index),
                           label: 'Year 4'
                         }, itemControl)"
             >
@@ -1102,7 +1142,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year4', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1117,7 +1157,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'assemblyTesting',
-                          inputKey: 'year5',
+                          inputKey: createFieldKey('assemblyTesting', 'year5', index),
                           label: 'Year 5'
                         }, itemControl)"
             >
@@ -1129,7 +1169,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year5', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1144,7 +1184,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'assemblyTesting',
-                          inputKey: 'year6',
+                          inputKey: createFieldKey('assemblyTesting', 'year6', index),
                           label: 'Year 6'
                         }, itemControl)"
             >
@@ -1156,7 +1196,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year6', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1171,7 +1211,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'assemblyTesting',
-                          inputKey: 'year7',
+                          inputKey: createFieldKey('assemblyTesting', 'year7', index),
                           label: 'Year 7'
                         }, itemControl)"
             >
@@ -1183,7 +1223,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year7', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1225,7 +1265,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'expenseHeader',
+                inputKey: createFieldKey('afterSales', 'expenseHeader', index),
                 label: 'Expense Header'
               }, itemControl)"
             >
@@ -1236,7 +1276,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-                [appConditionalColorClass]="highlightInput('expenseHeader', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'expenseHeader', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1246,18 +1286,28 @@
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
-            <p-select
-              [options]="inHouseOrProcuredOptions()"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              optionLabel="name"
-              optionValue="id"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
-              (onChange)="onInHouseOrProcuredChange(itemControl)"
-              fluid
-              [appendTo]="'body'"
-              [appConditionalColorClass]="highlightInput('inHouseOrProcured', itemControl.get('rowId')?.value)"
-              [color]="selectedInputColor()"
-            />
+            <app-group-input-with-checkbox
+              [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+              [showCheckbox]="showCheckbox()"
+              (valueChanged)="upDateSelectedInputs($event, {
+                section: 'afterSales',
+                inputKey: createFieldKey('afterSales', 'inHouseOrProcured', index),
+                label: 'In-house / Procured'
+              }, itemControl)"
+            >
+              <p-select
+                [options]="inHouseOrProcuredOptions()"
+                [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
+                optionLabel="name"
+                optionValue="id"
+                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                (onChange)="onInHouseOrProcuredChange(itemControl)"
+                fluid
+                [appendTo]="'body'"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
+                [color]="selectedInputColor()"
+              />
+            </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
               [label]="'In-house / Procured'"
@@ -1269,7 +1319,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'costPercentage',
+                inputKey: createFieldKey('afterSales', 'costPercentage', index),
                 label: 'Cost %'
               }, itemControl)"
             >
@@ -1282,7 +1332,7 @@
                 [minFractionDigits]="0"
                 [maxFractionDigits]="2"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-                [appConditionalColorClass]="highlightInput('costPercentage', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'costPercentage', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1297,7 +1347,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'year1',
+                inputKey: createFieldKey('afterSales', 'year1', index),
                 label: 'Year 1'
               }, itemControl)"
             >
@@ -1309,7 +1359,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year1', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year1', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1324,7 +1374,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'year2',
+                inputKey: createFieldKey('afterSales', 'year2', index),
                 label: 'Year 2'
               }, itemControl)"
             >
@@ -1336,7 +1386,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year2', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year2', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1351,7 +1401,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'year3',
+                inputKey: createFieldKey('afterSales', 'year3', index),
                 label: 'Year 3'
               }, itemControl)"
             >
@@ -1363,7 +1413,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year3', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year3', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1378,7 +1428,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'year4',
+                inputKey: createFieldKey('afterSales', 'year4', index),
                 label: 'Year 4'
               }, itemControl)"
             >
@@ -1390,7 +1440,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year4', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year4', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1405,7 +1455,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'year5',
+                inputKey: createFieldKey('afterSales', 'year5', index),
                 label: 'Year 5'
               }, itemControl)"
             >
@@ -1417,7 +1467,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year5', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year5', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1432,7 +1482,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'year6',
+                inputKey: createFieldKey('afterSales', 'year6', index),
                 label: 'Year 6'
               }, itemControl)"
             >
@@ -1444,7 +1494,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year6', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year6', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>
@@ -1459,7 +1509,7 @@
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
-                inputKey: 'year7',
+                inputKey: createFieldKey('afterSales', 'year7', index),
                 label: 'Year 7'
               }, itemControl)"
             >
@@ -1471,7 +1521,7 @@
                 [appHidePlaceholderWhenDisabledEmpty]="'Select'"
                 fluid
                 [appendTo]="'body'"
-                [appConditionalColorClass]="highlightInput('year7', itemControl.get('rowId')?.value)"
+                [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year7', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
             </app-group-input-with-checkbox>

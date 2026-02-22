@@ -28,7 +28,7 @@
             <app-plan-summary-flied [planSummaryField]="getSummaryField(row.inHouseOrProcured, formatInHouseProcured(row.inHouseOrProcured.value))" />
           </td>
           <td class="border-t border-gray-300 p-3">
-            <app-plan-summary-flied [planSummaryField]="getSummaryField(row.costPercentage, row.costPercentage.value != null ? row.costPercentage.value + '%' : '-')" />
+            <app-plan-summary-flied [planSummaryField]="getSummaryField(row.costPercentage, formatCostPercent(row.costPercentage.value))" />
           </td>
           @for (y of [row.year1, row.year2, row.year3, row.year4, row.year5, row.year6, row.year7]; track $index) {
           <td class="border-t border-gray-300 p-3">
