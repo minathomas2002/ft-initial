@@ -20,11 +20,11 @@ export class OpportunityFormService {
     opportunityType: null,
     shortDescription: '',
     opportunityCategory: '',
-    spendSAR: 0 as unknown as string,
-    minQuantity: 0 as unknown as string,
-    maxQuantity: 0 as unknown as string,
-    localSuppliers: 0 as unknown as string,
-    globalSuppliers: 0 as unknown as string,
+    spendSAR: null as unknown as string | null,
+    minQuantity: null as unknown as string | null,
+    maxQuantity: null as unknown as string | null,
+    localSuppliers: null as unknown as string | null,
+    globalSuppliers: null as unknown as string | null,
     startDate: null,
     endDate: null,
     image: null,
@@ -93,11 +93,11 @@ export class OpportunityFormService {
         shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
         opportunityCategory: ['', Validators.required],
         quantityUnit :[null],
-        spendSAR: [0, [Validators.min(0), Validators.max(10)]],
-        minQuantity: [0, [Validators.min(0)]],
-        maxQuantity: [0, [Validators.min(0)]],
-        localSuppliers: [0, [Validators.min(0), Validators.max(1000000000)]],
-        globalSuppliers: [0, [Validators.min(0), Validators.max(1000000000)]],
+          spendSAR: [null, [Validators.min(0), Validators.max(10)]],
+          minQuantity: [null, [Validators.min(0), Validators.max(1000000)]],
+          maxQuantity: [null, [Validators.min(0), Validators.max(1000000)]],
+          localSuppliers: [null, [Validators.min(0), Validators.max(1000000000)]],
+          globalSuppliers: [null, [Validators.min(0), Validators.max(1000000000)]],
         startDate: [null, [Validators.required, this.startDateRestrictionValidator]],
         endDate: [null, [Validators.required, this.endDateAfterStartDateValidator, this.endDateRestrictionValidator]],
         image: [null, Validators.required],
@@ -209,23 +209,13 @@ export class OpportunityFormService {
     const maxQuantity = maxQuantityControl?.value;
 
     // Only validate if both values are provided and not zero
-    if ((minQuantity || minQuantity === 0) && (maxQuantity || maxQuantity === 0) && minQuantity !== null && maxQuantity !== null && minQuantity !== undefined && maxQuantity !== undefined) {
-      const minVal = parseFloat(minQuantity);
-      const maxVal = parseFloat(maxQuantity);
-
-      if (minVal >= maxVal) {
-        // Merge errors instead of overwriting
-        const minErrors = minQuantityControl?.errors || {};
-        const maxErrors = maxQuantityControl?.errors || {};
-        minQuantityControl?.setErrors({ ...minErrors, minQuantityError: { message: 'Min quantity must be less than max quantity' } });
-        maxQuantityControl?.setErrors({ ...maxErrors, maxQuantityError: { message: 'Max quantity must be greater than min quantity' } });
-
-        minQuantityControl?.markAsDirty({ onlySelf: true });
-        maxQuantityControl?.markAsDirty({ onlySelf: true });
-        minQuantityControl?.markAsTouched({ onlySelf: true });
-        maxQuantityControl?.markAsTouched({ onlySelf: true });
-        return { quantityRange: true };
-      }
+     if ((minQuantity || maxQuantity )&& parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
+      // Merge errors instead of overwriting
+      const minErrors = minQuantityControl?.errors || {};
+      const maxErrors = maxQuantityControl?.errors || {};
+      minQuantityControl?.setErrors({ ...minErrors, minQuantityError: { message: 'Min quantity must be less than max quantity' } });
+      maxQuantityControl?.setErrors({ ...maxErrors, maxQuantityError: { message: 'Max quantity must be greater than min quantity' } });
+      return { quantityRange: true };
     }
 
     // Clear errors if valid
@@ -409,11 +399,11 @@ export class OpportunityFormService {
       opportunityType: value.opportunityType?.toString(),
       opportunityCategory: value.opportunityCategory?.toString(), // TODO: Remove this once the API is updated
       quantityUnit: value.quantityUnit?.toString(),
-      spendSAR: value.spendSAR != null ? Number(value.spendSAR) : 0,
-      minQuantity: value.minQuantity != null ? Number(value.minQuantity) : 0,
-      maxQuantity: value.maxQuantity != null ? Number(value.maxQuantity) : 0,
-      localSuppliers: value.localSuppliers != null ? Number(value.localSuppliers) : 0,
-      globalSuppliers: value.globalSuppliers != null ? Number(value.globalSuppliers) : 0,
+      spendSAR: value.spendSAR != null ? Number(value.spendSAR) : null,
+      minQuantity: value.minQuantity != null ? Number(value.minQuantity) : null,
+      maxQuantity: value.maxQuantity != null ? Number(value.maxQuantity) : null,
+      localSuppliers: value.localSuppliers != null ? Number(value.localSuppliers) : null,
+      globalSuppliers: value.globalSuppliers != null ? Number(value.globalSuppliers) : null,
       startDate: normalizedStartDate,
       endDate: normalizedEndDate,
       image: image,
@@ -473,8 +463,8 @@ export class OpportunityFormService {
     infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
     //infoGroup.get('quantityUnit')?.setValidators([Validators.required]);
     infoGroup.get('spendSAR')?.setValidators([Validators.required, Validators.max(10)]);
-    infoGroup.get('minQuantity')?.setValidators([Validators.required]);
-    infoGroup.get('maxQuantity')?.setValidators([Validators.required]);
+    infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.max(1000000)]);
+    infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.max(1000000)]);
     infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.max(1000000000)]);
     infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.max(1000000000)]);
     infoGroup.get('startDate')?.setValidators([Validators.required, this.startDateRestrictionValidator]);
