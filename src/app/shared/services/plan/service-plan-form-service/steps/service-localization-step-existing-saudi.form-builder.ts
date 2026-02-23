@@ -139,7 +139,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach(yearControl => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]], // Required, Integer only
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(1000000)]], // Required, Integer only
       });
       itemGroup[`${yearControl}_saudization`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -191,7 +191,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     yearControls.forEach((yearControl) => {
       itemGroup[`${yearControl}_headcount`] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.required]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.max(1000000)]],
       });
     });
 
