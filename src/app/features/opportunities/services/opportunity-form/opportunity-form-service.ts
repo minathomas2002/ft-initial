@@ -94,8 +94,8 @@ export class OpportunityFormService {
         opportunityCategory: ['', Validators.required],
         quantityUnit :[null],
           spendSAR: [null, [Validators.min(0), Validators.max(10)]],
-          minQuantity: [null, [Validators.min(0), Validators.max(1000000)]],
-          maxQuantity: [null, [Validators.min(0), Validators.max(1000000)]],
+          minQuantity: [null, [Validators.min(0), Validators.max(9999999999999999)]],
+          maxQuantity: [null, [Validators.min(0), Validators.max(9999999999999999)]],
           localSuppliers: [null, [Validators.min(0), Validators.max(1000000000)]],
           globalSuppliers: [null, [Validators.min(0), Validators.max(1000000000)]],
         startDate: [null, [Validators.required, this.startDateRestrictionValidator]],
@@ -209,7 +209,7 @@ export class OpportunityFormService {
     const maxQuantity = maxQuantityControl?.value;
 
     // Only validate if both values are provided and not zero
-     if ((minQuantity || maxQuantity )&& parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
+     if ((minQuantity || maxQuantity ||  (maxQuantity == 0&&  minQuantity == 0))&& parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
       // Merge errors instead of overwriting
       const minErrors = minQuantityControl?.errors || {};
       const maxErrors = maxQuantityControl?.errors || {};
@@ -463,8 +463,8 @@ export class OpportunityFormService {
     infoGroup.get('opportunityCategory')?.setValidators([Validators.required]);
     //infoGroup.get('quantityUnit')?.setValidators([Validators.required]);
     infoGroup.get('spendSAR')?.setValidators([Validators.required, Validators.max(10)]);
-    infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.max(1000000)]);
-    infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.max(1000000)]);
+    infoGroup.get('minQuantity')?.setValidators([Validators.required, Validators.max(9999999999999999)]);
+    infoGroup.get('maxQuantity')?.setValidators([Validators.required, Validators.max(9999999999999999)]);
     infoGroup.get('localSuppliers')?.setValidators([Validators.required, Validators.max(1000000000)]);
     infoGroup.get('globalSuppliers')?.setValidators([Validators.required, Validators.max(1000000000)]);
     infoGroup.get('startDate')?.setValidators([Validators.required, this.startDateRestrictionValidator]);
