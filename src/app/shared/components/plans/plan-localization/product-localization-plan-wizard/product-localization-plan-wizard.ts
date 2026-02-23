@@ -797,7 +797,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   private mapPlanDataToForm(response: IProductPlanResponse): void {
     // Store original plan response for before/after comparison in resubmit mode or view mode
-    if (this.isResubmitMode() || this.isViewMode()) {
+    if (this.isResubmitMode() || this.isViewMode() || this.isReviewMode()) {
       // Store original plan response for before/after comparison
       this.originalPlanResponse.set(response);
     }
@@ -1120,6 +1120,9 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       return;
     }
 
+    // Don't mark years as dirty so year validation errors don't block/display for draft save
+    this.productPlanFormService.markYearControlsAsPristineForDraft();
+
     // Get plan ID if in edit mode
     const currentPlanId = this.planStore.wizardMode() === 'edit' ? (this.planStore.selectedPlanId() ?? '') : '';
     const isEditMode = this.planStore.wizardMode() === 'edit';
@@ -1156,7 +1159,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           this.visibility.set(false);
           this.isSubmitted.set(true);
         },
-        error: (error) => {
+        error: () => {
           this.isProcessing.set(false);
           this.toasterService.error(this.i18nService.translate('plans.wizard.messages.draftError'));
         }

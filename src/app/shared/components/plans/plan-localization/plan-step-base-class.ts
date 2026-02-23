@@ -262,6 +262,25 @@ export abstract class PlanStepBaseClass implements OnInit {
   }
 
   /**
+   * Called when a corrected field control becomes dirty (user edited it).
+   * Override in subclasses to e.g. enable sibling controls in the same row so the user can complete the record.
+   */
+  protected onCorrectedFieldBecameDirty(_control: AbstractControl, _field: IFieldInformation): void {
+    // Default: no-op. Value chain form overrides to enable row siblings.
+  }
+
+  /**
+   * Override in subclasses to add extra controls enabled in resubmit mode.
+   * Use case: when a section has corrected fields but its opportunityLocalizationTablesValidation
+   * flag is false, enable the entire section so the user can add remaining fields.
+   */
+  protected collectAdditionalEnabledControlsForResubmit(
+    _correctedFields: IFieldInformation[]
+  ): { controls: AbstractControl[]; parentChains: Map<AbstractControl, AbstractControl[]> } {
+    return { controls: [], parentChains: new Map() };
+  }
+
+  /**
    * Collects all controls and their parent chains that should be enabled.
    */
   private collectEnabledControls(
@@ -290,8 +309,9 @@ export abstract class PlanStepBaseClass implements OnInit {
 
   /**
    * Builds the parent chain for a control (from root to immediate parent).
+   * Protected for use by subclasses in collectAdditionalEnabledControlsForResubmit.
    */
-  private buildParentChain(control: AbstractControl): AbstractControl[] {
+  protected buildParentChain(control: AbstractControl): AbstractControl[] {
     const parentChain: AbstractControl[] = [];
     let parent: AbstractControl | null = control.parent;
 
@@ -341,11 +361,14 @@ export abstract class PlanStepBaseClass implements OnInit {
         });
         control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
           // if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
-          if (control.status === 'VALID' && control.dirty) {
+          if (control.dirty) {
             const field = correctedFields.find(f => this.getControlForField(f) === control);
-            const currentValue = control.value;
-            const originalValue = this.getOriginalValue(field!);
-            if (field) this.upDateSelectedInputs(originalValue == currentValue, field);
+            if (control.status === 'VALID' && field) {
+              const currentValue = control.value;
+              const originalValue = this.getOriginalValue(field);
+              this.upDateSelectedInputs(originalValue == currentValue, field);
+            }
+            if (field) this.onCorrectedFieldBecameDirty(control, field);
           }
         });
       }
@@ -569,6 +592,7 @@ export abstract class PlanStepBaseClass implements OnInit {
     let isCorrected = false;
     if (correctedField) {
       const control = this.getControlForField(correctedField);
+      const originalValue = this.getOriginalValue(correctedField);
       const isAttachmentsField =
         (correctedField.section === 'attachments' && correctedField.inputKey === 'attachments') ||
         inputKey === 'attachments';
@@ -576,9 +600,12 @@ export abstract class PlanStepBaseClass implements OnInit {
       if (isAttachmentsField) {
         // Attachments: use dirty flag—value comparison fails (File[] vs BE objects, ref equality)
         isCorrected = control?.dirty ?? false;
+      } else if (originalValue === undefined) {
+        // New rows/fields with no original value (e.g. assemblyTesting when original had no sectionType 4):
+        // use dirty flag—comparison would falsely treat as "corrected" since current !== undefined
+        isCorrected = control?.dirty ?? false;
       } else {
         let currentValue = control?.value;
-        const originalValue = this.getOriginalValue(correctedField);
         if (correctedField.inputKey === 'contactNumber') {
           currentValue = currentValue?.countryCode + '' + currentValue?.phoneNumber;
         }

@@ -349,7 +349,7 @@ export function getFieldValueFromProductPlanResponse(
   // Step 3: value chain sections (designEngineering, sourcing, manufacturing, assemblyTesting, afterSales)
   const vcSectionType = VALUE_CHAIN_SECTION_TYPE[section];
   if (vcSectionType != null && rowId) {
-    const rows: ValueChainRow[] = pp.valueChainStep?.valueChainRows ?? [];
+    const rows: ValueChainRow[] = pp.valueChainStep?.valueChainRows ?? (pp as any)?.valueChainRows ?? [];
     const row: ValueChainRow | undefined = rows.find((r) => r.sectionType === vcSectionType && r.id === rowId);
     if (!row) return undefined;
     if (key === EMaterialsFormControls.expenseHeader) return row.expenseHeader ?? undefined;

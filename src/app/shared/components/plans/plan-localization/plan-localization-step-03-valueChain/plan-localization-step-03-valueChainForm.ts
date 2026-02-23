@@ -25,6 +25,7 @@ import { ProductPlanFormService } from 'src/app/shared/services/plan/product-pla
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { row } from '@primeuix/themes/aura/datatable';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -176,8 +177,65 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   /** Returns true when in-house/procured selection is In-house */
   isInHouse(itemControl: AbstractControl): boolean {
     const val = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
-    return val === '1' || val === EInHouseProcuredType.InHouse;
+    return val === '1' || val === EInHouseProcuredType.InHouse || val === EInHouseProcuredType.InHouse.toString();
   }
+
+  /** In create/edit: show year form controls only when Procured; when In House show "No". In view/review: always show. */
+  showYearFormControls(itemControl: AbstractControl): boolean {
+    return !this.isInHouse(itemControl)
+  }
+
+  /**
+   * TD orange background: Review mode only, corrected field, and user has NOT checked the box (not yet addressed).
+   * When user selects/checks the input, no orange.
+   */
+  shouldHighlightTdInReviewMode(
+    inputKey: string,
+    rowId: string | undefined | null,
+    itemControl: AbstractControl,
+    controlName: string
+  ): boolean {
+    if (this.planStore.wizardMode() !== 'Review') return false;
+    const isCorrectedField = this.correctedFields().some(
+      f => f.inputKey === inputKey && (rowId == null ? f.id == null : f.id === rowId)
+    );
+    if (!isCorrectedField) return false;
+    const fieldGroup = itemControl.get(controlName);
+    const hasCommentChecked = fieldGroup instanceof FormGroup
+      ? !!(fieldGroup.get(EMaterialsFormControls.hasComment)?.value)
+      : false;
+    return !hasCommentChecked;
+  }
+
+  /** Section type to number: designEngineering=1, sourcing=2, manufacturing=3, assemblyTesting=4, afterSales=5 */
+  private static readonly SECTION_TYPE_MAP: Record<string, number> = {
+    designEngineering: 1,
+    sourcing: 2,
+    manufacturing: 3,
+    assemblyTesting: 4,
+    afterSales: 5,
+  };
+
+  /** True when valueChainRows in originalPlanResponse has at least one row with this sectionType */
+  hasSectionInResponse(sectionKey: string): boolean {
+    const response = this.originalPlanResponse();
+    const pp = response?.productPlan;
+    const rows = pp?.valueChainStep?.valueChainRows ?? (pp as any)?.valueChainRows ?? [];
+    const sectionType = PlanLocalizationStep03ValueChainForm.SECTION_TYPE_MAP[sectionKey];
+    return sectionType != null && rows.some((r: { sectionType: number }) => r.sectionType === sectionType);
+  }
+
+  /** Years (1-7) that have fields in correctedFields - for value-chain-summary highlight. Review mode only. */
+  highlightedYears = computed(() => {
+    if (this.planStore.wizardMode() !== 'Review') return [];
+    const fields = this.correctedFields();
+    const years = new Set<number>();
+    (fields ?? []).forEach((f) => {
+      const m = f.inputKey?.match(/year(\d+)/);
+      if (m) years.add(parseInt(m[1], 10));
+    });
+    return [...years];
+  });
 
   private static readonly YEAR_KEYS = [
     EMaterialsFormControls.year1,
@@ -197,12 +255,48 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     { key: 'afterSales', getArray: c => c.getAfterSalesFormArray() },
   ];
 
+  /**
+   * When a corrected field becomes dirty in resubmit mode: do NOT enable other fields in the row.
+   * Each field stays independent; changing one field does not unlock siblings.
+   */
+  protected override onCorrectedFieldBecameDirty(_control: AbstractControl, _field: IFieldInformation): void {
+    // Do not enable sibling fields when any corrected field changes
+    return;
+  }
+
   /** When user changes In-house/Procured: apply years enable/disable for that row. In resubmit, only applies on user change (not on loadPlanData). */
   onInHouseOrProcuredChange(itemControl: AbstractControl): void {
     if (this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review') return;
     const section = this.getSectionForItemControl(itemControl);
-    console.log(section);
-    if (section) this.applyYearsViewForItem(itemControl, section.key, section.index);
+    if (!section) return;
+
+    this.applyYearsViewForItem(itemControl, section.key, section.index, true);
+
+    // In resubmit mode: when switching to In House, years become null (not applicable). Remove them from selectedInputs
+    // so they are no longer highlighted as corrected - their value has effectively changed to null.
+    if (this.isResubmitMode()) {
+      const inHouseVal = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
+      const isInHouse = inHouseVal === '1' || inHouseVal === EInHouseProcuredType.InHouse || inHouseVal === EInHouseProcuredType.InHouse.toString();
+      if (isInHouse) {
+        this.removeYearFieldsFromSelectedInputs(section.key, section.index, itemControl.get('rowId')?.value ?? null);
+      }
+    }
+  }
+
+  /** Remove year (1–7) fields for a given row from selectedInputs. Used when switching to In House in resubmit mode. */
+  private removeYearFieldsFromSelectedInputs(sectionKey: string, index: number, rowId: string | null): void {
+    const yearInputKeys = PlanLocalizationStep03ValueChainForm.YEAR_KEYS.map(yearKey =>
+      createValueChainFieldKey(sectionKey, yearKey, index)
+    );
+    const current = this.selectedInputs();
+    const updated = current.filter(
+      input =>
+        !(
+          yearInputKeys.includes(input.inputKey) &&
+          (rowId == null ? input.id == null : input.id === rowId)
+        )
+    );
+    if (updated.length !== current.length) this.selectedInputs.set(updated);
   }
 
   private getSectionForItemControl(itemControl: AbstractControl): { key: string; index: number } | null {
@@ -215,13 +309,15 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     return null;
   }
 
-  /** Apply years enable/disable for a single row. Years always displayed; enabled only when Procured and (edit mode OR resubmit with corrected/user-changed). */
-  private applyYearsViewForItem(itemControl: AbstractControl, sectionKey: string, index: number): void {
+  /** Apply years enable/disable for a single row. In create/edit: In House = hide years + set "No"; Procured = show years + null. */
+  private applyYearsViewForItem(itemControl: AbstractControl, sectionKey: string, index: number, clearStaleNoFromInHouseTransition = false): void {
     const inHouseVal = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
     const inHouseCtrl = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value);
     const rowId = itemControl.get('rowId')?.value ?? null;
     const isInHouse = inHouseVal === '1' || inHouseVal === EInHouseProcuredType.InHouse || inHouseVal === EInHouseProcuredType.InHouse.toString();
     const userChangedInHouse = !!(inHouseCtrl && inHouseCtrl.dirty);
+    const anyFieldInRowDirty = this.isAnyControlInRowDirty(itemControl);
+    const isCreateOrEdit = !this.isViewMode() && this.planStore.wizardMode() !== 'Review' && this.planStore.wizardMode() !== 'resubmit';
 
     for (const yearKey of PlanLocalizationStep03ValueChainForm.YEAR_KEYS) {
       const yearGroup = itemControl.get(yearKey);
@@ -232,12 +328,20 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
       const isYearCorrected = this.isYearCorrected(fieldKey, rowId);
 
       if (isInHouse) {
-        valueCtrl.setValue(null);
+        if (isCreateOrEdit || userChangedInHouse) {
+          valueCtrl.setValue(ELocalizationStatusType.No.toString());
+        }
         valueCtrl.removeValidators(Validators.required);
         valueCtrl.disable();
         yearGroup.disable({ emitEvent: false, onlySelf: true });
       } else {
-        const canEdit = !this.isResubmitMode() || isYearCorrected || userChangedInHouse;
+        // Only clear year when user JUST switched from In House to Procured (stale "No" → null for fresh input).
+        // Do NOT clear when costPercentage/expenseHeader changes: "No" is a valid Procured choice and inHouse stays dirty.
+        const yearValue = valueCtrl.value;
+        if (clearStaleNoFromInHouseTransition && userChangedInHouse && yearValue === ELocalizationStatusType.No.toString()) {
+          valueCtrl.setValue(null);
+        }
+        const canEdit = !this.isResubmitMode() || isYearCorrected || userChangedInHouse || anyFieldInRowDirty;
         if (canEdit) {
           yearGroup.enable({ emitEvent: false, onlySelf: true });
           valueCtrl.enable();
@@ -249,6 +353,22 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
       }
       valueCtrl.updateValueAndValidity();
     }
+  }
+
+  private isAnyControlInRowDirty(rowControl: AbstractControl): boolean {
+    if (!(rowControl instanceof FormGroup)) return false;
+    const allNames = [
+      EMaterialsFormControls.expenseHeader,
+      EMaterialsFormControls.inHouseOrProcured,
+      EMaterialsFormControls.costPercentage,
+      ...PlanLocalizationStep03ValueChainForm.YEAR_KEYS,
+    ];
+    return allNames.some((name) => {
+      const group = rowControl.get(name);
+      if (!(group instanceof FormGroup)) return false;
+      const valueCtrl = group.get(EMaterialsFormControls.value);
+      return !!(valueCtrl && valueCtrl.dirty);
+    });
   }
 
   private isYearCorrected(fieldKey: string, rowId: string | null): boolean {
