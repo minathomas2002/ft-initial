@@ -73,7 +73,7 @@
                 cardDescription="{{
                   opportunitiesStore.details()?.spendSAR
                     ? opportunitiesStore.details()?.spendSAR + 'B'
-                    : '-'
+                    : opportunitiesStore.details()?.spendSAR
                 }}"
               >
               </app-base-card>
@@ -100,7 +100,7 @@
                 cardDescription="{{
                   (opportunitiesStore.details()?.localSuppliersFormatted == '0' ||
                    opportunitiesStore.details()?.localSuppliersFormatted == null) ?
-                  '-':
+                   opportunitiesStore.details()?.localSuppliersFormatted :
                    opportunitiesStore.details()?.localSuppliersFormatted + '+'
                 }}"
               >
@@ -112,7 +112,7 @@
                 cardDescription="{{
                   (opportunitiesStore.details()?.globalSuppliersFormatted == '0' ||
                   opportunitiesStore.details()?.globalSuppliersFormatted == null) ?
-                  '-':
+                  opportunitiesStore.details()?.globalSuppliersFormatted :
                    opportunitiesStore.details()?.globalSuppliersFormatted + '+'
                 }}"
               >
