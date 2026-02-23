@@ -209,7 +209,7 @@ export class OpportunityFormService {
     const maxQuantity = maxQuantityControl?.value;
 
     // Only validate if both values are provided and not zero
-     if ((minQuantity || maxQuantity ||  (maxQuantity == 0&&  minQuantity == 0))&& parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
+     if ((minQuantity || maxQuantity)&& parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
       // Merge errors instead of overwriting
       const minErrors = minQuantityControl?.errors || {};
       const maxErrors = maxQuantityControl?.errors || {};
