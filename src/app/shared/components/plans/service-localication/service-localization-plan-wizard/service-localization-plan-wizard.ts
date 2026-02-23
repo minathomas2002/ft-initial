@@ -228,17 +228,25 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   // Computed signals to check if incoming comments exist and have content
   hasIncomingStep1Comments = computed(() => {
     const step = this.steps()[0];
+    const isReturnedByManager = [EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.ReturnedByDV]
+      .includes(this.planStatus() as EInternalUserPlanStatus);
+
     return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
       this.isViewMode() ||
-      (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
+      (isReturnedByManager && this.step1CommentPhase() !== 'viewing') ||
+      (this.isInvestorPersona() ? ((step?.commentsCount ?? 0) > 0) : true) &&
       !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
     );
   });
 
   hasIncomingStep2Comments = computed(() => {
     const step = this.steps()[1];
+    const isReturnedByManager = [EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.ReturnedByDV]
+      .includes(this.planStatus() as EInternalUserPlanStatus);
+
     return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
       this.isViewMode() ||
+      (isReturnedByManager && this.step2CommentPhase() !== 'viewing') ||
       (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
       (!this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase()))
     );
@@ -246,8 +254,12 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   hasIncomingStep3Comments = computed(() => {
     const step = this.steps()[2];
+    const isReturnedByManager = [EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.ReturnedByDV]
+      .includes(this.planStatus() as EInternalUserPlanStatus);
+
     return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
       this.isViewMode() ||
+      (isReturnedByManager && this.step3CommentPhase() !== 'viewing') ||
       (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
       !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
     );
@@ -255,8 +267,12 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   hasIncomingStep4Comments = computed(() => {
     const step = this.steps()[3];
+    const isReturnedByManager = [EInternalUserPlanStatus.ReturnedByDEPTManager, EInternalUserPlanStatus.ReturnedByDV]
+      .includes(this.planStatus() as EInternalUserPlanStatus);
+
     return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
       this.isViewMode() ||
+      (isReturnedByManager && this.step4CommentPhase() !== 'viewing') ||
       (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
       !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
     );
