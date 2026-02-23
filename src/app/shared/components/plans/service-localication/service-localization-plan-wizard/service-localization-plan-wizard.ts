@@ -498,22 +498,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return (hasInvestorCode && hasNoEmployeeId) || hasInvestorRole;
   });
 
-  // Check if user is employee persona
-  isEmployeePersona = computed(() => {
-    const userProfile = this.authStore.userProfile();
-    if (!userProfile) return false;
-    const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
-    return hasEmployeeRole;
-  });
-
-  // Check if user is Division MANAGER persona
-  isDVManagerPersona = computed(() => {
-    const userProfile = this.authStore.userProfile();
-    if (!userProfile) return false;
-    const hasMangerRole = userProfile.roleCodes?.includes(ERoles.Division_MANAGER) ?? false;
-    return hasMangerRole;
-  });
-
   private readonly stepsWithId = computed<ServiceLocalizationWizardStepState[]>(() => {
     this.i18nService.currentLanguage();
     const list: ServiceLocalizationWizardStepState[] = [];

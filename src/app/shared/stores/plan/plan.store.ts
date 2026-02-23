@@ -534,8 +534,8 @@ export const PlanStore = signalStore(
         );
       },
 
-      /* Send Plan Back to Investor*/
-      sendPlanBackToInvestor(request: ReviewPlanRequest): Observable<IBaseApiResponse<boolean>> {
+      /* Send Plan Back*/
+      sendPlanBack(request: ReviewPlanRequest): Observable<IBaseApiResponse<boolean>> {
         patchState(store, { isProcessing: true, error: null });
         return planApiService.sendPlanBackToInvestor(request).pipe(
           tap(() => {
@@ -543,9 +543,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error sending plan back to investor',
+              error: error.errorMessage || 'Error sending plan back',
             });
-            return throwError(() => new Error('Error sending plan back to investor'));
+            return throwError(() => new Error('Error sending plan back'));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });

@@ -1,4 +1,4 @@
-import { DestroyRef, inject, signal, WritableSignal } from '@angular/core';
+import { computed, DestroyRef, inject, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -35,6 +35,35 @@ export abstract class BasePlanWizard {
   protected acknowledgeReason = signal<string>('');
   protected deptManagerSignature = signal<string | null>(null);
 
+  // Check if user is employee persona
+  isEmployeePersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    // Check if user has employeeID or has EMPLOYEE role
+    const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
+    return hasEmployeeRole;
+  });
+
+  // Check if user is Division MANAGER persona
+  isDVManagerPersona = computed(() => {
+    const userProfile = this.authStore.userProfile();
+    if (!userProfile) return false;
+    // Check if user has employeeID or has EMPLOYEE role
+    const hasMangerRole = userProfile.roleCodes?.includes(ERoles.Division_MANAGER) ?? false;
+    return hasMangerRole;
+  });
+  
+  sendBackSuccessMessage = computed(() => {
+    if (this.isDVManagerPersona()) {
+      return "Plan has been sent back to employee successfully."
+    }
+
+    if (this.isEmployeePersona()) {
+      return "Plan has been sent back to investor successfully."
+    }
+
+    return "Plan has been sent back to the division manager successfully."
+  })
 
   protected readonly commentTitle = this.planStore.commentPersona;
 
@@ -507,13 +536,13 @@ export abstract class BasePlanWizard {
       comments: comments,
     };
     this.isProcessing.set(true);
-    this.planStore.sendPlanBackToInvestor(request)
+    this.planStore.sendPlanBack(request)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
           this.showSendBackConfirmationDialog.set(false);
-          this.toasterService.success('Plan has been sent back to investor successfully.');
+          this.toasterService.success(this.sendBackSuccessMessage());
           this.refresh();
           this.closeWizard();
           this.planStore.resetWizardState();

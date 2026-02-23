@@ -933,7 +933,7 @@
       "deptApproved": "Plan approved and forwarded to employee",
       "employeeApproved": "Plan Approved and Forwarded to Division Manager",
       "editPlan": "Edited the plan",
-      "dVReview": "Division Review",
+      "dVReview": "Plan reviewed and returned to employee for more info",
       "deptManagerReview": "Department Manager Review"
     }
   },

@@ -465,23 +465,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return (hasInvestorCode && hasNoEmployeeId) || hasInvestorRole;
   });
 
-  // Check if user is employee persona
-  isEmployeePersona = computed(() => {
-    const userProfile = this.authStore.userProfile();
-    if (!userProfile) return false;
-    // Check if user has employeeID or has EMPLOYEE role
-    const hasEmployeeRole = userProfile.roleCodes?.includes(ERoles.EMPLOYEE) ?? false;
-    return hasEmployeeRole;
-  });
-
-  // Check if user is Division MANAGER persona
-  isDVManagerPersona = computed(() => {
-    const userProfile = this.authStore.userProfile();
-    if (!userProfile) return false;
-    // Check if user has employeeID or has EMPLOYEE role
-    const hasMangerRole = userProfile.roleCodes?.includes(ERoles.Division_MANAGER) ?? false;
-    return hasMangerRole;
-  });
   // Check if plan is in pending status for investor
   isPendingStatusForInvestor = computed(() => {
     const status = this.planStatus();
