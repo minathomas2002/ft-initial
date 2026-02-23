@@ -5,6 +5,7 @@ import { EPlanPageTitle } from "src/app/shared/enums";
 import { IFieldInformation, IPageComment } from "src/app/shared/interfaces/plans.interface";
 import { I18nService } from "src/app/shared/services/i18n";
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
+import { EInternalUserPlanStatus } from "src/app/shared/interfaces";
 
 @Component({
   selector: 'app-summary-step-base',
@@ -45,17 +46,11 @@ export abstract class SummaryStepBaseClass {
 
   shouldShowCommentBox = computed(() => {
     const commentForPage = this.commentForPage();
-    const phase = this.stepCommentsCountAndPhaseFromWizard().phase;
-    const isAddingOrEditing = ['adding', 'editing'].includes(phase);
     const hasComment = !!commentForPage.text;
     const hasUserComment = this.planStore.currentUserPageComments().includes(this.pageTitleForTL as EPlanPageTitle);
     const hasComments = this.stepCommentsCountAndPhaseFromWizard().count > 0;
     const isResubmit = this.planStore.wizardMode() === 'resubmit';
     const isViewOrReviewMode = this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review';
-
-    if (isAddingOrEditing) {
-      return false
-    }
 
     if (isViewOrReviewMode) {
       return hasComment

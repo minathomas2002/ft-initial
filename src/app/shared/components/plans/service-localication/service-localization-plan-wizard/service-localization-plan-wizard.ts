@@ -235,7 +235,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       this.isViewMode() ||
       (isReturnedByManager && this.step1CommentPhase() !== 'viewing') ||
       (this.isInvestorPersona() ? ((step?.commentsCount ?? 0) > 0) : true) &&
-      !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step1CommentPhase())
+      !this.planStore.currentUserPageComments().includes(step.title)
     );
   });
 
@@ -248,7 +248,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       this.isViewMode() ||
       (isReturnedByManager && this.step2CommentPhase() !== 'viewing') ||
       (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
-      (!this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step2CommentPhase()))
+      !this.planStore.currentUserPageComments().includes(step.title)
     );
   });
 
@@ -261,7 +261,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       this.isViewMode() ||
       (isReturnedByManager && this.step3CommentPhase() !== 'viewing') ||
       (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
-      !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step3CommentPhase())
+      !this.planStore.currentUserPageComments().includes(step.title)
     );
   });
 
@@ -274,7 +274,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       this.isViewMode() ||
       (isReturnedByManager && this.step4CommentPhase() !== 'viewing') ||
       (this.isInvestorPersona() ? (step?.commentsCount ?? 0 > 0) : true) &&
-      !this.planStore.currentUserPageComments().includes(step.title) && !['adding', 'editing'].includes(this.step4CommentPhase())
+      !this.planStore.currentUserPageComments().includes(step.title)
     );
   });
 
