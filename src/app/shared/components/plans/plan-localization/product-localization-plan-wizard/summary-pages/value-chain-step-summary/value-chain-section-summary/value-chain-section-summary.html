@@ -31,8 +31,14 @@
             <app-plan-summary-flied [planSummaryField]="getSummaryField(row.costPercentage, formatCostPercent(row.costPercentage.value))" />
           </td>
           @for (y of [row.year1, row.year2, row.year3, row.year4, row.year5, row.year6, row.year7]; track $index) {
-          <td class="border-t border-gray-300 p-3">
+          <td
+            class="border-t border-gray-300 p-3"
+            [class.bg-success-50]="y.shouldHighlightTd"
+            [class.border-success-500]="y.shouldHighlightTd"
+          >
+            @if (!row.isInHouse) {
             <app-plan-summary-flied [planSummaryField]="getSummaryField(y, formatYearValue(y.value))" />
+            }
           </td>
           }
         </tr>

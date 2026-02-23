@@ -160,6 +160,42 @@ export class ProductPlanFormService {
     this._step3Builder.updateValueChainValidation(this._step3FormGroup, validation);
   }
 
+  /**
+   * Mark all year value controls in step3 as pristine so year validation errors don't display when saving as draft.
+   */
+  markYearControlsAsPristineForDraft(): void {
+    const yearKeys = [
+      EMaterialsFormControls.year1,
+      EMaterialsFormControls.year2,
+      EMaterialsFormControls.year3,
+      EMaterialsFormControls.year4,
+      EMaterialsFormControls.year5,
+      EMaterialsFormControls.year6,
+      EMaterialsFormControls.year7,
+    ];
+    const sectionNames = [
+      EMaterialsFormControls.designEngineeringFormGroup,
+      EMaterialsFormControls.sourcingFormGroup,
+      EMaterialsFormControls.manufacturingFormGroup,
+      EMaterialsFormControls.assemblyTestingFormGroup,
+      EMaterialsFormControls.afterSalesFormGroup,
+    ];
+    for (const sectionName of sectionNames) {
+      const itemsArray = this._step3Builder.getSectionFormArray(this._step3FormGroup, sectionName);
+      if (!itemsArray) continue;
+      itemsArray.controls.forEach((itemControl: AbstractControl) => {
+        const itemGroup = itemControl as FormGroup;
+        yearKeys.forEach((yearKey) => {
+          const yearGroup = itemGroup.get(yearKey) as FormGroup;
+          if (yearGroup) {
+            const valueCtrl = yearGroup.get(EMaterialsFormControls.value);
+            if (valueCtrl) valueCtrl.markAsPristine();
+          }
+        });
+      });
+    }
+  }
+
   // Expose Step 4 sub-form groups for convenience
   get saudizationFormGroup(): FormGroup {
     return this._step4FormGroup.get(EMaterialsFormControls.saudizationFormGroup) as FormGroup;

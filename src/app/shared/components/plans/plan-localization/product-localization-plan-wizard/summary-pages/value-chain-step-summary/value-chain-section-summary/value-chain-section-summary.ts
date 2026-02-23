@@ -44,7 +44,8 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
     const sectionKey = this.sectionKey();
     const sectionType = SECTION_TYPE_BY_KEY[sectionKey] ?? 0;
     const summaryFields = this.sectionSummaryFields();
-    const valueChainRows = this.planStore.productPlanData()?.productPlan?.valueChainStep?.valueChainRows ?? [];
+    const pp = this.planStore.productPlanData()?.productPlan;
+    const valueChainRows = pp?.valueChainStep?.valueChainRows ?? (pp as any)?.valueChainRows ?? [];
 
     return items.controls.map((control, index) => {
       const item = control as FormGroup;
@@ -75,7 +76,10 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
           this.planStore.planStatus() === EInternalUserPlanStatus.UNDER_REVIEW &&
           ['view', 'Review'].includes(this.planStore.wizardMode()) &&
           this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])();
-        return { value, beforeValue: beforeFormatted || '-', hasError, hasComment, showDifference: showDiff, isResolved };
+        /** TD orange background: Review mode only, corrected field (hasComment), checkbox not checked (!hasCommentChecked) */
+        const shouldHighlightTd =
+          this.planStore.wizardMode() === 'Review' && hasComment && !hasCommentChecked;
+        return { value, beforeValue: beforeFormatted || '-', hasError, hasComment, showDifference: showDiff, isResolved, shouldHighlightTd };
       };
 
       const inHouseVal = item.get(EMaterialsFormControls.inHouseOrProcured);
@@ -134,7 +138,7 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
 
   /** Maps a table cell to IPlanSummaryField for use with app-plan-summary-flied */
   getSummaryField(
-    cell: { beforeValue: string | number; hasError: boolean; hasComment: boolean; showDifference: boolean; isResolved: boolean },
+    cell: { beforeValue: string | number; hasError: boolean; hasComment: boolean; showDifference: boolean; isResolved: boolean; shouldHighlightTd?: boolean },
     currantValueDisplay: string
   ): IPlanSummaryField {
     return {

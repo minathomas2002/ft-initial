@@ -52,6 +52,7 @@
         <span class="text-red-500">*</span>
         }
       </h3>
+      @if (hasSectionInResponse('designEngineering') || !isViewMode()) {
       <app-form-array-input
         [ft]="getDesignEngineeringFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -146,7 +147,13 @@
               [label]="'Cost %'"
             />
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('designEngineering', 'year1', index), itemControl.get('rowId')?.value, itemControl, 'year1')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
               [showCheckbox]="showCheckbox()"
@@ -172,8 +179,15 @@
                 [label]="'Year 1'"
               />
             </app-group-input-with-checkbox>
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('designEngineering', 'year2', index), itemControl.get('rowId')?.value, itemControl, 'year2')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
               [showCheckbox]="showCheckbox()"
@@ -199,8 +213,15 @@
                 [label]="'Year 2'"
               />
             </app-group-input-with-checkbox>
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('designEngineering', 'year3', index), itemControl.get('rowId')?.value, itemControl, 'year3')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [showCheckbox]="showCheckbox()"
@@ -221,13 +242,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year3', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+                [label]="'Year 3'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
-              [label]="'Year 3'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('designEngineering', 'year4', index), itemControl.get('rowId')?.value, itemControl, 'year4')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [showCheckbox]="showCheckbox()"
@@ -248,13 +276,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year4', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+                [label]="'Year 4'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
-              [label]="'Year 4'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('designEngineering', 'year5', index), itemControl.get('rowId')?.value, itemControl, 'year5')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [showCheckbox]="showCheckbox()"
@@ -275,13 +310,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year5', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+                [label]="'Year 5'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
-              [label]="'Year 5'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('designEngineering', 'year6', index), itemControl.get('rowId')?.value, itemControl, 'year6')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [showCheckbox]="showCheckbox()"
@@ -302,13 +344,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year6', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+                [label]="'Year 6'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
-              [label]="'Year 6'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('designEngineering', 'year7', index), itemControl.get('rowId')?.value, itemControl, 'year7')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [showCheckbox]="showCheckbox()"
@@ -329,11 +378,12 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year7', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+                [label]="'Year 7'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
-              [label]="'Year 7'"
-            />
+            }
           </td>
         </ng-template>
       </app-form-array-input>
@@ -341,6 +391,30 @@
         [control]="getDesignEngineeringFormArray()!"
         [label]="'Design & Engineering'"
       />
+      } @else {
+      <div class="rounded-2xl overflow-hidden border border-gray-300">
+        <table class="w-full text-sm border-collapse [&_th]:border [&_td]:border [&_th]:border-gray-300 [&_td]:border-gray-300">
+          <thead>
+            <tr class="[&_th]:bg-[#F9FAFA] [&_th]:text-[#4A4E5A]">
+              <th class="p-3 text-left font-semibold">Expense Header</th>
+              <th class="p-3 text-left font-semibold">In-house / Procured</th>
+              <th class="p-3 text-left font-semibold">Cost %</th>
+              @for (y of [1,2,3,4,5,6,7]; track y) {
+              <th class="p-3 text-left font-semibold">Year {{ y }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td
+                class="p-3"
+                colspan="10"
+              >&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      }
     </div>
 
     <!-- Sourcing Section -->
@@ -350,6 +424,7 @@
         <span class="text-red-500">*</span>
         }
       </h3>
+      @if (hasSectionInResponse('sourcing') || !isViewMode()) {
       <app-form-array-input
         [ft]="getSourcingFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -444,7 +519,13 @@
               [label]="'Cost %'"
             />
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('sourcing', 'year1', index), itemControl.get('rowId')?.value, itemControl, 'year1')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
               [showCheckbox]="showCheckbox()"
@@ -465,13 +546,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year1', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
+                [label]="'Year 1'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
-              [label]="'Year 1'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('sourcing', 'year2', index), itemControl.get('rowId')?.value, itemControl, 'year2')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
               [showCheckbox]="showCheckbox()"
@@ -492,13 +580,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year2', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
+                [label]="'Year 2'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
-              [label]="'Year 2'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('sourcing', 'year3', index), itemControl.get('rowId')?.value, itemControl, 'year3')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [showCheckbox]="showCheckbox()"
@@ -519,13 +614,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year3', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
+                [label]="'Year 3'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
-              [label]="'Year 3'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('sourcing', 'year4', index), itemControl.get('rowId')?.value, itemControl, 'year4')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [showCheckbox]="showCheckbox()"
@@ -546,13 +648,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year4', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
+                [label]="'Year 4'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
-              [label]="'Year 4'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('sourcing', 'year5', index), itemControl.get('rowId')?.value, itemControl, 'year5')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [showCheckbox]="showCheckbox()"
@@ -573,14 +682,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year5', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
+                [label]="'Year 5'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
-              [label]="'Year 5'"
-            />
+            }
           </td>
-
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('sourcing', 'year6', index), itemControl.get('rowId')?.value, itemControl, 'year6')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [showCheckbox]="showCheckbox()"
@@ -601,13 +716,20 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year6', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
+                [label]="'Year 6'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
-              [label]="'Year 6'"
-            />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('sourcing', 'year7', index), itemControl.get('rowId')?.value, itemControl, 'year7')"
+            [color]="selectedInputColor()"
+          >
+            @if (showYearFormControls(itemControl)) {
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [showCheckbox]="showCheckbox()"
@@ -628,11 +750,12 @@
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year7', index), itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
               />
+              <app-base-error-messages
+                [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
+                [label]="'Year 7'"
+              />
             </app-group-input-with-checkbox>
-            <app-base-error-messages
-              [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
-              [label]="'Year 7'"
-            />
+            }
           </td>
         </ng-template>
       </app-form-array-input>
@@ -640,15 +763,40 @@
         [control]="getSourcingFormArray()!"
         [label]="'Sourcing'"
       />
+      } @else {
+      <div class="rounded-2xl overflow-hidden border border-gray-300">
+        <table class="w-full text-sm border-collapse [&_th]:border [&_td]:border [&_th]:border-gray-300 [&_td]:border-gray-300">
+          <thead>
+            <tr class="[&_th]:bg-[#F9FAFA] [&_th]:text-[#4A4E5A]">
+              <th class="p-3 text-left font-semibold">Expense Header</th>
+              <th class="p-3 text-left font-semibold">In-house / Procured</th>
+              <th class="p-3 text-left font-semibold">Cost %</th>
+              @for (y of [1,2,3,4,5,6,7]; track y) {
+              <th class="p-3 text-left font-semibold">Year {{ y }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td
+                class="p-3"
+                colspan="10"
+              >&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      }
     </div>
 
-    <!-- Manufacturing Section (NO years) -->
+    <!-- Manufacturing Section -->
     <div class="flex flex-col gap-4">
       <h3 class="text-base font-semibold text-gray-900">Manufacturing
         @if(isRequired(EOpportunityLocalizationTablesValidation.Manufacturing)){
         <span class="text-red-500">*</span>
         }
       </h3>
+      @if (hasSectionInResponse('manufacturing') || !isViewMode()) {
       <app-form-array-input
         [ft]="getManufacturingFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -743,15 +891,19 @@
               [label]="'Cost %'"
             />
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
-                section: 'manufacturing',
-                inputKey: createFieldKey('manufacturing', 'year1', index),
-                label: 'Year 1'
-              }, itemControl)"
+                                        section: 'manufacturing',
+                                        inputKey: createFieldKey('manufacturing', 'year1', index),
+                                        label: 'Year 1'
+                                      }, itemControl)"
             >
               <p-select
                 [options]="localizationStatusOptions()"
@@ -769,16 +921,21 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
               [label]="'Year 1'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
               [showCheckbox]="showCheckbox()"
               (valueChanged)="upDateSelectedInputs($event, {
-                section: 'manufacturing',
-                inputKey: createFieldKey('manufacturing', 'year2', index),
-                label: 'Year 2'
-              }, itemControl)"
+                                        section: 'manufacturing',
+                                        inputKey: createFieldKey('manufacturing', 'year2', index),
+                                        label: 'Year 2'
+                                      }, itemControl)"
             >
               <p-select
                 [options]="localizationStatusOptions()"
@@ -796,8 +953,13 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
               [label]="'Year 2'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [showCheckbox]="showCheckbox()"
@@ -823,8 +985,13 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [label]="'Year 3'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [showCheckbox]="showCheckbox()"
@@ -850,9 +1017,14 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [label]="'Year 4'"
             />
+            }
           </td>
 
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [showCheckbox]="showCheckbox()"
@@ -878,8 +1050,13 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [label]="'Year 5'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [showCheckbox]="showCheckbox()"
@@ -905,8 +1082,13 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [label]="'Year 6'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [showCheckbox]="showCheckbox()"
@@ -932,13 +1114,38 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [label]="'Year 7'"
             />
+            }
           </td>
         </ng-template>
       </app-form-array-input>
       <app-base-error-messages
         [control]="getManufacturingFormArray()!"
-        [label]="'Assembly & Testing'"
+        [label]="'Manufacturing'"
       />
+      } @else {
+      <div class="rounded-2xl overflow-hidden border border-gray-300">
+        <table class="w-full text-sm border-collapse [&_th]:border [&_td]:border [&_th]:border-gray-300 [&_td]:border-gray-300">
+          <thead>
+            <tr class="[&_th]:bg-[#F9FAFA] [&_th]:text-[#4A4E5A]">
+              <th class="p-3 text-left font-semibold">Expense Header</th>
+              <th class="p-3 text-left font-semibold">In-house / Procured</th>
+              <th class="p-3 text-left font-semibold">Cost %</th>
+              @for (y of [1,2,3,4,5,6,7]; track y) {
+              <th class="p-3 text-left font-semibold">Year {{ y }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td
+                class="p-3"
+                colspan="10"
+              >&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      }
     </div>
 
     <!-- Assembly & Testing Section -->
@@ -948,6 +1155,7 @@
         <span class="text-red-500">*</span>
         }
       </h3>
+      @if (hasSectionInResponse('assemblyTesting') || !isViewMode()) {
       <app-form-array-input
         [ft]="getAssemblyTestingFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -1042,7 +1250,13 @@
               [label]="'Cost %'"
             />
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('assemblyTesting', 'year1', index), itemControl.get('rowId')?.value, itemControl, 'year1')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
               [showCheckbox]="showCheckbox()"
@@ -1068,8 +1282,15 @@
                 [label]="'Year 1'"
               />
             </app-group-input-with-checkbox>
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('assemblyTesting', 'year2', index), itemControl.get('rowId')?.value, itemControl, 'year2')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
               [showCheckbox]="showCheckbox()"
@@ -1095,8 +1316,15 @@
                 [label]="'Year 2'"
               />
             </app-group-input-with-checkbox>
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('assemblyTesting', 'year3', index), itemControl.get('rowId')?.value, itemControl, 'year3')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [showCheckbox]="showCheckbox()"
@@ -1122,9 +1350,16 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [label]="'Year 3'"
             />
+            }
           </td>
 
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('assemblyTesting', 'year4', index), itemControl.get('rowId')?.value, itemControl, 'year4')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [showCheckbox]="showCheckbox()"
@@ -1150,8 +1385,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [label]="'Year 4'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('assemblyTesting', 'year5', index), itemControl.get('rowId')?.value, itemControl, 'year5')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [showCheckbox]="showCheckbox()"
@@ -1177,8 +1419,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [label]="'Year 5'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('assemblyTesting', 'year6', index), itemControl.get('rowId')?.value, itemControl, 'year6')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [showCheckbox]="showCheckbox()"
@@ -1204,8 +1453,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [label]="'Year 6'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('assemblyTesting', 'year7', index), itemControl.get('rowId')?.value, itemControl, 'year7')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [showCheckbox]="showCheckbox()"
@@ -1231,6 +1487,7 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [label]="'Year 7'"
             />
+            }
           </td>
         </ng-template>
       </app-form-array-input>
@@ -1238,6 +1495,30 @@
         [control]="getAssemblyTestingFormArray()!"
         [label]="'Assembly & Testing'"
       />
+      } @else {
+      <div class="rounded-2xl overflow-hidden border border-gray-300">
+        <table class="w-full text-sm border-collapse [&_th]:border [&_td]:border [&_th]:border-gray-300 [&_td]:border-gray-300">
+          <thead>
+            <tr class="[&_th]:bg-[#F9FAFA] [&_th]:text-[#4A4E5A]">
+              <th class="p-3 text-left font-semibold">Expense Header</th>
+              <th class="p-3 text-left font-semibold">In-house / Procured</th>
+              <th class="p-3 text-left font-semibold">Cost %</th>
+              @for (y of [1,2,3,4,5,6,7]; track y) {
+              <th class="p-3 text-left font-semibold">Year {{ y }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td
+                class="p-3"
+                colspan="10"
+              >&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      }
     </div>
 
     <!-- After-Sales Section -->
@@ -1247,6 +1528,7 @@
         <span class="text-red-500">*</span>
         }
       </h3>
+      @if (hasSectionInResponse('afterSales') || !isViewMode()) {
       <app-form-array-input
         [ft]="getAfterSalesFormArray()!"
         [hideAddButton]="isViewMode()"
@@ -1341,7 +1623,13 @@
               [label]="'Cost %'"
             />
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('afterSales', 'year1', index), itemControl.get('rowId')?.value, itemControl, 'year1')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year1)!)"
               [showCheckbox]="showCheckbox()"
@@ -1367,8 +1655,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
               [label]="'Year 1'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('afterSales', 'year2', index), itemControl.get('rowId')?.value, itemControl, 'year2')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year2)!)"
               [showCheckbox]="showCheckbox()"
@@ -1394,8 +1689,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
               [label]="'Year 2'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('afterSales', 'year3', index), itemControl.get('rowId')?.value, itemControl, 'year3')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [showCheckbox]="showCheckbox()"
@@ -1421,8 +1723,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
               [label]="'Year 3'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('afterSales', 'year4', index), itemControl.get('rowId')?.value, itemControl, 'year4')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [showCheckbox]="showCheckbox()"
@@ -1448,8 +1757,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
               [label]="'Year 4'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('afterSales', 'year5', index), itemControl.get('rowId')?.value, itemControl, 'year5')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [showCheckbox]="showCheckbox()"
@@ -1475,8 +1791,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
               [label]="'Year 5'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('afterSales', 'year6', index), itemControl.get('rowId')?.value, itemControl, 'year6')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [showCheckbox]="showCheckbox()"
@@ -1502,8 +1825,15 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
               [label]="'Year 6'"
             />
+            }
           </td>
-          <td class="p-3 border border-gray-200 min-w-[150px]">
+          <td
+            class="p-3 border border-gray-200 min-w-[150px]"
+            [class.bg-gray-100]="!showYearFormControls(itemControl)"
+            [appConditionalColorClass]="!showYearFormControls(itemControl) && shouldHighlightTdInReviewMode(createFieldKey('afterSales', 'year7', index), itemControl.get('rowId')?.value, itemControl, 'year7')"
+            [color]="selectedInputColor()"
+          >
+            @if(showYearFormControls(itemControl)){
             <app-group-input-with-checkbox
               [hasCommentControl]="getHasCommentControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [showCheckbox]="showCheckbox()"
@@ -1529,6 +1859,7 @@
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
               [label]="'Year 7'"
             />
+            }
           </td>
         </ng-template>
       </app-form-array-input>
@@ -1536,6 +1867,30 @@
         [control]="getAfterSalesFormArray()!"
         [label]="'After-Sales'"
       />
+      } @else {
+      <div class="rounded-2xl overflow-hidden border border-gray-300">
+        <table class="w-full text-sm border-collapse [&_th]:border [&_td]:border [&_th]:border-gray-300 [&_td]:border-gray-300">
+          <thead>
+            <tr class="[&_th]:bg-[#F9FAFA] [&_th]:text-[#4A4E5A]">
+              <th class="p-3 text-left font-semibold">Expense Header</th>
+              <th class="p-3 text-left font-semibold">In-house / Procured</th>
+              <th class="p-3 text-left font-semibold">Cost %</th>
+              @for (y of [1,2,3,4,5,6,7]; track y) {
+              <th class="p-3 text-left font-semibold">Year {{ y }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td
+                class="p-3"
+                colspan="10"
+              >&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      }
     </div>
     <app-value-chain-summary></app-value-chain-summary>
     <app-base-error-messages
