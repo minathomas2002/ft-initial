@@ -32,11 +32,6 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     return value === true ? 'Yes' : value === false ? 'No' : '';
   }
 
-  private normalizeNumberString(value: unknown): string {
-    if (value === null || value === undefined || value === '') return '';
-    return String(value).replace(/,/g, '');
-  }
-
   private formatProductManufacturingExperience(value: number | unknown): string {
     if (value === null || value === undefined || value === '') return '';
 
