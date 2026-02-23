@@ -126,8 +126,12 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   totalQuantitiesSECSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.totalQuantitiesSECControl()?.value ?? '0';
-    const beforeValue = this.mfg()?.totalQuantitiesToSEC?.toString() || '0';
+
+    const currantValue = Number(this.totalQuantitiesSECControl()?.value ?? '0')
+      .toLocaleString('en-US');
+
+    const beforeValue = Number(this.mfg()?.totalQuantitiesToSEC ?? 0)
+      .toLocaleString('en-US');
     return {
       label: 'Total Quantities provided to SEC',
       beforeValue,
@@ -205,8 +209,11 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   totalQuantitiesSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = this.totalQuantitiesControl()?.value ?? '0';
-    const beforeValue = this.mfg()?.totalQuantitiesToLocalSuppliers?.toString() || '0';
+    const currantValue = Number(this.totalQuantitiesSECControl()?.value ?? '0')
+      .toLocaleString('en-US');
+
+    const beforeValue = Number(this.mfg()?.totalQuantitiesToSEC ?? 0)
+      .toLocaleString('en-US');
     return {
       label: 'Total quantities provided to all approved local suppliers',
       beforeValue,
