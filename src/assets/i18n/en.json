@@ -934,7 +934,7 @@
       "employeeApproved": "Plan Approved and Forwarded to Division Manager",
       "editPlan": "Edited the plan",
       "dVReview": "Plan reviewed and returned to employee for more info",
-      "deptManagerReview": "Department Manager Review"
+      "deptManagerReview": "Plan reviewed and returned to Division Manager for more info"
     }
   },
   "assign": {
