@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-8 pb-10">
 
-  @if (planStore.actionNote() && shouldShowActionNote()) {
+  @if (planStore.actionNote() && shouldShowActionNote() && !hasComments()) {
     <app-page-comment-box
     [commentTitle]="isRejected() ? 'Rejection Reason' : 'Approval Note'"
     [commentText]="planStore.actionNote()!"
