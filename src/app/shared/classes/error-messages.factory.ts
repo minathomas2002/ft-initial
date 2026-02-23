@@ -48,6 +48,12 @@ export const VALIDATION_MESSAGES = {
 
   dateRangeInvalid: (label: string) =>
     `${label} must be after the start date`,
+
+  minQuantityError: (label: string, error: any) =>
+    error?.message || `${label} must be less than max quantity`,
+
+  maxQuantityError: (label: string, error: any) =>
+    error?.message || `${label} must be greater than min quantity`,
 } as const;
 
 type ValidationMessageKey = keyof typeof VALIDATION_MESSAGES;

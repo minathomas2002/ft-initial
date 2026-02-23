@@ -71,11 +71,21 @@ export class OpportunityInformationForm implements OnInit {
   disabledstartDate = toSignal(
     (this.opportunityInformationForm.get('endDate')?.valueChanges ?? of(new Date())).pipe(
       map((value) => {
-        return value ? new Date(value) : new Date();
+        const date = value ? new Date(value) : new Date();
+        const today = new Date();
+        if (date.toDateString() === today.toDateString())
+          return null;
+        return date;
       })
     ),
-    { initialValue: new Date() as Date, requireSync: false }
+    { initialValue: null as Date | null, requireSync: false }
   );
+
+  disabledStartDatesArray = computed(() => {
+    const date = this.disabledstartDate();
+    return date ? [date] : [];
+  });
+
   files = signal<File[]>([]);
   placeholder = computed(() => this.i18nService.translate('opportunity.form.fileUploadPlaceholder'));
 
