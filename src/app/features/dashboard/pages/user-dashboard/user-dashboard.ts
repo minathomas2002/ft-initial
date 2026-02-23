@@ -397,7 +397,7 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   onViewPendingAssignedPlans() {
     this.router.navigate([ERoutes.plans], {
       queryParams: {
-        status: [EInternalUserPlanStatus.UNDER_REVIEW, EInternalUserPlanStatus.ReturnedByDEPTManager,
+        status: [EInternalUserPlanStatus.UNDER_REVIEW,
         EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.DEPT_APPROVED,
         EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED],
       }
