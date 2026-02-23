@@ -574,14 +574,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   hasComments = computed(() => {
     // // Check if any step has saved comments
-    const planComments = this.planStore.planComments()?.comments ?? [];
     const currentUserPageComments = this.planStore.currentUserPageComments();
-    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDV];
-
-    if (returnedByManagerStatus.includes(this.planStatus() as EInternalUserPlanStatus)) {
-      return planComments.every(comment => currentUserPageComments.includes(comment.pageTitleForTL));
-    }
-
     return currentUserPageComments.length > 0;
   });
 
