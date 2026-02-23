@@ -569,6 +569,7 @@ export abstract class PlanStepBaseClass implements OnInit {
     let isCorrected = false;
     if (correctedField) {
       const control = this.getControlForField(correctedField);
+      const originalValue = this.getOriginalValue(correctedField);
       const isAttachmentsField =
         (correctedField.section === 'attachments' && correctedField.inputKey === 'attachments') ||
         inputKey === 'attachments';
@@ -576,9 +577,12 @@ export abstract class PlanStepBaseClass implements OnInit {
       if (isAttachmentsField) {
         // Attachments: use dirty flag—value comparison fails (File[] vs BE objects, ref equality)
         isCorrected = control?.dirty ?? false;
+      } else if (originalValue === undefined) {
+        // New rows/fields with no original value (e.g. assemblyTesting when original had no sectionType 4):
+        // use dirty flag—comparison would falsely treat as "corrected" since current !== undefined
+        isCorrected = control?.dirty ?? false;
       } else {
         let currentValue = control?.value;
-        const originalValue = this.getOriginalValue(correctedField);
         if (correctedField.inputKey === 'contactNumber') {
           currentValue = currentValue?.countryCode + '' + currentValue?.phoneNumber;
         }

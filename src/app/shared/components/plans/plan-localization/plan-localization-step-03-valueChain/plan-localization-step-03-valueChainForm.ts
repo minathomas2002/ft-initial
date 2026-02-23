@@ -201,7 +201,6 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   onInHouseOrProcuredChange(itemControl: AbstractControl): void {
     if (this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review') return;
     const section = this.getSectionForItemControl(itemControl);
-    console.log(section);
     if (section) this.applyYearsViewForItem(itemControl, section.key, section.index);
   }
 
