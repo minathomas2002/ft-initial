@@ -74,4 +74,10 @@ export class ProductPlanSummaryPage {
   isDvAcknowledgedStatus = computed(() => {
     return this.planStatus() === EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED;
   })
+
+    hasComments = computed(() => {
+    // // Check if any step has saved comments
+    const currentUserPageComments = this.planStore.currentUserPageComments();
+    return currentUserPageComments.length > 0;
+  });
 }
