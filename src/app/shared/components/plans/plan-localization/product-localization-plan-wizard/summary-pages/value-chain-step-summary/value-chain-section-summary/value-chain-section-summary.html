@@ -33,6 +33,7 @@
           @for (y of [row.year1, row.year2, row.year3, row.year4, row.year5, row.year6, row.year7]; track $index) {
           <td
             class="border-t border-gray-300 p-3"
+            [class.bg-gray-100]="row.isInHouse"
             [class.bg-success-50]="y.shouldHighlightTd"
             [class.border-success-500]="y.shouldHighlightTd"
           >
