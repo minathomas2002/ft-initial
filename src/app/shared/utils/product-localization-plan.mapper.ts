@@ -653,8 +653,13 @@ export function mapProductPlanResponseToForm(
 
   // Step 3: Value Chain
   const step3Form = formService.step3_valueChain;
-  if (step3Form && productPlan.valueChainStep?.valueChainRows) {
-    const valueChainRows = productPlan.valueChainStep.valueChainRows;
+  // Support multiple API response structures: valueChainStep.valueChainRows, productPlan.valueChainRows, or response.valueChainRows
+  const valueChainRows: ValueChainRow[] =
+    productPlan.valueChainStep?.valueChainRows ??
+    (productPlan as any).valueChainRows ??
+    (response as any).valueChainRows ??
+    [];
+  if (step3Form && valueChainRows.length > 0) {
 
     // Group rows by section type
     const rowsBySection: Record<number, ValueChainRow[]> = {};

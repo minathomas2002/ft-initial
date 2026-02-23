@@ -202,7 +202,8 @@ export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
         context.mode === 'Review' &&
         !context.config.visibility?.isInvestorViewMode?.() &&
         !context.config.permissions?.canAcknowledgeRejection?.() &&
-        !isDeptApproved
+        !isDeptApproved &&
+        context.status !== EInternalUserPlanStatus.ReturnedByDV
       );
     },
 
@@ -223,7 +224,8 @@ export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
       context.mode === 'Review' &&
       !context.config.visibility?.isInvestorViewMode?.() &&
       !context.config.permissions?.canAcknowledgeRejection?.() &&
-      !context.isPlanRejectedFromManager,
+      !context.isPlanRejectedFromManager &&
+      context.status !== EInternalUserPlanStatus.ReturnedByDV,
 
     build: (context, i18n) => {
       const isDeptApproved =

@@ -8,6 +8,7 @@ import { map } from 'rxjs';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
+import { EInvestorPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 
 @Component({
   selector: 'app-wizard-step-state',
@@ -92,8 +93,13 @@ export class WizardStepStateComponent {
   }
 
   private updateFormState(form: any) {
+    // For create or draft edit: require form.dirty so step does not show completed until user interacts
+    const isCreateOrDraft = this.viewMode() === 'create' ||
+      (this.viewMode() === 'edit' && this.planStore.planStatus() === EInvestorPlanStatus.DRAFT);
+    const valid = isCreateOrDraft ? form.valid && form.dirty : form.valid;
+
     this.formStateSignal.set({
-      valid: this.viewMode() === 'create' ? form.valid && form.dirty : form.valid,
+      valid,
       invalid: form.invalid,
       dirty: form.dirty,
       touched: form.touched,
