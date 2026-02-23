@@ -423,7 +423,7 @@
             [dateFormat]="'dd M yy'"
             [minDate]="today"
             [maxDate]="getControl('endDate').value  || null"
-            [disabledDates]="[disabledstartDate()]"
+            [disabledDates]="disabledStartDatesArray()"
             class="w-full"
             keepInvalid
             [invalid]="getControl('startDate').invalid && getControl('startDate').dirty"

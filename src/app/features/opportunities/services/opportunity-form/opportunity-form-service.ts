@@ -101,7 +101,7 @@ export class OpportunityFormService {
         startDate: [null, [Validators.required, this.startDateRestrictionValidator]],
         endDate: [null, [Validators.required, this.endDateAfterStartDateValidator, this.endDateRestrictionValidator]],
         image: [null, Validators.required],
-      }, { validators: [this.quantityRangeValidator, , this.quantityUnitRequiredValidator] }),
+      }, { validators: [this.quantityRangeValidator, this.quantityUnitRequiredValidator] }),
       opportunityLocalization: this.fb.group({
         designEngineerings: this.fb.array(
           [this.createKeyActivityControl()]
@@ -208,13 +208,24 @@ export class OpportunityFormService {
     const minQuantity = minQuantityControl?.value;
     const maxQuantity = maxQuantityControl?.value;
 
-    if ((minQuantity || maxQuantity )&& parseFloat(minQuantity) >= parseFloat(maxQuantity)) {
-      // Merge errors instead of overwriting
-      const minErrors = minQuantityControl?.errors || {};
-      const maxErrors = maxQuantityControl?.errors || {};
-      minQuantityControl?.setErrors({ ...minErrors, minQuantityError: { message: 'Min quantity must be less than max quantity' } });
-      maxQuantityControl?.setErrors({ ...maxErrors, maxQuantityError: { message: 'Max quantity must be greater than min quantity' } });
-      return { quantityRange: true };
+    // Only validate if both values are provided and not zero
+    if ((minQuantity || minQuantity === 0) && (maxQuantity || maxQuantity === 0) && minQuantity !== null && maxQuantity !== null && minQuantity !== undefined && maxQuantity !== undefined) {
+      const minVal = parseFloat(minQuantity);
+      const maxVal = parseFloat(maxQuantity);
+
+      if (minVal >= maxVal) {
+        // Merge errors instead of overwriting
+        const minErrors = minQuantityControl?.errors || {};
+        const maxErrors = maxQuantityControl?.errors || {};
+        minQuantityControl?.setErrors({ ...minErrors, minQuantityError: { message: 'Min quantity must be less than max quantity' } });
+        maxQuantityControl?.setErrors({ ...maxErrors, maxQuantityError: { message: 'Max quantity must be greater than min quantity' } });
+
+        minQuantityControl?.markAsDirty({ onlySelf: true });
+        maxQuantityControl?.markAsDirty({ onlySelf: true });
+        minQuantityControl?.markAsTouched({ onlySelf: true });
+        maxQuantityControl?.markAsTouched({ onlySelf: true });
+        return { quantityRange: true };
+      }
     }
 
     // Clear errors if valid
