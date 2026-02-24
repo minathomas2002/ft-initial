@@ -102,6 +102,8 @@ export class AdminOpportunitiesFilter {
 
   onClearFilters() {
     this.adminOpportunitiesFilterService.clearAllFilters();
+    this.adminOpportunitiesFilterService.updateFilterSignal({ searchText: '' });
+    this.searchSubject.next('');
   }
 
 }

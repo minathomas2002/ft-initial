@@ -92,6 +92,8 @@ export class RoleManagementFilters implements OnInit {
 
   onClearFilters() {
     this.roleManagementFilterService.clearAllFilters();
+    this.roleManagementFilterService.updateFilterSignal({ searchText: '' });
+    this.onSearchTextChange('');
   }
 }
 
