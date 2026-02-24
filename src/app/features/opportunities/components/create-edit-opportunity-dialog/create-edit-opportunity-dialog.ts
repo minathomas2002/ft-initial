@@ -173,7 +173,8 @@ export class CreateEditOpportunityDialog implements OnInit {
     if (opportunityTitleField?.invalid) {
       // Mark as touched to show validation errors
       this.toasterService.error("Title field is required.")
-      opportunityTitleField.markAllAsDirty();
+      opportunityTitleField.markAsDirty();
+      opportunityTitleField.updateValueAndValidity();
       return;
     }
 
@@ -183,16 +184,20 @@ export class CreateEditOpportunityDialog implements OnInit {
     // Draft should require both dates if the user entered either one.
     if (hasStartDate !== hasEndDate) {
       this.toasterService.error('Please provide both start date and end date.');
-      startDateField?.markAllAsDirty();
-      endDateField?.markAllAsDirty();
+      startDateField?.markAsDirty();
+      startDateField?.updateValueAndValidity({ emitEvent: false });
+      endDateField?.markAsDirty();
+      endDateField?.updateValueAndValidity({ emitEvent: false });
       return;
     }
 
     // Draft should still enforce a valid date range when both dates are provided.
     if (hasStartDate && hasEndDate && endDateField?.hasError('dateRangeInvalid')) {
       this.toasterService.error('End date must be after start date.');
-      startDateField.markAllAsDirty();
-      endDateField.markAllAsDirty();
+      startDateField.markAsDirty();
+      startDateField.updateValueAndValidity({ emitEvent: false });
+      endDateField.markAsDirty();
+      endDateField.updateValueAndValidity({ emitEvent: false });
       return;
     }
 
