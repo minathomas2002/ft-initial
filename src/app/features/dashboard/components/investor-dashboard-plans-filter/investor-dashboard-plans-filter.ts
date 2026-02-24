@@ -77,6 +77,8 @@ export class InvestorDashboardPlansFilter implements OnInit {
 
   onClearFilters() {
     this.filterService.clearAllFilters();
+    this.filterService.updateFilterSignal({ searchText: '' });
+    this.onSearchTextChange('');
   }
 
   private listenToSearchChanges() {

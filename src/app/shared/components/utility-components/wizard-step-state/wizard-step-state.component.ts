@@ -94,9 +94,8 @@ export class WizardStepStateComponent {
 
   private updateFormState(form: any) {
     // For create or draft edit: require form.dirty so step does not show completed until user interacts
-    const isCreateOrDraft = this.viewMode() === 'create' ||
-      (this.viewMode() === 'edit' && this.planStore.planStatus() === EInvestorPlanStatus.DRAFT);
-    const valid = isCreateOrDraft ? form.valid && form.dirty : form.valid;
+    const isCreateMode = this.viewMode() === 'create';
+    const valid = isCreateMode ? form.valid && form.dirty : form.valid;
 
     this.formStateSignal.set({
       valid,
@@ -123,6 +122,7 @@ export class WizardStepStateComponent {
   status = computed(() => {
     // Read signal to ensure reactivity
     const state = this.formStateSignal();
+    console.log('state', state);
     if (state.valid) {
       return EWizardStepState.Completed;
     } else if (state.dirty && state.invalid) {
