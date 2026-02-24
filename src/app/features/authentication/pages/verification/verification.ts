@@ -31,7 +31,6 @@ export class Verification implements OnInit {
     const emailParam = this.route.snapshot.queryParams['email'];
     if (emailParam) {
       this.email.set(emailParam);
-      this.resendVerificationEmail();
     }
   }
 
@@ -40,18 +39,18 @@ export class Verification implements OnInit {
     if (email) {
       this.isButtonLoading.set(true);
       this.authStore.resentVerifyEmail(email)
-      .pipe(finalize(() => this.isButtonLoading.set(false)))
-      .subscribe({
-        next: (response) => {
-          if (response.statusCode === 200 || response.statusCode === 201) {
-            this.toast.success(this.i18nService.translate('auth.login.resendVerificationSuccess'));
-            this.resendSuccessToken++;
-          }
-        },
-        error: (error) => {
-          console.error('Resend verification email error:', error);
-        },
-      });
+        .pipe(finalize(() => this.isButtonLoading.set(false)))
+        .subscribe({
+          next: (response) => {
+            if (response.statusCode === 200 || response.statusCode === 201) {
+              this.toast.success(this.i18nService.translate('auth.login.resendVerificationSuccess'));
+              this.resendSuccessToken++;
+            }
+          },
+          error: (error) => {
+            console.error('Resend verification email error:', error);
+          },
+        });
     }
   }
 
