@@ -80,7 +80,7 @@
       "signUp": "Sign up",
       "resendVerificationLink": "Resend verification link",
       "resendVerificationSuccess": "A new verification link has been sent to your email.",
-      "verifyEmailFirst": "Your email address is not verified yet. Please click the verification link sent to your inbox to proceed with login.",
+      "verifyEmailFirst": "Email not verified. Please use ‘Resend verification link’ to receive a new verification email.",
       "generalError": "Login failed. Please try again later.",
       "devEnvironmentTitle": "Development Environment Only (Simulate Login for SEC Employees)",
       "jobNumber": "Job Number",
