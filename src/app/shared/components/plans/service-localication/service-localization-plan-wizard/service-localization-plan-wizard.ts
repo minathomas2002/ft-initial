@@ -614,7 +614,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const stepId = this.stepsWithId()[this.activeStep() - 1]?.id;
     if (!stepId) return false;
     const currentStepCommentPhase = this.getCommentPhaseForStepId(stepId);
-    return currentStepCommentPhase !== 'none';
+    return currentStepCommentPhase !== 'none' || this.showCommentState();
   });
 
   // Centralized wizard actions using the action factory

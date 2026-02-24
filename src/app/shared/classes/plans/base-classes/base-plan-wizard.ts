@@ -52,7 +52,7 @@ export abstract class BasePlanWizard {
     const hasMangerRole = userProfile.roleCodes?.includes(ERoles.Division_MANAGER) ?? false;
     return hasMangerRole;
   });
-  
+
   sendBackSuccessMessage = computed(() => {
     if (this.isDVManagerPersona()) {
       return "Plan has been sent back to employee successfully."
@@ -115,11 +115,11 @@ export abstract class BasePlanWizard {
    * When implemented as a computed signal, it can be called like a method: canApproveOrReject()
    */
   abstract canApproveOrReject(): boolean;
-    /**
-   * Template method: Check if the wizard can Acknowledge.
-   * Subclasses must implement this as a computed signal or method.
-   * When implemented as a computed signal, it can be called like a method: canAcknowledgeRejection()
-   */
+  /**
+ * Template method: Check if the wizard can Acknowledge.
+ * Subclasses must implement this as a computed signal or method.
+ * When implemented as a computed signal, it can be called like a method: canAcknowledgeRejection()
+ */
   abstract canAcknowledgeRejection(): boolean;
 
   /**
@@ -222,10 +222,10 @@ export abstract class BasePlanWizard {
     const step = this.getActiveStep();
     const stepId = this.getStepIdFromStepIndex(step);
 
-    // reset all current selection for the employee only that recieved a plan
+    // reset all current selection for the employee only that received a plan
     // from investor with fixed inputs
     if (stepCommentColor === 'green') {
-        this.resetCurrentStepCommentSelections(stepId);
+      this.resetCurrentStepCommentSelections(stepId);
     }
 
     const phaseSignal = stepId ? this.getCommentPhaseSignalForStepId(stepId) : null;
@@ -774,7 +774,7 @@ export abstract class BasePlanWizard {
   /**
    * dv acknowledge rejection
    */
-    onAcknowledgeReject(): void {
+  onAcknowledgeReject(): void {
     const planId = this.planStore.selectedPlanId();
     if (!planId) {
       this.toasterService.error('Plan ID is required.');
@@ -804,9 +804,9 @@ export abstract class BasePlanWizard {
       });
   }
 
-    /**
-   * Cancel rejection acknowledge confirmation -
-   */
+  /**
+ * Cancel rejection acknowledge confirmation -
+ */
   onCancelRejectAcknowledgment(): void {
     this.showRejectConfirmationDialog.set(false);
     // Return to reason entry dialog
