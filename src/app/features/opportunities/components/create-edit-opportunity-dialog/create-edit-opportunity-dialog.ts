@@ -173,7 +173,7 @@ export class CreateEditOpportunityDialog implements OnInit {
     if (opportunityTitleField?.invalid) {
       // Mark as touched to show validation errors
       this.toasterService.error("Title field is required.")
-      opportunityTitleField.markAsTouched();
+      opportunityTitleField.markAllAsDirty();
       return;
     }
 
