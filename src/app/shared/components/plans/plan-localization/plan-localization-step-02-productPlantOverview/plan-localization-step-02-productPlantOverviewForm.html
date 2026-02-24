@@ -624,7 +624,7 @@
               <p-inputnumber
                 fluid
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter years of experience'"
-                [maxlength]="3"
+                [maxlength]="2"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
                 [appConditionalColorClass]="highlightInput('yearsOfExperienceSEC')"
                 [color]="selectedInputColor()"
@@ -784,7 +784,7 @@
             >
               <p-inputnumber
                 fluid
-                [maxlength]="3"
+                [maxlength]="2"
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter years of experience'"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
                 [appConditionalColorClass]="highlightInput('yearsOfExperience')"
@@ -814,7 +814,7 @@
             >
               <p-inputnumber
                 fluid
-                [maxlength]="10"
+                [maxlength]="16"
                 [appHidePlaceholderWhenDisabledEmpty]="'Enter total quantities provided'"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
                 [appConditionalColorClass]="highlightInput('totalQuantities')"
@@ -842,7 +842,7 @@
     [commentsCount]="selectedInputs().length"
     [(commentPhase)]="commentPhase"
     [commentFormControl]="commentFormControl"
-      [incomingCommentText]="incomingCommentText()"
+    [incomingCommentText]="incomingCommentText()"
     [isResubmitMode]="isResubmitMode()"
     [hasInvestorComment]="hasInvestorComment()"
     (deleteComments)="onDeleteComments()"
