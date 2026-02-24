@@ -1,6 +1,6 @@
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ELocalizationStatusType, EMaterialsFormControls } from 'src/app/shared/enums';
+import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { hasIncompleteControl } from 'src/app/shared/validators/form-control-helpers';
 import { BasicPlanBuilder } from './basicPlanBuilder';
 import { IOpportunityLocalizationTablesValidationResponse } from 'src/app/shared/interfaces';
@@ -187,6 +187,15 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
   }
 
   /**
+   * Returns true when in-house/procured selection is In-house.
+   * Year fields are not required for In-house rows.
+   */
+  private isInHouseRow(itemGroup: FormGroup): boolean {
+    const val = itemGroup.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
+    return val === '1' || val === EInHouseProcuredType.InHouse || val === EInHouseProcuredType.InHouse.toString();
+  }
+
+  /**
    * Check if an item has at least one value in any value field.
    */
   private itemHasAnyValue(itemGroup: FormGroup): boolean {
@@ -220,7 +229,9 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
         const itemFormGroup = itemControl as FormGroup;
         const hasValue = this.itemHasAnyValue(itemFormGroup);
         this.updateItemGroupValidators(itemFormGroup, hasValue);
-        this.updateItemGroupYearsValidators(itemFormGroup, hasValue);
+        // Year fields are only required for Procured rows; In-house rows show "No" for years
+        const isInHouse = this.isInHouseRow(itemFormGroup);
+        this.updateItemGroupYearsValidators(itemFormGroup, hasValue && !isInHouse);
       });
     });
   }
@@ -279,7 +290,9 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
         const itemFormGroup = itemControl as FormGroup;
         if (isRequired) {
           this.updateItemGroupValidators(itemFormGroup, true);
-          this.updateItemGroupYearsValidators(itemFormGroup, true);
+          // Year fields only required for Procured rows; In-house rows show "No"
+          const isInHouse = this.isInHouseRow(itemFormGroup);
+          this.updateItemGroupYearsValidators(itemFormGroup, !isInHouse);
         } else {
           this.updateItemGroupValidators(itemFormGroup, false);
           this.updateItemGroupYearsValidators(itemFormGroup, false);

@@ -363,9 +363,11 @@ export abstract class PlanStepBaseClass implements OnInit {
           // if (fieldForControl) this.markCorrectedFieldChangedOnce(fieldForControl, control);
           if (control.status === 'VALID' && control.dirty) {
             const field = correctedFields.find(f => this.getControlForField(f) === control);
-            const currentValue = control.value;
-            const originalValue = this.getOriginalValue(field!);
-            if (field) this.upDateSelectedInputs(originalValue == currentValue, field);
+            if (field) {
+              const currentValue = control.value;
+              const originalValue = this.getOriginalValue(field);
+              this.upDateSelectedInputs(originalValue == currentValue, field);
+            }
           }
         });
         control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
