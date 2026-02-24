@@ -22,6 +22,7 @@ interface TableRow {
   prefix?: string;
   minFractionDigits?: number;
   maxFractionDigits?: number;
+  maxLength?: number;
   alignBaseline?: boolean;
 }
 
@@ -91,6 +92,7 @@ export class SaudizationMatrixComponent {
       mode: 'decimal',
       minFractionDigits: 0,
       maxFractionDigits: 2,
+      maxLength: 16,
       alignBaseline: true,
     },
     {
