@@ -5,11 +5,11 @@
     [commentTitle]="isRejected() ? 'Rejection Reason' : 'Approval Note'"
     [commentText]="planStore.actionNote()!"
     [colorsClassesConfig]="{
-      border: isRejected() ? 'border-[#B42318]' : 'border-green-200',
-      background: isRejected() ? 'bg-[#F7E9E8]' : 'bg-green-50',
-      iconColor: isRejected() ? 'text-[#A22016] rotate-180 ' : 'text-green-700 ',
+      border: isRejected() ? 'border-[#B42318]' : 'border-[#067647]',
+      background: isRejected() ? 'bg-[#F7E9E8]' : 'bg-[#E6F1ED]',
+      iconColor: isRejected() ? 'text-[#A22016] rotate-180 ' : 'text-[#05683E] ',
     }"
-    [iconType]="isRejected() ? 'icon-info' : 'icon-message-circle'"
+    [iconType]="isRejected() ? 'icon-info' : 'icon-check-circle'"
     >
     </app-page-comment-box>
   }
