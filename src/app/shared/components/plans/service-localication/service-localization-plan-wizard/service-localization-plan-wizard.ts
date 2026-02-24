@@ -182,26 +182,30 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   step4SelectedInputs = signal<IFieldInformation[]>([]);
 
   step1CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    const step = this.getStepStateById('cover');
     return {
-      count: this.steps()[0]?.commentsCount ?? 0,
+      count: step?.commentsCount ?? 0,
       phase: this.step1CommentPhase()
     };
   });
   step2CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    const step = this.getStepStateById('overview');
     return {
-      count: this.steps()[1]?.commentsCount ?? 0,
+      count: step?.commentsCount ?? 0,
       phase: this.step2CommentPhase()
     };
   });
   step3CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    const step = this.getStepStateById('existingSaudi');
     return {
-      count: this.steps()[2]?.commentsCount ?? 0,
+      count: step?.commentsCount ?? 0,
       phase: this.step3CommentPhase()
     };
   });
   step4CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {
+    const step = this.getStepStateById('directLocalization');
     return {
-      count: this.steps()[3]?.commentsCount ?? 0,
+      count: step?.commentsCount ?? 0,
       phase: this.step4CommentPhase()
     };
   });
@@ -227,7 +231,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
 
   // Computed signals to check if incoming comments exist and have content
   hasIncomingStep1Comments = computed(() => {
-    const step = this.steps()[0];
+    const step = this.getStepStateById('cover');
+    if (!step) return false;
 
     return this.step1Comments().length > 0 && this.step1Comments()[0].comment && (
       this.isViewMode() ||
@@ -237,7 +242,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   hasIncomingStep2Comments = computed(() => {
-    const step = this.steps()[1];
+    const step = this.getStepStateById('overview');
+    if (!step) return false;
 
     return this.step2Comments().length > 0 && this.step2Comments()[0].comment && (
       this.isViewMode() ||
@@ -247,7 +253,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   hasIncomingStep3Comments = computed(() => {
-    const step = this.steps()[2];
+    const step = this.getStepStateById('existingSaudi');
+    if (!step) return false;
 
     return this.step3Comments().length > 0 && this.step3Comments()[0].comment && (
       this.isViewMode() ||
@@ -257,7 +264,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   hasIncomingStep4Comments = computed(() => {
-    const step = this.steps()[3];
+    const step = this.getStepStateById('directLocalization');
+    if (!step) return false;
 
     return this.step4Comments().length > 0 && this.step4Comments()[0].comment && (
       this.isViewMode() ||
@@ -1022,6 +1030,14 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   private getStepIndexById(stepId: ServiceLocalizationWizardStepId): number {
     const idx = this.stepsWithId().findIndex((s) => s.id === stepId);
     return idx >= 0 ? idx + 1 : 0;
+  }
+
+  private getStepStateById(stepId: ServiceLocalizationWizardStepId): IWizardStepState | undefined {
+    const step = this.stepsWithId().find((s) => s.id === stepId);
+    if (!step) return undefined;
+
+    const { id, ...state } = step;
+    return state;
   }
 
   updateValidationErrors(errors: Map<number, IStepValidationStatus>): void {
