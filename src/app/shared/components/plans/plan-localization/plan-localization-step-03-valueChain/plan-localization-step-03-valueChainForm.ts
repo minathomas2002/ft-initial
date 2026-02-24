@@ -196,6 +196,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     controlName: string
   ): boolean {
     if (this.planStore.wizardMode() !== 'Review') return false;
+    if (this.selectedInputColor() !== 'green') return false;
     const isCorrectedField = this.correctedFields().some(
       f => f.inputKey === inputKey && (rowId == null ? f.id == null : f.id === rowId)
     );
