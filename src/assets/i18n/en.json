@@ -78,7 +78,7 @@
       "signIn": "Login",
       "dontHaveAccount": "Don't have an account?",
       "signUp": "Sign up",
-      "resendVerificationLink": "Didn’t receive the e-mail? Resend verification link",
+      "resendVerificationLink": "Resend verification link",
       "resendVerificationSuccess": "A new verification link has been sent to your email.",
       "verifyEmailFirst": "Your email address is not verified yet. Please click the verification link sent to your inbox to proceed with login.",
       "generalError": "Login failed. Please try again later.",

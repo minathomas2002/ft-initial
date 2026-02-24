@@ -28,9 +28,22 @@ export class Verification implements OnInit {
   resendSuccessToken = 0;
 
   ngOnInit(): void {
-    const emailParam = this.route.snapshot.queryParams['email'];
+    const queryParams = this.route.snapshot.queryParamMap;
+    const emailParam = queryParams.get('email');
+    const shouldAutoResend = queryParams.get('autoResend') === '1';
+
     if (emailParam) {
       this.email.set(emailParam);
+
+      if (shouldAutoResend) {
+        this.resendVerificationEmail();
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { autoResend: null },
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      }
     }
   }
 

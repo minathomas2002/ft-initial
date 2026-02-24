@@ -121,7 +121,7 @@ export class Login implements OnInit {
     }
 
     this.router.navigate(['/', ERoutes.auth, ERoutes.verification], {
-      queryParams: { email },
+      queryParams: { email, autoResend: '1' },
     });
   }
 }

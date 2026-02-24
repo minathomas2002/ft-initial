@@ -74,7 +74,7 @@
 			"signIn": "تسجيل الدخول",
 			"dontHaveAccount": "ليس لديك حساب؟",
 			"signUp": "إنشاء حساب",
-			"resendVerificationLink": "لم تستلم البريد الإلكتروني؟ إعادة إرسال رابط التحقق",
+			"resendVerificationLink": "إعادة إرسال رابط التحقق",
 			"resendVerificationSuccess": "تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني.",
 			"verifyEmailFirst": "يرجى التحقق من بريدك الإلكتروني قبل تسجيل الدخول.",
 			"devEnvironmentTitle": "بيئة التطوير فقط (محاكاة تسجيل الدخول لموظفي شركة الكهرباء)",
