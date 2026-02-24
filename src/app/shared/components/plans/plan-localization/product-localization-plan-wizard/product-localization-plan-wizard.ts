@@ -566,7 +566,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   // Computed signal to check if Add Comment button should be disabled
   override isAddCommentButtonDisabled = computed(() => {
-    return this.currentStepCommentPhase() !== 'none';
+    return this.currentStepCommentPhase() !== 'none' || this.showCommentState();
   });
 
   wizardActions = new WizardActionFactory().generateActions({
