@@ -56,6 +56,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     const itemGroup: any = {
       rowId: [null], // Hidden control to store the localization strategy row ID (for edit mode)
       serviceHeadcountRowId: [null], // Hidden control to store the service headcount row ID (for edit mode)
+      [EMaterialsFormControls.localizationStrategyRowId]: [null], // Strategy row ID for serviceLevel comment matching when rowId holds headcount id
       [EMaterialsFormControls.serviceId]: this.fb.control(''), // Service GUID from cover page
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
