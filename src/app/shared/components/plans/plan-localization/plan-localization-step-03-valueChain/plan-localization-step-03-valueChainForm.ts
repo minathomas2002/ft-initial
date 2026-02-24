@@ -329,7 +329,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
       if (isInHouse) {
         if (isCreateOrEdit || userChangedInHouse) {
-          valueCtrl.setValue(ELocalizationStatusType.No.toString());
+          valueCtrl.setValue(null);
         }
         valueCtrl.removeValidators(Validators.required);
         valueCtrl.disable();
