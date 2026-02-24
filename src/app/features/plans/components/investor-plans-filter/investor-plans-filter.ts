@@ -101,9 +101,9 @@ export class InvestorPlansFilter implements OnInit {
   private getStatusFromParam(
     param: string | number | (string | number)[]
   ): EInvestorPlanStatus[] {
-  
+
     const values = Array.isArray(param) ? param : [param];
-  
+
     return values
       .map(v => Number(v))
       .filter(v =>
@@ -113,7 +113,7 @@ export class InvestorPlansFilter implements OnInit {
         )
       ) as EInvestorPlanStatus[];
   }
-  
+
 
   private getPlanTypeFromParam(param: string): EOpportunityType | null {
     switch (param.toLowerCase()) {
@@ -150,7 +150,9 @@ export class InvestorPlansFilter implements OnInit {
   }
 
   onClearFilters() {
+    this.onSearchTextChange('');
     this.filterService.clearAllFilters();
+    this.filterService.updateFilterSignal({ searchText: '' });
   }
 
   private listenToSearchChanges() {
