@@ -235,6 +235,15 @@ export abstract class PlanStepBaseClass implements OnInit {
     // Collect enabled controls and their parent chains
     const { enabledControls, enabledParentChains } = this.collectEnabledControls(correctedFields);
 
+    // Merge additional controls from subclasses (e.g. value chain year fields for Procured rows)
+    const additional = this.collectAdditionalEnabledControlsForResubmit(correctedFields);
+    additional.controls.forEach(control => {
+      enabledControls.add(control);
+      const parentChain = additional.parentChains.get(control) ?? this.buildParentChain(control);
+      parentChain.forEach(p => enabledControls.add(p));
+      enabledParentChains.set(control, parentChain);
+    });
+
     // Enable parent chains and controls
     this.enableCorrectedFields(enabledParentChains, correctedFields);
 

@@ -264,6 +264,36 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     return;
   }
 
+  /**
+   * Add year value controls for Procured rows with corrected fields so the base class does not disable them.
+   */
+  protected override collectAdditionalEnabledControlsForResubmit(
+    correctedFields: IFieldInformation[]
+  ): { controls: AbstractControl[]; parentChains: Map<AbstractControl, AbstractControl[]> } {
+    const controls: AbstractControl[] = [];
+    const parentChains = new Map<AbstractControl, AbstractControl[]>();
+    if (!this.isResubmitMode() || !correctedFields?.length) return { controls, parentChains };
+    for (const { key, getArray } of PlanLocalizationStep03ValueChainForm.SECTION_CONFIG) {
+      const arr = getArray(this);
+      if (!arr) continue;
+      arr.controls.forEach((item, index) => {
+        const rowId = item.get('rowId')?.value ?? null;
+        const inHouseVal = item.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
+        const isProcured = inHouseVal !== '1' && inHouseVal !== EInHouseProcuredType.InHouse && inHouseVal !== EInHouseProcuredType.InHouse.toString();
+        if (!isProcured) return;
+        if (!this.shouldEnableYearsForProcuredRowInResubmit(key, index, rowId, true, correctedFields)) return;
+        for (const yearKey of PlanLocalizationStep03ValueChainForm.YEAR_KEYS) {
+          const yearGroup = item.get(yearKey);
+          if (!(yearGroup instanceof FormGroup)) continue;
+          const valueCtrl = this.planFormService.getValueControl(yearGroup);
+          controls.push(valueCtrl);
+          parentChains.set(valueCtrl, this.buildParentChain(valueCtrl));
+        }
+      });
+    }
+    return { controls, parentChains };
+  }
+
   /** When user changes In-house/Procured: apply years enable/disable for that row. In resubmit, only applies on user change (not on loadPlanData). */
   onInHouseOrProcuredChange(itemControl: AbstractControl): void {
     if (this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review') return;
@@ -341,7 +371,9 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
         if (clearStaleNoFromInHouseTransition && userChangedInHouse && yearValue === ELocalizationStatusType.No.toString()) {
           valueCtrl.setValue(null);
         }
-        const canEdit = !this.isResubmitMode() || isYearCorrected || userChangedInHouse || anyFieldInRowDirty;
+        // In resubmit: enable when any field in row is corrected and current is Procured (on load/revisit)
+        const procuredRowWithCorrectedField = this.shouldEnableYearsForProcuredRowInResubmit(sectionKey, index, rowId, !isInHouse);
+        const canEdit = !this.isResubmitMode() || isYearCorrected || userChangedInHouse || anyFieldInRowDirty || procuredRowWithCorrectedField;
         if (canEdit) {
           yearGroup.enable({ emitEvent: false, onlySelf: true });
           valueCtrl.enable();
@@ -379,6 +411,33 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     );
   }
 
+  /**
+   * In resubmit: true when current is Procured, original was In-House, and inHouseOrProcured is in correctedFields.
+   * Only enables year fields when investor switched from In-House to Procured (on load/revisit).
+   */
+  private shouldEnableYearsForProcuredRowInResubmit(
+    sectionKey: string,
+    index: number,
+    rowId: string | null,
+    currentIsProcured: boolean,
+    correctedOverride?: IFieldInformation[]
+  ): boolean {
+    if (!this.isResubmitMode() || !currentIsProcured) return false;
+    const corrected = correctedOverride ?? this.correctedFields();
+    if (!corrected?.length) return false;
+    const inHouseFieldKey = createValueChainFieldKey(sectionKey, EMaterialsFormControls.inHouseOrProcured, index);
+    const isInHouseCorrected = corrected.some(
+      f =>
+        (f.inputKey === inHouseFieldKey || (f.section === sectionKey && extractValueChainControlName(f.inputKey) === EMaterialsFormControls.inHouseOrProcured && extractValueChainIndex(f.inputKey) === index)) &&
+        ((rowId == null && f.id == null) || f.id === rowId)
+    );
+    if (!isInHouseCorrected) return false;
+    const field: IFieldInformation = { section: sectionKey, inputKey: inHouseFieldKey, id: rowId ?? undefined, label: '' };
+    const originalVal = this.getOriginalFieldValueFromPlanResponse(field);
+    const wasInHouse = originalVal === '1' || originalVal === 1 || originalVal === EInHouseProcuredType.InHouse || originalVal === EInHouseProcuredType.InHouse.toString();
+    return wasInHouse;
+  }
+
   private applyYearsViewForAllRows(): void {
     if (this.isViewMode() || this.planStore.wizardMode() === 'Review') return;
     for (const { key, getArray } of PlanLocalizationStep03ValueChainForm.SECTION_CONFIG) {
@@ -411,7 +470,12 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   override ngOnInit(): void {
     super.ngOnInit();
-    if (!this.isResubmitMode()) this.applyYearsViewForAllRows();
+    if (!this.isResubmitMode()) {
+      this.applyYearsViewForAllRows();
+    } else {
+      // In resubmit: run after base class effect (setTimeout ensures we run after disableUnselectedSiblings)
+      setTimeout(() => this.applyYearsViewForAllRows(), 0);
+    }
   }
 
   // Override hook method for step-specific initialization
@@ -426,11 +490,11 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
       const corrected = this.correctedFields();
       if (mode === 'resubmit') {
         if (!corrected?.length) return;
-        queueMicrotask(() => this.applyYearsViewForAllRows());
+        setTimeout(() => this.applyYearsViewForAllRows(), 0);
         return;
       }
       if (mode === 'edit' && this.planStore.productPlanData()) {
-        queueMicrotask(() => this.applyYearsViewForAllRows());
+        setTimeout(() => this.applyYearsViewForAllRows(), 0);
       }
     });
   }
