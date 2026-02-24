@@ -101,7 +101,7 @@
       "invalidEmailFormat": "Invalid email format",
       "buttonLabel": "Reset password",
       "backButtonLabel": "Back to login",
-      "success": "You will receive a password reset link shortly",
+      "success": "The link has been sent successfully.",
       "didntReceiveEmail": "Didn't receive the email?",
       "resendResetLink": "Resend reset link",
       "resendResetLinkFull": "Didn’t receive the e-mail? Resend reset link"
