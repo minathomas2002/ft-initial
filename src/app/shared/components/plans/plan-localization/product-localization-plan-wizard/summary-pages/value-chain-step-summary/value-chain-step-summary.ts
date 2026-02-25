@@ -11,11 +11,13 @@ import { ValueChainSectionSummaryComponent } from './value-chain-section-summary
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-value-chain-step-summary',
   imports: [
     TranslatePipe,
+    TooltipModule,
     SummarySectionHeader,
     ValueChainSectionSummaryComponent,
     PageCommentBox,
