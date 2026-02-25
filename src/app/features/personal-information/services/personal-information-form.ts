@@ -1,0 +1,78 @@
+import { inject, Injectable } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { EViewMode } from 'src/app/shared/enums';
+import { IPhoneValue } from 'src/app/shared/interfaces';
+import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
+
+@Injectable()
+export class PersonalInformationFormService {
+  private fb = inject(FormBuilder);
+  personalInformationForm = this.fb.group({
+    fullName: [null, [Validators.required, Validators.maxLength(150)]],
+    email: [{
+      value: '',
+      disabled: true
+    }],
+    phoneNumber: [null, [Validators.required, phoneNumberPatternValidator()]],
+    otherPhoneNumber: [null, [phoneNumberPatternValidator()]],
+    benaId: [{
+      value: '',
+      disabled: true
+    }],
+    secRegisteredId: [null, [Validators.maxLength(7)]],
+  });
+
+  get fullName(): FormControl<string | null> {
+    return this.personalInformationForm.get('fullName') as FormControl<string | null>;
+  }
+
+  get email(): FormControl<string | null> {
+    return this.personalInformationForm.get('email') as FormControl<string | null>;
+  }
+
+  get phoneNumber(): FormControl<IPhoneValue | null> {
+    return this.personalInformationForm.get('phoneNumber') as FormControl<IPhoneValue | null>;
+  }
+
+  get otherPhoneNumber(): FormControl<IPhoneValue | null> {
+    return this.personalInformationForm.get('otherPhoneNumber') as FormControl<IPhoneValue | null>;
+  }
+
+  get benaId(): FormControl<string | null> {
+    return this.personalInformationForm.get('benaId') as FormControl<string | null>;
+  }
+
+  get secRegisteredId(): FormControl<string | null> {
+    return this.personalInformationForm.get('secRegisteredId') as FormControl<string | null>;
+  }
+
+  initializeForm(user: any): void {
+    this.personalInformationForm.patchValue({
+      fullName: user.fullName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      otherPhoneNumber: user.otherPhoneNumber,
+      benaId: user.benaId,
+      secRegisteredId: user.secRegisteredId,
+    });
+    this.personalInformationForm.updateValueAndValidity();
+  }
+
+  updateViewMode(viewMode: EViewMode) {
+    if (viewMode === EViewMode.View) {
+      this.personalInformationForm.disable();
+    } else if (viewMode === EViewMode.Edit) {
+      this.personalInformationForm.enable();
+      this.email.disable();
+      this.benaId.disable();
+    }
+  }
+
+  getFormValue(): any {
+    return this.personalInformationForm.getRawValue();
+  }
+
+  get invalid(): boolean {
+    return this.personalInformationForm.invalid;
+  }
+}

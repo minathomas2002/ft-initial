@@ -1,0 +1,25 @@
+<app-personal-information-card
+  [sectionTitle]="'User Image'"
+  [sectionDescription]="'Update your user image here.'"
+>
+  <div class="flex items-center gap-5">
+    <p-avatar
+      [image]="image()"
+      shape="circle"
+      size="large"
+    />
+    <div class="flex gap-4">
+      <p-button
+        label="Upload"
+        severity="secondary"
+        icon="icon-file-upload"
+      />
+      <p-button
+        label="Delete"
+        severity="danger"
+        text
+      />
+    </div>
+
+  </div>
+</app-personal-information-card>
