@@ -37,16 +37,15 @@ const MAIN_LAYOUT_ROUTES: Routes = [
         data: { animation: ERoutes.investors },
       },
       {
-        path: ERoutes.settings,
-        loadChildren: () => import('./features/settings/settings.routes').then((c) => c.setting_ROUTES),
-        canActivate: [adminGuard],
-        data: { animation: ERoutes.settings },
+        path: ERoutes.personalInformation,
+        loadComponent: () => import('./features/personal-information/pages/personal-information-view/personal-information-view').then((c) => c.PersonalInformationView),
+        canActivate: [authGuard],
+        data: { animation: ERoutes.personalInformation },
       },
       {
         path: ERoutes.plans,
         loadChildren: () => import('./features/plans/plans.route').then((c) => c.plans_ROUTES),
         data: { animation: ERoutes.plans },
-        // dvManager gaurd
       },
 
     ],
