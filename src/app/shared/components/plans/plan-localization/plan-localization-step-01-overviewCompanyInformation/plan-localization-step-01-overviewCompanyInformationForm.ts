@@ -61,7 +61,6 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   override readonly planStore = inject(PlanStore);
   override readonly destroyRef = inject(DestroyRef);
-  readonly roleService = inject(RoleService);
 
   readonly planFormService = inject(ProductPlanFormService);
 

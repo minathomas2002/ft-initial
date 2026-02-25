@@ -464,7 +464,7 @@
 @if(showDeleteConfirmationDialog()){
 <app-general-confirmation-dialog
   [(visible)]="showDeleteConfirmationDialog"
-  [title]="'Are you sure you want to delete the comment and selected fields?'"
+  [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
   [confirmationLabel]="'Delete'"
   [cancelLabel]="'Cancel'"
   [confirmButtonSeverity]="'danger'"
