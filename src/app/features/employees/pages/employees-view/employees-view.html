@@ -22,6 +22,7 @@
     <p-tablist>
       <p-tab value="0">{{ 'users.tabs.employees' | translate }}</p-tab>
       <p-tab value="1">{{ 'users.tabs.roleManagement' | translate }}</p-tab>
+      <p-tab value="2">{{ 'users.tabs.delegation' | translate }}</p-tab>
     </p-tablist>
     <p-tabpanels>
       <p-tabpanel value="0">
@@ -37,6 +38,15 @@
         @if(activeTab() === '1'){
         @defer (on viewport) {
         <app-role-management (updateEmployees)="onUpdateEmployees()"></app-role-management>
+        } @placeholder {
+        <div></div>
+        }
+        }
+      </p-tabpanel>
+      <p-tabpanel value="2">
+        @if(activeTab() === '2'){
+        @defer (on viewport) {
+        <app-delegation></app-delegation>
         } @placeholder {
         <div></div>
         }

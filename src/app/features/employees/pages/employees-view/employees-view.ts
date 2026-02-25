@@ -8,10 +8,11 @@ import { AddEditEmployeeDialog } from '../../components/add-edit-employee-dialog
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { RolesStore } from 'src/app/shared/stores/roles/roles.store';
 import { EmployeesFilterService } from '../../services/empolyees-filter/employee-filter-service';
+import { Delegation } from "../delegation/delegation";
 
 @Component({
   selector: 'app-employees-view',
-  imports: [TabsModule, EmployeeList, RoleManagement, TranslatePipe, ButtonModule, AddEditEmployeeDialog],
+  imports: [TabsModule, EmployeeList, RoleManagement, TranslatePipe, ButtonModule, AddEditEmployeeDialog, Delegation],
   templateUrl: './employees-view.html',
   styleUrl: './employees-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
