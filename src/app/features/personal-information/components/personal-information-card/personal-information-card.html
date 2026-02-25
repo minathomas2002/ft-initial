@@ -1,0 +1,21 @@
+<div class="bg-white rounded-lg flex flex-col gap-6 shadow-xs border border-gray-200">
+  <div class="section-header p-6 pb-0 flex flex-col gap-[2px]">
+    <h4 class="font-semibold text-lg text-gray-900"> {{sectionTitle()}} </h4>
+    <p class="text-gray-600 text-gray-600 mb-5"> {{sectionDescription()}} </p>
+    <hr class="text-gray-200">
+  </div>
+
+  <div class="section-body px-6">
+    <ng-content></ng-content>
+  </div>
+
+  <div class="section-footer p-6 border-t border-gray-200 flex justify-end">
+    <p-button
+      [label]="submitActionLabel()"
+      severity="primary"
+      size="small"
+      [disabled]="submitActionDisabled()"
+      (onClick)="onSubmit.emit()"
+    />
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="flex gap-[32px]">
+  <div class="min-w-[280px]">
+    <label class="font-medium text-sm capitalize inline-block text-gray-700">
+      {{label()}}
+      @if(required()){ <span class="text-primary-600"> *</span> }
+    </label>
+  </div>
+  <div class="flex-1">
+    <ng-content></ng-content>
+  </div>
+</div>

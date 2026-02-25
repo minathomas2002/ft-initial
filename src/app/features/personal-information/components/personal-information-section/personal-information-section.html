@@ -1,0 +1,66 @@
+<app-personal-information-card
+  [sectionTitle]="'Personal Information'"
+  [sectionDescription]="'Update your personal details here.'"
+  [submitActionDisabled]="isViewMode() || isLoading() || formService.personalInformationForm.invalid"
+>
+  <app-personal-information-skeleton
+    [numberOfFields]="6"
+    [isLoading]="isLoading()"
+  >
+    <div class="flex flex-col gap-5">
+      <app-personal-information-form-field label="Full Name">
+        <input
+          pInputText
+          [placeholder]="'Enter your full name'"
+          fluid
+          maxlength="150"
+          [formControl]="formService.fullName"
+        />
+      </app-personal-information-form-field>
+      <hr class="text-gray-200">
+      <app-personal-information-form-field
+        label="E-mail"
+        [required]="false"
+      >
+        <input
+          pInputText
+          [placeholder]="'Enter your e-mail'"
+          fluid
+          maxlength="150"
+          [formControl]="formService.email"
+        />
+      </app-personal-information-form-field>
+      <hr class="text-gray-200">
+      <app-personal-information-form-field label="Phone Number">
+        <app-phone-input [formControl]="formService.phoneNumber" />
+      </app-personal-information-form-field>
+      <hr class="text-gray-200">
+      <app-personal-information-form-field
+        label="Other Phone Number"
+        [required]="false"
+      >
+        <app-phone-input [formControl]="formService.otherPhoneNumber" />
+      </app-personal-information-form-field>
+      <hr class="text-gray-200">
+      <app-personal-information-form-field label="BENA ID">
+        <input
+          pInputText
+          fluid
+          [formControl]="formService.benaId"
+        />
+      </app-personal-information-form-field>
+      <hr class="text-gray-200">
+      <app-personal-information-form-field
+        label="SEC Registered ID"
+        [required]="false"
+      >
+        <p-inputNumber
+          [placeholder]="'Enter your SEC registered ID'"
+          fluid
+          [maxlength]="7"
+          [formControl]="formService.secRegisteredId"
+        />
+      </app-personal-information-form-field>
+    </div>
+  </app-personal-information-skeleton>
+</app-personal-information-card>
