@@ -9,13 +9,19 @@
   >
     <div class="flex flex-col gap-5">
       <app-personal-information-form-field label="Full Name">
-        <input
-          pInputText
-          [placeholder]="'Enter your full name'"
-          fluid
-          maxlength="150"
-          [formControl]="formService.fullName"
-        />
+        <div>
+          <input
+            pInputText
+            [placeholder]="'Enter your full name'"
+            fluid
+            maxlength="150"
+            [formControl]="formService.fullName"
+          />
+          <app-base-error-messages
+            [control]="formService.fullName"
+            [label]="'Full Name'"
+          />
+        </div>
       </app-personal-information-form-field>
       <hr class="text-gray-200">
       <app-personal-information-form-field
@@ -32,14 +38,26 @@
       </app-personal-information-form-field>
       <hr class="text-gray-200">
       <app-personal-information-form-field label="Phone Number">
-        <app-phone-input [formControl]="formService.phoneNumber" />
+        <div>
+          <app-phone-input [formControl]="formService.phoneNumber" />
+          <app-base-error-messages
+            [control]="formService.phoneNumber"
+            [label]="'Phone Number'"
+          />
+        </div>
       </app-personal-information-form-field>
       <hr class="text-gray-200">
       <app-personal-information-form-field
         label="Other Phone Number"
         [required]="false"
       >
-        <app-phone-input [formControl]="formService.otherPhoneNumber" />
+        <div>
+          <app-phone-input [formControl]="formService.otherPhoneNumber" />
+          <app-base-error-messages
+            [control]="formService.otherPhoneNumber"
+            [label]="'Other Phone Number'"
+          />
+        </div>
       </app-personal-information-form-field>
       <hr class="text-gray-200">
       <app-personal-information-form-field label="BENA ID">
