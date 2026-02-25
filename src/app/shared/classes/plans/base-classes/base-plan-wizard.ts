@@ -292,23 +292,26 @@ export abstract class BasePlanWizard {
     descriptors: IPlanWizardStepCommentDescriptor[],
     getSendBackErrorMessage: (pageTitle: string, phase: TCommentPhase) => string
   ): string | null {
-    for (const d of descriptors) {
-      if (d.isVisible && !d.isVisible()) continue;
-      const selected = d.getSelectedInputs();
+    const currentUserPageComments = this.planStore.currentUserPageComments();
+
+    for (const descriptor of descriptors) {
+      if (descriptor.isVisible && !descriptor.isVisible()) continue;
+      const selected = descriptor.getSelectedInputs();
       if (selected.length === 0) continue;
 
-      const form = d.getForm();
-      const commentControl =
-        (form?.get(EMaterialsFormControls.comment) as FormControl<string> | null) ??
-        (form?.get('comment') as FormControl<string> | null);
+      const pageTitle = descriptor.getStepTitle() as EPlanPageTitle;
+      const phase = descriptor.getCommentPhase();
+      const hasCurrentUserComment = currentUserPageComments.includes(pageTitle);
+      const isCurrentUserEditingComment = phase === 'adding' || phase === 'editing';
 
-      const formComment = commentControl?.value?.trim() || '';
-      const existingPageComment = d.getComments().some(c => (c.comment?.trim()?.length ?? 0) > 0);
-      const hasComment = formComment.length > 0 || existingPageComment;
+      // Ignore preloaded selections that came from incoming API comments and were not touched
+      // by the current user in this session.
+      if (!hasCurrentUserComment && !isCurrentUserEditingComment) {
+        continue;
+      }
 
-      const phase = d.getCommentPhase();
-      if (!hasComment) {
-        return getSendBackErrorMessage(d.getStepTitle(), phase);
+      if (!hasCurrentUserComment) {
+        return getSendBackErrorMessage(pageTitle, phase);
       }
     }
     return null;
@@ -535,6 +538,7 @@ export abstract class BasePlanWizard {
       planId: planId,
       comments: comments,
     };
+
     this.isProcessing.set(true);
     this.planStore.sendPlanBack(request)
       .pipe(takeUntilDestroyed(this.destroyRef))
