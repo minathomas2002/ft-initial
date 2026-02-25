@@ -9,7 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { JwtService } from '../../services/auth/jwt-service';
 import { ERoutes } from '../../enums';
 
-const REFRESH_BEFORE_EXPIRY_MS = 30 * 1000; // 2 minutes before expiry
+const REFRESH_BEFORE_EXPIRY_MS = 2 * 60 * 1000; // 2 minutes before expiry
 
 const initialState: {
   authResponse: IAuthData | null;
