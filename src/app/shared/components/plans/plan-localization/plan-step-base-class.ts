@@ -8,10 +8,11 @@ import { FormUtilityService } from 'src/app/shared/services/form-utility/form-ut
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { PlanCommentSyncService } from 'src/app/shared/services/plan/plan-comment-sync.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle, ERoles } from 'src/app/shared/enums';
 import { IFieldInformation, IPageComment } from 'src/app/shared/interfaces/plans.interface';
 import { TColors } from 'src/app/shared/interfaces';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 
 /**
  * Abstract base class for plan localization step forms.
@@ -31,6 +32,7 @@ export abstract class PlanStepBaseClass implements OnInit {
   protected readonly formUtilityService = inject(FormUtilityService);
   protected readonly toasterService = inject(ToasterService);
   private readonly planCommentSyncService = inject(PlanCommentSyncService);
+  protected readonly roleService = inject(RoleService);
   readonly planStore = inject(PlanStore);
   protected readonly destroyRef = inject(DestroyRef);
 
@@ -60,6 +62,7 @@ export abstract class PlanStepBaseClass implements OnInit {
 
   // Common signals
   showCheckbox = computed(() => this.commentPhase() !== 'none' && !this.isResubmitMode());
+  isInvestorPersona = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
   comment = signal<string>('');
   showDeleteConfirmationDialog = signal<boolean>(false);
 
@@ -679,7 +682,7 @@ export abstract class PlanStepBaseClass implements OnInit {
       this.planCommentSyncService.removePageCommentFromStore(this.pageTitle());
     }
     this.showDeleteConfirmationDialog.set(false);
-    this.toasterService.success('Your comments and selected fields were removed successfully.');
+    this.toasterService.success(this.isInvestorPersona() ? 'Your comments were removed successfully.' : 'Your comments and selected fields were removed successfully.');
   }
 
   /**

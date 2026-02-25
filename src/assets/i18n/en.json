@@ -716,9 +716,9 @@
     "filter": {
       "searchPlaceholder": "Search by Plan ID or Title",
       "dvsearchPlaceholder": "Search by Plan ID or Title or Investor Name",
-      "selectPlanType": "Select Plan Type",
-      "selectStatus": "Select Status",
-      "selectSubmissionDate": "Select Submission Date",
+      "selectPlanType": "Plan Type",
+      "selectStatus": "Status",
+      "selectSubmissionDate": "Submission Date",
       "allTypes": "All Plan Types",
       "service": "Service",
       "material": "Material",
