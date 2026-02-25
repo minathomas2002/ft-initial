@@ -61,6 +61,7 @@ export class Register {
       this.authStore.register(request).subscribe({
         next: (response) => {
           if (response.success) {
+            this.toast.success('A verification link has been sent to your email successfully');
             this.router.navigate(['/', ERoutes.auth, ERoutes.verification], {
               queryParams: { email: this.registerForm.value.email! },
             });
