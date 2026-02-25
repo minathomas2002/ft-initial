@@ -8,6 +8,7 @@ import { PersonalInformationFormService } from '../../services/personal-informat
 import { EViewMode } from 'src/app/shared/enums';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
 @Component({
   selector: 'app-personal-information-section',
@@ -18,7 +19,8 @@ import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/
     InputTextModule,
     InputNumberModule,
     ReactiveFormsModule,
-    PhoneInputComponent
+    PhoneInputComponent,
+    BaseErrorMessages
   ],
   providers: [PersonalInformationFormService],
   templateUrl: './personal-information-section.html',
