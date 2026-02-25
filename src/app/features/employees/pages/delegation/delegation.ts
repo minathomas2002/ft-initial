@@ -16,18 +16,16 @@ import { UserStatusMapper } from '../../classes/user-status-mapper';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { EmployeesActionMenu } from '../../components/employees-action-menu/employees-action-menu';
-import { TranslatePipe } from 'src/app/shared/pipes';
 import { DatePipe } from '@angular/common';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ButtonModule } from 'primeng/button';
-import { EmployeesFilterService } from '../../services/empolyees-filter/employee-filter-service';
 import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
 import { ERoles } from 'src/app/shared/enums';
-import { take } from 'rxjs';
 import { DelegationStore } from 'src/app/shared/stores/system-employees/delegation.store';
 import { IDelegationRecord } from 'src/app/shared/interfaces/delegation.interface';
-import { DelegationFilterService } from '../../services/Delegation-filter/delegation-filter-service';
+import { DelegationFilterService } from '../../services/Delegation-filter/Delegation-filter-service';
+import { DelegationFilter } from "../../components/delegation-filter/delegation-filter";
+import { DelegationActionMenu } from "../../components/delegation-action-menu/delegation-action-menu";
 
 @Component({
   selector: 'app-delegation',
@@ -35,14 +33,14 @@ import { DelegationFilterService } from '../../services/Delegation-filter/delega
     TableLayoutComponent,
     TableSkeletonComponent,
     DatePipe,
-    EmployeesFilter,
     BaseTagComponent,
     DataTableComponent,
     TooltipModule,
-    EmployeesActionMenu,
     DatePipe,
-    ButtonModule
-  ],
+    ButtonModule,
+    DelegationFilter,
+    DelegationActionMenu
+],
   templateUrl: './delegation.html',
   styleUrl: './delegation.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
