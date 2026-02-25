@@ -98,6 +98,8 @@
                   ? 'text-green-500'
                   : item.slaCountDown > 0
                   ? 'text-orange-500'
+                  : item.slaCountDown === null
+                  ? ''
                   : 'text-red-600'
               "
               >
