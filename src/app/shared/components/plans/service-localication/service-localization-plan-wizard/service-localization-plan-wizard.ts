@@ -111,7 +111,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
         ? "Are you sure you want to approve this plan and forward it to the Investor?"
         : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
     }
-    return "Are you sure you want to approve this plan and forward it to the Employee for review?"
+    return "Are you sure you want to approve this plan and forward it to the Employee for approval submission?"
   })
 
   readonly rejectionDialogTitle = computed(() => {

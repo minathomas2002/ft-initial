@@ -72,6 +72,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   private _servicesSynced = false;
   private _conditionalFieldsSetup = false;
   private _benaVendorIdLockSetup = false;
+  private _attachmentsRequirementSetup = false;
+  private _attachmentsUnlockedByProvideAgreementChange = signal(false);
   private _userChangedDropdowns = new Set<string>();
 
   // Check if investor comment exists for this step
@@ -93,7 +95,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       const canEditAttachments = this.correctedFields().some(
         f => f.section === 'attachments' && f.inputKey === 'attachments'
       );
-      return !canEditAttachments;
+      const unlockedByProvideAgreementChange = this._attachmentsUnlockedByProvideAgreementChange();
+      return !(canEditAttachments || unlockedByProvideAgreementChange);
     }
     return false;
   });
@@ -358,6 +361,12 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       if (!this._conditionalFieldsSetup) {
         this.setupConditionalFields();
         this._conditionalFieldsSetup = true;
+      }
+
+      // Setup dynamic attachments validation based on "Provide Agreement Copy" (only once)
+      if (!this._attachmentsRequirementSetup) {
+        this.setupAttachmentsRequiredByAgreementCopy();
+        this._attachmentsRequirementSetup = true;
       }
 
       // Always keep BENA Registered Vendor ID disabled (all rows).
@@ -732,6 +741,98 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
           });
       });
     });
+  }
+
+  /**
+   * Make attachments required if any collaboration row has "Provide Agreement Copy" = Yes.
+   * Otherwise keep attachments optional.
+   */
+  private setupAttachmentsRequiredByAgreementCopy(): void {
+    const collaborationArray = this.getCollaborationPartnershipFormArray();
+    const attachmentsGroupControl = this.getAttachmentsFormGroup().get(EMaterialsFormControls.attachments);
+
+    if (!collaborationArray || !attachmentsGroupControl) return;
+
+    const attachmentsControl = this.getValueControl(attachmentsGroupControl);
+
+    if (!attachmentsControl) return;
+
+    const updateAttachmentsRequiredState = (): void => {
+      const shouldRequire = collaborationArray.controls.some((itemControl) => {
+        if (!(itemControl instanceof FormGroup)) return false;
+
+        const provideAgreementCopyControl = itemControl.get(
+          `${EMaterialsFormControls.provideAgreementCopy}.${EMaterialsFormControls.value}`
+        );
+        const provideAgreementCopyValue = provideAgreementCopyControl?.value;
+
+        const normalized = String(provideAgreementCopyValue ?? '').trim().toLowerCase();
+        return Number(provideAgreementCopyValue) === EYesNo.Yes ||
+          normalized === 'yes' ||
+          normalized === 'true';
+      });
+
+      if (shouldRequire) {
+        attachmentsControl.addValidators(Validators.required);
+      } else {
+        attachmentsControl.removeValidators(Validators.required);
+      }
+
+      const attachmentsValue = attachmentsControl.value;
+      const isEmpty = attachmentsValue == null ||
+        (Array.isArray(attachmentsValue) && attachmentsValue.length === 0);
+
+      if (shouldRequire && isEmpty) {
+        attachmentsControl.markAsDirty();
+        attachmentsControl.markAsTouched();
+      }
+
+      attachmentsControl.updateValueAndValidity({ emitEvent: false });
+    };
+
+    // Initial state
+    updateAttachmentsRequiredState();
+
+    // Keep state in sync with collaboration/partnership changes
+    collaborationArray.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        if (this.isResubmitMode() && !this._attachmentsUnlockedByProvideAgreementChange()) {
+          const hasUserChangedProvideAgreementCopy = collaborationArray.controls.some((itemControl) => {
+            if (!(itemControl instanceof FormGroup)) return false;
+
+            const provideAgreementCopyControl = itemControl.get(
+              `${EMaterialsFormControls.provideAgreementCopy}.${EMaterialsFormControls.value}`
+            );
+
+            return !!provideAgreementCopyControl?.dirty;
+          });
+
+          if (hasUserChangedProvideAgreementCopy) {
+            this._attachmentsUnlockedByProvideAgreementChange.set(true);
+            this.enableAttachmentsSectionForResubmit();
+          }
+        }
+
+        updateAttachmentsRequiredState();
+      });
+  }
+
+  /**
+   * In resubmit mode, when Provide Agreement Copy is changed by user,
+   * unlock attachments section even if it was not part of corrected fields.
+   */
+  private enableAttachmentsSectionForResubmit(): void {
+    const attachmentsFormGroup = this.getAttachmentsFormGroup();
+    const attachmentsGroupControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
+
+    attachmentsFormGroup.enable({ emitEvent: false });
+
+    if (attachmentsGroupControl) {
+      attachmentsGroupControl.enable({ emitEvent: false });
+      const attachmentsValueControl = this.getValueControl(attachmentsGroupControl);
+      attachmentsValueControl.enable({ emitEvent: false });
+    }
   }
 
   getEntityLevelFormArray(): FormArray {

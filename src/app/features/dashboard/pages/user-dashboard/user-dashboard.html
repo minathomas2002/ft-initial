@@ -63,24 +63,27 @@
     </ng-container>
 
     <ng-container ngProjectAs="table-body">
+      @if (isLoading()) {
       <app-table-skeleton
         [headers]="headers()"
-        [isLoading]="isLoading()"
+        [isLoading]="true"
+      ></app-table-skeleton>
+      } @else {
+      <app-data-table
+        [columns]="headers()"
+        [rows]="rows()"
+        [(filter)]="filterService().filter"
+        [totalRecords]="totalRecords()"
+        (filterChange)="filterService().applyFilterWithPaging()"
+        (sortChange)="applyFilter()"
+        [messageTitle]="'plans.list.noPlansFound' | translate"
+        [showCheckBox]="false"
+        [rowsCheckable]="false"
       >
-        <app-data-table
-          [columns]="headers()"
-          [rows]="rows()"
-          [(filter)]="filterService().filter"
-          [totalRecords]="totalRecords()"
-          (filterChange)="filterService().applyFilterWithPaging()"
-          [messageTitle]="'plans.list.noPlansFound' | translate"
-          [showCheckBox]="false"
-          [rowsCheckable]="false"
+        <ng-template
+          #itemsTemplate
+          let-item="item"
         >
-          <ng-template
-            #itemsTemplate
-            let-item="item"
-          >
             <td>
               {{ item.planCode }}
             </td>
@@ -179,9 +182,9 @@
                 (onDelete)="onDelete($event)"
               />
             </td>
-          </ng-template>
-        </app-data-table>
-      </app-table-skeleton>
+        </ng-template>
+      </app-data-table>
+      }
     </ng-container>
   </app-table-layout>
 </div>
