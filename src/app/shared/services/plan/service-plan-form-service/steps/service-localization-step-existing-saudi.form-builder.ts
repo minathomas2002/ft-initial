@@ -19,7 +19,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
+        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.minLength(7), Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
       }),
       [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),

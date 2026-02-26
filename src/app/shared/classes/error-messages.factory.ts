@@ -69,7 +69,7 @@ export class ErrorMessagesFactory {
 
     return Object.entries(control!.errors!)
       .map(([errorKey, errorValue]) =>
-        this.buildErrorMessage(errorKey, errorValue, label)
+        this.buildErrorMessage(errorKey, errorValue, label, control)
       )
       .filter((message): message is string => message !== null);
   }
@@ -81,13 +81,14 @@ export class ErrorMessagesFactory {
   private static buildErrorMessage(
     errorKey: string,
     errorValue: any,
-    label: string
+    label: string,
+    control: AbstractControl | null
   ): string | null {
     if (['expectedLength', 'description'].includes(errorKey)) {
       return null;
     }
     if (this.isValidationMessageKey(errorKey)) {
-      return this.getValidationMessage(errorKey, errorValue, label);
+      return this.getValidationMessage(errorKey, errorValue, label, control);
     }
 
     return this.getFallbackMessage();
@@ -102,10 +103,19 @@ export class ErrorMessagesFactory {
   private static getValidationMessage(
     errorKey: ValidationMessageKey,
     errorValue: any,
-    label: string
+    label: string,
+    control: AbstractControl | null
   ): string {
     const messageFactory = VALIDATION_MESSAGES[errorKey];
-    return this.callMessageFactory(messageFactory, label, errorValue);
+    const message = this.callMessageFactory(messageFactory, label, errorValue);
+
+    if (this.isNumericControl(control)) {
+      return message
+        .replace(/\bcharacters\b/g, 'digits')
+        .replace(/\bcharacter\b/g, 'digit');
+    }
+
+    return message;
   }
 
   private static callMessageFactory(
@@ -120,6 +130,14 @@ export class ErrorMessagesFactory {
     }
 
     return messageFactory(label, errorValue);
+  }
+
+  private static isNumericControl(control: AbstractControl | null): boolean {
+    const value = control?.value;
+    if (value == null) return false;
+    if (typeof value === 'number') return true;
+    if (typeof value === 'string') return /^\d+$/.test(value);
+    return false;
   }
 
   private static getFallbackMessage(): string {
