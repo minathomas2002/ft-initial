@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AgreementType, EMaterialsFormControls, EServiceCompanyType, EServiceQualificationStatus } from 'src/app/shared/enums';
+import { AgreementType, EMaterialsFormControls, EServiceCompanyType, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums';
 import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
 
 export class ServiceLocalizationStepExistingSaudiFormBuilder {
@@ -536,7 +536,8 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
 
     if (!agreementCopyControl) return;
 
-    const isYes = provideAgreementCopy === 'Yes' || provideAgreementCopy === true || provideAgreementCopy === 'true';
+    const normalized = String(provideAgreementCopy ?? '').trim().toLowerCase();
+    const isYes = Number(provideAgreementCopy) === EYesNo.Yes || normalized === 'yes' || normalized === 'true';
     if (isYes) {
       agreementCopyControl.setValidators([Validators.required]);
     } else {
