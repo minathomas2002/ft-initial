@@ -14,3 +14,4 @@ export * from './system-employees.interface';
 export * from './role-managements.interface';
 export * from './phone-input.interface';
 export * from './dashboard-plans.interface';
+export * from './profile.interface';
