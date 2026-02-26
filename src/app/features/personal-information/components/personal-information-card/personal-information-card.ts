@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -11,8 +11,10 @@ import { ButtonModule } from 'primeng/button';
 export class PersonalInformationCard {
   sectionTitle = input<string>('');
   sectionDescription = input<string>('');
-  showEditButton = input<boolean>(false);
-  submitActionDisabled = input<boolean>(false);
+  showEditButton = model<boolean>(false);
+  submitActionDisabled = input<boolean>(true);
   submitActionLabel = input<string>('Save Changes');
   onSubmit = output<void>();
+  onEditClick = output<void>();
+  onCancelClicked = output<void>();
 }

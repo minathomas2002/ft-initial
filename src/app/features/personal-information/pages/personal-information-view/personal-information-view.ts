@@ -5,6 +5,7 @@ import { UserImageSection } from '../../components/user-image-section/user-image
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { ERoles } from 'src/app/shared/enums';
 import { SignatureSection } from '../../components/signature-section/signature-section';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 
 @Component({
   selector: 'app-personal-information-view',
@@ -19,8 +20,6 @@ import { SignatureSection } from '../../components/signature-section/signature-s
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonalInformationView {
-  private roleService = inject(RoleService);
-  protected canViewSignature = computed(() => this.roleService.hasAnyRoleSignal(
-    [ERoles.INVESTOR, ERoles.DEPARTMENT_MANAGER])
-    ());
+  private profileStore = inject(ProfileStore);
+  canViewSignature = computed(() => this.profileStore.isInvestor());
 }

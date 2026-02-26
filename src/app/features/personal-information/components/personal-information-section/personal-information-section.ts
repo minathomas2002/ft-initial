@@ -48,4 +48,15 @@ export class PersonalInformationSection implements OnInit {
         }
       });
   }
+
+  onEditClick(): void {
+    this.viewMode.set(EViewMode.Edit);
+    this.formService.updateViewMode(this.viewMode());
+  }
+
+  onCancelClick(): void {
+    this.viewMode.set(EViewMode.View);
+    this.formService.initializeForm(this.profileStore.userProfile()!);
+    this.formService.updateViewMode(this.viewMode());
+  }
 }

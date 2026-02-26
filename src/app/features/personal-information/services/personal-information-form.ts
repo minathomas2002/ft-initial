@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { parsePhoneNumber } from 'src/app/shared/data/countries.data';
 import { EViewMode } from 'src/app/shared/enums';
 import { IPhoneValue, IProfileResponse } from 'src/app/shared/interfaces';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
@@ -10,8 +11,8 @@ export class PersonalInformationFormService {
   personalInformationForm = this.fb.group({
     fullName: new FormControl<string>('', [Validators.required, Validators.maxLength(150)]),
     email: new FormControl<string>('', [Validators.required, Validators.email, Validators.maxLength(100)]),
-    phoneNumber: new FormControl('', [Validators.required, phoneNumberPatternValidator()]),
-    otherPhoneNumber: ['', [phoneNumberPatternValidator()]],
+    phoneNumber: new FormControl<IPhoneValue | null>(null, [Validators.required, phoneNumberPatternValidator()]),
+    otherPhoneNumber: new FormControl<IPhoneValue | null>(null, [phoneNumberPatternValidator()]),
     benaId: new FormControl<string | null>(null, [Validators.maxLength(7)]),
     secRegisteredId: new FormControl<string | null>(null, [Validators.maxLength(7)]),
   });
@@ -44,8 +45,8 @@ export class PersonalInformationFormService {
     this.personalInformationForm.patchValue({
       fullName: user.fullName,
       email: user.email,
-      phoneNumber: user.phoneNumber,
-      otherPhoneNumber: user.otherPhoneNumber,
+      phoneNumber: parsePhoneNumber(user.phoneNumber),
+      otherPhoneNumber: parsePhoneNumber(user.otherPhoneNumber ?? '') ?? null,
       benaId: user.benaId,
       secRegisteredId: user.secRegisteredId,
     });
