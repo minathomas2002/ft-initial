@@ -16,6 +16,7 @@
     inset: 0;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.5);
+    border: 2px solid white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -24,6 +25,7 @@
 
     i {
       pointer-events: none;
+      filter: brightness(0) invert(1); /* force icon to white regardless of color */
     }
   }
 

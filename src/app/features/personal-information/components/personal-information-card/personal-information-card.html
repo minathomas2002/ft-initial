@@ -1,7 +1,20 @@
 <div class="bg-white rounded-lg flex flex-col gap-6 shadow-xs border border-gray-200">
-  <div class="section-header p-6 pb-0 flex flex-col gap-[2px]">
-    <h4 class="font-semibold text-lg text-gray-900"> {{sectionTitle()}} </h4>
-    <p class="text-gray-600 text-gray-600 mb-5"> {{sectionDescription()}} </p>
+  <div class="section-header p-6 pb-0 flex items-center justify-between">
+    <div class="flex flex-col gap-[2px] flex-1">
+      <h4 class="font-semibold text-lg text-gray-900"> {{sectionTitle()}} </h4>
+      <p class="text-gray-600 text-gray-600 mb-5"> {{sectionDescription()}} </p>
+    </div>
+    @if(showEditButton()){
+    <div>
+      <p-button
+        [label]="'Edit'"
+        size="small"
+        severity="secondary"
+        icon="icon-edit-05"
+        text
+      />
+    </div>
+    }
     <hr class="text-gray-200">
   </div>
 

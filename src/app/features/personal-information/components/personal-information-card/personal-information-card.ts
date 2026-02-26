@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 export class PersonalInformationCard {
   sectionTitle = input<string>('');
   sectionDescription = input<string>('');
+  showEditButton = input<boolean>(false);
   submitActionDisabled = input<boolean>(false);
   submitActionLabel = input<string>('Save Changes');
   onSubmit = output<void>();
