@@ -66,9 +66,9 @@ export class SidebarContentComponent {
         show: this.permissionService.canAccessInvestors()
       },
       {
-        label: 'Personal Information',
-        icon: 'icon-settings',
-        routerLink: ERoutes.personalInformation,
+        label: 'My Profile',
+        icon: 'icon-profile',
+        routerLink: ERoutes.myProfile,
         show: true
       }
     ];

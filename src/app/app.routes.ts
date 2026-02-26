@@ -37,10 +37,9 @@ const MAIN_LAYOUT_ROUTES: Routes = [
         data: { animation: ERoutes.investors },
       },
       {
-        path: ERoutes.personalInformation,
+        path: ERoutes.myProfile,
         loadComponent: () => import('./features/personal-information/pages/personal-information-view/personal-information-view').then((c) => c.PersonalInformationView),
-        canActivate: [authGuard],
-        data: { animation: ERoutes.personalInformation },
+        data: { animation: ERoutes.myProfile },
       },
       {
         path: ERoutes.plans,
