@@ -1,0 +1,24 @@
+<div class="rounded-xl flex items-center shadow-xs border bg-linear-gradient-primary p-6 gap-6">
+  <div
+    class="avatar-wrapper relative cursor-pointer"
+    (click)="onAvatarEditClick()"
+  >
+    <p-avatar
+      [image]="image()"
+      shape="circle"
+      class="border-3 border-white !w-[100px] !h-[100px]"
+    />
+    <div class="avatar-overlay">
+      <i class="icon-edit-05 text-white text-xl"></i>
+    </div>
+  </div>
+  <div>
+    <h3 class="font-semibold text-[24px] text-white">{{userName()}}</h3>
+    <p class="text-white text-sm">{{userTitle()}}</p>
+  </div>
+</div>
+
+<app-change-your-profile-picture-modal
+  [(visible)]="changeYourProfilePictureVisible"
+  [image]="image()"
+></app-change-your-profile-picture-modal>

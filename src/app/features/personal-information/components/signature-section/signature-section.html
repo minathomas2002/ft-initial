@@ -1,0 +1,15 @@
+<app-personal-information-card
+  [sectionTitle]="'Signature'"
+  [sectionDescription]="'Update your signature here.'"
+>
+  @if(isViewMode() && !existingSignature()){
+  <div class="flex justify-center items-center">
+    <p class="text-sm text-gray-500">No signature yet</p>
+  </div>
+  }@else {
+  <app-signature-pad
+    [existingSignature]="existingSignature()"
+    (onSignatureChange)="onSignatureChange($event)"
+  />
+  }
+</app-personal-information-card>

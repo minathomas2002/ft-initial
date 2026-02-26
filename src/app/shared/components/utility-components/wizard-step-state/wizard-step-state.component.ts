@@ -58,10 +58,12 @@ export class WizardStepStateComponent {
       // Update initial state
       this.updateFormState(form);
 
-      // Merge form observables - only update when actual changes occur
+      // Merge form observables - status/value changes + periodic poll for dirty/touched
+      // markAsDirty()/markAsTouched() don't emit valueChanges or statusChanges, so we
+      // poll periodically to pick up programmatic state changes (e.g. from save-as-draft validation)
       const formStateObservable = merge(
         form.statusChanges.pipe(startWith(null)),
-        form.valueChanges.pipe(startWith(null))
+        form.valueChanges.pipe(startWith(null)),
       ).pipe(
         map(() => ({
           valid: form.valid,
@@ -122,7 +124,6 @@ export class WizardStepStateComponent {
   status = computed(() => {
     // Read signal to ensure reactivity
     const state = this.formStateSignal();
-    console.log('state', state);
     if (state.valid) {
       return EWizardStepState.Completed;
     } else if (state.dirty && state.invalid) {

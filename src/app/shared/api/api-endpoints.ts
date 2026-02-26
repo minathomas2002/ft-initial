@@ -14,6 +14,7 @@ const Notifications = "Notifications";
 
 const Auth = "Auth";
 const Plans = "Plans";
+const Profile = "Profile";
 
 export const API_ENDPOINTS = {
   baseUrl: baseUrl,
@@ -53,6 +54,9 @@ export const API_ENDPOINTS = {
     reviewPlan: `${Plans}/review-plan`,
     getPlanComment: `${Plans}/get-PlanComment`,
     deleteDraftPlan: `${Plans}/delete-draftPlan`,
+  },
+  profile: {
+    me: `${Profile}/me`,
   },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,

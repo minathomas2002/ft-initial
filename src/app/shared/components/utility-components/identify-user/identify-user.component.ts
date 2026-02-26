@@ -14,8 +14,8 @@ export class IdentifyUserComponent {
 	private readonly i18nService = inject(I18nService);
 	private readonly employeeRoleMapper = new SystemEmployeeRoleMapper(this.i18nService);
 
-	userAvatar = input<string>(
-		"https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png",
+	userAvatar = input<string | null | undefined>(
+		"assets/images/user_placeholder.svg",
 	);
 	avatarClass = input<string>("!w-[40px] !h-[40px]");
 	titleClass = input<string>("font-medium text-gray-900");

@@ -16,5 +16,6 @@ export enum ERoutes {
   dvManager = 'dv-manager',
   settings = 'settings',
   holidaysManagement = 'holidays-management',
-  plans = 'plans'
+  plans = 'plans',
+  myProfile = 'my-profile'
 }

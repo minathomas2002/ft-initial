@@ -1,0 +1,14 @@
+<div class="cards-page-layout px-[32px] py-[24px]">
+  <div class="cards-page-layout--header mb-[24px]">
+    <div class="table-layout--title sm:w-auto flex items-center justify-between">
+      <div class="flex-1">
+        <ng-content select="page-title">
+          <h4 class="font-semibold text-[20px] lg:text-[24px]"> {{pageTitle()}} </h4>
+        </ng-content>
+      </div>
+    </div>
+  </div>
+  <div class="cards-page-layout--body flex flex-col gap-6">
+    <ng-content select="page-body"></ng-content>
+  </div>
+</div>
