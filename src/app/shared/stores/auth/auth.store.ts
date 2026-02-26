@@ -1,4 +1,5 @@
 import { computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { type Observable, type Subscription, catchError, finalize, throwError, tap } from 'rxjs';
 import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse, IJwtUserDetails, IUserProfile, } from '../../interfaces';
@@ -6,18 +7,23 @@ import { AuthApiService } from '../../api/auth/auth-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
 import { HttpErrorResponse } from '@angular/common/http';
 import { JwtService } from '../../services/auth/jwt-service';
+import { ERoutes } from '../../enums';
+
+const REFRESH_BEFORE_EXPIRY_MS = 2 * 60 * 1000; // 2 minutes before expiry
 
 const initialState: {
   authResponse: IAuthData | null;
   jwtUserDetails: IJwtUserDetails | null;
   loading: boolean;
   _inactivityTimeout$: Subscription | null;
+  _refreshTimerId: ReturnType<typeof setTimeout> | null;
   userProfile: IUserProfile | null;
 } = {
   authResponse: null,
   jwtUserDetails: null,
   loading: false,
   _inactivityTimeout$: null,
+  _refreshTimerId: null,
   userProfile: null,
 };
 
@@ -36,9 +42,89 @@ export const AuthStore = signalStore(
     const authApiService = inject(AuthApiService);
     const localStorage = inject(LocalStorage);
     const jwtService = inject(JwtService);
+    const router = inject(Router);
+
+    function getRefreshDelayMs(authData: IAuthData): number | null {
+      if (!authData.expiresAt) {
+        return null;
+      }
+      const expiresAtMs = new Date(authData.expiresAt).getTime();
+      if (Number.isNaN(expiresAtMs)) {
+        return null;
+      }
+      const refreshAtMs = expiresAtMs - REFRESH_BEFORE_EXPIRY_MS;
+      const delayMs = refreshAtMs - Date.now();
+      return delayMs > 0 ? delayMs : null;
+    }
+
+    function isRefreshTokenValid(authData: IAuthData): boolean {
+      if (!authData.refreshToken || !authData.refreshTokenExpiresAt) {
+        return false;
+      }
+      const refreshTokenExpiresAtMs = new Date(authData.refreshTokenExpiresAt).getTime();
+      if (Number.isNaN(refreshTokenExpiresAtMs)) {
+        return false;
+      }
+      return refreshTokenExpiresAtMs > Date.now();
+    }
 
     return {
+      clearRefreshTimer(): void {
+        const timerId = store._refreshTimerId();
+        if (timerId !== null) {
+          clearTimeout(timerId);
+          patchState(store, { _refreshTimerId: null });
+        }
+      },
+
+      scheduleTokenRefresh(): void {
+        this.clearRefreshTimer();
+        const authData = localStorage.getAuthData();
+        if (!authData?.token || !authData.refreshToken || !authData.expiresAt) {
+          return;
+        }
+        if (!isRefreshTokenValid(authData)) {
+          return;
+        }
+        const delayMs = getRefreshDelayMs(authData);
+        if (delayMs === null) {
+          return;
+        }
+        const timerId = setTimeout(() => {
+          this.refreshTokenProactively();
+        }, delayMs);
+        patchState(store, { _refreshTimerId: timerId });
+      },
+
+      refreshTokenProactively(): void {
+        const authData = localStorage.getAuthData();
+        if (!authData?.token || !authData.refreshToken) {
+          this.logout();
+          return;
+        }
+        const refreshRequest = {
+          accessToken: authData.token,
+          refreshToken: authData.refreshToken,
+        };
+        authApiService.refreshToken(refreshRequest).subscribe({
+          next: (response) => {
+            if (response.success && response.body) {
+              this.updateAuthDataInStorage(response);
+              this.scheduleTokenRefresh();
+            } else {
+              this.logout();
+              router.navigate(['/', ERoutes.auth, ERoutes.login]);
+            }
+          },
+          error: () => {
+            this.logout();
+            router.navigate(['/', ERoutes.auth, ERoutes.login]);
+          },
+        });
+      },
+
       logout(): void {
+        this.clearRefreshTimer();
         localStorage.cleanAll();
         patchState(store, { authResponse: null, jwtUserDetails: null, userProfile: null });
         authApiService.logout();
@@ -65,6 +151,7 @@ export const AuthStore = signalStore(
           jwtUserDetails: jwtService.decodeJwt(authResponse.body?.token ?? ''),
         });
         localStorage.saveAuthDataToStorage(authResponse);
+        this.scheduleTokenRefresh();
       },
 
       handleLoginMethod(
@@ -176,6 +263,7 @@ export const AuthStore = signalStore(
         if (userProfile) {
           patchState(store, { userProfile: userProfile });
         }
+        store.scheduleTokenRefresh();
       }
     },
   })
