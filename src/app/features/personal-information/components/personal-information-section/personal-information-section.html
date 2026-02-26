@@ -1,6 +1,7 @@
 <app-personal-information-card
   [sectionTitle]="'Personal Information'"
   [sectionDescription]="'Update your personal details here.'"
+  [showEditButton]="isViewMode()"
   [submitActionDisabled]="isViewMode() || isLoading() || formService.personalInformationForm.invalid"
 >
   <app-personal-information-skeleton
