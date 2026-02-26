@@ -1,25 +1,19 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { EViewMode } from 'src/app/shared/enums';
-import { IPhoneValue } from 'src/app/shared/interfaces';
+import { IPhoneValue, IProfileResponse } from 'src/app/shared/interfaces';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 
 @Injectable()
 export class PersonalInformationFormService {
   private fb = inject(FormBuilder);
   personalInformationForm = this.fb.group({
-    fullName: [null, [Validators.required, Validators.maxLength(150)]],
-    email: [{
-      value: '',
-      disabled: true
-    }],
-    phoneNumber: [null, [Validators.required, phoneNumberPatternValidator()]],
-    otherPhoneNumber: [null, [phoneNumberPatternValidator()]],
-    benaId: [{
-      value: '',
-      disabled: true
-    }],
-    secRegisteredId: [null, [Validators.maxLength(7)]],
+    fullName: new FormControl<string>('', [Validators.required, Validators.maxLength(150)]),
+    email: new FormControl<string>('', [Validators.required, Validators.email, Validators.maxLength(100)]),
+    phoneNumber: new FormControl('', [Validators.required, phoneNumberPatternValidator()]),
+    otherPhoneNumber: ['', [phoneNumberPatternValidator()]],
+    benaId: new FormControl<string | null>(null, [Validators.maxLength(7)]),
+    secRegisteredId: new FormControl<string | null>(null, [Validators.maxLength(7)]),
   });
 
   get fullName(): FormControl<string | null> {
@@ -46,7 +40,7 @@ export class PersonalInformationFormService {
     return this.personalInformationForm.get('secRegisteredId') as FormControl<string | null>;
   }
 
-  initializeForm(user: any): void {
+  initializeForm(user: IProfileResponse): void {
     this.personalInformationForm.patchValue({
       fullName: user.fullName,
       email: user.email,
