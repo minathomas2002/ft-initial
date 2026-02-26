@@ -9,6 +9,8 @@ import { EViewMode } from 'src/app/shared/enums';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-personal-information-section',
@@ -28,30 +30,22 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonalInformationSection implements OnInit {
+  private profileStore = inject(ProfileStore);
   protected formService = inject(PersonalInformationFormService);
   protected viewMode = signal<EViewMode>(EViewMode.View);
   protected isViewMode = computed(() => this.viewMode() === EViewMode.View);
 
   /** When true, shows skeleton placeholders; when false, shows the form. Wire to your data loading state. */
-  isLoading = input<boolean>(false);
+  isLoading = computed(() => this.profileStore.loading());
 
   ngOnInit(): void {
-    this.formService.initializeForm({
-      fullName: null,
-      email: 'john.doe@example.com',
-      phoneNumber: {
-        countryCode: '966',
-        phoneNumber: '555555555'
-      },
-      otherPhoneNumber: {
-        countryCode: '966',
-        phoneNumber: '555555555'
-      },
-      benaId: '1234567890',
-      secRegisteredId: '1234567',
-    });
     this.formService.updateViewMode(this.viewMode());
-    console.log(this.formService.personalInformationForm.invalid);
-
+    this.profileStore.getUserProfile()
+      .pipe(take(1))
+      .subscribe((res) => {
+        if (res.success && res.body) {
+          this.formService.initializeForm(res.body);
+        }
+      });
   }
 }
