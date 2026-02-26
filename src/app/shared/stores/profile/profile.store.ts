@@ -1,4 +1,4 @@
-import { inject } from "@angular/core";
+import { computed, inject } from "@angular/core";
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
 import { RoleService } from "../../services/role/role-service";
 import { ERoles } from "../../enums";
@@ -20,6 +20,9 @@ export const ProfileStore = signalStore(
     const roleService = inject(RoleService);
     return {
       isInvestor: roleService.hasAnyRoleSignal([ERoles.INVESTOR]),
+      userImage: computed(() => store.userProfile()?.photo ?? 'assets/images/user_placeholder.svg'),
+      userSignature: computed(() => store.userProfile()?.signature ?? null),
+      userTitle: computed(() => roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? store.userProfile()?.secRegisteredId : store.userProfile()?.title ?? 'Title'),
     }
   }),
   withMethods((store) => {

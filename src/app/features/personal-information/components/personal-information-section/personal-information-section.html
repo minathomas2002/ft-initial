@@ -2,7 +2,9 @@
   [sectionTitle]="'Personal Information'"
   [sectionDescription]="'Update your personal details here.'"
   [showEditButton]="isViewMode()"
-  [submitActionDisabled]="isViewMode() || isLoading() || formService.personalInformationForm.invalid"
+  (onEditClick)="onEditClick()"
+  (onCancelClicked)="onCancelClick()"
+  [submitActionDisabled]="isLoading()"
 >
   <app-personal-information-skeleton
     [numberOfFields]="6"
