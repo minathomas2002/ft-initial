@@ -1,3 +1,33 @@
 :host {
   display: block;
 }
+
+.bg-linear-gradient-primary {
+  background: linear-gradient(270deg, rgba(30, 70, 145, 0.9) 0%, #113373 99.4%);
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+
+  .avatar-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    i {
+      pointer-events: none;
+    }
+  }
+
+  &:hover .avatar-overlay {
+    opacity: 1;
+  }
+}

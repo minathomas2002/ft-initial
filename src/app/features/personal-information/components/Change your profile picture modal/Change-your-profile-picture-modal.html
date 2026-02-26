@@ -1,0 +1,44 @@
+<app-base-dialog
+  [(visible)]="visible"
+  [showCloseButton]="true"
+  [showConfirmButton]="true"
+  [icon]="icon"
+  [dialogTitle]="dialogTitle"
+  [isConfirmationDisabled]="!allowSaveAction()"
+  [confirmButtonClass]="'w-[80px]'"
+  [cancelButtonClass]="'w-[60px]'"
+  [confirmLabel]="confirmLabel"
+  (onConfirm)="onSaveUserPhoto()"
+>
+  <div class="flex flex-col gap-4 justify-center items-center min-w-[620px] py-10">
+    <p-avatar
+      [image]="previewImageUrl() ?? image()"
+      shape="circle"
+      class="border-3 border-primary !w-[220px] !h-[220px]"
+    />
+    <input
+      #fileInput
+      type="file"
+      accept="image/*"
+      class="hidden"
+      (change)="onFileSelected($event)"
+    />
+    <div class="flex gap-4">
+      <p-button
+        label="Upload"
+        severity="secondary"
+        icon="icon-file-upload"
+        text
+        type="button"
+        (onClick)="fileInput.click()"
+      />
+      <p-button
+        label="Delete"
+        severity="danger"
+        icon="icon-trash-2"
+        text
+        (onClick)="onDeleteUserPhoto()"
+      />
+    </div>
+  </div>
+</app-base-dialog>
