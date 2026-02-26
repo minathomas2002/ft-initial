@@ -21,6 +21,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+.icon-image-up:before {
+    content: "\f004";
+}
+.icon-edit-05:before {
+    content: "\f003";
+}
+.icon-profile:before {
+    content: "\f002";
+}
 .icon-cancel-icon:before {
     content: "\f001";
 }

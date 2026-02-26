@@ -17,5 +17,5 @@ export enum ERoutes {
   settings = 'settings',
   holidaysManagement = 'holidays-management',
   plans = 'plans',
-  personalInformation = 'personal-information'
+  myProfile = 'my-profile'
 }
