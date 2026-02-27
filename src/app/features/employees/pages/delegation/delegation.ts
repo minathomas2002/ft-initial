@@ -26,6 +26,7 @@ import { IDelegationRecord } from 'src/app/shared/interfaces/delegation.interfac
 import { DelegationFilterService } from '../../services/Delegation-filter/Delegation-filter-service';
 import { DelegationFilter } from "../../components/delegation-filter/delegation-filter";
 import { DelegationActionMenu } from "../../components/delegation-action-menu/delegation-action-menu";
+import { DelegationStatusMapper } from '../../classes/delegation-status-mapper';
 
 @Component({
   selector: 'app-delegation',
@@ -54,56 +55,47 @@ export class Delegation implements OnInit {
     this.i18nService.currentLanguage();
     return [
       {
-        label: this.i18nService.translate('delegation.table.delegator'),
-        tooltip: this.i18nService.translate('delegation.table.delegatorTooltip'), // “Delegator – the original owner of tasks.”
+        label: this.i18nService.translate('delegation.table.delegatorName'),
         isSortable: true,
-        sortingKey: 'delegator',
+        sortingKey: 'delegatorName',
       },
       {
-        label: this.i18nService.translate('delegation.table.delegatee'),
-        tooltip: this.i18nService.translate('delegation.table.delegateeTooltip'), // “Delegatee – the user authorized to act on behalf of the delegator.”
+        label: this.i18nService.translate('delegation.table.delegateeName'),
         isSortable: true,
-        sortingKey: 'delegatee',
+        sortingKey: 'delegateeName',
       },
       {
         label: this.i18nService.translate('delegation.table.startDate'),
-        tooltip: this.i18nService.translate('delegation.table.startDateTooltip'),
         isSortable: true,
         sortingKey: 'startDate',
       },
       {
         label: this.i18nService.translate('delegation.table.endDate'),
-        tooltip: this.i18nService.translate('delegation.table.endDateTooltip'),
         isSortable: true,
         sortingKey: 'endDate',
       },
       {
         label: this.i18nService.translate('delegation.table.createdAt'),
-        tooltip: this.i18nService.translate('delegation.table.createdAtTooltip'),
         isSortable: true,
         sortingKey: 'createdAt',
       },
       {
         label: this.i18nService.translate('delegation.table.createdBy'),
-        tooltip: this.i18nService.translate('delegation.table.createdByTooltip'),
         isSortable: true,
         sortingKey: 'createdBy',
       },
       {
-        label: this.i18nService.translate('delegation.table.lastModifiedBy'),
-        tooltip: this.i18nService.translate('delegation.table.lastModifiedByTooltip'),
+        label: this.i18nService.translate('delegation.table.updatedBy'),
         isSortable: true,
-        sortingKey: 'lastModifiedBy',
+        sortingKey: 'updatedBy',
       },
       {
-        label: this.i18nService.translate('delegation.table.lastModifiedDate'),
-        tooltip: this.i18nService.translate('delegation.table.lastModifiedDateTooltip'),
+        label: this.i18nService.translate('delegation.table.updatedAt'),
         isSortable: true,
-        sortingKey: 'lastModifiedDate',
+        sortingKey: 'updatedAt',
       },
       {
         label: this.i18nService.translate('delegation.table.status'),
-        tooltip: this.i18nService.translate('delegation.table.statusTooltip'),
         isSortable: true,
         sortingKey: 'status',
       },
@@ -119,8 +111,7 @@ export class Delegation implements OnInit {
   filterService = inject(DelegationFilterService);
   filter = this.filterService.filter;
   totalRecords = computed(() => this.delegationStore.count());
-  employeeRoleMapper = new EmployeeRoleMapper(this.i18nService);
-  userStatusMapper = new UserStatusMapper(this.i18nService);
+  delegationStatusMapper = new DelegationStatusMapper(this.i18nService);
   ToasterService = inject(ToasterService);
   deleteDialogVisible = signal<boolean>(false);
   deactivateDialogVisible = signal<boolean>(false);
@@ -130,12 +121,9 @@ export class Delegation implements OnInit {
     this.filterService.applyFilter();
   }
 
-  getUserTranslatedRole(roleCode: number): string {
-    return this.employeeRoleMapper.getTranslatedRole(roleCode as ERoles);
-  }
 
-  getUserStatus(status: string) {
-    return this.userStatusMapper.getStatus(status);
+  getDelegationStatus(status: string) {
+    return this.delegationStatusMapper.getStatus(status);
   }
 
   onDelete(item: IUser) {

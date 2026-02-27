@@ -11,6 +11,7 @@ const AdminSettings = "AdminSettings";
 const Roles = "Roles";
 const RoleManagement = "RoleManagement";
 const Notifications = "Notifications";
+const Delegation = "Delegation";
 
 const Auth = "Auth";
 const Plans = "Plans";
@@ -68,6 +69,9 @@ export const API_ENDPOINTS = {
       getCurrentHolders: `${SystemEmployees}/${RoleManagement}/GetCurrentHolders`,
       transferRole: `${SystemEmployees}/${RoleManagement}/Transfer`,
     },
+    Delegation :{
+        getDelegationList: `${Delegation}/get_delegations`,
+    }
   },
   AdminSettings: {
     getSlaSetting: `${AdminSettings}/get-sla`,

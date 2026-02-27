@@ -24,7 +24,7 @@
           <!-- Delegator -->
           <td>
             <span
-              [pTooltip]="item.delegator"
+              [pTooltip]="item.delegatorName"
               tooltipPosition="top"
             >{{ item.delegator }}</span>
           </td>
@@ -32,7 +32,7 @@
           <!-- Delegatee -->
           <td>
             <span
-              [pTooltip]="item.delegatee"
+              [pTooltip]="item.delegateeName"
               tooltipPosition="top"
             >{{ item.delegatee }}</span>
           </td>
@@ -63,21 +63,21 @@
           <!-- Last Modified By -->
           <td>
             <span
-              [pTooltip]="item.lastModifiedBy"
+              [pTooltip]="item.updatedBy"
               tooltipPosition="top"
-            >{{ item.lastModifiedBy }}</span>
+            >{{ item.updatedBy }}</span>
           </td>
 
           <!-- Last Modified Date -->
           <td>
-            {{ item.lastModifiedDate | date : 'dd MMM yyyy' }}
+            {{ item.updatedAt | date : 'dd MMM yyyy' }}
           </td>
 
           <!-- Status -->
           <td>
             <app-base-tag
-              [color]="getUserStatus(item.status).color"
-              [value]="getUserStatus(item.status).title"
+              [color]="getDelegationStatus(item.status).color"
+              [value]="getDelegationStatus(item.status).title"
             />
           </td>
 

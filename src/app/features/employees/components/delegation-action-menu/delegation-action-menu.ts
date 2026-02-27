@@ -22,16 +22,16 @@ export class DelegationActionMenu {
   private readonly _i18n = inject(I18nService);
   employeesActionsMapper = new DelegationsActionsMapper(this._i18n);
 
-  onChangeRole = output();
+  OnCancelled = output();
   onDelete = output();
   onEdit = output();
   onView = output();
   onDeactivate = output();
 
   handleEventsMapper = {
-    [EDelegationActions.EDIT]: this.onEdit,
+    [EDelegationActions.Update]: this.onEdit,
     [EDelegationActions.DELETE]: this.onDelete,
-    [EDelegationActions.CANCEL]: this.onChangeRole,
+    [EDelegationActions.CANCEL]: this.OnCancelled,
   };
 
   menuItems = computed<MenuItem[]>(() => {

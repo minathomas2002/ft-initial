@@ -1,0 +1,22 @@
+<app-base-dialog
+  [(visible)]="dialogVisible"
+  icon="icon-user-plus"
+  [confirmLabel]="isEditMode()
+  ? ('delegation.dialog.edit.confirmedit' | translate)
+  : ('delegation.dialog.add.confirmAdd' | translate)"
+  [confirmButtonClass]="'w-fit'"
+  [cancelButtonClass]="'w-fit'"
+  (onConfirm)="onConfirm()"
+  (onClose)="resetForm()"
+>
+  <!--
+  [isConfirmationDisabled]="formService.form.invalid" -->
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">{{
+      isEditMode()
+      ? ('delegation.dialog.edit.confirmedit' | translate)
+      : ('delegation.dialog.add.confirmAdd' | translate)
+      }}</p>
+  </div>
+
+</app-base-dialog>

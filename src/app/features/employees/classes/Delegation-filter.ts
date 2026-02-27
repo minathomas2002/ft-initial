@@ -12,13 +12,15 @@ export class DelegationFilter extends Filter<
     super();
     const pagination = new Pagination(10);
     const sorting = new Sorting<TDelegationSortingKeys>();
-    sorting.sortField = 'id';
+    sorting.sortField = 'delegatorName';
     sorting.sortOrder = ESortingOrder.asc;
     this.filter = {
       ...pagination,
       ...sorting,
       searchText: '',
-      statusFilters: [],
+      status: [],
+      delegationDateFrom: null,
+      delegationDateTo: null
     };
 
     this.initialState = structuredClone(this.filter);

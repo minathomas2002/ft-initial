@@ -1,18 +1,8 @@
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
 import { inject } from "@angular/core";
 import { catchError, finalize, map, tap, throwError } from "rxjs";
-import {
-  IActiveEmployee,
-  ICreateSystemEmployeeRequest,
-  IEmployeeDateFromHR,
-  ISystemEmployeeDetails,
-  ISystemEmployeeFilterRequest,
-  ISystemEmployeeRecord,
-  IUpdateSystemEmployeeRequest,
-} from "../../interfaces";
-import { EAdminUserActions } from "../../enums";
 import { DelegationApiService } from "../../api/system-employees/delegation-api-service";
-import { IDelegationDetails, IDelegationFilterRequest, IDelegationRecord } from "../../interfaces/delegation.interface";
+import { IDelegationFilterRequest, IDelegationRecord } from "../../interfaces/delegation.interface";
 
 
 const initialState: {
@@ -22,15 +12,13 @@ const initialState: {
   error: string | null;
   count: number;
   list: IDelegationRecord[]
-  delegationDetails: IDelegationDetails | null;
 } = {
   isLoading: false,
   isLoadingDetails: false,
   isProcessing: false,
   error: null,
   count: 0,
-  list: [],
-  delegationDetails: null
+  list: []
 }
 export const DelegationStore = signalStore(
   { providedIn: "root" },
@@ -60,40 +48,13 @@ export const DelegationStore = signalStore(
             patchState(store, { isLoading: false });
           }),
         );
-      },
-
-
-
-
-      /* Get System Employee Details */
-      getSystemEmployeeDetails(id: string) {
-        patchState(store, { isLoading: true, error: null });
-        return delegationApiService.getDelegationDetails(id).pipe(
-          tap((res) => {
-            patchState(store, { isLoading: false });
-            patchState(store, { delegationDetails: res.body || null });
-          }),
-          catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error getting delegation details' });
-            return throwError(() => new Error('Error getting delegation details'));
-          }),
-          finalize(() => {
-            patchState(store, { isLoading: false });
-          }),
-        );
-      },
-
-
-
-
+      }
     }
   }),
   withMethods((store) => {
     return {
-      /* Reset Delegation Details */
-      resetDelegationDetails: () => {
-        patchState(store, { delegationDetails: null });
-      },
+
+
     };
   }),
 );

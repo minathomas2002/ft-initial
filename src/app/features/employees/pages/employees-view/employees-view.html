@@ -14,6 +14,16 @@
       (onClick)="onAddEmployee()"
     />
     }
+    @if(activeTab() === '2'){
+    <p-button
+      [label]="'delegation.list.addDelegation' | translate"
+      severity="primary"
+      class="flex"
+      fluid
+      icon="icon-plus"
+      (onClick)="onAddDelegation()"
+    />
+    }
   </div>
   <p-tabs
     [(value)]="activeTab"
@@ -63,4 +73,14 @@
   >
   </app-add-edit-employee-dialog>
   }
+
+  @if(createDelegationDialogVisible()){
+  <app-add-edit-delegation-dialog
+    [(dialogVisible)]="createDelegationDialogVisible"
+    [isEditMode]="false"
+    (onSuccess)="onAddDelegationSuccess()"
+  >
+  </app-add-edit-delegation-dialog>
+  }
+
 </div>

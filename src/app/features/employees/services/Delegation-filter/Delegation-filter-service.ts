@@ -17,7 +17,7 @@ export class DelegationFilterService extends AbstractServiceFilter<IDelegationFi
     return {
       ...this.filter(),
       searchText: this.filter().searchText?.trim() ?? '',
-      statusFilters: this.filter().statusFilters ?? []
+      status: this.filter().status ?? []
     };
   });
 

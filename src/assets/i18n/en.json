@@ -384,7 +384,8 @@
     },
     "tabs": {
       "employees": "Employees",
-      "roleManagement": "Role Management"
+      "roleManagement": "Role Management",
+      "delegation": "Delegation"
     },
     "filter": {
       "searchPlaceholder": "Search by name or email or ID or phone",
@@ -457,6 +458,28 @@
       "employeeUpdatedSuccess": "Employee Updated Successfully",
       "deactivateSuccess": "User deactivated successfully",
       "transferRoleSuccess": "Role has been successfully transferred to the selected user."
+    }
+  },
+  "delegation": {
+    "list":{
+      "addDelegation": "Add Delegation"
+    },
+    "filter": {
+      "searchPlaceholder": "Search by delegatee name or delegator name or created by or last modified by",
+      "selectDelegationPeriod": "Select delegation period",
+      "statusPlaceholder": "Select Status"
+    },
+    "table": {
+      "delegatorName": "Delegator Name",
+      "delegateeName": "Delegatee Name",
+      "startDate":"Start Date",
+      "endDate":"End Date",
+      "createdAt" : "Created At",
+      "createdBy": "Created By",
+      "updatedBy":"Updated By",
+      "updatedAt" : "Updated At",
+      "status": "Status",
+      "actions": "Actions"
     }
   },
   "investors": {

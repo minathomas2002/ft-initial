@@ -16,11 +16,11 @@ export class DelegationsActionsMapper {
     [EDelegationActions.DELETE]: {
       labelKey: "delegations.actions.delete",
     },
-    [EDelegationActions.EDIT]: {
-      labelKey: "delegations.actions.edit",
-    },
     [EDelegationActions.CANCEL]: {
       labelKey: "delegations.actions.cancel",
+    },
+    [EDelegationActions.Update]: {
+      labelKey: "delegations.actions.update",
     }
   };
 
