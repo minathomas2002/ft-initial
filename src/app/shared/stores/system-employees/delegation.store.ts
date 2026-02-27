@@ -1,9 +1,13 @@
-import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
-import { inject } from "@angular/core";
-import { catchError, finalize, map, tap, throwError } from "rxjs";
-import { DelegationApiService } from "../../api/system-employees/delegation-api-service";
-import { IDelegationFilterRequest, IDelegationRecord } from "../../interfaces/delegation.interface";
-
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { inject } from '@angular/core';
+import { catchError, finalize, map, tap, throwError } from 'rxjs';
+import { DelegationApiService } from '../../api/system-employees/delegation-api-service';
+import {
+  ActiveEmployee,
+  IAddDelegationRequest,
+  IDelegationFilterRequest,
+  IDelegationRecord,
+} from '../../interfaces/delegation.interface';
 
 const initialState: {
   isLoading: boolean;
@@ -11,17 +15,19 @@ const initialState: {
   isProcessing: boolean;
   error: string | null;
   count: number;
-  list: IDelegationRecord[]
+  list: IDelegationRecord[];
+  activeEmployees: ActiveEmployee[];
 } = {
   isLoading: false,
   isLoadingDetails: false,
   isProcessing: false,
   error: null,
   count: 0,
-  list: []
-}
+  list: [],
+  activeEmployees: [],
+};
 export const DelegationStore = signalStore(
-  { providedIn: "root" },
+  { providedIn: 'root' },
   withState(initialState),
   withMethods((store) => {
     const delegationApiService = inject(DelegationApiService);
@@ -29,11 +35,11 @@ export const DelegationStore = signalStore(
       getDelegationList(filter: IDelegationFilterRequest) {
         patchState(store, { isLoading: true, error: null });
         return delegationApiService.getDelegationList(filter).pipe(
-          map((res)=> {
-             res.body.data = res.body.data.map((item: IDelegationRecord) => ({
-                ...item,
-                actions: item.actions || []
-              }));
+          map((res) => {
+            res.body.data = res.body.data.map((item: IDelegationRecord) => ({
+              ...item,
+              actions: item.actions || [],
+            }));
             return res;
           }),
           tap((res) => {
@@ -48,13 +54,44 @@ export const DelegationStore = signalStore(
             patchState(store, { isLoading: false });
           }),
         );
-      }
+      },
+      addDelegation(request: IAddDelegationRequest) {
+        patchState(store, { isProcessing: true, error: null });
+        return delegationApiService.addDelegation(request).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || 'Error adding delegation' });
+            return throwError(() => new Error(error.errorMessage || 'Error adding delegation'));
+          }),
+        );
+      },
+   getActiveEmployees() {
+      patchState(store, { isLoadingDetails: true, error: null });
+
+      return delegationApiService.getActiveEmployees().pipe(
+        tap((res: any) => {
+          const employees: ActiveEmployee[] =
+            res?.body?.activeEmployees ?? [];
+
+          patchState(store, { activeEmployees: employees });
+        }),
+        finalize(() => {
+          patchState(store, { isLoadingDetails: false });
+        }),
+        catchError((error) => {
+          patchState(store, {
+            error: error?.errorMessage || 'Error fetching active employees',
+            activeEmployees: []
+          });
+          return throwError(() => new Error('Error fetching active employees'));
+        }),
+      );
     }
+    };
   }),
   withMethods((store) => {
-    return {
-
-
-    };
+    return {};
   }),
 );

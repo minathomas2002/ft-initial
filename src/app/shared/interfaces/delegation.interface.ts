@@ -5,8 +5,13 @@ export type DelegationStatus = "Upcoming" | "Active" | "Cancelled" | "Expired";
 export interface IAddDelegationRequest {
   delegatorId: string;
   delegateeId: string;
-  startDate: string;
-  endDate: string;
+  from: string;
+  to: string;
+}
+export interface ActiveEmployee{
+  id: string;
+  name: string;
+  role:number;
 }
 export interface IDelegationRecord {
   id: number;

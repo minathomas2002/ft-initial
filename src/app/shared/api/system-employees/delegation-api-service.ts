@@ -6,7 +6,7 @@ import {
   IApiPaginatedResponse,
   IBaseApiResponse
 } from '../../interfaces';
-import { IDelegationFilterRequest, IDelegationRecord } from '../../interfaces/delegation.interface';
+import { ActiveEmployee, IAddDelegationRequest, IDelegationFilterRequest, IDelegationRecord } from '../../interfaces/delegation.interface';
 import { of } from 'rxjs';
 import { EDelegationActions } from '../../enums/delegation-enum';
 
@@ -21,5 +21,12 @@ export class DelegationApiService  {
     return this.baseHttpService.post<IApiPaginatedResponse<IDelegationRecord[]>, IDelegationFilterRequest, unknown>(API_ENDPOINTS.systemEmployees.Delegation.getDelegationList, filter);
   }
 
+  addDelegation(request: IAddDelegationRequest): Observable<IBaseApiResponse<unknown>> {
+    return this.baseHttpService.post<unknown, IAddDelegationRequest, unknown>(API_ENDPOINTS.systemEmployees.Delegation.addDelegation, request);
+  }
+
+  getActiveEmployees(): Observable<IBaseApiResponse<ActiveEmployee[]>> {
+    return this.baseHttpService.get<ActiveEmployee[], unknown>(API_ENDPOINTS.systemEmployees.Delegation.getActiveEmployees);
+  }
 
 }
