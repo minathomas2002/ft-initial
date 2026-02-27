@@ -10,7 +10,7 @@
     [numberOfFields]="6"
     [isLoading]="isLoading()"
   >
-    <div class="flex flex-col gap-5">
+    <div class="grid grid-cols-2 gap-8">
       <app-personal-information-form-field label="Full Name">
         <div>
           <input
@@ -26,7 +26,7 @@
           />
         </div>
       </app-personal-information-form-field>
-      <hr class="text-gray-200">
+
       <app-personal-information-form-field
         label="E-mail"
         [required]="false"
@@ -39,30 +39,36 @@
           [formControl]="formService.email"
         />
       </app-personal-information-form-field>
-      <hr class="text-gray-200">
+
       <app-personal-information-form-field label="Phone Number">
         <div>
-          <app-phone-input [formControl]="formService.phoneNumber" />
+          <app-phone-input
+            [formControl]="formService.phoneNumber"
+            [disabled]="formService.phoneNumber.disabled"
+          />
           <app-base-error-messages
             [control]="formService.phoneNumber"
             [label]="'Phone Number'"
           />
         </div>
       </app-personal-information-form-field>
-      <hr class="text-gray-200">
+
       <app-personal-information-form-field
         label="Other Phone Number"
         [required]="false"
       >
         <div>
-          <app-phone-input [formControl]="formService.otherPhoneNumber" />
+          <app-phone-input
+            [formControl]="formService.otherPhoneNumber"
+            [disabled]="formService.otherPhoneNumber.disabled"
+          />
           <app-base-error-messages
             [control]="formService.otherPhoneNumber"
             [label]="'Other Phone Number'"
           />
         </div>
       </app-personal-information-form-field>
-      <hr class="text-gray-200">
+
       <app-personal-information-form-field label="BENA ID">
         <input
           pInputText
@@ -70,7 +76,7 @@
           [formControl]="formService.benaId"
         />
       </app-personal-information-form-field>
-      <hr class="text-gray-200">
+
       <app-personal-information-form-field
         label="SEC Registered ID"
         [required]="false"
@@ -80,6 +86,7 @@
           fluid
           [maxlength]="7"
           [formControl]="formService.secRegisteredId"
+          [disabled]="formService.secRegisteredId.disabled"
         />
       </app-personal-information-form-field>
     </div>
