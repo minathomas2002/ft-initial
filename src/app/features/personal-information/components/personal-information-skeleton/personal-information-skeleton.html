@@ -1,19 +1,29 @@
 @if (isLoading()) {
-  <div class="flex flex-col gap-5">
-    @for (index of fieldIndices(); track index) {
-      <div class="flex gap-[32px]">
-        <div class="min-w-[280px]">
-          <p-skeleton width="80px" height="14px" />
-        </div>
-        <div class="flex-1">
-          <p-skeleton height="40px" />
-        </div>
-      </div>
-      @if (index < fieldIndices().length - 1) {
-        <hr class="text-gray-200" />
-      }
-    }
+<div class="grid grid-cols-2 gap-8">
+  @for (index of fieldIndices(); track index) {
+  <div class="flex flex-col gap-2">
+    <div>
+      <p-skeleton
+        width="80px"
+        height="14px"
+      />
+    </div>
+    <div class="flex-1">
+      <p-skeleton height="40px" />
+    </div>
   </div>
+  @if (index
+  <
+    fieldIndices().length
+    -
+    1)
+    {
+    <hr
+    class="text-gray-200"
+  />
+  }
+  }
+</div>
 } @else {
-  <ng-content />
+<ng-content />
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { PersonalInformationCard } from '../personal-information-card/personal-information-card';
 import { PersonalInformationFormField } from '../personal-information-form-field/personal-information-form-field';
 import { PersonalInformationSkeleton } from '../personal-information-skeleton/personal-information-skeleton';
@@ -31,6 +31,7 @@ import { take } from 'rxjs';
 })
 export class PersonalInformationSection implements OnInit {
   private profileStore = inject(ProfileStore);
+  private cdr = inject(ChangeDetectorRef);
   protected formService = inject(PersonalInformationFormService);
   protected viewMode = signal<EViewMode>(EViewMode.View);
   protected isViewMode = computed(() => this.viewMode() === EViewMode.View);
@@ -52,11 +53,16 @@ export class PersonalInformationSection implements OnInit {
   onEditClick(): void {
     this.viewMode.set(EViewMode.Edit);
     this.formService.updateViewMode(this.viewMode());
+    this.cdr.markForCheck();
+    // Defer second check: form enable propagates to CVAs asynchronously
+    queueMicrotask(() => this.cdr.markForCheck());
   }
 
   onCancelClick(): void {
     this.viewMode.set(EViewMode.View);
     this.formService.initializeForm(this.profileStore.userProfile()!);
     this.formService.updateViewMode(this.viewMode());
+    this.cdr.markForCheck();
+    queueMicrotask(() => this.cdr.markForCheck());
   }
 }
