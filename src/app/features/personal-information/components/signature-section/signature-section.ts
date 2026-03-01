@@ -2,12 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, input, output, signal } f
 import { PersonalInformationCard } from '../personal-information-card/personal-information-card';
 import { SignaturePadComponent } from 'src/app/shared/components/plans/submission-confirmation-modal/signature-pad/signature-pad.component';
 import { EViewMode } from 'src/app/shared/enums';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-signature-section',
   imports: [
     PersonalInformationCard,
-    SignaturePadComponent
+    SignaturePadComponent,
+    ButtonModule
   ],
   templateUrl: './signature-section.html',
   styleUrl: './signature-section.scss',
@@ -19,7 +21,7 @@ export class SignatureSection {
   existingSignature = signal<string | null>(null);
 
 
-  onSignatureChange(signature: string | null): void {
-    console.log(signature);
-  }
+  onAddSignatureClick(): void { }
+
+  onChangeSignatureClick(): void { }
 }

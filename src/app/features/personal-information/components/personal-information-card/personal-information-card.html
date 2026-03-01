@@ -23,7 +23,7 @@
     <ng-content></ng-content>
   </div>
 
-  @if(!showEditButton()){
+  @if(!hideFooter() && !showEditButton()){
   <div class="section-footer p-6 border-t border-gray-200 flex justify-end gap-3">
     <p-button
       [label]="'Cancel'"
