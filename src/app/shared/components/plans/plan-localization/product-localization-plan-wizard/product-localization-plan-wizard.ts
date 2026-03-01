@@ -557,7 +557,22 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   hasComments = computed(() => {
     // // Check if any step has saved comments
+    const planComments = this.planStore.planComments()?.comments ?? [];
     const currentUserPageComments = this.planStore.currentUserPageComments();
+    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDV];
+
+    if (returnedByManagerStatus.includes(this.planStatus() as EInternalUserPlanStatus)) {
+      const stepMeta = [
+        { title: this.steps()[0]?.title as EPlanPageTitle, selectedCount: this.step1SelectedInputs().length },
+        { title: this.steps()[1]?.title as EPlanPageTitle, selectedCount: this.step2SelectedInputs().length },
+        { title: this.steps()[2]?.title as EPlanPageTitle, selectedCount: this.step3SelectedInputs().length },
+        { title: this.steps()[3]?.title as EPlanPageTitle, selectedCount: this.step4SelectedInputs().length },
+      ];
+
+      const filteredPlanCommentsPages = stepMeta.filter(step => planComments.some(comment => comment.pageTitleForTL === step.title));
+      return filteredPlanCommentsPages.every(comment => currentUserPageComments.includes(comment.title) || comment.selectedCount === 0) && currentUserPageComments.length > 0;
+    }
+
     return currentUserPageComments.length > 0;
   });
 
