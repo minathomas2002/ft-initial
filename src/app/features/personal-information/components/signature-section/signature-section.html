@@ -6,7 +6,7 @@
   @if(isViewMode() && !existingSignature()){
   <div class="flex flex-col justify-center items-center gap-6">
     <div class="flex justify-center items-center">
-      <p class="text-sm text-gray-500">No signature yet</p>
+      <p class="text-sm text-gray-500">No signature created</p>
     </div>
     <div class="flex gap-4">
       <p-button
@@ -69,6 +69,7 @@
 </app-personal-information-card>
 
 <app-upload-signature-modal
+  [isProcessing]="isSignatureProcessing()"
   [(visible)]="uploadSignatureModalVisible"
   (onSubmitSignature)="onSubmitSignature($event)"
 />

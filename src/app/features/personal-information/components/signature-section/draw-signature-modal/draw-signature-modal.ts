@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, input, model, output, signal } from
 import { ButtonModule } from 'primeng/button';
 import { BaseDialogComponent } from 'src/app/shared/components/base-components/base-dialog/base-dialog.component';
 import { SignaturePadComponent } from 'src/app/shared/components/plans/submission-confirmation-modal/signature-pad/signature-pad.component';
+import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
 
 @Component({
   selector: 'app-draw-signature-modal',
   imports: [
     BaseDialogComponent,
     SignaturePadComponent,
-    ButtonModule
+    ButtonModule,
   ],
   templateUrl: './draw-signature-modal.html',
   styleUrl: './draw-signature-modal.scss',

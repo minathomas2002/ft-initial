@@ -3,5 +3,26 @@
   [icon]="icon()"
   [confirmLabel]="confirmLabel()"
   [cancelLabel]="cancelLabel()"
+  [dialogTitle]="'Upload Signature'"
+  [confirmButtonClass]="'max-w-[100px]'"
+  [cancelButtonClass]="'w-[60px]'"
+  (onConfirm)="onSubmitClick()"
+  (onClose)="onCloseClick()"
+  [isConfirmationDisabled]="files().length === 0 || isProcessing()"
 >
+  <ng-container ngProjectAs="subTitle">
+    <p>Upload your signature here</p>
+  </ng-container>
+  <div class="flex justify-center items-center min-w-[600px]">
+    <app-fileupload
+      [isViewMode]="false"
+      [multiple]="false"
+      [maxFileSize]="maxFileSize"
+      [acceptedFileTypes]="'image/*'"
+      [placeholder]="'Upload your signature here'"
+      [styleClass]="'border border-gray-200 rounded-lg p-4'"
+      class="flex-1"
+      [(files)]="files"
+    />
+  </div>
 </app-base-dialog>

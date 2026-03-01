@@ -58,6 +58,7 @@ export class SignatureSection {
         if (res.success) {
           this.toasterService.success('Signature updated successfully');
           this.drawSignatureModalVisible.set(false);
+          this.uploadSignatureModalVisible.set(false);
         }
       });
   }
