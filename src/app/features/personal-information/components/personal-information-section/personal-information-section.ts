@@ -35,6 +35,10 @@ export class PersonalInformationSection implements OnInit {
   protected formService = inject(PersonalInformationFormService);
   protected viewMode = signal<EViewMode>(EViewMode.View);
   protected isViewMode = computed(() => this.viewMode() === EViewMode.View);
+  protected isInvestor = computed(() => this.profileStore.isInvestor());
+  protected userProfile = computed(() => this.profileStore.userProfile());
+  protected userID = computed(() => this.profileStore.userID());
+  protected RoleName = computed(() => this.profileStore.RoleName());
 
   /** When true, shows skeleton placeholders; when false, shows the form. Wire to your data loading state. */
   isLoading = computed(() => this.profileStore.loading());

@@ -19,7 +19,7 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 export class UserImageSection {
   private profileStore = inject(ProfileStore);
   image = computed(() => this.profileStore.userImage());
-  userName = computed(() => this.profileStore.userProfile()?.fullName ?? '');
+  userName = computed(() => this.profileStore.userProfile()?.nameEn ?? '');
   userTitle = computed(() => this.profileStore.userTitle());
   changeYourProfilePictureVisible = signal<boolean>(false);
 

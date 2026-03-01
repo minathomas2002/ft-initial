@@ -5,6 +5,7 @@ import { ERoles } from "../../enums";
 import { ProfileApiService } from "../../api/profile/profile-api.service";
 import { IBaseApiResponse, IProfileResponse } from "../../interfaces";
 import { finalize, Observable, tap } from "rxjs";
+import { AuthStore } from "../auth/auth.store";
 
 const initialState: {
   loading: boolean;
@@ -20,11 +21,14 @@ export const ProfileStore = signalStore(
   withState(initialState),
   withComputed((store) => {
     const roleService = inject(RoleService);
+    const authStore = inject(AuthStore);
     return {
       isInvestor: roleService.hasAnyRoleSignal([ERoles.INVESTOR]),
       userImage: computed(() => store.userProfile()?.photo ?? 'assets/images/user_placeholder.svg'),
       userSignature: computed(() => store.userProfile()?.signature ?? null),
-      userTitle: computed(() => roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? store.userProfile()?.secRegisteredId : store.userProfile()?.title ?? 'Title'),
+      userTitle: computed(() => roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? authStore.userProfile()?.investorCode : authStore.userProfile()?.roleNames[0]),
+      userID: computed(() => authStore.userProfile()?.employeeID ?? ''),
+      RoleName: computed(() => authStore.userProfile()?.roleNames[0] ?? ''),
     }
   }),
   withMethods((store) => {

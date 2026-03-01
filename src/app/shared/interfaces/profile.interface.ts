@@ -1,12 +1,14 @@
 export interface IProfileResponse {
-  photo: string | null;
-  fullName: string;
-  title: string;
+  photo: string;
+  nameEn: string;
+  nameAr: string;
   email: string;
   phoneNumber: string;
-  otherPhoneNumber: string | null;
-  benaId: string | null;
-  signature: string | null;
-  secRegisteredId: string | null;
-  countryCode: string | null;
+  otherPhoneNumber: string;
+  benaId: string;
+  signature: string;
+  userSignatureId: string;
+  secRegisteredId: string;
+  countryCode: string;
+  otherPhoneCountryCode: string;
 }

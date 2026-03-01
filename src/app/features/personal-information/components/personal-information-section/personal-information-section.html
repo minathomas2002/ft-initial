@@ -1,7 +1,8 @@
 <app-personal-information-card
   [sectionTitle]="'Personal Information'"
   [sectionDescription]="'Update your personal details here.'"
-  [showEditButton]="isViewMode()"
+  [showEditButton]="isViewMode() && isInvestor()"
+  [hideFooter]="!isInvestor()"
   (onEditClick)="onEditClick()"
   (onCancelClicked)="onCancelClick()"
   [submitActionDisabled]="isLoading()"
@@ -11,7 +12,14 @@
     [isLoading]="isLoading()"
   >
     <div class="grid grid-cols-2 gap-8">
-      <app-personal-information-form-field label="Full Name">
+      <!-- Name En -->
+      <app-personal-information-form-field
+        [label]="isInvestor() ? 'Name' : 'English Name'"
+        [required]="!isViewMode()"
+      >
+        @if(isViewMode()){
+        <span class="text-sm font-medium text-gray-900">{{ userProfile()?.nameEn }}</span>
+        }@else{
         <div>
           <input
             pInputText
@@ -25,12 +33,29 @@
             [label]="'Full Name'"
           />
         </div>
+        }
       </app-personal-information-form-field>
 
+      <!-- Name Ar -->
+      @if(!isInvestor()){
+      <app-personal-information-form-field
+        label="Arabic Name"
+        [required]="!isViewMode()"
+      >
+        @if(isViewMode()){
+        <span class="text-sm font-medium text-gray-900">{{ userProfile()?.nameAr }}</span>
+        }
+      </app-personal-information-form-field>
+      }
+
+      <!-- E-mail -->
       <app-personal-information-form-field
         label="E-mail"
         [required]="false"
       >
+        @if(isViewMode()){
+        <span class="text-sm font-medium text-gray-900">{{ userProfile()?.email }}</span>
+        }@else {
         <input
           pInputText
           [placeholder]="'Enter your e-mail'"
@@ -38,9 +63,20 @@
           maxlength="150"
           [formControl]="formService.email"
         />
+        }
       </app-personal-information-form-field>
 
-      <app-personal-information-form-field label="Phone Number">
+      <!-- Phone Number -->
+      <app-personal-information-form-field
+        label="Phone Number"
+        [required]="!isViewMode()"
+      >
+        @if(isViewMode()){
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-medium text-gray-900">{{ userProfile()?.countryCode }}</span>
+          <span class="text-sm font-medium text-gray-900">{{ userProfile()?.phoneNumber }}</span>
+        </div>
+        }@else {
         <div>
           <app-phone-input
             [formControl]="formService.phoneNumber"
@@ -51,12 +87,43 @@
             [label]="'Phone Number'"
           />
         </div>
+        }
       </app-personal-information-form-field>
 
+      @if(!isInvestor()){
+      <!-- User ID -->
+      <app-personal-information-form-field
+        label="User ID"
+        [required]="false"
+      >
+        @if(isViewMode()){
+        <span class="text-sm font-medium text-gray-900">{{ userID() }}</span>
+        }
+      </app-personal-information-form-field>
+
+      <!-- Role Name -->
+      <app-personal-information-form-field
+        label="Role Name"
+        [required]="false"
+      >
+        @if(isViewMode()){
+        <span class="text-sm font-medium text-gray-900">{{ RoleName() }}</span>
+        }
+      </app-personal-information-form-field>
+      }
+
+      <!-- Other Phone Number -->
+      @if(isInvestor()){
       <app-personal-information-form-field
         label="Other Phone Number"
         [required]="false"
       >
+        @if(isViewMode()){
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-medium text-gray-900">{{ userProfile()?.otherPhoneCountryCode ?? '-' }}</span>
+          <span class="text-sm font-medium text-gray-900">{{ userProfile()?.otherPhoneNumber }}</span>
+        </div>
+        }@else {
         <div>
           <app-phone-input
             [formControl]="formService.otherPhoneNumber"
@@ -67,20 +134,33 @@
             [label]="'Other Phone Number'"
           />
         </div>
+        }
       </app-personal-information-form-field>
 
-      <app-personal-information-form-field label="BENA ID">
+      <!-- BENA ID -->
+      <app-personal-information-form-field
+        label="BENA ID"
+        [required]="false"
+      >
+        @if(isViewMode()){
+        <span class="text-sm font-medium text-gray-900">{{ userProfile()?.benaId ?? '-' }}</span>
+        }@else {
         <input
           pInputText
           fluid
           [formControl]="formService.benaId"
         />
+        }
       </app-personal-information-form-field>
 
+      <!-- SEC Registered ID -->
       <app-personal-information-form-field
         label="SEC Registered ID"
         [required]="false"
       >
+        @if(isViewMode()){
+        <span class="text-sm font-medium text-gray-900">{{ userProfile()?.secRegisteredId ?? '-' }}</span>
+        }@else {
         <p-inputNumber
           [placeholder]="'Enter your SEC registered ID'"
           fluid
@@ -88,7 +168,9 @@
           [formControl]="formService.secRegisteredId"
           [disabled]="formService.secRegisteredId.disabled"
         />
+        }
       </app-personal-information-form-field>
+      }
     </div>
   </app-personal-information-skeleton>
 </app-personal-information-card>

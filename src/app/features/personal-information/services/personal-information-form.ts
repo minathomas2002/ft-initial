@@ -43,7 +43,7 @@ export class PersonalInformationFormService {
 
   initializeForm(user: IProfileResponse): void {
     this.personalInformationForm.patchValue({
-      fullName: user.fullName,
+      fullName: user.nameEn,
       email: user.email,
       phoneNumber: {
         countryCode: user.countryCode ?? '',
@@ -51,7 +51,7 @@ export class PersonalInformationFormService {
       },
       otherPhoneNumber: user.otherPhoneNumber ? {
         countryCode: user.countryCode ?? '',
-        phoneNumber: user.otherPhoneNumber,
+        phoneNumber: user.otherPhoneCountryCode,
       } : null,
       benaId: user.benaId,
       secRegisteredId: user.secRegisteredId,
