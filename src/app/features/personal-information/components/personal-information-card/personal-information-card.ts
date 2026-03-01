@@ -14,6 +14,7 @@ export class PersonalInformationCard {
   showEditButton = model<boolean>(false);
   submitActionDisabled = input<boolean>(true);
   submitActionLabel = input<string>('Save Changes');
+  hideFooter = input<boolean>(false);
   onSubmit = output<void>();
   onEditClick = output<void>();
   onCancelClicked = output<void>();

@@ -1,15 +1,29 @@
 <app-personal-information-card
   [sectionTitle]="'Signature'"
   [sectionDescription]="'Update your signature here.'"
+  [hideFooter]="true"
 >
   @if(isViewMode() && !existingSignature()){
-  <div class="flex justify-center items-center">
-    <p class="text-sm text-gray-500">No signature yet</p>
+  <div class="flex flex-col justify-center items-center gap-6">
+    <div class="flex justify-center items-center">
+      <p class="text-sm text-gray-500">No signature yet</p>
+    </div>
+    <div class="flex gap-4">
+      <p-button
+        [label]="'Draw Signature'"
+        severity="secondary"
+        icon="icon-edit-04"
+        (onClick)="onAddSignatureClick()"
+      />
+      <p-button
+        [label]="'upload Signature'"
+        severity="secondary"
+        icon="icon-file-upload"
+        (onClick)="onChangeSignatureClick()"
+      />
+    </div>
   </div>
   }@else {
-  <app-signature-pad
-    [existingSignature]="existingSignature()"
-    (onSignatureChange)="onSignatureChange($event)"
-  />
+  <app-signature-pad [existingSignature]="existingSignature()" />
   }
 </app-personal-information-card>
