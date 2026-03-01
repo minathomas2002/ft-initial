@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, Component, input, model, OnDestroy, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, OnDestroy, output, signal } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { BaseDialogComponent } from 'src/app/shared/components/base-components/base-dialog/base-dialog.component';
+import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 
 @Component({
   selector: 'app-change-your-profile-picture-modal',
@@ -24,6 +27,16 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
   allowSaveAction = signal<boolean>(false);
   previewImageUrl = signal<string | null>(null);
   confirmLabel = 'Save';
+  cancelLabel = 'Back';
+  attachmentService = inject(AttachmentService);
+  private toasterService = inject(ToasterService);
+  onProfilePictureUpdated = output<string | null>();
+  private profileStore = inject(ProfileStore);
+  profilePictureProcessing = computed(() => this.profileStore.profilePictureProcessing());
+
+
+  private readonly maxFileSize = 2 * 1024 * 1024; // 2MB
+  private readonly acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -31,6 +44,19 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
     if (!file) {
       return;
     }
+
+    if (!this.acceptedTypes.includes(file.type)) {
+      this.toasterService.error('Invalid file type or file size exceeds 2MB.');
+      input.value = '';
+      return;
+    }
+
+    if (file.size > this.maxFileSize) {
+      this.toasterService.error('Invalid file type or file size exceeds 2MB.');
+      input.value = '';
+      return;
+    }
+
     this.revokePreviewUrl();
     this.newProfilePicture.set(file);
     this.allowSaveAction.set(true);
@@ -43,10 +69,18 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
     this.newProfilePicture.set(null);
     this.previewImageUrl.set(null);
     this.allowSaveAction.set(true);
+    this.onProfilePictureUpdated.emit(null);
   }
 
   onSaveUserPhoto(): void {
-    console.log('save user photo');
+    this.attachmentService.resizeImages(this.newProfilePicture()!, 120).then((res) => {
+      this.attachmentService.fileToBase64(res).then((base64) => {
+        console.log(base64);
+        this.toasterService.success('Profile picture updated successfully');
+        this.visible.set(false);
+        this.onProfilePictureUpdated.emit(base64);
+      });
+    });
   }
 
   ngOnDestroy(): void {
@@ -59,5 +93,11 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
       URL.revokeObjectURL(url);
       this.previewImageUrl.set(null);
     }
+  }
+
+  onCloseClick(): void {
+    this.newProfilePicture.set(null);
+    this.previewImageUrl.set(null);
+    this.allowSaveAction.set(false);
   }
 }

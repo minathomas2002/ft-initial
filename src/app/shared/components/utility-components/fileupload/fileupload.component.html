@@ -114,11 +114,11 @@
   <ng-template #file></ng-template>
   <!-- Empty Slot -->
   <ng-template #empty>
-    <div class="flex items-center justify-center flex-col py-8">
+    <div class="flex items-center justify-center flex-col py-2">
       @if(!isDisabled()){
       <p class="text-sm">
         <span
-          class="text-primary-600 cursor-pointer"
+          class="text-primary-600 cursor-pointer font-medium"
           (click)="chooseFiles()"
         >{{
           'common.clickToUpload' | translate

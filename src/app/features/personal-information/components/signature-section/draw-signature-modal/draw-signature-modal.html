@@ -1,0 +1,21 @@
+<app-base-dialog
+  [(visible)]="visible"
+  [icon]="icon()"
+  [confirmLabel]="confirmLabel()"
+  [cancelLabel]="cancelLabel()"
+  [dialogTitle]="'Draw Signature'"
+  [confirmButtonClass]="'max-w-[100px]'"
+  [cancelButtonClass]="'w-[60px]'"
+  (onConfirm)="onSubmitClick()"
+  [isConfirmationDisabled]="!signature() || isProcessing()"
+>
+  <ng-container ngProjectAs="subTitle">
+    <p>Draw your signature using your mouse</p>
+  </ng-container>
+
+  <div class="flex justify-center items-center min-w-[600px]">
+    <div class="w-full">
+      <app-signature-pad (onSignatureChange)="onSignatureChange($event)" />
+    </div>
+  </div>
+</app-base-dialog>

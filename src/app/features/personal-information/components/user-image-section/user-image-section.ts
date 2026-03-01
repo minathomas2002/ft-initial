@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, output, signal } from '@angular/core';
 import { PersonalInformationCard } from '../personal-information-card/personal-information-card';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
@@ -19,11 +19,16 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 export class UserImageSection {
   private profileStore = inject(ProfileStore);
   image = computed(() => this.profileStore.userImage());
-  userName = computed(() => this.profileStore.userProfile()?.fullName ?? '');
+  userName = computed(() => this.profileStore.userProfile()?.nameEn ?? '');
   userTitle = computed(() => this.profileStore.userTitle());
   changeYourProfilePictureVisible = signal<boolean>(false);
+  onProfilePictureUpdated = output<void>();
 
   onAvatarEditClick(): void {
     this.changeYourProfilePictureVisible.set(true);
+  }
+
+  profilePictureUpdated(base64: string | null): void {
+    this.onProfilePictureUpdated.emit();
   }
 }

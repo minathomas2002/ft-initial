@@ -4,11 +4,13 @@
   [showConfirmButton]="true"
   [icon]="icon"
   [dialogTitle]="dialogTitle"
-  [isConfirmationDisabled]="!allowSaveAction()"
+  [isConfirmationDisabled]="!allowSaveAction() || profilePictureProcessing()"
   [confirmButtonClass]="'w-[80px]'"
   [cancelButtonClass]="'w-[60px]'"
   [confirmLabel]="confirmLabel"
+  [cancelLabel]="cancelLabel"
   (onConfirm)="onSaveUserPhoto()"
+  (onClose)="onCloseClick()"
 >
   <div class="flex flex-col gap-4 justify-center items-center min-w-[620px] py-10">
     <p-avatar
@@ -19,7 +21,7 @@
     <input
       #fileInput
       type="file"
-      accept="image/*"
+      accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
       class="hidden"
       (change)="onFileSelected($event)"
     />
@@ -37,6 +39,7 @@
         severity="danger"
         icon="icon-trash-2"
         text
+        [disabled]="!previewImageUrl()"
         (onClick)="onDeleteUserPhoto()"
       />
     </div>

@@ -1,15 +1,24 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { PersonalInformationCard } from '../personal-information-card/personal-information-card';
 import { SignaturePadComponent } from 'src/app/shared/components/plans/submission-confirmation-modal/signature-pad/signature-pad.component';
 import { EViewMode } from 'src/app/shared/enums';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { UploadSignatureModal } from './upload-signature-modal/upload-signature-modal';
+import { DrawSignatureModal } from './draw-signature-modal/draw-signature-modal';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { take } from 'rxjs';
+import { IUpdateSignatureRequest } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-signature-section',
   imports: [
     PersonalInformationCard,
-    SignaturePadComponent,
-    ButtonModule
+    ButtonModule,
+    DialogModule,
+    UploadSignatureModal,
+    DrawSignatureModal,
   ],
   templateUrl: './signature-section.html',
   styleUrl: './signature-section.scss',
@@ -18,10 +27,43 @@ import { ButtonModule } from 'primeng/button';
 export class SignatureSection {
   viewMode = input<EViewMode>(EViewMode.View);
   isViewMode = computed(() => this.viewMode() === EViewMode.View);
-  existingSignature = signal<string | null>(null);
+  private readonly profileStore = inject(ProfileStore);
+  private readonly toasterService = inject(ToasterService);
+  onSignatureUpdate = output<void>();
 
+  isSignatureProcessing = this.profileStore.signatureProcessing;
+  existingSignature = computed(() => this.profileStore.userProfile()?.signature || '');
 
-  onAddSignatureClick(): void { }
+  uploadSignatureModalVisible = signal<boolean>(false);
+  drawSignatureModalVisible = signal<boolean>(false);
+  signaturePreviewVisible = signal<boolean>(false);
 
-  onChangeSignatureClick(): void { }
+  onAddSignatureClick(): void {
+    this.drawSignatureModalVisible.set(true);
+  }
+
+  onChangeSignatureClick(): void {
+    this.uploadSignatureModalVisible.set(true);
+  }
+
+  onSubmitSignature(signature: string | null): void {
+    const userSignatureId = this.profileStore.userProfile()?.userSignatureId ?? '';
+    const signatureRequest: IUpdateSignatureRequest = {
+      userSignatureId: userSignatureId,
+      signatureBase64: signature ?? '',
+    }
+    this.profileStore.updateSignature(signatureRequest)
+      .pipe(take(1))
+      .subscribe((res) => {
+        if (res.success) {
+          this.toasterService.success('Signature updated successfully');
+          this.drawSignatureModalVisible.set(false);
+          this.uploadSignatureModalVisible.set(false);
+        }
+      });
+  }
+
+  onDeleteSignatureClick(): void {
+    this.onSubmitSignature('');
+  }
 }

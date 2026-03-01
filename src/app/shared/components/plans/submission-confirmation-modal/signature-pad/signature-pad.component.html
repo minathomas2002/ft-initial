@@ -1,4 +1,15 @@
 <div class="signature-pad-container">
+  <div class="flex justify-between items-center">
+    <h3 class="text-sm font-medium text-gray-700">Draw your signature</h3>
+    <p-button
+      (onClick)="clearSignature()"
+      [outlined]="true"
+      [label]="'plans.submission.clear' | translate"
+      severity="danger"
+      text
+      [disabled]="!canClearSignature()"
+    />
+  </div>
 
   @if (existingSignature() && !showCanvas()) {
   <div class="existing-signature-container">
@@ -14,7 +25,7 @@
       [outlined]="true"
     />
   </div>
-  } @else {    
+  } @else {
   <div class="signature-canvas-container">
     <div class="canvas-wrapper">
       <canvas
@@ -29,14 +40,6 @@
         (touchend)="onTouchEnd()"
       ></canvas>
     </div>
-    <p class="signature-placeholder">{{ 'plans.submission.signaturePlaceholder' | translate }}</p>
-    <p-button
-      [label]="'plans.submission.clear' | translate"
-      severity="secondary"
-      (onClick)="clearSignature()"
-      [outlined]="true"
-      [disabled]="!canClearSignature()"
-    />
   </div>
   }
 </div>
