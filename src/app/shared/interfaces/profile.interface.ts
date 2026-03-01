@@ -8,4 +8,5 @@ export interface IProfileResponse {
   benaId: string | null;
   signature: string | null;
   secRegisteredId: string | null;
+  countryCode: string | null;
 }

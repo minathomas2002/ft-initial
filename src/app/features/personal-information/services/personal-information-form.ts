@@ -45,8 +45,14 @@ export class PersonalInformationFormService {
     this.personalInformationForm.patchValue({
       fullName: user.fullName,
       email: user.email,
-      phoneNumber: parsePhoneNumber(user.phoneNumber),
-      otherPhoneNumber: parsePhoneNumber(user.otherPhoneNumber ?? '') ?? null,
+      phoneNumber: {
+        countryCode: user.countryCode ?? '',
+        phoneNumber: user.phoneNumber,
+      },
+      otherPhoneNumber: user.otherPhoneNumber ? {
+        countryCode: user.countryCode ?? '',
+        phoneNumber: user.otherPhoneNumber,
+      } : null,
       benaId: user.benaId,
       secRegisteredId: user.secRegisteredId,
     });
