@@ -14,13 +14,13 @@ export class DelegationsActionsMapper {
   private _actionDefinitions: Record<EDelegationActions, TActionDefinition> = {
 
     [EDelegationActions.DELETE]: {
-      labelKey: "delegations.actions.delete",
+      labelKey: "delegation.actions.delete",
     },
     [EDelegationActions.CANCEL]: {
-      labelKey: "delegations.actions.cancel",
+      labelKey: "delegation.actions.cancel",
     },
     [EDelegationActions.Update]: {
-      labelKey: "delegations.actions.update",
+      labelKey: "delegation.actions.edit",
     }
   };
 

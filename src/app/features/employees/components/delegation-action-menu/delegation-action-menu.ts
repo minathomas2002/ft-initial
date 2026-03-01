@@ -20,22 +20,20 @@ export class DelegationActionMenu {
   disabled = input<boolean>(false);
   selectedItem = signal<string | null>(null);
   private readonly _i18n = inject(I18nService);
-  employeesActionsMapper = new DelegationsActionsMapper(this._i18n);
+  delegationsActionsMapper = new DelegationsActionsMapper(this._i18n);
 
-  OnCancelled = output();
+  onCancel = output();
   onDelete = output();
   onEdit = output();
-  onView = output();
-  onDeactivate = output();
 
   handleEventsMapper = {
+    [EDelegationActions.CANCEL]: this.onCancel,
     [EDelegationActions.Update]: this.onEdit,
     [EDelegationActions.DELETE]: this.onDelete,
-    [EDelegationActions.CANCEL]: this.OnCancelled,
   };
 
   menuItems = computed<MenuItem[]>(() => {
-    return this.employeesActionsMapper
+    return this.delegationsActionsMapper
       .getActions(this.actions())
       .map((mItem) => {
         return {

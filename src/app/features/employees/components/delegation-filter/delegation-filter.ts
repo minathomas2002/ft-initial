@@ -73,5 +73,10 @@ export class DelegationFilter {
     this.delegationFilterService.updateFilterSignal({ searchText: '' });
     this.delegationFilterService.applyFilter();
   }
+  onClearFilters() {
+     this.delegationFilterService.clearAllFilters();
+    this.delegationFilterService.updateFilterSignal({ searchText: '' });
+    this.delegationFilterService.clearAllFilters();
+  }
 }
 

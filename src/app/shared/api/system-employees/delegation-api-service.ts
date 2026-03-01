@@ -29,4 +29,11 @@ export class DelegationApiService  {
     return this.baseHttpService.get<ActiveEmployee[], unknown>(API_ENDPOINTS.systemEmployees.Delegation.getActiveEmployees);
   }
 
+  deleteDelegation(id: string): Observable<IBaseApiResponse<unknown>> {
+    return this.baseHttpService.post<unknown, { delegationId: string }, unknown>(API_ENDPOINTS.systemEmployees.Delegation.deleteDelegation, { delegationId: id });
+  }
+
+  cancleDelegation(id: string): Observable<IBaseApiResponse<unknown>> {
+    return this.baseHttpService.post<unknown, { delegationId: string }, unknown>(API_ENDPOINTS.systemEmployees.Delegation.cancelDelegation, { delegationId: id });
+  }
 }

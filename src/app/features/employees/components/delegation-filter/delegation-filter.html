@@ -33,5 +33,19 @@
       ></p-datepicker>
     </div>
   </div>
+
+  @if(delegationFilterService.showClearAll()) {
+  <div class="col-span-12 md:col-span-2">
+    <div class="flex flex-col">
+      <p-button
+        [label]="'plans.filter.reset' | translate"
+        [severity]="'secondary'"
+        (click)="onClearFilters()"
+        [styleClass]="'w-full'"
+      ></p-button>
+    </div>
+  </div>
+  }
 </div>
+
 

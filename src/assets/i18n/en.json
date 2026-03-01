@@ -461,6 +461,50 @@
     }
   },
   "delegation": {
+    "status": {
+      "active": "Active",
+      "cancelled": "Cancelled",
+      "expired": "Expired",
+      "upcoming": "Upcoming"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "dialog": {
+      "addTitle": "Add Delegation",
+      "editTitle": "Edit Delegation",
+      "subTitle": "Delegate your tasks to another employee during your absence",
+      "delegator": "Delegator",
+      "delegatee": "Delegatee",
+      "startDate":"Start Date",
+      "endDate": "End Date",
+      "status": "Status",
+      "confirmButton": "Submit",
+      "delegatorRequired":"Delegator is required",
+      "delegateeRequired":"Delegatee is required",
+      "startDateRequired":"Start date is required",
+      "endDateRequired":"End date is required",
+      "delegatorPlaceHolder" : "Select delegator",
+      "delegateePlaceHolder" : "Select delegatee",
+      "delete":{
+        "title" : "Are you sure you want to delete this Delegation?",
+        "description" : "This action cannot be undone. Once deleted, all related data will be permanently removed."
+      },
+      "cancel":{
+        "title" : "Are you sure you want to cancel this Delegation?",
+        "description" : "Canceling the delegation will end the delegation immediately"
+
+      },
+      "edit":{
+        "editTitle": "Edit Delegation"
+      },
+      "add":{
+        "addTitle": "Add Delegation"
+      }
+
+    },
     "list":{
       "addDelegation": "Add Delegation"
     },
@@ -480,6 +524,12 @@
       "updatedAt" : "Updated At",
       "status": "Status",
       "actions": "Actions"
+    },
+    "messages": {
+      "AddedSuccess": "Delegation Added Successfully",
+      "UpdatedSuccess": "Delegation Updated Successfully",
+      "deleteSuccess": "Delegation Deleted Successfully",
+      "cancelSuccess": "Delegation Cancelled Successfully"
     }
   },
   "investors": {

@@ -23,7 +23,7 @@ export class EmployeesView {
   usersStore = inject(SystemEmployeesStore);
   roleStore = inject(RolesStore);
   createEmpDialogVisible = signal<boolean>(false);
-  createDelegationDialogVisible = signal<boolean>(false);
+  AddEditDelegationDialogVisible = signal<boolean>(false);
   filterService = inject(EmployeesFilterService);
   delegationFilterService = inject(DelegationFilterService);
   activeTab = signal<string>('0');
@@ -40,10 +40,11 @@ export class EmployeesView {
     this.filterService.applyFilter()
   }
 
-  onAddDelegation() {
-    this.createDelegationDialogVisible.set(true);
+  onAddEditDelegation() {
+    this.AddEditDelegationDialogVisible.set(true);
    }
    onAddDelegationSuccess() {
     this.delegationFilterService.applyFilter()
    }
+
 }

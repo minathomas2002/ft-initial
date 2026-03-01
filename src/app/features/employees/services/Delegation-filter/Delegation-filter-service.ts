@@ -21,11 +21,17 @@ export class DelegationFilterService extends AbstractServiceFilter<IDelegationFi
     };
   });
 
+
+
   performFilter$() {
     this.resetPagination();
     return this.store.getDelegationList(this.adaptedFilter());
   }
 
+  showClearAll(): boolean {
+    const currentFilter = this.filter();
+    return !!(currentFilter.searchText || (currentFilter.status && currentFilter.status.length > 0) || currentFilter.delegationDateFrom || currentFilter.delegationDateTo);
+  }
   clearAllFilters() {
     this.clearAll();
     this.applyFilter();

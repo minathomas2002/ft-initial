@@ -27,6 +27,10 @@ import { DelegationFilterService } from '../../services/Delegation-filter/Delega
 import { DelegationFilter } from "../../components/delegation-filter/delegation-filter";
 import { DelegationActionMenu } from "../../components/delegation-action-menu/delegation-action-menu";
 import { DelegationStatusMapper } from '../../classes/delegation-status-mapper';
+import { row } from '@primeuix/themes/aura/datatable';
+import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
+import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
+import { AddEditDelegationDialog } from "../../components/add-edit-delegation-dialog/add-edit-delegation-dialog";
 
 @Component({
   selector: 'app-delegation',
@@ -40,7 +44,10 @@ import { DelegationStatusMapper } from '../../classes/delegation-status-mapper';
     DatePipe,
     ButtonModule,
     DelegationFilter,
-    DelegationActionMenu
+    DelegationActionMenu,
+    GeneralConfirmationDialogComponent,
+    TranslatePipe,
+    AddEditDelegationDialog
 ],
   templateUrl: './delegation.html',
   styleUrl: './delegation.scss',
@@ -106,7 +113,7 @@ export class Delegation implements OnInit {
     ];
   });
 
-  EditEmpDialogVisible = signal<boolean>(false);
+  EditDialogVisible = signal<boolean>(false);
   rows = computed<IDelegationRecord[]>(() => this.delegationStore.list());
   filterService = inject(DelegationFilterService);
   filter = this.filterService.filter;
@@ -114,11 +121,12 @@ export class Delegation implements OnInit {
   delegationStatusMapper = new DelegationStatusMapper(this.i18nService);
   ToasterService = inject(ToasterService);
   deleteDialogVisible = signal<boolean>(false);
-  deactivateDialogVisible = signal<boolean>(false);
+  cancelDialogVisible = signal<boolean>(false);
   isProcessing = this.delegationStore.isProcessing;
 
   ngOnInit(): void {
     this.filterService.applyFilter();
+
   }
 
 
@@ -126,23 +134,54 @@ export class Delegation implements OnInit {
     return this.delegationStatusMapper.getStatus(status);
   }
 
-  onDelete(item: IUser) {
+  onDelete(item: IDelegationRecord) {
+    this.delegation.set(item);
     this.deleteDialogVisible.set(true);
   }
   onDeleteConfirm() {
+    const delegation = this.delegation();
+    if (delegation) {
+      this.delegationStore.deleteDelegation(delegation.delgationId).subscribe({
+        next: () => {
+          this.ToasterService.success(this.i18nService.translate('delegation.messages.deleteSuccess'));
+          this.filterService.applyFilterWithPaging();
+        }
+      });
+    }
     this.deleteDialogVisible.set(false);
+  }
+
+
+  onCancelDelegate(item: IDelegationRecord) {
+    this.delegation.set(item);
+    this.cancelDialogVisible.set(true);
+  }
+  onCancelConfirm() {
+    const delegation = this.delegation();
+    if (delegation) {
+      this.delegationStore.cancelDelegation(delegation.delgationId).subscribe({
+        next: () => {
+          this.ToasterService.success(this.i18nService.translate('delegation.messages.cancelSuccess'));
+          this.filterService.applyFilterWithPaging();
+        }
+      });
+    }
+    this.cancelDialogVisible.set(false);
   }
 
 
 
   onUpdateDelegate(item: IDelegationRecord  ) {
     this.delegation.set(item);
-    this.EditEmpDialogVisible.set(true);
+    this.EditDialogVisible.set(true);
   }
 
-  onUpdateDelegateSuccess() {
+  onUpdateDelegationSuccess() {
+    this.EditDialogVisible.set(false);
+    this.delegation.set(null);
     this.filterService.applyFilterWithPaging();
   }
+
 
 
 }

@@ -20,6 +20,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import {
   ActiveEmployee,
   IAddDelegationRequest,
+  IDelegationRecord,
 } from 'src/app/shared/interfaces/delegation.interface';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SelectModule } from 'primeng/select';
@@ -47,6 +48,7 @@ export class AddEditDelegationDialog implements OnInit {
   onSuccess = output<void>();
   destroyRef = inject(DestroyRef);
   jobIdErrorMessage = signal<string | null>(null);
+  SelectedItem = model<IDelegationRecord | null>();
 
   dialogVisible = model<boolean>(false);
   isEditMode = input<boolean>(false);
@@ -56,7 +58,6 @@ export class AddEditDelegationDialog implements OnInit {
   isLoadingDetails = this.delegationStore.isLoadingDetails;
   toasterService = inject(ToasterService);
 
-  activeEmployee = signal(null);
   i18nService = inject(I18nService);
 
   employees = this.delegationStore.activeEmployees;
@@ -86,11 +87,19 @@ export class AddEditDelegationDialog implements OnInit {
     return date ? [date] : [];
   });
 
+
   ngOnInit() {
+
     this.loadEmployees();
+
   }
+
   private loadEmployees() {
-    this.delegationStore.getActiveEmployees().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+    this.delegationStore.getActiveEmployees().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res=>{
+       if (this.isEditMode()) {
+          this.LoadDelegationDetails();
+        }
+    });
   }
   onConfirm() {
     this.submitNewDelegation();
@@ -102,6 +111,23 @@ export class AddEditDelegationDialog implements OnInit {
   getControl(controlName: string): FormControl {
     return this.formService.form.get(controlName) as FormControl;
   }
+
+  LoadDelegationDetails() {
+    const delegation = this.SelectedItem();
+
+    if (delegation) {
+      this.formService.form.patchValue({
+        id: delegation.delgationId,
+        delegatorId: delegation.delegatorId,
+        delegateeId: delegation.delegateeId,
+        from: new Date(delegation.startDate),
+        to: new Date(delegation.endDate),
+      });
+      this.formService.form.updateValueAndValidity();
+    }
+  }
+
+
 
   private submitNewDelegation() {
     const form = this.formService.form;
@@ -116,9 +142,10 @@ export class AddEditDelegationDialog implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.toasterService.success(this.i18nService.translate('delegation.add.successMessage'));
+          this.toasterService.success(this.i18nService.translate('delegation.messages.AddedSuccess'));
           this.onSuccess.emit();
           this.dialogVisible.set(false);
+          this.formService.ResetFormFields();
         },
         error: (error: any) => {
         },

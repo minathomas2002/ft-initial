@@ -26,7 +26,7 @@
             <span
               [pTooltip]="item.delegatorName"
               tooltipPosition="top"
-            >{{ item.delegator }}</span>
+            >{{ item.delegatorName }}</span>
           </td>
 
           <!-- Delegatee -->
@@ -34,7 +34,7 @@
             <span
               [pTooltip]="item.delegateeName"
               tooltipPosition="top"
-            >{{ item.delegatee }}</span>
+            >{{ item.delegateeName }}</span>
           </td>
 
           <!-- Start Date -->
@@ -84,10 +84,11 @@
           <!-- Action Menu -->
           <td>
             <app-delegation-action-menu
-              [actions]="item.actions"
-              [disabled]="item.actions.length == 0"
+              [actions]="item.delegationActions"
+              [disabled]="item.delegationActions.length == 0"
               (onDelete)="onDelete(item)"
               (onEdit)="onUpdateDelegate(item)"
+              (onCancel)="onCancelDelegate(item)"
             ></app-delegation-action-menu>
           </td>
         </ng-template>
@@ -95,3 +96,37 @@
     </app-table-skeleton>
   </ng-container>
 </app-table-layout>
+
+
+@if(EditDialogVisible()){
+<app-add-edit-delegation-dialog
+  [(dialogVisible)]="EditDialogVisible"
+  [isEditMode]="true"
+  (onSuccess)="onUpdateDelegationSuccess()"
+  [SelectedItem]="delegation() ?? null"
+  >
+</app-add-edit-delegation-dialog>
+}
+
+<app-general-confirmation-dialog
+  [(visible)]="deleteDialogVisible"
+  (onConfirm)="onDeleteConfirm()"
+  [icon]="'icon-trash-2'"
+  [title]="'delegation.dialog.delete.title' | translate"
+  [description]="'delegation.dialog.delete.description' | translate"
+  (confirmed)="onDeleteConfirm()"
+  [confirmButtonSeverity]="'danger'"
+  [confirmationLabel]="'dialog.delete' | translate"
+></app-general-confirmation-dialog>
+
+
+<app-general-confirmation-dialog
+  [(visible)]="cancelDialogVisible"
+  (onConfirm)="onCancelConfirm()"
+  [icon]="'slash-circle-01'"
+  [title]="'delegation.dialog.cancel.title' | translate"
+  [description]="'delegation.dialog.cancel.description' | translate"
+  (confirmed)="onCancelConfirm()"
+  [confirmButtonSeverity]="'danger'"
+  [confirmationLabel]="'dialog.cancel' | translate"
+></app-general-confirmation-dialog>

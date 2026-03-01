@@ -28,11 +28,11 @@ export class DelegationStatusMapper {
       },
       [EDelegationStatus.EXPIRED]: {
         title: this.i18nService.translate(this._statusTranslationMap[EDelegationStatus.EXPIRED]),
-        color: "orange",
+        color: "gray",
       },
       [EDelegationStatus.UPCOMING]: {
         title: this.i18nService.translate(this._statusTranslationMap[EDelegationStatus.UPCOMING]),
-        color: "blue",
+        color: "yellow",
       }
     };
   }
@@ -60,7 +60,7 @@ export class DelegationStatusMapper {
 
   getStatus(status: string): { title: string; color: TColors } {
     const statusMap = this.mapDelegationStatusColor();
-    const statusKey = status.toLowerCase() as EDelegationStatus;
+    const statusKey = parseInt(status) as EDelegationStatus;
     return statusMap[statusKey] || {
       title: status,
       color: 'gray' as const,

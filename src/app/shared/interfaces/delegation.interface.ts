@@ -3,6 +3,7 @@ import { IFilterBase } from "./filter.interface";
 export type DelegationStatus = "Upcoming" | "Active" | "Cancelled" | "Expired";
 
 export interface IAddDelegationRequest {
+  id?: string| null;
   delegatorId: string;
   delegateeId: string;
   from: string;
@@ -14,11 +15,11 @@ export interface ActiveEmployee{
   role:number;
 }
 export interface IDelegationRecord {
-  id: number;
+  delgationId: string;
   delegatorName: string;
-  delegatorId: string;
+  delegatorId?: string| null;
   delegateeName: string;
-  delegateeId: string;
+  delegateeId?: string| null;
   startDate: string;
   endDate: string;
   createdAt: string;
@@ -26,7 +27,7 @@ export interface IDelegationRecord {
   updatedBy: string;
   updatedAt: string;
   status: DelegationStatus;
-  actions: EDelegationActions[];
+  delegationActions: EDelegationActions[];
 }
 export type TDelegationSortingKeys = keyof IDelegationRecord;
 

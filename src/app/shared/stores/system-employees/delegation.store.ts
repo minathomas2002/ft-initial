@@ -38,7 +38,7 @@ export const DelegationStore = signalStore(
           map((res) => {
             res.body.data = res.body.data.map((item: IDelegationRecord) => ({
               ...item,
-              actions: item.actions || [],
+              delegationActions: item.delegationActions || [],
             }));
             return res;
           }),
@@ -88,7 +88,33 @@ export const DelegationStore = signalStore(
           return throwError(() => new Error('Error fetching active employees'));
         }),
       );
-    }
+    },
+
+    deleteDelegation(id: string) {
+        patchState(store, { isProcessing: true, error: null });
+        return delegationApiService.deleteDelegation(id).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            return throwError(() => new Error(error.errorMessage || 'Error deleting delegation'));
+          }),
+        );
+      },
+
+      cancelDelegation(id: string) {
+        patchState(store, { isProcessing: true, error: null });
+        return delegationApiService.cancleDelegation(id).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            return throwError(() => new Error(error.errorMessage || 'Error canceling delegation'));
+          }),
+        );
+      }
+
+
     };
   }),
   withMethods((store) => {

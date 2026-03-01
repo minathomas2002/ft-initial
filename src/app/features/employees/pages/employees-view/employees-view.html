@@ -21,7 +21,7 @@
       class="flex"
       fluid
       icon="icon-plus"
-      (onClick)="onAddDelegation()"
+      (onClick)="onAddEditDelegation()"
     />
     }
   </div>
@@ -74,9 +74,9 @@
   </app-add-edit-employee-dialog>
   }
 
-  @if(createDelegationDialogVisible()){
+  @if(AddEditDelegationDialogVisible()){
   <app-add-edit-delegation-dialog
-    [(dialogVisible)]="createDelegationDialogVisible"
+    [(dialogVisible)]="AddEditDelegationDialogVisible"
     [isEditMode]="false"
     (onSuccess)="onAddDelegationSuccess()"
   >
