@@ -1,0 +1,72 @@
+import { ChangeDetectionStrategy, Component, effect, inject, model } from '@angular/core';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PasswordPolicy, passwordPolicyValidator } from 'src/app/features/authentication/components/password-policy/password-policy';
+import { passwordMatchValidator } from 'src/app/features/authentication/validators/password-match-validator';
+import { BaseDialogComponent } from 'src/app/shared/components/base-components/base-dialog/base-dialog.component';
+import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
+import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
+import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
+
+@Component({
+  selector: 'app-change-password',
+  imports: [
+    BaseDialogComponent,
+    ReactiveFormsModule,
+    BaseLabelComponent,
+    BaseErrorComponent,
+    PasswordToggleComponent,
+    PasswordPolicy,
+  ],
+  templateUrl: './change-password.html',
+  styleUrl: './change-password.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ChangePassword {
+  constructor() {
+    effect(() => {
+      if (this.visible()) {
+        this.changePasswordForm.reset();
+      }
+    })
+  }
+
+  private readonly fb = inject(FormBuilder);
+
+  visible = model<boolean>(false);
+  changePasswordForm = this.fb.group(
+    {
+      currentPassword: ['', [Validators.required]],
+      password: ['', [Validators.required, passwordPolicyValidator()]],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: passwordMatchValidator }
+  );
+
+  get currentPassword(): FormControl<string | null> {
+    return this.changePasswordForm.get('currentPassword') as FormControl<string | null>;
+  }
+
+  get password(): FormControl<string | null> {
+    return this.changePasswordForm.get('password') as FormControl<string | null>;
+  }
+
+  get confirmPassword(): FormControl<string | null> {
+    return this.changePasswordForm.get('confirmPassword') as FormControl<string | null>;
+  }
+
+  onCancel(): void {
+    this.changePasswordForm.reset();
+    this.visible.set(false);
+  }
+
+  onConfirm(): void {
+    if (this.changePasswordForm.invalid) {
+      this.changePasswordForm.markAllAsTouched();
+      return;
+    }
+
+    // TODO: wire API call
+    this.changePasswordForm.reset();
+    this.visible.set(false);
+  }
+}
