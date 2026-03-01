@@ -12,11 +12,13 @@ const initialState: {
   userProfile: IProfileResponse | null;
   signatureProcessing: boolean;
   personalInfoProcessing: boolean;
+  profilePictureProcessing: boolean;
 } = {
   loading: false,
   userProfile: null,
   signatureProcessing: false,
   personalInfoProcessing: false,
+  profilePictureProcessing: false,
 }
 export const ProfileStore = signalStore(
   { providedIn: 'root' },

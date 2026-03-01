@@ -59,7 +59,7 @@ export class AttachmentService {
    * @param file - The image file to resize
    * @returns Promise resolving to the resized File or the original if smaller than 120x120
    */
-  resizeImages(file: File): Promise<File> {
+  resizeImages(file: File, targetSize: number = this.TARGET_SIZE): Promise<File> {
     return new Promise((resolve, reject) => {
       if (!file.type.startsWith('image/')) {
         resolve(file);

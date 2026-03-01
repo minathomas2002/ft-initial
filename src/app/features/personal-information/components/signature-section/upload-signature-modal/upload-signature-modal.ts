@@ -32,7 +32,7 @@ export class UploadSignatureModal {
   }
 
   onSubmitClick(): void {
-    this.attachmentService.resizeImages(this.files()[0]).then((res) => {
+    this.attachmentService.resizeImages(this.files()[0], 300).then((res) => {
       this.attachmentService.fileToBase64(res).then((base64) => {
         this.onSubmitSignature.emit(base64);
       });

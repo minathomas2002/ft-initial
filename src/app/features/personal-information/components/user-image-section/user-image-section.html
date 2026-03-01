@@ -21,4 +21,5 @@
 <app-change-your-profile-picture-modal
   [(visible)]="changeYourProfilePictureVisible"
   [image]="image()"
+  (onProfilePictureUpdated)="profilePictureUpdated($event)"
 ></app-change-your-profile-picture-modal>
