@@ -7,8 +7,7 @@
   [confirmButtonClass]="'max-w-[100px]'"
   [cancelButtonClass]="'w-[60px]'"
   (onConfirm)="onSubmitClick()"
-  (onCancel)="handleCancel()"
-  [isConfirmationDisabled]="!signature()"
+  [isConfirmationDisabled]="!signature() || isProcessing()"
 >
   <ng-container ngProjectAs="subTitle">
     <p>Draw your signature using your mouse</p>

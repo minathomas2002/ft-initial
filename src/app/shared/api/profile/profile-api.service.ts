@@ -14,4 +14,8 @@ export class ProfileApiService {
   getUserProfile(): Observable<IBaseApiResponse<IProfileResponse>> {
     return this.http.get<IBaseApiResponse<IProfileResponse>>(`${this.baseUrl}/${API_ENDPOINTS.profile.me}`);
   }
+
+  updateSignature(signature: string | null): Observable<IBaseApiResponse<boolean>> {
+    return this.http.post<IBaseApiResponse<boolean>>(`${this.baseUrl}/${API_ENDPOINTS.profile.signature}`, { signatureBase64: signature });
+  }
 }

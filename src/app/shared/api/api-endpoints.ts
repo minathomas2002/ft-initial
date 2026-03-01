@@ -57,6 +57,7 @@ export const API_ENDPOINTS = {
   },
   profile: {
     me: `${Profile}/me`,
+    signature: `${Profile}/signature`,
   },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,

@@ -34,13 +34,36 @@
       text
       (onClick)="onDeleteSignatureClick()"
     />
-    <div class="md:max-w-[50%]">
-      <p-image
-        [src]="'assets/images/opportunity-1.png'"
+    <div
+      class="md:max-w-[50%] cursor-pointer"
+      (click)="signaturePreviewVisible.set(true)"
+    >
+      <img
+        [src]="existingSignature()"
         alt="Signature"
-        [preview]="true"
+        class="w-full rounded-lg object-contain"
       />
     </div>
+    <p-dialog
+      [visible]="signaturePreviewVisible()"
+      (visibleChange)="signaturePreviewVisible.set($event)"
+      header="Your Signature"
+      [modal]="true"
+      [closable]="true"
+      [closeOnEscape]="true"
+      [dismissableMask]="true"
+      [style]="{ width: '60vw' }"
+      [contentStyle]="{ 'background': 'white', 'padding': '0 1.5rem'}"
+      styleClass="rounded-lg shadow-lg overflow-hidden"
+    >
+      <div class="flex justify-center items-center min-h-[200px] bg-white border-t border-gray-200">
+        <img
+          [src]="existingSignature()"
+          alt="Signature"
+          class="max-w-full max-h-[400px] object-contain"
+        />
+      </div>
+    </p-dialog>
   </div>
   }
 </app-personal-information-card>
@@ -50,6 +73,7 @@
   (onSubmitSignature)="onSubmitSignature($event)"
 />
 <app-draw-signature-modal
+  [isProcessing]="isSignatureProcessing()"
   [(visible)]="drawSignatureModalVisible"
   (onSubmitSignature)="onSubmitSignature($event)"
 />

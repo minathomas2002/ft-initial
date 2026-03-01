@@ -3,15 +3,17 @@ import { patchState, signalStore, withComputed, withMethods, withState } from "@
 import { RoleService } from "../../services/role/role-service";
 import { ERoles } from "../../enums";
 import { ProfileApiService } from "../../api/profile/profile-api.service";
-import { IProfileResponse } from "../../interfaces";
-import { finalize, tap } from "rxjs";
+import { IBaseApiResponse, IProfileResponse } from "../../interfaces";
+import { finalize, Observable, tap } from "rxjs";
 
 const initialState: {
   loading: boolean;
   userProfile: IProfileResponse | null;
+  signatureProcessing: boolean;
 } = {
   loading: false,
   userProfile: null,
+  signatureProcessing: false,
 }
 export const ProfileStore = signalStore(
   { providedIn: 'root' },
@@ -40,6 +42,15 @@ export const ProfileStore = signalStore(
           })
         );
       },
+
+      updateSignature(signature: string | null): Observable<IBaseApiResponse<boolean>> {
+        patchState(store, { signatureProcessing: true });
+        return profileApiService.updateSignature(signature).pipe(
+          finalize(() => {
+            patchState(store, { signatureProcessing: false });
+          })
+        );
+      }
     };
   })
 );

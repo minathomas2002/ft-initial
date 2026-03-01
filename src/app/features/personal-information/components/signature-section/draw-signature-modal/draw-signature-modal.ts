@@ -16,6 +16,7 @@ import { SignaturePadComponent } from 'src/app/shared/components/plans/submissio
 })
 export class DrawSignatureModal {
   visible = model<boolean>(false);
+  isProcessing = input(false);
   onSubmitSignature = output<string | null>();
 
   icon = signal<string>('icon-edit-04');
@@ -27,14 +28,7 @@ export class DrawSignatureModal {
     this.signature.set(signature);
   }
 
-  handleCancel(): void {
-    this.visible.set(false);
-  }
-  handleSubmit(): void {
-    this.onSubmitSignature.emit('');
-  }
-
   onSubmitClick(): void {
-    this.onSubmitSignature.emit('');
+    this.onSubmitSignature.emit(this.signature());
   }
 }
