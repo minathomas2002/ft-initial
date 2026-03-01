@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, output, signal } from '@angular/core';
 import { PersonalInformationCard } from '../personal-information-card/personal-information-card';
 import { PersonalInformationFormField } from '../personal-information-form-field/personal-information-form-field';
 import { PersonalInformationSkeleton } from '../personal-information-skeleton/personal-information-skeleton';
@@ -11,6 +11,8 @@ import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { IUpdatePersonalInfoRequest } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-personal-information-section',
@@ -31,6 +33,7 @@ import { take } from 'rxjs';
 })
 export class PersonalInformationSection implements OnInit {
   private profileStore = inject(ProfileStore);
+  private toasterService = inject(ToasterService);
   private cdr = inject(ChangeDetectorRef);
   protected formService = inject(PersonalInformationFormService);
   protected viewMode = signal<EViewMode>(EViewMode.View);
@@ -39,6 +42,8 @@ export class PersonalInformationSection implements OnInit {
   protected userProfile = computed(() => this.profileStore.userProfile());
   protected userID = computed(() => this.profileStore.userID());
   protected RoleName = computed(() => this.profileStore.RoleName());
+  protected personalInfoProcessing = computed(() => this.profileStore.personalInfoProcessing());
+  protected onPersonalInfoUpdate = output<void>();
 
   /** When true, shows skeleton placeholders; when false, shows the form. Wire to your data loading state. */
   isLoading = computed(() => this.profileStore.loading());
@@ -68,5 +73,25 @@ export class PersonalInformationSection implements OnInit {
     this.formService.updateViewMode(this.viewMode());
     this.cdr.markForCheck();
     queueMicrotask(() => this.cdr.markForCheck());
+  }
+
+  onSubmit(): void {
+    const request: IUpdatePersonalInfoRequest = {
+      fullName: this.formService.fullName.value ?? '',
+      countryCode: this.formService.phoneNumber.value?.countryCode ?? '',
+      phoneNumber: this.formService.phoneNumber.value?.phoneNumber ?? '',
+      otherPhoneNumber: this.formService.otherPhoneNumber.value?.phoneNumber ?? '',
+      secRegisteredId: this.formService.secRegisteredId.value ?? '',
+      otherPhoneCountryCode: this.formService.otherPhoneNumber.value?.countryCode ?? '',
+    }
+    this.profileStore.updatePersonalInfo(request).pipe(take(1))
+      .subscribe((res) => {
+        if (res.success) {
+          this.toasterService.success('Profile updated successfully');
+          this.onPersonalInfoUpdate.emit();
+          this.viewMode.set(EViewMode.View);
+          this.formService.updateViewMode(this.viewMode());
+        }
+      });
   }
 }

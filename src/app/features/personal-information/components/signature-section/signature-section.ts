@@ -8,6 +8,8 @@ import { UploadSignatureModal } from './upload-signature-modal/upload-signature-
 import { DrawSignatureModal } from './draw-signature-modal/draw-signature-modal';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { take } from 'rxjs';
+import { IUpdateSignatureRequest } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-signature-section',
@@ -45,12 +47,19 @@ export class SignatureSection {
   }
 
   onSubmitSignature(signature: string | null): void {
-    this.profileStore.updateSignature(signature).subscribe((res) => {
-      if (res.success) {
-        this.toasterService.success('Signature updated successfully');
-        this.drawSignatureModalVisible.set(false);
-      }
-    });
+    const userSignatureId = this.profileStore.userProfile()?.userSignatureId ?? '';
+    const signatureRequest: IUpdateSignatureRequest = {
+      userSignatureId: userSignatureId,
+      signatureBase64: signature ?? '',
+    }
+    this.profileStore.updateSignature(signatureRequest)
+      .pipe(take(1))
+      .subscribe((res) => {
+        if (res.success) {
+          this.toasterService.success('Signature updated successfully');
+          this.drawSignatureModalVisible.set(false);
+        }
+      });
   }
 
   onDeleteSignatureClick(): void {

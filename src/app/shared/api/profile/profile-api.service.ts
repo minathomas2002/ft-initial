@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IBaseApiResponse, IProfileResponse } from '../../interfaces';
+import { IBaseApiResponse, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateSignatureRequest } from '../../interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -15,7 +15,11 @@ export class ProfileApiService {
     return this.http.get<IBaseApiResponse<IProfileResponse>>(`${this.baseUrl}/${API_ENDPOINTS.profile.me}`);
   }
 
-  updateSignature(signature: string | null): Observable<IBaseApiResponse<boolean>> {
-    return this.http.post<IBaseApiResponse<boolean>>(`${this.baseUrl}/${API_ENDPOINTS.profile.signature}`, { signatureBase64: signature });
+  updateSignature(request: IUpdateSignatureRequest): Observable<IBaseApiResponse<boolean>> {
+    return this.http.post<IBaseApiResponse<boolean>>(`${this.baseUrl}/${API_ENDPOINTS.profile.signature}`, request);
+  }
+
+  updatePersonalInfo(request: IUpdatePersonalInfoRequest): Observable<IBaseApiResponse<boolean>> {
+    return this.http.post<IBaseApiResponse<boolean>>(`${this.baseUrl}/${API_ENDPOINTS.profile.updatePersonalInfo}`, request);
   }
 }

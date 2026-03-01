@@ -5,7 +5,8 @@
   [hideFooter]="!isInvestor()"
   (onEditClick)="onEditClick()"
   (onCancelClicked)="onCancelClick()"
-  [submitActionDisabled]="isLoading()"
+  (onSubmit)="onSubmit()"
+  [submitActionDisabled]="isLoading() || personalInfoProcessing()"
 >
   <app-personal-information-skeleton
     [numberOfFields]="6"

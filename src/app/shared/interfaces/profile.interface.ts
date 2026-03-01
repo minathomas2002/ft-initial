@@ -12,3 +12,17 @@ export interface IProfileResponse {
   countryCode: string;
   otherPhoneCountryCode: string;
 }
+
+export interface IUpdateSignatureRequest {
+  userSignatureId: string;
+  signatureBase64: string;
+}
+
+export interface IUpdatePersonalInfoRequest {
+  fullName: string;
+  countryCode: string;
+  phoneNumber: string;
+  otherPhoneNumber: string;
+  secRegisteredId: string;
+  otherPhoneCountryCode: string;
+}

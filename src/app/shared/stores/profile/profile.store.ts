@@ -3,7 +3,7 @@ import { patchState, signalStore, withComputed, withMethods, withState } from "@
 import { RoleService } from "../../services/role/role-service";
 import { ERoles } from "../../enums";
 import { ProfileApiService } from "../../api/profile/profile-api.service";
-import { IBaseApiResponse, IProfileResponse } from "../../interfaces";
+import { IBaseApiResponse, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateSignatureRequest } from "../../interfaces";
 import { finalize, Observable, tap } from "rxjs";
 import { AuthStore } from "../auth/auth.store";
 
@@ -11,10 +11,12 @@ const initialState: {
   loading: boolean;
   userProfile: IProfileResponse | null;
   signatureProcessing: boolean;
+  personalInfoProcessing: boolean;
 } = {
   loading: false,
   userProfile: null,
   signatureProcessing: false,
+  personalInfoProcessing: false,
 }
 export const ProfileStore = signalStore(
   { providedIn: 'root' },
@@ -47,11 +49,20 @@ export const ProfileStore = signalStore(
         );
       },
 
-      updateSignature(signature: string | null): Observable<IBaseApiResponse<boolean>> {
+      updateSignature(request: IUpdateSignatureRequest): Observable<IBaseApiResponse<boolean>> {
         patchState(store, { signatureProcessing: true });
-        return profileApiService.updateSignature(signature).pipe(
+        return profileApiService.updateSignature(request).pipe(
           finalize(() => {
             patchState(store, { signatureProcessing: false });
+          })
+        );
+      },
+
+      updatePersonalInfo(request: IUpdatePersonalInfoRequest): Observable<IBaseApiResponse<boolean>> {
+        patchState(store, { personalInfoProcessing: true });
+        return profileApiService.updatePersonalInfo(request).pipe(
+          finalize(() => {
+            patchState(store, { personalInfoProcessing: false });
           })
         );
       }
