@@ -456,7 +456,7 @@ export abstract class BasePlanWizard {
       keyedRowIds.set(key, rowIds);
     });
 
-    this.applyMatchingHasCommentControls(form, undefined, undefined, keysWithoutRowId, keyedRowIds);
+    this.applyMatchingHasCommentControls(form, undefined, undefined, undefined, keysWithoutRowId, keyedRowIds);
   }
 
   private setAllHasCommentControls(control: AbstractControl, value: boolean): void {
@@ -480,12 +480,20 @@ export abstract class BasePlanWizard {
     control: AbstractControl,
     fieldKey: string | undefined,
     inheritedRowId: string | undefined,
+    inheritedYearKey: string | undefined,
     keysWithoutRowId: Set<string>,
     keyedRowIds: Map<string, Set<string>>
   ): void {
     if (control instanceof FormArray) {
       control.controls.forEach(child => {
-        this.applyMatchingHasCommentControls(child, fieldKey, inheritedRowId, keysWithoutRowId, keyedRowIds);
+        this.applyMatchingHasCommentControls(
+          child,
+          fieldKey,
+          inheritedRowId,
+          inheritedYearKey,
+          keysWithoutRowId,
+          keyedRowIds
+        );
       });
       return;
     }
@@ -500,17 +508,25 @@ export abstract class BasePlanWizard {
     // Leaf commentable field pattern: { hasComment, value }
     if (hasCommentControl && hasValueControl && fieldKey) {
       const normalizedKey = this.normalizeInputKey(fieldKey);
-      const matchedByKey = keysWithoutRowId.has(normalizedKey);
-      const matchedByRowId = !!currentRowId && (keyedRowIds.get(normalizedKey)?.has(currentRowId) ?? false);
+      const normalizedYearKey = inheritedYearKey ? this.normalizeInputKey(inheritedYearKey) : undefined;
+      const matchedByKey = keysWithoutRowId.has(normalizedKey)
+        || (!!normalizedYearKey && keysWithoutRowId.has(normalizedYearKey));
+      const matchedByRowId = !!currentRowId && (
+        (keyedRowIds.get(normalizedKey)?.has(currentRowId) ?? false)
+        || (!!normalizedYearKey && (keyedRowIds.get(normalizedYearKey)?.has(currentRowId) ?? false))
+      );
       hasCommentControl.setValue(matchedByKey || matchedByRowId, { emitEvent: false });
       return;
     }
 
     Object.keys(control.controls).forEach(key => {
+      const isYearKey = /^year\d+$/.test(key);
+      const nextYearKey = isYearKey ? key : inheritedYearKey;
       this.applyMatchingHasCommentControls(
         control.controls[key],
         key,
         currentRowId,
+        nextYearKey,
         keysWithoutRowId,
         keyedRowIds
       );
