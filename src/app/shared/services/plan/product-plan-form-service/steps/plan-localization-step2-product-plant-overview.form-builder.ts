@@ -32,19 +32,19 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
     return this.fb.group({
       [EMaterialsFormControls.landPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control<number | null>(null, [Validators.min(0), Validators.required, Validators.max(100)]),
+        [EMaterialsFormControls.value]: this.fb.control<number | null>(0, [Validators.min(0), Validators.required, Validators.max(100)]),
       }),
       [EMaterialsFormControls.buildingPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control<number | null>(null, [Validators.min(0), Validators.required, Validators.max(100)]),
+        [EMaterialsFormControls.value]: this.fb.control<number | null>(0, [Validators.min(0), Validators.required, Validators.max(100)]),
       }),
       [EMaterialsFormControls.machineryEquipmentPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control<number | null>(null, [Validators.min(0), Validators.required, Validators.max(100)]),
+        [EMaterialsFormControls.value]: this.fb.control<number | null>(0, [Validators.min(0), Validators.required, Validators.max(100)]),
       }),
       [EMaterialsFormControls.othersPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control<number | null>(null, [Validators.min(0), Validators.required, Validators.max(100)]),
+        [EMaterialsFormControls.value]: this.fb.control<number | null>(0, [Validators.min(0), Validators.required, Validators.max(100)]),
       }),
       [EMaterialsFormControls.othersDescription]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
