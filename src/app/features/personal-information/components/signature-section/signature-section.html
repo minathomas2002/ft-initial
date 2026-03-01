@@ -24,6 +24,32 @@
     </div>
   </div>
   }@else {
-  <app-signature-pad [existingSignature]="existingSignature()" />
+  <div class="flex justify-center items-center bg-gray-50 rounded-lg p-6 border border-gray-200 relative">
+    <p-button
+      [label]="'Delete'"
+      icon="icon-trash-2"
+      severity="danger"
+      size="small"
+      class="absolute top-2 right-2"
+      text
+      (onClick)="onDeleteSignatureClick()"
+    />
+    <div class="md:max-w-[50%]">
+      <p-image
+        [src]="'assets/images/opportunity-1.png'"
+        alt="Signature"
+        [preview]="true"
+      />
+    </div>
+  </div>
   }
 </app-personal-information-card>
+
+<app-upload-signature-modal
+  [(visible)]="uploadSignatureModalVisible"
+  (onSubmitSignature)="onSubmitSignature($event)"
+/>
+<app-draw-signature-modal
+  [(visible)]="drawSignatureModalVisible"
+  (onSubmitSignature)="onSubmitSignature($event)"
+/>
