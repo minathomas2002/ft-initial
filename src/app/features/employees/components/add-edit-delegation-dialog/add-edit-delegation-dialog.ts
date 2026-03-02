@@ -28,6 +28,7 @@ import { SelectModule } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, of } from 'rxjs';
+import { ERoles } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-add-edit-delegation-dialog',
@@ -44,7 +45,6 @@ import { map, of } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEditDelegationDialog implements OnInit {
-
   today = new Date();
   onSuccess = output<void>();
   destroyRef = inject(DestroyRef);
@@ -65,9 +65,9 @@ export class AddEditDelegationDialog implements OnInit {
 
   disabledEndDate = toSignal(
     (this.formService.form.get('startDate')?.valueChanges ?? of(new Date())).pipe(
-      map((value) => (value ? new Date(value) : new Date()))
+      map((value) => (value ? new Date(value) : new Date())),
     ),
-    { initialValue: new Date() as Date, requireSync: false }
+    { initialValue: new Date() as Date, requireSync: false },
   );
 
   disabledstartDate = toSignal(
@@ -75,12 +75,11 @@ export class AddEditDelegationDialog implements OnInit {
       map((value) => {
         const date = value ? new Date(value) : new Date();
         const today = new Date();
-        if (date.toDateString() === today.toDateString())
-          return null;
+        if (date.toDateString() === today.toDateString()) return null;
         return date;
-      })
+      }),
     ),
-    { initialValue: null as Date | null, requireSync: false }
+    { initialValue: null as Date | null, requireSync: false },
   );
 
   disabledStartDatesArray = computed(() => {
@@ -88,25 +87,24 @@ export class AddEditDelegationDialog implements OnInit {
     return date ? [date] : [];
   });
 
-
   ngOnInit() {
-
     this.loadEmployees();
-
   }
 
   private loadEmployees() {
-    this.delegationStore.getActiveEmployees().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res=>{
-       if (this.isEditMode()) {
+    this.delegationStore
+      .getActiveEmployees()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        if (this.isEditMode()) {
           this.LoadDelegationDetails();
         }
-    });
+      });
   }
   onConfirm() {
-    if(this.isEditMode()){
+    if (this.isEditMode()) {
       this.submitEditedDelegation();
-    }
-    else {
+    } else {
       this.submitNewDelegation();
     }
   }
@@ -133,6 +131,28 @@ export class AddEditDelegationDialog implements OnInit {
     }
   }
 
+  delegatorIdSignal = toSignal(this.formService.delegatorId.valueChanges, {
+    initialValue: this.formService.delegatorId.value,
+  });
+
+  delegateeIdSignal = toSignal(this.formService.delegateeId.valueChanges, {
+    initialValue: this.formService.delegateeId.value,
+  });
+
+  getDelegatorsWithoutAdmin = computed(() => {
+    const employees = this.employees() ?? [];
+    const selectedDelegateeId = this.delegateeIdSignal();
+
+    return employees.filter((emp) => emp.role !== ERoles.ADMIN && emp.id !== selectedDelegateeId);
+  });
+
+  getDelegatees = computed(() => {
+    const employees = this.employees() ?? [];
+    const selectedDelegatorId = this.delegatorIdSignal();
+
+    return employees.filter((emp) => emp.id !== selectedDelegatorId);
+  });
+
   private submitEditedDelegation() {
     const form = this.formService.form;
     const req: IEditDelegationRequest = {
@@ -146,16 +166,16 @@ export class AddEditDelegationDialog implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.toasterService.success(this.i18nService.translate('delegation.messages.updatedSuccess'));
+          this.toasterService.success(
+            this.i18nService.translate('delegation.messages.updatedSuccess'),
+          );
           this.onSuccess.emit();
           this.dialogVisible.set(false);
           this.formService.ResetFormFields();
         },
-        error: (error: any) => {
-        },
+        error: (error: any) => {},
       });
   }
-
 
   private submitNewDelegation() {
     const form = this.formService.form;
@@ -170,13 +190,14 @@ export class AddEditDelegationDialog implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.toasterService.success(this.i18nService.translate('delegation.messages.addedSuccess'));
+          this.toasterService.success(
+            this.i18nService.translate('delegation.messages.addedSuccess'),
+          );
           this.onSuccess.emit();
           this.dialogVisible.set(false);
           this.formService.ResetFormFields();
         },
-        error: (error: any) => {
-        },
+        error: (error: any) => {},
       });
   }
 }
