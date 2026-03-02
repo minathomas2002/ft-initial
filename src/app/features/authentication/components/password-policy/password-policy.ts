@@ -33,6 +33,8 @@ export class PasswordPolicy implements OnInit {
     alias: 'passwordFormControl',
   });
   required = input<boolean>(false);
+  label = input<string>('auth.password');
+  placeholder = input<string>('auth.enterYourPassword');
 
   constructor(private controlContainer: ControlContainer) { }
 
