@@ -459,8 +459,23 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   });
 
   hasComments = computed(() => {
-    // // Check if any step has saved comments
+    // Check if any step has saved comments
+    const planComments = this.planStore.planComments()?.comments ?? [];
     const currentUserPageComments = this.planStore.currentUserPageComments();
+    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager];
+
+    if (returnedByManagerStatus.includes(this.planStatus() as EInternalUserPlanStatus)) {
+      const stepMeta = [
+        { title: this.getStepStateById('cover')?.title as EPlanPageTitle, selectedCount: this.step1SelectedInputs().length },
+        { title: this.getStepStateById('overview')?.title as EPlanPageTitle, selectedCount: this.step2SelectedInputs().length },
+        { title: this.getStepStateById('existingSaudi')?.title as EPlanPageTitle, selectedCount: this.step3SelectedInputs().length },
+        { title: this.getStepStateById('directLocalization')?.title as EPlanPageTitle, selectedCount: this.step4SelectedInputs().length },
+      ];
+
+      const filteredPlanCommentsPages = stepMeta.filter(step => planComments.some(comment => comment.pageTitleForTL === step.title));
+      return filteredPlanCommentsPages.every(comment => currentUserPageComments.includes(comment.title) || comment.selectedCount === 0) && currentUserPageComments.length > 0;
+    }
+
     return currentUserPageComments.length > 0;
   });
 
@@ -625,6 +640,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return currentStepCommentPhase !== 'none' || this.showCommentState();
   });
 
+  private currentActiveStepState = computed(() => this.stepsWithId().filter(step => step.isActive));
+
   // Centralized wizard actions using the action factory
   wizardActions = new WizardActionFactory().generateActions({
     context: 'service-plan',
@@ -634,6 +651,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       totalSteps: this.stepsCount,
       isLoading: this.isLoading,
       isProcessing: this.isProcessing,
+      currentStepState: this.currentActiveStepState,
+      planComments: this.planStore.planComments,
     },
     visibility: {
       hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode()),

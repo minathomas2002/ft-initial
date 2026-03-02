@@ -557,7 +557,22 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   hasComments = computed(() => {
     // // Check if any step has saved comments
+    const planComments = this.planStore.planComments()?.comments ?? [];
     const currentUserPageComments = this.planStore.currentUserPageComments();
+    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager];
+
+    if (returnedByManagerStatus.includes(this.planStatus() as EInternalUserPlanStatus)) {
+      const stepMeta = [
+        { title: this.steps()[0]?.title as EPlanPageTitle, selectedCount: this.step1SelectedInputs().length },
+        { title: this.steps()[1]?.title as EPlanPageTitle, selectedCount: this.step2SelectedInputs().length },
+        { title: this.steps()[2]?.title as EPlanPageTitle, selectedCount: this.step3SelectedInputs().length },
+        { title: this.steps()[3]?.title as EPlanPageTitle, selectedCount: this.step4SelectedInputs().length },
+      ];
+
+      const filteredPlanCommentsPages = stepMeta.filter(step => planComments.some(comment => comment.pageTitleForTL === step.title));
+      return filteredPlanCommentsPages.every(comment => currentUserPageComments.includes(comment.title) || comment.selectedCount === 0) && currentUserPageComments.length > 0;
+    }
+
     return currentUserPageComments.length > 0;
   });
 
@@ -569,6 +584,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return this.currentStepCommentPhase() !== 'none' || this.showCommentState();
   });
 
+  private currentActiveStepState = computed(() => this.steps().filter(step => step.isActive));
+
   wizardActions = new WizardActionFactory().generateActions({
     context: 'product-plan',
     state: {
@@ -577,6 +594,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       totalSteps: this.totalSteps,
       isLoading: this.isLoadingPlan,
       isProcessing: this.isProcessing,
+      currentStepState: this.currentActiveStepState,
+      planComments: this.planStore.planComments,
     },
     visibility: {
       hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode() || this.isInvestorViewMode()),

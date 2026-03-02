@@ -886,7 +886,7 @@
     [commentPhase]="commentPhase()"
   />
 
-  @if(showCheckbox() || showCommentState()){
+  @if(showCheckbox() || (showCommentState() && (!isResubmitMode() || pageComments().length > 0))){
   <app-comment-state-component
     [commentsCount]="selectedInputs().length"
     [(commentPhase)]="commentPhase"

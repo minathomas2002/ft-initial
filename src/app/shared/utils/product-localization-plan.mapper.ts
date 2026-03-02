@@ -579,7 +579,8 @@ export function mapProductPlanResponseToForm(
     setFormGroupValue(capexForm, EMaterialsFormControls.landPercentage, capex.landPercent);
     setFormGroupValue(capexForm, EMaterialsFormControls.buildingPercentage, capex.buildingPercent);
     setFormGroupValue(capexForm, EMaterialsFormControls.machineryEquipmentPercentage, capex.machineryPercent);
-    setFormGroupValue(capexForm, EMaterialsFormControls.othersPercentage, capex.othersPercent);
+    const othersPercentageControl = capexForm.get(`${EMaterialsFormControls.othersPercentage}.${EMaterialsFormControls.value}`);
+    othersPercentageControl?.setValue(capex.othersPercent ?? 0);
     setFormGroupValue(capexForm, EMaterialsFormControls.othersDescription, capex.othersDescription);
   }
 
