@@ -42,6 +42,11 @@ const MAIN_LAYOUT_ROUTES: Routes = [
         data: { animation: ERoutes.myProfile },
       },
       {
+        path: ERoutes.settings,
+        loadComponent: () => import('./features/settings/pages/admin-setting-view/admin-setting-view').then((c) => c.AdminSettingView),
+        data: { animation: ERoutes.settings },
+      },
+      {
         path: ERoutes.plans,
         loadChildren: () => import('./features/plans/plans.route').then((c) => c.plans_ROUTES),
         data: { animation: ERoutes.plans },

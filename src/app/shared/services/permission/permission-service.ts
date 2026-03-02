@@ -17,5 +17,6 @@ export class PermissionService {
   canAccessDvManagerDashboard = this.roleService.hasAnyRoleSignal([ERoles.Division_MANAGER]);
   canAccessUsers = this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
   canAccessInvestors = this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
+  canAccessSettings = this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
 }
 

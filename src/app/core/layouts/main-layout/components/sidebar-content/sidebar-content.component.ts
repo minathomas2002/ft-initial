@@ -70,6 +70,12 @@ export class SidebarContentComponent {
         icon: 'icon-profile',
         routerLink: ERoutes.myProfile,
         show: true
+      },
+      {
+        label: 'Settings',
+        icon: 'icon-settings',
+        routerLink: ERoutes.settings,
+        show: this.permissionService.canAccessSettings()
       }
     ];
   });
