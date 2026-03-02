@@ -32,7 +32,7 @@
     </label>
     <p-select
       [readonly]="isEditMode()"
-      [options]="employees()"
+      [options]="getDelegatorsWithoutAdmin()"
       optionLabel="name"
       optionValue="id"
       [loading]="isLoadingDetails()"
@@ -62,7 +62,7 @@
     </label>
     <p-select
       [readonly]="isEditMode()"
-      [options]="employees()"
+      [options]="getDelegatees()"
       optionLabel="name"
       optionValue="id"
       [loading]="isLoadingDetails()"
