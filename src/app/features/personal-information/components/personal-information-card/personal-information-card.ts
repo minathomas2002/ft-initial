@@ -3,6 +3,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-personal-information-card',
+  standalone: true,
   imports: [ButtonModule],
   templateUrl: './personal-information-card.html',
   styleUrl: './personal-information-card.scss',
@@ -11,11 +12,10 @@ import { ButtonModule } from 'primeng/button';
 export class PersonalInformationCard {
   sectionTitle = input<string>('');
   sectionDescription = input<string>('');
-  showEditButton = model<boolean>(false);
   submitActionDisabled = input<boolean>(true);
   submitActionLabel = input<string>('Save Changes');
   hideFooter = input<boolean>(false);
+  hideBody = input<boolean>(false);
   onSubmit = output<void>();
-  onEditClick = output<void>();
   onCancelClicked = output<void>();
 }

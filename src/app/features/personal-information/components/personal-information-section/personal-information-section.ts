@@ -13,6 +13,7 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { IUpdatePersonalInfoRequest } from 'src/app/shared/interfaces';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-personal-information-section',
@@ -24,7 +25,8 @@ import { IUpdatePersonalInfoRequest } from 'src/app/shared/interfaces';
     InputNumberModule,
     ReactiveFormsModule,
     PhoneInputComponent,
-    BaseErrorMessages
+    BaseErrorMessages,
+    ButtonModule,
   ],
   providers: [PersonalInformationFormService],
   templateUrl: './personal-information-section.html',
@@ -94,4 +96,5 @@ export class PersonalInformationSection implements OnInit {
         }
       });
   }
+
 }
