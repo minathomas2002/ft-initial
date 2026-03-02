@@ -42,7 +42,7 @@ export const VALIDATION_MESSAGES = {
     `Please enter a valid mobile number (e.g., 05XXXXXXXX).`,
 
   passwordMismatch: (label: string) =>
-    `Must match new password`,
+    `Passwords do not match`,
 
   fileSizeExceeded: (label: string, error: { maxSize: number; actualSize: number }) => {
     const maxSizeMB = Math.round(error.maxSize / (1024 * 1024));
