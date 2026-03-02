@@ -28,10 +28,7 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
 
   // Computed signal to check if clear button should be enabled
   canClearSignature = computed(() => {
-    // Enable clear button if:
-    // 1. There's a current signature, OR
-    // 2. Canvas is visible and initialized - meaning user can draw/clear
-    return !!(this.currentSignature() || (this.showCanvas() && this.canvasInitialized()));
+    return this.currentSignature();
   });
 
 

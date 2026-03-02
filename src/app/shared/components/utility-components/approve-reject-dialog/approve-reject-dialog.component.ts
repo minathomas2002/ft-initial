@@ -3,7 +3,7 @@ import { BaseDialogComponent } from '../../base-components/base-dialog/base-dial
 import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { BaseLabelComponent } from "../../base-components/base-label/base-label.component";
-import { SignaturePadComponent } from "../../plans/submission-confirmation-modal/signature-pad/signature-pad.component";
+import { SignaturePadComponent } from "../../form/signature-pad/signature-pad.component";
 import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({

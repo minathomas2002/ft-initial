@@ -68,16 +68,20 @@
   }
 </app-personal-information-card>
 
+@if(uploadSignatureModalVisible()){
 <app-upload-signature-modal
   [isProcessing]="isSignatureProcessing()"
   [(visible)]="uploadSignatureModalVisible"
   (onSubmitSignature)="onSubmitSignature($event)"
 />
+}
+@if(drawSignatureModalVisible()){
 <app-draw-signature-modal
   [isProcessing]="isSignatureProcessing()"
   [(visible)]="drawSignatureModalVisible"
   (onSubmitSignature)="onSubmitSignature($event)"
 />
+}
 <app-general-confirmation-dialog
   [(visible)]="deleteSignatureConfirmVisible"
   [title]="'Delete signature'"

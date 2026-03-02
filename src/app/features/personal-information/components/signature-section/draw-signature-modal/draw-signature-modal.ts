@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, model, output, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { BaseDialogComponent } from 'src/app/shared/components/base-components/base-dialog/base-dialog.component';
-import { SignaturePadComponent } from 'src/app/shared/components/plans/submission-confirmation-modal/signature-pad/signature-pad.component';
+import { SignaturePadComponent } from 'src/app/shared/components/form/signature-pad/signature-pad.component';
 import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
 
 @Component({

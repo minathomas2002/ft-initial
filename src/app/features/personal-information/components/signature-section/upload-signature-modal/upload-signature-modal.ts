@@ -24,7 +24,7 @@ export class UploadSignatureModal {
   cancelLabel = signal<string>('Back');
 
   maxFileSize = 1024 * 1024 * 2; // 2MB
-  acceptedFileTypes = '.png, .jpg, .jpeg, .webp';
+  acceptedFileTypes = '.png, .jpg';
   files = model<File[]>([]);
 
   onCloseClick() {

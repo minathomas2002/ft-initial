@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, mo
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SignaturePadComponent } from './signature-pad/signature-pad.component';
+import { SignaturePadComponent } from '../../form/signature-pad/signature-pad.component';
 import { SubmissionConfirmationModalFormService } from './submission-confirmation-modal-form.service';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
 import { TextareaModule } from 'primeng/textarea';

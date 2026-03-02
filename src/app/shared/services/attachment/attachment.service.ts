@@ -52,14 +52,17 @@ export class AttachmentService {
     );
   }
 
-  private readonly TARGET_SIZE = 120;
+  private readonly TARGET_WIDTH = 120;
+  private readonly TARGET_HEIGHT = 120;
 
   /**
-   * Resizes an image to 120x120px. If the image is smaller than 120x120, returns it unchanged.
+   * Resizes an image while keeping its aspect ratio.
+   * - If smaller than target dimensions, returns the original unchanged.
+   * - Meets the target width; height is scaled proportionally to preserve aspect ratio.
    * @param file - The image file to resize
-   * @returns Promise resolving to the resized File or the original if smaller than 120x120
+   * @returns Promise resolving to the resized File or the original if smaller than target
    */
-  resizeImages(file: File, targetSize: number = this.TARGET_SIZE): Promise<File> {
+  resizeImages(file: File, targetWidth: number = this.TARGET_WIDTH, targetHeight: number = this.TARGET_HEIGHT): Promise<File> {
     return new Promise((resolve, reject) => {
       if (!file.type.startsWith('image/')) {
         resolve(file);
@@ -73,14 +76,18 @@ export class AttachmentService {
         URL.revokeObjectURL(objectUrl);
 
         const { width, height } = img;
-        if (width < this.TARGET_SIZE || height < this.TARGET_SIZE) {
+        if (width < targetWidth || height < targetHeight) {
           resolve(file);
           return;
         }
 
+        // Non-square: meet target width, scale height to maintain aspect ratio
+        const outputWidth = targetWidth;
+        const outputHeight = Math.round((height / width) * targetWidth);
+
         const canvas = document.createElement('canvas');
-        canvas.width = this.TARGET_SIZE;
-        canvas.height = this.TARGET_SIZE;
+        canvas.width = outputWidth;
+        canvas.height = outputHeight;
         const ctx = canvas.getContext('2d');
 
         if (!ctx) {
@@ -88,7 +95,7 @@ export class AttachmentService {
           return;
         }
 
-        ctx.drawImage(img, 0, 0, this.TARGET_SIZE, this.TARGET_SIZE);
+        ctx.drawImage(img, 0, 0, outputWidth, outputHeight);
 
         canvas.toBlob(
           (blob) => {
