@@ -3,7 +3,8 @@ import { patchState, signalStore, withComputed, withMethods, withState } from "@
 import { RoleService } from "../../services/role/role-service";
 import { ERoles } from "../../enums";
 import { ProfileApiService } from "../../api/profile/profile-api.service";
-import { IBaseApiResponse, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateSignatureRequest } from "../../interfaces";
+import { AuthApiService } from "../../api/auth/auth-api-service";
+import { IBaseApiResponse, IChangePasswordRequest, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateSignatureRequest } from "../../interfaces";
 import { finalize, Observable, tap } from "rxjs";
 import { AuthStore } from "../auth/auth.store";
 
@@ -13,12 +14,14 @@ const initialState: {
   signatureProcessing: boolean;
   personalInfoProcessing: boolean;
   profilePictureProcessing: boolean;
+  changePasswordProcessing: boolean;
 } = {
   loading: false,
   userProfile: null,
   signatureProcessing: false,
   personalInfoProcessing: false,
   profilePictureProcessing: false,
+  changePasswordProcessing: false,
 }
 export const ProfileStore = signalStore(
   { providedIn: 'root' },
@@ -37,6 +40,7 @@ export const ProfileStore = signalStore(
   }),
   withMethods((store) => {
     const profileApiService = inject(ProfileApiService);
+    const authApiService = inject(AuthApiService);
 
     return {
       getUserProfile() {
@@ -67,7 +71,16 @@ export const ProfileStore = signalStore(
             patchState(store, { personalInfoProcessing: false });
           })
         );
-      }
+      },
+
+      changePassword(request: IChangePasswordRequest): Observable<IBaseApiResponse<void>> {
+        patchState(store, { changePasswordProcessing: true });
+        return authApiService.changePassword(request).pipe(
+          finalize(() => {
+            patchState(store, { changePasswordProcessing: false });
+          })
+        );
+      },
     };
   })
 );

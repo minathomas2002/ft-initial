@@ -4,9 +4,10 @@ import { PasswordPolicy, passwordPolicyValidator } from 'src/app/features/authen
 import { passwordMatchValidator } from 'src/app/features/authentication/validators/password-match-validator';
 import { BaseDialogComponent } from 'src/app/shared/components/base-components/base-dialog/base-dialog.component';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
-import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
+import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-change-password',
@@ -32,6 +33,8 @@ export class ChangePassword {
   }
 
   private readonly fb = inject(FormBuilder);
+  private readonly toasterService = inject(ToasterService);
+  readonly profileStore = inject(ProfileStore);
 
   visible = model<boolean>(false);
   changePasswordForm = this.fb.group(
@@ -66,8 +69,23 @@ export class ChangePassword {
       return;
     }
 
-    // TODO: wire API call
-    this.changePasswordForm.reset();
-    this.visible.set(false);
+    const request = {
+      currentPassword: this.currentPassword.value ?? '',
+      newPassword: this.password.value ?? '',
+    };
+
+    this.profileStore.changePassword(request).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.toasterService.success('Password changed successfully.');
+          this.changePasswordForm.reset();
+          this.visible.set(false);
+        }
+      },
+      error: (error) => {
+        const message = error?.error?.message ?? error?.error?.errorMessage ?? error?.message ?? 'Failed to change password.';
+        this.toasterService.error(message);
+      },
+    });
   }
 }
