@@ -6,6 +6,7 @@ import { BaseDialogComponent } from 'src/app/shared/components/base-components/b
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
 @Component({
   selector: 'app-change-password',
@@ -13,9 +14,9 @@ import { PasswordToggleComponent } from 'src/app/shared/components/form/password
     BaseDialogComponent,
     ReactiveFormsModule,
     BaseLabelComponent,
-    BaseErrorComponent,
     PasswordToggleComponent,
     PasswordPolicy,
+    BaseErrorMessages
   ],
   templateUrl: './change-password.html',
   styleUrl: './change-password.scss',
