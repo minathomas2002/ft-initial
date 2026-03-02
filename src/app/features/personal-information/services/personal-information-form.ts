@@ -51,7 +51,7 @@ export class PersonalInformationFormService {
       },
       otherPhoneNumber: user.otherPhoneNumber ? {
         countryCode: user.otherPhoneCountryCode ?? '',
-        phoneNumber: user.otherPhoneCountryCode,
+        phoneNumber: user.otherPhoneNumber,
       } : null,
       benaId: user.benaId,
       secRegisteredId: user.secRegisteredId,

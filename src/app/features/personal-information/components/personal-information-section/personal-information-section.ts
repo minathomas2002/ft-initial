@@ -82,9 +82,9 @@ export class PersonalInformationSection implements OnInit {
       fullName: this.formService.fullName.value ?? '',
       countryCode: this.formService.phoneNumber.value?.countryCode ?? '',
       phoneNumber: this.formService.phoneNumber.value?.phoneNumber ?? '',
+      otherPhoneCountryCode: this.formService.otherPhoneNumber.value?.countryCode ?? '',
       otherPhoneNumber: this.formService.otherPhoneNumber.value?.phoneNumber ?? '',
       secRegisteredId: this.formService.secRegisteredId.value ?? '',
-      otherPhoneCountryCode: this.formService.otherPhoneNumber.value?.countryCode ?? '',
     }
     this.profileStore.updatePersonalInfo(request).pipe(take(1))
       .subscribe((res) => {

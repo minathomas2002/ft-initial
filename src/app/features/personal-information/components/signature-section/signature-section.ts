@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { PersonalInformationCard } from '../personal-information-card/personal-information-card';
-import { SignaturePadComponent } from 'src/app/shared/components/plans/submission-confirmation-modal/signature-pad/signature-pad.component';
 import { EViewMode } from 'src/app/shared/enums';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -10,6 +9,7 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { take } from 'rxjs';
 import { IUpdateSignatureRequest } from 'src/app/shared/interfaces';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 
 @Component({
   selector: 'app-signature-section',
@@ -19,6 +19,7 @@ import { IUpdateSignatureRequest } from 'src/app/shared/interfaces';
     DialogModule,
     UploadSignatureModal,
     DrawSignatureModal,
+    GeneralConfirmationDialogComponent,
   ],
   templateUrl: './signature-section.html',
   styleUrl: './signature-section.scss',
@@ -37,6 +38,7 @@ export class SignatureSection {
   uploadSignatureModalVisible = signal<boolean>(false);
   drawSignatureModalVisible = signal<boolean>(false);
   signaturePreviewVisible = signal<boolean>(false);
+  deleteSignatureConfirmVisible = signal<boolean>(false);
 
   onAddSignatureClick(): void {
     this.drawSignatureModalVisible.set(true);
@@ -64,6 +66,27 @@ export class SignatureSection {
   }
 
   onDeleteSignatureClick(): void {
-    this.onSubmitSignature('');
+    this.deleteSignatureConfirmVisible.set(true);
+  }
+
+  onConfirmDeleteSignature(): void {
+    const signatureRequest: IUpdateSignatureRequest = {
+      userSignatureId: this.profileStore.userProfile()?.userSignatureId ?? '',
+      signatureBase64: '',
+    };
+    this.profileStore.updateSignature(signatureRequest)
+      .pipe(take(1))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.profileStore.getUserProfile().pipe(take(1)).subscribe();
+            this.toasterService.success('Signature deleted successfully');
+            this.deleteSignatureConfirmVisible.set(false);
+          }
+        },
+        error: () => {
+          this.deleteSignatureConfirmVisible.set(false);
+        },
+      });
   }
 }

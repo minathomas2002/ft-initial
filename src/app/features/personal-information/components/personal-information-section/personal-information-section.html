@@ -84,7 +84,9 @@
       >
         @if(isViewMode()){
         <div class="flex items-center gap-2">
+          @if(isInvestor()){
           <span class="text-sm font-medium text-gray-900">{{ userProfile()?.countryCode }}</span>
+          }
           <span class="text-sm font-medium text-gray-900">{{ userProfile()?.phoneNumber }}</span>
         </div>
         }@else {

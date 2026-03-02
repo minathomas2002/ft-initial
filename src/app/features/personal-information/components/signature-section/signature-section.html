@@ -78,3 +78,13 @@
   [(visible)]="drawSignatureModalVisible"
   (onSubmitSignature)="onSubmitSignature($event)"
 />
+<app-general-confirmation-dialog
+  [(visible)]="deleteSignatureConfirmVisible"
+  [title]="'Delete signature'"
+  [description]="'Are you sure you want to delete your signature? This action cannot be undone.'"
+  [confirmationLabel]="'Delete'"
+  [icon]="'icon-trash-2'"
+  [confirmButtonSeverity]="'danger'"
+  [isLoading]="isSignatureProcessing()"
+  (confirmed)="onConfirmDeleteSignature()"
+/>
