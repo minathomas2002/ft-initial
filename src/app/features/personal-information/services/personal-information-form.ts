@@ -13,8 +13,8 @@ export class PersonalInformationFormService {
     email: new FormControl<string>('', [Validators.required, Validators.email, Validators.maxLength(100)]),
     phoneNumber: new FormControl<IPhoneValue | null>(null, [Validators.required, phoneNumberPatternValidator()]),
     otherPhoneNumber: new FormControl<IPhoneValue | null>(null, [phoneNumberPatternValidator()]),
-    benaId: new FormControl<string | null>(null, [Validators.maxLength(7)]),
-    secRegisteredId: new FormControl<string | null>(null, [Validators.maxLength(7)]),
+    benaId: new FormControl<string | null>(null),
+    secRegisteredId: new FormControl<string | null>(null, [Validators.minLength(7), Validators.maxLength(7)]),
   });
 
   get fullName(): FormControl<string | null> {

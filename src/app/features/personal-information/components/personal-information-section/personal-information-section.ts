@@ -69,6 +69,22 @@ export class PersonalInformationSection implements OnInit {
     queueMicrotask(() => this.cdr.markForCheck());
   }
 
+  onRegisteredVendorIDWithSecInput(event: Event): void {
+    const inputEl = event.target as HTMLInputElement | null;
+    if (!inputEl) return;
+
+    const rawValue = inputEl.value ?? '';
+    const digitsOnly = rawValue.replace(/\D+/g, '').slice(0, 7);
+
+    if (digitsOnly !== rawValue) {
+      inputEl.value = digitsOnly;
+    }
+
+    const ctrl = this.formService.secRegisteredId;
+    if (!ctrl) return;
+    ctrl.setValue(digitsOnly, { emitEvent: false });
+  }
+
   onCancelClick(): void {
     this.viewMode.set(EViewMode.View);
     this.formService.initializeForm(this.profileStore.userProfile()!);

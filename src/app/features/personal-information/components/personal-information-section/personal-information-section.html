@@ -174,12 +174,20 @@
         @if(isViewMode()){
         <span class="text-sm font-medium text-gray-900">{{ userProfile()?.secRegisteredId ?? '-' }}</span>
         }@else {
-        <p-inputNumber
-          [placeholder]="'Enter your SEC registered ID'"
+        <input
+          type="text"
+          pInputText
           fluid
-          [maxlength]="7"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="7"
+          [placeholder]="'Enter your SEC registered ID'"
           [formControl]="formService.secRegisteredId"
-          [disabled]="formService.secRegisteredId.disabled"
+          (input)="onRegisteredVendorIDWithSecInput($event)"
+        />
+        <app-base-error-messages
+          [control]="formService.secRegisteredId"
+          [label]="'SEC Registered ID'"
         />
         }
       </app-personal-information-form-field>
