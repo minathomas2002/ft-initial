@@ -584,6 +584,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return this.currentStepCommentPhase() !== 'none' || this.showCommentState();
   });
 
+  private currentActiveStepState = computed(() => this.steps().filter(step => step.isActive));
+
   wizardActions = new WizardActionFactory().generateActions({
     context: 'product-plan',
     state: {
@@ -592,6 +594,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       totalSteps: this.totalSteps,
       isLoading: this.isLoadingPlan,
       isProcessing: this.isProcessing,
+      currentStepState: this.currentActiveStepState,
+      planComments: this.planStore.planComments,
     },
     visibility: {
       hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode() || this.isInvestorViewMode()),

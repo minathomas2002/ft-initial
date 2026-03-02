@@ -640,6 +640,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     return currentStepCommentPhase !== 'none' || this.showCommentState();
   });
 
+  private currentActiveStepState = computed(() => this.stepsWithId().filter(step => step.isActive));
+
   // Centralized wizard actions using the action factory
   wizardActions = new WizardActionFactory().generateActions({
     context: 'service-plan',
@@ -649,6 +651,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       totalSteps: this.stepsCount,
       isLoading: this.isLoading,
       isProcessing: this.isProcessing,
+      currentStepState: this.currentActiveStepState,
+      planComments: this.planStore.planComments,
     },
     visibility: {
       hideSaveAsDraft: computed(() => this.isViewMode() || this.isReviewMode() || this.isResubmitMode()),

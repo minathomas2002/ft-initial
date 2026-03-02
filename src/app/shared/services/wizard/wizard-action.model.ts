@@ -2,6 +2,8 @@ import { Signal } from '@angular/core';
 import { IBaseWizardAction } from 'src/app/shared/components/base-components/base-wizard-actions/base-wizard-actions';
 import { ERoles } from 'src/app/shared/enums';
 import { EInvestorPlanStatus, EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { IPlanCommentResponse } from 'src/app/shared/interfaces/plans.interface';
+import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { I18nService } from 'src/app/shared/services/i18n';
 
 export type WizardActionContext =
@@ -20,6 +22,8 @@ export interface IWizardActionConfig {
     isLoading?: Signal<boolean>;
     isProcessing?: Signal<boolean>;
     isSavingAsDraft?: Signal<boolean>;
+    currentStepState?: Signal<IWizardStepState[]>
+    planComments?: Signal<IPlanCommentResponse | null>
   };
   visibility?: {
     hideSaveAsDraft?: Signal<boolean>;

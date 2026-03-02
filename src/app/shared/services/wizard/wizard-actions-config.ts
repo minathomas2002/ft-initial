@@ -80,13 +80,25 @@ export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
 
   ADD_COMMENTS: {
 
-    shouldShow: (context) =>
-      (context.mode === 'Review' || context.mode === 'resubmit') &&
+    shouldShow: (context) => {
+      const currentStepState = context.config.state.currentStepState;
+      const planComments = context.config.state.planComments;
+      const shouldHideInResubmit =
+        !!planComments?.() &&
+        !!currentStepState?.()?.length &&
+        planComments()!.comments.some(
+          comment =>
+            comment.pageTitleForTL === currentStepState()![0].title
+        );
+
+      return ((context.mode === 'Review' || context.mode === 'resubmit') &&
       context.activeStep < context.totalSteps &&
       !!context.config.handlers.onAddComment &&
       !context.config.permissions?.canAcknowledgeRejection?.() &&
       !context.isPlanRejectedFromManager &&
-      context.config.metadata?.status?.() !== EInternalUserPlanStatus.DEPT_APPROVED,
+      context.config.metadata?.status?.() !== EInternalUserPlanStatus.DEPT_APPROVED) &&
+        (context.mode === 'resubmit' ? shouldHideInResubmit : true)
+    },
 
     build: (context, i18n) => ({
       id: 'add-comments',
