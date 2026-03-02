@@ -25,6 +25,7 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
   private viewInitialized = false;
   private documentMouseMoveHandler?: (e: MouseEvent) => void;
   private documentMouseUpHandler?: () => void;
+  private userRequestedCanvasMode = false;
 
   // Computed signal to check if clear button should be enabled
   canClearSignature = computed(() => {
@@ -35,36 +36,37 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
   constructor() {
     effect(() => {
       const existing = this.existingSignature();
-      // Only update if showCanvas is false (meaning we're showing the existing signature)
-      // This prevents the effect from interfering when user clicks "Change"
-      if (existing && !this.showCanvas()) {
+      if (existing && !this.userRequestedCanvasMode) {
+        // Show existing signature - including when it arrives asynchronously (e.g. from API fetch)
         this.currentSignature.set(existing);
         this.showCanvas.set(false);
-        // Emit the existing signature to update the form control
         this.onSignatureChange.emit(existing);
-      } else if (!existing && !this.showCanvas()) {
-        // When existing signature is cleared from parent, reset the signature pad
-        this.showCanvas.set(true);
-        this.currentSignature.set(null);
-        this.onSignatureChange.emit(null);
-        // Clear the canvas if context is available
-        if (this.ctx) {
-          try {
-            const canvasRef = this.canvasRef();
-            if (canvasRef) {
-              const canvas = canvasRef.nativeElement;
-              this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+      } else if (!existing) {
+        this.userRequestedCanvasMode = false;
+        if (!this.showCanvas()) {
+          // When existing signature is cleared from parent, reset the signature pad
+          this.showCanvas.set(true);
+          this.currentSignature.set(null);
+          this.onSignatureChange.emit(null);
+          // Clear the canvas if context is available
+          if (this.ctx) {
+            try {
+              const canvasRef = this.canvasRef();
+              if (canvasRef) {
+                const canvas = canvasRef.nativeElement;
+                this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+              }
+            } catch (error) {
+              // Canvas might not be initialized yet, ignore error
             }
-          } catch (error) {
-            // Canvas might not be initialized yet, ignore error
           }
-        }
-        this.canvasInitialized.set(false);
-        // Only reinitialize if view is ready and canvas is visible
-        if (this.viewInitialized && this.showCanvas()) {
-          // Reset retry count when showing canvas again
-          this.initRetryCount = 0;
-          this.scheduleInitialization();
+          this.canvasInitialized.set(false);
+          // Only reinitialize if view is ready and canvas is visible
+          if (this.viewInitialized && this.showCanvas()) {
+            // Reset retry count when showing canvas again
+            this.initRetryCount = 0;
+            this.scheduleInitialization();
+          }
         }
       }
     });
@@ -347,6 +349,7 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
   }
 
   changeSignature(): void {
+    this.userRequestedCanvasMode = true;
     // Get the existing signature before clearing state
     const existingSig = this.existingSignature();
 

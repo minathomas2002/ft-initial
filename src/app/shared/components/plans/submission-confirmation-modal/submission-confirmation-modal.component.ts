@@ -11,7 +11,9 @@ import { PhoneInputComponent } from '../../form/phone-input/phone-input.componen
 import { IPhoneValue } from '../../../interfaces';
 import { TranslatePipe } from '../../../pipes';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { parsePhoneNumber } from '../../../data/countries.data';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-submission-confirmation-modal',
@@ -52,10 +54,12 @@ export class SubmissionConfirmationModalComponent {
 
   formService = inject(SubmissionConfirmationModalFormService);
   private readonly planStore = inject(PlanStore);
+  private readonly profileStore = inject(ProfileStore);
   isProcessing = this.planStore.isProcessing;
 
   isSubmitting = signal(false);
   phoneInputValue = signal<IPhoneValue | null>(null);
+  private hasFetchedSignatureForCurrentOpen = false;
 
   constructor() {
     // Initialize form when modal opens with existing data
@@ -65,6 +69,20 @@ export class SubmissionConfirmationModalComponent {
       const contactInfoData = this.contactInfo();
 
       if (isVisible) {
+        // Fetch user profile to get the latest signature (once per modal open)
+        if (!this.hasFetchedSignatureForCurrentOpen) {
+          this.hasFetchedSignatureForCurrentOpen = true;
+          this.profileStore.getUserProfile()
+            .pipe(take(1))
+            .subscribe({
+              next: (res) => {
+                if (res.success && res.body?.signature) {
+                  this.existingSignature.set(res.body.signature);
+                }
+              },
+            });
+        }
+
         // Pre-fill form with contactInfo from API response
         if (contactInfoData && Object.keys(contactInfoData).length > 0) {
           if (contactInfoData.name) {
@@ -108,6 +126,7 @@ export class SubmissionConfirmationModalComponent {
         }
       } else if (!isVisible) {
         // Reset form when modal closes
+        this.hasFetchedSignatureForCurrentOpen = false;
         this.formService.resetForm();
         this.phoneInputValue.set(null);
       }
