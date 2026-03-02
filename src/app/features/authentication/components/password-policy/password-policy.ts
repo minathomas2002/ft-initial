@@ -31,6 +31,7 @@ export class PasswordPolicy implements OnInit {
   formControl = input.required<FormControl>({
     alias: 'passwordFormControl',
   });
+  required = input<boolean>(false);
 
   constructor(private controlContainer: ControlContainer) { }
 
