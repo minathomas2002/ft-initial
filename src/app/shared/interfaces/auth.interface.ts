@@ -15,7 +15,7 @@ export interface IUser {
   zip: string;
   country: string;
   isActive: boolean;
-  roleId : string;
+  roleId: string;
   isDeleted: boolean;
 }
 
@@ -54,22 +54,22 @@ export interface IJwtUserDetails {
 }
 
 export interface IUserProfile {
-    userId: string;
-    nameAR: string;
-    nameEN: string;
-    userType: string;
-    roleIds: string[];
-    roleNames: string[];
-    roleCodes: ERoles[];
-    phoneNumber: string;
-    otherPhone: string | null;
-    countryCode: string | null;
-    photoURL: string | null;
-    isEmailVerified: boolean | null;
-    employeeID: string | null;
-    investorCode: string | null;
-    department: string | null;
-    active: boolean | null;
+  userId: string;
+  nameAR: string;
+  nameEN: string;
+  userType: string;
+  roleIds: string[];
+  roleNames: string[];
+  roleCodes: ERoles[];
+  phoneNumber: string;
+  otherPhone: string | null;
+  countryCode: string | null;
+  photoURL: string | null;
+  isEmailVerified: boolean | null;
+  employeeID: string | null;
+  investorCode: string | null;
+  department: string | null;
+  active: boolean | null;
 }
 
 export interface IRefreshTokenRequest {
@@ -95,9 +95,4 @@ export interface IResetPasswordRequest {
   token: string;
   newPassword: string;
   confirmPassword: string;
-}
-
-export interface IChangePasswordRequest {
-  currentPassword: string;
-  newPassword: string;
 }

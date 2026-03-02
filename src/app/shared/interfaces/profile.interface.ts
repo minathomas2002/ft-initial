@@ -26,3 +26,8 @@ export interface IUpdatePersonalInfoRequest {
   secRegisteredId: string;
   otherPhoneCountryCode: string;
 }
+
+export interface IChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}

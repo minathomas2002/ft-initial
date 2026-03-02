@@ -75,7 +75,7 @@ export const ProfileStore = signalStore(
 
       changePassword(request: IChangePasswordRequest): Observable<IBaseApiResponse<void>> {
         patchState(store, { changePasswordProcessing: true });
-        return authApiService.changePassword(request).pipe(
+        return profileApiService.changePassword(request).pipe(
           finalize(() => {
             patchState(store, { changePasswordProcessing: false });
           })

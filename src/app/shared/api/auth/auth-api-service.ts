@@ -62,16 +62,12 @@ export class AuthApiService {
     return this.http.post<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.resetPassword}`, request);
   }
 
-  changePassword(request: IChangePasswordRequest): Observable<IBaseApiResponse<void>> {
-    return this.http.post<IBaseApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.auth.changePassword}`, request);
-  }
-
   verifyEmail(token: string): Observable<IBaseApiResponse<any>> {
     return this.http.get<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.verifyEmail}?token=${token}`);
   }
 
   logout() {
-    
+
   }
 
   passwordResetTokenExpiry(token: string): Observable<IBaseApiResponse<boolean>> {
