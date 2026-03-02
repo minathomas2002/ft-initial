@@ -6,6 +6,8 @@ import { SignatureSection } from '../../components/signature-section/signature-s
 import { SecuritySection } from '../../components/security-section/security-section';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
+import { RoleService } from 'src/app/shared/services/role/role-service';
+import { ERoles } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-personal-information-view',
@@ -22,9 +24,13 @@ import { take } from 'rxjs';
 })
 export class PersonalInformationView {
   private profileStore = inject(ProfileStore);
-  canViewSignature = computed(() => this.profileStore.isInvestor());
+  private roleService = inject(RoleService);
+  canViewSignature = computed(() => this.profileStore.isInvestor() || this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])());
+  canViewSecurity = computed(() => this.profileStore.isInvestor());
 
   refreshUserDate() {
+    console.log('refreshUserDate');
+
     this.profileStore.getUserProfile()
       .pipe(take(1))
       .subscribe();
