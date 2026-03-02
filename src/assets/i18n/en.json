@@ -1024,5 +1024,28 @@
   },
   "WarningMesages":{
     "deletedOppprtuinity": "This draft plan is no longer valid because the associated opportunity has been deleted. Please delete this plan and submit a new one for an available opportunity."
+  },
+  "contactUs": {
+    "title": "Contact Us",
+    "description": "If you have any questions, feedback, or need assistance, please don't hesitate to reach out to us. We're here to help and ensure you have the best experience possible.",
+
+    "submit": "Submit",
+    "dialog": {
+      "title": "Title",
+      "titlePlaceholder": "Enter the subject of your message",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide a detailed description of your inquiry or feedback",
+      "contactUs": "Contact Us",
+      "titleRequired": "Title is required",
+      "titleMinLength" : "Title must be at least 3 characters long",
+      "titleMaxLength" : "Title cannot exceed 150 characters",
+      "descriptionRequired": "Description is required",
+      "descriptionMinLength" : "Description must be at least 10 characters long",
+      "descriptionMaxLength" : "Description cannot exceed 1000 characters"
+    },
+    "messages":{
+      "addedSuccess" : "Added Success"
+    }
   }
+
 }
