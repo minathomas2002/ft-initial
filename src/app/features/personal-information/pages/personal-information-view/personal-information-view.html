@@ -2,6 +2,7 @@
   <ng-container ngProjectAs="page-body">
     <app-user-image-section (onProfilePictureUpdated)="refreshUserDate()"></app-user-image-section>
     <app-personal-information-section (onPersonalInfoUpdate)="refreshUserDate()"></app-personal-information-section>
+    <app-security-section></app-security-section>
     @if(canViewSignature()){
     <app-signature-section (onSignatureUpdate)="refreshUserDate()"></app-signature-section>
     }

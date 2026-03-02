@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { SectionsLayout } from 'src/app/shared/components/layout-components/sections-layout/sections-layout';
 import { PersonalInformationSection } from '../../components/personal-information-section/personal-information-section';
 import { UserImageSection } from '../../components/user-image-section/user-image-section';
-import { RoleService } from 'src/app/shared/services/role/role-service';
-import { ERoles } from 'src/app/shared/enums';
 import { SignatureSection } from '../../components/signature-section/signature-section';
+import { SecuritySection } from '../../components/security-section/security-section';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
 
@@ -14,6 +13,7 @@ import { take } from 'rxjs';
     SectionsLayout,
     UserImageSection,
     PersonalInformationSection,
+    SecuritySection,
     SignatureSection,
   ],
   templateUrl: './personal-information-view.html',

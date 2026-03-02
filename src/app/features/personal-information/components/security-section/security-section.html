@@ -1,0 +1,15 @@
+<app-personal-information-card
+  [sectionTitle]="'Security'"
+  [sectionDescription]="'Manage your account security settings.'"
+  [hideFooter]="true"
+  [hideBody]="true"
+>
+  <p-button
+    headerAction
+    label="Change Password"
+    severity="secondary"
+    (onClick)="onChangePasswordClick()"
+  />
+</app-personal-information-card>
+
+<app-change-password [(visible)]="changePasswordVisible"></app-change-password>
