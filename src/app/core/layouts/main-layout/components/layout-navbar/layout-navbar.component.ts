@@ -14,7 +14,7 @@ import { LanguageSwitcherComponent } from '../../../../../shared/components/lang
 		ButtonModule,
 		DrawerModule,
 		SidebarContentComponent,
-		//LanguageSwitcherComponent,
+		LanguageSwitcherComponent,
 	],
 	templateUrl: './layout-navbar.component.html',
 	styleUrl: './layout-navbar.component.scss',
