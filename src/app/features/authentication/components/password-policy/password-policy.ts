@@ -28,6 +28,7 @@ import { PasswordToggleComponent } from 'src/app/shared/components/form/password
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordPolicy implements OnInit {
+  maxlength = input<number>(20);
   formControl = input.required<FormControl>({
     alias: 'passwordFormControl',
   });

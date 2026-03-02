@@ -39,7 +39,7 @@ export class ChangePassword {
   visible = model<boolean>(false);
   changePasswordForm = this.fb.group(
     {
-      currentPassword: ['', [Validators.required]],
+      currentPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
       password: ['', [Validators.required, passwordPolicyValidator()]],
       confirmPassword: ['', [Validators.required]],
     },

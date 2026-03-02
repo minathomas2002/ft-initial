@@ -15,6 +15,7 @@ export class PasswordToggleComponent {
   placeholder = input<string>('');
   autocomplete = input<string>('new-password');
   showPassword = signal(false);
+  maxlength = input<number>(20);
 
   togglePasswordVisibility() {
     this.showPassword.update(value => !value);
