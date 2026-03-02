@@ -28,7 +28,7 @@ export class OpportunityFormService {
     startDate: null,
     endDate: null,
     image: null,
-    quantityUnit: null
+    quantityUnit: EOpportunityQuantity.Unit.toString()
   }
   private OpportunityLocalizationFormInitialState: IOpportunityLocalizationFrom = {
     designEngineerings: [
@@ -92,7 +92,7 @@ export class OpportunityFormService {
         opportunityType: [null, Validators.required],
         shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
         opportunityCategory: ['', Validators.required],
-        quantityUnit :[null],
+        quantityUnit :[EOpportunityQuantity.Unit.toString()],
           spendSAR: [null, [Validators.min(0), Validators.max(10)]],
           minQuantity: [null, [Validators.min(0), Validators.max(9999999999999999)]],
           maxQuantity: [null, [Validators.min(0), Validators.max(9999999999999999)]],
@@ -398,7 +398,7 @@ export class OpportunityFormService {
       shortDescription: value.shortDescription,
       opportunityType: value.opportunityType?.toString(),
       opportunityCategory: value.opportunityCategory?.toString(), // TODO: Remove this once the API is updated
-      quantityUnit: value.quantityUnit?.toString(),
+      quantityUnit: value.quantityUnit?.toString() ?? EOpportunityQuantity.Unit.toString(),
       spendSAR: value.spendSAR != null ? Number(value.spendSAR) : null,
       minQuantity: value.minQuantity != null ? Number(value.minQuantity) : null,
       maxQuantity: value.maxQuantity != null ? Number(value.maxQuantity) : null,
