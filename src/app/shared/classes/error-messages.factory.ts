@@ -41,6 +41,9 @@ export const VALIDATION_MESSAGES = {
   invalidContactNumber: (label: string) =>
     `Please enter a valid mobile number (e.g., 05XXXXXXXX).`,
 
+  passwordMismatch: (label: string) =>
+    `Must match new password`,
+
   fileSizeExceeded: (label: string, error: { maxSize: number; actualSize: number }) => {
     const maxSizeMB = Math.round(error.maxSize / (1024 * 1024));
     return `All uploaded files in ${label} should be less than ${maxSizeMB} MB`;
