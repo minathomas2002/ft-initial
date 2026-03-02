@@ -43,10 +43,16 @@ export class PersonalInformationFormService {
 
   initializeForm(user: IProfileResponse): void {
     this.personalInformationForm.patchValue({
-      fullName: user.fullName,
+      fullName: user.nameEn,
       email: user.email,
-      phoneNumber: parsePhoneNumber(user.phoneNumber),
-      otherPhoneNumber: parsePhoneNumber(user.otherPhoneNumber ?? '') ?? null,
+      phoneNumber: {
+        countryCode: user.countryCode ?? '',
+        phoneNumber: user.phoneNumber,
+      },
+      otherPhoneNumber: user.otherPhoneNumber ? {
+        countryCode: user.otherPhoneCountryCode ?? '',
+        phoneNumber: user.otherPhoneCountryCode,
+      } : null,
       benaId: user.benaId,
       secRegisteredId: user.secRegisteredId,
     });

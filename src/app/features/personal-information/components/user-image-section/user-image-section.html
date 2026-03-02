@@ -30,6 +30,7 @@
 <app-change-your-profile-picture-modal
   [(visible)]="changeYourProfilePictureVisible"
   [image]="image()"
+  (onProfilePictureUpdated)="profilePictureUpdated($event)"
 ></app-change-your-profile-picture-modal>
 
 <app-change-password [(visible)]="changePasswordVisible"></app-change-password>

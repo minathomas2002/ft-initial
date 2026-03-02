@@ -1,9 +1,9 @@
 <app-sections-layout pageTitle="My Profile">
   <ng-container ngProjectAs="page-body">
-    <app-user-image-section></app-user-image-section>
-    <app-personal-information-section></app-personal-information-section>
+    <app-user-image-section (onProfilePictureUpdated)="refreshUserDate()"></app-user-image-section>
+    <app-personal-information-section (onPersonalInfoUpdate)="refreshUserDate()"></app-personal-information-section>
     @if(canViewSignature()){
-    <app-signature-section></app-signature-section>
+    <app-signature-section (onSignatureUpdate)="refreshUserDate()"></app-signature-section>
     }
   </ng-container>
 </app-sections-layout>

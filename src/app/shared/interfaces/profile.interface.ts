@@ -1,11 +1,28 @@
 export interface IProfileResponse {
-  photo: string | null;
-  fullName: string;
-  title: string;
+  photo: string;
+  nameEn: string;
+  nameAr: string;
   email: string;
   phoneNumber: string;
-  otherPhoneNumber: string | null;
-  benaId: string | null;
-  signature: string | null;
-  secRegisteredId: string | null;
+  otherPhoneNumber: string;
+  benaId: string;
+  signature: string;
+  userSignatureId: string;
+  secRegisteredId: string;
+  countryCode: string;
+  otherPhoneCountryCode: string;
+}
+
+export interface IUpdateSignatureRequest {
+  userSignatureId: string;
+  signatureBase64: string;
+}
+
+export interface IUpdatePersonalInfoRequest {
+  fullName: string;
+  countryCode: string;
+  phoneNumber: string;
+  otherPhoneNumber: string;
+  secRegisteredId: string;
+  otherPhoneCountryCode: string;
 }
