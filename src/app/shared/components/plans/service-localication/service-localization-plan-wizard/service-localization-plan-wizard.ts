@@ -462,7 +462,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     // Check if any step has saved comments
     const planComments = this.planStore.planComments()?.comments ?? [];
     const currentUserPageComments = this.planStore.currentUserPageComments();
-    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDV];
+    const returnedByManagerStatus = [EInternalUserPlanStatus.ReturnedByDV, EInternalUserPlanStatus.ReturnedByDEPTManager];
 
     if (returnedByManagerStatus.includes(this.planStatus() as EInternalUserPlanStatus)) {
       const stepMeta = [
