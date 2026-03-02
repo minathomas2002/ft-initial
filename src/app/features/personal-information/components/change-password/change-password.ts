@@ -24,14 +24,6 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangePassword {
-  constructor() {
-    effect(() => {
-      if (this.visible()) {
-        this.changePasswordForm.reset();
-      }
-    })
-  }
-
   private readonly fb = inject(FormBuilder);
   private readonly toasterService = inject(ToasterService);
   readonly profileStore = inject(ProfileStore);
@@ -77,7 +69,7 @@ export class ChangePassword {
     this.profileStore.changePassword(request).subscribe({
       next: (response) => {
         if (response.success) {
-          this.toasterService.success('Password changed successfully.');
+          this.toasterService.success('Password updated successfully.');
           this.changePasswordForm.reset();
           this.visible.set(false);
         }
