@@ -31,6 +31,7 @@
       <span class="text-red-500">*</span>
     </label>
     <p-select
+      [readonly]="isEditMode()"
       [options]="employees()"
       optionLabel="name"
       optionValue="id"
@@ -60,6 +61,7 @@
       <span class="text-red-500">*</span>
     </label>
     <p-select
+      [readonly]="isEditMode()"
       [options]="employees()"
       optionLabel="name"
       optionValue="id"

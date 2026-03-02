@@ -75,6 +75,7 @@ export const API_ENDPOINTS = {
         getActiveEmployees: `${Delegation}/Get_ActiveEmployees`,
         deleteDelegation: `${Delegation}/delete-delegation`,
         cancelDelegation: `${Delegation}/cancel-delegation`,
+        editDelegation : `${Delegation}/update-delegation`,
     }
   },
   AdminSettings: {

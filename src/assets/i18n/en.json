@@ -526,8 +526,8 @@
       "actions": "Actions"
     },
     "messages": {
-      "AddedSuccess": "Delegation Added Successfully",
-      "UpdatedSuccess": "Delegation Updated Successfully",
+      "addedSuccess": "Delegation Added Successfully",
+      "updatedSuccess": "Delegation Updated Successfully",
       "deleteSuccess": "Delegation Deleted Successfully",
       "cancelSuccess": "Delegation Cancelled Successfully"
     }

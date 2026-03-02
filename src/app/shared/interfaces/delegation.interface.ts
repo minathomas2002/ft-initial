@@ -3,9 +3,14 @@ import { IFilterBase } from "./filter.interface";
 export type DelegationStatus = "Upcoming" | "Active" | "Cancelled" | "Expired";
 
 export interface IAddDelegationRequest {
-  id?: string| null;
   delegatorId: string;
   delegateeId: string;
+  from: string;
+  to: string;
+}
+
+export interface IEditDelegationRequest {
+  delegationId: string;
   from: string;
   to: string;
 }

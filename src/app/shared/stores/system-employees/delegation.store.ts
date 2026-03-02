@@ -7,6 +7,7 @@ import {
   IAddDelegationRequest,
   IDelegationFilterRequest,
   IDelegationRecord,
+  IEditDelegationRequest,
 } from '../../interfaces/delegation.interface';
 
 const initialState: {
@@ -62,11 +63,23 @@ export const DelegationStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error adding delegation' });
             return throwError(() => new Error(error.errorMessage || 'Error adding delegation'));
           }),
         );
       },
+
+      editDelegation(request: IEditDelegationRequest) {
+        patchState(store, { isProcessing: true, error: null });
+        return delegationApiService.editDelegation(request).pipe(
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            return throwError(() => new Error(error.errorMessage || 'Error editing delegation'));
+          }),
+        );
+      },
+
    getActiveEmployees() {
       patchState(store, { isLoadingDetails: true, error: null });
 

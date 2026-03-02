@@ -21,6 +21,7 @@ import {
   ActiveEmployee,
   IAddDelegationRequest,
   IDelegationRecord,
+  IEditDelegationRequest,
 } from 'src/app/shared/interfaces/delegation.interface';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SelectModule } from 'primeng/select';
@@ -102,7 +103,12 @@ export class AddEditDelegationDialog implements OnInit {
     });
   }
   onConfirm() {
-    this.submitNewDelegation();
+    if(this.isEditMode()){
+      this.submitEditedDelegation();
+    }
+    else {
+      this.submitNewDelegation();
+    }
   }
   resetForm() {
     this.formService.ResetFormFields();
@@ -127,6 +133,28 @@ export class AddEditDelegationDialog implements OnInit {
     }
   }
 
+  private submitEditedDelegation() {
+    const form = this.formService.form;
+    const req: IEditDelegationRequest = {
+      delegationId: form.controls.id.value!,
+      from: form.controls.from.value ? new Date(form.controls.from.value).toISOString() : '',
+      to: form.controls.to.value ? new Date(form.controls.to.value).toISOString() : '',
+    };
+
+    this.delegationStore
+      .editDelegation(req)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toasterService.success(this.i18nService.translate('delegation.messages.updatedSuccess'));
+          this.onSuccess.emit();
+          this.dialogVisible.set(false);
+          this.formService.ResetFormFields();
+        },
+        error: (error: any) => {
+        },
+      });
+  }
 
 
   private submitNewDelegation() {
@@ -142,7 +170,7 @@ export class AddEditDelegationDialog implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.toasterService.success(this.i18nService.translate('delegation.messages.AddedSuccess'));
+          this.toasterService.success(this.i18nService.translate('delegation.messages.addedSuccess'));
           this.onSuccess.emit();
           this.dialogVisible.set(false);
           this.formService.ResetFormFields();
