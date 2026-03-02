@@ -14,6 +14,16 @@
       (onClick)="onAddEmployee()"
     />
     }
+    @if(activeTab() === '2'){
+    <p-button
+      [label]="'delegation.list.addDelegation' | translate"
+      severity="primary"
+      class="flex"
+      fluid
+      icon="icon-plus"
+      (onClick)="onAddEditDelegation()"
+    />
+    }
   </div>
   <p-tabs
     [(value)]="activeTab"
@@ -22,6 +32,7 @@
     <p-tablist>
       <p-tab value="0">{{ 'users.tabs.employees' | translate }}</p-tab>
       <p-tab value="1">{{ 'users.tabs.roleManagement' | translate }}</p-tab>
+      <p-tab value="2">{{ 'users.tabs.delegation' | translate }}</p-tab>
     </p-tablist>
     <p-tabpanels>
       <p-tabpanel value="0">
@@ -42,6 +53,15 @@
         }
         }
       </p-tabpanel>
+      <p-tabpanel value="2">
+        @if(activeTab() === '2'){
+        @defer (on viewport) {
+        <app-delegation></app-delegation>
+        } @placeholder {
+        <div></div>
+        }
+        }
+      </p-tabpanel>
     </p-tabpanels>
   </p-tabs>
 
@@ -53,4 +73,14 @@
   >
   </app-add-edit-employee-dialog>
   }
+
+  @if(AddEditDelegationDialogVisible()){
+  <app-add-edit-delegation-dialog
+    [(dialogVisible)]="AddEditDelegationDialogVisible"
+    [isEditMode]="false"
+    (onSuccess)="onAddDelegationSuccess()"
+  >
+  </app-add-edit-delegation-dialog>
+  }
+
 </div>

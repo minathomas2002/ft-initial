@@ -1,0 +1,132 @@
+<app-table-layout>
+  <ng-container ngProjectAs="table-filters">
+    <app-delegation-filter></app-delegation-filter>
+  </ng-container>
+
+  <ng-container ngProjectAs="table-body">
+    <app-table-skeleton
+      [headers]="headers()"
+      [isLoading]="delegationStore.isLoading()"
+    >
+      <app-data-table
+        [columns]="headers()"
+        [rows]="rows()"
+        [(filter)]="filterService.filter"
+        [totalRecords]="totalRecords()"
+        (filterChange)="filterService.applyFilterWithPaging()"
+        (sortChange)="filterService.applyFilter()"
+      >
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
+
+          <!-- Delegator -->
+          <td>
+            <span
+              [pTooltip]="item.delegatorName"
+              tooltipPosition="top"
+            >{{ item.delegatorName }}</span>
+          </td>
+
+          <!-- Delegatee -->
+          <td>
+            <span
+              [pTooltip]="item.delegateeName"
+              tooltipPosition="top"
+            >{{ item.delegateeName }}</span>
+          </td>
+
+          <!-- Start Date -->
+          <td>
+            {{ item.startDate | date : 'dd MMM yyyy' }}
+          </td>
+
+          <!-- End Date -->
+          <td>
+            {{ item.endDate | date : 'dd MMM yyyy' }}
+          </td>
+
+          <!-- Created At -->
+          <td>
+            {{ item.createdAt | date : 'dd MMM yyyy' }}
+          </td>
+
+          <!-- Created By -->
+          <td>
+            <span
+              [pTooltip]="item.createdBy"
+              tooltipPosition="top"
+            >{{ item.createdBy }}</span>
+          </td>
+
+          <!-- Last Modified By -->
+          <td>
+            <span
+              [pTooltip]="item.updatedBy"
+              tooltipPosition="top"
+            >{{ item.updatedBy }}</span>
+          </td>
+
+          <!-- Last Modified Date -->
+          <td>
+            {{ item.updatedAt | date : 'dd MMM yyyy' }}
+          </td>
+
+          <!-- Status -->
+          <td>
+            <app-base-tag
+              [color]="getDelegationStatus(item.status).color"
+              [value]="getDelegationStatus(item.status).title"
+            />
+          </td>
+
+          <!-- Action Menu -->
+          <td>
+            <app-delegation-action-menu
+              [actions]="item.delegationActions"
+              [disabled]="item.delegationActions.length == 0"
+              (onDelete)="onDelete(item)"
+              (onEdit)="onUpdateDelegate(item)"
+              (onCancel)="onCancelDelegate(item)"
+            ></app-delegation-action-menu>
+          </td>
+        </ng-template>
+      </app-data-table>
+    </app-table-skeleton>
+  </ng-container>
+</app-table-layout>
+
+
+@if(EditDialogVisible()){
+<app-add-edit-delegation-dialog
+  [(dialogVisible)]="EditDialogVisible"
+  [isEditMode]="true"
+  (onSuccess)="onUpdateDelegationSuccess()"
+  [SelectedItem]="delegation() ?? null"
+  >
+</app-add-edit-delegation-dialog>
+}
+
+<app-general-confirmation-dialog
+  [(visible)]="deleteDialogVisible"
+  (onConfirm)="onDeleteConfirm()"
+  [icon]="'icon-trash-2'"
+  [title]="'delegation.dialog.delete.title' | translate"
+  [description]="'delegation.dialog.delete.description' | translate"
+  (confirmed)="onDeleteConfirm()"
+  [confirmButtonSeverity]="'danger'"
+  [confirmationLabel]="'dialog.delete' | translate"
+></app-general-confirmation-dialog>
+
+
+<app-general-confirmation-dialog
+  [(visible)]="cancelDialogVisible"
+  (onConfirm)="onCancelConfirm()"
+  [icon]="'slash-circle-01'"
+  [title]="'delegation.dialog.cancel.title' | translate"
+  [description]="'delegation.dialog.cancel.description' | translate"
+  (confirmed)="onCancelConfirm()"
+  [confirmButtonSeverity]="'danger'"
+  [confirmationLabel]="'dialog.cancel' | translate"
+></app-general-confirmation-dialog>
