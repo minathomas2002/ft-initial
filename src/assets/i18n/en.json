@@ -1044,7 +1044,7 @@
       "descriptionMaxLength" : "Description cannot exceed 1000 characters"
     },
     "messages":{
-      "addedSuccess" : "Added Success"
+      "addedSuccess" : "Your request has been sent successfully."
     }
   }
 
