@@ -28,8 +28,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SelectModule } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { map, of } from 'rxjs';
-import { ERoles } from 'src/app/shared/enums';
+import { EDelegationStatus, ERoles } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
@@ -50,7 +49,8 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEditDelegationDialog implements OnInit {
-  today = new Date();
+  /** Start of today (midnight) - ensures dates at 00:00:00 pass minDate validation */
+  today = new Date(new Date().setHours(0, 0, 0, 0));
   onSuccess = output<void>();
   destroyRef = inject(DestroyRef);
   jobIdErrorMessage = signal<string | null>(null);
@@ -67,30 +67,6 @@ export class AddEditDelegationDialog implements OnInit {
   i18nService = inject(I18nService);
 
   employees = this.delegationStore.activeEmployees;
-
-  disabledEndDate = toSignal(
-    (this.formService.form.get('startDate')?.valueChanges ?? of(new Date())).pipe(
-      map((value) => (value ? new Date(value) : new Date())),
-    ),
-    { initialValue: new Date() as Date, requireSync: false },
-  );
-
-  disabledStartDate = toSignal(
-    (this.formService.form.get('endDate')?.valueChanges ?? of(new Date())).pipe(
-      map((value) => {
-        const date = value ? new Date(value) : new Date();
-        const today = new Date();
-        if (date.toDateString() === today.toDateString()) return null;
-        return date;
-      }),
-    ),
-    { initialValue: null as Date | null, requireSync: false },
-  );
-
-  disabledStartDatesArray = computed(() => {
-    const date = this.disabledStartDate();
-    return date ? [date] : [];
-  });
 
   constructor() {
     effect(() => {
@@ -131,16 +107,8 @@ export class AddEditDelegationDialog implements OnInit {
 
   LoadDelegationDetails() {
     const delegation = this.SelectedItem();
-
     if (delegation) {
-      this.formService.form.patchValue({
-        id: delegation.delgationId,
-        delegatorId: delegation.delegatorId,
-        delegateeId: delegation.delegateeId,
-        from: new Date(delegation.startDate),
-        to: new Date(delegation.endDate),
-      });
-      this.formService.form.updateValueAndValidity();
+      this.formService.setFormInEditMode(delegation);
     }
   }
 
@@ -170,8 +138,8 @@ export class AddEditDelegationDialog implements OnInit {
     const form = this.formService.form;
     const req: IEditDelegationRequest = {
       delegationId: form.controls.id.value!,
-      from: form.controls.from.value ? new Date(form.controls.from.value).toISOString() : '',
-      to: form.controls.to.value ? new Date(form.controls.to.value).toISOString() : '',
+      from: form.controls.from.value ? new Date(form.controls.from.value).toLocaleDateString('en-us') : '',
+      to: form.controls.to.value ? new Date(form.controls.to.value).toLocaleDateString('en-us') : '',
     };
 
     this.delegationStore
@@ -195,8 +163,8 @@ export class AddEditDelegationDialog implements OnInit {
     const req: IAddDelegationRequest = {
       delegatorId: form.controls.delegatorId.value!,
       delegateeId: form.controls.delegateeId.value!,
-      from: form.controls.from.value ? new Date(form.controls.from.value).toISOString() : '',
-      to: form.controls.to.value ? new Date(form.controls.to.value).toISOString() : '',
+      from: form.controls.from.value ? new Date(form.controls.from.value).toLocaleDateString('en-us') : '',
+      to: form.controls.to.value ? new Date(form.controls.to.value).toLocaleDateString('en-us') : '',
     };
     this.delegationStore
       .addDelegation(req)

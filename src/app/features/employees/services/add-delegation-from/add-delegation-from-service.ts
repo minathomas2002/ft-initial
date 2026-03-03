@@ -50,17 +50,28 @@ export class AddDelegationFormService {
   }
 
   setFormInEditMode(delegation: IDelegationRecord) {
+    const fromDate = this.parseToLocalDate(delegation.startDate);
+    const toDate = this.parseToLocalDate(delegation.endDate);
     this.form.patchValue({
       id: delegation.delgationId,
       delegatorId: delegation.delegatorId,
       delegateeId: delegation.delegateeId,
-      from: new Date(delegation.startDate),
-      to: new Date(delegation.endDate),
+      from: fromDate,
+      to: toDate,
     });
     this.delegatorId.disable();
     this.delegateeId.disable();
     if (delegation.status === EDelegationStatus.ACTIVE) {
       this.from.disable();
     }
+    this.form.updateValueAndValidity();
+  }
+
+  /** Parse API date string to local midnight to avoid timezone/minDate display issues */
+  private parseToLocalDate(dateStr: string): Date | null {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return null;
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
   }
 }
