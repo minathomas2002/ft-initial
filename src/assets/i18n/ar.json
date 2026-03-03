@@ -371,7 +371,8 @@
 		},
 		"tabs": {
 			"employees": "الموظفون",
-			"roleManagement": "إدارة الأدوار"
+			"roleManagement": "إدارة الأدوار",
+			"delegation": "التفويض"
 		},
 		"filter": {
 			"searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني أو تاريخ الانضمام",
@@ -445,6 +446,78 @@
 			"employeeUpdatedSuccess": "تم تحديث الموظف بنجاح",
 			"deactivateSuccess": "تم إلغاء تفعيل المستخدم بنجاح",
 			"transferRoleSuccess": "تم نقل الدور بنجاح"
+		}
+	},
+	"delegation": {
+		"status": {
+			"active": "نشط",
+			"cancelled": "ملغى",
+			"expired": "منتهي",
+			"upcoming": "قادم"
+		},
+		"actions": {
+			"edit": "تعديل",
+			"delete": "حذف",
+			"cancel": "إلغاء"
+		},
+		"dialog": {
+			"addTitle": "إضافة تفويض",
+			"editTitle": "تعديل التفويض",
+			"subTitle": "فوض مهامك لموظف آخر أثناء غيابك",
+			"delegator": "الموكل",
+			"delegatee": "الموكل إليه",
+			"startDate": "تاريخ البدء",
+			"endDate": "تاريخ الانتهاء",
+			"status": "الحالة",
+			"confirmButton": "إرسال",
+			"delegatorRequired": "الموكل مطلوب",
+			"delegateeRequired": "الموكل إليه مطلوب",
+			"startDateRequired": "تاريخ البدء مطلوب",
+			"endDateRequired": "تاريخ الانتهاء مطلوب",
+			"delegatorPlaceHolder": "اختر الموكل",
+			"delegateePlaceHolder": "اختر الموكل إليه",
+			"selectStartDate": "اختر تاريخ البدء",
+			"selectEndDate": "اختر تاريخ الانتهاء",
+			"delete": {
+				"title": "هل أنت متأكد من حذف هذا التفويض؟",
+				"description": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم."
+			},
+			"cancel": {
+				"title": "هل أنت متأكد من إلغاء هذا التفويض؟",
+				"description": "سيؤدي إلغاء التفويض إلى إنهاء التفويض فوراً"
+			},
+			"edit": {
+				"editTitle": "تعديل التفويض"
+			},
+			"add": {
+				"addTitle": "إضافة تفويض"
+			}
+		},
+		"list": {
+			"addDelegation": "إضافة تفويض"
+		},
+		"filter": {
+			"searchPlaceholder": "البحث باسم الموكل إليه أو الموكل أو المنشئ أو آخر معدل",
+			"selectDelegationPeriod": "اختر فترة التفويض",
+			"statusPlaceholder": "اختر الحالة"
+		},
+		"table": {
+			"delegatorName": "اسم الموكل",
+			"delegateeName": "اسم الموكل إليه",
+			"startDate": "تاريخ البدء",
+			"endDate": "تاريخ الانتهاء",
+			"createdAt": "تاريخ الإنشاء",
+			"createdBy": "المنشئ",
+			"updatedBy": "آخر معدل",
+			"updatedAt": "تاريخ آخر تعديل",
+			"status": "الحالة",
+			"actions": "الإجراءات"
+		},
+		"messages": {
+			"addedSuccess": "تم إضافة التفويض بنجاح",
+			"updatedSuccess": "تم تحديث التفويض بنجاح",
+			"deleteSuccess": "تم حذف التفويض بنجاح",
+			"cancelSuccess": "تم إلغاء التفويض بنجاح"
 		}
 	},
 	"investors": {
