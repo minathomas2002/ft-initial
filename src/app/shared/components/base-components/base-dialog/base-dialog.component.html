@@ -1,12 +1,13 @@
 <p-dialog
-  [(visible)]="visible"
+  [visible]="visible()"
+  (visibleChange)="onVisibleChange($event)"
   [modal]="true"
   [resizable]="false"
   [closable]="closable()"
   [closeOnEscape]="closeOnEscape()"
   [dismissableMask]="dismissableMask()"
   #dialogRef
-  (onHide)="onClose.emit()"
+  (onHide)="handleHide()"
   (onShow)="onShow.emit()"
   [appendTo]="appendTo()"
   [contentStyleClass]="contentStyleClass()"
