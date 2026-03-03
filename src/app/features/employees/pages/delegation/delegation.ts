@@ -34,7 +34,7 @@ import { AddEditDelegationDialog } from "../../components/add-edit-delegation-di
 
 @Component({
   selector: 'app-delegation',
- imports: [
+  imports: [
     TableLayoutComponent,
     TableSkeletonComponent,
     DatePipe,
@@ -48,7 +48,7 @@ import { AddEditDelegationDialog } from "../../components/add-edit-delegation-di
     GeneralConfirmationDialogComponent,
     TranslatePipe,
     AddEditDelegationDialog
-],
+  ],
   templateUrl: './delegation.html',
   styleUrl: './delegation.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,11 +65,13 @@ export class Delegation implements OnInit {
         label: this.i18nService.translate('delegation.table.delegatorName'),
         isSortable: true,
         sortingKey: 'delegatorName',
+        tooltip: 'Delegator – the original owner of tasks.',
       },
       {
         label: this.i18nService.translate('delegation.table.delegateeName'),
         isSortable: true,
         sortingKey: 'delegateeName',
+        tooltip: 'Delegatee – the user authorized to act on behalf of the delegator.',
       },
       {
         label: this.i18nService.translate('delegation.table.startDate'),
@@ -171,7 +173,7 @@ export class Delegation implements OnInit {
 
 
 
-  onUpdateDelegate(item: IDelegationRecord  ) {
+  onUpdateDelegate(item: IDelegationRecord) {
     this.delegation.set(item);
     this.EditDialogVisible.set(true);
   }

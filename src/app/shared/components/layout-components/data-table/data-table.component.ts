@@ -16,6 +16,7 @@ import { EmptyRecordsComponent } from "../../utility-components/empty-records/em
 import { PaginatorComponent } from "../../utility-components/paginator/paginator.component";
 import { ESortingOrder } from "./../../../enums/sorting.enum";
 import { I18nService } from "src/app/shared/services/i18n";
+import { TooltipModule } from "primeng/tooltip";
 
 @Component({
   selector: "app-data-table",
@@ -25,6 +26,7 @@ import { I18nService } from "src/app/shared/services/i18n";
     PaginatorComponent,
     NgClass,
     EmptyRecordsComponent,
+    TooltipModule,
   ],
   templateUrl: "./data-table.component.html",
   styleUrl: "./data-table.component.scss",
