@@ -21,7 +21,7 @@
     <input
       #fileInput
       type="file"
-      accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
+      accept="image/jpg,image/png"
       class="hidden"
       (change)="onFileSelected($event)"
     />
@@ -39,7 +39,7 @@
         severity="danger"
         icon="icon-trash-2"
         text
-        [disabled]="!previewImageUrl() && !image()"
+        [disabled]="isImageNotSelectedPlaceholder()"
         (onClick)="onDeleteUserPhotoClick()"
       />
     </div>

@@ -43,6 +43,7 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
   private readonly maxFileSize = 2 * 1024 * 1024; // 2MB
   private readonly acceptedTypes = ['image/jpg', 'image/png'];
 
+  isImageNotSelectedPlaceholder = computed(() => this.image() === this.userPlaceholderImage);
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
