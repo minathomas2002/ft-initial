@@ -17,43 +17,24 @@
         styleClass="!text-lg"
         icon="icon-list"
         text
-        (onClick)="handleSidebarToggle()"
+        (onClick)="visibleSidebarDrawer.set(true)"
       />
-    </div>
-    <div>
-      <button
-        type="button"
-        class="absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors"
-        [class.end-0]="!isRtl()"
-        [class.translate-x-1/2]="!isRtl()"
-        [class.start-0]="isRtl()"
-        [class.-translate-x-1/2]="isRtl()"
-        (click)="toggleSidebarDrawerCollapsed()"
-        [attr.aria-label]="sidebarDrawerCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
-      >
-        <i
-          [class]="sidebarToggleIcon()"
-          class="text-gray-600 text-lg"
-        ></i>
-      </button>
     </div>
   </div>
 </div>
 
 <p-drawer
+  header="Right Drawer"
   [(visible)]="visibleSidebarDrawer"
   [position]="drawerPosition()"
   #drawerRef
   [styleClass]="drawerStyleClass()"
 >
   <ng-template #headless>
-    <div class="relative h-full flex">
-      <app-sidebar-content
-        [(sidebarDrawerVisibility)]="visibleSidebarDrawer"
-        [collapsed]="sidebarDrawerCollapsed()"
-        class="h-full px-[16px] py-[24px] flex-1 min-w-0"
-      />
-
-    </div>
+    <app-sidebar-content
+      [(sidebarDrawerVisibility)]="visibleSidebarDrawer"
+      [(minimizedSidebarDrawer)]="sidebarDrawerCollapsed"
+      class="h-full px-[16px] py-[24px]"
+    />
   </ng-template>
 </p-drawer>

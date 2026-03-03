@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, model, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { PanelModule } from 'primeng/panel';
@@ -9,10 +10,20 @@ import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 import { BaseLogoComponent } from 'src/app/shared/components/base-components/base-logo/base-logo.component';
 import { AddContactUsDialog } from "./add-contact-us-dialog/add-contact-us-dialog";
+import { Button, ButtonModule } from "primeng/button";
 
 @Component({
   selector: 'app-sidebar-content',
-  imports: [SidebarLinkComponent, PanelModule, SidebarDropdownComponent, RouterModule, BaseLogoComponent, AddContactUsDialog],
+  imports: [
+    NgClass,
+    SidebarLinkComponent,
+    PanelModule,
+    SidebarDropdownComponent,
+    RouterModule,
+    BaseLogoComponent,
+    AddContactUsDialog,
+    ButtonModule
+  ],
   templateUrl: './sidebar-content.component.html',
   styleUrl: './sidebar-content.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,6 +39,22 @@ export class SidebarContentComponent {
   sidebarDrawerVisibility = model(false);
   /** When true, show icons only (for mobile drawer collapsed state) */
   collapsed = input<boolean>(false);
+
+  minimizedSidebarDrawer = model<boolean>(false);
+
+  /** LTR: expand=right, collapse=left. RTL: expand=left, collapse=right */
+  sidebarToggleIcon = computed(() => {
+    const collapsed = this.minimizedSidebarDrawer();
+    const rtl = this.i18nService.currentLanguage() === 'ar';
+    if (collapsed) return rtl ? 'icon-arrow-left' : 'icon-arrow-right';
+    return rtl ? 'icon-arrow-right' : 'icon-arrow-left';
+  });
+
+  /** Toggle button position: RTL uses left, LTR uses right */
+  togglePositionClass = computed(() => {
+    const rtl = this.i18nService.currentLanguage() === 'ar';
+    return rtl ? 'left-[-30px]' : 'right-[-30px]';
+  });
 
   sidebarLinks = computed<ISideBarLink[]>((): ISideBarLink[] => {
     // Access currentLanguage to make computed reactive to language changes
@@ -104,5 +131,9 @@ export class SidebarContentComponent {
 
   closeSidebarDrawer() {
     this.sidebarDrawerVisibility.set(false);
+  }
+
+  toggleSidebarDrawerCollapsed() {
+    this.minimizedSidebarDrawer.set(!this.minimizedSidebarDrawer());
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model, output, signal } from '@angular/core';
 import { NavbarProfileDropdownComponent } from '../navbar-profile-dropdown/navbar-profile-dropdown.component';
 import { NavbarNotificationsComponent } from '../navbar-notifications/navbar-notifications.component';
 import { ButtonModule } from 'primeng/button';
@@ -25,7 +25,7 @@ export class LayoutNavbarComponent {
 	private readonly i18nService = inject(I18nService);
 
 	visibleSidebarDrawer = signal(false);
-	sidebarDrawerCollapsed = signal(false);
+	sidebarDrawerCollapsed = model(false);
 	toggleDesktopSidebar = output<void>();
 
 	isRtl = computed(() => this.i18nService.currentLanguage() === 'ar');
@@ -34,8 +34,8 @@ export class LayoutNavbarComponent {
 
 	drawerStyleClass = computed(() =>
 		this.sidebarDrawerCollapsed()
-			? '!w-[80px] max-w-[95%] transition-[width] duration-300'
-			: '!w-[311px] max-w-[95%] transition-[width] duration-300',
+			? '!w-[80px] max-w-[95%] transition-[width] duration-300 ease-in-out'
+			: '!w-[311px] max-w-[95%] transition-[width] duration-300 ease-in-out',
 	);
 
 	/** LTR: expand=right, collapse=left. RTL: expand=left, collapse=right */
@@ -53,9 +53,5 @@ export class LayoutNavbarComponent {
 		}
 
 		this.visibleSidebarDrawer.set(true);
-	}
-
-	toggleSidebarDrawerCollapsed(): void {
-		this.sidebarDrawerCollapsed.update((v) => !v);
 	}
 }

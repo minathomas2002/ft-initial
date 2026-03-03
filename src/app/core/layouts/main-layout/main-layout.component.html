@@ -1,11 +1,7 @@
 <div class="flex flex-col md:flex-row w-full">
-  @if (isSidebarExpanded()) {
-  <div class="w-full md:w-[280px] flex-shrink-0 lg:block hidden">
-    <app-layout-sidebar></app-layout-sidebar>
-  </div>
-  }
+  <app-layout-sidebar></app-layout-sidebar>
   <div class="flex-1 min-w-0 bg-gray-50">
-    <app-layout-navbar (toggleDesktopSidebar)="toggleSidebar()" />
+    <app-layout-navbar />
     <app-layout-content />
     <app-layout-footer />
   </div>
