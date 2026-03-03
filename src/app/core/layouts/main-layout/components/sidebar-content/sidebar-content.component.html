@@ -28,6 +28,7 @@
     <div class="sidebar-links mt-[48px]">
       <ul class="list-none">
 
+        @if(canContactUs()){
         <li
           class="mb-[8px]"
           (click)="AddContactUsDialogVisible.set(true)"
@@ -37,13 +38,12 @@
             Contact Us
           </a>
         </li>
+        }
       </ul>
     </div>
   </div>
 </div>
 
-  @if(AddContactUsDialogVisible()){
-    <app-add-contact-us-dialog
-      [(dialogVisible)]="AddContactUsDialogVisible"
-    ></app-add-contact-us-dialog>
-  }
+@if(AddContactUsDialogVisible()){
+<app-add-contact-us-dialog [(dialogVisible)]="AddContactUsDialogVisible"></app-add-contact-us-dialog>
+}

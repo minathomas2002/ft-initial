@@ -21,6 +21,7 @@ export class SidebarContentComponent {
   private readonly i18nService = inject(I18nService);
   private readonly permissionService = inject(PermissionService);
 
+  canContactUs = this.permissionService.canContactUs;
   contactUsFormVisibility = signal(false);
 
   AddContactUsDialogVisible = signal<boolean>(false);
