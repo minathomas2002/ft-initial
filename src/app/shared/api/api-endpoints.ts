@@ -12,6 +12,7 @@ const Roles = "Roles";
 const RoleManagement = "RoleManagement";
 const Notifications = "Notifications";
 const Delegation = "Delegation";
+const ContactUs = "ContactUs";
 
 const Auth = "Auth";
 const Plans = "Plans";
@@ -137,4 +138,7 @@ export const API_ENDPOINTS = {
     markNotificationAsRead: `${Notifications}`,
     markAllNotificationsAsRead: `${Notifications}/read-all`,
   },
+  contactUs: {
+    add: `${ContactUs}/add`,
+  }
 };
