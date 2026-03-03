@@ -13,6 +13,7 @@ import { BaseErrorComponent } from '../base-error/base-error.component';
 export class BaseErrorMessages {
   control = input.required<AbstractControl>();
   label = input.required<string>();
+  customRequiredMessage = input<string | null>(null);
 
   private controlChangeTrigger = signal(0);
 
@@ -40,6 +41,16 @@ export class BaseErrorMessages {
   errorMessages = computed(() => {
     // Read trigger to make computed reactive to input changes
     this.controlChangeTrigger();
-    return ErrorMessagesFactory.getErrorMessages(this.control(), this.label());
+    const messages = ErrorMessagesFactory.getErrorMessages(this.control(), this.label());
+    const customRequiredMessage = this.customRequiredMessage();
+
+    if (!customRequiredMessage) {
+      return messages;
+    }
+
+    const defaultRequiredMessage = `${this.label()} is required`;
+    return messages.map((message) =>
+      message === defaultRequiredMessage ? customRequiredMessage : message
+    );
   });
 }

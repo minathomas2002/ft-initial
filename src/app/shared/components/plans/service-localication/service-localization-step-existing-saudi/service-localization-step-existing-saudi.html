@@ -878,6 +878,7 @@
     <app-base-error-messages
       [control]="getValueControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
       [label]="'Attachments'"
+      [customRequiredMessage]="'Attachment is required when Agreement Copy is selected as Yes'"
     />
   </div>
 
