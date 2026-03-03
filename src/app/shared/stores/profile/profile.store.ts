@@ -31,7 +31,7 @@ export const ProfileStore = signalStore(
     const authStore = inject(AuthStore);
     return {
       isInvestor: roleService.hasAnyRoleSignal([ERoles.INVESTOR]),
-      userImage: computed(() => store.userProfile()?.photo ?? 'assets/images/user_placeholder.svg'),
+      userImage: computed(() => store.userProfile()?.userPicBase64 ?? 'assets/images/user_placeholder.svg'),
       userSignature: computed(() => store.userProfile()?.signature ?? null),
       userTitle: computed(() => roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? authStore.userProfile()?.investorCode : authStore.userProfile()?.roleNames[0]),
       userID: computed(() => authStore.userProfile()?.employeeID ?? ''),

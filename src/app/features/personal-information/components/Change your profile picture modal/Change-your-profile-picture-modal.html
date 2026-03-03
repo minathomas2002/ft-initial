@@ -39,9 +39,19 @@
         severity="danger"
         icon="icon-trash-2"
         text
-        [disabled]="!previewImageUrl()"
-        (onClick)="onDeleteUserPhoto()"
+        [disabled]="!previewImageUrl() && !image()"
+        (onClick)="onDeleteUserPhotoClick()"
       />
     </div>
   </div>
 </app-base-dialog>
+
+<app-general-confirmation-dialog
+  [(visible)]="deleteConfirmVisible"
+  [title]="'profile.deleteConfirm.title' | translate"
+  [description]="'profile.deleteConfirm.description' | translate"
+  [confirmationLabel]="'common.delete' | translate"
+  [icon]="'icon-trash-2'"
+  [confirmButtonSeverity]="'danger'"
+  (confirmed)="onConfirmDeleteUserPhoto()"
+/>

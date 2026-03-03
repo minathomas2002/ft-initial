@@ -140,6 +140,10 @@
   "profile": {
     "messages": {
       "profilePictureUpdated": "Profile picture updated successfully"
+    },
+    "deleteConfirm": {
+      "title": "Delete profile picture",
+      "description": "Are you sure you want to delete your profile picture? This action cannot be undone."
     }
   },
   "navigation": {

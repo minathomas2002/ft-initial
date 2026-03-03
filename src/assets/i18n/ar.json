@@ -134,6 +134,10 @@
 	"profile": {
 		"messages": {
 			"profilePictureUpdated": "تم تحديث صورة الملف الشخصي بنجاح"
+		},
+		"deleteConfirm": {
+			"title": "حذف صورة الملف الشخصي",
+			"description": "هل أنت متأكد من أنك تريد حذف صورة الملف الشخصي؟ لا يمكن التراجع عن هذا الإجراء."
 		}
 	},
 	"navigation": {

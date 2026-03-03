@@ -4,7 +4,7 @@
   [hideFooter]="!isInvestor() || isViewMode()"
   (onCancelClicked)="onCancelClick()"
   (onSubmit)="onSubmit()"
-  [submitActionDisabled]="isLoading() || personalInfoProcessing()"
+  [submitActionDisabled]="isLoading() || personalInfoProcessing() || formService.personalInformationForm.invalid"
 >
   @if(isViewMode() && isInvestor()){
   <p-button

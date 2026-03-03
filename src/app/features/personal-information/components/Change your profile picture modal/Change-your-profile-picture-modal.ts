@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, model, OnD
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { BaseDialogComponent } from 'src/app/shared/components/base-components/base-dialog/base-dialog.component';
+import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
@@ -11,7 +13,9 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
   imports: [
     BaseDialogComponent,
     AvatarModule,
-    ButtonModule
+    ButtonModule,
+    GeneralConfirmationDialogComponent,
+    TranslatePipe,
   ],
   templateUrl: './Change-your-profile-picture-modal.html',
   styleUrl: './Change-your-profile-picture-modal.scss',
@@ -34,9 +38,10 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
   private profileStore = inject(ProfileStore);
   profilePictureProcessing = computed(() => this.profileStore.profilePictureProcessing());
 
+  deleteConfirmVisible = signal<boolean>(false);
 
   private readonly maxFileSize = 2 * 1024 * 1024; // 2MB
-  private readonly acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  private readonly acceptedTypes = ['image/jpg', 'image/png'];
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -64,12 +69,17 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
     input.value = ''; // Reset so selecting same file again triggers change
   }
 
-  onDeleteUserPhoto(): void {
+  onDeleteUserPhotoClick(): void {
+    this.deleteConfirmVisible.set(true);
+  }
+
+  onConfirmDeleteUserPhoto(): void {
     this.revokePreviewUrl();
     this.newProfilePicture.set(null);
     this.previewImageUrl.set(null);
     this.allowSaveAction.set(true);
     this.onProfilePictureUpdated.emit(null);
+    this.deleteConfirmVisible.set(false);
   }
 
   onSaveUserPhoto(): void {

@@ -47,6 +47,7 @@ export class PersonalInformationSection implements OnInit {
   protected personalInfoProcessing = computed(() => this.profileStore.personalInfoProcessing());
   protected onPersonalInfoUpdate = output<void>();
 
+
   /** When true, shows skeleton placeholders; when false, shows the form. Wire to your data loading state. */
   isLoading = computed(() => this.profileStore.loading());
 
