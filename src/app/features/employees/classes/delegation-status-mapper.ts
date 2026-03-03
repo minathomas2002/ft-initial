@@ -1,4 +1,4 @@
-import { EDelegationStatus } from "src/app/shared/enums/delegation-enum";
+import { EDelegationStatus } from "src/app/shared/enums/delegation.enum";
 import type { TColors } from "src/app/shared/interfaces";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 
