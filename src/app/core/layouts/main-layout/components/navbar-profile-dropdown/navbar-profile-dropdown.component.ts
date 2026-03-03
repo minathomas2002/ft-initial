@@ -33,8 +33,8 @@ export class NavbarProfileDropdownComponent {
     this.i18nService.currentLanguage();
     const items = [];
 
-    const shouldHideLogout = (this.isInternal || this.isSecEnvironment()) && this.isProduction();
-    if (!shouldHideLogout) {
+    // const shouldHideLogout = (this.isInternal || this.isSecEnvironment()) && this.isProduction();
+    // if (!shouldHideLogout) {
       items.push({
         label: this.i18nService.translate('navigation.signOut'),
         icon: 'icon-log-out',
@@ -43,7 +43,7 @@ export class NavbarProfileDropdownComponent {
           this.router.navigate(['/', ERoutes.auth, ERoutes.login])
         },
       })
-    }
+    // }
 
     return items;
   });
