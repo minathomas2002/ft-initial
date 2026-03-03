@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { EDelegationStatus } from 'src/app/shared/enums';
 import {
   IAddDelegationRequest,
   IDelegationRecord,
@@ -44,6 +45,22 @@ export class AddDelegationFormService {
   }
   ResetFormFields() {
     this.form.reset();
+    this.form.enable();
     this.form.updateValueAndValidity();
+  }
+
+  setFormInEditMode(delegation: IDelegationRecord) {
+    this.form.patchValue({
+      id: delegation.delgationId,
+      delegatorId: delegation.delegatorId,
+      delegateeId: delegation.delegateeId,
+      from: new Date(delegation.startDate),
+      to: new Date(delegation.endDate),
+    });
+    this.delegatorId.disable();
+    this.delegateeId.disable();
+    if (delegation.status === EDelegationStatus.ACTIVE) {
+      this.from.disable();
+    }
   }
 }

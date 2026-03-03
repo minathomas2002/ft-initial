@@ -5,7 +5,7 @@ import { MenuModule } from "primeng/menu";
 import { EAdminUserActions } from "src/app/shared/enums/system-employee.enum";
 import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 import { EmployeesActionsMapper } from "../../classes/employee-actions-mapper";
-import { EDelegationActions } from "src/app/shared/enums/delegation-enum";
+import { EDelegationActions } from "src/app/shared/enums/delegation.enum";
 import { DelegationsActionsMapper } from "../../classes/delegation-actions-mapper";
 
 @Component({
