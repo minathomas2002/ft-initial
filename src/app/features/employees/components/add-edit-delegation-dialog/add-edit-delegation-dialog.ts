@@ -29,6 +29,7 @@ import { DatePicker } from 'primeng/datepicker';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, of } from 'rxjs';
 import { ERoles } from 'src/app/shared/enums';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-add-edit-delegation-dialog',
@@ -39,6 +40,7 @@ import { ERoles } from 'src/app/shared/enums';
     DatePicker,
     ReactiveFormsModule,
     FormsModule,
+    TooltipModule,
   ],
   templateUrl: './add-edit-delegation-dialog.html',
   styleUrl: './add-edit-delegation-dialog.scss',
@@ -173,7 +175,7 @@ export class AddEditDelegationDialog implements OnInit {
           this.dialogVisible.set(false);
           this.formService.ResetFormFields();
         },
-        error: (error: any) => {},
+        error: (error: any) => { },
       });
   }
 
@@ -197,7 +199,7 @@ export class AddEditDelegationDialog implements OnInit {
           this.dialogVisible.set(false);
           this.formService.ResetFormFields();
         },
-        error: (error: any) => {},
+        error: (error: any) => { },
       });
   }
 }

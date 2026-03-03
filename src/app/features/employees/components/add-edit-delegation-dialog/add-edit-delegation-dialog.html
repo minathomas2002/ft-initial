@@ -4,10 +4,10 @@
   [confirmLabel]="
     isEditMode()
       ? ('delegation.dialog.edit.editTitle' | translate)
-      : ('delegation.dialog.add.addTitle' | translate)
+      : 'Save'
   "
-  [confirmButtonClass]="'w-fit'"
-  [cancelButtonClass]="'w-fit'"
+  [confirmButtonClass]="'w-[100px]'"
+  [cancelButtonClass]="'w-[80px]'"
   (onConfirm)="onConfirm()"
   (onClose)="resetForm()"
   (onCancel)="resetForm()"
@@ -17,119 +17,121 @@
   <div class="mb-5">
     <p class="text-lg font-semibold text-gray-900 mb-1">
       {{
-        isEditMode()
-          ? ('delegation.dialog.edit.editTitle' | translate)
-          : ('delegation.dialog.add.addTitle' | translate)
+      isEditMode()
+      ? ('delegation.dialog.edit.editTitle' | translate)
+      : ('delegation.dialog.add.addTitle' | translate)
       }}
     </p>
   </div>
 
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 min-w-[500px]">
     <div class="form-group">
-    <label class="block text-sm font-medium text-gray-700 mb-1"
-      >{{ 'delegation.dialog.delegator' | translate }}
-      <span class="text-red-500">*</span>
-    </label>
-    <p-select
-      [readonly]="isEditMode()"
-      [options]="getDelegatorsWithoutAdmin()"
-      optionLabel="name"
-      optionValue="id"
-      [loading]="isLoadingDetails()"
-      [loadingIcon]="'icon-transfer'"
-      [formControl]="formService.delegatorId"
-      appendTo="body"
-      optionLabel="name"
-      optionValue="id"
-      [placeholder]="'delegation.dialog.delegatorPlaceHolder' | translate"
-      dropdownIcon="icon-chevron-down"
-      fluid
-    />
-    <div>
-      @if (formService.delegatorId.invalid && formService.delegatorId.touched) {
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'delegation.dialog.delegator' | translate }}
+        <span><i
+            class="icon-help-circle text-primary text-sm ms-1"
+            pTooltip="Delegator – the original owner of tasks."
+          ></i></span>
+      </label>
+      <p-select
+        [readonly]="isEditMode()"
+        [options]="getDelegatorsWithoutAdmin()"
+        optionLabel="name"
+        optionValue="id"
+        [loading]="isLoadingDetails()"
+        [loadingIcon]="'icon-transfer'"
+        [formControl]="formService.delegatorId"
+        appendTo="body"
+        optionLabel="name"
+        optionValue="id"
+        [placeholder]="'delegation.dialog.delegatorPlaceHolder' | translate"
+        dropdownIcon="icon-chevron-down"
+        fluid
+      />
+      <div>
+        @if (formService.delegatorId.invalid && formService.delegatorId.touched) {
         <div class="mt-1">
           <small class="text-red-500">{{
             'delegation.dialog.delegatorRequired' | translate
-          }}</small>
+            }}</small>
         </div>
-      }
+        }
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label class="block text-sm font-medium text-gray-700 mb-1"
-      >{{ 'delegation.dialog.delegatee' | translate }}
-      <span class="text-red-500">*</span>
-    </label>
-    <p-select
-      [readonly]="isEditMode()"
-      [options]="getDelegatees()"
-      optionLabel="name"
-      optionValue="id"
-      [loading]="isLoadingDetails()"
-      [loadingIcon]="'icon-transfer'"
-      [formControl]="formService.delegateeId"
-      appendTo="body"
-      optionLabel="name"
-      optionValue="id"
-      [placeholder]="'delegation.dialog.delegateePlaceHolder' | translate"
-      dropdownIcon="icon-chevron-down"
-      fluid
-    />
-    @if (formService.delegateeId.invalid && formService.delegateeId.touched) {
+    <div class="form-group">
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'delegation.dialog.delegatee' | translate }}
+        <span><i
+            class="icon-help-circle text-primary text-sm ms-1"
+            pTooltip="Delegatee – the user authorized to act on behalf of the delegator."
+          ></i></span>
+      </label>
+      <p-select
+        [readonly]="isEditMode()"
+        [options]="getDelegatees()"
+        optionLabel="name"
+        optionValue="id"
+        [loading]="isLoadingDetails()"
+        [loadingIcon]="'icon-transfer'"
+        [formControl]="formService.delegateeId"
+        appendTo="body"
+        optionLabel="name"
+        optionValue="id"
+        [placeholder]="'delegation.dialog.delegateePlaceHolder' | translate"
+        dropdownIcon="icon-chevron-down"
+        fluid
+      />
+      @if (formService.delegateeId.invalid && formService.delegateeId.touched) {
       <div class="mt-1">
         <small class="text-red-500">{{ 'delegation.dialog.delegateeRequired' | translate }}</small>
       </div>
-    }
-  </div>
-  <div class="form-group">
-    <label class="block text-sm font-medium text-gray-700 mb-1">
-      {{ 'delegation.dialog.startDate' | translate }}
-      <span class="text-red-500">*</span>
-    </label>
-    <p-datepicker
-      [formControl]="formService.from"
-      [readonlyInput]="true"
-      [dateFormat]="'dd M yy'"
-      [showIcon]="true"
-      [showButtonBar]="true"
-      [iconDisplay]="'input'"
-      [minDate]="today"
-      [maxDate]="formService.to.value"
-      [disabledDates]="disabledStartDatesArray()"
-      [placeholder]="'delegation.dialog.selectStartDate' | translate"
-      appendTo="body"
-      fluid
-    ></p-datepicker>
-    @if (formService.from.invalid && formService.from.touched) {
+      }
+    </div>
+    <div class="form-group">
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        {{ 'delegation.dialog.startDate' | translate }}
+      </label>
+      <p-datepicker
+        [formControl]="formService.from"
+        [readonlyInput]="true"
+        [dateFormat]="'dd M yy'"
+        [showIcon]="true"
+        [showButtonBar]="true"
+        [iconDisplay]="'input'"
+        [minDate]="today"
+        [maxDate]="formService.to.value"
+        [disabledDates]="disabledStartDatesArray()"
+        [placeholder]="'delegation.dialog.selectStartDate' | translate"
+        appendTo="body"
+        fluid
+      ></p-datepicker>
+      @if (formService.from.invalid && formService.from.touched) {
       <div class="mt-1">
         <small class="text-red-500">{{ 'delegation.dialog.startDateRequired' | translate }}</small>
       </div>
-    }
-  </div>
+      }
+    </div>
 
-  <div class="form-group">
-    <label class="block text-sm font-medium text-gray-700">
-      {{ 'delegation.dialog.endDate' | translate }}
-      <span class="text-red-500">*</span>
-    </label>
-    <p-datepicker
-      [formControl]="formService.to"
-      [readonlyInput]="true"
-      [dateFormat]="'dd M yy'"
-      [showIcon]="true"
-      [showButtonBar]="true"
-      [iconDisplay]="'input'"
-      [minDate]="formService.from.value || today"
-      [disabledDates]="[disabledEndDate()]"
-      [placeholder]="'delegation.dialog.selectEndDate' | translate"
-      appendTo="body"
-      fluid
-    ></p-datepicker>
-    @if (formService.to.invalid && formService.to.touched) {
+    <div class="form-group">
+      <label class="block text-sm font-medium text-gray-700">
+        {{ 'delegation.dialog.endDate' | translate }}
+      </label>
+      <p-datepicker
+        [formControl]="formService.to"
+        [readonlyInput]="true"
+        [dateFormat]="'dd M yy'"
+        [showIcon]="true"
+        [showButtonBar]="true"
+        [iconDisplay]="'input'"
+        [minDate]="formService.from.value || today"
+        [disabledDates]="[disabledEndDate()]"
+        [placeholder]="'delegation.dialog.selectEndDate' | translate"
+        appendTo="body"
+        fluid
+      ></p-datepicker>
+      @if (formService.to.invalid && formService.to.touched) {
       <div class="mt-1">
         <small class="text-red-500">{{ 'delegation.dialog.endDateRequired' | translate }}</small>
       </div>
-    }
-  </div>
+      }
+    </div>
   </div>
 </app-base-dialog>
