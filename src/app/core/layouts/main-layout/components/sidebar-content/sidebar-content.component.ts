@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { PanelModule } from 'primeng/panel';
 import { SidebarDropdownComponent } from '../sidebar-dropdown/sidebar-dropdown.component';
@@ -26,6 +26,8 @@ export class SidebarContentComponent {
 
   AddContactUsDialogVisible = signal<boolean>(false);
   sidebarDrawerVisibility = model(false);
+  /** When true, show icons only (for mobile drawer collapsed state) */
+  collapsed = input<boolean>(false);
 
   sidebarLinks = computed<ISideBarLink[]>((): ISideBarLink[] => {
     // Access currentLanguage to make computed reactive to language changes

@@ -10,5 +10,6 @@ import type { ISideBarLink } from '../../models';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarLinkComponent {
-	link = input.required<ISideBarLink>();
+  link = input.required<ISideBarLink>();
+  collapsed = input<boolean>(false);
 }

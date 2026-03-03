@@ -1,5 +1,5 @@
 <div class="main-layout--navbar sticky top-0 z-50 bg-white py-[13px] md:px-[32px] px-[20px] border-b border-b-[#D5D6DD]">
-  <div class="flex justify-between flex-row-reverse">
+  <div class="flex justify-between flex-row-reverse relative">
     <div class="flex items-center gap-[28px]">
       <div>
         <app-language-switcher></app-language-switcher>
@@ -11,7 +11,7 @@
         <app-navbar-profile-dropdown></app-navbar-profile-dropdown>
       </div>
     </div>
-    <div class="inline-block">
+    <div class="inline-block lg:hidden">
       <p-button
         severity="secondary"
         styleClass="!text-lg"
@@ -20,20 +20,40 @@
         (onClick)="handleSidebarToggle()"
       />
     </div>
+    <div>
+      <button
+        type="button"
+        class="absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors"
+        [class.end-0]="!isRtl()"
+        [class.translate-x-1/2]="!isRtl()"
+        [class.start-0]="isRtl()"
+        [class.-translate-x-1/2]="isRtl()"
+        (click)="toggleSidebarDrawerCollapsed()"
+        [attr.aria-label]="sidebarDrawerCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      >
+        <i
+          [class]="sidebarToggleIcon()"
+          class="text-gray-600 text-lg"
+        ></i>
+      </button>
+    </div>
   </div>
 </div>
 
 <p-drawer
-  header="Right Drawer"
   [(visible)]="visibleSidebarDrawer"
-  position="left"
+  [position]="drawerPosition()"
   #drawerRef
-  styleClass="!w-[311px] max-w-[95%]"
+  [styleClass]="drawerStyleClass()"
 >
   <ng-template #headless>
-    <app-sidebar-content
-      [(sidebarDrawerVisibility)]="visibleSidebarDrawer"
-      class="h-full px-[16px] py-[24px]"
-    />
+    <div class="relative h-full flex">
+      <app-sidebar-content
+        [(sidebarDrawerVisibility)]="visibleSidebarDrawer"
+        [collapsed]="sidebarDrawerCollapsed()"
+        class="h-full px-[16px] py-[24px] flex-1 min-w-0"
+      />
+
+    </div>
   </ng-template>
 </p-drawer>

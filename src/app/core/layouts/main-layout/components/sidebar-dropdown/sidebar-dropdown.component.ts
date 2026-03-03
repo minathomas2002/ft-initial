@@ -11,6 +11,7 @@ import type { ISideBarLink } from "../../models/sidebar.interface";
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarDropdownComponent {
-	link = input.required<ISideBarLink>();
-	onCloseSidebarDrawer = output<void>();
+  link = input.required<ISideBarLink>();
+  collapsed = input<boolean>(false);
+  onCloseSidebarDrawer = output<void>();
 }

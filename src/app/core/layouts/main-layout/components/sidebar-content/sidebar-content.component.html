@@ -1,7 +1,9 @@
-<div class="flex flex-col justify-between h-full">
+<div class="flex flex-col justify-between h-full" [class.sidebar-collapsed]="collapsed()">
   <div>
-    <app-base-logo class="cursor-pointer" />
-    <div class="sidebar-links mt-[48px]">
+    @if (!collapsed()) {
+      <app-base-logo class="cursor-pointer" />
+    }
+    <div class="sidebar-links mt-[48px]" [class.mt-4]="collapsed()">
       <ul class="list-unstyles">
         @for(link of sidebarLinks(); track link.routerLink){
         @if(link.show){
@@ -9,12 +11,14 @@
           @if(link.children && link.children.length > 0){
           <app-sidebar-dropdown
             [link]="link"
+            [collapsed]="collapsed()"
             (onCloseSidebarDrawer)="closeSidebarDrawer()"
           ></app-sidebar-dropdown>
           }
           @else {
           <app-sidebar-link
             [link]="link"
+            [collapsed]="collapsed()"
             (click)="closeSidebarDrawer()"
           ></app-sidebar-link>
           }
@@ -25,7 +29,7 @@
     </div>
   </div>
   <div>
-    <div class="sidebar-links mt-[48px]">
+    <div class="sidebar-links mt-[48px]" [class.mt-4]="collapsed()">
       <ul class="list-none">
 
         @if(canContactUs()){
@@ -34,8 +38,10 @@
           (click)="AddContactUsDialogVisible.set(true)"
         >
           <a class="flex items-center hover:!bg-gray-50 text-[16px] transition-all block w-full p-3 rounded-lg font-semibold p-[12px] cursor-pointer">
-            <i class="icon-life-buoy me-[11px] text-gray-400 text-xl w-[25px]"></i>
-            Contact Us
+            <i class="icon-life-buoy text-gray-400 text-xl w-[25px] flex-shrink-0" [class.me-[11px]]="!collapsed()"></i>
+            @if (!collapsed()) {
+              <span>Contact Us</span>
+            }
           </a>
         </li>
         }
