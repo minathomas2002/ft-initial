@@ -4,7 +4,7 @@ import { RoleService } from "../../services/role/role-service";
 import { ERoles } from "../../enums";
 import { ProfileApiService } from "../../api/profile/profile-api.service";
 import { AuthApiService } from "../../api/auth/auth-api-service";
-import { IBaseApiResponse, IChangePasswordRequest, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateSignatureRequest } from "../../interfaces";
+import { IBaseApiResponse, IChangePasswordRequest, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateProfilePicRequest, IUpdateSignatureRequest } from "../../interfaces";
 import { finalize, Observable, tap } from "rxjs";
 import { AuthStore } from "../auth/auth.store";
 
@@ -78,6 +78,27 @@ export const ProfileStore = signalStore(
         return profileApiService.changePassword(request).pipe(
           finalize(() => {
             patchState(store, { changePasswordProcessing: false });
+          })
+        );
+      },
+
+      updateProfilePic(request: IUpdateProfilePicRequest): Observable<IBaseApiResponse<boolean>> {
+        patchState(store, { profilePictureProcessing: true });
+        return profileApiService.updateProfilePic(request).pipe(
+          tap((res) => {
+            if (res.success && res.body && store.userProfile()) {
+              const photo = !request.profilePicBase64
+                ? 'assets/images/user_placeholder.svg'
+                : request.profilePicBase64.startsWith('data:')
+                  ? request.profilePicBase64
+                  : `data:image/png;base64,${request.profilePicBase64}`;
+              patchState(store, {
+                userProfile: { ...store.userProfile()!, photo },
+              });
+            }
+          }),
+          finalize(() => {
+            patchState(store, { profilePictureProcessing: false });
           })
         );
       },

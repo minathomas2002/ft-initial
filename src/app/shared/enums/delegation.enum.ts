@@ -1,8 +1,8 @@
 export enum EDelegationStatus {
   ACTIVE = 1,
-  CANCELLED = 2,
+  DEACTIVATED = 2,
   EXPIRED = 3,
-  UPCOMING   = 4
+  UPCOMING = 4
 }
 
 export enum EDelegationActions {

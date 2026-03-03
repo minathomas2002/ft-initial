@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IBaseApiResponse, IChangePasswordRequest, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateSignatureRequest } from '../../interfaces';
+import { IBaseApiResponse, IChangePasswordRequest, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateProfilePicRequest, IUpdateSignatureRequest } from '../../interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -25,5 +25,9 @@ export class ProfileApiService {
 
   changePassword(request: IChangePasswordRequest): Observable<IBaseApiResponse<void>> {
     return this.http.post<IBaseApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.profile.changePassword}`, request);
+  }
+
+  updateProfilePic(request: IUpdateProfilePicRequest): Observable<IBaseApiResponse<boolean>> {
+    return this.http.post<IBaseApiResponse<boolean>>(`${this.baseUrl}/${API_ENDPOINTS.profile.updateProfilePic}`, request);
   }
 }

@@ -62,6 +62,7 @@ export const API_ENDPOINTS = {
     signature: `${Profile}/signature`,
     updatePersonalInfo: `${Profile}/update-personal-info`,
     changePassword: `${Profile}/change-password`,
+    updateProfilePic: `${Profile}/update-profile-pic`,
   },
   systemEmployees: {
     getEmployeeDataFromHr: `${SystemEmployees}/hr`,

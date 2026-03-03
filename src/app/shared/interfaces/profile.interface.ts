@@ -11,6 +11,9 @@ export interface IProfileResponse {
   secRegisteredId: string;
   countryCode: string;
   otherPhoneCountryCode: string;
+  userPicBase64: string | null;
+  userPicId: string | null;
+  employeeId: string | null;
 }
 
 export interface IUpdateSignatureRequest {
@@ -30,4 +33,8 @@ export interface IUpdatePersonalInfoRequest {
 export interface IChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
+}
+
+export interface IUpdateProfilePicRequest {
+  profilePicBase64: string;
 }

@@ -5,7 +5,7 @@ import { I18nService } from "src/app/shared/services/i18n/i18n.service";
 export class DelegationStatusMapper {
   private _statusTranslationMap: Record<EDelegationStatus, string> = {
     [EDelegationStatus.ACTIVE]: 'delegation.status.active',
-    [EDelegationStatus.CANCELLED]: 'delegation.status.cancelled',
+    [EDelegationStatus.DEACTIVATED]: 'delegation.status.deactivated',
     [EDelegationStatus.EXPIRED]: 'delegation.status.expired',
     [EDelegationStatus.UPCOMING]: 'delegation.status.upcoming'
   };
@@ -22,8 +22,8 @@ export class DelegationStatusMapper {
         title: this.i18nService.translate(this._statusTranslationMap[EDelegationStatus.ACTIVE]),
         color: "green",
       },
-      [EDelegationStatus.CANCELLED]: {
-        title: this.i18nService.translate(this._statusTranslationMap[EDelegationStatus.CANCELLED]),
+      [EDelegationStatus.DEACTIVATED]: {
+        title: this.i18nService.translate(this._statusTranslationMap[EDelegationStatus.DEACTIVATED]),
         color: "red",
       },
       [EDelegationStatus.EXPIRED]: {
@@ -44,7 +44,7 @@ export class DelegationStatusMapper {
         value: 1
       },
       {
-        label: this.i18nService.translate(this._statusTranslationMap[EDelegationStatus.CANCELLED]),
+        label: this.i18nService.translate(this._statusTranslationMap[EDelegationStatus.DEACTIVATED]),
         value: 2
       },
       {

@@ -137,6 +137,11 @@
       "success": "Your email has been successfully verified. You can now log in."
     }
   },
+  "profile": {
+    "messages": {
+      "profilePictureUpdated": "Profile picture updated successfully"
+    }
+  },
   "navigation": {
     "home": "Home",
     "dashboard": "Dashboard",
@@ -463,7 +468,7 @@
   "delegation": {
     "status": {
       "active": "Active",
-      "cancelled": "Cancelled",
+      "deactivated": "Deactivated",
       "expired": "Expired",
       "upcoming": "Upcoming"
     },

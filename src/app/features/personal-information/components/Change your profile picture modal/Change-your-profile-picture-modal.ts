@@ -75,9 +75,6 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
   onSaveUserPhoto(): void {
     this.attachmentService.resizeImages(this.newProfilePicture()!, 120).then((res) => {
       this.attachmentService.fileToBase64(res).then((base64) => {
-        console.log(base64);
-        this.toasterService.success('Profile picture updated successfully');
-        this.visible.set(false);
         this.onProfilePictureUpdated.emit(base64);
       });
     });
