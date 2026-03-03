@@ -16,6 +16,8 @@ import { ERoutes } from 'src/app/shared/enums';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
+import { SkeletonModule } from 'primeng/skeleton';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -31,6 +33,7 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     TranslatePipe,
     TrimOnBlurDirective,
     PasswordToggleComponent,
+    SkeletonModule,
   ],
   providers: [LoginFormService],
   templateUrl: './login.html',
@@ -51,11 +54,14 @@ export class Login implements OnInit {
   unverifiedEmail = signal<string | null>(null);
 
   loginForm = this.loginFormService.loginForm;
+  windowsLoginLoader = signal(false);
 
   ngOnInit(): void {
     //if domain is sec domain
     if (this.isSecInternal()) {
-      this.authStore.windowsLogin().subscribe({
+      this.authStore.windowsLogin()
+      .pipe(finalize(() => this.windowsLoginLoader.set(false)))
+      .subscribe({
         next: (response) => {
           if (response.success) {
             this.router.navigate(['/', ERoutes.dashboard]);
