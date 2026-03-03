@@ -12,8 +12,8 @@ export class DelegationFilter extends Filter<
     super();
     const pagination = new Pagination(10);
     const sorting = new Sorting<TDelegationSortingKeys>();
-    sorting.sortField = 'delegatorName';
-    sorting.sortOrder = ESortingOrder.asc;
+    sorting.sortField = 'createdAt';
+    sorting.sortOrder = ESortingOrder.desc;
     this.filter = {
       ...pagination,
       ...sorting,
