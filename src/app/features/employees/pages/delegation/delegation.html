@@ -97,14 +97,13 @@
   </ng-container>
 </app-table-layout>
 
-
 @if(EditDialogVisible()){
 <app-add-edit-delegation-dialog
   [(dialogVisible)]="EditDialogVisible"
   [isEditMode]="true"
   (onSuccess)="onUpdateDelegationSuccess()"
   [SelectedItem]="delegation() ?? null"
-  >
+>
 </app-add-edit-delegation-dialog>
 }
 
@@ -116,17 +115,16 @@
   [description]="'delegation.dialog.delete.description' | translate"
   (confirmed)="onDeleteConfirm()"
   [confirmButtonSeverity]="'danger'"
-  [confirmationLabel]="'dialog.delete' | translate"
+  [confirmationLabel]="'Confirm Delete'"
 ></app-general-confirmation-dialog>
-
 
 <app-general-confirmation-dialog
   [(visible)]="cancelDialogVisible"
   (onConfirm)="onCancelConfirm()"
-  [icon]="'slash-circle-01'"
+  [icon]="'icon-cancel-icon'"
   [title]="'delegation.dialog.cancel.title' | translate"
   [description]="'delegation.dialog.cancel.description' | translate"
   (confirmed)="onCancelConfirm()"
   [confirmButtonSeverity]="'danger'"
-  [confirmationLabel]="'dialog.cancel' | translate"
+  [confirmationLabel]="'Confirm'"
 ></app-general-confirmation-dialog>

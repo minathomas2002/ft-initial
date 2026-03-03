@@ -6,7 +6,7 @@
       ? ('delegation.dialog.edit.editTitle' | translate)
       : 'Save'
   "
-  [confirmButtonClass]="'w-[100px]'"
+  [confirmButtonClass]="'w-fit'"
   [cancelButtonClass]="'w-[80px]'"
   (onConfirm)="onConfirm()"
   (onClose)="resetForm()"
@@ -28,7 +28,7 @@
     <div class="form-group">
       <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'delegation.dialog.delegator' | translate }}
         <span><i
-            class="icon-help-circle text-primary text-sm ms-1"
+            class="icon-help-circle text-sm ms-1"
             pTooltip="Delegator – the original owner of tasks."
           ></i></span>
       </label>
@@ -57,7 +57,7 @@
     <div class="form-group">
       <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'delegation.dialog.delegatee' | translate }}
         <span><i
-            class="icon-help-circle text-primary text-sm ms-1"
+            class="icon-help-circle text-sm ms-1"
             pTooltip="Delegatee – the user authorized to act on behalf of the delegator."
           ></i></span>
       </label>
