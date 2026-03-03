@@ -25,7 +25,11 @@
 		"language": "اللغة",
 		"searchCountry": "البحث عن البلد...",
 		"signIn": "تسجيل الدخول",
-		"signUp": "إنشاء حساب"
+		"signUp": "إنشاء حساب",
+		"days": "يوم/أيام",
+		"files": "الملفات",
+		"clickToUpload": "انقر للتحميل",
+		"dragAndDrop": "أو اسحب وأفلت"
 	},
 	"footer": {
 		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
@@ -79,7 +83,8 @@
 			"verifyEmailFirst": "بريدك الإلكتروني غير مؤكد. يرجى استخدام ‘إعادة إرسال رابط التحقق’ للحصول على بريد إلكتروني جديد.",
 			"devEnvironmentTitle": "بيئة التطوير فقط (محاكاة تسجيل الدخول لموظفي شركة الكهرباء)",
 			"jobNumber": "رقم الوظيفة",
-			"enterJobNumber": "أدخل رقم وظيفتك"
+			"enterJobNumber": "أدخل رقم وظيفتك",
+			"generalError": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى لاحقاً."
 		},
 		"verification": {
 			"didntReceiveEmail": "لم تستلم البريد الإلكتروني؟",
@@ -112,7 +117,8 @@
 			"passwordMismatch": "كلمتا المرور غير متطابقتين",
 			"buttonLabel": "إعادة تعيين كلمة المرور",
 			"backButtonLabel": "العودة إلى تسجيل الدخول",
-			"success": "تم إعادة تعيين كلمة المرور بنجاح. يرجى تسجيل الدخول."
+			"success": "تم إعادة تعيين كلمة المرور بنجاح. يرجى تسجيل الدخول.",
+			"tokenExpired": "رابط إعادة التعيين غير صالح أو منتهي الصلاحية. يرجى طلب إعادة تعيين كلمة مرور جديدة."
 		},
 		"register": {
 			"confirmPassword": "تأكيد كلمة المرور",
@@ -150,7 +156,8 @@
 		"help": "مساعدة",
 		"users": "المستخدمين",
 		"opportunities": "الفرص",
-		"investors": "المستثمرون"
+		"investors": "المستثمرون",
+		"plans": "الخطط"
 	},
 	"opportunity": {
 		"status": {
@@ -238,8 +245,11 @@
 			"shortDescription": "الوصف القصير",
 			"opportunityCategory": "فئة الفرصة",
 			"opportunityType": "نوع الفرصة",
-			"spendSAR": "الإنفاق (ريال سعودي)",
-			"quantityUnits": "الكمية (وحدات)",
+			"spendSAR": "الإنفاق (ريال سعودي) بالمليارات",
+			"quantityUnits": "الكمية",
+			"measureUnits": "وحدة القياس",
+			"minQuantity": "الحد الأدنى للكمية",
+			"maxQuantity": "الحد الأقصى للكمية",
 			"localSuppliers": "الموردون المحليون",
 			"globalSuppliers": "الموردون العالميون",
 			"dateRange": "نطاق التاريخ",
@@ -314,6 +324,7 @@
 		},
 		"wizard": {
 			"createOpportunity": "إنشاء فرصة",
+			"editOpportunity": "تعديل الفرصة",
 			"addOpportunity": "إضافة فرصة",
 			"saveAsDraft": "حفظ كمسودة",
 			"back": "رجوع",
@@ -349,7 +360,10 @@
 			"employee": "موظف",
 			"manager": "مدير",
 			"departmentManager": "مدير القسم",
-			"dvManager": "مدير DV"
+			"dvManager": "مدير DV",
+			"investor": "مستثمر",
+			"divisionManager": "مدير القسم",
+			"autoProcess": "عملية آلية"
 		},
 		"status": {
 			"active": "نشط",
@@ -391,6 +405,14 @@
 			"selectJoinDate": "اختر تاريخ الانضمام"
 		},
 		"dialog": {
+			"replaceTransfer": {
+				"title": "استبدال / نقل",
+				"description": "يرجى اختيار الموظف لـ",
+				"employeeLabel": "الموظف",
+				"employeePlaceholder": "اختر الموظف",
+				"employeeRequired": "الموظف مطلوب.",
+				"confirmButton": "تأكيد"
+			},
 			"changeRole": {
 				"title": "تغيير الدور",
 				"description": "اختر دوراً جديداً لهذا الموظف",
@@ -409,6 +431,10 @@
 			},
 			"add": {
 				"title": "إضافة موظف",
+				"employeeId": "الرقم",
+				"employeeIdPlaceholder": "أدخل رقم الموظف",
+				"employeeIdRequired": "رقم الموظف مطلوب",
+				"employeeIdInvalidLength": "يجب أن يكون رقم الموظف بين 6 و 20 حرفاً",
 				"job": "رقم الوظيفة",
 				"jobLabel": "رقم الوظيفة",
 				"enName": "الاسم باللغة الإنجليزية",
@@ -437,6 +463,7 @@
 				"nameArabicInvalidLength": "يجب أن يكون طول الاسم العربي بين 3 و100 حرف.",
 				"nameEnglishInvalid": "يجب أن يحتوي الاسم الإنجليزي على أحرف إنجليزية فقط.",
 				"nameEnglishInvalidLength": "يجب أن يكون طول الاسم الإنجليزي بين 3 و100 حرف.",
+				"phoneInvalidLength": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
 				"phoneInvalidLenhtg": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
 				"phoneInvalid": "يجب أن يحتوي رقم الجوال على أرقام فقط."
 			},
@@ -460,6 +487,7 @@
 	"delegation": {
 		"status": {
 			"active": "نشط",
+			"deactivated": "معطل",
 			"cancelled": "ملغى",
 			"expired": "منتهي",
 			"upcoming": "قادم"
@@ -542,6 +570,7 @@
 			"selectJoinDate": "اختر تاريخ الانضمام"
 		},
 		"table": {
+			"BenaID": "معرف بينا",
 			"id": "المعرف",
 			"name": "الاسم",
 			"email": "البريد الإلكتروني",
@@ -554,10 +583,18 @@
 	"dashboard": {
 		"title": "لوحة التحكم",
 		"subtitle": "تتبع وإدارة خطط التوطين المقدمة وحالة مراجعتها",
-		"submitNewPlan": "تقديم خطة جديدة"
+		"subtitleInvestor": "تتبع حالة خطط التوطين المقدمة الخاصة بك.",
+		"subtitleInternalUser": "تتبع حالة جميع خطط التوطين.",
+		"subtitleInternalUsers": "تتبع حالة جميع خطط التوطين.",
+		"subTitleDvManager": "تتبع وإدارة خطط التوطين المقدمة التي تتطلب إجراءاتك",
+		"submitNewPlan": "تقديم خطة جديدة",
+		"assigndPlanTitle": "الخطط المعينة المعلقة",
+		"underReviewPlanTitle": "الخطط قيد المراجعة",
+		"inProgressPlanTitle": "الخطط قيد التنفيذ"
 	},
 	"dialog": {
 		"cancel": "إلغاء",
+		"close": "إغلاق",
 		"deleteOpportunity": "هل أنت متأكد من أنك تريد حذف هذه الفرصة؟",
 		"deleteOpportunityDescription": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم.",
 		"moveToDraft": "هل أنت متأكد من أنك تريد نقل هذه الفرصة إلى المسودة؟",
@@ -567,6 +604,16 @@
 		"publish": "نشر"
 	},
 	"plans": {
+		"assign": "تعيين",
+		"title": "الخطط",
+		"submitNewPlan": "تقديم خطة جديدة",
+		"subtitle": "تتبع وإدارة خطط التوطين المقدمة وحالة مراجعتها",
+		"confirmation": {
+			"onLeaveTitle": "هل أنت متأكد أنك تريد المغادرة؟",
+			"saveAsDraft": "حفظ كمسودة",
+			"cancelLabel": "إلغاء",
+			"onLeaveDesc": "سيؤدي الإلغاء الآن إلى تجاهل جميع التغييرات غير المحفوظة. احفظ كمسودة للاحتفاظ بعملك."
+		},
 		"newPlan": {
 			"title": "فرصة جديدة",
 			"description": "أدخل التفاصيل الأساسية لبدء خطة التوطين الخاصة بك",
@@ -604,6 +651,31 @@
 			"readAndApproved": "قرأت ووافقت"
 		},
 		"wizard": {
+			"step1": {
+				"title": "نظرة عامة ومعلومات الشركة",
+				"description": "أدخل تفاصيل الخطة الأساسية ومعلومات الشركة"
+			},
+			"step2": {
+				"title": "نظرة عامة على المنتج والمصنع",
+				"description": "أدخل تفاصيل المنتج ومعلومات المصنع"
+			},
+			"step3": {
+				"title": "سلسلة القيمة",
+				"description": "حدد مكونات سلسلة القيمة والتوطين"
+			},
+			"step4": {
+				"title": "السعودة",
+				"description": "أدخل توقعات السعودة والمرفقات"
+			},
+			"step5": {
+				"title": "الملخص",
+				"description": "راجع خطة التوطين قبل التقديم النهائي"
+			},
+			"title": {
+				"edit": "تعديل الخطة",
+				"view": "عرض الخطة",
+				"create": "خطة توطين المنتج"
+			},
 			"saveAsDraft": "حفظ كمسودة",
 			"back": "رجوع",
 			"next": "التالي",
@@ -611,12 +683,27 @@
 			"resubmit": "إعادة الإرسال",
 			"approveAndForward": "الموافقة والإرسال",
 			"reject": "رفض",
+			"acknowledge": "إقرار",
 			"sendBackToInvestor": "إرجاع إلى المستثمر",
+			"sendBackToEmployee": "إرجاع إلى الموظف",
+			"sendBackToDv": "إرجاع إلى مدير القسم",
 			"addComments": "إضافة تعليقات",
-			"timeline": "الجدول الزمني"
+			"timeline": "الجدول الزمني",
+			"messages": {
+				"fixValidationErrors": "يرجى إصلاح جميع أخطاء التحقق قبل الإرسال",
+				"errorLoadingPlan": "خطأ في تحميل بيانات الخطة. يرجى المحاولة مرة أخرى.",
+				"submitSuccess": "تم تقديم خطة التوطين بنجاح",
+				"submitError": "خطأ في تقديم الخطة. يرجى المحاولة مرة أخرى.",
+				"selectPlanTitleAndOpportunity": "يرجى اختيار عنوان الخطة والفرصة",
+				"draftUpdatedSuccess": "تم تحديث المسودة بنجاح.",
+				"draftSavedSuccess": "تم حفظ خطة توطين المنتج كمسودة بنجاح",
+				"draftError": "خطأ في حفظ المسودة. يرجى المحاولة مرة أخرى.",
+				"fixHighlightedSections": "يرجى تصحيح الأقسام المميزة قبل الإرسال."
+			}
 		},
 		"filter": {
 			"searchPlaceholder": "البحث عن طريق معرف الخطة أو العنوان",
+			"dvsearchPlaceholder": "البحث عن طريق معرف الخطة أو العنوان أو اسم المستثمر",
 			"selectPlanType": "اختر نوع الخطة",
 			"selectStatus": "اختر الحالة",
 			"selectSubmissionDate": "اختر تاريخ التقديم",
@@ -624,14 +711,21 @@
 			"service": "خدمة",
 			"material": "مادة",
 			"allStatuses": "جميع الحالات",
+			"allAssignees": "جميع المعينين",
+			"selectAssignee": "المعين",
 			"reset": "إعادة تعيين التصفية"
 		},
 		"status": {
 			"submitted": "مقدمة",
 			"pending": "قيد الانتظار",
+			"pendingWithInvestor": "معلقة مع المستثمر",
 			"underReview": "قيد المراجعة",
 			"approved": "موافق عليها",
-			"rejected": "مرفوضة"
+			"rejected": "مرفوضة",
+			"draft": "مسودة"
+		},
+		"errors": {
+			"cannotEdit": "لا يمكن تعديل الخطة في هذه الحالة"
 		},
 		"employee_status": {
 			"pending": "قيد الانتظار",
@@ -645,7 +739,15 @@
 			"dvRejected": "مرفوضة من مدير DV",
 			"dvRejectionAcknowledged": "تم الاعتراف برفض مدير DV",
 			"employeeApproved": "موافق عليها من الموظف",
-			"employeeRejected": "مرفوضة من الموظف"
+			"employeeRejected": "مرفوضة من الموظف",
+			"assigned": "معينة",
+			"reassigned": "معاد تعيينها",
+			"submitted": "مقدمة",
+			"pendingOnInvestor": "معلقة على المستثمر",
+			"pendingWithInvestor": "معلقة مع المستثمر",
+			"draft": "مسودة",
+			"returnedByDV": "مرتجعة من القسم",
+			"returnedByDEPTManager": "مرتجعة من المدير"
 		},
 		"type": {
 			"services": "الخدمات",
@@ -665,14 +767,21 @@
 			"day": "يوم",
 			"days": "أيام",
 			"dayOverdue": "يوم متأخر",
-			"daysOverdue": "أيام متأخرة"
+			"daysOverdue": "أيام متأخرة",
+			"assignee": "المعين"
 		},
 		"statistics": {
 			"totalPlans": "إجمالي الخطط",
+			"totalApproved": "إجمالي الموافق عليها",
 			"unAssignedPlans": "الخطط غير المعينة",
+			"assignedPending": "المعلقة المعينة",
 			"plansUnderReview": "الخطط قيد المراجعة",
+			"inProgressPlans": "الخطط قيد التنفيذ",
+			"assignedPlans": "الخطط المعينة",
 			"approvedPlans": "الخطط الموافق عليها",
-			"rejectedPlans": "الخطط المرفوضة"
+			"assignedApprovedPlans": "الموافق عليها المعينة",
+			"rejectedPlans": "الخطط المرفوضة",
+			"assignedRejected": "المرفوضة المعينة"
 		},
 		"list": {
 			"noPlansFound": "لم يتم العثور على خطط"
@@ -680,10 +789,101 @@
 		"actions": {
 			"viewDetails": "عرض التفاصيل",
 			"edit": "تعديل",
-			"download": "تحميل",
+			"download": "تحميل (PDF)",
 			"viewTimeline": "عرض الجدول الزمني",
 			"assignToEmployee": "تعيين للموظف",
-			"reAssign": "إعادة التعيين"
+			"reAssign": "إعادة التعيين",
+			"internalReview": "مراجعة",
+			"submitted": "إرسال",
+			"commentSubmitted": "إرسال التعليق",
+			"approved": "موافقة",
+			"rejected": "رفض",
+			"autoAssign": "تعيين تلقائي",
+			"removeAssignee": "إزالة المعين",
+			"delete": "حذف",
+			"dvRejectionAcknowledged": "إقرار الرفض",
+			"returnedForMoreInfo": "مرتجعة لمزيد من المعلومات"
+		},
+		"submission": {
+			"confirmTitle": "هل أنت متأكد من تقديم هذه الخطة؟",
+			"disclaimer": "أؤكد بأنني راجعت هذا المستند بدقة وأقر بأن موافقة خطة التوطين هذه لا تشكل ولا تعني أي ضمان لأعمال حالية أو مستقبلية مع شركة الكهرباء أو أي من مورديها المعتمدين. وأؤكد كذلك أن جميع المعلومات المقدمة في هذه الخطة (بما في ذلك جميع الأقسام) صحيحة ودقيقة وكاملة بقدر علمي. أفهم أن عدم الامتثال للجدول الزمني المقدم قد يؤدي إلى إلغاء تأهيلي من قبل شركة الكهرباء في أي وقت.",
+			"name": "الاسم",
+			"namePlaceholder": "أدخل الاسم",
+			"jobTitle": "المسمى الوظيفي",
+			"jobTitlePlaceholder": "أدخل المسمى الوظيفي",
+			"contactNumber": "رقم الاتصال",
+			"contactNumberPlaceholder": "أدخل رقم الاتصال",
+			"emailId": "البريد الإلكتروني",
+			"emailIdPlaceholder": "أدخل البريد الإلكتروني",
+			"signature": "التوقيع",
+			"signatureSectionHeader": "معلومات مالك الخطة والتوقيع",
+			"drawSignature": "ارسم توقيعك",
+			"signaturePlaceholder": "ارسم توقيعك باستخدام الماوس",
+			"change": "تغيير",
+			"clear": "مسح",
+			"back": "رجوع",
+			"submit": "إرسال"
+		},
+		"summary": {
+			"productPlantOverview": "نظرة عامة على المنتج والمصنع",
+			"overview": "نظرة عامة",
+			"expectedCAPEXInvestment": "استثمار رأس المال المتوقع",
+			"targetCustomers": "العملاء المستهدفون",
+			"targetingLocalSuppliersNote": "إذا كان الهدف \"موردي شركة الكهرباء المحليين المعتمدين\"، اذكر ما يلي:",
+			"productManufacturingExperience": "خبرة تصنيع المنتج",
+			"attachments": "المرفقات",
+			"saudization": {
+				"annualHeadcount": "عدد الموظفين السنوي (#)",
+				"saudizationPercentage": "نسبة السعودة %",
+				"saudizationSubtitle": "(عدد الموظفين السعوديين / إجمالي الموظفين)",
+				"annualTotalCompensation": "إجمالي التعويض السنوي (ريال)",
+				"saudiCompensationPercentage": "نسبة تعويض السعوديين %",
+				"saudiCompensationSubtitle": "(تعويض السعوديين / إجمالي التعويض)"
+			},
+			"valueChain": {
+				"designEngineering": "التصميم والهندسة",
+				"sourcing": "التوريد",
+				"manufacturing": "التصنيع",
+				"assemblyTesting": "التجميع والاختبار",
+				"afterSales": "ما بعد البيع",
+				"expenseHeader": "رأس مصروف",
+				"inHouseProcured": "داخلي / مشترى",
+				"costPercentage": "نسبة التكلفة %"
+			},
+			"year": "السنة",
+			"summary": "الملخص",
+			"year1": "السنة 1",
+			"year2": "السنة 2",
+			"year3": "السنة 3",
+			"year4": "السنة 4",
+			"year5": "السنة 5",
+			"year6": "السنة 6"
+		}
+	},
+	"timeline": {
+		"title": "الجدول الزمني للخطة",
+		"remainingDays": " أيام بعد الإجراء السابق",
+		"action": "الإجراء",
+		"actions": {
+			"created": "تقديم خطة {{param}} جديدة",
+			"assign": "تعيين الخطة للموظف {{param}}",
+			"autoAssign": "تعيين الخطة تلقائياً للموظف {{param}}",
+			"reassigned": "إعادة تعيين الخطة للموظف {{param}}",
+			"submitComment": "إرسال تعليق على الخطة وإرجاعها للمستثمر",
+			"rejected": "مرفوضة",
+			"approved": "موافق عليها",
+			"dVRejected": "الخطة مرفوضة وتم توجيهها إلى {{param}}",
+			"internalReview": "إرسال تعليق على الخطة وإرجاعها للمستثمر",
+			"autoRejected": "الخطة مرفوضة تلقائياً",
+			"resubmitted": "تحديث وإعادة تقديم الخطة من المستثمر",
+			"deptRejected": "الخطة مرفوضة وتم توجيهها إلى {{param}}",
+			"dVRejectionAcknowledged": "إقرار رفض الخطة",
+			"dvApproved": "الخطة موافق عليها وتم توجيهها لمدير القسم",
+			"deptApproved": "الخطة موافق عليها وتم توجيهها للموظف",
+			"employeeApproved": "الخطة موافق عليها وتم توجيهها لمدير القسم",
+			"editPlan": "تعديل الخطة",
+			"dVReview": "تمت مراجعة الخطة وإرجاعها للموظف لمزيد من المعلومات",
+			"deptManagerReview": "تمت مراجعة الخطة وإرجاعها لمدير القسم لمزيد من المعلومات"
 		}
 	},
 	"assign": {
@@ -695,13 +895,173 @@
 		"employeePlaceholder": "اختر الموظف",
 		"employeeRequired": "الموظف مطلوب",
 		"assignSuccessMsg": "تم تعيين الخطة بنجاح إلى {{employee}}.",
-		"reassignSuccessMsg": "تم إعادة تعيين الخطة بنجاح إلى {{employee}}."
+		"reassignSuccessMsg": "تم إعادة تعيين الخطة بنجاح إلى {{employee}}.",
+		"currentEmployee": "الموظف الحالي"
+	},
+	"WarningMesages": {
+		"deletedOppprtuinity": "لم تعد هذه المسودة صالحة لأن الفرصة المرتبطة بها تم حذفها. يرجى حذف هذه الخطة وتقديم واحدة جديدة لفرصة متاحة."
+	},
+	"contactUs": {
+		"title": "تواصل معنا",
+		"description": "إذا كان لديك أي أسئلة أو ملاحظات أو تحتاج مساعدة، يرجى عدم التردد في التواصل معنا. نحن هنا لمساعدتك وضمان أفضل تجربة ممكنة.",
+		"submit": "إرسال",
+		"dialog": {
+			"send": "إرسال",
+			"title": "العنوان",
+			"titlePlaceholder": "أدخل موضوع رسالتك",
+			"description": "الوصف",
+			"descriptionPlaceholder": "قدم وصفاً مفصلاً لاستفسارك أو ملاحظاتك",
+			"contactUs": "تواصل معنا",
+			"titleRequired": "العنوان مطلوب",
+			"titleMinLength": "يجب أن يكون العنوان 3 أحرف على الأقل",
+			"titleMaxLength": "لا يمكن أن يتجاوز العنوان 150 حرفاً",
+			"descriptionRequired": "الوصف مطلوب",
+			"descriptionMinLength": "يجب أن يكون الوصف 10 أحرف على الأقل",
+			"descriptionMaxLength": "لا يمكن أن يتجاوز الوصف 1000 حرف"
+		},
+		"messages": {
+			"addedSuccess": "تم إرسال طلبك بنجاح."
+		}
 	},
 	"setting": {
+		"title": "الإعدادات",
+		"subTitle": "التحكم في إعدادات الحساب والتطبيق",
+		"confirmButton": "تحديث",
 		"adminView": {
+			"slaCardTitle": "وقت اتفاقية مستوى الخدمة",
+			"slaCardDesc": "تعديل وقت اتفاقية مستوى الخدمة ليتوافق مع متطلبات خدمتك.",
+			"slaCardLink": "تغيير وقت اتفاقية مستوى الخدمة",
+			"autoAssignCardTitle": "التعيين التلقائي",
+			"autoAssignCardDesc": "توزيع الطلبات تلقائياً دون تعيين يدوي.",
+			"autoAssignCardLink": "تفعيل/إلغاء التفعيل",
+			"notificationCardTitle": "الإشعارات",
+			"notificationCardDesc": "إدارة الإشعارات التي تريد استلامها.",
+			"notificationCardLink": "تفعيل/إلغاء التفعيل",
+			"holidaysCardTitle": "إدارة العطلات",
+			"holidaysCardDesc": "إضافة العطلات الرسمية أو أيام الراحة لاستبعادها من حسابات اتفاقية مستوى الخدمة.",
+			"holidaysCardLink": "عرض العطلات",
+			"dialog": {
+				"internalCycleLabel": "وقت الدورة الداخلية",
+				"investorReplyTimeLabel": "وقت رد المستثمر",
+				"days": "أيام",
+				"internalCycleRequired": "وقت الدورة الداخلية لا يمكن أن يكون فارغاً",
+				"numbersOnlyError": "أرقام فقط (الأرقام العشرية غير مسموحة)",
+				"internalCycleValidNumber": "وقت الدورة الداخلية يجب أن يكون رقماً، أقصاه 365، أدناه 1",
+				"investorReplyTimeRequired": "وقت رد المستثمر لا يمكن أن يكون فارغاً",
+				"investorReplyTimeValidNumber": "وقت رد المستثمر يجب أن يكون رقماً، أقصاه 365، أدناه {{days}}",
+				"slaSuccessUpdate": "تم تحديث اتفاقية مستوى الخدمة بنجاح.",
+				"autoAssignSuccessUpdate": "تم تحديث التعيين التلقائي بنجاح.",
+				"autoAssignWarningUpdate": "لا يوجد موظفون نشطون متاحون للتعيين."
+			},
+			"autoAssign": {
+				"autoAssignDesc": "تعيين الخطط المقدمة تلقائياً للموظفين بالدور.",
+				"enableAutoAssign": "تفعيل التعيين التلقائي",
+				"noActiveUsersWarning": "لا يوجد موظفون نشطون متاحون للتعيين."
+			},
+			"notification": {
+				"notificationDesc": "تفعيل أو تعطيل إشعارات النظام والبريد الإلكتروني لجميع أدوار المستخدمين.",
+				"systemTab": "إشعارات النظام",
+				"emailTab": "إشعارات البريد الإلكتروني",
+				"planWorkflowTitle": "إشعارات سير عمل الخطة",
+				"countNotification": " إشعارات",
+				"unAssignedAlert": "تنبيه خطة غير معينة",
+				"unAssignedAlertDesc": "الإشعار عند تقديم خطة ولكنها لم تُعيّن بعد لأي مراجع",
+				"dvManager": "مدير القسم",
+				"planAssignedReview": "خطة معينة للمراجعة",
+				"planAssignedReviewDesc": "الإشعار عند تعيين خطة لمستخدم للمراجعة",
+				"employee": "موظف",
+				"departmentManager": "مدير القسم",
+				"planReassignment": "إعادة تعيين الخطة",
+				"planReassignmentDesc": "الإشعار عند إعادة تعيين خطة من مستخدم لآخر",
+				"employeeReassignee": "الموظف (المعاد تعيينه إليه)",
+				"employeePrev": "الموظف (المعين سابقاً)",
+				"internalPlanSLAReminder": "تذكير اتفاقية مستوى الخدمة الداخلية للخطة",
+				"internalPlanSLAReminderDesc": "يُرسل قبل 5 أيام ويومين من انتهاء اتفاقية مستوى الخدمة الداخلية.",
+				"investorPlanSLAReminder": "تذكير اتفاقية مستوى الخدمة للمستثمر",
+				"investorPlanSLAReminderDesc": "يُرسل قبل 5 أيام ويومين من انتهاء اتفاقية مستوى الخدمة للمستثمر.",
+				"investor": "مستثمر",
+				"overdueInternalPlan": "خطة داخلية متأخرة",
+				"overdueInternalPlanDesc": "يُرسل فوراً عندما تتجاوز خطة داخلية اتفاقية مستوى الخدمة",
+				"finalApprovalRejectionNotification": "إشعار الموافقة/الرفض النهائية",
+				"finalApprovalRejectionNotificationDesc": "يُرسل عند تقديم الموظف للموافقة أو الرفض النهائي.",
+				"finalApprovalRejectionNotificationDescCons": "يُرسل عند الرفض التلقائي للخطة.",
+				"opportunityNotifications": "إشعارات الفرص",
+				"inactiveOpportunityAlert": "تنبيه فرصة غير نشطة",
+				"inactiveOpportunityAlertDesc": "يُرسل قبل يوم من تحول الفرصة إلى غير نشطة.",
+				"admins": "المسؤولون",
+				"draftOpportunityReminder": "تذكير فرصة مسودة",
+				"draftOpportunityReminderDesc": "يُرسل للفرص المسودة النشطة المعلقة على النشر.",
+				"opportunityUpdateNotification": "إشعار تحديث الفرصة",
+				"opportunityUpdateNotificationDesc": "يُرسل عند تحديث المسؤول لفرصة مرتبطة بخطة مقدمة أو مسودة (قيد التنفيذ)",
+				"newOpportunityCreatedNotification": "إشعار إنشاء فرصة جديدة",
+				"newOpportunityCreatedNotificationDesc": "يُرسل تلقائياً عند إنشاء فرصة نشطة ومنشورة جديدة في النظام.",
+				"accessNotifications": "إشعارات الوصول",
+				"impersonationAccessAlert": "تنبيه وصول انتحال الشخصية",
+				"impersonationAccessAlertDesc": "يُرسل عند انتحال مستخدم لهوية مستخدم آخر في النظام.",
+				"userBeingImpersonated": "المستخدم المنتحل شخصيته",
+				"userperformingImpersonation": "المستخدم المنتحل للشخصية",
+				"unAssignedAlertEmailDesc": "يُرسل عندما تظل خطة غير معينة لمدة 5 أيام بعد التقديم.",
+				"planReassignmenEmailDesc": "يُرسل عند إعادة تعيين خطة من موظف لآخر",
+				"reminderOnPlanAssignedforReview": "تذكير على خطة معينة للمراجعة",
+				"reminderOnPlanAssignedforReviewDesc": "يُرسل عند تعيين خطة لمراجع.",
+				"internalPlanSLAReminderEmailDesc": "يُرسل قبل 5 أيام ويومين من انتهاء اتفاقية مستوى الخدمة الداخلية.",
+				"investorPlanSLAReminderEmailDesc": "يُرسل قبل يومين من انتهاء اتفاقية مستوى الخدمة للمستثمر.",
+				"overdueInternalPlanEmailDesc": "يُرسل كل يومين عندما تتجاوز خطة داخلية اتفاقية مستوى الخدمة.",
+				"notificationSuccessMessage": "تم تحديث الإشعار بنجاح",
+				"commentNotification": "إشعار التعليق"
+			},
 			"holidays": {
+				"goBack": "العودة إلى الإعدادات",
 				"title": "إدارة العطلات",
-				"subTitle": "أضف العطلات الرسمية أو أيام الراحة لاستبعادها من حسابات اتفاقية مستوى الخدمة."
+				"subTitle": "أضف العطلات الرسمية أو أيام الراحة لاستبعادها من حسابات اتفاقية مستوى الخدمة.",
+				"addHoliday": "إنشاء عطلة جديدة",
+				"table": {
+					"holidayName": "اسم العطلة",
+					"type": "النوع",
+					"startDate": "تاريخ البدء",
+					"endDate": "تاريخ الانتهاء",
+					"numberOfDay": "عدد الأيام",
+					"createdBy": "المنشئ",
+					"lastUpdated": "آخر تحديث",
+					"createdDate": "تاريخ الإنشاء",
+					"updatedDate": "تاريخ التحديث",
+					"updatedBy": "المحدث",
+					"actions": "الإجراءات",
+					"filter": {
+						"searchKeyPlaceHolder": "البحث باسم العطلة",
+						"year": "السنة",
+						"dateRangePlaceHolder": "نطاق التاريخ"
+					},
+					"typeMapper": {
+						"dayOff": "يوم إجازة",
+						"officialHoliday": "عطلة رسمية"
+					}
+				},
+				"dialog": {
+					"confirm": "إرسال",
+					"addTitle": "إنشاء عطلة جديدة",
+					"editTitle": "تعديل العطلة",
+					"subTitle": "إضافة عطلة أو يوم إجازة جديد",
+					"holidayNamePlaceHolder": "أدخل اسم العطلة",
+					"holidayNameRequired": "اسم العطلة مطلوب.",
+					"holidayNameLength": "يجب أن يكون اسم العطلة بين 3 و 100 حرف.",
+					"holidayNamePattern": "يجب أن يحتوي اسم العطلة على أحرف إنجليزية وعربية فقط بدون رموز خاصة.",
+					"typeRequired": "النوع مطلوب.",
+					"endtDatePlaceHolder": "اختر تاريخ الانتهاء",
+					"startDatePlaceHolder": "اختر تاريخ البدء",
+					"startDateRequired": "تاريخ البدء مطلوب.",
+					"endDateValidation": "يجب أن يكون تاريخ الانتهاء أكبر من تاريخ البدء.",
+					"endDateValidateDateRange": "يجب أن يكون تاريخ الانتهاء بعد أو يساوي تاريخ البدء.",
+					"createdSuccessfully": "تم إضافة العطلة بنجاح.",
+					"updatedSuccessfully": "تم تحديث العطلة بنجاح.",
+					"deleteTitle": "هل أنت متأكد من حذف هذه العطلة؟",
+					"deleteDescription": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم.",
+					"deleteSuccessMessage": "تم حذف العطلة بنجاح."
+				},
+				"actions": {
+					"edit": "تعديل",
+					"delete": "حذف"
+				}
 			},
 			"workingDays": {
 				"title": "إدارة أيام العمل",
