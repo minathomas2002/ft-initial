@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
 import { NavbarProfileDropdownComponent } from '../navbar-profile-dropdown/navbar-profile-dropdown.component';
 import { NavbarNotificationsComponent } from '../navbar-notifications/navbar-notifications.component';
 import { ButtonModule } from 'primeng/button';
@@ -22,4 +22,14 @@ import { LanguageSwitcherComponent } from '../../../../../shared/components/lang
 })
 export class LayoutNavbarComponent {
 	visibleSidebarDrawer = signal(false);
+	toggleDesktopSidebar = output<void>();
+
+	handleSidebarToggle(): void {
+		if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+			this.toggleDesktopSidebar.emit();
+			return;
+		}
+
+		this.visibleSidebarDrawer.set(true);
+	}
 }

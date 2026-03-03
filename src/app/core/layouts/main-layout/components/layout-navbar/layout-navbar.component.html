@@ -11,13 +11,13 @@
         <app-navbar-profile-dropdown></app-navbar-profile-dropdown>
       </div>
     </div>
-    <div class="inline-block lg:hidden">
+    <div class="inline-block">
       <p-button
         severity="secondary"
         styleClass="!text-lg"
         icon="icon-list"
         text
-        (onClick)="visibleSidebarDrawer.set(true)"
+        (onClick)="handleSidebarToggle()"
       />
     </div>
   </div>
