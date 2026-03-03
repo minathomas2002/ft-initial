@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
   inject,
   input,
   model,
@@ -30,6 +31,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, of } from 'rxjs';
 import { ERoles } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
 @Component({
   selector: 'app-add-edit-delegation-dialog',
@@ -41,6 +43,7 @@ import { TooltipModule } from 'primeng/tooltip';
     ReactiveFormsModule,
     FormsModule,
     TooltipModule,
+    BaseErrorMessages,
   ],
   templateUrl: './add-edit-delegation-dialog.html',
   styleUrl: './add-edit-delegation-dialog.scss',
@@ -72,7 +75,7 @@ export class AddEditDelegationDialog implements OnInit {
     { initialValue: new Date() as Date, requireSync: false },
   );
 
-  disabledstartDate = toSignal(
+  disabledStartDate = toSignal(
     (this.formService.form.get('endDate')?.valueChanges ?? of(new Date())).pipe(
       map((value) => {
         const date = value ? new Date(value) : new Date();
@@ -85,9 +88,17 @@ export class AddEditDelegationDialog implements OnInit {
   );
 
   disabledStartDatesArray = computed(() => {
-    const date = this.disabledstartDate();
+    const date = this.disabledStartDate();
     return date ? [date] : [];
   });
+
+  constructor() {
+    effect(() => {
+      if (!this.dialogVisible()) {
+        this.resetForm();
+      }
+    });
+  }
 
   ngOnInit() {
     this.loadEmployees();
