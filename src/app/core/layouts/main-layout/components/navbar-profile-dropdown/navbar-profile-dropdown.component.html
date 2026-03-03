@@ -5,19 +5,23 @@
   (onShow)="isOpen.set(true)"
   (onHide)="isOpen.set(false)"
   appendTo="body"
-/>
+  />
 
-<button
-  (click)="menu.toggle($event)"
+  <button
+  (click)="toggleMenu($event)"
   class="w-full border-0 text-start bg-transparent rounded-none"
 >
   <div class="items-center md:!flex hidden text-sm">
     <app-identify-user
       [userName]="authStore.userProfile()?.nameEN!"
-      [userTitle]="authStore.userCode()!"
+      [userTitle]="authStore.userProfile()?.roleNames?.[0] || authStore.userCode()!"
       [userAvatar]="authStore.userProfile()?.photoURL"
     ></app-identify-user>
-    <i class="icon-chevron-down ms-[18px] text-gray-400 {{isOpen()? 'rotate-180':'rotate-none'}} transition-all"></i>
+
+    @if (dropdownItems().length) {
+      <i class="icon-chevron-down ms-[18px] text-gray-400 {{isOpen()? 'rotate-180':'rotate-none'}} transition-all"></i>
+    }
+
   </div>
 
   <p-avatar

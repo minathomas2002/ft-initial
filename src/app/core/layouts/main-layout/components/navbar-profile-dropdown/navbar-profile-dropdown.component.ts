@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { MenuModule } from 'primeng/menu';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, viewChild } from '@angular/core';
+import { Menu, MenuModule } from 'primeng/menu';
 import { AvatarModule } from 'primeng/avatar';
 import { Router } from '@angular/router';
-import { ERoutes } from '../../../../../shared/enums';
+import { ERoles, ERoutes } from '../../../../../shared/enums';
 import { IdentifyUserComponent } from '../../../../../shared/components/utility-components/identify-user/identify-user.component';
 import { AuthStore } from '../../../../../shared/stores/auth/auth.store';
 import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
+import { RoleService } from 'src/app/shared/services/role/role-service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-navbar-profile-dropdown',
@@ -16,26 +18,42 @@ import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
 })
 export class NavbarProfileDropdownComponent {
   authStore = inject(AuthStore);
+  roleService = inject(RoleService);
   router = inject(Router);
   private readonly i18nService = inject(I18nService);
   isOpen = signal(false);
+  menu = viewChild<Menu>('menu');
+  private readonly isProduction = signal(environment.production);
+  private readonly isSecEnvironment = signal(window.location.hostname === environment.secDomain);
+  private readonly isInvestor = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR]);
+  private readonly isInternal = !this.isInvestor();
+
   dropdownItems = computed(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
-    return [
-      // {
-      //   label: this.i18nService.translate('navigation.viewProfile'),
-      //   icon: 'icon-user',
-      //   command: () => this.router.navigate(['/', ERoutes.profile]),
-      // },
-      {
+    const items = [];
+
+    const shouldHideLogout = (this.isInternal || this.isSecEnvironment()) && this.isProduction();
+    if (!shouldHideLogout) {
+      items.push({
         label: this.i18nService.translate('navigation.signOut'),
         icon: 'icon-log-out',
         command: () => {
           this.authStore.logout();
           this.router.navigate(['/', ERoutes.auth, ERoutes.login])
         },
-      },
-    ];
+      })
+    }
+
+    return items;
   });
+
+  toggleMenu(event: Event) {
+    const items = this.dropdownItems();
+    if (!items || items.length === 0) {
+      return; // Prevent opening empty menu
+    }
+
+    this.menu()?.toggle(event);
+  }
 }
