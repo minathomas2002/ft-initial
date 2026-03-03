@@ -13,10 +13,11 @@
   [contentStyleClass]="contentStyleClass()"
   [styleClass]="styleClass() + ' lg:min-w-[25rem] max-w-[90%] min-w-[15rem]'"
   [position]="position()"
+  [draggable]="false"
 >
   @if(visible()){
   <ng-template #header>
-    <span class="inline-flex items-start gap-2">
+    <span class="inline-flex items-center gap-2">
       @if(icon()){
       <div class="!min-w-[48px] !min-h-[48px] rounded-lg grid place-content-center border border-gray-300">
         <i class="{{icon()}} text-gray-900 text-xl"></i>
