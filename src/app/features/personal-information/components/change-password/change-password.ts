@@ -75,10 +75,6 @@ export class ChangePassword {
           this.visible.set(false);
         }
       },
-      error: (error) => {
-        const message = error?.error?.message ?? error?.error?.errorMessage ?? error?.message ?? 'Failed to change password.';
-        this.toasterService.error(message);
-      },
     });
   }
 }

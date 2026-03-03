@@ -488,6 +488,8 @@
       "endDateRequired":"End date is required",
       "delegatorPlaceHolder" : "Select delegator",
       "delegateePlaceHolder" : "Select delegatee",
+      "selectStartDate": "Select start date",
+      "selectEndDate": "Select end date",
       "delete":{
         "title" : "Are you sure you want to delete this Delegation?",
         "description" : "This action cannot be undone. Once deleted, all related data will be permanently removed."

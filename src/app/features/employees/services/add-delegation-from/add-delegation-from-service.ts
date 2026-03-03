@@ -44,5 +44,6 @@ export class AddDelegationFormService {
   }
   ResetFormFields() {
     this.form.reset();
+    this.form.updateValueAndValidity();
   }
 }

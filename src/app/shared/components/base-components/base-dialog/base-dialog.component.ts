@@ -41,5 +41,16 @@ export class BaseDialogComponent {
   handleCancel(): void {
     this.onCancel.emit();
     this.visible.set(false);
-}
+  }
+
+  handleHide(): void {
+    this.onClose.emit();
+    this.visible.set(false);
+  }
+
+  onVisibleChange(value: boolean): void {
+    if (!value) {
+      this.handleHide();
+    }
+  }
 }
