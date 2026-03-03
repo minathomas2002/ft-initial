@@ -11,6 +11,11 @@ const MAIN_LAYOUT_ROUTES: Routes = [
       import('./core/layouts/main-layout/main-layout.component').then((m) => m.MainLayoutComponent),
     children: [
       {
+        path: '',
+        redirectTo: ERoutes.dashboard,
+        pathMatch: 'full',
+      },
+      {
         path: ERoutes.dashboard,
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then((c) => c.DASHBOARD_ROUTES),
@@ -90,4 +95,9 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
+  }
 ];
