@@ -142,8 +142,14 @@ export class TimelineComponent {
       'Entity Level': 'entityLevel',
       'Service Level': 'serviceLevel',
       'Collaboration Partnership': 'collaborationPartnership',
+      'Overview': 'overview',
       'Overview & Company Information': 'overviewCompanyInformation',
       'Other Location Details': 'otherLocationDetails',
+      'Design & Engineering': 'designEngineering',
+      'Sourcing': 'sourcing',
+      'Manufacturing': 'manufacturing',
+      'Assembly & Testing': 'assemblyTesting',
+      'After Sales': 'afterSales',
     };
     const normalized = displayToKey[section] ?? section.replace(/\s+/g, '');
     return 'plans.form.' + normalized;
