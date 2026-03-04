@@ -48,7 +48,16 @@
 		"noNotifications": "لا توجد إشعارات",
 		"continueEditing": "متابعة التحرير",
 		"markAllAsRead": "تعليم الكل كمقروء",
-		"previousNotifications": "الإشعارات السابقة"
+		"previousNotifications": "الإشعارات السابقة",
+		"timeAgo": {
+			"justNow": "الآن",
+			"minutesAgo": "منذ {{count}} د",
+			"hoursAgo": "منذ {{count}} س",
+			"daysAgo": "منذ {{count}} يوم",
+			"weeksAgo": "منذ {{count}} أسبوع",
+			"monthsAgo": "منذ {{count}} شهر",
+			"yearsAgo": "منذ {{count}} سنة"
+		}
 	},
 	"footer": {
 		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
