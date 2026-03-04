@@ -28,7 +28,7 @@ export interface IAssignee {
 
 export interface IAssignActiveEmployee {
   id: string;
-  name: string;  
+  name: string;
 }
 
 export interface IAssignReassignActiveEmployee {
@@ -76,6 +76,7 @@ export interface ISystemEmployeeRecord {
   status: string;
   userId: string;
   actions: EAdminUserActions[];
+  photo: string;
 }
 
 export type TSystemEmployeeSortingKeys = keyof ISystemEmployeeRecord;

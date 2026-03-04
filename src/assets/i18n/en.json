@@ -384,7 +384,8 @@
       "assignedDate": "Assigned Date",
       "assignedBy": "Assigned BY",
       "status": "Status",
-      "actions": "Actions"
+      "actions": "Actions",
+      "photo":"Profile Picture"
     },
     "list": {
       "title": "Employees",
