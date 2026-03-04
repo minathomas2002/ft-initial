@@ -16,7 +16,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'basicInformation',
             inputKey: 'planTitle',
-            label: 'Plan Title'
+            label: 'plans.newPlan.planTitle'
           })"
         >
           <input
@@ -77,7 +77,7 @@
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="submissionDateLabel()" />
+        <app-base-label [title]="'plans.form.submissionDate' | translate" />
         <p-datepicker
           fluid
           dateFormat="dd M yy"
@@ -92,14 +92,14 @@
     <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.companyInformation' | translate }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 ">
       <div class="flex flex-col gap-2 col-span-1">
-        <app-base-label [title]="companyNameLabel()" />
+        <app-base-label [title]="'plans.newPlan.companyName' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="companyNameHasCommentControl()!"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'companyName',
-            label: companyNameLabel()
+            label: 'plans.newPlan.companyName'
           })"
         >
           <input
@@ -115,20 +115,20 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['companyName'])"
-          [label]="companyNameLabel()"
+          [label]="'plans.newPlan.companyName' | translate"
         />
       </div>
     </div>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="ceoNameLabel()" />
+        <app-base-label [title]="'plans.form.ceoName' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'ceoName',
-            label: ceoNameLabel()
+            label: 'plans.form.ceoName'
           })"
         >
           <input
@@ -144,18 +144,18 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['ceoName'])"
-          [label]="ceoNameLabel()"
+          [label]="'plans.form.ceoName' | translate"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="ceoEmailLabel()" />
+        <app-base-label [title]="'plans.summary.ceoEmail' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoEmailID'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'ceoEmailID',
-            label: ceoEmailLabel()
+            label: 'plans.summary.ceoEmail'
           })"
         >
           <input
@@ -171,7 +171,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
-          [label]="ceoEmailLabel()"
+          [label]="'plans.summary.ceoEmail' | translate"
         />
       </div>
     </div>
@@ -182,14 +182,14 @@
     <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.locationInformation' | translate }}</h2>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="globalHQLocationLabel()" />
+        <app-base-label [title]="'plans.form.globalHQLocation' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'locationInformation',
             inputKey: 'globalHQLocation',
-            label: globalHQLocationLabel()
+            label: 'plans.form.globalHQLocation'
           })"
         >
           <input
@@ -205,12 +205,12 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
-          [label]="globalHQLocationLabel()"
+          [label]="'plans.form.globalHQLocation' | translate"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
         <div>
-          <app-base-label [title]="registeredVendorIDwithSECLabel()" />
+          <app-base-label [title]="'plans.form.registeredVendorIDwithSEC' | translate" />
           <span class="text-sm text-gray-600 ms-2">{{ 'plans.form.ifAvailable' | translate }}</span>
         </div>
         <app-group-input-with-checkbox
@@ -219,7 +219,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'locationInformation',
             inputKey: 'registeredVendorIDwithSEC',
-            label: registeredVendorIDwithSECLabel()
+            label: 'plans.form.registeredVendorIDwithSEC'
           })"
         >
           <input
@@ -239,7 +239,7 @@
 
         <app-base-error-messages
           [control]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
-          [label]="registeredVendorIDwithSECLabel()"
+          [label]="'plans.form.registeredVendorIDwithSEC' | translate"
         />
       </div>
     </div>
@@ -257,9 +257,9 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'locationInformation',
               inputKey: 'doYouCurrentlyHaveLocalAgentInKSA',
-              label: hasLocalAgentInKSALabel()
+              label: 'plans.form.hasLocalAgentInKSA'
             })"
-          >
+          > 
             <div class="flex gap-2">
               <label class="flex items-center gap-2 cursor-pointer">
                 <p-radiobutton
@@ -290,7 +290,7 @@
         </div>
         <app-base-error-messages
           [control]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
-          [label]="hasLocalAgentInKSALabel()"
+          [label]="'plans.form.hasLocalAgentInKSA' | translate"
         />
       </div>
 
@@ -303,14 +303,14 @@
     >
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="localAgentNameLabel()" />
+          <app-base-label [title]="'plans.form.localAgentName' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'localAgentName',
-              label: localAgentNameLabel()
+              label: 'plans.form.localAgentName'
             })"
           >
             <input
@@ -326,18 +326,18 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
-            [label]="localAgentNameLabel()"
+            [label]="'plans.form.localAgentName' | translate"
           />
         </div>
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="contactPersonNameLabel()" />
+          <app-base-label [title]="'plans.form.contactPersonName' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'contactPersonName',
-              label: contactPersonNameLabel()
+              label: 'plans.form.contactPersonName'
             })"
           >
             <input
@@ -353,20 +353,20 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
-            [label]="contactPersonNameLabel()"
+            [label]="'plans.form.contactPersonName' | translate"
           />
         </div>
       </div>
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="emailIDLabel()" />
+          <app-base-label [title]="'plans.form.emailID' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['emailID'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'emailID',
-              label: emailIDLabel()
+              label: 'plans.form.emailID'
             })"
           >
             <input
@@ -381,18 +381,18 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
-            [label]="emailIDLabel()"
+            [label]="'plans.form.emailID' | translate"
           />
         </div>
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="contactNumberLabel()" />
+          <app-base-label [title]="'plans.form.contactNumber' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="contactNumberHasCommentControl()!"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'contactNumber',
-              label: contactNumberLabel()
+              label: 'plans.form.contactNumber'
             })"
           >
             <app-phone-input
@@ -403,21 +403,21 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
-            [label]="contactNumberLabel()"
+            [label]="'plans.form.contactNumber' | translate"
           />
         </div>
       </div>
       <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-1">
           <div class="flex flex-col gap-2 flex-1">
-<app-base-label [title]="companyHQLocationLabel()" />
+<app-base-label [title]="'plans.form.companyHQLocation' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'companyHQLocation',
-              label: companyHQLocationLabel()
+              label: 'plans.form.companyHQLocation'
             })"
             >
               <input
@@ -433,7 +433,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
-              [label]="companyHQLocationLabel()"
+              [label]="'plans.form.companyHQLocation' | translate"
             />
           </div>
         </div>

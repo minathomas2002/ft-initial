@@ -94,19 +94,6 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
     return this.planFormService?.localAgentInformationFormGroup?.controls;
   }
 
-  submissionDateLabel = computed(() => this.i18nService.translate('plans.form.submissionDate'));
-  companyNameLabel = computed(() => this.i18nService.translate('plans.newPlan.companyName'));
-  ceoNameLabel = computed(() => this.i18nService.translate('plans.form.ceoName'));
-  ceoEmailLabel = computed(() => this.i18nService.translate('plans.summary.ceoEmail'));
-  globalHQLocationLabel = computed(() => this.i18nService.translate('plans.form.globalHQLocation'));
-  registeredVendorIDwithSECLabel = computed(() => this.i18nService.translate('plans.form.registeredVendorIDwithSEC'));
-  hasLocalAgentInKSALabel = computed(() => this.i18nService.translate('plans.form.hasLocalAgentInKSA'));
-  localAgentNameLabel = computed(() => this.i18nService.translate('plans.form.localAgentName'));
-  contactPersonNameLabel = computed(() => this.i18nService.translate('plans.form.contactPersonName'));
-  emailIDLabel = computed(() => this.i18nService.translate('plans.form.emailID'));
-  contactNumberLabel = computed(() => this.i18nService.translate('plans.form.contactNumber'));
-  companyHQLocationLabel = computed(() => this.i18nService.translate('plans.form.companyHQLocation'));
-
   companyNameHasCommentControl = computed(() => {
     const controls = this.companyInformationFormGroupControls;
     return controls ? this.getHasCommentControl(controls['companyName']) : null;

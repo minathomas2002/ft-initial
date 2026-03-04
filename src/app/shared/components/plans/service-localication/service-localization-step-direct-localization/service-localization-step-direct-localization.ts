@@ -78,10 +78,14 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
   customHeaderLabels = computed(() => {
     return {
-      'locationType': 'Location',
-      'supervisionOversightByGovernmentEntity': 'Supervision / Oversight by Government Entity (if any)'
+      'location': this.i18n.translate('plans.form.location'),
+      'supervisionOversightByGovernmentEntity': this.i18n.translate('plans.form.supervisionOversightByGovernmentEntity')
     };
   });
+
+  getTranslatedLabel(key: string, year: string | number): string {
+    return this.i18n.translate(key, { year: String(year) });
+  }
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -176,12 +180,12 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   serviceLevelGroupHeader = computed(() => {
     const yearCols = this.yearControlKeys.length;
     return [
-      { label: 'Service Name', rowspan: 2, dataGroup: false },
-      { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
-      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
-      { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
-      { label: 'Key measures to upskill Saudis', rowspan: 2, dataGroup: false },
-      { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.serviceName'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.expectedLocalizationDate'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.expectedAnnualHeadcountKSA'), colspan: yearCols, dataGroup: true },
+      { label: this.i18n.translate('plans.form.mentionYoySaudizationKSAUptoYear', { year: this.yearColumns()[5] }), colspan: yearCols, dataGroup: true },
+      { label: this.i18n.translate('plans.form.keyMeasuresToUpskillSaudis'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.supportRequiredFromSEC') + ' (if any)', rowspan: 2, dataGroup: false },
     ];
   });
 
