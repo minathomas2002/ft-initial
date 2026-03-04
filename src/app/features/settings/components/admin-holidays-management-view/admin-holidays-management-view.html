@@ -29,25 +29,25 @@
             </td>
 
             <td class="whitespace-nowrap">
-              {{ item.dateFrom| date : 'dd MMM yyyy' }}
+              {{ item.dateFrom| localizedDate : 'dd MMM yyyy' }}
             </td>
 
             <td class="whitespace-nowrap">
-              {{item.dateTo | date : 'dd MMM yyyy'}}
+              {{item.dateTo | localizedDate : 'dd MMM yyyy'}}
             </td>
 
             <td>
               {{ (item.numberOfDays)? (item.numberOfDays + ' ' + getNumberOfDaysNoun(item.numberOfDays)) : '-' }}
             </td>
             <td>
-              {{ item.createdDate | date : 'dd MMM yyyy' }}
+              {{ item.createdDate | localizedDate : 'dd MMM yyyy' }}
             </td>
             <td>
               {{item.createdBy}}
             </td>
             <td>
               @if(item.updatedDate){
-              {{ item.updatedDate | date : 'dd MMM yyyy' }}
+              {{ item.updatedDate | localizedDate : 'dd MMM yyyy' }}
               }@else{
               <div class="text-center">-</div>
               }

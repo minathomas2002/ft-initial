@@ -58,7 +58,7 @@
     } @if(opportunity().startDate && opportunity().endDate) {
     <app-opportunity-detail-item
       [label]="'opportunity.list.applicationPeriod' | translate"
-      [value]="`${opportunity().startDate | date:'dd MMM yyyy'} - ${opportunity().endDate | date:'dd MMM yyyy'}`"
+      [value]="`${opportunity().startDate | localizedDate:'dd MMM yyyy'} - ${opportunity().endDate | localizedDate:'dd MMM yyyy'}`"
     />
     }
   </div>

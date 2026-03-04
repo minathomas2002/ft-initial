@@ -5,12 +5,12 @@ import { DataTableComponent } from 'src/app/shared/components/layout-components/
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { EInvestorPlanStatus, EInternalUserPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
-import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
+import { LocalizedDatePipe, TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
 import { EOpportunityType, ERoles } from 'src/app/shared/enums';
-import { DatePipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
@@ -40,7 +40,7 @@ import { GeneralConfirmationDialogComponent } from "src/app/shared/components/ut
     PlansActionMenu,
     TranslatePipe,
     SlaCountdownNounPipe,
-    DatePipe,
+    LocalizedDatePipe,
     NgClass,
     ButtonModule,
     SkeletonModule,

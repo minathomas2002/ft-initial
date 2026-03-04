@@ -16,7 +16,6 @@ import { UserStatusMapper } from '../../classes/user-status-mapper';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { EmployeesActionMenu } from '../../components/employees-action-menu/employees-action-menu';
-import { DatePipe } from '@angular/common';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { ButtonModule } from 'primeng/button';
 import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
@@ -29,7 +28,7 @@ import { DelegationActionMenu } from "../../components/delegation-action-menu/de
 import { DelegationStatusMapper } from '../../classes/delegation-status-mapper';
 import { row } from '@primeuix/themes/aura/datatable';
 import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
-import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
+import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
 import { AddEditDelegationDialog } from "../../components/add-edit-delegation-dialog/add-edit-delegation-dialog";
 
 @Component({
@@ -37,11 +36,10 @@ import { AddEditDelegationDialog } from "../../components/add-edit-delegation-di
   imports: [
     TableLayoutComponent,
     TableSkeletonComponent,
-    DatePipe,
+    LocalizedDatePipe,
     BaseTagComponent,
     DataTableComponent,
     TooltipModule,
-    DatePipe,
     ButtonModule,
     DelegationFilter,
     DelegationActionMenu,

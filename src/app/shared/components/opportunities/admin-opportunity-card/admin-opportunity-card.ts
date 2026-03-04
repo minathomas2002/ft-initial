@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
-import { DatePipe } from '@angular/common';
 import { IAdminOpportunity } from '../../../interfaces/admin-opportunities.interface';
 import { EOpportunityStatus, EOpportunityState, EOpportunityAction } from '../../../enums/opportunities.enum';
-import { TranslatePipe } from '../../../pipes';
+import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
 import { BaseTagComponent } from '../../base-components/base-tag/base-tag.component';
 import { OpportunityDetailItem } from '../opportunity-detail-item/opportunity-detail-item';
 import { OpportunityActionMenuComponent } from '../opportunity-action-menu/opportunity-action-menu.component';
@@ -17,7 +16,7 @@ import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-too
   imports: [
     TooltipModule,
     ButtonModule,
-    DatePipe,
+    LocalizedDatePipe,
     TranslatePipe,
     BaseTagComponent,
     OpportunityDetailItem,

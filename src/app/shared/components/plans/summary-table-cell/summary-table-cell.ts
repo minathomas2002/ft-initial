@@ -1,6 +1,7 @@
 import { NgClass } from '@angular/common';
-import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, computed, ChangeDetectionStrategy, inject } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 @Component({
   selector: 'app-summary-table-cell',
@@ -10,6 +11,8 @@ import { TooltipModule } from 'primeng/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryTableCell {
+  private readonly i18nService = inject(I18nService);
+
   value = input<any>(null);
   beforeValue = input<any>(null);
   afterValue = input<any>(null);
@@ -41,7 +44,8 @@ export class SummaryTableCell {
 
     if (this.isDate() && this.value()) {
       const date = new Date(this.value());
-      return date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const locale = this.i18nService.currentLanguage() === 'ar' ? 'ar-SA' : 'en-GB';
+      return date.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 
     if (this.value() === null || this.value() === undefined || this.value() === '') {
@@ -71,7 +75,8 @@ export class SummaryTableCell {
 
     if (this.isDate() && val) {
       const date = new Date(val);
-      return date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const locale = this.i18nService.currentLanguage() === 'ar' ? 'ar-SA' : 'en-GB';
+      return date.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 
     if (typeof val === 'object' && val !== null) {
@@ -96,7 +101,8 @@ export class SummaryTableCell {
 
     if (this.isDate() && val) {
       const date = new Date(val);
-      return date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const locale = this.i18nService.currentLanguage() === 'ar' ? 'ar-SA' : 'en-GB';
+      return date.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 
     if (typeof val === 'object' && val !== null) {

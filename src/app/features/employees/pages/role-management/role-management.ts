@@ -16,7 +16,6 @@ import { UserStatusMapper } from '../../classes/user-status-mapper';
 import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
-import { DatePipe } from '@angular/common';
 import { ERoles } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { RoleManagementActions } from '../../components/role-management-actions/role-management-actions';
@@ -24,13 +23,14 @@ import { TransferRoleDialog } from '../../components/transfer-role-dialog/transf
 import { TransferRoleService } from '../../services/transfer-role/transfer-role-service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { pipe, switchMap, tap } from 'rxjs';
+import { LocalizedDatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-role-management',
   imports: [
     TableLayoutComponent,
     TableSkeletonComponent,
-    DatePipe,
+    LocalizedDatePipe,
     RoleManagementFilters,
     BaseTagComponent,
     DataTableComponent,

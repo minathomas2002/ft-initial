@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
-import { DatePipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
 import { Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { InvestorDashboardPlansFilter } from '../../components/investor-dashboar
 import { DashboardStatisticsSkeleton } from '../../components/dashboard-statistics-skeleton/dashboard-statistics-skeleton';
 import { DashboardStatisticsCards } from '../../components/dashboard-statistics-cards/dashboard-statistics-cards';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
-import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
+import { LocalizedDatePipe, TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { AssignReassignManualEmployee } from 'src/app/features/plans/components/assign-reassign-manual-employee/assign-reassign-manual-employee';
 import { ProductLocalizationPlanWizard } from 'src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
@@ -47,7 +47,7 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
     DashboardPlanActionMenu,
     DashboardStatisticsSkeleton,
     DashboardStatisticsCards,
-    DatePipe,
+    LocalizedDatePipe,
     NgClass,
     TranslatePipe,
     SlaCountdownNounPipe,

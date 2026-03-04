@@ -3,11 +3,10 @@ import { ICommentFields, ITimeLineResponse } from 'src/app/shared/interfaces/pla
 import { Timeline } from "../../utility-components/timeline/timeline";
 import { EInvestorPlanStatus, TColors } from 'src/app/shared/interfaces';
 import { Divider } from "primeng/divider";
-import { DatePipe } from '@angular/common';
 import { SystemEmployeeRoleMapper } from 'src/app/shared/classes/role.mapper';
 import { ERoles } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n';
-import { CamelCaseToWordPipe, PlanPageTitlePipe, TranslatePipe } from 'src/app/shared/pipes';
+import { CamelCaseToWordPipe, LocalizedDatePipe, PlanPageTitlePipe, TranslatePipe } from 'src/app/shared/pipes';
 import { HandlePlanStatusFactory } from 'src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory';
 import { IdentifyUserComponent } from "../../utility-components/identify-user/identify-user.component";
 import { EStatusPlanTimeLine } from 'src/app/shared/enums';
@@ -21,7 +20,7 @@ import { TextareaModule } from 'primeng/textarea';
   selector: 'app-plan-timeline-component',
   imports: [
     Timeline,
-    DatePipe,
+    LocalizedDatePipe,
     TranslatePipe,
     PlanPageTitlePipe,
     Divider,

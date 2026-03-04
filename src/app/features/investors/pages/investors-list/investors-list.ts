@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
@@ -9,7 +8,7 @@ import { InvestorsFilterService } from '../../services/investors-filter/investor
 import { InvestorsFilter } from '../../components/investors-filter/investors-filter';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { AvatarModule } from 'primeng/avatar';
-import { TranslatePipe } from 'src/app/shared/pipes';
+import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-investors-list',
@@ -17,7 +16,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
     TableLayoutComponent,
     TableSkeletonComponent,
     DataTableComponent,
-    DatePipe,
+    LocalizedDatePipe,
     InvestorsFilter,
     AvatarModule,
   ],

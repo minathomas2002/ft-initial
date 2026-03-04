@@ -69,7 +69,7 @@
             <td>
               <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
             </td>
-            <td>{{ item.submissionDate | date: 'dd MMM yyyy' }}</td>
+            <td>{{ item.submissionDate | localizedDate: 'dd MMM yyyy' }}</td>
             @if (isInternalUser()) {
             <td>
               <p
