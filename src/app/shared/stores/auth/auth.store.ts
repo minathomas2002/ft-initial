@@ -1,13 +1,15 @@
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
-import { type Observable, type Subscription, catchError, finalize, throwError, tap } from 'rxjs';
+import { type Observable, type Subscription, catchError, finalize, throwError, tap, pipe, take } from 'rxjs';
 import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse, IJwtUserDetails, IUserProfile, } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
+import { UsersApiService } from '../../api/users/users-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
 import { HttpErrorResponse } from '@angular/common/http';
 import { JwtService } from '../../services/auth/jwt-service';
 import { ERoutes } from '../../enums';
+import type { SupportedLanguage } from '../../services/i18n/i18n.service';
 
 const REFRESH_BEFORE_EXPIRY_MS = 2 * 60 * 1000; // 2 minutes before expiry
 
@@ -40,6 +42,7 @@ export const AuthStore = signalStore(
   }),
   withMethods((store) => {
     const authApiService = inject(AuthApiService);
+    const usersApiService = inject(UsersApiService);
     const localStorage = inject(LocalStorage);
     const jwtService = inject(JwtService);
     const router = inject(Router);
@@ -164,13 +167,22 @@ export const AuthStore = signalStore(
 
             if (response.success && response.body && hasValidToken && isEmailVerified) {
               this.updateAuthDataInStorage(response);
-              this.getUserProfile().subscribe();
+              this.getUserProfile()
+                .pipe(take(1))
+                .subscribe();
+              this.syncLanguageToServer();
             }
           }),
           finalize(() => {
             patchState(store, { loading: false });
           })
         );
+      },
+
+      syncLanguageToServer(): void {
+        const lang = (typeof window !== 'undefined' && window.localStorage?.getItem('preferred-language')) as SupportedLanguage | null;
+        const supportedLang = lang === 'en' || lang === 'ar' ? lang : 'en';
+        usersApiService.changeLanguage(supportedLang).pipe(take(1)).subscribe();
       },
 
       getUserProfile(): Observable<IBaseApiResponse<IUserProfile>> {
@@ -264,6 +276,7 @@ export const AuthStore = signalStore(
           patchState(store, { userProfile: userProfile });
         }
         store.scheduleTokenRefresh();
+        store.syncLanguageToServer();
       }
     },
   })
