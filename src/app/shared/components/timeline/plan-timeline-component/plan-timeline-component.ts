@@ -94,7 +94,19 @@ export class TimelineComponent {
   }
 
   getCommentFieldLabel(field: ICommentFields): string {
-    const translatedLabel = this.i18nService.translate(field.label);
+    let translatedLabel = this.i18nService.translate(field.label);
+
+    // Handle "key - Year N" pattern (e.g. saudization matrix fields)
+    const yearMatch = field.label.match(/^(.+)\s+-\s+Year\s+(\d+)$/);
+    if (yearMatch) {
+      const [, keyPart, yearNum] = yearMatch;
+      const translatedKey = this.i18nService.translate(keyPart.trim());
+      const yearLabel = this.i18nService.translate('plans.summary.year');
+      translatedLabel = translatedKey !== keyPart.trim()
+        ? `${translatedKey} - ${yearLabel} ${yearNum}`
+        : translatedLabel;
+    }
+
     if (field.section.toLowerCase() === field.label.toLowerCase()) {
       return translatedLabel;
     }
