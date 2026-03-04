@@ -72,7 +72,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'expenseHeader', index),
-                label: 'Expense Header'
+                label: 'plans.form.expenseHeader'
               }, itemControl)"
             >
               <input
@@ -88,7 +88,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-              [label]="'Expense Header'"
+              [label]="'plans.form.expenseHeader' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
@@ -98,7 +98,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'inHouseOrProcured', index),
-                label: 'In-house / Procured'
+                label: 'plans.form.inHouseProcured'
               }, itemControl)"
             >
               <p-select
@@ -116,7 +116,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              [label]="'In-house / Procured'"
+              [label]="'plans.form.inHouseProcured' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -126,7 +126,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'costPercentage', index),
-                label: 'Cost %'
+                label: 'plans.form.costPercentage'
               }, itemControl)"
             >
               <p-inputnumber
@@ -144,7 +144,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-              [label]="'Cost %'"
+              [label]="'plans.form.costPercentage' | translate"
             />
           </td>
           <td
@@ -160,7 +160,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'designEngineering',
                           inputKey: createFieldKey('designEngineering', 'year1', index),
-                          label: 'Year 1'
+                          label: 'plans.summary.year1'
                         }, itemControl)"
             >
               <p-select
@@ -176,7 +176,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
-                [label]="'Year 1'"
+                [label]="'plans.summary.year1' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -194,7 +194,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'year2', index),
-                label: 'Year 2'
+                label: 'plans.summary.year2'
               }, itemControl)"
             >
               <p-select
@@ -210,7 +210,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
-                [label]="'Year 2'"
+                [label]="'plans.summary.year2' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -228,7 +228,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'year3', index),
-                label: 'Year 3'
+                label: 'plans.summary.year3'
               }, itemControl)"
             >
               <p-select
@@ -244,7 +244,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
-                [label]="'Year 3'"
+                [label]="'plans.summary.year3' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -262,7 +262,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'year4', index),
-                label: 'Year 4'
+                label: 'plans.summary.year4'
               }, itemControl)"
             >
               <p-select
@@ -278,7 +278,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
-                [label]="'Year 4'"
+                [label]="'plans.summary.year4' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -296,7 +296,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'year5', index),
-                label: 'Year 5'
+                label: 'plans.summary.year5'
               }, itemControl)"
             >
               <p-select
@@ -312,7 +312,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
-                [label]="'Year 5'"
+                [label]="'plans.summary.year5' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -330,7 +330,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'year6', index),
-                label: 'Year 6'
+                label: 'plans.summary.year6'
               }, itemControl)"
             >
               <p-select
@@ -346,7 +346,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
-                [label]="'Year 6'"
+                [label]="'plans.summary.year6' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -364,7 +364,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'designEngineering',
                 inputKey: createFieldKey('designEngineering', 'year7', index),
-                label: 'Year 7'
+                label: 'plans.summary.year7'
               }, itemControl)"
             >
               <p-select
@@ -380,7 +380,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
-                [label]="'Year 7'"
+                [label]="'plans.summary.year7' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -444,7 +444,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'expenseHeader', index),
-                label: 'Expense Header'
+                label: 'plans.form.expenseHeader'
               }, itemControl)"
             >
               <input
@@ -460,7 +460,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-              [label]="'Expense Header'"
+              [label]="'plans.form.expenseHeader' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
@@ -470,7 +470,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'inHouseOrProcured', index),
-                label: 'In-house / Procured'
+                label: 'plans.form.inHouseProcured'
               }, itemControl)"
             >
               <p-select
@@ -488,7 +488,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              [label]="'In-house / Procured'"
+              [label]="'plans.form.inHouseProcured' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -498,7 +498,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'costPercentage', index),
-                label: 'Cost %'
+                label: 'plans.form.costPercentage'
               }, itemControl)"
             >
               <p-inputnumber
@@ -516,7 +516,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-              [label]="'Cost %'"
+              [label]="'plans.form.costPercentage' | translate"
             />
           </td>
           <td
@@ -532,7 +532,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'year1', index),
-                label: 'Year 1'
+                label: 'plans.summary.year1'
               }, itemControl)"
             >
               <p-select
@@ -548,7 +548,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
-                [label]="'Year 1'"
+                [label]="'plans.summary.year1' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -566,7 +566,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'year2', index),
-                label: 'Year 2'
+                label: 'plans.summary.year2'
               }, itemControl)"
             >
               <p-select
@@ -582,7 +582,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
-                [label]="'Year 2'"
+                [label]="'plans.summary.year2' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -600,7 +600,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'year3', index),
-                label: 'Year 3'
+                label: 'plans.summary.year3'
               }, itemControl)"
             >
               <p-select
@@ -616,7 +616,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
-                [label]="'Year 3'"
+                [label]="'plans.summary.year3' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -634,7 +634,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'year4', index),
-                label: 'Year 4'
+                label: 'plans.summary.year4'
               }, itemControl)"
             >
               <p-select
@@ -650,7 +650,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
-                [label]="'Year 4'"
+                [label]="'plans.summary.year4' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -668,7 +668,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'year5', index),
-                label: 'Year 5'
+                label: 'plans.summary.year5'
               }, itemControl)"
             >
               <p-select
@@ -684,7 +684,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
-                [label]="'Year 5'"
+                [label]="'plans.summary.year5' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -702,7 +702,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'year6', index),
-                label: 'Year 6'
+                label: 'plans.summary.year6'
               }, itemControl)"
             >
               <p-select
@@ -718,7 +718,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
-                [label]="'Year 6'"
+                [label]="'plans.summary.year6' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -736,7 +736,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'sourcing',
                 inputKey: createFieldKey('sourcing', 'year7', index),
-                label: 'Year 7'
+                label: 'plans.summary.year7'
               }, itemControl)"
             >
               <p-select
@@ -752,7 +752,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
-                [label]="'Year 7'"
+                [label]="'plans.summary.year7' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -816,7 +816,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
                 inputKey: createFieldKey('manufacturing', 'expenseHeader', index),
-                label: 'Expense Header'
+                label: 'plans.form.expenseHeader'
               }, itemControl)"
             >
               <input
@@ -832,7 +832,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-              [label]="'Expense Header'"
+              [label]="'plans.form.expenseHeader' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
@@ -842,7 +842,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
                 inputKey: createFieldKey('manufacturing', 'inHouseOrProcured', index),
-                label: 'In-house / Procured'
+                label: 'plans.form.inHouseProcured'
               }, itemControl)"
             >
               <p-select
@@ -860,7 +860,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              [label]="'In-house / Procured'"
+              [label]="'plans.form.inHouseProcured' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -870,7 +870,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
                 inputKey: createFieldKey('manufacturing', 'costPercentage', index),
-                label: 'Cost %'
+                label: 'plans.form.costPercentage'
               }, itemControl)"
             >
               <p-inputnumber
@@ -888,7 +888,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-              [label]="'Cost %'"
+              [label]="'plans.form.costPercentage' | translate"
             />
           </td>
           <td
@@ -902,7 +902,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                                         section: 'manufacturing',
                                         inputKey: createFieldKey('manufacturing', 'year1', index),
-                                        label: 'Year 1'
+                                        label: 'plans.summary.year1'
                                       }, itemControl)"
             >
               <p-select
@@ -919,7 +919,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
-              [label]="'Year 1'"
+              [label]="'plans.summary.year1' | translate"
             />
             }
           </td>
@@ -934,7 +934,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                                         section: 'manufacturing',
                                         inputKey: createFieldKey('manufacturing', 'year2', index),
-                                        label: 'Year 2'
+                                        label: 'plans.summary.year2'
                                       }, itemControl)"
             >
               <p-select
@@ -951,7 +951,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
-              [label]="'Year 2'"
+              [label]="'plans.summary.year2' | translate"
             />
             }
           </td>
@@ -966,7 +966,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
                 inputKey: createFieldKey('manufacturing', 'year3', index),
-                label: 'Year 3'
+                label: 'plans.summary.year3'
               }, itemControl)"
             >
               <p-select
@@ -983,7 +983,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
-              [label]="'Year 3'"
+              [label]="'plans.summary.year3' | translate"
             />
             }
           </td>
@@ -998,7 +998,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
                 inputKey: createFieldKey('manufacturing', 'year4', index),
-                label: 'Year 4'
+                label: 'plans.summary.year4'
               }, itemControl)"
             >
               <p-select
@@ -1015,7 +1015,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
-              [label]="'Year 4'"
+              [label]="'plans.summary.year4' | translate"
             />
             }
           </td>
@@ -1031,7 +1031,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
                 inputKey: createFieldKey('manufacturing', 'year5', index),
-                label: 'Year 5'
+                label: 'plans.summary.year5'
               }, itemControl)"
             >
               <p-select
@@ -1048,7 +1048,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
-              [label]="'Year 5'"
+              [label]="'plans.summary.year5' | translate"
             />
             }
           </td>
@@ -1063,7 +1063,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
                 inputKey: createFieldKey('manufacturing', 'year6', index),
-                label: 'Year 6'
+                label: 'plans.summary.year6'
               }, itemControl)"
             >
               <p-select
@@ -1080,7 +1080,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
-              [label]="'Year 6'"
+              [label]="'plans.summary.year6' | translate"
             />
             }
           </td>
@@ -1095,7 +1095,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'manufacturing',
                 inputKey: createFieldKey('manufacturing', 'year7', index),
-                label: 'Year 7'
+                label: 'plans.summary.year7'
               }, itemControl)"
             >
               <p-select
@@ -1112,7 +1112,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
-              [label]="'Year 7'"
+              [label]="'plans.summary.year7' | translate"
             />
             }
           </td>
@@ -1175,7 +1175,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
                 inputKey: createFieldKey('assemblyTesting', 'expenseHeader', index),
-                label: 'Expense Header'
+                label: 'plans.form.expenseHeader'
               }, itemControl)"
             >
               <input
@@ -1191,7 +1191,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-              [label]="'Expense Header'"
+              [label]="'plans.form.expenseHeader' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
@@ -1201,7 +1201,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
                 inputKey: createFieldKey('assemblyTesting', 'inHouseOrProcured', index),
-                label: 'In-house / Procured'
+                label: 'plans.form.inHouseProcured'
               }, itemControl)"
             >
               <p-select
@@ -1219,7 +1219,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              [label]="'In-house / Procured'"
+              [label]="'plans.form.inHouseProcured' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -1229,7 +1229,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
                 inputKey: createFieldKey('assemblyTesting', 'costPercentage', index),
-                label: 'Cost %'
+                label: 'plans.form.costPercentage'
               }, itemControl)"
             >
               <p-inputnumber
@@ -1247,7 +1247,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-              [label]="'Cost %'"
+              [label]="'plans.form.costPercentage' | translate"
             />
           </td>
           <td
@@ -1263,7 +1263,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
                 inputKey: createFieldKey('assemblyTesting', 'year1', index),
-                label: 'Year 1'
+                label: 'plans.summary.year1'
               }, itemControl)"
             >
               <p-select
@@ -1279,7 +1279,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
-                [label]="'Year 1'"
+                [label]="'plans.summary.year1' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -1297,7 +1297,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
                 inputKey: createFieldKey('assemblyTesting', 'year2', index),
-                label: 'Year 2'
+                label: 'plans.summary.year2'
               }, itemControl)"
             >
               <p-select
@@ -1313,7 +1313,7 @@
               />
               <app-base-error-messages
                 [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
-                [label]="'Year 2'"
+                [label]="'plans.summary.year2' | translate"
               />
             </app-group-input-with-checkbox>
             }
@@ -1331,7 +1331,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'assemblyTesting',
                 inputKey: createFieldKey('assemblyTesting', 'year3', index),
-                label: 'Year 3'
+                label: 'plans.summary.year3'
               }, itemControl)"
             >
               <p-select
@@ -1348,7 +1348,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
-              [label]="'Year 3'"
+              [label]="'plans.summary.year3' | translate"
             />
             }
           </td>
@@ -1366,7 +1366,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'assemblyTesting',
                           inputKey: createFieldKey('assemblyTesting', 'year4', index),
-                          label: 'Year 4'
+                          label: 'plans.summary.year4'
                         }, itemControl)"
             >
               <p-select
@@ -1383,7 +1383,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
-              [label]="'Year 4'"
+              [label]="'plans.summary.year4' | translate"
             />
             }
           </td>
@@ -1400,7 +1400,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'assemblyTesting',
                           inputKey: createFieldKey('assemblyTesting', 'year5', index),
-                          label: 'Year 5'
+                          label: 'plans.summary.year5'
                         }, itemControl)"
             >
               <p-select
@@ -1417,7 +1417,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
-              [label]="'Year 5'"
+              [label]="'plans.summary.year5' | translate"
             />
             }
           </td>
@@ -1434,7 +1434,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'assemblyTesting',
                           inputKey: createFieldKey('assemblyTesting', 'year6', index),
-                          label: 'Year 6'
+                          label: 'plans.summary.year6'
                         }, itemControl)"
             >
               <p-select
@@ -1451,7 +1451,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
-              [label]="'Year 6'"
+              [label]="'plans.summary.year6' | translate"
             />
             }
           </td>
@@ -1468,7 +1468,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                           section: 'assemblyTesting',
                           inputKey: createFieldKey('assemblyTesting', 'year7', index),
-                          label: 'Year 7'
+                          label: 'plans.summary.year7'
                         }, itemControl)"
             >
               <p-select
@@ -1485,7 +1485,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
-              [label]="'Year 7'"
+              [label]="'plans.summary.year7' | translate"
             />
             }
           </td>
@@ -1548,7 +1548,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'expenseHeader', index),
-                label: 'Expense Header'
+                label: 'plans.form.expenseHeader'
               }, itemControl)"
             >
               <input
@@ -1564,7 +1564,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
-              [label]="'Expense Header'"
+              [label]="'plans.form.expenseHeader' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[270px]">
@@ -1574,7 +1574,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'inHouseOrProcured', index),
-                label: 'In-house / Procured'
+                label: 'plans.form.inHouseProcured'
               }, itemControl)"
             >
               <p-select
@@ -1592,7 +1592,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
-              [label]="'In-house / Procured'"
+              [label]="'plans.form.inHouseProcured' | translate"
             />
           </td>
           <td class="p-3 border border-gray-200 min-w-[150px]">
@@ -1602,7 +1602,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'costPercentage', index),
-                label: 'Cost %'
+                label: 'plans.form.costPercentage'
               }, itemControl)"
             >
               <p-inputnumber
@@ -1620,7 +1620,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.costPercentage)!)"
-              [label]="'Cost %'"
+              [label]="'plans.form.costPercentage' | translate"
             />
           </td>
           <td
@@ -1636,7 +1636,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'year1', index),
-                label: 'Year 1'
+                label: 'plans.summary.year1'
               }, itemControl)"
             >
               <p-select
@@ -1653,7 +1653,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
-              [label]="'Year 1'"
+              [label]="'plans.summary.year1' | translate"
             />
             }
           </td>
@@ -1670,7 +1670,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'year2', index),
-                label: 'Year 2'
+                label: 'plans.summary.year2'
               }, itemControl)"
             >
               <p-select
@@ -1687,7 +1687,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
-              [label]="'Year 2'"
+              [label]="'plans.summary.year2' | translate"
             />
             }
           </td>
@@ -1704,7 +1704,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'year3', index),
-                label: 'Year 3'
+                label: 'plans.summary.year3'
               }, itemControl)"
             >
               <p-select
@@ -1721,7 +1721,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
-              [label]="'Year 3'"
+              [label]="'plans.summary.year3' | translate"
             />
             }
           </td>
@@ -1738,7 +1738,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'year4', index),
-                label: 'Year 4'
+                label: 'plans.summary.year4'
               }, itemControl)"
             >
               <p-select
@@ -1755,7 +1755,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
-              [label]="'Year 4'"
+              [label]="'plans.summary.year4' | translate"
             />
             }
           </td>
@@ -1772,7 +1772,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'year5', index),
-                label: 'Year 5'
+                label: 'plans.summary.year5'
               }, itemControl)"
             >
               <p-select
@@ -1789,7 +1789,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
-              [label]="'Year 5'"
+              [label]="'plans.summary.year5' | translate"
             />
             }
           </td>
@@ -1806,7 +1806,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'year6', index),
-                label: 'Year 6'
+                label: 'plans.summary.year6'
               }, itemControl)"
             >
               <p-select
@@ -1823,7 +1823,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
-              [label]="'Year 6'"
+              [label]="'plans.summary.year6' | translate"
             />
             }
           </td>
@@ -1840,7 +1840,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'afterSales',
                 inputKey: createFieldKey('afterSales', 'year7', index),
-                label: 'Year 7'
+                label: 'plans.summary.year7'
               }, itemControl)"
             >
               <p-select
@@ -1857,7 +1857,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
-              [label]="'Year 7'"
+              [label]="'plans.summary.year7' | translate"
             />
             }
           </td>
