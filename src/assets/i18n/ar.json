@@ -653,7 +653,7 @@
 	},
 	"dashboard": {
 		"messages": {
-			"planRemoved": "تم إزالة خطتك بنجاح."
+			"planRemoved": "تم حذف خطتك بنجاح."
 		},
 		"errors": {
 			"productPdfError": "خطأ في إنشاء ملف PDF لخطة المنتج",
