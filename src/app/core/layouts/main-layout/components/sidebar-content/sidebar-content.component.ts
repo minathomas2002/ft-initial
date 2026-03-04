@@ -96,7 +96,7 @@ export class SidebarContentComponent {
       },
       {
         label: this.i18nService.translate('navigation.investors'),
-        icon: 'icon-users',
+        icon: 'icon-briefcase-02',
         routerLink: ERoutes.investors,
         show: this.permissionService.canAccessInvestors()
       },
