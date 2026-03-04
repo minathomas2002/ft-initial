@@ -31,7 +31,7 @@ export const ProfileStore = signalStore(
     const authStore = inject(AuthStore);
     return {
       isInvestor: roleService.hasAnyRoleSignal([ERoles.INVESTOR]),
-      userImage: computed(() => store.userProfile()?.userPicBase64 ?? 'assets/images/user_placeholder.svg'),
+      userImage: computed(() => store.userProfile()?.userPicBase64 ?? store.userProfile()?.photoURL ?? 'assets/images/user_placeholder.svg'),
       userSignature: computed(() => store.userProfile()?.signature ?? null),
       userTitle: computed(() => roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? authStore.userProfile()?.investorCode : authStore.userProfile()?.roleNames[0]),
       userID: computed(() => authStore.userProfile()?.employeeID ?? ''),
@@ -92,8 +92,14 @@ export const ProfileStore = signalStore(
                 : request.profilePicBase64.startsWith('data:')
                   ? request.profilePicBase64
                   : `data:image/png;base64,${request.profilePicBase64}`;
+
               patchState(store, {
-                userProfile: { ...store.userProfile()!, photo },
+                userProfile: {
+                  ...store.userProfile()!,
+                  photo,
+                  photoURL: photo,
+                  userPicBase64: request.profilePicBase64 ? photo : null,
+                },
               });
             }
           }),
