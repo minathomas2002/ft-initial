@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 import { SystemEmployeeRoleMapper } from 'src/app/shared/classes/role.mapper';
 import { ERoles } from 'src/app/shared/enums';
 import { I18nService } from 'src/app/shared/services/i18n';
-import { CamelCaseToWordPipe, TranslatePipe } from 'src/app/shared/pipes';
+import { CamelCaseToWordPipe, PlanPageTitlePipe, TranslatePipe } from 'src/app/shared/pipes';
 import { HandlePlanStatusFactory } from 'src/app/shared/services/plan/planStatusFactory/handle-plan-status-factory';
 import { IdentifyUserComponent } from "../../utility-components/identify-user/identify-user.component";
 import { EStatusPlanTimeLine } from 'src/app/shared/enums';
@@ -23,6 +23,7 @@ import { TextareaModule } from 'primeng/textarea';
     Timeline,
     DatePipe,
     TranslatePipe,
+    PlanPageTitlePipe,
     Divider,
     IdentifyUserComponent,
     BaseTagComponent,

@@ -46,11 +46,11 @@ export class UserImageSection {
             this.changeYourProfilePictureVisible.set(false);
             this.onProfilePictureUpdated.emit();
           } else {
-            this.toasterService.error(res.message?.join(' ') ?? 'Failed to update profile picture');
+            this.toasterService.error(res.message?.join(' ') ?? this.i18nService.translate('profile.messages.updateFailed'));
           }
         },
         error: () => {
-          this.toasterService.error('Failed to update profile picture');
+          this.toasterService.error(this.i18nService.translate('profile.messages.updateFailed'));
         },
       });
   }

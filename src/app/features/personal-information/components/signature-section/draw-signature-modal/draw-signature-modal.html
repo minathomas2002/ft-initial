@@ -3,14 +3,14 @@
   [icon]="icon()"
   [confirmLabel]="confirmLabel()"
   [cancelLabel]="cancelLabel()"
-  [dialogTitle]="'Draw Signature'"
+  [dialogTitle]="'profile.drawSignatureBtn' | translate"
   [confirmButtonClass]="'max-w-[100px]'"
   [cancelButtonClass]="'w-[60px]'"
   (onConfirm)="onSubmitClick()"
   [isConfirmationDisabled]="!signature() || isProcessing()"
 >
   <ng-container ngProjectAs="subTitle">
-    <p>Draw your signature using your mouse</p>
+    <p>{{ 'profile.signature.drawInstructions' | translate }}</p>
   </ng-container>
 
   <div class="flex justify-center items-center min-w-[600px]">

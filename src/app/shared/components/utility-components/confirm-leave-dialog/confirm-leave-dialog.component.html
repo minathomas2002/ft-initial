@@ -2,29 +2,29 @@
   [(visible)]="visible"
   [showCloseButton]="false"
   [showConfirmButton]="false"
-  dialogTitle="Confirm Leave"
+  [dialogTitle]="'plans.confirmation.confirmLeaveTitle' | translate"
   (onClose)="handleClose()"
   [icon]="''"
   contentStyleClass="p-6"
 >
   <div class="max-w-[500px]">
     <p class="text-base font-semibold text-gray-900 mb-2">
-      Are you sure you want to leave?
+      {{ 'plans.confirmation.onLeaveTitle' | translate }}
     </p>
     <p class="text-sm text-gray-600">
-      All the changes will be discarded.
+      {{ 'plans.confirmation.changesDiscarded' | translate }}
     </p>
   </div>
 
   <ng-container ngProjectAs="footerButtons">
     <p-button
-      label="Continue Editing"
+      [label]="'plans.confirmation.continueEditing' | translate"
       severity="secondary"
       (onClick)="handleContinueEditing()"
       class="flex-initial"
     />
     <p-button
-      label="Leave"
+      [label]="'plans.confirmation.leaveButton' | translate"
       severity="danger"
       (onClick)="handleLeave()"
       class="flex-initial"

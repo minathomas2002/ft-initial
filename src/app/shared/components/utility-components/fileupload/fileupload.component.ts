@@ -7,7 +7,9 @@ import {
   FileUploadModule,
 } from "primeng/fileupload";
 import { ToastModule } from "primeng/toast";
+import { TooltipModule } from "primeng/tooltip";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
+import { I18nService } from "src/app/shared/services/i18n";
 import { AttachmentService } from "src/app/shared/services/attachment/attachment.service";
 import { ImageErrorDirective } from "../../../directives/image-error.directive";
 import { TranslatePipe } from "../../../pipes";
@@ -15,7 +17,7 @@ import { Attachment, AttachmentItem } from "src/app/shared/interfaces/plans.inte
 
 @Component({
   selector: "app-fileupload",
-  imports: [FileUploadModule, ButtonModule, ToastModule, ImageErrorDirective, TranslatePipe],
+  imports: [FileUploadModule, ButtonModule, ToastModule, TooltipModule, ImageErrorDirective, TranslatePipe],
   templateUrl: "./fileupload.component.html",
   styleUrl: "./fileupload.component.scss",
   providers: [MessageService],
@@ -37,6 +39,8 @@ export class FileuploadComponent {
    * Merged with styleClass and passed to p-fileupload.
    */
   conditionalHighlightClasses = signal<string>("");
+
+  private readonly i18nService = inject(I18nService);
 
   /** Effective styleClass: styleClass + conditional highlight classes from directive */
   effectiveStyleClass = computed(() => {
@@ -167,15 +171,18 @@ export class FileuploadComponent {
 
       if (!isSizeAccepted) {
         this.toasterService.error(
-          `${file.name}: File exceeds max size of ${Math.round(
-            maxSize / (1024 * 1024),
-          )}MB`,
+          this.i18nService.translate('common.fileExceedsMaxSizeWithName', {
+            name: file.name,
+            size: String(Math.round(maxSize / (1024 * 1024))),
+          }),
         );
         continue;
       }
 
       if (!isTypeAccepted) {
-        this.toasterService.error(`${file.name}: Invalid file type`);
+        this.toasterService.error(
+          this.i18nService.translate('common.invalidFileTypeWithName', { name: file.name }),
+        );
         continue;
       }
 
@@ -282,7 +289,7 @@ export class FileuploadComponent {
     const fileId = file.ibmIdentifier;
 
     if (!fileId) {
-      this.toasterService.error("Unable to download file: missing attachment id.");
+      this.toasterService.error(this.i18nService.translate('common.downloadMissingId'));
       return;
     }
 
@@ -291,7 +298,7 @@ export class FileuploadComponent {
         // Download handled in service
       },
       error: () => {
-        this.toasterService.error("An error occurred while downloading the file.");
+        this.toasterService.error(this.i18nService.translate('common.downloadError'));
       },
     });
   }

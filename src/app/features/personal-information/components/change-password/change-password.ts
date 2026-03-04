@@ -8,11 +8,14 @@ import { PasswordToggleComponent } from 'src/app/shared/components/form/password
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-change-password',
   imports: [
     BaseDialogComponent,
+    TranslatePipe,
     ReactiveFormsModule,
     BaseLabelComponent,
     PasswordToggleComponent,
@@ -26,6 +29,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 export class ChangePassword {
   private readonly fb = inject(FormBuilder);
   private readonly toasterService = inject(ToasterService);
+  private readonly i18nService = inject(I18nService);
   readonly profileStore = inject(ProfileStore);
   protected confirmLabel = 'Update';
 
@@ -70,7 +74,7 @@ export class ChangePassword {
     this.profileStore.changePassword(request).subscribe({
       next: (response) => {
         if (response.success) {
-          this.toasterService.success('Password updated successfully.');
+          this.toasterService.success(this.i18nService.translate('profile.messages.passwordUpdated'));
           this.changePasswordForm.reset();
           this.visible.set(false);
         }

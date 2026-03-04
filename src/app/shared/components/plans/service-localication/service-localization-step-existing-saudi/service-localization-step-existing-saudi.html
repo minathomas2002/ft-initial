@@ -1,16 +1,16 @@
 <div class="flex flex-col gap-[32px] pb-10">
   <!-- Saudi Company Details Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Saudi Company Details</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.saudiCompanyDetails' | translate }}</h2>
     <app-form-array-input
       [ft]="getSaudiCompanyDetailsFormArray()"
       [hideAddButton]="isViewMode()"
       [hideDeleteButton]="isViewMode() || isReviewMode()"
-      [addButtonMessage]="'Add Saudi Company'"
+      [addButtonMessage]="'plans.form.addSaudiCompany' | translate"
       [createNewItem]="createSaudiCompanyDetailItem"
       [maxItems]="20"
       [scrollHeight]="'600px'"
-      [customHeaderLabels]="saudiCompanyDetailsHeaderLabels"
+      [customHeaderLabels]="saudiCompanyDetailsHeaderLabels()"
       [headerTooltips]="saudiCompanyDetailsHeaderTooltips()"
     >
       <ng-template
@@ -26,7 +26,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
               inputKey: 'saudiCompanyName',
-              label: 'Saudi Company Name'
+              label: saudiCompanyNameLabel()
             }, itemControl.get('rowId')?.value)"
           >
             <input
@@ -34,7 +34,7 @@
               pInputText
               fluid
               [maxlength]="100"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter Saudi company name'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterSaudiCompanyName' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
               [appConditionalColorClass]="highlightInput('saudiCompanyName', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -42,7 +42,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.saudiCompanyName))"
-            [label]="'Saudi Company Name'"
+            [label]="'plans.form.saudiCompanyName' | translate"
           />
         </td>
 
@@ -58,7 +58,7 @@
             [maxFractionDigits]="0"
             mode="decimal"
             fluid
-            [placeholder]="isReviewMode() ? '' : 'Registered Vendor ID with SEC'"
+            [placeholder]="isReviewMode() ? '' : ('plans.form.vendorIdWithSecPlaceholder' | translate)"
           />
         </td>
 
@@ -68,7 +68,7 @@
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'BENA Registered Vendor ID'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.benaVendorIdPlaceholder' | translate"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.benaRegisteredVendorID))"
             class="bg-gray-100 text-gray-500"
           />
@@ -81,7 +81,7 @@
             optionLabel="name"
             optionValue="id"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
-            [appHidePlaceholderWhenDisabledEmpty]="'Select company type(s)'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.selectCompanyType' | translate"
             fluid
             [appendTo]="'body'"
             [appConditionalColorClass]="highlightInput('companyType', itemControl.get('rowId')?.value)"
@@ -89,7 +89,7 @@
           />
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyType))"
-            [label]="'Company Type'"
+            [label]="'plans.form.companyType' | translate"
           />
         </td>
 
@@ -104,7 +104,7 @@
             optionLabel="name"
             optionValue="id"
             [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
-            [appHidePlaceholderWhenDisabledEmpty]="'Select qualification status'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.selectQualificationStatus' | translate"
             fluid
             [appendTo]="'body'"
             [appConditionalColorClass]="highlightInput('qualificationStatus', itemControl.get('rowId')?.value)"
@@ -112,7 +112,7 @@
           />
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.qualificationStatus))"
-            [label]="'Qualification Status with SEC'"
+            [label]="'plans.form.qualificationStatusWithSEC' | translate"
           />
           }
         </td>
@@ -478,7 +478,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'whyChoseThisCompany',
-              label: 'Why did you choose this particular Saudi Company as your partner?'
+              label: whyChoseThisCompanyLabel()
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -486,7 +486,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Why did you choose this particular Saudi Company as your partner?'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.whyChoseThisSaudiCompany' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
               [appConditionalColorClass]="highlightInput('whyChoseThisCompany', itemControl.get('rowId')?.value || itemControl.get('id')?.value)"
               [color]="selectedInputColor()"
@@ -499,7 +499,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
-            [label]="'Why did you choose this particular Saudi Company as your partner?'"
+            [label]="whyChoseThisCompanyLabel()"
           />
         </td>
 
@@ -570,8 +570,8 @@
 
   <!-- Entity Level Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
-    <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.entityLevelTitle' | translate }}</h2>
+    <p>{{ 'plans.form.entityLevelDescription' | translate }}</p>
     <div class="data-table bg-white">
       <p-table
         [value]="entityLevelTableRows()"
@@ -580,7 +580,7 @@
       >
         <ng-template pTemplate="header">
           <tr class="bg-primary text-white p-3 border border-gray-200">
-            <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">Metrics</td>
+            <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">{{ 'plans.form.metrics' | translate }}</td>
             <td
               class="p-3 !border-t-0 !border-e-0 !border-b-0"
               colspan="20"
@@ -591,7 +591,7 @@
               class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[250px] z-10000000"
               pFrozenColumn
             >
-              <span>Category</span>
+              <span>{{ 'plans.form.category' | translate }}</span>
             </th>
             @for(year of yearColumns(); track year) {
             <th class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[200px]">
@@ -651,7 +651,7 @@
 
   <!-- Service Level Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Service Level</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.serviceLevel' | translate }}</h2>
     <p>Details to be provided for the KSA based facility responsible for delivering all services. Provide details separately for each service you intend to localize</p>
     <div class="border border-gray-300 rounded-2xl">
       <app-form-array-input
@@ -850,7 +850,7 @@
   <!-- Attachments Section -->
   <div class="flex flex-col gap-4">
     <div>
-      <h2 class="text-lg font-semibold text-gray-900">Attachments</h2>
+      <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.attachments' | translate }}</h2>
     </div>
 
     <app-group-input-with-checkbox

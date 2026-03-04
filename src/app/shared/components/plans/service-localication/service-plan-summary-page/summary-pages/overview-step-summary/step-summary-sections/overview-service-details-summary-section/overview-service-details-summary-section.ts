@@ -6,10 +6,11 @@ import { EMaterialsFormControls, ERoles, EServiceProvidedTo } from 'src/app/shar
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-overview-service-details-summary-section',
-  imports: [PlanSummaryFlied, TableModule],
+  imports: [PlanSummaryFlied, TableModule, TranslatePipe],
   templateUrl: './overview-service-details-summary-section.html',
   styleUrl: './overview-service-details-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,12 +38,12 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
 
   private toYesNoDisplay(raw: unknown): string {
     if (raw === null || raw === undefined || raw === '') return '';
-    if (raw === true) return 'Yes';
-    if (raw === false) return 'No';
+    if (raw === true) return this.i18nService.translate('common.yes');
+    if (raw === false) return this.i18nService.translate('common.no');
     const s = String(raw).toLowerCase();
-    if (s === 'true' || s === 'yes') return 'Yes';
-    if (s === 'false' || s === 'no') return 'No';
-    const opt = this.planStore.yesNoOptions().find((o) => o.id === String(raw));
+    if (s === 'true' || s === 'yes') return this.i18nService.translate('common.yes');
+    if (s === 'false' || s === 'no') return this.i18nService.translate('common.no');
+    const opt = this.planStore.yesNoOptionsTranslated().find((o) => o.id === String(raw));
     return opt?.name ?? String(raw);
   }
 
@@ -88,18 +89,18 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
       const currantServiceName = String(getValue(EMaterialsFormControls.serviceName) ?? '');
       const beforeServiceName = currantServiceName
 
-      const currantServiceType = this.formatSelectValue(getValue(EMaterialsFormControls.serviceType), this.planStore.serviceTypeOptions());
-      const beforeServiceType = this.formatSelectValue(service?.serviceType ?? null, this.planStore.serviceTypeOptions());
+      const currantServiceType = this.formatSelectValue(getValue(EMaterialsFormControls.serviceType), this.planStore.serviceTypeOptionsTranslated());
+      const beforeServiceType = this.formatSelectValue(service?.serviceType ?? null, this.planStore.serviceTypeOptionsTranslated());
 
-      const currantServiceCategory = this.formatSelectValue(getValue(EMaterialsFormControls.serviceCategory), this.planStore.serviceCategoryOptions());
-      const beforeServiceCategory = this.formatSelectValue(service?.serviceCategory ?? null, this.planStore.serviceCategoryOptions());
+      const currantServiceCategory = this.formatSelectValue(getValue(EMaterialsFormControls.serviceCategory), this.planStore.serviceCategoryOptionsTranslated());
+      const beforeServiceCategory = this.formatSelectValue(service?.serviceCategory ?? null, this.planStore.serviceCategoryOptionsTranslated());
 
       const currantDescription = getValue(EMaterialsFormControls.serviceDescription) ?? '';
       const beforeDescription = service?.serviceDescription ?? null;
 
       const rawProvidedTo = getValue(EMaterialsFormControls.serviceProvidedTo);
-      const currantProvidedTo = this.formatSelectValue(rawProvidedTo, this.planStore.serviceProvidedToOptions());
-      const beforeProvidedTo = this.formatSelectValue(service?.serviceProvidedTo ?? null, this.planStore.serviceProvidedToOptions());
+      const currantProvidedTo = this.formatSelectValue(rawProvidedTo, this.planStore.serviceProvidedToOptionsTranslated());
+      const beforeProvidedTo = this.formatSelectValue(service?.serviceProvidedTo ?? null, this.planStore.serviceProvidedToOptionsTranslated());
       const showServiceProvidedToCompanyNames = this.hasServiceProvidedToOthers(rawProvidedTo);
 
       const currantCompanyNames = getValue(EMaterialsFormControls.serviceProvidedToCompanyNames) ?? '';
@@ -118,11 +119,11 @@ export class OverviewServiceDetailsSummarySection extends SummarySectionBaseClas
         Array.isArray(getValue(EMaterialsFormControls.serviceLocalizationMethodology))
           ? (getValue(EMaterialsFormControls.serviceLocalizationMethodology) as unknown[])?.[0]
           : getValue(EMaterialsFormControls.serviceLocalizationMethodology),
-        this.planStore.localizationMethodologyOptions()
+        this.planStore.localizationMethodologyOptionsTranslated()
       );
       const beforeMethodology = this.formatSelectValue(
         Array.isArray(service?.serviceLocalizationMethodology) ? service?.serviceLocalizationMethodology?.[0] : service?.serviceLocalizationMethodology ?? null,
-        this.planStore.localizationMethodologyOptions()
+        this.planStore.localizationMethodologyOptionsTranslated()
       );
 
       return {

@@ -20,10 +20,12 @@ import { FormsModule } from '@angular/forms';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { EPlanPageTitle } from 'src/app/shared/enums';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-service-localization-step-cover-page',
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
@@ -59,6 +61,10 @@ export class ServiceLocalizationStepCoverPage extends PlanStepBaseClass {
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
   originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
+
+  planTitleLabel = computed(() => this.i18nService.translate('plans.newPlan.planTitle'));
+  companyNameLabel = computed(() => this.i18nService.translate('plans.newPlan.companyName'));
+  serviceNameLabel = computed(() => this.i18nService.translate('plans.form.serviceName'));
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {

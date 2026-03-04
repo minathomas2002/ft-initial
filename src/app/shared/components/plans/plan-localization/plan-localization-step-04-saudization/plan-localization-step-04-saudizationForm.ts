@@ -19,10 +19,12 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { SAUDIZATION_ROW_KEYS } from './saudization.constants';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-plan-localization-step-04-saudization-form',
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     BaseErrorMessages,
     GroupInputWithCheckbox,
@@ -90,6 +92,7 @@ export class PlanLocalizationStep04SaudizationForm extends PlanStepBaseClass {
 
   // Files signal for file upload component
   files = signal<File[]>([]);
+  attachmentsLabel = computed(() => this.i18nService.translate('plans.form.attachments'));
 
   // Implement abstract method from base class
   getFormGroup(): FormGroup {

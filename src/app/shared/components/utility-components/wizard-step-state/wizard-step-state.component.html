@@ -28,7 +28,7 @@
         class="text-md font-semibold text-start"
         [class.text-primary-700]="stepState().isActive"
       >
-        {{ stepState().title }}
+        {{ stepState().title | planPageTitle }}
       </h3>
       <h4
         class="text-sm text-start"

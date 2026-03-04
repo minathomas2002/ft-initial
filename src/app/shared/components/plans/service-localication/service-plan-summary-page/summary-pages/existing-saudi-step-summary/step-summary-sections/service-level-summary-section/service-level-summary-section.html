@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-4">
-  <h3 class="text-md font-semibold text-gray-900">Service Level</h3>
+  <h3 class="text-md font-semibold text-gray-900">{{ 'plans.form.serviceLevel' | translate }}</h3>
   @if (serviceLevelRows().length > 0) {
   <div class="overflow-x-auto">
     <div class="rounded-xl overflow-hidden border border-gray-300">
@@ -14,29 +14,29 @@
             <th
               class="p-3 text-left text-sm font-semibold text-[#4A4E5A]"
               rowspan="2"
-            >Service Name</th>
+            >{{ 'plans.form.serviceName' | translate }}</th>
             <th
               class="p-3 text-left text-sm font-semibold text-[#4A4E5A]"
               rowspan="2"
-            >Expected Localization Date</th>
+            >{{ 'plans.form.expectedLocalizationDate' | translate }}</th>
             <th
               class="p-3 text-center text-sm font-semibold bg-primary! text-white!"
               colspan="6"
               data-group="true"
-            >Expected Annual Headcount (To be filled for the KSA based facility only)</th>
+            >{{ 'plans.form.expectedAnnualHeadcountKSA' | translate }}</th>
             <th
               class="p-3 text-center text-sm font-semibold bg-primary! text-white!"
               colspan="6"
               data-group="true"
-            >Mention Y-o-Y expected Saudization % (To be filled for the KSA based facility only)</th>
+            >{{ 'plans.form.mentionYoySaudizationKSA' | translate }}</th>
             <th
               class="p-3 text-left text-sm font-semibold text-[#4A4E5A]"
               rowspan="2"
-            >Key measures to upskill Saudis</th>
+            >{{ 'plans.form.keyMeasuresToUpskillSaudis' | translate }}</th>
             <th
               class="p-3 text-left text-sm font-semibold text-[#4A4E5A]"
               rowspan="2"
-            >Support Required from SEC</th>
+            >{{ 'plans.form.supportRequiredFromSEC' | translate }}</th>
           </tr>
           <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
             @for (year of yearColumns(); track $index) {
@@ -68,6 +68,6 @@
     </div>
   </div>
   } @else {
-  <p class="text-sm text-gray-500">No service level details added</p>
+  <p class="text-sm text-gray-500">{{ 'plans.form.noServiceLevelDetails' | translate }}</p>
   }
 </div>

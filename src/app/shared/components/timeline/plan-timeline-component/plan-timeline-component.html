@@ -56,11 +56,11 @@
       <div class="mt-2">
         <label class="block text-sm text-[#414651] font-medium mb-1">
           @if (planApprovedActionsEnum.includes(item.item.actionType)) {
-          Approved Note
+          {{ 'timeline.approvedNote' | translate }}
           } @else if (planRejectedActionsEnum.includes(item.item.actionType)) {
-          Rejection Reason
+          {{ 'timeline.rejectionReason' | translate }}
           } @else {
-          Note
+          {{ 'timeline.note' | translate }}
           }
         </label>
         <textarea
@@ -79,12 +79,12 @@
       @for (comment of item.item.comments; track comment) {
       <div class="mt-2">
         <div class="text-sm font-semibold text-gray-700">
-          {{ comment.pageTitleForTL }}
+          {{ comment.pageTitleForTL | planPageTitle }}
         </div>
 
         @if (comment.comment) {
         <div class="mt-1">
-          <label class="block text-sm text-[#414651] font-medium mb-1">Comment</label>
+          <label class="block text-sm text-[#414651] font-medium mb-1">{{ 'plans.comments.yourComment' | translate }}</label>
           <textarea
             pTextarea
             [value]="comment.comment"

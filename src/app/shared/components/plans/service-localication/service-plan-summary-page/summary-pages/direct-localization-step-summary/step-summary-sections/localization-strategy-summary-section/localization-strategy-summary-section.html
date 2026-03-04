@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-4">
-  <h3 class="text-md font-semibold text-gray-900">Localization Strategy</h3>
+  <h3 class="text-md font-semibold text-gray-900">{{ 'plans.form.localizationStrategy' | translate }}</h3>
   @if (localizationStrategyRows().length > 0) {
   <div class="overflow-x-auto">
     <div class="rounded-2xl overflow-hidden border border-gray-300">
@@ -10,13 +10,13 @@
       >
         <ng-template pTemplate="header">
           <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Service Name</th>
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Expected Localization Date</th>
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Localization Approach</th>
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Location</th>
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">CAPEX Required (SAR Million)</th>
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Supervision/Oversight</th>
-            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Proprietary Tools/Systems</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.serviceName' | translate }}</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.expectedLocalizationDate' | translate }}</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.localizationApproach' | translate }}</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.location' | translate }}</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.capexRequiredSarMillion' | translate }}</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.supervisionOversight' | translate }}</th>
+            <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.proprietaryToolsSystems' | translate }}</th>
           </tr>
         </ng-template>
         <ng-template
@@ -60,6 +60,6 @@
     </div>
   </div>
   } @else {
-  <p class="text-sm text-gray-500">No localization strategy added</p>
+  <p class="text-sm text-gray-500">{{ 'plans.form.noLocalizationStrategy' | translate }}</p>
   }
 </div>

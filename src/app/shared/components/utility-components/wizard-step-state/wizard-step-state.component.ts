@@ -1,5 +1,6 @@
 import { Component, computed, inject, input, effect, signal, ChangeDetectionStrategy } from '@angular/core';
 import { BadgeModule } from 'primeng/badge';
+import { PlanPageTitlePipe } from 'src/app/shared/pipes/plan-page-title.pipe';
 import { EWizardStepState } from 'src/app/shared/enums/wizard-step-state.enum';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
 import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
@@ -12,7 +13,7 @@ import { EInvestorPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.i
 
 @Component({
   selector: 'app-wizard-step-state',
-  imports: [BadgeModule],
+  imports: [BadgeModule, PlanPageTitlePipe],
   templateUrl: './wizard-step-state.component.html',
   styleUrl: './wizard-step-state.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

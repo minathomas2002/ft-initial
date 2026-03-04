@@ -25,11 +25,13 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-plan-localization-step-02-product-plant-overview-form',
   standalone: true,
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     InputTextModule,
     SelectModule,
@@ -443,8 +445,8 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   }
 
   // Dropdown options
-  targetedCustomerOptions = this.planStore.targetedCustomerOptions;
-  productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptions;
+  targetedCustomerOptions = this.planStore.targetedCustomerOptionsTranslated;
+  productManufacturingExperienceOptions = this.planStore.productManufacturingExperienceOptionsTranslated;
 
   getOriginalFieldValueFromPlanResponse(field: IFieldInformation): any {
     return getFieldValueFromProductPlanResponse(field, this.originalPlanResponse());

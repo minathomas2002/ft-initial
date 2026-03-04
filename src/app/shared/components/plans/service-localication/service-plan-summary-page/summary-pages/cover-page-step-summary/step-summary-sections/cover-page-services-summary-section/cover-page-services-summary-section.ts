@@ -6,10 +6,11 @@ import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-f
 import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-cover-page-services-summary-section',
-  imports: [PlanSummaryFlied, TableModule],
+  imports: [PlanSummaryFlied, TableModule, TranslatePipe],
   templateUrl: './cover-page-services-summary-section.html',
   styleUrl: './cover-page-services-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

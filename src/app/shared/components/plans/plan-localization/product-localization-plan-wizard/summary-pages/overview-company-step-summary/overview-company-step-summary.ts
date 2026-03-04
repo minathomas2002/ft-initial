@@ -13,10 +13,12 @@ import { LocationInformationSummarySection } from './step-summary-sections/locat
 import { LocalAgentInformationSummarySection } from './step-summary-sections/local-agent-information-summary-section/local-agent-information-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-overview-company-step-summary',
   imports: [
+    TranslatePipe,
     SummarySectionHeader,
     BasicInformationSummarySection,
     CompanyInformationSummarySection,

@@ -16,10 +16,11 @@ import { Menu, MenuModule } from 'primeng/menu';
 import { OpportunityActionsMapper } from '../../../../features/opportunities/classes/opportunity-actions-mapper';
 import { EOpportunityAction } from '../../../enums/opportunities.enum';
 import { I18nService } from '../../../services/i18n/i18n.service';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-opportunity-action-menu',
-  imports: [MenuModule, ButtonModule],
+  imports: [MenuModule, ButtonModule, TranslatePipe],
   templateUrl: './opportunity-action-menu.component.html',
   styleUrl: './opportunity-action-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

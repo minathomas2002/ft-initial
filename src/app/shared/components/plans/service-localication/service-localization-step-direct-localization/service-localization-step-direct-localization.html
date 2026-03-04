@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-[32px] pb-10">
   <!-- Localization Strategy Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Localization Strategy</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.localizationStrategy' | translate }}</h2>
     <app-form-array-input
       [ft]="getLocalizationStrategyFormArray()"
       [hideAddButton]="true"
@@ -319,8 +319,8 @@
 
   <!-- Entity Level Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
-    <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.entityLevelTitle' | translate }}</h2>
+    <p>{{ 'plans.form.entityLevelDescription' | translate }}</p>
     <div class="data-table bg-white">
       <p-table
         [value]="entityLevelTableRows()"
@@ -329,7 +329,7 @@
       >
         <ng-template pTemplate="header">
           <tr class="bg-primary text-white p-3 border border-gray-200">
-            <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">Metrics</td>
+            <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">{{ 'plans.form.metrics' | translate }}</td>
             <td
               class="p-3 !border-t-0 !border-e-0 !border-b-0"
               colspan="20"
@@ -340,7 +340,7 @@
               class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[250px] "
               pFrozenColumn
             >
-              <span>Category</span>
+              <span>{{ 'plans.form.category' | translate }}</span>
             </th>
             @for(year of yearColumns(); track year) {
             <th class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[200px]">
@@ -400,7 +400,7 @@
 
   <!-- Service Level Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Service Level</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.serviceLevel' | translate }}</h2>
     <p>Details to be provided for the KSA based facility responsible for delivering all services. Provide details separately for each service you intend to localize</p>
     <div class="rounded-lg overflow-hidden">
       <!-- todo add (in sar) to customTextBesideHeaders -->

@@ -7,13 +7,16 @@ import { UploadSignatureModal } from './upload-signature-modal/upload-signature-
 import { DrawSignatureModal } from './draw-signature-modal/draw-signature-modal';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n';
 import { take } from 'rxjs';
 import { IUpdateSignatureRequest } from 'src/app/shared/interfaces';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-signature-section',
   imports: [
+    TranslatePipe,
     PersonalInformationCard,
     ButtonModule,
     DialogModule,
@@ -30,6 +33,7 @@ export class SignatureSection {
   isViewMode = computed(() => this.viewMode() === EViewMode.View);
   private readonly profileStore = inject(ProfileStore);
   private readonly toasterService = inject(ToasterService);
+  private readonly i18nService = inject(I18nService);
   onSignatureUpdate = output<void>();
 
   isSignatureProcessing = this.profileStore.signatureProcessing;
@@ -58,7 +62,7 @@ export class SignatureSection {
       .pipe(take(1))
       .subscribe((res) => {
         if (res.success) {
-          this.toasterService.success('Signature updated successfully');
+          this.toasterService.success(this.i18nService.translate('profile.messages.signatureUpdated'));
           this.drawSignatureModalVisible.set(false);
           this.uploadSignatureModalVisible.set(false);
           this.onSignatureUpdate.emit();
@@ -81,7 +85,7 @@ export class SignatureSection {
         next: (res) => {
           if (res.success) {
             this.profileStore.getUserProfile().pipe(take(1)).subscribe();
-            this.toasterService.success('Signature deleted successfully');
+            this.toasterService.success(this.i18nService.translate('profile.messages.signatureDeleted'));
             this.deleteSignatureConfirmVisible.set(false);
           }
         },

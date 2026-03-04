@@ -87,7 +87,7 @@
                 class="p-2 rounded-md hover:bg-gray-100 transition-colors flex-shrink-0"
                 (click)="downloadFile(file)"
                 [attr.aria-label]="'Download ' + file.name"
-                pTooltip="Download"
+                pTooltip="{{ 'common.download' | translate }}"
                 tooltipPosition="top"
               >
                 <i class="icon-save text-gray-600"></i>

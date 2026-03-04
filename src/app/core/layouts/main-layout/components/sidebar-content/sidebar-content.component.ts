@@ -11,10 +11,12 @@ import { PermissionService } from 'src/app/shared/services/permission/permission
 import { BaseLogoComponent } from 'src/app/shared/components/base-components/base-logo/base-logo.component';
 import { AddContactUsDialog } from "./add-contact-us-dialog/add-contact-us-dialog";
 import { Button, ButtonModule } from "primeng/button";
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-sidebar-content',
   imports: [
+    TranslatePipe,
     NgClass,
     SidebarLinkComponent,
     PanelModule,
@@ -99,13 +101,13 @@ export class SidebarContentComponent {
         show: this.permissionService.canAccessInvestors()
       },
       {
-        label: 'My Profile',
+        label: this.i18nService.translate('navigation.myProfile'),
         icon: 'icon-profile',
         routerLink: ERoutes.myProfile,
         show: true
       },
       {
-        label: 'Settings',
+        label: this.i18nService.translate('navigation.settings'),
         icon: 'icon-settings',
         routerLink: ERoutes.settings,
         show: this.permissionService.canAccessSettings()

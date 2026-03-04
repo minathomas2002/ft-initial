@@ -6,6 +6,7 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 
 @Component({
@@ -34,6 +35,7 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
   cancelLabel = 'Back';
   attachmentService = inject(AttachmentService);
   private toasterService = inject(ToasterService);
+  private i18nService = inject(I18nService);
   onProfilePictureUpdated = output<string | null>();
   private profileStore = inject(ProfileStore);
   profilePictureProcessing = computed(() => this.profileStore.profilePictureProcessing());
@@ -52,13 +54,13 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
     }
 
     if (!this.acceptedTypes.includes(file.type)) {
-      this.toasterService.error('Invalid file type or file size exceeds 2MB.');
+      this.toasterService.error(this.i18nService.translate('profile.messages.invalidFileType'));
       input.value = '';
       return;
     }
 
     if (file.size > this.maxFileSize) {
-      this.toasterService.error('Invalid file type or file size exceeds 2MB.');
+      this.toasterService.error(this.i18nService.translate('profile.messages.invalidFileType'));
       input.value = '';
       return;
     }

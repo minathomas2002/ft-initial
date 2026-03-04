@@ -2,7 +2,7 @@
 
   @if (planStore.actionNote() && shouldShowActionNote() && !hasComments()) {
     <app-page-comment-box
-    [commentTitle]="isRejected() ? 'Rejection Reason' : 'Approval Note'"
+    [commentTitle]="(isRejected() ? 'plans.rejection.reason' : 'plans.rejection.approvalNote') | translate"
     [commentText]="planStore.actionNote()!"
     [colorsClassesConfig]="{
       border: isRejected() ? 'border-[#B42318]' : 'border-[#067647]',
@@ -16,7 +16,7 @@
 
   @if (planStore.acknowledgeRejectionNote() && isEmployeePersona() && isDvAcknowledgedStatus()) {
     <app-page-comment-box
-    [commentTitle]="'Acknowledge Rejection Note'"
+    [commentTitle]="'plans.rejection.acknowledgeNote' | translate"
     [commentText]="planStore.acknowledgeRejectionNote()!"
     [colorsClassesConfig]="{
       border: 'border-[#B42318]',

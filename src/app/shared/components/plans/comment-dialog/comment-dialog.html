@@ -2,8 +2,8 @@
 <app-base-dialog
   [(visible)]="visible"
   [icon]="'icon-message-circle'"
-  [confirmLabel]="'Save'"
-  [cancelLabel]="'Back'"
+  [confirmLabel]="'common.save' | translate"
+  [cancelLabel]="'common.back' | translate"
   [confirmButtonClass]="'w-[100px]'"
   [cancelButtonClass]="'w-[75px]'"
   (onConfirm)="onConfirm()"
@@ -13,28 +13,28 @@
   <div class="modal-content-wrapper max-w-[600px]">
     <!-- Disclaimer Message - appears right after title -->
     <div class="disclaimer-container">
-      <h2 class="text-lg font-semibold text-gray-900">Add Comment</h2>
+      <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.comments.addComment' | translate }}</h2>
       <p class="text-sm text-gray-600">
-        Add a comment to clarify your feedback.
+        {{ 'plans.comments.clarifyFeedback' | translate }}
       </p>
     </div>
 
     <div class="flex flex-col mt-5">
-      <app-base-label [title]="'Your Comment'" />
+      <app-base-label [title]="'plans.comments.yourComment' | translate" />
       <textarea
         rows="8"
         cols="100"
         pTextarea
         [formControl]="formControl"
         maxlength="255"
-        [appHidePlaceholderWhenDisabledEmpty]="'Enter your comment'"
+        [appHidePlaceholderWhenDisabledEmpty]="'plans.comments.enterComment' | translate"
       ></textarea>
       <div class="text-xs text-gray-500 text-right mt-1">
         {{ formControl.value?.length || 0 }} / 255
       </div>
       <app-base-error-messages
         [control]="formControl"
-        [label]="'Your Comment'"
+        [label]="'plans.comments.yourComment' | translate"
       />
     </div>
   </div>

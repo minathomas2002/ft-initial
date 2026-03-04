@@ -21,7 +21,7 @@
   <div class="flex flex-col">
     <div class="flex justify-between py-[20px] px-[24px]">
       <div class="flex justify-between items-center w-full">
-        <p class="font-semibold">Notifications</p>
+        <p class="font-semibold">{{ 'common.notifications' | translate }}</p>
         <a class="flex items-center gap-2 text-blue-800 cursor-pointer" (click)="markAllAsRead()">
           <svg
             width="15"
@@ -38,7 +38,7 @@
               stroke-linejoin="round"
             />
           </svg>
-          Mark all as read
+          {{ 'common.markAllAsRead' | translate }}
         </a>
       </div>
       <span class="text-gray-400 text-xl cursor-pointer" (click)="notificationsModal.toggle($event)"
@@ -58,7 +58,7 @@
       @if (!isShowPreviousButtonClicked() && totalCount() > (notifications().length || 0)) {
         <div class="p-4 text-center w-full transition-opacity">
           <button pButton type="button" class="p-button-text w-full text-sm" (click)="loadPreviousNotifications()">
-            Previous Notifications
+            {{ 'common.previousNotifications' | translate }}
           </button>
         </div>
       }

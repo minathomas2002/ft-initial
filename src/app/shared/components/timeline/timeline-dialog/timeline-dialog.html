@@ -1,6 +1,6 @@
 <app-base-drawer
   [(visible)]="dialogVisible"
-  [title]="'Timeline'"
+  [title]="'common.timeline' | translate"
 >
   <app-timeline-skeleton [isLoading]="planStore.isLoading() || !timeLineEvents()">
     @if(timeLineEvents()){

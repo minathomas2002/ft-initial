@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 const YEAR_CONTROL_KEYS = [
   EMaterialsFormControls.firstYear,
@@ -20,7 +21,7 @@ const YEAR_CONTROL_KEYS = [
 
 @Component({
   selector: 'app-service-level-summary-section',
-  imports: [PlanSummaryFlied, TableModule],
+  imports: [PlanSummaryFlied, TableModule, TranslatePipe],
   templateUrl: './service-level-summary-section.html',
   styleUrl: './service-level-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,7 +1,7 @@
 <app-base-dialog
   [(visible)]="dialogVisible"
   [icon]="isEditMode() ? 'icon-edit' : 'icon-user-plus'"
-  [confirmLabel]="'Save'"
+  [confirmLabel]="'common.save' | translate"
   [confirmButtonClass]="'w-[100px]'"
   [cancelButtonClass]="'w-[80px]'"
   [isConfirmationDisabled]="formService.form.invalid || isProcessing()"

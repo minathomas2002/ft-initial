@@ -37,10 +37,12 @@ import { FormsModule } from '@angular/forms';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { MultiSelect } from 'primeng/multiselect';
 import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-service-localization-step-overview',
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     BaseLabelComponent,
     InputTextModule,
@@ -84,6 +86,11 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
   originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
+
+  submissionDateLabel = computed(() => this.i18nService.translate('plans.form.submissionDate'));
+  ceoNameLabel = computed(() => this.i18nService.translate('plans.form.ceoName'));
+  globalHQLocationLabel = computed(() => this.i18nService.translate('plans.form.globalHQLocation'));
+  registeredVendorIDwithSECLabel = computed(() => this.i18nService.translate('plans.form.registeredVendorIDwithSEC'));
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -135,11 +142,11 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   }
 
   // Dropdown options
-  serviceTypeOptions = this.planStore.serviceTypeOptions;
-  serviceCategoryOptions = this.planStore.serviceCategoryOptions;
-  serviceProvidedToOptions = this.planStore.serviceProvidedToOptions;
-  yesNoOptions = this.planStore.yesNoOptions;
-  localizationMethodologyOptions = this.planStore.localizationMethodologyOptions;
+  serviceTypeOptions = this.planStore.serviceTypeOptionsTranslated;
+  serviceCategoryOptions = this.planStore.serviceCategoryOptionsTranslated;
+  serviceProvidedToOptions = this.planStore.serviceProvidedToOptionsTranslated;
+  yesNoOptions = this.planStore.yesNoOptionsTranslated;
+  localizationMethodologyOptions = this.planStore.localizationMethodologyOptionsTranslated;
 
   availableOpportunities = this.planStore.availableOpportunities;
   isLoadingAvailableOpportunities = this.planStore.isLoadingAvailableOpportunities;

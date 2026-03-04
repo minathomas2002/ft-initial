@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { EPlanPageTitle } from 'src/app/shared/enums';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { map, startWith, tap } from 'rxjs/operators';
@@ -29,7 +30,8 @@ import { merge } from 'rxjs';
 export class CoverPageStepSummary extends SummaryStepBaseClass {
   private readonly servicePlanFormService = inject(ServicePlanFormService);
 
-  override readonly pageTitleForTL = 'Cover Page';
+  override readonly pageTitleForTL = EPlanPageTitle.CoverPage;
+  readonly displayTitle = computed(() => this.i18nService.translate('plans.wizard.coverPage'));
   override readonly formGroup: FormGroup = this.servicePlanFormService.step1_coverPage;
 
   private readonly _coverPageCompanyFormGroup = this.formGroup.get(EMaterialsFormControls.coverPageCompanyInformationFormGroup) as FormGroup;

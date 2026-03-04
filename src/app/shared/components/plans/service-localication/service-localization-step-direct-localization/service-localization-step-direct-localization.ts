@@ -23,10 +23,13 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 @Component({
   selector: 'app-service-localization-step-direct-localization',
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     FormArrayInput,
     InputTextModule,
@@ -51,6 +54,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
+  private readonly i18n = inject(I18nService);
 
   pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
@@ -65,9 +69,9 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   isViewMode = input<boolean>(false);
   isReviewMode = input<boolean>(false);
 
-  yesNoOptions = this.planStore.yesNoOptions;
-  localizationApproachOptions = this.planStore.localizationApproachOptions;
-  locationOptions = this.planStore.locationOptions;
+  yesNoOptions = this.planStore.yesNoOptionsTranslated;
+  localizationApproachOptions = this.planStore.localizationApproachOptionsTranslated;
+  locationOptions = this.planStore.locationOptionsTranslated;
 
   private _servicesSynced = false;
   private _userChangedDropdowns = new Set<string>();
@@ -137,17 +141,17 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     const years = this.yearColumns();
     return [
       {
-        label: 'Expected Annual Headcount',
+        label: this.i18n.translate('plans.form.expectedAnnualHeadcount'),
         controlKey: 'headcount',
-        placeholder: 'Enter headcount',
+        placeholder: this.i18n.translate('plans.form.enterHeadcount'),
         mode: undefined,
         minFractionDigits: 0,
         maxFractionDigits: 0,
       },
       {
-        label: 'Expected Saudization (%)',
+        label: this.i18n.translate('plans.form.expectedSaudizationPercent'),
         controlKey: 'saudization',
-        placeholder: 'Enter %',
+        placeholder: this.i18n.translate('plans.form.enterPercent'),
         mode: 'decimal' as const,
         minFractionDigits: 0,
         maxFractionDigits: 2,

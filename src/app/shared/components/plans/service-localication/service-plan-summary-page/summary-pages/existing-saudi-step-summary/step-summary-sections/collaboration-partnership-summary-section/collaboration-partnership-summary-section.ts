@@ -6,10 +6,11 @@ import { EMaterialsFormControls, ERoles } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-collaboration-partnership-summary-section',
-  imports: [PlanSummaryFlied, TableModule],
+  imports: [PlanSummaryFlied, TableModule, TranslatePipe],
   templateUrl: './collaboration-partnership-summary-section.html',
   styleUrl: './collaboration-partnership-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +22,7 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
 
   private formatAgreementType(agreementTypeId: string | number | null): string | null {
     if (!agreementTypeId) return null;
-    const options = this.planStore.agreementTypeOptions();
+    const options = this.planStore.agreementTypeOptionsTranslated();
     const match = options.find((o) => String(o.id) === String(agreementTypeId));
     return match ? match.name : String(agreementTypeId);
   }
@@ -30,7 +31,7 @@ export class CollaborationPartnershipSummarySection extends SummarySectionBaseCl
     if (value === null || value === undefined) return null;
     if (value === true || value === 'true') return 'Yes';
     if (value === false || value === 'false') return 'No';
-    const options = this.planStore.yesNoOptions();
+    const options = this.planStore.yesNoOptionsTranslated();
     const match = options.find((o) => String(o.id) === String(value));
     return match ? match.name : String(value);
   }

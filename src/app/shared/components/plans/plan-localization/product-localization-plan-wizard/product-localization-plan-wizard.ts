@@ -80,7 +80,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   override readonly toasterService = inject(ToasterService);
   override readonly planStore = inject(PlanStore);
   readonly validationService = inject(ProductPlanValidationService);
-  private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   visibility = model(false);
   activeStep = signal<number>(1);
@@ -127,14 +126,14 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   readonly rejectionDialogTitle = computed(() => {
     if (this.isDVManagerPersona()) {
-      return 'Are you sure you want to reject this plan and return it to the Employee for final rejection submission to the Investor?'
+      return this.i18nService.translate('plans.wizard.rejectDialogTitleDvReturn')
     }
 
     if (this.isEmployeePersona()) {
-      return 'Are you sure you want to reject the plan as final rejection?'
+      return this.i18nService.translate('plans.wizard.rejectDialogTitleFinal')
     }
 
-    return 'Are you sure you want to reject this plan and return it to the Division Manager for acknowledgement?'
+    return this.i18nService.translate('plans.wizard.rejectDialogTitleDvAck')
   })
 
   // Track validation errors for stepper indicators
@@ -1105,13 +1104,13 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       planTitleControl?.markAsDirty()
       planTitleControl?.markAsTouched();
       basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.updateValueAndValidity()
-      this.toasterService.error('Plan title is required to save as draft');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.planTitleRequired'));
       return;
     }
     if (!opportunity) {
       opportunityControl?.markAsDirty();
       opportunityControl?.markAsTouched();
-      this.toasterService.error('Please select opportunity to save as draft');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.opportunityRequired'));
       return;
     }
 

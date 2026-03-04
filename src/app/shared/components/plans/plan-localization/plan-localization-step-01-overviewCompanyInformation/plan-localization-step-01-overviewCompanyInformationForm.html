@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-[32px]">
   <!-- Basic Information -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Basic Information <span><i
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.basicInformation' | translate }} <span><i
           class="icon-info text-sm ms-2 text-gray-400"
           pTooltip="Supplier contact information provided here will serve as the primary contact for SEC throughout the entire BENA program."
           tooltipPosition="top"
@@ -77,7 +77,7 @@
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'Submission Date'" />
+        <app-base-label [title]="submissionDateLabel()" />
         <p-datepicker
           fluid
           dateFormat="dd M yy"
@@ -89,17 +89,17 @@
 
   <!-- Company Information -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Company Information</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.companyInformation' | translate }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 ">
       <div class="flex flex-col gap-2 col-span-1">
-        <app-base-label [title]="'Company Name'" />
+        <app-base-label [title]="companyNameLabel()" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="companyNameHasCommentControl()!"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'companyName',
-            label: 'Company Name'
+            label: companyNameLabel()
           })"
         >
           <input
@@ -115,20 +115,20 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['companyName'])"
-          [label]="'Company Name'"
+          [label]="companyNameLabel()"
         />
       </div>
     </div>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'CEO Name'" />
+        <app-base-label [title]="ceoNameLabel()" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'ceoName',
-            label: 'CEO Name'
+            label: ceoNameLabel()
           })"
         >
           <input
@@ -144,18 +144,18 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['ceoName'])"
-          [label]="'CEO Name'"
+          [label]="ceoNameLabel()"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'CEO Email'" />
+        <app-base-label [title]="ceoEmailLabel()" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoEmailID'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'ceoEmailID',
-            label: 'CEO Email'
+            label: ceoEmailLabel()
           })"
         >
           <input
@@ -171,7 +171,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
-          [label]="'CEO Email'"
+          [label]="ceoEmailLabel()"
         />
       </div>
     </div>
@@ -179,17 +179,17 @@
 
   <!-- Location Information -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Location Information</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.locationInformation' | translate }}</h2>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'Global HQ Location'" />
+        <app-base-label [title]="globalHQLocationLabel()" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'locationInformation',
             inputKey: 'globalHQLocation',
-            label: 'Global HQ Location'
+            label: globalHQLocationLabel()
           })"
         >
           <input
@@ -205,13 +205,13 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
-          [label]="'Global HQ Location'"
+          [label]="globalHQLocationLabel()"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
         <div>
-          <app-base-label [title]="'Registered Vendor ID with SEC'" />
-          <span class="text-sm text-gray-600 ms-2">(If available)</span>
+          <app-base-label [title]="registeredVendorIDwithSECLabel()" />
+          <span class="text-sm text-gray-600 ms-2">{{ 'plans.form.ifAvailable' | translate }}</span>
         </div>
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -219,7 +219,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'locationInformation',
             inputKey: 'registeredVendorIDwithSEC',
-            label: 'Registered Vendor ID with SEC'
+            label: registeredVendorIDwithSECLabel()
           })"
         >
           <input
@@ -229,7 +229,7 @@
             inputmode="numeric"
             pattern="[0-9]*"
             maxlength="7"
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter registered vendor ID with SEC'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterRegisteredVendorIDWithSEC' | translate"
             [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
             (input)="onRegisteredVendorIDWithSecInput($event)"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
@@ -239,15 +239,16 @@
 
         <app-base-error-messages
           [control]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
-          [label]="'Registered Vendor ID with SEC'"
+          [label]="registeredVendorIDwithSECLabel()"
         />
       </div>
     </div>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
         <div>
-          <h4 class="text-sm font-medium text-gray-900">Do you currently have local Agent in KSA?</h4>
-          <p class="text-sm text-gray-600">If “Yes”, mention the following details of Local Agent</p>
+          <h4 class="text-sm font-medium text-gray-900">{{ 'plans.form.hasLocalAgentInKSA' | translate }}</h4>
+          <p class="text-sm text-gray-600">{{ 'plans.form.ifYesMentionLocalAgentDetails' | translate }}</p>
+
         </div>
         <div class="flex gap-2">
           <app-group-input-with-checkbox
@@ -256,7 +257,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'locationInformation',
               inputKey: 'doYouCurrentlyHaveLocalAgentInKSA',
-              label: 'Do you currently have local Agent in KSA?'
+              label: hasLocalAgentInKSALabel()
             })"
           >
             <div class="flex gap-2">
@@ -270,7 +271,7 @@
                   [appConditionalColorClass]="highlightInput('doYouCurrentlyHaveLocalAgentInKSA')"
                   [color]="selectedInputColor()"
                 />
-                <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.yes' | translate }}</span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer">
                 <p-radiobutton
@@ -282,14 +283,14 @@
                   [appConditionalColorClass]="highlightInput('doYouCurrentlyHaveLocalAgentInKSA')"
                   [color]="selectedInputColor()"
                 />
-                <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.no' | translate }}</span>
               </label>
             </div>
           </app-group-input-with-checkbox>
         </div>
         <app-base-error-messages
           [control]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
-          [label]="'Do you currently have local Agent in KSA?'"
+          [label]="hasLocalAgentInKSALabel()"
         />
       </div>
 
@@ -302,21 +303,21 @@
     >
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Local Agent Name'" />
+          <app-base-label [title]="localAgentNameLabel()" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'localAgentName',
-              label: 'Local Agent Name'
+              label: localAgentNameLabel()
             })"
           >
             <input
               type="text"
               pInputText
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter local agent name'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterLocalAgentName' | translate"
               maxlength="100"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
               [appConditionalColorClass]="highlightInput('localAgentName')"
@@ -325,18 +326,18 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
-            [label]="'Local Agent Name'"
+            [label]="localAgentNameLabel()"
           />
         </div>
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Contact Person Name'" />
+          <app-base-label [title]="contactPersonNameLabel()" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'contactPersonName',
-              label: 'Contact Person Name'
+              label: contactPersonNameLabel()
             })"
           >
             <input
@@ -344,7 +345,7 @@
               pInputText
               fluid
               [maxlength]="100"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter contact person name'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterContactPersonName' | translate"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
               [appConditionalColorClass]="highlightInput('contactPersonName')"
               [color]="selectedInputColor()"
@@ -352,27 +353,27 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
-            [label]="'Contact Person Name'"
+            [label]="contactPersonNameLabel()"
           />
         </div>
       </div>
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Email ID'" />
+          <app-base-label [title]="emailIDLabel()" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['emailID'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'emailID',
-              label: 'Email ID'
+              label: emailIDLabel()
             })"
           >
             <input
               type="text"
               pInputText
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter email ID'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterEmailID' | translate"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
               [appConditionalColorClass]="highlightInput('emailID')"
               [color]="selectedInputColor()"
@@ -380,18 +381,18 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
-            [label]="'Email ID'"
+            [label]="emailIDLabel()"
           />
         </div>
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Contact Number'" />
+          <app-base-label [title]="contactNumberLabel()" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="contactNumberHasCommentControl()!"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'contactNumber',
-              label: 'Contact Number'
+              label: contactNumberLabel()
             })"
           >
             <app-phone-input
@@ -402,29 +403,29 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
-            [label]="'Contact Number'"
+            [label]="contactNumberLabel()"
           />
         </div>
       </div>
       <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-1">
           <div class="flex flex-col gap-2 flex-1">
-            <app-base-label [title]="'Company HQ Location'" />
-            <app-group-input-with-checkbox
-              [showCheckbox]="showCheckbox()"
-              [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
-              (valueChanged)="upDateSelectedInputs($event, {
-                section: 'localAgentInformation',
-                inputKey: 'companyHQLocation',
-                label: 'Company HQ Location'
-              })"
+<app-base-label [title]="companyHQLocationLabel()" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'localAgentInformation',
+              inputKey: 'companyHQLocation',
+              label: companyHQLocationLabel()
+            })"
             >
               <input
                 type="text"
                 pInputText
                 fluid
                 maxlength="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter company HQ location'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterCompanyHQLocation' | translate"
                 [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
                 [appConditionalColorClass]="highlightInput('companyHQLocation')"
                 [color]="selectedInputColor()"
@@ -432,7 +433,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
-              [label]="'Company HQ Location'"
+              [label]="companyHQLocationLabel()"
             />
           </div>
         </div>

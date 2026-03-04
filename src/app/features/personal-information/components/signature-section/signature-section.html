@@ -1,22 +1,22 @@
 <app-personal-information-card
-  [sectionTitle]="'Signature'"
-  [sectionDescription]="'Update your signature here.'"
+  [sectionTitle]="'profile.signatureLabel' | translate"
+  [sectionDescription]="'profile.signatureUpdateDesc' | translate"
   [hideFooter]="true"
 >
   @if(isViewMode() && !existingSignature()){
   <div class="flex flex-col justify-center items-center gap-6">
     <div class="flex justify-center items-center">
-      <p class="text-sm text-gray-500">No signature created</p>
+      <p class="text-sm text-gray-500">{{ 'profile.signature.noSignature' | translate }}</p>
     </div>
     <div class="flex gap-4">
       <p-button
-        [label]="'Draw Signature'"
+        [label]="'profile.drawSignatureBtn' | translate"
         severity="secondary"
         icon="icon-edit-04"
         (onClick)="onAddSignatureClick()"
       />
       <p-button
-        [label]="'upload Signature'"
+        [label]="'profile.uploadSignatureBtn' | translate"
         severity="secondary"
         icon="icon-file-upload"
         (onClick)="onChangeSignatureClick()"
@@ -26,7 +26,7 @@
   }@else {
   <div class="flex justify-center items-center bg-gray-50 rounded-lg p-6 border border-gray-200 relative">
     <p-button
-      [label]="'Delete'"
+      [label]="'common.delete' | translate"
       icon="icon-trash-2"
       severity="danger"
       size="small"
@@ -47,7 +47,7 @@
     <p-dialog
       [visible]="signaturePreviewVisible()"
       (visibleChange)="signaturePreviewVisible.set($event)"
-      header="Your Signature"
+      [header]="'profile.yourSignature' | translate"
       [modal]="true"
       [closable]="true"
       [closeOnEscape]="true"
@@ -84,9 +84,9 @@
 }
 <app-general-confirmation-dialog
   [(visible)]="deleteSignatureConfirmVisible"
-  [title]="'Delete signature'"
-  [description]="'Are you sure you want to delete your signature? This action cannot be undone.'"
-  [confirmationLabel]="'Delete'"
+  [title]="'profile.signature.deleteSignature' | translate"
+  [description]="'profile.deleteSignatureConfirm' | translate"
+  [confirmationLabel]="'common.delete' | translate"
   [icon]="'icon-trash-2'"
   [confirmButtonSeverity]="'danger'"
   [isLoading]="isSignatureProcessing()"

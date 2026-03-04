@@ -7,10 +7,11 @@ import { ERoles, ERoutes } from 'src/app/shared/enums';
 import { NotificationItemFactory } from 'src/app/shared/classes/notifications/notification-item.factory';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { NotificationsStore } from 'src/app/shared/stores/notifications/notifications.store';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-navbar-notifications-tabs',
-  imports: [TimeAgoPipe, ProgressSpinnerModule],
+  imports: [TimeAgoPipe, ProgressSpinnerModule, TranslatePipe],
   templateUrl: './navbar-notifications-tabs.html',
   styleUrl: './navbar-notifications-tabs.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

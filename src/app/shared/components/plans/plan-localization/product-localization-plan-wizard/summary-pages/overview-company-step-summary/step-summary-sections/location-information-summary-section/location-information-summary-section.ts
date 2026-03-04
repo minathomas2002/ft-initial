@@ -23,7 +23,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
     const currantValue = this.globalHQLocationControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.globalHQLocation ?? '';
     return {
-      label: 'Global HQ Location',
+      label: this.i18nService.translate('plans.form.globalHQLocation'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.globalHQLocationControl()),
@@ -38,7 +38,7 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
     const currantValue = this.registeredVendorIDControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.vendorIdWithSEC ?? '';
     return {
-      label: 'Registered Vendor ID with SEC',
+      label: this.i18nService.translate('plans.form.registeredVendorIDwithSEC'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.registeredVendorIDControl()),
@@ -51,11 +51,11 @@ export class LocationInformationSummarySection extends SummarySectionBaseClass {
   doYouCurrentlyHaveLocalAgentSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
     const value = this.doYouCurrentlyHaveLocalAgentControl()?.value;
-    const displayValue = value === true ? 'Yes' : value === false ? 'No' : '';
+    const displayValue = value === true ? this.i18nService.translate('common.yes') : value === false ? this.i18nService.translate('common.no') : '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.hasLocalAgent;
-    const beforeDisplay = beforeValue === true ? 'Yes' : beforeValue === false ? 'No' : '';
+    const beforeDisplay = beforeValue === true ? this.i18nService.translate('common.yes') : beforeValue === false ? this.i18nService.translate('common.no') : '';
     return {
-      label: 'Do you currently have local Agent in KSA?',
+      label: this.i18nService.translate('plans.form.hasLocalAgentInKSA'),
       beforeValue: beforeDisplay,
       currantValue: displayValue,
       hasError: this.isFieldHasError(this.doYouCurrentlyHaveLocalAgentControl()),

@@ -3,7 +3,7 @@
   (click)="menu.toggle($event)"
   iconPos="right"
 >
-  <span class="font-semibold">Actions</span>
+  <span class="font-semibold">{{ 'common.actions' | translate }}</span>
   <i class="icon-chevron-down {{isOpen() ? 'rotate-180' : 'rotate-0'}} transition-all"></i>
 </p-button>
 <p-menu

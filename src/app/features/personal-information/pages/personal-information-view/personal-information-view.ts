@@ -8,11 +8,13 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { ERoles } from 'src/app/shared/enums';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-personal-information-view',
   imports: [
     SectionsLayout,
+    TranslatePipe,
     UserImageSection,
     PersonalInformationSection,
     SecuritySection,

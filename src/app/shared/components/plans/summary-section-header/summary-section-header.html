@@ -4,7 +4,7 @@
   </div>
   @if(!hideEditButton()){
   <p-button
-    label="Edit"
+    [label]="'common.edit' | translate"
     icon="icon-edit"
     [text]="true"
     (click)="onEditClick()"

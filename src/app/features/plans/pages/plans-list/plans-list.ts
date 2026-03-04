@@ -104,7 +104,7 @@ export class PlansList extends PlanDashboardBase {
 
     baseHeaders.push(
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: 'Opportunity Type', isSortable: false, sortingKey: 'title' },
+      { label: this.i18nService.translate('plans.table.opportunityType'), isSortable: false, sortingKey: 'title' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
     );
 
