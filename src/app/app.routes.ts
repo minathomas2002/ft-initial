@@ -49,7 +49,7 @@ const MAIN_LAYOUT_ROUTES: Routes = [
       },
       {
         path: ERoutes.settings,
-        loadComponent: () => import('./features/settings/pages/admin-setting-view/admin-setting-view').then((c) => c.AdminSettingView),
+        loadChildren: () => import('./features/settings/settings.routes').then((c) => c.setting_ROUTES),
         data: { animation: ERoutes.settings },
       },
       {
