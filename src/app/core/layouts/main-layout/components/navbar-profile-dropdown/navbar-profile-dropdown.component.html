@@ -15,7 +15,7 @@
     <app-identify-user
       [userName]="authStore.userProfile()?.nameEN!"
       [userTitle]="authStore.userProfile()?.roleNames?.[0] || authStore.userCode()!"
-      [userAvatar]="authStore.userProfile()?.photoURL"
+      [userAvatar]="userProfilePicture()"
     ></app-identify-user>
 
     @if (dropdownItems().length) {

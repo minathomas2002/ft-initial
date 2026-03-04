@@ -27,6 +27,7 @@ import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/sys
 import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
 import { ERoles } from 'src/app/shared/enums';
 import { take } from 'rxjs';
+import { Avatar } from 'primeng/avatar';
 
 @Component({
   selector: 'app-employee-list',
@@ -42,7 +43,8 @@ import { take } from 'rxjs';
     GeneralConfirmationDialogComponent,
     TranslatePipe,
     ButtonModule,
-    AddEditEmployeeDialog
+    AddEditEmployeeDialog,
+    Avatar
   ],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
@@ -62,6 +64,10 @@ export class EmployeeList implements OnInit {
         label: this.i18nService.translate('users.table.id'),
         isSortable: true,
         sortingKey: 'employeeID',
+      },
+      {
+        label: this.i18nService.translate('users.table.photo'),
+        isSortable: false,
       },
       {
         label: this.i18nService.translate('users.table.nameArabic'),

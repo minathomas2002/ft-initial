@@ -25,6 +25,14 @@
             {{ item.employeeID }}
           </td>
 
+          <!-- Employee photo -->
+          <td>
+              <div class="flex items-center gap-3">
+                <p-avatar [image]="item.photo || 'assets/images/user_placeholder.svg'" shape="circle" size="normal"
+                  class="!w-[32px] !h-[32px] flex-shrink-0" />
+              </div>
+          </td>
+
           <!-- Employee arabic name -->
           <td>
             {{ item.name_Ar }}

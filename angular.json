@@ -119,6 +119,9 @@
             "development": {
               "buildTarget": "benaa:build:development"
             },
+            "testing": {
+              "buildTarget": "benaa:build:testing"
+            },
             "local": {
               "buildTarget": "benaa:build:local"
             }
