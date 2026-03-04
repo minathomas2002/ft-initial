@@ -96,7 +96,11 @@
         }
 
         @if (comment.fields?.length > 0) {
-        <div class="mt-2 flex gap-2 flex-wrap">
+        <div
+          class="mt-2 flex flex-row flex-wrap gap-2 justify-start"
+          [class.[direction:rtl]]="directionClass() === 'rtl'"
+          [class.[direction:ltr]]="directionClass() === 'ltr'"
+        >
           @for (field of comment.fields; track field) {
           <app-base-tag
             [styleClass]="'whitespace-normal!'"

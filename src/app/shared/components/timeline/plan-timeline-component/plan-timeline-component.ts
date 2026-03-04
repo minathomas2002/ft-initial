@@ -41,6 +41,11 @@ export class TimelineComponent {
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly camelCaseToWordPipe = inject(CamelCaseToWordPipe);
   planStatus = computed(() => this.planStatusFactory.handleValidateStatus());
+
+  /** Direction class based on current language (rtl for Arabic, ltr otherwise) */
+  directionClass = computed(() =>
+    this.i18nService.currentLanguage() === 'ar' ? 'rtl' : 'ltr'
+  );
   events = computed<{ color: TColors; item: ITimeLineResponse }[]>(() => {
     const requestData = this.timelineRequests();
     if (!this.timelineRequests) {
@@ -88,10 +93,16 @@ export class TimelineComponent {
     return this.planTimelineStatusMapper.getStatusLabel(status);
   }
 
-  getCommentFieldLabel(field: ICommentFields) {
+  getCommentFieldLabel(field: ICommentFields): string {
+    const translatedLabel = this.i18nService.translate(field.label);
     if (field.section.toLowerCase() === field.label.toLowerCase()) {
-      return field.label
+      return translatedLabel;
     }
-    return this.camelCaseToWordPipe.transform(field.section) + ' - ' + field.label
+    const sectionKey = 'plans.form.' + field.section;
+    const translatedSection = this.i18nService.translate(sectionKey);
+    const sectionDisplay = translatedSection === sectionKey
+      ? this.camelCaseToWordPipe.transform(field.section)
+      : translatedSection;
+    return sectionDisplay + ' - ' + translatedLabel;
   }
 }
