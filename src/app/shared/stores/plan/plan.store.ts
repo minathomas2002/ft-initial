@@ -1,54 +1,15 @@
-import { computed, inject } from '@angular/core';
-import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
-import {
-  AgreementType,
-  EExperienceRange,
-  EInHouseProcuredType,
-  ELocalizationApproach,
-  ELocation,
-  ELocalizationMethodology,
-  ELocalizationStatusType,
-  EOpportunityType,
-  EServiceCategory,
-  EServiceProvidedTo,
-  EServiceQualificationStatus,
-  EServiceType,
-  ETargetedCustomer,
-  EYesNo,
-  EemployeePlanAction,
-  ERoles,
-  EServiceCompanyType,
-  EPlanPageTitle,
-} from '../../enums';
+import { computed, inject } from "@angular/core";
+import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType, EPlanPageTitle } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { PlanApiService } from '../../api/plans/plan-api-service';
-import { catchError, finalize, map, Observable, of, tap, throwError } from 'rxjs';
-import {
-  EInternalUserPlanStatus,
-  EInvestorPlanStatus,
-  IAssignActiveEmployee,
-  IAssignReassignActiveEmployee,
-  IAssignRequest,
-  IBaseApiResponse,
-  IOpportunity,
-  IOpportunityDetails,
-  IPlanFilterRequest,
-  IPlanRecord,
-  IPlansDashboardStatistics,
-  ISelectItem,
-} from '../../interfaces';
-import {
-  IProductPlanResponse,
-  IServiceLocalizationPlanResponse,
-  ITimeLineResponse,
-  ReviewPlanRequest,
-  IPlanCommentResponse,
-} from '../../interfaces/plans.interface';
-import { downloadFileFromBlob } from '../../utils/file-download.utils';
-import { I18nService } from '../../services/i18n/i18n.service';
-import { RoleService } from '../../services/role/role-service';
-import { AuthStore } from '../auth/auth.store';
-import { HttpResponse } from '@microsoft/signalr';
+import { PlanApiService } from "../../api/plans/plan-api-service";
+import { catchError, finalize, map, Observable, of, tap, throwError } from "rxjs";
+import { EInternalUserPlanStatus, EInvestorPlanStatus, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
+import { IProductPlanResponse, IServiceLocalizationPlanResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from "../../interfaces/plans.interface";
+import { downloadFileFromBlob } from "../../utils/file-download.utils";
+import { I18nService } from "../../services/i18n/i18n.service";
+import { RoleService } from "../../services/role/role-service";
+import { AuthStore } from "../auth/auth.store";
 
 export interface IPlanTypeDropdownOption {
   label: string;
@@ -126,7 +87,7 @@ const initialState: {
   productManufacturingExperienceOptions: [
     { id: EExperienceRange.Years_5.toString(), name: 'Less than 5 years' },
     { id: EExperienceRange.Years_5_10.toString(), name: '5 to 10 years' },
-    { id: EExperienceRange.Years_10.toString(), name: 'More than 10 years' },
+    { id: EExperienceRange.Years_10.toString(), name: 'More than 10 years' }
   ],
   inHouseProcuredOptions: [
     { id: EInHouseProcuredType.InHouse.toString(), name: 'In-house' },
@@ -162,10 +123,7 @@ const initialState: {
   ],
   qualificationStatusOptions: [
     { id: EServiceQualificationStatus.Qualified.toString(), name: 'Qualified' },
-    {
-      id: EServiceQualificationStatus.UnderPreQualification.toString(),
-      name: 'Under Pre-Qualification',
-    },
+    { id: EServiceQualificationStatus.UnderPreQualification.toString(), name: 'Under Pre-Qualification' },
     { id: EServiceQualificationStatus.NotQualified.toString(), name: 'Not Qualified' },
   ],
   localizationMethodologyOptions: [
@@ -180,10 +138,7 @@ const initialState: {
   ],
   localizationApproachOptions: [
     { id: ELocalizationApproach.EstablishSaudiEntity.toString(), name: 'Establish Saudi Entity' },
-    {
-      id: ELocalizationApproach.EstablishLocalBranch.toString(),
-      name: 'Establish Local Branch of Foreign Company',
-    },
+    { id: ELocalizationApproach.EstablishLocalBranch.toString(), name: 'Establish Local Branch of Foreign Company' },
     { id: ELocalizationApproach.Other.toString(), name: 'Other' },
   ],
   locationOptions: [
@@ -198,14 +153,8 @@ const initialState: {
   agreementTypeOptions: [
     { id: AgreementType.JointVenture.toString(), name: 'Joint Venture' },
     { id: AgreementType.SpecialPurposeVehicle.toString(), name: 'Special Purpose Vehicle' },
-    {
-      id: AgreementType.TechnologyTransferAgreement.toString(),
-      name: 'Technology Transfer Agreement',
-    },
-    {
-      id: AgreementType.KnowledgeTransferAgreement.toString(),
-      name: 'Knowledge Transfer Agreement',
-    },
+    { id: AgreementType.TechnologyTransferAgreement.toString(), name: 'Technology Transfer Agreement' },
+    { id: AgreementType.KnowledgeTransferAgreement.toString(), name: 'Knowledge Transfer Agreement' },
     { id: AgreementType.Other.toString(), name: 'Other' },
   ],
   activeEmployees: null,
@@ -221,7 +170,7 @@ const initialState: {
   servicePlanData: null,
   actionNote: null,
   acknowledgeRejectionNote: null,
-  linkedToDeletedOpportunity: false,
+  linkedToDeletedOpportunity: false
 };
 
 export const PlanStore = signalStore(
@@ -239,8 +188,7 @@ export const PlanStore = signalStore(
           EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
           EInternalUserPlanStatus.DEPT_REJECTED,
           EInternalUserPlanStatus.DV_REJECTED,
-        ].includes(store.planStatus() as EInternalUserPlanStatus),
-      ),
+        ].includes(store.planStatus() as EInternalUserPlanStatus)),
 
       planTypeOptions: computed<IPlanTypeDropdownOption[]>(() => {
         i18nService.currentLanguage();
@@ -261,7 +209,7 @@ export const PlanStore = signalStore(
         if (!role) return null;
 
         if (roleService.hasAnyRoleSignal([role])()) {
-          return 'Your Comment';
+          return 'Your Comment'
         }
 
         const roleMap: Record<number, string> = {
@@ -336,7 +284,7 @@ export const PlanStore = signalStore(
         patchState(store, { planStatus: status });
       },
       setLinkedOpportunityWarning(linkedToDeletedOpportunity: boolean | false): void {
-        console.log(linkedToDeletedOpportunity, 'showWarningMesageDeletedOpportunity');
+        console.log(linkedToDeletedOpportunity, "showWarningMesageDeletedOpportunity");
         patchState(store, { linkedToDeletedOpportunity });
       },
       setActionNote(actionNote: string | null): void {
@@ -369,7 +317,7 @@ export const PlanStore = signalStore(
           currentUserPageComments: [],
           actionNote: null,
           acknowledgeRejectionNote: null,
-          linkedToDeletedOpportunity: false,
+          linkedToDeletedOpportunity: false
         });
       },
       updateCurrentUserPageComments(newPageComments: EPlanPageTitle[]): void {
@@ -389,7 +337,7 @@ export const PlanStore = signalStore(
           .getActiveOpportunityLookUps(store.newPlanOpportunityType()!)
           .pipe(
             finalize(() => patchState(store, { isLoadingAvailableOpportunities: false })),
-            tap((response) => patchState(store, { availableOpportunities: response.body })),
+            tap((response) => patchState(store, { availableOpportunities: response.body }))
           );
       },
 
@@ -398,7 +346,7 @@ export const PlanStore = signalStore(
        * Used in edit mode to populate the opportunity dropdown with the existing opportunity
        */
       getOpportunityDetailsAndUpdateOptions(
-        opportunityId: string,
+        opportunityId: string
       ): Observable<IBaseApiResponse<IOpportunityDetails>> {
         patchState(store, { isLoadingAvailableOpportunities: true });
         return opportunitiesApiService.getOpportunityById(opportunityId).pipe(
@@ -417,14 +365,12 @@ export const PlanStore = signalStore(
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading opportunity details' });
             return throwError(() => new Error('Error loading opportunity details'));
-          }),
+          })
         );
       },
 
       /* Get Active Employees  For plans*/
-      getActiveEmployeesForPlans(
-        planId: string,
-      ): Observable<IBaseApiResponse<IAssignReassignActiveEmployee>> {
+      getActiveEmployeesForPlans(planId: string): Observable<IBaseApiResponse<IAssignReassignActiveEmployee>> {
         patchState(store, { isLoading: true, error: null });
         return planApiService.getActiveEmployeesForPlans(planId).pipe(
           tap((res) => {
@@ -438,7 +384,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
-          }),
+          })
         );
       },
       /* assign Employee  For plan*/
@@ -454,7 +400,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
       /* reassign Employee  For plan*/
@@ -470,7 +416,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -489,7 +435,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -508,7 +454,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -527,7 +473,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -546,7 +492,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -565,7 +511,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -584,7 +530,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -603,53 +549,44 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
       employeeApprovePlan(planId: string, reason?: string, approvalSignature?: string) {
         patchState(store, { isProcessing: true, error: null });
-        return planApiService
-          .internalApprovePlanStatus({
-            planId,
-            status: EemployeePlanAction.Approve,
-            reason,
-            approvalSignature,
+        return planApiService.internalApprovePlanStatus({ planId, status: EemployeePlanAction.Approve, reason, approvalSignature }).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error approving plan',
+            });
+            return throwError(() => new Error('Error approving plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
           })
-          .pipe(
-            tap(() => {
-              patchState(store, { isProcessing: false });
-            }),
-            catchError((error) => {
-              patchState(store, {
-                error: error.errorMessage || 'Error approving plan',
-              });
-              return throwError(() => new Error('Error approving plan'));
-            }),
-            finalize(() => {
-              patchState(store, { isProcessing: false });
-            }),
-          );
+        );
       },
 
       employeeRejectPlan(planId: string, reason: string) {
         patchState(store, { isProcessing: true, error: null });
-        return planApiService
-          .internalRejectPlanStatus({ planId, status: EemployeePlanAction.Reject, reason })
-          .pipe(
-            tap(() => {
-              patchState(store, { isProcessing: false });
-            }),
-            catchError((error) => {
-              patchState(store, {
-                error: error.errorMessage || 'Error rejecting plan',
-              });
-              return throwError(() => new Error('Error rejecting plan'));
-            }),
-            finalize(() => {
-              patchState(store, { isProcessing: false });
-            }),
-          );
+        return planApiService.internalRejectPlanStatus({ planId, status: EemployeePlanAction.Reject, reason }).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error rejecting plan',
+            });
+            return throwError(() => new Error('Error rejecting plan'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
       },
 
       /* rejection acknowledge by dv*/
@@ -667,7 +604,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
 
@@ -677,20 +614,14 @@ export const PlanStore = signalStore(
         return planApiService.getProductPlan({ planId }).pipe(
           tap((res) => {
             store.setActionNote(res.body?.productPlan?.actionNote || null);
-            store.setLinkedOpportunityWarning(
-              res.body?.productPlan?.linkedToDeletedOpportunity || false,
-            );
-            store.setAcknowledgeRejectionNote(
-              res.body?.productPlan?.acknowledgeRejectionNote || null,
-            );
-            const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])()
-              ? res.body?.productPlan?.investorStatus
-              : res.body?.productPlan?.status;
+            store.setLinkedOpportunityWarning(res.body?.productPlan?.linkedToDeletedOpportunity || false);
+            store.setAcknowledgeRejectionNote(res.body?.productPlan?.acknowledgeRejectionNote || null);
+            const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.productPlan?.investorStatus : res.body?.productPlan?.status;
             store.setPlanStatus(planStatus ?? null);
             const opportunityItem: ISelectItem = {
               id: res.body?.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId ?? '',
               name: res.body?.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityTitle ?? '',
-            };
+            }
             patchState(store, { availableOpportunities: [opportunityItem] });
             patchState(store, { productPlanData: res.body || null });
           }),
@@ -700,33 +631,28 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
-          }),
+          })
         );
       },
 
       /* Get Service Plan*/
-      getServicePlan(
-        planId: string,
-      ): Observable<IBaseApiResponse<IServiceLocalizationPlanResponse>> {
+      getServicePlan(planId: string): Observable<IBaseApiResponse<IServiceLocalizationPlanResponse>> {
         patchState(store, { isLoading: true, error: null });
         return planApiService.getServicePlan({ planId }).pipe(
           tap((res) => {
-            const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])()
-              ? res.body?.servicePlan?.investorStatus
-              : res.body?.servicePlan?.status;
+            const planStatus = roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? res.body?.servicePlan?.investorStatus : res.body?.servicePlan?.status;
             store.setPlanStatus(planStatus ?? null);
 
             const opportunityItem: ISelectItem = {
               id: res.body?.servicePlan?.opportunityId ?? '',
               name: res.body?.servicePlan?.opportunityName ?? '',
-            };
+            }
             patchState(store, { availableOpportunities: [opportunityItem] });
             patchState(store, { servicePlanData: res.body || null });
             store.setActionNote(res.body?.actionNote ?? null);
             store.setAcknowledgeRejectionNote(res.body?.acknowledgeRejectionNote ?? null);
-            store.setLinkedOpportunityWarning(
-              res.body?.servicePlan.linkedToDeletedOpportunity || false,
-            );
+            store.setLinkedOpportunityWarning(res.body?.servicePlan.linkedToDeletedOpportunity || false);
+
           }),
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading service plan' });
@@ -734,7 +660,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
-          }),
+          })
         );
       },
 
@@ -752,7 +678,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
-          }),
+          })
         );
       },
       /* Download Plan*/
@@ -766,7 +692,7 @@ export const PlanStore = signalStore(
             const errorMessage = error.message || error.error?.message || 'Error downloading plan';
             patchState(store, { error: errorMessage });
             return throwError(() => error);
-          }),
+          })
         );
       },
 
@@ -783,7 +709,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
-          }),
+          })
         );
       },
 
@@ -798,7 +724,7 @@ export const PlanStore = signalStore(
           catchError((error) => {
             patchState(store, { error: error.errorMessage || 'Error loading plan comments' });
             return throwError(() => new Error('Error loading plan comments'));
-          }),
+          })
         );
       },
     };
@@ -824,7 +750,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { loading: false });
-          }),
+          })
         );
       },
       getInternalUserPlans(filter: IPlanFilterRequest) {
@@ -837,7 +763,7 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { loading: false });
-          }),
+          })
         );
       },
 
@@ -853,9 +779,10 @@ export const PlanStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
-          }),
+          })
         );
       },
+
       exportPlans(): Observable<Blob> {
         patchState(store, { isProcessing: true, error: null });
 
@@ -876,6 +803,7 @@ export const PlanStore = signalStore(
           }),
         );
       },
+
     };
-  }),
+  })
 );
