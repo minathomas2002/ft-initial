@@ -370,7 +370,7 @@
                 (valueChanged)="upDateSelectedInputs($event, {
                   section: 'entityLevel',
                   inputKey: uniqueInputKey,
-                  label: row.label + ' - ' + yearColumns()[i]
+                  label: row.labelKey + ' - ' + yearColumns()[i]
                 }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
@@ -477,7 +477,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: yearKey + '_headcount',
-                label: getTranslatedLabel('plans.form.headcountYear', yearColumns()[i])
+                label: 'plans.form.headcountYear - ' + yearColumns()[i]
               }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <p-inputnumber
@@ -506,7 +506,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: yearKey + '_saudization',
-                label: getTranslatedLabel('plans.form.saudizationPercentYear', yearColumns()[i])
+                label: 'plans.form.saudizationPercentYear - ' + yearColumns()[i]
               }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <p-inputnumber

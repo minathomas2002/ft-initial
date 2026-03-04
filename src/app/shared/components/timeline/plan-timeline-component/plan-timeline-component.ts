@@ -107,14 +107,45 @@ export class TimelineComponent {
         : translatedLabel;
     }
 
+    // Handle "key - YYYY" pattern (entity/service level year fields)
+    const keyYearMatch = field.label.match(/^(.+)\s+-\s+(\d{4})$/);
+    if (keyYearMatch) {
+      const [, keyPart, yearNum] = keyYearMatch;
+      const key = keyPart.trim();
+      const yearParamKeys = ['plans.form.headcountYear', 'plans.form.saudizationPercentYear'];
+      if (yearParamKeys.includes(key)) {
+        const translated = this.i18nService.translate(key, { year: yearNum });
+        translatedLabel = translated !== key ? translated : translatedLabel;
+      } else {
+        const translated = this.i18nService.translate(key);
+        translatedLabel = translated !== key ? `${translated} - ${yearNum}` : translatedLabel;
+      }
+    }
+
     if (field.section.toLowerCase() === field.label.toLowerCase()) {
       return translatedLabel;
     }
-    const sectionKey = 'plans.form.' + field.section;
+    const sectionKey = this.getSectionTranslationKey(field.section);
     const translatedSection = this.i18nService.translate(sectionKey);
     const sectionDisplay = translatedSection === sectionKey
       ? this.camelCaseToWordPipe.transform(field.section)
       : translatedSection;
     return sectionDisplay + ' - ' + translatedLabel;
+  }
+
+  /** Resolve section to translation key; handles camelCase and legacy display strings */
+  private getSectionTranslationKey(section: string): string {
+    const key = 'plans.form.' + section;
+    if (this.i18nService.translate(key) !== key) return key;
+    const displayToKey: Record<string, string> = {
+      'Service Details': 'serviceDetails',
+      'Entity Level': 'entityLevel',
+      'Service Level': 'serviceLevel',
+      'Collaboration Partnership': 'collaborationPartnership',
+      'Overview & Company Information': 'overviewCompanyInformation',
+      'Other Location Details': 'otherLocationDetails',
+    };
+    const normalized = displayToKey[section] ?? section.replace(/\s+/g, '');
+    return 'plans.form.' + normalized;
   }
 }

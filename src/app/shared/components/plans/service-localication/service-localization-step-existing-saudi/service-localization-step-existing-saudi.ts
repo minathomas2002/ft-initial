@@ -234,6 +234,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     return [
       {
         label: this.i18n.translate('plans.form.expectedAnnualHeadcount'),
+        labelKey: 'plans.form.expectedAnnualHeadcount',
         controlKey: 'headcount',
         placeholder: this.i18n.translate('plans.form.enterHeadcount'),
         mode: undefined,
@@ -242,6 +243,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       },
       {
         label: this.i18n.translate('plans.form.expectedSaudizationPercent'),
+        labelKey: 'plans.form.expectedSaudizationPercent',
         controlKey: 'saudization',
         placeholder: this.i18n.translate('plans.form.enterPercent'),
         mode: 'decimal' as const,
