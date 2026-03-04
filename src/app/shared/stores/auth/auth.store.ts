@@ -1,7 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
-import { type Observable, type Subscription, catchError, finalize, throwError, tap } from 'rxjs';
+import { type Observable, type Subscription, catchError, finalize, throwError, tap, pipe, take } from 'rxjs';
 import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse, IJwtUserDetails, IUserProfile, } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { UsersApiService } from '../../api/users/users-api-service';
@@ -167,7 +167,9 @@ export const AuthStore = signalStore(
 
             if (response.success && response.body && hasValidToken && isEmailVerified) {
               this.updateAuthDataInStorage(response);
-              this.getUserProfile().subscribe();
+              this.getUserProfile()
+                .pipe(take(1))
+                .subscribe();
               this.syncLanguageToServer();
             }
           }),
@@ -180,7 +182,7 @@ export const AuthStore = signalStore(
       syncLanguageToServer(): void {
         const lang = (typeof window !== 'undefined' && window.localStorage?.getItem('preferred-language')) as SupportedLanguage | null;
         const supportedLang = lang === 'en' || lang === 'ar' ? lang : 'en';
-        usersApiService.changeLanguage(supportedLang).subscribe();
+        usersApiService.changeLanguage(supportedLang).pipe(take(1)).subscribe();
       },
 
       getUserProfile(): Observable<IBaseApiResponse<IUserProfile>> {
