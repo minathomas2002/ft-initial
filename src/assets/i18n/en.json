@@ -472,7 +472,7 @@
   "delegation": {
     "status": {
       "active": "Active",
-      "deactivated": "Deactivated",
+      "deactivated": "Cancelled",
       "expired": "Expired",
       "upcoming": "Upcoming"
     },
