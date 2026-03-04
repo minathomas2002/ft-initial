@@ -41,7 +41,7 @@ export class ChangeYourProfilePictureModal implements OnDestroy {
   deleteConfirmVisible = signal<boolean>(false);
 
   private readonly maxFileSize = 2 * 1024 * 1024; // 2MB
-  private readonly acceptedTypes = ['image/jpg', 'image/png'];
+  private readonly acceptedTypes = ['image/jpg', 'image/png', 'image/jpeg'];
 
   isImageNotSelectedPlaceholder = computed(() => this.image() === this.userPlaceholderImage);
   onFileSelected(event: Event): void {
