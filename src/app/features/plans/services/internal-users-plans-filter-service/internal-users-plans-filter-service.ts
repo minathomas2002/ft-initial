@@ -30,6 +30,18 @@ export class InternalUsersPlansFilterService extends AbstractServiceFilter<IPlan
     return hasSearch || hasPlanType || hasStatus || hasAssignee || hasSubmissionDate;
   });
 
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const planTypeCount = Array.isArray(current.planType) ? current.planType.length : 0;
+    const statusCount = Array.isArray(current.status) ? current.status.length : 0;
+    const assigneeCount = Array.isArray(current.assignee) ? current.assignee.length : 0;
+    const submissionDateCount = current.submissionDate?.length === 2 ? 1 : 0;
+
+    return searchCount + planTypeCount + statusCount + assigneeCount + submissionDateCount;
+  });
+
   performFilter$() {
     this.resetPagination();
     return this.store.getInternalUserPlans(this.adpatedFilter());

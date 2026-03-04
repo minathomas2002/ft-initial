@@ -13,6 +13,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 interface IDropdownOption {
   label: string;
   value: EOpportunityType | EInvestorPlanStatus | null;
@@ -20,7 +22,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-investor-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe,ButtonModule],
+  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe, ButtonModule, OverlayBadgeModule, BadgeModule],
   templateUrl: './investor-plans-filter.html',
   styleUrl: './investor-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

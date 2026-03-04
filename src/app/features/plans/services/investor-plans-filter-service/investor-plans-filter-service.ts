@@ -29,6 +29,17 @@ export class InvestorPlansFilterService extends AbstractServiceFilter<IPlanFilte
     return hasSearch || hasPlanType || hasStatus || hasSubmissionDate;
   });
 
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const planTypeCount = Array.isArray(current.planType) ? current.planType.length : 0;
+    const statusCount = Array.isArray(current.status) ? current.status.length : 0;
+    const submissionDateCount = current.submissionDate?.length === 2 ? 1 : 0;
+
+    return searchCount + planTypeCount + statusCount + submissionDateCount;
+  });
+
   performFilter$() {
     this.resetPagination();
     return this.store.getInvestorPlans(this.adpatedFilter());

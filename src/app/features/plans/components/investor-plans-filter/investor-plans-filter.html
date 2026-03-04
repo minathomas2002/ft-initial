@@ -1,5 +1,5 @@
 <div class="grid grid-cols-12 gap-4">
-    <div class="col-span-12 md:col-span-5">
+    <div class="col-span-12 md:col-span-4">
         <div class="flex flex-col">
             <input
                 type="text"
@@ -62,15 +62,28 @@
         </div>
     </div>
 
-     @if(filterService.showClearAll()) {
-    <div class="col-span-12 md:col-span-2">
-        <div class="flex flex-col">
-            <p-button
-                [label]="'plans.filter.reset' | translate"
-                [severity]="'secondary'"
-                (click)="onClearFilters()"
-                [styleClass]="'w-full'"
-            ></p-button>
+    @if(filterService.showClearAll()) {
+    <div class="col-span-12 md:col-span-1 md:justify-self-end">
+        <div class="flex h-full items-center md:justify-end">
+            <p-overlaybadge
+                [value]="filterService.activeFiltersCount()"
+                severity="danger"
+                class="filter-reset-badge"
+            >
+                <p-button
+                    [severity]="'secondary'"
+                    (click)="onClearFilters()"
+                    [rounded]="true"
+                    [outlined]="true"
+                    [ariaLabel]="'plans.filter.reset' | translate"
+                >
+                  <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M0.75 6.58333C0.75 6.58333 2.42082 4.30685 3.7782 2.94854C5.13557 1.59022 7.01133 0.75 9.08333 0.75C13.2255 0.75 16.5833 4.10786 16.5833 8.25C16.5833 12.3921 13.2255 15.75 9.08333 15.75C5.66409 15.75 2.77926 13.4619 1.87647 10.3333M0.75 6.58333V1.58333M0.75 6.58333H5.75"
+                      stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </p-button>
+            </p-overlaybadge>
         </div>
     </div>
     }

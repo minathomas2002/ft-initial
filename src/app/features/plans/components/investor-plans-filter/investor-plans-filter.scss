@@ -1,7 +1,36 @@
 :host ::ng-deep {
-    .p-datepicker input {
-      width: 100%;
-    }
+  .p-datepicker input {
+    width: 100%;
   }
-  
-  
+
+  .filter-reset-badge .p-button {
+    background-color: white;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .p-popover-content {
+    padding: 0 !important;
+  }
+
+  .hidden-notification-counter .p-overlaybadge .p-badge {
+    display: none !important;
+  }
+
+  .p-overlaybadge .p-badge {
+    background-color: #EF4444 !important;
+  }
+
+  .p-popover {
+    box-shadow: none !important;
+    border-radius: 20px !important;
+  }
+
+  .p-popover-content {
+    padding: 0 !important;
+  }
+
+}
