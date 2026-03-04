@@ -11,7 +11,7 @@
         [ngModel]="selectedCountry()"
         (ngModelChange)="onCountryChange($event)"
         (onHide)="onCountrySelectBlur()"
-        optionLabel="name"
+        [optionLabel]="isArabic() ? 'nameAr' : 'name'"
         [disabled]="disabled() || _isDisabled"
         [filter]="true"
         [filterPlaceholder]="'common.searchCountry' | translate"
@@ -27,11 +27,11 @@
           <div class="country-display">
             <img
               [src]="country.flagUrl"
-              [alt]="country.name"
+              [alt]="isArabic() ? country.nameAr : country.name"
               class="flag-icon"
               onerror="this.style.display='none'"
             />
-            <span class="dial-code text-sm font-medium">{{ country.dialCode }}</span>
+            <span class="dial-code text-sm font-medium ltr">{{ country.dialCode }}</span>
           </div>
           }
         </ng-template>
@@ -42,12 +42,12 @@
           <div class="country-option flex items-center gap-2">
             <img
               [src]="country.flagUrl"
-              [alt]="country.name"
+              [alt]="isArabic() ? country.nameAr : country.name"
               class="flag-icon"
               onerror="this.style.display='none'"
             />
-            <span class="country-name">{{ country.name }}</span>
-            <span class="dial-code ml-auto text-sm font-medium">{{ country.dialCode }}</span>
+            <span class="country-name">{{ isArabic() ? country.nameAr : country.name }}</span>
+            <span class="dial-code ml-auto text-sm font-medium ltr">{{ country.dialCode }}</span>
           </div>
         </ng-template>
       </p-select>
@@ -59,12 +59,12 @@
         type="tel"
         pInputText
         [maxlength]="15"
-        [placeholder]="placeholder()"
+        [placeholder]="'users.dialog.add.phonePlaceholder' | translate"
         [ngModel]="phoneNumber()"
         (ngModelChange)="onPhoneNumberChange($event)"
         (blur)="onPhoneInputBlur()"
         [disabled]="disabled() || _isDisabled"
-        class="phone-number-input"
+        class="phone-number-input ltr"
       />
     </div>
   </div>

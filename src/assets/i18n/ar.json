@@ -534,7 +534,7 @@
 				"nameArRequired": "الاسم باللغة العربية مطلوب.",
 				"emailPlaceholder": "أدخل البريد الإلكتروني.",
 				"emailRequired": "البريد الإلكتروني مطلوب.",
-				"phonePlaceholder": "أدخل رقم الجوال.",
+				"phonePlaceholder": "أدخل رقم الجوال",
 				"phoneRequired": "رقم الجوال مطلوب.",
 				"jobInvalid": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة صحيح.",
 				"jobInvalidLength": "يجب أن يكون رقم الوظيفة بين 6 و20 حرفًا.",

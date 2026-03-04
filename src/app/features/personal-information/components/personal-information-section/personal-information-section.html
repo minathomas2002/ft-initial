@@ -65,7 +65,7 @@
         [required]="false"
       >
         @if(isViewMode()){
-        <span class="text-sm font-medium text-gray-900">{{ userProfile()?.email }}</span>
+        <span class="text-sm font-medium text-gray-900 ltr">{{ userProfile()?.email }}</span>
         }@else {
         <input
           pInputText
@@ -73,6 +73,7 @@
           fluid
           maxlength="150"
           [formControl]="formService.email"
+          class="ltr"
         />
         }
       </app-personal-information-form-field>
@@ -83,7 +84,7 @@
         [required]="!isViewMode()"
       >
         @if(isViewMode()){
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 ltr">
           @if(isInvestor()){
           <span class="text-sm font-medium text-gray-900">{{ userProfile()?.countryCode }}</span>
           }
@@ -110,7 +111,7 @@
         [required]="false"
       >
         @if(isViewMode()){
-        <span class="text-sm font-medium text-gray-900">{{ userID() }}</span>
+        <span class="text-sm font-medium text-gray-900 ltr">{{ userID() }}</span>
         }
       </app-personal-information-form-field>
 
@@ -132,7 +133,7 @@
         [required]="false"
       >
         @if(isViewMode()){
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 ltr">
           <span class="text-sm font-medium text-gray-900">{{ userProfile()?.otherPhoneCountryCode ?? '-' }}</span>
           <span class="text-sm font-medium text-gray-900">{{ userProfile()?.otherPhoneNumber }}</span>
         </div>
@@ -156,12 +157,13 @@
         [required]="false"
       >
         @if(isViewMode()){
-        <span class="text-sm font-medium text-gray-900">{{ userProfile()?.benaId ?? '-' }}</span>
+        <span class="text-sm font-medium text-gray-900 ltr">{{ userProfile()?.benaId ?? '-' }}</span>
         }@else {
         <input
           pInputText
           fluid
           [formControl]="formService.benaId"
+          class="ltr"
         />
         }
       </app-personal-information-form-field>
@@ -172,7 +174,7 @@
         [required]="false"
       >
         @if(isViewMode()){
-        <span class="text-sm font-medium text-gray-900">{{ userProfile()?.secRegisteredId ?? '-' }}</span>
+        <span class="text-sm font-medium text-gray-900 ltr">{{ userProfile()?.secRegisteredId ?? '-' }}</span>
         }@else {
         <input
           type="text"
@@ -184,6 +186,7 @@
           [placeholder]="'Enter your SEC registered ID'"
           [formControl]="formService.secRegisteredId"
           (input)="onRegisteredVendorIDWithSecInput($event)"
+          class="ltr"
         />
         <app-base-error-messages
           [control]="formService.secRegisteredId"

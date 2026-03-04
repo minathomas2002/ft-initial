@@ -162,6 +162,7 @@
             type="email"
             pInputText
             fluid
+            class="ltr"
             [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO email ID'"
             maxlength="100"
             [appConditionalColorClass]="highlightInput('ceoEmailID')"
@@ -234,6 +235,7 @@
             (input)="onRegisteredVendorIDWithSecInput($event)"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
             [color]="selectedInputColor()"
+            class="ltr"
           />
         </app-group-input-with-checkbox>
 
@@ -373,6 +375,7 @@
               type="text"
               pInputText
               fluid
+              class="ltr"
               [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterEmailID' | translate"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
               [appConditionalColorClass]="highlightInput('emailID')"

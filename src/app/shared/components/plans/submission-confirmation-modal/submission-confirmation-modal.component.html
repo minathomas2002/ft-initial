@@ -101,9 +101,9 @@
             id="emailId"
             type="email"
             pInputText
+            class="w-full ltr"
             [formControl]="formService.emailIdControl"
             [placeholder]="'plans.submission.emailIdPlaceholder' | translate"
-            class="w-full"
           />
           <app-base-error-messages
             [control]="formService.emailIdControl"

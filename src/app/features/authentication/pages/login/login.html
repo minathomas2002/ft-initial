@@ -23,6 +23,7 @@
             autocomplete="new-field"
             type="email"
             pInputText
+            class="ltr"
             [formControl]="loginFormService.email"
             [placeholder]="'auth.login.enterYourEmail' | translate"
             fluid
@@ -101,6 +102,7 @@
         type="userName"
         pInputText
         #usernameInput
+          class="ltr"
         fluid
       />
     </div>

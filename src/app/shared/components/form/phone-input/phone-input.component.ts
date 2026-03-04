@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, input, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, computed, signal, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { IPhoneValue, ICountry } from '../../../interfaces';
 import { getCountriesWithPreferred, getCountryByCode } from '../../../data/countries.data';
 import { TranslatePipe } from '../../../pipes';
+import { I18nService } from '../../../services/i18n/i18n.service';
 
 @Component({
 	selector: 'app-phone-input',
@@ -23,10 +24,13 @@ import { TranslatePipe } from '../../../pipes';
 })
 export class PhoneInputComponent implements ControlValueAccessor {
 	countries = getCountriesWithPreferred(['SA']);
-	placeholder = input<string>('Enter your phone');
 	disabled = input<boolean>(false);
 	styleClass = input<string>('');
 	defaultCountryCode = input<string>(getCountryByCode('SA')?.dialCode || ''); // Default to Saudi Arabia
+
+	private readonly i18nService = inject(I18nService);
+
+	isArabic = computed(() => this.i18nService.currentLanguage() === 'ar');
 
 	// Internal state
 	selectedCountry = signal<ICountry>(this.getDefaultCountry());

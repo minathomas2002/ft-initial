@@ -27,7 +27,7 @@
             #itemsTemplate
             let-item="item"
           >
-            <td class="whitespace-nowrap">
+            <td class="whitespace-nowrap ltr">
               {{ item.code }}
             </td>
             <td class="whitespace-nowrap">
@@ -42,13 +42,13 @@
               </div>
             </td>
             <td class="whitespace-nowrap">
-              <p class="text-sm text-gray-600 max-w-[220px] truncate">
+              <p class="text-sm text-gray-600 max-w-[220px] truncate ltr">
                 {{ item.email }}
               </p>
             </td>
-            <td class="whitespace-nowrap">{{ item.countryCode }} {{ item.phoneNumber }}</td>
-            <td class="whitespace-nowrap">{{ item.otherPhone || '-' }}</td>
-            <td class="whitespace-nowrap">{{ item.numberOfSubmittedPlans }}</td>
+            <td class="whitespace-nowrap ltr">{{ item.countryCode }} {{ item.phoneNumber }}</td>
+            <td class="whitespace-nowrap ltr">{{ item.otherPhone || '-' }}</td>
+            <td class="whitespace-nowrap ltr">{{ item.numberOfSubmittedPlans }}</td>
             <td class="whitespace-nowrap">{{ item.joinDate | localizedDate: 'dd MMM yyyy' }}</td>
           </ng-template>
         </app-data-table>

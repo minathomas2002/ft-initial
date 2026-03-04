@@ -21,7 +21,7 @@
           let-item="item"
         >
           <!-- Employee ID -->
-          <td>
+          <td class="ltr">
             {{ item.employeeID }}
           </td>
 
@@ -36,7 +36,7 @@
           </td>
 
           <!-- Employee Email -->
-          <td>
+          <td class="ltr">
             <p
               class="text-sm text-gray-600 max-w-[200px] truncate"
               [pTooltip]="item.email"
@@ -45,7 +45,7 @@
             ></p>
           </td>
 
-          <td>
+          <td class="ltr">
             {{ item.phoneNumber }}
           </td>
 
@@ -53,8 +53,8 @@
           <td>
             {{item.role}}
           </td>
-
-          <!-- Role -->
+         
+          <!-- Join Date -->
           <td>
             {{ item.joinDate | localizedDate : 'dd MMM yyyy' }}
           </td>
