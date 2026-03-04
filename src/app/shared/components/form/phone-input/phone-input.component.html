@@ -59,7 +59,7 @@
         type="tel"
         pInputText
         [maxlength]="15"
-        [placeholder]="'users.dialog.add.phonePlaceholder' | translate"
+        [placeholder]="placeholder() | translate"
         [ngModel]="phoneNumber()"
         (ngModelChange)="onPhoneNumberChange($event)"
         (blur)="onPhoneInputBlur()"

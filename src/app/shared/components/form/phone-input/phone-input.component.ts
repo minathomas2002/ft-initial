@@ -24,6 +24,7 @@ import { I18nService } from '../../../services/i18n/i18n.service';
 })
 export class PhoneInputComponent implements ControlValueAccessor {
 	countries = getCountriesWithPreferred(['SA']);
+	placeholder = input<string>('users.dialog.add.phonePlaceholder');
 	disabled = input<boolean>(false);
 	styleClass = input<string>('');
 	defaultCountryCode = input<string>(getCountryByCode('SA')?.dialCode || ''); // Default to Saudi Arabia
