@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Menu, MenuModule } from 'primeng/menu';
 import { AvatarModule } from 'primeng/avatar';
 import { Router } from '@angular/router';
@@ -18,14 +18,6 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarProfileDropdownComponent {
-  constructor() {
-    effect(() => {
-      if (this.profileStore.userImage()) {
-        this.userProfilePicture.set(this.profileStore.userImage())
-      }
-    })
-  }
-
   authStore = inject(AuthStore);
   roleService = inject(RoleService);
   profileStore = inject(ProfileStore);
@@ -37,7 +29,13 @@ export class NavbarProfileDropdownComponent {
   private readonly isSecEnvironment = signal(window.location.hostname === environment.secDomain);
   private readonly isInvestor = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR]);
   private readonly isInternal = !this.isInvestor();
-  protected readonly userProfilePicture = signal(this.authStore.userProfile()?.photoURL);
+  protected readonly userProfilePicture = computed(() => {
+    if (!this.profileStore.userProfile()) {
+      return this.authStore.userProfile()?.photoURL ?? 'assets/images/user_placeholder.svg';
+    }
+
+    return this.profileStore.userImage();
+  });
 
   dropdownItems = computed(() => {
     // Access currentLanguage to make computed reactive to language changes

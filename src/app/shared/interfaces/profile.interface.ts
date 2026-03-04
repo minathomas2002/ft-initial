@@ -1,5 +1,6 @@
 export interface IProfileResponse {
   photo: string;
+  photoURL: string;
   nameEn: string;
   nameAr: string;
   email: string;
