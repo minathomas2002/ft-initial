@@ -21,6 +21,13 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.icon-Icon:before {
+  content: "\f009";
+}
+.icon-briefcase-02:before {
+  content: "\f008";
+}
 .icon-help-circle:before {
     content: "\f007";
 }
