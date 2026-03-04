@@ -63,8 +63,8 @@ export class DelegationFilter {
    onPickerChange(value: Date[] | undefined) {
     value = value?.filter((x) => !!x) ?? [];
     if (!!value && (value.length == 2 || value.length == 0)) {
-      this.filter().delegationDateFrom = value[0] ? value[0].toISOString() : null;
-      this.filter().delegationDateTo = value[1] ? value[1].toISOString() : null;
+      this.filter().delegationDateFrom = value[0] ? new Date(value[0]).toLocaleDateString('en-us') : null;
+      this.filter().delegationDateTo = value[1] ? new Date(value[1]).toLocaleDateString('en-us') : null;
       this.delegationFilterService.applyFilterWithPaging();
     }
   }
