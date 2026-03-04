@@ -13,6 +13,17 @@
         (onClick)="createNewPlan()"
       />
     </ng-container>}
+    @else {
+       <ng-container ngProjectAs="table-actions">
+      <p-button
+        [severity]="'secondary'"
+        [label]="'plans.exportPlans' | translate"
+        [icon]="'icon-file-text'"
+        [size]="'small'"
+        (onClick)="exportPlans()"
+      />
+    </ng-container>
+    }
 
     <ng-container ngProjectAs="table-filters">
       <!-- Filters -->

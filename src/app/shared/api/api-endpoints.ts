@@ -56,6 +56,7 @@ export const API_ENDPOINTS = {
     reviewPlan: `${Plans}/review-plan`,
     getPlanComment: `${Plans}/get-PlanComment`,
     deleteDraftPlan: `${Plans}/delete-draftPlan`,
+    exportPlans : `${Plans}/ExportPlans`
   },
   profile: {
     me: `${Profile}/me`,
