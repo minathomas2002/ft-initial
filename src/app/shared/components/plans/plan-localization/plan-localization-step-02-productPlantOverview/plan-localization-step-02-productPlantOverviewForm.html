@@ -36,7 +36,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'overview',
             inputKey: 'productName',
-            label: 'Product Name'
+            label: 'plans.form.productName'
           })"
         >
           <input
@@ -52,7 +52,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
-          [label]="'Product Name'"
+          [label]="'plans.form.productName' | translate"
         />
       </div>
 
@@ -68,7 +68,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'overview',
             inputKey: 'productSpecifications',
-            label: 'Product Specifications'
+            label: 'plans.form.productSpecifications'
           })"
         >
           <textarea
@@ -88,7 +88,7 @@
         </div>
         <app-base-error-messages
           [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
-          [label]="'Product Specifications'"
+          [label]="'plans.form.productSpecifications' | translate"
         />
       </div>
 
@@ -107,7 +107,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'overview',
               inputKey: 'targetedAnnualPlantCapacity',
-              label: 'Targeted Annual Plant Capacity'
+              label: 'plans.form.targetedAnnualPlantCapacity'
             })"
           >
             <input
@@ -123,7 +123,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
-            [label]="'Targeted Annual Plant Capacity'"
+            [label]="'plans.form.targetedAnnualPlantCapacity' | translate"
           />
         </div>
 
@@ -141,7 +141,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'overview',
               inputKey: 'timeRequiredToSetupFactory',
-              label: 'Time Required to Setup Factory'
+              label: 'plans.form.timeRequiredToSetupFactory'
             })"
           >
             <input
@@ -157,7 +157,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
-            [label]="'Time Required to Setup Factory'"
+            [label]="'plans.form.timeRequiredToSetupFactory' | translate"
           />
         </div>
       </div>
@@ -181,7 +181,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'expectedCAPEXInvestment',
             inputKey: 'landPercentage',
-            label: 'Land'
+            label: 'plans.form.land'
           })"
         >
           <p-inputnumber
@@ -199,7 +199,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage])"
-          [label]="'Land'"
+          [label]="'plans.form.land' | translate"
         />
       </div>
 
@@ -233,7 +233,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage])"
-          [label]="'Building'"
+          [label]="'plans.form.building' | translate"
         />
       </div>
 
@@ -267,7 +267,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage])"
-          [label]="'Machinery / Equipment'"
+          [label]="'plans.form.machineryEquipment' | translate"
         />
       </div>
 
@@ -301,7 +301,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage])"
-          [label]="'Others'"
+          [label]="'plans.form.others' | translate"
         />
       </div>
     </div>
@@ -336,7 +336,7 @@
       </div>
       <app-base-error-messages
         [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
-        [label]="'Others Description'"
+        [label]="'plans.form.othersDescription' | translate"
       />
     </div>
     }
@@ -375,7 +375,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
-            [label]="'Targeted Customer'"
+            [label]="'plans.form.targetedCustomer' | translate"
           />
         </div>
       </div>
@@ -414,7 +414,7 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
-            [label]="'Names of targeted SEC\'s approved local suppliers'"
+            [label]="'plans.form.provideNamesTargetedSuppliers' | translate"
           />
         </div>
 
@@ -489,7 +489,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
-            [label]="'Product Manufacturing Experience'"
+            [label]="'plans.form.productManufacturingExperience' | translate"
           />
         </div>
 
@@ -568,7 +568,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
-              [label]="'Qualified Plant Location'"
+              [label]="'plans.form.qualifiedPlantLocation' | translate"
             />
           </div>
 
@@ -602,7 +602,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
-              [label]="'Approved Vendor ID'"
+              [label]="'plans.form.approvedVendorIDWithSEC' | translate"
             />
           </div>
 
@@ -632,7 +632,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
-              [label]="'Years of Experience'"
+              [label]="'plans.form.yearsOfExperience' | translate"
             />
           </div>
 
@@ -662,7 +662,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
-              [label]="'Total Quantities'"
+              [label]="'plans.form.totalQuantitiesProvidedToSEC' | translate"
             />
           </div>
         </div>
@@ -737,7 +737,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
-              [label]="'Name(s) of SEC approved local supplier(s)'"
+              [label]="'plans.form.namesOfSECApprovedSuppliers' | translate"
             />
           </div>
 
@@ -766,7 +766,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
-              [label]="'Qualified Plant Location'"
+              [label]="'plans.form.qualifiedPlantLocation' | translate"
             />
           </div>
 
@@ -793,7 +793,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
-              [label]="'Years of Experience'"
+              [label]="'plans.form.yearsOfExperience' | translate"
             />
           </div>
 
@@ -823,7 +823,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
-              [label]="'Total quantities provided to all approved local suppliers'"
+              [label]="'plans.form.totalQuantitiesToLocalSuppliers' | translate"
             />
           </div>
         </div>

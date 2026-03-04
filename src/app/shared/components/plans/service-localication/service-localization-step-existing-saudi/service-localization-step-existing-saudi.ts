@@ -62,8 +62,9 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   override readonly planStore = inject(PlanStore);
   private readonly i18n = inject(I18nService);
 
-  saudiCompanyNameLabel = computed(() => this.i18n.translate('plans.form.saudiCompanyName'));
-  whyChoseThisCompanyLabel = computed(() => this.i18n.translate('plans.form.whyChoseThisSaudiCompany'));
+  getTranslatedLabel(key: string, year: string | number): string {
+    return this.i18n.translate(key, { year: String(year) });
+  }
 
   pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
@@ -107,6 +108,10 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
     }
     return false;
   });
+
+  collaborationPartnershipHeaderLabels = computed<Record<string, string>>(() => ({
+    supervisionOversightEntity: this.i18n.translate('plans.form.supervisionOversightByGovernmentEntity'),
+  }));
 
   saudiCompanyDetailsHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
@@ -263,14 +268,13 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
   // Grouped header cell for Service Level years
   serviceLevelGroupHeader = computed(() => {
     const yearCols = this.yearControlKeys.length;
-    // Structure: first two columns (Service name + Expected Localization Date), then yearCols headcount, then yearCols saudization, then two columns (Key Measures, Support)
     return [
-      { label: 'Service Name', rowspan: 2, dataGroup: false },
-      { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
-      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
-      { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
-      { label: 'Key measures to upskill Saudis', rowspan: 2, dataGroup: false },
-      { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.serviceName'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.expectedLocalizationDate'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.expectedAnnualHeadcountKSA'), colspan: yearCols, dataGroup: true },
+      { label: this.i18n.translate('plans.form.mentionYoySaudizationKSAUptoYear', { year: this.yearColumns()[5] }), colspan: yearCols, dataGroup: true },
+      { label: this.i18n.translate('plans.form.keyMeasuresToUpskillSaudis'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.supportRequiredFromSEC') + ' (if any)', rowspan: 2, dataGroup: false },
     ];
   });
 

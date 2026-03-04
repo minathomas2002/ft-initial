@@ -4,7 +4,7 @@
     <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.companyInformation' | translate }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
       <div class="flex flex-col gap-2 col-span-1">
-        <app-base-label [title]="planTitleLabel()" />
+        <app-base-label [title]="'plans.newPlan.planTitle' | translate" />
 
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -14,7 +14,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'planTitle',
-            label: planTitleLabel()
+            label: 'plans.newPlan.planTitle'
           })"
         >
           <input
@@ -31,12 +31,12 @@
 
         <app-base-error-messages
           [control]="getCoverPageValueControl('planTitle')"
-          [label]="planTitleLabel()"
+          [label]="'plans.newPlan.planTitle' | translate"
         />
       </div>
 
       <div class="flex flex-col gap-2 col-span-1">
-        <app-base-label [title]="companyNameLabel()" />
+        <app-base-label [title]="'plans.newPlan.companyName' | translate" />
 
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -46,7 +46,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'companyName',
-            label: companyNameLabel()
+            label: 'plans.newPlan.companyName'
           })"
         >
           <input
@@ -63,7 +63,7 @@
 
         <app-base-error-messages
           [control]="getCoverPageValueControl('companyName')"
-          [label]="companyNameLabel()"
+          [label]="'plans.newPlan.companyName' | translate"
         />
       </div>
     </div>
@@ -93,7 +93,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                     section: 'services',
                     inputKey: 'serviceName',
-                    label: serviceNameLabel()
+                    label: 'plans.form.serviceName'
                   }, itemControl.get('rowId')?.value)"
             >
               <input
@@ -111,7 +111,7 @@
 
             <app-base-error-messages
               [control]="getValueControl(itemControl.get('serviceName'))"
-              [label]="serviceNameLabel()"
+              [label]="'plans.form.serviceName' | translate"
             />
           </td>
         </ng-template>

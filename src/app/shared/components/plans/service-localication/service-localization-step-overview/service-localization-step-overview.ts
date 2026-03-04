@@ -87,11 +87,6 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   showCommentState = input<boolean>(false);
   originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
 
-  submissionDateLabel = computed(() => this.i18nService.translate('plans.form.submissionDate'));
-  ceoNameLabel = computed(() => this.i18nService.translate('plans.form.ceoName'));
-  globalHQLocationLabel = computed(() => this.i18nService.translate('plans.form.globalHQLocation'));
-  registeredVendorIDwithSECLabel = computed(() => this.i18nService.translate('plans.form.registeredVendorIDwithSEC'));
-
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
     if (!this.isResubmitMode()) return false;

@@ -26,7 +26,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
               inputKey: 'saudiCompanyName',
-              label: saudiCompanyNameLabel()
+              label: 'plans.form.saudiCompanyName'
             }, itemControl.get('rowId')?.value)"
           >
             <input
@@ -129,7 +129,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
               inputKey: 'products',
-              label: 'Product(s)'
+              label: 'plans.form.products'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -150,7 +150,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
-            [label]="'Product(s)'"
+            [label]="'plans.form.products' | translate"
           />
           }
         </td>
@@ -167,7 +167,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
               inputKey: 'companyOverview',
-              label: 'Company Overview'
+              label: 'plans.form.companyOverview'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -189,7 +189,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
-            [label]="'Company Overview'"
+            [label]="'plans.form.companyOverview' | translate"
           />
           }
         </td>
@@ -206,7 +206,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
               inputKey: 'keyProjectsExecutedByContractorForSEC',
-              label: 'Key Projects Executed'
+              label: 'plans.form.keyProjectsExecuted'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -229,7 +229,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
-            [label]="'Key Projects Executed'"
+            [label]="'plans.form.keyProjectsExecuted' | translate"
           />
           }
         </td>
@@ -246,7 +246,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
               inputKey: 'companyOverviewKeyProjectDetails',
-              label: 'Company Overview, Key Project Details'
+              label: 'plans.form.companyOverviewKeyProjectDetails'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -270,7 +270,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
-            [label]="'Company Overview, Key Project Details'"
+            [label]="'plans.form.companyOverviewKeyProjectDetails' | translate"
           />
           }
         </td>
@@ -287,7 +287,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'saudiCompanyDetails',
               inputKey: 'companyOverviewOther',
-              label: 'Company Overview'
+              label: 'plans.form.companyOverview'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -310,7 +310,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
-            [label]="'Company Overview'"
+            [label]="'plans.form.companyOverview' | translate"
           />
           }
         </td>
@@ -320,12 +320,12 @@
 
   <!-- Collaboration / Partnership Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Collaboration / Partnership with Saudi Company</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.collaborationPartnershipWithSaudiCompany' | translate }}</h2>
     <app-form-array-input
       [ft]="getCollaborationPartnershipFormArray()"
       [hideAddButton]="isViewMode()"
       [hideDeleteButton]="isViewMode() || isReviewMode()"
-      [addButtonMessage]="'Add Collaboration/Partnership'"
+      [addButtonMessage]="'plans.form.addCollaborationPartnership' | translate"
       [createNewItem]="createCollaborationPartnershipItem"
       [maxItems]="20"
       [scrollHeight]="'600px'"
@@ -334,9 +334,7 @@
         'supervisionOversightEntity': 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.) if any',
         'provideAgreementCopy': 'If “Yes”, please attach the agreement copy at the end of the plan in the Attachment section.',
       }"
-      [customHeaderLabels]="{
-        'supervisionOversightEntity': 'Supervision / Oversight by Government Entity (if any)'
-      }"
+      [customHeaderLabels]="collaborationPartnershipHeaderLabels()"
     >
       <ng-template
         #itemTemplate
@@ -352,7 +350,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'collaborationPartnership',
                 inputKey: 'agreementTypeWithSaudiCompany',
-                label: 'Agreement Type with Saudi Company'
+                label: 'plans.form.agreementTypeWithSaudiCompany'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -374,7 +372,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'collaborationPartnership',
                 inputKey: 'agreementOtherDetails',
-                label: 'Other Agreement Details'
+                label: 'plans.form.ifAgreementTypeOtherProvideDetails'
               }, itemControl.get('rowId')?.value)"
             >
               <textarea
@@ -397,12 +395,12 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
-            [label]="'Agreement Type'"
+            [label]="'plans.form.agreementTypeWithSaudiCompany' | translate"
           />
           @if (isAgreementTypeOther(itemControl)) {
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
-            [label]="'Other Agreement Details'"
+            [label]="'plans.form.ifAgreementTypeOtherProvideDetails' | translate"
           />
           }
         </td>
@@ -415,7 +413,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'agreementSigningDate',
-              label: 'Agreement Signing Date'
+              label: 'plans.form.agreementSigningDate'
             }, itemControl.get('rowId')?.value)"
           >
             <p-select
@@ -432,7 +430,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
-            [label]="'Agreement Signing Date'"
+            [label]="'plans.form.agreementSigningDate' | translate"
           />
         </td>
 
@@ -444,7 +442,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'supervisionOversightEntity',
-              label: 'Supervision / Oversight'
+              label: 'plans.form.supervisionOversight'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -466,7 +464,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
-            [label]="'Supervision / Oversight'"
+            [label]="'plans.form.supervisionOversight' | translate"
           />
         </td>
 
@@ -478,7 +476,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'whyChoseThisCompany',
-              label: whyChoseThisCompanyLabel()
+              label: 'plans.form.whyChoseThisSaudiCompany'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -499,7 +497,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.whyChoseThisCompany))"
-            [label]="whyChoseThisCompanyLabel()"
+            [label]="'plans.form.whyChoseThisSaudiCompany' | translate"
           />
         </td>
 
@@ -511,7 +509,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'summaryOfKeyAgreementClauses',
-              label: 'Summary of Key Agreement Clauses'
+              label: 'plans.form.summaryOfKeyAgreementClauses'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -532,7 +530,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
-            [label]="'Summary of Key Agreement Clauses'"
+            [label]="'plans.form.summaryOfKeyAgreementClauses' | translate"
           />
         </td>
 
@@ -544,7 +542,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'collaborationPartnership',
               inputKey: 'provideAgreementCopy',
-              label: 'Provide Agreement Copy'
+              label: 'plans.form.provideAgreementCopy'
             }, itemControl.get('rowId')?.value)"
           >
             <p-select
@@ -561,7 +559,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
-            [label]="'Provide Agreement Copy'"
+            [label]="'plans.form.provideAgreementCopy' | translate"
           />
         </td>
       </ng-template>
@@ -652,7 +650,7 @@
   <!-- Service Level Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.serviceLevel' | translate }}</h2>
-    <p>Details to be provided for the KSA based facility responsible for delivering all services. Provide details separately for each service you intend to localize</p>
+    <p>{{ 'plans.form.entityLevelServiceDescription' | translate }}</p>
     <div class="border border-gray-300 rounded-2xl">
       <app-form-array-input
         [ft]="getServiceLevelFormArray()"
@@ -684,7 +682,7 @@
             />
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
-              [label]="'Service Name'"
+              [label]="'plans.form.serviceName' | translate"
             />
           </td>
 
@@ -696,7 +694,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'expectedLocalizationDate',
-                label: 'Expected Localization Date'
+                label: 'plans.form.expectedLocalizationDate'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -713,7 +711,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-              [label]="'Expected Localization Date'"
+              [label]="'plans.form.expectedLocalizationDate' | translate"
             />
           </td>
 
@@ -726,7 +724,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: yearKey + '_headcount',
-                label: 'Headcount ' + yearColumns()[i]
+                label: getTranslatedLabel('plans.form.headcountYear', yearColumns()[i])
               }, itemControl.get('rowId')?.value)"
             >
               <p-inputnumber
@@ -741,7 +739,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(yearKey + '_headcount'))"
-              [label]="'Headcount ' + yearColumns()[i]"
+              [label]="getTranslatedLabel('plans.form.headcountYear', yearColumns()[i])"
             />
           </td>
           }
@@ -755,7 +753,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: yearKey + '_saudization',
-                label: 'Saudization % ' + yearColumns()[i]
+                label: getTranslatedLabel('plans.form.saudizationPercentYear', yearColumns()[i])
               }, itemControl.get('rowId')?.value)"
             >
               <p-inputnumber
@@ -772,7 +770,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(yearKey + '_saudization'))"
-              [label]="'Saudization % ' + yearColumns()[i]"
+              [label]="getTranslatedLabel('plans.form.saudizationPercentYear', yearColumns()[i])"
             />
           </td>
           }
@@ -785,7 +783,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'keyMeasuresToUpskillSaudis',
-                label: 'Key measures to upskill Saudis'
+                label: 'plans.form.keyMeasuresToUpskillSaudis'
               }, itemControl.get('rowId')?.value)"
             >
               <textarea
@@ -806,7 +804,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-              [label]="'Key measures to upskill Saudis'"
+              [label]="'plans.form.keyMeasuresToUpskillSaudis' | translate"
             />
           </td>
 
@@ -818,7 +816,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'mentionSupportRequiredFromSEC',
-                label: 'Support Required from SEC'
+                label: 'plans.form.supportRequiredFromSEC'
               }, itemControl.get('rowId')?.value)"
             >
               <textarea
@@ -839,7 +837,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
-              [label]="'Support Required from SEC'"
+              [label]="'plans.form.supportRequiredFromSEC' | translate"
             />
           </td>
         </ng-template>
@@ -859,7 +857,7 @@
       (valueChanged)="upDateSelectedInputs($event, {
         section: 'attachments',
         inputKey: 'attachments',
-        label: 'Attachments'
+        label: 'plans.form.attachments'
       })"
     >
       <app-fileupload
@@ -877,7 +875,7 @@
     </app-group-input-with-checkbox>
     <app-base-error-messages
       [control]="getValueControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
-      [label]="'Attachments'"
+      [label]="'plans.form.attachments' | translate"
       [customRequiredMessage]="'Attachment is required when Agreement Copy is selected as Yes'"
     />
   </div>
@@ -892,7 +890,7 @@
     [commentsCount]="selectedInputs().length"
     [(commentPhase)]="commentPhase"
     [commentFormControl]="commentFormControl"
-      [incomingCommentText]="incomingCommentText()"
+    [incomingCommentText]="incomingCommentText()"
     [isResubmitMode]="isResubmitMode()"
     [hasInvestorComment]="hasInvestorComment()"
     (deleteComments)="onDeleteComments()"
