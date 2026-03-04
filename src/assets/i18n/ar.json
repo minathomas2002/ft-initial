@@ -850,6 +850,7 @@
 			"addComment": "إضافة تعليق",
 			"clarifyFeedback": "أضف تعليقاً لتوضيح ملاحظاتك.",
 			"yourComment": "تعليقك",
+			"myComment": "التعليق",
 			"enterComment": "أدخل تعليقك",
 			"savedSuccess": "تم حفظ تعليقاتك بنجاح.",
 			"updatesSavedSuccess": "تم حفظ تحديثاتك بنجاح.",
@@ -1068,7 +1069,7 @@
 			"commentEmployeeComment": "تعليق الموظف",
 			"commentDivisionManagerComment": "تعليق مدير القسم",
 			"commentDepartmentManagerComment": "تعليق مدير الإدارة",
-			"commentComment": "تعليق"
+			"commentComment": "التعليق"
 		},
 		"errors": {
 			"cannotEdit": "لا يمكن تعديل الخطة في هذه الحالة"

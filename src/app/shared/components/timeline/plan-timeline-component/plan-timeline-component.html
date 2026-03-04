@@ -64,6 +64,7 @@
           }
         </label>
         <textarea
+          [class.rtl]="directionClass() === 'rtl'"
           pTextarea
           [value]="item.item.reason"
           disabled
@@ -84,9 +85,10 @@
 
         @if (comment.comment) {
         <div class="mt-1">
-          <label class="block text-sm text-[#414651] font-medium mb-1">{{ 'plans.comments.yourComment' | translate }}</label>
+          <label class="block text-sm text-[#414651] font-medium mb-1">{{ 'plans.options.commentComment' | translate }}</label>
           <textarea
             pTextarea
+            [class.text-right]="directionClass() === 'rtl'"
             [value]="comment.comment"
             disabled
             rows="3"
@@ -99,7 +101,6 @@
         <div
           class="mt-2 flex flex-row flex-wrap gap-2 justify-start"
           [class.[direction:rtl]]="directionClass() === 'rtl'"
-          [class.[direction:ltr]]="directionClass() === 'ltr'"
         >
           @for (field of comment.fields; track field) {
           <app-base-tag
