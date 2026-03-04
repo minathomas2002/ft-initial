@@ -10,7 +10,7 @@ import { LocalizationStrategySummarySection } from './step-summary-sections/loca
 import { EntityLevelSummarySection } from '../existing-saudi-step-summary/step-summary-sections/entity-level-summary-section/entity-level-summary-section';
 import { ServiceLevelSummarySection } from '../existing-saudi-step-summary/step-summary-sections/service-level-summary-section/service-level-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
@@ -29,7 +29,7 @@ import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 export class DirectLocalizationStepSummary extends SummaryStepBaseClass {
   private readonly servicePlanFormService = inject(ServicePlanFormService);
 
-  override readonly pageTitleForTL = 'Direct Localization';
+  override readonly pageTitleForTL = EPlanPageTitle.DirectLocalization;
   override readonly formGroup: FormGroup = this.servicePlanFormService.step4_directLocalization;
   doRefresh = signal(new Date());
   constructor() {

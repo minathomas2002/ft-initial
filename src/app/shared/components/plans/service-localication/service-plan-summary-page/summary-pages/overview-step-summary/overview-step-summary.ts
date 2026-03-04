@@ -12,7 +12,7 @@ import { OverviewLocationInformationSummarySection } from './step-summary-sectio
 import { OverviewLocalAgentInformationSummarySection } from './step-summary-sections/overview-local-agent-information-summary-section/overview-local-agent-information-summary-section';
 import { OverviewServiceDetailsSummarySection } from './step-summary-sections/overview-service-details-summary-section/overview-service-details-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
@@ -33,7 +33,7 @@ import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 export class OverviewStepSummary extends SummaryStepBaseClass {
   private readonly servicePlanFormService = inject(ServicePlanFormService);
 
-  override readonly pageTitleForTL = 'Overview';
+  override readonly pageTitleForTL = EPlanPageTitle.Overview;
   override readonly formGroup: FormGroup = this.servicePlanFormService.step2_overview;
 
   constructor() {

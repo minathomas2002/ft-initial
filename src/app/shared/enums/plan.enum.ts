@@ -123,15 +123,15 @@ export enum ECommentType {
 }
 
 export enum EPlanPageTitle {
-  OverviewAndCompanyInformation = 'Overview & Company Information',
-  ProductAndPlantOverview = 'Product & Plant Overview',
-  ValueChain = 'Value Chain',
-  Saudization = 'Saudization',
-  CoverPage = 'Cover Page',
-  Overview = 'Overview',
-  ExistingSaudi = 'Existing Saudi Co.',
-  DirectLocalization = 'Direct Localization',
-  Summary = 'Summary',
-  OpportunityInformation = 'Opportunity Information',
-  OpportunityLocalization = 'Opportunity Localization',
+  OverviewAndCompanyInformation = 'plans.wizard.step1.title',
+  ProductAndPlantOverview = 'plans.wizard.step2.title',
+  ValueChain = 'plans.wizard.step3.title',
+  Saudization = 'plans.wizard.step4.title',
+  CoverPage = 'plans.wizard.coverPage',
+  Overview = 'plans.wizard.stepTitles.overview',
+  ExistingSaudi = 'plans.wizard.stepTitles.existingSaudi',
+  DirectLocalization = 'plans.wizard.stepTitles.directLocalization',
+  Summary = 'plans.wizard.step5.title',
+  OpportunityInformation = 'opportunity.wizard.opportunityInformation',
+  OpportunityLocalization = 'opportunity.wizard.opportunityLocalization',
 }

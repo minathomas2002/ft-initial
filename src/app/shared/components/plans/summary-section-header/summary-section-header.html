@@ -1,6 +1,6 @@
 <div class="flex items-center justify-between">
   <div class="flex items-center gap-2">
-    <h2 class="text-lg font-semibold text-gray-900">{{ title() }}</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ title() | planPageTitle }}</h2>
   </div>
   @if(!hideEditButton()){
   <p-button

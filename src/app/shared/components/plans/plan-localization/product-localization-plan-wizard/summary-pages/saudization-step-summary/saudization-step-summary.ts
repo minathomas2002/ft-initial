@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { merge } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
@@ -28,7 +28,7 @@ import { AttachmentsSummarySection } from '../../../../attachments-summary-secti
 })
 export class SaudizationStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
-  readonly pageTitleForTL = this.i18nService.translate('plans.wizard.step4.title');
+  readonly pageTitleForTL = EPlanPageTitle.Saudization;
   formGroup = this.productPlanFormService.step4_saudization;
   doRefresh = signal(new Date());
 

@@ -34,7 +34,6 @@ export class ExistingSaudiStepSummary extends SummaryStepBaseClass {
   private readonly servicePlanFormService = inject(ServicePlanFormService);
 
   override readonly pageTitleForTL = EPlanPageTitle.ExistingSaudi;
-  readonly displayTitle = computed(() => this.i18nService.translate('plans.wizard.stepTitles.existingSaudi'));
   override readonly formGroup: FormGroup = this.servicePlanFormService.step3_existingSaudi;
 
   constructor() {

@@ -31,7 +31,6 @@ export class CoverPageStepSummary extends SummaryStepBaseClass {
   private readonly servicePlanFormService = inject(ServicePlanFormService);
 
   override readonly pageTitleForTL = EPlanPageTitle.CoverPage;
-  readonly displayTitle = computed(() => this.i18nService.translate('plans.wizard.coverPage'));
   override readonly formGroup: FormGroup = this.servicePlanFormService.step1_coverPage;
 
   private readonly _coverPageCompanyFormGroup = this.formGroup.get(EMaterialsFormControls.coverPageCompanyInformationFormGroup) as FormGroup;
