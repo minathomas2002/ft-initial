@@ -740,6 +740,7 @@
     "publish": "Publish"
   },
   "plans": {
+    "exportPlans":"Export Plans",
     "assign": "Assign",
     "title": "Plans",
     "submitNewPlan": "Submit New Plan",

@@ -317,5 +317,29 @@ export class PlansList extends PlanDashboardBase {
 
 
   }
+  exportPlans() {
+  this.planStore.exportPlans().pipe(take(1)).subscribe({
+    next: (blob: Blob) => {
+      debugger
+      if (!blob) {
+        this.toastService.error('No file returned from server');
+        return;
+      }
+      let fileName = 'Plans.csv';
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
 
+      this.toastService.success('Plans exported successfully.');
+    },
+    error: (error) => {
+      this.toastService.error(error.errorMessage || 'Error exporting plans');
+    }
+  });
+}
 }
