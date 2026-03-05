@@ -1,10 +1,11 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, computed, effect, ElementRef, input, OnDestroy, output, signal, viewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { BaseLabelComponent } from "../../base-components/base-label/base-label.component";
 
 @Component({
   selector: 'app-signature-pad',
-  imports: [ButtonModule, TranslatePipe],
+  imports: [ButtonModule, TranslatePipe, BaseLabelComponent],
   templateUrl: './signature-pad.component.html',
   styleUrl: './signature-pad.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -180,15 +181,12 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
       // This ensures a fresh canvas when switching from existing signature to drawing mode
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Load existing signature if available
-      // When changeSignature() is called, currentSignature is set to the existing signature
-      // so we load it onto the canvas for editing
-      const existing = this.existingSignature();
       const currentSig = this.currentSignature();
 
-      // Load signature if we have one (either from existingSignature input or currentSignature)
-      // This allows the user to modify the existing signature when they click "Change"
-      const signatureToLoad = currentSig || existing;
+      // Load signature from current state only.
+      // `changeSignature()` sets `currentSignature` to existing image so it can be edited.
+      // `clearSignature()` sets `currentSignature` to null, so canvas remains blank.
+      const signatureToLoad = currentSig;
       if (signatureToLoad) {
         this.loadSignature(signatureToLoad);
         // Ensure currentSignature is set so the clear button works
@@ -332,20 +330,32 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  clearSignature(): void {
-    const canvasRef = this.canvasRef();
-    if (!canvasRef) return;
+  clearSignature(emit = true): void {
+    // When clearing from "existing signature" mode, force canvas mode immediately.
+    // This avoids re-showing the old image while waiting for parent input to update.
+    this.userRequestedCanvasMode = true;
+    this.showCanvas.set(true);
+    this.canvasInitialized.set(false);
 
+    const canvasRef = this.canvasRef();
     // Clear the canvas if context is available
-    if (this.ctx) {
+    if (this.ctx && canvasRef) {
       const canvas = canvasRef.nativeElement;
       // Clear using canvas internal dimensions
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Clear the signature state and emit null
+    // Clear the signature state and optionally emit null
     this.currentSignature.set(null);
-    this.onSignatureChange.emit(null);
+    if (emit) {
+      this.onSignatureChange.emit(null);
+    }
+
+    // Reinitialize if view is ready and canvas is now visible
+    if (this.viewInitialized && this.showCanvas()) {
+      this.initRetryCount = 0;
+      this.scheduleInitialization();
+    }
   }
 
   changeSignature(): void {
@@ -440,6 +450,6 @@ export class SignaturePadComponent implements AfterViewInit, OnDestroy {
     if (this.documentMouseUpHandler) {
       document.removeEventListener('mouseup', this.documentMouseUpHandler);
     }
-    this.clearSignature();
+    this.clearSignature(false);
   }
 }
