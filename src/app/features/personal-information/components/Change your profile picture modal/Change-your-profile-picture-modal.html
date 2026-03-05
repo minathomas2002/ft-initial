@@ -34,14 +34,16 @@
         type="button"
         (onClick)="fileInput.click()"
       />
+      @if (!isImageNotSelectedPlaceholder()) {
       <p-button
         label="Delete"
         severity="danger"
         icon="icon-trash-2"
         text
-        [disabled]="isImageNotSelectedPlaceholder()"
         (onClick)="onDeleteUserPhotoClick()"
       />
+      }
+
     </div>
   </div>
 </app-base-dialog>
