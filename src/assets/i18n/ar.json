@@ -133,7 +133,8 @@
 	},
 	"profile": {
 		"messages": {
-			"profilePictureUpdated": "تم تحديث صورة الملف الشخصي بنجاح"
+			"profilePictureUpdated": "تم تحديث صورة الملف الشخصي بنجاح",
+			"profilePictureRemoved": "تم إزالة صورة الملف الشخصي بنجاح"
 		},
 		"deleteConfirm": {
 			"title": "حذف صورة الملف الشخصي",
@@ -144,6 +145,7 @@
 		"home": "الرئيسية",
 		"dashboard": "لوحة التحكم",
 		"profile": "الملف الشخصي",
+		"myProfile": "ملفي الشخصي",
 		"viewProfile": "عرض الملف الشخصي",
 		"signOut": "تسجيل الخروج",
 		"settings": "الإعدادات",
