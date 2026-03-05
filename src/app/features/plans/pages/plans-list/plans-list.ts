@@ -318,9 +318,8 @@ export class PlansList extends PlanDashboardBase {
 
   }
   exportPlans() {
-  this.planStore.exportPlans().pipe(take(1)).subscribe({
+  this.planStore.exportPlans(this.internalUsersFilterService.adpatedFilter()).pipe(take(1)).subscribe({
     next: (blob: Blob) => {
-      debugger
       if (!blob) {
         this.toastService.error('No file returned from server');
         return;

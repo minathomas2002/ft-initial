@@ -783,10 +783,10 @@ export const PlanStore = signalStore(
         );
       },
 
-      exportPlans(): Observable<Blob> {
+      exportPlans(filter: IPlanFilterRequest): Observable<Blob> {
         patchState(store, { isProcessing: true, error: null });
 
-        return planApiService.exportPlans().pipe(
+        return planApiService.exportPlans(filter).pipe(
           map((res:any) => {
             patchState(store, { isProcessing: false });
             return res.body!;
