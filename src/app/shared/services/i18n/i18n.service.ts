@@ -1,5 +1,6 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
 import { TranslateService } from './translate.service';
+import { TranslationKey } from 'src/app/core/i18n/translation-types';
 
 export type SupportedLanguage = 'en' | 'ar';
 
@@ -39,7 +40,7 @@ export class I18nService {
 	/**
 	 * Get translation by key
 	 */
-	translate(key: string, params?: Record<string, any>): string {
+	translate(key: TranslationKey, params?: Record<string, any>): string {
 		const translation = this.getNestedTranslation(key);
 		if (!translation) {
 			return key;
