@@ -139,7 +139,8 @@
   },
   "profile": {
     "messages": {
-      "profilePictureUpdated": "Profile picture updated successfully"
+      "profilePictureUpdated": "Profile picture updated successfully",
+      "profilePictureRemoved": "Profile picture removed successfully"
     },
     "deleteConfirm": {
       "title": "Delete profile picture",
@@ -150,6 +151,7 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "profile": "Profile",
+    "myProfile": "My Profile",
     "viewProfile": "View profile",
     "signOut": "Sign out",
     "settings": "Settings",
