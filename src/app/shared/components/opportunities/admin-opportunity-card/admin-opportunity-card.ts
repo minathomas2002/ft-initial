@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { IAdminOpportunity } from '../../../interfaces/admin-opportunities.interface';
 import { EOpportunityStatus, EOpportunityState, EOpportunityAction } from '../../../enums/opportunities.enum';
 import { TranslatePipe } from '../../../pipes';
@@ -22,7 +22,8 @@ import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-too
     BaseTagComponent,
     OpportunityDetailItem,
     OpportunityActionMenuComponent,
-    TruncateTooltipDirective
+    TruncateTooltipDirective,
+    NgClass
   ],
   templateUrl: './admin-opportunity-card.html',
   styleUrl: './admin-opportunity-card.scss',
