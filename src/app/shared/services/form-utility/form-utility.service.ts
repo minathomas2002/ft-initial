@@ -92,6 +92,7 @@ export class FormUtilityService {
               } else if (nestedChild instanceof FormControl) {
                 // Count if control is invalid AND (dirty)
                 if ((nestedChild.dirty) && nestedChild.invalid) {
+                  console.log(nestedChild);
                   errorCount++;
                 }
               }
@@ -99,6 +100,7 @@ export class FormUtilityService {
           } else if (child instanceof FormControl) {
             // Count if control is invalid AND (dirty)
             if ((child.dirty) && child.invalid) {
+              console.log(child);
               errorCount++;
             }
           }
@@ -110,6 +112,7 @@ export class FormUtilityService {
       if (control instanceof FormControl) {
         // Count if control is invalid AND (dirty OR touched)
         if ((control.dirty) && control.invalid) {
+          console.log(control);
           errorCount++;
         }
       }

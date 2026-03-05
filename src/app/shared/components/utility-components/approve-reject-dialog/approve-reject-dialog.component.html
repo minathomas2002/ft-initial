@@ -17,19 +17,13 @@
       <h2 class="text-lg font-semibold text-gray-900">{{title()}}</h2>
     </div>
     @if (showSignaturePad()) {
-      <!-- Signature Field -->
-      <div class="form-field signature-field">
-        <label class="form-label">
-          {{ 'plans.submission.drawSignature' | translate }}
-          @if (signatureRequired()) {
-            <span class="required">*</span>
-          }
-        </label>
-        <app-signature-pad
-          [existingSignature]="existingSignature()"
-          (onSignatureChange)="onSignatureChange($event)"
-        />
-      </div>
+    <!-- Signature Field -->
+    <div class="form-field signature-field">
+      <app-signature-pad
+        [existingSignature]="existingSignature()"
+        (onSignatureChange)="onSignatureChange($event)"
+      />
+    </div>
     }
 
     <div class="mt-4">
