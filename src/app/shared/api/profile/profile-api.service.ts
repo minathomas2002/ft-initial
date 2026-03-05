@@ -24,7 +24,11 @@ export class ProfileApiService {
   }
 
   changePassword(request: IChangePasswordRequest): Observable<IBaseApiResponse<void>> {
-    return this.http.post<IBaseApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.profile.changePassword}`, request);
+    return this.http.post<IBaseApiResponse<void>>(
+      `${this.baseUrl}/${API_ENDPOINTS.profile.changePassword}`,
+      request,
+      { withCredentials: true }
+    );
   }
 
   updateProfilePic(request: IUpdateProfilePicRequest): Observable<IBaseApiResponse<boolean>> {
