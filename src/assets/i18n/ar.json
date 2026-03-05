@@ -27,7 +27,11 @@
 		"signIn": "تسجيل الدخول",
 		"signUp": "إنشاء حساب",
     "viewDetails" :"عرض التفاصيل",
-    "viewDetailsHint" :"هذا نص تلميحي لمساعدة المستخدم,"
+    "viewDetailsHint" :"هذا نص تلميحي لمساعدة المستخدم,",
+    "CreatorName": "اسم المُنشئ",
+    "CreationDate": "تاريخ الإنشاء",
+    "LastModifiedBy": "آخر تعديل بواسطة",
+    "LastModifiedDate": "تاريخ آخر تعديل"
 	},
 	"footer": {
 		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
