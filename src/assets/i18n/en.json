@@ -29,7 +29,9 @@
     "days": "day(s)",
     "files": "Files",
     "clickToUpload": "Click to upload",
-    "dragAndDrop": "or drag and drop"
+    "dragAndDrop": "or drag and drop",
+    "viewDetails":"View Details",
+    "viewDetailsHint":"This is a hint text to help user,"
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",

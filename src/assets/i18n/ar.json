@@ -25,7 +25,9 @@
 		"language": "اللغة",
 		"searchCountry": "البحث عن البلد...",
 		"signIn": "تسجيل الدخول",
-		"signUp": "إنشاء حساب"
+		"signUp": "إنشاء حساب",
+    "viewDetails" :"عرض التفاصيل",
+    "viewDetailsHint" :"هذا نص تلميحي لمساعدة المستخدم,"
 	},
 	"footer": {
 		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
