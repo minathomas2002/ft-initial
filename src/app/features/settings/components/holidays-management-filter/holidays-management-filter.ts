@@ -11,10 +11,24 @@ import { HolidaysTypeMapper } from '../../classes/holidays-type-mapper';
 import { MultiSelectModule } from "primeng/multiselect";
 import { DatePicker } from "primeng/datepicker";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ButtonModule } from 'primeng/button';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'app-holidays-management-filter',
-  imports: [IconField, InputIconModule, TranslatePipe, FormsModule, InputTextModule, MultiSelectModule, DatePicker],
+  imports: [
+    IconField,
+    InputIconModule,
+    TranslatePipe,
+    FormsModule,
+    InputTextModule,
+    MultiSelectModule,
+    DatePicker,
+    ButtonModule,
+    OverlayBadgeModule,
+    BadgeModule,
+  ],
   templateUrl: './holidays-management-filter.html',
   styleUrl: './holidays-management-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,5 +68,11 @@ export class HolidaysManagementFilter implements OnInit {
   onSearchTextChange(value: string) {
     this.holidaysFilterService.updateFilterSignal({ searchText: value, pageNumber: 1 });
     this.holidaySearchSubject.next(value ?? '');
+  }
+
+  onClearFilters() {
+    this.onSearchTextChange('');
+    this.holidaysFilterService.clearAllFilters();
+    this.holidaysFilterService.updateFilterSignal({ searchText: '' });
   }
 }

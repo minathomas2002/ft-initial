@@ -25,7 +25,24 @@ export class HolidaysFilterService extends AbstractServiceFilter<IHolidayManagem
   });
 
   showClearAll = computed(() => {
-    return false;
+    const current = this.filter();
+    const hasSearch = Boolean(current.searchText?.trim());
+    const hasTypeIds = Array.isArray(current.typeIds) ? current.typeIds.length > 0 : false;
+    const hasDateRange = current.dateRange?.length === 2;
+    const hasYear = Boolean(current.year);
+
+    return hasSearch || hasTypeIds || hasDateRange || hasYear;
+  });
+
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const typeIdsCount = Array.isArray(current.typeIds) ? current.typeIds.length : 0;
+    const dateRangeCount = current.dateRange?.length === 2 ? 1 : 0;
+    const yearCount = current.year ? 1 : 0;
+
+    return searchCount + typeIdsCount + dateRangeCount + yearCount;
   });
 
   performFilter$() {

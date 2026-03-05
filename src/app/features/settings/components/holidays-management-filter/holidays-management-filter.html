@@ -1,60 +1,83 @@
-<div class="grid grid-cols-12 gap-4">
+<div class="flex flex-col md:flex-row gap-4">
+  <div class="grid grid-cols-12 gap-4 flex-1">
+    <div class="col-span-12 md:col-span-3">
+      <p-iconfield>
+        <p-inputicon
+          inputId="users-search"
+          class="icon-search"
+        />
+        <input
+          class="w-full"
+          type="text"
+          pInputText
+          [disabled]="disableFilterInputs()"
+          [placeholder]="'setting.adminView.holidays.table.filter.searchKeyPlaceHolder' | translate"
+          [ngModel]="filter().searchText"
+          (ngModelChange)="onSearchTextChange($event)"
+        />
+      </p-iconfield>
+    </div>
 
-  <div class="col-span-12 md:col-span-3">
-    <p-iconfield>
-      <p-inputicon
-        inputId="users-search"
-        class="icon-search"
+    <div class="col-span-12 md:col-span-3">
+      <p-multiselect
+        [options]="holidayTypes()"
+        [(ngModel)]="filter().typeIds"
+        optionLabel="label"
+        optionValue="value"
+        [placeholder]="'setting.adminView.holidays.table.type' | translate"
+        display="chip"
+        dropdownIcon="icon-chevron-down"
+        fluid
+        (ngModelChange)="holidaysFilterService.applyFilterWithPaging()"
+      >
+      </p-multiselect>
+    </div>
+
+    <div class="col-span-12 md:col-span-3">
+      <p-datepicker
+        [showIcon]="true"
+        [showTime]="false"
+        [(ngModel)]="filter().dateRange"
+        (ngModelChange)="onPickerChange($event)"
+        [selectionMode]="'range'"
+        [placeholder]="'setting.adminView.holidays.table.filter.dateRangePlaceHolder' | translate"
+        [dateFormat]="'dd M yy'"
+        fluid
       />
-      <input
-        class="w-full"
-        type="text"
-        pInputText
-        [disabled]="disableFilterInputs()"
-        [placeholder]="'setting.adminView.holidays.table.filter.searchKeyPlaceHolder' | translate"
-        [(ngModel)]="filter().searchText"
-        (ngModelChange)="holidaySearchSubject.next(filter().searchText??'')"
+    </div>
+    <div class="col-span-12 md:col-span-3">
+      <p-datepicker
+        [showIcon]="true"
+        [showTime]="false"
+        [(ngModel)]="filter().year"
+        (ngModelChange)="holidaysFilterService.applyFilterWithPaging()"
+        [placeholder]="'setting.adminView.holidays.table.filter.year' | translate"
+        view="year"
+        dateFormat="yy"
+        fluid
       />
-    </p-iconfield>
+    </div>
   </div>
 
-  <div class="col-span-12 md:col-span-3">
-    <p-multiselect
-      [options]="holidayTypes()"
-      [(ngModel)]="filter().typeIds"
-      optionLabel="label"
-      optionValue="value"
-      [placeholder]="'setting.adminView.holidays.table.type' | translate"
-      display="chip"
-      dropdownIcon="icon-chevron-down"
-      fluid
-      (ngModelChange)="holidaysFilterService.applyFilterWithPaging()"
-    >
-    </p-multiselect>
+  @if(holidaysFilterService.showClearAll()) {
+  <div>
+    <div class="flex h-full items-center md:justify-end">
+      <p-overlaybadge
+        [value]="holidaysFilterService.activeFiltersCount()"
+        severity="danger"
+        class="filter-reset-badge"
+      >
+        <p-button
+          [severity]="'secondary'"
+          (click)="onClearFilters()"
+          [rounded]="true"
+          [icon]="'icon-reload'"
+          [outlined]="true"
+          [ariaLabel]="'plans.filter.reset' | translate"
+        >
+        </p-button>
+      </p-overlaybadge>
+    </div>
   </div>
-
-  <div class="col-span-12 md:col-span-3">
-    <p-datepicker
-      [showIcon]="true"
-      [showTime]="false"
-      [(ngModel)]="filter().dateRange"
-      (ngModelChange)="onPickerChange($event)"
-      [selectionMode]="'range'"
-      [placeholder]="'setting.adminView.holidays.table.filter.dateRangePlaceHolder' | translate"
-      [dateFormat]="'dd M yy'"
-      fluid
-    />
-  </div>
-  <div class="col-span-12 md:col-span-3">
-    <p-datepicker
-      [showIcon]="true"
-      [showTime]="false"
-      [(ngModel)]="filter().year"
-      (ngModelChange)="holidaysFilterService.applyFilterWithPaging()"
-      [placeholder]="'setting.adminView.holidays.table.filter.year' | translate"
-      view="year"
-      dateFormat="yy"
-      fluid
-    />
-  </div>
+  }
 </div>

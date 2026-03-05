@@ -23,6 +23,25 @@ export class EmployeesFilterService extends AbstractServiceFilter<ISystemEmploye
     };
   });
 
+  showClearAll = computed(() => {
+    const current = this.filter();
+    const hasSearch = Boolean(current.searchText?.trim());
+    const hasRoleIds = Array.isArray(current.roleIds) ? current.roleIds.length > 0 : false;
+    const hasStatuses = Array.isArray(current.statusFilters) ? current.statusFilters.length > 0 : false;
+
+    return hasSearch || hasRoleIds || hasStatuses;
+  });
+
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const roleIdsCount = Array.isArray(current.roleIds) ? current.roleIds.length : 0;
+    const statusesCount = Array.isArray(current.statusFilters) ? current.statusFilters.length : 0;
+
+    return searchCount + roleIdsCount + statusesCount;
+  });
+
   performFilter$() {
     this.resetPagination();
     return this.store.getSystemEmployeesList(this.adaptedFilter());

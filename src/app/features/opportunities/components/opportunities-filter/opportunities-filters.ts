@@ -8,6 +8,9 @@ import { SelectModule } from 'primeng/select';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, catchError, of } from 'rxjs';
 import { OpportunitiesFilterService } from '../../services/opportunities-filter/investor-opportunities-filter-service';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { ButtonModule } from 'primeng/button';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 
 
 @Component({
@@ -18,7 +21,10 @@ import { TranslatePipe } from 'src/app/shared/pipes';
     FormsModule,
     InputTextModule,
     SelectModule,
-    TranslatePipe
+    TranslatePipe,
+    ButtonModule,
+    OverlayBadgeModule,
+    BadgeModule
   ],
   templateUrl: './opportunities-filters.html',
   styleUrl: './opportunities-filters.scss',
@@ -49,5 +55,16 @@ export class OpportunitiesFilters {
 
   performFilter$() {
     return this.filterService.performFilter$().pipe(catchError((error) => of(error)));
+  }
+
+  onSearchTextChange(value: string) {
+    this.filterService.updateFilterSignal({ searchText: value, pageNumber: 1 });
+    this.searchSubject.next(value ?? '');
+  }
+
+  onClearFilters() {
+    this.onSearchTextChange('');
+    this.filterService.clearAllFilters();
+    this.filterService.updateFilterSignal({ searchText: '' });
   }
 }

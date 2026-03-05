@@ -15,7 +15,13 @@ export class OpportunitiesFilterService extends AbstractServiceFilter<IOpportuni
   filter = signal(this.filterClass.filter);
 
   showClearAll = computed(() => {
-    return false;
+    const current = this.filter();
+    return Boolean(current.searchText?.trim());
+  });
+
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+    return current.searchText?.trim() ? 1 : 0;
   });
 
   performFilter$() {
