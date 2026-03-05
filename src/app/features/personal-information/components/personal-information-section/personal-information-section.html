@@ -1,6 +1,7 @@
 <app-personal-information-card
   [sectionTitle]="'Personal Information'"
   [sectionDescription]="isInvestor() ? 'Update your personal details here.' : 'View your personal details here.'"
+  [submitActionLabel]="'Update'"
   [hideFooter]="!isInvestor() || isViewMode()"
   (onCancelClicked)="onCancelClick()"
   (onSubmit)="onSubmit()"
