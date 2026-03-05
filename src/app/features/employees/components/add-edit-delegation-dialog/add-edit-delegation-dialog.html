@@ -4,7 +4,7 @@
   [confirmLabel]="'common.save' | translate"
   [confirmButtonClass]="'w-[100px]'"
   [cancelButtonClass]="'w-[80px]'"
-  [isConfirmationDisabled]="formService.form.invalid || isProcessing()"
+  [isConfirmationDisabled]="formService.form.invalid || isProcessing()|| !formService.form.dirty"
   (onConfirm)="onConfirm()"
   (onClose)="resetForm()"
   (onCancel)="resetForm()"
