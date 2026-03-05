@@ -25,6 +25,15 @@ export class InvestorsFilterService extends AbstractServiceFilter<IInvestorsFilt
     return Boolean(current.searchText?.trim()) || Boolean(current.joinDate);
   });
 
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const joinDateCount = current.joinDate?.length === 2 ? 1 : 0;
+
+    return searchCount + joinDateCount;
+  });
+
   performFilter$() {
     this.resetPagination();
     return this.store.getInvestorsList(this.adpatedFilter());

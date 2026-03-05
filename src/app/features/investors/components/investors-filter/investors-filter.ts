@@ -6,10 +6,13 @@ import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InvestorsFilterService } from '../../services/investors-filter/investors-filter-service';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { ButtonModule } from 'primeng/button';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'app-investors-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, TranslatePipe],
+  imports: [FormsModule, InputTextModule, DatePickerModule, TranslatePipe, ButtonModule, OverlayBadgeModule, BadgeModule],
   templateUrl: './investors-filter.html',
   styleUrl: './investors-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

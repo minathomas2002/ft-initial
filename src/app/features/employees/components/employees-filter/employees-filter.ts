@@ -14,6 +14,8 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { UserStatusMapper } from '../../classes/user-status-mapper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'app-employees-filter',
@@ -25,6 +27,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MultiSelectModule,
     ButtonModule,
     TranslatePipe,
+    OverlayBadgeModule,
+    BadgeModule,
   ],
   templateUrl: './employees-filter.html',
   styleUrl: './employees-filter.scss',
@@ -68,6 +72,17 @@ export class EmployeesFilter {
 
   applyFilter() {
     this.employeesFilterService.applyFilter();
+  }
+
+  onSearchTextChange(value: string) {
+    this.employeesFilterService.updateFilterSignal({ searchText: value, pageNumber: 1 });
+    this.employeeSearchSubject.next(value ?? '');
+  }
+
+  onClearFilters() {
+    this.onSearchTextChange('');
+    this.employeesFilterService.clearAllFilters();
+    this.employeesFilterService.updateFilterSignal({ searchText: '' });
   }
 }
 

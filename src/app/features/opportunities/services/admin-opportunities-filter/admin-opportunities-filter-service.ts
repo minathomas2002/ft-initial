@@ -25,6 +25,17 @@ export class AdminOpportunitiesFilterService extends AbstractServiceFilter<IAdmi
     return current.searchText || current.state || current.opportunityType || current.status ? true : false;
   });
 
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const stateCount = current.state !== undefined ? 1 : 0;
+    const opportunityTypeCount = current.opportunityType !== undefined ? 1 : 0;
+    const statusCount = current.status !== undefined ? 1 : 0;
+
+    return searchCount + stateCount + opportunityTypeCount + statusCount;
+  });
+
   performFilter$() {
     this.resetPagination();
     return this.store.getAdminOpportunities(this.adaptedFilter());

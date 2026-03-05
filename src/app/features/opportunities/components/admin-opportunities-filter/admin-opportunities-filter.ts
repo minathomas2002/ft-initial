@@ -12,6 +12,8 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { EOpportunityState, EOpportunityStatus, EOpportunityType } from 'src/app/shared/enums';
 import { AdminOpportunitiesFilterService } from '../../services/admin-opportunities-filter/admin-opportunities-filter-service';
 import { ButtonModule } from 'primeng/button';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 @Component({
   selector: 'app-admin-opportunities-filter',
   imports: [
@@ -21,7 +23,9 @@ import { ButtonModule } from 'primeng/button';
     InputTextModule,
     SelectModule,
     TranslatePipe,
-    ButtonModule
+    ButtonModule,
+    OverlayBadgeModule,
+    BadgeModule,
   ],
   templateUrl: './admin-opportunities-filter.html',
   styleUrl: './admin-opportunities-filter.scss',
@@ -100,10 +104,15 @@ export class AdminOpportunitiesFilter {
     return this.adminOpportunitiesFilterService.performFilter$().pipe(catchError((error) => of(error)));
   }
 
+  onSearchTextChange(value: string) {
+    this.adminOpportunitiesFilterService.updateFilterSignal({ searchText: value, pageNumber: 1 });
+    this.searchSubject.next(value ?? '');
+  }
+
   onClearFilters() {
+    this.onSearchTextChange('');
     this.adminOpportunitiesFilterService.clearAllFilters();
     this.adminOpportunitiesFilterService.updateFilterSignal({ searchText: '' });
-    this.searchSubject.next('');
   }
 
 }
