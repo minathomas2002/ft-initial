@@ -163,8 +163,8 @@ export class PlanApiService {
   }
 
 
- exportPlans(): Observable<HttpResponse<Blob>> {
-   return this.http.post(`${this.baseUrl}/` + API_ENDPOINTS.plans.exportPlans, {}, {
+ exportPlans(filter: IPlanFilterRequest): Observable<HttpResponse<Blob>> {
+   return this.http.post(`${this.baseUrl}/` + API_ENDPOINTS.plans.exportPlans, filter, {
     responseType: 'blob',
     observe: 'response',
   });
