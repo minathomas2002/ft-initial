@@ -222,7 +222,7 @@
     },
     "deleteConfirm": {
       "title": "Delete profile picture",
-      "description": "Are you sure you want to delete your profile picture? This action cannot be undone."
+      "description": "Are you sure you want to delete your profile picture?"
     }
   },
   "navigation": {
