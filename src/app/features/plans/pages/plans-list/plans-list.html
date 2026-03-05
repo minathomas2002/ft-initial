@@ -14,11 +14,11 @@
       />
     </ng-container>}
     @else {
-       <ng-container ngProjectAs="table-actions">
+    <ng-container ngProjectAs="table-actions">
       <p-button
-        [severity]="'secondary'"
+        [severity]="'primary'"
         [label]="'plans.exportPlans' | translate"
-        [icon]="'icon-file-text'"
+        [icon]="'icon-download'"
         [size]="'small'"
         (onClick)="exportPlans()"
       />
