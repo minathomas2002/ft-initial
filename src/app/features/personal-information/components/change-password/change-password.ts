@@ -62,8 +62,9 @@ export class ChangePassword {
       return;
     }
 
-    const currentRefreshToken = localStorage.getItem('refreshToken');
+    const auth_data = localStorage.getItem('auth_data');
 
+    const currentRefreshToken = auth_data ? JSON.parse(auth_data).refreshToken : null;
     
 
     const request = {
