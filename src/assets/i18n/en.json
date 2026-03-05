@@ -1426,7 +1426,7 @@
     "dialog": {
       "send": "Send",
       "title": "Title",
-      "titlePlaceholder": "Enter the subject of your message",
+      "titlePlaceholder": "Enter title",
       "description": "Description",
       "descriptionPlaceholder": "Provide a detailed description of your inquiry or feedback",
       "contactUs": "Contact Us",
