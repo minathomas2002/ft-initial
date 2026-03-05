@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, effect, input, model, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, effect, input, model, DestroyRef, OnInit } from '@angular/core';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, AbstractControl, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -51,7 +51,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
   styleUrl: './service-localization-step-existing-saudi.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
+export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass implements OnInit {
   isViewMode = input<boolean>(false);
   isReviewMode = input<boolean>(false);
 
@@ -266,6 +266,17 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
 
   protected override readonly destroyRef = inject(DestroyRef);
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+    // Setup dynamic attachments validation based on "Provide Agreement Copy".
+    // Runs every time the step is shown (component is recreated on tab navigation),
+    // ensuring the required attachment indicator persists after navigating between tabs.
+    if (!this._attachmentsRequirementSetup) {
+      this.setupAttachmentsRequiredByAgreementCopy();
+      this._attachmentsRequirementSetup = true;
+    }
+  }
+
   // Implement abstract method from base class
   override getFormGroup(): FormGroup {
     return this.formGroup;
@@ -361,12 +372,6 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass {
       if (!this._conditionalFieldsSetup) {
         this.setupConditionalFields();
         this._conditionalFieldsSetup = true;
-      }
-
-      // Setup dynamic attachments validation based on "Provide Agreement Copy" (only once)
-      if (!this._attachmentsRequirementSetup) {
-        this.setupAttachmentsRequiredByAgreementCopy();
-        this._attachmentsRequirementSetup = true;
       }
 
       // Always keep BENA Registered Vendor ID disabled (all rows).

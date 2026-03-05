@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { IOpportunityLocalizationTablesValidationResponse } from 'src/app/shared/interfaces/opportunities.interface';
@@ -15,6 +16,7 @@ import { PlanLocalizationStep4SaudizationFormBuilder } from './steps/plan-locali
 export class ProductPlanFormService {
   private readonly _fb = inject(FormBuilder);
   private readonly _planStore = inject(PlanStore);
+  private readonly _profileStore = inject(ProfileStore);
   private readonly _opportunitiesStore = inject(OpportunitiesStore);
   private initialFormValue!: any;
 
@@ -376,6 +378,8 @@ export class ProductPlanFormService {
     // Reset Step 4: Saudization
     this._step4FormGroup.reset();
 
+    this.applyRegisteredVendorIdFromProfileStore();
+
     // Mark all forms as pristine and untouched
     this._step1FormGroup.markAsPristine();
     this._step1FormGroup.markAsUntouched();
@@ -405,6 +409,23 @@ export class ProductPlanFormService {
   hasFormChanged(): boolean {
     return JSON.stringify(this.initialFormValue) !==
       JSON.stringify(this.getAllFormsRawValue());
+  }
+
+  /**
+   * Apply registeredVendorIDwithSEC from ProfileStore.secRegisteredId to overview location information.
+   * Used in create mode (and when profile is loaded after reset).
+   */
+  applyRegisteredVendorIdFromProfileStore(): void {
+    const secValue = this._profileStore.userProfile()?.secRegisteredId ?? '';
+    if (!secValue) return;
+
+    const locationInfo = this.locationInformationFormGroup;
+    const secControl = locationInfo?.get(
+      `${EMaterialsFormControls.registeredVendorIDwithSEC}.${EMaterialsFormControls.value}`
+    );
+    if (secControl) {
+      secControl.setValue(secValue, { emitEvent: false });
+    }
   }
 
   /* ------------------------------------------------ */

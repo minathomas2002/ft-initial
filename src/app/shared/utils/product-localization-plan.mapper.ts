@@ -484,7 +484,8 @@ function setPhoneValue(formGroup: FormGroup | null, controlName: string, phoneSt
 
 export function mapProductPlanResponseToForm(
   response: IProductPlanResponse,
-  formService: ProductPlanFormService
+  formService: ProductPlanFormService,
+  options?: { storeSecRegisteredId?: string | null }
 ): void {
   const { productPlan, signature } = response;
 
@@ -539,7 +540,8 @@ export function mapProductPlanResponseToForm(
   if (locationInfoForm && productPlan.overviewCompanyInfo?.locationInfo) {
     const locationInfo = productPlan.overviewCompanyInfo.locationInfo;
     setFormGroupValue(locationInfoForm, EMaterialsFormControls.globalHQLocation, locationInfo.globalHQLocation);
-    setFormGroupValue(locationInfoForm, EMaterialsFormControls.registeredVendorIDwithSEC, locationInfo.vendorIdWithSEC || null);
+    const overviewSecVendorId = (locationInfo.vendorIdWithSEC?.trim() ? locationInfo.vendorIdWithSEC : options?.storeSecRegisteredId) ?? null;
+    setFormGroupValue(locationInfoForm, EMaterialsFormControls.registeredVendorIDwithSEC, overviewSecVendorId);
     locationInfoForm.get(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA)?.setValue(locationInfo.hasLocalAgent ?? null);
 
     // Toggle local agent validation based on hasLocalAgent

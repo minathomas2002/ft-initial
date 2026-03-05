@@ -10,7 +10,7 @@ import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interfa
 import { PlanStore } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
-import { switchMap, catchError, finalize, of, map, tap, combineLatest, EMPTY, distinctUntilChanged, Observable } from "rxjs";
+import { switchMap, catchError, finalize, of, map, tap, combineLatest, EMPTY, distinctUntilChanged, Observable, take } from "rxjs";
 import { ToasterService } from "src/app/shared/services/toaster/toaster.service";
 import { EMaterialsFormControls, EOpportunityType, EPlanPageTitle } from "src/app/shared/enums";
 import { SubmissionConfirmationModalComponent } from "../../submission-confirmation-modal/submission-confirmation-modal.component";
@@ -31,6 +31,7 @@ import { ERoles } from "src/app/shared/enums/roles.enum";
 import { EInvestorPlanStatus } from "src/app/shared/interfaces/dashboard-plans.interface";
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { ProductPlanSummaryPage } from "../product-plan-summary-page/product-plan-summary-page";
 import { WizardActionFactory } from "src/app/shared/services/wizard/wizard-action-factory";
 import { SkeletonModule } from "primeng/skeleton";
@@ -77,6 +78,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   readonly opportunitiesStore = inject(OpportunitiesStore);
   readonly productPlanFormService = inject(ProductPlanFormService);
+  private readonly profileStore = inject(ProfileStore);
   override readonly toasterService = inject(ToasterService);
   override readonly planStore = inject(PlanStore);
   readonly validationService = inject(ProductPlanValidationService);
@@ -660,6 +662,11 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           const appliedOpportunity = this.planStore.appliedOpportunity();
           if (appliedOpportunity) this.initializeOpportunityFromApplied();
           else this.loadAvailableOpportunities();
+          this.profileStore.getUserProfile().pipe(take(1)).subscribe({
+            next: () => {
+              this.productPlanFormService.applyRegisteredVendorIdFromProfileStore();
+            },
+          });
         }
         return EMPTY;
       }),
@@ -805,7 +812,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     }
 
     // Map response to form
-    mapProductPlanResponseToForm(response, this.productPlanFormService);
+    const storeSecRegisteredId = this.profileStore.userProfile()?.secRegisteredId ?? null;
+    mapProductPlanResponseToForm(response, this.productPlanFormService, { storeSecRegisteredId });
 
     // Store signature for summary display (view/edit modes)
     this.planSignature.set(response.signature ?? null);
