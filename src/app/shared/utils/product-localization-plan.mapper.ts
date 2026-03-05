@@ -640,7 +640,14 @@ export function mapProductPlanResponseToForm(
     // SEC fields
     if (mfgExp.provideToSEC) {
       setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.qualifiedPlantLocationSEC, mfgExp.qualifiedPlantLocation_SEC);
-      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.approvedVendorIDSEC, mfgExp.approvedVendorId_SEC);
+      const planApprovedVendorId = mfgExp.approvedVendorId_SEC;
+      const planHasApprovedVendorId = planApprovedVendorId != null && String(planApprovedVendorId).trim() !== '';
+      const approvedVendorIdSec = planHasApprovedVendorId
+        ? (typeof planApprovedVendorId === 'number' ? planApprovedVendorId : parseInt(String(planApprovedVendorId), 10))
+        : (options?.storeSecRegisteredId?.trim()
+          ? (parseInt(options.storeSecRegisteredId, 10) || 0)
+          : planApprovedVendorId);
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.approvedVendorIDSEC, approvedVendorIdSec);
       setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.yearsOfExperienceSEC, mfgExp.yearsExperience_SEC);
       setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.totalQuantitiesSEC, mfgExp.totalQuantitiesToSEC);
     }

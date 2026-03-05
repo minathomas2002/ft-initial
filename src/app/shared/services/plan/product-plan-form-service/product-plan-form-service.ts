@@ -81,6 +81,9 @@ export class ProductPlanFormService {
   // Step 2 methods
   toggleSECFieldsValidation(provideToSEC: boolean): void {
     this._step2Builder.toggleSECFieldsValidation(this._step2FormGroup, provideToSEC);
+    if (provideToSEC) {
+      this.applyApprovedVendorIdFromProfileStoreWhenEmpty();
+    }
   }
 
   toggleLocalSuppliersFieldsValidation(provideToLocalSuppliers: boolean): void {
@@ -412,7 +415,7 @@ export class ProductPlanFormService {
   }
 
   /**
-   * Apply registeredVendorIDwithSEC from ProfileStore.secRegisteredId to overview location information.
+   * Apply registeredVendorIDwithSEC and approvedVendorIDSEC from ProfileStore.secRegisteredId.
    * Used in create mode (and when profile is loaded after reset).
    */
   applyRegisteredVendorIdFromProfileStore(): void {
@@ -425,6 +428,32 @@ export class ProductPlanFormService {
     );
     if (secControl) {
       secControl.setValue(secValue, { emitEvent: false });
+    }
+
+    this.applyApprovedVendorIdFromProfileStoreWhenEmpty();
+  }
+
+  /**
+   * Set approvedVendorIDSEC from ProfileStore.secRegisteredId when the field is empty (0 or null).
+   * Called when provideToSEC becomes true so create mode gets the value when user enables the section.
+   */
+  private applyApprovedVendorIdFromProfileStoreWhenEmpty(): void {
+    const secValue = this._profileStore.userProfile()?.secRegisteredId ?? '';
+    if (!secValue) return;
+
+    const manufacturingExpForm = this.productManufacturingExperienceFormGroup;
+    const approvedVendorControl = manufacturingExpForm?.get(
+      `${EMaterialsFormControls.approvedVendorIDSEC}.${EMaterialsFormControls.value}`
+    );
+    if (!approvedVendorControl) return;
+
+    const currentValue = approvedVendorControl.value;
+    const isEmpty = currentValue == null || currentValue === '' || currentValue === 0;
+    if (!isEmpty) return;
+
+    const numValue = parseInt(secValue, 10);
+    if (!isNaN(numValue)) {
+      approvedVendorControl.setValue(numValue, { emitEvent: false });
     }
   }
 
