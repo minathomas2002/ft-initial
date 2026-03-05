@@ -72,7 +72,7 @@
           fluid
         />
          @if(opportunityControlSignal()){
-            <div>{{`common.viewDetailsHint`|translate}} <a style="color: blue; text-decoration: underline;" target="_blank" [href]="`/opportunities/${opportunityControlSignal()?.id}`">{{`common.viewDetails`|translate}}</a></div>
+            <div>{{`common.viewDetailsHint`|translate}} <a class="text-primary-500" style="text-decoration: underline;" target="_blank" [href]="`/opportunities/${opportunityControlSignal()?.id}`">{{`common.viewDetails`|translate}}</a></div>
           }
        <app-base-error-messages
           [control]="getFormControl(basicInformationFormGroupControls['opportunity'])"
