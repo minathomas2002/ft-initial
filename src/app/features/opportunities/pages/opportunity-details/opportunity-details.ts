@@ -35,6 +35,7 @@ import { opportunityImagePlaceholder } from './opportunity-image-placeholder';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { opportunityUnitsMapper } from '../../classes/opportunity-units-mapper';
+import { OpportunityAuditDetails } from "./opportunity-audit-details/opportunity-audit-details";
 
 @Component({
   selector: 'app-opportunity-details',
@@ -52,8 +53,9 @@ import { opportunityUnitsMapper } from '../../classes/opportunity-units-mapper';
     ImageErrorDirective,
     ProductLocalizationPlanWizard,
     ServiceLocalizationPlanWizard,
-    PlanTermsAndConditionsDialog
-  ],
+    PlanTermsAndConditionsDialog,
+    OpportunityAuditDetails
+],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

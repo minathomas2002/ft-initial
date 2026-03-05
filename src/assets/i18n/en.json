@@ -31,7 +31,12 @@
     "clickToUpload": "Click to upload",
     "dragAndDrop": "or drag and drop",
     "viewDetails":"View Details",
-    "viewDetailsHint":"This is a hint text to help user,"
+    "viewDetailsHint":"This is a hint text to help user,",
+    "CreatorName" : "Creator Name",
+    "CreationDate" : "Creation  Date",
+    "LastModifiedBy":"Last Modified By",
+    "LastModifiedDate":"Last Modified Date"
+
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
