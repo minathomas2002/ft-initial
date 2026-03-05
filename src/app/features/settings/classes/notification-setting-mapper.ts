@@ -24,8 +24,8 @@ export class notificationSettingMapper {
     [ENotificationRecipient.DepartmentManager]: 'setting.adminView.notification.departmentManager',
     [ENotificationRecipient.Investor]: 'setting.adminView.notification.investor',
     [ENotificationRecipient.Admins]: 'setting.adminView.notification.admins',
-    [ENotificationRecipient.UserBeingImpersonated]: 'setting.adminView.notification.userBeingImpersonated',
-    [ENotificationRecipient.UserPerformingImpersonation]: 'setting.adminView.notification.userperformingImpersonation',
+    [ENotificationRecipient.Delegator]: 'setting.adminView.notification.delegator',
+    [ENotificationRecipient.Delegatee]: 'setting.adminView.notification.delegatee',
     [ENotificationRecipient.EmployeePreviousOne]: 'setting.adminView.notification.employeePrev',
     [ENotificationRecipient.EmployeeReassignee]: 'setting.adminView.notification.employeeReassignee',
 
@@ -51,8 +51,8 @@ export class notificationSettingMapper {
     [ENotificationType.DraftOpportunityReminder]: 'setting.adminView.notification.draftOpportunityReminder',
     [ENotificationType.OpportunityUpdateNotification]: 'setting.adminView.notification.opportunityUpdateNotification',
     [ENotificationType.NewOpportunityCreatedNotification]: 'setting.adminView.notification.newOpportunityCreatedNotification',
-    [ENotificationType.ImpersonationAccessAlert]: 'setting.adminView.notification.impersonationAccessAlert',
-        
+    [ENotificationType.DelegationCreateUpdate]: 'setting.adminView.notification.delegationCreateUpdate',
+     [ENotificationType.DelegationDeleteCancel]: 'setting.adminView.notification.delegationDeleteCancel',   
 
 
   };
