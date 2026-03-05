@@ -9,6 +9,7 @@ import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { environment } from 'src/environments/environment';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-navbar-profile-dropdown',
@@ -40,18 +41,24 @@ export class NavbarProfileDropdownComponent {
   dropdownItems = computed(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
-    const items = [];
+    const items: MenuItem[] = [
+      {
+        label: this.i18nService.translate('navigation.myProfile'),
+        icon: 'icon-user',
+        routerLink: [ERoutes.myProfile],
+      }
+    ];
 
     // const shouldHideLogout = (this.isInternal || this.isSecEnvironment()) && this.isProduction();
     // if (!shouldHideLogout) {
-      items.push({
-        label: this.i18nService.translate('navigation.signOut'),
-        icon: 'icon-log-out',
-        command: () => {
-          this.authStore.logout();
-          this.router.navigate(['/', ERoutes.auth, ERoutes.login])
-        },
-      })
+    items.push({
+      label: this.i18nService.translate('navigation.signOut'),
+      icon: 'icon-log-out',
+      command: () => {
+        this.authStore.logout();
+        this.router.navigate(['/', ERoutes.auth, ERoutes.login])
+      },
+    })
     // }
 
     return items;

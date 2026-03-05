@@ -65,6 +65,7 @@ export class AddDelegationFormService {
       this.from.disable();
     }
     this.form.updateValueAndValidity();
+    this.form.markAsPristine();
   }
 
   /** Parse API date string to local midnight to avoid timezone/minDate display issues */

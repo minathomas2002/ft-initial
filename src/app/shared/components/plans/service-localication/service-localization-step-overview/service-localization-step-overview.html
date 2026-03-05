@@ -25,6 +25,10 @@
             [appConditionalColorClass]="highlightInput('opportunity')"
             [color]="selectedInputColor()"
           />
+          @if(opportunityControlSignal()){
+            <div>This is a hint text to help user, <a class="text-primary-500" style="text-decoration: underline;" target="_blank" [href]="`/opportunities/${opportunityControlSignal()?.id}`">View details</a></div>
+          }
+
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getFormControl(basicInformationFormGroupControls['opportunity'])"

@@ -25,7 +25,9 @@
 		"language": "اللغة",
 		"searchCountry": "البحث عن البلد...",
 		"signIn": "تسجيل الدخول",
-		"signUp": "إنشاء حساب"
+		"signUp": "إنشاء حساب",
+    "viewDetails" :"عرض التفاصيل",
+    "viewDetailsHint" :"هذا نص تلميحي لمساعدة المستخدم,"
 	},
 	"footer": {
 		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
@@ -133,7 +135,8 @@
 	},
 	"profile": {
 		"messages": {
-			"profilePictureUpdated": "تم تحديث صورة الملف الشخصي بنجاح"
+			"profilePictureUpdated": "تم تحديث صورة الملف الشخصي بنجاح",
+			"profilePictureRemoved": "تم إزالة صورة الملف الشخصي بنجاح"
 		},
 		"deleteConfirm": {
 			"title": "حذف صورة الملف الشخصي",
@@ -144,6 +147,7 @@
 		"home": "الرئيسية",
 		"dashboard": "لوحة التحكم",
 		"profile": "الملف الشخصي",
+		"myProfile": "ملفي الشخصي",
 		"viewProfile": "عرض الملف الشخصي",
 		"signOut": "تسجيل الخروج",
 		"settings": "الإعدادات",

@@ -12,7 +12,7 @@
   (onConfirm)="onSaveUserPhoto()"
   (onClose)="onCloseClick()"
 >
-  <div class="flex flex-col gap-4 justify-center items-center min-w-[620px] py-10">
+  <div class="flex flex-col gap-4 justify-center items-center min-w-[620px] py-2">
     <p-avatar
       [image]="previewImageUrl() ?? image()"
       shape="circle"
@@ -34,14 +34,16 @@
         type="button"
         (onClick)="fileInput.click()"
       />
+      @if (!isImageNotSelectedPlaceholder()) {
       <p-button
         label="Delete"
         severity="danger"
         icon="icon-trash-2"
         text
-        [disabled]="isImageNotSelectedPlaceholder()"
         (onClick)="onDeleteUserPhotoClick()"
       />
+      }
+
     </div>
   </div>
 </app-base-dialog>
