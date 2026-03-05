@@ -21,8 +21,8 @@ export enum ENotificationChannel
      Admins,
 
      // Specific user targets for impersonation
-     UserBeingImpersonated,
-     UserPerformingImpersonation,
+     Delegator,
+     Delegatee,
      // Specific user targets for reassignments
     EmployeeReassignee,
     EmployeePreviousOne
@@ -42,11 +42,13 @@ export enum ENotificationChannel
      CommentNotification=9,
 
      // Opportunity
+    InactiveOpportunityAlert = 20,
      DraftOpportunityReminder = 21,
      OpportunityUpdateNotification = 22,
      NewOpportunityCreatedNotification = 23,
-     InactiveOpportunityAlert = 24,
+  
 
      // Access
-     ImpersonationAccessAlert = 30
+     DelegationCreateUpdate =30,
+     DelegationDeleteCancel =31
  }
