@@ -21,6 +21,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { BaseErrorMessages } from "src/app/shared/components/base-components/base-error-messages/base-error-messages";
+import { TrimOnBlurDirective } from 'src/app/shared/directives';
 @Component({
   selector: 'app-add-contact-us-dialog',
   imports: [
@@ -31,14 +32,15 @@ import { BaseErrorMessages } from "src/app/shared/components/base-components/bas
     ReactiveFormsModule,
     InputTextModule,
     TextareaModule,
-    BaseErrorMessages
-],
+    BaseErrorMessages,
+    TrimOnBlurDirective
+  ],
   templateUrl: './add-contact-us-dialog.html',
   styleUrl: './add-contact-us-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddContactUsDialog implements OnInit {
-   onSuccess = output<void>();
+  onSuccess = output<void>();
   destroyRef = inject(DestroyRef);
   dialogVisible = model<boolean>(false);
   formService = inject(ContactUsFormService);
@@ -49,7 +51,7 @@ export class AddContactUsDialog implements OnInit {
 
   i18nService = inject(I18nService);
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onConfirm() {
     const form = this.formService.form;
@@ -59,7 +61,7 @@ export class AddContactUsDialog implements OnInit {
     };
 
     this.contactUsStore
-    .addContactUsMessage(req)
+      .addContactUsMessage(req)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
@@ -70,7 +72,7 @@ export class AddContactUsDialog implements OnInit {
           this.dialogVisible.set(false);
           this.formService.ResetFormFields();
         },
-        error: (error: any) => {},
+        error: (error: any) => { },
       });
   }
   resetForm() {
