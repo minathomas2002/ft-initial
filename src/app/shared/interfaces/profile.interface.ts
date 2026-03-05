@@ -34,6 +34,7 @@ export interface IUpdatePersonalInfoRequest {
 export interface IChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
+  refreshToken: string;
 }
 
 export interface IUpdateProfilePicRequest {

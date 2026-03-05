@@ -62,9 +62,14 @@ export class ChangePassword {
       return;
     }
 
+    const currentRefreshToken = localStorage.getItem('refreshToken');
+
+    
+
     const request = {
       currentPassword: this.currentPassword.value ?? '',
       newPassword: this.password.value ?? '',
+      refreshToken: currentRefreshToken ?? '',
     };
 
     this.profileStore.changePassword(request).subscribe({
