@@ -25,6 +25,16 @@
             [appConditionalColorClass]="highlightInput('opportunity')"
             [color]="selectedInputColor()"
           />
+          @if(opportunityControlSignal()){
+          <div class="text-sm text-[#606675]">{{`common.viewDetailsHint`|translate}}<a
+              class="
+            text-primary-500"
+              style="text-decoration: underline;"
+              target="_blank"
+              [href]="`/opportunities/${opportunityControlSignal()?.id}`"
+            >{{`common.viewDetails`|translate}}</a></div>
+          }
+
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getFormControl(basicInformationFormGroupControls['opportunity'])"

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, computed, effect, ElementRef, inject, input, output, signal } from '@angular/core';
 import { PersonalInformationCard } from '../personal-information-card/personal-information-card';
 import { EViewMode } from 'src/app/shared/enums';
 import { ButtonModule } from 'primeng/button';
@@ -28,16 +28,41 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
   styleUrl: './signature-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignatureSection {
+export class SignatureSection implements AfterViewInit {
   viewMode = input<EViewMode>(EViewMode.View);
   isViewMode = computed(() => this.viewMode() === EViewMode.View);
   private readonly profileStore = inject(ProfileStore);
   private readonly toasterService = inject(ToasterService);
   private readonly i18nService = inject(I18nService);
+  private readonly elementRef = inject(ElementRef);
   onSignatureUpdate = output<void>();
 
   isSignatureProcessing = this.profileStore.signatureProcessing;
   existingSignature = computed(() => this.profileStore.userProfile()?.signature || '');
+
+  constructor() {
+    effect(() => {
+      if (this.isViewMode() && !this.existingSignature()) {
+        setTimeout(() => this.blurIfFocusedInSection(), 0);
+        setTimeout(() => this.blurIfFocusedInSection(), 150);
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.isViewMode() && !this.existingSignature()) {
+      setTimeout(() => this.blurIfFocusedInSection(), 100);
+    }
+  }
+
+  private blurIfFocusedInSection(): void {
+    if (typeof document === 'undefined') return;
+    const active = document.activeElement as HTMLElement;
+    const host = this.elementRef.nativeElement as HTMLElement;
+    if (active && host?.contains(active)) {
+      active.blur();
+    }
+  }
 
   uploadSignatureModalVisible = signal<boolean>(false);
   drawSignatureModalVisible = signal<boolean>(false);

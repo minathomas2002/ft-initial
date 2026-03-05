@@ -71,6 +71,16 @@
           [disabled]="isOpportunityDisabled()"
           fluid
         />
+        @if(opportunityControlSignal()){
+        <div class="text-sm text-[#606675]">{{`common.viewDetailsHint`|translate}}
+          <a
+            class="text-primary-500"
+            style="text-decoration: underline;"
+            target="_blank"
+            [href]="`/opportunities/${opportunityControlSignal()?.id}`"
+          >{{`common.viewDetails`|translate}}</a>
+        </div>
+        }
         <app-base-error-messages
           [control]="getFormControl(basicInformationFormGroupControls['opportunity'])"
           [label]="'plans.newPlan.opportunity' | translate"

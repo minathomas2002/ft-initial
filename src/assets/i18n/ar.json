@@ -57,7 +57,13 @@
 			"weeksAgo": "منذ {{count}} أسبوع",
 			"monthsAgo": "منذ {{count}} شهر",
 			"yearsAgo": "منذ {{count}} سنة"
-		}
+		},
+    "viewDetails" :"عرض التفاصيل",
+    "viewDetailsHint" :"هذا نص تلميحي لمساعدة المستخدم,",
+    "CreatorName": "اسم المُنشئ",
+    "CreationDate": "تاريخ الإنشاء",
+    "LastModifiedBy": "آخر تعديل بواسطة",
+    "LastModifiedDate": "تاريخ آخر تعديل"
 	},
 	"footer": {
 		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
@@ -210,7 +216,8 @@
 			"passwordUpdated": "تم تحديث كلمة المرور بنجاح.",
 			"signatureUpdated": "تم تحديث التوقيع بنجاح",
 			"signatureDeleted": "تم حذف التوقيع بنجاح",
-			"invalidFileType": "نوع الملف غير صالح أو حجم الملف يتجاوز 2 ميجابايت."
+			"invalidFileType": "نوع الملف غير صالح أو حجم الملف يتجاوز 2 ميجابايت.",
+			"profilePictureRemoved": "تم إزالة صورة الملف الشخصي بنجاح"
 		},
 		"deleteConfirm": {
 			"title": "حذف صورة الملف الشخصي",
@@ -221,8 +228,8 @@
 		"home": "الرئيسية",
 		"dashboard": "لوحة التحكم",
 		"profile": "الملف الشخصي",
-		"viewProfile": "عرض الملف الشخصي",
 		"myProfile": "ملفي الشخصي",
+		"viewProfile": "عرض الملف الشخصي",
 		"signOut": "تسجيل الخروج",
 		"settings": "الإعدادات",
 		"help": "مساعدة",

@@ -3,7 +3,7 @@ import { OpportunitiesApiService } from "../../api/opportunities/opportunities-a
 import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType, EPlanPageTitle } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
-import { catchError, finalize, Observable, of, tap, throwError } from "rxjs";
+import { catchError, finalize, map, Observable, of, tap, throwError } from "rxjs";
 import { EInternalUserPlanStatus, EInvestorPlanStatus, IAssignActiveEmployee, IAssignReassignActiveEmployee, IAssignRequest, IBaseApiResponse, IOpportunity, IOpportunityDetails, IPlanFilterRequest, IPlanRecord, IPlansDashboardStatistics, ISelectItem } from "../../interfaces";
 import { IProductPlanResponse, IServiceLocalizationPlanResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from "../../interfaces/plans.interface";
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
@@ -919,7 +919,28 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           })
         );
-      }
+      },
+
+      exportPlans(filter: IPlanFilterRequest): Observable<Blob> {
+        patchState(store, { isProcessing: true, error: null });
+
+        return planApiService.exportPlans(filter).pipe(
+          map((res:any) => {
+            patchState(store, { isProcessing: false });
+            return res.body!;
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error.errorMessage || 'Error exporting plans',
+              isProcessing: false,
+            });
+            return throwError(() => new Error('Error exporting plans'));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          }),
+        );
+      },
 
     };
   })

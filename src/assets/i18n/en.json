@@ -57,7 +57,14 @@
       "weeksAgo": "{{count}}w ago",
       "monthsAgo": "{{count}}mo ago",
       "yearsAgo": "{{count}}y ago"
-    }
+    },
+    "viewDetails":"View Details",
+    "viewDetailsHint":"This is a hint text to help user,",
+    "CreatorName" : "Creator Name",
+    "CreationDate" : "Creation  Date",
+    "LastModifiedBy":"Last Modified By",
+    "LastModifiedDate":"Last Modified Date"
+
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
@@ -210,7 +217,8 @@
       "passwordUpdated": "Password updated successfully.",
       "signatureUpdated": "Signature updated successfully",
       "signatureDeleted": "Signature deleted successfully",
-      "invalidFileType": "Invalid file type or file size exceeds 2MB."
+      "invalidFileType": "Invalid file type or file size exceeds 2MB.",
+      "profilePictureRemoved": "Profile picture removed successfully"
     },
     "deleteConfirm": {
       "title": "Delete profile picture",
@@ -221,8 +229,8 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "profile": "Profile",
-    "viewProfile": "View profile",
     "myProfile": "My Profile",
+    "viewProfile": "View profile",
     "signOut": "Sign out",
     "settings": "Settings",
     "help": "Help",
@@ -829,6 +837,7 @@
     "publish": "Publish"
   },
   "plans": {
+    "exportPlans":"Export Plans",
     "assign": "Assign",
     "title": "Plans",
     "submitNewPlan": "Submit New Plan",

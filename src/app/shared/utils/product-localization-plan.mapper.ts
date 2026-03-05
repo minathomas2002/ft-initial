@@ -484,7 +484,8 @@ function setPhoneValue(formGroup: FormGroup | null, controlName: string, phoneSt
 
 export function mapProductPlanResponseToForm(
   response: IProductPlanResponse,
-  formService: ProductPlanFormService
+  formService: ProductPlanFormService,
+  options?: { storeSecRegisteredId?: string | null }
 ): void {
   const { productPlan, signature } = response;
 
@@ -539,7 +540,8 @@ export function mapProductPlanResponseToForm(
   if (locationInfoForm && productPlan.overviewCompanyInfo?.locationInfo) {
     const locationInfo = productPlan.overviewCompanyInfo.locationInfo;
     setFormGroupValue(locationInfoForm, EMaterialsFormControls.globalHQLocation, locationInfo.globalHQLocation);
-    setFormGroupValue(locationInfoForm, EMaterialsFormControls.registeredVendorIDwithSEC, locationInfo.vendorIdWithSEC || null);
+    const overviewSecVendorId = (locationInfo.vendorIdWithSEC?.trim() ? locationInfo.vendorIdWithSEC : options?.storeSecRegisteredId) ?? null;
+    setFormGroupValue(locationInfoForm, EMaterialsFormControls.registeredVendorIDwithSEC, overviewSecVendorId);
     locationInfoForm.get(EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA)?.setValue(locationInfo.hasLocalAgent ?? null);
 
     // Toggle local agent validation based on hasLocalAgent
@@ -638,7 +640,14 @@ export function mapProductPlanResponseToForm(
     // SEC fields
     if (mfgExp.provideToSEC) {
       setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.qualifiedPlantLocationSEC, mfgExp.qualifiedPlantLocation_SEC);
-      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.approvedVendorIDSEC, mfgExp.approvedVendorId_SEC);
+      const planApprovedVendorId = mfgExp.approvedVendorId_SEC;
+      const planHasApprovedVendorId = planApprovedVendorId != null && String(planApprovedVendorId).trim() !== '';
+      const approvedVendorIdSec = planHasApprovedVendorId
+        ? (typeof planApprovedVendorId === 'number' ? planApprovedVendorId : parseInt(String(planApprovedVendorId), 10))
+        : (options?.storeSecRegisteredId?.trim()
+          ? (parseInt(options.storeSecRegisteredId, 10) || 0)
+          : planApprovedVendorId);
+      setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.approvedVendorIDSEC, approvedVendorIdSec);
       setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.yearsOfExperienceSEC, mfgExp.yearsExperience_SEC);
       setFormGroupValue(manufacturingExpForm, EMaterialsFormControls.totalQuantitiesSEC, mfgExp.totalQuantitiesToSEC);
     }

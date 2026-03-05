@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
   providedIn: 'root',
 })
 export class PlanApiService {
+	protected baseUrl: string = API_ENDPOINTS.baseUrl;
   private readonly baseHttpService = inject(BaseHttpService);
   private readonly http = inject(HttpClient);
   private readonly i18nService = inject(I18nService);
@@ -160,5 +161,13 @@ export class PlanApiService {
   getCurrentDateTime(): string {
     return this.datePipe.transform(new Date(), 'dd MMM yyyy HH:mm') ?? '';
   }
+
+
+ exportPlans(filter: IPlanFilterRequest): Observable<HttpResponse<Blob>> {
+   return this.http.post(`${this.baseUrl}/` + API_ENDPOINTS.plans.exportPlans, filter, {
+    responseType: 'blob',
+    observe: 'response',
+  });
+ }
 
 }

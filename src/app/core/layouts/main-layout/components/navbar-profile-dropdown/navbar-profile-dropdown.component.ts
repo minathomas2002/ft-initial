@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal, viewChild } from '@angular/core';
 import { Menu, MenuModule } from 'primeng/menu';
 import { AvatarModule } from 'primeng/avatar';
 import { Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { environment } from 'src/environments/environment';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
+import { MenuItem } from 'primeng/api';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-navbar-profile-dropdown',
@@ -17,7 +19,7 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
   styleUrl: './navbar-profile-dropdown.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavbarProfileDropdownComponent {
+export class NavbarProfileDropdownComponent implements OnInit {
   authStore = inject(AuthStore);
   roleService = inject(RoleService);
   profileStore = inject(ProfileStore);
@@ -25,10 +27,10 @@ export class NavbarProfileDropdownComponent {
   private readonly i18nService = inject(I18nService);
   isOpen = signal(false);
   menu = viewChild<Menu>('menu');
-  private readonly isProduction = signal(environment.production);
-  private readonly isSecEnvironment = signal(window.location.hostname === environment.secDomain);
-  private readonly isInvestor = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR]);
-  private readonly isInternal = !this.isInvestor();
+
+  ngOnInit(): void {
+    this.profileStore.getUserProfile().pipe(take(1)).subscribe();
+  }
   protected readonly userProfilePicture = computed(() => {
     if (!this.profileStore.userProfile()) {
       return this.authStore.userProfile()?.photoURL ?? 'assets/images/user_placeholder.svg';
@@ -40,18 +42,24 @@ export class NavbarProfileDropdownComponent {
   dropdownItems = computed(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
-    const items = [];
+    const items: MenuItem[] = [
+      {
+        label: this.i18nService.translate('navigation.myProfile'),
+        icon: 'icon-user',
+        routerLink: [ERoutes.myProfile],
+      }
+    ];
 
     // const shouldHideLogout = (this.isInternal || this.isSecEnvironment()) && this.isProduction();
     // if (!shouldHideLogout) {
-      items.push({
-        label: this.i18nService.translate('navigation.signOut'),
-        icon: 'icon-log-out',
-        command: () => {
-          this.authStore.logout();
-          this.router.navigate(['/', ERoutes.auth, ERoutes.login])
-        },
-      })
+    items.push({
+      label: this.i18nService.translate('navigation.signOut'),
+      icon: 'icon-log-out',
+      command: () => {
+        this.authStore.logout();
+        this.router.navigate(['/', ERoutes.auth, ERoutes.login])
+      },
+    })
     // }
 
     return items;

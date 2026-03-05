@@ -35,7 +35,7 @@ import { SubmissionConfirmationModalComponent } from '../../submission-confirmat
 import { Signature, IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { mapServiceLocalizationPlanFormToRequest, convertServiceRequestToFormData, mapServicePlanResponseToForm } from 'src/app/shared/utils/service-localization-plan.mapper';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { switchMap, of, map, catchError, finalize, tap, combineLatest, EMPTY, distinctUntilChanged } from 'rxjs';
+import { switchMap, of, map, catchError, finalize, tap, combineLatest, EMPTY, distinctUntilChanged, take } from 'rxjs';
 import { GeneralConfirmationDialogComponent } from "../../../utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { ApproveRejectDialogComponent } from "../../../utility-components/approve-reject-dialog/approve-reject-dialog.component";
 import { TranslatePipe } from "../../../../pipes/translate.pipe";
@@ -43,6 +43,7 @@ import { TCommentPhase, ICommentsCountAndPhase, IPlanWizardStepCommentDescriptor
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { ERoles } from 'src/app/shared/enums/roles.enum';
 import { BasePlanWizard } from '../../../../classes/plans/base-classes/base-plan-wizard';
 import { EInternalUserPlanStatus, EInvestorPlanStatus, ISelectItem, TColors } from 'src/app/shared/interfaces';
@@ -84,6 +85,7 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
 })
 export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnInit, OnDestroy {
   override readonly planStore = inject(PlanStore);
+  private readonly profileStore = inject(ProfileStore);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   override readonly toasterService = inject(ToasterService);
@@ -742,6 +744,11 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
           if (benaVendorIDControl && userCode) {
             benaVendorIDControl.setValue(userCode, { emitEvent: true });
           }
+          this.profileStore.getUserProfile().pipe(take(1)).subscribe({
+            next: () => {
+              this.serviceLocalizationFormService.applyRegisteredVendorIdFromProfileStore();
+            },
+          });
         }
         return EMPTY;
       }),
@@ -768,7 +775,8 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     }
     this.serviceLocalizationFormService.resetAllForms();
     const opportunityItem = this.planStore.availableOpportunities()?.[0] ?? null;
-    mapServicePlanResponseToForm(data, this.serviceLocalizationFormService, { opportunityItem });
+    const storeSecRegisteredId = this.profileStore.userProfile()?.secRegisteredId ?? null;
+    mapServicePlanResponseToForm(data, this.serviceLocalizationFormService, { opportunityItem, storeSecRegisteredId });
     if (data.signature?.signatureValue) {
       this.existingSignature.set(data.signature.signatureValue);
     } else {

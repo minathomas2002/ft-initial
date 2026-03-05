@@ -3,6 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { ServiceLocalizationStepCoverPageFormBuilder } from './steps/service-localization-step-cover-page.form-builder';
 import { ServiceLocalizationStepOverviewFormBuilder } from './steps/service-localization-step-overview.form-builder';
@@ -17,6 +18,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 export class ServicePlanFormService {
   private readonly _planStore = inject(PlanStore);
   private readonly _authStore = inject(AuthStore);
+  private readonly _profileStore = inject(ProfileStore);
   
   private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
@@ -667,6 +669,27 @@ export class ServicePlanFormService {
 
     // Re-sync derived disabled fields after reset.
     this.syncCompanyNameFromCoverPageToOverview();
+
+    this.applyRegisteredVendorIdFromProfileStore();
+  }
+
+  /**
+   * Apply registeredVendorIDwithSEC from ProfileStore.secRegisteredId to overview and Saudi Company Details.
+   * Used in create mode (and when profile is loaded after reset).
+   */
+  applyRegisteredVendorIdFromProfileStore(): void {
+    const secValue = this._profileStore.userProfile()?.secRegisteredId ?? '';
+    if (!secValue) return;
+
+    const locationInfo = this.locationInformationFormGroup;
+    const secControl = locationInfo?.get(
+      `${EMaterialsFormControls.registeredVendorIDwithSEC}.${EMaterialsFormControls.value}`
+    );
+    if (secControl) {
+      secControl.setValue(secValue, { emitEvent: false });
+    }
+
+    this.syncExistingSaudiRegisteredVendorIdWithSecFromOverview();
   }
 
   private getCoverPageCompanyNameValueControl(): FormControl<string> | null {

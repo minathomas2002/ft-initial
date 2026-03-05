@@ -58,7 +58,9 @@ export interface IOpportunityDetails {
   endDate: string;
   status: number;
   isActive: boolean;
-  createdDate: string;
+  createdBy: string;
+  createdDate: string|null;
+  updatedBy: string | null;
   updatedDate: string | null;
   actions: number[];
   minQuantityFormatted: string;

@@ -1,6 +1,10 @@
 <div class="signature-pad-container">
   <div class="flex justify-between items-center">
-    <h3 class="text-sm font-medium text-gray-700">{{ 'plans.submission.drawSignature' | translate }}</h3>
+    <app-base-label
+      [title]="'plans.submission.drawSignature' | translate"
+      [required]="true"
+    >
+    </app-base-label>
     <p-button
       (onClick)="clearSignature()"
       [outlined]="true"
@@ -17,12 +21,6 @@
       [src]="existingSignature()!"
       alt="Signature"
       class="existing-signature-image"
-    />
-    <p-button
-      [label]="'plans.submission.change' | translate"
-      severity="secondary"
-      (onClick)="changeSignature()"
-      [outlined]="true"
     />
   </div>
   } @else {

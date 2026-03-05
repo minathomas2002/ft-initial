@@ -40,8 +40,10 @@ export class UserImageSection {
       .subscribe({
         next: (res) => {
           if (res.success) {
+            const messageKey = base64 === null ? 'profile.messages.profilePictureRemoved' : 'profile.messages.profilePictureUpdated';
+            const fallback = base64 === null ? 'Profile picture removed successfully' : 'Profile picture updated successfully';
             this.toasterService.success(
-              this.i18nService.translate('profile.messages.profilePictureUpdated') ?? 'Profile picture updated successfully',
+              this.i18nService.translate(messageKey) ?? fallback,
             );
             this.changeYourProfilePictureVisible.set(false);
             this.onProfilePictureUpdated.emit();
