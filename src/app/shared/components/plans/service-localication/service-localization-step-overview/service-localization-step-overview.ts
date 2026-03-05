@@ -20,7 +20,7 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
@@ -31,7 +31,7 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { PlanStepBaseClass } from '../../plan-localization/plan-step-base-class';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } from 'src/app/shared/interfaces/plans.interface';
-import { TColors } from 'src/app/shared/interfaces';
+import { ISelectItem, TColors } from 'src/app/shared/interfaces';
 import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { FormsModule } from '@angular/forms';
 import { CommentInputComponent } from '../../comment-input/comment-input';
@@ -171,6 +171,9 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   getFormGroup(): FormGroup {
     return this.formGroup;
   }
+   opportunityControlSignal = toSignal<ISelectItem | null>(this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).valueChanges, {
+    initialValue: this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).value ?? null
+  });
 
   // Expose base class methods as public for template access
   override upDateSelectedInputs(value: boolean, fieldInformation: IFieldInformation, rowId?: string): void {
