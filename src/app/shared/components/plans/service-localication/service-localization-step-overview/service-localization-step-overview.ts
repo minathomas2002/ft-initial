@@ -37,6 +37,7 @@ import { FormsModule } from '@angular/forms';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { MultiSelect } from 'primeng/multiselect';
 import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-service-localization-step-overview',
@@ -60,7 +61,8 @@ import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
     FormsModule,
     CommentInputComponent,
     MultiSelect,
-    InputNumberModule
+    InputNumberModule,
+    TranslatePipe
   ],
   templateUrl: './service-localization-step-overview.html',
   styleUrl: './service-localization-step-overview.scss',
@@ -171,7 +173,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   getFormGroup(): FormGroup {
     return this.formGroup;
   }
-   opportunityControlSignal = toSignal<ISelectItem | null>(this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).valueChanges, {
+  opportunityControlSignal = toSignal<ISelectItem | null>(this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).valueChanges, {
     initialValue: this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).value ?? null
   });
 
