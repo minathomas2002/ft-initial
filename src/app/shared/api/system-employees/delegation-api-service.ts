@@ -6,7 +6,7 @@ import {
   IApiPaginatedResponse,
   IBaseApiResponse
 } from '../../interfaces';
-import { ActiveEmployee, IAddDelegationRequest, IDelegationFilterRequest, IDelegationRecord, IEditDelegationRequest } from '../../interfaces/delegation.interface';
+import { ActiveEmployee, IAddDelegationRequest, IDelegationFilterRequest, IDelegationRecord, IEditDelegationRequest, IImpersonationOptions } from '../../interfaces/delegation.interface';
 import { of } from 'rxjs';
 import { EDelegationActions } from '../../enums/delegation.enum';
 
@@ -39,5 +39,9 @@ export class DelegationApiService {
 
   cancleDelegation(id: string): Observable<IBaseApiResponse<unknown>> {
     return this.baseHttpService.post<unknown, { delegationId: string }, unknown>(API_ENDPOINTS.systemEmployees.Delegation.cancelDelegation, { delegationId: id });
+  }
+
+  getImpersonationOptions(): Observable<IBaseApiResponse<IImpersonationOptions[]>> {
+    return this.baseHttpService.get<IImpersonationOptions[], unknown>(API_ENDPOINTS.systemEmployees.Delegation.getImpersonationOptions);
   }
 }

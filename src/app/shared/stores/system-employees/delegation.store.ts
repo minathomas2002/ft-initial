@@ -8,6 +8,7 @@ import {
   IDelegationFilterRequest,
   IDelegationRecord,
   IEditDelegationRequest,
+  IImpersonationOptions,
 } from '../../interfaces/delegation.interface';
 
 const initialState: {
@@ -18,6 +19,7 @@ const initialState: {
   count: number;
   list: IDelegationRecord[];
   activeEmployees: ActiveEmployee[];
+  impersonationOptions: IImpersonationOptions[];
 } = {
   isLoading: false,
   isLoadingDetails: false,
@@ -26,6 +28,7 @@ const initialState: {
   count: 0,
   list: [],
   activeEmployees: [],
+  impersonationOptions: [],
 };
 export const DelegationStore = signalStore(
   { providedIn: 'root' },
@@ -80,30 +83,30 @@ export const DelegationStore = signalStore(
         );
       },
 
-   getActiveEmployees() {
-      patchState(store, { isLoadingDetails: true, error: null });
+      getActiveEmployees() {
+        patchState(store, { isLoadingDetails: true, error: null });
 
-      return delegationApiService.getActiveEmployees().pipe(
-        tap((res: any) => {
-          const employees: ActiveEmployee[] =
-            res?.body?.activeEmployees ?? [];
+        return delegationApiService.getActiveEmployees().pipe(
+          tap((res: any) => {
+            const employees: ActiveEmployee[] =
+              res?.body?.activeEmployees ?? [];
 
-          patchState(store, { activeEmployees: employees });
-        }),
-        finalize(() => {
-          patchState(store, { isLoadingDetails: false });
-        }),
-        catchError((error) => {
-          patchState(store, {
-            error: error?.errorMessage || 'Error fetching active employees',
-            activeEmployees: []
-          });
-          return throwError(() => new Error('Error fetching active employees'));
-        }),
-      );
-    },
+            patchState(store, { activeEmployees: employees });
+          }),
+          finalize(() => {
+            patchState(store, { isLoadingDetails: false });
+          }),
+          catchError((error) => {
+            patchState(store, {
+              error: error?.errorMessage || 'Error fetching active employees',
+              activeEmployees: []
+            });
+            return throwError(() => new Error('Error fetching active employees'));
+          }),
+        );
+      },
 
-    deleteDelegation(id: string) {
+      deleteDelegation(id: string) {
         patchState(store, { isProcessing: true, error: null });
         return delegationApiService.deleteDelegation(id).pipe(
           finalize(() => {
@@ -125,9 +128,16 @@ export const DelegationStore = signalStore(
             return throwError(() => new Error(error.errorMessage || 'Error canceling delegation'));
           }),
         );
+      },
+
+      getImpersonationOptions() {
+        patchState(store, { isLoadingDetails: true, error: null });
+        return delegationApiService.getImpersonationOptions().pipe(
+          tap((res: any) => {
+            patchState(store, { impersonationOptions: res?.body || [] });
+          }),
+        );
       }
-
-
     };
   }),
   withMethods((store) => {

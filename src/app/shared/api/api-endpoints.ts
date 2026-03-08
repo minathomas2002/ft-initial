@@ -56,7 +56,7 @@ export const API_ENDPOINTS = {
     reviewPlan: `${Plans}/review-plan`,
     getPlanComment: `${Plans}/get-PlanComment`,
     deleteDraftPlan: `${Plans}/delete-draftPlan`,
-    exportPlans : `${Plans}/ExportPlans`
+    exportPlans: `${Plans}/ExportPlans`
   },
   profile: {
     me: `${Profile}/me`,
@@ -79,13 +79,14 @@ export const API_ENDPOINTS = {
       getCurrentHolders: `${SystemEmployees}/${RoleManagement}/GetCurrentHolders`,
       transferRole: `${SystemEmployees}/${RoleManagement}/Transfer`,
     },
-    Delegation :{
-        getDelegationList: `${Delegation}/get_delegations`,
-        addDelegation: `${Delegation}/add_delegation`,
-        getActiveEmployees: `${Delegation}/Get_ActiveEmployees`,
-        deleteDelegation: `${Delegation}/delete-delegation`,
-        cancelDelegation: `${Delegation}/cancel-delegation`,
-        editDelegation : `${Delegation}/update-delegation`,
+    Delegation: {
+      getDelegationList: `${Delegation}/get_delegations`,
+      addDelegation: `${Delegation}/add_delegation`,
+      getActiveEmployees: `${Delegation}/Get_ActiveEmployees`,
+      deleteDelegation: `${Delegation}/delete-delegation`,
+      cancelDelegation: `${Delegation}/cancel-delegation`,
+      editDelegation: `${Delegation}/update-delegation`,
+      getImpersonationOptions: `${Delegation}/get-impersonationOptions`,
     }
   },
   AdminSettings: {
