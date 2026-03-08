@@ -1,13 +1,13 @@
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
-import { type Observable, type Subscription, catchError, finalize, throwError, tap } from 'rxjs';
-import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse, IJwtUserDetails, IUserProfile, } from '../../interfaces';
+import { type Observable, type Subscription, catchError, finalize, map, of, switchMap, take, throwError, tap } from 'rxjs';
+import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse, IJwtUserDetails, IUserProfile, ILoginWithImpersonationRequest, } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
 import { HttpErrorResponse } from '@angular/common/http';
 import { JwtService } from '../../services/auth/jwt-service';
-import { ERoutes } from '../../enums';
+import { EImpersonationStatus, ERoutes } from '../../enums';
 
 const REFRESH_BEFORE_EXPIRY_MS = 2 * 60 * 1000; // 2 minutes before expiry
 
@@ -36,6 +36,8 @@ export const AuthStore = signalStore(
       userCode: computed(
         () => store.userProfile()?.employeeID ?? store.userProfile()?.investorCode ?? ''
       ),
+      isImpersonating: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATE),
+      isDelegator: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATOR),
     };
   }),
   withMethods((store) => {
@@ -105,6 +107,7 @@ export const AuthStore = signalStore(
         const refreshRequest = {
           accessToken: authData.token,
           refreshToken: authData.refreshToken,
+          isImpersonating: store.isImpersonating(),
         };
         authApiService.refreshToken(refreshRequest).subscribe({
           next: (response) => {
@@ -140,9 +143,27 @@ export const AuthStore = signalStore(
         return this.handleLoginMethod(authApiService.windowsLogin());
       },
 
+      winLoginWithImpersonation(delegatorUserId: string): Observable<IBaseApiResponse<IAuthData>> {
+        const request: ILoginWithImpersonationRequest = {
+          userName: store.userProfile()?.employeeID ?? '',
+          delegatorUserId: delegatorUserId,
+        };
+        patchState(store, { loading: true });
+        return this.handleLoginMethod(authApiService.winLoginWithImpersonation(request));
+      },
+
       fakeWindowsLogin(userName: string): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
         return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName));
+      },
+
+      loginWithImpersonation(delegatorUserId: string): Observable<IBaseApiResponse<IAuthData>> {
+        const request: ILoginWithImpersonationRequest = {
+          userName: store.userProfile()?.employeeID ?? '',
+          delegatorUserId: delegatorUserId,
+        };
+        patchState(store, { loading: true });
+        return this.handleLoginMethod(authApiService.loginWithImpersonation(request));
       },
 
       updateAuthDataInStorage(authResponse: IBaseApiResponse<IAuthData>): void {
@@ -158,14 +179,15 @@ export const AuthStore = signalStore(
         login$: Observable<IBaseApiResponse<IAuthData>>
       ): Observable<IBaseApiResponse<IAuthData>> {
         return login$.pipe(
-          tap((response: IBaseApiResponse<IAuthData>) => {
+          switchMap((response: IBaseApiResponse<IAuthData>) => {
             const hasValidToken = Boolean(response.body?.token);
             const isEmailVerified = response.body?.isEmailVerified !== false;
 
             if (response.success && response.body && hasValidToken && isEmailVerified) {
               this.updateAuthDataInStorage(response);
-              this.getUserProfile().subscribe();
+              return this.getUserProfile().pipe(map(() => response));
             }
+            return of(response);
           }),
           finalize(() => {
             patchState(store, { loading: false });

@@ -63,6 +63,7 @@
           </div>
           <p-radiobutton
             [ngModel]="selectedAccountId()"
+            (click)="$event.stopPropagation()"
             [inputId]="'account-' + option.userId"
             name="impersonation-account"
             [value]="option.userId"

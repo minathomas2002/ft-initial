@@ -127,6 +127,8 @@ export const API_ENDPOINTS = {
     verifyEmail: `${Auth}/verify-email`,
     resendVerifyEmail: `${Auth}/resend-verification-email`,
     getUserProfile: `${Auth}/profile`,
+    loginWithImpersonation: `${Auth}/LoginWithImpersonation`,
+    winLoginWithImpersonation: `${Auth}/WinLoginWithImpersonation`,
   },
   roles: {
     getRoles: `${Roles}`,

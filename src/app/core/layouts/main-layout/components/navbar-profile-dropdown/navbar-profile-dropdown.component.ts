@@ -66,7 +66,7 @@ export class NavbarProfileDropdownComponent implements OnInit {
   });
 
   /** Current user ID for impersonation radio selection */
-  selectedAccountId = computed(() => this.authStore.userProfile()?.userId ?? '');
+  selectedAccountId = signal<string>(this.authStore.userProfile()?.userId ?? '');
 
   hasImpersonationOptions = computed(
     () => (this.delegationStore.impersonationOptions()?.length ?? 0) > 0
@@ -75,19 +75,7 @@ export class NavbarProfileDropdownComponent implements OnInit {
   /** Switch accounts list: current user first (as selected), then other impersonation options */
   impersonationOptionsWithCurrentUser = computed((): IImpersonationOptions[] => {
     if (!this.hasImpersonationOptions()) return [];
-    const profile = this.authStore.userProfile();
-    if (!profile) return this.delegationStore.impersonationOptions();
-    const currentUserId = profile.userId;
-    const currentUserOption: IImpersonationOptions = {
-      userId: currentUserId,
-      nameEn: profile.nameEN ?? '',
-      nameAr: profile.nameAR ?? '',
-      profilePic: this.userProfilePicture() ?? 'assets/images/user_placeholder.svg',
-      role: profile.roleCodes?.[0] ?? ERoles.EMPLOYEE,
-      userName: profile.employeeID ?? profile.userId ?? '',
-    };
-    const others = this.delegationStore.impersonationOptions().filter((o) => o.userId !== currentUserId);
-    return [currentUserOption, ...others];
+    return this.delegationStore.impersonationOptions();
   });
 
   dropdownItems = computed(() => {
@@ -139,10 +127,23 @@ export class NavbarProfileDropdownComponent implements OnInit {
     this.profilePopover()?.hide();
   }
 
+  /** Called when radio value changes - updates selection and triggers switch if different account */
+  // onRadioChange(userId: string) {
+  //   const wasAlreadySelected = this.selectedAccountId() === userId;
+  //   this.selectedAccountId.set(userId);
+  //   if (wasAlreadySelected) return;
+  //   const option = this.impersonationOptionsWithCurrentUser().find((o) => o.userId === userId);
+  //   if (option) {
+  //     this.authStore.loginWithImpersonation(option.userId).pipe(take(1)).subscribe();
+  //   }
+  // }
+
   onAccountSelect(option: IImpersonationOptions) {
     if (this.isCurrentAccount(option)) return;
-    // TODO: Call switch/impersonation API when backend provides it.
-    // For now, reload to apply impersonation if backend uses cookie/header.
-    window.location.reload();
+    this.selectedAccountId.set(option.userId);
+    this.authStore.loginWithImpersonation(option.userId).pipe(take(1)).subscribe({
+      next: () => window.location.reload(),
+      error: () => this.selectedAccountId.set(this.authStore.userProfile()?.userId ?? ''),
+    });
   }
 }

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../api-endpoints';
-import { IAuthData, IBaseApiResponse, IChangePasswordRequest, IRefreshTokenRequest, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
+import { IAuthData, IBaseApiResponse, IChangePasswordRequest, ILoginWithImpersonationRequest, IRefreshTokenRequest, IRegisterRequest, IResetPasswordRequest } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -74,5 +74,13 @@ export class AuthApiService {
     return this.http.post<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.passwordResetTokenExpiry}`, {
       token,
     });
+  }
+
+  loginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {
+    return this.http.post<IBaseApiResponse<IAuthData>>(`${this.baseUrl}/${API_ENDPOINTS.auth.loginWithImpersonation}`, request);
+  }
+
+  winLoginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {
+    return this.http.post<IBaseApiResponse<IAuthData>>(`${this.baseUrl}/${API_ENDPOINTS.auth.winLoginWithImpersonation}`, request);
   }
 }

@@ -42,6 +42,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         const refreshRequest: IRefreshTokenRequest = {
           accessToken: authData.token,
           refreshToken: authData.refreshToken,
+          isImpersonating: authStore.isImpersonating(),
         };
 
         // If refresh is already in progress, reuse that observable
