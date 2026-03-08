@@ -21,7 +21,7 @@
       <div class="text-xs text-gray-500 mb-1">{{'common.LastModifiedBy'|translate}}</div>
       <div class="flex items-center gap-2 font-medium">
         <i class="icon-user-edit text-gray-500"></i>
-        {{opportunityDetails()?.updatedBy}}
+        {{opportunityDetails()?.updatedBy== null || opportunityDetails()?.updatedBy== ''  ?'___' : opportunityDetails()?.updatedBy}}
       </div>
     </div>
 
