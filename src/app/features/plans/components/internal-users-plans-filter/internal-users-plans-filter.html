@@ -1,6 +1,6 @@
 <div class="flex flex-col md:flex-row gap-4">
     <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-12 md:col-span-4">
+        <div class="col-span-12 md:col-span-2">
             <div class="flex flex-col">
                 <input
                     type="text"
@@ -43,6 +43,24 @@
                     [loading]="isLoadingAssignees()"
                     appendTo="body"
                 ></p-multiSelect>
+            </div>
+        </div>
+
+        <div class="col-span-12 md:col-span-2">
+            <div class="flex flex-col">
+              <p-select
+                [options]="availableOpportunities()"
+                optionLabel="name"
+                optionValue="id"
+                [placeholder]="'opportunities'"
+                [loading]="isLoadingAvailableOpportunities()"
+                [filter]="true"
+                filterBy="name"
+                [ngModel]="filter().opportunityId"
+                (ngModelChange)="onOpportunityChange($event)"
+                [showClear]="true"
+                fluid
+              />
             </div>
         </div>
 

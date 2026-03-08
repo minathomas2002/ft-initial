@@ -5,7 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { EOpportunityType, ERoles } from 'src/app/shared/enums';
-import { EInternalUserPlanStatus, IAssignee, IPlanFilter } from 'src/app/shared/interfaces';
+import { EInternalUserPlanStatus, IAssignee, IPlanFilter, ISelectItem } from 'src/app/shared/interfaces';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -17,6 +17,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { BadgeModule } from 'primeng/badge';
+import { SelectModule } from 'primeng/select';
 
 interface IDropdownOption {
   label: string;
@@ -30,7 +31,7 @@ interface IAssigneeOption {
 
 @Component({
   selector: 'app-internal-users-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe, ButtonModule, OverlayBadgeModule, BadgeModule],
+  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe, ButtonModule, OverlayBadgeModule, BadgeModule,SelectModule],
   templateUrl: './internal-users-plans-filter.html',
   styleUrl: './internal-users-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,7 +46,15 @@ export class InternalUsersPlansFilter implements OnInit {
   private readonly planApiService = inject(PlanApiService);
   private readonly roleService = inject(RoleService);
   readonly filter = this.filterService.filter;
-
+  availableOpportunities = computed<ISelectItem[]>(() => [
+    { id: "801d8798-4cea-4299-ab56-386d3e0327e8", name: "fsdfdsf1" },
+    { id: "801d8798-4cea-4299-ab56-386d3e0327e7", name: "fsdfdsf2" },
+    { id: "801d8798-4cea-4299-ab56-386d3e0327e6", name: "fsdfdsf3" },
+    { id: "801d8798-4cea-4299-ab56-386d3e0327e5", name: "fsdfdsf4" },
+    { id: "801d8798-4cea-4299-ab56-386d3e0327e4", name: "fsdfdsf5" },
+    { id: "801d8798-4cea-4299-ab56-386d3e0327e4", name: "fsdfdsf6" },
+  ]);
+  isLoadingAvailableOpportunities = computed<boolean>(()=>false);
   assignees = signal<IAssignee[]>([]);
   isLoadingAssignees = signal(false);
 
@@ -240,6 +249,12 @@ export class InternalUsersPlansFilter implements OnInit {
 
   onAssigneeChange(value: string[] | null) {
     this.filterService.updateFilterSignal({ assignee: value, pageNumber: 1 });
+    this.filterService.applyFilterWithPaging();
+  }
+
+
+  onOpportunityChange(value: string | null) {
+    this.filterService.updateFilterSignal({ opportunityId: value, pageNumber: 1 });
     this.filterService.applyFilterWithPaging();
   }
 
