@@ -17,6 +17,7 @@ import { of, switchMap, take } from 'rxjs';
 import { DelegationStore } from 'src/app/shared/stores/system-employees/delegation.store';
 import { SystemEmployeeRoleMapper } from 'src/app/shared/classes/role.mapper';
 import type { IImpersonationOptions } from 'src/app/shared/interfaces/delegation.interface';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-navbar-profile-dropdown',
@@ -69,7 +70,7 @@ export class NavbarProfileDropdownComponent implements OnInit {
   selectedAccountId = signal<string>(this.authStore.userProfile()?.userId ?? '');
 
   hasImpersonationOptions = computed(
-    () => (this.delegationStore.impersonationOptions()?.length ?? 0) > 0
+    () => (this.delegationStore.impersonationOptions()?.length ?? 0) > 1
   );
 
   /** Switch accounts list: current user first (as selected), then other impersonation options */
@@ -127,23 +128,37 @@ export class NavbarProfileDropdownComponent implements OnInit {
     this.profilePopover()?.hide();
   }
 
-  /** Called when radio value changes - updates selection and triggers switch if different account */
-  // onRadioChange(userId: string) {
-  //   const wasAlreadySelected = this.selectedAccountId() === userId;
-  //   this.selectedAccountId.set(userId);
-  //   if (wasAlreadySelected) return;
-  //   const option = this.impersonationOptionsWithCurrentUser().find((o) => o.userId === userId);
-  //   if (option) {
-  //     this.authStore.loginWithImpersonation(option.userId).pipe(take(1)).subscribe();
-  //   }
-  // }
-
   onAccountSelect(option: IImpersonationOptions) {
     if (this.isCurrentAccount(option)) return;
     this.selectedAccountId.set(option.userId);
-    this.authStore.loginWithImpersonation(option.userId).pipe(take(1)).subscribe({
-      next: () => window.location.reload(),
-      error: () => this.selectedAccountId.set(this.authStore.userProfile()?.userId ?? ''),
+
+    const login$ = this.getSwitchAccountLogin$(option);
+    login$.pipe(take(1)).subscribe({
+      next: (res) => {
+        if (res.success) window.location.reload();
+      },
+      error: () =>
+        this.selectedAccountId.set(this.authStore.userProfile()?.userId ?? ''),
     });
+  }
+
+  private getSwitchAccountLogin$(option: IImpersonationOptions) {
+    const isSwitchBackToDelegator =
+      this.authStore.isImpersonating() &&
+      this.authStore.delegatorUserId() === option.userId;
+
+    if (isSwitchBackToDelegator) {
+      return environment.production
+        ? this.authStore.windowsLogin() : this.authStore.fakeWindowsLogin(option.userName);
+    }
+
+    const request = {
+      userName: this.authStore.userProfile()?.employeeID ?? '',
+      delegatorUserId: option.userId,
+    };
+
+    return environment.production
+      ? this.authStore.winLoginWithImpersonation(request)
+      : this.authStore.loginWithImpersonation(request);
   }
 }

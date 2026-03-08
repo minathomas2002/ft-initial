@@ -36,8 +36,9 @@ export const AuthStore = signalStore(
       userCode: computed(
         () => store.userProfile()?.employeeID ?? store.userProfile()?.investorCode ?? ''
       ),
-      isImpersonating: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATE),
+      isImpersonating: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATEE),
       isDelegator: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATOR),
+      delegatorUserId: computed(() => store.jwtUserDetails()?.DelegateeUserId),
     };
   }),
   withMethods((store) => {
@@ -143,11 +144,7 @@ export const AuthStore = signalStore(
         return this.handleLoginMethod(authApiService.windowsLogin());
       },
 
-      winLoginWithImpersonation(delegatorUserId: string): Observable<IBaseApiResponse<IAuthData>> {
-        const request: ILoginWithImpersonationRequest = {
-          userName: store.userProfile()?.employeeID ?? '',
-          delegatorUserId: delegatorUserId,
-        };
+      winLoginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
         return this.handleLoginMethod(authApiService.winLoginWithImpersonation(request));
       },
@@ -157,11 +154,7 @@ export const AuthStore = signalStore(
         return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName));
       },
 
-      loginWithImpersonation(delegatorUserId: string): Observable<IBaseApiResponse<IAuthData>> {
-        const request: ILoginWithImpersonationRequest = {
-          userName: store.userProfile()?.employeeID ?? '',
-          delegatorUserId: delegatorUserId,
-        };
+      loginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
         return this.handleLoginMethod(authApiService.loginWithImpersonation(request));
       },

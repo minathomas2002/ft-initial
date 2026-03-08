@@ -13,7 +13,7 @@ export enum EDelegationActions {
 
 
 export enum EImpersonationStatus {
-  NOUN = 1,
-  DELEGATOR = 2,
-  DELEGATE = 3
+  NOUN = 'noun',
+  DELEGATOR = 'delegator',
+  DELEGATEE = 'delegatee'
 }
