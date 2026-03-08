@@ -4,8 +4,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
-import { EOpportunityType, ERoles } from 'src/app/shared/enums';
-import { EInternalUserPlanStatus, IAssignee, IPlanFilter, ISelectItem } from 'src/app/shared/interfaces';
+import { EOpportunityType, ERoles, ESortingOrder } from 'src/app/shared/enums';
+import { EInternalUserPlanStatus, IAssignee, IOpportunitiesFilterRequest, IPlanFilter, ISelectItem } from 'src/app/shared/interfaces';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -18,6 +18,7 @@ import { ButtonModule } from 'primeng/button';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { BadgeModule } from 'primeng/badge';
 import { SelectModule } from 'primeng/select';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 
 interface IDropdownOption {
   label: string;
@@ -42,22 +43,15 @@ export class InternalUsersPlansFilter implements OnInit {
   readonly filterService = inject(InternalUsersPlansFilterService);
   private readonly i18nService = inject(I18nService);
   private readonly planStore = inject(PlanStore);
+  private readonly opportunitiesStore = inject(OpportunitiesStore);
   private readonly route = inject(ActivatedRoute);
   private readonly planApiService = inject(PlanApiService);
   private readonly roleService = inject(RoleService);
   readonly filter = this.filterService.filter;
-  availableOpportunities = computed<ISelectItem[]>(() => [
-    { id: "801d8798-4cea-4299-ab56-386d3e0327e8", name: "fsdfdsf1" },
-    { id: "801d8798-4cea-4299-ab56-386d3e0327e7", name: "fsdfdsf2" },
-    { id: "801d8798-4cea-4299-ab56-386d3e0327e6", name: "fsdfdsf3" },
-    { id: "801d8798-4cea-4299-ab56-386d3e0327e5", name: "fsdfdsf4" },
-    { id: "801d8798-4cea-4299-ab56-386d3e0327e4", name: "fsdfdsf5" },
-    { id: "801d8798-4cea-4299-ab56-386d3e0327e4", name: "fsdfdsf6" },
-  ]);
-  isLoadingAvailableOpportunities = computed<boolean>(()=>false);
+  opportunitiesList = this.opportunitiesStore.listLookup;
+  isLoadingopportunitiesList = this.opportunitiesStore.isLoadingopportunitiesList;
   assignees = signal<IAssignee[]>([]);
   isLoadingAssignees = signal(false);
-
   planTypeOptions = computed<IDropdownOption[]>(() => {
     return this.planStore.planTypeOptions() as IDropdownOption[];
   });
@@ -129,8 +123,29 @@ export class InternalUsersPlansFilter implements OnInit {
   }
 
   ngOnInit() {
+    this.loadOpportunityLookup();
     this.loadAssignees();
     this.listenToSearchChanges();
+  }
+
+  private loadOpportunityLookup() {
+    let req :IOpportunitiesFilterRequest ={
+      pageNumber :1,
+      pageSize:10000,
+      sortOrder:ESortingOrder.asc,
+      sortField:'id'
+    }
+    this.opportunitiesStore.getOpportunitiesLookup(req)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+
+          this.listenToQueryParamChanges();
+        },
+        error: (error) => {
+          console.error('Error loading assignees:', error);
+        }
+      });
   }
 
   private loadAssignees() {
@@ -187,6 +202,13 @@ export class InternalUsersPlansFilter implements OnInit {
         } else {
           updates.searchText = '';
         }
+
+        if (queryParams['opportunityId']) {
+          updates.opportunityId = queryParams['opportunityId'];
+        } else {
+          updates.opportunityId = '';
+        }
+
 
         if (queryParams['assignee']) {
           //skip if the filtered user is not existing in backend assignee list

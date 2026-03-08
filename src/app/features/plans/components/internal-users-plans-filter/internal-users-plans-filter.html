@@ -49,11 +49,11 @@
         <div class="col-span-12 md:col-span-2">
             <div class="flex flex-col">
               <p-select
-                [options]="availableOpportunities()"
+                [options]="opportunitiesList()"
                 optionLabel="name"
                 optionValue="id"
                 [placeholder]="'opportunities'"
-                [loading]="isLoadingAvailableOpportunities()"
+                [loading]="isLoadingopportunitiesList()"
                 [filter]="true"
                 filterBy="name"
                 [ngModel]="filter().opportunityId"

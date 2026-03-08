@@ -2,7 +2,7 @@ import { patchState, signalStore, withComputed, withMethods, withState } from '@
 import { computed, inject } from '@angular/core';
 import { finalize, map, of, tap } from 'rxjs';
 import { OpportunitiesApiService } from '../../api/opportunities/opportunities-api-service';
-import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityLocalizationTablesValidationResponse } from '../../interfaces/opportunities.interface';
+import { IOpportunitiesFilterRequest, IOpportunity, IOpportunityDetails, IOpportunityLocalizationTablesValidationResponse, IOpportunityLookup } from '../../interfaces/opportunities.interface';
 
 const initialState: {
   loading: boolean;
@@ -10,7 +10,9 @@ const initialState: {
   error: string | null;
   count: number;
   list: IOpportunity[];
+  listLookup: IOpportunityLookup[];
   isCheckingApplyOpportunity: boolean;
+  isLoadingopportunitiesList: boolean;
   details: IOpportunityDetails | null;
   opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null;
 } = {
@@ -19,9 +21,11 @@ const initialState: {
   error: null,
   count: 0,
   list: [],
+  listLookup: [],
   details: null,
   isCheckingApplyOpportunity: false,
-  opportunityLocalizationTablesValidation: null
+  opportunityLocalizationTablesValidation: null,
+  isLoadingopportunitiesList:false
 };
 export const OpportunitiesStore = signalStore(
   { providedIn: 'root' },
@@ -44,6 +48,19 @@ export const OpportunitiesStore = signalStore(
           }),
           finalize(() => {
             patchState(store, { loading: false });
+          })
+        )
+      },
+      getOpportunitiesLookup(filter: IOpportunitiesFilterRequest) {
+        patchState(store, { isLoadingopportunitiesList: true });
+        return opportunitiesApiService.getOpportunitiesLookup(filter).pipe(
+          tap((res) => {
+            const opportunities = res.body.data || [];
+            const totalCount = res.body.pagination?.totalCount ?? 0;
+            patchState(store, { listLookup: opportunities, count: totalCount });
+          }),
+          finalize(() => {
+            patchState(store, { isLoadingopportunitiesList: false });
           })
         )
       },
