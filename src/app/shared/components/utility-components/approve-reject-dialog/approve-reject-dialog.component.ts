@@ -10,7 +10,7 @@ import { take } from 'rxjs';
 
 @Component({
   selector: 'app-approve-reject-dialog',
-  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent, SignaturePadComponent, TranslatePipe],
+  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent, SignaturePadComponent],
   templateUrl: './approve-reject-dialog.component.html',
   styleUrl: './approve-reject-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
