@@ -11,6 +11,10 @@ export interface IOpportunity {
   isOtherOpportunity: boolean,
   icon: string
 }
+export interface IOpportunityLookup {
+  id: string,
+  name: string,
+}
 
 export type TOpportunitiesSortingKeys = keyof IOpportunity;
 

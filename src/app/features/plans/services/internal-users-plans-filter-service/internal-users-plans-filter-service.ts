@@ -21,25 +21,27 @@ export class InternalUsersPlansFilterService extends AbstractServiceFilter<IPlan
 
   showClearAll = computed(() => {
     const current = this.filter();
+    const hasOpportunityId = Boolean(current.opportunityId?.trim());
     const hasSearch = Boolean(current.searchText?.trim());
     const hasPlanType = Array.isArray(current.planType) ? current.planType.length > 0 : current.planType !== null;
     const hasStatus = Array.isArray(current.status) ? current.status.length > 0 : current.status !== null;
     const hasAssignee = Array.isArray(current.assignee) ? current.assignee.length > 0 : current.assignee !== null;
     const hasSubmissionDate = Boolean(current.submissionDate);
 
-    return hasSearch || hasPlanType || hasStatus || hasAssignee || hasSubmissionDate;
+    return hasOpportunityId || hasSearch || hasPlanType || hasStatus || hasAssignee || hasSubmissionDate;
   });
 
   activeFiltersCount = computed(() => {
     const current = this.filter();
 
     const searchCount = current.searchText?.trim() ? 1 : 0;
+    const searchOpportunity = current.opportunityId?.trim() ? 1 : 0;
     const planTypeCount = Array.isArray(current.planType) ? current.planType.length : 0;
     const statusCount = Array.isArray(current.status) ? current.status.length : 0;
     const assigneeCount = Array.isArray(current.assignee) ? current.assignee.length : 0;
     const submissionDateCount = current.submissionDate?.length === 2 ? 1 : 0;
 
-    return searchCount + planTypeCount + statusCount + assigneeCount + submissionDateCount;
+    return searchOpportunity + searchCount + planTypeCount + statusCount + assigneeCount + submissionDateCount;
   });
 
   performFilter$() {
