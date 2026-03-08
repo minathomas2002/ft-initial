@@ -29,5 +29,10 @@
   "i18n-ally.sourceLanguage": "en",
   "i18n-ally.displayLanguage": "en",
   "angular.experimental-ivy": true,
-  "biome.executable": "${workspaceFolder}/node_modules/.bin/biome"
+  "biome.executable": "${workspaceFolder}/node_modules/.bin/biome",
+  "i18n-ally.localesPaths": [
+    "src/locale",
+    "src/assets/i18n",
+    "src/app/shared/services/i18n"
+  ]
 }

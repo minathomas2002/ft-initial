@@ -22,12 +22,12 @@ export class ProfileApiService {
   updatePersonalInfo(request: IUpdatePersonalInfoRequest): Observable<IBaseApiResponse<boolean>> {
     return this.http.post<IBaseApiResponse<boolean>>(`${this.baseUrl}/${API_ENDPOINTS.profile.updatePersonalInfo}`, request);
   }
-
+  // add refresh token to the request
+ 
   changePassword(request: IChangePasswordRequest): Observable<IBaseApiResponse<void>> {
     return this.http.post<IBaseApiResponse<void>>(
       `${this.baseUrl}/${API_ENDPOINTS.profile.changePassword}`,
-      request,
-      { withCredentials: true }
+      request
     );
   }
 
