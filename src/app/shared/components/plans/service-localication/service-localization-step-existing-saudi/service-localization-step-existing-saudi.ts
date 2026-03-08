@@ -778,6 +778,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
       });
 
       if (shouldRequire) {
+        this._attachmentsUnlockedByProvideAgreementChange.set(true);
+        this.enableAttachmentsSectionForResubmit();
         attachmentsControl.addValidators(Validators.required);
       } else {
         attachmentsControl.removeValidators(Validators.required);
