@@ -29,7 +29,7 @@
       <div class="text-xs text-gray-500 mb-1">{{'common.LastModifiedDate'|translate}}</div>
       <div class="flex items-center gap-2 font-medium">
         <i class="icon-calender text-gray-500"></i>
-        {{(opportunityDetails()?.updatedDate|date)??opportunityDetails()?.createdDate|date}}
+        {{ opportunityDetails()?.updatedDate == null  ?'___':opportunityDetails()?.updatedDate|date}}
       </div>
     </div>
 
