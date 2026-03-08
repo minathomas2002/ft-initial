@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ServicePlanFormService } from '../service-plan-form-service/service-plan-form-service';
-import { ErrorMessagesFactory } from 'src/app/shared/classes/error-messages.factory';
+import { ErrorMessagesService } from 'src/app/shared/services/error-messages/error-messages.service';
 
 export interface IFormFieldError {
   fieldPath: string;
@@ -20,6 +20,7 @@ export interface IStepValidationErrors {
 })
 export class ServicePlanValidationService {
   private readonly formService = inject(ServicePlanFormService);
+  private readonly errorMessagesService = inject(ErrorMessagesService);
 
   /**
    * Validates all forms and returns structured error information
@@ -106,7 +107,7 @@ export class ServicePlanValidationService {
   ): void {
     if (control instanceof FormControl) {
       if (control.invalid && control.errors) {
-        const errorMessages = ErrorMessagesFactory.getErrorMessages(control, this.getFieldLabel(path));
+        const errorMessages = this.errorMessagesService.getErrorMessages(control, this.getFieldLabel(path));
         if (errorMessages.length > 0) {
           errors.set(path, {
             fieldPath: path,

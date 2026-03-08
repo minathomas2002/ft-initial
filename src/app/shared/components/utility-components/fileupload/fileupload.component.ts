@@ -30,7 +30,12 @@ export class FileuploadComponent {
   maxFileSize = input<number>(1024 * 1024 * 10); // 10MB default
   acceptedFileTypes = input<string>("*/*");
   files = model<File[]>([]);
-  placeholder = input("SVG, PNG, JPG, PDF, DOCX, MP4");
+  placeholder = input<string | undefined>(undefined);
+
+  /** Effective placeholder: custom value or translated default file types hint */
+  effectivePlaceholder = computed(() =>
+    this.placeholder() ?? this.i18nService.translate('common.placeholder.fileTypes')
+  );
   multiple = input<boolean>(false);
   styleClass = input<string>("");
 

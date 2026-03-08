@@ -3,7 +3,7 @@
   <!-- Resubmit mode: Show Add/Edit comment button without checkboxes -->
   @if(commentPhase() === 'viewing'){
   <p-button
-    label="Edit"
+    [label]="'common.edit' | translate"
     variant="outlined"
     icon="icon-edit"
     rounded
@@ -12,7 +12,7 @@
   />
 
   <p-button
-    label="Delete"
+    [label]="'common.delete' | translate"
     severity="danger"
     icon="icon-trash-2"
     rounded
@@ -22,7 +22,7 @@
   />
   } @else if(!hasInvestorComment() && commentPhase() === 'none'){
   <p-button
-    label="Add Comment"
+    [label]="'plans.comments.addComment' | translate"
     severity="warn"
     icon="icon-message-circle"
     rounded
@@ -30,7 +30,7 @@
   />
   } @else if(commentPhase() === 'editing'){
   <p-button
-    label="Save"
+    [label]="'common.save' | translate"
     severity="warn"
     icon="icon-check-circle"
     rounded
@@ -42,7 +42,7 @@
   <!-- Normal mode: Show full comment state with checkboxes -->
   @if(commentPhase() === 'viewing'){
   <p-button
-    label="Edit"
+    [label]="'common.edit' | translate"
     variant="outlined"
     icon="icon-edit"
     rounded
@@ -51,7 +51,7 @@
   />
 
   <p-button
-    label="Delete"
+    [label]="'common.delete' | translate"
     severity="danger"
     icon="icon-trash-2"
     rounded
@@ -69,12 +69,12 @@
       [binary]="true"
       [disabled]="true"
     />
-    <span class="text-md font-semibold text-gray-600">{{ commentsCount() }} Selected</span>
+    <span class="text-md font-semibold text-gray-600">{{ commentsCount() }} {{ 'plans.comments.selected' | translate }}</span>
   </div>
   }
   @if(commentPhase() === 'adding'){
   <p-button
-    label="Add Comment"
+    [label]="'plans.comments.addComment' | translate"
     severity="warn"
     icon="icon-message-circle"
     rounded
@@ -83,7 +83,7 @@
   />
   }@else{
   <p-button
-    label="Save"
+    [label]="'common.save' | translate"
     severity="warn"
     icon="icon-check-circle"
     rounded

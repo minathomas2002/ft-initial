@@ -1,7 +1,7 @@
 <app-personal-information-card
-  [sectionTitle]="'Personal Information'"
-  [sectionDescription]="isInvestor() ? 'Update your personal details here.' : 'View your personal details here.'"
-  [submitActionLabel]="'Update'"
+  [sectionTitle]="'profile.personalInformation' | translate"
+  [sectionDescription]="(isInvestor() ? 'profile.updateDetailsDesc' : 'profile.viewDetailsDesc') | translate"
+  [submitActionLabel]="'profile.update' | translate"
   [hideFooter]="!isInvestor() || isViewMode()"
   (onCancelClicked)="onCancelClick()"
   (onSubmit)="onSubmit()"
@@ -10,7 +10,7 @@
   @if(isViewMode() && isInvestor()){
   <p-button
     headerAction
-    [label]="'Edit'"
+    [label]="'common.edit' | translate"
     size="small"
     severity="secondary"
     icon="icon-edit-05"
@@ -26,7 +26,7 @@
     <div class="grid grid-cols-2 gap-8">
       <!-- Name En -->
       <app-personal-information-form-field
-        [label]="isInvestor() ? 'Name' : 'English Name'"
+        [label]="(isInvestor() ? 'profile.name' : 'profile.englishName') | translate"
         [required]="!isViewMode()"
       >
         @if(isViewMode()){
@@ -35,14 +35,14 @@
         <div>
           <input
             pInputText
-            [placeholder]="'Enter your full name'"
+            [placeholder]="'profile.placeholder.fullName' | translate"
             fluid
             maxlength="150"
             [formControl]="formService.fullName"
           />
           <app-base-error-messages
             [control]="formService.fullName"
-            [label]="'Full Name'"
+            [label]="'profile.fullName' | translate"
           />
         </div>
         }
@@ -51,7 +51,7 @@
       <!-- Name Ar -->
       @if(!isInvestor()){
       <app-personal-information-form-field
-        label="Arabic Name"
+        [label]="'profile.arabicName' | translate"
         [required]="!isViewMode()"
       >
         @if(isViewMode()){
@@ -62,7 +62,7 @@
 
       <!-- E-mail -->
       <app-personal-information-form-field
-        label="E-mail"
+        [label]="'profile.email' | translate"
         [required]="false"
       >
         @if(isViewMode()){
@@ -70,7 +70,7 @@
         }@else {
         <input
           pInputText
-          [placeholder]="'Enter your e-mail'"
+          [placeholder]="'profile.placeholder.email' | translate"
           fluid
           maxlength="150"
           [formControl]="formService.email"
@@ -81,7 +81,7 @@
 
       <!-- Phone Number -->
       <app-personal-information-form-field
-        label="Phone Number"
+        [label]="'profile.phoneNumber' | translate"
         [required]="!isViewMode()"
       >
         @if(isViewMode()){
@@ -99,7 +99,7 @@
           />
           <app-base-error-messages
             [control]="formService.phoneNumber"
-            [label]="'Phone Number'"
+            [label]="'profile.phoneNumber' | translate"
           />
         </div>
         }
@@ -108,7 +108,7 @@
       @if(!isInvestor()){
       <!-- User ID -->
       <app-personal-information-form-field
-        label="User ID"
+        [label]="'profile.userId' | translate"
         [required]="false"
       >
         @if(isViewMode()){
@@ -118,7 +118,7 @@
 
       <!-- Role -->
       <app-personal-information-form-field
-        label="Role"
+        [label]="'profile.role' | translate"
         [required]="false"
       >
         @if(isViewMode()){
@@ -130,7 +130,7 @@
       <!-- Other Phone Number -->
       @if(isInvestor()){
       <app-personal-information-form-field
-        label="Other Phone Number"
+        [label]="'profile.otherPhoneNumber' | translate"
         [required]="false"
       >
         @if(isViewMode()){
@@ -146,7 +146,7 @@
           />
           <app-base-error-messages
             [control]="formService.otherPhoneNumber"
-            [label]="'Other Phone Number'"
+            [label]="'profile.otherPhoneNumber' | translate"
           />
         </div>
         }
@@ -154,7 +154,7 @@
 
       <!-- BENA ID -->
       <app-personal-information-form-field
-        label="BENA ID"
+        [label]="'profile.benaId' | translate"
         [required]="false"
       >
         @if(isViewMode()){
@@ -171,7 +171,7 @@
 
       <!-- SEC Registered ID -->
       <app-personal-information-form-field
-        label="SEC Registered ID"
+        [label]="'profile.secRegisteredId' | translate"
         [required]="false"
       >
         @if(isViewMode()){
@@ -184,14 +184,14 @@
           inputmode="numeric"
           pattern="[0-9]*"
           maxlength="7"
-          [placeholder]="'Enter your SEC registered ID'"
+          [placeholder]="'profile.placeholder.secRegisteredId' | translate"
           [formControl]="formService.secRegisteredId"
           (input)="onRegisteredVendorIDWithSecInput($event)"
           class="ltr"
         />
         <app-base-error-messages
           [control]="formService.secRegisteredId"
-          [label]="'SEC Registered ID'"
+          [label]="'profile.secRegisteredId' | translate"
         />
         }
       </app-personal-information-form-field>

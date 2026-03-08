@@ -1,7 +1,8 @@
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { merge } from 'rxjs';
-import { ErrorMessagesFactory } from 'src/app/shared/classes/error-messages.factory';
+import { ErrorMessagesService } from 'src/app/shared/services/error-messages/error-messages.service';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { BaseErrorComponent } from '../base-error/base-error.component';
 
 @Component({
@@ -11,6 +12,9 @@ import { BaseErrorComponent } from '../base-error/base-error.component';
   styleUrl: './base-error-messages.scss',
 })
 export class BaseErrorMessages {
+  private readonly errorMessagesService = inject(ErrorMessagesService);
+  private readonly i18n = inject(I18nService);
+
   control = input.required<AbstractControl>();
   label = input.required<string>();
   customRequiredMessage = input<string | null>(null);
@@ -41,14 +45,19 @@ export class BaseErrorMessages {
   errorMessages = computed(() => {
     // Read trigger to make computed reactive to input changes
     this.controlChangeTrigger();
-    const messages = ErrorMessagesFactory.getErrorMessages(this.control(), this.label());
+    const messages = this.errorMessagesService.getErrorMessages(
+      this.control(),
+      this.label()
+    );
     const customRequiredMessage = this.customRequiredMessage();
 
     if (!customRequiredMessage) {
       return messages;
     }
 
-    const defaultRequiredMessage = `${this.label()} is required`;
+    const defaultRequiredMessage = this.i18n.translate('common.validation.required', {
+      label: this.label(),
+    });
     return messages.map((message) =>
       message === defaultRequiredMessage ? customRequiredMessage : message
     );

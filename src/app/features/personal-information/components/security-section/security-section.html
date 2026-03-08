@@ -1,12 +1,12 @@
 <app-personal-information-card
-  [sectionTitle]="'Security'"
-  [sectionDescription]="'Manage your account security settings.'"
+  [sectionTitle]="'profile.security' | translate"
+  [sectionDescription]="'profile.securityDesc' | translate"
   [hideFooter]="true"
   [hideBody]="true"
 >
   <p-button
     headerAction
-    label="Change Password"
+    [label]="'profile.changePassword' | translate"
     severity="secondary"
     icon="icon-key-02"
     (onClick)="onChangePasswordClick()"

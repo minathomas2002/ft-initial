@@ -15,10 +15,12 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { I18nService } from 'src/app/shared/services/i18n';
 import { IUpdatePersonalInfoRequest } from 'src/app/shared/interfaces';
 import { ButtonModule } from 'primeng/button';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-personal-information-section',
   imports: [
+    TranslatePipe,
     PersonalInformationCard,
     PersonalInformationFormField,
     PersonalInformationSkeleton,

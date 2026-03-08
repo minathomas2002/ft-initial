@@ -467,6 +467,7 @@ export const PlanStore = signalStore(
     const opportunitiesApiService = inject(OpportunitiesApiService);
     const planApiService = inject(PlanApiService);
     const roleService = inject(RoleService);
+    const i18n = inject(I18nService);
     return {
       getActiveOpportunityLookUps(): Observable<IBaseApiResponse<ISelectItem[]>> {
         if (!store.newPlanOpportunityType()) return of({} as IBaseApiResponse<ISelectItem[]>);
@@ -501,8 +502,8 @@ export const PlanStore = signalStore(
             }
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading opportunity details' });
-            return throwError(() => new Error('Error loading opportunity details'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadOpportunityDetails') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadOpportunityDetails')));
           })
         );
       },
@@ -517,8 +518,8 @@ export const PlanStore = signalStore(
             patchState(store, { currentEmployee: res.body.currentEmployee || null });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error getting active employees' });
-            return throwError(() => new Error('Error getting active employees'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.getActiveEmployees') });
+            return throwError(() => new Error(i18n.translate('plans.errors.getActiveEmployees')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -533,8 +534,8 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error assigning system employee' });
-            return throwError(() => new Error('Error assigning system employee'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.assignEmployee') });
+            return throwError(() => new Error(i18n.translate('plans.errors.assignEmployee')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -549,8 +550,8 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error assigning system employee' });
-            return throwError(() => new Error('Error assigning system employee'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.assignEmployee') });
+            return throwError(() => new Error(i18n.translate('plans.errors.assignEmployee')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -567,9 +568,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error saving product localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.saveProductPlan'),
             });
-            return throwError(() => new Error('Error saving product localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.saveProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -586,9 +587,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error submitting product localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.submitProductPlan'),
             });
-            return throwError(() => new Error('Error submitting product localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.submitProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -605,9 +606,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error submitting service localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.submitServicePlan'),
             });
-            return throwError(() => new Error('Error submitting service localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.submitServicePlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -624,9 +625,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error resubmitting product localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.resubmitProductPlan'),
             });
-            return throwError(() => new Error('Error resubmitting product localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.resubmitProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -643,9 +644,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error resubmitting service localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.resubmitServicePlan'),
             });
-            return throwError(() => new Error('Error resubmitting service localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.resubmitServicePlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -662,9 +663,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error saving product localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.saveProductPlan'),
             });
-            return throwError(() => new Error('Error saving product localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.saveProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -681,9 +682,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error sending plan back',
+              error: error.errorMessage || i18n.translate('plans.errors.sendPlanBack'),
             });
-            return throwError(() => new Error('Error sending plan back'));
+            return throwError(() => new Error(i18n.translate('plans.errors.sendPlanBack')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -699,9 +700,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error approving plan',
+              error: error.errorMessage || i18n.translate('plans.errors.approvePlan'),
             });
-            return throwError(() => new Error('Error approving plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.approvePlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -717,9 +718,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error rejecting plan',
+              error: error.errorMessage || i18n.translate('plans.errors.rejectPlan'),
             });
-            return throwError(() => new Error('Error rejecting plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.rejectPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -736,9 +737,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error rejecting Acknowledge plan',
+              error: error.errorMessage || i18n.translate('plans.errors.rejectAcknowledgePlan'),
             });
-            return throwError(() => new Error('Error rejecting Acknowledge plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.rejectAcknowledgePlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -764,8 +765,8 @@ export const PlanStore = signalStore(
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading product plan' });
-            return throwError(() => new Error('Error loading product plan'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadProductPlan') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -793,8 +794,8 @@ export const PlanStore = signalStore(
 
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading service plan' });
-            return throwError(() => new Error('Error loading service plan'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadServicePlan') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadServicePlan')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -811,8 +812,8 @@ export const PlanStore = signalStore(
             patchState(store, { timeLineList: res.body || [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading timeline data' });
-            return throwError(() => new Error('Error loading plan timeline'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadTimeline') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadTimeline')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -842,8 +843,8 @@ export const PlanStore = signalStore(
             downloadFileFromBlob(res.blob, res.filename);
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error generating service plan pdf' });
-            return throwError(() => new Error('Error generating service plan pdf'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.generateServicePdf') });
+            return throwError(() => new Error(i18n.translate('plans.errors.generateServicePdf')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -860,8 +861,8 @@ export const PlanStore = signalStore(
             patchState(store, { currentUserPageComments: [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading plan comments' });
-            return throwError(() => new Error('Error loading plan comments'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadComments') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadComments')));
           })
         );
       },
@@ -877,6 +878,7 @@ export const PlanStore = signalStore(
   }),
   withMethods((store) => {
     const planApiService = inject(PlanApiService);
+    const i18n = inject(I18nService);
     return {
       getInvestorPlans(filter: IPlanFilterRequest) {
         patchState(store, { loading: true });
@@ -912,8 +914,8 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error deleting draft plan' });
-            return throwError(() => new Error('Error deleting draft plan'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.deleteDraft') });
+            return throwError(() => new Error(i18n.translate('plans.errors.deleteDraft')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -931,10 +933,10 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error exporting plans',
+              error: error.errorMessage || i18n.translate('plans.errors.exportPlans'),
               isProcessing: false,
             });
-            return throwError(() => new Error('Error exporting plans'));
+            return throwError(() => new Error(i18n.translate('plans.errors.exportPlans')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });

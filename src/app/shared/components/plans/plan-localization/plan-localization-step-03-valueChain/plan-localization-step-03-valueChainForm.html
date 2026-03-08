@@ -2,7 +2,7 @@
   <!-- Value Chain Components Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">
-      Value Chain Components
+      {{ 'plans.form.valueChainComponents' | translate }}
       <span>
         <i
           class="icon-info text-sm ms-2 text-gray-400"
@@ -47,7 +47,7 @@
 
     <!-- Design & Engineering Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">Design & Engineering
+      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.designEngineering' | translate }}
         @if(isRequired(EOpportunityLocalizationTablesValidation.DesignEngineering)){
         <span class="text-red-500">*</span>
         }
@@ -389,7 +389,7 @@
       </app-form-array-input>
       <app-base-error-messages
         [control]="getDesignEngineeringFormArray()!"
-        [label]="'Design & Engineering'"
+        [label]="'plans.form.designEngineering' | translate"
       />
       } @else {
       <div class="rounded-2xl overflow-hidden border border-gray-300">
@@ -419,7 +419,7 @@
 
     <!-- Sourcing Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">Sourcing
+      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.sourcing' | translate }}
         @if(isRequired(EOpportunityLocalizationTablesValidation.Sourcing)){
         <span class="text-red-500">*</span>
         }
@@ -761,7 +761,7 @@
       </app-form-array-input>
       <app-base-error-messages
         [control]="getSourcingFormArray()!"
-        [label]="'Sourcing'"
+        [label]="'plans.form.sourcing' | translate"
       />
       } @else {
       <div class="rounded-2xl overflow-hidden border border-gray-300">
@@ -791,7 +791,7 @@
 
     <!-- Manufacturing Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">Manufacturing
+      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.manufacturing' | translate }}
         @if(isRequired(EOpportunityLocalizationTablesValidation.Manufacturing)){
         <span class="text-red-500">*</span>
         }
@@ -1120,7 +1120,7 @@
       </app-form-array-input>
       <app-base-error-messages
         [control]="getManufacturingFormArray()!"
-        [label]="'Manufacturing'"
+        [label]="'plans.form.manufacturing' | translate"
       />
       } @else {
       <div class="rounded-2xl overflow-hidden border border-gray-300">
@@ -1150,7 +1150,7 @@
 
     <!-- Assembly & Testing Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">Assembly & Testing
+      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.assemblyTesting' | translate }}
         @if(isRequired(EOpportunityLocalizationTablesValidation.AssemblyTesting)){
         <span class="text-red-500">*</span>
         }
@@ -1493,7 +1493,7 @@
       </app-form-array-input>
       <app-base-error-messages
         [control]="getAssemblyTestingFormArray()!"
-        [label]="'Assembly & Testing'"
+        [label]="'plans.form.assemblyTesting' | translate"
       />
       } @else {
       <div class="rounded-2xl overflow-hidden border border-gray-300">
@@ -1523,7 +1523,7 @@
 
     <!-- After-Sales Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">After-Sales
+      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.afterSales' | translate }}
         @if(isRequired(EOpportunityLocalizationTablesValidation.AfterSales)){
         <span class="text-red-500">*</span>
         }
@@ -1865,7 +1865,7 @@
       </app-form-array-input>
       <app-base-error-messages
         [control]="getAfterSalesFormArray()!"
-        [label]="'After-Sales'"
+        [label]="'plans.form.afterSales' | translate"
       />
       } @else {
       <div class="rounded-2xl overflow-hidden border border-gray-300">
@@ -1895,7 +1895,7 @@
     <app-value-chain-summary></app-value-chain-summary>
     <app-base-error-messages
       [control]="formGroup"
-      [label]="'Total Cost Percentage'"
+      [label]="'plans.form.totalCostPercentage' | translate"
     />
   </div>
 
@@ -1921,9 +1921,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.comments.deleteCommentTitle' : 'plans.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"

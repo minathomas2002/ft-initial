@@ -7,8 +7,8 @@
   [isConfirmationDisabled]="!allowSaveAction() || profilePictureProcessing()"
   [confirmButtonClass]="'w-[80px]'"
   [cancelButtonClass]="'w-[60px]'"
-  [confirmLabel]="confirmLabel"
-  [cancelLabel]="cancelLabel"
+  [confirmLabel]="confirmLabel | translate"
+  [cancelLabel]="cancelLabel | translate"
   (onConfirm)="onSaveUserPhoto()"
   (onClose)="onCloseClick()"
 >

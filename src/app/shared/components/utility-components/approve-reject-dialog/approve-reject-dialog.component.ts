@@ -4,13 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { BaseLabelComponent } from "../../base-components/base-label/base-label.component";
 import { SignaturePadComponent } from "../../form/signature-pad/signature-pad.component";
-import { TranslatePipe } from 'src/app/shared/pipes';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
 
 @Component({
   selector: 'app-approve-reject-dialog',
-  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent, SignaturePadComponent, TranslatePipe],
+  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent, SignaturePadComponent],
   templateUrl: './approve-reject-dialog.component.html',
   styleUrl: './approve-reject-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

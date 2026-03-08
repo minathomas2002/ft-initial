@@ -25,14 +25,14 @@ import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 export class ChangeYourProfilePictureModal implements OnDestroy {
   visible = model<boolean>(false);
   icon = 'icon-image-up';
-  dialogTitle = 'Change your profile picture';
+  dialogTitle = 'profile.changeProfilePicture';
   image = input<string>('assets/images/user_placeholder.svg');
   userPlaceholderImage = 'assets/images/user_placeholder.svg';
   newProfilePicture = signal<File | null>(null);
   allowSaveAction = signal<boolean>(false);
   previewImageUrl = signal<string | null>(null);
-  confirmLabel = 'Save';
-  cancelLabel = 'Back';
+  confirmLabel = 'common.save';
+  cancelLabel = 'common.back';
   attachmentService = inject(AttachmentService);
   private toasterService = inject(ToasterService);
   private i18nService = inject(I18nService);

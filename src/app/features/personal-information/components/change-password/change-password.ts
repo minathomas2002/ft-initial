@@ -31,7 +31,7 @@ export class ChangePassword {
   private readonly toasterService = inject(ToasterService);
   private readonly i18nService = inject(I18nService);
   readonly profileStore = inject(ProfileStore);
-  protected confirmLabel = 'Update';
+  protected confirmLabel = 'profile.update';
 
   visible = model<boolean>(false);
   changePasswordForm = this.fb.group(

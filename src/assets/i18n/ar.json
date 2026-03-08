@@ -63,8 +63,48 @@
     "CreatorName": "اسم المُنشئ",
     "CreationDate": "تاريخ الإنشاء",
     "LastModifiedBy": "آخر تعديل بواسطة",
-    "LastModifiedDate": "تاريخ آخر تعديل"
-	},
+    "LastModifiedDate": "تاريخ آخر تعديل",
+    "errors": {
+      "unauthorized": "غير مصرح لك بالوصول إلى هذا المورد أو أن المستخدم غير نشط",
+      "uploadSizeExceeded": "الحد الأقصى المسموح به لحجم التحميل هو 30 ميجابايت",
+      "serverError": "تواجه مشكلة في الخادم. يرجى المحاولة مرة أخرى لاحقاً."
+    },
+    "validation": {
+      "expectedLength": "{{label}} يجب أن يكون {{expectedLength}} أرقام",
+      "required": "{{label}} مطلوب",
+      "maxlength": "{{label}} يجب أن يكون أقل من {{count}} حرفاً",
+      "maxlengthDigits": "{{label}} يجب أن يكون أقل من {{count}} أرقام",
+      "minlength": "{{label}} يجب أن يكون على الأقل {{count}} حرفاً",
+      "minlengthDigits": "{{label}} يجب أن يكون على الأقل {{count}} أرقام",
+      "max": "{{label}} يجب أن يكون أقل من {{max}}",
+      "min": "{{label}} يجب أن يكون أكبر من أو يساوي {{min}}",
+      "inComplete": "{{label}} يحتوي على حقول ناقصة أو غير صالحة",
+      "totalExceeds100": "{{label}} يجب أن يكون 100٪",
+      "invalidPhoneNumber": "يرجى إدخال {{label}} صالح",
+      "email": "{{label}} غير صالح",
+      "alphabetsAndSpacesOnly": "يرجى إدخال {{label}} صالح يحتوي على أحرف فقط.",
+      "invalidJobTitle": "يرجى إدخال {{label}} صالح.",
+      "invalidContactNumber": "يرجى إدخال رقم جوال صالح (مثال: 05XXXXXXXX).",
+      "passwordMismatch": "كلمات المرور غير متطابقة",
+      "fileSizeExceeded": "يجب أن تكون جميع الملفات المرفوعة في {{label}} أقل من {{maxSizeMB}} ميجابايت",
+      "dateRangeInvalid": "{{label}} يجب أن يكون بعد تاريخ البدء",
+      "minQuantityError": "{{label}} يجب أن يكون أقل من الكمية القصوى",
+      "maxQuantityError": "{{label}} يجب أن يكون أكبر من الكمية الدنيا",
+      "fallback": "هذا الحقل غير صالح",
+      "characters": "حروف",
+      "digits": "أرقام"
+    },
+    "placeholder": {
+      "fileTypes": "SVG, PNG, JPG, PDF, DOCX, MP4",
+      "enterNumber": "أدخل الرقم",
+      "enterPercentage": "أدخل النسبة المئوية",
+      "enterCost": "أدخل التكلفة",
+      "fileUploadHint": "يمكنك تحميل أي نوع ملف (صور، مستندات).",
+      "fileUploadHintExtended": "يمكنك تحميل أي نوع ملف (صور، مستندات، أرشيفات).",
+      "exampleEntities": "مثال: MoEn، PIF، إلخ.",
+      "supportRequiredHint": "اذكر الدعم المطلوب من هيئة السوق المالية لتوطين الخدمة (إن وجد)"
+    }
+  },
 	"footer": {
 		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
 		"terms": "الشروط والأحكام",
@@ -162,6 +202,7 @@
 			"confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
 			"passwordMismatch": "كلمتا المرور غير متطابقتين",
 			"success": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل.",
+			"verificationSentSuccess": "تم إرسال رابط التحقق إلى بريدك الإلكتروني بنجاح",
 			"invalidEmailFormat": "يرجى إدخال بريد إلكتروني صالح",
 			"generalError": "فشل التسجيل. يرجى المحاولة مرة أخرى لاحقاً."
 		},
@@ -177,7 +218,10 @@
 		"personalInformation": "المعلومات الشخصية",
 		"updateDetailsDesc": "قم بتحديث بياناتك الشخصية هنا.",
 		"viewDetailsDesc": "عرض بياناتك الشخصية هنا.",
+		"update": "تحديث",
+		"name": "الاسم",
 		"nameEn": "الاسم / الاسم الإنجليزي",
+		"englishName": "الاسم الإنجليزي",
 		"fullName": "الاسم الكامل",
 		"arabicName": "الاسم العربي",
 		"email": "البريد الإلكتروني",
@@ -195,13 +239,17 @@
 		"uploadSignatureBtn": "تحميل التوقيع",
 		"yourSignature": "توقيعك",
 		"deleteSignatureConfirm": "هل أنت متأكد من حذف توقيعك؟ لا يمكن التراجع عن هذا الإجراء.",
+		"security": "الأمان",
+		"securityDesc": "إدارة إعدادات أمان حسابك.",
+		"newPassword": "كلمة المرور الجديدة",
 		"changeProfilePicture": "تغيير صورة الملف الشخصي",
 		"currentPassword": "كلمة المرور الحالية",
 		"confirmNewPassword": "تأكيد كلمة المرور الجديدة",
 		"placeholder": {
 			"fullName": "أدخل اسمك الكامل",
 			"email": "أدخل بريدك الإلكتروني",
-			"secRegisteredId": "أدخل معرف التسجيل في شركة الكهرباء"
+			"secRegisteredId": "أدخل معرف التسجيل في شركة الكهرباء",
+			"newPassword": "أدخل كلمة المرور الجديدة"
 		},
 		"signature": {
 			"noSignature": "لم يتم إنشاء توقيع",
@@ -250,7 +298,8 @@
 			"inactive": "غير نشط"
 		},
 		"warning": {
-			"draftAfterStartDate": "هذه المسودة لديها تاريخ بداية قد مضى بالفعل."
+			"draftAfterStartDate": "هذه المسودة لديها تاريخ بداية قد مضى بالفعل.",
+			"inProgressPlan": "التقديم غير مسموح بينما توجد خطة قيد التنفيذ للفرصة المحددة."
 		},
 		"action": {
 			"edit": "تعديل",
@@ -434,6 +483,19 @@
 		}
 	},
 	"users": {
+		"errors": {
+			"fetchEmployees": "خطأ في جلب موظفي النظام",
+			"updateEmployee": "خطأ في تحديث موظف النظام",
+			"toggleStatus": "خطأ في تبديل حالة موظف النظام",
+			"createEmployee": "خطأ في إنشاء موظف النظام",
+			"getEmployeeDetails": "خطأ في الحصول على تفاصيل موظف النظام",
+			"getEmployeeDateFromHR": "خطأ في الحصول على بيانات الموظف من الموارد البشرية",
+			"getActiveEmployees": "خطأ في الحصول على الموظفين النشطين",
+			"fetchRoles": "خطأ في جلب الأدوار",
+			"fetchRoleManagementList": "خطأ في جلب قائمة إدارة الأدوار",
+			"fetchCurrentRoleHolders": "خطأ في جلب أصحاب الأدوار الحاليين",
+			"transferRole": "خطأ في نقل الدور"
+		},
 		"actions": {
 			"changeRole": "تغيير الدور",
 			"delete": "حذف",
@@ -627,8 +689,14 @@
 			"statusPlaceholder": "اختر الحالة"
 		},
 		"table": {
+			"delegator": "الموكل",
+			"delegatee": "الموكل إليه",
 			"delegatorName": "اسم الموكل",
 			"delegateeName": "اسم الموكل إليه",
+			"delegatorTooltip": "الموكل – المالك الأصلي للمهام.",
+			"delegateeTooltip": "الموكل إليه – المستخدم المخول بالتصرف نيابة عن الموكل.",
+			"lastModifiedBy": "آخر تعديل بواسطة",
+			"lastModifiedDate": "تاريخ آخر تعديل",
 			"startDate": "تاريخ البدء",
 			"endDate": "تاريخ الانتهاء",
 			"createdAt": "تاريخ الإنشاء",
@@ -643,6 +711,14 @@
 			"updatedSuccess": "تم تحديث التفويض بنجاح",
 			"deleteSuccess": "تم حذف التفويض بنجاح",
 			"cancelSuccess": "تم إلغاء التفويض بنجاح"
+		},
+		"errors": {
+			"fetchList": "خطأ في جلب قائمة التفويض",
+			"add": "خطأ في إضافة التفويض",
+			"edit": "خطأ في تعديل التفويض",
+			"fetchActiveEmployees": "خطأ في جلب الموظفين النشطين",
+			"delete": "خطأ في حذف التفويض",
+			"cancel": "خطأ في إلغاء التفويض"
 		}
 	},
 	"investors": {
@@ -670,9 +746,11 @@
 	},
 	"dashboard": {
 		"messages": {
-			"planRemoved": "تم حذف خطتك بنجاح."
+			"planRemoved": "تم حذف خطتك بنجاح.",
+			"exportSuccess": "تم تصدير الخطط بنجاح."
 		},
 		"errors": {
+			"noFileReturned": "لم يتم إرجاع ملف من الخادم",
 			"productPdfError": "خطأ في إنشاء ملف PDF لخطة المنتج",
 			"servicePdfError": "خطأ في إنشاء ملف PDF لخطة الخدمة",
 			"deletePlanError": "خطأ في حذف الخطة"
@@ -867,7 +945,8 @@
 			"selectFieldFirst": "يرجى تحديد حقل واحد على الأقل قبل إضافة تعليق.",
 			"maxLength": "لا يمكن أن يتجاوز التعليق 255 حرفاً.",
 			"deleteCommentTitle": "هل أنت متأكد من حذف التعليق؟",
-			"deleteCommentAndFieldsTitle": "هل أنت متأكد من حذف التعليق والحقول المحددة؟"
+			"deleteCommentAndFieldsTitle": "هل أنت متأكد من حذف التعليق والحقول المحددة؟",
+			"selected": "محدد"
 		},
 		"validation": {
 			"planIdRequired": "معرف الخطة مطلوب.",
@@ -896,6 +975,7 @@
 			"acknowledgeNote": "ملاحظة إقرار الرفض"
 		},
 		"form": {
+			"valueChainComponents": "مكونات سلسلة القيمة",
 			"basicInformation": "المعلومات الأساسية",
 			"companyInformation": "معلومات الشركة",
 			"overview": "نظرة عامة",
@@ -917,6 +997,7 @@
 			"expenseHeader": "رأس المصروف",
 			"inHouseProcured": "داخلي / مشترى",
 			"costPercentage": "نسبة التكلفة %",
+			"totalCostPercentage": "إجمالي نسبة التكلفة",
 			"detailsOfServiceProvided": "تفاصيل الخدمة المقدمة",
 			"serviceDetails": "تفاصيل الخدمة",
 			"saudiCompanyDetails": "تفاصيل الشركة السعودية",
@@ -1091,7 +1172,26 @@
 			"commentComment": "التعليق"
 		},
 		"errors": {
-			"cannotEdit": "لا يمكن تعديل الخطة في هذه الحالة"
+			"cannotEdit": "لا يمكن تعديل الخطة في هذه الحالة",
+			"loadOpportunityDetails": "خطأ في تحميل تفاصيل الفرصة",
+			"getActiveEmployees": "خطأ في الحصول على الموظفين النشطين",
+			"assignEmployee": "خطأ في تعيين موظف النظام",
+			"saveProductPlan": "خطأ في حفظ خطة توطين المنتج",
+			"submitProductPlan": "خطأ في تقديم خطة توطين المنتج",
+			"submitServicePlan": "خطأ في تقديم خطة توطين الخدمة",
+			"resubmitProductPlan": "خطأ في إعادة تقديم خطة توطين المنتج",
+			"resubmitServicePlan": "خطأ في إعادة تقديم خطة توطين الخدمة",
+			"sendPlanBack": "خطأ في إرجاع الخطة",
+			"approvePlan": "خطأ في الموافقة على الخطة",
+			"rejectPlan": "خطأ في رفض الخطة",
+			"rejectAcknowledgePlan": "خطأ في رفض خطة الاعتراف",
+			"loadProductPlan": "خطأ في تحميل خطة المنتج",
+			"loadServicePlan": "خطأ في تحميل خطة الخدمة",
+			"loadTimeline": "خطأ في تحميل بيانات الجدول الزمني",
+			"generateServicePdf": "خطأ في إنشاء ملف PDF لخطة الخدمة",
+			"loadComments": "خطأ في تحميل تعليقات الخطة",
+			"deleteDraft": "خطأ في حذف مسودة الخطة",
+			"exportPlans": "خطأ في تصدير الخطط"
 		},
 		"employee_status": {
 			"pending": "قيد الانتظار",
@@ -1313,12 +1413,28 @@
 		},
 		"messages": {
 			"addedSuccess": "تم إرسال طلبك بنجاح."
+		},
+		"errors": {
+			"addMessage": "خطأ في إضافة رسالة تواصل معنا"
 		}
 	},
 	"setting": {
 		"title": "الإعدادات",
 		"subTitle": "التحكم في إعدادات الحساب والتطبيق",
 		"confirmButton": "تحديث",
+		"errors": {
+			"getSlaSetting": "خطأ في الحصول على إعداد اتفاقية مستوى الخدمة",
+			"updateSlaSetting": "خطأ في تحديث إعداد اتفاقية مستوى الخدمة",
+			"getAutoAssignSetting": "خطأ في الحصول على إعداد التعيين التلقائي",
+			"updateAutoAssignSetting": "خطأ في تحديث إعداد التعيين التلقائي",
+			"getHolidaysList": "خطأ في جلب قائمة العطلات",
+			"createHoliday": "خطأ في إنشاء العطلة",
+			"updateHoliday": "خطأ في تحديث العطلة",
+			"deleteHoliday": "خطأ في حذف العطلة",
+			"getNotificationSetting": "خطأ في الحصول على إعداد الإشعارات",
+			"getWorkingDays": "خطأ في جلب قائمة أيام العمل",
+			"updateNotification": "خطأ في تحديث الإشعارات"
+		},
 		"adminView": {
 			"slaCardTitle": "وقت اتفاقية مستوى الخدمة",
 			"slaCardDesc": "تعديل وقت اتفاقية مستوى الخدمة ليتوافق مع متطلبات خدمتك.",

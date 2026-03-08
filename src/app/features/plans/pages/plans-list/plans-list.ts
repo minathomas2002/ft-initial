@@ -228,13 +228,13 @@ export class PlansList extends PlanDashboardBase {
     if (plan.planType === EOpportunityType.PRODUCT) {
       this.planStore.generateProductPlanPdf(plan.id).pipe(take(1)).subscribe({
         error: (error) => {
-          this.toastService.error(error.errorMessage || 'Error generating product plan pdf');
+          this.toastService.error(error.errorMessage || this.i18nService.translate('dashboard.errors.productPdfError'));
         }
       });
     } else if (plan.planType === EOpportunityType.SERVICES) {
       this.planStore.generateServicePlanPdf(plan.id).pipe(take(1)).subscribe({
         error: (error) => {
-          this.toastService.error(error.errorMessage || 'Error generating service plan pdf');
+          this.toastService.error(error.errorMessage || this.i18nService.translate('dashboard.errors.servicePdfError'));
         }
       });
     }
@@ -301,14 +301,14 @@ export class PlansList extends PlanDashboardBase {
     this.planStore.deleteDraftPlan(this.planItem()!.id).pipe(take(1)).subscribe({
       next: () => {
 
-        this.toastService.success('Your Plan has been removed successfully.');
+        this.toastService.success(this.i18nService.translate('dashboard.messages.planRemoved'));
         this.applyFilter();
         this.viewDeleteDialog.set(false);
         this.planItem.set(null);
         this.isDeleteMode.set(false);
       },
       error: (error) => {
-        this.toastService.error(error.errorMessage || 'Error deleting the plan');
+        this.toastService.error(error.errorMessage || this.i18nService.translate('dashboard.errors.deletePlanError'));
         this.viewDeleteDialog.set(false);
         this.planItem.set(null);
         this.isDeleteMode.set(false);
@@ -321,7 +321,7 @@ export class PlansList extends PlanDashboardBase {
   this.planStore.exportPlans(this.internalUsersFilterService.adpatedFilter()).pipe(take(1)).subscribe({
     next: (blob: Blob) => {
       if (!blob) {
-        this.toastService.error('No file returned from server');
+        this.toastService.error(this.i18nService.translate('dashboard.errors.noFileReturned'));
         return;
       }
       let fileName = 'Plans.csv';
@@ -334,10 +334,10 @@ export class PlansList extends PlanDashboardBase {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-      this.toastService.success('Plans exported successfully.');
+      this.toastService.success(this.i18nService.translate('dashboard.messages.exportSuccess'));
     },
     error: (error) => {
-      this.toastService.error(error.errorMessage || 'Error exporting plans');
+      this.toastService.error(error.errorMessage || this.i18nService.translate('plans.errors.exportPlans'));
     }
   });
 }

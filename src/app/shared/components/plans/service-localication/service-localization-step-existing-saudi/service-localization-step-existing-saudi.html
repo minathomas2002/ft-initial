@@ -451,7 +451,7 @@
               fluid
               rows="3"
               [maxlength]="100"
-              [placeholder]="isReviewMode() ? '' : 'E.g., MoEn, PIF, etc.'"
+              [placeholder]="isReviewMode() ? '' : ('common.placeholder.exampleEntities' | translate)"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightEntity))"
               [appConditionalColorClass]="highlightInput('supervisionOversightEntity', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -824,7 +824,7 @@
                 fluid
                 rows="3"
                 [maxlength]="500"
-                [placeholder]="isReviewMode() ? '' : 'Mention Support required from SEC to localize the service (if any)'"
+                [placeholder]="isReviewMode() ? '' : ('common.placeholder.supportRequiredHint' | translate)"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
                 [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -869,7 +869,7 @@
         class="w-full"
         [appConditionalColorClass]="highlightInput('attachments')"
         [color]="selectedInputColor()"
-        [placeholder]="'You can upload any file type (images, documents, archives).'"
+        [placeholder]="'common.placeholder.fileUploadHintExtended' | translate"
         [multiple]="true"
       />
     </app-group-input-with-checkbox>

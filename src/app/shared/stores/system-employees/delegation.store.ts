@@ -2,6 +2,7 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { catchError, finalize, map, tap, throwError } from 'rxjs';
 import { DelegationApiService } from '../../api/system-employees/delegation-api-service';
+import { I18nService } from '../../services/i18n/i18n.service';
 import {
   ActiveEmployee,
   IAddDelegationRequest,
@@ -32,6 +33,7 @@ export const DelegationStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const delegationApiService = inject(DelegationApiService);
+    const i18n = inject(I18nService);
     return {
       getDelegationList(filter: IDelegationFilterRequest) {
         patchState(store, { isLoading: true, error: null });
@@ -48,8 +50,8 @@ export const DelegationStore = signalStore(
             patchState(store, { count: res.body?.pagination.totalCount || 0 });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error fetching delegation list' });
-            return throwError(() => new Error('Error fetching delegation list'));
+            patchState(store, { error: error.errorMessage || i18n.translate('delegation.errors.fetchList') });
+            return throwError(() => new Error(i18n.translate('delegation.errors.fetchList')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -63,7 +65,7 @@ export const DelegationStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            return throwError(() => new Error(error.errorMessage || 'Error adding delegation'));
+            return throwError(() => new Error(error.errorMessage || i18n.translate('delegation.errors.add')));
           }),
         );
       },
@@ -75,7 +77,7 @@ export const DelegationStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            return throwError(() => new Error(error.errorMessage || 'Error editing delegation'));
+            return throwError(() => new Error(error.errorMessage || i18n.translate('delegation.errors.edit')));
           }),
         );
       },
@@ -95,10 +97,10 @@ export const DelegationStore = signalStore(
         }),
         catchError((error) => {
           patchState(store, {
-            error: error?.errorMessage || 'Error fetching active employees',
+            error: error?.errorMessage || i18n.translate('delegation.errors.fetchActiveEmployees'),
             activeEmployees: []
           });
-          return throwError(() => new Error('Error fetching active employees'));
+          return throwError(() => new Error(i18n.translate('delegation.errors.fetchActiveEmployees')));
         }),
       );
     },
@@ -110,7 +112,7 @@ export const DelegationStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            return throwError(() => new Error(error.errorMessage || 'Error deleting delegation'));
+            return throwError(() => new Error(error.errorMessage || i18n.translate('delegation.errors.delete')));
           }),
         );
       },
@@ -122,7 +124,7 @@ export const DelegationStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            return throwError(() => new Error(error.errorMessage || 'Error canceling delegation'));
+            return throwError(() => new Error(error.errorMessage || i18n.translate('delegation.errors.cancel')));
           }),
         );
       }

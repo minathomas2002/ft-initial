@@ -60,16 +60,16 @@ export class Delegation implements OnInit {
     this.i18nService.currentLanguage();
     return [
       {
-        label: 'Delegator',
+        label: this.i18nService.translate('delegation.table.delegator'),
         isSortable: true,
         sortingKey: 'delegatorName',
-        tooltip: 'Delegator – the original owner of tasks.',
+        tooltip: this.i18nService.translate('delegation.table.delegatorTooltip'),
       },
       {
-        label: 'Delegatee',
+        label: this.i18nService.translate('delegation.table.delegatee'),
         isSortable: true,
         sortingKey: 'delegateeName',
-        tooltip: 'Delegatee – the user authorized to act on behalf of the delegator.',
+        tooltip: this.i18nService.translate('delegation.table.delegateeTooltip'),
       },
       {
         label: this.i18nService.translate('delegation.table.startDate'),
@@ -92,17 +92,17 @@ export class Delegation implements OnInit {
         sortingKey: 'createdBy',
       },
       {
-        label: 'Last Modified By',
+        label: this.i18nService.translate('delegation.table.lastModifiedBy'),
         isSortable: true,
         sortingKey: 'updatedBy',
       },
       {
-        label: 'Last Modified Date',
+        label: this.i18nService.translate('delegation.table.lastModifiedDate'),
         isSortable: true,
         sortingKey: 'updatedAt',
       },
       {
-        label: 'Status',
+        label: this.i18nService.translate('delegation.table.status'),
         isSortable: true,
         sortingKey: 'status',
       },
