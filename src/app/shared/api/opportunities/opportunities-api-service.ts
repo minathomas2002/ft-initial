@@ -11,7 +11,8 @@ import {
   IAdminOpportunitiesFilterRequest,
   IAdminOpportunity,
   ISelectItem,
-  IOpportunityLocalizationTablesValidationResponse
+  IOpportunityLocalizationTablesValidationResponse,
+  IOpportunityLookup
 } from '../../interfaces';
 import { API_ENDPOINTS } from '../api-endpoints';
 import { EOpportunityStatus, EOpportunityType } from '../../enums';
@@ -24,6 +25,10 @@ export class OpportunitiesApiService {
 
   getOpportunities(filter: IOpportunitiesFilterRequest): Observable<IBaseApiResponse<IApiPaginatedResponse<IOpportunity[]>>> {
     return this.baseHttpService.get<IApiPaginatedResponse<IOpportunity[]>, IOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getOpportunities, filter);
+  }
+
+  getOpportunitiesLookup(filter: IOpportunitiesFilterRequest): Observable<IBaseApiResponse<IApiPaginatedResponse<IOpportunityLookup[]>>> {
+    return this.baseHttpService.get<IApiPaginatedResponse<IOpportunityLookup[]>, IOpportunitiesFilterRequest>(API_ENDPOINTS.opportunities.getOpportunitiesLookup, filter);
   }
 
   getAdminOpportunities(filter: IAdminOpportunitiesFilterRequest): Observable<IBaseApiResponse<IOpportunitiesDashboardResponse<IAdminOpportunity[]>>> {

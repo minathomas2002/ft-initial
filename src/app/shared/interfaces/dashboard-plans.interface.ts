@@ -50,6 +50,7 @@ export interface IPlanFilter extends IFilterBase<TPlansSortingKeys> {
   status?: EInvestorPlanStatus[] | EInternalUserPlanStatus[] | null;
   submissionDate?: Date[] | undefined;
   assignee?: string[] | null;
+  opportunityId?:string|null
 }
 
 export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {

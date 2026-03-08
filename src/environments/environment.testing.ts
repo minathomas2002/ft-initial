@@ -8,6 +8,6 @@ export const environment = {
   apiVersion: 'v1',
   appName: 'Benaa',
   enableDebug: true,
-  secDomain: 'http://localhost:4200'//should be updated with sec internal domain
+  secDomain: 'http://192.168.50.198:8054/'//should be updated with sec internal domain
 };
 
