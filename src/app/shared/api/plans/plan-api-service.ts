@@ -159,7 +159,8 @@ export class PlanApiService {
   }
 
   getCurrentDateTime(): string {
-    return this.datePipe.transform(new Date(), 'dd MMM yyyy HH:mm') ?? '';
+    const locale = this.i18nService.currentLanguage() === 'ar' ? 'ar-SA' : 'en-US';
+    return this.datePipe.transform(new Date(), 'dd MMM yyyy HH:mm', undefined, locale) ?? '';
   }
 
 
