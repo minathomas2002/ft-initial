@@ -5,6 +5,7 @@ import { Popover, PopoverModule } from 'primeng/popover';
 import { AvatarModule } from 'primeng/avatar';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { SkeletonModule } from 'primeng/skeleton';
 import { Router } from '@angular/router';
 import { ERoles, ERoutes } from '../../../../../shared/enums';
 import { IdentifyUserComponent } from '../../../../../shared/components/utility-components/identify-user/identify-user.component';
@@ -13,7 +14,7 @@ import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { MenuItem } from 'primeng/api';
-import { of, switchMap, take } from 'rxjs';
+import { take } from 'rxjs';
 import { DelegationStore } from 'src/app/shared/stores/system-employees/delegation.store';
 import { SystemEmployeeRoleMapper } from 'src/app/shared/classes/role.mapper';
 import type { IImpersonationOptions } from 'src/app/shared/interfaces/delegation.interface';
@@ -29,6 +30,7 @@ import { environment } from 'src/environments/environment';
     AvatarModule,
     DividerModule,
     RadioButtonModule,
+    SkeletonModule,
   ],
   templateUrl: './navbar-profile-dropdown.component.html',
   styleUrl: './navbar-profile-dropdown.component.scss',
@@ -44,19 +46,15 @@ export class NavbarProfileDropdownComponent implements OnInit {
   profilePopover = viewChild<Popover>('profilePopover');
   delegationStore = inject(DelegationStore);
   private readonly roleMapper = new SystemEmployeeRoleMapper(this.i18nService);
+  isSecInternal = signal<boolean>(window.location.origin == environment.secDomain);
+
+  /** Whether the current user can have impersonation options (employee, division/department manager) */
+  canHaveImpersonationOptions = computed(() =>
+    this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE, ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER])()
+  );
 
   ngOnInit(): void {
-    this.profileStore.getUserProfile()
-      .pipe(
-        take(1),
-        switchMap((res) => {
-          if (this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE, ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER])()) {
-            return this.delegationStore.getImpersonationOptions()
-          }
-          return of(res);
-        })
-      )
-      .subscribe();
+    this.profileStore.getUserProfile().pipe(take(1)).subscribe();
   }
   protected readonly userProfilePicture = computed(() => {
     if (!this.profileStore.userProfile()) {
@@ -90,8 +88,6 @@ export class NavbarProfileDropdownComponent implements OnInit {
       }
     ];
 
-    // const shouldHideLogout = (this.isInternal || this.isSecEnvironment()) && this.isProduction();
-    // if (!shouldHideLogout) {
     items.push({
       label: this.i18nService.translate('navigation.signOut'),
       icon: 'icon-log-out',
@@ -100,8 +96,6 @@ export class NavbarProfileDropdownComponent implements OnInit {
         this.router.navigate(['/', ERoutes.auth, ERoutes.login])
       },
     })
-    // }
-
     return items;
   });
 
@@ -109,6 +103,9 @@ export class NavbarProfileDropdownComponent implements OnInit {
     const items = this.dropdownItems();
     if (!items || items.length === 0) {
       return;
+    }
+    if (this.canHaveImpersonationOptions()) {
+      this.delegationStore.getImpersonationOptions().pipe(take(1)).subscribe();
     }
     this.profilePopover()?.toggle(event);
   }
@@ -148,7 +145,8 @@ export class NavbarProfileDropdownComponent implements OnInit {
       this.authStore.delegatorUserId() === option.userId;
 
     if (isSwitchBackToDelegator) {
-      return environment.production
+      // When switching TO the delegator, we need the delegator's userName (from the selected option)
+      return this.isSecInternal()
         ? this.authStore.windowsLogin() : this.authStore.fakeWindowsLogin(option.userName);
     }
 
@@ -157,7 +155,7 @@ export class NavbarProfileDropdownComponent implements OnInit {
       delegatorUserId: option.userId,
     };
 
-    return environment.production
+    return this.isSecInternal()
       ? this.authStore.winLoginWithImpersonation(request)
       : this.authStore.loginWithImpersonation(request);
   }

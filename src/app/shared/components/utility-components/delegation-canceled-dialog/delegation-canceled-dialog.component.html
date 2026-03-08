@@ -1,0 +1,20 @@
+<app-base-dialog
+  [visible]="delegationCanceledService.visible()"
+  (visibleChange)="delegationCanceledService.visible.set($event)"
+  [icon]="'icon-cancel-icon'"
+  [dialogTitle]="title"
+  [confirmLabel]="i18nService.translate('delegation.canceled.ok')"
+  [showCloseButton]="false"
+  [showConfirmButton]="true"
+  [closable]="false"
+  [closeOnEscape]="false"
+  [dismissableMask]="false"
+  [confirmButtonClass]="'!w-[100px]'"
+  (onConfirm)="onConfirm()"
+>
+  <div class="max-w-[25rem]">
+    <p class="text-base font-normal text-gray-700 mt-2">
+      {{ description }}
+    </p>
+  </div>
+</app-base-dialog>

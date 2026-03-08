@@ -136,6 +136,9 @@ export const DelegationStore = signalStore(
           tap((res: any) => {
             patchState(store, { impersonationOptions: res?.body || [] });
           }),
+          finalize(() => {
+            patchState(store, { isLoadingDetails: false });
+          }),
         );
       }
     };

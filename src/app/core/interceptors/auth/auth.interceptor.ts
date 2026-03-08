@@ -19,6 +19,25 @@ const isRefreshTokenEndpoint = (url: string): boolean => {
   return url.includes(API_ENDPOINTS.auth.refreshToken);
 };
 
+/** Login/auth endpoints that must not receive the Bearer token */
+const isLoginEndpoint = (url: string): boolean => {
+  const loginPaths = [
+    API_ENDPOINTS.auth.investorLogin,
+    API_ENDPOINTS.auth.windowsLogin,
+    API_ENDPOINTS.auth.fakeWindowsLogin,
+    API_ENDPOINTS.auth.loginWithImpersonation,
+    API_ENDPOINTS.auth.winLoginWithImpersonation,
+    API_ENDPOINTS.auth.register,
+    API_ENDPOINTS.auth.forgotPassword,
+    API_ENDPOINTS.auth.resetPassword,
+    API_ENDPOINTS.auth.passwordResetTokenExpiry,
+    API_ENDPOINTS.auth.verifyEmail,
+    API_ENDPOINTS.auth.resendVerifyEmail,
+    API_ENDPOINTS.auth.refreshToken,
+  ];
+  return loginPaths.some((path) => url.includes(path));
+};
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authApiService = inject(AuthApiService);
   const authStore = inject(AuthStore);
@@ -28,7 +47,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authData = localStorage.getAuthData();
   let clonedRequest = req;
 
-  if (authData?.token) {
+  if (authData?.token && !isLoginEndpoint(req.url)) {
     clonedRequest = req.clone({
       setHeaders: { Authorization: `Bearer ${authData.token}` },
     });

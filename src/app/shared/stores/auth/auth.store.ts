@@ -39,6 +39,7 @@ export const AuthStore = signalStore(
       isImpersonating: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATEE),
       isDelegator: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATOR),
       delegatorUserId: computed(() => store.jwtUserDetails()?.DelegateeUserId),
+      delegateeUserName: computed(() => store.jwtUserDetails()?.DelegateeUserName),
     };
   }),
   withMethods((store) => {
@@ -151,7 +152,7 @@ export const AuthStore = signalStore(
 
       fakeWindowsLogin(userName: string): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName));
+        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName))
       },
 
       loginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {

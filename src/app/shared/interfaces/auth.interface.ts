@@ -47,6 +47,7 @@ export interface IJwtUserDetails {
   EmpID: string;
   ImpersonationStatus?: EImpersonationStatus;
   DelegateeUserId?: string;
+  DelegateeUserName?: string;
 
   // Standard JWT claims
   aud: string;

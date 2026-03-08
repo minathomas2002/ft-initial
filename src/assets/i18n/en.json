@@ -552,6 +552,11 @@
       "updatedSuccess": "Delegation Updated Successfully",
       "deleteSuccess": "Delegation Deleted Successfully",
       "cancelSuccess": "Delegation Cancelled Successfully"
+    },
+    "canceled": {
+      "title": "Delegation Canceled",
+      "description": "The delegation from ({{delegatorName}}) has been Canceled. You no longer have access to their tasks and cannot perform actions on their behalf.",
+      "ok": "OK"
     }
   },
   "investors": {
