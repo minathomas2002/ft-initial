@@ -74,7 +74,13 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
   private _benaVendorIdLockSetup = false;
   private _attachmentsRequirementSetup = false;
   private _attachmentsUnlockedByProvideAgreementChange = signal(false);
+  private _incomingProvideAgreementCopyCommentValue = signal<'none' | 'yes' | 'no'>('none');
   private _userChangedDropdowns = new Set<string>();
+  private readonly requireAtLeastOneNewAttachmentValidator = (control: AbstractControl) => {
+    const value = control.value;
+    const hasAtLeastOneNewAttachment = Array.isArray(value) && value.some((file: File) => !this.isExistingAttachmentFile(file));
+    return hasAtLeastOneNewAttachment ? null : { required: true };
+  };
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -90,6 +96,20 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
     if (this.isReviewMode()) return true;
     if (this.isViewMode() && !this.isResubmitMode()) return true;
     if (this.isResubmitMode()) {
+      const incomingProvideAgreementCopyCommentValue = this._incomingProvideAgreementCopyCommentValue();
+      const hasIncomingAttachmentsComment = this.hasIncomingAttachmentsComment();
+
+      // If attachments are in incoming comments, keep section enabled regardless provideAgreementCopy.
+      if (hasIncomingAttachmentsComment) {
+        return false;
+      }
+
+      if (incomingProvideAgreementCopyCommentValue === 'yes') {
+        // If provideAgreementCopy is part of incoming comments and currently Yes,
+        // attachments must remain disabled regardless of other conditions.
+        return true;
+      }
+
       // In resubmit mode, disable unless the attachments field is part of the corrected fields.
       // (Do not depend on orange highlight, which should disappear after the user updates the value.)
       const canEditAttachments = this.correctedFields().some(
@@ -763,26 +783,80 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
     if (!attachmentsControl) return;
 
     const updateAttachmentsRequiredState = (): void => {
-      const shouldRequire = collaborationArray.controls.some((itemControl) => {
-        if (!(itemControl instanceof FormGroup)) return false;
+      const incomingProvideAgreementCopyCommentValue = this.getIncomingProvideAgreementCopyCommentValue();
+      this._incomingProvideAgreementCopyCommentValue.set(incomingProvideAgreementCopyCommentValue);
 
-        const provideAgreementCopyControl = itemControl.get(
-          `${EMaterialsFormControls.provideAgreementCopy}.${EMaterialsFormControls.value}`
-        );
-        const provideAgreementCopyValue = provideAgreementCopyControl?.value;
+      const shouldRequire = this.shouldRequireAttachmentsByProvideAgreementCopy();
+      const hasIncomingAttachmentsComment = this.hasIncomingAttachmentsComment();
 
-        const normalized = String(provideAgreementCopyValue ?? '').trim().toLowerCase();
-        return Number(provideAgreementCopyValue) === EYesNo.Yes ||
-          normalized === 'yes' ||
-          normalized === 'true';
-      });
-
-      if (shouldRequire) {
+      // If attachments are incoming comments, keep section enabled regardless provideAgreementCopy.
+      // Validation still follows provideAgreementCopy value.
+      if (incomingProvideAgreementCopyCommentValue !== 'none' && hasIncomingAttachmentsComment) {
         this._attachmentsUnlockedByProvideAgreementChange.set(true);
         this.enableAttachmentsSectionForResubmit();
-        attachmentsControl.addValidators(Validators.required);
-      } else {
+
+        if (shouldRequire) {
+          attachmentsControl.addValidators(Validators.required);
+        } else {
+          attachmentsControl.removeValidators(Validators.required);
+        }
+        attachmentsControl.removeValidators(this.requireAtLeastOneNewAttachmentValidator);
+
+        const attachmentsValue = attachmentsControl.value;
+        const isEmpty = attachmentsValue == null ||
+          (Array.isArray(attachmentsValue) && attachmentsValue.length === 0);
+
+        if (shouldRequire && isEmpty) {
+          attachmentsControl.markAsDirty();
+          attachmentsControl.markAsTouched();
+        }
+
+        attachmentsControl.updateValueAndValidity({ emitEvent: false });
+        return;
+      }
+
+      // Case 1: provideAgreementCopy is in incoming comments and current value is Yes
+      // => attachments should never be enabled.
+      if (incomingProvideAgreementCopyCommentValue === 'yes') {
+        this._attachmentsUnlockedByProvideAgreementChange.set(false);
+        attachmentsControl.removeValidators(this.requireAtLeastOneNewAttachmentValidator);
         attachmentsControl.removeValidators(Validators.required);
+        if (this.isResubmitMode()) {
+          this.disableAttachmentsSectionForResubmit();
+        }
+
+        attachmentsControl.updateValueAndValidity({ emitEvent: false });
+        return;
+      }
+
+      // Case 2: provideAgreementCopy is in incoming comments and current value is No
+      // => attachments become enabled/required only when user changes to Yes,
+      // and disabled again if changed back to No.
+      if (incomingProvideAgreementCopyCommentValue === 'no') {
+        if (shouldRequire) {
+          this._attachmentsUnlockedByProvideAgreementChange.set(true);
+          this.enableAttachmentsSectionForResubmit();
+          // Require at least one NEW attachment (existing files should not satisfy validation).
+          attachmentsControl.removeValidators(Validators.required);
+          attachmentsControl.addValidators(this.requireAtLeastOneNewAttachmentValidator);
+        } else {
+          this._attachmentsUnlockedByProvideAgreementChange.set(false);
+          attachmentsControl.removeValidators(this.requireAtLeastOneNewAttachmentValidator);
+          attachmentsControl.removeValidators(Validators.required);
+          if (this.isResubmitMode()) {
+            this.disableAttachmentsSectionForResubmit();
+          }
+        }
+      } else {
+        attachmentsControl.removeValidators(this.requireAtLeastOneNewAttachmentValidator);
+        // Default behavior (when provideAgreementCopy is not part of incoming comments)
+        if (shouldRequire) {
+          this._attachmentsUnlockedByProvideAgreementChange.set(true);
+          this.enableAttachmentsSectionForResubmit();
+          attachmentsControl.addValidators(Validators.required);
+        } else {
+          attachmentsControl.removeValidators(Validators.required);
+        }
       }
 
       const attachmentsValue = attachmentsControl.value;
@@ -804,7 +878,11 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
     collaborationArray.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        if (this.isResubmitMode() && !this._attachmentsUnlockedByProvideAgreementChange()) {
+        if (
+          this.isResubmitMode() &&
+          this._incomingProvideAgreementCopyCommentValue() === 'none' &&
+          !this._attachmentsUnlockedByProvideAgreementChange()
+        ) {
           const hasUserChangedProvideAgreementCopy = collaborationArray.controls.some((itemControl) => {
             if (!(itemControl instanceof FormGroup)) return false;
 
@@ -825,6 +903,91 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
       });
   }
 
+  private isYesValue(value: unknown): boolean {
+    const normalized = String(value ?? '').trim().toLowerCase();
+    return Number(value) === EYesNo.Yes || normalized === 'yes' || normalized === 'true';
+  }
+
+  private shouldRequireAttachmentsByProvideAgreementCopy(): boolean {
+    const collaborationArray = this.getCollaborationPartnershipFormArray();
+
+    return collaborationArray.controls.some((itemControl) => {
+      if (!(itemControl instanceof FormGroup)) return false;
+
+      const provideAgreementCopyControl = itemControl.get(
+        `${EMaterialsFormControls.provideAgreementCopy}.${EMaterialsFormControls.value}`
+      );
+      return this.isYesValue(provideAgreementCopyControl?.value);
+    });
+  }
+
+  private hasIncomingAttachmentsComment(): boolean {
+    if (!this.isResubmitMode()) return false;
+
+    return this.correctedFields().some(field =>
+      field.section === 'attachments' && (
+        field.inputKey === EMaterialsFormControls.attachments ||
+        field.inputKey === `${EMaterialsFormControls.attachments}.${EMaterialsFormControls.value}` ||
+        field.inputKey.startsWith(`${EMaterialsFormControls.attachments}_`)
+      )
+    );
+  }
+
+  shouldLockExistingAttachments(): boolean {
+    return this.isResubmitMode() && !this.hasIncomingAttachmentsComment();
+  }
+
+  private isExistingAttachmentFile(file: File): boolean {
+    const candidate = file as File & {
+      isExistingAttachment?: boolean;
+      ibmIdentifier?: string;
+      fileUrl?: string;
+    };
+
+    return !!candidate.isExistingAttachment || !!candidate.ibmIdentifier || !!candidate.fileUrl;
+  }
+
+  private isProvideAgreementCopyCommentField(inputKey: string): boolean {
+    return inputKey === EMaterialsFormControls.provideAgreementCopy ||
+      inputKey === `${EMaterialsFormControls.provideAgreementCopy}.${EMaterialsFormControls.value}` ||
+      inputKey.startsWith(`${EMaterialsFormControls.provideAgreementCopy}_`);
+  }
+
+  /**
+   * Determines whether provideAgreementCopy exists in incoming comments for this step,
+   * and if so returns incoming/original value state for commented rows:
+   * - 'yes' => at least one commented row originally had Yes
+   * - 'no' => commented rows exist and none originally had Yes
+   * - 'none' => field is not in incoming comments
+   */
+  private getIncomingProvideAgreementCopyCommentValue(): 'none' | 'yes' | 'no' {
+    if (!this.isResubmitMode()) return 'none';
+
+    const commentFields = this.correctedFields().filter(
+      field =>
+        field.section === 'collaborationPartnership' &&
+        this.isProvideAgreementCopyCommentField(field.inputKey)
+    );
+
+    if (commentFields.length === 0) return 'none';
+
+    // IMPORTANT: Determine this state from incoming/original API value, not current form value.
+    // Otherwise changing No -> Yes would incorrectly switch state to "yes" and lock attachments.
+    const originalValues = commentFields
+      .map((field) => this.getOriginalFieldValueFromPlanResponse(field))
+      .filter((value) => value != null);
+
+    if (originalValues.length > 0) {
+      const hasYesInOriginal = originalValues.some((value) => this.isYesValue(value));
+      return hasYesInOriginal ? 'yes' : 'no';
+    }
+
+    // Defensive fallback: when original value cannot be resolved, treat as "no"
+    // so user can still unlock attachments by selecting Yes.
+    return 'no';
+
+  }
+
   /**
    * In resubmit mode, when Provide Agreement Copy is changed by user,
    * unlock attachments section even if it was not part of corrected fields.
@@ -839,6 +1002,17 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
       attachmentsGroupControl.enable({ emitEvent: false });
       const attachmentsValueControl = this.getValueControl(attachmentsGroupControl);
       attachmentsValueControl.enable({ emitEvent: false });
+    }
+  }
+
+  private disableAttachmentsSectionForResubmit(): void {
+    const attachmentsFormGroup = this.getAttachmentsFormGroup();
+    const attachmentsGroupControl = attachmentsFormGroup.get(EMaterialsFormControls.attachments);
+
+    if (attachmentsGroupControl) {
+      const attachmentsValueControl = this.getValueControl(attachmentsGroupControl);
+      attachmentsValueControl.disable({ emitEvent: false });
+      attachmentsGroupControl.disable({ emitEvent: false });
     }
   }
 
