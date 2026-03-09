@@ -110,6 +110,20 @@ export class NavbarProfileDropdownComponent implements OnInit {
     this.profilePopover()?.toggle(event);
   }
 
+  protected onPopoverShow(): void {
+    this.isOpen.set(true);
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.style.overflowX = 'hidden';
+    }
+  }
+
+  protected onPopoverHide(): void {
+    this.isOpen.set(false);
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.style.overflowX = '';
+    }
+  }
+
   isCurrentAccount(option: IImpersonationOptions): boolean {
     return option.userId === this.selectedAccountId();
   }

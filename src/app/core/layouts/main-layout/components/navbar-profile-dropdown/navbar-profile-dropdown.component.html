@@ -27,8 +27,8 @@
   #profilePopover
   appendTo="body"
   [dismissable]="true"
-  (onShow)="isOpen.set(true)"
-  (onHide)="isOpen.set(false)"
+  (onShow)="onPopoverShow()"
+  (onHide)="onPopoverHide()"
   styleClass="profile-dropdown-popover min-w-[280px]"
 >
   <!-- Current user profile section -->
