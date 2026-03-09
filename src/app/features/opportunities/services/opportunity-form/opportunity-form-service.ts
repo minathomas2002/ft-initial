@@ -142,7 +142,7 @@ export class OpportunityFormService {
     const today = this.getTodayDateOnly();
     const normalized = startDate ? this.toDateOnly(startDate) : null;
 
-    if (normalized && normalized < today) {
+    if (this.hasActivePlans && normalized && normalized < today) {
       startDateControl.disable({ emitEvent: false });
       startDateControl.setErrors(null);
     } else {
