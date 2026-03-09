@@ -49,16 +49,17 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   visibility: hidden !important;
 }
 
-.summary-subsection-title {
+.plans-summary-subsection-title {
   position: relative;
   color: #1d1e23;
   font-size: 20px;
   font-weight: 600;
   line-height: 22px;
   padding-inline-start: 1rem;
+  margin-bottom: 8px;
 }
 
-.summary-subsection-title::before {
+.plans-summary-subsection-title::before {
   content: "";
   position: absolute;
   inset-inline-start: 0;

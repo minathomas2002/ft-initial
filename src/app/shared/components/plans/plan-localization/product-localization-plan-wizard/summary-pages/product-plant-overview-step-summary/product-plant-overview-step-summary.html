@@ -9,7 +9,7 @@
 
   @if (isExpanded()) {
   <div class="flex flex-col gap-4">
-    <h3 class="summary-subsection-title">{{ 'plans.summary.overview' | translate }}</h3>
+    <h3 class="plans-summary-subsection-title">{{ 'plans.summary.overview' | translate }}</h3>
     <app-overview-summary-section
       [sectionFormGroup]="overviewFormGroup()"
       [sectionSummaryFields]="overviewSummaryFields()"
@@ -18,7 +18,7 @@
   </div>
 
   <div class="flex flex-col gap-4">
-    <h3 class="summary-subsection-title">{{ 'plans.summary.expectedCAPEXInvestment' | translate }}</h3>
+    <h3 class="plans-summary-subsection-title">{{ 'plans.summary.expectedCAPEXInvestment' | translate }}</h3>
     <app-expected-capex-summary-section
       [sectionFormGroup]="expectedCAPEXInvestmentFormGroup()"
       [sectionSummaryFields]="expectedCAPEXInvestmentSummaryFields()"
@@ -27,7 +27,7 @@
   </div>
 
   <div class="flex flex-col gap-4">
-    <h3 class="summary-subsection-title">{{ 'plans.summary.targetCustomers' | translate }}</h3>
+    <h3 class="plans-summary-subsection-title">{{ 'plans.summary.targetCustomers' | translate }}</h3>
     <app-target-customers-summary-section
       [sectionFormGroup]="targetCustomersFormGroup()"
       [sectionSummaryFields]="targetCustomersSummaryFields()"
@@ -36,7 +36,7 @@
   </div>
 
   <div class="flex flex-col gap-4">
-    <h3 class="summary-subsection-title">{{ 'plans.summary.productManufacturingExperience' | translate }}</h3>
+    <h3 class="plans-summary-subsection-title">{{ 'plans.summary.productManufacturingExperience' | translate }}</h3>
     <app-product-manufacturing-experience-summary-section
       [sectionFormGroup]="productManufacturingExperienceFormGroup()"
       [sectionSummaryFields]="productManufacturingExperienceSummaryFields()"
