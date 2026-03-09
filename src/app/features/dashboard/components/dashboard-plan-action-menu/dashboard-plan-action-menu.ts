@@ -46,6 +46,7 @@ export class DashboardPlanActionMenu {
   onRemoveAssignee = output<IPlanRecord>();
   onDelete = output<IPlanRecord>();
   onAutoRejected = output<IPlanRecord>();
+  onViewOpportunityDetails = output<IPlanRecord>();
 
   handleEventsMapper = {
     [EActionPlanTimeLine.EditPlan]: this.onEdit,
@@ -73,6 +74,7 @@ export class DashboardPlanActionMenu {
     [EActionPlanTimeLine.AutoRejected]: this.onAutoRejected,
     [EActionPlanTimeLine.DVReview]: null,
     [EActionPlanTimeLine.DeptManagerReview]: null,
+    [EActionPlanTimeLine.ViewOpportunityDetails]: this.onViewOpportunityDetails,
   };
 
   menuItems = computed<MenuItem[]>(() => {

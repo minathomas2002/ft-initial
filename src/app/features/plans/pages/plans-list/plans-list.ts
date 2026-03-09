@@ -9,7 +9,7 @@ import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
-import { EOpportunityType, ERoles } from 'src/app/shared/enums';
+import { EOpportunityType, ERoles, ERoutes } from 'src/app/shared/enums';
 import { DatePipe, NgClass } from '@angular/common';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
@@ -28,7 +28,7 @@ import { AssignReassignManualEmployee } from "../../components/assign-reassign-m
 import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -63,6 +63,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class PlansList extends PlanDashboardBase implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
@@ -213,6 +214,10 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     plan.planType === EOpportunityType.PRODUCT
       ? this.productLocalizationPlanWizardVisibility.set(true)
       : this.serviceLocalizationPlanWizardVisibility.set(true);
+  }
+  onViewOpportunityDetails(plan: IPlanRecord) {
+    const url = `/opportunities/${plan.opportunityId}`;
+    window.open(url, '_blank');
   }
 
   onEdit(plan: IPlanRecord) {
