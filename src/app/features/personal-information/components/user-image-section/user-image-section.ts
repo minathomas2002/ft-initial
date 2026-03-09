@@ -5,6 +5,7 @@ import { ChangeYourProfilePictureModal } from '../Change your profile picture mo
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 @Component({
   selector: 'app-user-image-section',
@@ -21,14 +22,19 @@ export class UserImageSection {
   private toasterService = inject(ToasterService);
   private i18nService = inject(I18nService);
   private destroyRef = inject(DestroyRef);
+  private authStore = inject(AuthStore);
 
   image = computed(() => this.profileStore.userImage());
   userName = computed(() => this.profileStore.userProfile()?.nameEn ?? '');
   userTitle = computed(() => this.profileStore.userTitle());
   changeYourProfilePictureVisible = signal<boolean>(false);
   onProfilePictureUpdated = output<void>();
+  isImpersonated = computed(() => this.authStore.isImpersonating());
 
   onAvatarEditClick(): void {
+    if (this.isImpersonated()) {
+      return;
+    }
     this.changeYourProfilePictureVisible.set(true);
   }
 
