@@ -21,7 +21,8 @@ export class InternalUsersPlansFilter extends Filter<IPlanFilter, TPlansSortingK
       status: null,
       assignee: null,
       submissionDate: undefined,
-      opportunityId : null
+      opportunityId : null,
+      investorId:null
     };
 
     this.initialState = structuredClone(this.filter);

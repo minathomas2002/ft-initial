@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { AbstractServiceFilter } from 'src/app/shared/classes/abstract-service-filter';
 import { IPlanFilter, IPlanFilterRequest } from 'src/app/shared/interfaces';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -49,8 +49,8 @@ export class InternalUsersPlansFilterService extends AbstractServiceFilter<IPlan
     return this.store.getInternalUserPlans(this.adpatedFilter());
   }
 
-  clearAllFilters(): void {
-    this.clearAll();
+  clearAllFilters(filter:WritableSignal<IPlanFilter>): void {
+    this.clearAll(filter());
     this.applyFilter();
   }
 

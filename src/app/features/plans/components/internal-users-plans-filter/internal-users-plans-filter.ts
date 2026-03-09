@@ -51,7 +51,9 @@ export class InternalUsersPlansFilter implements OnInit {
   opportunitiesList = this.opportunitiesStore.listLookup;
   isLoadingopportunitiesList = this.opportunitiesStore.isLoadingopportunitiesList;
   assignees = signal<IAssignee[]>([]);
+  investorId = signal<string|null>(null);
   isLoadingAssignees = signal(false);
+
   planTypeOptions = computed<IDropdownOption[]>(() => {
     return this.planStore.planTypeOptions() as IDropdownOption[];
   });
@@ -123,6 +125,11 @@ export class InternalUsersPlansFilter implements OnInit {
   }
 
   ngOnInit() {
+    this.route.queryParams
+    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params=>{
+      this.investorId.set(params['investorId']);
+    })
+
     this.loadOpportunityLookup();
     this.loadAssignees();
     this.listenToSearchChanges();
@@ -139,7 +146,6 @@ export class InternalUsersPlansFilter implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-
           this.listenToQueryParamChanges();
         },
         error: (error) => {
@@ -207,6 +213,12 @@ export class InternalUsersPlansFilter implements OnInit {
           updates.opportunityId = queryParams['opportunityId'];
         } else {
           updates.opportunityId = '';
+        }
+
+          if (queryParams['investorId']) {
+          updates.investorId = queryParams['investorId'];
+        } else {
+          updates.investorId = '';
         }
 
 
@@ -289,8 +301,8 @@ export class InternalUsersPlansFilter implements OnInit {
   }
 
   onClearFilters() {
-    this.filterService.clearAllFilters();
-    this.filterService.updateFilterSignal({ searchText: '' });
+    this.filterService.updateFilterSignal({assignee:null,opportunityId:null,planType:null,searchText:'',status:null,submissionDate:undefined, investorId: this.investorId(), pageNumber: 1 });
+    this.filterService.clearAllFilters(this.filter);
     this.onSearchTextChange('');
   }
 
