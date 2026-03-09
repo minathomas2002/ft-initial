@@ -24,16 +24,18 @@
           [hasLabel]="true"
         />
         } }@else{
+        @if(canApplyOnOpportunity()){
         <p-button
           [label]="'opportunity.details.apply' | translate"
           (click)="onApply()"
         ></p-button>
         }
+        }
       </div>
 
       <div class="page-layout--title sm:w-auto">
         @if(permissionService.canViewOpportunityAduit()){
-          <app-opportunity-audit-details [opportunityDetails]="opportunitiesStore.details()"></app-opportunity-audit-details>
+        <app-opportunity-audit-details [opportunityDetails]="opportunitiesStore.details()"></app-opportunity-audit-details>
         }
         <div class="flex gap-4 items-center justify-between">
           <div class="flex gap-4 items-center">
