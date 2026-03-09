@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { ICommentsCountAndPhase } from "src/app/shared/types/plan-comments.types";
 import { EPlanPageTitle } from "src/app/shared/enums";
@@ -94,11 +94,16 @@ export abstract class SummaryStepBaseClass {
   );
 
   isViewMode = computed(() => this.planStore.wizardMode() === 'view');
+  isExpanded = signal(true);
 
   /* Outputs */
   onEdit = output<void>();
 
   /* Methods */
+  toggleExpanded(): void {
+    this.isExpanded.update(value => !value);
+  }
+
   protected getSectionSummaryFields(section: string): IFieldInformation[] {
     return this.stepComments()?.fields.filter(field => field.section === section) ?? [];
   }

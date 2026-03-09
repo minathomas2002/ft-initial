@@ -11,10 +11,17 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class SummarySectionHeader {
   hideEditButton = input<boolean>(false);
+  showExpandButton = input<boolean>(true);
+  isExpanded = input<boolean>(false);
   title = input.required<string>();
   onEdit = output<void>();
+  onToggleExpand = output<void>();
 
   onEditClick(): void {
     this.onEdit.emit();
+  }
+
+  onToggleExpandClick(): void {
+    this.onToggleExpand.emit();
   }
 }
