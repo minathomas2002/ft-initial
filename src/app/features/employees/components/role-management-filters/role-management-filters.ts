@@ -15,6 +15,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'app-role-management-filters',
@@ -26,7 +28,9 @@ import { EmployeeRoleMapper } from '../../classes/employee-role-mapper';
     MultiSelectModule,
     ButtonModule,
     TranslatePipe,
-    DatePickerModule
+    DatePickerModule,
+    OverlayBadgeModule,
+    BadgeModule,
   ],
   templateUrl: './role-management-filters.html',
   styleUrl: './role-management-filters.scss',

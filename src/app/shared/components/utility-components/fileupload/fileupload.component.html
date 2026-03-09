@@ -84,7 +84,7 @@
               @if(showDownloadButton()){
               <button
                 type="button"
-                class="p-2 rounded-md hover:bg-gray-100 transition-colors flex-shrink-0"
+                class="p-2 rounded-md hover:bg-gray-100 transition-colors shrink-0"
                 (click)="downloadFile(file)"
                 [attr.aria-label]="'Download ' + file.name"
                 pTooltip="Download"
@@ -93,7 +93,7 @@
                 <i class="icon-save text-gray-600"></i>
               </button>
               }
-              @if(!isDisabled()){
+              @if(canRemoveFile(file)){
               <p-button
                 icon="icon-x-close"
                 (onClick)="removeUploadedFile(i)"

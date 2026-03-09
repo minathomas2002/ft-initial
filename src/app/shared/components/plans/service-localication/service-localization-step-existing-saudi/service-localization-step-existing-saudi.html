@@ -862,7 +862,8 @@
         label: 'Attachments'
       })"
     >
-      <app-fileupload
+    <app-fileupload
+        [lockExistingFiles]="shouldLockExistingAttachments()"
         [isViewMode]="isViewMode() && !isResubmitMode()"
         [disabled]="isFileUploadDisabled()"
         [showDownloadButton]="((isViewMode() || isResubmitMode() || isReviewMode()) && isFileUploadDisabled())"

@@ -537,12 +537,6 @@
       "updatedSuccess": "تم تحديث التفويض بنجاح",
       "deleteSuccess": "تم حذف التفويض بنجاح",
       "cancelSuccess": "تم إلغاء التفويض بنجاح"
-    },
-    "canceled": {
-      "title": "تم إلغاء التفويض",
-      "descriptionBefore": "تم إلغاء التفويض من ",
-      "descriptionAfter": ". لم يعد لديك حق الوصول إلى مهامهم ولا يمكنك تنفيذ إجراءات نيابة عنهم.",
-      "ok": "موافق"
     }
   },
   "investors": {

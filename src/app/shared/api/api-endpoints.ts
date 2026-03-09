@@ -106,6 +106,7 @@ export const API_ENDPOINTS = {
     createOpportunity: `${Opportunities}/create-opportunity`,
     draftOpportunity: `${Opportunities}/draft`,
     getOpportunities: `${Opportunities}/get-opportunities`,
+    getOpportunitiesLookup: `${Opportunities}/get-OpportunitiesLookups`,
     getOpportunityById: `${Opportunities}`,
     getAdminOpportunities: `${AdminOpportunities}`,
     editOpportunity: `${Opportunities}/edit-opportunity`,
