@@ -76,6 +76,10 @@ export class TimelineComponent {
     return this.employeeRoleMapper.getTranslatedRole(roleCode);
   }
 
+  getNameByLanguage(nameEn: string, nameAr: string): string {
+    return this.i18nService.currentLanguage() === 'ar' ? nameAr : nameEn;
+  }
+
   getUserTranslatedAction(item: ITimeLineResponse): string {
     return this.actionPlanMapper.getTranslatedAction(item.actionType, this.actionPlanMapper.getActionParam(item));
   }

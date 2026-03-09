@@ -33,22 +33,28 @@
 
       <!-- user card -->
       <div class="flex flex-col gap-3">
+        @if (item.item.isImpersonated) {
+        <app-identify-user
+          [userAvatar]="item.item.delegateeProfilePic"
+          [userName]="getNameByLanguage(item.item.delegateeNameEn, item.item.delegateeNameAr)"
+          [userRole]="getUserTranslatedRole(item.item.delegateeRole)"
+        >
+        </app-identify-user>
+        <span class="text-[#FF692E] text-sm font-normal">
+          <i class="icon-arrow-up bg-[#FFF4ED] p-2 rounded-full transform rotate-180 me-3"></i>
+          {{'timeline.onBehalf' | translate}}
+        </span>
         <app-identify-user
           [userAvatar]="item.item.actionByProfilePic"
-          [userName]="item.item.actionByNameEn"
+          [userName]="getNameByLanguage(item.item.actionByNameEn, item.item.actionByNameAr)"
           [userRole]="getUserTranslatedRole(item.item.actorRole)"
         >
         </app-identify-user>
-
-        @if (item.item.isImpersonated) {
-        <span class="text-[#FF692E]">
-          <i class="icon-arrow-up bg-[#FFF4ED] p-2 rounded-full rotate-180 text-sm me-3"></i>
-          {{'timeline.impersonatedBy' | translate}}
-        </span>
+        }@else {
         <app-identify-user
-          [userAvatar]="item.item.delegateeProfilePic"
-          [userName]="item.item.delegateeNameEn"
-          [userRole]="getUserTranslatedRole(item.item.delegateeRole)"
+          [userAvatar]="item.item.actionByProfilePic"
+          [userName]="getNameByLanguage(item.item.actionByNameEn, item.item.actionByNameAr)"
+          [userRole]="getUserTranslatedRole(item.item.actorRole)"
         >
         </app-identify-user>
         }
