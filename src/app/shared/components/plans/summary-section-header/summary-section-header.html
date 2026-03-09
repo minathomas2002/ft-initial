@@ -1,14 +1,29 @@
-<div class="flex items-center justify-between">
+<div class="flex items-center justify-between" [class.mb-6]="isExpanded() || !showExpandButton()">
   <div class="flex items-center gap-2">
-    <h2 class="text-lg font-semibold text-gray-900">{{ title() }}</h2>
+    <h2 class="text-2xl font-semibold text-[#1D1E23]">{{ title() }}</h2>
   </div>
-  @if(!hideEditButton()){
-  <p-button
-    label="Edit"
-    icon="icon-edit"
-    [text]="true"
-    (click)="onEditClick()"
-    size="small"
-  />
-  }
+  <div class="flex items-center gap-2">
+    @if(!hideEditButton()) {
+    <p-button
+      label="Edit"
+      icon="icon-edit"
+      [text]="true"
+      styleClass="custom-primary"
+      (click)="onEditClick()"
+      size="small"
+    />
+    }
+
+    @if (showExpandButton()) {
+    <p-button
+      [icon]="isExpanded() ? 'icon-chevron-up-small' : 'icon-chevron-down-small'"
+      [text]="true"
+      (click)="onToggleExpandClick()"
+      size="large"
+    />
+    }
+  </div>
 </div>
+@if (isExpanded()) {
+  <hr class="text-[#D5D6DD] mb-6">
+}

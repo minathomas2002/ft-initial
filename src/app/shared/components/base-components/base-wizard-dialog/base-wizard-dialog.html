@@ -11,8 +11,8 @@
     class="icon-x-close text-gray-400 cursor-pointer absolute top-[32px] right-[32px] z-10"
     (click)="handleCloseClick()"
   ></span>
-  <div class="flex !max-h-full h-full">
-    <div class="steps-container bg-gray-50 ps-5 py-6 border-e-1 border-gray-200 max-w-[300px] flex flex-col">
+  <div class="flex max-h-full! h-full">
+    <div class="steps-container bg-gray-50 ps-5 py-6 border-e border-gray-200 max-w-[300px] flex flex-col">
       <div class="inline-flex items-start flex-1">
         <img
           src="assets/images/long-logo.svg"
@@ -61,13 +61,16 @@
         }
       </div>
     </div>
-    <div class="flex flex-col overflow-hidden flex-1 p-8 pb-4 gap-[32px]">
-      <div class="header flex flex-col gap-2">
-        <h3 class="text-2xl font-semibold">{{wizardTitle()}}</h3>
-        <ng-content select="status"></ng-content>
+    <div class="flex flex-col overflow-hidden flex-1 pb-4 gap-[24px] bg-white">
+      <div class="header flex flex-col gap-2 bg-white py-5 px-8">
+        <div class="flex items-center gap-3">
+          <h3 class="text-2xl font-semibold">{{wizardTitle()}}</h3>
+          <ng-content select="status"></ng-content>
+        </div>
+        <ng-content select="status-extra"></ng-content>
       </div>
       <div
-        class="flex-1 py-6 overflow-auto max-w-full"
+        class="flex-1 py-6 overflow-auto max-w-full mx-6"
         #scrollableContent
       >
         @for (step of steps(); track $index; let i = $index) { @if (activeStep() === i + 1) {
@@ -76,7 +79,7 @@
         <ng-container *ngTemplateOutlet="content.templateRef"></ng-container>
         } } } }
       </div>
-      <div class="pt-[16px] border-t border-gray-200">
+      <div class="pt-[16px] border-t border-gray-200 mx-6">
         <app-base-wizard-actions [actions]="actions()" />
       </div>
     </div>

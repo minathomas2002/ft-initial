@@ -48,3 +48,24 @@ input[type="password"]::-ms-clear {
 input[type="password"]::-webkit-credentials-auto-fill-button {
   visibility: hidden !important;
 }
+
+.plans-summary-subsection-title {
+  position: relative;
+  color: #1d1e23;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 22px;
+  padding-inline-start: 1rem;
+  margin-bottom: 8px;
+}
+
+.plans-summary-subsection-title::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: #f78f3a;
+  border-radius: 32px;
+}
