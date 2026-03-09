@@ -292,7 +292,6 @@
 <!-- Submission Confirmation Modal -->
 <app-submission-confirmation-modal
   [(visible)]="showSubmissionModal"
-  [(existingSignature)]="existingSignature"
   [contactInfo]="contactInfo()"
   (onConfirm)="onSubmissionConfirm($event)"
   (onCancel)="onSubmissionCancel()"
