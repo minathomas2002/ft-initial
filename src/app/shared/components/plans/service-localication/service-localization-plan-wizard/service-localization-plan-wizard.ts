@@ -790,11 +790,6 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     const opportunityItem = this.planStore.availableOpportunities()?.[0] ?? null;
     const storeSecRegisteredId = this.profileStore.userProfile()?.secRegisteredId ?? null;
     mapServicePlanResponseToForm(data, this.serviceLocalizationFormService, { opportunityItem, storeSecRegisteredId });
-    if (data.signature?.signatureValue) {
-      this.existingSignature.set(data.signature.signatureValue);
-    } else {
-      this.existingSignature.set(null);
-    }
     this.planSignature.set(data.signature ?? null);
     this.planDepartmentApprovalSignature.set(data.approvalSignature ?? null);
     const currentMode = this.planStore.wizardMode();

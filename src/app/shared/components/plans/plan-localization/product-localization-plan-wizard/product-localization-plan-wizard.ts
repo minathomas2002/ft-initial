@@ -819,11 +819,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.planSignature.set(response.signature ?? null);
     this.planDepartmentApprovalSignature.set(response.approvalSignature ?? null);
 
-    // Store existing signature if present
-    if (response.signature?.signatureValue) {
-      this.existingSignature.set(response.signature.signatureValue);
-    }
-
     const currentMode = this.planStore.wizardMode();
 
     // Handle forms based on mode
