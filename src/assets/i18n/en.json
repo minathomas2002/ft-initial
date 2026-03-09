@@ -552,7 +552,8 @@
     },
     "canceled": {
       "title": "Delegation Canceled",
-      "description": "The delegation from ({{delegatorName}}) has been Canceled. You no longer have access to their tasks and cannot perform actions on their behalf.",
+      "descriptionBefore": "The delegation from ",
+      "descriptionAfter": " has been Canceled. You no longer have access to their tasks and cannot perform actions on their behalf.",
       "ok": "OK"
     }
   },
@@ -1035,7 +1036,8 @@
       "dVReview": "Plan reviewed and returned to employee for more info",
       "deptManagerReview": "Plan reviewed and returned to Division Manager for more info"
     },
-    "impersonatedBy": "Impersonated By"
+    "impersonatedBy": "Impersonated By",
+    "onBehalf": "On Behalf of"
   },
   "assign": {
     "assign": "Assign",
