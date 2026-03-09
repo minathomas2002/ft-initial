@@ -25,15 +25,12 @@ const isLoginEndpoint = (url: string): boolean => {
     API_ENDPOINTS.auth.investorLogin,
     API_ENDPOINTS.auth.windowsLogin,
     API_ENDPOINTS.auth.fakeWindowsLogin,
-    API_ENDPOINTS.auth.loginWithImpersonation,
-    API_ENDPOINTS.auth.winLoginWithImpersonation,
     API_ENDPOINTS.auth.register,
     API_ENDPOINTS.auth.forgotPassword,
     API_ENDPOINTS.auth.resetPassword,
     API_ENDPOINTS.auth.passwordResetTokenExpiry,
     API_ENDPOINTS.auth.verifyEmail,
     API_ENDPOINTS.auth.resendVerifyEmail,
-    API_ENDPOINTS.auth.refreshToken,
   ];
   return loginPaths.some((path) => url.includes(path));
 };
