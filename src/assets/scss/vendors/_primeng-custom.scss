@@ -303,6 +303,22 @@
   border: 0 !important;
 }
 
+/* Profile dropdown popover - keep within viewport, RTL-aware positioning */
+.profile-dropdown-popover.p-popover {
+  max-width: min(280px, calc(100vw - 2rem)) !important;
+  max-height: min(85vh, 500px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  /* Anchor to inline-end (right in LTR, left in RTL) to align with profile trigger */
+  @media (min-width: 576px) {
+    inset-inline-start: auto !important;
+    inset-inline-end: 1rem !important;
+    /* Override global translate(40px); keep vertical offset only */
+    transform: translateY(16px) !important;
+  }
+}
+
 .notification-badge {
   position: relative;
 }
