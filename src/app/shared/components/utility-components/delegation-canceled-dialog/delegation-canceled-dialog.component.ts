@@ -19,13 +19,6 @@ export class DelegationCanceledDialogComponent {
     return this.i18nService.translate('delegation.canceled.title');
   }
 
-  protected get description(): string {
-    const delegatorName = this.delegationCanceledService.delegatorDisplayName;
-    return this.i18nService.translate('delegation.canceled.description', {
-      delegatorName: delegatorName || '—',
-    });
-  }
-
   protected onConfirm(): void {
     this.delegationCanceledService.onConfirm();
   }

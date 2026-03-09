@@ -14,7 +14,9 @@
 >
   <div class="max-w-[25rem]">
     <p class="text-base font-normal text-gray-700 mt-2">
-      {{ description }}
+      {{ i18nService.translate('delegation.canceled.descriptionBefore') }}
+      <span class="font-bold">{{ delegationCanceledService.delegatorDisplayName || '—' }}</span>
+      {{ i18nService.translate('delegation.canceled.descriptionAfter') }}
     </p>
   </div>
 </app-base-dialog>
