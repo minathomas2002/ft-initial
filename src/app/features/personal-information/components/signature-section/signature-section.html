@@ -8,6 +8,7 @@
     <div class="flex justify-center items-center">
       <p class="text-sm text-gray-500">No signature created</p>
     </div>
+    @if (!isImpersonated()) {
     <div class="flex gap-4">
       <p-button
         [label]="'Draw Signature'"
@@ -22,9 +23,11 @@
         (onClick)="onChangeSignatureClick()"
       />
     </div>
+    }
   </div>
   }@else {
   <div class="flex justify-center items-center bg-gray-50 rounded-lg p-6 border border-gray-200 relative">
+    @if(!isImpersonated()){
     <p-button
       [label]="'Delete'"
       icon="icon-trash-2"
@@ -34,6 +37,7 @@
       text
       (onClick)="onDeleteSignatureClick()"
     />
+    }
     <div
       class="md:max-w-[50%] cursor-pointer"
       (click)="signaturePreviewVisible.set(true)"
