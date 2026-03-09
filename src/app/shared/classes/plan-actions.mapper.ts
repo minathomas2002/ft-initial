@@ -36,6 +36,7 @@ export class PlanActionsMapper {
         [EActionPlanTimeLine.AutoRejected]: { labelKey: 'Plan Auto Rejected' },
         [EActionPlanTimeLine.DVReview]: { labelKey: 'DV Review' },
         [EActionPlanTimeLine.DeptManagerReview]: { labelKey: 'Department Manager Review' },
+        [EActionPlanTimeLine.ViewOpportunityDetails]: { labelKey: 'View Opportunity' },
     };
 
     getActions(

@@ -31,6 +31,7 @@ export enum EInternalUserPlanStatus {
 export interface IPlanRecord {
   id: string;
   planId: string;
+  opportunityId: string;
   planCode: string;
   title: string;
   investorName?: string;
