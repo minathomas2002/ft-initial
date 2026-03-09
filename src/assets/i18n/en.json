@@ -30,13 +30,12 @@
     "files": "Files",
     "clickToUpload": "Click to upload",
     "dragAndDrop": "or drag and drop",
-    "viewDetails":"View Details",
-    "viewDetailsHint":"This is a hint text to help user,",
-    "CreatorName" : "Creator Name",
-    "CreationDate" : "Creation  Date",
-    "LastModifiedBy":"Last Modified By",
-    "LastModifiedDate":"Last Modified Date"
-
+    "viewDetails": "View Details",
+    "viewDetailsHint": "This is a hint text to help user,",
+    "CreatorName": "Creator Name",
+    "CreationDate": "Creation  Date",
+    "LastModifiedBy": "Last Modified By",
+    "LastModifiedDate": "Last Modified Date"
   },
   "footer": {
     "message": "© 2025 SEC. All rights reserved.",
@@ -195,7 +194,7 @@
       "services": "Services",
       "product": "Product"
     },
-    "units":{
+    "units": {
       "km": "Km",
       "panels": "Panels",
       "cb": "CB",
@@ -395,7 +394,7 @@
       "assignedBy": "Assigned BY",
       "status": "Status",
       "actions": "Actions",
-      "photo":"Profile Picture"
+      "photo": "Profile Picture"
     },
     "list": {
       "title": "Employees",
@@ -498,36 +497,34 @@
       "subTitle": "Delegate your tasks to another employee during your absence",
       "delegator": "Delegator",
       "delegatee": "Delegatee",
-      "startDate":"Start Date",
+      "startDate": "Start Date",
       "endDate": "End Date",
       "status": "Status",
       "confirmButton": "Submit",
-      "delegatorRequired":"Delegator is required",
-      "delegateeRequired":"Delegatee is required",
-      "startDateRequired":"Start date is required",
-      "endDateRequired":"End date is required",
-      "delegatorPlaceHolder" : "Select delegator",
-      "delegateePlaceHolder" : "Select delegatee",
+      "delegatorRequired": "Delegator is required",
+      "delegateeRequired": "Delegatee is required",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "delegatorPlaceHolder": "Select delegator",
+      "delegateePlaceHolder": "Select delegatee",
       "selectStartDate": "Select start date",
       "selectEndDate": "Select end date",
-      "delete":{
-        "title" : "Are you sure you want to delete this Delegation?",
-        "description" : "This action cannot be undone. Once deleted, all related data will be permanently removed."
+      "delete": {
+        "title": "Are you sure you want to delete this Delegation?",
+        "description": "This action cannot be undone. Once deleted, all related data will be permanently removed."
       },
-      "cancel":{
-        "title" : "Are you sure you want to cancel this Delegation?",
-        "description" : "Canceling the delegation will end the delegation immediately"
-
+      "cancel": {
+        "title": "Are you sure you want to cancel this Delegation?",
+        "description": "Canceling the delegation will end the delegation immediately"
       },
-      "edit":{
+      "edit": {
         "editTitle": "Edit Delegation"
       },
-      "add":{
+      "add": {
         "addTitle": "Add Delegation"
       }
-
     },
-    "list":{
+    "list": {
       "addDelegation": "Add Delegation"
     },
     "filter": {
@@ -538,12 +535,12 @@
     "table": {
       "delegatorName": "Delegator Name",
       "delegateeName": "Delegatee Name",
-      "startDate":"Start Date",
-      "endDate":"End Date",
-      "createdAt" : "Created At",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "createdAt": "Created At",
       "createdBy": "Created By",
-      "updatedBy":"Updated By",
-      "updatedAt" : "Updated At",
+      "updatedBy": "Updated By",
+      "updatedAt": "Updated At",
       "status": "Status",
       "actions": "Actions"
     },
@@ -655,7 +652,7 @@
         "newOpportunityCreatedNotificationDesc": "Sent automatically whenever a new active and published Opportunity is created in the system.",
         "accessNotifications": "Delegation Notifications",
         "delegationCreateUpdate": "Delegation Creation / Update",
-        "delegationDeleteCancel" :"Delegation Deleted / Deactivated",
+        "delegationDeleteCancel": "Delegation Deleted / Deactivated",
         "impersonationAccessAlertDesc": " Sent when the admin creates or updates a delegation.",
         "delegator": "Delegator (The original owner of the permissions) ",
         "delegatee": "Delegatee (The user assigned to act on behalf of the delegator)",
@@ -735,8 +732,8 @@
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Track and manage your submitted localization plans and their review status",
-    "subtitleInvestor":"Track the status of your submitted localization plans.",
-    "subtitleInternalUser":"Track the status of all localization plans.",
+    "subtitleInvestor": "Track the status of your submitted localization plans.",
+    "subtitleInternalUser": "Track the status of all localization plans.",
     "subtitleInternalUsers": "Track the status of all localization plans.",
     "subTitleDvManager": "Track and manage submitted localization plans that require your action",
     "submitNewPlan": "Submit New Plan",
@@ -756,7 +753,7 @@
     "publish": "Publish"
   },
   "plans": {
-    "exportPlans":"Export Plans",
+    "exportPlans": "Export Plans",
     "assign": "Assign",
     "title": "Plans",
     "submitNewPlan": "Submit New Plan",
@@ -824,8 +821,8 @@
       "allTypes": "All Plan Types",
       "service": "Service",
       "material": "Material",
-      "allStatuses":"All Statuses",
-      "allAssignees":"All Assignees",
+      "allStatuses": "All Statuses",
+      "allAssignees": "All Assignees",
       "selectAssignee": "Assignee",
       "reset": "Reset Filters"
     },
@@ -955,7 +952,7 @@
       "pendingWithInvestor": "Pending with Investor",
       "draft": "Draft",
       "returnedByDV": "Returned By Division",
-      "returnedByDEPTManager":"Returned By Department"
+      "returnedByDEPTManager": "Returned By Department"
     },
     "type": {
       "services": "Services",
@@ -984,7 +981,7 @@
       "unAssignedPlans": "Unassigned Plans",
       "assignedPending": "Assigned Pending",
       "plansUnderReview": "Under Review Plans",
-      "inProgressPlans":"In Progress Plans",
+      "inProgressPlans": "In Progress Plans",
       "assignedPlans": "Assigned Plans",
       "approvedPlans": "Approved Plans",
       "assignedApprovedPlans": "Assigned Approved",
@@ -1037,7 +1034,8 @@
       "editPlan": "Edited the plan",
       "dVReview": "Plan reviewed and returned to employee for more info",
       "deptManagerReview": "Plan reviewed and returned to Division Manager for more info"
-    }
+    },
+    "impersonatedBy": "Impersonated By"
   },
   "assign": {
     "assign": "Assign",
@@ -1051,7 +1049,7 @@
     "reassignSuccessMsg": "Plan has been reassigned successfully to {{employee}}.",
     "currentEmployee": "Current Employee"
   },
-  "WarningMesages":{
+  "WarningMesages": {
     "deletedOppprtuinity": "This draft plan is no longer valid because the associated opportunity has been deleted. Please delete this plan and submit a new one for an available opportunity."
   },
   "contactUs": {
@@ -1066,15 +1064,14 @@
       "descriptionPlaceholder": "Provide a detailed description of your inquiry or feedback",
       "contactUs": "Contact Us",
       "titleRequired": "Title is required",
-      "titleMinLength" : "Title must be at least 3 characters long",
-      "titleMaxLength" : "Title cannot exceed 150 characters",
+      "titleMinLength": "Title must be at least 3 characters long",
+      "titleMaxLength": "Title cannot exceed 150 characters",
       "descriptionRequired": "Description is required",
-      "descriptionMinLength" : "Description must be at least 10 characters long",
-      "descriptionMaxLength" : "Description cannot exceed 1000 characters"
+      "descriptionMinLength": "Description must be at least 10 characters long",
+      "descriptionMaxLength": "Description cannot exceed 1000 characters"
     },
-    "messages":{
-      "addedSuccess" : "Your request has been sent successfully."
+    "messages": {
+      "addedSuccess": "Your request has been sent successfully."
     }
   }
-
 }

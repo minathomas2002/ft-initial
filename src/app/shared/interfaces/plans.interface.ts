@@ -1,4 +1,4 @@
-import { EOpportunityType, EPlanPageTitle, EStatusPlanTimeLine, ETargetedCustomer } from "../enums"
+import { EOpportunityType, EPlanPageTitle, ERoles, EStatusPlanTimeLine, ETargetedCustomer } from "../enums"
 import { EActionPlanTimeLine } from "../enums/action-plan-timeline.enum"
 import { TColors } from "./colors.interface"
 import { EInternalUserPlanStatus, EInvestorPlanStatus } from "./dashboard-plans.interface"
@@ -340,6 +340,11 @@ export interface ITimeLineResponse {
   daysAfterPreviousAction: number;
   comments: ITimelineComment[];
   reason: string;
+  delegateeNameEn: string,
+  delegateeNameAr: string,
+  delegateeProfilePic: string,
+  delegateeRole: ERoles | null,
+  isImpersonated: false
 }
 
 export interface IPlanStatus {

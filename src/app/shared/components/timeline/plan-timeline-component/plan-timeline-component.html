@@ -3,7 +3,7 @@
     #timelineTemplate
     let-item="item"
   >
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 border border-gray-200 p-4 rounded-lg">
       <!-- status and date -->
       <div class="flex justify-between items-start">
 
@@ -32,13 +32,27 @@
       </div>
 
       <!-- user card -->
-      <div>
+      <div class="flex flex-col gap-3">
         <app-identify-user
           [userAvatar]="item.item.actionByProfilePic"
           [userName]="item.item.actionByNameEn"
           [userRole]="getUserTranslatedRole(item.item.actorRole)"
         >
         </app-identify-user>
+
+        @if (item.item.isImpersonated) {
+        <span class="text-[#FF692E]">
+          <i class="icon-arrow-up bg-[#FFF4ED] p-2 rounded-full rotate-180 text-sm me-3"></i>
+          {{'timeline.impersonatedBy' | translate}}
+        </span>
+        <app-identify-user
+          [userAvatar]="item.item.delegateeProfilePic"
+          [userName]="item.item.delegateeNameEn"
+          [userRole]="getUserTranslatedRole(item.item.delegateeRole)"
+        >
+        </app-identify-user>
+        }
+        <div class="border-t border-gray-200"></div>
       </div>
 
       <!-- Action -->

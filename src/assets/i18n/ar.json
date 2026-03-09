@@ -1,193 +1,193 @@
 {
-	"common": {
-		"welcome": "مرحباً",
-		"hello": "مرحبا",
-		"yes": "نعم",
-		"no": "لا",
-		"cancel": "إلغاء",
-		"confirm": "تأكيد",
-		"save": "حفظ",
-		"delete": "حذف",
-		"edit": "تعديل",
-		"add": "إضافة",
-		"search": "بحث",
-		"loading": "جاري التحميل...",
-		"error": "خطأ",
-		"success": "نجح",
-		"warning": "تحذير",
-		"info": "معلومة",
-		"noDataFound": "لا توجد بيانات",
-		"clearAll": "مسح الكل",
-		"paginatorTemplate": "عرض {first} إلى {last} من {totalRecords}",
-		"filter": "تصفية",
-		"previous": "السابق",
-		"next": "التالي",
-		"language": "اللغة",
-		"searchCountry": "البحث عن البلد...",
-		"signIn": "تسجيل الدخول",
-		"signUp": "إنشاء حساب",
-    "viewDetails" :"عرض التفاصيل",
-    "viewDetailsHint" :"هذا نص تلميحي لمساعدة المستخدم,",
+  "common": {
+    "welcome": "مرحباً",
+    "hello": "مرحبا",
+    "yes": "نعم",
+    "no": "لا",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "warning": "تحذير",
+    "info": "معلومة",
+    "noDataFound": "لا توجد بيانات",
+    "clearAll": "مسح الكل",
+    "paginatorTemplate": "عرض {first} إلى {last} من {totalRecords}",
+    "filter": "تصفية",
+    "previous": "السابق",
+    "next": "التالي",
+    "language": "اللغة",
+    "searchCountry": "البحث عن البلد...",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "viewDetails": "عرض التفاصيل",
+    "viewDetailsHint": "هذا نص تلميحي لمساعدة المستخدم,",
     "CreatorName": "اسم المُنشئ",
     "CreationDate": "تاريخ الإنشاء",
     "LastModifiedBy": "آخر تعديل بواسطة",
     "LastModifiedDate": "تاريخ آخر تعديل"
-	},
-	"footer": {
-		"message": "© 2025 SEC. جميع الحقوق محفوظة.",
-		"terms": "الشروط والأحكام",
-		"privacy": "الخصوصية",
-		"cookie": "ملفات التعريف"
-	},
-	"auth": {
-		"email": "البريد الإلكتروني",
-		"password": "كلمة المرور",
-		"name": "الاسم",
-		"phone": "الهاتف",
-		"welcomeMessage": "مرحباً! يرجى إدخال بياناتك.",
-		"enterYourEmail": "أدخل بريدك الإلكتروني",
-		"enterYourName": "أدخل اسمك",
-		"emailRequired": "البريد الإلكتروني مطلوب",
-		"nameRequired": "الاسم مطلوب",
-		"phoneRequired": "رقم الهاتف مطلوب",
-		"invalidEmailFormat": "البريد الإلكتروني غير صالح",
-		"invalidFullName": "يرجى إدخال اسم كامل صالح (أحرف فقط، بحد أقصى 100 حرف)",
-		"invalidPhoneNumber": "يرجى إدخال رقم هاتف صالح",
-		"enterYourPassword": "أدخل كلمة المرور",
-		"passwordRequired": "كلمة المرور مطلوبة",
-		"passwordLength": "يجب أن تكون كلمة المرور بين 8 و 20 حرفاً.",
-		"passwordUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.",
-		"passwordLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل.",
-		"passwordNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.",
-		"passwordSpecialChar": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل.",
-		"signIn": "تسجيل الدخول",
-		"signUp": "إنشاء حساب",
-		"getStarted": "ابدأ",
-		"alreadyHaveAccount": "هل لديك حساب بالفعل؟",
-		"login": {
-			"title": "تسجيل الدخول",
-			"description": "مرحباً بعودتك! يرجى إدخال بياناتك.",
-			"email": "البريد الإلكتروني",
-			"enterYourEmail": "أدخل بريدك الإلكتروني",
-			"emailRequired": "البريد الإلكتروني مطلوب",
-			"invalidEmailFormat": "البريد الإلكتروني غير صالح",
-			"password": "كلمة المرور",
-			"enterYourPassword": "أدخل كلمة المرور",
-			"passwordRequired": "كلمة المرور مطلوبة",
-			"invalidPasswordFormat": "صيغة كلمة المرور غير صحيحة",
-			"rememberMe": "تذكرني",
-			"forgotPassword": "نسيت كلمة المرور؟",
-			"signIn": "تسجيل الدخول",
-			"dontHaveAccount": "ليس لديك حساب؟",
-			"signUp": "إنشاء حساب",
-			"resendVerificationLink": "إعادة إرسال رابط التحقق",
-			"resendVerificationSuccess": "تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني.",
-			"verifyEmailFirst": "بريدك الإلكتروني غير مؤكد. يرجى استخدام ‘إعادة إرسال رابط التحقق’ للحصول على بريد إلكتروني جديد.",
-			"devEnvironmentTitle": "بيئة التطوير فقط (محاكاة تسجيل الدخول لموظفي شركة الكهرباء)",
-			"jobNumber": "رقم الوظيفة",
-			"enterJobNumber": "أدخل رقم وظيفتك"
-		},
-		"verification": {
-			"didntReceiveEmail": "لم تستلم البريد الإلكتروني؟",
-			"title": "التحقق",
-			"subtitle": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل.",
-			"clickToResend": "انقر لإعادة الإرسال"
-		},
-		"forgot": {
-			"title": "نسيت كلمة المرور؟",
-			"description": "لا تقلق، سنرسل لك تعليمات إعادة التعيين.",
-			"email": "البريد الإلكتروني",
-			"enterYourEmail": "أدخل بريدك الإلكتروني",
-			"emailRequired": "البريد الإلكتروني مطلوب",
-			"invalidEmailFormat": "البريد الإلكتروني غير صالح",
-			"buttonLabel": "إعادة تعيين كلمة المرور",
-			"backButtonLabel": "العودة إلى تسجيل الدخول",
-			"success": "تم إرسال رابط إعادة تعيين كلمة المرور بنجاح.",
-			"didntReceiveEmail": "لم تستلم البريد الإلكتروني؟",
-			"resendResetLink": "انقر لإعادة الإرسال",
-			"resendResetLinkFull": "لم تستلم البريد الإلكتروني؟ إعادة إرسال رابط إعادة التعيين"
-		},
-		"reset": {
-			"title": "تعيين كلمة مرور جديدة",
-			"description": "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمات المرور السابقة.",
-			"password": "كلمة المرور",
-			"enterYourPassword": "أدخل كلمة المرور الجديدة",
-			"confirmPassword": "تأكيد كلمة المرور",
-			"enterYourConfirmPassword": "أكد كلمة المرور الجديدة",
-			"confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
-			"passwordMismatch": "كلمتا المرور غير متطابقتين",
-			"buttonLabel": "إعادة تعيين كلمة المرور",
-			"backButtonLabel": "العودة إلى تسجيل الدخول",
-			"success": "تم إعادة تعيين كلمة المرور بنجاح. يرجى تسجيل الدخول."
-		},
-		"register": {
-			"confirmPassword": "تأكيد كلمة المرور",
-			"enterYourConfirmPassword": "أكد كلمة المرور",
-			"confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
-			"passwordMismatch": "كلمتا المرور غير متطابقتين",
-			"success": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل.",
-			"invalidEmailFormat": "يرجى إدخال بريد إلكتروني صالح",
-			"generalError": "فشل التسجيل. يرجى المحاولة مرة أخرى لاحقاً."
-		},
-		"verifyEmail": {
-			"title": "اكتمال التحقق",
-			"subtitle": "يمكنك الآن الوصول إلى جميع فرص الاستثمار والتأهيل المتاحة في بوابة بينا.",
-			"backToLogin": "العودة إلى تسجيل الدخول",
-			"verifying": "جاري التحقق من بريدك الإلكتروني...",
-			"success": "تم التحقق من بريدك الإلكتروني بنجاح. يمكنك الآن تسجيل الدخول."
-		}
-	},
-	"profile": {
-		"messages": {
-			"profilePictureUpdated": "تم تحديث صورة الملف الشخصي بنجاح",
-			"profilePictureRemoved": "تم إزالة صورة الملف الشخصي بنجاح"
-		},
-		"deleteConfirm": {
-			"title": "حذف صورة الملف الشخصي",
-			"description": "هل أنت متأكد من أنك تريد حذف صورة الملف الشخصي؟ لا يمكن التراجع عن هذا الإجراء."
-		}
-	},
-	"navigation": {
-		"home": "الرئيسية",
-		"dashboard": "لوحة التحكم",
-		"profile": "الملف الشخصي",
-		"myProfile": "ملفي الشخصي",
-		"viewProfile": "عرض الملف الشخصي",
-		"switchAccounts": "تبديل الحسابات",
-		"signOut": "تسجيل الخروج",
-		"settings": "الإعدادات",
-		"help": "مساعدة",
-		"users": "المستخدمين",
-		"opportunities": "الفرص",
-		"investors": "المستثمرون"
-	},
-	"opportunity": {
-		"status": {
-			"draft": "مسودة",
-			"published": "منشور"
-		},
-		"state": {
-			"isActive": "نشط",
-			"isNotActive": "غير نشط",
-			"active": "نشط",
-			"inactive": "غير نشط"
-		},
-		"warning": {
-			"draftAfterStartDate": "هذه المسودة لديها تاريخ بداية قد مضى بالفعل."
-		},
-		"action": {
-			"edit": "تعديل",
-			"delete": "حذف",
-			"moveToDraft": "نقل إلى المسودة",
-			"publish": "نشر",
-			"apply": "تطبيق"
-		},
-		"type": {
-			"service": "خدمة",
-			"services": "خدمات",
-			"product": "منتج"
-		},
-		"units":{
+  },
+  "footer": {
+    "message": "© 2025 SEC. جميع الحقوق محفوظة.",
+    "terms": "الشروط والأحكام",
+    "privacy": "الخصوصية",
+    "cookie": "ملفات التعريف"
+  },
+  "auth": {
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "name": "الاسم",
+    "phone": "الهاتف",
+    "welcomeMessage": "مرحباً! يرجى إدخال بياناتك.",
+    "enterYourEmail": "أدخل بريدك الإلكتروني",
+    "enterYourName": "أدخل اسمك",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "nameRequired": "الاسم مطلوب",
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "invalidEmailFormat": "البريد الإلكتروني غير صالح",
+    "invalidFullName": "يرجى إدخال اسم كامل صالح (أحرف فقط، بحد أقصى 100 حرف)",
+    "invalidPhoneNumber": "يرجى إدخال رقم هاتف صالح",
+    "enterYourPassword": "أدخل كلمة المرور",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "passwordLength": "يجب أن تكون كلمة المرور بين 8 و 20 حرفاً.",
+    "passwordUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.",
+    "passwordLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل.",
+    "passwordNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.",
+    "passwordSpecialChar": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل.",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "getStarted": "ابدأ",
+    "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+    "login": {
+      "title": "تسجيل الدخول",
+      "description": "مرحباً بعودتك! يرجى إدخال بياناتك.",
+      "email": "البريد الإلكتروني",
+      "enterYourEmail": "أدخل بريدك الإلكتروني",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "invalidEmailFormat": "البريد الإلكتروني غير صالح",
+      "password": "كلمة المرور",
+      "enterYourPassword": "أدخل كلمة المرور",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "invalidPasswordFormat": "صيغة كلمة المرور غير صحيحة",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "signIn": "تسجيل الدخول",
+      "dontHaveAccount": "ليس لديك حساب؟",
+      "signUp": "إنشاء حساب",
+      "resendVerificationLink": "إعادة إرسال رابط التحقق",
+      "resendVerificationSuccess": "تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني.",
+      "verifyEmailFirst": "بريدك الإلكتروني غير مؤكد. يرجى استخدام ‘إعادة إرسال رابط التحقق’ للحصول على بريد إلكتروني جديد.",
+      "devEnvironmentTitle": "بيئة التطوير فقط (محاكاة تسجيل الدخول لموظفي شركة الكهرباء)",
+      "jobNumber": "رقم الوظيفة",
+      "enterJobNumber": "أدخل رقم وظيفتك"
+    },
+    "verification": {
+      "didntReceiveEmail": "لم تستلم البريد الإلكتروني؟",
+      "title": "التحقق",
+      "subtitle": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل.",
+      "clickToResend": "انقر لإعادة الإرسال"
+    },
+    "forgot": {
+      "title": "نسيت كلمة المرور؟",
+      "description": "لا تقلق، سنرسل لك تعليمات إعادة التعيين.",
+      "email": "البريد الإلكتروني",
+      "enterYourEmail": "أدخل بريدك الإلكتروني",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "invalidEmailFormat": "البريد الإلكتروني غير صالح",
+      "buttonLabel": "إعادة تعيين كلمة المرور",
+      "backButtonLabel": "العودة إلى تسجيل الدخول",
+      "success": "تم إرسال رابط إعادة تعيين كلمة المرور بنجاح.",
+      "didntReceiveEmail": "لم تستلم البريد الإلكتروني؟",
+      "resendResetLink": "انقر لإعادة الإرسال",
+      "resendResetLinkFull": "لم تستلم البريد الإلكتروني؟ إعادة إرسال رابط إعادة التعيين"
+    },
+    "reset": {
+      "title": "تعيين كلمة مرور جديدة",
+      "description": "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمات المرور السابقة.",
+      "password": "كلمة المرور",
+      "enterYourPassword": "أدخل كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "enterYourConfirmPassword": "أكد كلمة المرور الجديدة",
+      "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين",
+      "buttonLabel": "إعادة تعيين كلمة المرور",
+      "backButtonLabel": "العودة إلى تسجيل الدخول",
+      "success": "تم إعادة تعيين كلمة المرور بنجاح. يرجى تسجيل الدخول."
+    },
+    "register": {
+      "confirmPassword": "تأكيد كلمة المرور",
+      "enterYourConfirmPassword": "أكد كلمة المرور",
+      "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين",
+      "success": "تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق لإكمال التسجيل.",
+      "invalidEmailFormat": "يرجى إدخال بريد إلكتروني صالح",
+      "generalError": "فشل التسجيل. يرجى المحاولة مرة أخرى لاحقاً."
+    },
+    "verifyEmail": {
+      "title": "اكتمال التحقق",
+      "subtitle": "يمكنك الآن الوصول إلى جميع فرص الاستثمار والتأهيل المتاحة في بوابة بينا.",
+      "backToLogin": "العودة إلى تسجيل الدخول",
+      "verifying": "جاري التحقق من بريدك الإلكتروني...",
+      "success": "تم التحقق من بريدك الإلكتروني بنجاح. يمكنك الآن تسجيل الدخول."
+    }
+  },
+  "profile": {
+    "messages": {
+      "profilePictureUpdated": "تم تحديث صورة الملف الشخصي بنجاح",
+      "profilePictureRemoved": "تم إزالة صورة الملف الشخصي بنجاح"
+    },
+    "deleteConfirm": {
+      "title": "حذف صورة الملف الشخصي",
+      "description": "هل أنت متأكد من أنك تريد حذف صورة الملف الشخصي؟ لا يمكن التراجع عن هذا الإجراء."
+    }
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "dashboard": "لوحة التحكم",
+    "profile": "الملف الشخصي",
+    "myProfile": "ملفي الشخصي",
+    "viewProfile": "عرض الملف الشخصي",
+    "switchAccounts": "تبديل الحسابات",
+    "signOut": "تسجيل الخروج",
+    "settings": "الإعدادات",
+    "help": "مساعدة",
+    "users": "المستخدمين",
+    "opportunities": "الفرص",
+    "investors": "المستثمرون"
+  },
+  "opportunity": {
+    "status": {
+      "draft": "مسودة",
+      "published": "منشور"
+    },
+    "state": {
+      "isActive": "نشط",
+      "isNotActive": "غير نشط",
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "warning": {
+      "draftAfterStartDate": "هذه المسودة لديها تاريخ بداية قد مضى بالفعل."
+    },
+    "action": {
+      "edit": "تعديل",
+      "delete": "حذف",
+      "moveToDraft": "نقل إلى المسودة",
+      "publish": "نشر",
+      "apply": "تطبيق"
+    },
+    "type": {
+      "service": "خدمة",
+      "services": "خدمات",
+      "product": "منتج"
+    },
+    "units": {
       "km": "كم",
       "panels": "لوحة",
       "cb": "قاطع دائرة",
@@ -195,537 +195,540 @@
       "ktons": "كيلو طن",
       "unit": "وحدة"
     },
-		"list": {
-			"title": "الفرص",
-			"subtitle": "تصفح جميع الخطط المتاحة وعرض تفاصيلها",
-			"cardDescription": "محولات الجهد العالي ذات الطلب القوي وإمكانات التوطين في التصنيع والخدمات.",
-			"opportunityType": "نوع الفرصة",
-			"applicationPeriod": "فترة التقديم",
-			"viewDetails": "عرض التفاصيل",
-			"apply": "تطبيق"
-		},
-		"counts": {
-			"totalOpportunities": "إجمالي الفرص",
-			"activePublishedOpportunities": "الفرص المنشورة النشطة",
-			"inactiveOpportunities": "الفرص غير النشطة",
-			"draftOpportunities": "الفرص المسودة",
-			"viewDetails": "عرض التفاصيل"
-		},
-		"filter": {
-			"search": "بحث",
-			"searchByOpportunityName": "البحث عن طريق اسم الفرصة",
-			"status": "حالة الفرصة",
-			"state": "حالة الفرصة",
-			"type": "نوع الفرصة",
-			"opportunityType": "نوع الفرصة"
-		},
-		"details": {
-			"backToOpportunities": "العودة إلى الفرص",
-			"forecastedDemand": "الطلب المتوقع لشركة الكهرباء (2024 – 2030)",
-			"demandNote": "الأرقام المقدمة هنا تقديرية وقابلة للتغيير",
-			"spendSAR": "الإنفاق (ريال سعودي)",
-			"quantityUnits": "الكمية (وحدات)",
-			"supplierBase": "قاعدة الموردين الحالية لشركة الكهرباء",
-			"local": "محلي",
-			"global": "عالمي",
-			"localizationAreas": "مجالات فرص التوطين",
-			"designEngineering": "التصميم والهندسة",
-			"sourcing": "التوريد",
-			"manufacturing": "التصنيع",
-			"assemblyTesting": "التجميع والاختبار",
-			"afterSalesServices": "خدمات ما بعد البيع",
-			"apply": "تطبيق"
-		},
-		"form": {
-			"basicInformation": "المعلومات الأساسية",
-			"forecastedDemand": "الطلب المتوقع لشركة الكهرباء (2024–2030)",
-			"supplierBase": "قاعدة الموردين",
-			"opportunityDates": "تواريخ الفرصة",
-			"opportunityImage": "صورة الفرصة",
-			"localization": "التوطين",
-			"opportunityTitle": "عنوان الفرصة",
-			"shortDescription": "الوصف القصير",
-			"opportunityCategory": "فئة الفرصة",
-			"opportunityType": "نوع الفرصة",
-			"spendSAR": "الإنفاق (ريال سعودي)",
-			"quantityUnits": "الكمية (وحدات)",
-			"localSuppliers": "الموردون المحليون",
-			"globalSuppliers": "الموردون العالميون",
-			"dateRange": "نطاق التاريخ",
-			"startDate": "تاريخ البدء",
-			"endDate": "تاريخ الانتهاء",
-			"image": "الصورة",
-			"designEngineering": "التصميم والهندسة",
-			"sourcing": "التوريد",
-			"manufacturing": "التصنيع",
-			"assemblyTesting": "التجميع والاختبار",
-			"afterSalesServices": "خدمات ما بعد البيع",
-			"enterOpportunityTitle": "أدخل عنوان الفرصة",
-			"enterShortDescription": "أدخل الوصف القصير",
-			"select": "اختر",
-			"enterSpendSAR": "أدخل الإنفاق (ريال سعودي)",
-			"enterMinQuantity": "أدخل الحد الأدنى للكمية",
-			"enterMaxQuantity": "أدخل الحد الأقصى للكمية",
-			"enterLocalSuppliersNumber": "أدخل عدد الموردين المحليين",
-			"enterGlobalSuppliersNumber": "أدخل عدد الموردين العالميين",
-			"selectDateRange": "اختر نطاق التاريخ",
-			"selectStartDate": "اختر تاريخ البدء",
-			"selectEndDate": "اختر تاريخ الانتهاء",
-			"enterKeyActivities": "أدخل الأنشطة الرئيسية",
-			"addDesignEngineeringItem": "إضافة عنصر التصميم والهندسة",
-			"addSourcingItem": "إضافة عنصر التوريد",
-			"addManufacturingItem": "إضافة عنصر التصنيع",
-			"addAssemblyTestingItem": "إضافة عنصر التجميع والاختبار",
-			"addAfterSalesServicesItem": "إضافة عنصر خدمات ما بعد البيع",
-			"fileUploadPlaceholder": "jpg, png, pdf, docx والفيديو، الحد الأقصى لحجم الملف (10 ميجابايت)",
-			"titleRequired": "عنوان الفرصة مطلوب",
-			"shortDescriptionRequired": "الوصف القصير مطلوب",
-			"maxLengthExceeded": "تم تجاوز الحد الأقصى للطول",
-			"opportunityCategoryRequired": "فئة الفرصة مطلوبة",
-			"opportunityTypeRequired": "نوع الفرصة مطلوب",
-			"spendSARRequired": "الإنفاق (ريال سعودي) مطلوب",
-			"spendSARCannotBeGreaterThan10": "الإنفاق (ريال سعودي) لا يمكن أن يتجاوز 10 مليارات",
-			"minQuantityRequired": "الحد الأدنى للكمية مطلوب",
-			"minQuantityCannotBeNegative": "الحد الأدنى للكمية لا يمكن أن يكون سالباً",
-			"minQuantityMustBeLessThanMax": "الحد الأدنى للكمية يجب أن يكون أقل من الحد الأقصى",
-			"maxQuantityRequired": "الحد الأقصى للكمية مطلوب",
-			"maxQuantityCannotBeNegative": "الحد الأقصى للكمية لا يمكن أن يكون سالباً",
-			"maxQuantityMustBeGreaterThanMin": "الحد الأقصى للكمية يجب أن يكون أكبر من الحد الأدنى",
-			"localSuppliersRequired": "الموردون المحليون مطلوبون",
-			"localSuppliersCannotBeNegative": "الموردون المحليون لا يمكن أن يكونوا سالبين",
-			"localSuppliersInvalid": "قيمة عدد الموردين المحليين غير صحيحة",
-			"globalSuppliersRequired": "الموردون العالميون مطلوبون",
-			"globalSuppliersCannotBeNegative": "الموردون العالميون لا يمكن أن يكونوا سالبين",
-			"globalSuppliersInvalid": "قيمة عدد الموردين العالميين غير صحيحة",
-			"dateRangeRequired": "نطاق التاريخ مطلوب",
-			"dateRangeInvalid": "يجب عليك اختيار نطاق تاريخ",
-			"startDateRequired": "تاريخ البدء مطلوب",
-			"endDateRequired": "تاريخ الانتهاء مطلوب",
-			"endDateValidateDateRange": "يجب أن يكون تاريخ الانتهاء بعد أو يساوي تاريخ البدء",
-			"startDateRestriction": "يمكن تغيير تاريخ البدء فقط إلى تاريخ أبكر عند ارتباط الخطط",
-			"endDateRestriction": "يمكن تغيير تاريخ الانتهاء فقط إلى تاريخ لاحق عند ارتباط الخطط",
-			"imageRequired": "الصورة مطلوبة",
-			"designEngineeringRequired": "التصميم والهندسة مطلوبان",
-			"designEngineeringMinLength": "يجب أن يحتوي عنصر التصميم والهندسة على 3 أحرف على الأقل",
-			"designEngineeringMaxLength": "يجب ألّا يتجاوز عنصر التصميم والهندسة 500 حرف",
-			"sourcingRequired": "التوريد مطلوب",
-			"sourcingMinLength": "يجب أن يحتوي عنصر التوريد على 3 أحرف على الأقل",
-			"sourcingMaxLength": "يجب ألّا يتجاوز عنصر التوريد 500 حرف",
-			"manufacturingRequired": "التصنيع مطلوب",
-			"manufacturingMinLength": "يجب أن يحتوي عنصر التصنيع على 3 أحرف على الأقل",
-			"manufacturingMaxLength": "يجب ألّا يتجاوز عنصر التصنيع 500 حرف",
-			"assemblyTestingRequired": "التجميع والاختبار مطلوبان",
-			"assemblyTestingMinLength": "يجب أن يحتوي عنصر التجميع والاختبار على 3 أحرف على الأقل",
-			"assemblyTestingMaxLength": "يجب ألّا يتجاوز عنصر التجميع والاختبار 500 حرف",
-			"afterSalesServicesRequired": "خدمات ما بعد البيع مطلوبة",
-			"afterSalesServicesMinLength": "يجب أن يحتوي عنصر خدمات ما بعد البيع على 3 أحرف على الأقل",
-			"afterSalesServicesMaxLength": "يجب ألّا يتجاوز عنصر خدمات ما بعد البيع 500 حرف"
-		},
-		"wizard": {
-			"createOpportunity": "إنشاء فرصة",
-			"addOpportunity": "إضافة فرصة",
-			"saveAsDraft": "حفظ كمسودة",
-			"back": "رجوع",
-			"next": "التالي",
-			"publish": "نشر",
-			"opportunityInformation": "معلومات الفرصة",
-			"opportunityInformationDescription": "أدخل تفاصيل الفرصة",
-			"opportunityLocalization": "توطين الفرصة",
-			"opportunityLocalizationDescription": "أدخل تفاصيل توطين الفرصة",
-			"keyActivity": "النشاط الرئيسي"
-		},
-		"messages": {
-			"savedAsDraft": "تم حفظ الفرصة كمسودة",
-			"createdSuccessfully": "تم إنشاء الفرصة بنجاح",
-			"updatedSuccessfully": "تم تحديث الفرصة بنجاح"
-		},
-		"confirmation": {
-			"onLeaveTitle": "هل أنت متأكد أنك تريد المغادرة؟",
-			"onLeaveDesc": "سيؤدي الإلغاء الآن إلى تجاهل جميع التغييرات غير المحفوظة. احفظ كمسودة للاحتفاظ بعملك."
-		}
-	},
-	"users": {
-		"actions": {
-			"changeRole": "تغيير الدور",
-			"delete": "حذف",
-			"edit": "تعديل",
-			"view": "عرض",
-			"deactivate": "إلغاء التفعيل",
-			"transfer": "استبدال / نقل"
-		},
-		"roles": {
-			"admin": "مدير",
-			"employee": "موظف",
-			"manager": "مدير",
-			"departmentManager": "مدير القسم",
-			"dvManager": "مدير DV"
-		},
-		"status": {
-			"active": "نشط",
-			"inactive": "غير نشط",
-			"delegated": "قيد الانتظار",
-			"all": "الكل"
-		},
-		"table": {
-			"id": "الرقم",
-			"name": "الاسم",
-			"nameArabic": "الاسم (عربي)",
-			"nameEnglish": "الاسم (إنجليزي)",
-			"jobNo": "رقم الوظيفة",
-			"email": "البريد الإلكتروني",
-			"phoneNumber": "رقم الهاتف",
-			"role": "الدور",
-			"joinDate": "تاريخ الانضمام",
-			"assignedDate": "تاريخ التعيين",
-			"assignedBy": "تم التعيين بواسطة",
-			"status": "الحالة",
-			"actions": "الإجراءات",
-      "photo":"الصورة الشخصية"
-		},
-		"list": {
-			"title": "الموظفون",
-			"subtitle": "إدارة أدوار الموظفين والصلاحيات",
-			"addEmployee": "إضافة موظف",
-			"noDataMessage": "لا توجد دورة تقييم متاحة"
-		},
-		"tabs": {
-			"employees": "الموظفون",
-			"roleManagement": "إدارة الأدوار",
-			"delegation": "التفويض"
-		},
-		"filter": {
-			"searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني أو تاريخ الانضمام",
-			"roleManagementSearchPlaceholder": "البحث باسم المستخدم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
-			"rolePlaceholder": "الدور",
-			"statusPlaceholder": "الحالة",
-			"selectJoinDate": "اختر تاريخ الانضمام"
-		},
-		"dialog": {
-			"changeRole": {
-				"title": "تغيير الدور",
-				"description": "اختر دوراً جديداً لهذا الموظف",
-				"roleLabel": "الدور",
-				"rolePlaceholder": "اختر الدور",
-				"roleRequired": "الدور مطلوب.",
-				"confirmButton": "تغيير"
-			},
-			"delete": {
-				"title": "حذف المستخدم",
-				"description": "هل أنت متأكد من أنك تريد حذف هذا المستخدم؟"
-			},
-			"deactivate": {
-				"title": "إلغاء تفعيل المستخدم",
-				"description": "هل أنت متأكد من أنك تريد إلغاء تفعيل هذا المستخدم؟"
-			},
-			"add": {
-				"title": "إضافة موظف",
-				"job": "رقم الوظيفة",
-				"jobLabel": "رقم الوظيفة",
-				"enName": "الاسم باللغة الإنجليزية",
-				"arName": "الاسم باللغة العربية",
-				"email": "البريد الإلكتروني",
-				"phone": "رقم الجوال",
-				"role": "الدور الوظيفي",
-				"rolePlaceHolder": "اختر الدور الوظيفي",
-				"roleRequired": "الدور الوظيفي مطلوب، يرجى اختيار دور صالح.",
-				"confirmAdd": "إضافة موظف",
-				"JobRequired": "رقم الوظيفة مطلوب.",
-				"jobPlaceHolder": "أدخل رقم الوظيفة.",
-				"invalidJobNo": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة صحيح.",
-				"nameEnPlaceHolder": "أدخل الاسم باللغة الإنجليزية.",
-				"nameEnRequired": "الاسم باللغة الإنجليزية مطلوب.",
-				"nameArPlaceholder": "أدخل الاسم باللغة العربية.",
-				"nameArRequired": "الاسم باللغة العربية مطلوب.",
-				"emailPlaceholder": "أدخل البريد الإلكتروني.",
-				"emailRequired": "البريد الإلكتروني مطلوب.",
-				"phonePlaceholder": "أدخل رقم الجوال.",
-				"phoneRequired": "رقم الجوال مطلوب.",
-				"jobInvalid": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة صحيح.",
-				"jobInvalidLength": "يجب أن يكون رقم الوظيفة بين 6 و20 حرفًا.",
-				"jobRequired": "رقم الوظيفة مطلوب.",
-				"nameArabicInvalid": "يجب أن يحتوي الاسم العربي على أحرف عربية فقط.",
-				"nameArabicInvalidLength": "يجب أن يكون طول الاسم العربي بين 3 و100 حرف.",
-				"nameEnglishInvalid": "يجب أن يحتوي الاسم الإنجليزي على أحرف إنجليزية فقط.",
-				"nameEnglishInvalidLength": "يجب أن يكون طول الاسم الإنجليزي بين 3 و100 حرف.",
-				"phoneInvalidLenhtg": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
-				"phoneInvalid": "يجب أن يحتوي رقم الجوال على أرقام فقط."
-			},
-			"edit": {
-				"confirmedit": "تعديل موظف"
-			},
-			"transferRole": {
-				"employeeLabel": "الموظف",
-				"employeePlaceholder": "اختر الموظف",
-				"employeeRequired": "الموظف مطلوب",
-				"transferRoleSuccess": "تم نقل الدور بنجاح"
-			}
-		},
-		"messages": {
-			"employeeAddedSuccess": "تم إضافة الموظف بنجاح",
-			"employeeUpdatedSuccess": "تم تحديث الموظف بنجاح",
-			"deactivateSuccess": "تم إلغاء تفعيل المستخدم بنجاح",
-			"transferRoleSuccess": "تم نقل الدور بنجاح"
-		}
-	},
-	"delegation": {
-		"status": {
-			"active": "نشط",
-			"cancelled": "ملغى",
-			"expired": "منتهي",
-			"upcoming": "قادم"
-		},
-		"actions": {
-			"edit": "تعديل",
-			"delete": "حذف",
-			"cancel": "إلغاء"
-		},
-		"dialog": {
-			"addTitle": "إضافة تفويض",
-			"editTitle": "تعديل التفويض",
-			"subTitle": "فوض مهامك لموظف آخر أثناء غيابك",
-			"delegator": "الموكل",
-			"delegatee": "الموكل إليه",
-			"startDate": "تاريخ البدء",
-			"endDate": "تاريخ الانتهاء",
-			"status": "الحالة",
-			"confirmButton": "إرسال",
-			"delegatorRequired": "الموكل مطلوب",
-			"delegateeRequired": "الموكل إليه مطلوب",
-			"startDateRequired": "تاريخ البدء مطلوب",
-			"endDateRequired": "تاريخ الانتهاء مطلوب",
-			"delegatorPlaceHolder": "اختر الموكل",
-			"delegateePlaceHolder": "اختر الموكل إليه",
-			"selectStartDate": "اختر تاريخ البدء",
-			"selectEndDate": "اختر تاريخ الانتهاء",
-			"delete": {
-				"title": "هل أنت متأكد من حذف هذا التفويض؟",
-				"description": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم."
-			},
-			"cancel": {
-				"title": "هل أنت متأكد من إلغاء هذا التفويض؟",
-				"description": "سيؤدي إلغاء التفويض إلى إنهاء التفويض فوراً"
-			},
-			"edit": {
-				"editTitle": "تعديل التفويض"
-			},
-			"add": {
-				"addTitle": "إضافة تفويض"
-			}
-		},
-		"list": {
-			"addDelegation": "إضافة تفويض"
-		},
-		"filter": {
-			"searchPlaceholder": "البحث باسم الموكل إليه أو الموكل أو المنشئ أو آخر معدل",
-			"selectDelegationPeriod": "اختر فترة التفويض",
-			"statusPlaceholder": "اختر الحالة"
-		},
-		"table": {
-			"delegatorName": "اسم الموكل",
-			"delegateeName": "اسم الموكل إليه",
-			"startDate": "تاريخ البدء",
-			"endDate": "تاريخ الانتهاء",
-			"createdAt": "تاريخ الإنشاء",
-			"createdBy": "المنشئ",
-			"updatedBy": "آخر معدل",
-			"updatedAt": "تاريخ آخر تعديل",
-			"status": "الحالة",
-			"actions": "الإجراءات"
-		},
-		"messages": {
-			"addedSuccess": "تم إضافة التفويض بنجاح",
-			"updatedSuccess": "تم تحديث التفويض بنجاح",
-			"deleteSuccess": "تم حذف التفويض بنجاح",
-			"cancelSuccess": "تم إلغاء التفويض بنجاح"
-		},
-		"canceled": {
-			"title": "تم إلغاء التفويض",
-			"description": "تم إلغاء التفويض من ({{delegatorName}}). لم يعد لديك حق الوصول إلى مهامهم ولا يمكنك تنفيذ إجراءات نيابة عنهم.",
-			"ok": "موافق"
-		}
-	},
-	"investors": {
-		"list": {
-			"title": "المستثمرون",
-			"subtitle": "إدارة معلومات المستثمرين والخطط",
-			"noInvestorsFound": "لم يتم العثور على مستثمرين"
-		},
-		"filter": {
-			"search": "بحث",
-			"joinDate": "تاريخ الانضمام",
-			"searchPlaceholder": "البحث بالاسم أو رقم الهاتف أو البريد الإلكتروني",
-			"selectJoinDate": "اختر تاريخ الانضمام"
-		},
-		"table": {
-			"id": "المعرف",
-			"name": "الاسم",
-			"email": "البريد الإلكتروني",
-			"phoneNumber": "رقم الهاتف",
-			"otherNumber": "رقم آخر",
-			"submittedPlans": "الخطط المقدمة",
-			"joinDate": "تاريخ الانضمام"
-		}
-	},
-	"dashboard": {
-		"title": "لوحة التحكم",
-		"subtitle": "تتبع وإدارة خطط التوطين المقدمة وحالة مراجعتها",
-		"submitNewPlan": "تقديم خطة جديدة"
-	},
-	"dialog": {
-		"cancel": "إلغاء",
-		"deleteOpportunity": "هل أنت متأكد من أنك تريد حذف هذه الفرصة؟",
-		"deleteOpportunityDescription": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم.",
-		"moveToDraft": "هل أنت متأكد من أنك تريد نقل هذه الفرصة إلى المسودة؟",
-		"publishOpportunity": "هل أنت متأكد من أنك تريد نشر هذه الفرصة؟",
-		"delete": "حذف",
-		"draft": "مسودة",
-		"publish": "نشر"
-	},
-	"plans": {
-		"newPlan": {
-			"title": "فرصة جديدة",
-			"description": "أدخل التفاصيل الأساسية لبدء خطة التوطين الخاصة بك",
-			"planTitle": "عنوان الخطة",
-			"planTitlePlaceholder": "أدخل عنوان خطتك",
-			"planTitleRequired": "عنوان الخطة مطلوب",
-			"opportunity": "الفرصة",
-			"opportunityType": "نوع الفرصة",
-			"services": "الخدمات",
-			"servicesDescription": "توطين الخدمات التشغيلية أو الداعمة",
-			"materials": "المواد",
-			"materialsDescription": "توطين المنتجات أو الأجزاء أو المعدات",
-			"next": "التالي"
-		},
-		"termsAndConditions": {
-			"title": "إرشادات خطة التوطين",
-			"description": "تتبع شركة الكهرباء العملية التالية لتقييم 'خطة التوطين' ودعوة الموردين للانضمام إلى رحلة بينا:",
-			"step1Title": "تقديم الطلب",
-			"step1Description": "اختر المنتج وأرسل التفاصيل الأساسية..",
-			"step2Title": "مراجعة الأهلية",
-			"step2Description": "يفحص فريق شركة الكهرباء الأهلية والأولوية.",
-			"step3Title": "التأهيل التقني",
-			"step3Description": "سجل كمورد ووفر المنتج.",
-			"step4Title": "الموافقة على الخطة",
-			"step4Description": "تراجع شركة الكهرباء وتوافق على خطة التوطين الخاصة بك.",
-			"step5Title": "مرحباً بك في بينا",
-			"step5Description": "احصل على مدير علاقات لدعم رحلتك.",
-			"instructionsTitle": "تعليمات رئيسية لملء قالب 'خطة التوطين' المقدم:",
-			"instruction1": "جميع المعلومات المطلوبة في القالب إلزامية ويجب ملؤها بأفضل ما لديك من قدرة ومعرفة.",
-			"instruction2": "يتم توفير 'تعليمات' في أعلى كل علامة تبويب في المستند. يرجى قراءتها بعناية أثناء ملء علامة التبويب.",
-			"instruction3": "صفحات 'الصفحة الأولى' و'نظرة عامة' للمعلومات فقط ولا ينبغي تعديلها بأي شكل من الأشكال.",
-			"instruction4": "يجب ملء خطة التوطين لكل 'منتج' بشكل فردي. ومع ذلك، يمكن تغطية مواصفات متعددة لنفس المنتج ضمن نفس 'خطة التوطين'، مع سرد جميع المواصفات في حقل '2. نظرة عامة على المنتج والمصنع' علامة التبويب الثاني.",
-			"instruction5": "يتم عرض إخلاء المسؤولية للتوقيع في نهاية القالب، ويجب التوقيع عليه قبل تقديم الخطة.",
-			"instruction6": "من المهم لشركة الكهرباء أن تعرف أن المنتج الذي تستهدفه للتوطين يتم شراؤه مباشرة من قبل شركة الكهرباء، أو مورديها المعتمدين. يرجى تقديم هذه المعلومات بعناية في قسم 'العميل المستهدف' من صفحة علامة التبويب '2. نظرة عامة على المنتج والمصنع'.",
-			"readAndApproved": "قرأت ووافقت"
-		},
-		"wizard": {
-			"saveAsDraft": "حفظ كمسودة",
-			"back": "رجوع",
-			"next": "التالي",
-			"submit": "إرسال",
-			"resubmit": "إعادة الإرسال",
-			"approveAndForward": "الموافقة والإرسال",
-			"reject": "رفض",
-			"sendBackToInvestor": "إرجاع إلى المستثمر",
-			"addComments": "إضافة تعليقات",
-			"timeline": "الجدول الزمني"
-		},
-		"filter": {
-			"searchPlaceholder": "البحث عن طريق معرف الخطة أو العنوان",
-			"selectPlanType": "اختر نوع الخطة",
-			"selectStatus": "اختر الحالة",
-			"selectSubmissionDate": "اختر تاريخ التقديم",
-			"allTypes": "جميع الأنواع",
-			"service": "خدمة",
-			"material": "مادة",
-			"allStatuses": "جميع الحالات",
-			"reset": "إعادة تعيين التصفية"
-		},
-		"status": {
-			"submitted": "مقدمة",
-			"pending": "قيد الانتظار",
-			"underReview": "قيد المراجعة",
-			"approved": "موافق عليها",
-			"rejected": "مرفوضة"
-		},
-		"employee_status": {
-			"pending": "قيد الانتظار",
-			"underReview": "قيد المراجعة",
-			"approved": "موافق عليها",
-			"rejected": "مرفوضة",
-			"unassigned": "غير معينة",
-			"deptApproved": "موافق عليها من القسم",
-			"deptRejected": "مرفوضة من القسم",
-			"dvApproved": "موافق عليها من مدير DV",
-			"dvRejected": "مرفوضة من مدير DV",
-			"dvRejectionAcknowledged": "تم الاعتراف برفض مدير DV",
-			"employeeApproved": "موافق عليها من الموظف",
-			"employeeRejected": "مرفوضة من الموظف"
-		},
-		"type": {
-			"services": "الخدمات",
-			"materials": "المواد"
-		},
-		"table": {
-			"planId": "معرف الخطة",
-			"investorName": "اسم المستثمر",
-			"planTitle": "عنوان الخطة",
-			"planType": "نوع الخطة",
-			"opportunityType": "نوع الفرصة",
-			"submissionDate": "تاريخ التقديم",
-			"slaCountdown": "العد التنازلي لاتفاقية مستوى الخدمة",
-			"currentStatus": "الحالة الحالية",
-			"actions": "الإجراءات",
-			"daysRemaining": "أيام متبقية",
-			"day": "يوم",
-			"days": "أيام",
-			"dayOverdue": "يوم متأخر",
-			"daysOverdue": "أيام متأخرة"
-		},
-		"statistics": {
-			"totalPlans": "إجمالي الخطط",
-			"unAssignedPlans": "الخطط غير المعينة",
-			"plansUnderReview": "الخطط قيد المراجعة",
-			"approvedPlans": "الخطط الموافق عليها",
-			"rejectedPlans": "الخطط المرفوضة"
-		},
-		"list": {
-			"noPlansFound": "لم يتم العثور على خطط"
-		},
-		"actions": {
-			"viewDetails": "عرض التفاصيل",
-			"edit": "تعديل",
-			"download": "تحميل",
-			"viewTimeline": "عرض الجدول الزمني",
-			"assignToEmployee": "تعيين للموظف",
-			"reAssign": "إعادة التعيين"
-		}
-	},
-	"assign": {
-		"assign": "تعيين",
-		"reassign": "إعادة التعيين",
-		"assignDesc": "يرجى اختيار الموظف لتعيين الخطة/الخطط",
-		"reassignDesc": "يرجى اختيار الموظف لإعادة تعيين الخطة/الخطط",
-		"employeeLabel": "الموظف",
-		"employeePlaceholder": "اختر الموظف",
-		"employeeRequired": "الموظف مطلوب",
-		"assignSuccessMsg": "تم تعيين الخطة بنجاح إلى {{employee}}.",
-		"reassignSuccessMsg": "تم إعادة تعيين الخطة بنجاح إلى {{employee}}."
-	},
-	"setting": {
-		"adminView": {
-			"holidays": {
-				"title": "إدارة العطلات",
-				"subTitle": "أضف العطلات الرسمية أو أيام الراحة لاستبعادها من حسابات اتفاقية مستوى الخدمة."
-			},
-			"workingDays": {
-				"title": "إدارة أيام العمل",
-				"table": {
-					"nameEn": "الاسم (إنجليزي)",
-					"nameAr": "الاسم (عربي)",
-					"isWorkingDay": "يوم عمل"
-				}
-			}
-		}
-	}
+    "list": {
+      "title": "الفرص",
+      "subtitle": "تصفح جميع الخطط المتاحة وعرض تفاصيلها",
+      "cardDescription": "محولات الجهد العالي ذات الطلب القوي وإمكانات التوطين في التصنيع والخدمات.",
+      "opportunityType": "نوع الفرصة",
+      "applicationPeriod": "فترة التقديم",
+      "viewDetails": "عرض التفاصيل",
+      "apply": "تطبيق"
+    },
+    "counts": {
+      "totalOpportunities": "إجمالي الفرص",
+      "activePublishedOpportunities": "الفرص المنشورة النشطة",
+      "inactiveOpportunities": "الفرص غير النشطة",
+      "draftOpportunities": "الفرص المسودة",
+      "viewDetails": "عرض التفاصيل"
+    },
+    "filter": {
+      "search": "بحث",
+      "searchByOpportunityName": "البحث عن طريق اسم الفرصة",
+      "status": "حالة الفرصة",
+      "state": "حالة الفرصة",
+      "type": "نوع الفرصة",
+      "opportunityType": "نوع الفرصة"
+    },
+    "details": {
+      "backToOpportunities": "العودة إلى الفرص",
+      "forecastedDemand": "الطلب المتوقع لشركة الكهرباء (2024 – 2030)",
+      "demandNote": "الأرقام المقدمة هنا تقديرية وقابلة للتغيير",
+      "spendSAR": "الإنفاق (ريال سعودي)",
+      "quantityUnits": "الكمية (وحدات)",
+      "supplierBase": "قاعدة الموردين الحالية لشركة الكهرباء",
+      "local": "محلي",
+      "global": "عالمي",
+      "localizationAreas": "مجالات فرص التوطين",
+      "designEngineering": "التصميم والهندسة",
+      "sourcing": "التوريد",
+      "manufacturing": "التصنيع",
+      "assemblyTesting": "التجميع والاختبار",
+      "afterSalesServices": "خدمات ما بعد البيع",
+      "apply": "تطبيق"
+    },
+    "form": {
+      "basicInformation": "المعلومات الأساسية",
+      "forecastedDemand": "الطلب المتوقع لشركة الكهرباء (2024–2030)",
+      "supplierBase": "قاعدة الموردين",
+      "opportunityDates": "تواريخ الفرصة",
+      "opportunityImage": "صورة الفرصة",
+      "localization": "التوطين",
+      "opportunityTitle": "عنوان الفرصة",
+      "shortDescription": "الوصف القصير",
+      "opportunityCategory": "فئة الفرصة",
+      "opportunityType": "نوع الفرصة",
+      "spendSAR": "الإنفاق (ريال سعودي)",
+      "quantityUnits": "الكمية (وحدات)",
+      "localSuppliers": "الموردون المحليون",
+      "globalSuppliers": "الموردون العالميون",
+      "dateRange": "نطاق التاريخ",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "image": "الصورة",
+      "designEngineering": "التصميم والهندسة",
+      "sourcing": "التوريد",
+      "manufacturing": "التصنيع",
+      "assemblyTesting": "التجميع والاختبار",
+      "afterSalesServices": "خدمات ما بعد البيع",
+      "enterOpportunityTitle": "أدخل عنوان الفرصة",
+      "enterShortDescription": "أدخل الوصف القصير",
+      "select": "اختر",
+      "enterSpendSAR": "أدخل الإنفاق (ريال سعودي)",
+      "enterMinQuantity": "أدخل الحد الأدنى للكمية",
+      "enterMaxQuantity": "أدخل الحد الأقصى للكمية",
+      "enterLocalSuppliersNumber": "أدخل عدد الموردين المحليين",
+      "enterGlobalSuppliersNumber": "أدخل عدد الموردين العالميين",
+      "selectDateRange": "اختر نطاق التاريخ",
+      "selectStartDate": "اختر تاريخ البدء",
+      "selectEndDate": "اختر تاريخ الانتهاء",
+      "enterKeyActivities": "أدخل الأنشطة الرئيسية",
+      "addDesignEngineeringItem": "إضافة عنصر التصميم والهندسة",
+      "addSourcingItem": "إضافة عنصر التوريد",
+      "addManufacturingItem": "إضافة عنصر التصنيع",
+      "addAssemblyTestingItem": "إضافة عنصر التجميع والاختبار",
+      "addAfterSalesServicesItem": "إضافة عنصر خدمات ما بعد البيع",
+      "fileUploadPlaceholder": "jpg, png, pdf, docx والفيديو، الحد الأقصى لحجم الملف (10 ميجابايت)",
+      "titleRequired": "عنوان الفرصة مطلوب",
+      "shortDescriptionRequired": "الوصف القصير مطلوب",
+      "maxLengthExceeded": "تم تجاوز الحد الأقصى للطول",
+      "opportunityCategoryRequired": "فئة الفرصة مطلوبة",
+      "opportunityTypeRequired": "نوع الفرصة مطلوب",
+      "spendSARRequired": "الإنفاق (ريال سعودي) مطلوب",
+      "spendSARCannotBeGreaterThan10": "الإنفاق (ريال سعودي) لا يمكن أن يتجاوز 10 مليارات",
+      "minQuantityRequired": "الحد الأدنى للكمية مطلوب",
+      "minQuantityCannotBeNegative": "الحد الأدنى للكمية لا يمكن أن يكون سالباً",
+      "minQuantityMustBeLessThanMax": "الحد الأدنى للكمية يجب أن يكون أقل من الحد الأقصى",
+      "maxQuantityRequired": "الحد الأقصى للكمية مطلوب",
+      "maxQuantityCannotBeNegative": "الحد الأقصى للكمية لا يمكن أن يكون سالباً",
+      "maxQuantityMustBeGreaterThanMin": "الحد الأقصى للكمية يجب أن يكون أكبر من الحد الأدنى",
+      "localSuppliersRequired": "الموردون المحليون مطلوبون",
+      "localSuppliersCannotBeNegative": "الموردون المحليون لا يمكن أن يكونوا سالبين",
+      "localSuppliersInvalid": "قيمة عدد الموردين المحليين غير صحيحة",
+      "globalSuppliersRequired": "الموردون العالميون مطلوبون",
+      "globalSuppliersCannotBeNegative": "الموردون العالميون لا يمكن أن يكونوا سالبين",
+      "globalSuppliersInvalid": "قيمة عدد الموردين العالميين غير صحيحة",
+      "dateRangeRequired": "نطاق التاريخ مطلوب",
+      "dateRangeInvalid": "يجب عليك اختيار نطاق تاريخ",
+      "startDateRequired": "تاريخ البدء مطلوب",
+      "endDateRequired": "تاريخ الانتهاء مطلوب",
+      "endDateValidateDateRange": "يجب أن يكون تاريخ الانتهاء بعد أو يساوي تاريخ البدء",
+      "startDateRestriction": "يمكن تغيير تاريخ البدء فقط إلى تاريخ أبكر عند ارتباط الخطط",
+      "endDateRestriction": "يمكن تغيير تاريخ الانتهاء فقط إلى تاريخ لاحق عند ارتباط الخطط",
+      "imageRequired": "الصورة مطلوبة",
+      "designEngineeringRequired": "التصميم والهندسة مطلوبان",
+      "designEngineeringMinLength": "يجب أن يحتوي عنصر التصميم والهندسة على 3 أحرف على الأقل",
+      "designEngineeringMaxLength": "يجب ألّا يتجاوز عنصر التصميم والهندسة 500 حرف",
+      "sourcingRequired": "التوريد مطلوب",
+      "sourcingMinLength": "يجب أن يحتوي عنصر التوريد على 3 أحرف على الأقل",
+      "sourcingMaxLength": "يجب ألّا يتجاوز عنصر التوريد 500 حرف",
+      "manufacturingRequired": "التصنيع مطلوب",
+      "manufacturingMinLength": "يجب أن يحتوي عنصر التصنيع على 3 أحرف على الأقل",
+      "manufacturingMaxLength": "يجب ألّا يتجاوز عنصر التصنيع 500 حرف",
+      "assemblyTestingRequired": "التجميع والاختبار مطلوبان",
+      "assemblyTestingMinLength": "يجب أن يحتوي عنصر التجميع والاختبار على 3 أحرف على الأقل",
+      "assemblyTestingMaxLength": "يجب ألّا يتجاوز عنصر التجميع والاختبار 500 حرف",
+      "afterSalesServicesRequired": "خدمات ما بعد البيع مطلوبة",
+      "afterSalesServicesMinLength": "يجب أن يحتوي عنصر خدمات ما بعد البيع على 3 أحرف على الأقل",
+      "afterSalesServicesMaxLength": "يجب ألّا يتجاوز عنصر خدمات ما بعد البيع 500 حرف"
+    },
+    "wizard": {
+      "createOpportunity": "إنشاء فرصة",
+      "addOpportunity": "إضافة فرصة",
+      "saveAsDraft": "حفظ كمسودة",
+      "back": "رجوع",
+      "next": "التالي",
+      "publish": "نشر",
+      "opportunityInformation": "معلومات الفرصة",
+      "opportunityInformationDescription": "أدخل تفاصيل الفرصة",
+      "opportunityLocalization": "توطين الفرصة",
+      "opportunityLocalizationDescription": "أدخل تفاصيل توطين الفرصة",
+      "keyActivity": "النشاط الرئيسي"
+    },
+    "messages": {
+      "savedAsDraft": "تم حفظ الفرصة كمسودة",
+      "createdSuccessfully": "تم إنشاء الفرصة بنجاح",
+      "updatedSuccessfully": "تم تحديث الفرصة بنجاح"
+    },
+    "confirmation": {
+      "onLeaveTitle": "هل أنت متأكد أنك تريد المغادرة؟",
+      "onLeaveDesc": "سيؤدي الإلغاء الآن إلى تجاهل جميع التغييرات غير المحفوظة. احفظ كمسودة للاحتفاظ بعملك."
+    }
+  },
+  "users": {
+    "actions": {
+      "changeRole": "تغيير الدور",
+      "delete": "حذف",
+      "edit": "تعديل",
+      "view": "عرض",
+      "deactivate": "إلغاء التفعيل",
+      "transfer": "استبدال / نقل"
+    },
+    "roles": {
+      "admin": "مدير",
+      "employee": "موظف",
+      "manager": "مدير",
+      "departmentManager": "مدير القسم",
+      "dvManager": "مدير DV"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "delegated": "قيد الانتظار",
+      "all": "الكل"
+    },
+    "table": {
+      "id": "الرقم",
+      "name": "الاسم",
+      "nameArabic": "الاسم (عربي)",
+      "nameEnglish": "الاسم (إنجليزي)",
+      "jobNo": "رقم الوظيفة",
+      "email": "البريد الإلكتروني",
+      "phoneNumber": "رقم الهاتف",
+      "role": "الدور",
+      "joinDate": "تاريخ الانضمام",
+      "assignedDate": "تاريخ التعيين",
+      "assignedBy": "تم التعيين بواسطة",
+      "status": "الحالة",
+      "actions": "الإجراءات",
+      "photo": "الصورة الشخصية"
+    },
+    "list": {
+      "title": "الموظفون",
+      "subtitle": "إدارة أدوار الموظفين والصلاحيات",
+      "addEmployee": "إضافة موظف",
+      "noDataMessage": "لا توجد دورة تقييم متاحة"
+    },
+    "tabs": {
+      "employees": "الموظفون",
+      "roleManagement": "إدارة الأدوار",
+      "delegation": "التفويض"
+    },
+    "filter": {
+      "searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني أو تاريخ الانضمام",
+      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
+      "rolePlaceholder": "الدور",
+      "statusPlaceholder": "الحالة",
+      "selectJoinDate": "اختر تاريخ الانضمام"
+    },
+    "dialog": {
+      "changeRole": {
+        "title": "تغيير الدور",
+        "description": "اختر دوراً جديداً لهذا الموظف",
+        "roleLabel": "الدور",
+        "rolePlaceholder": "اختر الدور",
+        "roleRequired": "الدور مطلوب.",
+        "confirmButton": "تغيير"
+      },
+      "delete": {
+        "title": "حذف المستخدم",
+        "description": "هل أنت متأكد من أنك تريد حذف هذا المستخدم؟"
+      },
+      "deactivate": {
+        "title": "إلغاء تفعيل المستخدم",
+        "description": "هل أنت متأكد من أنك تريد إلغاء تفعيل هذا المستخدم؟"
+      },
+      "add": {
+        "title": "إضافة موظف",
+        "job": "رقم الوظيفة",
+        "jobLabel": "رقم الوظيفة",
+        "enName": "الاسم باللغة الإنجليزية",
+        "arName": "الاسم باللغة العربية",
+        "email": "البريد الإلكتروني",
+        "phone": "رقم الجوال",
+        "role": "الدور الوظيفي",
+        "rolePlaceHolder": "اختر الدور الوظيفي",
+        "roleRequired": "الدور الوظيفي مطلوب، يرجى اختيار دور صالح.",
+        "confirmAdd": "إضافة موظف",
+        "JobRequired": "رقم الوظيفة مطلوب.",
+        "jobPlaceHolder": "أدخل رقم الوظيفة.",
+        "invalidJobNo": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة صحيح.",
+        "nameEnPlaceHolder": "أدخل الاسم باللغة الإنجليزية.",
+        "nameEnRequired": "الاسم باللغة الإنجليزية مطلوب.",
+        "nameArPlaceholder": "أدخل الاسم باللغة العربية.",
+        "nameArRequired": "الاسم باللغة العربية مطلوب.",
+        "emailPlaceholder": "أدخل البريد الإلكتروني.",
+        "emailRequired": "البريد الإلكتروني مطلوب.",
+        "phonePlaceholder": "أدخل رقم الجوال.",
+        "phoneRequired": "رقم الجوال مطلوب.",
+        "jobInvalid": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة صحيح.",
+        "jobInvalidLength": "يجب أن يكون رقم الوظيفة بين 6 و20 حرفًا.",
+        "jobRequired": "رقم الوظيفة مطلوب.",
+        "nameArabicInvalid": "يجب أن يحتوي الاسم العربي على أحرف عربية فقط.",
+        "nameArabicInvalidLength": "يجب أن يكون طول الاسم العربي بين 3 و100 حرف.",
+        "nameEnglishInvalid": "يجب أن يحتوي الاسم الإنجليزي على أحرف إنجليزية فقط.",
+        "nameEnglishInvalidLength": "يجب أن يكون طول الاسم الإنجليزي بين 3 و100 حرف.",
+        "phoneInvalidLenhtg": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
+        "phoneInvalid": "يجب أن يحتوي رقم الجوال على أرقام فقط."
+      },
+      "edit": {
+        "confirmedit": "تعديل موظف"
+      },
+      "transferRole": {
+        "employeeLabel": "الموظف",
+        "employeePlaceholder": "اختر الموظف",
+        "employeeRequired": "الموظف مطلوب",
+        "transferRoleSuccess": "تم نقل الدور بنجاح"
+      }
+    },
+    "messages": {
+      "employeeAddedSuccess": "تم إضافة الموظف بنجاح",
+      "employeeUpdatedSuccess": "تم تحديث الموظف بنجاح",
+      "deactivateSuccess": "تم إلغاء تفعيل المستخدم بنجاح",
+      "transferRoleSuccess": "تم نقل الدور بنجاح"
+    }
+  },
+  "delegation": {
+    "status": {
+      "active": "نشط",
+      "cancelled": "ملغى",
+      "expired": "منتهي",
+      "upcoming": "قادم"
+    },
+    "actions": {
+      "edit": "تعديل",
+      "delete": "حذف",
+      "cancel": "إلغاء"
+    },
+    "dialog": {
+      "addTitle": "إضافة تفويض",
+      "editTitle": "تعديل التفويض",
+      "subTitle": "فوض مهامك لموظف آخر أثناء غيابك",
+      "delegator": "الموكل",
+      "delegatee": "الموكل إليه",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "status": "الحالة",
+      "confirmButton": "إرسال",
+      "delegatorRequired": "الموكل مطلوب",
+      "delegateeRequired": "الموكل إليه مطلوب",
+      "startDateRequired": "تاريخ البدء مطلوب",
+      "endDateRequired": "تاريخ الانتهاء مطلوب",
+      "delegatorPlaceHolder": "اختر الموكل",
+      "delegateePlaceHolder": "اختر الموكل إليه",
+      "selectStartDate": "اختر تاريخ البدء",
+      "selectEndDate": "اختر تاريخ الانتهاء",
+      "delete": {
+        "title": "هل أنت متأكد من حذف هذا التفويض؟",
+        "description": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم."
+      },
+      "cancel": {
+        "title": "هل أنت متأكد من إلغاء هذا التفويض؟",
+        "description": "سيؤدي إلغاء التفويض إلى إنهاء التفويض فوراً"
+      },
+      "edit": {
+        "editTitle": "تعديل التفويض"
+      },
+      "add": {
+        "addTitle": "إضافة تفويض"
+      }
+    },
+    "list": {
+      "addDelegation": "إضافة تفويض"
+    },
+    "filter": {
+      "searchPlaceholder": "البحث باسم الموكل إليه أو الموكل أو المنشئ أو آخر معدل",
+      "selectDelegationPeriod": "اختر فترة التفويض",
+      "statusPlaceholder": "اختر الحالة"
+    },
+    "table": {
+      "delegatorName": "اسم الموكل",
+      "delegateeName": "اسم الموكل إليه",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "createdAt": "تاريخ الإنشاء",
+      "createdBy": "المنشئ",
+      "updatedBy": "آخر معدل",
+      "updatedAt": "تاريخ آخر تعديل",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "messages": {
+      "addedSuccess": "تم إضافة التفويض بنجاح",
+      "updatedSuccess": "تم تحديث التفويض بنجاح",
+      "deleteSuccess": "تم حذف التفويض بنجاح",
+      "cancelSuccess": "تم إلغاء التفويض بنجاح"
+    },
+    "canceled": {
+      "title": "تم إلغاء التفويض",
+      "description": "تم إلغاء التفويض من ({{delegatorName}}). لم يعد لديك حق الوصول إلى مهامهم ولا يمكنك تنفيذ إجراءات نيابة عنهم.",
+      "ok": "موافق"
+    }
+  },
+  "investors": {
+    "list": {
+      "title": "المستثمرون",
+      "subtitle": "إدارة معلومات المستثمرين والخطط",
+      "noInvestorsFound": "لم يتم العثور على مستثمرين"
+    },
+    "filter": {
+      "search": "بحث",
+      "joinDate": "تاريخ الانضمام",
+      "searchPlaceholder": "البحث بالاسم أو رقم الهاتف أو البريد الإلكتروني",
+      "selectJoinDate": "اختر تاريخ الانضمام"
+    },
+    "table": {
+      "id": "المعرف",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "phoneNumber": "رقم الهاتف",
+      "otherNumber": "رقم آخر",
+      "submittedPlans": "الخطط المقدمة",
+      "joinDate": "تاريخ الانضمام"
+    }
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "subtitle": "تتبع وإدارة خطط التوطين المقدمة وحالة مراجعتها",
+    "submitNewPlan": "تقديم خطة جديدة"
+  },
+  "dialog": {
+    "cancel": "إلغاء",
+    "deleteOpportunity": "هل أنت متأكد من أنك تريد حذف هذه الفرصة؟",
+    "deleteOpportunityDescription": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم.",
+    "moveToDraft": "هل أنت متأكد من أنك تريد نقل هذه الفرصة إلى المسودة؟",
+    "publishOpportunity": "هل أنت متأكد من أنك تريد نشر هذه الفرصة؟",
+    "delete": "حذف",
+    "draft": "مسودة",
+    "publish": "نشر"
+  },
+  "plans": {
+    "newPlan": {
+      "title": "فرصة جديدة",
+      "description": "أدخل التفاصيل الأساسية لبدء خطة التوطين الخاصة بك",
+      "planTitle": "عنوان الخطة",
+      "planTitlePlaceholder": "أدخل عنوان خطتك",
+      "planTitleRequired": "عنوان الخطة مطلوب",
+      "opportunity": "الفرصة",
+      "opportunityType": "نوع الفرصة",
+      "services": "الخدمات",
+      "servicesDescription": "توطين الخدمات التشغيلية أو الداعمة",
+      "materials": "المواد",
+      "materialsDescription": "توطين المنتجات أو الأجزاء أو المعدات",
+      "next": "التالي"
+    },
+    "termsAndConditions": {
+      "title": "إرشادات خطة التوطين",
+      "description": "تتبع شركة الكهرباء العملية التالية لتقييم 'خطة التوطين' ودعوة الموردين للانضمام إلى رحلة بينا:",
+      "step1Title": "تقديم الطلب",
+      "step1Description": "اختر المنتج وأرسل التفاصيل الأساسية..",
+      "step2Title": "مراجعة الأهلية",
+      "step2Description": "يفحص فريق شركة الكهرباء الأهلية والأولوية.",
+      "step3Title": "التأهيل التقني",
+      "step3Description": "سجل كمورد ووفر المنتج.",
+      "step4Title": "الموافقة على الخطة",
+      "step4Description": "تراجع شركة الكهرباء وتوافق على خطة التوطين الخاصة بك.",
+      "step5Title": "مرحباً بك في بينا",
+      "step5Description": "احصل على مدير علاقات لدعم رحلتك.",
+      "instructionsTitle": "تعليمات رئيسية لملء قالب 'خطة التوطين' المقدم:",
+      "instruction1": "جميع المعلومات المطلوبة في القالب إلزامية ويجب ملؤها بأفضل ما لديك من قدرة ومعرفة.",
+      "instruction2": "يتم توفير 'تعليمات' في أعلى كل علامة تبويب في المستند. يرجى قراءتها بعناية أثناء ملء علامة التبويب.",
+      "instruction3": "صفحات 'الصفحة الأولى' و'نظرة عامة' للمعلومات فقط ولا ينبغي تعديلها بأي شكل من الأشكال.",
+      "instruction4": "يجب ملء خطة التوطين لكل 'منتج' بشكل فردي. ومع ذلك، يمكن تغطية مواصفات متعددة لنفس المنتج ضمن نفس 'خطة التوطين'، مع سرد جميع المواصفات في حقل '2. نظرة عامة على المنتج والمصنع' علامة التبويب الثاني.",
+      "instruction5": "يتم عرض إخلاء المسؤولية للتوقيع في نهاية القالب، ويجب التوقيع عليه قبل تقديم الخطة.",
+      "instruction6": "من المهم لشركة الكهرباء أن تعرف أن المنتج الذي تستهدفه للتوطين يتم شراؤه مباشرة من قبل شركة الكهرباء، أو مورديها المعتمدين. يرجى تقديم هذه المعلومات بعناية في قسم 'العميل المستهدف' من صفحة علامة التبويب '2. نظرة عامة على المنتج والمصنع'.",
+      "readAndApproved": "قرأت ووافقت"
+    },
+    "wizard": {
+      "saveAsDraft": "حفظ كمسودة",
+      "back": "رجوع",
+      "next": "التالي",
+      "submit": "إرسال",
+      "resubmit": "إعادة الإرسال",
+      "approveAndForward": "الموافقة والإرسال",
+      "reject": "رفض",
+      "sendBackToInvestor": "إرجاع إلى المستثمر",
+      "addComments": "إضافة تعليقات",
+      "timeline": "الجدول الزمني"
+    },
+    "filter": {
+      "searchPlaceholder": "البحث عن طريق معرف الخطة أو العنوان",
+      "selectPlanType": "اختر نوع الخطة",
+      "selectStatus": "اختر الحالة",
+      "selectSubmissionDate": "اختر تاريخ التقديم",
+      "allTypes": "جميع الأنواع",
+      "service": "خدمة",
+      "material": "مادة",
+      "allStatuses": "جميع الحالات",
+      "reset": "إعادة تعيين التصفية"
+    },
+    "status": {
+      "submitted": "مقدمة",
+      "pending": "قيد الانتظار",
+      "underReview": "قيد المراجعة",
+      "approved": "موافق عليها",
+      "rejected": "مرفوضة"
+    },
+    "employee_status": {
+      "pending": "قيد الانتظار",
+      "underReview": "قيد المراجعة",
+      "approved": "موافق عليها",
+      "rejected": "مرفوضة",
+      "unassigned": "غير معينة",
+      "deptApproved": "موافق عليها من القسم",
+      "deptRejected": "مرفوضة من القسم",
+      "dvApproved": "موافق عليها من مدير DV",
+      "dvRejected": "مرفوضة من مدير DV",
+      "dvRejectionAcknowledged": "تم الاعتراف برفض مدير DV",
+      "employeeApproved": "موافق عليها من الموظف",
+      "employeeRejected": "مرفوضة من الموظف"
+    },
+    "type": {
+      "services": "الخدمات",
+      "materials": "المواد"
+    },
+    "table": {
+      "planId": "معرف الخطة",
+      "investorName": "اسم المستثمر",
+      "planTitle": "عنوان الخطة",
+      "planType": "نوع الخطة",
+      "opportunityType": "نوع الفرصة",
+      "submissionDate": "تاريخ التقديم",
+      "slaCountdown": "العد التنازلي لاتفاقية مستوى الخدمة",
+      "currentStatus": "الحالة الحالية",
+      "actions": "الإجراءات",
+      "daysRemaining": "أيام متبقية",
+      "day": "يوم",
+      "days": "أيام",
+      "dayOverdue": "يوم متأخر",
+      "daysOverdue": "أيام متأخرة"
+    },
+    "statistics": {
+      "totalPlans": "إجمالي الخطط",
+      "unAssignedPlans": "الخطط غير المعينة",
+      "plansUnderReview": "الخطط قيد المراجعة",
+      "approvedPlans": "الخطط الموافق عليها",
+      "rejectedPlans": "الخطط المرفوضة"
+    },
+    "list": {
+      "noPlansFound": "لم يتم العثور على خطط"
+    },
+    "actions": {
+      "viewDetails": "عرض التفاصيل",
+      "edit": "تعديل",
+      "download": "تحميل",
+      "viewTimeline": "عرض الجدول الزمني",
+      "assignToEmployee": "تعيين للموظف",
+      "reAssign": "إعادة التعيين"
+    }
+  },
+  "assign": {
+    "assign": "تعيين",
+    "reassign": "إعادة التعيين",
+    "assignDesc": "يرجى اختيار الموظف لتعيين الخطة/الخطط",
+    "reassignDesc": "يرجى اختيار الموظف لإعادة تعيين الخطة/الخطط",
+    "employeeLabel": "الموظف",
+    "employeePlaceholder": "اختر الموظف",
+    "employeeRequired": "الموظف مطلوب",
+    "assignSuccessMsg": "تم تعيين الخطة بنجاح إلى {{employee}}.",
+    "reassignSuccessMsg": "تم إعادة تعيين الخطة بنجاح إلى {{employee}}."
+  },
+  "setting": {
+    "adminView": {
+      "holidays": {
+        "title": "إدارة العطلات",
+        "subTitle": "أضف العطلات الرسمية أو أيام الراحة لاستبعادها من حسابات اتفاقية مستوى الخدمة."
+      },
+      "workingDays": {
+        "title": "إدارة أيام العمل",
+        "table": {
+          "nameEn": "الاسم (إنجليزي)",
+          "nameAr": "الاسم (عربي)",
+          "isWorkingDay": "يوم عمل"
+        }
+      }
+    }
+  },
+  "timeline": {
+    "impersonatedBy": "منتحل بواسطة"
+  }
 }
