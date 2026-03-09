@@ -51,6 +51,7 @@ export interface IPlanFilter extends IFilterBase<TPlansSortingKeys> {
   submissionDate?: Date[] | undefined;
   assignee?: string[] | null;
   opportunityId?:string|null
+  investorId?:string|null
 }
 
 export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {

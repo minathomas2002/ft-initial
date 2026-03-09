@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
@@ -28,6 +28,8 @@ import { AssignReassignManualEmployee } from "../../components/assign-reassign-m
 import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-plans-list',
@@ -59,7 +61,8 @@ import { GeneralConfirmationDialogComponent } from "src/app/shared/components/ut
   providers: [InvestorPlansFilterService, InternalUsersPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlansList extends PlanDashboardBase {
+export class PlansList extends PlanDashboardBase implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
@@ -71,6 +74,7 @@ export class PlansList extends PlanDashboardBase {
   isReassignMode = signal<boolean>(false);
   isDeleteMode = signal<boolean>(false);
   planItem = signal<IPlanRecord | null>(null);
+  investorName = signal<string | null>(null);
 
   eInvestorPlanStatus = EInvestorPlanStatus;
   eInternalUserPlanStatus = EInternalUserPlanStatus;
@@ -82,7 +86,7 @@ export class PlansList extends PlanDashboardBase {
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
   private readonly toastService = inject(ToasterService);
-
+  private readonly route = inject(ActivatedRoute);
   // Get the appropriate filter service based on role
   readonly filterService = computed<AbstractServiceFilter<IPlanFilter>>(() => {
     return this.isInvestor() ? this.investorFilterService : this.internalUsersFilterService;
@@ -149,6 +153,13 @@ export class PlansList extends PlanDashboardBase {
         this.resetPlanWizard();
       }
     });
+  }
+  ngOnInit(): void {
+     this.route.queryParams
+     .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params=>{
+       this.investorName.set(params["investorName"]);
+
+     })
   }
 
   createNewPlan() {

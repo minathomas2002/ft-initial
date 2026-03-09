@@ -9,7 +9,7 @@ export abstract class AbstractServiceFilter<
 	abstract filterClass: Filter<IFilter, unknown>;
 	abstract filter: WritableSignal<IFilter>;
 
-	abstract clearAllFilters(): void;
+	abstract clearAllFilters(filter?: WritableSignal<IFilter>|null): void;
 	abstract applyFilterWithPaging(): void;
 	abstract performFilter$(): Observable<unknown>;
 
