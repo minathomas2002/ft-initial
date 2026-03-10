@@ -859,15 +859,8 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
         }
       }
 
-      const attachmentsValue = attachmentsControl.value;
-      const isEmpty = attachmentsValue == null ||
-        (Array.isArray(attachmentsValue) && attachmentsValue.length === 0);
-
-      if (shouldRequire && isEmpty) {
-        attachmentsControl.markAsDirty();
-        attachmentsControl.markAsTouched();
-      }
-
+      attachmentsControl.markAsDirty()
+      attachmentsControl.markAsTouched();
       attachmentsControl.updateValueAndValidity({ emitEvent: false });
     };
 
