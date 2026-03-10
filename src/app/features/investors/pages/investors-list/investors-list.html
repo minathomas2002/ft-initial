@@ -1,7 +1,7 @@
 <div class="cards-page-layout px-[32px] py-[24px]">
   <app-table-layout
-    tableTitle="Investors"
-    tableSubTitle="Manage Investors Information and plans"
+    [tableTitle]="'investors.list.title' | translate"
+    [tableSubTitle]="'investors.list.subtitle' | translate"
   >
     <ng-container ngProjectAs="table-filters">
       <app-investors-filter></app-investors-filter>
@@ -19,7 +19,7 @@
           [totalRecords]="totalRecords()"
           (filterChange)="filterService.applyFilterWithPaging()"
           (sortChange)="filterService.applyFilter()"
-          messageTitle="No Investors Found"
+          [messageTitle]="'investors.list.noInvestorsFound' | translate"
           [showCheckBox]="false"
           [rowsCheckable]="false"
         >

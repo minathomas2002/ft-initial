@@ -6,6 +6,7 @@
     "no": "No",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "submit": "Submit",
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
@@ -639,8 +640,8 @@
       "subTitle": "Delegate your tasks to another employee during your absence",
       "delegator": "Delegator",
       "delegatee": "Delegatee",
-      "startDate": "Start Date",
-      "endDate": "End Date",
+      "startDate": "From Date",
+      "endDate": "To Date",
       "status": "Status",
       "confirmButton": "Submit",
       "delegatorRequired": "Delegator is required",
@@ -1294,55 +1295,55 @@
       "sendBackToDv": "Send Back to Division Manager",
       "addComments": "Add Comments",
       "timeline": "Timeline",
-    "comments": {
-      "addComment": "Add Comment",
-      "clarifyFeedback": "Add a comment to clarify your feedback.",
-      "yourComment": "Your Comment",
-      "myComment": "Comment",
-      "enterComment": "Enter your comment",
-      "savedSuccess": "Your comments have been saved successfully.",
-      "updatesSavedSuccess": "Your updates have been saved successfully.",
-      "removedSuccess": "Your comments were removed successfully.",
-      "removedWithFieldsSuccess": "Your comments and selected fields were removed successfully.",
-      "selectFieldFirst": "Please select at least one field before adding a comment.",
-      "maxLength": "Comment cannot exceed 255 characters.",
-      "deleteCommentTitle": "Are you sure you want to delete the comment?",
-      "deleteCommentAndFieldsTitle": "Are you sure you want to delete the comment and selected fields?",
-      "selected": "Selected"
-    },
-    "validation": {
-      "planIdRequired": "Plan ID is required.",
-      "rejectionReasonRequired": "Rejection reason is required.",
-      "rejectionReasonMaxLength": "Rejection reason must not exceed 255 characters.",
-      "updateRequiredFields": "Please update all required fields before resubmitting."
-    },
-    "delete": {
-      "confirmMessage": "Are you sure you want to delete the plan? This action cannot be undone."
-    },
-    "sendBack": {
-      "confirmMessage": "Are you sure you want to send back the plan?"
-    },
-    "rejection": {
-      "reason": "Rejection Reason",
-      "approvalNote": "Approval Note",
-      "note": "Note",
-      "acknowledgeConfirm": "Are you sure you want to acknowledge this rejection?",
-      "acknowledgeNote": "Acknowledge Rejection Note"
-    },
-    "messages": {
-      "approvedForwarded": "Plan has been approved and forwarded successfully.",
-      "rejected": "Plan has been rejected successfully.",
-      "resubmitted": "Plan has been resubmitted successfully.",
-      "rejectionAcknowledged": "Plan has been rejected acknowledge successfully.",
-      "rejectionAcknowledgeError": "Error rejecting acknowledge plan. Please try again.",
-      "fixValidationErrors": "Please fix all validation errors before submitting",
-      "errorLoadingPlan": "Error loading plan data. Please try again.",
-      "submitSuccess": "Localization plan submitted successfully",
+      "comments": {
+        "addComment": "Add Comment",
+        "clarifyFeedback": "Add a comment to clarify your feedback.",
+        "yourComment": "Your Comment",
+        "myComment": "Comment",
+        "enterComment": "Enter your comment",
+        "savedSuccess": "Your comments have been saved successfully.",
+        "updatesSavedSuccess": "Your updates have been saved successfully.",
+        "removedSuccess": "Your comments were removed successfully.",
+        "removedWithFieldsSuccess": "Your comments and selected fields were removed successfully.",
+        "selectFieldFirst": "Please select at least one field before adding a comment.",
+        "maxLength": "Comment cannot exceed 255 characters.",
+        "deleteCommentTitle": "Are you sure you want to delete the comment?",
+        "deleteCommentAndFieldsTitle": "Are you sure you want to delete the comment and selected fields?",
+        "selected": "Selected"
+      },
+      "validation": {
+        "planIdRequired": "Plan ID is required.",
+        "rejectionReasonRequired": "Rejection reason is required.",
+        "rejectionReasonMaxLength": "Rejection reason must not exceed 255 characters.",
+        "updateRequiredFields": "Please update all required fields before resubmitting."
+      },
+      "delete": {
+        "confirmMessage": "Are you sure you want to delete the plan? This action cannot be undone."
+      },
+      "sendBack": {
+        "confirmMessage": "Are you sure you want to send back the plan?"
+      },
+      "rejection": {
+        "reason": "Rejection Reason",
+        "approvalNote": "Approval Note",
+        "note": "Note",
+        "acknowledgeConfirm": "Are you sure you want to acknowledge this rejection?",
+        "acknowledgeNote": "Acknowledge Rejection Note"
+      },
+      "messages": {
+        "approvedForwarded": "Plan has been approved and forwarded successfully.",
+        "rejected": "Plan has been rejected successfully.",
+        "resubmitted": "Plan has been resubmitted successfully.",
+        "rejectionAcknowledged": "Plan has been rejected acknowledge successfully.",
+        "rejectionAcknowledgeError": "Error rejecting acknowledge plan. Please try again.",
+        "fixValidationErrors": "Please fix all validation errors before submitting",
+        "errorLoadingPlan": "Error loading plan data. Please try again.",
+        "submitSuccess": "Localization plan submitted successfully",
         "submitError": "Error submitting plan. Please try again.",
         "selectPlanTitleAndOpportunity": "Please select a plan title and opportunity",
         "draftUpdatedSuccess": "Draft updated successfully.",
         "draftSavedSuccess": "Product localization plan saved as draft successfully",
-      "serviceDraftSavedSuccess": "Service localization plan saved as draft successfully",
+        "serviceDraftSavedSuccess": "Service localization plan saved as draft successfully",
         "draftError": "Error saving draft. Please try again.",
         "fixHighlightedSections": "Please correct the highlighted sections before submitting."
       }
@@ -1498,7 +1499,12 @@
       "removeAssignee": "Remove Assignee",
       "delete": "Delete",
       "dvRejectionAcknowledged": "Rejection Acknowledged",
-      "returnedForMoreInfo": "Returned For More Info"
+      "returnedForMoreInfo": "Returned For More Info",
+      "autoRejected": "Plan Auto Rejected",
+      "dvReview": "DV Review",
+      "deptManagerReview": "Department Manager Review",
+      "viewOpportunityDetails": "View Opportunity",
+      "editResubmit": "Edit / Resubmit"
     }
   },
   "timeline": {

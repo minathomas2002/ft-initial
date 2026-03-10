@@ -2,6 +2,15 @@ import { definePreset } from "@primeuix/themes";
 import Lara from '@primeuix/themes/lara';
 import { providePrimeNG } from "primeng/config";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { PRIMENG_LOCALE_AR, PRIMENG_LOCALE_EN } from './primeng-locale';
+
+function getInitialPrimengLocale() {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const lang = localStorage.getItem('preferred-language');
+    return lang === 'ar' ? PRIMENG_LOCALE_AR : PRIMENG_LOCALE_EN;
+  }
+  return PRIMENG_LOCALE_EN;
+}
 
 const BUTTON_COMPONENT = {
   button: {
@@ -757,6 +766,7 @@ export const PRIMENG_CONFIG = [
   provideAnimationsAsync(),
   providePrimeNG({
     ripple: true,
+    translation: getInitialPrimengLocale(),
     theme: {
       preset: MY_PRESET,
       options: {

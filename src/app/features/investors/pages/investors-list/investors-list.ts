@@ -10,12 +10,13 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { AvatarModule } from 'primeng/avatar';
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
-import { LocalizedDatePipe } from 'src/app/shared/pipes';
+import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-investors-list',
   imports: [
     TableLayoutComponent,
+    TranslatePipe,
     TableSkeletonComponent,
     DataTableComponent,
     LocalizedDatePipe,

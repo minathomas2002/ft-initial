@@ -64,6 +64,21 @@ export class NavbarProfileDropdownComponent implements OnInit {
     return this.profileStore.userImage();
   });
 
+  /** User name based on current language (nameEN for English, nameAR for Arabic) */
+  protected readonly userNameByLanguage = computed(() => {
+    this.i18nService.currentLanguage();
+    const profile = this.authStore.userProfile();
+    if (!profile) return '';
+    return this.i18nService.currentLanguage() === 'ar'
+      ? (profile.nameAR ?? profile.nameEN ?? '')
+      : (profile.nameEN ?? profile.nameAR ?? '');
+  });
+
+  /** User title (translated role or investor code) based on current language */
+  protected readonly userTitleByLanguage = computed(() => {
+    return this.profileStore.userTitle() ?? this.authStore.userCode() ?? '';
+  });
+
   /** Current user ID for impersonation radio selection */
   selectedAccountId = signal<string>(this.authStore.userProfile()?.userId ?? '');
 

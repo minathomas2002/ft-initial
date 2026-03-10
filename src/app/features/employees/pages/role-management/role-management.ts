@@ -115,8 +115,8 @@ export class RoleManagement implements OnInit {
     );
   }
 
-  getUserTranslatedRole(roleCode: number): string {
-    return this.userRoleMapper.getTranslatedRole(roleCode as ERoles);
+  getUserTranslatedRole(roleCode: number, fallbackRole?: string): string {
+    return this.userRoleMapper.getTranslatedRole(roleCode as ERoles, fallbackRole);
   }
 
   getUserName(item: IRoleManagementAssignmentRecord): string {

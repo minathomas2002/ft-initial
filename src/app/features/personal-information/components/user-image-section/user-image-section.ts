@@ -25,7 +25,7 @@ export class UserImageSection {
   private authStore = inject(AuthStore);
 
   image = computed(() => this.profileStore.userImage());
-  userName = computed(() => this.profileStore.userProfile()?.nameEn ?? '');
+  userName = computed(() => this.i18nService.currentLanguage() === 'en' ? this.profileStore.userProfile()?.nameEn ?? '' : this.profileStore.userProfile()?.nameAr ?? '');
   userTitle = computed(() => this.profileStore.userTitle());
   changeYourProfilePictureVisible = signal<boolean>(false);
   onProfilePictureUpdated = output<void>();

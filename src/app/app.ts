@@ -4,6 +4,7 @@ import { ToastModule } from 'primeng/toast';
 import { I18nService } from './shared/services/i18n/i18n.service';
 import { NgClass } from '@angular/common';
 import { DelegationCanceledDialogComponent } from './shared/components/utility-components/delegation-canceled-dialog/delegation-canceled-dialog.component';
+import { PrimengLocaleSyncService } from './core/services/primeng-locale-sync.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,10 @@ import { DelegationCanceledDialogComponent } from './shared/components/utility-c
 export class App implements OnInit {
   private readonly i18nService = inject(I18nService);
   protected readonly title = signal('benaa');
+
+  constructor() {
+    inject(PrimengLocaleSyncService); // Activate PrimeNG locale sync with app language
+  }
 
   ngOnInit(): void {
     this.i18nService.initialize();

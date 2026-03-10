@@ -80,7 +80,7 @@
     </div>
     <div class="form-group">
       <label class="block text-sm font-medium text-gray-700 mb-1">
-        From Date
+        {{ 'delegation.dialog.startDate' | translate }}
       </label>
       <p-datepicker
         [formControl]="formService.from"
@@ -103,7 +103,7 @@
 
     <div class="form-group">
       <label class="block text-sm font-medium text-gray-700">
-        To Date
+        {{ 'delegation.dialog.endDate' | translate }}
       </label>
       <p-datepicker
         [formControl]="formService.to"

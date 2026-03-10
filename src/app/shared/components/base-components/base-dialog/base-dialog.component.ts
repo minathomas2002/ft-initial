@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, input, model, output, viewChild } f
 import { ButtonModule } from "primeng/button";
 import { type Dialog, DialogModule } from "primeng/dialog";
 import { DividerModule } from "primeng/divider";
+import { TranslatePipe } from "../../../pipes";
 @Component({
   selector: "app-base-dialog",
-  imports: [DialogModule, ButtonModule, DividerModule],
+  imports: [DialogModule, ButtonModule, DividerModule, TranslatePipe],
   templateUrl: "./base-dialog.component.html",
   styleUrl: "./base-dialog.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,8 +18,8 @@ export class BaseDialogComponent {
   onClose = output();
   icon = input<string>("icon-eye");
   dialogTitle = input<string>("");
-  confirmLabel = input<string>("Submit");
-  cancelLabel = input<string>("Cancel");
+  confirmLabel = input<string>("common.submit");
+  cancelLabel = input<string>("common.cancel");
   showCloseButton = input<boolean>(true);
   showConfirmButton = input<boolean>(true);
   closable = input<boolean>(true);

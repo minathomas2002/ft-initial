@@ -125,8 +125,8 @@ export class EmployeeList implements OnInit {
     this.filterService.applyFilter();
   }
 
-  getUserTranslatedRole(roleCode: number): string {
-    return this.employeeRoleMapper.getTranslatedRole(roleCode as ERoles);
+  getUserTranslatedRole(roleCode: number, fallbackRole?: string): string {
+    return this.employeeRoleMapper.getTranslatedRole(roleCode as ERoles, fallbackRole);
   }
 
   getUserStatus(status: string) {

@@ -114,6 +114,11 @@
   }
 }
 
+/* RTL: Swap prev/next arrow direction so "previous" points right, "next" points left */
+html[dir='rtl'] .p-datepicker-calendar .p-datepicker-header {
+  flex-direction: row-reverse !important;
+}
+
 /*.p-datepicker end*/
 
 /*.p-chip-label*/
