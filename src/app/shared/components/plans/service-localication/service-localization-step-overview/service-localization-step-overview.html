@@ -26,13 +26,12 @@
             [color]="selectedInputColor()"
           />
           @if(opportunityControlSignal()){
-          <div class="text-sm text-[#606675]">{{`common.viewDetailsHint`|translate}}<a
-              class="
-            text-primary-500"
-              style="text-decoration: underline;"
+            <a
+              class="text-[#4767A5] font-normal underline mt-2 cursor-pointer"
               target="_blank"
-              [href]="`/opportunities/${opportunityControlSignal()?.id}`"
-            >{{`common.viewDetails`|translate}}</a></div>
+              [attr.href]="showWarningMesageDeletedOpportunity() ? null : `/opportunities/${opportunityControlSignal()?.id}`"
+              (click)="onViewOpportunityDetails($event)"
+            >{{`common.viewDetails`|translate}}</a>
           }
 
         </app-group-input-with-checkbox>
