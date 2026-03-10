@@ -15,6 +15,7 @@ import { PlanTimelineActionsMapper } from 'src/app/shared/classes/Plan-Timeline/
 import { PlanTimelineStatusMapper } from 'src/app/shared/classes/Plan-Timeline/plan-timeline-status.mapper';
 import { EActionPlanTimeLine } from 'src/app/shared/enums/action-plan-timeline.enum';
 import { TextareaModule } from 'primeng/textarea';
+import { RoleService } from 'src/app/shared/services/role/role-service';
 
 @Component({
   selector: 'app-plan-timeline-component',
@@ -40,7 +41,9 @@ export class TimelineComponent {
   private readonly planTimelineStatusMapper = new PlanTimelineStatusMapper(this.i18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly camelCaseToWordPipe = inject(CamelCaseToWordPipe);
+  private readonly roleService = inject(RoleService);
   planStatus = computed(() => this.planStatusFactory.handleValidateStatus());
+  isInvestor = computed(() => this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])());
 
   /** Direction class based on current language (rtl for Arabic, ltr otherwise) */
   directionClass = computed(() =>
