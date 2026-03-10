@@ -4,7 +4,7 @@ import localeArSA from '@angular/common/locales/ar-SA';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
 
-registerLocaleData(localeArSA, 'ar-SA');
+registerLocaleData(localeArSA, 'ar');
 
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));
