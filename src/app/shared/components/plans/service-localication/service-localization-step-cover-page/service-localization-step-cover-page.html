@@ -71,15 +71,15 @@
 
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.services' | translate }}</h2>
-    <div class="border border-gray-300 rounded-2xl">
+    <div class="border border-gray-300 rounded-2xl overflow-hidden">
       <app-form-array-input
-        [ft]="
-      getServicesFormArray()"
+        [ft]="getServicesFormArray()"
         [hideAddButton]="isViewMode()"
         [hideDeleteButton]="isViewMode()"
         [addButtonMessage]="'plans.form.addService' | translate"
         [createNewItem]="createServiceItem"
         [excludeKeys]="['serviceId']"
+        [customHeaderLabels]="{ serviceName: ('plans.form.serviceName' | translate) }"
       >
         <ng-template
           #itemTemplate

@@ -10,6 +10,7 @@ import {
   ViewChild,
   ElementRef,
   OnDestroy,
+  inject,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -20,6 +21,7 @@ import { CamelCaseToWordPipe } from 'src/app/shared/pipes';
 import { TooltipModule } from 'primeng/tooltip';
 import { Subscription } from 'rxjs';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 
 @Component({
   selector: 'app-form-array-input',
@@ -29,6 +31,8 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormArrayInput implements OnDestroy {
+  private readonly i18nService = inject(I18nService);
+
   hideAddButton = input<boolean>(false);
   // Accept FormArray instead of FieldTree
   // Using input instead of model since FormArray is mutable and changes are reflected automatically
@@ -59,6 +63,9 @@ export class FormArrayInput implements OnDestroy {
   headerColspan = input<Record<string, number>>({});
   // Optional rowspan for individual header columns - map of key names to rowspan value
   headerRowspan = input<Record<string, number>>({});
+
+  /** RTL: icon after text. LTR: icon before text. */
+  addButtonIconPos = computed(() => (this.i18nService.currentLanguage() === 'ar' ? 'right' : 'left'));
 
   @ContentChild('itemTemplate', { read: TemplateRef }) itemTemplate?: TemplateRef<{
     $implicit: AbstractControl;

@@ -1,5 +1,5 @@
 <div
-  class="rounded-xl"
+  class="rounded-xl overflow-hidden"
   #tableWrapper
 >
   <p-table
@@ -19,7 +19,7 @@
           [attr.data-group]="cell.dataGroup"
           [class]="cell.dataGroup
             ? 'p-3 !border border-gray-200 text-center font-medium! bg-primary! text-white!'
-            : (cell.label ? 'p-3 !border border-gray-200 text-left font-medium! bg-gray-50! text-gray-700!' : 'bg-white! border-0!')"
+            : (cell.label ? 'p-3 !border border-gray-200 text-start font-medium! bg-gray-50! text-gray-700!' : 'bg-white! border-0!')"
         >{{ cell.label }}</th>
         }
         <!-- Delete button column header with rowspan -->
@@ -58,13 +58,13 @@
       <!-- Default single header row when no groupHeader -->
       <tr class="bg-gray-50">
         @if(showIndexColumn()){
-        <th class="p-3 !border !border-gray-200 !text-left !font-medium !whitespace-nowrap !bg-gray-50 !text-gray-700 rounded-tl-xl">
+        <th class="p-3 !border !border-gray-200 !text-start !font-medium !whitespace-nowrap !bg-gray-50 !text-gray-700 rounded-ss-xl">
           <span>{{ indexColumnLabel() }}</span>
         </th>
         } @for (key of keys(); track key) {
         <th
-          class="p-3 !border !border-gray-200 !text-left !font-medium !whitespace-nowrap !bg-gray-50 !text-gray-700"
-          [class.rounded-tl-xl]="$index === 0 && !showIndexColumn()"
+          class="p-3 !border !border-gray-200 !text-start !font-medium !whitespace-nowrap !bg-gray-50 !text-gray-700"
+          [class.rounded-ss-xl]="$index === 0 && !showIndexColumn()"
           [attr.colspan]="headerColspan()[key] || null"
           [attr.rowspan]="headerRowspan()[key] || null"
         >
@@ -91,7 +91,7 @@
           }
         </th>
         }
-        <th class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700 rounded-tr-xl"></th>
+        <th class="p-3 !border !border-gray-200 !w-[48px] !bg-gray-50 !text-gray-700 rounded-se-xl"></th>
       </tr>
       }
     </ng-template>
@@ -127,12 +127,13 @@
       <tr>
         <td
           [attr.colspan]="keys().length + 1"
-          class="!p-3 !border !border-gray-200 !rounded-br-xl !rounded-bl-xl"
+          class="!p-3 !border !border-gray-200 !rounded-es-xl !rounded-ee-xl !text-start"
         >
           @if(!hideAddButton()){
           <p-button
             text
             [icon]="'icon-plus'"
+            [iconPos]="addButtonIconPos()"
             [label]="addButtonMessage()"
             (onClick)="onAddHandler()"
             [disabled]="rows().length >= maxItems()"
