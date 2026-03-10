@@ -45,18 +45,25 @@ export class BaseErrorMessages {
   errorMessages = computed(() => {
     // Read trigger to make computed reactive to input changes
     this.controlChangeTrigger();
-    const messages = this.errorMessagesService.getErrorMessages(
-      this.control(),
-      this.label()
-    );
+    const control = this.control();
+    const label = this.label();
+    const messages = this.errorMessagesService.getErrorMessages(control, label);
     const customRequiredMessage = this.customRequiredMessage();
+
+    // #region agent log
+    if (messages.length > 0) {
+      const hasObjectMessage = messages.some(m => typeof m !== 'string');
+      fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify({sessionId:'bd8107',location:'base-error-messages.ts:errorMessages',message:'errorMessages computed',data:{labelType:typeof label,labelValue:label,messages,messagesTypes:messages.map(m=>typeof m),hasObjectMessage,controlErrors:control?.errors},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+    }
+    // #endregion
 
     if (!customRequiredMessage) {
       return messages;
     }
 
+    const labelForDefault = typeof this.label() === 'string' ? this.label() : 'Field';
     const defaultRequiredMessage = this.i18n.translate('common.validation.required', {
-      label: this.label(),
+      label: labelForDefault,
     });
     return messages.map((message) =>
       message === defaultRequiredMessage ? customRequiredMessage : message

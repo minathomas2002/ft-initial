@@ -330,10 +330,7 @@
       [maxItems]="20"
       [scrollHeight]="'600px'"
       [excludeKeys]="['agreementOtherDetails', 'agreementCopy']"
-      [headerTooltips]="{
-        'supervisionOversightEntity': 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.) if any',
-        'provideAgreementCopy': 'If “Yes”, please attach the agreement copy at the end of the plan in the Attachment section.',
-      }"
+      [headerTooltips]="collaborationPartnershipHeaderTooltips()"
       [customHeaderLabels]="collaborationPartnershipHeaderLabels()"
     >
       <ng-template
@@ -546,10 +543,10 @@
             }, itemControl.get('rowId')?.value)"
           >
             <p-select
+              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
               [options]="yesNoOptions()"
               optionLabel="name"
               optionValue="id"
-              [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
               [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
               fluid
               [appendTo]="'body'"

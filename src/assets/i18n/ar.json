@@ -1100,7 +1100,8 @@
       "tooltipCompanyOverviewKeyProject": "إذا كان نوع الشركة مقاول ولا توجد مشاريع منفذة لشركة الكهرباء، قدم نظرة عامة على الشركة وتفاصيل المشاريع الرئيسية",
       "tooltipCompanyOverviewOther": "إذا كان نوع الشركة أخرى قدم نظرة عامة على الشركة",
       "tooltipQualificationStatus": "إذا كان نوع الشركة \"مصنع\" اختر \"حالة التأهيل\"",
-      "tooltipSupervisionOversight": "اذكر ما إذا كانت الشراكة مع الشركة السعودية تحت إشراف أي جهة حكومية (مثل وزارة الطاقة، صندوق الاستثمارات العامة، إلخ)",
+      "tooltipSupervisionOversight": "اذكر ما إذا كانت الشراكة مع الشركة السعودية تحت إشراف أي جهة حكومية (مثل وزارة الطاقة، صندوق الاستثمارات العامة، إلخ) إن وجدت",
+      "tooltipProvideAgreementCopy": "إذا كانت الإجابة \"نعم\"، يرجى إرفاق نسخة الاتفاقية في نهاية الخطة في قسم المرفقات.",
       "numberOfServices": "عدد الخدمات",
       "totalBusinessDoneLast5Years": "إجمالي الأعمال المنفذة (آخر 5 سنوات)",
       "serviceLocalizationMethodology": "منهجية توطين الخدمات",
@@ -1174,7 +1175,12 @@
       "expectedAnnualHeadcountKSAFacility": "العدد السنوي المتوقع للموظفين (يُملأ لمنشأة المملكة فقط)",
       "companyNames": "أسماء الشركات",
       "serviceTargetedForLocalization": "الخدمة المستهدفة للتوطين",
-      "provideNamesTargetedSuppliers": "تقديم أسماء موردي SEC المحليين المعتمدين المستهدفين"
+      "provideNamesTargetedSuppliers": "تقديم أسماء موردي SEC المحليين المعتمدين المستهدفين",
+      "collaborationPartnershipWithSaudiCompany": "شراكة تعاون مع شركة سعودية",
+      "addCollaborationPartnership": "إضافة شراكة التعاون",
+      "placeholders": {
+        "select": "اختر"
+      }
     },
     "placeholders": {
       "selectOpportunity": "اختر الفرصة",

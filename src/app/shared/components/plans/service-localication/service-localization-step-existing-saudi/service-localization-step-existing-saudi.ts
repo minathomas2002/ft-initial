@@ -131,6 +131,12 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
 
   collaborationPartnershipHeaderLabels = computed<Record<string, string>>(() => ({
     supervisionOversightEntity: this.i18n.translate('plans.form.supervisionOversightByGovernmentEntity'),
+    [EMaterialsFormControls.whyChoseThisCompany]: this.i18n.translate('plans.form.whyChoseThisSaudiCompany'),
+  }));
+
+  collaborationPartnershipHeaderTooltips = computed<Record<string, string>>(() => ({
+    supervisionOversightEntity: this.i18n.translate('plans.form.tooltipSupervisionOversight'),
+    provideAgreementCopy: this.i18n.translate('plans.form.tooltipProvideAgreementCopy'),
   }));
 
   saudiCompanyDetailsHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {

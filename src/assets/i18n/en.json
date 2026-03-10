@@ -309,7 +309,7 @@
       "moveToDraft": "Move to Draft",
       "publish": "Publish",
       "apply": "Apply",
-      "viewPlans":"View Plans"
+      "viewPlans": "View Plans"
     },
     "type": {
       "service": "Service",
@@ -332,7 +332,7 @@
       "applicationPeriod": "Application Period",
       "viewDetails": "View Details",
       "apply": "Apply",
-      "numberOfPlans":"Number Of Plans"
+      "numberOfPlans": "Number Of Plans"
     },
     "counts": {
       "totalOpportunities": "Total Opportunities",
@@ -1077,7 +1077,8 @@
       "tooltipCompanyOverviewKeyProject": "If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.",
       "tooltipCompanyOverviewOther": "If Company Type is Other Provide company overview",
       "tooltipQualificationStatus": "If the Company Type is \"Manufacturer\" select \"Qualification Status\"",
-      "tooltipSupervisionOversight": "Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.)",
+      "tooltipSupervisionOversight": "Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.) if any",
+      "tooltipProvideAgreementCopy": "If \"Yes\", please attach the agreement copy at the end of the plan in the Attachment section.",
       "numberOfServices": "# of Services",
       "totalBusinessDoneLast5Years": "Total Business Done (Last 5 Years)",
       "serviceLocalizationMethodology": "Service Localization Methodology",
@@ -1151,7 +1152,12 @@
       "expectedAnnualHeadcountKSAFacility": "Expected Annual Headcount (To be filled for the KSA based facility only)",
       "companyNames": "Company Names",
       "serviceTargetedForLocalization": "Service Targeted For Localization",
-      "provideNamesTargetedSuppliers": "Provide names of targeted SEC's approved local suppliers"
+      "provideNamesTargetedSuppliers": "Provide names of targeted SEC's approved local suppliers",
+      "collaborationPartnershipWithSaudiCompany": "Collaboration Partnership With Saudi Company",
+      "addCollaborationPartnership": "Add Collaboration Partnership",
+      "placeholders": {
+        "select": "Select"
+      }
     },
     "placeholders": {
       "selectOpportunity": "Select opportunity",
