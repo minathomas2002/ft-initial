@@ -44,7 +44,15 @@ export class AttachmentsSummarySection extends SummarySectionBaseClass {
   private attachmentSignature(items: AttachmentItem[]): string {
     if (!items?.length) return '';
     const sorted = [...items]
-      .map((a) => a.ibmIdentifier || a.id || '')
+      .map((a) => {
+        const identifier = a.ibmIdentifier || a.id;
+        if (identifier) return String(identifier);
+
+        const fallbackName = a.fileName || a.name || '';
+        const fallbackSize = a.size ?? '';
+        const fallbackType = a.type ?? '';
+        return `${fallbackName}::${fallbackSize}::${fallbackType}`;
+      })
       .filter(Boolean)
       .sort();
     return sorted.join('\n');
