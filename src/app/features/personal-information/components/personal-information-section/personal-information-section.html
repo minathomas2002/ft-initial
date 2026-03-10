@@ -134,8 +134,8 @@
         [required]="false"
       >
         @if(isViewMode()){
-        <div class="flex items-center gap-2 ltr">
-          <span class="text-sm font-medium text-gray-900">{{ userProfile()?.otherPhoneCountryCode ?? '-' }}</span>
+        <div class="ltr">
+          <span class="text-sm font-medium text-gray-900 me-2">{{ userProfile()?.otherPhoneCountryCode ?? '-' }}</span>
           <span class="text-sm font-medium text-gray-900">{{ userProfile()?.otherPhoneNumber }}</span>
         </div>
         }@else {

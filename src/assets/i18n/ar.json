@@ -230,7 +230,7 @@
     "userId": "معرف المستخدم",
     "role": "الدور",
     "otherPhoneNumber": "رقم هاتف آخر",
-    "benaId": "معرف بينا",
+    "benaId": "معرف BENA",
     "secRegisteredId": "معرف التسجيل في شركة الكهرباء",
     "changePassword": "تغيير كلمة المرور",
     "changePasswordDesc": "لمتابعة تغيير كلمة المرور، يرجى ملء النموذج أدناه. تأكد من استيفاء جميع متطلبات كلمة المرور.",
@@ -308,7 +308,7 @@
       "moveToDraft": "نقل إلى المسودة",
       "publish": "نشر",
       "apply": "تطبيق",
-      "viewPlans":"عرض الخطط"
+      "viewPlans": "عرض الخطط"
     },
     "type": {
       "service": "خدمة",
@@ -331,7 +331,7 @@
       "applicationPeriod": "فترة التقديم",
       "viewDetails": "عرض التفاصيل",
       "apply": "تطبيق",
-      "numberOfPlans":"عدد الخطط"
+      "numberOfPlans": "عدد الخطط"
     },
     "counts": {
       "totalOpportunities": "إجمالي الفرص",
