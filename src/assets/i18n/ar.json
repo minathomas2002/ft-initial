@@ -888,7 +888,16 @@
       "title": {
         "edit": "تعديل الخطة",
         "view": "عرض الخطة",
-        "create": "خطة توطين المنتج"
+        "create": "خطة توطين المنتج",
+        "reviewProduct": "مراجعة خطة توطين المنتج",
+        "resubmitProduct": "إعادة تقديم خطة توطين المنتج",
+        "reviewService": "مراجعة خطة توطين الخدمة",
+        "resubmitService": "إعادة تقديم خطة توطين الخدمة",
+        "createService": "خطة توطين الخدمة"
+      },
+      "valueChainAddCommentInfo": {
+        "description": "يتطلب أي طلب تغيير لنسبة التكلفة تحديثات مقابلة من المستثمر لحقول نسبة التكلفة المتبقية لضمان أن الإجمالي يساوي 100٪. يرجى تحديد جميع خلايا نسبة التكلفة الأخرى التي تحتاج إلى تحديث",
+        "iUnderstand": "فهمت"
       },
       "saveAsDraft": "حفظ كمسودة",
       "back": "رجوع",
@@ -904,6 +913,36 @@
       "sendBackToDv": "إرجاع إلى مدير القسم",
       "addComments": "إضافة تعليقات",
       "timeline": "الجدول الزمني",
+      "comments": {
+        "addComment": "إضافة تعليق",
+        "clarifyFeedback": "أضف تعليقاً لتوضيح ملاحظاتك.",
+        "yourComment": "تعليقك",
+        "myComment": "التعليق",
+        "comments": "التعليقات",
+        "enterComment": "أدخل تعليقك",
+        "savedSuccess": "تم حفظ تعليقاتك بنجاح.",
+        "updatesSavedSuccess": "تم حفظ تحديثاتك بنجاح.",
+        "removedSuccess": "تم إزالة تعليقاتك بنجاح.",
+        "removedWithFieldsSuccess": "تم إزالة تعليقاتك والحقول المحددة بنجاح.",
+        "selectFieldFirst": "يرجى تحديد حقل واحد على الأقل قبل إضافة تعليق.",
+        "maxLength": "لا يمكن أن يتجاوز التعليق 255 حرفاً.",
+        "deleteCommentTitle": "هل أنت متأكد من حذف التعليق؟",
+        "deleteCommentAndFieldsTitle": "هل أنت متأكد من حذف التعليق والحقول المحددة؟",
+        "selected": "محدد"
+      },
+      "sendBack": {
+        "confirmMessage": "هل أنت متأكد من إرجاع الخطة؟",
+        "sendBackLabel": "إرجاع",
+        "confirmationMessageToEmployee": "لا يمكن التراجع عن هذا الإجراء وستنتقل الخطة مباشرة إلى الموظف.",
+        "confirmationMessageToInvestor": "لا يمكن التراجع عن هذا الإجراء وستنتقل الخطة مباشرة إلى المستثمر.",
+        "confirmationMessageToDivisionManager": "لا يمكن التراجع عن هذا الإجراء وستنتقل الخطة مباشرة إلى مدير القسم."
+      },
+      "approval": {
+        "titleToDeptManager": "هل أنت متأكد من الموافقة على هذه الخطة وإرسالها إلى مدير القسم للمراجعة؟",
+        "titleToInvestor": "هل أنت متأكد من الموافقة على هذه الخطة وإرسالها إلى المستثمر؟",
+        "titleToDivisionManager": "هل أنت متأكد من الموافقة على هذه الخطة وإرسالها إلى مدير القسم للمراجعة؟",
+        "titleToEmployee": "هل أنت متأكد من الموافقة على هذه الخطة وإرسالها إلى الموظف لتقديم الموافقة؟"
+      },
       "messages": {
         "fixValidationErrors": "يرجى إصلاح جميع أخطاء التحقق قبل الإرسال",
         "errorLoadingPlan": "خطأ في تحميل بيانات الخطة. يرجى المحاولة مرة أخرى.",

@@ -80,7 +80,7 @@
 
       @if (hasIncomingStep1Comments()) {
       <app-page-comment-box
-        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentTitle]="incomingCommentPersona() || ('plans.wizard.comments.myComment' | translate)"
         [commentText]="getIncomingStep1CommentText()"
       />
       }
@@ -134,7 +134,7 @@
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep2Comments()) {
       <app-page-comment-box
-        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentTitle]="incomingCommentPersona() || ('plans.wizard.comments.myComment' | translate)"
         [commentText]="getIncomingStep2CommentText()"
       />
       }
@@ -188,7 +188,7 @@
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep3Comments()) {
       <app-page-comment-box
-        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentTitle]="incomingCommentPersona() || ('plans.wizard.comments.myComment' | translate)"
         [commentText]="getIncomingStep3CommentText()"
       />
       }
@@ -236,7 +236,7 @@
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep4Comments()) {
       <app-page-comment-box
-        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentTitle]="incomingCommentPersona() || ('plans.wizard.comments.myComment' | translate)"
         [commentText]="getIncomingStep4CommentText()"
       />
       }
@@ -324,8 +324,8 @@
 <app-general-confirmation-dialog
   [(visible)]="showValueChainAddCommentInfoDialog"
   [title]="''"
-  [description]="'Any change request to a cost percentage requires corresponding updates from the investor to the remaining cost percentage fields to ensure the total equals 100%. Please select all other cost percentage cells that need to be updated'"
-  [confirmationLabel]="'I Understand'"
+  [description]="'plans.wizard.valueChainAddCommentInfo.description' | translate"
+  [confirmationLabel]="'plans.wizard.valueChainAddCommentInfo.iUnderstand' | translate"
   [showCloseButton]="false"
   [closable]="false"
   [closeOnEscape]="false"
@@ -338,10 +338,10 @@
 @if(showSendBackConfirmationDialog()){
 <app-general-confirmation-dialog
   [(visible)]="showSendBackConfirmationDialog"
-  [title]="'Are you sure you want to send back the plan?'"
+  [title]="'plans.wizard.sendBack.confirmMessage' | translate"
   [description]="sendBackConfirmationMessage()"
-  [confirmationLabel]="'Send Back'"
-  [cancelLabel]="'Cancel'"
+  [confirmationLabel]="'plans.wizard.sendBack.sendBackLabel' | translate"
+  [cancelLabel]="'common.cancel' | translate"
   [icon]="'icon-info'"
   (confirmed)="onConfirmSendBack()"
   (onCancel)="onCancelSendBack()"

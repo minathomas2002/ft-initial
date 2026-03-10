@@ -1279,7 +1279,16 @@
       "title": {
         "edit": "Edit Plan",
         "view": "View Plan",
-        "create": "Product Localization Plan"
+        "create": "Product Localization Plan",
+        "reviewProduct": "Review Product Localization Plan",
+        "resubmitProduct": "Resubmit Product Localization Plan",
+        "reviewService": "Review Service Localization Plan",
+        "resubmitService": "Resubmit Service Localization Plan",
+        "createService": "Service Localization Plan"
+      },
+      "valueChainAddCommentInfo": {
+        "description": "Any change request to a cost percentage requires corresponding updates from the investor to the remaining cost percentage fields to ensure the total equals 100%. Please select all other cost percentage cells that need to be updated",
+        "iUnderstand": "I Understand"
       },
       "saveAsDraft": "Save as Draft",
       "back": "Back",
@@ -1300,6 +1309,7 @@
         "clarifyFeedback": "Add a comment to clarify your feedback.",
         "yourComment": "Your Comment",
         "myComment": "Comment",
+        "comments": "Comments",
         "enterComment": "Enter your comment",
         "savedSuccess": "Your comments have been saved successfully.",
         "updatesSavedSuccess": "Your updates have been saved successfully.",
@@ -1321,7 +1331,17 @@
         "confirmMessage": "Are you sure you want to delete the plan? This action cannot be undone."
       },
       "sendBack": {
-        "confirmMessage": "Are you sure you want to send back the plan?"
+        "confirmMessage": "Are you sure you want to send back the plan?",
+        "sendBackLabel": "Send Back",
+        "confirmationMessageToEmployee": "This action cannot be undone and the plan will go directly to the Employee.",
+        "confirmationMessageToInvestor": "This action cannot be undone and the plan will go directly to the Investor.",
+        "confirmationMessageToDivisionManager": "This action cannot be undone and the plan will go directly to the Division Manager."
+      },
+      "approval": {
+        "titleToDeptManager": "Are you sure you want to approve this plan and forward it to the Department Manager for review?",
+        "titleToInvestor": "Are you sure you want to approve this plan and forward it to the Investor?",
+        "titleToDivisionManager": "Are you sure you want to approve this plan and forward it to the Division Manager for review?",
+        "titleToEmployee": "Are you sure you want to approve this plan and forward it to the Employee for approval submission?"
       },
       "rejection": {
         "reason": "Rejection Reason",
@@ -1505,6 +1525,14 @@
       "deptManagerReview": "Department Manager Review",
       "viewOpportunityDetails": "View Opportunity",
       "editResubmit": "Edit / Resubmit"
+    },
+    "comments": {
+      "addComment": "Add Comment",
+      "selected": "Selected"
+    },
+    "rejection": {
+      "reason": "Rejection Reason",
+      "approvalNote": "Approval Note"
     }
   },
   "timeline": {

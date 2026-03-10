@@ -102,28 +102,28 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   })
   sendBackConfirmationMessage = computed(() => {
     if (this.isDVManagerPersona()) {
-      return "This action cannot be undone and the plan will go directly to the Employee."
+      return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToEmployee');
     }
 
     if (this.isEmployeePersona()) {
-      return "This action cannot be undone and the plan will go directly to the Investor."
+      return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToInvestor');
     }
 
-    return "This action cannot be undone and the plan will go directly to the Division Manager.";
+    return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToDivisionManager');
   })
 
   readonly approvalDialogTitle = computed(() => {
     if (this.isDVManagerPersona()) {
-      return "Are you sure you want to approve this plan and forward it to the Department Manager for review?"
+      return this.i18nService.translate('plans.wizard.approval.titleToDeptManager');
     }
 
     if (this.isEmployeePersona()) {
       return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
-        ? "Are you sure you want to approve this plan and forward it to the Investor?"
-        : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+        ? this.i18nService.translate('plans.wizard.approval.titleToInvestor')
+        : this.i18nService.translate('plans.wizard.approval.titleToDivisionManager');
     }
 
-    return "Are you sure you want to approve this plan and forward it to the Employee for approval submission?"
+    return this.i18nService.translate('plans.wizard.approval.titleToEmployee');
   })
 
   readonly rejectionDialogTitle = computed(() => {
@@ -425,8 +425,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.i18nService.currentLanguage();
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
-    if (currentMode === 'Review') return 'Review Product Localization Plan';
-    if (currentMode === 'resubmit') return 'Resubmit Product Localization Plan';
+    if (currentMode === 'Review') return this.i18nService.translate('plans.wizard.title.reviewProduct');
+    if (currentMode === 'resubmit') return this.i18nService.translate('plans.wizard.title.resubmitProduct');
     return this.i18nService.translate('plans.wizard.title.create');
   });
   isLoadingPlan = signal(false);

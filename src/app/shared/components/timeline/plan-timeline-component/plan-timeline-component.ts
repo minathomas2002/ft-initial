@@ -98,13 +98,15 @@ export class TimelineComponent {
   }
 
   getCommentFieldLabel(field: ICommentFields): string {
-    let translatedLabel = this.i18nService.translate(field.label);
+    // Map display strings (e.g. from API) to translation keys for proper i18n
+    const labelKey = this.getLabelTranslationKey(field.label);
+    let translatedLabel = this.i18nService.translate(labelKey);
 
     // Handle "key - Year N" pattern (e.g. saudization matrix fields)
     const yearMatch = field.label.match(/^(.+)\s+-\s+Year\s+(\d+)$/);
     if (yearMatch) {
       const [, keyPart, yearNum] = yearMatch;
-      const translatedKey = this.i18nService.translate(keyPart.trim());
+      const translatedKey = this.i18nService.translate(this.getLabelTranslationKey(keyPart.trim()));
       const yearLabel = this.i18nService.translate('plans.summary.year');
       translatedLabel = translatedKey !== keyPart.trim()
         ? `${translatedKey} - ${yearLabel} ${yearNum}`
@@ -121,7 +123,7 @@ export class TimelineComponent {
         const translated = this.i18nService.translate(key, { year: yearNum });
         translatedLabel = translated !== key ? translated : translatedLabel;
       } else {
-        const translated = this.i18nService.translate(key);
+        const translated = this.i18nService.translate(this.getLabelTranslationKey(key));
         translatedLabel = translated !== key ? `${translated} - ${yearNum}` : translatedLabel;
       }
     }
@@ -137,9 +139,21 @@ export class TimelineComponent {
     return sectionDisplay + ' - ' + translatedLabel;
   }
 
+  /** Map label (from API or form) to translation key for proper i18n */
+  private getLabelTranslationKey(label: string): string {
+    if (!label) return label;
+    const displayToKey: Record<string, string> = {
+      'Attachments': 'plans.form.attachments',
+      'attachments': 'plans.form.attachments',
+    };
+    return displayToKey[label] ?? label;
+  }
+
   /** Resolve section to translation key; handles camelCase and legacy display strings */
   private getSectionTranslationKey(section: string): string {
-    const key = 'plans.form.' + section;
+    // Normalize display strings like "Attachments" to lowercase for key lookup
+    const normalizedSection = section.charAt(0).toLowerCase() + section.slice(1);
+    const key = 'plans.form.' + normalizedSection;
     if (this.i18nService.translate(key) !== key) return key;
     const displayToKey: Record<string, string> = {
       'Service Details': 'serviceDetails',
@@ -154,6 +168,7 @@ export class TimelineComponent {
       'Manufacturing': 'manufacturing',
       'Assembly & Testing': 'assemblyTesting',
       'After Sales': 'afterSales',
+      'Attachments': 'attachments',
     };
     const normalized = displayToKey[section] ?? section.replace(/\s+/g, '');
     return 'plans.form.' + normalized;
