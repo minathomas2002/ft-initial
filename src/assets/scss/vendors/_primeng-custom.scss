@@ -347,3 +347,15 @@
   align-items: start !important;
 }
 // p-dialog end
+
+ .p-select-overlay {
+    max-width: 300px;
+  }
+  .p-select-items-wrapper {
+    overflow-x: auto;
+  }
+  .p-select-option {
+    overflow: visible;
+    white-space: nowrap;
+    min-width: max-content;
+  }
