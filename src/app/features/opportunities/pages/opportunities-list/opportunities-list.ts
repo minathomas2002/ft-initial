@@ -21,6 +21,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard';
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
+import { OpportunityDetailItem } from "src/app/shared/components/opportunities/opportunity-detail-item/opportunity-detail-item";
 
 @Component({
   selector: 'app-opportunities-list',
@@ -37,8 +38,9 @@ import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/n
     ProductLocalizationPlanWizard,
     ServiceLocalizationPlanWizard,
     PlanTermsAndConditionsDialog,
-    NewPlanDialog
-  ],
+    NewPlanDialog,
+    OpportunityDetailItem
+],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -87,6 +89,11 @@ export class OpportunitiesList implements OnInit, OnDestroy {
     }
   }
 
+  onViewPlans(opportunity: IOpportunity){
+    this.router.navigate(['/',ERoutes.plans], {
+      queryParams: { opportunityId: opportunity.id}
+    });
+  }
   onApply(opportunity: IOpportunity) {
     if (this.authStore.isAuthenticated()) {
       this.opportunitiesStore.checkApplyOpportunity(opportunity.id).subscribe((res) => {

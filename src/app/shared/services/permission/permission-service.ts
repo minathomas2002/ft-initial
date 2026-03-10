@@ -20,5 +20,6 @@ export class PermissionService {
   canAccessSettings = this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
   canContactUs = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR]);
   canViewOpportunityAduit = this.roleService.hasAnyRoleSignal([ERoles.ADMIN]);
+  canViewOpportunityPlansNumber = this.roleService.hasAnyRoleSignal([ERoles.ADMIN,ERoles.DEPARTMENT_MANAGER,ERoles.Division_MANAGER]);
 }
 
