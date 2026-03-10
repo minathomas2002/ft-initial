@@ -2,10 +2,10 @@
   <a
     [routerLink]="link().routerLink"
     (click)="onCloseSidebarDrawer.emit()"
-    routerLinkActive="bg-gray-50"
-    class="flex items-center justify-center hover:!bg-gray-50 text-[16px] transition-all duration-300 ease-in-out block w-full p-3 rounded-lg font-semibold p-[12px]"
+    routerLinkActive="bg-primary text-white"
+    class="group flex items-center justify-center hover:!bg-gray-50 text-[16px] transition-all duration-300 ease-in-out block w-full p-3 rounded-lg font-semibold p-[12px]"
   >
-    <i class="{{link().icon}} text-gray-400 text-2xl w-[25px]"></i>
+    <i class="{{link().icon}} text-gray-400 group-[.bg-primary]:text-white text-2xl w-[25px] transition-colors"></i>
   </a>
 } @else {
   <p-panel
@@ -19,10 +19,10 @@
       <a
         [routerLink]="link().routerLink"
         (click)="onCloseSidebarDrawer.emit()"
-        routerLinkActive="bg-gray-50"
-        class="flex items-center hover:!bg-gray-50 text-[16px] transition-all duration-300 ease-in-out block w-full p-3 rounded-lg font-semibold p-[12px]"
+        routerLinkActive="bg-primary text-white"
+        class="group flex items-center hover:!bg-gray-50 text-[16px] transition-all duration-300 ease-in-out block w-full p-3 rounded-lg font-semibold p-[12px]"
       >
-        <i class="{{link().icon}} me-[11px] text-gray-400 text-2xl"></i>
+        <i class="{{link().icon}} me-[11px] text-gray-400 group-[.bg-primary]:text-white text-2xl transition-colors"></i>
         {{link().label}}
       </a>
     </ng-template>
@@ -33,9 +33,9 @@
     <a
       [routerLink]="child.routerLink"
       (click)="onCloseSidebarDrawer.emit()"
-      routerLinkActive="bg-gray-50"
+      routerLinkActive="bg-primary text-white"
       [routerLinkActiveOptions]="{ exact: false }"
-      class="flex items-center hover:!bg-gray-50 text-[16px] transition-all duration-300 ease-in-out block w-full p-3 rounded-lg font-semibold p-[12px] mt-2"
+      class="group flex items-center hover:!bg-gray-50 text-[16px] transition-all duration-300 ease-in-out block w-full p-3 rounded-lg font-semibold p-[12px] mt-2"
     >
       <i class="w-[30px]"></i>
       {{child.label}}
