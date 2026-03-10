@@ -31,6 +31,7 @@ export enum EInternalUserPlanStatus {
 export interface IPlanRecord {
   id: string;
   planId: string;
+  opportunityId: string;
   planCode: string;
   title: string;
   investorName?: string;
@@ -50,6 +51,8 @@ export interface IPlanFilter extends IFilterBase<TPlansSortingKeys> {
   status?: EInvestorPlanStatus[] | EInternalUserPlanStatus[] | null;
   submissionDate?: Date[] | undefined;
   assignee?: string[] | null;
+  opportunityId?:string|null
+  investorId?:string|null
 }
 
 export interface IPlanFilterRequest extends IFilterBase<TPlansSortingKeys> {

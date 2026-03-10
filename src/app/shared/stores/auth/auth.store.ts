@@ -1,14 +1,14 @@
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
-import { type Observable, type Subscription, catchError, finalize, throwError, tap, pipe, take } from 'rxjs';
-import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse, IJwtUserDetails, IUserProfile, } from '../../interfaces';
+import { type Observable, type Subscription, catchError, finalize, of, switchMap, take, throwError, tap } from 'rxjs';
+import { IAuthData, IRegisterRequest, IResetPasswordRequest, IBaseApiResponse, IJwtUserDetails, IUserProfile, ILoginWithImpersonationRequest, } from '../../interfaces';
 import { AuthApiService } from '../../api/auth/auth-api-service';
 import { UsersApiService } from '../../api/users/users-api-service';
 import { LocalStorage } from '../../services/local-storage/local-storage';
 import { HttpErrorResponse } from '@angular/common/http';
 import { JwtService } from '../../services/auth/jwt-service';
-import { ERoutes } from '../../enums';
+import { EImpersonationStatus, ERoutes } from '../../enums';
 import type { SupportedLanguage } from '../../services/i18n/i18n.service';
 
 const REFRESH_BEFORE_EXPIRY_MS = 2 * 60 * 1000; // 2 minutes before expiry
@@ -38,6 +38,10 @@ export const AuthStore = signalStore(
       userCode: computed(
         () => store.userProfile()?.employeeID ?? store.userProfile()?.investorCode ?? ''
       ),
+      isImpersonating: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATEE),
+      isDelegator: computed(() => store.jwtUserDetails()?.ImpersonationStatus === EImpersonationStatus.DELEGATOR),
+      delegatorUserId: computed(() => store.jwtUserDetails()?.DelegateeUserId),
+      delegateeUserName: computed(() => store.jwtUserDetails()?.DelegateeUserName),
     };
   }),
   withMethods((store) => {
@@ -108,6 +112,7 @@ export const AuthStore = signalStore(
         const refreshRequest = {
           accessToken: authData.token,
           refreshToken: authData.refreshToken,
+          isImpersonating: store.isImpersonating(),
         };
         authApiService.refreshToken(refreshRequest).subscribe({
           next: (response) => {
@@ -143,9 +148,19 @@ export const AuthStore = signalStore(
         return this.handleLoginMethod(authApiService.windowsLogin());
       },
 
+      winLoginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {
+        patchState(store, { loading: true });
+        return this.handleLoginMethod(authApiService.winLoginWithImpersonation(request));
+      },
+
       fakeWindowsLogin(userName: string): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName));
+        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName))
+      },
+
+      loginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {
+        patchState(store, { loading: true });
+        return this.handleLoginMethod(authApiService.loginWithImpersonation(request));
       },
 
       updateAuthDataInStorage(authResponse: IBaseApiResponse<IAuthData>): void {
@@ -161,7 +176,7 @@ export const AuthStore = signalStore(
         login$: Observable<IBaseApiResponse<IAuthData>>
       ): Observable<IBaseApiResponse<IAuthData>> {
         return login$.pipe(
-          tap((response: IBaseApiResponse<IAuthData>) => {
+          switchMap((response: IBaseApiResponse<IAuthData>) => {
             const hasValidToken = Boolean(response.body?.token);
             const isEmailVerified = response.body?.isEmailVerified !== false;
 
@@ -172,6 +187,7 @@ export const AuthStore = signalStore(
                 .subscribe();
               this.syncLanguageToServer();
             }
+            return of(response);
           }),
           finalize(() => {
             patchState(store, { loading: false });

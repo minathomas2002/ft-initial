@@ -24,15 +24,19 @@
           [hasLabel]="true"
         />
         } }@else{
+        @if(canApplyOnOpportunity()){
         <p-button
           [label]="'opportunity.details.apply' | translate"
           (click)="onApply()"
         ></p-button>
         }
+        }
       </div>
 
       <div class="page-layout--title sm:w-auto">
-
+        @if(permissionService.canViewOpportunityAduit()){
+        <app-opportunity-audit-details [opportunityDetails]="opportunitiesStore.details()"></app-opportunity-audit-details>
+        }
         <div class="flex gap-4 items-center justify-between">
           <div class="flex gap-4 items-center">
             <h2
@@ -56,8 +60,8 @@
         </p>
       </div>
       @if(permissionService.canViewOpportunityAduit()){
-          <app-opportunity-audit-details [opportunityDetails]="opportunitiesStore.details()"></app-opportunity-audit-details>
-        }
+      <app-opportunity-audit-details [opportunityDetails]="opportunitiesStore.details()"></app-opportunity-audit-details>
+      }
     </div>
     <div class="cpage-layout--body">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-[64px] mb-[48px]">

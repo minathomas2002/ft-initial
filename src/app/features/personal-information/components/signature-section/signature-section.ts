@@ -12,6 +12,7 @@ import { take } from 'rxjs';
 import { IUpdateSignatureRequest } from 'src/app/shared/interfaces';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 @Component({
   selector: 'app-signature-section',
@@ -36,6 +37,8 @@ export class SignatureSection implements AfterViewInit {
   private readonly i18nService = inject(I18nService);
   private readonly elementRef = inject(ElementRef);
   onSignatureUpdate = output<void>();
+  private authStore = inject(AuthStore);
+  isImpersonated = computed(() => this.authStore.isImpersonating());
 
   isSignatureProcessing = this.profileStore.signatureProcessing;
   existingSignature = computed(() => this.profileStore.userProfile()?.signature || '');

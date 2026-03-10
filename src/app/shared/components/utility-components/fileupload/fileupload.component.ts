@@ -26,6 +26,7 @@ import { Attachment, AttachmentItem } from "src/app/shared/interfaces/plans.inte
 export class FileuploadComponent {
   isViewMode = input<boolean>(false);
   disabled = input<boolean>(false);
+  lockExistingFiles = input<boolean>(false);
   showDownloadButton = input<boolean>(false);
   maxFileSize = input<number>(1024 * 1024 * 10); // 10MB default
   acceptedFileTypes = input<string>("*/*");
@@ -148,6 +149,11 @@ export class FileuploadComponent {
       return;
     }
 
+    const targetFile = this.files()[index] as File | undefined;
+    if (targetFile && !this.canRemoveFile(targetFile)) {
+      return;
+    }
+
     // Remove from your custom model
     const currentFiles = this.files().slice();
     currentFiles.splice(index, 1);
@@ -158,6 +164,24 @@ export class FileuploadComponent {
     if (primeNgFiles) {
       primeNgFiles.splice(index, 1);
     }
+  }
+
+  private isExistingAttachment(file: File): boolean {
+    const candidate = file as File & {
+      isExistingAttachment?: boolean;
+      ibmIdentifier?: string;
+      fileUrl?: string;
+    };
+
+    return !!candidate.isExistingAttachment ||
+      !!candidate.ibmIdentifier ||
+      !!candidate.fileUrl;
+  }
+
+  canRemoveFile(file: File): boolean {
+    if (this.isDisabled()) return false;
+    if (this.lockExistingFiles() && this.isExistingAttachment(file)) return false;
+    return true;
   }
 
   onSelectedFiles(event: FileSelectEvent) {

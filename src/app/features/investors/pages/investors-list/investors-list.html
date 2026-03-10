@@ -46,9 +46,22 @@
                 {{ item.email }}
               </p>
             </td>
-            <td class="whitespace-nowrap ltr">{{ item.countryCode }} {{ item.phoneNumber }}</td>
-            <td class="whitespace-nowrap ltr">{{ item.otherPhone || '-' }}</td>
-            <td class="whitespace-nowrap ltr">{{ item.numberOfSubmittedPlans }}</td>
+            <td class="whitespace-nowrap">{{ item.countryCode }} {{ item.phoneNumber }}</td>
+            <td class="whitespace-nowrap">{{ item.otherPhone || '-' }}</td>
+            <td class="whitespace-nowrap">
+              @if(item.numberOfSubmittedPlans > 0){
+              <ng-container>
+                <a
+                  class="text-primary cursor-pointer underline"
+                  (click)="goToInvestorPlans(item.id,item.fullName)"
+                >
+                  {{ item.numberOfSubmittedPlans }}
+                </a>
+              </ng-container>
+              }@else{
+              <ng-container>-</ng-container>
+              }
+            </td>
             <td class="whitespace-nowrap">{{ item.joinDate | localizedDate: 'dd MMM yyyy' }}</td>
           </ng-template>
         </app-data-table>

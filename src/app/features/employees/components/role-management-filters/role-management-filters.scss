@@ -1,3 +1,18 @@
 :host ::ng-deep p-datepicker input {
   width: 100% !important;
 }
+
+:host ::ng-deep {
+  .filter-reset-badge .p-button {
+    background-color: white;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .p-overlaybadge .p-badge {
+    background-color: #EF4444 !important;
+  }
+}

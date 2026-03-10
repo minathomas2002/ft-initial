@@ -55,7 +55,7 @@ import { OpportunityAuditDetails } from "./opportunity-audit-details/opportunity
     ServiceLocalizationPlanWizard,
     PlanTermsAndConditionsDialog,
     OpportunityAuditDetails
-],
+  ],
   templateUrl: './opportunity-details.html',
   styleUrl: './opportunity-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -85,6 +85,8 @@ export class OpportunityDetails implements OnInit, OnDestroy {
   get EOpportunityAction() {
     return EOpportunityAction;
   }
+  canApplyOnOpportunity = computed(() => this.permissionService.canApplyOnOpportunityCard());
+
 
   private readonly destroy$ = new Subject<void>()
 

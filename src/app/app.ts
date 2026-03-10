@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { I18nService } from './shared/services/i18n/i18n.service';
 import { NgClass } from '@angular/common';
+import { DelegationCanceledDialogComponent } from './shared/components/utility-components/delegation-canceled-dialog/delegation-canceled-dialog.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ToastModule, NgClass],
+  imports: [RouterOutlet, ToastModule, NgClass, DelegationCanceledDialogComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

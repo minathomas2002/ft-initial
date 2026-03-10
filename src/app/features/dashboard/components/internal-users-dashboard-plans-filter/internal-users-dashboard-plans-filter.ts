@@ -22,6 +22,8 @@ import { PlanStore, IPlanTypeDropdownOption } from 'src/app/shared/stores/plan/p
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 
 interface IDropdownOption {
   label: string;
@@ -30,7 +32,7 @@ interface IDropdownOption {
 
 @Component({
   selector: 'app-internal-users-dashboard-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe, MultiSelectModule, ButtonModule],
+  imports: [FormsModule, InputTextModule, DatePickerModule, SelectModule, TranslatePipe, MultiSelectModule, ButtonModule, OverlayBadgeModule, BadgeModule],
   templateUrl: './internal-users-dashboard-plans-filter.html',
   styleUrl: './internal-users-dashboard-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

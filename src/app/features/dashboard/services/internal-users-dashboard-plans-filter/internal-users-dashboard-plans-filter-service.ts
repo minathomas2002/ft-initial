@@ -13,7 +13,7 @@ export class InternalUsersDashboardPlansFilterService extends AbstractServiceFil
   private readonly roleService = inject(RoleService);
   filterClass = new DashboardPlansFilter();
   filter = signal(this.filterClass.filter);
-  
+
   adpatedFilter = computed(() => {
     var filter = this.filter();
     const adapted = {
@@ -21,23 +21,34 @@ export class InternalUsersDashboardPlansFilterService extends AbstractServiceFil
       submissionDateFrom: filter.submissionDate?.[0]?.toLocaleDateString('en-CA'),
       submissionDateTo: filter.submissionDate?.[1]?.toLocaleDateString('en-CA'),
     };
-    
+
     // Department Managers always filter by DV_APPROVED status
     if (this.roleService.hasAnyRoleSignal([ERoles.DEPARTMENT_MANAGER])()) {
      // adapted.status = EInternalUserPlanStatus.DV_APPROVED;
     }
-    
+
     return adapted;
   });
 
   showClearAll = computed(() => {
     const current = this.filter();
-    return (
-      Boolean(current.searchText?.trim()) ||
-      current.planType !== null ||
-      current.status !== null ||
-      Boolean(current.submissionDate)
-    );
+    const hasSearch = Boolean(current.searchText?.trim());
+    const hasPlanType = Array.isArray(current.planType) ? current.planType.length > 0 : current.planType !== null;
+    const hasStatus = Array.isArray(current.status) ? current.status.length > 0 : current.status !== null;
+    const hasSubmissionDate = Boolean(current.submissionDate);
+
+    return hasSearch || hasPlanType || hasStatus || hasSubmissionDate;
+  });
+
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const planTypeCount = Array.isArray(current.planType) ? current.planType.length : 0;
+    const statusCount = Array.isArray(current.status) ? current.status.length : 0;
+    const submissionDateCount = current.submissionDate?.length === 2 ? 1 : 0;
+
+    return searchCount + planTypeCount + statusCount + submissionDateCount;
   });
 
   performFilter$() {

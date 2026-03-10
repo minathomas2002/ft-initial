@@ -1,3 +1,4 @@
+import { ERoles } from "../enums";
 import { EDelegationActions, EDelegationStatus } from "../enums/delegation.enum";
 import { IFilterBase } from "./filter.interface";
 
@@ -50,3 +51,12 @@ export interface IDelegationFilterRequest extends IFilterBase<TDelegationSorting
   delegationDateTo?: string | null;
 }
 
+
+export interface IImpersonationOptions {
+  userId: string;
+  nameEn: string;
+  nameAr: string;
+  profilePic: string;
+  role: ERoles;
+  userName: string;
+}

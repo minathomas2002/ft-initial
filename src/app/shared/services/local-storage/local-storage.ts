@@ -5,10 +5,10 @@ import { IAuthData, IBaseApiResponse, IUserProfile } from '../../interfaces';
   providedIn: 'root',
 })
 export class LocalStorage {
-  
+
   private readonly AUTH_STORAGE_KEY = 'auth_data';
   private readonly USER_PROFILE_STORAGE_KEY = 'user_profile';
-  
+
   saveAuthDataToStorage(authResponse: IBaseApiResponse<IAuthData>): void {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem(this.AUTH_STORAGE_KEY, JSON.stringify(authResponse.body));

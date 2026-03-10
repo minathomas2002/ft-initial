@@ -1,0 +1,17 @@
+:host ::ng-deep .custom-primary.p-button.p-button-text {
+  color: #f78f3a !important;
+}
+
+:host ::ng-deep .custom-primary.p-button.p-button-text .p-button-label,
+:host ::ng-deep .custom-primary.p-button.p-button-text .p-button-icon {
+  color: #f78f3a !important;
+}
+
+:host ::ng-deep .custom-primary.p-button.p-button-text:hover,
+:host ::ng-deep .custom-primary.p-button.p-button-text:active {
+  color: #e57f2f !important;
+}
+
+:host ::ng-deep .p-button-icon {
+  font-size: 20px !important;
+}

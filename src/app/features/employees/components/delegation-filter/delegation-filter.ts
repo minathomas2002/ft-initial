@@ -17,6 +17,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DelegationFilterService } from '../../services/Delegation-filter/Delegation-filter-service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { DelegationStatusMapper } from '../../classes/delegation-status-mapper';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'app-delegation-filter',
@@ -28,7 +30,9 @@ import { DelegationStatusMapper } from '../../classes/delegation-status-mapper';
     MultiSelectModule,
     ButtonModule,
     TranslatePipe,
-    DatePickerModule
+    DatePickerModule,
+    OverlayBadgeModule,
+    BadgeModule,
   ],
   templateUrl: './delegation-filter.html',
   styleUrl: './delegation-filter.scss',
@@ -73,10 +77,16 @@ export class DelegationFilter {
     this.delegationFilterService.updateFilterSignal({ searchText: '' });
     this.delegationFilterService.applyFilter();
   }
+
+  onSearchTextChange(value: string) {
+    this.delegationFilterService.updateFilterSignal({ searchText: value, pageNumber: 1 });
+    this.delegationSearchSubject.next(value ?? '');
+  }
+
   onClearFilters() {
-     this.delegationFilterService.clearAllFilters();
-    this.delegationFilterService.updateFilterSignal({ searchText: '' });
+    this.onSearchTextChange('');
     this.delegationFilterService.clearAllFilters();
+    this.delegationFilterService.updateFilterSignal({ searchText: '' });
   }
 }
 

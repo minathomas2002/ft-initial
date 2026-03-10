@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { DataTableComponent } from 'src/app/shared/components/layout-components/data-table/data-table.component';
@@ -9,8 +9,8 @@ import { LocalizedDatePipe, TranslatePipe, SlaCountdownNounPipe } from 'src/app/
 import { I18nService } from 'src/app/shared/services/i18n';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
-import { EOpportunityType, ERoles } from 'src/app/shared/enums';
 import { NgClass } from '@angular/common';
+import { EOpportunityType } from 'src/app/shared/enums';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
@@ -28,6 +28,8 @@ import { AssignReassignManualEmployee } from "../../components/assign-reassign-m
 import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
+import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-plans-list',
@@ -53,13 +55,15 @@ import { GeneralConfirmationDialogComponent } from "src/app/shared/components/ut
     AssignReassignManualEmployee,
     BaseTagComponent,
     GeneralConfirmationDialogComponent
-],
+  ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
   providers: [InvestorPlansFilterService, InternalUsersPlansFilterService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlansList extends PlanDashboardBase {
+export class PlansList extends PlanDashboardBase implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
@@ -71,6 +75,7 @@ export class PlansList extends PlanDashboardBase {
   isReassignMode = signal<boolean>(false);
   isDeleteMode = signal<boolean>(false);
   planItem = signal<IPlanRecord | null>(null);
+  investorName = signal<string | null>(null);
 
   eInvestorPlanStatus = EInvestorPlanStatus;
   eInternalUserPlanStatus = EInternalUserPlanStatus;
@@ -82,7 +87,7 @@ export class PlansList extends PlanDashboardBase {
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
   private readonly toastService = inject(ToasterService);
-
+  private readonly route = inject(ActivatedRoute);
   // Get the appropriate filter service based on role
   readonly filterService = computed<AbstractServiceFilter<IPlanFilter>>(() => {
     return this.isInvestor() ? this.investorFilterService : this.internalUsersFilterService;
@@ -150,6 +155,13 @@ export class PlansList extends PlanDashboardBase {
       }
     });
   }
+  ngOnInit(): void {
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+        this.investorName.set(params["investorName"]);
+
+      })
+  }
 
   createNewPlan() {
     // Set mode to create and plan ID
@@ -202,6 +214,10 @@ export class PlansList extends PlanDashboardBase {
     plan.planType === EOpportunityType.PRODUCT
       ? this.productLocalizationPlanWizardVisibility.set(true)
       : this.serviceLocalizationPlanWizardVisibility.set(true);
+  }
+  onViewOpportunityDetails(plan: IPlanRecord) {
+    const url = `/opportunities/${plan.opportunityId}`;
+    window.open(url, '_blank');
   }
 
   onEdit(plan: IPlanRecord) {
@@ -285,7 +301,7 @@ export class PlansList extends PlanDashboardBase {
     this.planItem.set(plan);
     this.isReassignMode.set(true);
   }
- onDelete(plan: IPlanRecord) {
+  onDelete(plan: IPlanRecord) {
     this.viewDeleteDialog.set(true);
     this.planItem.set(plan);
     this.isDeleteMode.set(true);
@@ -318,27 +334,27 @@ export class PlansList extends PlanDashboardBase {
 
   }
   exportPlans() {
-  this.planStore.exportPlans(this.internalUsersFilterService.adpatedFilter()).pipe(take(1)).subscribe({
-    next: (blob: Blob) => {
-      if (!blob) {
-        this.toastService.error(this.i18nService.translate('dashboard.errors.noFileReturned'));
-        return;
-      }
-      let fileName = 'Plans.csv';
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      document.body.appendChild(link);
-      link.href = url;
-      link.download = fileName;
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+    this.planStore.exportPlans(this.internalUsersFilterService.adpatedFilter()).pipe(take(1)).subscribe({
+      next: (blob: Blob) => {
+        if (!blob) {
+          this.toastService.error(this.i18nService.translate('dashboard.errors.noFileReturned'));
+          return;
+        }
+        let fileName = 'Plans.csv';
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        document.body.appendChild(link);
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
 
-      this.toastService.success(this.i18nService.translate('dashboard.messages.exportSuccess'));
-    },
-    error: (error) => {
-      this.toastService.error(error.errorMessage || this.i18nService.translate('plans.errors.exportPlans'));
-    }
-  });
-}
+        this.toastService.success(this.i18nService.translate('dashboard.messages.exportSuccess'));
+      },
+      error: (error) => {
+        this.toastService.error(error.errorMessage || this.i18nService.translate('plans.errors.exportPlans'));
+      }
+    });
+  }
 }

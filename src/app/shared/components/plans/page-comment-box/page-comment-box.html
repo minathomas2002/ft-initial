@@ -1,3 +1,16 @@
+@if (showOwnCommentInput()) {
+<div class="flex flex-col gap-2">
+  <app-base-label [title]="commentTitle()"></app-base-label>
+  <textarea
+    class="w-full rounded-lg border border-[#BBBEC8] p-3 text-sm text-[#606675] bg-[#F9FAFA]"
+    [value]="commentText()"
+    disabled
+    rows="4"
+    fluid
+    pTextarea
+  ></textarea>
+</div>
+} @else {
 <div
   class="border rounded-lg p-5"
   [ngClass]="[colorsClassesConfig()['border'], colorsClassesConfig()['background']]"
@@ -13,3 +26,4 @@
     </div>
   </div>
 </div>
+}

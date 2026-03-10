@@ -182,7 +182,9 @@ export const PlanStore = signalStore(
 
     return {
       isFinalStatus: computed(() =>
-        [
+        roleService.hasAnyRoleSignal([ERoles.INVESTOR]) ?
+       [EInvestorPlanStatus.REJECTED].includes(store.planStatus() as EInvestorPlanStatus) :
+       [
           EInternalUserPlanStatus.DEPT_REJECTED,
           EInternalUserPlanStatus.DEPT_APPROVED,
           EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,

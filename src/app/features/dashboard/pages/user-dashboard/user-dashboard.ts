@@ -210,6 +210,11 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     }
   }
 
+  onViewOpportunityDetails(plan: IPlanRecord) {
+    const url = `/opportunities/${plan.opportunityId}`;
+    window.open(url, '_blank');
+  }
+
   onEdit(plan: IPlanRecord) {
     // Only investors can edit (Draft or Pending status)
     if (this.isInvestor() && (plan.status === EInvestorPlanStatus.DRAFT || plan.status === EInvestorPlanStatus.PENDING)) {

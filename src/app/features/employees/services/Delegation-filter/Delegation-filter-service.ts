@@ -32,6 +32,17 @@ export class DelegationFilterService extends AbstractServiceFilter<IDelegationFi
     const currentFilter = this.filter();
     return !!(currentFilter.searchText || (currentFilter.status && currentFilter.status.length > 0) || currentFilter.delegationDateFrom || currentFilter.delegationDateTo);
   }
+
+  activeFiltersCount(): number {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const statusCount = Array.isArray(current.status) ? current.status.length : 0;
+    const delegationDateCount = current.delegationDateFrom && current.delegationDateTo ? 1 : 0;
+
+    return searchCount + statusCount + delegationDateCount;
+  }
+
   clearAllFilters() {
     this.clearAll();
     this.applyFilter();

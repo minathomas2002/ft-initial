@@ -1,3 +1,4 @@
+import { EImpersonationStatus } from '../enums';
 import { ERoles } from '../enums/roles.enum';
 
 export interface IUser {
@@ -44,6 +45,9 @@ export interface IJwtUserDetails {
   UserId: string;
   UserType: string;
   EmpID: string;
+  ImpersonationStatus?: EImpersonationStatus;
+  DelegateeUserId?: string;
+  DelegateeUserName?: string;
 
   // Standard JWT claims
   aud: string;
@@ -75,6 +79,7 @@ export interface IUserProfile {
 export interface IRefreshTokenRequest {
   accessToken: string;
   refreshToken: string;
+  isImpersonating: boolean;
 }
 
 export interface IRegisterRequest {
@@ -95,4 +100,9 @@ export interface IResetPasswordRequest {
   token: string;
   newPassword: string;
   confirmPassword: string;
+}
+
+export interface ILoginWithImpersonationRequest {
+  userName: string;
+  delegatorUserId: string;
 }

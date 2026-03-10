@@ -36,7 +36,7 @@ import { take } from 'rxjs';
 })
 export class SubmissionConfirmationModalComponent {
   visible = model<boolean>(false);
-  existingSignature = model<string | null>(null);
+  existingSignature = signal<string | null>(null);
   contactInfo = input<{
     name?: string;
     jobTitle?: string;
@@ -70,18 +70,7 @@ export class SubmissionConfirmationModalComponent {
 
       if (isVisible) {
         // Fetch user profile to get the latest signature (once per modal open)
-        if (!this.hasFetchedSignatureForCurrentOpen) {
-          this.hasFetchedSignatureForCurrentOpen = true;
-          this.profileStore.getUserProfile()
-            .pipe(take(1))
-            .subscribe({
-              next: (res) => {
-                if (res.success && res.body?.signature) {
-                  this.existingSignature.set(res.body.signature);
-                }
-              },
-            });
-        }
+        this.existingSignature.set(this.profileStore.userSignature());
 
         // Pre-fill form with contactInfo from API response
         if (contactInfoData && Object.keys(contactInfoData).length > 0) {

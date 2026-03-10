@@ -8,7 +8,9 @@ import { InvestorsFilterService } from '../../services/investors-filter/investor
 import { InvestorsFilter } from '../../components/investors-filter/investors-filter';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { AvatarModule } from 'primeng/avatar';
-import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
+import { Router } from '@angular/router';
+import { ERoutes } from 'src/app/shared/enums';
+import { LocalizedDatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-investors-list',
@@ -29,7 +31,7 @@ export class InvestorsList implements OnInit {
   private readonly investorsStore = inject(InvestorsStore);
   readonly filterService = inject(InvestorsFilterService);
   private readonly i18nService = inject(I18nService);
-
+  private readonly router = inject(Router);
   readonly headers = computed<ITableHeaderItem<TInvestorsSortingKeys>[]>(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
@@ -52,4 +54,9 @@ export class InvestorsList implements OnInit {
     this.filterService.applyFilter();
   }
 
+  goToInvestorPlans(investorId: string, investorName: string) {
+    this.router.navigate(['/', ERoutes.plans], {
+      queryParams: { investorId: investorId, investorName: investorName }
+    });
+  }
 }

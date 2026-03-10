@@ -34,5 +34,6 @@
     "src/locale",
     "src/assets/i18n",
     "src/app/shared/services/i18n"
-  ]
+  ],
+  "i18n-ally.keystyle": "nested"
 }

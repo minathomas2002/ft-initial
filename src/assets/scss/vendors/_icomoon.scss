@@ -21,6 +21,19 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+.icon-chevron-down-small:before {
+  content: "\f00e";
+}
+
+.icon-chevron-up-small:before {
+  content: "\f00d";
+}
+.icon-check-circle-outline:before {
+  content: "\f00c";
+}
+.icon-alert-circle-outline:before {
+  content: "\f00b";
+}
 .icon-download:before {
     content: "\f00a";
 }

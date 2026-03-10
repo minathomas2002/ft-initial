@@ -24,4 +24,5 @@ export enum EActionPlanTimeLine {
   AutoRejected = 23,
   DeptManagerReview = 25,
   DVReview = 26,
+  ViewOpportunityDetails = 27
 }

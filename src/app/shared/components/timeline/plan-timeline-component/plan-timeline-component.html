@@ -3,7 +3,7 @@
     #timelineTemplate
     let-item="item"
   >
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 border border-gray-200 p-4 rounded-lg">
       <!-- status and date -->
       <div class="flex justify-between items-start">
 
@@ -32,13 +32,33 @@
       </div>
 
       <!-- user card -->
-      <div>
+      <div class="flex flex-col gap-3">
+        @if (item.item.isImpersonated) {
+        <app-identify-user
+          [userAvatar]="item.item.delegateeProfilePic"
+          [userName]="getNameByLanguage(item.item.delegateeNameEn, item.item.delegateeNameAr)"
+          [userRole]="getUserTranslatedRole(item.item.delegateeRole)"
+        >
+        </app-identify-user>
+        <span class="text-[#FF692E] text-sm font-normal">
+          <i class="icon-arrow-up bg-[#FFF4ED] p-2 rounded-full inline-block rotate-180 me-3"></i>
+          {{'timeline.onBehalf' | translate}}
+        </span>
         <app-identify-user
           [userAvatar]="item.item.actionByProfilePic"
-          [userName]="item.item.actionByNameEn"
+          [userName]="getNameByLanguage(item.item.actionByNameEn, item.item.actionByNameAr)"
           [userRole]="getUserTranslatedRole(item.item.actorRole)"
         >
         </app-identify-user>
+        }@else {
+        <app-identify-user
+          [userAvatar]="item.item.actionByProfilePic"
+          [userName]="getNameByLanguage(item.item.actionByNameEn, item.item.actionByNameAr)"
+          [userRole]="getUserTranslatedRole(item.item.actorRole)"
+        >
+        </app-identify-user>
+        }
+        <div class="border-t border-gray-200"></div>
       </div>
 
       <!-- Action -->

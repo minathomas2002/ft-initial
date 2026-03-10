@@ -1,7 +1,7 @@
 <div class="rounded-xl flex items-center justify-between shadow-xs border bg-linear-gradient-primary p-6 gap-6">
   <div class="flex items-center gap-6">
     <div
-      class="avatar-wrapper relative cursor-pointer"
+      [class.avatar-wrapper.relative.cursor-pointer]="!isImpersonated()"
       (click)="onAvatarEditClick()"
     >
       <p-avatar
@@ -9,9 +9,11 @@
         shape="circle"
         class="border-3 border-white w-[100px]! h-[100px]!"
       />
+      @if(!isImpersonated()) {
       <div class="avatar-overlay">
         <i class="icon-edit-05 text-white! text-xl"></i>
       </div>
+      }
     </div>
     <div>
       <h3 class="font-semibold text-[24px] text-white">{{userName()}}</h3>

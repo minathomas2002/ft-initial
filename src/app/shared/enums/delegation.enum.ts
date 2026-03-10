@@ -10,3 +10,10 @@ export enum EDelegationActions {
   Update = 2,
   DELETE = 3
 }
+
+
+export enum EImpersonationStatus {
+  NOUN = 'noun',
+  DELEGATOR = 'delegator',
+  DELEGATEE = 'delegatee'
+}

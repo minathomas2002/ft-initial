@@ -1,10 +1,13 @@
-<div class="flex flex-col gap-6 bg-white">
+<div class="flex flex-col gap-6 bg-white p-6 rounded-[8px]  border border-[#D5D6DD]">
   <app-summary-section-header
     [title]="pageTitleForTL"
     [hideEditButton]="hideEditButton()"
+    [isExpanded]="isExpanded()"
     (onEdit)="onEditClick()"
+    (onToggleExpand)="toggleExpanded()"
   />
 
+  @if (isExpanded()) {
   <app-cover-page-company-information-summary-section
     [sectionFormGroup]="coverPageCompanyInformationFormGroup()"
     [sectionSummaryFields]="coverPageCompanyInformationSummaryFields()"
@@ -22,5 +25,6 @@
     [commentTitle]="commentForPage().title"
     [commentText]="commentForPage().text || 'No comment found'"
   />
+  }
   }
 </div>

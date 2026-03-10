@@ -1,6 +1,6 @@
 <div class="cards-page-layout px-[32px] py-[24px]">
   <app-table-layout
-    [tableTitle]="'plans.title' | translate"
+    [tableTitle]="this.investorName() ? this.investorName() + `'s Submitted Plans` : 'plans.title' | translate"
     [tableSubTitle]="'plans.subtitle' | translate"
     pageTitleClass="text-[24px] font-semibold"
     pageSubTitleClass="text-md text-gray-600"
@@ -126,6 +126,7 @@
                 [actions]="item.actions"
                 [plan]="item"
                 (onViewDetails)="onViewDetails($event)"
+                (onViewOpportunityDetails)="onViewOpportunityDetails($event)"
                 (onEdit)="onEdit($event)"
                 (onDownload)="onDownload($event)"
                 (onViewTimeLine)="onViewTimeline($event)"

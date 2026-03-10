@@ -21,6 +21,27 @@ export class RoleManagementFilterService extends AbstractServiceFilter<IRoleMana
     };
   });
 
+  showClearAll = computed(() => {
+    const current = this.filter();
+    const hasSearch = Boolean(current.searchText?.trim());
+    const hasRoleIds = Array.isArray(current.roleIds) ? current.roleIds.length > 0 : false;
+    const hasStatuses = Array.isArray(current.statusFilters) ? current.statusFilters.length > 0 : false;
+    const hasAssignedDate = current.assignedDate?.length === 2;
+
+    return hasSearch || hasRoleIds || hasStatuses || hasAssignedDate;
+  });
+
+  activeFiltersCount = computed(() => {
+    const current = this.filter();
+
+    const searchCount = current.searchText?.trim() ? 1 : 0;
+    const roleIdsCount = Array.isArray(current.roleIds) ? current.roleIds.length : 0;
+    const statusesCount = Array.isArray(current.statusFilters) ? current.statusFilters.length : 0;
+    const assignedDateCount = current.assignedDate?.length === 2 ? 1 : 0;
+
+    return searchCount + roleIdsCount + statusesCount + assignedDateCount;
+  });
+
   performFilter$() {
     this.resetPagination();
     return this.store.getRoleManagementList(this.adaptedFilter());
