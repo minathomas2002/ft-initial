@@ -52,11 +52,11 @@
                 [options]="opportunitiesList()"
                 optionLabel="name"
                 optionValue="id"
-                [placeholder]="'opportunities'"
+                [placeholder]="'Opportunities'"
                 [loading]="isLoadingopportunitiesList()"
                 [filter]="true"
                 filterBy="name"
-                [ngModel]="filter().opportunityId"
+                [ngModel]="filter().opportunityId ?? null"
                 (ngModelChange)="onOpportunityChange($event)"
                 [showClear]="true"
                 fluid

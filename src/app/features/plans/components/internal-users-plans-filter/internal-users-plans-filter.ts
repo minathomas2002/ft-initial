@@ -212,7 +212,7 @@ export class InternalUsersPlansFilter implements OnInit {
         if (queryParams['opportunityId']) {
           updates.opportunityId = queryParams['opportunityId'];
         } else {
-          updates.opportunityId = '';
+          updates.opportunityId = null;
         }
 
           if (queryParams['investorId']) {
