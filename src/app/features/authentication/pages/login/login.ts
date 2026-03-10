@@ -67,6 +67,17 @@ export class Login implements OnInit {
             this.router.navigate(['/', ERoutes.dashboard]);
           }
         },
+        error: (error) => {
+          if (error.status === 401) {
+            this.toast.error(
+              this.i18nService.translate('auth.login.noPortalAccess')
+            );
+          } else if (error.status === 500) {
+            this.toast.error(error?.error?.message || error?.error || 'Server error');
+          } else {
+            this.toast.error('Something went wrong. Please try again.');
+          }
+        }
       });
     } else if (!environment.production && this.route.snapshot.queryParamMap.get('dev')) {
       this.isFakeDev.set(true);

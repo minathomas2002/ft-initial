@@ -4,7 +4,6 @@ import { AuthLayout } from './core/layouts/auth-layout/auth-layout';
 import { visitorsGuard } from './core/guards/visitors/visitors.guard';
 import { authGuard } from './core/guards/auth/auth.guard';
 import { adminGuard } from './core/guards/opportunities/admin.guard';
-import { secDomainAutoLoginGuard } from './core/guards/auth/sec-domain-auto-login.guard';
 const MAIN_LAYOUT_ROUTES: Routes = [
   {
     path: '',
@@ -66,7 +65,6 @@ const MAIN_LAYOUT_ROUTES: Routes = [
 export const routes: Routes = [
   {
     path: '',
-    canActivate: [secDomainAutoLoginGuard],
     children: [...MAIN_LAYOUT_ROUTES],
   },
   {

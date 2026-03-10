@@ -90,7 +90,8 @@
       "generalError": "Login failed. Please try again later.",
       "devEnvironmentTitle": "Development Environment Only (Simulate Login for SEC Employees)",
       "jobNumber": "Job Number",
-      "enterJobNumber": "Enter your job number"
+      "enterJobNumber": "Enter your job number",
+      "noPortalAccess": "You do not have access to this portal. Please contact your administrator to be added."
     },
     "verification": {
       "didntReceiveEmail": "Didn't receive the email?",
