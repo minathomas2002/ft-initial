@@ -802,16 +802,12 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
         }
         attachmentsControl.removeValidators(this.requireAtLeastOneNewAttachmentValidator);
 
-        const attachmentsValue = attachmentsControl.value;
-        const isEmpty = attachmentsValue == null ||
-          (Array.isArray(attachmentsValue) && attachmentsValue.length === 0);
+        attachmentsControl.updateValueAndValidity({ emitEvent: false });
 
-        if (shouldRequire && isEmpty) {
+        if (shouldRequire && attachmentsControl.invalid) {
           attachmentsControl.markAsDirty();
           attachmentsControl.markAsTouched();
         }
-
-        attachmentsControl.updateValueAndValidity({ emitEvent: false });
         return;
       }
 
@@ -859,9 +855,12 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
         }
       }
 
-      attachmentsControl.markAsDirty()
-      attachmentsControl.markAsTouched();
       attachmentsControl.updateValueAndValidity({ emitEvent: false });
+
+      if (shouldRequire && attachmentsControl.invalid) {
+        attachmentsControl.markAsDirty();
+        attachmentsControl.markAsTouched();
+      }
     };
 
     // Initial state
