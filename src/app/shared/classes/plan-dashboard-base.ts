@@ -48,6 +48,14 @@ export abstract class PlanDashboardBase {
   }
 
   /**
+   * Translation key for status label. Use with translate pipe for reactive language updates.
+   */
+  getStatusLabelKey(status: EInvestorPlanStatus | EInternalUserPlanStatus): string {
+    const statusService = this.planStatusFactory.handleValidateStatus();
+    return statusService.getStatusLabelKey(status as number);
+  }
+
+  /**
    * Full Tailwind CSS classes for status badge (e.g. for &lt;span&gt;).
    * Delegates to IPlanStatus.getStatusBadgeClass (TColors) and maps to CSS.
    */

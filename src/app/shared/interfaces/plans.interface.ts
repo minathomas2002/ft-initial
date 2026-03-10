@@ -349,6 +349,7 @@ export interface ITimeLineResponse {
 
 export interface IPlanStatus {
   getStatusLabel(status: number): string;
+  getStatusLabelKey(status: number): string;
   getStatusBadgeClass(status: number): TColors;
 }
 

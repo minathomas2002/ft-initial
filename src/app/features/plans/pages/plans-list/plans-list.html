@@ -94,7 +94,7 @@
             }
             <td>
               <app-base-tag
-                [value]="getStatusLabel(item.status)"
+                [value]="getStatusLabelKey(item.status) | translate"
                 [color]="getStatusBadgeColor(item.status)"
                 [maxChars]="25"
               ></app-base-tag>
