@@ -6,7 +6,7 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { AttachmentItem, IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
 import { ImageErrorDirective } from 'src/app/shared/directives/image-error.directive';
-import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-attachments-summary-section',
