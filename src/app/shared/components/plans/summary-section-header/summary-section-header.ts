@@ -1,12 +1,10 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
-import { PlanPageTitlePipe } from 'src/app/shared/pipes/plan-page-title.pipe';
 
 @Component({
   selector: 'app-summary-section-header',
-  imports: [ButtonModule, TooltipModule, TranslatePipe, PlanPageTitlePipe],
+  imports: [ButtonModule, TooltipModule],
   templateUrl: './summary-section-header.html',
   styleUrl: './summary-section-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
