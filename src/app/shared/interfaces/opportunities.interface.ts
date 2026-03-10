@@ -9,6 +9,7 @@ export interface IOpportunity {
   opportunityType: EOpportunityType,
   isApplied: boolean,
   isOtherOpportunity: boolean,
+  numberOfPlans:number;
   icon: string
 }
 export interface IOpportunityLookup {

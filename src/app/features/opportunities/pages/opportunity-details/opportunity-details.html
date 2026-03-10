@@ -21,6 +21,7 @@
           (onDelete)="onAction(EOpportunityAction.Delete)"
           (onMoveToDraft)="onAction(EOpportunityAction.MoveToDraft)"
           (onPublish)="onAction(EOpportunityAction.Publish)"
+          (onViewPlans)="onViewPlans()"
           [hasLabel]="true"
         />
         } }@else{
@@ -34,9 +35,6 @@
       </div>
 
       <div class="page-layout--title sm:w-auto">
-        @if(permissionService.canViewOpportunityAduit()){
-        <app-opportunity-audit-details [opportunityDetails]="opportunitiesStore.details()"></app-opportunity-audit-details>
-        }
         <div class="flex gap-4 items-center justify-between">
           <div class="flex gap-4 items-center">
             <h2
