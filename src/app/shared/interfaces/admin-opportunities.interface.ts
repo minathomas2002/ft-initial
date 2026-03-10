@@ -8,7 +8,7 @@ export interface IAdminOpportunity {
   shortDescription: string;
   opportunityType: EOpportunityType;
   opportunityCategory: number;
-  numberOfPlans: number;
+  numberOfPlans?: number;
   isActive: boolean;
   status: EOpportunityStatus;
   startDate: string;

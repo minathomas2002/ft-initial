@@ -81,7 +81,7 @@
 
     <app-opportunity-detail-item
       [label]="'opportunity.list.numberOfPlans' | translate"
-      [value]="opportunity().numberOfPlans.toString()"
+      [value]="opportunity().numberOfPlans?.toString() || ''"
     />
   </div>
 

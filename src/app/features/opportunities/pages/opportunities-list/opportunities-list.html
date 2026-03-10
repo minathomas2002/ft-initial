@@ -34,7 +34,7 @@
             @if(permissionService.canViewOpportunityPlansNumber()) {
               <app-opportunity-detail-item
                  [label]="'opportunity.list.numberOfPlans' | translate"
-                 [value]="item.numberOfPlans.toString()"
+                 [value]="item.numberOfPlans?.toString()"
                />
               }
               <div class="flex gap-4">
