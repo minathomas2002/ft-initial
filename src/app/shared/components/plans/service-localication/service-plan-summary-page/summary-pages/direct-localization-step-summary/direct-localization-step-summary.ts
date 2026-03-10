@@ -10,6 +10,7 @@ import { LocalizationStrategySummarySection } from './step-summary-sections/loca
 import { EntityLevelSummarySection } from '../existing-saudi-step-summary/step-summary-sections/entity-level-summary-section/entity-level-summary-section';
 import { ServiceLevelSummarySection } from '../existing-saudi-step-summary/step-summary-sections/service-level-summary-section/service-level-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
+import { TranslatePipe } from 'src/app/shared/pipes';
 import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 
@@ -21,6 +22,7 @@ import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
     EntityLevelSummarySection,
     ServiceLevelSummarySection,
     PageCommentBox,
+    TranslatePipe,
   ],
   templateUrl: './direct-localization-step-summary.html',
   styleUrl: './direct-localization-step-summary.scss',

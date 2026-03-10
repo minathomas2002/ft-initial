@@ -67,7 +67,7 @@
       @if (hasTotalCostPercentageError()) {
       <i
         class="icon-info text-red-500 text-sm bg-red-50 p-1 rounded-full font-medium"
-        pTooltip="This field has validation errors"
+        [pTooltip]="'plans.form.placeholders.validationErrorTooltip' | translate"
         tooltipPosition="top"
       ></i>
       }
@@ -85,7 +85,7 @@
   @if (shouldShowCommentBox()) {
   <app-page-comment-box
     [commentTitle]="commentForPage().title"
-    [commentText]="commentForPage().text || 'No comment found'"
+    [commentText]="commentForPage().text || ('plans.noCommentFound' | translate)"
   />
   }
   }

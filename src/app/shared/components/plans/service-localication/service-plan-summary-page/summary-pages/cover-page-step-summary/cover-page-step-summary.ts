@@ -9,6 +9,7 @@ import { SummarySectionHeader } from '../../../../summary-section-header/summary
 import { CoverPageCompanyInformationSummarySection } from './step-summary-sections/cover-page-company-information-summary-section/cover-page-company-information-summary-section';
 import { CoverPageServicesSummarySection } from './step-summary-sections/cover-page-services-summary-section/cover-page-services-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
+import { TranslatePipe } from 'src/app/shared/pipes';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { DatePipe } from '@angular/common';
@@ -21,6 +22,7 @@ import { merge } from 'rxjs';
     CoverPageCompanyInformationSummarySection,
     CoverPageServicesSummarySection,
     PageCommentBox,
+    TranslatePipe,
   ],
   templateUrl: './cover-page-step-summary.html',
   styleUrl: './cover-page-step-summary.scss',

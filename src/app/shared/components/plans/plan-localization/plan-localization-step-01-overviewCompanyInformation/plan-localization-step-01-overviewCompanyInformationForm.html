@@ -3,7 +3,7 @@
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.basicInformation' | translate }} <span><i
           class="icon-info text-sm ms-2 text-gray-400"
-          pTooltip="Supplier contact information provided here will serve as the primary contact for SEC throughout the entire BENA program."
+          [pTooltip]="'plans.form.placeholders.supplierContactTooltip' | translate"
           tooltipPosition="top"
           [tooltipStyleClass]="'min-w-[300px]'"
         ></i></span></h2>
@@ -22,7 +22,7 @@
           <input
             type="text"
             pInputText
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter your plan title'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterPlanTitle' | translate"
             [formControl]="getValueControl(basicInformationFormGroupControls['planTitle'])"
             fluid
             maxlength="150"
@@ -66,7 +66,7 @@
           [options]="availableOpportunities()"
           [formControl]="getFormControl(basicInformationFormGroupControls['opportunity'])"
           optionLabel="name"
-          [appHidePlaceholderWhenDisabledEmpty]="'Select opportunity'"
+          [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectOpportunity' | translate"
           [loading]="isLoadingAvailableOpportunities()"
           [disabled]="isOpportunityDisabled()"
           fluid
@@ -115,7 +115,7 @@
             pInputText
             fluid
             [maxlength]="100"
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter company name'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCompanyName' | translate"
             [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
             [appConditionalColorClass]="highlightInput('companyName')"
             [color]="selectedInputColor()"
@@ -143,7 +143,7 @@
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO name'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCeoName' | translate"
             [maxlength]="100"
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
             [appConditionalColorClass]="highlightInput('ceoName')"
@@ -171,7 +171,7 @@
             pInputText
             fluid
             class="ltr"
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO email ID'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCeoEmailId' | translate"
             maxlength="100"
             [appConditionalColorClass]="highlightInput('ceoEmailID')"
             [color]="selectedInputColor()"
@@ -205,7 +205,7 @@
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter global HQ location'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterGlobalHQLocation' | translate"
             [maxlength]="255"
             [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
             [appConditionalColorClass]="highlightInput('globalHQLocation')"
@@ -476,9 +476,9 @@
 @if(showDeleteConfirmationDialog()){
 <app-general-confirmation-dialog
   [(visible)]="showDeleteConfirmationDialog"
-  [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-  [confirmationLabel]="'Delete'"
-  [cancelLabel]="'Cancel'"
+  [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+  [confirmationLabel]="'common.delete' | translate"
+  [cancelLabel]="'common.cancel' | translate"
   [confirmButtonSeverity]="'danger'"
   [icon]="'icon-trash-2'"
   (confirmed)="onConfirmDeleteComment()"

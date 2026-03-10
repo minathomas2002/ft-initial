@@ -12,6 +12,7 @@ import { EntityLevelSummarySection } from './step-summary-sections/entity-level-
 import { ServiceLevelSummarySection } from './step-summary-sections/service-level-summary-section/service-level-summary-section';
 import { AttachmentsSummarySection } from '../../../../attachments-summary-section/attachments-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
+import { TranslatePipe } from 'src/app/shared/pipes';
 import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 
@@ -25,6 +26,7 @@ import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
     ServiceLevelSummarySection,
     AttachmentsSummarySection,
     PageCommentBox,
+    TranslatePipe,
   ],
   templateUrl: './existing-saudi-step-summary.html',
   styleUrl: './existing-saudi-step-summary.scss',

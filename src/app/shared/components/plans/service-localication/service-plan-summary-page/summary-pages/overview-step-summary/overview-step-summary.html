@@ -45,7 +45,7 @@
   @if (shouldShowCommentBox()) {
   <app-page-comment-box
     [commentTitle]="commentForPage().title"
-    [commentText]="commentForPage().text || 'No comment found'"
+    [commentText]="commentForPage().text || ('plans.noCommentFound' | translate)"
   />
   }
   }

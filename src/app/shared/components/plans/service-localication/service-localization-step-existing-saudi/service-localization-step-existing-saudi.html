@@ -137,7 +137,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter specify the product(s)'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterSpecifyProducts' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.products))"
               [appConditionalColorClass]="highlightInput('products', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -176,7 +176,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCompanyOverview' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverview))"
               [appConditionalColorClass]="highlightInput('companyOverview', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -216,7 +216,7 @@
               rows="3"
               fluid
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter key projects executed by contractor for SEC'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterKeyProjectsExecuted' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyProjectsExecutedByContractorForSEC))"
               [appConditionalColorClass]="highlightInput('keyProjectsExecutedByContractorForSEC', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -257,7 +257,7 @@
               fluid
               fluid
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview, key project details etc.'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCompanyOverviewKeyProject' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewKeyProjectDetails))"
               [appConditionalColorClass]="highlightInput('companyOverviewKeyProjectDetails', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -297,7 +297,7 @@
               rows="3"
               fluid
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter company overview'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCompanyOverview' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.companyOverviewOther))"
               [appConditionalColorClass]="highlightInput('companyOverviewOther', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -358,7 +358,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementType))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select agreement type with Saudi Company'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectAgreementType' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('agreementTypeWithSaudiCompany', itemControl.get('rowId')?.value)"
@@ -380,7 +380,7 @@
                 pTextarea
                 fluid
                 [maxlength]="100"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter other agreement details'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterOtherAgreementDetails' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementOtherDetails))"
                 [appConditionalColorClass]="highlightInput('agreementOtherDetails', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -421,7 +421,7 @@
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.agreementSigningDate))"
-              [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectQuarter' | translate"
               fluid
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('agreementSigningDate', itemControl.get('rowId')?.value)"
@@ -517,7 +517,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Brief summary ownership %, key responsibilities, technology / IP sharing etc.)'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.briefSummaryOwnership' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.summaryOfKeyAgreementClauses))"
               [appConditionalColorClass]="highlightInput('summaryOfKeyAgreementClauses', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"
@@ -550,7 +550,7 @@
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.provideAgreementCopy))"
-              [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
               fluid
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('provideAgreementCopy', itemControl.get('rowId')?.value)"
@@ -702,7 +702,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectQuarter' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('expectedLocalizationDate', itemControl.get('rowId')?.value)"
@@ -731,7 +731,7 @@
                 fluid
                 [min]="0"
                 inputId="integeronly"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter headcount'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterHeadcount' | translate"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_headcount'))"
                 [appConditionalColorClass]="highlightInput(yearKey + '_headcount', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -760,7 +760,7 @@
                 fluid
                 [min]="0"
                 mode="decimal"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter %'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterPercent' | translate"
                 [maxFractionDigits]="2"
                 [maxlength]="5"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_saudization'))"
@@ -791,7 +791,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill Saudis'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterKeyMeasuresUpskill' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
                 [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -877,7 +877,7 @@
     <app-base-error-messages
       [control]="getValueControl(getAttachmentsFormGroup().get(EMaterialsFormControls.attachments)!)"
       [label]="'plans.form.attachments' | translate"
-      [customRequiredMessage]="'Attachment is required when Agreement Copy is selected as Yes'"
+      [customRequiredMessage]="'plans.form.placeholders.attachmentRequiredWhenAgreementYes' | translate"
     />
   </div>
 
@@ -903,9 +903,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"

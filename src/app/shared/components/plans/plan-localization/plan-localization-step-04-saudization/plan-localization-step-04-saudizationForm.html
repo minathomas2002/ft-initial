@@ -73,9 +73,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"

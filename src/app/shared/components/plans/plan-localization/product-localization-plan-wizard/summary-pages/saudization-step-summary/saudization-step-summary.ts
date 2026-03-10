@@ -10,6 +10,7 @@ import { ProductPlanFormService } from 'src/app/shared/services/plan/product-pla
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { SaudizationSectionSummaryComponent } from './saudization-section-summary/saudization-section-summary';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
+import { TranslatePipe } from 'src/app/shared/pipes';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
 import { PlanSummaryFlied } from '../../../../plan-summary-flied/plan-summary-flied';
 import { AttachmentsSummarySection } from '../../../../attachments-summary-section/attachments-summary-section';
@@ -21,6 +22,7 @@ import { AttachmentsSummarySection } from '../../../../attachments-summary-secti
     SummarySectionHeader,
     SaudizationSectionSummaryComponent,
     PageCommentBox,
+    TranslatePipe,
   ],
   templateUrl: './saudization-step-summary.html',
   styleUrl: './saudization-step-summary.scss',

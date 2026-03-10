@@ -12,6 +12,7 @@ import { OverviewLocationInformationSummarySection } from './step-summary-sectio
 import { OverviewLocalAgentInformationSummarySection } from './step-summary-sections/overview-local-agent-information-summary-section/overview-local-agent-information-summary-section';
 import { OverviewServiceDetailsSummarySection } from './step-summary-sections/overview-service-details-summary-section/overview-service-details-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
+import { TranslatePipe } from 'src/app/shared/pipes';
 import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 
@@ -25,6 +26,7 @@ import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
     OverviewLocalAgentInformationSummarySection,
     OverviewServiceDetailsSummarySection,
     PageCommentBox,
+    TranslatePipe,
   ],
   templateUrl: './overview-step-summary.html',
   styleUrl: './overview-step-summary.scss',

@@ -18,7 +18,7 @@
             [options]="availableOpportunities()"
             [formControl]="getFormControl(basicInformationFormGroupControls['opportunity'])"
             optionLabel="name"
-            [appHidePlaceholderWhenDisabledEmpty]="'Select opportunity'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectOpportunity' | translate"
             [loading]="isLoadingAvailableOpportunities()"
             fluid
             [disabled]="isOpportunityDisabled()"
@@ -78,7 +78,7 @@
           pInputText
           fluid
           [maxlength]="100"
-          [appHidePlaceholderWhenDisabledEmpty]="'Enter company name'"
+          [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCompanyName' | translate"
           [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
         />
         <app-base-error-messages
@@ -103,7 +103,7 @@
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO name'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCeoName' | translate"
             [maxlength]="100"
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
             [appConditionalColorClass]="highlightInput('ceoName')"
@@ -131,7 +131,7 @@
             pInputText
             fluid
             class="ltr"
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO email ID'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCeoEmailId' | translate"
             maxlength="100"
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
             [appConditionalColorClass]="highlightInput('ceoEmailID')"
@@ -168,7 +168,7 @@
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter global HQ location'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterGlobalHQLocation' | translate"
             [maxlength]="255"
             [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
             [appConditionalColorClass]="highlightInput('globalHQLocation')"
@@ -225,7 +225,7 @@
           type="text"
           pInputText
           fluid
-          [appHidePlaceholderWhenDisabledEmpty]="'Enter BENA registered vendor ID'"
+          [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterBenaVendorId' | translate"
           [maxlength]="50"
           [formControl]="getValueControl(locationInformationFormGroupControls['benaRegisteredVendorID'])"
           [appConditionalColorClass]="highlightInput('benaRegisteredVendorID')"
@@ -304,7 +304,7 @@
             pTextarea
             fluid
             [maxlength]="255"
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter local agent details'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterLocalAgentDetails' | translate"
             [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentDetails'])"
             [appConditionalColorClass]="highlightInput('localAgentDetails')"
             [color]="selectedInputColor()"
@@ -339,7 +339,7 @@
               type="text"
               pInputText
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter local agent name'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterLocalAgentName' | translate"
               [maxlength]="100"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
               [appConditionalColorClass]="highlightInput('localAgentName')"
@@ -368,7 +368,7 @@
               type="text"
               pInputText
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter contact person name'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterContactPersonName' | translate"
               [maxlength]="100"
               [formControl]="
                 getValueControl(localAgentInformationFormGroupControls['contactPersonName'])
@@ -403,7 +403,7 @@
             pInputText
             fluid
             class="ltr"
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter email ID'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterEmailId' | translate"
             [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
             [appConditionalColorClass]="highlightInput('emailID')"
             [color]="selectedInputColor()"
@@ -456,7 +456,7 @@
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter Company HQ Location'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCompanyHQLocation' | translate"
             [formControl]="getValueControl(localAgentInformationFormGroupControls['companyLocation'])"
             [appConditionalColorClass]="highlightInput('companyLocation')"
             [color]="selectedInputColor()"
@@ -525,7 +525,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get('serviceType'))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('serviceType', itemControl.get('rowId')?.value)"
@@ -553,7 +553,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get('serviceCategory'))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('serviceCategory', itemControl.get('rowId')?.value)"
@@ -582,7 +582,7 @@
                 rows="3"
                 fluid
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Brief description of the service'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.briefDescriptionOfService' | translate"
                 [formControl]="getValueControl(itemControl.get('serviceDescription'))"
                 [appConditionalColorClass]="highlightInput('serviceDescription', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -614,7 +614,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get('serviceProvidedTo'))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 (onChange)="onServiceProvidedToChange($event.value, index)"
@@ -642,7 +642,7 @@
                   pTextarea
                   fluid
                   [maxlength]="255"
-                  [appHidePlaceholderWhenDisabledEmpty]="'Please mention company names'"
+                  [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.pleaseMentionCompanyNames' | translate"
                   [formControl]="getValueControl(itemControl.get('serviceProvidedToCompanyNames'))"
                   [appConditionalColorClass]="highlightInput('serviceProvidedToCompanyNames', itemControl.get('rowId')?.value)"
                   [color]="selectedInputColor()"
@@ -675,7 +675,7 @@
                 pTextarea
                 fluid
                 [maxlength]="150"
-                [appHidePlaceholderWhenDisabledEmpty]="'Company Name – Amount (Mn SAR) (From Year – To Year)'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.companyNameAmountFormat' | translate"
                 [formControl]="getValueControl(itemControl.get('totalBusinessDoneLast5Years'))"
                 [appConditionalColorClass]="highlightInput('totalBusinessDoneLast5Years', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -707,7 +707,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get('serviceTargetedForLocalization'))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 (onChange)="onServiceTargetedForLocalizationChange($event.value, index)"
@@ -736,7 +736,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get('expectedLocalizationDate'))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectQuarter' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('expectedLocalizationDate', itemControl.get('rowId')?.value)"
@@ -755,7 +755,7 @@
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get('serviceLocalizationMethodology'))"
-              [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
               fluid
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('serviceLocalizationMethodology', itemControl.get('rowId')?.value)"
@@ -793,9 +793,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"

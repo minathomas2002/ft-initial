@@ -43,7 +43,7 @@
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter product name'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterProductName' | translate"
             [maxlength]="100"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
             [appConditionalColorClass]="highlightInput('productName')"
@@ -74,7 +74,7 @@
           <textarea
             pTextarea
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter product specifications'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterProductSpecifications' | translate"
             [maxlength]="500"
             [rows]="4"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
@@ -854,9 +854,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"

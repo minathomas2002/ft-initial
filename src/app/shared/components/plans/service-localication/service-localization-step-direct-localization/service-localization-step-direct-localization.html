@@ -51,7 +51,7 @@
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-              [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectQuarter' | translate"
               fluid
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('expectedLocalizationDate', itemControl.get('rowId')?.value)"
@@ -81,7 +81,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproach))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select localization approach'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectLocalizationApproach' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('localizationApproach', itemControl.get('rowId')?.value)"
@@ -103,7 +103,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Please specify other localization approach'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.pleaseSpecifyOtherApproach' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails))"
                 [appConditionalColorClass]="highlightInput('localizationApproachOtherDetails', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -145,7 +145,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.location))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter location'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterLocation' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('location', itemControl.get('rowId')?.value)"
@@ -167,7 +167,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Kindly provide details'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.kindlyProvideDetails' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails))"
                 [appConditionalColorClass]="highlightInput('locationOtherDetails', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -203,7 +203,7 @@
           >
             <p-inputnumber
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter CAPEX amount'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCapexAmount' | translate"
               [min]="0"
               mode="decimal"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.capexRequired))"
@@ -267,7 +267,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('willBeAnyProprietaryToolsSystems', itemControl.get('rowId')?.value)"
@@ -289,7 +289,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Please provide details about the proprietary tools/systems'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.pleaseProvideProprietaryDetails' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails))"
                 [appConditionalColorClass]="highlightInput('proprietaryToolsSystemsDetails', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -455,7 +455,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceLevelLocalizationDate))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectQuarter' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('serviceLevelLocalizationDate', itemControl.get('rowId')?.value)"
@@ -484,7 +484,7 @@
                 fluid
                 [min]="0"
                 inputId="integeronly"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter headcount'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterHeadcount' | translate"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_headcount'))"
                 [appConditionalColorClass]="highlightInput(yearKey + '_headcount', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
@@ -513,7 +513,7 @@
                 fluid
                 [min]="0"
                 mode="decimal"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter %'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterPercent' | translate"
                 [maxFractionDigits]="2"
                 [maxlength]="5"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_saudization'))"
@@ -544,7 +544,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill saudis'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterKeyMeasuresUpskill' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
                 [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
@@ -577,7 +577,7 @@
                 fluid
                 rows="3"
                 [maxlength]="500"
-                [appHidePlaceholderWhenDisabledEmpty]="'Mention Support required from SEC to localize the service (if any)'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.mentionSupportRequired' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
                 [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
@@ -620,9 +620,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"
