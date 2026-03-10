@@ -13,7 +13,7 @@ export class InvestorPlanStatus implements IPlanStatus {
   getStatusLabel(status: EInvestorPlanStatus): string {
     const statusMap = {
       [EInvestorPlanStatus.SUBMITTED]: this.i18nService.translate('plans.status.submitted'),
-      [EInvestorPlanStatus.PENDING]: 'Pending with Investor',
+      [EInvestorPlanStatus.PENDING]: this.i18nService.translate('plans.status.pendingWithInvestor'),
       [EInvestorPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
       [EInvestorPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
       [EInvestorPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
