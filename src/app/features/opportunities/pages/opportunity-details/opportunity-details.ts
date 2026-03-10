@@ -234,12 +234,18 @@ export class OpportunityDetails implements OnInit, OnDestroy {
       isApplied: false,
       isOtherOpportunity: false,
       icon: '',
+      numberOfPlans:0
     });
     this.planTermsAndConditionsDialogVisibility.set(true)
     this.planStore.setWizardMode('create');
     this.planStore.setSelectedPlanId(null);
   }
 
+  onViewPlans(){
+    this.router.navigate(['/',ERoutes.plans], {
+      queryParams: { opportunityId: this.opportunityId()}
+    });
+  }
   get opportunityAttachmentBase64() {
     const attachment = this.opportunitiesStore.details()?.attachments[0];
 

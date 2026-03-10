@@ -60,7 +60,6 @@
       "yearsAgo": "{{count}}y ago"
     },
     "viewDetails": "View Details",
-    "viewDetailsHint": "This is a hint text to help user,",
     "CreatorName": "Creator Name",
     "CreationDate": "Creation  Date",
     "LastModifiedBy": "Last Modified By",
@@ -309,7 +308,8 @@
       "delete": "Delete",
       "moveToDraft": "Move to Draft",
       "publish": "Publish",
-      "apply": "Apply"
+      "apply": "Apply",
+      "viewPlans":"View Plans"
     },
     "type": {
       "service": "Service",
@@ -331,7 +331,8 @@
       "opportunityType": "Opportunity Type",
       "applicationPeriod": "Application Period",
       "viewDetails": "View Details",
-      "apply": "Apply"
+      "apply": "Apply",
+      "numberOfPlans":"Number Of Plans"
     },
     "counts": {
       "totalOpportunities": "Total Opportunities",

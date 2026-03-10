@@ -75,6 +75,9 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
   originalPlanResponse = input<IProductPlanResponse | null>(null);
+  showWarningMesageDeletedOpportunity = computed(() => {
+    return this.planStore.linkedToDeletedOpportunity();
+  });
 
   formGroup = this.planFormService.overviewCompanyInformation;
   opportunityTypes = this.adminOpportunitiesStore.opportunityTypes();
@@ -186,6 +189,16 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   opportunityControlSignal = toSignal<ISelectItem | null>(this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).valueChanges, {
     initialValue: this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).value ?? null
   });
+
+  onViewOpportunityDetails(event: MouseEvent): void {
+    if (!this.showWarningMesageDeletedOpportunity()) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.toasterService.error('Opportunity is no longer available');
+  }
 
   // Override hook method for step-specific initialization
   protected override initializeStepSpecificLogic(): void {

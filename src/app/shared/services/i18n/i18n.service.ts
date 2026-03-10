@@ -1,6 +1,7 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import { TranslateService } from './translate.service';
 import { TranslationKey } from 'src/app/core/i18n/translation-types';
+import { Router } from '@angular/router';
 
 export type SupportedLanguage = 'en' | 'ar';
 
@@ -12,6 +13,8 @@ export class I18nService {
 	public readonly currentLanguage = this._currentLanguage.asReadonly();
 
 	public readonly translations = signal<Record<string, any>>({});
+
+	private readonly router = inject(Router)
 
 	constructor(private translateService: TranslateService) {
 		// Load initial language
@@ -27,7 +30,7 @@ export class I18nService {
 	/**
 	 * Set the current language
 	 */
-	setLanguage(lang: SupportedLanguage): void {
+	setLanguage(lang: SupportedLanguage, refreshPage = true): void {
 		this._currentLanguage.set(lang);
 		// Store preference in localStorage
 		if (typeof window !== 'undefined' && window.localStorage) {
@@ -35,6 +38,16 @@ export class I18nService {
 		}
 		// Update document direction for RTL/LTR
 		this.updateDocumentDirection(lang);
+
+		if (refreshPage) {
+			this.refreshCurrentPage();
+		}
+	}
+
+	private refreshCurrentPage(): void {
+		this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+		this.router.navigated = false;
+		void this.router.navigateByUrl(this.router.url);
 	}
 
 	/**
@@ -106,7 +119,7 @@ export class I18nService {
 		if (typeof window !== 'undefined' && window.localStorage) {
 			const saved = localStorage.getItem('preferred-language') as SupportedLanguage;
 			if (saved && (saved === 'en' || saved === 'ar')) {
-				this.setLanguage(saved);
+				this.setLanguage(saved, false);
 				return;
 			}
 		}
@@ -122,7 +135,7 @@ export class I18nService {
 		// }
 
 		// Default to English
-		this.setLanguage('en');
+		this.setLanguage('en', false);
 	}
 
 	/**

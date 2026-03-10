@@ -35,6 +35,7 @@ export class OpportunityActionMenuComponent {
   onMoveToDraft = output();
   onPublish = output();
   onApply = output();
+  onViewPlans = output();
 
   isOpen = signal<boolean>(false);
   handleEventsMapper: Partial<
@@ -45,11 +46,13 @@ export class OpportunityActionMenuComponent {
       [EOpportunityAction.MoveToDraft]: this.onMoveToDraft,
       [EOpportunityAction.Publish]: this.onPublish,
       [EOpportunityAction.Apply]: this.onApply,
+      [EOpportunityAction.ViewPlans]: this.onViewPlans,
     };
 
   menuItems = computed<MenuItem[]>(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
+    console.log(this.actions());
 
     return this.opportunityActionsMapper.getActions(this.actions()).map((mItem) => {
       return {

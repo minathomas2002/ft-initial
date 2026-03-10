@@ -3,6 +3,15 @@
     <h3 class="text-md font-semibold text-gray-900">
       {{ 'plans.form.attachments' | translate }}
     </h3>
+
+    @if (shouldShowDifferenceForAttachments()) {
+    <span
+      class="inline-block h-2 w-2 rounded-full relative -top-1 mx-1 bg-success-500"
+      aria-label="Attachments changed"
+      title="Attachments changed"
+    ></span>
+    }
+
     <app-plan-summary-flied
       [isAttachment]="true"
       class="inline-block!"

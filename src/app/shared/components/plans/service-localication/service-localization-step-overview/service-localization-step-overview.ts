@@ -87,6 +87,20 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
   originalPlanResponse = input<IServiceLocalizationPlanResponse | null>(null);
+  showWarningMesageDeletedOpportunity = computed(() => {
+    return this.planStore.linkedToDeletedOpportunity()
+  });
+
+  onViewOpportunityDetails(event: MouseEvent): void {
+    if (!this.showWarningMesageDeletedOpportunity()) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.toasterService.error('Opportunity is no longer available');
+  }
+
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {

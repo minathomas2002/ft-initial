@@ -20,6 +20,7 @@ export enum EOpportunityAction {
   Publish = 4,
   Apply = 5,
   SystemReminder = 6,
+  ViewPlans = 7,
 }
 
 export enum EOpportunityQuantity {

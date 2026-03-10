@@ -11,6 +11,8 @@ import { OpportunityActionMenuComponent } from '../opportunity-action-menu/oppor
 import { TColors } from 'src/app/shared/interfaces';
 import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
+import { Router } from '@angular/router';
+import { ERoutes } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-admin-opportunity-card',
@@ -34,7 +36,7 @@ export class AdminOpportunityCard {
   onViewDetails = output<IAdminOpportunity>();
   onAction = output<{ opportunity: IAdminOpportunity; action: EOpportunityAction }>();
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
-
+  private readonly router = inject(Router);
   EOpportunityStatus = EOpportunityStatus;
   EOpportunityState = EOpportunityState;
   EOpportunityAction = EOpportunityAction;
@@ -71,6 +73,12 @@ export class AdminOpportunityCard {
 
   handleViewDetails() {
     this.onViewDetails.emit(this.opportunity());
+  }
+
+  handleViewPlans() {
+    this.router.navigate(['/',ERoutes.plans], {
+      queryParams: { opportunityId: this.opportunity().id}
+    });
   }
 }
 

@@ -78,6 +78,11 @@
       [value]="`${opportunity().startDate | localizedDate:'dd MMM yyyy'} - ${opportunity().endDate | localizedDate:'dd MMM yyyy'}`"
     />
     }
+
+    <app-opportunity-detail-item
+      [label]="'opportunity.list.numberOfPlans' | translate"
+      [value]="opportunity().numberOfPlans?.toString() || ''"
+    />
   </div>
 
   <div class="flex gap-4">
@@ -96,6 +101,7 @@
       (onDelete)="handleAction(EOpportunityAction.Delete)"
       (onMoveToDraft)="handleAction(EOpportunityAction.MoveToDraft)"
       (onPublish)="handleAction(EOpportunityAction.Publish)"
+      (onViewPlans)="handleViewPlans()"
     />
     }
     }

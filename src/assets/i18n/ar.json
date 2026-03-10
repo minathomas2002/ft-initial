@@ -60,7 +60,6 @@
       "yearsAgo": "منذ {{count}} سنة"
     },
     "viewDetails": "عرض التفاصيل",
-    "viewDetailsHint": "هذا نص تلميحي لمساعدة المستخدم,",
     "CreatorName": "اسم المُنشئ",
     "CreationDate": "تاريخ الإنشاء",
     "LastModifiedBy": "آخر تعديل بواسطة",
@@ -308,7 +307,8 @@
       "delete": "حذف",
       "moveToDraft": "نقل إلى المسودة",
       "publish": "نشر",
-      "apply": "تطبيق"
+      "apply": "تطبيق",
+      "viewPlans":"عرض الخطط"
     },
     "type": {
       "service": "خدمة",
@@ -330,7 +330,8 @@
       "opportunityType": "نوع الفرصة",
       "applicationPeriod": "فترة التقديم",
       "viewDetails": "عرض التفاصيل",
-      "apply": "تطبيق"
+      "apply": "تطبيق",
+      "numberOfPlans":"عدد الخطط"
     },
     "counts": {
       "totalOpportunities": "إجمالي الفرص",

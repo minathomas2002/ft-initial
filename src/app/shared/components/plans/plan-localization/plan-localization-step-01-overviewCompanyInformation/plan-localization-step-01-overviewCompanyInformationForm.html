@@ -72,14 +72,12 @@
           fluid
         />
         @if(opportunityControlSignal()){
-        <div class="text-sm text-[#606675]">{{`common.viewDetailsHint`|translate}}
           <a
-            class="text-primary-500"
-            style="text-decoration: underline;"
+            class="text-[#4767A5] font-normal underline mt-2 cursor-pointer"
             target="_blank"
-            [href]="`/opportunities/${opportunityControlSignal()?.id}`"
+            [attr.href]="showWarningMesageDeletedOpportunity() ? null : `/opportunities/${opportunityControlSignal()?.id}`"
+            (click)="onViewOpportunityDetails($event)"
           >{{`common.viewDetails`|translate}}</a>
-        </div>
         }
         <app-base-error-messages
           [control]="getFormControl(basicInformationFormGroupControls['opportunity'])"
