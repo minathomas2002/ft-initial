@@ -289,7 +289,7 @@
   },
   "opportunity": {
     "status": {
-      "draft": "مسودة",
+      "draft": "قيد الإعداد",
       "published": "منشور"
     },
     "state": {
@@ -520,7 +520,7 @@
     "status": {
       "active": "نشط",
       "inactive": "غير نشط",
-      "delegated": "قيد الانتظار",
+      "delegated": "مُفَوَّض",
       "all": "الكل"
     },
     "table": {
@@ -783,7 +783,7 @@
     "moveToDraft": "هل أنت متأكد من أنك تريد نقل هذه الفرصة إلى المسودة؟",
     "publishOpportunity": "هل أنت متأكد من أنك تريد نشر هذه الفرصة؟",
     "delete": "حذف",
-    "draft": "مسودة",
+    "draft": "قيد الإعداد",
     "publish": "نشر"
   },
   "plans": {
@@ -973,13 +973,13 @@
       "reset": "إعادة تعيين التصفية"
     },
     "status": {
-      "submitted": "مقدمة",
+      "submitted": "تم الإرسال",
       "pending": "قيد الانتظار",
-      "pendingWithInvestor": "معلقة مع المستثمر",
+      "pendingWithInvestor": "بانتظار المستثمر",
       "underReview": "قيد المراجعة",
-      "approved": "موافق عليها",
-      "rejected": "مرفوضة",
-      "draft": "مسودة"
+      "approved": "تمت الموافقة",
+      "rejected": "مرفوض",
+      "draft": "قيد الإعداد"
     },
     "comments": {
       "addComment": "إضافة تعليق",
@@ -1278,31 +1278,31 @@
       "validationErrorTooltip": "هذا الحقل به أخطاء في التحقق"
     },
     "options": {
-      "targetedCustomerSec": "شركة الكهرباء",
-      "targetedCustomerSecApprovedLocalSuppliers": "الموردون المحليون المعتمدون من شركة الكهرباء",
+      "targetedCustomerSec": "SEC",
+      "targetedCustomerSecApprovedLocalSuppliers": "الموردون المحليون المعتمدون من SEC",
       "inHouse": "داخلي",
-      "procured": "مشتري",
+      "procured": "مُورَّد",
       "localizationStatusYes": "نعم",
       "localizationStatusNo": "لا",
       "localizationStatusPartial": "جزئي",
-      "serviceTypeTechnical": "خدمة تقنية (أساسية)",
-      "serviceTypeNonTechnical": "خدمة غير تقنية (غير أساسية / دعم)",
-      "serviceProvidedToSec": "شركة الكهرباء",
-      "serviceProvidedToContractors": "مقاولو شركة الكهرباء المعتمدون",
-      "serviceProvidedToManufacturers": "مصنعو شركة الكهرباء المعتمدون",
+      "serviceTypeTechnical": "خدمة فنية (أساسية)",
+      "serviceTypeNonTechnical": "خدمة غير فنية (دعم / غير أساسية)",
+      "serviceProvidedToSec": "SEC",
+      "serviceProvidedToContractors": "المقاولون المعتمدون من SEC",
+      "serviceProvidedToManufacturers": "المصنعون المعتمدون من SEC",
       "serviceProvidedToOthers": "أخرى",
       "serviceCategoryA": "الفئة أ",
       "serviceCategoryB": "الفئة ب",
       "companyTypeContractor": "مقاول",
-      "companyTypeManufacturer": "الشركة المصنعة",
+      "companyTypeManufacturer": "مصنع",
       "companyTypeOther": "أخرى",
       "qualificationStatusQualified": "مؤهل",
       "qualificationStatusUnderPreQualification": "قيد التأهيل المسبق",
       "qualificationStatusNotQualified": "غير مؤهل",
       "localizationMethodologyCollaboration": "التعاون مع شركة سعودية قائمة",
-      "localizationMethodologyDirect": "التوطين المباشر من قبل الكيان الأجنبي",
-      "localizationApproachEstablishSaudiEntity": "إنشاء كيان سعودي",
-      "localizationApproachEstablishLocalBranch": "إنشاء فرع محلي للشركة الأجنبية",
+      "localizationMethodologyDirect": "التوطين المباشر بواسطة الكيان الأجنبي",
+      "localizationApproachEstablishSaudiEntity": "تأسيس كيان سعودي",
+      "localizationApproachEstablishLocalBranch": "تأسيس فرع محلي للكيان الأجنبي",
       "localizationApproachOther": "أخرى",
       "locationSaudiEntity": "كيان سعودي",
       "locationBranch": "فرع",
@@ -1346,24 +1346,24 @@
     "employee_status": {
       "pending": "قيد الانتظار",
       "underReview": "قيد المراجعة",
-      "approved": "موافق عليها",
-      "rejected": "مرفوضة",
-      "unassigned": "غير معينة",
-      "deptApproved": "موافق عليها من القسم",
-      "deptRejected": "مرفوضة من القسم",
-      "dvApproved": "موافق عليها من مدير DV",
-      "dvRejected": "مرفوضة من مدير DV",
-      "dvRejectionAcknowledged": "تم الاعتراف برفض مدير DV",
-      "employeeApproved": "موافق عليها من الموظف",
-      "employeeRejected": "مرفوضة من الموظف",
-      "assigned": "معينة",
+      "approved": "تمت الموافقة",
+      "rejected": "مرفوض",
+      "unassigned": "غير معين",
+      "deptApproved": "تمت الموافقة من الإدارة",
+      "deptRejected": "مرفوض من الإدارة",
+      "dvApproved": "تمت الموافقة من مدير القسم",
+      "dvRejected": "مرفوض من مدير القسم",
+      "dvRejectionAcknowledged": "إقرار برفض مدير القسم",
+      "employeeApproved": "تمت الموافقة من الموظف",
+      "employeeRejected": "مرفوض",
+      "assigned": "تم التعيين",
       "reassigned": "معاد تعيينها",
-      "submitted": "مقدمة",
-      "pendingOnInvestor": "معلقة على المستثمر",
-      "pendingWithInvestor": "معلقة مع المستثمر",
-      "draft": "مسودة",
-      "returnedByDV": "مرتجعة من القسم",
-      "returnedByDEPTManager": "مرتجعة من المدير"
+      "submitted": "تم الإرسال",
+      "pendingOnInvestor": "بانتظار المستثمر",
+      "pendingWithInvestor": "بانتظار المستثمر",
+      "draft": "قيد الإعداد",
+      "returnedByDV": "معاد من مدير القسم",
+      "returnedByDEPTManager": "معاد من الإدارة"
     },
     "type": {
       "services": "الخدمات",
