@@ -107,7 +107,7 @@ export class I18nService {
 	 * Interpolate parameters in translation string
 	 */
 	private interpolate(text: string, params: Record<string, any>): string {
-		return text.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+		return text.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, key) => {
 			return params[key] !== undefined ? String(params[key]) : match;
 		});
 	}
