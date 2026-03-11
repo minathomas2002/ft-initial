@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-[32px] pb-10">
+﻿<div class="flex flex-col gap-[32px] pb-10">
   <!-- Overview Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">
@@ -24,7 +24,7 @@
       <div class="flex flex-col gap-2">
         <app-base-label
           [title]="'plans.form.productName' | translate"
-          [secondaryTitle]="'(i.e. Product Targeted for Localization)'"
+          [secondaryTitle]="'plans.form.placeholders.productTargetedForLocalization' | translate"
         />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -56,7 +56,7 @@
       <div class="flex flex-col gap-2">
         <app-base-label
           [title]="'plans.form.productSpecifications' | translate"
-          [secondaryTitle]="'(incl. voltage ratings\' targeted for Localization)'"
+          [secondaryTitle]="'plans.form.placeholders.productSpecsVoltageNote' | translate"
         />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -169,7 +169,7 @@
       <div class="flex flex-col gap-2">
         <app-base-label
           [title]="'plans.form.land' | translate"
-          [secondaryTitle]="'(%)'"
+          [secondaryTitle]="'plans.form.placeholders.percentUnit' | translate"
         />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -203,7 +203,7 @@
       <div class="flex flex-col gap-2">
         <app-base-label
           [title]="'plans.form.building' | translate"
-          [secondaryTitle]="'(%)'"
+          [secondaryTitle]="'plans.form.placeholders.percentUnit' | translate"
         />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -237,7 +237,7 @@
       <div class="flex flex-col gap-2">
         <app-base-label
           [title]="'plans.form.machineryEquipment' | translate"
-          [secondaryTitle]="'(%)'"
+          [secondaryTitle]="'plans.form.placeholders.percentUnit' | translate"
         />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -496,7 +496,7 @@
               [title]="'plans.form.doYouProvideProductToSEC' | translate"
               [styleClass]="'!mb-[2px]'"
             />
-            <span class="text-sm text-gray-700 block text-xs">If “Yes” , provide the following:</span>
+            <span class="text-sm text-gray-700 block text-xs">{{ 'plans.form.placeholders.ifYesProvideFollowing' | translate }}</span>
 
             <div class="flex gap-4 min-h-[40px] mt-1">
               <label class="flex items-center gap-2 cursor-pointer">
@@ -540,7 +540,7 @@
           <div class="flex flex-col gap-2">
             <app-base-label
               [title]="'plans.form.placeholders.qualifiedPlantLocation' | translate"
-              secondaryTitle="(By SEC)"
+              [secondaryTitle]="'plans.form.placeholders.bySEC' | translate"
             />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
@@ -571,8 +571,8 @@
           <!-- Approved Vendor ID (with SEC) -->
           <div class="flex flex-col gap-2">
             <app-base-label
-              [title]="'plans.form.placeholders.approvedVendorId' | translate"
-              secondaryTitle="(with SEC)"
+[title]="'plans.form.placeholders.approvedVendorId' | translate"
+            [secondaryTitle]="'plans.form.placeholders.withSEC' | translate"
             />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
@@ -605,8 +605,8 @@
           <!-- Years of Experience (with SEC) -->
           <div class="flex flex-col gap-2">
             <app-base-label
-              [title]="'plans.form.placeholders.yearsOfExperience' | translate"
-              secondaryTitle="(with SEC)"
+[title]="'plans.form.placeholders.yearsOfExperience' | translate"
+            [secondaryTitle]="'plans.form.placeholders.withSEC' | translate"
             />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
@@ -636,7 +636,7 @@
           <div class="flex flex-col gap-2">
             <app-base-label
               [title]="'plans.form.placeholders.totalQuantitiesProvidedToSEC' | translate"
-              secondaryTitle="(2019 onwards)"
+              [secondaryTitle]="'plans.form.placeholders.year2019Onwards' | translate"
             />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"

@@ -1280,7 +1280,20 @@
         "selectAgreementType": "اختر نوع الاتفاقية مع الشركة السعودية",
         "enterOtherAgreementDetails": "أدخل تفاصيل الاتفاقية الأخرى",
         "briefSummaryOwnership": "ملخص موجز ملكية %، المسؤوليات الرئيسية، نقل التكنولوجيا / الملكية الفكرية)",
-        "attachmentRequiredWhenAgreementYes": "المرفق مطلوب عند اختيار نسخة الاتفاقية كنعم"
+        "attachmentRequiredWhenAgreementYes": "المرفق مطلوب عند اختيار نسخة الاتفاقية كنعم",
+        "supplierContactTooltip": "معلومات جهة اتصال المورد المقدمة هنا ستكون جهة الاتصال الرئيسية لشركة الكهرباء طوال برنامج BENA.",
+        "validationErrorTooltip": "هذا الحقل به أخطاء في التحقق",
+        "productTargetedForLocalization": "(أي المنتج المستهدف للتوطين)",
+        "productSpecsVoltageNote": "(بما في ذلك تصنيفات الجهد المستهدفة للتوطين)",
+        "percentUnit": "(%)",
+        "bySEC": "(بواسطة شركة الكهرباء)",
+        "withSEC": "(مع شركة الكهرباء)",
+        "year2019Onwards": "(من 2019 فصاعدًا)",
+        "addDesignEngineeringItem": "إضافة عنصر التصميم والهندسة",
+        "addSourcingItem": "إضافة عنصر التوريد",
+        "addManufacturingItem": "إضافة عنصر التصنيع",
+        "addAssemblyTestingItem": "إضافة عنصر التجميع والاختبار",
+        "addAfterSalesItem": "إضافة عنصر ما بعد البيع"
       },
       "commentYourComment": "تعليقك",
       "locationType": "نوع الموقع"
