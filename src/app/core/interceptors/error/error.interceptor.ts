@@ -11,11 +11,19 @@ import { DelegationCanceledService } from '../../../shared/services/delegation-c
 import { AuthStore } from '../../../shared/stores/auth/auth.store';
 import { DELEGATION_CANCELED_STATUS } from '../../../shared/constants/http-status.constants';
 
+const isTranslationRequest = (url: string): boolean => {
+  return url.includes('/assets/i18n/');
+};
+
 /**
  * Interceptor to handle errors from the API by display error messages in toaster.
  * It handles both success and error responses from the API.
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  if (isTranslationRequest(req.url)) {
+    return next(req);
+  }
+
   const toaster = inject(ToasterService);
   const i18n = inject(I18nService);
   const delegationCanceledService = inject(DelegationCanceledService);
