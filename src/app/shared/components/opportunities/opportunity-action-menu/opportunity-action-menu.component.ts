@@ -52,7 +52,6 @@ export class OpportunityActionMenuComponent {
   menuItems = computed<MenuItem[]>(() => {
     // Access currentLanguage to make computed reactive to language changes
     this.i18nService.currentLanguage();
-    console.log(this.actions());
 
     return this.opportunityActionsMapper.getActions(this.actions()).map((mItem) => {
       return {
