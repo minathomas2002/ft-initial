@@ -850,6 +850,8 @@
           "startDate": "Start Date",
           "endDate": "End Date",
           "numberOfDay": "Number Of Days",
+          "dayUnit": "Day",
+          "daysUnit": "Days",
           "createdBy": "Created By",
           "lastUpdated": "Last Updated",
           "createdDate": "Created Date",

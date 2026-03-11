@@ -1739,6 +1739,8 @@
           "startDate": "تاريخ البدء",
           "endDate": "تاريخ الانتهاء",
           "numberOfDay": "عدد الأيام",
+          "dayUnit": "يوم",
+          "daysUnit": "أيام",
           "createdBy": "المنشئ",
           "lastUpdated": "آخر تحديث",
           "createdDate": "تاريخ الإنشاء",
