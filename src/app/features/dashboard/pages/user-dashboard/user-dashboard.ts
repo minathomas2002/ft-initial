@@ -178,7 +178,9 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filterService().applyFilter();
+    // Initial load is handled by filter components (InternalUsersDashboardPlansFilter via
+    // listenToQueryParamChanges, InvestorDashboardPlansFilter via its ngOnInit) to avoid
+    // duplicate get-internal-dashboard-plans / get-investor-dashboard-plans API calls.
   }
 
   //#region Plan type label

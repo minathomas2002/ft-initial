@@ -52,6 +52,7 @@ export class InvestorDashboardPlansFilter implements OnInit {
   });
 
   ngOnInit() {
+    this.filterService.applyFilterWithPaging();
     this.listenToSearchChanges();
   }
 
