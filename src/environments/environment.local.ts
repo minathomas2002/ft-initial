@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  baseUrl: 'http://192.168.50.198:8053/api',
+  baseUrl: 'https://localhost:7026/api',
   apiVersion: 'v1',
   appName: 'Benaa',
   enableDebug: true,
