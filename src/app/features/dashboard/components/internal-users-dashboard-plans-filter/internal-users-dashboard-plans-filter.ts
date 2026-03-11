@@ -40,6 +40,7 @@ interface IDropdownOption {
 export class InternalUsersDashboardPlansFilter implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly searchSubject = new Subject<string>();
+  readonly maxSubmissionDate = new Date();
   readonly filterService = inject(InternalUsersDashboardPlansFilterService);
   private readonly i18nService = inject(I18nService);
   private readonly route = inject(ActivatedRoute);

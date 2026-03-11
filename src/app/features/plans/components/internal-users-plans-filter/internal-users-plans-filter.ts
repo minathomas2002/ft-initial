@@ -40,6 +40,7 @@ interface IAssigneeOption {
 export class InternalUsersPlansFilter implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly searchSubject = new Subject<string>();
+  readonly maxSubmissionDate = new Date();
   readonly filterService = inject(InternalUsersPlansFilterService);
   private readonly i18nService = inject(I18nService);
   private readonly planStore = inject(PlanStore);
