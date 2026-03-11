@@ -15,7 +15,10 @@
         [(filter)]="filter"
         (filterChange)="filterService.applyFilterWithPaging()"
       >
-        <ng-template #itemsTemplate let-item="item">
+        <ng-template
+          #itemsTemplate
+          let-item="item"
+        >
           <app-opportunity-card
             item
             icon="{{ getOpportunityIcon(item) }}"
@@ -23,19 +26,19 @@
             [cardDescription]="item.shortDescription"
             [cardClass]="isAnonymous() ? 'bg-gray-50' : 'bg-white'"
           >
-          <ng-container ngProjectAs="opportunity-card-chip">
-            @let opportunityTypeConfig = getOpportunityTypeConfig(item.opportunityType);
-            <app-base-tag
-            [color]="opportunityTypeConfig.color"
-            [value]="opportunityTypeConfig.label | translate"
-            />
-          </ng-container>
-          <ng-container ngProjectAs="opportunity-card-actions">
-            @if(permissionService.canViewOpportunityPlansNumber()) {
+            <ng-container ngProjectAs="opportunity-card-chip">
+              @let opportunityTypeConfig = getOpportunityTypeConfig(item.opportunityType);
+              <app-base-tag
+                [color]="opportunityTypeConfig.color"
+                [value]="opportunityTypeConfig.label | translate"
+              />
+            </ng-container>
+            <ng-container ngProjectAs="opportunity-card-actions">
+              @if(permissionService.canViewOpportunityPlansNumber()) {
               <app-opportunity-detail-item
-                 [label]="'opportunity.list.numberOfPlans' | translate"
-                 [value]="item.numberOfPlans?.toString()"
-               />
+                [label]="'opportunity.list.numberOfPlans' | translate"
+                [value]="item.numberOfPlans?.toString()"
+              />
               }
               <div class="flex gap-4">
                 @if(item.numberOfPlans > 0 && permissionService.canViewOpportunityPlansNumber()) {
@@ -50,13 +53,13 @@
                 @if(!item.isOtherOpportunity) {
                 <p-button
                   [label]="'opportunity.list.viewDetails' | translate"
-                  [severity]="isAnonymous()?'secondary':'primary'"
+                  [severity]="'secondary'"
                   class="flex-1"
                   fluid
                   (onClick)="onViewDetails(item)"
                 />
                 }
-                 @if(permissionService.canApplyOnOpportunityCard() || isAnonymous()) {
+                @if(permissionService.canApplyOnOpportunityCard() || isAnonymous()) {
                 <p-button
                   [label]="'opportunity.list.apply' | translate"
                   severity="primary"
@@ -90,7 +93,13 @@
 }
 
 @if(productLocalizationPlanWizardVisibility()){
-<app-product-localization-plan-wizard [(visibility)]="productLocalizationPlanWizardVisibility" (doRefresh)="applyFilter()" />
+<app-product-localization-plan-wizard
+  [(visibility)]="productLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()"
+/>
 } @if (serviceLocalizationPlanWizardVisibility()) {
-<app-service-localization-plan-wizard [(visibility)]="serviceLocalizationPlanWizardVisibility" (doRefresh)="applyFilter()" />
+<app-service-localization-plan-wizard
+  [(visibility)]="serviceLocalizationPlanWizardVisibility"
+  (doRefresh)="applyFilter()"
+/>
 }
