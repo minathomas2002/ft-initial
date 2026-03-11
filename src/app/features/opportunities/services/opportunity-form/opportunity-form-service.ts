@@ -100,6 +100,7 @@ export class OpportunityFormService {
           globalSuppliers: [null, [Validators.min(0), Validators.max(1000000000)]],
         startDate: [null, [Validators.required, this.startDateRestrictionValidator]],
         endDate: [null, [Validators.required, this.endDateAfterStartDateValidator, this.endDateRestrictionValidator]],
+        imageIbmIdentifier: [null],
         image: [null, Validators.required],
       }, { validators: [this.quantityRangeValidator, this.quantityUnitRequiredValidator] }),
       opportunityLocalization: this.fb.group({
@@ -317,8 +318,8 @@ export class OpportunityFormService {
     }
   }
 
-  updateImageField(image: File | null) {
-    this.opportunityInformationForm.patchValue({ image });
+  updateImageField(image: File | null,imageIbmIdentifier?:string|null) {
+    this.opportunityInformationForm.patchValue({ image ,imageIbmIdentifier});
     this.opportunityInformationForm.get('image')?.markAsDirty();
   }
 
@@ -377,10 +378,12 @@ export class OpportunityFormService {
 
     // Get image from attachments (first attachment if available) and convert to File
     let image: File | null = null;
+    let imageIbmIdentifier: string | null = null;
     if (value.attachments && value.attachments.length > 0) {
       var attachment = value.attachments[0];
       const fileUrl = `data:${attachment?.ibmFileBase64?.fileBase64MimeType};base64,${attachment?.ibmFileBase64?.fileBase64}`;
       const fileName = attachment.fileName || 'image';
+      imageIbmIdentifier = attachment.ibmIdentifier;
       image = await this.createFileFromUrl(fileUrl, fileName);
     }
 
@@ -407,6 +410,7 @@ export class OpportunityFormService {
       startDate: normalizedStartDate,
       endDate: normalizedEndDate,
       image: image,
+      imageIbmIdentifier:imageIbmIdentifier
     });
 
     // If the current start date is already in the past, lock it (edit mode).
