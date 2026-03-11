@@ -55,6 +55,10 @@ export class TruncateTooltipDirective {
       const element = this.el.nativeElement;
       const useHeight = this.useHeightTruncation();
       const maxHeightVal = this.maxHeight();
+      const textAlign = this.getTextAlignByLanguage(this.value());
+
+      // Keep rendered text aligned by content language
+      this.renderer.setStyle(element, 'textAlign', textAlign);
 
       // Reset height truncation state when not using it
       if (!useHeight) {
@@ -125,10 +129,12 @@ export class TruncateTooltipDirective {
   private setupTooltip(): void {
     const element = this.el.nativeElement;
     const value = this.value();
+    const textAlign = this.getTextAlignByLanguage(value);
 
     // If tooltip already exists, just update its text
     if (this.tooltipElement) {
       this.renderer.setProperty(this.tooltipElement.querySelector('.p-tooltip-text'), 'textContent', value);
+      this.renderer.setStyle(this.tooltipElement.querySelector('.p-tooltip-text'), 'textAlign', textAlign);
       return;
     }
 
@@ -140,6 +146,7 @@ export class TruncateTooltipDirective {
 
     const tooltipText = this.renderer.createElement('div');
     this.renderer.addClass(tooltipText, 'p-tooltip-text');
+    this.renderer.setStyle(tooltipText, 'textAlign', textAlign);
     this.renderer.setProperty(tooltipText, 'textContent', value);
     this.renderer.appendChild(this.tooltipElement, tooltipText);
 
@@ -223,5 +230,16 @@ export class TruncateTooltipDirective {
     if (timeout !== null) {
       clearTimeout(timeout);
     }
+  }
+
+  private getTextAlignByLanguage(value: string): 'right' | 'left' {
+    const rtlRegex = /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\u0700-\u074F\u0780-\u07BF\uFB1D-\uFB4F\uFB50-\uFDFF\uFE70-\uFEFF]/g;
+    const ltrRegex = /[A-Za-z\u00C0-\u024F]/g;
+
+    const rtlCount = (value.match(rtlRegex) || []).length;
+    const ltrCount = (value.match(ltrRegex) || []).length;
+
+    if (rtlCount === 0 && ltrCount === 0) return 'left'; // numbers/symbols only → default
+    return rtlCount >= ltrCount ? 'right' : 'left';
   }
 }
