@@ -214,8 +214,8 @@ export class OpportunityFormService {
       // Merge errors instead of overwriting
       const minErrors = minQuantityControl?.errors || {};
       const maxErrors = maxQuantityControl?.errors || {};
-      minQuantityControl?.setErrors({ ...minErrors, minQuantityError: { message: 'Min quantity must be less than max quantity' } });
-      maxQuantityControl?.setErrors({ ...maxErrors, maxQuantityError: { message: 'Max quantity must be greater than min quantity' } });
+      minQuantityControl?.setErrors({ ...minErrors, minQuantityError: true });
+      maxQuantityControl?.setErrors({ ...maxErrors, maxQuantityError: true });
       return { quantityRange: true };
     }
 

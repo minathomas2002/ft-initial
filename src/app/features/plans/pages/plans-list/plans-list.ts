@@ -128,7 +128,7 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     if (this.isInternalUser()) {
       baseHeaders.push({
         label: this.i18nService.translate('plans.table.slaCountdown'),
-        isSortable: true,
+        isSortable: false,
         sortingKey: 'slaCountDown'
       });
     }

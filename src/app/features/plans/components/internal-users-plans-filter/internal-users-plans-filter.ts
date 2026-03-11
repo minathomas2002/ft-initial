@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
 import { ActivatedRoute } from '@angular/router';
-import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, forkJoin, Subject, switchMap } from 'rxjs';
 import { EOpportunityType, ERoles, ESortingOrder } from 'src/app/shared/enums';
 import { EInternalUserPlanStatus, IAssignee, IOpportunitiesFilterRequest, IPlanFilter, ISelectItem } from 'src/app/shared/interfaces';
 import { TranslatePipe } from 'src/app/shared/pipes';
@@ -127,53 +127,46 @@ export class InternalUsersPlansFilter implements OnInit {
 
   ngOnInit() {
     this.route.queryParams
-    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params=>{
-      this.investorId.set(params['investorId']);
-    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(params => {
+        this.investorId.set(params['investorId']);
+      });
 
-    this.loadOpportunityLookup();
-    this.loadAssignees();
+    this.initializeFilterAndLoadData();
     this.listenToSearchChanges();
   }
 
-  private loadOpportunityLookup() {
-    let req :IOpportunitiesFilterRequest ={
-      pageNumber :1,
-      pageSize:10000,
-      sortOrder:ESortingOrder.asc,
-      sortField:'id'
-    }
-    this.opportunitiesStore.getOpportunitiesLookup(req)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.listenToQueryParamChanges();
-        },
-        error: (error) => {
-          console.error('Error loading assignees:', error);
-        }
-      });
-  }
+  private initializeFilterAndLoadData() {
+    const opportunitiesReq: IOpportunitiesFilterRequest = {
+      pageNumber: 1,
+      pageSize: 10000,
+      sortOrder: ESortingOrder.asc,
+      sortField: 'id',
+    };
 
-  private loadAssignees() {
     this.isLoadingAssignees.set(true);
-    this.planApiService.getPlanAssignees()
+    forkJoin({
+      opportunities: this.opportunitiesStore.getOpportunitiesLookup(opportunitiesReq),
+      assignees: this.planApiService.getPlanAssignees(),
+    })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response) => {
-          this.assignees.set(response.body.map(assignee => ({
-            id: assignee.id,
-            name_Ar: assignee.name,
-            name_En: assignee.name,
-            userId: assignee.id,
-          })));
+        next: ({ assignees }) => {
+          this.assignees.set(
+            assignees.body.map(assignee => ({
+              id: assignee.id,
+              name_Ar: assignee.name,
+              name_En: assignee.name,
+              userId: assignee.id,
+            }))
+          );
           this.isLoadingAssignees.set(false);
           this.listenToQueryParamChanges();
         },
         error: (error) => {
-          console.error('Error loading assignees:', error);
+          console.error('Error loading filter data:', error);
           this.isLoadingAssignees.set(false);
-        }
+        },
       });
   }
 

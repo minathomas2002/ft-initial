@@ -1,16 +1,15 @@
 import type { HttpInterceptorFn } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, Injector } from '@angular/core';
 import { catchError, switchMap, throwError, Observable, shareReplay, tap, finalize } from 'rxjs';
 import { AuthApiService } from '../../../shared/api/auth/auth-api-service';
 import { AuthStore } from '../../../shared/stores/auth/auth.store';
 import { IAuthData, IRefreshTokenRequest, IBaseApiResponse } from '../../../shared/interfaces';
 import { API_ENDPOINTS } from '../../../shared/api/api-endpoints';
 import { LocalStorage } from 'src/app/shared/services/local-storage/local-storage';
-import { ERoutes } from 'src/app/shared/enums';
+import { JwtService } from 'src/app/shared/services/auth/jwt-service';
+import { EImpersonationStatus, ERoutes } from 'src/app/shared/enums';
 import { Router } from '@angular/router';
-
-const AUTH_STORAGE_KEY = 'auth_data';
 
 // Shared refresh token observable to prevent multiple refresh calls
 let refreshTokenInProgress: Observable<IBaseApiResponse<IAuthData>> | null = null;
@@ -36,10 +35,11 @@ const isLoginEndpoint = (url: string): boolean => {
 };
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const injector = inject(Injector);
   const authApiService = inject(AuthApiService);
-  const authStore = inject(AuthStore);
   const router = inject(Router);
   const localStorage = inject(LocalStorage);
+  const jwtService = inject(JwtService);
 
   const authData = localStorage.getAuthData();
   let clonedRequest = req;
@@ -54,11 +54,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       // Don't try to refresh token if the request is to the refresh token endpoint itself
       if (error.status === 401 && authData && !isRefreshTokenEndpoint(req.url)) {
-        // Token expired, try to refresh
+        // Decode JWT to get isImpersonating without injecting AuthStore (avoids circular dependency)
+        const jwtDetails = jwtService.decodeJwt(authData.token);
+        const isImpersonating = jwtDetails?.ImpersonationStatus === EImpersonationStatus.DELEGATEE;
+
         const refreshRequest: IRefreshTokenRequest = {
           accessToken: authData.token,
           refreshToken: authData.refreshToken,
-          isImpersonating: authStore.isImpersonating(),
+          isImpersonating: isImpersonating ?? false,
         };
 
         // If refresh is already in progress, reuse that observable
@@ -67,7 +70,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             shareReplay(1), // Share the result with all subscribers
             tap((response) => {
               if (response.success && response.body) {
-                // Save new tokens to storage
+                // Lazy-inject AuthStore only when needed (after app bootstrap, breaks circular dependency)
+                const authStore = injector.get(AuthStore);
                 authStore.updateAuthDataInStorage(response);
               }
             }),
@@ -97,9 +101,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             return throwError(() => error);
           }),
           catchError((refreshError) => {
-            // Refresh failed, return error
+            // Refresh failed, return error - lazy-inject AuthStore for logout
+            const authStore = injector.get(AuthStore);
             authStore.logout();
-            router.navigate(['/', ERoutes.auth, ERoutes.login])
+            router.navigate(['/', ERoutes.auth, ERoutes.login]);
             return throwError(() => refreshError);
           })
         );

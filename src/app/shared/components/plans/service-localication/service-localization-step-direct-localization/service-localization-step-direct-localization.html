@@ -233,7 +233,7 @@
               fluid
               rows="3"
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'E.g., MoEn, PIF, etc.'"
+              [appHidePlaceholderWhenDisabledEmpty]="'common.placeholder.exampleEntities' | translate"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity))"
               [appConditionalColorClass]="highlightInput('supervisionOversightByGovernmentEntity', itemControl.get('rowId')?.value)"
               [color]="selectedInputColor()"

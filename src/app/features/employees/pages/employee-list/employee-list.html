@@ -27,10 +27,14 @@
 
           <!-- Employee photo -->
           <td>
-              <div class="flex items-center gap-3">
-                <p-avatar [image]="item.photo || 'assets/images/user_placeholder.svg'" shape="circle" size="normal"
-                  class="!w-[32px] !h-[32px] flex-shrink-0" />
-              </div>
+            <div class="flex items-center gap-3">
+              <p-avatar
+                [image]="item.photo || 'assets/images/user_placeholder.svg'"
+                shape="circle"
+                size="normal"
+                class="!w-[32px] !h-[32px] flex-shrink-0"
+              />
+            </div>
           </td>
 
           <!-- Employee arabic name -->
@@ -61,7 +65,7 @@
           <td>
             {{ getUserTranslatedRole(item.roleCode, item.role) }}
           </td>
-         
+
           <!-- Join Date -->
           <td>
             {{ item.joinDate | localizedDate : 'dd MMM yyyy' }}

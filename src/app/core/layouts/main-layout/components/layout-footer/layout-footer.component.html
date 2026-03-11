@@ -1,17 +1,17 @@
 <div class="flex justify-between items-center py-[16px] px-[32px]">
-  <p class="text-gray-600 flex-1">{{ footerMessage() }}</p>
-  <div class="flex">
+  <p class="text-gray-600 flex-1 text-start">{{ footerMessage() }}</p>
+  <div class="flex gap-4">
     <a
       [routerLink]="['/terms']"
-      class="text-gray-600 mr-4"
+      class="text-gray-600"
     >{{ footerTerms() }}</a>
     <a
       [routerLink]="['/privacy']"
-      class="text-gray-600 mr-4"
+      class="text-gray-600"
     >{{ footerPrivacy() }}</a>
     <a
       [routerLink]="['/cookie']"
-      class="text-gray-600 mr-4"
+      class="text-gray-600"
     >{{ footerCookie() }}</a>
   </div>
 </div>

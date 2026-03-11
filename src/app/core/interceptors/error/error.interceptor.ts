@@ -8,11 +8,21 @@ import { of, throwError } from 'rxjs';
 import { ToasterService } from '../../../shared/services/toaster/toaster.service';
 import { I18nService } from '../../../shared/services/i18n/i18n.service';
 import { DelegationCanceledService } from '../../../shared/services/delegation-canceled/delegation-canceled.service';
-import { AuthStore } from '../../../shared/stores/auth/auth.store';
+import { LocalStorage } from '../../../shared/services/local-storage/local-storage';
+import { JwtService } from '../../../shared/services/auth/jwt-service';
+import { EImpersonationStatus } from '../../../shared/enums';
 import { DELEGATION_CANCELED_STATUS } from '../../../shared/constants/http-status.constants';
 
 const isTranslationRequest = (url: string): boolean => {
   return url.includes('/assets/i18n/');
+};
+
+/** Get isImpersonating from JWT without injecting AuthStore (avoids circular dependency) */
+const getIsImpersonating = (localStorage: LocalStorage, jwtService: JwtService): boolean => {
+  const authData = localStorage.getAuthData();
+  if (!authData?.token) return false;
+  const jwtDetails = jwtService.decodeJwt(authData.token);
+  return jwtDetails?.ImpersonationStatus === EImpersonationStatus.DELEGATEE;
 };
 
 /**
@@ -27,7 +37,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toaster = inject(ToasterService);
   const i18n = inject(I18nService);
   const delegationCanceledService = inject(DelegationCanceledService);
-  const authStore = inject(AuthStore);
+  const localStorage = inject(LocalStorage);
+  const jwtService = inject(JwtService);
 
   return next(req).pipe(
     switchMap((response) => {
@@ -36,7 +47,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (apiBody?.success === false) {
         if (
           apiBody?.statusCode === DELEGATION_CANCELED_STATUS &&
-          authStore.isImpersonating()
+          getIsImpersonating(localStorage, jwtService)
         ) {
           delegationCanceledService.show();
           return throwError(() => apiBody);
@@ -60,11 +71,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (
         (status === DELEGATION_CANCELED_STATUS ||
           errorBodyTyped?.statusCode === DELEGATION_CANCELED_STATUS) &&
-        authStore.isImpersonating()
+        getIsImpersonating(localStorage, jwtService)
       ) {
         delegationCanceledService.show();
       }
-      else if (errorBodyTyped?.statusCode === DELEGATION_CANCELED_STATUS && !authStore.isImpersonating()) {
+      else if (errorBodyTyped?.statusCode === DELEGATION_CANCELED_STATUS && !getIsImpersonating(localStorage, jwtService)) {
         toaster.error(errorBodyTyped.message ?? '');
       }
       else if (errorBodyTyped?.success === false) {

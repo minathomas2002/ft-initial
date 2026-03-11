@@ -102,7 +102,9 @@ export class AdminHolidaysManagementView implements OnInit {
   }
 
   getNumberOfDaysNoun(numberInDays: number): string {
-    return numberInDays > 1 ? 'Days' : 'Day';
+    return numberInDays > 1
+      ? this.i18nService.translate('setting.adminView.holidays.table.daysUnit')
+      : this.i18nService.translate('setting.adminView.holidays.table.dayUnit');
   }
 
   onSuccessActions() {

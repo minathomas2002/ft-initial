@@ -202,7 +202,7 @@
             inputmode="numeric"
             pattern="[0-9]*"
             maxlength="7"
-            [appHidePlaceholderWhenDisabledEmpty]="isReviewMode() ? '' : ('plans.form.enterRegisteredVendorIDWithSEC' | translate)"
+            [appHidePlaceholderWhenDisabledEmpty]="isReviewMode() ? '' : ('plans.form.placeholders.enterRegisteredVendorIDWithSEC' | translate)"
             (input)="onRegisteredVendorIDWithSecInput($event)"
             [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
@@ -239,10 +239,10 @@
       <div class="flex flex-col gap-2 flex-1">
         <div>
           <h4 class="text-sm font-medium text-gray-900">
-            Do you currently have local Agent in KSA?
+            {{ 'plans.form.hasLocalAgentInKSA' | translate }}
           </h4>
           <p class="text-sm text-gray-600">
-            If “Yes”, mention the following details of Local Agent -
+            {{ 'plans.form.ifYesMentionLocalAgentDetails' | translate }} -
           </p>
         </div>
         <div class="flex gap-2">
@@ -258,7 +258,7 @@
               inputId="doYouCurrentlyHaveLocalAgentInKSAYes"
               size="small"
             />
-            <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.yes' | translate }}</span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer">
             <p-radiobutton
@@ -272,7 +272,7 @@
               inputId="doYouCurrentlyHaveLocalAgentInKSANo"
               size="small"
             />
-            <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.no' | translate }}</span>
           </label>
         </div>
         <app-base-error-messages
@@ -497,7 +497,7 @@
               type="text"
               pInputText
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.serviceName' | translate"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterServiceName' | translate"
               [formControl]="getValueControl(itemControl.get('serviceName'))"
               readonly
               class="text-gray-400"
