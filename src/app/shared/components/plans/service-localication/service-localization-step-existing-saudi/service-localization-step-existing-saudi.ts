@@ -25,10 +25,13 @@ import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-
 import { FormsModule } from '@angular/forms';
 import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     FormArrayInput,
     InputTextModule,
@@ -57,6 +60,11 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
 
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
+  private readonly i18n = inject(I18nService);
+
+  getTranslatedLabel(key: string, year: string | number): string {
+    return this.i18n.translate(key, { year: String(year) });
+  }
 
   pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
@@ -121,15 +129,25 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
     return false;
   });
 
+  collaborationPartnershipHeaderLabels = computed<Record<string, string>>(() => ({
+    supervisionOversightEntity: this.i18n.translate('plans.form.supervisionOversightByGovernmentEntity'),
+    [EMaterialsFormControls.whyChoseThisCompany]: this.i18n.translate('plans.form.whyChoseThisSaudiCompany'),
+  }));
+
+  collaborationPartnershipHeaderTooltips = computed<Record<string, string>>(() => ({
+    supervisionOversightEntity: this.i18n.translate('plans.form.tooltipSupervisionOversight'),
+    provideAgreementCopy: this.i18n.translate('plans.form.tooltipProvideAgreementCopy'),
+  }));
+
   saudiCompanyDetailsHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
       [EMaterialsFormControls.products]: 'If the Company Type is “Manufacturer” and Qualification Status is “Qualified / Under-Prequalification” Specify the products(s)',
       [EMaterialsFormControls.companyOverview]: 'If the Company Type is “Manufacturer” and Qualification Status is “Not Qualified” provide Company Overview',
-      [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: 'If Company Type is Contractor, Mention few key projects executed by the Contractor for SEC',
-      [EMaterialsFormControls.companyOverviewKeyProjectDetails]: 'If Company Type is Contractor, and no projects executed for SEC, provide company overview, key project details etc.',
-      [EMaterialsFormControls.companyOverviewOther]: 'If Company Type is Other Provide company overview',
+      [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: this.i18n.translate('plans.form.tooltipKeyProjectsContractor'),
+      [EMaterialsFormControls.companyOverviewKeyProjectDetails]: this.i18n.translate('plans.form.tooltipCompanyOverviewKeyProject'),
+      [EMaterialsFormControls.companyOverviewOther]: this.i18n.translate('plans.form.tooltipCompanyOverviewOther'),
       [EMaterialsFormControls.qualificationStatus]: 'If the Company Type is “Manufacturer” select “Qualification Status”',
-      [EMaterialsFormControls.supervisionOversightEntity]: 'Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.)',
+      [EMaterialsFormControls.supervisionOversightEntity]: this.i18n.translate('plans.form.tooltipSupervisionOversight'),
     };
   });
 
@@ -143,10 +161,10 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
   EServiceQualificationStatus = EServiceQualificationStatus;
   EYesNo = EYesNo;
 
-  companyTypeOptions = this.planStore.companyTypeOptions;
-  qualificationStatusOptions = this.planStore.qualificationStatusOptions;
-  yesNoOptions = this.planStore.yesNoOptions;
-  agreementTypeOptions = this.planStore.agreementTypeOptions;
+  companyTypeOptions = this.planStore.companyTypeOptionsTranslated;
+  qualificationStatusOptions = this.planStore.qualificationStatusOptionsTranslated;
+  yesNoOptions = this.planStore.yesNoOptionsTranslated;
+  agreementTypeOptions = this.planStore.agreementTypeOptionsTranslated;
 
   isSaudiCompanyDetailsFieldSelectable(
     itemControl: AbstractControl,
@@ -211,18 +229,21 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
   yearColumns = computed(() => this.planFormService?.upcomingYears(6));
 
   // Custom header labels for Saudi Company Details table to ensure correct order
-  saudiCompanyDetailsHeaderLabels: Record<string, string> = {
-    [EMaterialsFormControls.saudiCompanyName]: 'Saudi Company Name',
-    [EMaterialsFormControls.registeredVendorIDwithSEC]: 'Vendor ID With SEC',
-    [EMaterialsFormControls.benaRegisteredVendorID]: 'Bena Register Vendor ID',
-    [EMaterialsFormControls.companyType]: 'Company Type',
-    [EMaterialsFormControls.qualificationStatus]: 'Qualification Status With SEC',
-    [EMaterialsFormControls.products]: 'Products',
-    [EMaterialsFormControls.companyOverview]: 'Company Overview',
-    [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: 'Key Projects Executed By Contractor For SEC',
-    [EMaterialsFormControls.companyOverviewKeyProjectDetails]: 'Company Overview Key Project Details',
-    [EMaterialsFormControls.companyOverviewOther]: 'Company Overview Other',
-  };
+  saudiCompanyDetailsHeaderLabels = computed<Record<string, string>>(() => {
+    this.i18n.currentLanguage();
+    return {
+      [EMaterialsFormControls.saudiCompanyName]: this.i18n.translate('plans.form.saudiCompanyName'),
+      [EMaterialsFormControls.registeredVendorIDwithSEC]: this.i18n.translate('plans.form.vendorIdWithSEC'),
+      [EMaterialsFormControls.benaRegisteredVendorID]: this.i18n.translate('plans.form.benaVendorId'),
+      [EMaterialsFormControls.companyType]: this.i18n.translate('plans.form.companyType'),
+      [EMaterialsFormControls.qualificationStatus]: this.i18n.translate('plans.form.qualificationStatusWithSEC'),
+      [EMaterialsFormControls.products]: this.i18n.translate('plans.form.products'),
+      [EMaterialsFormControls.companyOverview]: this.i18n.translate('plans.form.companyOverview'),
+      [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: this.i18n.translate('plans.form.keyProjectsExecutedByContractorForSEC'),
+      [EMaterialsFormControls.companyOverviewKeyProjectDetails]: this.i18n.translate('plans.form.companyOverviewKeyProjectDetails'),
+      [EMaterialsFormControls.companyOverviewOther]: this.i18n.translate('plans.form.companyOverviewOther'),
+    };
+  });
 
   yearControlKeys = [
     EMaterialsFormControls.firstYear,
@@ -238,17 +259,19 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
     const years = this.yearColumns();
     return [
       {
-        label: 'Expected Annual Headcount',
+        label: this.i18n.translate('plans.form.expectedAnnualHeadcount'),
+        labelKey: 'plans.form.expectedAnnualHeadcount',
         controlKey: 'headcount',
-        placeholder: 'Enter headcount',
+        placeholder: this.i18n.translate('plans.form.enterHeadcount'),
         mode: undefined,
         minFractionDigits: 0,
         maxFractionDigits: 0,
       },
       {
-        label: 'Expected Saudization (%)',
+        label: this.i18n.translate('plans.form.expectedSaudizationPercent'),
+        labelKey: 'plans.form.expectedSaudizationPercent',
         controlKey: 'saudization',
-        placeholder: 'Enter %',
+        placeholder: this.i18n.translate('plans.form.enterPercent'),
         mode: 'decimal' as const,
         minFractionDigits: 0,
         maxFractionDigits: 2,
@@ -273,14 +296,13 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
   // Grouped header cell for Service Level years
   serviceLevelGroupHeader = computed(() => {
     const yearCols = this.yearControlKeys.length;
-    // Structure: first two columns (Service name + Expected Localization Date), then yearCols headcount, then yearCols saudization, then two columns (Key Measures, Support)
     return [
-      { label: 'Service Name', rowspan: 2, dataGroup: false },
-      { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
-      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
-      { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
-      { label: 'Key measures to upskill Saudis', rowspan: 2, dataGroup: false },
-      { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.serviceName'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.expectedLocalizationDate'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.expectedAnnualHeadcountKSA'), colspan: yearCols, dataGroup: true },
+      { label: this.i18n.translate('plans.form.mentionYoySaudizationKSAUptoYear', { year: this.yearColumns()[5] }), colspan: yearCols, dataGroup: true },
+      { label: this.i18n.translate('plans.form.keyMeasuresToUpskillSaudis'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.supportRequiredFromSEC') + ' (if any)', rowspan: 2, dataGroup: false },
     ];
   });
 

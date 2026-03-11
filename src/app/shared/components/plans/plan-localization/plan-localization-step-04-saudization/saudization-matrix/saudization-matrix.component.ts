@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
@@ -30,6 +31,7 @@ interface TableRow {
   selector: 'app-saudization-matrix',
   imports: [
     CommonModule,
+    TranslatePipe,
     ReactiveFormsModule,
     BaseErrorMessages,
     GroupInputWithCheckbox,
@@ -62,20 +64,20 @@ export class SaudizationMatrixComponent {
   /** Year keys for table columns – single source of truth for comment field matching (yearKey + id) */
   readonly years: string[] = [...SAUDIZATION_YEAR_KEYS];
 
-  // Table rows configuration
+  // Table rows configuration - label uses translation keys for timeline display
   readonly tableRows: TableRow[] = [
     {
-      label: 'Annual Headcount (#)',
+      label: 'plans.summary.saudization.annualHeadcount',
       controlName: EMaterialsFormControls.annualHeadcount,
-      placeholder: 'Enter number',
+      placeholder: 'common.placeholder.enterNumber',
       min: 0,
       alignBaseline: false,
     },
     {
-      label: 'Saudization %',
-      subtitle: '(No. of Saudi employees / Total employees)',
+      label: 'plans.summary.saudization.saudizationPercentage',
+      subtitle: 'plans.summary.saudization.saudizationSubtitle',
       controlName: EMaterialsFormControls.saudizationPercentage,
-      placeholder: 'Enter percentage',
+      placeholder: 'common.placeholder.enterPercentage',
       min: 0,
       max: 100,
       mode: 'decimal',
@@ -85,9 +87,9 @@ export class SaudizationMatrixComponent {
       alignBaseline: false,
     },
     {
-      label: 'Annual Total Compensation (SAR)',
+      label: 'plans.summary.saudization.annualTotalCompensation',
       controlName: EMaterialsFormControls.annualTotalCompensation,
-      placeholder: 'Enter cost',
+      placeholder: 'common.placeholder.enterCost',
       min: 0,
       mode: 'decimal',
       minFractionDigits: 0,
@@ -96,10 +98,10 @@ export class SaudizationMatrixComponent {
       alignBaseline: true,
     },
     {
-      label: 'Saudi Compensation %',
-      subtitle: '(Saudi compensation / Total compensation)',
+      label: 'plans.summary.saudization.saudiCompensationPercentage',
+      subtitle: 'plans.summary.saudization.saudiCompensationSubtitle',
       controlName: EMaterialsFormControls.saudiCompensationPercentage,
-      placeholder: 'Enter percentage',
+      placeholder: 'common.placeholder.enterPercentage',
       min: 0,
       max: 100,
       mode: 'decimal',

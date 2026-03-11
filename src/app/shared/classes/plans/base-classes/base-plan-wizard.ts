@@ -9,6 +9,7 @@ import { TCommentPhase, IPlanWizardStepCommentDescriptor } from 'src/app/shared/
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 /**
  * Abstract base class for plan wizard components using Template Method pattern.
@@ -18,6 +19,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 export abstract class BasePlanWizard {
   protected readonly planStore = inject(PlanStore);
   protected readonly toasterService = inject(ToasterService);
+  protected readonly i18nService = inject(I18nService);
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly roleService = inject(RoleService);
   protected readonly authStore = inject(AuthStore);
@@ -545,7 +547,7 @@ export abstract class BasePlanWizard {
   onConfirmSendBack(): void {
     const planId = this.planStore.selectedPlanId();
     if (!planId) {
-      this.toasterService.error('Plan ID is required.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.planIdRequired'));
       return;
     }
 
@@ -605,7 +607,7 @@ export abstract class BasePlanWizard {
   onConfirmApprove(): void {
     const planId = this.planStore.selectedPlanId();
     if (!planId) {
-      this.toasterService.error('Plan ID is required.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.planIdRequired'));
       return;
     }
 
@@ -620,7 +622,7 @@ export abstract class BasePlanWizard {
           this.showApproveConfirmationDialog.set(false);
           this.approvalNote.set('');
           this.deptManagerSignature.set(null);
-          this.toasterService.success('Plan has been approved and forwarded successfully.');
+          this.toasterService.success(this.i18nService.translate('plans.messages.approvedForwarded'));
           this.refresh();
           this.closeWizard();
           this.planStore.resetWizardState();
@@ -668,11 +670,11 @@ export abstract class BasePlanWizard {
   onProceedReject(): void {
     const reason = this.rejectionReason().trim();
     if (!reason) {
-      this.toasterService.error('Rejection reason is required.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.rejectionReasonRequired'));
       return;
     }
     if (reason.length > 255) {
-      this.toasterService.error('Rejection reason must not exceed 255 characters.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.rejectionReasonMaxLength'));
       return;
     }
     this.showRejectReasonDialog.set(false);
@@ -693,13 +695,13 @@ export abstract class BasePlanWizard {
   onConfirmReject(): void {
     const planId = this.planStore.selectedPlanId();
     if (!planId) {
-      this.toasterService.error('Plan ID is required.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.planIdRequired'));
       return;
     }
 
     const reason = this.rejectionReason().trim();
     if (!reason) {
-      this.toasterService.error('Rejection reason is required.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.rejectionReasonRequired'));
       return;
     }
 
@@ -711,7 +713,7 @@ export abstract class BasePlanWizard {
           this.isProcessing.set(false);
           this.showRejectConfirmationDialog.set(false);
           this.rejectionReason.set('');
-          this.toasterService.success('Plan has been rejected successfully.');
+          this.toasterService.success(this.i18nService.translate('plans.messages.rejected'));
           this.refresh();
           this.closeWizard();
           this.planStore.resetWizardState();
@@ -738,7 +740,7 @@ export abstract class BasePlanWizard {
    */
   onInvestorResubmit(): void {
     if (!this.canInvestorSubmit()) {
-      this.toasterService.error('Please update all required fields before resubmitting.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.updateRequiredFields'));
       return;
     }
 
@@ -753,7 +755,7 @@ export abstract class BasePlanWizard {
   onConfirmInvestorResubmit(): void {
     const planId = this.planStore.selectedPlanId();
     if (!planId) {
-      this.toasterService.error('Plan ID is required.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.planIdRequired'));
       return;
     }
 
@@ -771,7 +773,7 @@ export abstract class BasePlanWizard {
         next: () => {
           this.isProcessing.set(false);
           this.showInvestorResubmitConfirmationDialog.set(false);
-          this.toasterService.success('Plan has been resubmitted successfully.');
+          this.toasterService.success(this.i18nService.translate('plans.messages.resubmitted'));
           this.refresh();
           this.closeWizard();
           this.planStore.resetWizardState();
@@ -797,7 +799,7 @@ export abstract class BasePlanWizard {
   onAcknowledgeReject(): void {
     const planId = this.planStore.selectedPlanId();
     if (!planId) {
-      this.toasterService.error('Plan ID is required.');
+      this.toasterService.error(this.i18nService.translate('plans.validation.planIdRequired'));
       return;
     }
 
@@ -811,14 +813,14 @@ export abstract class BasePlanWizard {
           this.isProcessing.set(false);
           this.showAcknowledgeRejectDialog.set(false);
           this.acknowledgeReason.set('');
-          this.toasterService.success('Plan has been rejected acknowledge successfully.');
+          this.toasterService.success(this.i18nService.translate('plans.messages.rejectionAcknowledged'));
           this.refresh();
           this.closeWizard();
           this.planStore.resetWizardState();
         },
         error: (error) => {
           this.isProcessing.set(false);
-          this.toasterService.error('Error rejecting acknowledge plan. Please try again.');
+          this.toasterService.error(this.i18nService.translate('plans.messages.rejectionAcknowledgeError'));
           console.error('Error rejecting acknowledge plan:', error);
         }
       });

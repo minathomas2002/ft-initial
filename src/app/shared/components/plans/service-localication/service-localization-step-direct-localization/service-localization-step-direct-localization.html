@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-[32px] pb-10">
   <!-- Localization Strategy Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Localization Strategy</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.localizationStrategy' | translate }}</h2>
     <app-form-array-input
       [ft]="getLocalizationStrategyFormArray()"
       [hideAddButton]="true"
@@ -31,7 +31,7 @@
           />
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
-            [label]="'Service Name'"
+            [label]="'plans.form.serviceName' | translate"
           />
         </td>
 
@@ -43,7 +43,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localizationStrategy',
               inputKey: 'expectedLocalizationDate',
-              label: 'Expected Localization Date'
+              label: 'plans.form.expectedLocalizationDate'
             }, itemControl.get('rowId')?.value)"
           >
             <p-select
@@ -51,7 +51,7 @@
               optionLabel="name"
               optionValue="id"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-              [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectQuarter' | translate"
               fluid
               [appendTo]="'body'"
               [appConditionalColorClass]="highlightInput('expectedLocalizationDate', itemControl.get('rowId')?.value)"
@@ -60,7 +60,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.expectedLocalizationDate))"
-            [label]="'Expected Localization Date'"
+            [label]="'plans.form.expectedLocalizationDate' | translate"
           />
         </td>
 
@@ -73,7 +73,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'localizationStrategy',
                 inputKey: 'localizationApproach',
-                label: 'Localization Approach'
+                label: 'plans.form.localizationApproach'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -81,7 +81,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproach))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select localization approach'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectLocalizationApproach' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('localizationApproach', itemControl.get('rowId')?.value)"
@@ -95,7 +95,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'localizationStrategy',
                 inputKey: 'localizationApproachOtherDetails',
-                label: 'Other Localization Approach Details'
+                label: 'plans.form.otherLocalizationApproachDetails'
               }, itemControl.get('rowId')?.value)"
             >
               <textarea
@@ -103,7 +103,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Please specify other localization approach'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.pleaseSpecifyOtherApproach' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails))"
                 [appConditionalColorClass]="highlightInput('localizationApproachOtherDetails', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -118,12 +118,12 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproach))"
-            [label]="'Localization Approach'"
+            [label]="'plans.form.localizationApproach' | translate"
           />
           @if (isLocalizationApproachOther(itemControl)) {
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.localizationApproachOtherDetails))"
-            [label]="'Other Localization Approach Details'"
+            [label]="'plans.form.otherLocalizationApproachDetails' | translate"
           />
           }
         </td>
@@ -137,7 +137,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'localizationStrategy',
                 inputKey: 'location',
-                label: 'Location'
+                label: 'plans.form.location'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -145,7 +145,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.location))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter location'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterLocation' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('location', itemControl.get('rowId')?.value)"
@@ -159,7 +159,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'localizationStrategy',
                 inputKey: 'locationOtherDetails',
-                label: 'Other Location Details'
+                label: 'plans.form.otherLocationDetails'
               }, itemControl.get('rowId')?.value)"
             >
               <textarea
@@ -167,7 +167,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Kindly provide details'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.kindlyProvideDetails' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails))"
                 [appConditionalColorClass]="highlightInput('locationOtherDetails', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -180,12 +180,12 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.location))"
-            [label]="'Location'"
+            [label]="'plans.form.location' | translate"
           />
           @if (isLocationOther(itemControl)) {
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.locationOtherDetails))"
-            [label]="'Other Location Details'"
+            [label]="'plans.form.otherLocationDetails' | translate"
           />
           }
         </td>
@@ -198,12 +198,12 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localizationStrategy',
               inputKey: 'capexRequired',
-              label: 'CAPEX Required (In SAR)'
+              label: 'plans.form.capexRequiredSar'
             }, itemControl.get('rowId')?.value)"
           >
             <p-inputnumber
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter CAPEX amount'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCapexAmount' | translate"
               [min]="0"
               mode="decimal"
               [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.capexRequired))"
@@ -213,7 +213,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.capexRequired))"
-            [label]="'CAPEX Required'"
+            [label]="'plans.form.capexRequiredSar' | translate"
           />
         </td>
 
@@ -225,7 +225,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localizationStrategy',
               inputKey: 'supervisionOversightByGovernmentEntity',
-              label: 'Supervision / Oversight by government entity'
+              label: 'plans.form.supervisionOversightByGovernmentEntity'
             }, itemControl.get('rowId')?.value)"
           >
             <textarea
@@ -246,7 +246,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.supervisionOversightByGovernmentEntity))"
-            [label]="'Supervision / Oversight by government entity'"
+            [label]="'plans.form.supervisionOversightByGovernmentEntity' | translate"
           />
         </td>
 
@@ -259,7 +259,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'localizationStrategy',
                 inputKey: 'willBeAnyProprietaryToolsSystems',
-                label: 'Proprietary Tools / Systems'
+                label: 'plans.form.proprietaryToolsSystems'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -267,7 +267,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('willBeAnyProprietaryToolsSystems', itemControl.get('rowId')?.value)"
@@ -281,7 +281,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'localizationStrategy',
                 inputKey: 'proprietaryToolsSystemsDetails',
-                label: 'Proprietary Tools Details'
+                label: 'plans.form.proprietaryToolsDetails'
               }, itemControl.get('rowId')?.value)"
             >
               <textarea
@@ -289,7 +289,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Please provide details about the proprietary tools/systems'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.pleaseProvideProprietaryDetails' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails))"
                 [appConditionalColorClass]="highlightInput('proprietaryToolsSystemsDetails', itemControl.get('rowId')?.value)"
                 [color]="selectedInputColor()"
@@ -304,12 +304,12 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.willBeAnyProprietaryToolsSystems))"
-            [label]="'Proprietary Tools / Systems'"
+            [label]="'plans.form.proprietaryToolsSystems' | translate"
           />
           @if (isProprietaryToolsYes(itemControl)) {
           <app-base-error-messages
             [control]="getValueControl(itemControl.get(EMaterialsFormControls.proprietaryToolsSystemsDetails))"
-            [label]="'Proprietary Tools Details'"
+            [label]="'plans.form.proprietaryToolsDetails' | translate"
           />
           }
         </td>
@@ -319,8 +319,8 @@
 
   <!-- Entity Level Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Entity Level (i.e., local company responsible for delivering the services)</h2>
-    <p>Details to be provided for the KSA facility only considering only the workforce / employees directly responsible for delivering all the services you intend to localize by setting up local entity / branch / other</p>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.entityLevelTitle' | translate }}</h2>
+    <p>{{ 'plans.form.entityLevelDescription' | translate }}</p>
     <div class="data-table bg-white">
       <p-table
         [value]="entityLevelTableRows()"
@@ -329,7 +329,7 @@
       >
         <ng-template pTemplate="header">
           <tr class="bg-primary text-white p-3 border border-gray-200">
-            <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">Metrics</td>
+            <td class="p-3 border-e-2 border-gray-200 !border-t-0 !border-s-0">{{ 'plans.form.metrics' | translate }}</td>
             <td
               class="p-3 !border-t-0 !border-e-0 !border-b-0"
               colspan="20"
@@ -340,7 +340,7 @@
               class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[250px] "
               pFrozenColumn
             >
-              <span>Category</span>
+              <span>{{ 'plans.form.category' | translate }}</span>
             </th>
             @for(year of yearColumns(); track year) {
             <th class="p-3 !border !border-gray-200 text-left !bg-gray-50 font-semibold text-gray-700! min-w-[200px]">
@@ -370,7 +370,7 @@
                 (valueChanged)="upDateSelectedInputs($event, {
                   section: 'entityLevel',
                   inputKey: uniqueInputKey,
-                  label: row.label + ' - ' + yearColumns()[i]
+                  label: row.labelKey + ' - ' + yearColumns()[i]
                 }, getEntityLevelItem().get('rowId')?.value)"
               >
                 <p-inputnumber
@@ -400,8 +400,8 @@
 
   <!-- Service Level Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Service Level</h2>
-    <p>Details to be provided for the KSA based facility responsible for delivering all services. Provide details separately for each service you intend to localize</p>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.serviceLevel' | translate }}</h2>
+    <p>{{ 'plans.form.entityLevelServiceDescription' | translate }}</p>
     <div class="rounded-lg overflow-hidden">
       <!-- todo add (in sar) to customTextBesideHeaders -->
       <app-form-array-input
@@ -435,7 +435,7 @@
             />
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceName))"
-              [label]="'Service Name'"
+              [label]="'plans.form.serviceName' | translate"
             />
           </td>
 
@@ -447,7 +447,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'serviceLevelLocalizationDate',
-                label: 'Expected Localization Date'
+                label: 'plans.form.expectedLocalizationDate'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -455,7 +455,7 @@
                 optionLabel="name"
                 optionValue="id"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.serviceLevelLocalizationDate))"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select quarter'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectQuarter' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput('serviceLevelLocalizationDate', itemControl.get('rowId')?.value)"
@@ -464,7 +464,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceLevelLocalizationDate))"
-              [label]="'Expected Localization Date'"
+              [label]="'plans.form.expectedLocalizationDate' | translate"
             />
           </td>
 
@@ -477,14 +477,14 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: yearKey + '_headcount',
-                label: 'Headcount ' + yearColumns()[i]
+                label: 'plans.form.headcountYear - ' + yearColumns()[i]
               }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <p-inputnumber
                 fluid
                 [min]="0"
                 inputId="integeronly"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter headcount'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterHeadcount' | translate"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_headcount'))"
                 [appConditionalColorClass]="highlightInput(yearKey + '_headcount', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
@@ -492,7 +492,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(yearKey + '_headcount'))"
-              [label]="'Headcount ' + yearColumns()[i]"
+              [label]="getTranslatedLabel('plans.form.headcountYear', yearColumns()[i])"
             />
           </td>
           }
@@ -506,14 +506,14 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: yearKey + '_saudization',
-                label: 'Saudization % ' + yearColumns()[i]
+                label: 'plans.form.saudizationPercentYear - ' + yearColumns()[i]
               }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <p-inputnumber
                 fluid
                 [min]="0"
                 mode="decimal"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter %'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterPercent' | translate"
                 [maxFractionDigits]="2"
                 [maxlength]="5"
                 [formControl]="getValueControl(itemControl.get(yearKey + '_saudization'))"
@@ -523,7 +523,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(yearKey + '_saudization'))"
-              [label]="'Saudization % ' + yearColumns()[i]"
+              [label]="getTranslatedLabel('plans.form.saudizationPercentYear', yearColumns()[i])"
             />
           </td>
           }
@@ -536,7 +536,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'keyMeasuresToUpskillSaudis',
-                label: 'Key measures to upskill Saudis'
+                label: 'plans.form.keyMeasuresToUpskillSaudis'
               }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <textarea
@@ -544,7 +544,7 @@
                 fluid
                 rows="3"
                 [maxlength]="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter key measures to upskill saudis'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterKeyMeasuresUpskill' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
                 [appConditionalColorClass]="highlightInput('keyMeasuresToUpskillSaudis', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
@@ -557,7 +557,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.keyMeasuresToUpskillSaudis))"
-              [label]="'Key measures to upskill Saudis'"
+              [label]="'plans.form.keyMeasuresToUpskillSaudis' | translate"
             />
           </td>
 
@@ -569,7 +569,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'mentionSupportRequiredFromSEC',
-                label: 'Support Required from SEC'
+                label: 'plans.form.supportRequiredFromSEC'
               }, itemControl.get('serviceHeadcountRowId')?.value)"
             >
               <textarea
@@ -577,7 +577,7 @@
                 fluid
                 rows="3"
                 [maxlength]="500"
-                [appHidePlaceholderWhenDisabledEmpty]="'Mention Support required from SEC to localize the service (if any)'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.mentionSupportRequired' | translate"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
                 [appConditionalColorClass]="highlightInput('mentionSupportRequiredFromSEC', itemControl.get('serviceHeadcountRowId')?.value)"
                 [color]="selectedInputColor()"
@@ -590,7 +590,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.mentionSupportRequiredFromSEC))"
-              [label]="'Support Required from SEC'"
+              [label]="'plans.form.supportRequiredFromSEC' | translate"
             />
           </td>
         </ng-template>
@@ -608,7 +608,7 @@
     [commentsCount]="selectedInputs().length"
     [(commentPhase)]="commentPhase"
     [commentFormControl]="commentFormControl"
-      [incomingCommentText]="incomingCommentText()"
+    [incomingCommentText]="incomingCommentText()"
     [isResubmitMode]="isResubmitMode()"
     [hasInvestorComment]="hasInvestorComment()"
     (deleteComments)="onDeleteComments()"
@@ -620,9 +620,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"

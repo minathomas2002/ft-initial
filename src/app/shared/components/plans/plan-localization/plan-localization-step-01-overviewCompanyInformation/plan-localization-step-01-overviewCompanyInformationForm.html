@@ -1,9 +1,9 @@
 <div class="flex flex-col gap-[32px]">
   <!-- Basic Information -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Basic Information <span><i
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.basicInformation' | translate }} <span><i
           class="icon-info text-sm ms-2 text-gray-400"
-          pTooltip="Supplier contact information provided here will serve as the primary contact for SEC throughout the entire BENA program."
+          [pTooltip]="'plans.form.placeholders.supplierContactTooltip' | translate"
           tooltipPosition="top"
           [tooltipStyleClass]="'min-w-[300px]'"
         ></i></span></h2>
@@ -16,13 +16,13 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'basicInformation',
             inputKey: 'planTitle',
-            label: 'Plan Title'
+            label: 'plans.newPlan.planTitle'
           })"
         >
           <input
             type="text"
             pInputText
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter your plan title'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterPlanTitle' | translate"
             [formControl]="getValueControl(basicInformationFormGroupControls['planTitle'])"
             fluid
             maxlength="150"
@@ -66,7 +66,7 @@
           [options]="availableOpportunities()"
           [formControl]="getFormControl(basicInformationFormGroupControls['opportunity'])"
           optionLabel="name"
-          [appHidePlaceholderWhenDisabledEmpty]="'Select opportunity'"
+          [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectOpportunity' | translate"
           [loading]="isLoadingAvailableOpportunities()"
           [disabled]="isOpportunityDisabled()"
           fluid
@@ -85,7 +85,7 @@
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'Submission Date'" />
+        <app-base-label [title]="'plans.form.submissionDate' | translate" />
         <p-datepicker
           fluid
           dateFormat="dd M yy"
@@ -97,17 +97,17 @@
 
   <!-- Company Information -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Company Information</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.companyInformation' | translate }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 ">
       <div class="flex flex-col gap-2 col-span-1">
-        <app-base-label [title]="'Company Name'" />
+        <app-base-label [title]="'plans.newPlan.companyName' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="companyNameHasCommentControl()!"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'companyName',
-            label: 'Company Name'
+            label: 'plans.newPlan.companyName'
           })"
         >
           <input
@@ -115,7 +115,7 @@
             pInputText
             fluid
             [maxlength]="100"
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter company name'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCompanyName' | translate"
             [formControl]="getValueControl(companyInformationFormGroupControls['companyName'])"
             [appConditionalColorClass]="highlightInput('companyName')"
             [color]="selectedInputColor()"
@@ -123,27 +123,27 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['companyName'])"
-          [label]="'Company Name'"
+          [label]="'plans.newPlan.companyName' | translate"
         />
       </div>
     </div>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'CEO Name'" />
+        <app-base-label [title]="'plans.form.ceoName' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoName'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'ceoName',
-            label: 'CEO Name'
+            label: 'plans.form.ceoName'
           })"
         >
           <input
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO name'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCeoName' | translate"
             [maxlength]="100"
             [formControl]="getValueControl(companyInformationFormGroupControls['ceoName'])"
             [appConditionalColorClass]="highlightInput('ceoName')"
@@ -152,25 +152,26 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['ceoName'])"
-          [label]="'CEO Name'"
+          [label]="'plans.form.ceoName' | translate"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'CEO Email'" />
+        <app-base-label [title]="'plans.summary.ceoEmail' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(companyInformationFormGroupControls['ceoEmailID'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'companyInformation',
             inputKey: 'ceoEmailID',
-            label: 'CEO Email'
+            label: 'plans.summary.ceoEmail'
           })"
         >
           <input
             type="email"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter CEO email ID'"
+            class="ltr"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCeoEmailId' | translate"
             maxlength="100"
             [appConditionalColorClass]="highlightInput('ceoEmailID')"
             [color]="selectedInputColor()"
@@ -179,7 +180,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(companyInformationFormGroupControls['ceoEmailID'])"
-          [label]="'CEO Email'"
+          [label]="'plans.summary.ceoEmail' | translate"
         />
       </div>
     </div>
@@ -187,24 +188,24 @@
 
   <!-- Location Information -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Location Information</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.locationInformation' | translate }}</h2>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
-        <app-base-label [title]="'Global HQ Location'" />
+        <app-base-label [title]="'plans.form.globalHQLocation' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
           [hasCommentControl]="getHasCommentControl(locationInformationFormGroupControls['globalHQLocation'])"
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'locationInformation',
             inputKey: 'globalHQLocation',
-            label: 'Global HQ Location'
+            label: 'plans.form.globalHQLocation'
           })"
         >
           <input
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter global HQ location'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterGlobalHQLocation' | translate"
             [maxlength]="255"
             [formControl]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
             [appConditionalColorClass]="highlightInput('globalHQLocation')"
@@ -213,13 +214,13 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(locationInformationFormGroupControls['globalHQLocation'])"
-          [label]="'Global HQ Location'"
+          [label]="'plans.form.globalHQLocation' | translate"
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
         <div>
-          <app-base-label [title]="'Registered Vendor ID with SEC'" />
-          <span class="text-sm text-gray-600 ms-2">(If available)</span>
+          <app-base-label [title]="'plans.form.registeredVendorIDwithSEC' | translate" />
+          <span class="text-sm text-gray-600 ms-2">{{ 'plans.form.ifAvailable' | translate }}</span>
         </div>
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -227,7 +228,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'locationInformation',
             inputKey: 'registeredVendorIDwithSEC',
-            label: 'Registered Vendor ID with SEC'
+            label: 'plans.form.registeredVendorIDwithSEC'
           })"
         >
           <input
@@ -237,25 +238,27 @@
             inputmode="numeric"
             pattern="[0-9]*"
             maxlength="7"
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter registered vendor ID with SEC'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterRegisteredVendorIDWithSEC' | translate"
             [formControl]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
             (input)="onRegisteredVendorIDWithSecInput($event)"
             [appConditionalColorClass]="highlightInput('registeredVendorIDwithSEC')"
             [color]="selectedInputColor()"
+            class="ltr"
           />
         </app-group-input-with-checkbox>
 
         <app-base-error-messages
           [control]="getValueControl(locationInformationFormGroupControls['registeredVendorIDwithSEC'])"
-          [label]="'Registered Vendor ID with SEC'"
+          [label]="'plans.form.registeredVendorIDwithSEC' | translate"
         />
       </div>
     </div>
     <div class="flex flex-col gap-4 md:flex-row">
       <div class="flex flex-col gap-2 flex-1">
         <div>
-          <h4 class="text-sm font-medium text-gray-900">Do you currently have local Agent in KSA?</h4>
-          <p class="text-sm text-gray-600">If “Yes”, mention the following details of Local Agent</p>
+          <h4 class="text-sm font-medium text-gray-900">{{ 'plans.form.hasLocalAgentInKSA' | translate }}</h4>
+          <p class="text-sm text-gray-600">{{ 'plans.form.ifYesMentionLocalAgentDetails' | translate }}</p>
+
         </div>
         <div class="flex gap-2">
           <app-group-input-with-checkbox
@@ -264,9 +267,9 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'locationInformation',
               inputKey: 'doYouCurrentlyHaveLocalAgentInKSA',
-              label: 'Do you currently have local Agent in KSA?'
+              label: 'plans.form.hasLocalAgentInKSA'
             })"
-          >
+          > 
             <div class="flex gap-2">
               <label class="flex items-center gap-2 cursor-pointer">
                 <p-radiobutton
@@ -278,7 +281,7 @@
                   [appConditionalColorClass]="highlightInput('doYouCurrentlyHaveLocalAgentInKSA')"
                   [color]="selectedInputColor()"
                 />
-                <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.yes' | translate }}</span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer">
                 <p-radiobutton
@@ -290,14 +293,14 @@
                   [appConditionalColorClass]="highlightInput('doYouCurrentlyHaveLocalAgentInKSA')"
                   [color]="selectedInputColor()"
                 />
-                <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.no' | translate }}</span>
               </label>
             </div>
           </app-group-input-with-checkbox>
         </div>
         <app-base-error-messages
           [control]="getFormControl(locationInformationFormGroupControls['doYouCurrentlyHaveLocalAgentInKSA'])"
-          [label]="'Do you currently have local Agent in KSA?'"
+          [label]="'plans.form.hasLocalAgentInKSA' | translate"
         />
       </div>
 
@@ -310,21 +313,21 @@
     >
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Local Agent Name'" />
+          <app-base-label [title]="'plans.form.localAgentName' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['localAgentName'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'localAgentName',
-              label: 'Local Agent Name'
+              label: 'plans.form.localAgentName'
             })"
           >
             <input
               type="text"
               pInputText
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter local agent name'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterLocalAgentName' | translate"
               maxlength="100"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
               [appConditionalColorClass]="highlightInput('localAgentName')"
@@ -333,18 +336,18 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['localAgentName'])"
-            [label]="'Local Agent Name'"
+            [label]="'plans.form.localAgentName' | translate"
           />
         </div>
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Contact Person Name'" />
+          <app-base-label [title]="'plans.form.contactPersonName' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['contactPersonName'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'contactPersonName',
-              label: 'Contact Person Name'
+              label: 'plans.form.contactPersonName'
             })"
           >
             <input
@@ -352,7 +355,7 @@
               pInputText
               fluid
               [maxlength]="100"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter contact person name'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterContactPersonName' | translate"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
               [appConditionalColorClass]="highlightInput('contactPersonName')"
               [color]="selectedInputColor()"
@@ -360,27 +363,28 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactPersonName'])"
-            [label]="'Contact Person Name'"
+            [label]="'plans.form.contactPersonName' | translate"
           />
         </div>
       </div>
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Email ID'" />
+          <app-base-label [title]="'plans.form.emailID' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['emailID'])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'emailID',
-              label: 'Email ID'
+              label: 'plans.form.emailID'
             })"
           >
             <input
               type="text"
               pInputText
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter email ID'"
+              class="ltr"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterEmailID' | translate"
               [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
               [appConditionalColorClass]="highlightInput('emailID')"
               [color]="selectedInputColor()"
@@ -388,18 +392,18 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
-            [label]="'Email ID'"
+            [label]="'plans.form.emailID' | translate"
           />
         </div>
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Contact Number'" />
+          <app-base-label [title]="'plans.form.contactNumber' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="contactNumberHasCommentControl()!"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'contactNumber',
-              label: 'Contact Number'
+              label: 'plans.form.contactNumber'
             })"
           >
             <app-phone-input
@@ -410,29 +414,29 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['contactNumber'])"
-            [label]="'Contact Number'"
+            [label]="'plans.form.contactNumber' | translate"
           />
         </div>
       </div>
       <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-1">
           <div class="flex flex-col gap-2 flex-1">
-            <app-base-label [title]="'Company HQ Location'" />
-            <app-group-input-with-checkbox
-              [showCheckbox]="showCheckbox()"
-              [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
-              (valueChanged)="upDateSelectedInputs($event, {
-                section: 'localAgentInformation',
-                inputKey: 'companyHQLocation',
-                label: 'Company HQ Location'
-              })"
+<app-base-label [title]="'plans.form.companyHQLocation' | translate" />
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
+            (valueChanged)="upDateSelectedInputs($event, {
+              section: 'localAgentInformation',
+              inputKey: 'companyHQLocation',
+              label: 'plans.form.companyHQLocation'
+            })"
             >
               <input
                 type="text"
                 pInputText
                 fluid
                 maxlength="255"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter company HQ location'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.enterCompanyHQLocation' | translate"
                 [formControl]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
                 [appConditionalColorClass]="highlightInput('companyHQLocation')"
                 [color]="selectedInputColor()"
@@ -440,7 +444,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(localAgentInformationFormGroupControls['companyHQLocation'])"
-              [label]="'Company HQ Location'"
+              [label]="'plans.form.companyHQLocation' | translate"
             />
           </div>
         </div>
@@ -472,9 +476,9 @@
 @if(showDeleteConfirmationDialog()){
 <app-general-confirmation-dialog
   [(visible)]="showDeleteConfirmationDialog"
-  [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-  [confirmationLabel]="'Delete'"
-  [cancelLabel]="'Cancel'"
+  [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+  [confirmationLabel]="'common.delete' | translate"
+  [cancelLabel]="'common.cancel' | translate"
   [confirmButtonSeverity]="'danger'"
   [icon]="'icon-trash-2'"
   (confirmed)="onConfirmDeleteComment()"

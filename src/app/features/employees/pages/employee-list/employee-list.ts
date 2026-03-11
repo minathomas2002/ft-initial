@@ -16,8 +16,7 @@ import { UserStatusMapper } from '../../classes/user-status-mapper';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { EmployeesActionMenu } from '../../components/employees-action-menu/employees-action-menu';
-import { TranslatePipe } from 'src/app/shared/pipes';
-import { DatePipe } from '@angular/common';
+import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { ButtonModule } from 'primeng/button';
@@ -35,13 +34,12 @@ import { Avatar } from 'primeng/avatar';
   imports: [
     TableLayoutComponent,
     TableSkeletonComponent,
-    DatePipe,
+    LocalizedDatePipe,
     EmployeesFilter,
     BaseTagComponent,
     DataTableComponent,
     TooltipModule,
     EmployeesActionMenu,
-    DatePipe,
     GeneralConfirmationDialogComponent,
     TranslatePipe,
     ButtonModule,
@@ -127,8 +125,8 @@ export class EmployeeList implements OnInit {
     this.filterService.applyFilter();
   }
 
-  getUserTranslatedRole(roleCode: number): string {
-    return this.employeeRoleMapper.getTranslatedRole(roleCode as ERoles);
+  getUserTranslatedRole(roleCode: number, fallbackRole?: string): string {
+    return this.employeeRoleMapper.getTranslatedRole(roleCode as ERoles, fallbackRole);
   }
 
   getUserStatus(status: string) {

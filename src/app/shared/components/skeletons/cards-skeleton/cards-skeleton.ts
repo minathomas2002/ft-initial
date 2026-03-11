@@ -3,10 +3,12 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-cards-skeleton',
   imports: [SkeletonModule,
+    TranslatePipe,
     NgTemplateOutlet,
     CardModule,
     ButtonModule

@@ -23,10 +23,13 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 @Component({
   selector: 'app-service-localization-step-direct-localization',
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     FormArrayInput,
     InputTextModule,
@@ -51,6 +54,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
+  private readonly i18n = inject(I18nService);
 
   pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
@@ -65,19 +69,23 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   isViewMode = input<boolean>(false);
   isReviewMode = input<boolean>(false);
 
-  yesNoOptions = this.planStore.yesNoOptions;
-  localizationApproachOptions = this.planStore.localizationApproachOptions;
-  locationOptions = this.planStore.locationOptions;
+  yesNoOptions = this.planStore.yesNoOptionsTranslated;
+  localizationApproachOptions = this.planStore.localizationApproachOptionsTranslated;
+  locationOptions = this.planStore.locationOptionsTranslated;
 
   private _servicesSynced = false;
   private _userChangedDropdowns = new Set<string>();
 
   customHeaderLabels = computed(() => {
     return {
-      'locationType': 'Location',
-      'supervisionOversightByGovernmentEntity': 'Supervision / Oversight by Government Entity (if any)'
+      'location': this.i18n.translate('plans.form.location'),
+      'supervisionOversightByGovernmentEntity': this.i18n.translate('plans.form.supervisionOversightByGovernmentEntity')
     };
   });
+
+  getTranslatedLabel(key: string, year: string | number): string {
+    return this.i18n.translate(key, { year: String(year) });
+  }
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {
@@ -137,17 +145,19 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     const years = this.yearColumns();
     return [
       {
-        label: 'Expected Annual Headcount',
+        label: this.i18n.translate('plans.form.expectedAnnualHeadcount'),
+        labelKey: 'plans.form.expectedAnnualHeadcount',
         controlKey: 'headcount',
-        placeholder: 'Enter headcount',
+        placeholder: this.i18n.translate('plans.form.enterHeadcount'),
         mode: undefined,
         minFractionDigits: 0,
         maxFractionDigits: 0,
       },
       {
-        label: 'Expected Saudization (%)',
+        label: this.i18n.translate('plans.form.expectedSaudizationPercent'),
+        labelKey: 'plans.form.expectedSaudizationPercent',
         controlKey: 'saudization',
-        placeholder: 'Enter %',
+        placeholder: this.i18n.translate('plans.form.enterPercent'),
         mode: 'decimal' as const,
         minFractionDigits: 0,
         maxFractionDigits: 2,
@@ -172,12 +182,12 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
   serviceLevelGroupHeader = computed(() => {
     const yearCols = this.yearControlKeys.length;
     return [
-      { label: 'Service Name', rowspan: 2, dataGroup: false },
-      { label: 'Expected Localization Date', rowspan: 2, dataGroup: false },
-      { label: 'Expected Annual Headcount (To be filled for the KSA based facility only)', colspan: yearCols, dataGroup: true },
-      { label: `Mention Y-o-Y expected Saudization % (upto ${this.yearColumns()[5]}) (To be filled for the KSA based facility only)`, colspan: yearCols, dataGroup: true },
-      { label: 'Key measures to upskill Saudis', rowspan: 2, dataGroup: false },
-      { label: 'Support Required from SEC (if any)', rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.serviceName'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.expectedLocalizationDate'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.expectedAnnualHeadcountKSA'), colspan: yearCols, dataGroup: true },
+      { label: this.i18n.translate('plans.form.mentionYoySaudizationKSAUptoYear', { year: this.yearColumns()[5] }), colspan: yearCols, dataGroup: true },
+      { label: this.i18n.translate('plans.form.keyMeasuresToUpskillSaudis'), rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.supportRequiredFromSEC') + ' (if any)', rowspan: 2, dataGroup: false },
     ];
   });
 

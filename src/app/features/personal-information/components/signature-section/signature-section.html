@@ -1,23 +1,23 @@
 <app-personal-information-card
-  [sectionTitle]="'Signature'"
-  [sectionDescription]="'Update your signature here.'"
+  [sectionTitle]="'profile.signatureLabel' | translate"
+  [sectionDescription]="'profile.signatureUpdateDesc' | translate"
   [hideFooter]="true"
 >
   @if(isViewMode() && !existingSignature()){
   <div class="flex flex-col justify-center items-center gap-6">
     <div class="flex justify-center items-center">
-      <p class="text-sm text-gray-500">No signature created</p>
+      <p class="text-sm text-gray-500">{{ 'profile.signature.noSignature' | translate }}</p>
     </div>
     @if (!isImpersonated()) {
     <div class="flex gap-4">
       <p-button
-        [label]="'Draw Signature'"
+        [label]="'profile.drawSignatureBtn' | translate"
         severity="secondary"
         icon="icon-edit-04"
         (onClick)="onAddSignatureClick()"
       />
       <p-button
-        [label]="'Upload Signature'"
+        [label]="'profile.uploadSignatureBtn' | translate"
         severity="secondary"
         icon="icon-file-upload"
         (onClick)="onChangeSignatureClick()"
@@ -29,7 +29,7 @@
   <div class="flex justify-center items-center bg-gray-50 rounded-lg p-6 border border-gray-200 relative">
     @if(!isImpersonated()){
     <p-button
-      [label]="'Delete'"
+      [label]="'common.delete' | translate"
       icon="icon-trash-2"
       severity="danger"
       size="small"
@@ -51,7 +51,7 @@
     <p-dialog
       [visible]="signaturePreviewVisible()"
       (visibleChange)="signaturePreviewVisible.set($event)"
-      header="Your Signature"
+      [header]="'profile.yourSignature' | translate"
       [modal]="true"
       [closable]="true"
       [closeOnEscape]="true"

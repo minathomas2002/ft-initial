@@ -18,7 +18,7 @@ export class PlanActionsMapper {
         [EActionPlanTimeLine.Assigned]: { labelKey: 'plans.actions.assignToEmployee' },
         [EActionPlanTimeLine.Reassigned]: { labelKey: 'plans.actions.reAssign' },
         [EActionPlanTimeLine.CommentSubmitted]: { labelKey: 'plans.actions.commentSubmitted' },
-        [EActionPlanTimeLine.Resubmitted]: { labelKey: 'Edit / Resubmit' },
+        [EActionPlanTimeLine.Resubmitted]: { labelKey: 'plans.actions.editResubmit' },
         [EActionPlanTimeLine.Approved]: { labelKey: 'plans.actions.approved' },
         [EActionPlanTimeLine.Rejected]: { labelKey: 'plans.actions.rejected' },
         [EActionPlanTimeLine.EmployeeApproved]: { labelKey: 'plans.actions.approved' },
@@ -33,10 +33,10 @@ export class PlanActionsMapper {
         [EActionPlanTimeLine.InternalReview]: { labelKey: 'plans.actions.internalReview' },
         [EActionPlanTimeLine.RemoveAssignee]: { labelKey: 'plans.actions.removeAssignee' },
         [EActionPlanTimeLine.Delete]: { labelKey: 'plans.actions.delete' },
-        [EActionPlanTimeLine.AutoRejected]: { labelKey: 'Plan Auto Rejected' },
-        [EActionPlanTimeLine.DVReview]: { labelKey: 'DV Review' },
-        [EActionPlanTimeLine.DeptManagerReview]: { labelKey: 'Department Manager Review' },
-        [EActionPlanTimeLine.ViewOpportunityDetails]: { labelKey: 'View Opportunity' },
+        [EActionPlanTimeLine.AutoRejected]: { labelKey: 'plans.actions.autoRejected' },
+        [EActionPlanTimeLine.DVReview]: { labelKey: 'plans.actions.dvReview' },
+        [EActionPlanTimeLine.DeptManagerReview]: { labelKey: 'plans.actions.deptManagerReview' },
+        [EActionPlanTimeLine.ViewOpportunityDetails]: { labelKey: 'plans.actions.viewOpportunityDetails' },
     };
 
     getActions(

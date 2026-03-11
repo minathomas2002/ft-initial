@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { merge } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
@@ -13,10 +13,12 @@ import { LocationInformationSummarySection } from './step-summary-sections/locat
 import { LocalAgentInformationSummarySection } from './step-summary-sections/local-agent-information-summary-section/local-agent-information-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-overview-company-step-summary',
   imports: [
+    TranslatePipe,
     SummarySectionHeader,
     BasicInformationSummarySection,
     CompanyInformationSummarySection,
@@ -30,7 +32,7 @@ import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/
 })
 export class OverviewCompanyStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
-  readonly pageTitleForTL = this.i18nService.translate('plans.wizard.step1.title');
+  readonly pageTitleForTL = EPlanPageTitle.OverviewAndCompanyInformation;
   formGroup = this.productPlanFormService.overviewCompanyInformation;
   doRefresh = signal(new Date());
   private readonly _basicInfoFormGroup = this.formGroup.get(EMaterialsFormControls.basicInformationFormGroup) as FormGroup;

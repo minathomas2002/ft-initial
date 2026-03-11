@@ -78,7 +78,7 @@
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep1Comments()) {
       <app-page-comment-box
-        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentTitle]="incomingCommentPersona() || ('plans.wizard.comments.myComment' | translate)"
         [commentText]="getIncomingStep1CommentText()"
       />
       }
@@ -89,7 +89,7 @@
         [(selectedInputs)]="step1SelectedInputs"
         [selectedInputColor]="commentColor()"
         [pageComments]="step1Comments()"
-        [commentTitle]="commentTitle() || 'Comments'"
+        [commentTitle]="commentTitle() || ('plans.wizard.comments.comments' | translate)"
         [showCommentState]="showCommentState()"
         [correctedFields]="step1CorrectedFields()"
         [originalPlanResponse]="originalPlanResponse()"
@@ -132,7 +132,7 @@
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep2Comments()) {
       <app-page-comment-box
-        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentTitle]="incomingCommentPersona() || ('plans.wizard.comments.myComment' | translate)"
         [commentText]="getIncomingStep2CommentText()"
       />
       }
@@ -144,7 +144,7 @@
         [(selectedInputs)]="step2SelectedInputs"
         [selectedInputColor]="commentColor()"
         [pageComments]="step2Comments()"
-        [commentTitle]="commentTitle() || 'Comments'"
+        [commentTitle]="commentTitle() || ('plans.wizard.comments.comments' | translate)"
         [showCommentState]="showCommentState()"
         [correctedFields]="step2CorrectedFields()"
         [originalPlanResponse]="originalPlanResponse()"
@@ -185,7 +185,7 @@
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep3Comments()) {
       <app-page-comment-box
-        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentTitle]="incomingCommentPersona() || ('plans.wizard.comments.myComment' | translate)"
         [commentText]="getIncomingStep3CommentText()"
       />
       }
@@ -197,7 +197,7 @@
         [(selectedInputs)]="step3SelectedInputs"
         [selectedInputColor]="commentColor()"
         [pageComments]="step3Comments()"
-        [commentTitle]="commentTitle() || 'Comments'"
+        [commentTitle]="commentTitle() || ('plans.wizard.comments.comments' | translate)"
         [showCommentState]="showCommentState()"
         [correctedFields]="step3CorrectedFields()"
         [originalPlanResponse]="originalPlanResponse()"
@@ -233,7 +233,7 @@
     <div class="flex flex-col gap-8">
       @if (hasIncomingStep4Comments()) {
       <app-page-comment-box
-        [commentTitle]="incomingCommentPersona() || 'Comment'"
+        [commentTitle]="incomingCommentPersona() || ('plans.wizard.comments.myComment' | translate)"
         [commentText]="getIncomingStep4CommentText()"
       />
       }
@@ -245,7 +245,7 @@
         [(selectedInputs)]="step4SelectedInputs"
         [selectedInputColor]="commentColor()"
         [pageComments]="step4Comments()"
-        [commentTitle]="commentTitle() || 'Comments'"
+        [commentTitle]="commentTitle() || ('plans.wizard.comments.comments' | translate)"
         [showCommentState]="showCommentState()"
         [correctedFields]="step4CorrectedFields()"
         [originalPlanResponse]="originalPlanResponse()"
@@ -331,10 +331,10 @@
 @if(showSendBackConfirmationDialog()){
 <app-general-confirmation-dialog
   [(visible)]="showSendBackConfirmationDialog"
-  [title]="'Are you sure you want to send back the plan?'"
+  [title]="'plans.wizard.sendBack.confirmMessage' | translate"
   [description]="sendBackConfirmationMessage()"
-  [confirmationLabel]="'Send Back'"
-  [cancelLabel]="'Cancel'"
+  [confirmationLabel]="'plans.wizard.sendBack.sendBackLabel' | translate"
+  [cancelLabel]="'common.cancel' | translate"
   [icon]="'icon-info'"
   (confirmed)="onConfirmSendBack()"
   (onCancel)="onCancelSendBack()"
@@ -347,15 +347,15 @@
 <app-approve-reject-dialog
   [(visible)]="showApproveConfirmationDialog"
   [title]="approvalDialogTitle()"
-  [label]="'Approval Note'"
-  [placeholder]="'Enter approval note'"
+  [label]="'plans.rejection.approvalNote' | translate"
+  [placeholder]="'plans.wizard.enterApprovalNote' | translate"
   [maxLength]="255"
   [(note)]="approvalNote"
   [showSignaturePad]="planStatus() === EInternalUserPlanStatus.DV_APPROVED"
   [signatureRequired]="planStatus() === EInternalUserPlanStatus.DV_APPROVED"
   [(signature)]="deptManagerSignature"
-  [confirmationLabel]="planStatus() === EInternalUserPlanStatus.DEPT_APPROVED ? 'Approve' : 'Approve and Forward'"
-  [cancelLabel]="'Cancel'"
+  [confirmationLabel]="(planStatus() === EInternalUserPlanStatus.DEPT_APPROVED ? 'plans.wizard.approve' : 'plans.wizard.approveAndForward') | translate"
+  [cancelLabel]="'common.cancel' | translate"
   [icon]="'icon-info'"
   (confirmed)="onConfirmApprove()"
   (onCancel)="onCancelApprove()"
@@ -367,13 +367,13 @@
 @if(showRejectReasonDialog()){
 <app-approve-reject-dialog
   [(visible)]="showRejectReasonDialog"
-  [title]="'Rejection Reason'"
-  [label]="'Rejection Reason'"
-  [placeholder]="'Enter rejection reason'"
+  [title]="'plans.rejection.reason' | translate"
+  [label]="'plans.rejection.reason' | translate"
+  [placeholder]="'plans.wizard.enterRejectionReasonShort' | translate"
   [maxLength]="255"
   [(note)]="rejectionReason"
-  [confirmationLabel]="'Reject'"
-  [cancelLabel]="'Back'"
+  [confirmationLabel]="'plans.wizard.reject' | translate"
+  [cancelLabel]="'common.back' | translate"
   [icon]="'icon-info'"
   [isRequired]="true"
   (confirmed)="onProceedReject()"
@@ -389,8 +389,8 @@
   [(visible)]="showRejectConfirmationDialog"
   [title]="rejectionDialogTitle()"
   [description]="sendBackConfirmationMessage()"
-  [confirmationLabel]="'Confirm Rejection'"
-  [cancelLabel]="'Cancel'"
+  [confirmationLabel]="'plans.wizard.confirmRejection' | translate"
+  [cancelLabel]="'common.cancel' | translate"
   [icon]="'icon-info'"
   [confirmButtonSeverity]="'danger'"
   (confirmed)="onConfirmReject()"
@@ -403,13 +403,13 @@
 @if(showAcknowledgeRejectDialog()){
 <app-approve-reject-dialog
   [(visible)]="showAcknowledgeRejectDialog"
-  [title]="'Are you sure you want to acknowledge this rejection and return the plan to the Employee for final rejection submission to the Investor?'"
-  [label]="'Acknowledgement Note '"
-  [placeholder]="'Enter acknowledgement note '"
+  [title]="'plans.wizard.acknowledgeRejectionTitle' | translate"
+  [label]="'plans.wizard.acknowledgementNote' | translate"
+  [placeholder]="'plans.wizard.enterAcknowledgementNote' | translate"
   [maxLength]="255"
   [(note)]="acknowledgeReason"
-  [confirmationLabel]="'Acknowledge'"
-  [cancelLabel]="'Cancel'"
+  [confirmationLabel]="'plans.wizard.acknowledge' | translate"
+  [cancelLabel]="'common.cancel' | translate"
   [icon]="'icon-info'"
   [isRequired]="false"
   (confirmed)="onAcknowledgeReject()"

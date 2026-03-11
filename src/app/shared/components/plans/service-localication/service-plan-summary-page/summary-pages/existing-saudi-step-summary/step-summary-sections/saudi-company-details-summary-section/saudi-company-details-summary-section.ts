@@ -7,9 +7,11 @@ import { EServiceCompanyType, EServiceQualificationStatus } from 'src/app/shared
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+
 @Component({
   selector: 'app-saudi-company-details-summary-section',
-  imports: [PlanSummaryFlied, TableModule],
+  imports: [PlanSummaryFlied, TableModule, TranslatePipe],
   templateUrl: './saudi-company-details-summary-section.html',
   styleUrl: './saudi-company-details-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +24,7 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
 
   private formatCompanyType(companyType: string | string[] | number | number[] | null): string | null {
     if (!companyType) return null;
-    const options = this.planStore.companyTypeOptions();
+    const options = this.planStore.companyTypeOptionsTranslated();
     if (Array.isArray(companyType)) {
       const labels = companyType
         .map((id) => options.find((o) => String(o.id) === String(id))?.name ?? String(id))
@@ -35,7 +37,7 @@ export class SaudiCompanyDetailsSummarySection extends SummarySectionBaseClass {
 
   private formatQualificationStatus(statusId: string | number | null): string | null {
     if (!statusId) return null;
-    const options = this.planStore.qualificationStatusOptions();
+    const options = this.planStore.qualificationStatusOptionsTranslated();
     const match = options.find((o) => String(o.id) === String(statusId));
     return match ? match.name : String(statusId);
   }

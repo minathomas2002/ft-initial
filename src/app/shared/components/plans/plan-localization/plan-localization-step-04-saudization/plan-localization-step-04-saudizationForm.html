@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-[32px] pb-10">
   <!-- Saudization Projection Matrix Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Saudization</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.saudization' | translate }}</h2>
 
     <app-saudization-matrix
       [getValueControl]="getValueControlWrapper"
@@ -17,8 +17,8 @@
   <!-- Attachments Section -->
   <div class="flex flex-col gap-4">
     <div>
-      <h2 class="text-lg font-semibold text-gray-900">Attachments (Optional)</h2>
-      <p class="text-xs text-gray-600"><span class="text-gray-600 font-semibold">Note:</span> all uploaded files size should be less than 30MB</p>
+      <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.attachmentsOptional' | translate }}</h2>
+      <p class="text-xs text-gray-600">{{ 'plans.form.attachmentsSizeNote' | translate }}</p>
     </div>
 
     <app-group-input-with-checkbox
@@ -27,7 +27,7 @@
       (valueChanged)="upDateSelectedInputs($event, {
         section: 'attachments',
         inputKey: 'attachments',
-        label: 'Attachments'
+        label: attachmentsLabel()
       })"
     >
       <app-fileupload
@@ -39,14 +39,14 @@
         class="w-full"
         [appConditionalColorClass]="highlightInput('attachments')"
         [color]="selectedInputColor()"
-        [placeholder]="'You can upload any file type (images, documents).'"
+        [placeholder]="'common.placeholder.fileUploadHint' | translate"
         [multiple]="true"
       />
     </app-group-input-with-checkbox>
     @if(getAttachmentsFormGroup()?.get(EMaterialsFormControls.attachments)) {
     <app-base-error-messages
       [control]="getValueControl(getAttachmentsFormGroup()!.get(EMaterialsFormControls.attachments)!)"
-      [label]="'Attachments'"
+      [label]="attachmentsLabel()"
     />
     }
   </div>
@@ -73,9 +73,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"

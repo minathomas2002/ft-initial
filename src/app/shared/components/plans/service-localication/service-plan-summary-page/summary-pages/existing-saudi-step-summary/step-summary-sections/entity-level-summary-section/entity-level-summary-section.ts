@@ -9,6 +9,7 @@ import { ServicePlanFormService } from 'src/app/shared/services/plan/service-pla
 import { I18nService } from 'src/app/shared/services/i18n';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 const YEAR_CONTROL_KEYS = [
   EMaterialsFormControls.firstYear,
@@ -19,9 +20,9 @@ const YEAR_CONTROL_KEYS = [
   EMaterialsFormControls.sixthYear,
 ] as const;
 
-const ENTITY_LEVEL_ROWS = [
-  { label: 'Expected Annual Headcount', controlKey: 'headcount' },
-  { label: 'Expected Saudization (%)', controlKey: 'saudization' },
+const ENTITY_LEVEL_ROW_KEYS = [
+  { labelKey: 'plans.form.expectedAnnualHeadcount', controlKey: 'headcount' },
+  { labelKey: 'plans.form.expectedSaudizationPercent', controlKey: 'saudization' },
 ] as const;
 
 const YEAR_MAP: Record<string, string> = {
@@ -41,7 +42,7 @@ const YEAR_MAP: Record<string, string> = {
 
 @Component({
   selector: 'app-entity-level-summary-section',
-  imports: [PlanSummaryFlied, TableModule],
+  imports: [PlanSummaryFlied, TableModule, TranslatePipe],
   templateUrl: './entity-level-summary-section.html',
   styleUrl: './entity-level-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -101,8 +102,8 @@ export class EntityLevelSummarySection extends SummarySectionBaseClass {
     };
 
     return {
-      rows: ENTITY_LEVEL_ROWS.map((rowConfig) => ({
-        label: rowConfig.label,
+      rows: ENTITY_LEVEL_ROW_KEYS.map((rowConfig) => ({
+        label: this.i18nService.translate(rowConfig.labelKey),
         yearValues: YEAR_CONTROL_KEYS.map((key) => {
           const controlName = `${key}_${rowConfig.controlKey}`;
           return { controlName, summaryField: buildField(controlName) };

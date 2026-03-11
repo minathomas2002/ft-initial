@@ -3,10 +3,11 @@ import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-class
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-overview-local-agent-information-summary-section',
-  imports: [PlanSummaryFlied],
+  imports: [PlanSummaryFlied, TranslatePipe],
   templateUrl: './overview-local-agent-information-summary-section.html',
   styleUrl: './overview-local-agent-information-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

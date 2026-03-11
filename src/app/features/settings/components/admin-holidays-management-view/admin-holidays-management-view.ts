@@ -1,12 +1,11 @@
 import { Component, computed, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
+import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
 import { TableLayoutComponent } from "src/app/shared/components/layout-components/table-layout/table-layout.component";
 import { ITableHeaderItem } from 'src/app/shared/interfaces';
 import { IHolidaysManagementRecord, THolidaysManagementRecordKeys } from 'src/app/shared/interfaces/ISetting';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { TableSkeletonComponent } from "src/app/shared/components/skeletons/table-skeleton/table-skeleton.component";
 import { DataTableComponent } from "src/app/shared/components/layout-components/data-table/data-table.component";
-import { DatePipe } from '@angular/common';
 import { HolidaysManagementFilter } from "../holidays-management-filter/holidays-management-filter";
 import { AddEditHolidayDialog } from "../add-edit-holiday-dialog/add-edit-holiday-dialog";
 import { AdminSettingsStore } from 'src/app/shared/stores/settings/admin-settings.store';
@@ -24,7 +23,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
     TableLayoutComponent,
     TableSkeletonComponent,
     DataTableComponent,
-    DatePipe, HolidaysManagementFilter, AddEditHolidayDialog, AdminSettingMenuAction, GeneralConfirmationDialogComponent],
+    LocalizedDatePipe, HolidaysManagementFilter, AddEditHolidayDialog, AdminSettingMenuAction, GeneralConfirmationDialogComponent],
   templateUrl: './admin-holidays-management-view.html',
   styleUrl: './admin-holidays-management-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

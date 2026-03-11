@@ -17,6 +17,7 @@ import { AdminOpportunitiesFilterService } from '../../services/admin-opportunit
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { take } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 @Component({
   selector: 'app-admin-opportunities-view',
@@ -37,6 +38,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminOpportunitiesView implements OnInit, OnDestroy {
+  readonly i18nService = inject(I18nService);
   protected readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   private readonly router = inject(Router);
   protected createEditOpportunityDialogVisible = signal<boolean>(false);
@@ -102,7 +104,7 @@ export class AdminOpportunitiesView implements OnInit, OnDestroy {
           next: () => {
             this.deleteConfirmDialogVisible.set(false);
             this.applyFilter();
-            this.toasterService.success('Opportunity deleted successfully');
+            this.toasterService.success(this.i18nService.translate('opportunity.messages.deletedSuccess'));
           },
           error: () => {
             this.deleteConfirmDialogVisible.set(false);
@@ -122,7 +124,7 @@ export class AdminOpportunitiesView implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.toasterService.success('Opportunity moved to draft successfully');
+            this.toasterService.success(this.i18nService.translate('opportunity.messages.movedToDraftSuccess'));
             this.selectedOpportunity.set(null);
             this.moveToDraftConfirmDialogVisible.set(false);
             this.applyFilter();
@@ -145,7 +147,7 @@ export class AdminOpportunitiesView implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.toasterService.success('Opportunity published successfully');
+            this.toasterService.success(this.i18nService.translate('opportunity.messages.publishedSuccess'));
             this.selectedOpportunity.set(null);
             this.publishConfirmDialogVisible.set(false);
             this.applyFilter();

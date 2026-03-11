@@ -8,10 +8,12 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { merge, startWith } from 'rxjs';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-plans.interface';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-comment-state-component',
   imports: [
+    TranslatePipe,
     ButtonModule,
     CheckboxModule,
     FormsModule,

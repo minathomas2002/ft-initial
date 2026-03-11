@@ -4,11 +4,11 @@ import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-class
 import { PlanSummaryFlied } from 'src/app/shared/components/plans/plan-summary-flied/plan-summary-flied';
 import { EMaterialsFormControls, EOpportunityType } from 'src/app/shared/enums';
 import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
-
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-basic-information-summary-section',
-  imports: [PlanSummaryFlied],
+  imports: [PlanSummaryFlied, TranslatePipe],
   templateUrl: './basic-Information-summary-section.html',
   styleUrl: './basic-Information-summary-section.scss',
   providers: [DatePipe],
@@ -63,7 +63,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
   submissionDateSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
     return {
-      label: 'Submission Date',
+      label: this.i18nService.translate('plans.form.submissionDate'),
       beforeValue: '',
       currantValue: this.getFormattedDate(this.submissionDateControl()?.value) || 'Invalid Date',
       hasError: false,

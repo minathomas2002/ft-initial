@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { merge } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
@@ -32,7 +32,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 })
 export class ProductPlantOverviewStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
-  readonly pageTitleForTL = this.i18nService.translate('plans.wizard.step2.title');
+  readonly pageTitleForTL = EPlanPageTitle.ProductAndPlantOverview;
   formGroup = this.productPlanFormService.step2_productPlantOverview;
   doRefresh = signal(new Date());
   private readonly _overviewFormGroup = this.formGroup.get(EMaterialsFormControls.overviewFormGroup) as FormGroup;

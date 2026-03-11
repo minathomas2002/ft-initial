@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { DatePipe, NgClass } from '@angular/common';
 import { IAdminOpportunity } from '../../../interfaces/admin-opportunities.interface';
 import { EOpportunityStatus, EOpportunityState, EOpportunityAction } from '../../../enums/opportunities.enum';
-import { TranslatePipe } from '../../../pipes';
+import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
 import { BaseTagComponent } from '../../base-components/base-tag/base-tag.component';
 import { OpportunityDetailItem } from '../opportunity-detail-item/opportunity-detail-item';
 import { OpportunityActionMenuComponent } from '../opportunity-action-menu/opportunity-action-menu.component';
@@ -19,7 +19,7 @@ import { ERoutes } from 'src/app/shared/enums';
   imports: [
     TooltipModule,
     ButtonModule,
-    DatePipe,
+    LocalizedDatePipe,
     TranslatePipe,
     BaseTagComponent,
     OpportunityDetailItem,

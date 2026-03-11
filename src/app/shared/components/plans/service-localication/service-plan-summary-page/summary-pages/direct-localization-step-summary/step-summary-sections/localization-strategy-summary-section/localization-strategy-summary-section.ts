@@ -7,15 +7,19 @@ import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { I18nService } from 'src/app/shared/services/i18n';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-localization-strategy-summary-section',
-  imports: [PlanSummaryFlied, TableModule, TooltipModule],
+  imports: [PlanSummaryFlied, TableModule, TooltipModule, TranslatePipe],
   templateUrl: './localization-strategy-summary-section.html',
   styleUrl: './localization-strategy-summary-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LocalizationStrategySummarySection extends SummarySectionBaseClass {
+  private readonly i18n = inject(I18nService);
+
   private get serviceLevelFormArray(): FormArray {
     return this.sectionFormGroup().get(EMaterialsFormControls.serviceLevelFormGroup) as FormArray;
   }
@@ -36,13 +40,14 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
   }
 
   private formatYesNo(value: unknown): string | null {
-    if (value === true || value === 'true') return 'Yes';
-    if (value === false || value === 'false') return 'No';
+    if (value === true || value === 'true') return this.i18n.translate('common.yes');
+    if (value === false || value === 'false') return this.i18n.translate('common.no');
     return this.mapOptionName(this.planStore.yesNoOptions(), value);
   }
 
   localizationStrategyRows = computed(() => {
     this.doRefresh();
+    this.i18n.currentLanguage();
     const arr = this.serviceLevelFormArray;
     if (!arr?.controls?.length) return [];
 

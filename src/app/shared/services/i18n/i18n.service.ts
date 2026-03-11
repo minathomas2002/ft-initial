@@ -1,5 +1,6 @@
 import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import { TranslateService } from './translate.service';
+import { TranslationKey } from 'src/app/core/i18n/translation-types';
 import { Router } from '@angular/router';
 
 export type SupportedLanguage = 'en' | 'ar';
@@ -13,7 +14,7 @@ export class I18nService {
 
 	public readonly translations = signal<Record<string, any>>({});
 
-  private readonly router = inject(Router)
+	private readonly router = inject(Router)
 
 	constructor(private translateService: TranslateService) {
 		// Load initial language
@@ -52,7 +53,7 @@ export class I18nService {
 	/**
 	 * Get translation by key
 	 */
-	translate(key: string, params?: Record<string, any>): string {
+	translate(key: TranslationKey, params?: Record<string, any>): string {
 		const translation = this.getNestedTranslation(key);
 		if (!translation) {
 			return key;

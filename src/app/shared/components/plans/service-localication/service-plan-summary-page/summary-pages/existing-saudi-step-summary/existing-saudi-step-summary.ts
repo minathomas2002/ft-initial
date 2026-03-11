@@ -12,7 +12,8 @@ import { EntityLevelSummarySection } from './step-summary-sections/entity-level-
 import { ServiceLevelSummarySection } from './step-summary-sections/service-level-summary-section/service-level-summary-section';
 import { AttachmentsSummarySection } from '../../../../attachments-summary-section/attachments-summary-section';
 import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
-import { EMaterialsFormControls } from 'src/app/shared/enums';
+import { TranslatePipe } from 'src/app/shared/pipes';
+import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
 import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 
 @Component({
@@ -25,6 +26,7 @@ import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
     ServiceLevelSummarySection,
     AttachmentsSummarySection,
     PageCommentBox,
+    TranslatePipe,
   ],
   templateUrl: './existing-saudi-step-summary.html',
   styleUrl: './existing-saudi-step-summary.scss',
@@ -33,7 +35,7 @@ import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
 export class ExistingSaudiStepSummary extends SummaryStepBaseClass {
   private readonly servicePlanFormService = inject(ServicePlanFormService);
 
-  override readonly pageTitleForTL = 'Existing Saudi Co.';
+  override readonly pageTitleForTL = EPlanPageTitle.ExistingSaudi;
   override readonly formGroup: FormGroup = this.servicePlanFormService.step3_existingSaudi;
 
   constructor() {

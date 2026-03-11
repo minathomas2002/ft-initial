@@ -28,6 +28,17 @@ export class PaginatorComponent {
 	filter = model.required<IFilterBase<unknown>>();
 	totalRecords = input.required<number>();
 
+	private readonly isRtl = computed(() => this.i18nService.currentLanguage() === 'ar');
+
+	/** LTR: arrow-left. RTL: arrow-right (back = toward start) */
+	prevIcon = computed(() => (this.isRtl() ? 'icon-arrow-right' : 'icon-arrow-left'));
+	/** LTR: arrow-right. RTL: arrow-left (forward = toward end) */
+	nextIcon = computed(() => (this.isRtl() ? 'icon-arrow-left' : 'icon-arrow-right'));
+	/** LTR: icon before text. RTL: icon after text (swap) */
+	prevIconPos = computed(() => (this.isRtl() ? 'right' : 'left'));
+	/** LTR: icon after text. RTL: icon before text (swap) */
+	nextIconPos = computed(() => (this.isRtl() ? 'left' : 'right'));
+
 	paginatorTemplate = computed(() => this.i18nService.translate('common.paginatorTemplate'));
 	maxPageLinkNumber = computed(() => {
 		return Math.ceil(this.totalRecords() / this.filter().pageSize) || 1;

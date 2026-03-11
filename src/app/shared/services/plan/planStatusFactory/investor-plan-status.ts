@@ -10,16 +10,21 @@ import { I18nService } from '../../i18n';
 export class InvestorPlanStatus implements IPlanStatus {
   i18nService = inject(I18nService);
 
+  private readonly statusKeyMap: Record<EInvestorPlanStatus, string> = {
+    [EInvestorPlanStatus.SUBMITTED]: 'plans.status.submitted',
+    [EInvestorPlanStatus.PENDING]: 'plans.status.pendingWithInvestor',
+    [EInvestorPlanStatus.UNDER_REVIEW]: 'plans.status.underReview',
+    [EInvestorPlanStatus.APPROVED]: 'plans.status.approved',
+    [EInvestorPlanStatus.REJECTED]: 'plans.status.rejected',
+    [EInvestorPlanStatus.DRAFT]: 'plans.status.draft',
+  };
+
   getStatusLabel(status: EInvestorPlanStatus): string {
-    const statusMap = {
-      [EInvestorPlanStatus.SUBMITTED]: this.i18nService.translate('plans.status.submitted'),
-      [EInvestorPlanStatus.PENDING]: 'Pending with Investor',
-      [EInvestorPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.status.underReview'),
-      [EInvestorPlanStatus.APPROVED]: this.i18nService.translate('plans.status.approved'),
-      [EInvestorPlanStatus.REJECTED]: this.i18nService.translate('plans.status.rejected'),
-      [EInvestorPlanStatus.DRAFT]: this.i18nService.translate('plans.status.draft'),
-    };
-    return statusMap[status] || this.i18nService.translate('plans.status.submitted');
+    return this.i18nService.translate(this.getStatusLabelKey(status));
+  }
+
+  getStatusLabelKey(status: EInvestorPlanStatus): string {
+    return this.statusKeyMap[status] ?? 'plans.status.submitted';
   }
 
   getStatusBadgeClass(status: EInvestorPlanStatus): TColors {

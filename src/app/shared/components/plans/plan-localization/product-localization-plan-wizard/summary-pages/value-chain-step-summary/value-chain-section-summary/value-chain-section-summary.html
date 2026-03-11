@@ -8,9 +8,9 @@
     >
       <ng-template pTemplate="header">
         <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
-          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Expense Header</th>
-          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">In-house / Procured</th>
-          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Cost %</th>
+          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.expenseHeader' | translate }}</th>
+          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.inHouseProcured' | translate }}</th>
+          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.costPercentage' | translate }}</th>
           @for (y of [1,2,3,4,5,6,7]; track y) {
           <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Year {{ y }}</th>
           }

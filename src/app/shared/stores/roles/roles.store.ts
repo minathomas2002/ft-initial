@@ -42,8 +42,8 @@ export const RolesStore = signalStore(
             patchState(store, { systemRoles: res.body || [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error fetching roles' });
-            return throwError(() => new Error('Error fetching roles'));
+            patchState(store, { error: error.errorMessage || i18nService.translate('users.errors.fetchRoles') });
+            return throwError(() => new Error(i18nService.translate('users.errors.fetchRoles')));
           }),
           finalize(() => {
             patchState(store, { loading: false });
@@ -66,8 +66,8 @@ export const RolesStore = signalStore(
             patchState(store, { filteredRoles: res.body || [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error fetching roles' });
-            return throwError(() => new Error('Error fetching roles'));
+            patchState(store, { error: error.errorMessage || i18nService.translate('users.errors.fetchRoles') });
+            return throwError(() => new Error(i18nService.translate('users.errors.fetchRoles')));
           }),
           finalize(() => {
             patchState(store, { loading: false });
@@ -90,8 +90,8 @@ export const RolesStore = signalStore(
             patchState(store, { allRoles: res.body || [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error fetching roles' });
-            return throwError(() => new Error('Error fetching roles'));
+            patchState(store, { error: error.errorMessage || i18nService.translate('users.errors.fetchRoles') });
+            return throwError(() => new Error(i18nService.translate('users.errors.fetchRoles')));
           }),
           finalize(() => {
             patchState(store, { loading: false });

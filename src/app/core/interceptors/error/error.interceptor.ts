@@ -6,6 +6,7 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { inject } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { ToasterService } from '../../../shared/services/toaster/toaster.service';
+import { I18nService } from '../../../shared/services/i18n/i18n.service';
 import { DelegationCanceledService } from '../../../shared/services/delegation-canceled/delegation-canceled.service';
 import { AuthStore } from '../../../shared/stores/auth/auth.store';
 import { DELEGATION_CANCELED_STATUS } from '../../../shared/constants/http-status.constants';
@@ -16,6 +17,7 @@ import { DELEGATION_CANCELED_STATUS } from '../../../shared/constants/http-statu
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toaster = inject(ToasterService);
+  const i18n = inject(I18nService);
   const delegationCanceledService = inject(DelegationCanceledService);
   const authStore = inject(AuthStore);
 
@@ -62,15 +64,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           toaster.error(error);
         });
       } else if (status === 403) {
-        toaster.error(
-          'You are not authorized to access this resource or your user is not active'
-        );
+        toaster.error(i18n.translate('common.errors.unauthorized'));
       } else if (status === 413) {
-        toaster.error('The maximum allowed upload size is 30 MB');
+        toaster.error(i18n.translate('common.errors.uploadSizeExceeded'));
       } else if (status === 0) {
-        toaster.error(
-          'You are facing an issue with the server. Please try again later.'
-        );
+        toaster.error(i18n.translate('common.errors.serverError'));
       }
 
       return throwError(() => err);

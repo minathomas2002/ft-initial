@@ -3,7 +3,7 @@
   (click)="menu.toggle($event)"
   iconPos="right"
 >
-  <span class="font-semibold">Actions</span>
+  <span class="font-semibold">{{ 'common.actions' | translate }}</span>
   <i class="icon-chevron-down {{isOpen() ? 'rotate-180' : 'rotate-0'}} transition-all"></i>
 </p-button>
 <p-menu
@@ -24,7 +24,7 @@
 />
 <p-menu
   #menu
-  styleClass="!text-gray-400 max-w-[165px] -translate-x-[80%]"
+  styleClass="!text-gray-400 max-w-[165px]"
   [model]="menuItems()"
   [popup]="true"
 />

@@ -2,6 +2,7 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { catchError, finalize, tap, throwError } from 'rxjs';
 import { RoleManagement } from '../../api/system-employees/role-management/role-management';
+import { I18nService } from '../../services/i18n/i18n.service';
 import { IRoleManagementAssignmentFilterRequest, IRoleManagementAssignmentRecord, ITransferRoleRequest } from '../../interfaces';
 import { ICurrentRoleHolders } from '../../interfaces';
 
@@ -26,6 +27,7 @@ export const RoleManagementStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const roleManagementApiService = inject(RoleManagement);
+    const i18n = inject(I18nService);
 
     return {
       getRoleManagementList(filter: IRoleManagementAssignmentFilterRequest) {
@@ -38,8 +40,8 @@ export const RoleManagementStore = signalStore(
             patchState(store, { roleManagementList: data, roleManagementCount: count });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error fetching role management list' });
-            return throwError(() => new Error('Error fetching role management list'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.fetchRoleManagementList') });
+            return throwError(() => new Error(i18n.translate('users.errors.fetchRoleManagementList')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -53,8 +55,8 @@ export const RoleManagementStore = signalStore(
             patchState(store, { currentRoleHolders: res.body || [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error fetching current role holders' });
-            return throwError(() => new Error('Error fetching current role holders'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.fetchCurrentRoleHolders') });
+            return throwError(() => new Error(i18n.translate('users.errors.fetchCurrentRoleHolders')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -68,8 +70,8 @@ export const RoleManagementStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error transferring role' });
-            return throwError(() => new Error('Error transferring role'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.transferRole') });
+            return throwError(() => new Error(i18n.translate('users.errors.transferRole')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });

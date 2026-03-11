@@ -1,4 +1,4 @@
-@if(control().dirty && control().invalid){
+@if((control().dirty || control().touched) && control().invalid){
 <div class="flex flex-col gap-2">
   @for(message of errorMessages(); track message){
   <app-base-error [message]="message" />

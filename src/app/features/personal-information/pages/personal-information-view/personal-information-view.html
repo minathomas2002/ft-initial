@@ -1,4 +1,4 @@
-<app-sections-layout pageTitle="My Profile">
+<app-sections-layout [pageTitle]="'navigation.myProfile' | translate">
   <ng-container ngProjectAs="page-body">
     <app-user-image-section (onProfilePictureUpdated)="refreshUserDate()"></app-user-image-section>
     <app-personal-information-section (onPersonalInfoUpdate)="refreshUserDate()"></app-personal-information-section>

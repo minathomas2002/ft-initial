@@ -6,10 +6,12 @@ import { TextareaModule } from 'primeng/textarea';
 import { HidePlaceholderWhenDisabledEmptyDirective, TrimOnBlurDirective } from 'src/app/shared/directives';
 import { BaseErrorMessages } from '../../base-components/base-error-messages/base-error-messages';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-comment-dialog',
   imports: [
+    TranslatePipe,
     BaseDialogComponent,
     BaseLabelComponent,
     ReactiveFormsModule,

@@ -107,7 +107,7 @@
             <td>
               <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
             </td>
-            <td>{{ item.submissionDate | date : 'dd MMM yyyy' }}</td>
+            <td>{{ item.submissionDate | localizedDate : 'dd MMM yyyy' }}</td>
             @if (isManager()) {
             <td>
               <p
@@ -239,9 +239,9 @@
 @if(viewDeleteDialog()) {
 <app-general-confirmation-dialog
   [(visible)]="viewDeleteDialog"
-  [title]="'Are you sure you want to delete the plan? This action cannot be undone.'"
-  [confirmationLabel]="'Delete'"
-  [cancelLabel]="'Cancel'"
+  [title]="'plans.delete.confirmMessage' | translate"
+  [confirmationLabel]="'common.delete' | translate"
+  [cancelLabel]="'common.cancel' | translate"
   [confirmButtonSeverity]="'danger'"
   [icon]="'icon-trash-2'"
   (confirmed)="onConfirmDeletePlan()"

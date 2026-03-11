@@ -5,8 +5,8 @@
 >
   <div class="items-center md:!flex hidden text-sm">
     <app-identify-user
-      [userName]="authStore.userProfile()?.nameEN!"
-      [userTitle]="authStore.userProfile()?.roleNames?.[0] || authStore.userCode()!"
+      [userName]="userNameByLanguage()"
+      [userTitle]="userTitleByLanguage()"
       [userAvatar]="userProfilePicture()"
     ></app-identify-user>
 

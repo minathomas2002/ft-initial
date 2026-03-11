@@ -3,12 +3,12 @@
   [showCloseButton]="true"
   [showConfirmButton]="true"
   [icon]="icon"
-  [dialogTitle]="dialogTitle"
+  [dialogTitle]="'profile.changeProfilePicture' | translate"
   [isConfirmationDisabled]="!allowSaveAction() || profilePictureProcessing()"
   [confirmButtonClass]="'w-[80px]'"
   [cancelButtonClass]="'w-[60px]'"
-  [confirmLabel]="confirmLabel"
-  [cancelLabel]="cancelLabel"
+  [confirmLabel]="confirmLabel | translate"
+  [cancelLabel]="cancelLabel | translate"
   (onConfirm)="onSaveUserPhoto()"
   (onClose)="onCloseClick()"
 >
@@ -27,7 +27,7 @@
     />
     <div class="flex gap-4">
       <p-button
-        label="Upload"
+        [label]="'common.upload' | translate"
         severity="secondary"
         icon="icon-file-upload"
         text
@@ -36,7 +36,7 @@
       />
       @if (!isImageNotSelectedPlaceholder()) {
       <p-button
-        label="Delete"
+        [label]="'common.delete' | translate"
         severity="danger"
         icon="icon-trash-2"
         text
@@ -51,7 +51,7 @@
 <app-general-confirmation-dialog
   [(visible)]="deleteConfirmVisible"
   [title]="'profile.deleteConfirm.title' | translate"
-  [description]="'Are you sure you want to delete your profile picture?'"
+  [description]="'profile.deleteConfirm.description' | translate"
   [confirmationLabel]="'common.delete' | translate"
   [icon]="'icon-trash-2'"
   [confirmButtonSeverity]="'danger'"

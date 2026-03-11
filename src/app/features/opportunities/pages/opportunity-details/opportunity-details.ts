@@ -135,7 +135,7 @@ export class OpportunityDetails implements OnInit, OnDestroy {
           );
         } else {
           this.toast.warn(
-            'Application is not allowed while an in-progress plan exists for the selected opportunity.'
+            this.i18nService.translate('opportunity.warning.inProgressPlan')
           );
         }
       });
@@ -179,7 +179,7 @@ export class OpportunityDetails implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.deleteConfirmDialogVisible.set(false);
-          this.toast.success('Opportunity deleted successfully');
+          this.toast.success(this.i18nService.translate('opportunity.messages.deletedSuccess'));
           this.onBack();
         },
         error: () => {
@@ -194,7 +194,7 @@ export class OpportunityDetails implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.toast.success('Opportunity moved to draft successfully');
+          this.toast.success(this.i18nService.translate('opportunity.messages.movedToDraftSuccess'));
           this.moveToDraftConfirmDialogVisible.set(false);
           this.getOpportunityDetails();
         },
@@ -210,7 +210,7 @@ export class OpportunityDetails implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.toast.success('Opportunity published successfully');
+          this.toast.success(this.i18nService.translate('opportunity.messages.publishedSuccess'));
           this.publishConfirmDialogVisible.set(false);
           this.getOpportunityDetails();
         },

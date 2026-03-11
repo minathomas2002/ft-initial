@@ -42,7 +42,7 @@
 
           <!-- Role -->
           <td>
-            {{item.role}}
+            {{ getUserTranslatedRole(item.roleCode, item.role) }}
           </td>
 
           <!-- Assigned BY -->
@@ -51,7 +51,7 @@
           </td>
           <!-- Assigned Date -->
           <td>
-            {{ item.assignedDate | date : 'dd MMM yyyy' }}
+            {{ item.assignedDate | localizedDate : 'dd MMM yyyy' }}
           </td>
 
           <!-- Status -->

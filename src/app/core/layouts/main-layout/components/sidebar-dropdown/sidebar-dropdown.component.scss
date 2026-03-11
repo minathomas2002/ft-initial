@@ -1,3 +1,14 @@
+/* Selected link: icon inherits white when parent has bg-primary */
+:host a.bg-primary i {
+  color: white !important;
+}
+
+/* Hover on active link: text and icon gray-900 */
+:host a.bg-primary:hover,
+:host a.bg-primary:hover i {
+  color: rgb(17 24 39) !important; /* gray-900 */
+}
+
 :host ::ng-deep {
   .p-panel-icons {
     position: absolute;

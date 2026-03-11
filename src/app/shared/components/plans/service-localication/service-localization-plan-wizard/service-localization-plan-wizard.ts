@@ -86,46 +86,45 @@ type ServiceLocalizationWizardStepState = IWizardStepState & { id: ServiceLocali
 export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnInit, OnDestroy {
   override readonly planStore = inject(PlanStore);
   private readonly profileStore = inject(ProfileStore);
-  private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   override readonly toasterService = inject(ToasterService);
 
   readonly sendBackConfirmationMessage = computed(() => {
     if (this.isDVManagerPersona()) {
-      return "This action cannot be undone and the plan will go directly to the Employee."
+      return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToEmployee');
     }
 
     if (this.isEmployeePersona()) {
-      return "This action cannot be undone and the plan will go directly to the Investor."
+      return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToInvestor');
     }
 
-    return "This action cannot be undone and the plan will go directly to the Division Manager.";
+    return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToDivisionManager');
   })
 
   readonly approvalDialogTitle = computed(() => {
     if (this.isDVManagerPersona()) {
-      return "Are you sure you want to approve this plan and forward it to the Department Manager for review?"
+      return this.i18nService.translate('plans.wizard.approval.titleToDeptManager');
     }
 
     if (this.isEmployeePersona()) {
       return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
-        ? "Are you sure you want to approve this plan and forward it to the Investor?"
-        : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+        ? this.i18nService.translate('plans.wizard.approval.titleToInvestor')
+        : this.i18nService.translate('plans.wizard.approval.titleToDivisionManager');
     }
-    return "Are you sure you want to approve this plan and forward it to the Employee for approval submission?"
+    return this.i18nService.translate('plans.wizard.approval.titleToEmployee');
   })
 
   readonly rejectionDialogTitle = computed(() => {
     if (this.isDVManagerPersona()) {
-      return 'Are you sure you want to reject this plan and return it to the Employee for final rejection submission to the Investor?'
+      return this.i18nService.translate('plans.wizard.rejectDialogTitleDvReturn')
     }
 
     if (this.isEmployeePersona()) {
-      return 'Are you sure you want to reject the plan as final rejection?'
+      return this.i18nService.translate('plans.wizard.rejectDialogTitleFinal')
     }
 
-    return 'Are you sure you want to reject this plan and return it to the Division Manager for acknowledgement?'
+    return this.i18nService.translate('plans.wizard.rejectDialogTitleDvAck')
   })
 
   visibility = model(false);
@@ -531,7 +530,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     pushStep({
       id: 'cover',
       title: EPlanPageTitle.CoverPage,
-      description: 'Enter high-level submission and plan details',
+      description: this.i18nService.translate('plans.wizard.serviceSteps.coverPageDesc'),
       formState: this.serviceLocalizationFormService.step1_coverPage,
       hasErrors: this.step1CommentPhase() === 'none' || this.step1CommentPhase() === 'viewing',
       commentsCount: this.isViewMode() && this.planComments() ? this.step1CommentFields().length : this.step1SelectedInputs().length,
@@ -541,7 +540,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     pushStep({
       id: 'overview',
       title: EPlanPageTitle.Overview,
-      description: 'Provide an overview of the localization plan',
+      description: this.i18nService.translate('plans.wizard.serviceSteps.overviewDesc'),
       formState: this.serviceLocalizationFormService.step2_overview,
       hasErrors: this.step2CommentPhase() === 'none' || this.step2CommentPhase() === 'viewing',
       commentsCount: this.isViewMode() && this.planComments() ? this.step2CommentFields().length : this.step2SelectedInputs().length,
@@ -552,7 +551,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       pushStep({
         id: 'existingSaudi',
         title: EPlanPageTitle.ExistingSaudi,
-        description: 'Enter details of your existing presence in Saudi Arabia',
+        description: this.i18nService.translate('plans.wizard.serviceSteps.existingSaudiDesc'),
         formState: this.serviceLocalizationFormService.step3_existingSaudi,
         hasErrors: this.step3CommentPhase() === 'none' || this.step3CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step3CommentFields().length : this.step3SelectedInputs().length,
@@ -564,7 +563,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       pushStep({
         id: 'directLocalization',
         title: EPlanPageTitle.DirectLocalization,
-        description: 'Provide direct localization and investment details',
+        description: this.i18nService.translate('plans.wizard.serviceSteps.directLocalizationDesc'),
         formState: this.serviceLocalizationFormService.step4_directLocalization,
         hasErrors: this.step4CommentPhase() === 'none' || this.step4CommentPhase() === 'viewing',
         commentsCount: this.isViewMode() && this.planComments() ? this.step4CommentFields().length : this.step4SelectedInputs().length,
@@ -576,7 +575,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     pushStep({
       id: 'summary',
       title: EPlanPageTitle.Summary,
-      description: 'Review the plan before final submission',
+      description: this.i18nService.translate('plans.wizard.step5.description'),
       formState: null,
       hasErrors: false,
     });
@@ -618,9 +617,9 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
     this.i18nService.currentLanguage();
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
-    if (currentMode === 'Review') return 'Review Service Localization Plan';
-    if (currentMode === 'resubmit') return 'Resubmit Service Localization Plan';
-    return 'Service Localization Plan';
+    if (currentMode === 'Review') return this.i18nService.translate('plans.wizard.title.reviewService');
+    if (currentMode === 'resubmit') return this.i18nService.translate('plans.wizard.title.resubmitService');
+    return this.i18nService.translate('plans.wizard.title.createService');
   });
 
   isLoadingPlan = signal(false);
@@ -1232,7 +1231,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.toasterService.success(this.i18nService.translate('Service localization plan submitted successfully'));
+          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.submitSuccess'));
           // Reset all forms after successful submission
           this.serviceLocalizationFormService.resetAllForms();
           // Reset wizard state
@@ -1313,7 +1312,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       coverPageCompanyInfo?.markAllAsTouched();
       step1CoverPage?.updateValueAndValidity({ emitEvent: true });
 
-      this.toasterService.error('Please enter plan title to save as draft');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.planTitleRequired'));
       return;
     }
 
@@ -1331,7 +1330,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       opportunityControl.updateValueAndValidity({ emitEvent: true });
       step2Overview.updateValueAndValidity({ emitEvent: true });
 
-      this.toasterService.error('Please select opportunity to save as draft');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.opportunityRequired'));
       return;
     }
 
@@ -1347,7 +1346,7 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
       .subscribe({
         next: () => {
           this.isProcessing.set(false);
-          this.toasterService.success('Service localization plan saved as draft successfully');
+          this.toasterService.success(this.i18nService.translate('plans.wizard.messages.serviceDraftSavedSuccess'));
           // Only reset forms if not in edit mode (to preserve data)
           if (!isEditMode) {
             this.serviceLocalizationFormService.resetAllForms();

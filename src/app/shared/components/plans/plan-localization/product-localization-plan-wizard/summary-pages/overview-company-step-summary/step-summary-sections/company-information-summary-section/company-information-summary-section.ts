@@ -38,7 +38,7 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
     const currantValue = this.ceoNameControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.ceoName ?? '';
     return {
-      label: 'CEO Name',
+      label: this.i18nService.translate('plans.form.ceoName'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.ceoNameControl()),

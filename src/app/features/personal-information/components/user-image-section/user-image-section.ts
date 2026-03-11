@@ -25,7 +25,7 @@ export class UserImageSection {
   private authStore = inject(AuthStore);
 
   image = computed(() => this.profileStore.userImage());
-  userName = computed(() => this.profileStore.userProfile()?.nameEn ?? '');
+  userName = computed(() => this.i18nService.currentLanguage() === 'en' ? this.profileStore.userProfile()?.nameEn ?? '' : this.profileStore.userProfile()?.nameAr ?? '');
   userTitle = computed(() => this.profileStore.userTitle());
   changeYourProfilePictureVisible = signal<boolean>(false);
   onProfilePictureUpdated = output<void>();
@@ -47,18 +47,15 @@ export class UserImageSection {
         next: (res) => {
           if (res.success) {
             const messageKey = base64 === null ? 'profile.messages.profilePictureRemoved' : 'profile.messages.profilePictureUpdated';
-            const fallback = base64 === null ? 'Profile picture removed successfully' : 'Profile picture updated successfully';
-            this.toasterService.success(
-              this.i18nService.translate(messageKey) ?? fallback,
-            );
+            this.toasterService.success(this.i18nService.translate(messageKey));
             this.changeYourProfilePictureVisible.set(false);
             this.onProfilePictureUpdated.emit();
           } else {
-            this.toasterService.error(res.message?.join(' ') ?? 'Failed to update profile picture');
+            this.toasterService.error(res.message?.join(' ') ?? this.i18nService.translate('profile.messages.updateFailed'));
           }
         },
         error: () => {
-          this.toasterService.error('Failed to update profile picture');
+          this.toasterService.error(this.i18nService.translate('profile.messages.updateFailed'));
         },
       });
   }

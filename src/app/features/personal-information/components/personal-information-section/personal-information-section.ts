@@ -12,12 +12,15 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n';
 import { IUpdatePersonalInfoRequest } from 'src/app/shared/interfaces';
 import { ButtonModule } from 'primeng/button';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-personal-information-section',
   imports: [
+    TranslatePipe,
     PersonalInformationCard,
     PersonalInformationFormField,
     PersonalInformationSkeleton,
@@ -36,6 +39,7 @@ import { ButtonModule } from 'primeng/button';
 export class PersonalInformationSection implements OnInit {
   private profileStore = inject(ProfileStore);
   private toasterService = inject(ToasterService);
+  private i18nService = inject(I18nService);
   private cdr = inject(ChangeDetectorRef);
   protected formService = inject(PersonalInformationFormService);
   protected viewMode = signal<EViewMode>(EViewMode.View);
@@ -106,7 +110,7 @@ export class PersonalInformationSection implements OnInit {
     this.profileStore.updatePersonalInfo(request).pipe(take(1))
       .subscribe((res) => {
         if (res.success) {
-          this.toasterService.success('Profile updated successfully');
+          this.toasterService.success(this.i18nService.translate('profile.messages.profileUpdated'));
           this.onPersonalInfoUpdate.emit();
           this.viewMode.set(EViewMode.View);
           this.formService.updateViewMode(this.viewMode());

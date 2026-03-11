@@ -12,10 +12,12 @@ import { EInternalUserPlanStatus, EInvestorPlanStatus } from 'src/app/shared/int
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { ERoles } from 'src/app/shared/enums';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-service-plan-summary-page',
   imports: [
+    TranslatePipe,
     CoverPageStepSummary,
     OverviewStepSummary,
     ExistingSaudiStepSummary,

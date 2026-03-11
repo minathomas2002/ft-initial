@@ -20,10 +20,12 @@ import { FormsModule } from '@angular/forms';
 import { PageCommentBox } from '../../page-comment-box/page-comment-box';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { EPlanPageTitle } from 'src/app/shared/enums';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-service-localization-step-cover-page',
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,

@@ -25,10 +25,12 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ServiceLocalizationPlanWizard } from "src/app/shared/components/plans/service-localication/service-localization-plan-wizard/service-localization-plan-wizard";
 import { ProductLocalizationPlanWizard } from "src/app/shared/components/plans/plan-localization/product-localization-plan-wizard/product-localization-plan-wizard";
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-navbar-notifications',
   imports: [
+    TranslatePipe,
     ButtonModule,
     OverlayBadgeModule,
     BadgeModule,

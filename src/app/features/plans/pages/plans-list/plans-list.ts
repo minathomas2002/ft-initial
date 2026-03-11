@@ -5,12 +5,12 @@ import { DataTableComponent } from 'src/app/shared/components/layout-components/
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { EInvestorPlanStatus, EInternalUserPlanStatus, IPlanRecord, ITableHeaderItem, TPlansSortingKeys } from 'src/app/shared/interfaces';
-import { TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
+import { LocalizedDatePipe, TranslatePipe, SlaCountdownNounPipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
-import { EOpportunityType, ERoles, ERoutes } from 'src/app/shared/enums';
-import { DatePipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
+import { EOpportunityType } from 'src/app/shared/enums';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
@@ -42,7 +42,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     PlansActionMenu,
     TranslatePipe,
     SlaCountdownNounPipe,
-    DatePipe,
+    LocalizedDatePipe,
     NgClass,
     ButtonModule,
     SkeletonModule,
@@ -55,7 +55,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     AssignReassignManualEmployee,
     BaseTagComponent,
     GeneralConfirmationDialogComponent
-],
+  ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
   providers: [InvestorPlansFilterService, InternalUsersPlansFilterService],
@@ -109,7 +109,7 @@ export class PlansList extends PlanDashboardBase implements OnInit {
 
     baseHeaders.push(
       { label: this.i18nService.translate('plans.table.planTitle'), isSortable: false, sortingKey: 'title' },
-      { label: 'Opportunity Type', isSortable: false, sortingKey: 'title' },
+      { label: this.i18nService.translate('plans.table.opportunityType'), isSortable: false, sortingKey: 'title' },
       { label: this.i18nService.translate('plans.table.submissionDate'), isSortable: true, sortingKey: 'submissionDate' },
     );
 
@@ -156,11 +156,11 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     });
   }
   ngOnInit(): void {
-     this.route.queryParams
-     .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params=>{
-       this.investorName.set(params["investorName"]);
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+        this.investorName.set(params["investorName"]);
 
-     })
+      })
   }
 
   createNewPlan() {
@@ -244,13 +244,13 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     if (plan.planType === EOpportunityType.PRODUCT) {
       this.planStore.generateProductPlanPdf(plan.id).pipe(take(1)).subscribe({
         error: (error) => {
-          this.toastService.error(error.errorMessage || 'Error generating product plan pdf');
+          this.toastService.error(error.errorMessage || this.i18nService.translate('dashboard.errors.productPdfError'));
         }
       });
     } else if (plan.planType === EOpportunityType.SERVICES) {
       this.planStore.generateServicePlanPdf(plan.id).pipe(take(1)).subscribe({
         error: (error) => {
-          this.toastService.error(error.errorMessage || 'Error generating service plan pdf');
+          this.toastService.error(error.errorMessage || this.i18nService.translate('dashboard.errors.servicePdfError'));
         }
       });
     }
@@ -301,7 +301,7 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     this.planItem.set(plan);
     this.isReassignMode.set(true);
   }
- onDelete(plan: IPlanRecord) {
+  onDelete(plan: IPlanRecord) {
     this.viewDeleteDialog.set(true);
     this.planItem.set(plan);
     this.isDeleteMode.set(true);
@@ -317,14 +317,14 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     this.planStore.deleteDraftPlan(this.planItem()!.id).pipe(take(1)).subscribe({
       next: () => {
 
-        this.toastService.success('Your Plan has been removed successfully.');
+        this.toastService.success(this.i18nService.translate('dashboard.messages.planRemoved'));
         this.applyFilter();
         this.viewDeleteDialog.set(false);
         this.planItem.set(null);
         this.isDeleteMode.set(false);
       },
       error: (error) => {
-        this.toastService.error(error.errorMessage || 'Error deleting the plan');
+        this.toastService.error(error.errorMessage || this.i18nService.translate('dashboard.errors.deletePlanError'));
         this.viewDeleteDialog.set(false);
         this.planItem.set(null);
         this.isDeleteMode.set(false);
@@ -334,27 +334,27 @@ export class PlansList extends PlanDashboardBase implements OnInit {
 
   }
   exportPlans() {
-  this.planStore.exportPlans(this.internalUsersFilterService.adpatedFilter()).pipe(take(1)).subscribe({
-    next: (blob: Blob) => {
-      if (!blob) {
-        this.toastService.error('No file returned from server');
-        return;
-      }
-      let fileName = 'Plans.csv';
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      document.body.appendChild(link);
-      link.href = url;
-      link.download = fileName;
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+    this.planStore.exportPlans(this.internalUsersFilterService.adpatedFilter()).pipe(take(1)).subscribe({
+      next: (blob: Blob) => {
+        if (!blob) {
+          this.toastService.error(this.i18nService.translate('dashboard.errors.noFileReturned'));
+          return;
+        }
+        let fileName = 'Plans.csv';
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        document.body.appendChild(link);
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
 
-      this.toastService.success('Plans exported successfully.');
-    },
-    error: (error) => {
-      this.toastService.error(error.errorMessage || 'Error exporting plans');
-    }
-  });
-}
+        this.toastService.success(this.i18nService.translate('dashboard.messages.exportSuccess'));
+      },
+      error: (error) => {
+        this.toastService.error(error.errorMessage || this.i18nService.translate('plans.errors.exportPlans'));
+      }
+    });
+  }
 }

@@ -11,6 +11,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { TableModule } from 'primeng/table';
 import { SummarySectionBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-section-base.class';
 import { EInternalUserPlanStatus } from 'src/app/shared/interfaces';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 const SECTION_TYPE_BY_KEY: Record<string, number> = {
   [EMaterialsFormControls.designEngineeringFormGroup]: 1,
@@ -22,7 +23,7 @@ const SECTION_TYPE_BY_KEY: Record<string, number> = {
 
 @Component({
   selector: 'app-value-chain-section-summary',
-  imports: [PlanSummaryFlied, TableModule],
+  imports: [PlanSummaryFlied, TableModule, TranslatePipe],
   templateUrl: './value-chain-section-summary.html',
   styleUrl: './value-chain-section-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

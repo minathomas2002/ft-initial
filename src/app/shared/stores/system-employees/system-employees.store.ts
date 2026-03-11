@@ -2,6 +2,7 @@ import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
 import { SystemEmployeesApiService } from "../../api/system-employees/system-employees-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, map, tap, throwError } from "rxjs";
+import { I18nService } from "../../services/i18n/i18n.service";
 import {
   IActiveEmployee,
   ICreateSystemEmployeeRequest,
@@ -40,6 +41,7 @@ export const SystemEmployeesStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const systemEmployeesApiService = inject(SystemEmployeesApiService);
+    const i18n = inject(I18nService);
     return {
       /* Get System Employee List */
       getSystemEmployeesList(filter: ISystemEmployeeFilterRequest) {
@@ -57,8 +59,8 @@ export const SystemEmployeesStore = signalStore(
             patchState(store, { count: res.body?.pagination.totalCount || 0 });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error fetching system employees' });
-            return throwError(() => new Error('Error fetching system employees'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.fetchEmployees') });
+            return throwError(() => new Error(i18n.translate('users.errors.fetchEmployees')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -74,8 +76,8 @@ export const SystemEmployeesStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error updating system employee' });
-            return throwError(() => new Error('Error updating system employee'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.updateEmployee') });
+            return throwError(() => new Error(i18n.translate('users.errors.updateEmployee')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -91,8 +93,8 @@ export const SystemEmployeesStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error toggling system employee status' });
-            return throwError(() => new Error('Error toggling system employee status'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.toggleStatus') });
+            return throwError(() => new Error(i18n.translate('users.errors.toggleStatus')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -108,8 +110,8 @@ export const SystemEmployeesStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error creating system employee' });
-            return throwError(() => new Error('Error creating system employee'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.createEmployee') });
+            return throwError(() => new Error(i18n.translate('users.errors.createEmployee')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -126,8 +128,8 @@ export const SystemEmployeesStore = signalStore(
             patchState(store, { employeeDetails: res.body || null });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error getting system employee details' });
-            return throwError(() => new Error('Error getting system employee details'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.getEmployeeDetails') });
+            return throwError(() => new Error(i18n.translate('users.errors.getEmployeeDetails')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -145,10 +147,10 @@ export const SystemEmployeesStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error getting employee date from HR',
+              error: error.errorMessage || i18n.translate('users.errors.getEmployeeDateFromHR'),
               employeeDateFromHR: null
             });
-            return throwError(() => new Error('Error getting employee date from HR'));
+            return throwError(() => new Error(i18n.translate('users.errors.getEmployeeDateFromHR')));
           }),
           finalize(() => {
             patchState(store, { isLoadingDetails: false });
@@ -165,8 +167,8 @@ export const SystemEmployeesStore = signalStore(
             patchState(store, { activeEmployees: res.body || [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error getting active employees' });
-            return throwError(() => new Error('Error getting active employees'));
+            patchState(store, { error: error.errorMessage || i18n.translate('users.errors.getActiveEmployees') });
+            return throwError(() => new Error(i18n.translate('users.errors.getActiveEmployees')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });

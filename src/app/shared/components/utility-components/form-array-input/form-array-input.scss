@@ -3,3 +3,8 @@
     border: 1px solid var(--p-gray-200) !important;
   }
 }
+
+/* RTL: Ensure table inherits direction for proper layout */
+:host-context(html[dir='rtl'])::ng-deep .p-datatable {
+  direction: rtl;
+}

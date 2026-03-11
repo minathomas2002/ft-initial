@@ -82,7 +82,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   override readonly toasterService = inject(ToasterService);
   override readonly planStore = inject(PlanStore);
   readonly validationService = inject(ProductPlanValidationService);
-  private readonly i18nService = inject(I18nService);
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   visibility = model(false);
   activeStep = signal<number>(1);
@@ -103,40 +102,40 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   })
   sendBackConfirmationMessage = computed(() => {
     if (this.isDVManagerPersona()) {
-      return "This action cannot be undone and the plan will go directly to the Employee."
+      return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToEmployee');
     }
 
     if (this.isEmployeePersona()) {
-      return "This action cannot be undone and the plan will go directly to the Investor."
+      return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToInvestor');
     }
 
-    return "This action cannot be undone and the plan will go directly to the Division Manager.";
+    return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToDivisionManager');
   })
 
   readonly approvalDialogTitle = computed(() => {
     if (this.isDVManagerPersona()) {
-      return "Are you sure you want to approve this plan and forward it to the Department Manager for review?"
+      return this.i18nService.translate('plans.wizard.approval.titleToDeptManager');
     }
 
     if (this.isEmployeePersona()) {
       return this.planStatus() === EInternalUserPlanStatus.DEPT_APPROVED
-        ? "Are you sure you want to approve this plan and forward it to the Investor?"
-        : 'Are you sure you want to approve this plan and forward it to the Division Manager for review?'
+        ? this.i18nService.translate('plans.wizard.approval.titleToInvestor')
+        : this.i18nService.translate('plans.wizard.approval.titleToDivisionManager');
     }
 
-    return "Are you sure you want to approve this plan and forward it to the Employee for approval submission?"
+    return this.i18nService.translate('plans.wizard.approval.titleToEmployee');
   })
 
   readonly rejectionDialogTitle = computed(() => {
     if (this.isDVManagerPersona()) {
-      return 'Are you sure you want to reject this plan and return it to the Employee for final rejection submission to the Investor?'
+      return this.i18nService.translate('plans.wizard.rejectDialogTitleDvReturn')
     }
 
     if (this.isEmployeePersona()) {
-      return 'Are you sure you want to reject the plan as final rejection?'
+      return this.i18nService.translate('plans.wizard.rejectDialogTitleFinal')
     }
 
-    return 'Are you sure you want to reject this plan and return it to the Division Manager for acknowledgement?'
+    return this.i18nService.translate('plans.wizard.rejectDialogTitleDvAck')
   })
 
   // Track validation errors for stepper indicators
@@ -426,8 +425,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.i18nService.currentLanguage();
     if (currentMode === 'edit') return this.i18nService.translate('plans.wizard.title.edit');
     if (currentMode === 'view') return this.i18nService.translate('plans.wizard.title.view');
-    if (currentMode === 'Review') return 'Review Product Localization Plan';
-    if (currentMode === 'resubmit') return 'Resubmit Product Localization Plan';
+    if (currentMode === 'Review') return this.i18nService.translate('plans.wizard.title.reviewProduct');
+    if (currentMode === 'resubmit') return this.i18nService.translate('plans.wizard.title.resubmitProduct');
     return this.i18nService.translate('plans.wizard.title.create');
   });
   isLoadingPlan = signal(false);
@@ -1108,13 +1107,13 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       planTitleControl?.markAsDirty()
       planTitleControl?.markAsTouched();
       basicInfoFormGroup?.get(EMaterialsFormControls.planTitle)?.updateValueAndValidity()
-      this.toasterService.error('Plan title is required to save as draft');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.planTitleRequired'));
       return;
     }
     if (!opportunity) {
       opportunityControl?.markAsDirty();
       opportunityControl?.markAsTouched();
-      this.toasterService.error('Please select opportunity to save as draft');
+      this.toasterService.error(this.i18nService.translate('plans.wizard.messages.opportunityRequired'));
       return;
     }
 

@@ -33,6 +33,7 @@
         <input
           type="email"
           pInputText
+          class="ltr"
           [formControl]="registerFormService.email"
           [placeholder]="'auth.enterYourEmail' | translate"
           fluid
@@ -46,7 +47,10 @@
       <!-- Phone -->
       <div class="field">
         <app-base-label [title]="'auth.phone' | translate"></app-base-label>
-        <app-phone-input [formControl]="registerFormService.phone"></app-phone-input>
+        <app-phone-input
+          class="ltr"
+          [formControl]="registerFormService.phone"
+        ></app-phone-input>
         @if (registerFormService.phone.touched && registerFormService.phone.invalid) {
         <app-base-error [message]="registerFormService.phone.hasError('required') ? ('auth.phoneRequired' | translate) :
           ('auth.invalidPhoneNumber' | translate)" />

@@ -11,10 +11,12 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { PageCommentBox } from "../../page-comment-box/page-comment-box";
 import { ERoles } from 'src/app/shared/enums';
 import { RoleService } from 'src/app/shared/services/role/role-service';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-product-plan-summary-page',
   imports: [
+    TranslatePipe,
     OverviewCompanyStepSummary,
     ProductPlantOverviewStepSummary,
     ValueChainStepSummary,

@@ -10,25 +10,28 @@ export class InternalUserPlanStatus implements IPlanStatus {
   i18nService = inject(I18nService);
 
 
-  getStatusLabel(status: EInternalUserPlanStatus): string {
+  private readonly statusKeyMap: Record<EInternalUserPlanStatus, string> = {
+    [EInternalUserPlanStatus.PENDING]: 'plans.employee_status.pendingWithInvestor',
+    [EInternalUserPlanStatus.UNDER_REVIEW]: 'plans.employee_status.underReview',
+    [EInternalUserPlanStatus.APPROVED]: 'plans.employee_status.approved',
+    [EInternalUserPlanStatus.REJECTED]: 'plans.employee_status.rejected',
+    [EInternalUserPlanStatus.UNASSIGNED]: 'plans.employee_status.unassigned',
+    [EInternalUserPlanStatus.DEPT_APPROVED]: 'plans.employee_status.deptApproved',
+    [EInternalUserPlanStatus.DEPT_REJECTED]: 'plans.employee_status.deptRejected',
+    [EInternalUserPlanStatus.DV_APPROVED]: 'plans.employee_status.dvApproved',
+    [EInternalUserPlanStatus.DV_REJECTED]: 'plans.employee_status.dvRejected',
+    [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: 'plans.employee_status.dvRejectionAcknowledged',
+    [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: 'plans.employee_status.employeeApproved',
+    [EInternalUserPlanStatus.ReturnedByDV]: 'plans.employee_status.returnedByDV',
+    [EInternalUserPlanStatus.ReturnedByDEPTManager]: 'plans.employee_status.returnedByDEPTManager',
+  };
 
-    const statusMap = {
-      [EInternalUserPlanStatus.PENDING]: this.i18nService.translate('plans.employee_status.pendingWithInvestor'),
-      [EInternalUserPlanStatus.UNDER_REVIEW]: this.i18nService.translate('plans.employee_status.underReview'),
-      [EInternalUserPlanStatus.APPROVED]: this.i18nService.translate('plans.employee_status.approved'),
-      [EInternalUserPlanStatus.REJECTED]: this.i18nService.translate('plans.employee_status.rejected'),
-      [EInternalUserPlanStatus.UNASSIGNED]: this.i18nService.translate('plans.employee_status.unassigned'),
-      [EInternalUserPlanStatus.DEPT_APPROVED]: this.i18nService.translate('plans.employee_status.deptApproved'),
-      [EInternalUserPlanStatus.DEPT_REJECTED]: this.i18nService.translate('plans.employee_status.deptRejected'),
-      [EInternalUserPlanStatus.DV_APPROVED]: this.i18nService.translate('plans.employee_status.dvApproved'),
-      [EInternalUserPlanStatus.DV_REJECTED]: this.i18nService.translate('plans.employee_status.dvRejected'),
-      [EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED]: this.i18nService.translate('plans.employee_status.dvRejectionAcknowledged'),
-      [EInternalUserPlanStatus.EMPLOYEE_APPROVED]: this.i18nService.translate('plans.employee_status.employeeApproved'),
-      // [EInternalUserPlanStatus.EMPLOYEE_REJECTED]: this.i18nService.translate('plans.employee_status.employeeRejected'),
-      [EInternalUserPlanStatus.ReturnedByDV]: this.i18nService.translate('plans.employee_status.returnedByDV'),
-      [EInternalUserPlanStatus.ReturnedByDEPTManager]: this.i18nService.translate('plans.employee_status.returnedByDEPTManager'),
-    };
-    return statusMap[status] || '';
+  getStatusLabel(status: EInternalUserPlanStatus): string {
+    return this.i18nService.translate(this.getStatusLabelKey(status));
+  }
+
+  getStatusLabelKey(status: EInternalUserPlanStatus): string {
+    return this.statusKeyMap[status] ?? 'plans.employee_status.pending';
   }
 
   getStatusBadgeClass(status: EInternalUserPlanStatus): TColors {

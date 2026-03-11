@@ -4,6 +4,7 @@ import { SettingsApiService } from "../../api/settings/settings-api-service";
 import { inject } from "@angular/core";
 import { catchError, finalize, map, tap, throwError } from "rxjs";
 import { ENotificationChannel } from "../../enums/notificationSetting.enum";
+import { I18nService } from "../../services/i18n/i18n.service";
 
 
 const initialState: {
@@ -37,6 +38,7 @@ export const AdminSettingsStore = signalStore(
   withMethods((store) => {
 
     const settingApiService = inject(SettingsApiService);
+    const i18n = inject(I18nService);
     return {
       /* Get Sla setting*/
       getSlaSetting() {
@@ -52,10 +54,10 @@ export const AdminSettingsStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error getting sla setting',
+              error: error.errorMessage || i18n.translate('setting.errors.getSlaSetting'),
               settingSla: null
             });
-            return throwError(() => new Error('Error getting sla setting'));
+            return throwError(() => new Error(i18n.translate('setting.errors.getSlaSetting')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -70,8 +72,8 @@ export const AdminSettingsStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error updating sla setting' });
-            return throwError(() => new Error('Error updating sla setting'));
+            patchState(store, { error: error.errorMessage || i18n.translate('setting.errors.updateSlaSetting') });
+            return throwError(() => new Error(i18n.translate('setting.errors.updateSlaSetting')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -89,10 +91,10 @@ export const AdminSettingsStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error getting auto assign setting',
+              error: error.errorMessage || i18n.translate('setting.errors.getAutoAssignSetting'),
               settingAutoAssign: { isEnabled: false } as ISettingAutoAssign
             });
-            return throwError(() => new Error('Error getting auto assign setting'));
+            return throwError(() => new Error(i18n.translate('setting.errors.getAutoAssignSetting')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -107,8 +109,8 @@ export const AdminSettingsStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error updating auto assign setting' });
-            return throwError(() => new Error('Error updating auto assign setting'));
+            patchState(store, { error: error.errorMessage || i18n.translate('setting.errors.updateAutoAssignSetting') });
+            return throwError(() => new Error(i18n.translate('setting.errors.updateAutoAssignSetting')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -137,11 +139,11 @@ export const AdminSettingsStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error getting holidays list',
+              error: error.errorMessage || i18n.translate('setting.errors.getHolidaysList'),
               holidaysList: [],
               holidaysTotalCount: 0
             });
-            return throwError(() => new Error('Error getting holidays list'));
+            return throwError(() => new Error(i18n.translate('setting.errors.getHolidaysList')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -157,8 +159,8 @@ export const AdminSettingsStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error creating holiday' });
-            return throwError(() => new Error('Error creating holiday'));
+            patchState(store, { error: error.errorMessage || i18n.translate('setting.errors.createHoliday') });
+            return throwError(() => new Error(i18n.translate('setting.errors.createHoliday')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -174,8 +176,8 @@ export const AdminSettingsStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error updating holiday' });
-            return throwError(() => new Error('Error updating holiday'));
+            patchState(store, { error: error.errorMessage || i18n.translate('setting.errors.updateHoliday') });
+            return throwError(() => new Error(i18n.translate('setting.errors.updateHoliday')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -191,8 +193,8 @@ export const AdminSettingsStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error deleting holiday' });
-            return throwError(() => new Error('Error deleting holiday'));
+            patchState(store, { error: error.errorMessage || i18n.translate('setting.errors.deleteHoliday') });
+            return throwError(() => new Error(i18n.translate('setting.errors.deleteHoliday')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -210,10 +212,10 @@ export const AdminSettingsStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error getting notification setting',
+              error: error.errorMessage || i18n.translate('setting.errors.getNotificationSetting'),
               [stateKey]: []
             });
-            return throwError(() => new Error('Error getting notification setting'));
+            return throwError(() => new Error(i18n.translate('setting.errors.getNotificationSetting')));
             }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -232,10 +234,10 @@ export const AdminSettingsStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error getting working days list',
+              error: error.errorMessage || i18n.translate('setting.errors.getWorkingDays'),
               workingDaysList: []
             });
-            return throwError(() => new Error('Error getting working days list'));
+            return throwError(() => new Error(i18n.translate('setting.errors.getWorkingDays')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -251,8 +253,8 @@ export const AdminSettingsStore = signalStore(
            
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error updating notification' });
-            return throwError(() => new Error('Error updating notification'));
+            patchState(store, { error: error.errorMessage || i18n.translate('setting.errors.updateNotification') });
+            return throwError(() => new Error(i18n.translate('setting.errors.updateNotification')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });

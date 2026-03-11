@@ -29,28 +29,32 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   private readonly mfg = () => this.planStore.productPlanData()?.productPlan.productPlantOverview.manufacturingExperience;
 
   private yesNo(value: boolean | null | undefined): string {
-    return value === true ? 'Yes' : value === false ? 'No' : '';
+    if (value === true) return this.i18nService.translate('common.yes');
+    if (value === false) return this.i18nService.translate('common.no');
+    return '';
   }
 
   private formatProductManufacturingExperience(value: number | unknown): string {
     if (value === null || value === undefined || value === '') return '';
 
-    const labelMap: Record<number, string> = {
-      [EProductManufacturingExperience.Years_5]: 'Less than 5 years',
-      [EProductManufacturingExperience.Years_5_10]: '5 to 10 years',
-      [EProductManufacturingExperience.Years_10]: 'More than 10 years',
+    const keyMap: Record<number, string> = {
+      [EProductManufacturingExperience.Years_5]: 'plans.form.experienceLessThan5',
+      [EProductManufacturingExperience.Years_5_10]: 'plans.form.experience5To10',
+      [EProductManufacturingExperience.Years_10]: 'plans.form.experienceMoreThan10',
     };
 
-    return labelMap[value as number] ?? String(value);
+    const key = keyMap[value as number];
+    return key ? this.i18nService.translate(key) : String(value);
   }
 
   productManufacturingExperienceSummaryField = computed<IPlanSummaryField>(() => {
+    this.i18nService.currentLanguage();
     this.doRefresh();
     const value = this.productManufacturingExperienceControl()?.value;
     const currantValue = this.formatProductManufacturingExperience(value);
     const beforeValue = this.formatProductManufacturingExperience(this.mfg()?.experienceRange);
     return {
-      label: 'Product Manufacturing Experience',
+      label: this.i18nService.translate('plans.form.productManufacturingExperience'),
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.productManufacturingExperienceControl()),
@@ -61,11 +65,12 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   provideToSECSummaryField = computed<IPlanSummaryField>(() => {
+    this.i18nService.currentLanguage();
     this.doRefresh();
     const currantValue = this.yesNo(this.provideToSECControl()?.value);
     const beforeValue = this.yesNo(this.mfg()?.provideToSEC);
     return {
-      label: 'Do you currently provide this product to SEC?',
+      label: this.i18nService.translate('plans.form.doYouProvideProductToSEC'),
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.provideToSECControl()),
@@ -76,7 +81,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   showProvideToSECSummaryField = computed(() => {
-    return this.provideToSECSummaryField().currantValue === 'Yes';
+    return this.provideToSECControl()?.value === true;
   });
 
   qualifiedPlantLocationSECSummaryField = computed<IPlanSummaryField>(() => {
@@ -84,7 +89,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const currantValue = this.qualifiedPlantLocationSECControl()?.value ?? '';
     const beforeValue = this.mfg()?.qualifiedPlantLocation_SEC ?? '';
     return {
-      label: 'Qualified Plant Location (By SEC)',
+      label: this.i18nService.translate('plans.form.qualifiedPlantLocationBySEC'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.qualifiedPlantLocationSECControl()),
@@ -99,7 +104,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const currantValue = this.approvedVendorIDSECControl()?.value ?? '0';
     const beforeValue = this.mfg()?.approvedVendorId_SEC ?? '0';
     return {
-      label: 'Approved Vendor ID (with SEC)',
+      label: this.i18nService.translate('plans.form.approvedVendorIDWithSEC'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.approvedVendorIDSECControl()),
@@ -114,7 +119,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const currantValue = this.yearsOfExperienceSECControl()?.value ?? '0';
     const beforeValue = this.mfg()?.yearsExperience_SEC?.toString() || '0';
     return {
-      label: 'Years of Experience (with SEC)',
+      label: this.i18nService.translate('plans.form.yearsOfExperienceWithSEC'),
       beforeValue,
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.yearsOfExperienceSECControl()),
@@ -133,7 +138,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const beforeValue = Number(this.mfg()?.totalQuantitiesToSEC ?? 0)
       .toLocaleString('en-US');
     return {
-      label: 'Total Quantities provided to SEC',
+      label: this.i18nService.translate('plans.form.totalQuantitiesProvidedToSEC'),
       beforeValue,
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.totalQuantitiesSECControl()),
@@ -144,15 +149,16 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
   });
 
   showApprovedLocalSuppliersSummaryField = computed(() => {
-    return this.provideToLocalSuppliersSummaryField().currantValue === 'Yes';
+    return this.provideToLocalSuppliersControl()?.value === true;
   });
 
   provideToLocalSuppliersSummaryField = computed<IPlanSummaryField>(() => {
+    this.i18nService.currentLanguage();
     this.doRefresh();
     const currantValue = this.yesNo(this.provideToLocalSuppliersControl()?.value);
     const beforeValue = this.yesNo(this.mfg()?.provideToLocalSuppliers);
     return {
-      label: "Do you currently provide this product to SEC's approved local suppliers?",
+      label: this.i18nService.translate('plans.form.doYouProvideProductToLocalSuppliers'),
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.provideToLocalSuppliersControl()),
@@ -167,7 +173,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const currantValue = this.namesOfSECApprovedSuppliersControl()?.value ?? '';
     const beforeValue = this.mfg()?.localSupplierNames || '';
     return {
-      label: "Name(s) of SEC approved local supplier(s)",
+      label: this.i18nService.translate('plans.form.namesOfSECApprovedSuppliers'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.namesOfSECApprovedSuppliersControl()),
@@ -182,7 +188,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const currantValue = this.qualifiedPlantLocationControl()?.value ?? '';
     const beforeValue = this.mfg()?.qualifiedPlantLocation_LocalSupplier || '';
     return {
-      label: 'Qualified Plant Location',
+      label: this.i18nService.translate('plans.form.qualifiedPlantLocation'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.qualifiedPlantLocationControl()),
@@ -197,7 +203,7 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
     const currantValue = this.yearsOfExperienceControl()?.value ?? '0';
     const beforeValue = this.mfg()?.yearsExperience_LocalSupplier?.toString() || '0';
     return {
-      label: 'Years of Experience',
+      label: this.i18nService.translate('plans.form.yearsOfExperience'),
       beforeValue,
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.yearsOfExperienceControl()),
@@ -209,13 +215,13 @@ export class ProductManufacturingExperienceSummarySection extends SummarySection
 
   totalQuantitiesSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
-    const currantValue = Number(this.totalQuantitiesSECControl()?.value ?? '0')
+    const currantValue = Number(this.totalQuantitiesControl()?.value ?? '0')
       .toLocaleString('en-US');
 
-    const beforeValue = Number(this.mfg()?.totalQuantitiesToSEC ?? 0)
+    const beforeValue = Number(this.mfg()?.totalQuantitiesToLocalSuppliers ?? 0)
       .toLocaleString('en-US');
     return {
-      label: 'Total quantities provided to all approved local suppliers',
+      label: this.i18nService.translate('plans.form.totalQuantitiesToLocalSuppliers'),
       beforeValue,
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.totalQuantitiesControl()),

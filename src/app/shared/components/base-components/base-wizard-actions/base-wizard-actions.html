@@ -2,32 +2,34 @@
   <!-- Left side actions -->
   <div class="flex-1 flex gap-2">
     @for (action of leftActions(); track $index) {
-      <p-button
-        [label]="action.label"
-        [icon]="action.icon"
-        [severity]="action.severity"
-        [text]="action.text"
-        [disabled]="action.disabled"
-        [loading]="action.loading"
-        [styleClass]="action.styleClass"
-        (click)="handleActionClick(action)"
-      />
+    <p-button
+      [label]="action.label"
+      [icon]="action.icon"
+      [iconPos]="getIconPos(action)"
+      [severity]="action.severity"
+      [text]="action.text"
+      [disabled]="action.disabled"
+      [loading]="action.loading"
+      [styleClass]="action.styleClass"
+      (click)="handleActionClick(action)"
+    />
     }
   </div>
 
   <!-- Right side actions -->
   <div class="flex gap-4">
     @for (action of rightActions(); track $index) {
-      <p-button
-        [label]="action.label"
-        [icon]="action.icon"
-        [severity]="action.severity"
-        [text]="action.text"
-        [disabled]="action.disabled"
-        [loading]="action.loading"
-        [styleClass]="action.styleClass"
-        (click)="handleActionClick(action)"
-      />
+    <p-button
+      [label]="action.label"
+      [icon]="action.icon"
+      [iconPos]="getIconPos(action)"
+      [severity]="action.severity"
+      [text]="action.text"
+      [disabled]="action.disabled"
+      [loading]="action.loading"
+      [styleClass]="action.styleClass"
+      (click)="handleActionClick(action)"
+    />
     }
   </div>
 </div>

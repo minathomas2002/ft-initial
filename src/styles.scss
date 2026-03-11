@@ -49,6 +49,14 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   visibility: hidden !important;
 }
 
+.ltr {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+body.rtl .ltr {
+  text-align: right;
+}
 .plans-summary-subsection-title {
   position: relative;
   color: #1d1e23;

@@ -5,10 +5,11 @@ import { BaseDrawerComponent } from "../../base-components/base-drawer/base-draw
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { take } from 'rxjs';
 import { TimelineComponent } from "../plan-timeline-component/plan-timeline-component";
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-timeline-dialog',
-  imports: [TimelineSkeleton, BaseDrawerComponent, TimelineComponent],
+  imports: [TimelineSkeleton, BaseDrawerComponent, TimelineComponent, TranslatePipe],
   templateUrl: './timeline-dialog.html',
   styleUrl: './timeline-dialog.scss',
 })

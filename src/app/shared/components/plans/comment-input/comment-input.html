@@ -5,7 +5,7 @@
 >
   <div class="flex flex-col gap-4 md:flex-row">
     <div class="flex flex-col gap-2 flex-1">
-      <app-base-label [title]="'Your Comment'" />
+      <app-base-label [title]="'plans.comments.yourComment' | translate" />
       <textarea
         fluid
         rows="8"
@@ -16,7 +16,7 @@
       <div class="flex justify-between items-center">
           <app-base-error-messages
             [control]="commentFormControl()"
-            [label]="'Your Comment'"
+            [label]="'plans.comments.yourComment' | translate"
           />
           @if(commentPhase() === 'editing'){
             <div class="text-xs text-gray-500 text-right mt-1">

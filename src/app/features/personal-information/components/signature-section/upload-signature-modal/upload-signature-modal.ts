@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject, input, model, output, signal } from '@angular/core';
 import { BaseDialogComponent } from 'src/app/shared/components/base-components/base-dialog/base-dialog.component';
 import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
 
 @Component({
   selector: 'app-upload-signature-modal',
   imports: [
     BaseDialogComponent,
+    TranslatePipe,
     FileuploadComponent
   ],
   templateUrl: './upload-signature-modal.html',

@@ -33,9 +33,9 @@
           pFrozenColumn
         >
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">{{ row.label }}</span>
+            <span class="text-sm font-medium text-gray-900">{{ row.label | translate }}</span>
             @if(row.subtitle) {
-            <span class="text-xs text-gray-500 mt-1">{{ row.subtitle }}</span>
+            <span class="text-xs text-gray-500 mt-1">{{ row.subtitle | translate }}</span>
             }
           </div>
         </td>
@@ -58,7 +58,7 @@
           >
             <p-inputnumber
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="row.placeholder"
+              [appHidePlaceholderWhenDisabledEmpty]="row.placeholder | translate"
               [mode]="row.mode"
               [minFractionDigits]="row.minFractionDigits"
               [maxFractionDigits]="row.maxFractionDigits"
@@ -70,7 +70,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl()(rowControl!)"
-            [label]="row.label"
+            [label]="row.label | translate"
           />
         </td>
         }

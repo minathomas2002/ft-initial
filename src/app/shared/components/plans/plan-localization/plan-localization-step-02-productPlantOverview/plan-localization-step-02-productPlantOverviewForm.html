@@ -2,7 +2,7 @@
   <!-- Overview Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">
-      Overview
+      {{ 'plans.form.overview' | translate }}
       <span>
         <i
           class="icon-info text-sm ms-2 text-gray-400"
@@ -27,7 +27,7 @@
       <!-- Product Name -->
       <div class="flex flex-col gap-2">
         <app-base-label
-          [title]="'Product Name'"
+          [title]="'plans.form.productName' | translate"
           [secondaryTitle]="'(i.e. Product Targeted for Localization)'"
         />
         <app-group-input-with-checkbox
@@ -36,14 +36,14 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'overview',
             inputKey: 'productName',
-            label: 'Product Name'
+            label: 'plans.form.productName'
           })"
         >
           <input
             type="text"
             pInputText
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter product name'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterProductName' | translate"
             [maxlength]="100"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
             [appConditionalColorClass]="highlightInput('productName')"
@@ -52,14 +52,14 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productName])"
-          [label]="'Product Name'"
+          [label]="'plans.form.productName' | translate"
         />
       </div>
 
       <!-- Product Specifications -->
       <div class="flex flex-col gap-2">
         <app-base-label
-          [title]="'Product Specifications'"
+          [title]="'plans.form.productSpecifications' | translate"
           [secondaryTitle]="'(incl. voltage ratings\' targeted for Localization)'"
         />
         <app-group-input-with-checkbox
@@ -68,13 +68,13 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'overview',
             inputKey: 'productSpecifications',
-            label: 'Product Specifications'
+            label: 'plans.form.productSpecifications'
           })"
         >
           <textarea
             pTextarea
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter product specifications'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterProductSpecifications' | translate"
             [maxlength]="500"
             [rows]="4"
             [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
@@ -88,7 +88,7 @@
         </div>
         <app-base-error-messages
           [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.productSpecifications])"
-          [label]="'Product Specifications'"
+          [label]="'plans.form.productSpecifications' | translate"
         />
       </div>
 
@@ -107,7 +107,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'overview',
               inputKey: 'targetedAnnualPlantCapacity',
-              label: 'Targeted Annual Plant Capacity'
+              label: 'plans.form.targetedAnnualPlantCapacity'
             })"
           >
             <input
@@ -123,7 +123,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
-            [label]="'Targeted Annual Plant Capacity'"
+            [label]="'plans.form.targetedAnnualPlantCapacity' | translate"
           />
         </div>
 
@@ -141,7 +141,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'overview',
               inputKey: 'timeRequiredToSetupFactory',
-              label: 'Time Required to Setup Factory'
+              label: 'plans.form.timeRequiredToSetupFactory'
             })"
           >
             <input
@@ -157,7 +157,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
-            [label]="'Time Required to Setup Factory'"
+            [label]="'plans.form.timeRequiredToSetupFactory' | translate"
           />
         </div>
       </div>
@@ -166,7 +166,7 @@
 
   <!-- Expected CAPEX Investment Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Expected CAPEX Investment</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.expectedCAPEXInvestment' | translate }}</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- Land Percentage -->
@@ -181,7 +181,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'expectedCAPEXInvestment',
             inputKey: 'landPercentage',
-            label: 'Land'
+            label: 'plans.form.land'
           })"
         >
           <p-inputnumber
@@ -199,7 +199,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.landPercentage])"
-          [label]="'Land'"
+          [label]="'plans.form.land' | translate"
         />
       </div>
 
@@ -215,7 +215,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'expectedCAPEXInvestment',
             inputKey: 'buildingPercentage',
-            label: 'Building'
+            label: 'plans.form.building'
           })"
         >
           <p-inputnumber
@@ -233,7 +233,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.buildingPercentage])"
-          [label]="'Building'"
+          [label]="'plans.form.building' | translate"
         />
       </div>
 
@@ -249,7 +249,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'expectedCAPEXInvestment',
             inputKey: 'machineryEquipmentPercentage',
-            label: 'Machinery / Equipment'
+            label: 'plans.form.machineryEquipment'
           })"
         >
           <p-inputnumber
@@ -267,7 +267,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.machineryEquipmentPercentage])"
-          [label]="'Machinery / Equipment'"
+          [label]="'plans.form.machineryEquipment' | translate"
         />
       </div>
 
@@ -283,7 +283,7 @@
           (valueChanged)="upDateSelectedInputs($event, {
             section: 'expectedCAPEXInvestment',
             inputKey: 'othersPercentage',
-            label: 'Others'
+            label: 'plans.form.others'
           })"
         >
           <p-inputnumber
@@ -301,7 +301,7 @@
         </app-group-input-with-checkbox>
         <app-base-error-messages
           [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersPercentage])"
-          [label]="'Others'"
+          [label]="'plans.form.others' | translate"
         />
       </div>
     </div>
@@ -316,7 +316,7 @@
         (valueChanged)="upDateSelectedInputs($event, {
           section: 'expectedCAPEXInvestment',
           inputKey: 'othersDescription',
-          label: 'Others Description'
+          label: 'plans.form.othersDescription'
         })"
       >
         <textarea
@@ -336,7 +336,7 @@
       </div>
       <app-base-error-messages
         [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
-        [label]="'Others Description'"
+        [label]="'plans.form.othersDescription' | translate"
       />
     </div>
     }
@@ -344,7 +344,7 @@
 
   <!-- Target Customers Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Target Customers</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.targetCustomers' | translate }}</h2>
 
     <div class="flex flex-col gap-4">
       <!-- Targeted Customer -->
@@ -357,7 +357,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'targetCustomers',
               inputKey: 'targetedCustomer',
-              label: 'Targeted Customer'
+              label: 'plans.form.targetedCustomer'
             })"
           >
             <p-multiselect
@@ -375,7 +375,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
-            [label]="'Targeted Customer'"
+            [label]="'plans.form.targetedCustomer' | translate"
           />
         </div>
       </div>
@@ -394,7 +394,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'targetCustomers',
               inputKey: 'namesOfTargetedSuppliers',
-              label: 'Names of Targeted Suppliers'
+              label: 'plans.form.namesOfTargetedSuppliers'
             })"
           >
             <textarea
@@ -414,7 +414,7 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
-            [label]="'Names of targeted SEC\'s approved local suppliers'"
+            [label]="'plans.form.provideNamesTargetedSuppliers' | translate"
           />
         </div>
 
@@ -429,7 +429,7 @@
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'targetCustomers',
               inputKey: 'productsUtilizeTargetedProduct',
-              label: 'Products Utilize Targeted Product'
+              label: 'plans.form.productsUtilizeTargetedProduct'
             })"
           >
             <textarea
@@ -459,20 +459,20 @@
 
   <!-- Product Manufacturing Experience Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">Product Manufacturing Experience</h2>
+    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.productManufacturingExperience' | translate }}</h2>
 
     <div class="flex flex-col gap-4">
       <div class="flex flex-col gap-4 md:flex-row">
         <!-- Product Manufacturing Experience Dropdown -->
         <div class="flex flex-col gap-2 flex-1">
-          <app-base-label [title]="'Product Manufacturing Experience'" />
+          <app-base-label [title]="'plans.form.productManufacturingExperience' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
             (valueChanged)="upDateSelectedInputs($event, {
               section: 'productManufacturingExperience',
               inputKey: 'productManufacturingExperience',
-              label: 'Product Manufacturing Experience'
+              label: 'plans.form.productManufacturingExperience'
             })"
           >
             <p-select
@@ -489,7 +489,7 @@
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.productManufacturingExperience])"
-            [label]="'Product Manufacturing Experience'"
+            [label]="'plans.form.productManufacturingExperience' | translate"
           />
         </div>
 
@@ -497,7 +497,7 @@
         <div class="flex flex-col gap-2 flex-1">
           <div>
             <app-base-label
-              [title]="'Do you currently provide this product to SEC?'"
+              [title]="'plans.form.doYouProvideProductToSEC' | translate"
               [styleClass]="'!mb-[2px]'"
             />
             <span class="text-sm text-gray-700 block text-xs">If “Yes” , provide the following:</span>
@@ -511,7 +511,7 @@
                   inputId="provideToSECYes"
                   size="small"
                 />
-                <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.yes' | translate }}</span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer">
                 <p-radiobutton
@@ -521,7 +521,7 @@
                   inputId="provideToSECNo"
                   size="small"
                 />
-                <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+                <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.no' | translate }}</span>
               </label>
             </div>
           </div>
@@ -552,7 +552,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'qualifiedPlantLocationSEC',
-                label: 'Qualified Plant Location (By SEC)'
+                label: 'plans.form.qualifiedPlantLocationBySEC'
               })"
             >
               <input
@@ -568,7 +568,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
-              [label]="'Qualified Plant Location'"
+              [label]="'plans.form.qualifiedPlantLocation' | translate"
             />
           </div>
 
@@ -584,7 +584,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'approvedVendorIDSEC',
-                label: 'Approved Vendor ID (with SEC)'
+                label: 'plans.form.approvedVendorIDWithSEC'
               })"
             >
               <p-inputnumber
@@ -602,7 +602,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.approvedVendorIDSEC])"
-              [label]="'Approved Vendor ID'"
+              [label]="'plans.form.approvedVendorIDWithSEC' | translate"
             />
           </div>
 
@@ -618,7 +618,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'yearsOfExperienceSEC',
-                label: 'Years of Experience (with SEC)'
+                label: 'plans.form.yearsOfExperienceWithSEC'
               })"
             >
               <p-inputnumber
@@ -632,7 +632,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
-              [label]="'Years of Experience'"
+              [label]="'plans.form.yearsOfExperience' | translate"
             />
           </div>
 
@@ -648,7 +648,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'totalQuantitiesSEC',
-                label: 'Total Quantities provided to SEC'
+                label: 'plans.form.totalQuantitiesProvidedToSEC'
               })"
             >
               <p-inputnumber
@@ -662,7 +662,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
-              [label]="'Total Quantities'"
+              [label]="'plans.form.totalQuantitiesProvidedToSEC' | translate"
             />
           </div>
         </div>
@@ -672,7 +672,7 @@
       <!-- Do you currently provide this product to SEC's approved local suppliers? -->
       <div class="flex flex-col gap-2">
         <div>
-          <app-base-label [title]="'Do you currently provide this product to SEC\'s approved local suppliers?'" />
+          <app-base-label [title]="'plans.form.doYouProvideProductToLocalSuppliers' | translate" />
           <span class="text-sm text-gray-700 block text-xs">If 'Yes', provide the following:</span>
         </div>
         <div class="flex gap-4">
@@ -684,7 +684,7 @@
               inputId="provideToLocalSuppliersYes"
               size="small"
             />
-            <span class="min-w-[100px] text-sm text-gray-700 font-medium">Yes</span>
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.yes' | translate }}</span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer">
             <p-radiobutton
@@ -694,7 +694,7 @@
               inputId="provideToLocalSuppliersNo"
               size="small"
             />
-            <span class="min-w-[100px] text-sm text-gray-700 font-medium">No</span>
+            <span class="min-w-[100px] text-sm text-gray-700 font-medium">{{ 'common.no' | translate }}</span>
           </label>
         </div>
         <app-base-error-messages
@@ -721,7 +721,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'namesOfSECApprovedSuppliers',
-                label: 'Name(s) of SEC approved local supplier(s)'
+                label: 'plans.form.namesOfSECApprovedSuppliers'
               })"
             >
               <input
@@ -737,7 +737,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
-              [label]="'Name(s) of SEC approved local supplier(s)'"
+              [label]="'plans.form.namesOfSECApprovedSuppliers' | translate"
             />
           </div>
 
@@ -750,7 +750,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'qualifiedPlantLocation',
-                label: 'Qualified Plant Location'
+                label: 'plans.form.qualifiedPlantLocation'
               })"
             >
               <input
@@ -766,7 +766,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
-              [label]="'Qualified Plant Location'"
+              [label]="'plans.form.qualifiedPlantLocation' | translate"
             />
           </div>
 
@@ -779,7 +779,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'yearsOfExperience',
-                label: 'Years of Experience'
+                label: 'plans.form.yearsOfExperience'
               })"
             >
               <p-inputnumber
@@ -793,7 +793,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
-              [label]="'Years of Experience'"
+              [label]="'plans.form.yearsOfExperience' | translate"
             />
           </div>
 
@@ -809,7 +809,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'productManufacturingExperience',
                 inputKey: 'totalQuantities',
-                label: 'Total quantities provided to all approved local suppliers'
+                label: 'plans.form.totalQuantitiesToLocalSuppliers'
               })"
             >
               <p-inputnumber
@@ -823,7 +823,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
-              [label]="'Total quantities provided to all approved local suppliers'"
+              [label]="'plans.form.totalQuantitiesToLocalSuppliers' | translate"
             />
           </div>
         </div>
@@ -854,9 +854,9 @@
   @if(showDeleteConfirmationDialog()){
   <app-general-confirmation-dialog
     [(visible)]="showDeleteConfirmationDialog"
-    [title]="isInvestorPersona() ? 'Are you sure you want to delete the comment?' : 'Are you sure you want to delete the comment and selected fields?'"
-    [confirmationLabel]="'Delete'"
-    [cancelLabel]="'Cancel'"
+    [title]="(isInvestorPersona() ? 'plans.wizard.comments.deleteCommentTitle' : 'plans.wizard.comments.deleteCommentAndFieldsTitle') | translate"
+    [confirmationLabel]="'common.delete' | translate"
+    [cancelLabel]="'common.cancel' | translate"
     [confirmButtonSeverity]="'danger'"
     [icon]="'icon-trash-2'"
     (confirmed)="onConfirmDeleteComment()"

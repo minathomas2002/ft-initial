@@ -25,11 +25,12 @@ import { ProductPlanFormService } from 'src/app/shared/services/plan/product-pla
 import { CommentStateComponent } from '../../comment-state-component/comment-state-component';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
-import { row } from '@primeuix/themes/aura/datatable';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
   imports: [
+    TranslatePipe,
     ReactiveFormsModule,
     BaseErrorMessages,
     FormArrayInput,
@@ -65,8 +66,8 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   formGroup = this.planFormService.step3_valueChain;
 
   // Dropdown options
-  inHouseOrProcuredOptions = this.planStore.inHouseProcuredOptions;
-  localizationStatusOptions = this.planStore.localizationStatusOptions;
+  inHouseOrProcuredOptions = this.planStore.inHouseProcuredOptionsTranslated;
+  localizationStatusOptions = this.planStore.localizationStatusOptionsTranslated;
 
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');

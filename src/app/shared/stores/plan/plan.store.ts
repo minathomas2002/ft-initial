@@ -206,22 +206,159 @@ export const PlanStore = signalStore(
           },
         ];
       }),
+      productManufacturingExperienceOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.productManufacturingExperienceOptions();
+        const keyMap: Record<string, string> = {
+          [EExperienceRange.Years_5.toString()]: 'plans.form.experienceLessThan5',
+          [EExperienceRange.Years_5_10.toString()]: 'plans.form.experience5To10',
+          [EExperienceRange.Years_10.toString()]: 'plans.form.experienceMoreThan10',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      yesNoOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.yesNoOptions();
+        return opts.map((o) => ({
+          id: o.id,
+          name: o.id === EYesNo.Yes.toString() ? i18nService.translate('common.yes') : i18nService.translate('common.no'),
+        }));
+      }),
+      targetedCustomerOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.targetedCustomerOptions();
+        const keyMap: Record<string, string> = {
+          [ETargetedCustomer.SEC.toString()]: 'plans.options.targetedCustomerSec',
+          [ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString()]: 'plans.options.targetedCustomerSecApprovedLocalSuppliers',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      inHouseProcuredOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.inHouseProcuredOptions();
+        const keyMap: Record<string, string> = {
+          [EInHouseProcuredType.InHouse.toString()]: 'plans.options.inHouse',
+          [EInHouseProcuredType.Procured.toString()]: 'plans.options.procured',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      localizationStatusOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.localizationStatusOptions();
+        const keyMap: Record<string, string> = {
+          [ELocalizationStatusType.Yes.toString()]: 'plans.options.localizationStatusYes',
+          [ELocalizationStatusType.No.toString()]: 'plans.options.localizationStatusNo',
+          [ELocalizationStatusType.Partial.toString()]: 'plans.options.localizationStatusPartial',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      serviceTypeOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.serviceTypeOptions();
+        const keyMap: Record<string, string> = {
+          [EServiceType.Technical.toString()]: 'plans.options.serviceTypeTechnical',
+          [EServiceType.NonTechnical.toString()]: 'plans.options.serviceTypeNonTechnical',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      serviceProvidedToOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.serviceProvidedToOptions();
+        const keyMap: Record<string, string> = {
+          [EServiceProvidedTo.SEC.toString()]: 'plans.options.serviceProvidedToSec',
+          [EServiceProvidedTo.Contractors.toString()]: 'plans.options.serviceProvidedToContractors',
+          [EServiceProvidedTo.Manufacturers.toString()]: 'plans.options.serviceProvidedToManufacturers',
+          [EServiceProvidedTo.Others.toString()]: 'plans.options.serviceProvidedToOthers',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      serviceCategoryOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.serviceCategoryOptions();
+        const keyMap: Record<string, string> = {
+          [EServiceCategory.CategoryA.toString()]: 'plans.options.serviceCategoryA',
+          [EServiceCategory.CategoryB.toString()]: 'plans.options.serviceCategoryB',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      companyTypeOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.companyTypeOptions();
+        const keyMap: Record<string, string> = {
+          [EServiceCompanyType.Contractors.toString()]: 'plans.options.companyTypeContractor',
+          [EServiceCompanyType.Manufacturers.toString()]: 'plans.options.companyTypeManufacturer',
+          [EServiceCompanyType.Others.toString()]: 'plans.options.companyTypeOther',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      qualificationStatusOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.qualificationStatusOptions();
+        const keyMap: Record<string, string> = {
+          [EServiceQualificationStatus.Qualified.toString()]: 'plans.options.qualificationStatusQualified',
+          [EServiceQualificationStatus.UnderPreQualification.toString()]: 'plans.options.qualificationStatusUnderPreQualification',
+          [EServiceQualificationStatus.NotQualified.toString()]: 'plans.options.qualificationStatusNotQualified',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      localizationMethodologyOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.localizationMethodologyOptions();
+        const keyMap: Record<string, string> = {
+          [ELocalizationMethodology.Collaboration.toString()]: 'plans.options.localizationMethodologyCollaboration',
+          [ELocalizationMethodology.Direct.toString()]: 'plans.options.localizationMethodologyDirect',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      localizationApproachOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.localizationApproachOptions();
+        const keyMap: Record<string, string> = {
+          [ELocalizationApproach.EstablishSaudiEntity.toString()]: 'plans.options.localizationApproachEstablishSaudiEntity',
+          [ELocalizationApproach.EstablishLocalBranch.toString()]: 'plans.options.localizationApproachEstablishLocalBranch',
+          [ELocalizationApproach.Other.toString()]: 'plans.options.localizationApproachOther',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      locationOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.locationOptions();
+        const keyMap: Record<string, string> = {
+          [ELocation.SaudiEntity.toString()]: 'plans.options.locationSaudiEntity',
+          [ELocation.Branch.toString()]: 'plans.options.locationBranch',
+          [ELocation.Other.toString()]: 'plans.options.locationOther',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
+      agreementTypeOptionsTranslated: computed<ISelectItem[]>(() => {
+        i18nService.currentLanguage();
+        const opts = store.agreementTypeOptions();
+        const keyMap: Record<string, string> = {
+          [AgreementType.JointVenture.toString()]: 'plans.options.agreementTypeJointVenture',
+          [AgreementType.SpecialPurposeVehicle.toString()]: 'plans.options.agreementTypeSpecialPurposeVehicle',
+          [AgreementType.TechnologyTransferAgreement.toString()]: 'plans.options.agreementTypeTechnologyTransfer',
+          [AgreementType.KnowledgeTransferAgreement.toString()]: 'plans.options.agreementTypeKnowledgeTransfer',
+          [AgreementType.Other.toString()]: 'plans.options.agreementTypeOther',
+        };
+        return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
+      }),
       commentPersona: computed<string | null>(() => {
+        i18nService.currentLanguage();
         const role = store.planComments()?.creatorRole;
         if (!role) return null;
 
         if (roleService.hasAnyRoleSignal([role])()) {
-          return 'Your Comment'
+          return i18nService.translate('plans.options.commentYourComment');
         }
 
         const roleMap: Record<number, string> = {
-          [ERoles.ADMIN]: 'Admin Comment',
-          [ERoles.INVESTOR]: 'Investor Comment',
-          [ERoles.EMPLOYEE]: 'Employee Comment',
-          [ERoles.Division_MANAGER]: 'Division Manager Comment',
-          [ERoles.DEPARTMENT_MANAGER]: 'Department Manager Comment',
+          [ERoles.ADMIN]: 'plans.options.commentAdminComment',
+          [ERoles.INVESTOR]: 'plans.options.commentInvestorComment',
+          [ERoles.EMPLOYEE]: 'plans.options.commentEmployeeComment',
+          [ERoles.Division_MANAGER]: 'plans.options.commentDivisionManagerComment',
+          [ERoles.DEPARTMENT_MANAGER]: 'plans.options.commentDepartmentManagerComment',
         };
-        return roleMap[role] || 'Comment';
+        return i18nService.translate(roleMap[role] ?? 'plans.options.commentComment');
       }),
       /**
        * Get persona label for a specific role.
@@ -229,20 +366,21 @@ export const PlanStore = signalStore(
        */
       getCommentPersonaByRole: computed(() => {
         return (role: number | undefined): string => {
-          if (!role) return 'Comment';
+          i18nService.currentLanguage();
+          if (!role) return i18nService.translate('plans.options.commentComment');
 
           if (roleService.hasAnyRoleSignal([role])()) {
-            return 'Your Comment';
+            return i18nService.translate('plans.options.commentYourComment');
           }
 
           const roleMap: Record<number, string> = {
-            [ERoles.ADMIN]: 'Admin Comment',
-            [ERoles.INVESTOR]: 'Investor Comment',
-            [ERoles.EMPLOYEE]: 'Employee Comment',
-            [ERoles.Division_MANAGER]: 'Division Manager Comment',
-            [ERoles.DEPARTMENT_MANAGER]: 'Department Manager Comment',
+            [ERoles.ADMIN]: 'plans.options.commentAdminComment',
+            [ERoles.INVESTOR]: 'plans.options.commentInvestorComment',
+            [ERoles.EMPLOYEE]: 'plans.options.commentEmployeeComment',
+            [ERoles.Division_MANAGER]: 'plans.options.commentDivisionManagerComment',
+            [ERoles.DEPARTMENT_MANAGER]: 'plans.options.commentDepartmentManagerComment',
           };
-          return roleMap[role] || 'Comment';
+          return i18nService.translate(roleMap[role] ?? 'plans.options.commentComment');
         };
       }),
     };
@@ -331,6 +469,7 @@ export const PlanStore = signalStore(
     const opportunitiesApiService = inject(OpportunitiesApiService);
     const planApiService = inject(PlanApiService);
     const roleService = inject(RoleService);
+    const i18n = inject(I18nService);
     return {
       getActiveOpportunityLookUps(): Observable<IBaseApiResponse<ISelectItem[]>> {
         if (!store.newPlanOpportunityType()) return of({} as IBaseApiResponse<ISelectItem[]>);
@@ -365,8 +504,8 @@ export const PlanStore = signalStore(
             }
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading opportunity details' });
-            return throwError(() => new Error('Error loading opportunity details'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadOpportunityDetails') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadOpportunityDetails')));
           })
         );
       },
@@ -381,8 +520,8 @@ export const PlanStore = signalStore(
             patchState(store, { currentEmployee: res.body.currentEmployee || null });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error getting active employees' });
-            return throwError(() => new Error('Error getting active employees'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.getActiveEmployees') });
+            return throwError(() => new Error(i18n.translate('plans.errors.getActiveEmployees')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -397,8 +536,8 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error assigning system employee' });
-            return throwError(() => new Error('Error assigning system employee'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.assignEmployee') });
+            return throwError(() => new Error(i18n.translate('plans.errors.assignEmployee')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -413,8 +552,8 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error assigning system employee' });
-            return throwError(() => new Error('Error assigning system employee'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.assignEmployee') });
+            return throwError(() => new Error(i18n.translate('plans.errors.assignEmployee')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -431,9 +570,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error saving product localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.saveProductPlan'),
             });
-            return throwError(() => new Error('Error saving product localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.saveProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -450,9 +589,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error submitting product localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.submitProductPlan'),
             });
-            return throwError(() => new Error('Error submitting product localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.submitProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -469,9 +608,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error submitting service localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.submitServicePlan'),
             });
-            return throwError(() => new Error('Error submitting service localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.submitServicePlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -488,9 +627,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error resubmitting product localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.resubmitProductPlan'),
             });
-            return throwError(() => new Error('Error resubmitting product localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.resubmitProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -507,9 +646,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error resubmitting service localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.resubmitServicePlan'),
             });
-            return throwError(() => new Error('Error resubmitting service localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.resubmitServicePlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -526,9 +665,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error saving product localization plan',
+              error: error.errorMessage || i18n.translate('plans.errors.saveProductPlan'),
             });
-            return throwError(() => new Error('Error saving product localization plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.saveProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -545,9 +684,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error sending plan back',
+              error: error.errorMessage || i18n.translate('plans.errors.sendPlanBack'),
             });
-            return throwError(() => new Error('Error sending plan back'));
+            return throwError(() => new Error(i18n.translate('plans.errors.sendPlanBack')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -563,9 +702,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error approving plan',
+              error: error.errorMessage || i18n.translate('plans.errors.approvePlan'),
             });
-            return throwError(() => new Error('Error approving plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.approvePlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -581,9 +720,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error rejecting plan',
+              error: error.errorMessage || i18n.translate('plans.errors.rejectPlan'),
             });
-            return throwError(() => new Error('Error rejecting plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.rejectPlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -600,9 +739,9 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error rejecting Acknowledge plan',
+              error: error.errorMessage || i18n.translate('plans.errors.rejectAcknowledgePlan'),
             });
-            return throwError(() => new Error('Error rejecting Acknowledge plan'));
+            return throwError(() => new Error(i18n.translate('plans.errors.rejectAcknowledgePlan')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -628,8 +767,8 @@ export const PlanStore = signalStore(
             patchState(store, { productPlanData: res.body || null });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading product plan' });
-            return throwError(() => new Error('Error loading product plan'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadProductPlan') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadProductPlan')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -657,8 +796,8 @@ export const PlanStore = signalStore(
 
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading service plan' });
-            return throwError(() => new Error('Error loading service plan'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadServicePlan') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadServicePlan')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -675,8 +814,8 @@ export const PlanStore = signalStore(
             patchState(store, { timeLineList: res.body || [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading timeline data' });
-            return throwError(() => new Error('Error loading plan timeline'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadTimeline') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadTimeline')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -706,8 +845,8 @@ export const PlanStore = signalStore(
             downloadFileFromBlob(res.blob, res.filename);
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error generating service plan pdf' });
-            return throwError(() => new Error('Error generating service plan pdf'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.generateServicePdf') });
+            return throwError(() => new Error(i18n.translate('plans.errors.generateServicePdf')));
           }),
           finalize(() => {
             patchState(store, { isLoading: false });
@@ -724,8 +863,8 @@ export const PlanStore = signalStore(
             patchState(store, { currentUserPageComments: [] });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error loading plan comments' });
-            return throwError(() => new Error('Error loading plan comments'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.loadComments') });
+            return throwError(() => new Error(i18n.translate('plans.errors.loadComments')));
           })
         );
       },
@@ -741,6 +880,7 @@ export const PlanStore = signalStore(
   }),
   withMethods((store) => {
     const planApiService = inject(PlanApiService);
+    const i18n = inject(I18nService);
     return {
       getInvestorPlans(filter: IPlanFilterRequest) {
         patchState(store, { loading: true });
@@ -776,8 +916,8 @@ export const PlanStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            patchState(store, { error: error.errorMessage || 'Error deleting draft plan' });
-            return throwError(() => new Error('Error deleting draft plan'));
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.deleteDraft') });
+            return throwError(() => new Error(i18n.translate('plans.errors.deleteDraft')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });
@@ -795,10 +935,10 @@ export const PlanStore = signalStore(
           }),
           catchError((error) => {
             patchState(store, {
-              error: error.errorMessage || 'Error exporting plans',
+              error: error.errorMessage || i18n.translate('plans.errors.exportPlans'),
               isProcessing: false,
             });
-            return throwError(() => new Error('Error exporting plans'));
+            return throwError(() => new Error(i18n.translate('plans.errors.exportPlans')));
           }),
           finalize(() => {
             patchState(store, { isProcessing: false });

@@ -1,7 +1,6 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { catchError, finalize, map, tap, throwError } from 'rxjs';
-import { DelegationApiService } from '../../api/system-employees/delegation-api-service';
 import {
   ActiveEmployee,
   IAddDelegationRequest,
@@ -11,6 +10,7 @@ import {
 } from '../../interfaces/delegation.interface';
 import { ContactUsApiService } from '../../api/contact-us/contact-us-service';
 import { IAddContactUsRequest } from '../../interfaces/contact-us.interface';
+import { I18nService } from '../../services/i18n/i18n.service';
 
 const initialState: {
   isLoading: boolean;
@@ -34,6 +34,7 @@ export const ContactUsStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const contactUsApiService = inject(ContactUsApiService);
+    const i18n = inject(I18nService);
     return {
 
       addContactUsMessage(request: IAddContactUsRequest) {
@@ -43,7 +44,7 @@ export const ContactUsStore = signalStore(
             patchState(store, { isProcessing: false });
           }),
           catchError((error) => {
-            return throwError(() => new Error(error.errorMessage || 'Error adding contact us message'));
+            return throwError(() => new Error(error.errorMessage || i18n.translate('contactUs.errors.addMessage')));
           }),
         );
       },

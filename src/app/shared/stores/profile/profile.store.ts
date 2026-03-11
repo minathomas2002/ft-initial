@@ -7,6 +7,8 @@ import { AuthApiService } from "../../api/auth/auth-api-service";
 import { IBaseApiResponse, IChangePasswordRequest, IProfileResponse, IUpdatePersonalInfoRequest, IUpdateProfilePicRequest, IUpdateSignatureRequest } from "../../interfaces";
 import { finalize, Observable, tap } from "rxjs";
 import { AuthStore } from "../auth/auth.store";
+import { I18nService } from "../../services/i18n";
+import { SystemEmployeeRoleMapper } from "../../classes/role.mapper";
 
 const initialState: {
   loading: boolean;
@@ -29,13 +31,38 @@ export const ProfileStore = signalStore(
   withComputed((store) => {
     const roleService = inject(RoleService);
     const authStore = inject(AuthStore);
+    const i18nService = inject(I18nService);
+    const roleMapper = new SystemEmployeeRoleMapper(i18nService);
+
     return {
       isInvestor: roleService.hasAnyRoleSignal([ERoles.INVESTOR]),
       userImage: computed(() => store.userProfile()?.userPicBase64 ?? store.userProfile()?.photoURL ?? 'assets/images/user_placeholder.svg'),
       userSignature: computed(() => store.userProfile()?.signature ?? null),
-      userTitle: computed(() => roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ? authStore.userProfile()?.investorCode : authStore.userProfile()?.roleNames[0]),
+      userTitle: computed(() => {
+        // Re-read current language so this computed updates when language changes
+        i18nService.currentLanguage();
+        const profile = authStore.userProfile();
+        if (!profile) return undefined;
+        if (roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
+          return profile.investorCode ?? undefined;
+        }
+        const roleCode = profile.roleCodes?.[0];
+        if (roleCode != null) {
+          return roleMapper.getTranslatedRole(roleCode);
+        }
+        return profile.roleNames?.[0] ?? undefined;
+      }),
       userID: computed(() => authStore.userProfile()?.employeeID ?? ''),
-      RoleName: computed(() => authStore.userProfile()?.roleNames[0] ?? ''),
+      RoleName: computed(() => {
+        i18nService.currentLanguage();
+        const profile = authStore.userProfile();
+        if (!profile) return '';
+        const roleCode = profile.roleCodes?.[0];
+        if (roleCode != null) {
+          return roleMapper.getTranslatedRole(roleCode);
+        }
+        return profile.roleNames?.[0] ?? '';
+      }),
     }
   }),
   withMethods((store) => {

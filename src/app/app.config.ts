@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { InMemoryScrollingOptions, provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -33,6 +33,16 @@ export const appConfig: ApplicationConfig = {
     {
       provide: DATE_PIPE_DEFAULT_OPTIONS,
       useValue: { dateFormat: "dd MMM yyyy" },
+    },
+    {
+      provide: LOCALE_ID,
+      useFactory: () => {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          const lang = localStorage.getItem('preferred-language');
+          return lang === 'ar' ? 'ar' : 'en-US';
+        }
+        return 'en-US';
+      },
     },
   ]
 };

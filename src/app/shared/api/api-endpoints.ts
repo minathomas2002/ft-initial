@@ -29,6 +29,7 @@ export const API_ENDPOINTS = {
   users: {
     getAllUsers: `${Users}`,
     createNewUser: `${Users}/create-user`,
+    changeLanguage: `${Users}/change-language`,
   },
   plans: {
     getInvestorDashboardPlans: `${Plans}/get-investor-dashboard-plans`,

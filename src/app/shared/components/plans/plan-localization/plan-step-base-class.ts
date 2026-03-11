@@ -6,6 +6,7 @@ import { ProductPlanFormService } from 'src/app/shared/services/plan/product-pla
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
 import { FormUtilityService } from 'src/app/shared/services/form-utility/form-utility.service';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { I18nService } from 'src/app/shared/services/i18n';
 import { PlanCommentSyncService } from 'src/app/shared/services/plan/plan-comment-sync.service';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { EMaterialsFormControls, EPlanPageTitle, ERoles } from 'src/app/shared/enums';
@@ -31,6 +32,7 @@ export abstract class PlanStepBaseClass implements OnInit {
   // Injected services
   protected readonly formUtilityService = inject(FormUtilityService);
   protected readonly toasterService = inject(ToasterService);
+  protected readonly i18nService = inject(I18nService);
   private readonly planCommentSyncService = inject(PlanCommentSyncService);
   protected readonly roleService = inject(RoleService);
   readonly planStore = inject(PlanStore);
@@ -682,7 +684,7 @@ export abstract class PlanStepBaseClass implements OnInit {
       this.planCommentSyncService.removePageCommentFromStore(this.pageTitle());
     }
     this.showDeleteConfirmationDialog.set(false);
-    this.toasterService.success(this.isInvestorPersona() ? 'Your comments were removed successfully.' : 'Your comments and selected fields were removed successfully.');
+    this.toasterService.success(this.isInvestorPersona() ? this.i18nService.translate('plans.comments.removedSuccess') : this.i18nService.translate('plans.comments.removedWithFieldsSuccess'));
   }
 
   /**
@@ -698,7 +700,7 @@ export abstract class PlanStepBaseClass implements OnInit {
   protected onSaveComment(commentValue: string | undefined): void {
     // Validate at least one field is selected
     if (this.selectedInputs().length === 0 && !this.isResubmitMode()) {
-      this.toasterService.error('Please select at least one field before adding a comment.');
+      this.toasterService.error(this.i18nService.translate('plans.comments.selectFieldFirst'));
       return;
     }
 
@@ -707,12 +709,12 @@ export abstract class PlanStepBaseClass implements OnInit {
 
     if (!comment) {
       this.commentFormControl.markAsTouched();
-      this.toasterService.error('Please enter a comment.');
+      this.toasterService.error(this.i18nService.translate('plans.comments.enterComment'));
       return;
     }
 
     if (comment.length > 255) {
-      this.toasterService.error('Comment cannot exceed 255 characters.');
+      this.toasterService.error(this.i18nService.translate('plans.comments.maxLength'));
       return;
     }
 
@@ -725,7 +727,7 @@ export abstract class PlanStepBaseClass implements OnInit {
     // Merge this page's comment into planComments (add/remove fields as user selected)
     // this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
-    this.toasterService.success('Your comments have been saved successfully.');
+    this.toasterService.success(this.i18nService.translate('plans.comments.savedSuccess'));
   }
 
   /**
@@ -736,12 +738,12 @@ export abstract class PlanStepBaseClass implements OnInit {
     const commentValue = this.commentFormControl.value?.trim() || '';
     if (!commentValue) {
       this.commentFormControl.markAsTouched();
-      this.toasterService.error('Please enter a comment.');
+      this.toasterService.error(this.i18nService.translate('plans.comments.enterComment'));
       return;
     }
 
     if (commentValue.length > 255) {
-      this.toasterService.error('Comment cannot exceed 255 characters.');
+      this.toasterService.error(this.i18nService.translate('plans.comments.maxLength'));
       return;
     }
 
@@ -754,7 +756,7 @@ export abstract class PlanStepBaseClass implements OnInit {
     // Merge this page's comment into planComments (add/remove fields as user selected)
     this.planCommentSyncService.syncPageCommentToStore(this.pageComment());
 
-    this.toasterService.success('Your updates have been saved successfully.');
+    this.toasterService.success(this.i18nService.translate('plans.comments.updatesSavedSuccess'));
   }
 
   /**
