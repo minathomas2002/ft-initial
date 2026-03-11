@@ -1426,7 +1426,7 @@
       "planType": "نوع الخطة",
       "opportunityType": "نوع الفرصة",
       "submissionDate": "تاريخ التقديم",
-      "slaCountdown": "العد التنازلي لاتفاقية مستوى الخدمة",
+      "slaCountdown": "أتفاقية مستوى الخدمة",
       "currentStatus": "الحالة الحالية",
       "actions": "الإجراءات",
       "daysRemaining": "أيام متبقية",
