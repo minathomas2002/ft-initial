@@ -78,9 +78,14 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
 
   customHeaderLabels = computed(() => {
     return {
-      'location': this.i18n.translate('plans.form.location'),
-      'locationOtherDetails': this.i18n.translate('plans.form.otherLocationDetails'),
-      'supervisionOversightByGovernmentEntity': this.i18n.translate('plans.form.supervisionOversightByGovernmentEntity')
+      serviceName: this.i18n.translate('plans.form.serviceName'),
+      expectedLocalizationDate: this.i18n.translate('plans.form.expectedLocalizationDate'),
+      localizationApproach: this.i18n.translate('plans.form.localizationApproach'),
+      [EMaterialsFormControls.location]: this.i18n.translate('plans.form.locationType'),
+      locationOtherDetails: this.i18n.translate('plans.form.otherLocationDetails'),
+      [EMaterialsFormControls.capexRequired]: this.i18n.translate('plans.form.capexRequiredSar'),
+      supervisionOversightByGovernmentEntity: this.i18n.translate('plans.form.supervisionOversightByGovernmentEntity'),
+      willBeAnyProprietaryToolsSystems: this.i18n.translate('plans.form.proprietaryToolsSystems'),
     };
   });
 
@@ -109,6 +114,7 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
       EMaterialsFormControls.serviceId,
       EMaterialsFormControls.serviceHeadcountRowId,
       EMaterialsFormControls.expectedLocalizationDate,
+      EMaterialsFormControls.serviceLevelLocalizationDate, // Excluded: header comes from groupHeader, not keys iteration
       EMaterialsFormControls.localizationApproach,
       EMaterialsFormControls.localizationApproachOtherDetails,
       EMaterialsFormControls.location,
@@ -179,16 +185,16 @@ export class ServiceLocalizationStepDirectLocalization extends PlanStepBaseClass
     return labels;
   });
 
-  // Grouped header cell for Service Level years
+  // Grouped header cell for Service Level years (labels are translation keys, rendered via TranslatePipe in form-array-input)
   serviceLevelGroupHeader = computed(() => {
     const yearCols = this.yearControlKeys.length;
     return [
-      { label: this.i18n.translate('plans.form.serviceName'), rowspan: 2, dataGroup: false },
-      { label: this.i18n.translate('plans.form.expectedLocalizationDate'), rowspan: 2, dataGroup: false },
-      { label: this.i18n.translate('plans.form.expectedAnnualHeadcountKSA'), colspan: yearCols, dataGroup: true },
-      { label: this.i18n.translate('plans.form.mentionYoySaudizationKSAUptoYear', { year: this.yearColumns()[5] }), colspan: yearCols, dataGroup: true },
-      { label: this.i18n.translate('plans.form.keyMeasuresToUpskillSaudis'), rowspan: 2, dataGroup: false },
-      { label: this.i18n.translate('plans.form.supportRequiredFromSECIfAny'), rowspan: 2, dataGroup: false },
+      { label: 'plans.form.serviceName', rowspan: 2, dataGroup: false },
+      { label: 'plans.form.serviceLevelLocalizationDate', rowspan: 2, dataGroup: false },
+      { label: 'plans.form.expectedAnnualHeadcountKSA', colspan: yearCols, dataGroup: true },
+      { label: 'plans.form.mentionYoySaudizationKSAUptoYear', colspan: yearCols, dataGroup: true, translateParams: { year: this.yearColumns()[5] } },
+      { label: 'plans.form.keyMeasuresToUpskillSaudis', rowspan: 2, dataGroup: false },
+      { label: 'plans.form.supportRequiredFromSECIfAny', rowspan: 2, dataGroup: false },
     ];
   });
 

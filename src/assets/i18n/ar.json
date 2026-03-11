@@ -1065,6 +1065,7 @@
       "serviceProvidedTo": "الخدمة مقدمة لـ",
       "targetedForLocalization": "مستهدف للتوطين",
       "expectedLocalizationDate": "تاريخ التوطين المتوقع",
+      "serviceLevelLocalizationDate": "تاريخ توطين مستوى الخدمة",
       "saudiCompanyName": "اسم الشركة السعودية",
       "vendorIdWithSEC": "معرف المورد مع شركة الكهرباء",
       "benaVendorId": "معرف مورد بينا",
@@ -1121,6 +1122,7 @@
       "category": "الفئة",
       "expectedAnnualHeadcountKSA": "العدد السنوي المتوقع للموظفين (يُملأ للمنشأة القائمة في المملكة فقط)",
       "mentionYoySaudizationKSA": "ذكر نسبة السعودة السنوية المتوقعة (يُملأ للمنشأة القائمة في المملكة فقط)",
+      "mentionYoySaudizationKSAUptoYear": "ذكر نسبة السعودة السنوية المتوقعة (حتى عام {{ year }})",
       "capexRequiredSarMillion": "رأس المال المطلوب (مليون ريال)",
       "supervisionOversight": "الإشراف/الرقابة",
       "supervisionOversightByGovernmentEntity": "الإشراف / الرقابة من قبل جهة حكومية (إن وجدت)",
@@ -1188,11 +1190,12 @@
       "provideNamesTargetedSuppliers": "تقديم أسماء موردي SEC المحليين المعتمدين المستهدفين",
       "collaborationPartnershipWithSaudiCompany": "شراكة تعاون مع شركة سعودية",
       "addCollaborationPartnership": "إضافة شراكة التعاون",
-			"otherLocationDetails": "تفاصيل الموقع الآخر",
+      "otherLocationDetails": "تفاصيل الموقع الآخر",
       "placeholders": {
         "select": "اختر"
       },
-      "commentYourComment": "تعليقك"
+      "commentYourComment": "تعليقك",
+      "locationType": "نوع الموقع"
     },
     "placeholders": {
       "selectOpportunity": "اختر الفرصة",

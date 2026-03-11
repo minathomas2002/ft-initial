@@ -1042,6 +1042,7 @@
       "serviceProvidedTo": "Service Provided to",
       "targetedForLocalization": "Targeted for Localization",
       "expectedLocalizationDate": "Expected Localization Date",
+      "serviceLevelLocalizationDate": "Service Level Localization Date",
       "saudiCompanyName": "Saudi Company Name",
       "vendorIdWithSEC": "Vendor ID with SEC",
       "benaVendorId": "Bena Vendor ID",
@@ -1098,6 +1099,7 @@
       "category": "Category",
       "expectedAnnualHeadcountKSA": "Expected Annual Headcount (To be filled for the KSA based facility only)",
       "mentionYoySaudizationKSA": "Mention Y-o-Y expected Saudization % (To be filled for the KSA based facility only)",
+      "mentionYoySaudizationKSAUptoYear": "Mention Y-o-Y expected Saudization % (up to {{ year }})",
       "capexRequiredSarMillion": "CAPEX Required (SAR Million)",
       "supervisionOversight": "Supervision/Oversight",
       "supervisionOversightByGovernmentEntity": "Supervision / Oversight by Government Entity (if any)",
@@ -1168,7 +1170,9 @@
       "placeholders": {
         "select": "Select"
       },
-      "commentYourComment": "Your Comment"
+      "commentYourComment": "Your Comment",
+      "otherLocationDetails": "Other Location Details",
+      "locationType": "Location Type"
     },
     "placeholders": {
       "selectOpportunity": "Select opportunity",

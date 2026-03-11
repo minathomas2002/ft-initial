@@ -130,8 +130,12 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
   });
 
   collaborationPartnershipHeaderLabels = computed<Record<string, string>>(() => ({
+    [EMaterialsFormControls.agreementType]: this.i18n.translate('plans.form.agreementTypeWithSaudiCompany'),
+    [EMaterialsFormControls.agreementSigningDate]: this.i18n.translate('plans.form.agreementSigningDate'),
     supervisionOversightEntity: this.i18n.translate('plans.form.supervisionOversightByGovernmentEntity'),
     [EMaterialsFormControls.whyChoseThisCompany]: this.i18n.translate('plans.form.whyChoseThisSaudiCompany'),
+    [EMaterialsFormControls.summaryOfKeyAgreementClauses]: this.i18n.translate('plans.form.summaryOfKeyAgreementClauses'),
+    [EMaterialsFormControls.provideAgreementCopy]: this.i18n.translate('plans.form.provideAgreementCopy'),
   }));
 
   collaborationPartnershipHeaderTooltips = computed<Record<string, string>>(() => ({
@@ -293,16 +297,16 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
     return labels;
   });
 
-  // Grouped header cell for Service Level years
+  // Grouped header cell for Service Level years (labels are translation keys, rendered via TranslatePipe in form-array-input)
   serviceLevelGroupHeader = computed(() => {
     const yearCols = this.yearControlKeys.length;
     return [
-      { label: this.i18n.translate('plans.form.serviceName'), rowspan: 2, dataGroup: false },
-      { label: this.i18n.translate('plans.form.expectedLocalizationDate'), rowspan: 2, dataGroup: false },
-      { label: this.i18n.translate('plans.form.expectedAnnualHeadcountKSA'), colspan: yearCols, dataGroup: true },
-      { label: this.i18n.translate('plans.form.mentionYoySaudizationKSAUptoYear', { year: this.yearColumns()[5] }), colspan: yearCols, dataGroup: true },
-      { label: this.i18n.translate('plans.form.keyMeasuresToUpskillSaudis'), rowspan: 2, dataGroup: false },
-      { label: this.i18n.translate('plans.form.supportRequiredFromSECIfAny'), rowspan: 2, dataGroup: false },
+      { label: 'plans.form.serviceName', rowspan: 2, dataGroup: false },
+      { label: 'plans.form.expectedLocalizationDate', rowspan: 2, dataGroup: false },
+      { label: 'plans.form.expectedAnnualHeadcountKSA', colspan: yearCols, dataGroup: true },
+      { label: 'plans.form.mentionYoySaudizationKSAUptoYear', colspan: yearCols, dataGroup: true, translateParams: { year: this.yearColumns()[5] } },
+      { label: 'plans.form.keyMeasuresToUpskillSaudis', rowspan: 2, dataGroup: false },
+      { label: 'plans.form.supportRequiredFromSECIfAny', rowspan: 2, dataGroup: false },
     ];
   });
 
