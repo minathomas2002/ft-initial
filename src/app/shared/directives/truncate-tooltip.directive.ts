@@ -58,7 +58,7 @@ export class TruncateTooltipDirective {
       const textAlign = this.getTextAlignByLanguage(this.value());
 
       // Keep rendered text aligned by content language
-      this.renderer.setStyle(element, 'textAlign', textAlign);
+      // this.renderer.setStyle(element, 'textAlign', textAlign);
 
       // Reset height truncation state when not using it
       if (!useHeight) {
