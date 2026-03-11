@@ -256,6 +256,8 @@
     "signature": {
       "noSignature": "No signature created",
       "deleteSignature": "Delete signature",
+      "deleteSignatureTitle": "Delete Signature",
+      "deleteSignatureDescription": "Are you sure you want to delete your signature?",
       "uploadHere": "Upload your signature here",
       "drawInstructions": "Draw your signature using your mouse"
     },

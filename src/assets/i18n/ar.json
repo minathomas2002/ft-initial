@@ -256,6 +256,8 @@
     "signature": {
       "noSignature": "لم يتم إنشاء توقيع",
       "deleteSignature": "حذف التوقيع",
+      "deleteSignatureTitle": "حذف التوقيع",
+      "deleteSignatureDescription": "هل أنت متأكد من حذف توقيعك؟",
       "uploadHere": "قم بتحميل توقيعك هنا",
       "drawInstructions": "ارسم توقيعك باستخدام الماوس"
     },

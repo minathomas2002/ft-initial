@@ -3,6 +3,7 @@ import { BaseDialogComponent } from 'src/app/shared/components/base-components/b
 import { FileuploadComponent } from 'src/app/shared/components/utility-components/fileupload/fileupload.component';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { AttachmentService } from 'src/app/shared/services/attachment/attachment.service';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 @Component({
   selector: 'app-upload-signature-modal',
@@ -20,10 +21,11 @@ export class UploadSignatureModal {
   isProcessing = input(false);
   onSubmitSignature = output<string | null>();
   private attachmentService = inject(AttachmentService);
+  private readonly i18n = inject(I18nService);
 
   icon = signal<string>('icon-file-upload');
-  confirmLabel = signal<string>('Submit');
-  cancelLabel = signal<string>('Back');
+  confirmLabel = signal<string>(this.i18n.translate('common.submit'));
+  cancelLabel = signal<string>(this.i18n.translate('common.back'));
 
   maxFileSize = 1024 * 1024 * 2; // 2MB
   acceptedFileTypes = '.png, .jpg';
