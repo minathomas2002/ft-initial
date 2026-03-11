@@ -95,8 +95,13 @@ export class OpportunityInformationForm implements OnInit {
   // Today's date for minDate validation in datepicker
   today = new Date();
   forecastedDemand = computed(() => {
-    return `Forecasted SEC Demand (${this.today.getFullYear()}–${this.today.getFullYear() + 5})`
-  })
+    const startYear = this.today.getFullYear();
+    const endYear = this.today.getFullYear() + 5;
+    return this.i18nService.translate('opportunity.form.forecastedDemandWithYears', {
+      startYear: String(startYear),
+      endYear: String(endYear),
+    });
+  });
 
   ngOnInit() {
     // Initialize files signal from form service when component is created

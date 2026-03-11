@@ -370,6 +370,7 @@
     "form": {
       "basicInformation": "Basic Information",
       "forecastedDemand": "Forecasted SEC Demand (2024–2030)",
+      "forecastedDemandWithYears": "Forecasted SEC Demand ({{startYear}}–{{endYear}})",
       "supplierBase": "Supplier Base",
       "opportunityDates": "Opportunity Dates",
       "opportunityImage": "Opportunity Image",
@@ -377,6 +378,9 @@
       "opportunityTitle": "Opportunity Title",
       "shortDescription": "Short Description",
       "opportunityCategory": "Opportunity Icon",
+      "categoryBellIcon": "Bell Icon",
+      "categoryIdeaIcon": "Idea Icon",
+      "categoryDataIcon": "Data Icon",
       "opportunityType": "Opportunity Type",
       "spendSAR": "Spend (SAR) in billions",
       "quantityUnits": "Quantity",

@@ -71,17 +71,17 @@ const initialState: {
   opportunityCategories: [
     {
       id: '1',
-      name: 'Bell Icon',
+      name: 'opportunity.form.categoryBellIcon',
       icon: 'icon-bell'
     },
     {
       id: '2',
-      name: 'Idea Icon',
+      name: 'opportunity.form.categoryIdeaIcon',
       icon: 'icon-idea'
     },
     {
       id: '3',
-      name: 'Data Icon',
+      name: 'opportunity.form.categoryDataIcon',
       icon: 'icon-data'
     }
   ],

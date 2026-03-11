@@ -231,7 +231,18 @@
           >
             <div class="flex items-center gap-2">
               <i [class]="item.icon"></i>
-              {{ item.name }}
+              {{ item.name | translate }}
+            </div>
+          </ng-template>
+          <ng-template
+            pTemplate="selectedItem"
+            let-item
+          >
+            <div class="flex items-center gap-2">
+              @if(item) {
+              <i [class]="item.icon"></i>
+              {{ item.name | translate }}
+              }
             </div>
           </ng-template>
         </p-select>

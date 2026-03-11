@@ -369,6 +369,7 @@
     "form": {
       "basicInformation": "المعلومات الأساسية",
       "forecastedDemand": "الطلب المتوقع لشركة الكهرباء (2024–2030)",
+      "forecastedDemandWithYears": "الطلب المتوقع لشركة الكهرباء ({{startYear}}–{{endYear}})",
       "supplierBase": "قاعدة الموردين",
       "opportunityDates": "تواريخ الفرصة",
       "opportunityImage": "صورة الفرصة",
@@ -376,6 +377,9 @@
       "opportunityTitle": "عنوان الفرصة",
       "shortDescription": "الوصف القصير",
       "opportunityCategory": "فئة الفرصة",
+      "categoryBellIcon": "أيقونة الجرس",
+      "categoryIdeaIcon": "أيقونة الفكرة",
+      "categoryDataIcon": "أيقونة البيانات",
       "opportunityType": "نوع الفرصة",
       "spendSAR": "الإنفاق (ريال سعودي) بالمليارات",
       "quantityUnits": "الكمية",
