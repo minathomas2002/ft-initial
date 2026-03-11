@@ -333,7 +333,9 @@
             <td
               class="p-3 !border-t-0 !border-e-0 !border-b-0"
               colspan="20"
-            >Years ({{ yearColumns()[0] }}-{{ yearColumns()[5] }})</td>
+            >
+              {{ 'plans.form.yearsRange' | translate:{ start: yearColumns()[0], end: yearColumns()[5] } }}
+            </td>
           </tr>
           <tr>
             <th
@@ -447,7 +449,7 @@
               (valueChanged)="upDateSelectedInputs($event, {
                 section: 'serviceLevel',
                 inputKey: 'serviceLevelLocalizationDate',
-                label: 'plans.form.expectedLocalizationDate'
+                label: 'plans.form.serviceLevelLocalizationDate'
               }, itemControl.get('rowId')?.value)"
             >
               <p-select
@@ -464,7 +466,7 @@
             </app-group-input-with-checkbox>
             <app-base-error-messages
               [control]="getValueControl(itemControl.get(EMaterialsFormControls.serviceLevelLocalizationDate))"
-              [label]="'plans.form.expectedLocalizationDate' | translate"
+              [label]="'plans.form.serviceLevelLocalizationDate' | translate"
             />
           </td>
 

@@ -55,8 +55,8 @@ export class FormArrayInput implements OnDestroy {
   headerTooltips = input<Record<string, string>>({});
   // Optional header labels override - map of key names to custom label text
   customHeaderLabels = input<Record<string, string>>({});
-  // Optional grouped header row - array of {label, colspan}
-  groupHeader = input<Array<{ label: string; colspan?: number, rowspan?: number, dataGroup: boolean }>>([]);
+  // Optional grouped header row - array of {label (translation key), colspan, rowspan, dataGroup, translateParams?}
+  groupHeader = input<Array<{ label: string; colspan?: number; rowspan?: number; dataGroup: boolean; translateParams?: Record<string, unknown> }>>([]);
   // Optional additional text beside headers - map of key names to text to display beside the header
   customTextBesideHeaders = input<Record<string, string>>({});
   // Optional colspan for individual header columns - map of key names to colspan value

@@ -20,7 +20,7 @@
           [class]="cell.dataGroup
             ? 'p-3 !border border-gray-200 text-center font-medium! bg-primary! text-white!'
             : (cell.label ? 'p-3 !border border-gray-200 text-start font-medium! bg-gray-50! text-gray-700!' : 'bg-white! border-0!')"
-        >{{ cell.label }}</th>
+        >{{ cell.label | translate:(cell.translateParams ?? {}) }}</th>
         }
         <!-- Delete button column header with rowspan -->
         <th

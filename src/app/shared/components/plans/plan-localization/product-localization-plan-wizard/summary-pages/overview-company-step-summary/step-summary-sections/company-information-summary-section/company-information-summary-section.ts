@@ -23,7 +23,7 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
     const currantValue = this.companyNameControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.companyName ?? '';
     return {
-      label: 'Company Name',
+      label: this.i18nService.translate('plans.form.companyName'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.companyNameControl()),
@@ -53,7 +53,7 @@ export class CompanyInformationSummarySection extends SummarySectionBaseClass {
     const currantValue = this.ceoEmailIDControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.companyInfo.ceoEmail ?? '';
     return {
-      label: 'CEO Email',
+      label: this.i18nService.translate('plans.summary.ceoEmail'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.ceoEmailIDControl()),

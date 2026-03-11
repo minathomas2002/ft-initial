@@ -12,34 +12,13 @@
         ></i>
         <ng-template #tooltipContent>
           <div class="flex flex-col gap-2 text-start">
-            <p>
-              Please provide a detailed breakdown of all expenses within each component of the value chain, including the following information for each expense
-            </p>
-            <p>
-              <strong>A)</strong> Specify whether the expense will be handled "in-house" or "procured" from third parties.
-            </p>
-            <p>
-              <strong>B)</strong> Indicate the cost % of each expense as a % of total cost
-            </p>
-            <p>
-              <strong>C)</strong> For expenses marked as "procured," please clarify if sourcing will be from within KSA or from foreign suppliers (on yearly basis):
-            </p>
-            <p>
-              <strong>C.i)</strong> if 100% procured from local (KSA) supplier - "Yes"
-            </p>
-            <p>
-              <strong>C.ii)</strong> if >0% and <100%
-                procured
-                from
-                local
-                (KSA)
-                supplier
-                - "Partial"
-                </p
-              >
-                <p>
-                  <strong>C.iii)</strong> if 0% procured from local (KSA) supplier (i.e. imported) - "No"
-                </p>
+            <p>{{ 'plans.form.placeholders.valueChainTooltipIntro' | translate }}</p>
+            <p><strong>A)</strong> {{ 'plans.form.placeholders.valueChainTooltipA' | translate }}</p>
+            <p><strong>B)</strong> {{ 'plans.form.placeholders.valueChainTooltipB' | translate }}</p>
+            <p><strong>C)</strong> {{ 'plans.form.placeholders.valueChainTooltipC' | translate }}</p>
+            <p><strong>C.i)</strong> {{ 'plans.form.placeholders.valueChainInHouse100' | translate }}</p>
+            <p><strong>C.ii)</strong> {{ 'plans.form.placeholders.valueChainTooltipCii' | translate }}</p>
+            <p><strong>C.iii)</strong> {{ 'plans.form.placeholders.valueChainImported0' | translate }}</p>
           </div>
         </ng-template>
       </span>
@@ -59,6 +38,7 @@
         [addButtonMessage]="'plans.form.placeholders.addDesignEngineeringItem' | translate"
         [createNewItem]="createDesignEngineeringItem"
         [maxItems]="20"
+        [customHeaderLabels]="valueChainHeaderLabels()"
       >
         <ng-template
           #itemTemplate
@@ -79,7 +59,7 @@
                 type="text"
                 pInputText
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpenseItemName' | translate"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'expenseHeader', index), itemControl.get('rowId')?.value)"
@@ -106,7 +86,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterInHouseProcured' | translate"
                 [appendTo]="'body'"
                 fluid
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
@@ -131,7 +111,7 @@
             >
               <p-inputnumber
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCost' | translate"
                 [min]="0"
                 mode="decimal"
                 prefix="%"
@@ -168,7 +148,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year1', index), itemControl.get('rowId')?.value)"
@@ -202,7 +182,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year2', index), itemControl.get('rowId')?.value)"
@@ -236,7 +216,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year3', index), itemControl.get('rowId')?.value)"
@@ -270,7 +250,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year4', index), itemControl.get('rowId')?.value)"
@@ -304,7 +284,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year5', index), itemControl.get('rowId')?.value)"
@@ -338,7 +318,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year6', index), itemControl.get('rowId')?.value)"
@@ -372,7 +352,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('designEngineering', 'year7', index), itemControl.get('rowId')?.value)"
@@ -431,6 +411,7 @@
         [addButtonMessage]="'plans.form.placeholders.addSourcingItem' | translate"
         [createNewItem]="createSourcingItem"
         [maxItems]="20"
+        [customHeaderLabels]="valueChainHeaderLabels()"
       >
         <ng-template
           #itemTemplate
@@ -451,7 +432,7 @@
                 type="text"
                 pInputText
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpenseItemName' | translate"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'expenseHeader', index), itemControl.get('rowId')?.value)"
@@ -478,7 +459,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterInHouseProcured' | translate"
                 [appendTo]="'body'"
                 fluid
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
@@ -503,7 +484,7 @@
             >
               <p-inputnumber
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCost' | translate"
                 [min]="0"
                 mode="decimal"
                 prefix="%"
@@ -540,7 +521,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year1', index), itemControl.get('rowId')?.value)"
@@ -574,7 +555,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year2', index), itemControl.get('rowId')?.value)"
@@ -608,7 +589,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year3', index), itemControl.get('rowId')?.value)"
@@ -642,7 +623,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year4', index), itemControl.get('rowId')?.value)"
@@ -676,7 +657,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year5', index), itemControl.get('rowId')?.value)"
@@ -710,7 +691,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year6', index), itemControl.get('rowId')?.value)"
@@ -744,7 +725,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('sourcing', 'year7', index), itemControl.get('rowId')?.value)"
@@ -803,6 +784,7 @@
         [addButtonMessage]="'plans.form.placeholders.addManufacturingItem' | translate"
         [createNewItem]="createManufacturingItem"
         [maxItems]="20"
+        [customHeaderLabels]="valueChainHeaderLabels()"
       >
         <ng-template
           #itemTemplate
@@ -823,7 +805,7 @@
                 type="text"
                 pInputText
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpenseItemName' | translate"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'expenseHeader', index), itemControl.get('rowId')?.value)"
@@ -850,7 +832,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterInHouseProcured' | translate"
                 [appendTo]="'body'"
                 fluid
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
@@ -875,7 +857,7 @@
             >
               <p-inputnumber
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCost' | translate"
                 [min]="0"
                 mode="decimal"
                 prefix="%"
@@ -910,7 +892,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year1', index), itemControl.get('rowId')?.value)"
@@ -942,7 +924,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year2', index), itemControl.get('rowId')?.value)"
@@ -974,7 +956,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year3', index), itemControl.get('rowId')?.value)"
@@ -1006,7 +988,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year4', index), itemControl.get('rowId')?.value)"
@@ -1039,7 +1021,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year5', index), itemControl.get('rowId')?.value)"
@@ -1071,7 +1053,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year6', index), itemControl.get('rowId')?.value)"
@@ -1103,7 +1085,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('manufacturing', 'year7', index), itemControl.get('rowId')?.value)"
@@ -1162,6 +1144,7 @@
         [addButtonMessage]="'plans.form.placeholders.addAssemblyTestingItem' | translate"
         [createNewItem]="createAssemblyTestingItem"
         [maxItems]="20"
+        [customHeaderLabels]="valueChainHeaderLabels()"
       >
         <ng-template
           #itemTemplate
@@ -1182,7 +1165,7 @@
                 type="text"
                 pInputText
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpenseItemName' | translate"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'expenseHeader', index), itemControl.get('rowId')?.value)"
@@ -1209,7 +1192,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterInHouseProcured' | translate"
                 [appendTo]="'body'"
                 fluid
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'inHouseOrProcured', index), itemControl.get('rowId')?.value)"
@@ -1234,7 +1217,7 @@
             >
               <p-inputnumber
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCost' | translate"
                 [min]="0"
                 prefix="%"
                 mode="decimal"
@@ -1271,7 +1254,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year1', index), itemControl.get('rowId')?.value)"
@@ -1305,7 +1288,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year2', index), itemControl.get('rowId')?.value)"
@@ -1339,7 +1322,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year3', index), itemControl.get('rowId')?.value)"
@@ -1374,7 +1357,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year4', index), itemControl.get('rowId')?.value)"
@@ -1408,7 +1391,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year5', index), itemControl.get('rowId')?.value)"
@@ -1442,7 +1425,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year6', index), itemControl.get('rowId')?.value)"
@@ -1476,7 +1459,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('assemblyTesting', 'year7', index), itemControl.get('rowId')?.value)"
@@ -1535,6 +1518,7 @@
         [addButtonMessage]="'plans.form.placeholders.addAfterSalesItem' | translate"
         [createNewItem]="createAfterSalesItem"
         [maxItems]="20"
+        [customHeaderLabels]="valueChainHeaderLabels()"
       >
         <ng-template
           #itemTemplate
@@ -1555,7 +1539,7 @@
                 type="text"
                 pInputText
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter expense item name'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpenseItemName' | translate"
                 [maxlength]="100"
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.expenseHeader)!)"
                 [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'expenseHeader', index), itemControl.get('rowId')?.value)"
@@ -1582,7 +1566,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.inHouseOrProcured)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter In-house / Procured'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterInHouseProcured' | translate"
                 (onChange)="onInHouseOrProcuredChange(itemControl)"
                 fluid
                 [appendTo]="'body'"
@@ -1607,7 +1591,7 @@
             >
               <p-inputnumber
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter cost'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterCost' | translate"
                 [min]="0"
                 mode="decimal"
                 prefix="%"
@@ -1644,7 +1628,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year1)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year1', index), itemControl.get('rowId')?.value)"
@@ -1678,7 +1662,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year2)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year2', index), itemControl.get('rowId')?.value)"
@@ -1712,7 +1696,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year3)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year3', index), itemControl.get('rowId')?.value)"
@@ -1746,7 +1730,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year4)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year4', index), itemControl.get('rowId')?.value)"
@@ -1780,7 +1764,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year5)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year5', index), itemControl.get('rowId')?.value)"
@@ -1814,7 +1798,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year6)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year6', index), itemControl.get('rowId')?.value)"
@@ -1848,7 +1832,7 @@
                 [formControl]="getValueControl(itemControl.get(EMaterialsFormControls.year7)!)"
                 optionLabel="name"
                 optionValue="id"
-                [appHidePlaceholderWhenDisabledEmpty]="'Select'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.select' | translate"
                 fluid
                 [appendTo]="'body'"
                 [appConditionalColorClass]="highlightInput(createFieldKey('afterSales', 'year7', index), itemControl.get('rowId')?.value)"

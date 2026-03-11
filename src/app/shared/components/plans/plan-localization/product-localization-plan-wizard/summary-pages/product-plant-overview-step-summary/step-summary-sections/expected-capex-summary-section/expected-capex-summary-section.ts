@@ -29,7 +29,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
     const currantValue = this.formatPercent(this.landPercentageControl()?.value);
     const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.landPercent);
     return {
-      label: 'Land %',
+      label: this.i18nService.translate('plans.form.landPercent'),
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.landPercentageControl()),
@@ -44,7 +44,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
     const currantValue = this.formatPercent(this.buildingPercentageControl()?.value);
     const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.buildingPercent);
     return {
-      label: 'Building %',
+      label: this.i18nService.translate('plans.form.buildingPercent'),
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.buildingPercentageControl()),
@@ -59,7 +59,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
     const currantValue = this.formatPercent(this.machineryEquipmentPercentageControl()?.value);
     const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.machineryPercent);
     return {
-      label: 'Machinery & Equipment %',
+      label: this.i18nService.translate('plans.form.machineryEquipmentPercent'),
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.machineryEquipmentPercentageControl()),
@@ -74,7 +74,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
     const currantValue = this.formatPercent(this.othersPercentageControl()?.value);
     const beforeValue = this.formatPercent(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.othersPercent);
     return {
-      label: 'Others %',
+      label: this.i18nService.translate('plans.form.othersPercent'),
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.othersPercentageControl()),
@@ -95,7 +95,7 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
     const currantValue = this.othersDescriptionControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.othersDescription ?? '';
     return {
-      label: 'Others Description',
+      label: this.i18nService.translate('plans.form.othersDescription'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.othersDescriptionControl()),

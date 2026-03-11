@@ -24,7 +24,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
     const currantValue = this.productNameControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.productName ?? '';
     return {
-      label: 'Product Name',
+      label: this.i18nService.translate('plans.form.productName'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.productNameControl()),
@@ -39,7 +39,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
     const currantValue = this.productSpecificationsControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.productSpecifications ?? '';
     return {
-      label: 'Product Specifications',
+      label: this.i18nService.translate('plans.form.productSpecifications'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.productSpecificationsControl()),
@@ -54,7 +54,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
     const currantValue = this.targetedAnnualPlantCapacityControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.targetedAnnualPlantCapacity ?? '';
     return {
-      label: 'Targeted Annual Plant Capacity',
+      label: this.i18nService.translate('plans.form.targetedAnnualPlantCapacity'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.targetedAnnualPlantCapacityControl()),
@@ -69,7 +69,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
     const currantValue = this.timeRequiredToSetupFactoryControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.timeRequiredToSetupFactory ?? '';
     return {
-      label: 'Time Required to Setup Factory',
+      label: this.i18nService.translate('plans.form.timeRequiredToSetupFactory'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.timeRequiredToSetupFactoryControl()),
