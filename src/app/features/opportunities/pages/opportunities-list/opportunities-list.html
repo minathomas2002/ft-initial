@@ -53,7 +53,7 @@
                 @if(!item.isOtherOpportunity) {
                 <p-button
                   [label]="'opportunity.list.viewDetails' | translate"
-                  [severity]="'secondary'"
+                  [severity]="item.numberOfPlans > 0 && permissionService.canViewOpportunityPlansNumber() ? 'primary' : 'secondary'"
                   class="flex-1"
                   fluid
                   (onClick)="onViewDetails(item)"
