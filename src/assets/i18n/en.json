@@ -107,7 +107,7 @@
     }
   },
   "footer": {
-    "message": "© 2025 SEC. All rights reserved.",
+    "message": "© {{year}} SEC. All rights reserved.",
     "terms": "Terms",
     "privacy": "Privacy",
     "cookie": "Cookie"

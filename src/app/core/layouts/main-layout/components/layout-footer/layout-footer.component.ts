@@ -11,7 +11,9 @@ import { RouterLink } from '@angular/router';
 })
 export class LayoutFooterComponent {
   private readonly i18nService = inject(I18nService);
-  protected readonly footerMessage = computed(() => this.i18nService.translate('footer.message'));
+  protected readonly footerMessage = computed(() =>
+    this.i18nService.translate('footer.message', { year: String(new Date().getFullYear()) })
+  );
   protected readonly footerTerms = computed(() => this.i18nService.translate('footer.terms'));
   protected readonly footerPrivacy = computed(() => this.i18nService.translate('footer.privacy'));
   protected readonly footerCookie = computed(() => this.i18nService.translate('footer.cookie'));
