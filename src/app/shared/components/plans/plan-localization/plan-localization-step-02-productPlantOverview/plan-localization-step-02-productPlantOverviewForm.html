@@ -12,12 +12,8 @@
         ></i>
         <ng-template #tooltipContent>
           <div class="flex flex-col gap-2 text-start">
-            <p>
-              Please note, supplier is required to complete this template independently for each product intended for localization. However, specifications of the same product should be consolidated.
-            </p>
-            <p>
-              For e.g., If targeted product is "HV Transformer", kindly fill this localization template specifically for "HV Transformer" only and do not include any other product. However all specifications of HV Transformer should be covered as part of the same template.
-            </p>
+            <p>{{ 'plans.form.overviewTooltipNote1' | translate }}</p>
+            <p>{{ 'plans.form.overviewTooltipNote2' | translate }}</p>
           </div>
         </ng-template>
       </span>
@@ -97,8 +93,8 @@
         <div class="flex flex-col gap-2 flex-1">
           <div>
             <app-base-label
-              [title]="'Targeted Annual Plant Capacity'"
-              [secondaryTitle]="'(Mention Unit of Measurement)'"
+              [title]="'plans.form.targetedAnnualPlantCapacity' | translate"
+              [secondaryTitle]="'plans.form.placeholders.mentionUnitOfMeasurement' | translate"
             />
           </div>
           <app-group-input-with-checkbox
@@ -115,7 +111,7 @@
               pInputText
               fluid
               [maxlength]="50"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter targeted annual plant capacity'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTargetedAnnualCapacity' | translate"
               [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
               [appConditionalColorClass]="highlightInput('targetedAnnualPlantCapacity')"
               [color]="selectedInputColor()"
@@ -131,8 +127,8 @@
         <div class="flex flex-col gap-2 flex-1">
           <div>
             <app-base-label
-              [title]="'Time Required to Setup Factory'"
-              [secondaryTitle]="'(Once Localization Plan is Approved)'"
+              [title]="'plans.form.timeRequiredToSetupFactory' | translate"
+              [secondaryTitle]="'plans.form.placeholders.oncePlanApproved' | translate"
             />
           </div>
           <app-group-input-with-checkbox
@@ -149,7 +145,7 @@
               pInputText
               fluid
               maxlength="50"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter time required to setup factory'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTimeToSetupFactory' | translate"
               [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
               [appConditionalColorClass]="highlightInput('timeRequiredToSetupFactory')"
               [color]="selectedInputColor()"
@@ -172,7 +168,7 @@
       <!-- Land Percentage -->
       <div class="flex flex-col gap-2">
         <app-base-label
-          [title]="'Land'"
+          [title]="'plans.form.land' | translate"
           [secondaryTitle]="'(%)'"
         />
         <app-group-input-with-checkbox
@@ -186,7 +182,7 @@
         >
           <p-inputnumber
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter land'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterLand' | translate"
             [min]="0"
             mode="decimal"
             [minFractionDigits]="0"
@@ -206,7 +202,7 @@
       <!-- Building Percentage -->
       <div class="flex flex-col gap-2">
         <app-base-label
-          [title]="'Building'"
+          [title]="'plans.form.building' | translate"
           [secondaryTitle]="'(%)'"
         />
         <app-group-input-with-checkbox
@@ -220,7 +216,7 @@
         >
           <p-inputnumber
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter building'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterBuilding' | translate"
             [min]="0"
             mode="decimal"
             [maxlength]="5"
@@ -240,7 +236,7 @@
       <!-- Machinery / Equipment Percentage -->
       <div class="flex flex-col gap-2">
         <app-base-label
-          [title]="'Machinery / Equipment'"
+          [title]="'plans.form.machineryEquipment' | translate"
           [secondaryTitle]="'(%)'"
         />
         <app-group-input-with-checkbox
@@ -254,7 +250,7 @@
         >
           <p-inputnumber
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter machinery / equipment'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterMachineryEquipment' | translate"
             [min]="0"
             [maxlength]="5"
             mode="decimal"
@@ -274,8 +270,8 @@
       <!-- Others Percentage -->
       <div class="flex flex-col gap-2">
         <app-base-label
-          [title]="'Others'"
-          [secondaryTitle]="'(%) (Kindly mention details)'"
+          [title]="'plans.form.others' | translate"
+          [secondaryTitle]="'plans.form.placeholders.othersPercentDetails' | translate"
         />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"
@@ -288,7 +284,7 @@
         >
           <p-inputnumber
             fluid
-            [appHidePlaceholderWhenDisabledEmpty]="'Enter others'"
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterOthers' | translate"
             [min]="0"
             [maxlength]="5"
             mode="decimal"
@@ -309,7 +305,7 @@
     <!-- Others Description (conditional) -->
     @if(showOthersDescription()){
     <div class="flex flex-col gap-2">
-      <app-base-label [title]="'Others Description'" />
+      <app-base-label [title]="'plans.form.othersDescription' | translate" />
       <app-group-input-with-checkbox
         [showCheckbox]="showCheckbox()"
         [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
@@ -323,7 +319,7 @@
           pInputTextarea
           fluid
           [maxlength]="255"
-          [appHidePlaceholderWhenDisabledEmpty]="'Enter others description'"
+          [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterOthersDescription' | translate"
           [rows]="4"
           [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.othersDescription])"
           [appConditionalColorClass]="highlightInput('othersDescription')"
@@ -350,7 +346,7 @@
       <!-- Targeted Customer -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex flex-col gap-2 col-span-1">
-          <app-base-label [title]="'Targeted Customer'" />
+          <app-base-label [title]="'plans.form.targetedCustomer' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.targetedCustomer])"
@@ -368,7 +364,7 @@
               display="chip"
               dropdownIcon="icon-chevron-down"
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Select targeted customer'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectTargetedCustomer' | translate"
               [appConditionalColorClass]="highlightInput('targetedCustomer')"
               [color]="selectedInputColor()"
             />
@@ -387,7 +383,7 @@
 
         <!-- Names of Targeted Suppliers -->
         <div class="flex flex-col gap-2">
-          <app-base-label [title]="'Provide names of targeted SEC\'s approved local suppliers'" />
+          <app-base-label [title]="'plans.form.placeholders.provideNamesTargetedSuppliers' | translate" />
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
             [hasCommentControl]="getHasCommentControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
@@ -401,7 +397,7 @@
               pInputTextarea
               fluid
               [maxlength]="255"
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter provide names of targeted SEC\'s'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterProvideNamesTargeted' | translate"
               [rows]="4"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.namesOfTargetedSuppliers])"
               [appConditionalColorClass]="highlightInput('namesOfTargetedSuppliers')"
@@ -421,7 +417,7 @@
         <!-- Products Utilize Targeted Product -->
         <div class="flex flex-col gap-2">
           <span class="font-medium text-sm mb-[6px] inline-block text-gray-700">
-            Which product(s) manufactured by SEC's approved local suppliers will utilize your 'Targeted Product'
+            {{ 'plans.form.placeholders.whichProductsUtilize' | translate }}
           </span>
           <app-group-input-with-checkbox
             [showCheckbox]="showCheckbox()"
@@ -435,7 +431,7 @@
             <textarea
               pInputTextarea
               fluid
-              [appHidePlaceholderWhenDisabledEmpty]="'Enter product(s)'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterProducts' | translate"
               [rows]="4"
               [maxlength]="255"
               [formControl]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
@@ -481,7 +477,7 @@
               optionLabel="name"
               optionValue="id"
               dropdownIcon="icon-chevron-down"
-              [appHidePlaceholderWhenDisabledEmpty]="'Select product manufacturing experience'"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.selectProductManufacturingExperience' | translate"
               fluid
               [appConditionalColorClass]="highlightInput('productManufacturingExperience')"
               [color]="selectedInputColor()"
@@ -528,7 +524,7 @@
 
           <app-base-error-messages
             [control]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToSEC])"
-            [label]="'This field'"
+            [label]="'plans.form.placeholders.thisField' | translate"
           />
         </div>
       </div>
@@ -543,7 +539,7 @@
           <!-- Qualified Plant Location (By SEC) -->
           <div class="flex flex-col gap-2">
             <app-base-label
-              [title]="'Qualified Plant Location'"
+              [title]="'plans.form.placeholders.qualifiedPlantLocation' | translate"
               secondaryTitle="(By SEC)"
             />
             <app-group-input-with-checkbox
@@ -560,7 +556,7 @@
                 pInputText
                 [maxlength]="255"
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter qualified plant location'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterQualifiedPlantLocation' | translate"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocationSEC])"
                 [appConditionalColorClass]="highlightInput('qualifiedPlantLocationSEC')"
                 [color]="selectedInputColor()"
@@ -575,7 +571,7 @@
           <!-- Approved Vendor ID (with SEC) -->
           <div class="flex flex-col gap-2">
             <app-base-label
-              [title]="'Approved Vendor ID'"
+              [title]="'plans.form.placeholders.approvedVendorId' | translate"
               secondaryTitle="(with SEC)"
             />
             <app-group-input-with-checkbox
@@ -589,7 +585,7 @@
             >
               <p-inputnumber
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter approved vendor ID'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterApprovedVendorId' | translate"
                 [min]="0"
                 [maxlength]="7"
                 [useGrouping]="false"
@@ -609,7 +605,7 @@
           <!-- Years of Experience (with SEC) -->
           <div class="flex flex-col gap-2">
             <app-base-label
-              [title]="'Years of Experience'"
+              [title]="'plans.form.placeholders.yearsOfExperience' | translate"
               secondaryTitle="(with SEC)"
             />
             <app-group-input-with-checkbox
@@ -623,7 +619,7 @@
             >
               <p-inputnumber
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter years of experience'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterYearsOfExperience' | translate"
                 [maxlength]="2"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperienceSEC])"
                 [appConditionalColorClass]="highlightInput('yearsOfExperienceSEC')"
@@ -639,7 +635,7 @@
           <!-- Total Quantities provided to SEC -->
           <div class="flex flex-col gap-2">
             <app-base-label
-              [title]="'Total Quantities provided to SEC'"
+              [title]="'plans.form.placeholders.totalQuantitiesProvidedToSEC' | translate"
               secondaryTitle="(2019 onwards)"
             />
             <app-group-input-with-checkbox
@@ -654,7 +650,7 @@
               <p-inputnumber
                 fluid
                 [maxlength]="16"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter total quantities provided to SEC'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTotalQuantitiesProvidedToSEC' | translate"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantitiesSEC])"
                 [appConditionalColorClass]="highlightInput('totalQuantitiesSEC')"
                 [color]="selectedInputColor()"
@@ -673,7 +669,7 @@
       <div class="flex flex-col gap-2">
         <div>
           <app-base-label [title]="'plans.form.doYouProvideProductToLocalSuppliers' | translate" />
-          <span class="text-sm text-gray-700 block text-xs">If 'Yes', provide the following:</span>
+          <span class="text-sm text-gray-700 block text-xs">{{ 'plans.form.placeholders.ifYesProvideFollowing' | translate }}</span>
         </div>
         <div class="flex gap-4">
           <label class="flex items-center gap-2 cursor-pointer">
@@ -699,7 +695,7 @@
         </div>
         <app-base-error-messages
           [control]="getFormControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.provideToLocalSuppliers])"
-          [label]="'This field'"
+          [label]="'plans.form.placeholders.thisField' | translate"
         />
       </div>
 
@@ -713,7 +709,7 @@
           <!-- Name(s) of SEC approved local supplier(s) -->
           <div class="flex flex-col gap-2">
             <span class="font-medium text-sm mb-[6px] inline-block text-gray-700">
-              Name(s) of SEC approved local supplier(s)
+              {{ 'plans.form.namesOfSECApprovedSuppliers' | translate }}
             </span>
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
@@ -728,7 +724,7 @@
                 type="text"
                 pInputText
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter name(s) of SEC approved local supplier(s)'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterNamesOfSECSuppliers' | translate"
                 [maxlength]="255"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.namesOfSECApprovedSuppliers])"
                 [appConditionalColorClass]="highlightInput('namesOfSECApprovedSuppliers')"
@@ -743,7 +739,7 @@
 
           <!-- Qualified Plant Location -->
           <div class="flex flex-col gap-2">
-            <app-base-label [title]="'Qualified Plant Location'" />
+            <app-base-label [title]="'plans.form.placeholders.qualifiedPlantLocation' | translate" />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
@@ -758,7 +754,7 @@
                 pInputText
                 [maxlength]="255"
                 fluid
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter qualified plant location'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterQualifiedPlantLocation' | translate"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.qualifiedPlantLocation])"
                 [appConditionalColorClass]="highlightInput('qualifiedPlantLocation')"
                 [color]="selectedInputColor()"
@@ -772,7 +768,7 @@
 
           <!-- Years of Experience -->
           <div class="flex flex-col gap-2">
-            <app-base-label [title]="'Years of Experience'" />
+            <app-base-label [title]="'plans.form.placeholders.yearsOfExperience' | translate" />
             <app-group-input-with-checkbox
               [showCheckbox]="showCheckbox()"
               [hasCommentControl]="getHasCommentControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
@@ -785,7 +781,7 @@
               <p-inputnumber
                 fluid
                 [maxlength]="2"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter years of experience'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterYearsOfExperience' | translate"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.yearsOfExperience])"
                 [appConditionalColorClass]="highlightInput('yearsOfExperience')"
                 [color]="selectedInputColor()"
@@ -800,7 +796,7 @@
           <!-- Total quantities provided to all approved local suppliers -->
           <div class="flex flex-col gap-2">
             <div>
-              <app-base-label [title]="'Total quantities provided to all approved local suppliers'" />
+              <app-base-label [title]="'plans.form.placeholders.totalQuantitiesToLocalSuppliers' | translate" />
               <span class="text-sm text-gray-600 ms-2">(2019 onwards)</span>
             </div>
             <app-group-input-with-checkbox
@@ -815,7 +811,7 @@
               <p-inputnumber
                 fluid
                 [maxlength]="16"
-                [appHidePlaceholderWhenDisabledEmpty]="'Enter total quantities provided'"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTotalQuantitiesProvided' | translate"
                 [formControl]="getValueControl(productManufacturingExperienceFormGroupControls[EMaterialsFormControls.totalQuantities])"
                 [appConditionalColorClass]="highlightInput('totalQuantities')"
                 [color]="selectedInputColor()"

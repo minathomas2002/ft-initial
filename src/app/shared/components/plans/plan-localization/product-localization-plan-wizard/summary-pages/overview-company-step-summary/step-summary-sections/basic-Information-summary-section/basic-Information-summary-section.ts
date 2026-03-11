@@ -65,7 +65,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     return {
       label: this.i18nService.translate('plans.form.submissionDate'),
       beforeValue: '',
-      currantValue: this.getFormattedDate(this.submissionDateControl()?.value) || 'Invalid Date',
+      currantValue: this.getFormattedDate(this.submissionDateControl()?.value) || this.i18nService.translate('common.invalidDate'),
       hasError: false,
       hasComment: false,
       isResolved: false,

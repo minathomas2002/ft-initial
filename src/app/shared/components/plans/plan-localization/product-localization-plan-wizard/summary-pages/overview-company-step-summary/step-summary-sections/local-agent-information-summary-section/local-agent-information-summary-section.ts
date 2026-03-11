@@ -25,7 +25,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     const currantValue = this.localAgentNameControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentName ?? '';
     return {
-      label: 'Local Agent Name',
+      label: this.i18nService.translate('plans.form.localAgentName'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.localAgentNameControl()),
@@ -40,7 +40,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     const currantValue = this.contactPersonNameControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.contactPersonName ?? '';
     return {
-      label: 'Contact Person Name',
+      label: this.i18nService.translate('plans.form.contactPersonName'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.contactPersonNameControl()),
@@ -55,7 +55,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     const currantValue = this.emailIDControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentEmail ?? '';
     return {
-      label: 'Email ID',
+      label: this.i18nService.translate('plans.form.emailID'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.emailIDControl()),
@@ -73,7 +73,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     const currantValueWithoutSpaces = currantValue.replace(' ', '');
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentContactNumber ?? '';
     return {
-      label: 'Contact Number',
+      label: this.i18nService.translate('plans.form.contactNumber'),
       beforeValue: String(beforeValue),
       currantValue: currantValueWithoutSpaces,
       hasError: this.isFieldHasError(this.contactNumberControl()),
@@ -88,7 +88,7 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     const currantValue = this.companyHQLocationControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.companyHQLocation ?? '';
     return {
-      label: 'Company HQ Location',
+      label: this.i18nService.translate('plans.form.companyHQLocation'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.companyHQLocationControl()),

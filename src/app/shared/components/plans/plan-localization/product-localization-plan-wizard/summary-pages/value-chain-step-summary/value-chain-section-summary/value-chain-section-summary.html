@@ -12,7 +12,7 @@
           <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.inHouseProcured' | translate }}</th>
           <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.form.costPercentage' | translate }}</th>
           @for (y of [1,2,3,4,5,6,7]; track y) {
-          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">Year {{ y }}</th>
+          <th class="p-3 text-left text-sm font-semibold text-[#4A4E5A]">{{ 'plans.summary.year' + y | translate }}</th>
           }
         </tr>
       </ng-template>

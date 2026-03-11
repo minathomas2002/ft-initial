@@ -26,6 +26,7 @@ import { CommentStateComponent } from '../../comment-state-component/comment-sta
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { I18nService } from 'src/app/shared/services/i18n';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -57,7 +58,22 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 })
 export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   readonly opportunitiesStore = inject(OpportunitiesStore);
+  private readonly i18n = inject(I18nService);
   isViewMode = input<boolean>(false);
+
+  /** Translated table headers for value chain sections (Expense Header, In-house/Procured, Cost %, Year 1–7) */
+  valueChainHeaderLabels = computed(() => ({
+    [EMaterialsFormControls.expenseHeader]: this.i18n.translate('plans.form.expenseHeader'),
+    [EMaterialsFormControls.inHouseOrProcured]: this.i18n.translate('plans.form.inHouseProcured'),
+    [EMaterialsFormControls.costPercentage]: this.i18n.translate('plans.form.costPercentage'),
+    [EMaterialsFormControls.year1]: this.i18n.translate('plans.summary.year1'),
+    [EMaterialsFormControls.year2]: this.i18n.translate('plans.summary.year2'),
+    [EMaterialsFormControls.year3]: this.i18n.translate('plans.summary.year3'),
+    [EMaterialsFormControls.year4]: this.i18n.translate('plans.summary.year4'),
+    [EMaterialsFormControls.year5]: this.i18n.translate('plans.summary.year5'),
+    [EMaterialsFormControls.year6]: this.i18n.translate('plans.summary.year6'),
+    [EMaterialsFormControls.year7]: this.i18n.translate('plans.summary.year7'),
+  }));
   override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
 

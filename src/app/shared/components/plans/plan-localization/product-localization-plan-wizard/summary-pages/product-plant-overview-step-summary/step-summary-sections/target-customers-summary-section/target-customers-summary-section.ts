@@ -20,16 +20,14 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
 
   private formatTargetedCustomers(value: number[] | unknown): string {
     if (!Array.isArray(value) || value.length === 0) return '';
-    
+
     const labelMap: Record<number, string> = {
-      [ETargetedCustomer.SEC]: 'SEC',
-      [ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS]: "SEC's approved local suppliers",
+      [ETargetedCustomer.SEC]: this.i18nService.translate('plans.options.targetedCustomerSec'),
+      [ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS]: this.i18nService.translate('plans.options.targetedCustomerSecApprovedLocalSuppliers'),
     };
-    
+
     return value
-      .map((id: number) => {
-        return labelMap[id] ?? String(id);
-      })
+      .map((id: number) => labelMap[id] ?? String(id))
       .join(', ');
   }
 
@@ -40,7 +38,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
     const targetSEC = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.targetSEC;
     const beforeValue = Array.isArray(targetSEC) ? this.formatTargetedCustomers(targetSEC) : '';
     return {
-      label: 'Targeted Customer',
+      label: this.i18nService.translate('plans.form.targetedCustomer'),
       beforeValue,
       currantValue,
       hasError: this.isFieldHasError(this.targetedCustomerControl()),
@@ -61,7 +59,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
     const currantValue = this.namesOfTargetedSuppliersControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.targetedLocalSupplierNames ?? '';
     return {
-      label: 'Names of Targeted Suppliers',
+      label: this.i18nService.translate('plans.form.namesOfTargetedSuppliers'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.namesOfTargetedSuppliersControl()),
@@ -76,7 +74,7 @@ export class TargetCustomersSummarySection extends SummarySectionBaseClass {
     const currantValue = this.productsUtilizeTargetedProductControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.targetCustomers.productsUtilizingTargetProduct ?? '';
     return {
-      label: 'Products Utilize Targeted Product',
+      label: this.i18nService.translate('plans.form.productsUtilizeTargetedProduct'),
       beforeValue: String(beforeValue),
       currantValue: String(currantValue),
       hasError: this.isFieldHasError(this.productsUtilizeTargetedProductControl()),
