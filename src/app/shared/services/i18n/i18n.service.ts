@@ -9,7 +9,15 @@ export type SupportedLanguage = 'en' | 'ar';
 	providedIn: 'root',
 })
 export class I18nService {
-	private readonly _currentLanguage = signal<SupportedLanguage>('en');
+	private static getInitialLanguage(): SupportedLanguage {
+		if (typeof window !== 'undefined' && window.localStorage) {
+			const saved = localStorage.getItem('preferred-language') as SupportedLanguage;
+			if (saved === 'en' || saved === 'ar') return saved;
+		}
+		return 'en';
+	}
+
+	private readonly _currentLanguage = signal<SupportedLanguage>(I18nService.getInitialLanguage());
 	public readonly currentLanguage = this._currentLanguage.asReadonly();
 
 	public readonly translations = signal<Record<string, any>>({});
@@ -17,7 +25,10 @@ export class I18nService {
 	private readonly router = inject(Router)
 
 	constructor(private translateService: TranslateService) {
-		// Load initial language
+		// Set document direction immediately from initial language (before async load)
+		this.updateDocumentDirection(this._currentLanguage());
+
+		// Load initial language (already correct from localStorage)
 		this.loadLanguage(this._currentLanguage());
 
 		// Load language when it changes
@@ -79,7 +90,10 @@ export class I18nService {
 	private async loadLanguage(lang: SupportedLanguage): Promise<void> {
 		try {
 			const translations = await this.translateService.loadTranslations(lang);
-			this.translations.set(translations);
+			// Only apply if this is still the current language (avoids race when switching)
+			if (this._currentLanguage() === lang) {
+				this.translations.set(translations);
+			}
 		} catch (error) {
 			console.error(`Failed to load translations for language: ${lang}`, error);
 		}
