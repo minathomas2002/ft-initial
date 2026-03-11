@@ -21,7 +21,10 @@
       <div class="text-xs text-gray-500 mb-1">{{'common.LastModifiedBy'|translate}}</div>
       <div class="flex items-center gap-2 font-medium">
         <i class="icon-user-edit text-gray-500"></i>
-        {{opportunityDetails()?.updatedBy== null || opportunityDetails()?.updatedBy== ''  ?'___' : opportunityDetails()?.updatedBy}}
+        {{
+        opportunityDetails()?.updatedBy== null ||
+        opportunityDetails()?.updatedBy== ''
+        ?'___' : opportunityDetails()?.updatedBy}}
       </div>
     </div>
 
@@ -29,7 +32,10 @@
       <div class="text-xs text-gray-500 mb-1">{{'common.LastModifiedDate'|translate}}</div>
       <div class="flex items-center gap-2 font-medium">
         <i class="icon-calender text-gray-500"></i>
-        {{ opportunityDetails()?.updatedDate == null  ?'___':opportunityDetails()?.updatedDate|date}}
+        {{ opportunityDetails()?.updatedDate == null ||
+           opportunityDetails()?.updatedBy== null ||
+           opportunityDetails()?.updatedBy== ''
+           ?'___':opportunityDetails()?.updatedDate|date}}
       </div>
     </div>
 
