@@ -1079,12 +1079,22 @@
       "tooltipQualificationStatus": "If the Company Type is \"Manufacturer\" select \"Qualification Status\"",
       "tooltipSupervisionOversight": "Mention whether the partnership with Saudi company is being supervised by any government entity (e.g., MoEn, PIF, etc.) if any",
       "tooltipProvideAgreementCopy": "If \"Yes\", please attach the agreement copy at the end of the plan in the Attachment section.",
+      "tooltipServiceType": "1) Technical (Core) Services: Services directly related to the planning, construction, operation, maintenance, testing, or commissioning of utility infrastructure and systems. 2) Non-Technical (Non-Core / Support) Services: Services that support project delivery or business operations",
+      "tooltipTotalBusinessLast5Years": "Mention total business done in last 5 years with top 5 entities",
+      "tooltipServiceTargetedForLocalization": "Select \"Yes\" if the service is currently targeted for localization; otherwise, select \"No\"",
+      "tooltipProprietaryTools": "Mention if any proprietary tools / platforms / systems etc. will be transferred locally as part of localizing the service? If yes, provide details",
+      "tooltipSupervisionOversightDirect": "Mention whether the localization of the service is being supervised / overseen by any government entity (if any) (e.g., MoEn, PIF etc.)",
+      "tooltipCapexRequired": "Provide details of the CAPEX required (in SAR) to establish local operations. Avoid duplicating CAPEX entries across services; if the same CAPEX applies to multiple services, please indicate it by stating 'included above'",
       "numberOfServices": "# of Services",
+      "serviceNumber": "Service {{ number }}",
+      "supportRequiredFromSECIfAny": "Support Required from SEC (if any)",
+      "noPersonaFound": "No Persona Found",
       "totalBusinessDoneLast5Years": "Total Business Done (Last 5 Years)",
       "serviceLocalizationMethodology": "Service Localization Methodology",
       "keyMeasuresToUpskillSaudis": "Key measures to upskill Saudis",
       "supportRequiredFromSEC": "Support Required from SEC",
       "metrics": "Metrics",
+      "yearsRange": "Years ({{start}}-{{end}})",
       "category": "Category",
       "expectedAnnualHeadcountKSA": "Expected Annual Headcount (To be filled for the KSA based facility only)",
       "mentionYoySaudizationKSA": "Mention Y-o-Y expected Saudization % (To be filled for the KSA based facility only)",
@@ -1157,7 +1167,8 @@
       "addCollaborationPartnership": "Add Collaboration Partnership",
       "placeholders": {
         "select": "Select"
-      }
+      },
+      "commentYourComment": "Your Comment"
     },
     "placeholders": {
       "selectOpportunity": "Select opportunity",

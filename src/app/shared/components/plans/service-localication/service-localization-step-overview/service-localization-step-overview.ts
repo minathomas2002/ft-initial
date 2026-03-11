@@ -34,6 +34,7 @@ import { IFieldInformation, IPageComment, IServiceLocalizationPlanResponse } fro
 import { ISelectItem, TColors } from 'src/app/shared/interfaces';
 import { getFieldValueFromServicePlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { FormsModule } from '@angular/forms';
+import { I18nService } from 'src/app/shared/services/i18n';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { MultiSelect } from 'primeng/multiselect';
 import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
@@ -76,6 +77,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
   override readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(I18nService);
 
   pageTitle = input.required<EPlanPageTitle>();
   selectedInputColor = input.required<TColors>();
@@ -150,6 +152,24 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   getDetailsFormArray(): FormArray {
     return this.planFormService?.getServiceDetailsFormArray() ?? new FormArray<any>([]);
   }
+
+  overviewServiceDetailsHeaderLabels = computed(() => ({
+    serviceName: this.i18n.translate('plans.form.serviceName'),
+    serviceType: this.i18n.translate('plans.form.serviceType'),
+    serviceCategory: this.i18n.translate('plans.form.serviceCategory'),
+    serviceDescription: this.i18n.translate('plans.form.serviceDescription'),
+    serviceProvidedTo: this.i18n.translate('plans.form.serviceProvidedTo'),
+    totalBusinessDoneLast5Years: this.i18n.translate('plans.form.totalBusinessDoneLast5Years'),
+    serviceTargetedForLocalization: this.i18n.translate('plans.form.serviceTargetedForLocalization'),
+    expectedLocalizationDate: this.i18n.translate('plans.form.expectedLocalizationDate'),
+    serviceLocalizationMethodology: this.i18n.translate('plans.form.serviceLocalizationMethodology'),
+  }));
+
+  overviewServiceDetailsHeaderTooltips = computed(() => ({
+    serviceType: this.i18n.translate('plans.form.tooltipServiceType'),
+    totalBusinessDoneLast5Years: this.i18n.translate('plans.form.tooltipTotalBusinessLast5Years'),
+    serviceTargetedForLocalization: this.i18n.translate('plans.form.tooltipServiceTargetedForLocalization'),
+  }));
 
   // Dropdown options
   serviceTypeOptions = this.planStore.serviceTypeOptionsTranslated;
