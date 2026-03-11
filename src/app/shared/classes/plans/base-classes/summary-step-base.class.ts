@@ -32,14 +32,14 @@ export abstract class SummaryStepBaseClass {
 
   commentForPage = computed(() => {
     let stepComment = this.stepComments();
-    let persona = 'Your Comment';
+    let persona = this.i18nService.translate('plans.form.commentYourComment');
     if (!this.planStore.currentUserPageComments().includes(this.pageTitleForTL as EPlanPageTitle)) {
       const commentRole = stepComment?.creatorRole ?? this.planStore.planComments()?.creatorRole;
       persona = this.planStore.getCommentPersonaByRole()(commentRole);
     }
     // Use the per-comment creatorRole if available, otherwise fallback to global
     return {
-      title: persona || 'No Persona Found',
+      title: persona || this.i18nService.translate('plans.form.noPersonaFound'),
       text: stepComment?.comment
     }
   });

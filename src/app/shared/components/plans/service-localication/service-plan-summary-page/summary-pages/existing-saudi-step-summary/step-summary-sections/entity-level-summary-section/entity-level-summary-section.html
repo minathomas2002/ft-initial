@@ -15,7 +15,7 @@
             <th
               class="p-3 text-start text-sm font-medium text-white"
               [attr.colspan]="yearColumns().length"
-            >Years ({{ yearColumns()[0] }}-{{ yearColumns()[yearColumns().length - 1] }})</th>
+            >{{ 'plans.form.yearsRange' | translate:{ start: yearColumns()[0], end: yearColumns()[yearColumns().length - 1] } }}</th>
           </tr>
           <tr class="[&_th]:bg-[#F9FAFA]! [&_th]:text-[#4A4E5A]!">
             <th class="p-3 text-start text-sm font-medium text-[#4A4E5A]">{{ 'plans.form.category' | translate }}</th>

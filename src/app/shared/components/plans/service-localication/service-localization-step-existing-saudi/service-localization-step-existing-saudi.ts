@@ -141,12 +141,12 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
 
   saudiCompanyDetailsHeaderTooltips = computed<Partial<Record<EMaterialsFormControls, string>>>(() => {
     return {
-      [EMaterialsFormControls.products]: 'If the Company Type is “Manufacturer” and Qualification Status is “Qualified / Under-Prequalification” Specify the products(s)',
-      [EMaterialsFormControls.companyOverview]: 'If the Company Type is “Manufacturer” and Qualification Status is “Not Qualified” provide Company Overview',
+      [EMaterialsFormControls.products]: this.i18n.translate('plans.form.tooltipProducts'),
+      [EMaterialsFormControls.companyOverview]: this.i18n.translate('plans.form.tooltipCompanyOverview'),
       [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: this.i18n.translate('plans.form.tooltipKeyProjectsContractor'),
       [EMaterialsFormControls.companyOverviewKeyProjectDetails]: this.i18n.translate('plans.form.tooltipCompanyOverviewKeyProject'),
       [EMaterialsFormControls.companyOverviewOther]: this.i18n.translate('plans.form.tooltipCompanyOverviewOther'),
-      [EMaterialsFormControls.qualificationStatus]: 'If the Company Type is “Manufacturer” select “Qualification Status”',
+      [EMaterialsFormControls.qualificationStatus]: this.i18n.translate('plans.form.tooltipQualificationStatus'),
       [EMaterialsFormControls.supervisionOversightEntity]: this.i18n.translate('plans.form.tooltipSupervisionOversight'),
     };
   });
@@ -302,7 +302,7 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
       { label: this.i18n.translate('plans.form.expectedAnnualHeadcountKSA'), colspan: yearCols, dataGroup: true },
       { label: this.i18n.translate('plans.form.mentionYoySaudizationKSAUptoYear', { year: this.yearColumns()[5] }), colspan: yearCols, dataGroup: true },
       { label: this.i18n.translate('plans.form.keyMeasuresToUpskillSaudis'), rowspan: 2, dataGroup: false },
-      { label: this.i18n.translate('plans.form.supportRequiredFromSEC') + ' (if any)', rowspan: 2, dataGroup: false },
+      { label: this.i18n.translate('plans.form.supportRequiredFromSECIfAny'), rowspan: 2, dataGroup: false },
     ];
   });
 
