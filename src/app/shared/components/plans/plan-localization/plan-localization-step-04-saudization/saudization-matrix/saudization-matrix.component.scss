@@ -1,3 +1,10 @@
-td{
+td {
   vertical-align: baseline;
+}
+
+// RTL: ensure table and cells flow correctly
+:host-context(html[dir='rtl']) {
+  ::ng-deep .p-datatable {
+    direction: rtl;
+  }
 }

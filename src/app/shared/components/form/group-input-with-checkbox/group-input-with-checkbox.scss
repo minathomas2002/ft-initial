@@ -1,3 +1,10 @@
+// RTL: place input at start (right) and checkbox at end (left) for correct reading order
+:host-context(html[dir='rtl']) {
+  .flex.items-center {
+    flex-direction: row-reverse;
+  }
+}
+
 :host ::ng-deep {
   .has-comment-checkbox{
     --p-checkbox-checked-border-color: var(--p-orange-500);
