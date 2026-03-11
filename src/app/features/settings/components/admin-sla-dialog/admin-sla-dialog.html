@@ -23,31 +23,17 @@
 
       <app-base-label [title]="'setting.adminView.dialog.internalCycleLabel' | translate">
       </app-base-label>
-      <div class="relative w-full">
-        <!-- <input
-          class="w-full"
-          type="number"
-          pInputText
-          [placeholder]="'setting.adminView.dialog.internalCycleLabel' | translate"
-          [formControl]="formService.internalCycle"
-          max="365"
-          min="1"
-          pattern="[0-9]*"
-        /> -->
-
+      <div class="w-full">
         <p-inputnumber
           fluid
-          class="ltr"
           [placeholder]="'setting.adminView.dialog.internalCycleLabel' | translate"
+          [suffix]="' ' + ('setting.adminView.dialog.days' | translate)"
           mode="decimal"
           [minFractionDigits]="0"
           [maxFractionDigits]="2"
           [maxlength]="5"
           [formControl]="formService.internalCycle"
         />
-        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-          {{('setting.adminView.dialog.days' | translate)}}
-        </span>
       </div>
 
       @if(formService.internalCycle.touched && formService.internalCycle.errors){
@@ -66,20 +52,17 @@
     <div class="col-span-12 md:col-span-12">
       <app-base-label [title]="'setting.adminView.dialog.investorReplyTimeLabel' | translate">
       </app-base-label>
-      <div class="relative w-full">
+      <div class="w-full">
         <p-inputnumber
           fluid
-          class="ltr"
           [placeholder]="'setting.adminView.dialog.investorReplyTimeLabel' | translate"
+          [suffix]="' ' + ('setting.adminView.dialog.days' | translate)"
           mode="decimal"
           [minFractionDigits]="0"
           [maxFractionDigits]="2"
           [maxlength]="5"
           [formControl]="formService.investorReply"
         />
-        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-          {{('setting.adminView.dialog.days' | translate)}}
-        </span>
       </div>
 
       <div>
