@@ -50,7 +50,7 @@ export class NavbarProfileDropdownComponent implements OnInit {
 
   /** Whether the current user can have impersonation options (employee, division/department manager) */
   canHaveImpersonationOptions = computed(() =>
-    this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE, ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER])()
+    this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE, ERoles.Division_MANAGER, ERoles.DEPARTMENT_MANAGER, ERoles.ADMIN])()
   );
 
   ngOnInit(): void {
