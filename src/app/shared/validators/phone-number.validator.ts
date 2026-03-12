@@ -93,7 +93,7 @@ function getCountryValidationPattern(countryCode: string | null | undefined): { 
 /**
  * Validator for mobile phone numbers with country-specific validation
  * Validates phone numbers based on the country code provided
- * 
+ *
  * Works with both IPhoneValue ({countryCode, phoneNumber}) and IPhoneNumberControl ({dialCode, nationalNumber})
  */
 export function phoneNumberPatternValidator(): (control: AbstractControl) => ValidationErrors | null {

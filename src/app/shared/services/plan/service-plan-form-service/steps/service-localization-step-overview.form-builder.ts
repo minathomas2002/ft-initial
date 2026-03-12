@@ -3,6 +3,7 @@ import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { EYesNo } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
+import { registeredVendorIDPatternValidator } from 'src/app/shared/validators/registered-vendor-id.validator';
 
 export class ServiceLocalizationStepOverviewFormBuilder {
   constructor(
@@ -41,7 +42,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.minLength(7), Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
+        [EMaterialsFormControls.value]: this.fb.control('',[registeredVendorIDPatternValidator()]),
       }),
       [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
