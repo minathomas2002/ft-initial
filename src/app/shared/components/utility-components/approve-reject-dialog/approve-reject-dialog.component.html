@@ -38,7 +38,7 @@
         [class.ng-invalid]="isRequired() && !note().trim()"
       ></textarea>
       <div class="mt-1 text-xs text-gray-500 flex justify-end">
-        <span>{{ note().length }} / {{ maxLength() }} characters</span>
+        <span>{{ note().length }} / {{ maxLength() }} {{ 'common.characters' | translate }}</span>
       </div>
     </div>
   </div>

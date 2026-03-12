@@ -256,6 +256,8 @@
     "signature": {
       "noSignature": "No signature created",
       "deleteSignature": "Delete signature",
+      "deleteSignatureTitle": "Delete Signature",
+      "deleteSignatureDescription": "Are you sure you want to delete your signature?",
       "uploadHere": "Upload your signature here",
       "drawInstructions": "Draw your signature using your mouse"
     },
@@ -327,7 +329,7 @@
     },
     "list": {
       "title": "Opportunities",
-      "subtitle": "Browse all available plans and view their details",
+      "subtitle": "Browse all available opportunities and view their details",
       "cardDescription": "High-voltage transformers with strong demand and localization potential in manufacturing and services.",
       "opportunityType": "Opportunity Type",
       "applicationPeriod": "Application Period",
@@ -407,6 +409,7 @@
       "selectDateRange": "Select date range",
       "selectStartDate": "Select start date",
       "selectEndDate": "Select end date",
+      "enterEndDate": "Enter end date",
       "enterKeyActivities": "Enter Key Activities",
       "addDesignEngineeringItem": "Add Design & Engineering Item",
       "addSourcingItem": "Add Sourcing Item",
@@ -604,12 +607,13 @@
         "jobInvalid": "Invalid ID. Please enter a valid employee ID.",
         "jobInvalidLength": "ID. must be between 6 and 20 characters.",
         "jobRequired": "ID is required.",
-        "nameArabicInvalid": "Arabic name must contain Arabic letters only.",
+        "nameArabicInvalid": "Invalid arabic name",
         "nameArabicInvalidLength": "Arabic name must be between 3 and 100 characters.",
-        "nameEnglishInvalid": "English name must contain English letters only.",
+        "nameEnglishInvalid": "Invalid english name",
         "nameEnglishInvalidLength": "English name must be between 3 and 100 characters.",
         "phoneInvalidLength": "Phone number must be between 8 and 15 digits",
-        "phoneInvalid": "Phone number must contain digits only."
+        "phoneInvalid": "Phone number must contain digits only.",
+        "invalidJobNo": "Invalid job number. Please enter a valid job number."
       },
       "edit": {
         "confirmedit": "Edit Employee"
@@ -815,6 +819,7 @@
         "overdueInternalPlan": "Overdue Internal Plan",
         "overdueInternalPlanDesc": "Sent immediately when an internal plan exceeds the SLA",
         "finalApprovalRejectionNotification": "Final Approval / Rejection Notification",
+        "finalApprovalRejection": "Final Approval / Rejection",
         "finalApprovalRejectionNotificationDesc": "Sent when the employee submits final approval or rejection.",
         "finalApprovalRejectionNotificationDescCons": "Sent when the plan rejected automatic.",
         "opportunityNotifications": "Opportunity Notifications",
@@ -844,6 +849,7 @@
         "commentNotification": "Comment Notification "
       },
       "holidays": {
+        "addTitle": "Add Holiday",
         "goBack": "Back to settings",
         "title": "Holidays Management",
         "subTitle": "Add official holidays or days off to exclude them from SLA calculations.",
@@ -859,8 +865,8 @@
           "createdBy": "Created By",
           "lastUpdated": "Last Updated",
           "createdDate": "Created Date",
-          "updatedDate": "Updated Date",
-          "updatedBy": "Updated By",
+          "updatedDate": "Last Updated Date",
+          "updatedBy": "Last Updated By",
           "actions": "Actions",
           "filter": {
             "searchKeyPlaceHolder": "Search by Holiday Name",
@@ -1055,6 +1061,9 @@
       "saudiCompanyName": "Saudi Company Name",
       "vendorIdWithSEC": "Vendor ID with SEC",
       "benaVendorId": "Bena Vendor ID",
+      "benaRegisteredVendorID": "BENA Registered Vendor ID",
+      "enterPlanTitle": "Enter plan title",
+      "selectOpportunity": "Select opportunity",
       "companyType": "Company Type",
       "qualificationStatus": "Qualification Status",
       "companyOverview": "Company Overview",
@@ -1159,12 +1168,16 @@
       "targetedAnnualPlantCapacity": "Targeted Annual Plant Capacity",
       "land": "Land",
       "landPercent": "Land %",
+      "tooltipLand": "Land percentage of total CAPEX",
       "building": "Building",
       "buildingPercent": "Building %",
+      "tooltipBuilding": "Building percentage of total CAPEX",
       "machineryEquipment": "Machinery / Equipment",
       "machineryEquipmentPercent": "Machinery & Equipment %",
+      "tooltipMachineryEquipment": "Machinery & equipment percentage of total CAPEX",
       "othersPercent": "Others %",
       "others": "Others",
+      "tooltipOthers": "Others percentage of total CAPEX",
       "othersDescription": "Others Description",
       "targetedCustomer": "Targeted Customer",
       "namesOfTargetedSuppliers": "Names of Targeted Suppliers",
@@ -1212,6 +1225,10 @@
         "enterTotalQuantitiesProvidedToSEC": "Enter total quantities provided to SEC",
         "enterNamesOfSECSuppliers": "Enter name(s) of SEC approved local supplier(s)",
         "enterTotalQuantitiesProvided": "Enter total quantities provided",
+        "enterTotalQuantitiesToLocalSuppliers": "Enter total quantities provided to local suppliers",
+        "selectCompanyType": "Select company type",
+        "selectQualificationStatus": "Select qualification status",
+        "enterVendorIdWithSecPlaceholder": "Enter vendor ID with SEC",
         "totalQuantitiesToLocalSuppliers": "Total quantities provided to all approved local suppliers",
         "ifYesProvideFollowing": "If 'Yes', provide the following:",
         "whichProductsUtilize": "Which product(s) manufactured by SEC's approved local suppliers will utilize your 'Targeted Product'",
@@ -1258,7 +1275,20 @@
         "selectAgreementType": "Select agreement type with Saudi Company",
         "enterOtherAgreementDetails": "Enter other agreement details",
         "briefSummaryOwnership": "Brief summary ownership %, key responsibilities, technology / IP sharing etc.)",
-        "attachmentRequiredWhenAgreementYes": "Attachment is required when Agreement Copy is selected as Yes"
+        "attachmentRequiredWhenAgreementYes": "Attachment is required when Agreement Copy is selected as Yes",
+        "supplierContactTooltip": "Supplier contact information provided here will serve as the primary contact for SEC throughout the entire BENA program.",
+        "validationErrorTooltip": "This field has validation errors",
+        "productTargetedForLocalization": "(i.e. Product Targeted for Localization)",
+        "productSpecsVoltageNote": "(incl. voltage ratings' targeted for Localization)",
+        "percentUnit": "(%)",
+        "bySEC": "(By SEC)",
+        "withSEC": "(with SEC)",
+        "year2019Onwards": "(2019 onwards)",
+        "addDesignEngineeringItem": "Add Design & Engineering Item",
+        "addSourcingItem": "Add Sourcing Item",
+        "addManufacturingItem": "Add Manufacturing Item",
+        "addAssemblyTestingItem": "Add Assembly & Testing Item",
+        "addAfterSalesItem": "Add After-Sales Item"
       },
       "commentYourComment": "Your Comment",
       "otherLocationDetails": "Other Location Details",
@@ -1440,7 +1470,7 @@
         "description": "Enter product details and plant information"
       },
       "step3": {
-        "title": "Value Chain",
+        "title": "Value Chain Components",
         "description": "Define value chain components and localization"
       },
       "step4": {
@@ -1559,6 +1589,8 @@
         "submitSuccess": "Localization plan submitted successfully",
         "submitError": "Error submitting plan. Please try again.",
         "selectPlanTitleAndOpportunity": "Please select a plan title and opportunity",
+        "opportunityRequired": "Please select an opportunity.",
+        "planTitleRequired": "Plan title is required.",
         "draftUpdatedSuccess": "Draft updated successfully.",
         "draftSavedSuccess": "Product localization plan saved as draft successfully",
         "serviceDraftSavedSuccess": "Service localization plan saved as draft successfully",
@@ -1658,7 +1690,7 @@
       "assigned": "Assigned",
       "reassigned": "Reassigned",
       "submitted": "Submitted",
-      "pendingOnInvestor": "Pending on Investor",
+      "pendingOnInvestor": "Pending with Investor",
       "pendingWithInvestor": "Pending with Investor",
       "draft": "Draft",
       "returnedByDV": "Returned By Division",
@@ -1688,6 +1720,7 @@
     "statistics": {
       "totalPlans": "Total Plans",
       "totalApproved": "Total Approved",
+      "totalApprovedPlans": "Total Approved Plans",
       "unAssignedPlans": "Unassigned Plans",
       "assignedPending": "Assigned Pending",
       "plansUnderReview": "Under Review Plans",
@@ -1726,11 +1759,40 @@
     },
     "comments": {
       "addComment": "Add Comment",
-      "selected": "Selected"
+      "selected": "Selected",
+      "yourComment": "Your Comment",
+      "clarifyFeedback": "Clarify Feedback",
+      "enterComment": "Enter Comment",
+      "myComment": "Comment",
+      "savedSuccess": "Your comments have been saved successfully.",
+      "updatesSavedSuccess": "Your updates have been saved successfully.",
+      "removedSuccess": "Your comments were removed successfully.",
+      "removedWithFieldsSuccess": "Your comments and selected fields were removed successfully.",
+      "selectFieldFirst": "Please select at least one field before adding a comment.",
+      "maxLength": "Comment cannot exceed 255 characters.",
+      "deleteCommentTitle": "Are you sure you want to delete the comment?",
+      "deleteCommentAndFieldsTitle": "Are you sure you want to delete the comment and selected fields?"
+    },
+    "delete": {
+      "confirmMessage": "Are you sure you want to delete the plan? This action cannot be undone."
+    },
+    "validation": {
+      "planIdRequired": "Plan ID is required.",
+      "rejectionReasonRequired": "Rejection reason is required.",
+      "rejectionReasonMaxLength": "Rejection reason must not exceed 255 characters.",
+      "updateRequiredFields": "Please update all required fields before resubmitting."
+    },
+    "messages": {
+      "approvedForwarded": "Plan has been approved and forwarded successfully.",
+      "rejected": "Plan has been rejected successfully.",
+      "resubmitted": "Plan has been resubmitted successfully.",
+      "rejectionAcknowledged": "Plan rejection has been acknowledged successfully.",
+      "rejectionAcknowledgeError": "Error acknowledging plan rejection. Please try again."
     },
     "rejection": {
       "reason": "Rejection Reason",
-      "approvalNote": "Approval Note"
+      "approvalNote": "Approval Note",
+      "acknowledgeNote": "Acknowledge Rejection Note"
     }
   },
   "timeline": {

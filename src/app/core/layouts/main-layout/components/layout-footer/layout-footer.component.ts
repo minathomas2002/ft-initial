@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-layout-footer',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './layout-footer.component.html',
   styleUrl: './layout-footer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,7 +8,7 @@
   <div class="flex items-center gap-2">
     @if(!hideEditButton()) {
     <p-button
-      label="Edit"
+      [label]="'common.edit' | translate"
       icon="icon-edit"
       [text]="true"
       styleClass="custom-primary"
@@ -28,5 +28,5 @@
   </div>
 </div>
 @if (isExpanded()) {
-  <hr class="text-[#D5D6DD] mb-6">
+<hr class="text-[#D5D6DD] mb-6">
 }

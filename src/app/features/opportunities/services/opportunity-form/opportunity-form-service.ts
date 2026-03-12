@@ -203,6 +203,12 @@ export class OpportunityFormService {
     return endDate < originalEnd ? { endDateRestriction: true } : null;
   };
 
+  getRestrictedEndDateMinDate(): Date | null {
+    if (!this.hasActivePlans || !this.originalDateRange) return null;
+    const [, originalEndRaw] = this.originalDateRange;
+    return this.toDateOnly(originalEndRaw);
+  }
+
   private quantityRangeValidator = (group: AbstractControl): ValidationErrors | null => {
     const minQuantityControl = group.get('minQuantity');
     const maxQuantityControl = group.get('maxQuantity');

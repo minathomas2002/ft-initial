@@ -104,7 +104,8 @@
       "fileUploadHintExtended": "يمكنك تحميل أي نوع ملف (صور، مستندات، أرشيفات).",
       "exampleEntities": "مثال: MoEn، PIF، إلخ.",
       "supportRequiredHint": "اذكر الدعم المطلوب من هيئة السوق المالية لتوطين الخدمة (إن وجد)"
-    }
+    },
+    "characters": "حرف"
   },
   "footer": {
     "message": "© {{year}} SEC. جميع الحقوق محفوظة.",
@@ -256,6 +257,8 @@
     "signature": {
       "noSignature": "لم يتم إنشاء توقيع",
       "deleteSignature": "حذف التوقيع",
+      "deleteSignatureTitle": "حذف التوقيع",
+      "deleteSignatureDescription": "هل أنت متأكد من حذف توقيعك؟",
       "uploadHere": "قم بتحميل توقيعك هنا",
       "drawInstructions": "ارسم توقيعك باستخدام الماوس"
     },
@@ -286,7 +289,8 @@
     "users": "الموظفون",
     "opportunities": "الفرص",
     "investors": "المستثمرون",
-    "plans": "الخطط"
+    "plans": "الخطط",
+    "switchAccounts": "تبديل الحسابات"
   },
   "opportunity": {
     "status": {
@@ -326,7 +330,7 @@
     },
     "list": {
       "title": "الفرص",
-      "subtitle": "تصفح جميع الخطط المتاحة وعرض تفاصيلها",
+      "subtitle": "تصفح جميع الفرص المتاحة وعرض تفاصيلها",
       "cardDescription": "محولات الجهد العالي ذات الطلب القوي وإمكانات التوطين في التصنيع والخدمات.",
       "opportunityType": "نوع الفرصة",
       "applicationPeriod": "فترة التقديم",
@@ -408,6 +412,7 @@
       "selectDateRange": "اختر نطاق التاريخ",
       "selectStartDate": "اختر تاريخ البدء",
       "selectEndDate": "اختر تاريخ الانتهاء",
+      "enterEndDate": "أدخل تاريخ الانتهاء",
       "enterKeyActivities": "أدخل الأنشطة الرئيسية",
       "addDesignEngineeringItem": "إضافة عنصر التصميم والهندسة",
       "addSourcingItem": "إضافة عنصر التوريد",
@@ -617,9 +622,9 @@
         "jobInvalid": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة صحيح.",
         "jobInvalidLength": "يجب أن يكون رقم الوظيفة بين 6 و20 حرفًا.",
         "jobRequired": "رقم الوظيفة مطلوب.",
-        "nameArabicInvalid": "يجب أن يحتوي الاسم العربي على أحرف عربية فقط.",
+        "nameArabicInvalid": "اسم عربي غير صالح",
         "nameArabicInvalidLength": "يجب أن يكون طول الاسم العربي بين 3 و100 حرف.",
-        "nameEnglishInvalid": "يجب أن يحتوي الاسم الإنجليزي على أحرف إنجليزية فقط.",
+        "nameEnglishInvalid": "اسم انجليزي غير صالح",
         "nameEnglishInvalidLength": "يجب أن يكون طول الاسم الإنجليزي بين 3 و100 حرف.",
         "phoneInvalidLength": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
         "phoneInvalidLenhtg": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
@@ -857,7 +862,7 @@
         "description": "أدخل تفاصيل المنتج ومعلومات المصنع"
       },
       "step3": {
-        "title": "سلسلة القيمة",
+        "title": "مكونات سلسلة القيمة",
         "description": "حدد مكونات سلسلة القيمة والتوطين"
       },
       "step4": {
@@ -955,6 +960,8 @@
         "submitSuccess": "تم تقديم خطة التوطين بنجاح",
         "submitError": "خطأ في تقديم الخطة. يرجى المحاولة مرة أخرى.",
         "selectPlanTitleAndOpportunity": "يرجى اختيار عنوان الخطة والفرصة",
+        "opportunityRequired": "يرجى اختيار الفرصة.",
+        "planTitleRequired": "عنوان الخطة مطلوب.",
         "draftUpdatedSuccess": "تم تحديث المسودة بنجاح.",
         "draftSavedSuccess": "تم حفظ خطة توطين المنتج كمسودة بنجاح",
         "serviceDraftSavedSuccess": "تم حفظ خطة توطين الخدمة كمسودة بنجاح",
@@ -1076,6 +1083,9 @@
       "saudiCompanyName": "اسم الشركة السعودية",
       "vendorIdWithSEC": "معرف المورد مع شركة الكهرباء",
       "benaVendorId": "معرف مورد بينا",
+      "benaRegisteredVendorID": "معرف مورد بينا المسجل",
+      "enterPlanTitle": "أدخل عنوان الخطة",
+      "selectOpportunity": "اختر الفرصة",
       "companyType": "نوع الشركة",
       "qualificationStatus": "حالة التأهيل",
       "companyOverview": "نظرة عامة على الشركة",
@@ -1180,12 +1190,16 @@
       "targetedAnnualPlantCapacity": "السعة السنوية المستهدفة للمصنع",
       "land": "الأرض",
       "landPercent": "الأرض %",
+      "tooltipLand": "نسبة الأرض من إجمالي رأس المال",
       "building": "المبنى",
       "buildingPercent": "المبنى %",
+      "tooltipBuilding": "نسبة المبنى من إجمالي رأس المال",
       "machineryEquipment": "الآلات / المعدات",
       "machineryEquipmentPercent": "الآلات والمعدات %",
+      "tooltipMachineryEquipment": "نسبة الآلات والمعدات من إجمالي رأس المال",
       "othersPercent": "أخرى %",
       "others": "أخرى",
+      "tooltipOthers": "نسبة أخرى من إجمالي رأس المال",
       "othersDescription": "وصف أخرى",
       "targetedCustomer": "العميل المستهدف",
       "namesOfTargetedSuppliers": "أسماء الموردين المستهدفين",
@@ -1234,6 +1248,10 @@
         "enterTotalQuantitiesProvidedToSEC": "أدخل إجمالي الكميات المقدمة لشركة الكهرباء",
         "enterNamesOfSECSuppliers": "أدخل اسم (أسماء) موردي شركة الكهرباء المحليين المعتمدين",
         "enterTotalQuantitiesProvided": "أدخل إجمالي الكميات المقدمة",
+        "enterTotalQuantitiesToLocalSuppliers": "أدخل إجمالي الكميات المقدمة للموردين المحليين",
+        "selectCompanyType": "اختر نوع الشركة",
+        "selectQualificationStatus": "اختر حالة التأهيل",
+        "enterVendorIdWithSecPlaceholder": "أدخل معرف المورد مع شركة الكهرباء",
         "totalQuantitiesToLocalSuppliers": "إجمالي الكميات المقدمة لجميع الموردين المحليين المعتمدين",
         "ifYesProvideFollowing": "إذا كانت الإجابة \"نعم\"، قدم التالي:",
         "whichProductsUtilize": "أي منتج (منتجات) تصنعها موردو شركة الكهرباء المحليون المعتمدون ستستخدم \"المنتج المستهدف\" الخاص بك",
@@ -1280,7 +1298,20 @@
         "selectAgreementType": "اختر نوع الاتفاقية مع الشركة السعودية",
         "enterOtherAgreementDetails": "أدخل تفاصيل الاتفاقية الأخرى",
         "briefSummaryOwnership": "ملخص موجز ملكية %، المسؤوليات الرئيسية، نقل التكنولوجيا / الملكية الفكرية)",
-        "attachmentRequiredWhenAgreementYes": "المرفق مطلوب عند اختيار نسخة الاتفاقية كنعم"
+        "attachmentRequiredWhenAgreementYes": "المرفق مطلوب عند اختيار نسخة الاتفاقية كنعم",
+        "supplierContactTooltip": "معلومات جهة اتصال المورد المقدمة هنا ستكون جهة الاتصال الرئيسية لشركة الكهرباء طوال برنامج BENA.",
+        "validationErrorTooltip": "هذا الحقل به أخطاء في التحقق",
+        "productTargetedForLocalization": "(أي المنتج المستهدف للتوطين)",
+        "productSpecsVoltageNote": "(بما في ذلك تصنيفات الجهد المستهدفة للتوطين)",
+        "percentUnit": "(%)",
+        "bySEC": "(بواسطة شركة الكهرباء)",
+        "withSEC": "(مع شركة الكهرباء)",
+        "year2019Onwards": "(من 2019 فصاعدًا)",
+        "addDesignEngineeringItem": "إضافة عنصر التصميم والهندسة",
+        "addSourcingItem": "إضافة عنصر التوريد",
+        "addManufacturingItem": "إضافة عنصر التصنيع",
+        "addAssemblyTestingItem": "إضافة عنصر التجميع والاختبار",
+        "addAfterSalesItem": "إضافة عنصر ما بعد البيع"
       },
       "commentYourComment": "تعليقك",
       "locationType": "نوع الموقع"
@@ -1482,6 +1513,7 @@
     "statistics": {
       "totalPlans": "إجمالي الخطط",
       "totalApproved": "إجمالي الموافق عليها",
+      "totalApprovedPlans": "إجمالي الخطط الموافق عليها",
       "unAssignedPlans": "الخطط غير المعينة",
       "assignedPending": "المعلقة المعينة",
       "plansUnderReview": "الخطط قيد المراجعة",
@@ -1600,6 +1632,7 @@
     "title": "الجدول الزمني للخطة",
     "remainingDays": " أيام بعد الإجراء السابق",
     "action": "الإجراء",
+    "onBehalf": "نيابة عن",
     "approvedNote": "ملاحظة الموافقة",
     "rejectionReason": "سبب الرفض",
     "note": "ملاحظة",
@@ -1740,6 +1773,7 @@
         "overdueInternalPlan": "خطة داخلية متأخرة",
         "overdueInternalPlanDesc": "يُرسل فوراً عندما تتجاوز خطة داخلية اتفاقية مستوى الخدمة",
         "finalApprovalRejectionNotification": "إشعار الموافقة/الرفض النهائية",
+        "finalApprovalRejection": "الموافقة/الرفض النهائية",
         "finalApprovalRejectionNotificationDesc": "يُرسل عند تقديم الموظف للموافقة أو الرفض النهائي.",
         "finalApprovalRejectionNotificationDescCons": "يُرسل عند الرفض التلقائي للخطة.",
         "opportunityNotifications": "إشعارات الفرص",
@@ -1772,6 +1806,7 @@
         "commentNotification": "إشعار التعليق"
       },
       "holidays": {
+        "addTitle": "إضافة عطلة",
         "goBack": "العودة إلى الإعدادات",
         "title": "إدارة العطلات",
         "subTitle": "أضف العطلات الرسمية أو أيام الراحة لاستبعادها من حسابات اتفاقية مستوى الخدمة.",
@@ -1787,8 +1822,8 @@
           "createdBy": "المنشئ",
           "lastUpdated": "آخر تحديث",
           "createdDate": "تاريخ الإنشاء",
-          "updatedDate": "تاريخ التحديث",
-          "updatedBy": "المحدث",
+          "updatedDate": "تاريخ آخر تحديث",
+          "updatedBy": "آخر تحديث بواسطة",
           "actions": "الإجراءات",
           "filter": {
             "searchKeyPlaceHolder": "البحث باسم العطلة",

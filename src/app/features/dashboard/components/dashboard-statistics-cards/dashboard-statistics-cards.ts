@@ -81,7 +81,7 @@ export class DashboardStatisticsCards {
    */
   readonly employeeCards = computed<IStatisticsCard[]>(() => [
     {
-      titleKey: 'Total Approved Plans',
+      titleKey: 'plans.statistics.totalApprovedPlans',
       valueKey: 'totalPlans',
       outputEvent: () => this.onViewTotalApprovedPlansInInternalUser.emit()
     },

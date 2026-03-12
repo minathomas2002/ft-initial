@@ -1,4 +1,4 @@
-import { computed, inject } from '@angular/core';
+import { computed, DestroyRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { type Observable, type Subscription, catchError, finalize, of, switchMap, take, throwError, tap } from 'rxjs';
@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { JwtService } from '../../services/auth/jwt-service';
 import { EImpersonationStatus, ERoutes } from '../../enums';
 import type { SupportedLanguage } from '../../services/i18n/i18n.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const REFRESH_BEFORE_EXPIRY_MS = 2 * 60 * 1000; // 2 minutes before expiry
 
@@ -143,24 +144,28 @@ export const AuthStore = signalStore(
         return this.handleLoginMethod(authApiService.login(email, password));
       },
 
-      windowsLogin(): Observable<IBaseApiResponse<IAuthData>> {
+      windowsLogin(options?: { skipPostLoginSync?: boolean }): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.windowsLogin());
+        return this.handleLoginMethod(authApiService.windowsLogin(), options);
       },
 
       winLoginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.winLoginWithImpersonation(request));
+        return this.handleLoginMethod(authApiService.winLoginWithImpersonation(request), {
+          skipPostLoginSync: true,
+        });
       },
 
-      fakeWindowsLogin(userName: string): Observable<IBaseApiResponse<IAuthData>> {
+      fakeWindowsLogin(userName: string, options?: { skipPostLoginSync?: boolean }): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName))
+        return this.handleLoginMethod(authApiService.fakeWindowsLogin(userName), options);
       },
 
       loginWithImpersonation(request: ILoginWithImpersonationRequest): Observable<IBaseApiResponse<IAuthData>> {
         patchState(store, { loading: true });
-        return this.handleLoginMethod(authApiService.loginWithImpersonation(request));
+        return this.handleLoginMethod(authApiService.loginWithImpersonation(request), {
+          skipPostLoginSync: true,
+        });
       },
 
       updateAuthDataInStorage(authResponse: IBaseApiResponse<IAuthData>): void {
@@ -173,7 +178,8 @@ export const AuthStore = signalStore(
       },
 
       handleLoginMethod(
-        login$: Observable<IBaseApiResponse<IAuthData>>
+        login$: Observable<IBaseApiResponse<IAuthData>>,
+        options?: { skipPostLoginSync?: boolean }
       ): Observable<IBaseApiResponse<IAuthData>> {
         return login$.pipe(
           switchMap((response: IBaseApiResponse<IAuthData>) => {
@@ -182,10 +188,12 @@ export const AuthStore = signalStore(
 
             if (response.success && response.body && hasValidToken && isEmailVerified) {
               this.updateAuthDataInStorage(response);
-              this.getUserProfile()
-                .pipe(take(1))
-                .subscribe();
-              this.syncLanguageToServer();
+              if (!options?.skipPostLoginSync) {
+                this.getUserProfile()
+                  .pipe(take(1))
+                  .subscribe();
+                this.syncLanguageToServer();
+              }
             }
             return of(response);
           }),

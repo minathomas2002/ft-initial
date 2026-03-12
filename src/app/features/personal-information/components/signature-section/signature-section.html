@@ -88,9 +88,9 @@
 }
 <app-general-confirmation-dialog
   [(visible)]="deleteSignatureConfirmVisible"
-  [title]="'Delete Signature'"
-  [description]="'Are you sure you want to delete your signature?'"
-  [confirmationLabel]="'Delete'"
+  [title]="'profile.signature.deleteSignatureTitle' | translate"
+  [description]="'profile.signature.deleteSignatureDescription' | translate"
+  [confirmationLabel]="'common.delete' | translate"
   [icon]="'icon-trash-2'"
   [confirmButtonSeverity]="'danger'"
   [isLoading]="isSignatureProcessing()"
