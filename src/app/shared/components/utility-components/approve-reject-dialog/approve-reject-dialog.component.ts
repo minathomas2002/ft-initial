@@ -6,10 +6,11 @@ import { BaseLabelComponent } from "../../base-components/base-label/base-label.
 import { SignaturePadComponent } from "../../form/signature-pad/signature-pad.component";
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
+import { TranslatePipe } from 'src/app/shared/pipes';
 
 @Component({
   selector: 'app-approve-reject-dialog',
-  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent, SignaturePadComponent],
+  imports: [BaseDialogComponent, FormsModule, TextareaModule, BaseLabelComponent, SignaturePadComponent, TranslatePipe],
   templateUrl: './approve-reject-dialog.component.html',
   styleUrl: './approve-reject-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

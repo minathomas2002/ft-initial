@@ -104,7 +104,8 @@
       "fileUploadHintExtended": "يمكنك تحميل أي نوع ملف (صور، مستندات، أرشيفات).",
       "exampleEntities": "مثال: MoEn، PIF، إلخ.",
       "supportRequiredHint": "اذكر الدعم المطلوب من هيئة السوق المالية لتوطين الخدمة (إن وجد)"
-    }
+    },
+    "characters": "حرف"
   },
   "footer": {
     "message": "© {{year}} SEC. جميع الحقوق محفوظة.",
@@ -621,9 +622,9 @@
         "jobInvalid": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة صحيح.",
         "jobInvalidLength": "يجب أن يكون رقم الوظيفة بين 6 و20 حرفًا.",
         "jobRequired": "رقم الوظيفة مطلوب.",
-        "nameArabicInvalid": "يجب أن يحتوي الاسم العربي على أحرف عربية فقط.",
+        "nameArabicInvalid": "اسم عربي غير صالح",
         "nameArabicInvalidLength": "يجب أن يكون طول الاسم العربي بين 3 و100 حرف.",
-        "nameEnglishInvalid": "يجب أن يحتوي الاسم الإنجليزي على أحرف إنجليزية فقط.",
+        "nameEnglishInvalid": "اسم انجليزي غير صالح",
         "nameEnglishInvalidLength": "يجب أن يكون طول الاسم الإنجليزي بين 3 و100 حرف.",
         "phoneInvalidLength": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
         "phoneInvalidLenhtg": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
