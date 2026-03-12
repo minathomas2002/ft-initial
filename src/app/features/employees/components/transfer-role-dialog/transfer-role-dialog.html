@@ -22,7 +22,7 @@
       [loading]="isLoading()"
       [loadingIcon]="'icon-transfer'"
       appendTo="body"
-      optionLabel="name_En"
+      [optionLabel]="employeeOptionLabel()"
       optionValue="userId"
       [formControl]="transferRoleService.employee"
       [placeholder]="'users.dialog.replaceTransfer.employeePlaceholder' | translate"
