@@ -213,6 +213,11 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   }
 
   onViewOpportunityDetails(plan: IPlanRecord) {
+    if (plan?.linkedToDeletedOpportunity) {
+      this.toasterService.error('Opportunity is no longer available');
+      return;
+    }
+
     const url = `/opportunities/${plan.opportunityId}`;
     window.open(url, '_blank');
   }
