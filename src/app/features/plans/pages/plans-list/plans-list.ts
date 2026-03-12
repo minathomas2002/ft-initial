@@ -216,6 +216,11 @@ export class PlansList extends PlanDashboardBase implements OnInit {
       : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
   onViewOpportunityDetails(plan: IPlanRecord) {
+    if (plan?.linkedToDeletedOpportunity) {
+      this.toastService.error('Opportunity is no longer available');
+      return;
+    }
+
     const url = `/opportunities/${plan.opportunityId}`;
     window.open(url, '_blank');
   }

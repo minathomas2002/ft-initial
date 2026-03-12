@@ -15,8 +15,6 @@ export class EmptyRecordsComponent {
 	titleClass = input<string>();
 	iconClass = input<string>();
 	subTitleClass = input<string>();
-	subtitle = input<string>(
-		`We couldn't find any data matching your filters. Try adjusting the criteria to see results.`,
-	);
+	subtitle = input<string>(this.i18nService.translate('common.noDataMatchingFiltersSubtitle'));
 	icon = input<string>("icon-search");
 }

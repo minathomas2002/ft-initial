@@ -19,12 +19,14 @@ export interface IActiveEmployee {
   nameEn: string;
 }
 
+
 export interface IAssignee {
   id: string;
   userId: string;
   name_Ar: string;
   name_En: string;
 }
+export type TActiveEmployeeOptionLabel = 'name_Ar' | 'name_En';
 
 export interface IAssignActiveEmployee {
   id: string;

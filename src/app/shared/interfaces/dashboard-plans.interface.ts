@@ -41,6 +41,7 @@ export interface IPlanRecord {
   status: EInvestorPlanStatus | EInternalUserPlanStatus;
   actions: number[];
   assignee?: string;
+  linkedToDeletedOpportunity?: boolean
 }
 
 export type TPlansSortingKeys = keyof IPlanRecord;
