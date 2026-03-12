@@ -166,8 +166,11 @@ export class NavbarProfileDropdownComponent implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.success) {
-            // Defer reload to allow the response to be fully processed and avoid aborting in-flight requests
-            setTimeout(() => window.location.reload(), 0);
+            // Navigate to dashboard instead of reload to avoid blank screen when the current
+            // route (e.g. /opportunities/admin) is not accessible to the impersonated user
+            setTimeout(() => {
+              window.location.href = `/${ERoutes.dashboard}`;
+            }, 0);
           }
         },
         error: () =>

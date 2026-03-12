@@ -5,6 +5,7 @@ import { I18nService } from '../i18n/i18n.service';
 import { environment } from 'src/environments/environment';
 import { take } from 'rxjs';
 import { LocalStorage } from '../local-storage/local-storage';
+import { ERoutes } from '../../enums';
 
 @Injectable({ providedIn: 'root' })
 export class DelegationCanceledService {
@@ -37,7 +38,9 @@ export class DelegationCanceledService {
     if (this.isSecInternal()) {
       authStore.windowsLogin({ skipPostLoginSync: true }).pipe(take(1)).subscribe(
         () => {
-          setTimeout(() => window.location.reload(), 0);
+          setTimeout(() => {
+            window.location.href = `/${ERoutes.dashboard}`;
+          }, 0);
         }
       );
     } else {
@@ -45,7 +48,9 @@ export class DelegationCanceledService {
       if (!userName) return;
       authStore.fakeWindowsLogin(userName, { skipPostLoginSync: true }).pipe(take(1)).subscribe(
         () => {
-          setTimeout(() => window.location.reload(), 0);
+          setTimeout(() => {
+            window.location.href = `/${ERoutes.dashboard}`;
+          }, 0);
         }
       );
     }
