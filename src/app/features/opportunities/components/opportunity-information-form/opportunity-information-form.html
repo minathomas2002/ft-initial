@@ -458,8 +458,7 @@
             [disabled]="getControl('endDate').disabled"
             [placeholder]="'opportunity.form.selectEndDate' | translate"
             [dateFormat]="'dd M yy'"
-            [minDate]="getControl('startDate').value || today"
-            [disabledDates]="[disabledEndDate()]"
+            [minDate]="endDateMinDate()"
             class="w-full"
             keepInvalid
             [invalid]="getControl('endDate').invalid && getControl('endDate').dirty"

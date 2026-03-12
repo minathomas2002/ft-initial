@@ -61,13 +61,6 @@ export class OpportunityInformationForm implements OnInit {
   opportunityUnits = this.adminOpportunitiesStore.opportunityUnits;
   isLoading = this.opportunitiesStore.loading;
 
-  disabledEndDate = toSignal(
-    (this.opportunityInformationForm.get('startDate')?.valueChanges ?? of(new Date())).pipe(
-      map((value) => (value ? new Date(value) : new Date()))
-    ),
-    { initialValue: new Date() as Date, requireSync: false }
-  );
-
   disabledstartDate = toSignal(
     (this.opportunityInformationForm.get('endDate')?.valueChanges ?? of(new Date())).pipe(
       map((value) => {
@@ -84,6 +77,23 @@ export class OpportunityInformationForm implements OnInit {
   disabledStartDatesArray = computed(() => {
     const date = this.disabledstartDate();
     return date ? [date] : [];
+  });
+
+  endDateMinDate = computed(() => {
+    const startDateValue = this.opportunityInformationForm.get('startDate')?.value;
+    const startDate = startDateValue ? new Date(startDateValue) : null;
+    const hasValidStartDate = !!startDate && !isNaN(startDate.getTime());
+
+    const today = new Date();
+    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const baseMinDate = hasValidStartDate ? startDate! : todayDateOnly;
+
+    const restrictedMinDate = this.opportunityFormService.getRestrictedEndDateMinDate();
+    if (!restrictedMinDate) {
+      return baseMinDate;
+    }
+
+    return restrictedMinDate > baseMinDate ? restrictedMinDate : baseMinDate;
   });
 
   files = signal<File[]>([]);
