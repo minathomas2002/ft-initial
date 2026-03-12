@@ -73,10 +73,15 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
     };
   });
 
-  private mapOpportunityTypeToLabel(opportunityType: string): string {
-    const enumValue = EOpportunityType[opportunityType as keyof typeof EOpportunityType];
-    if (!enumValue) return '-';
-    const opportunityTypeLabel = enumValue.toString().toLowerCase();
-    return opportunityTypeLabel.charAt(0).toUpperCase() + opportunityTypeLabel.slice(1);
+  private mapOpportunityTypeToLabel(opportunityType: string | number): string {
+    const num =
+      typeof opportunityType === 'number'
+        ? opportunityType
+        : typeof opportunityType === 'string' && (opportunityType === 'SERVICES' || opportunityType === 'PRODUCT')
+          ? EOpportunityType[opportunityType as keyof typeof EOpportunityType]
+          : Number(opportunityType);
+    if (num !== EOpportunityType.SERVICES && num !== EOpportunityType.PRODUCT) return '-';
+    const key = num === EOpportunityType.SERVICES ? 'opportunity.type.services' : 'opportunity.type.product';
+    return this.i18nService.translate(key);
   }
 }
