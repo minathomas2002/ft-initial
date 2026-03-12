@@ -865,8 +865,8 @@
           "createdBy": "Created By",
           "lastUpdated": "Last Updated",
           "createdDate": "Created Date",
-          "updatedDate": "Updated Date",
-          "updatedBy": "Updated By",
+          "updatedDate": "Last Updated Date",
+          "updatedBy": "Last Updated By",
           "actions": "Actions",
           "filter": {
             "searchKeyPlaceHolder": "Search by Holiday Name",

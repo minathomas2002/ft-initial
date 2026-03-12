@@ -1822,8 +1822,8 @@
           "createdBy": "المنشئ",
           "lastUpdated": "آخر تحديث",
           "createdDate": "تاريخ الإنشاء",
-          "updatedDate": "تاريخ التحديث",
-          "updatedBy": "المحدث",
+          "updatedDate": "تاريخ آخر تحديث",
+          "updatedBy": "آخر تحديث بواسطة",
           "actions": "الإجراءات",
           "filter": {
             "searchKeyPlaceHolder": "البحث باسم العطلة",
