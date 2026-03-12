@@ -34,23 +34,37 @@
   <!-- Current user profile section -->
   <div class="flex flex-col border border-gray-200 rounded-xl">
     @if (canHaveImpersonationOptions()) {
-  @if (delegationStore.isLoadingDetails()) {
+    @if (delegationStore.isLoadingDetails()) {
     <!-- Switch accounts skeleton -->
     <div class="px-4 py-3">
-      <p-skeleton width="8rem" height="1rem" class="mb-3" />
+      <p-skeleton
+        width="8rem"
+        height="1rem"
+        class="mb-3"
+      />
       <div class="flex flex-col gap-2">
         @for (i of [1,2,3]; track i) {
         <div class="flex items-center gap-3 rounded-lg px-3 py-2">
-          <p-skeleton shape="circle" size="2.25rem" class="shrink-0" />
+          <p-skeleton
+            shape="circle"
+            size="2.25rem"
+            class="shrink-0"
+          />
           <div class="min-w-0 flex-1 space-y-1">
-            <p-skeleton width="100%" height="1rem" />
-            <p-skeleton width="60%" height="0.875rem" />
+            <p-skeleton
+              width="100%"
+              height="1rem"
+            />
+            <p-skeleton
+              width="60%"
+              height="0.875rem"
+            />
           </div>
         </div>
         }
       </div>
     </div>
-  } @else if (hasImpersonationOptions()) {
+    } @else if (hasImpersonationOptions()) {
     <!-- Switch accounts section (loaded with options) -->
     <div class="px-4 py-3">
       <h3 class="mb-3 text-sm font-normal text-gray-900">
@@ -70,11 +84,11 @@
             shape="circle"
             size="normal"
           />
-          <div class="min-w-0 flex-1">
-            <span class="block truncate font-medium text-gray-900">
+          <div class="min-w-0 flex-1 flex flex-col items-start overflow-hidden">
+            <span class="block truncate w-full min-w-0 font-medium text-gray-900 text-start">
               {{ i18nService.currentLanguage() === 'ar' ? option.nameAr : option.nameEn }}
             </span>
-            <span class="block truncate text-sm text-gray-600">
+            <span class="block truncate w-full min-w-0 text-sm text-gray-600 text-start">
               {{ getRoleLabel(option.role) }}
             </span>
           </div>
@@ -89,7 +103,7 @@
         }
       </div>
     </div>
-  }
+    }
     @if (delegationStore.isLoadingDetails() || hasImpersonationOptions()) {
     <p-divider class="!my-0" />
     }
