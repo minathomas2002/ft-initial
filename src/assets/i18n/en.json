@@ -1741,7 +1741,10 @@
     },
     "comments": {
       "addComment": "Add Comment",
-      "selected": "Selected"
+      "selected": "Selected",
+      "yourComment": "Your Comment",
+      "clarifyFeedback": "Clarify Feedback",
+      "enterComment": "Enter Comment"
     },
     "rejection": {
       "reason": "Rejection Reason",
