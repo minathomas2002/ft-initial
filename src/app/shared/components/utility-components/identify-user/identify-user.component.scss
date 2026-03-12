@@ -1,0 +1,4 @@
+/* RTL: Avatar on right, text on left (drawer alignment) */
+:host-context(html[dir='rtl']) .identify-user-container {
+  flex-direction: row-reverse;
+}
