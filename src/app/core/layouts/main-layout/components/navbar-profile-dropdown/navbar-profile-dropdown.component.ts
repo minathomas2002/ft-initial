@@ -14,7 +14,7 @@ import { I18nService } from '../../../../../shared/services/i18n/i18n.service';
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { MenuItem } from 'primeng/api';
-import { take } from 'rxjs';
+import { switchMap, take } from 'rxjs';
 import { DelegationStore } from 'src/app/shared/stores/system-employees/delegation.store';
 import { SystemEmployeeRoleMapper } from 'src/app/shared/classes/role.mapper';
 import type { IImpersonationOptions } from 'src/app/shared/interfaces/delegation.interface';
@@ -159,13 +159,20 @@ export class NavbarProfileDropdownComponent implements OnInit {
     this.selectedAccountId.set(option.userId);
 
     const login$ = this.getSwitchAccountLogin$(option);
-    login$.pipe(take(1)).subscribe({
-      next: (res) => {
-        if (res.success) window.location.reload();
-      },
-      error: () =>
-        this.selectedAccountId.set(this.authStore.userProfile()?.userId ?? ''),
-    });
+    login$.pipe(
+      switchMap(res => this.authStore.getUserProfile()),
+      take(1)
+    )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            // Defer reload to allow the response to be fully processed and avoid aborting in-flight requests
+            setTimeout(() => window.location.reload(), 0);
+          }
+        },
+        error: () =>
+          this.selectedAccountId.set(this.authStore.userProfile()?.userId ?? ''),
+      });
   }
 
   private getSwitchAccountLogin$(option: IImpersonationOptions) {
@@ -176,7 +183,8 @@ export class NavbarProfileDropdownComponent implements OnInit {
     if (isSwitchBackToDelegator) {
       // When switching TO the delegator, we need the delegator's userName (from the selected option)
       return this.isSecInternal()
-        ? this.authStore.windowsLogin() : this.authStore.fakeWindowsLogin(option.userName);
+        ? this.authStore.windowsLogin({ skipPostLoginSync: true })
+        : this.authStore.fakeWindowsLogin(option.userName, { skipPostLoginSync: true });
     }
 
     const request = {

@@ -35,17 +35,17 @@ export class DelegationCanceledService {
   private switchBackToDelegator(): void {
     const authStore = this.injector.get(AuthStore);
     if (this.isSecInternal()) {
-      authStore.windowsLogin().pipe(take(1)).subscribe(
+      authStore.windowsLogin({ skipPostLoginSync: true }).pipe(take(1)).subscribe(
         () => {
-          window.location.reload();
+          setTimeout(() => window.location.reload(), 0);
         }
       );
     } else {
       const userName = authStore.delegateeUserName() ?? '';
       if (!userName) return;
-      authStore.fakeWindowsLogin(userName).pipe(take(1)).subscribe(
+      authStore.fakeWindowsLogin(userName, { skipPostLoginSync: true }).pipe(take(1)).subscribe(
         () => {
-          window.location.reload();
+          setTimeout(() => window.location.reload(), 0);
         }
       );
     }
