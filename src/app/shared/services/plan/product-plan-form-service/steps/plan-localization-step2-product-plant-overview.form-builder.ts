@@ -30,6 +30,10 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
 
   buildExpectedCAPEXInvestmentFormGroup(): FormGroup {
     return this.fb.group({
+      [EMaterialsFormControls.expectedCAPEXInvestment]: this.fb.group({
+        [EMaterialsFormControls.hasComment]: this.fb.control(false),
+        [EMaterialsFormControls.value]: this.fb.control<number | null>(null, [Validators.min(0), Validators.required, Validators.max(9999999999999999)]),
+      }),
       [EMaterialsFormControls.landPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control<number | null>(0, [Validators.min(0), Validators.required, Validators.max(100)]),

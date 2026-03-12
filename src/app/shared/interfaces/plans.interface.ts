@@ -70,6 +70,7 @@ export interface Overview {
 }
 
 export interface ExpectedCapex {
+  expectedCAPEXInvestment?: number | null
   landPercent: number
   buildingPercent: number
   machineryPercent: number

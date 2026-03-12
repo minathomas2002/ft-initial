@@ -1226,6 +1226,8 @@
         "oncePlanApproved": "(بعد الموافقة على خطة التوطين)",
         "enterTargetedAnnualCapacity": "أدخل السعة السنوية المستهدفة للمصنع",
         "enterTimeToSetupFactory": "أدخل المدة المطلوبة بالأشهر (على سبيل المثال، 12 شهرًا)",
+        "inSAR": "(ريال سعودي)",
+        "enterExpectedCAPEXInvestment": "أدخل استثمار رأس المال المتوقع",
         "enterLand": "أدخل الأرض",
         "enterBuilding": "أدخل المبنى",
         "enterMachineryEquipment": "أدخل الآلات / المعدات",

@@ -1203,6 +1203,8 @@
         "oncePlanApproved": "(Once Localization Plan is Approved)",
         "enterTargetedAnnualCapacity": "Enter targeted annual plant capacity",
         "enterTimeToSetupFactory": "Enter time required in month (e.g., 12 months)",
+        "inSAR": "(SAR)",
+        "enterExpectedCAPEXInvestment": "Enter expected CAPEX investment",
         "enterLand": "Enter land",
         "enterBuilding": "Enter building",
         "enterMachineryEquipment": "Enter machinery / equipment",

@@ -50,8 +50,8 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
     CommentStateComponent,
     FormsModule,
     GeneralConfirmationDialogComponent,
-    CommentInputComponent
-  ],
+    CommentInputComponent,
+],
   templateUrl: './plan-localization-step-02-productPlantOverviewForm.html',
   styleUrl: './plan-localization-step-02-productPlantOverviewForm.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

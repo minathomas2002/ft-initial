@@ -306,6 +306,7 @@ export function getFieldValueFromProductPlanResponse(
   if (section === 'expectedCAPEXInvestment') {
     const cap = pp.productPlantOverview?.expectedCapex;
     if (!cap) return undefined;
+    if (key === EMaterialsFormControls.expectedCAPEXInvestment) return cap.expectedCAPEXInvestment ?? undefined;
     if (key === EMaterialsFormControls.landPercentage) return cap.landPercent ?? undefined;
     if (key === EMaterialsFormControls.buildingPercentage) return cap.buildingPercent ?? undefined;
     if (key === EMaterialsFormControls.machineryEquipmentPercentage) return cap.machineryPercent ?? undefined;

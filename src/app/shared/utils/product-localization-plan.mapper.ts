@@ -177,6 +177,7 @@ function mapProductPlantOverview(formService: ProductPlanFormService): ProductPl
   } as any; // Allow null values for FormData conversion
 
   const expectedCapex: ExpectedCapex = {
+    expectedCAPEXInvestment: getFormValue(capexForm, EMaterialsFormControls.expectedCAPEXInvestment) ?? null,
     landPercent: getFormValue(capexForm, EMaterialsFormControls.landPercentage) ?? null,
     buildingPercent: getFormValue(capexForm, EMaterialsFormControls.buildingPercentage) ?? null,
     machineryPercent: getFormValue(capexForm, EMaterialsFormControls.machineryEquipmentPercentage) ?? null,
@@ -578,6 +579,7 @@ export function mapProductPlanResponseToForm(
   // Expected CAPEX
   if (capexForm && productPlan.productPlantOverview?.expectedCapex) {
     const capex = productPlan.productPlantOverview.expectedCapex;
+    setFormGroupValue(capexForm, EMaterialsFormControls.expectedCAPEXInvestment, capex.expectedCAPEXInvestment);
     setFormGroupValue(capexForm, EMaterialsFormControls.landPercentage, capex.landPercent);
     setFormGroupValue(capexForm, EMaterialsFormControls.buildingPercentage, capex.buildingPercent);
     setFormGroupValue(capexForm, EMaterialsFormControls.machineryEquipmentPercentage, capex.machineryPercent);
@@ -926,6 +928,7 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.Overview.TimeRequiredToSetupFactory', productPlan.productPlantOverview.overview.timeRequiredToSetupFactory);
 
   // ExpectedCapex
+  appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.ExpectedCapex.ExpectedCAPEXInvestment', productPlan.productPlantOverview.expectedCapex.expectedCAPEXInvestment);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.ExpectedCapex.LandPercent', productPlan.productPlantOverview.expectedCapex.landPercent);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.ExpectedCapex.BuildingPercent', productPlan.productPlantOverview.expectedCapex.buildingPercent);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.ExpectedCapex.MachineryPercent', productPlan.productPlantOverview.expectedCapex.machineryPercent);

@@ -14,6 +14,7 @@ import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
+  private readonly expectedCAPEXInvestmentControl = computed(() => this.getValueFormControl(EMaterialsFormControls.expectedCAPEXInvestment));
   private readonly landPercentageControl = computed(() => this.getValueFormControl(EMaterialsFormControls.landPercentage));
   private readonly buildingPercentageControl = computed(() => this.getValueFormControl(EMaterialsFormControls.buildingPercentage));
   private readonly machineryEquipmentPercentageControl = computed(() => this.getValueFormControl(EMaterialsFormControls.machineryEquipmentPercentage));
@@ -23,6 +24,26 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
   private formatPercent(value: number | null | undefined): string {
     return (value != null && value.toString().trim() !== '') ? `${value}%` : '0%';
   }
+
+  private formatSarCurrency(value: number | null | undefined): string {
+    if (value == null || value.toString().trim() === '') return '-';
+    return `${value} SAR`;
+  }
+
+  expectedCAPEXInvestmentSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    const currantValue = this.formatSarCurrency(this.expectedCAPEXInvestmentControl()?.value);
+    const beforeValue = this.formatSarCurrency(this.planStore.productPlanData()?.productPlan.productPlantOverview.expectedCapex.expectedCAPEXInvestment);
+    return {
+      label: this.i18nService.translate('plans.form.expectedCAPEXInvestment'),
+      beforeValue,
+      currantValue,
+      hasError: this.isFieldHasError(this.expectedCAPEXInvestmentControl()),
+      hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.expectedCAPEXInvestment),
+      isResolved: this.isResolvedField(EMaterialsFormControls.expectedCAPEXInvestment),
+      showDifference: this.shouldShowDifference(currantValue, beforeValue),
+    };
+  });
 
   landPercentageSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
