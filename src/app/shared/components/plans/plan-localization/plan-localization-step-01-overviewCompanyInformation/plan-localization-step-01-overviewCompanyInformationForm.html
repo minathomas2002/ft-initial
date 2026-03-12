@@ -72,12 +72,12 @@
           fluid
         />
         @if(opportunityControlSignal()){
-          <a
-            class="text-[#4767A5] font-normal underline mt-2 cursor-pointer"
-            target="_blank"
-            [attr.href]="showWarningMesageDeletedOpportunity() ? null : `/opportunities/${opportunityControlSignal()?.id}`"
-            (click)="onViewOpportunityDetails($event)"
-          >{{`common.viewDetails`|translate}}</a>
+        <a
+          class="text-[#4767A5] font-normal underline mt-2 cursor-pointer"
+          target="_blank"
+          [attr.href]="showWarningMessageDeletedOpportunity() ? null : `/opportunities/${opportunityControlSignal()?.id}`"
+          (click)="onViewOpportunityDetails($event)"
+        >{{`common.viewDetails`|translate}}</a>
         }
         <app-base-error-messages
           [control]="getFormControl(basicInformationFormGroupControls['opportunity'])"
@@ -269,7 +269,7 @@
               inputKey: 'doYouCurrentlyHaveLocalAgentInKSA',
               label: 'plans.form.hasLocalAgentInKSA'
             })"
-          > 
+          >
             <div class="flex gap-2">
               <label class="flex items-center gap-2 cursor-pointer">
                 <p-radiobutton
@@ -421,11 +421,11 @@
       <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-1">
           <div class="flex flex-col gap-2 flex-1">
-<app-base-label [title]="'plans.form.companyHQLocation' | translate" />
-          <app-group-input-with-checkbox
-            [showCheckbox]="showCheckbox()"
-            [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
-            (valueChanged)="upDateSelectedInputs($event, {
+            <app-base-label [title]="'plans.form.companyHQLocation' | translate" />
+            <app-group-input-with-checkbox
+              [showCheckbox]="showCheckbox()"
+              [hasCommentControl]="getHasCommentControl(localAgentInformationFormGroupControls['companyHQLocation'])"
+              (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'companyHQLocation',
               label: 'plans.form.companyHQLocation'

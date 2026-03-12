@@ -75,7 +75,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
   originalPlanResponse = input<IProductPlanResponse | null>(null);
-  showWarningMesageDeletedOpportunity = computed(() => {
+  showWarningMessageDeletedOpportunity = computed(() => {
     return this.planStore.linkedToDeletedOpportunity();
   });
 
@@ -191,7 +191,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   });
 
   onViewOpportunityDetails(event: MouseEvent): void {
-    if (!this.showWarningMesageDeletedOpportunity()) {
+    if (!this.showWarningMessageDeletedOpportunity()) {
       return;
     }
 
