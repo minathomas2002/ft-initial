@@ -100,10 +100,6 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control(null, [Validators.required]), // Dropdown Yes/No, required
       }),
-      [EMaterialsFormControls.agreementCopy]: this.fb.group({
-        [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null), // File upload - conditional if provideAgreementCopy is Yes
-      }),
     });
   }
 
@@ -527,26 +523,26 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
    * Toggle validation for Agreement Copy file upload based on provideAgreementCopy value
    * Required if provideAgreementCopy is "Yes"
    */
-  toggleAgreementCopyValidation(formGroup: FormGroup, provideAgreementCopy: string | boolean | null, index: number): void {
-    const array = this.getCollaborationPartnershipFormArray(formGroup);
-    if (!array || index >= array.length) return;
+  // toggleAgreementCopyValidation(formGroup: FormGroup, provideAgreementCopy: string | boolean | null, index: number): void {
+  //   const array = this.getCollaborationPartnershipFormArray(formGroup);
+  //   if (!array || index >= array.length) return;
 
-    const itemFormGroup = array.at(index) as FormGroup;
-    const agreementCopyControl = itemFormGroup.get(`${EMaterialsFormControls.agreementCopy}.${EMaterialsFormControls.value}`);
+  //   const itemFormGroup = array.at(index) as FormGroup;
+  //   const agreementCopyControl = itemFormGroup.get(`${EMaterialsFormControls.agreementCopy}.${EMaterialsFormControls.value}`);
 
-    if (!agreementCopyControl) return;
+  //   if (!agreementCopyControl) return;
 
-    const normalized = String(provideAgreementCopy ?? '').trim().toLowerCase();
-    const isYes = Number(provideAgreementCopy) === EYesNo.Yes || normalized === 'yes' || normalized === 'true';
-    if (isYes) {
-      agreementCopyControl.setValidators([Validators.required]);
-    } else {
-      agreementCopyControl.clearValidators();
-      agreementCopyControl.reset();
-    }
+  //   const normalized = String(provideAgreementCopy ?? '').trim().toLowerCase();
+  //   const isYes = Number(provideAgreementCopy) === EYesNo.Yes || normalized === 'yes' || normalized === 'true';
+  //   if (isYes) {
+  //     agreementCopyControl.setValidators([Validators.required]);
+  //   } else {
+  //     agreementCopyControl.clearValidators();
+  //     agreementCopyControl.reset();
+  //   }
 
-    agreementCopyControl.updateValueAndValidity();
-  }
+  //   agreementCopyControl.updateValueAndValidity();
+  // }
 
   /**
    * Sync services from cover page to service level
