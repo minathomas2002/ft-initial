@@ -105,7 +105,8 @@
       "fileUploadHintExtended": "You can upload any file type (images, documents, archives).",
       "exampleEntities": "E.g., MoEn, PIF, etc.",
       "supportRequiredHint": "Mention Support required from SEC to localize the service (if any)"
-    }
+    },
+    "characters": "characters"
   },
   "footer": {
     "message": "© {{year}} SEC. All rights reserved.",
