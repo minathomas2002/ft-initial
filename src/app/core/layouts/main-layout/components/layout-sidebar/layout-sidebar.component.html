@@ -1,3 +1,26 @@
-<div class="main-layout--sidebar sticky top-0 bg-white h-screen px-[16px] py-[24px] border-e-1 border-e-gray-200">
-  <app-sidebar-content />
+@if (isImpersonating()) {
+<div
+  class="shrink-0 transition-[width] duration-300 ease-in-out"
+  [ngClass]="sidebarWidthClass()"
+>
+  <div
+    class="main-layout--sidebar fixed top-[45px] z-40 h-[calc(100vh-45px)] bg-white px-[16px] py-[24px] border-e-1 border-e-gray-200 transition-[width] duration-300 ease-in-out"
+    [ngClass]="[fixedSidebarPositionClass(), sidebarWidthClass()]"
+  >
+    <app-sidebar-content
+      [expanded]="isSidebarExpanded()"
+      (onToggleCollapsed)="toggleSidebar.emit()"
+    />
+  </div>
 </div>
+} @else {
+<div
+  class="main-layout--sidebar sticky top-0 z-40 bg-white h-screen px-[16px] py-[24px] border-e-1 border-e-gray-200 shrink-0 transition-[width] duration-300 ease-in-out"
+  [ngClass]="sidebarWidthClass()"
+>
+  <app-sidebar-content
+    [expanded]="isSidebarExpanded()"
+    (onToggleCollapsed)="toggleSidebar.emit()"
+  />
+</div>
+}

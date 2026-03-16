@@ -20,6 +20,7 @@
     "info": "معلومة",
     "noDataFound": "لا توجد بيانات",
     "noDataMatchingFiltersSubtitle": "لم نجد أي بيانات تطابق معايير البحث. حاول تعديل المعايير لعرض النتائج.",
+    "loggedInOnBehalfOf": "أنت مسجل الدخول حالياً نيابة عن {{name}}.",
     "clearAll": "مسح الكل",
     "paginatorTemplate": "عرض {first} إلى {last} من {totalRecords}",
     "filter": "تصفية",

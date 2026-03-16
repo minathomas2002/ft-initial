@@ -20,6 +20,7 @@
     "info": "Info",
     "noDataFound": "No data found",
     "noDataMatchingFiltersSubtitle": "We couldn't find any data matching your filters. Try adjusting the criteria to see results.",
+    "loggedInOnBehalfOf": "You are currently logged in on behalf of {{name}}.",
     "clearAll": "Clear all",
     "paginatorTemplate": "Showing {first} to {last} of {totalRecords}",
     "filter": "Filter",

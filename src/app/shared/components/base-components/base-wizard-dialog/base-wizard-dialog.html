@@ -3,7 +3,7 @@
   [modal]="true"
   [resizable]="false"
   (onShow)="onShow.emit()"
-  [styleClass]="'w-full !max-h-full h-full !p-0'"
+  [styleClass]="dialogStyleClass()"
   [pt]="pt"
   [closable]="false"
 >

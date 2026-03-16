@@ -3,6 +3,7 @@ import { LayoutContentComponent } from "./components/layout-content/layout-conte
 import { LayoutFooterComponent } from "./components/layout-footer/layout-footer.component";
 import { LayoutNavbarComponent } from "./components/layout-navbar/layout-navbar.component";
 import { LayoutSidebarComponent } from "./components/layout-sidebar/layout-sidebar.component";
+import { ImpersonationMessage } from "src/app/shared/components/impersonation-message/impersonation-message";
 
 @Component({
 	selector: "app-main-layout",
@@ -11,6 +12,7 @@ import { LayoutSidebarComponent } from "./components/layout-sidebar/layout-sideb
 		LayoutNavbarComponent,
 		LayoutContentComponent,
 		LayoutFooterComponent,
+		ImpersonationMessage
 	],
 	templateUrl: "./main-layout.component.html",
 	styleUrl: "./main-layout.component.scss",
@@ -18,7 +20,7 @@ import { LayoutSidebarComponent } from "./components/layout-sidebar/layout-sideb
 })
 export class MainLayoutComponent {
 	private static readonly DESKTOP_BREAKPOINT = 1024;
-  private static readonly SIDEBAR_STATE_STORAGE_KEY = "main-layout-sidebar-expanded";
+	private static readonly SIDEBAR_STATE_STORAGE_KEY = "main-layout-sidebar-expanded";
 
 	isSidebarExpanded = signal(this.getInitialSidebarState());
 
