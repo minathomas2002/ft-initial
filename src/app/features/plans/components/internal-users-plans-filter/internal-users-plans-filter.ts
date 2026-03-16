@@ -19,6 +19,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { BadgeModule } from 'primeng/badge';
 import { SelectModule } from 'primeng/select';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { Tooltip } from "primeng/tooltip";
 
 interface IDropdownOption {
   label: string;
@@ -32,7 +33,7 @@ interface IAssigneeOption {
 
 @Component({
   selector: 'app-internal-users-plans-filter',
-  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe, ButtonModule, OverlayBadgeModule, BadgeModule,SelectModule],
+  imports: [FormsModule, InputTextModule, DatePickerModule, MultiSelectModule, TranslatePipe, ButtonModule, OverlayBadgeModule, BadgeModule, SelectModule, Tooltip],
   templateUrl: './internal-users-plans-filter.html',
   styleUrl: './internal-users-plans-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

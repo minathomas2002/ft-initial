@@ -14,6 +14,7 @@ import { AdminOpportunitiesFilterService } from '../../services/admin-opportunit
 import { ButtonModule } from 'primeng/button';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { BadgeModule } from 'primeng/badge';
+import { Tooltip } from 'primeng/tooltip';
 @Component({
   selector: 'app-admin-opportunities-filter',
   imports: [
