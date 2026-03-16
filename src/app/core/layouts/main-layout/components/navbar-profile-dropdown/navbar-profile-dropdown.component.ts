@@ -168,9 +168,13 @@ export class NavbarProfileDropdownComponent implements OnInit {
           if (res.success) {
             // Navigate to dashboard instead of reload to avoid blank screen when the current
             // route (e.g. /opportunities/admin) is not accessible to the impersonated user
-            setTimeout(() => {
-              window.location.href = `/${ERoutes.dashboard}`;
-            }, 0);
+            // setTimeout(() => {
+            //   window.location.href = `/${ERoutes.dashboard}`;
+            // }, 0);
+            this.router.resetConfig(this.router.config);
+            this.router.navigate([`/${ERoutes.dashboard}`], {
+              replaceUrl: true
+            });
           }
         },
         error: () =>

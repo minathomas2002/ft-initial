@@ -32,7 +32,7 @@
   styleClass="profile-dropdown-popover min-w-[280px]"
 >
   <!-- Current user profile section -->
-  <div class="flex flex-col border border-gray-200 rounded-xl">
+  <div class="flex flex-col border border-gray-200">
     @if (canHaveImpersonationOptions()) {
     @if (delegationStore.isLoadingDetails()) {
     <!-- Switch accounts skeleton -->
@@ -94,7 +94,7 @@
           </div>
           <p-radiobutton
             [ngModel]="selectedAccountId()"
-            (click)="$event.stopPropagation()"
+            (click)="onAccountSelect(option)"
             [inputId]="'account-' + option.userId"
             name="impersonation-account"
             [value]="option.userId"
