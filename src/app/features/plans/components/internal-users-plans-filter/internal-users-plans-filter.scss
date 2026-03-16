@@ -1,4 +1,17 @@
 :host ::ng-deep {
+    .plan-search-input {
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .plan-search-input::placeholder {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .p-datepicker input {
       width: 100%;
     }
