@@ -563,7 +563,7 @@
     },
     "filter": {
       "searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
-      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو الهاتف أو البريد الإلكتروني",
+      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو البريد الإلكتروني",
       "rolePlaceholder": "الدور",
       "statusPlaceholder": "الحالة",
       "selectJoinDate": "اختر تاريخ الانضمام"
