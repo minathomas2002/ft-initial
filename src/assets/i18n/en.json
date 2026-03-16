@@ -1184,6 +1184,7 @@
       "targetedCustomer": "Targeted Customer",
       "namesOfTargetedSuppliers": "Names of Targeted Suppliers",
       "productsUtilizeTargetedProduct": "Products Utilize Targeted Product",
+      "productsManufactured": "Product(s) manufactured",
       "capexRequiredSar": "CAPEX Required (In SAR)",
       "otherLocalizationApproachDetails": "Other Localization Approach Details",
       "proprietaryToolsDetails": "Proprietary Tools Details",
@@ -1294,7 +1295,8 @@
       },
       "commentYourComment": "Your Comment",
       "otherLocationDetails": "Other Location Details",
-      "locationType": "Location Type"
+      "locationType": "Location Type",
+      "targetingLocalSuppliersNote": "If Targeting \"SEC's approved local suppliers\", mention the following:\""
     },
     "placeholders": {
       "selectOpportunity": "Select opportunity",
@@ -1674,7 +1676,8 @@
       "year4": "Year 4",
       "year5": "Year 5",
       "year6": "Year 6",
-      "year7": "Year 7"
+      "year7": "Year 7",
+      "yearOnYour": "year-on-your"
     },
     "employee_status": {
       "pending": "Pending",
@@ -1839,7 +1842,8 @@
     "employeeRequired": "Employee is required",
     "assignSuccessMsg": "Plan has been successfully assigned to {{employee}}.",
     "reassignSuccessMsg": "Plan has been reassigned successfully to {{employee}}.",
-    "currentEmployee": "Current Employee"
+    "currentEmployee": "Current Employee",
+    "reassignConfirmMessage": "I confirm that I want to reassign this plan from [{{currentEmployee}}] to [{{newAssignee}}]."
   },
   "WarningMesages": {
     "deletedOppprtuinity": "This draft plan is no longer valid because the associated opportunity has been deleted. Please delete this plan and submit a new one for an available opportunity."
