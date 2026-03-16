@@ -57,7 +57,6 @@
           [(ngModel)]="filter().submissionDate"
           (ngModelChange)="onPickerChange($event)"
           [maxDate]="maxSubmissionDate"
-          [dateFormat]="'dd M yy'"
           [showIcon]="true"
           [showButtonBar]="true"
           [iconDisplay]="'input'"
@@ -69,25 +68,25 @@
   </div>
 
   @if(filterService.showClearAll()) {
-    <div>
-      <div class="flex h-full items-center md:justify-end">
-        <p-overlaybadge
-          [value]="filterService.activeFiltersCount()"
-          severity="danger"
-          class="filter-reset-badge"
+  <div>
+    <div class="flex h-full items-center md:justify-end">
+      <p-overlaybadge
+        [value]="filterService.activeFiltersCount()"
+        severity="danger"
+        class="filter-reset-badge"
+      >
+        <p-button
+          [severity]="'secondary'"
+          (click)="onClearFilters()"
+          [rounded]="true"
+          [icon]="'icon-reload'"
+          [outlined]="true"
+          [ariaLabel]="'plans.filter.reset' | translate"
         >
-          <p-button
-            [severity]="'secondary'"
-            (click)="onClearFilters()"
-            [rounded]="true"
-            [icon]="'icon-reload'"
-            [outlined]="true"
-            [ariaLabel]="'plans.filter.reset' | translate"
-          >
-          </p-button>
-        </p-overlaybadge>
-      </div>
+        </p-button>
+      </p-overlaybadge>
     </div>
+  </div>
   }
 
 </div>
