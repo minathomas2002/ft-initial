@@ -535,7 +535,7 @@
       "all": "الكل"
     },
     "table": {
-      "id": "الرقم",
+      "id": "رقم الوظيفة",
       "name": "الاسم",
       "nameArabic": "الاسم (عربي)",
       "nameEnglish": "الاسم (إنجليزي)",
@@ -562,8 +562,8 @@
       "delegation": "التفويض"
     },
     "filter": {
-      "searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني أو تاريخ الانضمام",
-      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
+      "searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
+      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو الهاتف أو البريد الإلكتروني",
       "rolePlaceholder": "الدور",
       "statusPlaceholder": "الحالة",
       "selectJoinDate": "اختر تاريخ الانضمام"
@@ -708,7 +708,7 @@
       "delegatorName": "اسم الموكل",
       "delegateeName": "اسم الموكل إليه",
       "delegatorTooltip": "الموكل – المالك الأصلي للمهام.",
-      "delegateeTooltip": "الموكل إليه – المستخدم المخول بالتصرف نيابة عن الموكل.",
+      "delegateeTooltip": "الموكل إليه – المستخدم الموكل إليه بالتصرف نيابة عن الموكل.",
       "lastModifiedBy": "آخر تعديل بواسطة",
       "lastModifiedDate": "تاريخ آخر تعديل",
       "startDate": "تاريخ البدء",
@@ -1205,6 +1205,7 @@
       "targetedCustomer": "العميل المستهدف",
       "namesOfTargetedSuppliers": "أسماء الموردين المستهدفين",
       "productsUtilizeTargetedProduct": "المنتجات التي تستخدم المنتج المستهدف",
+      "productsManufactured": "المنتج/المنتجات المصنعة",
       "capexRequiredSar": "رأس المال المطلوب (بالريال)",
       "otherLocalizationApproachDetails": "تفاصيل نهج التوطين الآخر",
       "proprietaryToolsDetails": "تفاصيل الأدوات الخاصة",
@@ -1315,7 +1316,8 @@
         "addAfterSalesItem": "إضافة عنصر ما بعد البيع"
       },
       "commentYourComment": "تعليقك",
-      "locationType": "نوع الموقع"
+      "locationType": "نوع الموقع",
+      "targetingLocalSuppliersNote": "إذا كان الهدف \"موردي شركة الكهرباء المحليين المعتمدين\"، اذكر ما يلي:"
     },
     "placeholders": {
       "selectOpportunity": "اختر الفرصة",
@@ -1485,7 +1487,7 @@
       "reassigned": "معاد تعيينها",
       "submitted": "تم الإرسال",
       "pendingOnInvestor": "بانتظار المستثمر",
-      "pendingWithInvestor": "بانتظار المستثمر",
+      "pendingWithInvestor": "بأنتظار المستثمر",
       "draft": "قيد الإعداد",
       "returnedByDV": "معاد من مدير القسم",
       "returnedByDEPTManager": "معاد من الإدارة"
@@ -1625,7 +1627,8 @@
       "year4": "السنة 4",
       "year5": "السنة 5",
       "year6": "السنة 6",
-      "year7": "السنة 7"
+      "year7": "السنة 7",
+      "yearOnYour": "على مدار عام"
     },
     "exportPlans": "تصدير الخطط"
   },
@@ -1670,7 +1673,8 @@
     "employeeRequired": "الموظف مطلوب",
     "assignSuccessMsg": "تم تعيين الخطة بنجاح إلى {{employee}}.",
     "reassignSuccessMsg": "تم إعادة تعيين الخطة بنجاح إلى {{employee}}.",
-    "currentEmployee": "الموظف الحالي"
+    "currentEmployee": "الموظف الحالي",
+    "reassignConfirmMessage": "أؤكد أنني أريد إعادة تعيين هذه الخطة من [{{currentEmployee}}] إلى [{{newAssignee}}]."
   },
   "WarningMesages": {
     "deletedOppprtuinity": "لم تعد هذه المسودة صالحة لأن الفرصة المرتبطة بها تم حذفها. يرجى حذف هذه الخطة وتقديم واحدة جديدة لفرصة متاحة."

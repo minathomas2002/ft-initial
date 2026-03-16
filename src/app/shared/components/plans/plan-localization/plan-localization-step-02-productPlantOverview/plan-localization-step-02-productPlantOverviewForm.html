@@ -1,4 +1,4 @@
-﻿<div class="flex flex-col gap-[32px] pb-10">
+<div class="flex flex-col gap-[32px] pb-10">
   <!-- Overview Section -->
   <div class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold text-gray-900">
@@ -379,7 +379,7 @@
       <!-- Conditional fields for SEC's approved local suppliers -->
       @if(showTargetedSuppliersFields()){
       <div class="flex flex-col gap-4">
-        <p class="text-sm text-gray-900 font-semibold">If Targeting "SEC's approved local suppliers", mention the following:</p>
+        <p class="text-sm text-gray-900 font-semibold">{{ 'plans.form.targetingLocalSuppliersNote' | translate }}</p>
 
         <!-- Names of Targeted Suppliers -->
         <div class="flex flex-col gap-2">
@@ -445,7 +445,7 @@
           </div>
           <app-base-error-messages
             [control]="getValueControl(targetCustomersFormGroupControls[EMaterialsFormControls.productsUtilizeTargetedProduct])"
-            [label]="'product(s) manufactured'"
+            [label]="'plans.form.productsManufactured' | translate"
           />
         </div>
       </div>

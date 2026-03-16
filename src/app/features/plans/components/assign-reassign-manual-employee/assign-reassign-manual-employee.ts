@@ -43,7 +43,11 @@ export class AssignReassignManualEmployee implements OnInit, OnDestroy {
   newAssigneeName = signal<string | undefined>(undefined);
   destroyRef = inject(DestroyRef);
   confirmedMessage = computed(() => {
-    return `I confirm that I want to reassign this plan from [${this.planStore.currentEmployee()?.name}] to [${this.newAssigneeName() || ''}].`;
+    this.i18nService.currentLanguage(); // reactive to language change
+    return this.i18nService.translate('assign.reassignConfirmMessage', {
+      currentEmployee: this.planStore.currentEmployee()?.name ?? '',
+      newAssignee: this.newAssigneeName() ?? ''
+    });
   });
   ngOnInit() {
     this.loadActiveEmployees();

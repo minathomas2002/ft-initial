@@ -13,7 +13,7 @@
       <div class="text-xs text-gray-500 mb-1">{{`common.CreationDate`|translate}}</div>
       <div class="flex items-center gap-2 font-medium">
         <i class="icon-calender text-gray-500"></i>
-        {{opportunityDetails()?.createdDate|date}}
+        {{opportunityDetails()?.createdDate| localizedDate : 'dd MMM yyyy'}}
       </div>
     </div>
 
@@ -33,9 +33,9 @@
       <div class="flex items-center gap-2 font-medium">
         <i class="icon-calender text-gray-500"></i>
         {{ opportunityDetails()?.updatedDate == null ||
-           opportunityDetails()?.updatedBy== null ||
-           opportunityDetails()?.updatedBy== ''
-           ?'___':opportunityDetails()?.updatedDate|date}}
+        opportunityDetails()?.updatedBy== null ||
+        opportunityDetails()?.updatedBy== ''
+        ?'___':opportunityDetails()?.updatedDate| localizedDate : 'dd MMM yyyy'}}
       </div>
     </div>
 
