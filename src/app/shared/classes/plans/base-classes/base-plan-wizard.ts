@@ -56,15 +56,14 @@ export abstract class BasePlanWizard {
   });
 
   sendBackSuccessMessage = computed(() => {
+    this.i18nService.currentLanguage(); // reactive to language change
     if (this.isDVManagerPersona()) {
-      return "Plan has been sent back to employee successfully."
+      return this.i18nService.translate('plans.wizard.sendBackToEmployeeSuccess');
     }
-
     if (this.isEmployeePersona()) {
-      return "Plan has been sent back to investor successfully."
+      return this.i18nService.translate('plans.wizard.sendBackToInvestorSuccess');
     }
-
-    return "Plan has been sent back to the division manager successfully."
+    return this.i18nService.translate('plans.wizard.sendBackToDivisionManagerSuccess');
   })
 
   protected readonly commentTitle = this.planStore.commentPersona;
