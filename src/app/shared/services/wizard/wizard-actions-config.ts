@@ -220,12 +220,15 @@ export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
     },
 
 
-    build: (context) => {
+    build: (context, i18n) => {
       const isPlanRejectedFromManager = [EInternalUserPlanStatus.DV_REJECTED, EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED];
+      const labelKey = isPlanRejectedFromManager.includes(context.status as EInternalUserPlanStatus)
+        ? TRANSLATION_KEYS.plans.submitRejection
+        : TRANSLATION_KEYS.plans.reject;
 
       return {
         id: 'reject',
-        label: isPlanRejectedFromManager.includes(context.status as EInternalUserPlanStatus) ? 'Submit Rejection' : 'Reject',
+        label: i18n.translate(labelKey),
         severity: 'danger',
         disabled: !(context.config.permissions?.canApproveOrReject?.() ?? true),
         onClick: context.config.handlers.onReject,

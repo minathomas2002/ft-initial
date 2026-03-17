@@ -102,6 +102,7 @@ export const TRANSLATION_KEYS = {
     addComments: 'plans.wizard.addComments',
     acknowledge: 'plans.wizard.acknowledge',
     reject: 'plans.wizard.reject',
+    submitRejection: 'plans.wizard.submitRejection',
     approveAndForward: 'plans.wizard.approveAndForward',
     resubmit: 'plans.wizard.resubmit',
     submitApproval: 'plans.wizard.submitApproval'
