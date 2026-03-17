@@ -1,6 +1,6 @@
 <div
   class="flex flex-col justify-between h-full relative transition-all duration-300 ease-in-out"
-  [class.sidebar-collapsed]="minimizedSidebarDrawer()"
+  [class.sidebar-collapsed]="displayCollapsed()"
 >
   <span
     class="absolute top-[60px] bg-white cursor-pointer rounded-full p-2 border border-gray-200 flex items-center justify-center h-[30px] w-[30px] transition-all duration-300 ease-in-out"
@@ -10,7 +10,7 @@
     <i [class]="sidebarToggleIcon() + ' text-gray-400'"></i>
   </span>
   <div>
-    @if (minimizedSidebarDrawer()) {
+    @if (displayCollapsed()) {
       <a routerLink="/" class="flex justify-center p-2">
         <img src="favicon.ico" alt="Logo" class="w-8 h-8 object-contain" />
       </a>
@@ -19,7 +19,7 @@
     }
     <div
       class="sidebar-links transition-[margin] duration-300 ease-in-out mt-[48px]"
-      [class.mt-4]="minimizedSidebarDrawer()"
+      [class.mt-4]="displayCollapsed()"
     >
       <ul class="list-unstyles">
         @for(link of sidebarLinks(); track link.routerLink){
@@ -28,14 +28,14 @@
           @if(link.children && link.children.length > 0){
           <app-sidebar-dropdown
             [link]="link"
-            [collapsed]="minimizedSidebarDrawer()"
+            [collapsed]="displayCollapsed()"
             (onCloseSidebarDrawer)="closeSidebarDrawer()"
           ></app-sidebar-dropdown>
           }
           @else {
           <app-sidebar-link
             [link]="link"
-            [collapsed]="minimizedSidebarDrawer()"
+            [collapsed]="displayCollapsed()"
             (click)="closeSidebarDrawer()"
           ></app-sidebar-link>
           }
@@ -48,7 +48,7 @@
   <div>
     <div
       class="sidebar-links transition-[margin] duration-300 ease-in-out mt-[48px]"
-      [class.mt-4]="minimizedSidebarDrawer()"
+      [class.mt-4]="displayCollapsed()"
     >
       <ul class="list-none">
 
@@ -60,9 +60,9 @@
           <a class="flex items-center hover:!bg-gray-50 text-[16px] transition-all block w-full p-3 rounded-lg font-semibold p-[12px] cursor-pointer">
             <i
               class="icon-life-buoy text-gray-400 text-xl w-[25px] flex-shrink-0 transition-[margin] duration-300 ease-in-out"
-              [class.me-[11px]]="!minimizedSidebarDrawer()"
+              [class.me-[11px]]="!displayCollapsed()"
             ></i>
-            @if (!minimizedSidebarDrawer()) {
+            @if (!displayCollapsed()) {
             <span>{{ 'contactUs.menu' | translate }}</span>
             }
           </a>

@@ -524,7 +524,6 @@ export function mapServicePlanResponseToForm(
     setNestedValue(row, EMaterialsFormControls.summaryOfKeyAgreementClauses, pm.keyAgreementClauses ?? '');
     setNestedValue(row, EMaterialsFormControls.provideAgreementCopy, toYesNoId(pm.agreementCopyProvided));
     formService.toggleAgreementOtherDetailsValidation(pm.agreementType != null ? String(pm.agreementType) : null, idx);
-    formService.toggleAgreementCopyValidation(toYesNoId(pm.agreementCopyProvided), idx);
   });
 
   const entity3: IServicePlanEntityHeadcount | undefined = findByPage(servicePlan.entityHeadcounts, 3);

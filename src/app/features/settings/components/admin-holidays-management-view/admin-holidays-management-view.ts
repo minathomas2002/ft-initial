@@ -80,11 +80,11 @@ export class AdminHolidaysManagementView implements OnInit {
         isSortable: false
       },
       {
-        label: 'Last Updated Date',
+        label: this.i18nService.translate('setting.adminView.holidays.table.updatedDate'),
         isSortable: false
       },
       {
-        label: 'Last Updated By',
+        label: this.i18nService.translate('setting.adminView.holidays.table.updatedBy'),
         isSortable: false
       },
       {

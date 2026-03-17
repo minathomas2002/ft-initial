@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, output, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { PanelModule } from 'primeng/panel';
 import { SidebarDropdownComponent } from '../sidebar-dropdown/sidebar-dropdown.component';
@@ -41,12 +41,20 @@ export class SidebarContentComponent {
   sidebarDrawerVisibility = model(false);
   /** When true, show icons only (for mobile drawer collapsed state) */
   collapsed = input<boolean>(false);
+  /** When provided, controlled mode (desktop sidebar) - use this for display instead of minimizedSidebarDrawer */
+  expanded = input<boolean | null>(null);
+  onToggleCollapsed = output<void>();
 
   minimizedSidebarDrawer = model<boolean>(false);
+  displayCollapsed = computed(() =>
+    this.expanded() !== null && this.expanded() !== undefined
+      ? !this.expanded()!
+      : this.minimizedSidebarDrawer(),
+  );
 
   /** LTR: expand=right, collapse=left. RTL: expand=left, collapse=right */
   sidebarToggleIcon = computed(() => {
-    const collapsed = this.minimizedSidebarDrawer();
+    const collapsed = this.displayCollapsed();
     const rtl = this.i18nService.currentLanguage() === 'ar';
     if (collapsed) return rtl ? 'icon-arrow-left' : 'icon-arrow-right';
     return rtl ? 'icon-arrow-right' : 'icon-arrow-left';
@@ -136,6 +144,10 @@ export class SidebarContentComponent {
   }
 
   toggleSidebarDrawerCollapsed() {
-    this.minimizedSidebarDrawer.set(!this.minimizedSidebarDrawer());
+    if (this.expanded() !== null && this.expanded() !== undefined) {
+      this.onToggleCollapsed.emit();
+    } else {
+      this.minimizedSidebarDrawer.set(!this.minimizedSidebarDrawer());
+    }
   }
 }

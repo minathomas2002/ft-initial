@@ -424,7 +424,6 @@ export const PlanStore = signalStore(
         patchState(store, { planStatus: status });
       },
       setLinkedOpportunityWarning(linkedToDeletedOpportunity: boolean | false): void {
-        console.log(linkedToDeletedOpportunity, "showWarningMesageDeletedOpportunity");
         patchState(store, { linkedToDeletedOpportunity });
       },
       setActionNote(actionNote: string | null): void {

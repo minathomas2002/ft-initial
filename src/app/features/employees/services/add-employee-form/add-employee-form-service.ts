@@ -12,6 +12,13 @@ export class AddEmployeeFormService {
   static readonly ENGLISH_REGEX =
     /^\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s*$/;
 
+  // Same as above but also accept all special characters (punctuation, symbols)
+  static readonly ARABIC_REGEX_WITH_SPECIAL_CHARS =
+    /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF \p{P}\p{S}]+$/u;
+
+  static readonly ENGLISH_REGEX_WITH_SPECIAL_CHARS =
+    /^\s*[A-Za-z\p{P}\p{S}]+(?:\s+[A-Za-z\p{P}\p{S}]+)*\s*$/u;
+
   static readonly PHONE_REGEX =
     /^\+?[0-9]+$/;
 
@@ -39,7 +46,7 @@ export class AddEmployeeFormService {
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(100),
-      Validators.pattern(AddEmployeeFormService.ARABIC_REGEX)
+      Validators.pattern(AddEmployeeFormService.ARABIC_REGEX_WITH_SPECIAL_CHARS)
 
     ]),
 
@@ -47,7 +54,7 @@ export class AddEmployeeFormService {
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(100),
-      Validators.pattern(AddEmployeeFormService.ENGLISH_REGEX)
+      Validators.pattern(AddEmployeeFormService.ENGLISH_REGEX_WITH_SPECIAL_CHARS)
     ]),
 
     phoneNumber: this.fb.control<string | null>(null, [

@@ -295,7 +295,6 @@
           <app-base-label [title]="'opportunity.form.spendSAR' | translate" />
           <p-inputgroup class="w-full">
             <p-inputnumber
-
               mode="decimal"
               [maxlength]="5"
               [minFractionDigits]="0"
@@ -347,7 +346,7 @@
             }
             <div class="flex items-start gap-2 w-full">
 
-               <div>
+              <div>
                 <p-inputnumber
                   fluid
                   [maxlength]="16"
@@ -361,7 +360,7 @@
               </div>
 
               <span class="text-gray-700 text-xl font-semibold pt-1"> - </span>
-             <div>
+              <div>
                 <p-inputnumber
                   fluid
                   [maxlength]="16"
@@ -389,7 +388,6 @@
         <div class="flex flex-col">
           <app-base-label [title]="'opportunity.form.localSuppliers' | translate" />
           <p-inputnumber
-
             [placeholder]="'opportunity.form.enterLocalSuppliersNumber' | translate"
             [formControl]="getControl('localSuppliers')"
             [maxlength]="9"
@@ -402,7 +400,6 @@
         <div class="flex flex-col">
           <app-base-label [title]="'opportunity.form.globalSuppliers' | translate" />
           <p-inputnumber
-
             [placeholder]="'opportunity.form.enterGlobalSuppliersNumber' | translate"
             [formControl]="getControl('globalSuppliers')"
             [maxlength]="9"
@@ -433,7 +430,6 @@
             (ngModelChange)="onStartDateChange($event)"
             [disabled]="getControl('startDate').disabled"
             [placeholder]="'opportunity.form.selectStartDate' | translate"
-            [dateFormat]="'dd M yy'"
             [minDate]="today"
             [maxDate]="getControl('endDate').value  || null"
             [disabledDates]="disabledStartDatesArray()"
@@ -457,7 +453,6 @@
             (ngModelChange)="onEndDateChange($event)"
             [disabled]="getControl('endDate').disabled"
             [placeholder]="'opportunity.form.selectEndDate' | translate"
-            [dateFormat]="'dd M yy'"
             [minDate]="endDateMinDate()"
             class="w-full"
             keepInvalid

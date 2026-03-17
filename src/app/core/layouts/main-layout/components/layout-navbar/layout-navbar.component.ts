@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, model, output, signal } from '@angular/core';
 import { NavbarProfileDropdownComponent } from '../navbar-profile-dropdown/navbar-profile-dropdown.component';
 import { NavbarNotificationsComponent } from '../navbar-notifications/navbar-notifications.component';
@@ -6,10 +7,12 @@ import { DrawerModule } from 'primeng/drawer';
 import { SidebarContentComponent } from '../sidebar-content/sidebar-content.component';
 import { LanguageSwitcherComponent } from '../../../../../shared/components/language-switcher';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 @Component({
 	selector: 'app-layout-navbar',
 	imports: [
+		NgClass,
 		NavbarProfileDropdownComponent,
 		NavbarNotificationsComponent,
 		ButtonModule,
@@ -23,8 +26,13 @@ import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 })
 export class LayoutNavbarComponent {
 	private readonly i18nService = inject(I18nService);
+	private readonly authStore = inject(AuthStore);
 
 	visibleSidebarDrawer = signal(false);
+	isImpersonating = computed(() => this.authStore.isImpersonating());
+	navbarStickyClass = computed(() =>
+		this.isImpersonating() ? 'sticky top-[45px] z-50' : 'sticky top-0 z-50',
+	);
 	sidebarDrawerCollapsed = model(false);
 	toggleDesktopSidebar = output<void>();
 

@@ -19,6 +19,8 @@
     "warning": "Warning",
     "info": "Info",
     "noDataFound": "No data found",
+    "noDataMatchingFiltersSubtitle": "We couldn't find any data matching your filters. Try adjusting the criteria to see results.",
+    "loggedInOnBehalfOf": "You are currently logged in on behalf of {{name}}.",
     "clearAll": "Clear all",
     "paginatorTemplate": "Showing {first} to {last} of {totalRecords}",
     "filter": "Filter",
@@ -104,7 +106,8 @@
       "fileUploadHintExtended": "You can upload any file type (images, documents, archives).",
       "exampleEntities": "E.g., MoEn, PIF, etc.",
       "supportRequiredHint": "Mention Support required from SEC to localize the service (if any)"
-    }
+    },
+    "characters": "characters"
   },
   "footer": {
     "message": "© {{year}} SEC. All rights reserved.",
@@ -607,9 +610,9 @@
         "jobInvalid": "Invalid ID. Please enter a valid employee ID.",
         "jobInvalidLength": "ID. must be between 6 and 20 characters.",
         "jobRequired": "ID is required.",
-        "nameArabicInvalid": "Arabic name must contain Arabic letters only.",
+        "nameArabicInvalid": "Invalid arabic name",
         "nameArabicInvalidLength": "Arabic name must be between 3 and 100 characters.",
-        "nameEnglishInvalid": "English name must contain English letters only.",
+        "nameEnglishInvalid": "Invalid english name",
         "nameEnglishInvalidLength": "English name must be between 3 and 100 characters.",
         "phoneInvalidLength": "Phone number must be between 8 and 15 digits",
         "phoneInvalid": "Phone number must contain digits only.",
@@ -865,8 +868,8 @@
           "createdBy": "Created By",
           "lastUpdated": "Last Updated",
           "createdDate": "Created Date",
-          "updatedDate": "Updated Date",
-          "updatedBy": "Updated By",
+          "updatedDate": "Last Updated Date",
+          "updatedBy": "Last Updated By",
           "actions": "Actions",
           "filter": {
             "searchKeyPlaceHolder": "Search by Holiday Name",
@@ -971,7 +974,7 @@
       "planTitlePlaceholder": "Enter your plan title",
       "enterPlanTitle": "Enter plan title",
       "enterCompanyName": "Enter company name",
-      "planTitleRequired": "Plan title is required to save as draft",
+      "planTitleRequired": "Plan title is required",
       "planTitleRequiredShort": "Plan title is required",
       "opportunityRequired": "Please select opportunity to save as draft",
       "opportunity": "Opportunity",
@@ -1182,6 +1185,7 @@
       "targetedCustomer": "Targeted Customer",
       "namesOfTargetedSuppliers": "Names of Targeted Suppliers",
       "productsUtilizeTargetedProduct": "Products Utilize Targeted Product",
+      "productsManufactured": "Product(s) manufactured",
       "capexRequiredSar": "CAPEX Required (In SAR)",
       "otherLocalizationApproachDetails": "Other Localization Approach Details",
       "proprietaryToolsDetails": "Proprietary Tools Details",
@@ -1292,7 +1296,8 @@
       },
       "commentYourComment": "Your Comment",
       "otherLocationDetails": "Other Location Details",
-      "locationType": "Location Type"
+      "locationType": "Location Type",
+      "targetingLocalSuppliersNote": "If Targeting \"SEC's approved local suppliers\", mention the following:\""
     },
     "placeholders": {
       "selectOpportunity": "Select opportunity",
@@ -1672,7 +1677,8 @@
       "year4": "Year 4",
       "year5": "Year 5",
       "year6": "Year 6",
-      "year7": "Year 7"
+      "year7": "Year 7",
+      "yearOnYour": "year-on-your"
     },
     "employee_status": {
       "pending": "Pending",
@@ -1837,7 +1843,8 @@
     "employeeRequired": "Employee is required",
     "assignSuccessMsg": "Plan has been successfully assigned to {{employee}}.",
     "reassignSuccessMsg": "Plan has been reassigned successfully to {{employee}}.",
-    "currentEmployee": "Current Employee"
+    "currentEmployee": "Current Employee",
+    "reassignConfirmMessage": "I confirm that I want to reassign this plan from [{{currentEmployee}}] to [{{newAssignee}}]."
   },
   "WarningMesages": {
     "deletedOppprtuinity": "This draft plan is no longer valid because the associated opportunity has been deleted. Please delete this plan and submit a new one for an available opportunity."

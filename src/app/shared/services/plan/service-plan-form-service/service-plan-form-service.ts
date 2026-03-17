@@ -19,13 +19,13 @@ export class ServicePlanFormService {
   private readonly _planStore = inject(PlanStore);
   private readonly _authStore = inject(AuthStore);
   private readonly _profileStore = inject(ProfileStore);
-  
+
   private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
 
-  startYear = computed(() => (new Date(this._planStore.servicePlanData()?.createdDate?? new Date())).getFullYear());
-  startMonth = computed(() => (new Date(this._planStore.servicePlanData()?.createdDate?? new Date())).getMonth());
-  
+  startYear = computed(() => (new Date(this._planStore.servicePlanData()?.createdDate ?? new Date())).getFullYear());
+  startMonth = computed(() => (new Date(this._planStore.servicePlanData()?.createdDate ?? new Date())).getMonth());
+
   private readonly _existingSaudiServiceLevelCache = new Map<string, any>();
   private readonly _directLocalizationServiceLevelCache = new Map<string, any>();
 
@@ -376,10 +376,6 @@ export class ServicePlanFormService {
 
   toggleAgreementOtherDetailsValidation(agreementType: string | null, index: number): void {
     this._step3Builder.toggleAgreementOtherDetailsValidation(this._step3FormGroup, agreementType, index);
-  }
-
-  toggleAgreementCopyValidation(provideAgreementCopy: string | boolean | null, index: number): void {
-    this._step3Builder.toggleAgreementCopyValidation(this._step3FormGroup, provideAgreementCopy, index);
   }
 
   syncServicesFromCoverPageToExistingSaudi(): void {

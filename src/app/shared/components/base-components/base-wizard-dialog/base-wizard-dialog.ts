@@ -7,10 +7,9 @@ import { StepContentDirective } from '../../../directives/step-content.directive
 import { ScrollPanelModule, ScrollPanel } from 'primeng/scrollpanel';
 import { WizardStepStateComponent } from '../../../components/utility-components/wizard-step-state/wizard-step-state.component';
 import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interface';
-import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
-import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { ImageErrorDirective } from '../../../directives/image-error.directive';
 import { BaseWizardActions, IBaseWizardAction } from '../base-wizard-actions/base-wizard-actions';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 
 
@@ -24,14 +23,13 @@ import { BaseWizardActions, IBaseWizardAction } from '../base-wizard-actions/bas
     ScrollPanelModule,
     WizardStepStateComponent,
     ImageErrorDirective,
-    BaseWizardActions
+    BaseWizardActions,
   ],
   templateUrl: './base-wizard-dialog.html',
   styleUrl: './base-wizard-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseWizardDialog {
-  private i18nService = inject(I18nService);
   activeStep = model<number>(1);
   visible = model<boolean>(false);
   isFinalStep = computed(() => this.activeStep() === this.steps().length);
@@ -39,7 +37,13 @@ export class BaseWizardDialog {
   onClose = output<void>();
   onShow = output<void>();
   wizardTitle = input<string>('Create Opportunity');
-
+  authStore = inject(AuthStore);
+  isImpersonating = computed(() => this.authStore.isImpersonating());
+  dialogStyleClass = computed(() =>
+    this.isImpersonating()
+      ? 'w-full !max-h-full !p-0 !h-[calc(100%-45px)] !mt-[45px]'
+      : 'w-full !max-h-full h-full !p-0'
+  );
   // Centralized actions
   actions = input<IBaseWizardAction[]>([]);
 

@@ -10,13 +10,11 @@ export class SubmissionConfirmationModalFormService {
       Validators.required,
       Validators.minLength(2),
       Validators.maxLength(100),
-      this.alphabetsAndSpacesOnlyValidator
     ]],
     jobTitle: ['', [
       Validators.required,
       Validators.minLength(2),
-      Validators.maxLength(100),
-      this.jobTitleValidator
+      Validators.maxLength(100)
     ]],
     contactNumber: ['', [
       Validators.required,

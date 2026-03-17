@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, model, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, OnInit, output } from '@angular/core';
 import { TransferRoleService } from '../../services/transfer-role/transfer-role-service';
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
@@ -10,6 +10,7 @@ import { BaseDialogComponent } from 'src/app/shared/components/base-components/b
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { RoleManagementStore } from 'src/app/shared/stores/system-employees/role-management-store';
+import { TActiveEmployeeOptionLabel } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-transfer-role-dialog',
@@ -35,6 +36,11 @@ export class TransferRoleDialog implements OnInit {
   i18nService = inject(I18nService);
   roleManagementStore = inject(RoleManagementStore);
   isLoading = this.roleManagementStore.isProcessing
+
+  employeeOptionLabel = computed<TActiveEmployeeOptionLabel>(() =>
+    this.i18nService.currentLanguage() === 'ar' ? 'name_Ar' : 'name_En'
+  );
+
   ngOnInit(): void {
     this.systemEmployeesStore.getActiveEmployees()
       .pipe(take(1))

@@ -171,6 +171,10 @@ export class NavbarProfileDropdownComponent implements OnInit {
             setTimeout(() => {
               window.location.href = `/${ERoutes.dashboard}`;
             }, 0);
+            // this.router.resetConfig(this.router.config);
+            // this.router.navigate([`/${ERoutes.dashboard}`], {
+            //   replaceUrl: true
+            // });
           }
         },
         error: () =>

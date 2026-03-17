@@ -19,6 +19,8 @@
     "warning": "تحذير",
     "info": "معلومة",
     "noDataFound": "لا توجد بيانات",
+    "noDataMatchingFiltersSubtitle": "لم نجد أي بيانات تطابق معايير البحث. حاول تعديل المعايير لعرض النتائج.",
+    "loggedInOnBehalfOf": "أنت مسجل الدخول حالياً نيابة عن {{name}}.",
     "clearAll": "مسح الكل",
     "paginatorTemplate": "عرض {first} إلى {last} من {totalRecords}",
     "filter": "تصفية",
@@ -104,7 +106,8 @@
       "fileUploadHintExtended": "يمكنك تحميل أي نوع ملف (صور، مستندات، أرشيفات).",
       "exampleEntities": "مثال: MoEn، PIF، إلخ.",
       "supportRequiredHint": "اذكر الدعم المطلوب من هيئة السوق المالية لتوطين الخدمة (إن وجد)"
-    }
+    },
+    "characters": "حرف"
   },
   "footer": {
     "message": "© {{year}} SEC. جميع الحقوق محفوظة.",
@@ -520,8 +523,8 @@
       "admin": "مدير",
       "employee": "موظف",
       "manager": "مدير",
-      "departmentManager": "مدير القسم",
-      "dvManager": "مدير DV",
+      "departmentManager": "مدير الإدارة",
+      "dvManager": "مدير القسم",
       "investor": "مستثمر",
       "divisionManager": "مدير القسم",
       "autoProcess": "عملية آلية"
@@ -533,7 +536,7 @@
       "all": "الكل"
     },
     "table": {
-      "id": "الرقم",
+      "id": "رقم الوظيفة",
       "name": "الاسم",
       "nameArabic": "الاسم (عربي)",
       "nameEnglish": "الاسم (إنجليزي)",
@@ -560,8 +563,8 @@
       "delegation": "التفويض"
     },
     "filter": {
-      "searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني أو تاريخ الانضمام",
-      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
+      "searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
+      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو البريد الإلكتروني",
       "rolePlaceholder": "الدور",
       "statusPlaceholder": "الحالة",
       "selectJoinDate": "اختر تاريخ الانضمام"
@@ -621,9 +624,9 @@
         "jobInvalid": "رقم الوظيفة غير صالح. يرجى إدخال رقم وظيفة صحيح.",
         "jobInvalidLength": "يجب أن يكون رقم الوظيفة بين 6 و20 حرفًا.",
         "jobRequired": "رقم الوظيفة مطلوب.",
-        "nameArabicInvalid": "يجب أن يحتوي الاسم العربي على أحرف عربية فقط.",
+        "nameArabicInvalid": "اسم عربي غير صالح",
         "nameArabicInvalidLength": "يجب أن يكون طول الاسم العربي بين 3 و100 حرف.",
-        "nameEnglishInvalid": "يجب أن يحتوي الاسم الإنجليزي على أحرف إنجليزية فقط.",
+        "nameEnglishInvalid": "اسم انجليزي غير صالح",
         "nameEnglishInvalidLength": "يجب أن يكون طول الاسم الإنجليزي بين 3 و100 حرف.",
         "phoneInvalidLength": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
         "phoneInvalidLenhtg": "يجب أن يتراوح طول رقم الجوال بين 8 و15 رقمًا.",
@@ -706,7 +709,7 @@
       "delegatorName": "اسم الموكل",
       "delegateeName": "اسم الموكل إليه",
       "delegatorTooltip": "الموكل – المالك الأصلي للمهام.",
-      "delegateeTooltip": "الموكل إليه – المستخدم المخول بالتصرف نيابة عن الموكل.",
+      "delegateeTooltip": "الموكل إليه – المستخدم الموكل إليه بالتصرف نيابة عن الموكل.",
       "lastModifiedBy": "آخر تعديل بواسطة",
       "lastModifiedDate": "تاريخ آخر تعديل",
       "startDate": "تاريخ البدء",
@@ -818,7 +821,7 @@
       "planTitlePlaceholder": "أدخل عنوان خطتك",
       "enterPlanTitle": "أدخل عنوان الخطة",
       "enterCompanyName": "أدخل اسم الشركة",
-      "planTitleRequired": "عنوان الخطة مطلوب لحفظ المسودة",
+      "planTitleRequired": "عنوان الخطة مطلوب",
       "planTitleRequiredShort": "عنوان الخطة مطلوب",
       "opportunityRequired": "يرجى اختيار الفرصة لحفظ المسودة",
       "opportunity": "الفرصة",
@@ -1203,6 +1206,7 @@
       "targetedCustomer": "العميل المستهدف",
       "namesOfTargetedSuppliers": "أسماء الموردين المستهدفين",
       "productsUtilizeTargetedProduct": "المنتجات التي تستخدم المنتج المستهدف",
+      "productsManufactured": "المنتج/المنتجات المصنعة",
       "capexRequiredSar": "رأس المال المطلوب (بالريال)",
       "otherLocalizationApproachDetails": "تفاصيل نهج التوطين الآخر",
       "proprietaryToolsDetails": "تفاصيل الأدوات الخاصة",
@@ -1313,7 +1317,8 @@
         "addAfterSalesItem": "إضافة عنصر ما بعد البيع"
       },
       "commentYourComment": "تعليقك",
-      "locationType": "نوع الموقع"
+      "locationType": "نوع الموقع",
+      "targetingLocalSuppliersNote": "إذا كان الهدف \"موردي شركة الكهرباء المحليين المعتمدين\"، اذكر ما يلي:"
     },
     "placeholders": {
       "selectOpportunity": "اختر الفرصة",
@@ -1483,7 +1488,7 @@
       "reassigned": "معاد تعيينها",
       "submitted": "تم الإرسال",
       "pendingOnInvestor": "بانتظار المستثمر",
-      "pendingWithInvestor": "بانتظار المستثمر",
+      "pendingWithInvestor": "بأنتظار المستثمر",
       "draft": "قيد الإعداد",
       "returnedByDV": "معاد من مدير القسم",
       "returnedByDEPTManager": "معاد من الإدارة"
@@ -1544,8 +1549,8 @@
       "dvRejectionAcknowledged": "إقرار الرفض",
       "returnedForMoreInfo": "مرتجعة لمزيد من المعلومات",
       "autoRejected": "رفض الخطة تلقائياً",
-      "dvReview": "مراجعة DV",
-      "deptManagerReview": "مراجعة مدير القسم",
+      "dvReview": "مراجعة القسم",
+      "deptManagerReview": "مراجعة مدير الإدارة",
       "viewOpportunityDetails": "عرض الفرصة",
       "editResubmit": "تعديل / إعادة الإرسال"
     },
@@ -1623,7 +1628,8 @@
       "year4": "السنة 4",
       "year5": "السنة 5",
       "year6": "السنة 6",
-      "year7": "السنة 7"
+      "year7": "السنة 7",
+      "yearOnYour": "على مدار عام"
     },
     "exportPlans": "تصدير الخطط"
   },
@@ -1668,7 +1674,8 @@
     "employeeRequired": "الموظف مطلوب",
     "assignSuccessMsg": "تم تعيين الخطة بنجاح إلى {{employee}}.",
     "reassignSuccessMsg": "تم إعادة تعيين الخطة بنجاح إلى {{employee}}.",
-    "currentEmployee": "الموظف الحالي"
+    "currentEmployee": "الموظف الحالي",
+    "reassignConfirmMessage": "أؤكد أنني أريد إعادة تعيين هذه الخطة من [{{currentEmployee}}] إلى [{{newAssignee}}]."
   },
   "WarningMesages": {
     "deletedOppprtuinity": "لم تعد هذه المسودة صالحة لأن الفرصة المرتبطة بها تم حذفها. يرجى حذف هذه الخطة وتقديم واحدة جديدة لفرصة متاحة."
@@ -1759,7 +1766,7 @@
         "planAssignedReview": "خطة معينة للمراجعة",
         "planAssignedReviewDesc": "الإشعار عند تعيين خطة لمستخدم للمراجعة",
         "employee": "موظف",
-        "departmentManager": "مدير القسم",
+        "departmentManager": "مدير الإدارة",
         "planReassignment": "إعادة تعيين الخطة",
         "planReassignmentDesc": "الإشعار عند إعادة تعيين خطة من مستخدم لآخر",
         "employeeReassignee": "الموظف (المعاد تعيينه إليه)",
@@ -1821,8 +1828,8 @@
           "createdBy": "المنشئ",
           "lastUpdated": "آخر تحديث",
           "createdDate": "تاريخ الإنشاء",
-          "updatedDate": "تاريخ التحديث",
-          "updatedBy": "المحدث",
+          "updatedDate": "تاريخ آخر تحديث",
+          "updatedBy": "آخر تحديث بواسطة",
           "actions": "الإجراءات",
           "filter": {
             "searchKeyPlaceHolder": "البحث باسم العطلة",

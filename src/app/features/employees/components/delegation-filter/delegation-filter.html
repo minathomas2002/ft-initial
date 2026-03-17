@@ -3,17 +3,34 @@
 
     <div class="col-span-12 md:col-span-6">
       <p-iconfield>
-        <p-inputicon inputId="users-search" class="icon-search" />
-        <input class="w-full" type="text" pInputText [disabled]="disableFilterInputs()"
-          [placeholder]="'delegation.filter.searchPlaceholder' | translate" [ngModel]="filter().searchText"
-          (ngModelChange)="onSearchTextChange($event)" />
+        <p-inputicon
+          inputId="users-search"
+          class="icon-search"
+        />
+        <input
+          class="w-full"
+          type="text"
+          pInputText
+          [disabled]="disableFilterInputs()"
+          [placeholder]="'delegation.filter.searchPlaceholder' | translate"
+          [ngModel]="filter().searchText"
+          (ngModelChange)="onSearchTextChange($event)"
+        />
       </p-iconfield>
     </div>
 
     <div class="col-span-12 md:col-span-3">
-      <p-multiselect [options]="delegationStatuses()" [(ngModel)]="filter().status" optionLabel="label" optionValue="value"
-        [placeholder]="'delegation.filter.statusPlaceholder' | translate" display="chip" dropdownIcon="icon-chevron-down" fluid
-        (ngModelChange)="delegationFilterService.applyFilterWithPaging()">
+      <p-multiselect
+        [options]="delegationStatuses()"
+        [(ngModel)]="filter().status"
+        optionLabel="label"
+        optionValue="value"
+        [placeholder]="'delegation.filter.statusPlaceholder' | translate"
+        display="chip"
+        dropdownIcon="icon-chevron-down"
+        fluid
+        (ngModelChange)="delegationFilterService.applyFilterWithPaging()"
+      >
       </p-multiselect>
     </div>
     <div class="col-span-12 md:col-span-3">
@@ -24,7 +41,6 @@
           [readonlyInput]="true"
           [(ngModel)]="filter().delegationPeriod"
           (ngModelChange)="onPickerChange($event)"
-          [dateFormat]="'dd M yy'"
           [showIcon]="true"
           [showButtonBar]="true"
           [iconDisplay]="'input'"
@@ -59,5 +75,3 @@
   </div>
   }
 </div>
-
-

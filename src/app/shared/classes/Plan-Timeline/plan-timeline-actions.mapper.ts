@@ -32,26 +32,26 @@ export class PlanTimelineActionsMapper {
     let param: string = '';
     switch (item.actionType) {
       case EActionPlanTimeLine.AutoAssign:
-        param = item.targetUserNameEn;
+        param = this.i18nService.currentLanguage() === 'ar' ? item.targetUserNameAr : item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.Assigned:
-        param = item.targetUserNameEn;
+        param = this.i18nService.currentLanguage() === 'ar' ? item.targetUserNameAr : item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.Reassigned:
-        param = item.targetUserNameEn;
+        param = this.i18nService.currentLanguage() === 'ar' ? item.targetUserNameAr : item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.Resubmitted:
-        param = item.targetUserNameEn;
+        param = this.i18nService.currentLanguage() === 'ar' ? item.targetUserNameAr : item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.DVRejected:
-        param = item.targetUserNameEn;
+        param = this.i18nService.currentLanguage() === 'ar' ? item.targetUserNameAr : item.targetUserNameEn;
         break;
       case EActionPlanTimeLine.Submitted:
         param = (item.planType == EOpportunityType.SERVICES) ? this.i18nService.translate('opportunity.type.service') : this.i18nService.translate('opportunity.type.product');
         break;
       case EActionPlanTimeLine.DeptRejected:
-          param = item.targetUserNameEn;
-          break;
+        param = this.i18nService.currentLanguage() === 'ar' ? item.targetUserNameAr : item.targetUserNameEn;
+        break;
       default:
         param = '';
         break;
