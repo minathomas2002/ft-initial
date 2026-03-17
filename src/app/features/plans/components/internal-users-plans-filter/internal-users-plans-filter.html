@@ -88,6 +88,8 @@
                 <p-datepicker
                     name="submissionDate"
                     selectionMode="range"
+                    [pTooltip]="'plans.filter.selectSubmissionDate' | translate"
+                    [tooltipPosition]="'bottom'"
                     [readonlyInput]="true"
                     [(ngModel)]="filter().submissionDate"
                     (ngModelChange)="onPickerChange($event)"
