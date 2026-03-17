@@ -1,5 +1,7 @@
-<div class="p-[24px] flex flex-col gap-[24px] rounded-2xl border border-gray-200 bg-white min-h-[400px] h-full" [ngClass]="{'border-[#FFC90C]! border-2!': shouldShowWarning()}">
-
+<div
+  class="p-[24px] flex flex-col gap-[24px] rounded-2xl border border-gray-200 bg-white min-h-[400px] h-full"
+  [ngClass]="{'border-[#FFC90C]! border-2!': shouldShowWarning()}"
+>
 
   <div class="flex items-center justify-between gap-2 items-start">
     <div class="w-[40px] h-[40px] rounded-xl bg-orange-500 flex justify-between border-1 border-gray-200 items-center justify-center">
@@ -9,34 +11,39 @@
     <div class="flex justify-end gap-2">
       <!-- Status Badge (Published/Draft) -->
       @if(opportunity().status === EOpportunityStatus.DRAFT){
-        @let statusConfig = getStatusConfig();
+      @let statusConfig = getStatusConfig();
 
-        @if (shouldShowWarning()) {
-          <div class="relative inline-block">
-            <span
-              [pTooltip]="draftWarningTooltipContent"
-              [tooltipDisabled]="!shouldShowWarning()"
-              tooltipPosition="bottom"
-              [tooltipStyleClass]="'draft-warning-tooltip'"
-            >
-              <app-base-tag [color]="statusConfig.color" [value]="statusConfig.label | translate">
-              </app-base-tag>
-            </span>
-
-            <ng-template #draftWarningTooltipContent>
-              <div class="draft-warning-tooltip-content">
-                <i class="icon-info draft-warning-tooltip-icon"></i>
-                <span class="p-0 m-0 text-[#4A4E5A] font-semibold">{{'opportunity.warning.draftAfterStartDate' | translate}}</span>
-              </div>
-            </ng-template>
-
-            <span class="absolute top-0 ltr:right-0 rtl:left-0 h-[6px] w-[6px]  rounded-full bg-[#FFC90C]"></span>
-          </div>
-        } @else {
-          <app-base-tag [color]="statusConfig.color" [value]="statusConfig.label | translate">
+      @if (shouldShowWarning()) {
+      <div class="relative inline-block">
+        <span
+          [pTooltip]="draftWarningTooltipContent"
+          [tooltipDisabled]="!shouldShowWarning()"
+          tooltipPosition="bottom"
+          [tooltipStyleClass]="'draft-warning-tooltip'"
+        >
+          <app-base-tag
+            [color]="statusConfig.color"
+            [value]="statusConfig.label | translate"
+          >
           </app-base-tag>
-        }
+        </span>
 
+        <ng-template #draftWarningTooltipContent>
+          <div class="draft-warning-tooltip-content">
+            <i class="icon-info draft-warning-tooltip-icon"></i>
+            <span class="p-0 m-0 text-[#4A4E5A] font-semibold">{{'opportunity.warning.draftAfterStartDate' | translate}}</span>
+          </div>
+        </ng-template>
+
+        <span class="absolute top-0 ltr:right-0 rtl:left-0 h-[6px] w-[6px]  rounded-full bg-[#FFC90C]"></span>
+      </div>
+      } @else {
+      <app-base-tag
+        [color]="statusConfig.color"
+        [value]="statusConfig.label | translate"
+      >
+      </app-base-tag>
+      }
 
       } @else{ @let stateConfig = getStateConfig();
       <app-base-tag
@@ -73,18 +80,15 @@
       "
     />
     } @if(opportunity().startDate && opportunity().endDate) {
-    <app-opportunity-detail-item
-      [label]="'opportunity.list.applicationPeriod' | translate"
-      [value]="`${opportunity().startDate | localizedDate:'dd MMM yyyy'} - ${opportunity().endDate | localizedDate:'dd MMM yyyy'}`"
-    />
+    <div class="flex justify-between items-center">
+      <span class="text-[#606675] font-normal p-0 m-0">{{'opportunity.list.applicationPeriod' | translate}}</span>
+      <div class="flex flex-col text-[#0083DB] bg-[#E0F2FE] py-1 px-3 rounded font-medium rounded-lg">
+        <span class="">{{opportunity().startDate | localizedDate:'dd MMM yyyy'}}</span>
+        <span class="">{{opportunity().endDate | localizedDate:'dd MMM yyyy'}}</span>
+      </div>
+    </div>
     }
-
-    <app-opportunity-detail-item
-      [label]="'opportunity.list.numberOfPlans' | translate"
-      [value]="opportunity().numberOfPlans?.toString() || ''"
-    />
   </div>
-
   <div class="flex gap-4">
     @if(!opportunity().isOtherOpportunity){
     <p-button
