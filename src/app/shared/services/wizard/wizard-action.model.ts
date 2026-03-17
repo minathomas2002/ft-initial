@@ -104,6 +104,7 @@ export const TRANSLATION_KEYS = {
     reject: 'plans.wizard.reject',
     approveAndForward: 'plans.wizard.approveAndForward',
     resubmit: 'plans.wizard.resubmit',
+    submitApproval: 'plans.wizard.submitApproval'
   }
 } as const;
 

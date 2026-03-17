@@ -1530,6 +1530,7 @@
       "resubmit": "Resubmit",
       "approve": "Approve",
       "approveAndForward": "Approve & Forward",
+      "submitApproval": "Submit Approval",
       "reject": "Reject",
       "acknowledge": "Acknowledge",
       "sendBackToInvestor": "Send Back to Investor",

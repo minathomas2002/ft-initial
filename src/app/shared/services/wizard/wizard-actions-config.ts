@@ -249,7 +249,7 @@ export const WIZARD_BUTTONS: Record<WizardButtonKey, WizardButtonDefinition> = {
         context.status === EInternalUserPlanStatus.DEPT_APPROVED;
 
       const label = isDeptApproved
-        ? 'Submit Approval'
+        ? i18n.translate(TRANSLATION_KEYS.plans.submitApproval)
         : i18n.translate(TRANSLATION_KEYS.plans.approveAndForward);
 
       return {
