@@ -15,10 +15,10 @@
   [confirmButtonSeverity]="confirmButtonSeverity()"
 >
   <div [class]="classes()">
-    <p class="text-base font-semibold text-gray-900"> {{ title() }} </p>
+    <p class="text-base font-semibold text-gray-900"> {{ title() | translate }} </p>
     @if(description()){
     <p class="mt-[8px]">
-      {{description()}}
+      {{ description() }}
     </p>
     }
   </div>

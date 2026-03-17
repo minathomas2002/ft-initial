@@ -1,16 +1,17 @@
 import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
+import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-general-confirmation-dialog',
-  imports: [BaseDialogComponent],
+  imports: [BaseDialogComponent, TranslatePipe],
   templateUrl: './general-confirmation-dialog.component.html',
   styleUrl: './general-confirmation-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GeneralConfirmationDialogComponent {
-  title = input<string>('Are you sure you want to proceed with this update?');
-  confirmationLabel = input<string>('Ok');
+  title = input<string>('common.confirmProceedUpdate');
+  confirmationLabel = input<string>('common.ok');
   icon = input<string>('icon-x-close');
   description = input<string>();
   confirmButtonSeverity = input<'primary' | 'secondary' | 'success' | 'info' | 'danger' | 'help'>("primary");

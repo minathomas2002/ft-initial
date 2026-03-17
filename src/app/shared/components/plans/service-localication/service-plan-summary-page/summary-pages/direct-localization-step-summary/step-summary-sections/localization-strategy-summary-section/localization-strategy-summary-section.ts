@@ -124,7 +124,7 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
           : null,
         location: buildField('', currantLocation, beforeLocation, EMaterialsFormControls.location),
         locationOther: shouldShowLocationOther
-          ? buildField('Description: ', currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
+          ? buildField(this.i18n.translate('common.descriptionLabel'), currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
           : null,
         capexRequired: buildField('', currantCapex != null ? String(currantCapex) : null, beforeCapex != null ? String(beforeCapex) : null, EMaterialsFormControls.capexRequired),
         supervisionOversight: buildField('', currantSupervision, beforeSupervision, EMaterialsFormControls.supervisionOversightByGovernmentEntity),

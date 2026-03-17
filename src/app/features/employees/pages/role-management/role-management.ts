@@ -51,7 +51,7 @@ export class RoleManagement implements OnInit {
     this.i18nService.currentLanguage();
     return [
       {
-        label: 'ID',
+        label: this.i18nService.translate('users.table.id') || 'ID',
         isSortable: false,
         sortingKey: 'jobId',
       },

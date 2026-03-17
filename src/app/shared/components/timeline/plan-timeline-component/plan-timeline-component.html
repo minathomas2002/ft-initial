@@ -14,7 +14,7 @@
         ></app-base-tag>
 
         <!-- Date & Days -->
-        <div class="">
+        <div>
           <div class="flex items-center justify-end text-xs text-gray-700 whitespace-nowrap">
             <i class="icon-clock text-gray-400 px-1"></i>
             <span>
@@ -23,10 +23,13 @@
           </div>
 
           @if (item.item.daysAfterPreviousAction !=null) {
-          <p class="text-xs text-gray-400 mt-1  px-2">
-            {{ item.item.daysAfterPreviousAction }}
-            {{ 'timeline.remainingDays' | translate }}
-          </p>
+          <div
+            class="text-xs text-gray-400 mt-1 flex items-center justify-start gap-1 ps-1"
+            [class.flex-row-reverse]="directionClass() === 'rtl'"
+          >
+            <span>{{ item.item.daysAfterPreviousAction }}</span>
+            <span>{{ 'timeline.remainingDays' | translate }}</span>
+          </div>
           }
         </div>
       </div>

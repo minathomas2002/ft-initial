@@ -7,6 +7,8 @@
     "no": "لا",
     "cancel": "إلغاء",
     "confirm": "تأكيد",
+    "ok": "موافق",
+    "confirmProceedUpdate": "هل أنت متأكد أنك تريد المتابعة مع هذا التحديث؟",
     "submit": "إرسال",
     "save": "حفظ",
     "delete": "حذف",
@@ -63,6 +65,8 @@
       "yearsAgo": "منذ {{count}} سنة"
     },
     "viewDetails": "عرض التفاصيل",
+    "descriptionLabel": "الوصف: ",
+    "detailsLabel": "التفاصيل: ",
     "CreatorName": "اسم المُنشئ",
     "CreationDate": "تاريخ الإنشاء",
     "LastModifiedBy": "آخر تعديل بواسطة",
@@ -564,7 +568,7 @@
     },
     "filter": {
       "searchPlaceholder": "البحث بالاسم أو رقم الوظيفة أو الهاتف أو البريد الإلكتروني",
-      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو البريد الإلكتروني",
+      "roleManagementSearchPlaceholder": "البحث باسم المستخدم أو البريد الإلكتروني أو رقم الوظيفة",
       "rolePlaceholder": "الدور",
       "statusPlaceholder": "الحالة",
       "selectJoinDate": "اختر تاريخ الانضمام"
@@ -682,7 +686,8 @@
       "selectEndDate": "اختر تاريخ الانتهاء",
       "delete": {
         "title": "هل أنت متأكد من حذف هذا التفويض؟",
-        "description": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم."
+        "description": "لا يمكن التراجع عن هذا الإجراء. بمجرد الحذف، سيتم إزالة جميع البيانات ذات الصلة بشكل دائم.",
+        "confirmLabel": "تأكيد الحذف"
       },
       "cancel": {
         "title": "هل أنت متأكد من إلغاء هذا التفويض؟",
