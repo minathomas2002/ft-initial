@@ -40,7 +40,8 @@
 ::ng-deep .draft-warning-tooltip.p-tooltip-bottom .p-tooltip-text::after {
   content: '';
   position: absolute;
-  top: -6px;
+  display: none;
+  top: -8px;
   left: 19px;
   width: 0;
   height: 0;
