@@ -1538,6 +1538,7 @@
       "sendBackToDv": "Send Back to Division Manager",
       "addComments": "Add Comments",
       "timeline": "Timeline",
+      "departmentManagerApproval":"Department Manager Approval",
       "comments": {
         "addComment": "Add Comment",
         "clarifyFeedback": "Add a comment to clarify your feedback.",

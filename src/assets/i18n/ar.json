@@ -927,6 +927,7 @@
       "sendBackToDv": "إرجاع إلى مدير القسم",
       "addComments": "إضافة تعليقات",
       "timeline": "الجدول الزمني",
+      "departmentManagerApproval":"موافقة مدير الادارة",
       "comments": {
         "addComment": "إضافة تعليق",
         "clarifyFeedback": "أضف تعليقاً لتوضيح ملاحظاتك.",
