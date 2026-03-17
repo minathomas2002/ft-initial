@@ -26,12 +26,12 @@
             [color]="selectedInputColor()"
           />
           @if(opportunityControlSignal()){
-            <a
-              class="text-[#4767A5] font-normal underline mt-2 cursor-pointer"
-              target="_blank"
-              [attr.href]="showWarningMesageDeletedOpportunity() ? null : `/opportunities/${opportunityControlSignal()?.id}`"
-              (click)="onViewOpportunityDetails($event)"
-            >{{`common.viewDetails`|translate}}</a>
+          <a
+            class="text-[#4767A5] font-normal underline mt-2 cursor-pointer"
+            target="_blank"
+            [attr.href]="showWarningMesageDeletedOpportunity() ? null : `/opportunities/${opportunityControlSignal()?.id}`"
+            (click)="onViewOpportunityDetails($event)"
+          >{{`common.viewDetails`|translate}}</a>
           }
 
         </app-group-input-with-checkbox>
@@ -53,7 +53,6 @@
         >
           <p-datepicker
             fluid
-            dateFormat="dd M yy"
             [formControl]="getFormControl(basicInformationFormGroupControls['submissionDate'])"
             [appConditionalColorClass]="highlightInput('submissionDate')"
             [color]="selectedInputColor()"
@@ -387,27 +386,27 @@
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex flex-col gap-2 flex-1">
           <app-base-label [title]="'plans.form.emailID' | translate" />
-        <app-group-input-with-checkbox
-          [showCheckbox]="showCheckbox()"
-          [hasCommentControl]="
+          <app-group-input-with-checkbox
+            [showCheckbox]="showCheckbox()"
+            [hasCommentControl]="
               getHasCommentControl(localAgentInformationFormGroupControls['emailID'])
             "
-          (valueChanged)="upDateSelectedInputs($event, {
+            (valueChanged)="upDateSelectedInputs($event, {
               section: 'localAgentInformation',
               inputKey: 'emailID',
               label: 'plans.form.emailID'
             })"
-        >
-          <input
-            type="email"
-            pInputText
-            fluid
-            class="ltr"
-            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterEmailId' | translate"
-            [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
-            [appConditionalColorClass]="highlightInput('emailID')"
-            [color]="selectedInputColor()"
-          />
+          >
+            <input
+              type="email"
+              pInputText
+              fluid
+              class="ltr"
+              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterEmailId' | translate"
+              [formControl]="getValueControl(localAgentInformationFormGroupControls['emailID'])"
+              [appConditionalColorClass]="highlightInput('emailID')"
+              [color]="selectedInputColor()"
+            />
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(localAgentInformationFormGroupControls['emailID'])"

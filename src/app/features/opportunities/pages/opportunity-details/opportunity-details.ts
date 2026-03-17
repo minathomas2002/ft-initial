@@ -86,7 +86,7 @@ export class OpportunityDetails implements OnInit, OnDestroy {
     return EOpportunityAction;
   }
   canApplyOnOpportunity = computed(() => this.permissionService.canApplyOnOpportunityCard());
-
+  direction = computed(() => this.i18nService.currentLanguage() === 'ar' ? 'rtl' : 'ltr');
 
   private readonly destroy$ = new Subject<void>()
 
@@ -239,16 +239,16 @@ export class OpportunityDetails implements OnInit, OnDestroy {
       isApplied: false,
       isOtherOpportunity: false,
       icon: '',
-      numberOfPlans:0
+      numberOfPlans: 0
     });
     this.planTermsAndConditionsDialogVisibility.set(true)
     this.planStore.setWizardMode('create');
     this.planStore.setSelectedPlanId(null);
   }
 
-  onViewPlans(){
-    this.router.navigate(['/',ERoutes.plans], {
-      queryParams: { opportunityId: this.opportunityId()}
+  onViewPlans() {
+    this.router.navigate(['/', ERoutes.plans], {
+      queryParams: { opportunityId: this.opportunityId() }
     });
   }
   get opportunityAttachmentBase64() {

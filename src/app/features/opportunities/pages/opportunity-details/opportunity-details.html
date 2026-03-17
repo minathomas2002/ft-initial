@@ -9,7 +9,10 @@
           class="flex items-center gap-2 text-primary-600 cursor-pointer mb-6"
           (click)="onBack()"
         >
-          <i class="icon-arrow-left"></i>
+          <i
+            [class.icon-arrow-left]="direction() === 'ltr'"
+            [class.icon-arrow-right]="direction() === 'rtl'"
+          ></i>
           <span>{{ 'opportunity.details.backToOpportunities' | translate }}</span>
         </span>
 
