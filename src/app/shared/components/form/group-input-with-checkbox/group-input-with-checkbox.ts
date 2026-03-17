@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, OnInit, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -9,7 +9,7 @@ import { distinctUntilChanged, debounceTime } from 'rxjs';
   imports: [CheckboxModule, ReactiveFormsModule],
   styleUrl: './group-input-with-checkbox.scss',
   template: `
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 !flex-row">
       @if (showCheckbox() && hasCommentControl()) {
         <p-checkbox
           [formControl]="hasCommentControl()!"
@@ -30,6 +30,7 @@ export class GroupInputWithCheckbox implements OnInit {
   valueChanged = output<boolean>();
   private readonly destroyRef = inject(DestroyRef);
   private subscriptionCreated = false;
+
 
   ngOnInit(): void {
     // Prevent multiple subscriptions if ngOnInit is called multiple times
