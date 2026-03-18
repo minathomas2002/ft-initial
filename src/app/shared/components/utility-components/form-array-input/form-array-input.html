@@ -47,7 +47,7 @@
           ></i>
           <ng-template #tooltipContent>
             <div class="flex flex-col gap-2 text-start">
-              <p>{{ headerTooltips()[key] }}</p>
+              <p [innerHTML]="headerTooltips()[key]"></p>
             </div>
           </ng-template>
           }
@@ -84,7 +84,7 @@
           ></i>
           <ng-template #tooltipContent>
             <div class="flex flex-col gap-2 text-start">
-              <p>{{ headerTooltips()[key] }}</p>
+              <p [innerHTML]="headerTooltips()[key]"></p>
             </div>
           </ng-template>
           }
