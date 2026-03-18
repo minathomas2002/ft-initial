@@ -27,7 +27,6 @@ import { Tooltip } from 'primeng/tooltip';
     ButtonModule,
     OverlayBadgeModule,
     BadgeModule,
-    Tooltip
   ],
   templateUrl: './admin-opportunities-filter.html',
   styleUrl: './admin-opportunities-filter.scss',
