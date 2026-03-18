@@ -61,6 +61,9 @@ import { OpportunityAuditDetails } from "./opportunity-audit-details/opportunity
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpportunityDetails implements OnInit, OnDestroy {
+  private readonly lri = '\u2066';
+  private readonly pdi = '\u2069';
+
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
   opportunitiesStore = inject(OpportunitiesStore);
@@ -268,5 +271,17 @@ export class OpportunityDetails implements OnInit, OnDestroy {
     const unit = this.opportunitiesStore.details()?.quantityUnit as EOpportunityQuantity;
     if (!unit) return '';
     return '(' + this.opportunityUnitMapper.getUnitLabel(unit) + ')';
+  }
+
+  getLocalSuppliersDisplay(): string | null | undefined {
+    const value = this.opportunitiesStore.details()?.localSuppliersFormatted;
+    if (value == null || value === '0') return value;
+    return `${this.lri}${value}+${this.pdi}`;
+  }
+
+  getGlobalSuppliersDisplay(): string | null | undefined {
+    const value = this.opportunitiesStore.details()?.globalSuppliersFormatted;
+    if (value == null || value === '0') return value;
+    return `${this.lri}${value}+${this.pdi}`;
   }
 }

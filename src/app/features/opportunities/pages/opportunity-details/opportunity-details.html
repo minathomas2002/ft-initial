@@ -106,24 +106,14 @@
                 icon="icon-flag"
                 [cardTitle]="'opportunity.details.local' | translate"
                 cardClass="bg-white"
-                cardDescription="{{
-                  (opportunitiesStore.details()?.localSuppliersFormatted == '0' ||
-                   opportunitiesStore.details()?.localSuppliersFormatted == null) ?
-                   opportunitiesStore.details()?.localSuppliersFormatted :
-                   opportunitiesStore.details()?.localSuppliersFormatted + '+'
-                }}"
+                cardDescription="{{ getLocalSuppliersDisplay() }}"
               >
               </app-base-card>
               <app-base-card
                 icon="icon-glop-04"
                 [cardTitle]="'opportunity.details.global' | translate"
                 cardClass="bg-white"
-                cardDescription="{{
-                  (opportunitiesStore.details()?.globalSuppliersFormatted == '0' ||
-                  opportunitiesStore.details()?.globalSuppliersFormatted == null) ?
-                  opportunitiesStore.details()?.globalSuppliersFormatted :
-                   opportunitiesStore.details()?.globalSuppliersFormatted + '+'
-                }}"
+                cardDescription="{{ getGlobalSuppliersDisplay() }}"
               >
               </app-base-card>
             </div>
