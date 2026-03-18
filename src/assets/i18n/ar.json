@@ -318,7 +318,7 @@
       "delete": "حذف",
       "moveToDraft": "نقل إلى المسودة",
       "publish": "نشر",
-      "apply": "تطبيق",
+      "apply": "تقديم",
       "viewPlans": "عرض الخطط"
     },
     "type": {
@@ -341,7 +341,7 @@
       "opportunityType": "نوع الفرصة",
       "applicationPeriod": "فترة التقديم",
       "viewDetails": "عرض التفاصيل",
-      "apply": "تطبيق",
+      "apply": "تقديم",
       "numberOfPlans": "عدد الخطط"
     },
     "counts": {
@@ -374,7 +374,7 @@
       "manufacturing": "التصنيع",
       "assemblyTesting": "التجميع والاختبار",
       "afterSalesServices": "خدمات ما بعد البيع",
-      "apply": "تطبيق"
+      "apply": "تقديم"
     },
     "form": {
       "basicInformation": "المعلومات الأساسية",
@@ -831,7 +831,7 @@
       "opportunityRequired": "يرجى اختيار الفرصة لحفظ المسودة",
       "opportunity": "الفرصة",
       "opportunityType": "نوع الفرصة",
-      "services": "الخدمات",
+      "services": "خدمة",
       "servicesDescription": "توطين الخدمات التشغيلية أو الداعمة",
       "materials": "المواد",
       "materialsDescription": "توطين المنتجات أو الأجزاء أو المعدات",
@@ -983,8 +983,8 @@
     },
     "noCommentFound": "لم يتم العثور على تعليق",
     "filter": {
-      "searchPlaceholder": "البحث عن طريق معرف الخطة أو العنوان",
-      "dvsearchPlaceholder": "البحث عن طريق معرف الخطة أو العنوان أو اسم المستثمر",
+      "searchPlaceholder": "البحث عن طريق رقم الخطة أو العنوان",
+      "dvsearchPlaceholder": "البحث عن طريق رقم الخطة أو العنوان أو اسم المستثمر",
       "selectPlanType": "اختر نوع الخطة",
       "selectStatus": "اختر الحالة",
       "selectSubmissionDate": "اختر تاريخ التقديم",
@@ -1022,7 +1022,7 @@
       "selected": "محدد"
     },
     "validation": {
-      "planIdRequired": "معرف الخطة مطلوب.",
+      "planIdRequired": "رقم الخطة مطلوب.",
       "rejectionReasonRequired": "سبب الرفض مطلوب.",
       "rejectionReasonMaxLength": "يجب ألا يتجاوز سبب الرفض 255 حرفاً.",
       "updateRequiredFields": "يرجى تحديث جميع الحقول المطلوبة قبل إعادة الإرسال."
@@ -1508,7 +1508,7 @@
       "materials": "المواد"
     },
     "table": {
-      "planId": "معرف الخطة",
+      "planId": "رقم الخطة",
       "investorName": "اسم المستثمر",
       "planTitle": "عنوان الخطة",
       "planType": "نوع الخطة",
