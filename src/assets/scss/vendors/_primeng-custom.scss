@@ -272,7 +272,7 @@ html[dir='rtl'] .p-datepicker-calendar .p-datepicker-header {
   border: none !important;
 
   @media (min-width: 576px) {
-    transform: translate(40px, 16px) !important;
+    transform: translate(0, 16px) !important;
   }
 
   // Target any scrollable element within p-datatable
