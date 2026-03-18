@@ -5,7 +5,7 @@ export function getOpportunityTypeConfig(opportunityType: number): { label: stri
   switch (opportunityType) {
     case EOpportunityType.SERVICES:
       return {
-        label: 'opportunity.type.services',
+        label: 'opportunity.type.service',
         color: 'primary'
       };
     case EOpportunityType.PRODUCT:
