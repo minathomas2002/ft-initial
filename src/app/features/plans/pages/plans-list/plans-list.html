@@ -1,6 +1,6 @@
 <div class="cards-page-layout px-[32px] py-[24px]">
   <app-table-layout
-    [tableTitle]="this.investorName() ? this.investorName() + `'s Submitted Plans` : 'plans.title' | translate"
+    [tableTitle]="this.investorName() ? ('plans.submittedPlansByInvestor' | translate:{ name: this.investorName() }) : ('plans.title' | translate)"
     [tableSubTitle]="'plans.subtitle' | translate"
     pageTitleClass="text-[24px] font-semibold"
     pageSubTitleClass="text-md text-gray-600"

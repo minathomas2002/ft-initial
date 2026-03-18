@@ -806,6 +806,7 @@
   "plans": {
     "assign": "تعيين",
     "title": "الخطط",
+    "submittedPlansByInvestor": "الخطط المقدمة لـ {{name}}",
     "submitNewPlan": "تقديم خطة جديدة",
     "subtitle": "تتبع وإدارة خطط التوطين المقدمة وحالة مراجعتها",
     "confirmation": {

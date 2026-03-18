@@ -959,6 +959,7 @@
     "exportPlans": "Export Plans",
     "assign": "Assign",
     "title": "Plans",
+    "submittedPlansByInvestor": "{{name}}'s Submitted Plans",
     "submitNewPlan": "Submit New Plan",
     "subtitle": "Track and manage your submitted localization plans and their review status",
     "confirmation": {
