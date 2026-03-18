@@ -14,6 +14,8 @@ import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LocalAgentInformationSummarySection extends SummarySectionBaseClass {
+  private readonly lrm = '\u200E';
+
   private readonly localAgentNameControl = computed(() => this.getValueFormControl(EMaterialsFormControls.localAgentName));
   private readonly contactPersonNameControl = computed(() => this.getValueFormControl(EMaterialsFormControls.contactPersonName));
   private readonly emailIDControl = computed(() => this.getValueFormControl(EMaterialsFormControls.emailID));
@@ -72,10 +74,12 @@ export class LocalAgentInformationSummarySection extends SummarySectionBaseClass
     const currantValue = typeof display === 'string' ? display : String(display ?? '');
     const currantValueWithoutSpaces = currantValue.replace(' ', '');
     const beforeValue = this.planStore.productPlanData()?.productPlan.overviewCompanyInfo.locationInfo.localAgentContactNumber ?? '';
+    const ltrCurrantValue = currantValueWithoutSpaces ? `${this.lrm}${currantValueWithoutSpaces}` : '';
+    const ltrBeforeValue = beforeValue ? `${this.lrm}${String(beforeValue)}` : '';
     return {
       label: this.i18nService.translate('plans.form.contactNumber'),
-      beforeValue: String(beforeValue),
-      currantValue: currantValueWithoutSpaces,
+      beforeValue: ltrBeforeValue,
+      currantValue: ltrCurrantValue,
       hasError: this.isFieldHasError(this.contactNumberControl()),
       hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.contactNumber),
       isResolved: this.isResolvedField(EMaterialsFormControls.contactNumber),
