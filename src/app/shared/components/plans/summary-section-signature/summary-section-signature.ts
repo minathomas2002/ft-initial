@@ -11,11 +11,17 @@ import { SummaryField } from 'src/app/shared/components/plans/summary-field/summ
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummarySectionSignature {
+  private readonly lrm = '\u200E';
+
   signature = input.required<Signature | null>();
   approvalDepartmentSignature = input<string | null>();
   isExpanded = signal(true);
 
   contactInfo = computed(() => this.signature()?.contactInfo ?? null);
+  contactNumberLtr = computed(() => {
+    const contactNumber = this.contactInfo()?.contactNumber ?? '';
+    return contactNumber ? `${this.lrm}${contactNumber}` : '';
+  });
   signatureValue = computed(() => this.signature()?.signatureValue ?? null);
   approvalDepartmentSignatureValue = computed(() => this.approvalDepartmentSignature() ?? null);
 
