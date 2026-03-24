@@ -2,7 +2,8 @@
   <div class="flex justify-between items-baseline">
     <p-button
       [label]="'setting.adminView.holidays.goBack' | translate"
-      icon="icon-arrow-left"
+      [icon]="isArabic() ? 'icon-arrow-right' : 'icon-arrow-left'"
+      [iconPos]="isArabic() ? 'right' : 'left'"
       styleClass="!px-0 mb-[16px]"
       link
       (onClick)="goBack()"

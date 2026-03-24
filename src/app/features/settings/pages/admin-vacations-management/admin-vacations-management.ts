@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
+import { I18nService } from 'src/app/shared/services/i18n';
 import { AddEditHolidayDialog } from '../../components/add-edit-holiday-dialog/add-edit-holiday-dialog';
 import { HolidaysFilterService } from '../../services/holidays-filter/holidays-filter-service';
 import { AdminHolidaysManagementView } from '../../components/admin-holidays-management-view/admin-holidays-management-view';
@@ -25,6 +26,9 @@ export class AdminVacationsManagement {
   viewCreateDialog = signal<boolean>(false);
   holidaysFilterService = inject(HolidaysFilterService);
   router = inject(Router);
+  i18nService = inject(I18nService);
+
+  isArabic = computed(() => this.i18nService.currentLanguage() === 'ar');
 
   onAddHoliday() {
     this.viewCreateDialog.set(true);
