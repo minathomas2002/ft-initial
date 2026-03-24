@@ -524,7 +524,7 @@
       "transfer": "استبدال / نقل"
     },
     "roles": {
-      "admin": "مدير",
+      "admin": "مسؤول",
       "employee": "موظف",
       "manager": "مدير",
       "departmentManager": "مدير الإدارة",
