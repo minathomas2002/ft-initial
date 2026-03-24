@@ -1000,7 +1000,7 @@
     "status": {
       "submitted": "تم الإرسال",
       "pending": "قيد الانتظار",
-      "pendingWithInvestor": "بأنتظار المستثمر",
+      "pendingWithInvestor": "بانتظار المستثمر",
       "underReview": "قيد المراجعة",
       "approved": "تمت الموافقة",
       "rejected": "مرفوض",
