@@ -1223,6 +1223,7 @@
       "proprietaryToolsDetails": "تفاصيل الأدوات الخاصة",
       "headcountYear": "عدد الموظفين {{year}}",
       "saudizationPercentYear": "نسبة السعودة % {{year}}",
+      "valueChainYearHeader": "السنة {{year}}",
       "expectedAnnualHeadcountKSAFacility": "العدد السنوي المتوقع للموظفين (يُملأ لمنشأة المملكة فقط)",
       "companyNames": "أسماء الشركات",
       "serviceTargetedForLocalization": "الخدمة المستهدفة للتوطين",
