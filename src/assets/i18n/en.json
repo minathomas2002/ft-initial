@@ -1198,6 +1198,7 @@
       "proprietaryToolsDetails": "Proprietary Tools Details",
       "headcountYear": "Headcount {{year}}",
       "saudizationPercentYear": "Saudization % {{year}}",
+      "valueChainYearHeader": "Year {{year}}",
       "expectedAnnualHeadcountKSAFacility": "Expected Annual Headcount (To be filled for the KSA based facility only)",
       "companyNames": "Company Names",
       "serviceTargetedForLocalization": "Service Targeted For Localization",
