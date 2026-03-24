@@ -276,12 +276,16 @@ export class OpportunityDetails implements OnInit, OnDestroy {
   getLocalSuppliersDisplay(): string | null | undefined {
     const value = this.opportunitiesStore.details()?.localSuppliersFormatted;
     if (value == null || value === '0') return value;
-    return `${this.lri}${value}+${this.pdi}`;
+    return `${this.lri}${this.normalizeDecimalSeparator(value)}+${this.pdi}`;
   }
 
   getGlobalSuppliersDisplay(): string | null | undefined {
     const value = this.opportunitiesStore.details()?.globalSuppliersFormatted;
     if (value == null || value === '0') return value;
-    return `${this.lri}${value}+${this.pdi}`;
+    return `${this.lri}${this.normalizeDecimalSeparator(value)}+${this.pdi}`;
+  }
+
+  private normalizeDecimalSeparator(value: string): string {
+    return value.replace(',', '.').replace('،', '.');
   }
 }
