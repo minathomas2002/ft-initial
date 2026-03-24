@@ -20,7 +20,8 @@ type ValidationMessageKey =
   | 'fileSizeExceeded'
   | 'dateRangeInvalid'
   | 'minQuantityError'
-  | 'maxQuantityError';
+  | 'maxQuantityError'
+  | 'invalidRegisteredVendorIDLength';
 
 @Injectable({
   providedIn: 'root',
@@ -110,6 +111,7 @@ export class ErrorMessagesService {
       'dateRangeInvalid',
       'minQuantityError',
       'maxQuantityError',
+      'invalidRegisteredVendorIDLength',
     ];
     return keys.includes(errorKey as ValidationMessageKey);
   }
@@ -167,6 +169,11 @@ export class ErrorMessagesService {
       case 'invalidPhoneNumber':
         return this.i18n.translate('common.validation.invalidPhoneNumber', {
           label,
+        });
+      case 'invalidRegisteredVendorIDLength':
+        return this.i18n.translate('common.validation.expectedLength', {
+          label,
+          expectedLength: String(control!.errors?.['expectedLength'] ?? ''),
         });
       case 'email':
         return this.i18n.translate('common.validation.email', { label });

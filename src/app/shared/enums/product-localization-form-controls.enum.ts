@@ -62,6 +62,7 @@ export enum EMaterialsFormControls {
   timeRequiredToSetupFactory = 'timeRequiredToSetupFactory',
 
   // Step 2 - Expected CAPEX Investment Controls
+  expectedCAPEXInvestment = 'expectedCAPEXInvestment',
   landPercentage = 'landPercentage',
   buildingPercentage = 'buildingPercentage',
   machineryEquipmentPercentage = 'machineryEquipmentPercentage',

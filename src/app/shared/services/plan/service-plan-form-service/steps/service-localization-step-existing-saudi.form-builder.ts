@@ -1,6 +1,7 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AgreementType, EMaterialsFormControls, EServiceCompanyType, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums';
 import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
+import { registeredVendorIDPatternValidator } from 'src/app/shared/validators/registered-vendor-id.validator';
 
 export class ServiceLocalizationStepExistingSaudiFormBuilder {
   constructor(
@@ -19,7 +20,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(null, [Validators.minLength(7), Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
+        [EMaterialsFormControls.value]: this.fb.control(null,[registeredVendorIDPatternValidator()]),
       }),
       [EMaterialsFormControls.benaRegisteredVendorID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),

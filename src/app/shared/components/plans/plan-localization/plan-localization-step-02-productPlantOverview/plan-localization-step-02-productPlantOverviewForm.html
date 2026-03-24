@@ -129,6 +129,7 @@
             <app-base-label
               [title]="'plans.form.timeRequiredToSetupFactory' | translate"
               [secondaryTitle]="'plans.form.placeholders.oncePlanApproved' | translate"
+              [helpTooltip]="'plans.form.timeRequiredToSetupFactoryTooltip'|translate"
             />
           </div>
           <app-group-input-with-checkbox
@@ -162,7 +163,41 @@
 
   <!-- Expected CAPEX Investment Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.expectedCAPEXInvestment' | translate }}</h2>
+    <div class="flex flex-col gap-2">
+      <app-base-label
+        [title]="'plans.form.expectedCAPEXInvestment' | translate"
+      />
+      <app-group-input-with-checkbox
+        [showCheckbox]="showCheckbox()"
+        [hasCommentControl]="getHasCommentControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.expectedCAPEXInvestment])"
+        (valueChanged)="upDateSelectedInputs($event, {
+          section: 'expectedCAPEXInvestment',
+          inputKey: 'expectedCAPEXInvestment',
+          label: 'plans.form.expectedCAPEXInvestment'
+        })"
+      >
+        <p-inputnumber
+          fluid
+          [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpectedCAPEXInvestment' | translate"
+          mode="currency"
+          currency="SAR"
+          locale="en-SA"
+          [useGrouping]="true"
+          [min]="0"
+          [maxlength]="16"
+          [max]="9999999999999999"
+          [minFractionDigits]="0"
+          [maxFractionDigits]="0"
+          [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.expectedCAPEXInvestment])"
+          [appConditionalColorClass]="highlightInput('expectedCAPEXInvestment')"
+          [color]="selectedInputColor()"
+        />
+      </app-group-input-with-checkbox>
+      <app-base-error-messages
+        [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.expectedCAPEXInvestment])"
+        [label]="'plans.form.expectedCAPEXInvestment' | translate"
+      />
+    </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- Land Percentage -->

@@ -2,6 +2,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EOpportunityType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 import { BasicPlanBuilder } from './basicPlanBuilder';
+import { registeredVendorIDPatternValidator } from 'src/app/shared/validators/registered-vendor-id.validator';
 
 export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
   constructor(fb: FormBuilder, private readonly newPlanTitle: string) {
@@ -45,7 +46,7 @@ export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control<string | null>(null, [Validators.minLength(7), Validators.maxLength(7), Validators.pattern(/^\d{0,7}$/)]),
+        [EMaterialsFormControls.value]: this.fb.control<string | null>(null, [registeredVendorIDPatternValidator()]),
       }),
       [EMaterialsFormControls.doYouCurrentlyHaveLocalAgentInKSA]: this.fb.control(null, [Validators.required])
     });

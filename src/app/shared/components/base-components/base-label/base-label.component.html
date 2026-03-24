@@ -2,4 +2,10 @@
   {{title()}}
   @if(secondaryTitle()){ <span class="ms-1 !font-normal">{{secondaryTitle()}}</span> }
   @if(required()){ <span class="text-red-700"> *</span> }
+  @if(helpTooltip()){
+    <span><i
+            class="icon-help-circle text-sm ms-1"
+            [pTooltip]="helpTooltip()"
+          ></i></span>
+  }
 </label>
