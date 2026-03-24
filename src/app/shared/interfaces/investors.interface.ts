@@ -12,13 +12,14 @@ export interface IInvestorRecord {
   numberOfSubmittedPlans: number;
   joinDate: string;
   isEmailVerified: boolean;
+  otherCountryCode: string;
 }
 
 export type TInvestorsSortingKeys = keyof IInvestorRecord;
 
 export interface IInvestorsFilter extends IFilterBase<TInvestorsSortingKeys> {
   searchText?: string;
-  joinDate?: Date[] | undefined;  
+  joinDate?: Date[] | undefined;
 }
 
 export interface IInvestorsFilterRequest extends IFilterBase<TInvestorsSortingKeys> {
