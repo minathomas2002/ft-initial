@@ -217,7 +217,7 @@ export class PlansList extends PlanDashboardBase implements OnInit {
   }
   onViewOpportunityDetails(plan: IPlanRecord) {
     if (plan?.linkedToDeletedOpportunity) {
-      this.toastService.error('Opportunity is no longer available');
+      this.toastService.error(this.i18nService.translate('common.opportunityNoLongerAvailable'));
       return;
     }
 

@@ -197,7 +197,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
 
     event.preventDefault();
     event.stopPropagation();
-    this.toasterService.error('Opportunity is no longer available');
+    this.toasterService.error(this.i18nService.translate('common.opportunityNoLongerAvailable'));
   }
 
   // Override hook method for step-specific initialization

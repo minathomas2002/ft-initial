@@ -65,6 +65,7 @@
       "yearsAgo": "منذ {{count}} سنة"
     },
     "viewDetails": "عرض التفاصيل",
+    "opportunityNoLongerAvailable": "الفرصة لم تعد متاحة",
     "descriptionLabel": "الوصف: ",
     "detailsLabel": "التفاصيل: ",
     "CreatorName": "اسم المُنشئ",

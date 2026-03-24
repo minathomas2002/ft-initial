@@ -214,7 +214,7 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
 
   onViewOpportunityDetails(plan: IPlanRecord) {
     if (plan?.linkedToDeletedOpportunity) {
-      this.toasterService.error('Opportunity is no longer available');
+      this.toasterService.error(this.i18nService.translate('common.opportunityNoLongerAvailable'));
       return;
     }
 

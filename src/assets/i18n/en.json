@@ -65,6 +65,7 @@
       "yearsAgo": "{{count}}y ago"
     },
     "viewDetails": "View Details",
+    "opportunityNoLongerAvailable": "Opportunity is no longer available",
     "descriptionLabel": "Description: ",
     "detailsLabel": "Details: ",
     "CreatorName": "Creator Name",

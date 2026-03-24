@@ -100,7 +100,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
 
     event.preventDefault();
     event.stopPropagation();
-    this.toasterService.error('Opportunity is no longer available');
+    this.toasterService.error(this.i18nService.translate('common.opportunityNoLongerAvailable'));
   }
 
 
