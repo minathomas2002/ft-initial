@@ -273,6 +273,29 @@ export class OpportunityDetails implements OnInit, OnDestroy {
     return '(' + this.opportunityUnitMapper.getUnitLabel(unit) + ')';
   }
 
+  getSpendSarDisplay(): string | number | null | undefined {
+    const spendSar = this.opportunitiesStore.details()?.spendSAR;
+    if (spendSar == null) return spendSar;
+    return `${this.normalizeDecimalSeparator(String(spendSar))}B`;
+  }
+
+  getMinQuantityDisplay(): string | null | undefined {
+    const value = this.opportunitiesStore.details()?.minQuantityFormatted;
+    if (value == null) return value;
+    return this.normalizeDecimalSeparator(value);
+  }
+
+  getMaxQuantityDisplay(): string | null | undefined {
+    const value = this.opportunitiesStore.details()?.maxQuantityFormatted;
+    if (value == null) return value;
+    return this.normalizeDecimalSeparator(value);
+  }
+
+  formatLocalizationActivityDisplay(value: string | null | undefined): string {
+    if (value == null) return '';
+    return this.normalizeDecimalSeparator(value);
+  }
+
   getLocalSuppliersDisplay(): string | null | undefined {
     const value = this.opportunitiesStore.details()?.localSuppliersFormatted;
     if (value == null || value === '0') return value;
@@ -286,6 +309,6 @@ export class OpportunityDetails implements OnInit, OnDestroy {
   }
 
   private normalizeDecimalSeparator(value: string): string {
-    return value.replace(',', '.').replace('،', '.');
+    return value.replace(/(\d)[,،](\d)/g, '$1.$2');
   }
 }

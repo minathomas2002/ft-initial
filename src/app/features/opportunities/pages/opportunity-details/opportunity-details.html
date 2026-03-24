@@ -79,20 +79,14 @@
                 icon="icon-currency-dollar-circle"
                 [cardTitle]="'opportunity.details.spendSAR' | translate"
                 cardClass="bg-white"
-                cardDescription="{{
-                  opportunitiesStore.details()?.spendSAR
-                    ? opportunitiesStore.details()?.spendSAR + 'B'
-                    : opportunitiesStore.details()?.spendSAR
-                }}"
+                cardDescription="{{ getSpendSarDisplay() }}"
               >
               </app-base-card>
               <app-base-card
                 icon="icon-data"
                 cardTitle="{{ 'opportunity.details.quantityUnits' | translate }} {{ getUnitLabel() }}"
                 cardClass="bg-white"
-                cardDescription="{{ opportunitiesStore.details()?.minQuantityFormatted }} - {{
-                  opportunitiesStore.details()?.maxQuantityFormatted
-                }}"
+                cardDescription="{{ getMinQuantityDisplay() }} - {{ getMaxQuantityDisplay() }}"
               >
               </app-base-card>
             </div>
@@ -158,7 +152,7 @@
                 @for(item of opportunitiesStore.details()?.designEngineerings; track item.id){
                 <app-opportunity-details-card-info-item
                   icon="icon-check-circle"
-                  label="{{ item.keyActivityFormatted }}"
+                  [label]="formatLocalizationActivityDisplay(item.keyActivityFormatted)"
                 />
                 }@empty {
                 <p class="text-md text-gray-600 mb-2">-</p>
@@ -176,7 +170,7 @@
                 @for(item of opportunitiesStore.details()?.sourcings; track item.id){
                 <app-opportunity-details-card-info-item
                   icon="icon-check-circle"
-                  label="{{ item.keyActivityFormatted }}"
+                  [label]="formatLocalizationActivityDisplay(item.keyActivityFormatted)"
                 />
                 }@empty {
                 <p class="text-md text-gray-600 mb-2">-</p>
@@ -194,7 +188,7 @@
                 @for(item of opportunitiesStore.details()?.manufacturings; track item.id){
                 <app-opportunity-details-card-info-item
                   icon="icon-check-circle"
-                  label="{{ item.keyActivityFormatted }}"
+                  [label]="formatLocalizationActivityDisplay(item.keyActivityFormatted)"
                 />
                 }@empty {
                 <p class="text-md text-gray-600 mb-2">-</p>
@@ -212,7 +206,7 @@
                 @for(item of opportunitiesStore.details()?.assemblyTestings; track item.id){
                 <app-opportunity-details-card-info-item
                   icon="icon-check-circle"
-                  label="{{ item.keyActivityFormatted }}"
+                  [label]="formatLocalizationActivityDisplay(item.keyActivityFormatted)"
                 />
                 }@empty {
                 <p class="text-md text-gray-600 mb-2">-</p>
@@ -230,7 +224,7 @@
                 @for(item of opportunitiesStore.details()?.afterSalesServices; track item.id){
                 <app-opportunity-details-card-info-item
                   icon="icon-check-circle"
-                  label="{{ item.keyActivityFormatted }}"
+                  [label]="formatLocalizationActivityDisplay(item.keyActivityFormatted)"
                 />
                 }@empty {
                 <p class="text-md text-gray-600 mb-2">-</p>
