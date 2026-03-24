@@ -15,10 +15,13 @@
 
         <!-- Date & Days -->
         <div>
-          <div class="flex items-center justify-end text-xs text-gray-700 whitespace-nowrap">
-            <i class="icon-clock text-gray-400 px-1"></i>
+          <div
+            class="flex items-center justify-end text-xs text-gray-700 whitespace-nowrap gap-1"
+            [class.flex-row-reverse]="directionClass() === 'rtl'"
+          >
+            <i class="icon-clock text-gray-400"></i>
             <span>
-              {{ item.item.timestamp+'Z' | localizedDate:'EEEE, MMMM d • h:mm a' }}
+              {{ item.item.timestamp+'Z' | localizedDate:(directionClass() === 'rtl' ? 'EEEE، d MMMM • h:mm a' : 'EEEE, MMMM d • h:mm a') }}
             </span>
           </div>
 
