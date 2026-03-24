@@ -30,6 +30,7 @@ import { BaseTagComponent } from 'src/app/shared/components/base-components/base
 import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ERoutes } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-plans-list',
@@ -64,6 +65,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class PlansList extends PlanDashboardBase implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private hasOpenedWizardFromQueryParams = false;
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
   productLocalizationPlanWizardVisibility = signal(false);
@@ -156,11 +158,58 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     });
   }
   ngOnInit(): void {
+
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
         this.investorName.set(params["investorName"]);
+        this.handleOpenWizardFromQueryParams(params);
 
       })
+  }
+
+  getPlanDetailsUrl(plan: IPlanRecord): string {
+    return this.router.serializeUrl(
+      this.router.createUrlTree([ERoutes.plans], {
+        queryParams: {
+          wizardMode: 'view',
+          wizardPlanId: plan.id,
+          wizardPlanType: plan.planType,
+          wizardPlanStatus: plan.status,
+        },
+      })
+    );
+  }
+
+  private handleOpenWizardFromQueryParams(params: Record<string, unknown>) {
+    if (this.hasOpenedWizardFromQueryParams) return;
+
+    const wizardMode = params['wizardMode'];
+    const wizardPlanId = params['wizardPlanId'];
+    const wizardPlanType = Number(params['wizardPlanType']);
+    const wizardPlanStatus = params['wizardPlanStatus'];
+
+    if (wizardMode !== 'view' || typeof wizardPlanId !== 'string' || !wizardPlanId) return;
+
+    const isProductPlan = wizardPlanType === EOpportunityType.PRODUCT;
+    const isServicePlan = wizardPlanType === EOpportunityType.SERVICES;
+
+    if (!isProductPlan && !isServicePlan) return;
+
+    this.hasOpenedWizardFromQueryParams = true;
+
+    this.planStore.setWizardMode('view');
+    this.planStore.setSelectedPlanId(wizardPlanId);
+
+    if (wizardPlanStatus !== null && wizardPlanStatus !== undefined && wizardPlanStatus !== '') {
+      this.planStore.setPlanStatus(Number(wizardPlanStatus));
+    }
+
+    if (isProductPlan) {
+      this.productLocalizationPlanWizardVisibility.set(true);
+      return;
+    }
+
+    this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
   createNewPlan() {

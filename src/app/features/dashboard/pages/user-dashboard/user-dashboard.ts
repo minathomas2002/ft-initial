@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
@@ -32,6 +32,7 @@ import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-too
 import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -79,6 +80,8 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   isDeleteMode = signal<boolean>(false);
   planItem = signal<IPlanRecord | null>(null);
   selectedPlan = signal<IPlanRecord | null>(null);
+  hasOpenedWizardFromQueryParams = false;
+
   //#endregion
 
   //#region Enums
@@ -95,6 +98,10 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
 
   private readonly internalUsersFilterService = inject(InternalUsersDashboardPlansFilterService);
   private readonly investorFilterService = inject(DashboardPlansFilterService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+
+
   //#endregion
 
   //#region Computed signals for role detection (isInternalUser excludes ADMIN for dashboard)
@@ -178,9 +185,11 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   }
 
   ngOnInit(): void {
-    // Initial load is handled by filter components (InternalUsersDashboardPlansFilter via
-    // listenToQueryParamChanges, InvestorDashboardPlansFilter via its ngOnInit) to avoid
-    // duplicate get-internal-dashboard-plans / get-investor-dashboard-plans API calls.
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+        this.handleOpenWizardFromQueryParams(params);
+
+      })
   }
 
   //#region Plan type label
@@ -197,7 +206,51 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
 
     return '';
   }
-  //#endregion
+
+  getPlanDetailsUrl(plan: IPlanRecord): string {
+    return this.router.serializeUrl(
+      this.router.createUrlTree([ERoutes.dashboard], {
+        queryParams: {
+          wizardMode: 'view',
+          wizardPlanId: plan.id,
+          wizardPlanType: plan.planType,
+          wizardPlanStatus: plan.status,
+        },
+      })
+    );
+  }
+
+  private handleOpenWizardFromQueryParams(params: Record<string, unknown>) {
+    if (this.hasOpenedWizardFromQueryParams) return;
+
+    const wizardMode = params['wizardMode'];
+    const wizardPlanId = params['wizardPlanId'];
+    const wizardPlanType = Number(params['wizardPlanType']);
+    const wizardPlanStatus = params['wizardPlanStatus'];
+
+    if (wizardMode !== 'view' || typeof wizardPlanId !== 'string' || !wizardPlanId) return;
+
+    const isProductPlan = wizardPlanType === EOpportunityType.PRODUCT;
+    const isServicePlan = wizardPlanType === EOpportunityType.SERVICES;
+
+    if (!isProductPlan && !isServicePlan) return;
+
+    this.hasOpenedWizardFromQueryParams = true;
+
+    this.planStore.setWizardMode('view');
+    this.planStore.setSelectedPlanId(wizardPlanId);
+
+    if (wizardPlanStatus !== null && wizardPlanStatus !== undefined && wizardPlanStatus !== '') {
+      this.planStore.setPlanStatus(Number(wizardPlanStatus));
+    }
+
+    if (isProductPlan) {
+      this.productLocalizationPlanWizardVisibility.set(true);
+      return;
+    }
+
+    this.serviceLocalizationPlanWizardVisibility.set(true);
+  }
 
   //#region Actions
   onViewDetails(plan: IPlanRecord) {

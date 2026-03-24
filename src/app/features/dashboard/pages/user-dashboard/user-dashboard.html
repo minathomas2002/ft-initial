@@ -85,7 +85,14 @@
           let-item="item"
         >
             <td>
-              {{ item.planCode }}
+              <a
+                [href]="getPlanDetailsUrl(item)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-[#4767A5] font-normal underline hover:text-[#3b5688] cursor-pointer"
+              >
+                {{ item.planCode }}
+              </a>
             </td>
             @if (isInternalUser()) {
             <td>
