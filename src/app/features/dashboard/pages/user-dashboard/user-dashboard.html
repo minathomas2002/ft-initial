@@ -84,47 +84,47 @@
           #itemsTemplate
           let-item="item"
         >
-            <td>
-              {{ item.planCode }}
-            </td>
-            @if (isInternalUser()) {
-            <td>
-              <p
-                class="text-sm text-gray-900 font-medium max-w-[25ch]"
-                [appTruncateTooltip]="item.investorName ?? '-'"
-                [maxChars]="20"
-              >{{ item.investorName ?? '-' }}</p>
-            </td>
-            }
-            <td>
-              <p
-                class="text-sm text-gray-900 font-medium max-w-[25ch]"
-                [appTruncateTooltip]="item.title"
-                [maxChars]="20"
-              >
-                {{ item.title }}</p>
-            </td>
-            <td>
-              <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
-            </td>
-            <td>{{ item.submissionDate | localizedDate : 'dd MMM yyyy' }}</td>
-            @if (isManager()) {
-            <td>
-              <p
-                class="text-sm text-gray-900 font-medium max-w-[25ch]"
-                [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)"
-                [maxChars]="20"
-              >
-                {{ getAssigneeName(item.assignedEmployee) }}
-              </p>
-            </td>
-            }
-            <td>
-              @if (isInvestor()) {
-              @if(item.status == EInvestorPlanStatus.PENDING) {
-              <span
-                class="text-sm font-medium"
-                [ngClass]="
+          <td>
+            {{ item.planCode }}
+          </td>
+          @if (isInternalUser()) {
+          <td>
+            <p
+              class="text-sm text-gray-900 font-medium max-w-[25ch]"
+              [appTruncateTooltip]="item.investorName ?? '-'"
+              [maxChars]="20"
+            >{{ item.investorName ?? '-' }}</p>
+          </td>
+          }
+          <td>
+            <p
+              class="text-sm text-gray-900 font-medium max-w-[25ch]"
+              [appTruncateTooltip]="item.title"
+              [maxChars]="20"
+            >
+              {{ item.title }}</p>
+          </td>
+          <td>
+            <span class="text-sm text-gray-600">{{ getPlanTypeLabel(item.planType) }}</span>
+          </td>
+          <td>{{ item.submissionDate | localizedDate : 'dd MMM yyyy' }}</td>
+          @if (isManager()) {
+          <td>
+            <p
+              class="text-sm text-gray-900 font-medium max-w-[25ch]"
+              [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)"
+              [maxChars]="20"
+            >
+              {{ getAssigneeName(item.assignedEmployee) }}
+            </p>
+          </td>
+          }
+          <td>
+            @if (isInvestor()) {
+            @if(item.status == EInvestorPlanStatus.PENDING) {
+            <span
+              class="text-sm font-medium"
+              [ngClass]="
                             item.slaCountDown > 5
                               ? 'text-green-500'
                               : item.slaCountDown > 0
@@ -133,17 +133,17 @@
                               ? ''
                               : 'text-red-600'
                           "
-              >
-                {{ item.slaCountDown | slaCountdownNoun }}
-              </span>
-              } @else {
-              <span class="text-sm font-medium text-center">-</span>
-              }
-              } @else {
-              @if(item.status !== EInternalUserPlanStatus.UNASSIGNED) {
-              <span
-                class="text-sm font-medium"
-                [ngClass]="
+            >
+              {{ item.slaCountDown | slaCountdownNoun }}
+            </span>
+            } @else {
+            <span class="text-sm font-medium text-center">-</span>
+            }
+            } @else {
+            @if(item.status !== EInternalUserPlanStatus.UNASSIGNED) {
+            <span
+              class="text-sm font-medium"
+              [ngClass]="
                           item.slaCountDown > 5
                             ? 'text-green-500'
                             : item.slaCountDown > 0
@@ -152,37 +152,37 @@
                             ? ''
                             : 'text-red-600'
                           "
-              >
-                {{ item.slaCountDown | slaCountdownNoun }}
-              </span>
-              } @else {
-              <span class="text-sm font-medium">-</span>
-              }
-              }
-            </td>
-            <td>
-              <app-base-tag
-                [value]="getStatusBadge(item.status).label"
-                [color]="getStatusBadge(item.status).color"
-                [maxChars]="25"
-              ></app-base-tag>
-            </td>
-            <td>
-              <app-dashboard-plan-action-menu
-                [actions]="item.actions"
-                [plan]="item"
-                (onViewDetails)="onViewDetails($event)"
-                (onViewOpportunityDetails)="onViewOpportunityDetails($event)"
-                (onEdit)="onEdit($event)"
-                (onDownload)="onDownload($event)"
-                (onViewTimeLine)="onViewTimeline($event)"
-                (onAssignToEmployee)="onAssignToEmployee($event)"
-                (onReAssign)="onReAssign($event)"
-                (onInternalReview)="onReview($event)"
-                (onResubmitted)="onResubmitted($event)"
-                (onDelete)="onDelete($event)"
-              />
-            </td>
+            >
+              {{ item.slaCountDown | slaCountdownNoun }}
+            </span>
+            } @else {
+            <span class="text-sm font-medium">-</span>
+            }
+            }
+          </td>
+          <td>
+            <app-base-tag
+              [value]="getStatusBadge(item.status).label"
+              [color]="getStatusBadge(item.status).color"
+              [maxChars]="27"
+            ></app-base-tag>
+          </td>
+          <td>
+            <app-dashboard-plan-action-menu
+              [actions]="item.actions"
+              [plan]="item"
+              (onViewDetails)="onViewDetails($event)"
+              (onViewOpportunityDetails)="onViewOpportunityDetails($event)"
+              (onEdit)="onEdit($event)"
+              (onDownload)="onDownload($event)"
+              (onViewTimeLine)="onViewTimeline($event)"
+              (onAssignToEmployee)="onAssignToEmployee($event)"
+              (onReAssign)="onReAssign($event)"
+              (onInternalReview)="onReview($event)"
+              (onResubmitted)="onResubmitted($event)"
+              (onDelete)="onDelete($event)"
+            />
+          </td>
         </ng-template>
       </app-data-table>
       }
