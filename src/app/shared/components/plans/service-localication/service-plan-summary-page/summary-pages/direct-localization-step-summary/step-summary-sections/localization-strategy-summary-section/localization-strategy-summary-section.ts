@@ -32,17 +32,17 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
   }
 
   private formatLocalizationApproach(value: unknown): string | null {
-    return this.mapOptionName(this.planStore.localizationApproachOptions(), value);
+    return this.mapOptionName(this.planStore.localizationApproachOptionsTranslated(), value);
   }
 
   private formatLocation(value: unknown): string | null {
-    return this.mapOptionName(this.planStore.locationOptions(), value);
+    return this.mapOptionName(this.planStore.locationOptionsTranslated(), value);
   }
 
   private formatYesNo(value: unknown): string | null {
     if (value === true || value === 'true') return this.i18n.translate('common.yes');
     if (value === false || value === 'false') return this.i18n.translate('common.no');
-    return this.mapOptionName(this.planStore.yesNoOptions(), value);
+    return this.mapOptionName(this.planStore.yesNoOptionsTranslated(), value);
   }
 
   localizationStrategyRows = computed(() => {
@@ -124,7 +124,7 @@ export class LocalizationStrategySummarySection extends SummarySectionBaseClass 
           : null,
         location: buildField('', currantLocation, beforeLocation, EMaterialsFormControls.location),
         locationOther: shouldShowLocationOther
-          ? buildField(this.i18n.translate('common.descriptionLabel'), currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
+          ? buildField('plans.form.otherLocationDetails', currantLocationOtherRaw, beforeLocationOtherRaw, EMaterialsFormControls.locationOtherDetails)
           : null,
         capexRequired: buildField('', currantCapex != null ? String(currantCapex) : null, beforeCapex != null ? String(beforeCapex) : null, EMaterialsFormControls.capexRequired),
         supervisionOversight: buildField('', currantSupervision, beforeSupervision, EMaterialsFormControls.supervisionOversightByGovernmentEntity),
