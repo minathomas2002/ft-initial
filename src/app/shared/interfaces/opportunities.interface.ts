@@ -53,6 +53,7 @@ export interface IOpportunityDetails {
   title: string;
   shortDescription: string;
   opportunityType: EOpportunityType;
+  numberOfPlans: number;
   opportunityCategory: string;
   spendSAR: number;
   minQuantity: number;

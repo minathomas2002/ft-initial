@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { IOpportunityDetails } from 'src/app/shared/interfaces';
 import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.utils';
 
 @Component({
   selector: 'app-opportunity-audit-details',
@@ -11,4 +13,7 @@ import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
 })
 export class OpportunityAuditDetails {
   opportunityDetails = input<IOpportunityDetails | null>();
+  getOpportunityTypeConfig = getOpportunityTypeConfig;
+  opportunitiesStore = inject(OpportunitiesStore);
+
 }

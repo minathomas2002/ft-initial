@@ -1,4 +1,35 @@
-<div class="bg-white border border-gray-200 rounded-lg p-4 my-5">
+<div class="w-full grid grid-cols-12 gap-4 bg-[#F0F9FF] px-4 py-2 rounded-lg mt-8">
+  <div class="col-span-3 flex items-center gap-2">
+    <h1 class="font-normal text-[#606675] p-0 m-0">{{'opportunity.list.opportunityType'| translate}}</h1>
+    <p class="text-[#0083DB] font-medium p-0 m-0 bg-[#E0F2FE] py-1 px-3 rounded-lg">
+      @if(opportunityDetails()?.opportunityType) {
+      {{ getOpportunityTypeConfig(opportunityDetails()?.opportunityType!).label | translate }}
+      } @else {
+      ___
+      }
+    </p>
+  </div>
+
+  <div class="col-span-3 flex items-center gap-2">
+    <h1 class="font-normal text-[#606675] p-0 m-0">{{'opportunity.list.numberOfPlans'| translate}}</h1>
+    <p class="text-[#0083DB] font-medium p-0 m-0 bg-[#E0F2FE] py-1 px-3 rounded-lg">{{ opportunityDetails()?.numberOfPlans ?? '___' }}</p>
+  </div>
+
+  <div class="col-span-5 flex items-center gap-2">
+    <h1 class="font-normal text-[#606675] p-0 m-0">{{'opportunity.list.applicationPeriod'| translate}}</h1>
+    @if(opportunityDetails()?.startDate && opportunityDetails()?.endDate) {
+    <div class="flex items-center gap-1 text-[#0083DB] bg-[#E0F2FE] py-1 px-3 font-medium rounded-lg">
+      <span>{{ opportunityDetails()?.startDate | localizedDate : 'dd MMM yyyy' }}</span>
+      <span>-</span>
+      <span>{{ opportunityDetails()?.endDate | localizedDate : 'dd MMM yyyy' }}</span>
+    </div>
+    } @else {
+    <p class="text-[#0083DB] font-medium p-0 m-0">___</p>
+    }
+  </div>
+</div>
+
+<div class="bg-white border border-gray-200 rounded-lg p-4 mb-5">
   <div class="grid grid-cols-1 md:grid-cols-4">
 
     <div class="px-4 md:border-r border-gray-200">
