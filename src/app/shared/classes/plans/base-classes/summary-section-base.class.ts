@@ -17,6 +17,7 @@ export abstract class SummarySectionBaseClass {
   protected readonly i18nService = inject(I18nService);
   protected readonly datePipe = inject(DatePipe);
   protected readonly planStore = inject(PlanStore);
+
   public readonly sectionFormGroup = input.required<FormGroup>();
   public readonly sectionSummaryFields = input.required<IFieldInformation[]>();
   /** When true (e.g. resubmit mode and employee's own comment page), comment icon is hidden on fields. */
@@ -70,7 +71,9 @@ export abstract class SummarySectionBaseClass {
 
   protected getFormattedDate(dateValue: string): string | null {
     const date = new Date(dateValue);
-    return this.datePipe.transform(date, 'dd MMM yyyy');
+    const language = this.i18nService.currentLanguage();
+    const locale = language === 'ar' ? 'ar-SA' : 'en-US';
+    return this.datePipe.transform(date, 'dd MMM yyyy', undefined, locale);
   }
 
 }
