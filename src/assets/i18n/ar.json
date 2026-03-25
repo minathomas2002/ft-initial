@@ -1184,6 +1184,8 @@
       "enterCompanyHQLocation": "أدخل موقع مقر الشركة",
       "timeRequiredToSetupFactory": "الوقت المطلوب لإعداد المصنع",
       "timeRequiredToSetupFactoryTooltip": "يجب تقديم القيمة بالأشهر.",
+      "month": "شهر",
+      "months": "أشهر",
       "productName": "اسم المنتج",
       "productSpecifications": "مواصفات المنتج",
       "doYouProvideProductToSEC": "هل تقدم حالياً هذا المنتج لشركة الكهرباء؟",

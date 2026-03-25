@@ -387,6 +387,10 @@ export interface IPlanSummaryField {
   hasComment: boolean;
   isResolved: boolean;
   showDifference: boolean;
+  suffix?: string;
+  /** Pluralized unit for beforeValue when showDifference (e.g. month vs months). */
+  beforeSuffix?: string;
+  prefix?: string;
 }
 
 export type AttachmentItem = Attachment & { name?: string; type?: string; size?: number; objectURL?: string; url?: string };
