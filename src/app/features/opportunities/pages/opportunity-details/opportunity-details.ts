@@ -273,42 +273,37 @@ export class OpportunityDetails implements OnInit, OnDestroy {
     return '(' + this.opportunityUnitMapper.getUnitLabel(unit) + ')';
   }
 
+  private normalizeDecimalSeparator(value: string | null | undefined): string | null | undefined {
+    return value?.replace(/[,،٫]/g, '.');
+  }
+
   getSpendSarDisplay(): string | number | null | undefined {
-    const spendSar = this.opportunitiesStore.details()?.spendSAR;
-    if (spendSar == null) return spendSar;
-    return `${this.normalizeDecimalSeparator(String(spendSar))}B`;
+    const value = this.opportunitiesStore.details()?.spendSAR;
+    if (value) {
+      return `${this.normalizeDecimalSeparator(String(value))}B`;
+    }
+    return value;
   }
 
   getMinQuantityDisplay(): string | null | undefined {
-    const value = this.opportunitiesStore.details()?.minQuantityFormatted;
-    if (value == null) return value;
-    return this.normalizeDecimalSeparator(value);
+    return this.normalizeDecimalSeparator(this.opportunitiesStore.details()?.minQuantityFormatted);
   }
 
   getMaxQuantityDisplay(): string | null | undefined {
-    const value = this.opportunitiesStore.details()?.maxQuantityFormatted;
-    if (value == null) return value;
-    return this.normalizeDecimalSeparator(value);
-  }
-
-  formatLocalizationActivityDisplay(value: string | null | undefined): string {
-    if (value == null) return '';
-    return this.normalizeDecimalSeparator(value);
+    return this.normalizeDecimalSeparator(this.opportunitiesStore.details()?.maxQuantityFormatted);
   }
 
   getLocalSuppliersDisplay(): string | null | undefined {
     const value = this.opportunitiesStore.details()?.localSuppliersFormatted;
     if (value == null || value === '0') return value;
-    return `${this.lri}${this.normalizeDecimalSeparator(value)}+${this.pdi}`;
+    const normalized = this.normalizeDecimalSeparator(value);
+    return `${this.lri}${normalized}+${this.pdi}`;
   }
 
   getGlobalSuppliersDisplay(): string | null | undefined {
     const value = this.opportunitiesStore.details()?.globalSuppliersFormatted;
     if (value == null || value === '0') return value;
-    return `${this.lri}${this.normalizeDecimalSeparator(value)}+${this.pdi}`;
-  }
-
-  private normalizeDecimalSeparator(value: string): string {
-    return value.replace(/(\d)[,،](\d)/g, '$1.$2');
+    const normalized = this.normalizeDecimalSeparator(value);
+    return `${this.lri}${normalized}+${this.pdi}`;
   }
 }
