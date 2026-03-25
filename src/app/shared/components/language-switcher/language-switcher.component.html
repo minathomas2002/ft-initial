@@ -1,10 +1,16 @@
-<p-select
-  [ngModel]="currentLanguage()"
-  [options]="languages"
-  optionLabel="label"
-  optionValue="value"
-  (ngModelChange)="onLanguageChange($event)"
-  [style]="{ width: '150px' }"
-  [placeholder]="'common.language' | translate"
+<button
+	type="button"
+	class="language-switcher__pill"
+	(click)="onLanguageChange(otherLanguage())"
+	[attr.aria-label]="ariaLabel()"
 >
-</p-select>
+	<span class="language-switcher__label">{{ otherLanguageOption().label }}</span>
+	<span
+		class="language-switcher__flag"
+		[class.language-switcher__flag--sa]="otherLanguage() === 'ar'"
+		[class.language-switcher__flag--uk]="otherLanguage() === 'en'"
+		aria-hidden="true"
+	>
+		<img [src]="otherLanguageOption().icon" alt="" />
+	</span>
+</button>

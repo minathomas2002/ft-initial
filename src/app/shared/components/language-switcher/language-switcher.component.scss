@@ -2,3 +2,68 @@
 	display: block;
 }
 
+.language-switcher__pill {
+	direction: ltr;
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 16px;
+	background-color: #f8f9fa;
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	font-family: inherit;
+	transition: background-color 0.15s ease, box-shadow 0.15s ease;
+
+	&:hover {
+		background-color: #eef0f3;
+	}
+
+	&:focus-visible {
+		outline: 2px solid #1a4a8e;
+		outline-offset: 2px;
+	}
+}
+
+.language-switcher__label {
+	color: #1a4a8e;
+	font-weight: 700;
+	font-size: 1rem;
+	line-height: 1.25;
+	white-space: nowrap;
+}
+
+.language-switcher__flag {
+	width: 40px;
+	height: 40px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	overflow: hidden;
+
+	img {
+		width: 100%;
+		height: 100%;
+		display: block;
+		object-fit: cover;
+	}
+}
+
+.language-switcher__flag--sa {
+	background-color: #6da04b;
+
+	img {
+		object-fit: contain;
+		padding: 4px;
+	}
+}
+
+.language-switcher__flag--uk {
+	background-color: #1a4a8e;
+
+	img {
+		object-fit: cover;
+	}
+}

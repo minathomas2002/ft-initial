@@ -1,5 +1,6 @@
 {
   "common": {
+    "changeLanguage": "Change Language",
     "invalidDate": "Invalid Date",
     "welcome": "Welcome",
     "hello": "Hello",
