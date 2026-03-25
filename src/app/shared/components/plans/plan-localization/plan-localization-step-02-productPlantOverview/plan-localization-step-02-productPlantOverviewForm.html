@@ -179,9 +179,8 @@
         <p-inputnumber
           fluid
           [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpectedCAPEXInvestment' | translate"
-          mode="currency"
-          currency="SAR"
-          locale="en-SA"
+          mode="decimal"
+          [suffix]="isArabic() ? ' ريال سعودي' : ' SAR'"
           [useGrouping]="true"
           [min]="0"
           [maxlength]="16"

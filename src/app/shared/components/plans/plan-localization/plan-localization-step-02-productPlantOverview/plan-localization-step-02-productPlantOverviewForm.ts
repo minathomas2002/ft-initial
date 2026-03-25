@@ -59,6 +59,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBaseClass {
   override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
+  readonly isArabic = computed(() => this.i18nService.currentLanguage() === 'ar');
 
   pageTitle = input<EPlanPageTitle>(EPlanPageTitle.ProductAndPlantOverview);
 
