@@ -158,12 +158,10 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     });
   }
   ngOnInit(): void {
-
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
         this.investorName.set(params["investorName"]);
         this.handleOpenWizardFromQueryParams(params);
-
       })
   }
 
@@ -194,22 +192,9 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     const isServicePlan = wizardPlanType === EOpportunityType.SERVICES;
 
     if (!isProductPlan && !isServicePlan) return;
-
-    this.hasOpenedWizardFromQueryParams = true;
-
-    this.planStore.setWizardMode('view');
-    this.planStore.setSelectedPlanId(wizardPlanId);
-
-    if (wizardPlanStatus !== null && wizardPlanStatus !== undefined && wizardPlanStatus !== '') {
-      this.planStore.setPlanStatus(Number(wizardPlanStatus));
-    }
-
-    if (isProductPlan) {
-      this.productLocalizationPlanWizardVisibility.set(true);
-      return;
-    }
-
-    this.serviceLocalizationPlanWizardVisibility.set(true);
+    setTimeout(() => {
+      this.onViewDetails({ id: wizardPlanId, status: Number(wizardPlanStatus), planType: wizardPlanType });
+    }, 600);
   }
 
   createNewPlan() {
@@ -254,7 +239,7 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     return planTypeOption?.label ?? '';
   }
 
-  onViewDetails(plan: IPlanRecord) {
+  onViewDetails(plan: { id: string; status: number; planType: EOpportunityType }) {
     // Set mode to view and plan ID
     this.planStore.setWizardMode('view');
     this.planStore.setSelectedPlanId(plan.id);
