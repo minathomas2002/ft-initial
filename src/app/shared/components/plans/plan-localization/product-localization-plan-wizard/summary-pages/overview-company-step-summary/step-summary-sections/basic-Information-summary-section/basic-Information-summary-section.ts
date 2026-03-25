@@ -81,7 +81,7 @@ export class BasicInformationSummarySection extends SummarySectionBaseClass {
           ? EOpportunityType[opportunityType as keyof typeof EOpportunityType]
           : Number(opportunityType);
     if (num !== EOpportunityType.SERVICES && num !== EOpportunityType.PRODUCT) return '-';
-    const key = num === EOpportunityType.SERVICES ? 'opportunity.type.services' : 'opportunity.type.product';
+    const key = num === EOpportunityType.SERVICES ? 'opportunity.type.service' : 'opportunity.type.product';
     return this.i18nService.translate(key);
   }
 }

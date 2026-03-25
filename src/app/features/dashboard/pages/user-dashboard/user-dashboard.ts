@@ -200,7 +200,7 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     }
 
     if (planType === EOpportunityType.SERVICES)
-      return this.i18nService.translate('opportunity.type.services');
+      return this.i18nService.translate('opportunity.type.service');
     if (planType === EOpportunityType.PRODUCT)
       return this.i18nService.translate('opportunity.type.product');
 
