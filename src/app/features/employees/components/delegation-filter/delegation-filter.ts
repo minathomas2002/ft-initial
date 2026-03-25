@@ -19,6 +19,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { DelegationStatusMapper } from '../../classes/delegation-status-mapper';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { BadgeModule } from 'primeng/badge';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-delegation-filter',
@@ -33,6 +34,7 @@ import { BadgeModule } from 'primeng/badge';
     DatePickerModule,
     OverlayBadgeModule,
     BadgeModule,
+    Tooltip
   ],
   templateUrl: './delegation-filter.html',
   styleUrl: './delegation-filter.scss',

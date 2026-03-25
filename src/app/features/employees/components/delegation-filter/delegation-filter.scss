@@ -11,4 +11,11 @@
 	.p-overlaybadge .p-badge {
 		background-color: #EF4444 !important;
 	}
+
+  .plan-search-input {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

@@ -8,8 +8,10 @@
           class="icon-search"
         />
         <input
-          class="w-full"
+          class="w-full plan-search-input"
           type="text"
+          [pTooltip]="'delegation.filter.searchPlaceholder' | translate"
+          [tooltipPosition]="'bottom'"
           pInputText
           [disabled]="disableFilterInputs()"
           [placeholder]="'delegation.filter.searchPlaceholder' | translate"
