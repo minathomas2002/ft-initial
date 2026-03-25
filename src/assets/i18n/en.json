@@ -567,7 +567,7 @@
       "delegation": "Delegation"
     },
     "filter": {
-      "searchPlaceholder": "Search by name or email or ID or phone",
+      "searchPlaceholder": "Search by Name, Email, ID, or Phone Number",
       "roleManagementSearchPlaceholder": "Search by Username, ID, Email",
       "rolePlaceholder": "Role",
       "statusPlaceholder": "Status",
@@ -1113,7 +1113,7 @@
       "tooltipServiceTargetedForLocalization": "Select \"Yes\" if the service is currently targeted for localization; otherwise, select \"No\"",
       "tooltipProprietaryTools": "Mention if any proprietary tools / platforms / systems etc. will be transferred locally as part of localizing the service? If yes, provide details",
       "tooltipSupervisionOversightDirect": "Mention whether the localization of the service is being supervised / overseen by any government entity (if any) (e.g., MoEn, PIF etc.)",
-"tooltipCapexRequired": "Provide details of the CAPEX required (in SAR) to establish local operations.<br>Avoid duplicating CAPEX entries across services; if the same CAPEX applies to multiple services, please indicate it by stating 'included above'",
+      "tooltipCapexRequired": "Provide details of the CAPEX required (in SAR) to establish local operations.<br>Avoid duplicating CAPEX entries across services; if the same CAPEX applies to multiple services, please indicate it by stating 'included above'",
       "numberOfServices": "# of Services",
       "serviceNumber": "Service {{ number }}",
       "supportRequiredFromSECIfAny": "Support Required from SEC (if any)",
@@ -1554,7 +1554,7 @@
       "sendBackToDivisionManagerSuccess": "Plan has been sent back to the division manager successfully.",
       "addComments": "Add Comments",
       "timeline": "Timeline",
-      "departmentManagerApproval":"Department Manager Approval",
+      "departmentManagerApproval": "Department Manager Approval",
       "comments": {
         "addComment": "Add Comment",
         "clarifyFeedback": "Add a comment to clarify your feedback.",
