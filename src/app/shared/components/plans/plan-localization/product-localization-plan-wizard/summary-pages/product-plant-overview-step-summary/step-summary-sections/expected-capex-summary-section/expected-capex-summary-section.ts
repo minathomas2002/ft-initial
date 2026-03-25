@@ -27,7 +27,13 @@ export class ExpectedCapexSummarySection extends SummarySectionBaseClass {
 
   private formatSarCurrency(value: number | null | undefined): string {
     if (value == null || value.toString().trim() === '') return '-';
-    return `${value} SAR`;
+    const language = this.i18nService.currentLanguage();
+    const currencyLabel = language === 'ar' ? 'ريال سعودي' : 'SAR';
+    const formattedValue = new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 0,
+      useGrouping: true,
+    }).format(Number(value));
+    return `${formattedValue} ${currencyLabel}`;
   }
 
   expectedCAPEXInvestmentSummaryField = computed<IPlanSummaryField>(() => {
