@@ -1,4 +1,5 @@
-import { inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IHolidayCreating } from 'src/app/shared/interfaces/ISetting';
 import { dateRangeValidator } from 'src/app/shared/validators/date-range-validator';
@@ -12,7 +13,7 @@ export class AddHolidayFormService {
   private fb = inject(FormBuilder);
 
   static readonly ARABIC_ENGLISH_REGEX =
-  /^\s*[A-Za-z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF-]+(?:\s+[A-Za-z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF-]+)*\s*$/;
+    /^\s*[A-Za-z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF-]+(?:\s+[A-Za-z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF-]+)*\s*$/;
 
 
   /**  declare Strongly-typed form */
@@ -38,17 +39,18 @@ export class AddHolidayFormService {
     ]),
     numberOfDays: this.fb.control<number | null>({ value: null, disabled: true })
   },
-  { validators: dateRangeValidator }
-);
+    { validators: dateRangeValidator }
+  );
   get type() { return this.form.controls.typeId; }
   get name() { return this.form.controls.name; }
   get fromDate() { return this.form.controls.dateFrom; }
   get toDate() { return this.form.controls.dateTo; }
   get numberOfDays() { return this.form.controls.numberOfDays; }
+  private readonly destroyRef = inject(DestroyRef);
 
   patchForm(holiday: IHolidayCreating) {
-   // holiday.dateFrom = new Date(holiday.dateFrom);
-   // holiday.dateTo = new Date(holiday.dateTo);
+    // holiday.dateFrom = new Date(holiday.dateFrom);
+    // holiday.dateTo = new Date(holiday.dateTo);
     this.form.patchValue({
       name: holiday.name,
       dateFrom: new Date(holiday.dateFrom),
@@ -57,87 +59,65 @@ export class AddHolidayFormService {
     });
     this.fromDate.setValue(new Date(holiday.dateFrom));
     this.toDate.setValue(new Date(holiday.dateTo));
-    //const numberOfDays = this.getAbsoluteDaysDifference(holiday.dateFrom,holiday.dateTo);
-   // this.numberOfDays.setValue((numberOfDays <0)? 0 : numberOfDays);
+    this.syncNumberOfDays();
   }
 
   ResetFormFields() {
     this.form.reset();
   }
 
-  loadData(){
+  loadData() {
     const payload = {
-        ...this.form.getRawValue(),
-        dateFrom: this.form.controls.dateFrom.value!.toLocaleDateString("en-CA"), //this.formatDateOnly(this.form.controls.dateFrom.value!),
-        dateTo: this.form.controls.dateTo.value!.toLocaleDateString("en-CA") ,
-      };
+      ...this.form.getRawValue(),
+      dateFrom: this.form.controls.dateFrom.value!.toLocaleDateString("en-CA"), //this.formatDateOnly(this.form.controls.dateFrom.value!),
+      dateTo: this.form.controls.dateTo.value!.toLocaleDateString("en-CA"),
+    };
     return payload;
   }
 
-   listenToFormChanges(){
-    // validate date to must be grater or equal from
-    this.fromDate.valueChanges.subscribe(() => {
-      const toDate = this.toDate.value;
-      if(toDate ===null){
-        this.toDate.setValue(this.fromDate.value);
-        this.numberOfDays.setValue(1);
-      }
-      else{
-        const diffDays = this.getAbsoluteDaysDifference(this.fromDate.value!, this.toDate.value!);
-        this.numberOfDays.setValue(diffDays);
-      }
-    });
+  listenToFormChanges() {
+    this.fromDate.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        const from = this.fromDate.value;
+        const to = this.toDate.value;
+        if (from && to === null) {
+          this.toDate.setValue(from, { emitEvent: false });
+        }
+        this.syncNumberOfDays();
+      });
 
-    this.toDate.valueChanges.subscribe(() => {
-      const toDate = this.toDate.value;
-      if(toDate ===null)
-        this.numberOfDays.setValue(1);
-      else{
-        const diffDays = this.getAbsoluteDaysDifference(this.fromDate.value!, this.toDate.value!);
-        
-        this.numberOfDays.setValue((diffDays <0)? 0 : diffDays);
-      }
-    });
+    this.toDate.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.syncNumberOfDays());
   }
 
-  getDaysDifferenceExcludeWeekend(from: Date, to: Date): number {
+  /**
+   * Sets numberOfDays to inclusive calendar days between dateFrom and dateTo (same day = 1).
+   * When either date is missing or range is invalid (to before from), uses null or 0 respectively.
+   */
+  private syncNumberOfDays(): void {
+    const from = this.fromDate.value;
+    const to = this.toDate.value;
     if (!from || !to) {
-    return 0; // or 0 depending on your business rule
-  }
-  const fromDate = new Date(from);
-  const toDate = new Date(to);
-
-  fromDate.setHours(0, 0, 0, 0);
-  toDate.setHours(0, 0, 0, 0);
-
-  const diffTime = Math.abs(toDate.getTime() - fromDate.getTime());
-  return diffTime / (1000 * 60 * 60 * 24) + 1;
-  }
-
-  getAbsoluteDaysDifference(from: Date, to: Date): number {
-  if (!from || !to) {
-    return 0;
-  }
-
-  const start = new Date(from);
-  const end = new Date(to);
-
-  start.setHours(0, 0, 0, 0);
-  end.setHours(0, 0, 0, 0);
-
-  let daysCount = 0;
-  const current = new Date(start);
-
-  while (current <= end) {
-    const day = current.getDay(); 
-    // Friday = 5, Saturday = 6
-    if (day !== 5 && day !== 6) {
-      daysCount++;
+      this.numberOfDays.setValue(null);
+      return;
     }
-    current.setDate(current.getDate() + 1);
+    this.numberOfDays.setValue(this.getCalendarDaysInclusive(from, to));
   }
 
-  return daysCount;
-}
+  /** Inclusive count of calendar days from start through end (normalized to local midnight). */
+  private getCalendarDaysInclusive(from: Date, to: Date): number {
+    const start = new Date(from);
+    const end = new Date(to);
+    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+    const diffMs = end.getTime() - start.getTime();
+    const wholeDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (wholeDays < 0) {
+      return 0;
+    }
+    return wholeDays + 1;
+  }
 
 }

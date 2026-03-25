@@ -14,6 +14,18 @@ import { IPlanSummaryField } from 'src/app/shared/interfaces/plans.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverviewSummarySection extends SummarySectionBaseClass {
+  /** Localized "month" / "months" from a numeric form value (1 → singular, else plural). */
+  private monthsSuffixForValue(value: unknown): string {
+    const raw = String(value ?? '').trim().replace(',', '.');
+    const n = parseFloat(raw);
+    if (!Number.isFinite(n)) {
+      return this.i18nService.translate('plans.form.months');
+    }
+    return Math.abs(n) === 1
+      ? this.i18nService.translate('plans.form.month')
+      : this.i18nService.translate('plans.form.months');
+  }
+
   private readonly productNameControl = computed(() => this.getValueFormControl(EMaterialsFormControls.productName));
   private readonly productSpecificationsControl = computed(() => this.getValueFormControl(EMaterialsFormControls.productSpecifications));
   private readonly targetedAnnualPlantCapacityControl = computed(() => this.getValueFormControl(EMaterialsFormControls.targetedAnnualPlantCapacity));
@@ -66,6 +78,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
 
   timeRequiredToSetupFactorySummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
+    this.i18nService.currentLanguage();
     const currantValue = this.timeRequiredToSetupFactoryControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.timeRequiredToSetupFactory ?? '';
     return {
@@ -76,6 +89,8 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
       hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.timeRequiredToSetupFactory),
       isResolved: this.isResolvedField(EMaterialsFormControls.timeRequiredToSetupFactory),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
+      beforeSuffix: this.monthsSuffixForValue(beforeValue),
+      suffix: this.monthsSuffixForValue(currantValue),
     };
   });
 }

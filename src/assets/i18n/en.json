@@ -1145,6 +1145,8 @@
       "enterRegisteredVendorIDWithSEC": "Enter registered vendor ID with SEC",
       "timeRequiredToSetupFactory": "Time Required to Setup Factory",
       "timeRequiredToSetupFactoryTooltip": "The value should be provided in months.",
+      "month": "month",
+      "months": "months",
       "ifAvailable": "(If available)",
       "hasLocalAgentInKSA": "Do you currently have local Agent in KSA?",
       "ifYesMentionLocalAgentDetails": "If \"Yes\", mention the following details of Local Agent",
