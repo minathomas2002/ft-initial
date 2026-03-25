@@ -1504,8 +1504,8 @@
       "assigned": "تم التعيين",
       "reassigned": "معاد تعيينها",
       "submitted": "تم الإرسال",
-      "pendingOnInvestor": "بأنتظار المستثمر",
-      "pendingWithInvestor": "بأنتظار المستثمر",
+      "pendingOnInvestor": "بانتظار المستثمر",
+      "pendingWithInvestor": "بانتظار المستثمر",
       "draft": "قيد الإعداد",
       "returnedByDV": "معاد من مدير القسم",
       "returnedByDEPTManager": "معاد من الإدارة"
