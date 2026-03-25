@@ -31,6 +31,13 @@
             getOpportunityTypeConfig(opportunitiesStore.details()?.opportunityType!);
             <app-base-tag [color]="opportunityTypeConfig.color" [value]="opportunityTypeConfig.label | translate" />
             }
+            @if(opportunitiesStore.details()?.status === EOpportunityStatus.DRAFT){
+            @let statusConfig = getStatusConfig();
+            <app-base-tag [color]="statusConfig.color" [value]="statusConfig.label | translate"></app-base-tag>
+            } @else {
+            @let stateConfig = getStateConfig();
+            <app-base-tag [color]="stateConfig.color" [value]="stateConfig.label | translate"></app-base-tag>
+            }
           </div>
         </div>
         <p class="text-md text-gray-600 break-word mb-1 whitespace-pre-line!">

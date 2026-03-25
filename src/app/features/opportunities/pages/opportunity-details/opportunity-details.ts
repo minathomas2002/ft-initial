@@ -19,7 +19,7 @@ import { getOpportunityTypeConfig } from 'src/app/shared/utils/opportunities.uti
 import { PermissionService } from 'src/app/shared/services/permission/permission-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { EOpportunityAction, EOpportunityQuantity, EOpportunityType, ERoutes, EViewMode } from 'src/app/shared/enums';
+import { EOpportunityAction, EOpportunityQuantity, EOpportunityStatus, EOpportunityType, ERoutes, EViewMode } from 'src/app/shared/enums';
 import { CardsSkeleton } from 'src/app/shared/components/skeletons/cards-skeleton/cards-skeleton';
 import { OpportunityActionsService } from '../../services/opportunity-actions/opportunity-actions-service';
 import { Subject, take, takeUntil } from 'rxjs';
@@ -36,6 +36,7 @@ import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/pl
 import { I18nService } from 'src/app/shared/services/i18n';
 import { opportunityUnitsMapper } from '../../classes/opportunity-units-mapper';
 import { OpportunityAuditDetails } from "./opportunity-audit-details/opportunity-audit-details";
+import { TColors } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-opportunity-details',
@@ -87,6 +88,9 @@ export class OpportunityDetails implements OnInit, OnDestroy {
   private readonly opportunityUnitMapper = new opportunityUnitsMapper(this.i18nService);
   get EOpportunityAction() {
     return EOpportunityAction;
+  }
+  get EOpportunityStatus() {
+    return EOpportunityStatus;
   }
   canApplyOnOpportunity = computed(() => this.permissionService.canApplyOnOpportunityCard());
   direction = computed(() => this.i18nService.currentLanguage() === 'ar' ? 'rtl' : 'ltr');
@@ -291,6 +295,29 @@ export class OpportunityDetails implements OnInit, OnDestroy {
 
   getMaxQuantityDisplay(): string | null | undefined {
     return this.normalizeDecimalSeparator(this.opportunitiesStore.details()?.maxQuantityFormatted);
+  }
+
+  getStatusConfig(): { label: string; color: TColors } {
+    const status = this.opportunitiesStore.details()?.status;
+    if (status === EOpportunityStatus.PUBLISHED) {
+      return { label: 'opportunity.status.published', color: 'green' as const };
+    }
+
+    return { label: 'opportunity.status.draft', color: 'gray' as const };
+  }
+
+  getStateConfig(): { label: string; color: TColors } {
+    const isActive = this.opportunitiesStore.details()?.isActive;
+    if (isActive) {
+      return { label: 'opportunity.state.active', color: 'green' as const };
+    }
+
+    return { label: 'opportunity.state.inactive', color: 'red' as const };
+  }
+
+  shouldShowWarning(): boolean {
+    const details = this.opportunitiesStore.details();
+    return !!details?.isActive && details.status === EOpportunityStatus.DRAFT;
   }
 
   getLocalSuppliersDisplay(): string | null | undefined {
