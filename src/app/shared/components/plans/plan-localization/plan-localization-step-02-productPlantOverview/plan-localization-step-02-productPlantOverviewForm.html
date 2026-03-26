@@ -178,21 +178,22 @@
           label: 'plans.form.expectedCAPEXInvestment'
         })"
       >
-        <p-inputnumber
-          fluid
-          [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpectedCAPEXInvestment' | translate"
-          mode="decimal"
-          [suffix]="isArabic() ? ' ريال سعودي' : ' SAR'"
-          [useGrouping]="true"
-          [min]="0"
-          [maxlength]="16"
-          [max]="9999999999999999"
-          [minFractionDigits]="0"
-          [maxFractionDigits]="0"
-          [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.expectedCAPEXInvestment])"
-          [appConditionalColorClass]="highlightInput('expectedCAPEXInvestment')"
-          [color]="selectedInputColor()"
-        />
+        <p-inputgroup class="w-full md:w-1/2!">
+          <p-inputnumber
+            [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterExpectedCAPEXInvestment' | translate"
+            mode="decimal"
+            [useGrouping]="true"
+            [min]="0"
+            [maxlength]="16"
+            [max]="9999999999999999"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="0"
+            [formControl]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.expectedCAPEXInvestment])"
+            [appConditionalColorClass]="highlightInput('expectedCAPEXInvestment')"
+            [color]="selectedInputColor()"
+          />
+          <p-inputgroup-addon class="sar">$</p-inputgroup-addon>
+        </p-inputgroup>
       </app-group-input-with-checkbox>
       <app-base-error-messages
         [control]="getValueControl(expectedCAPEXInvestmentFormGroupControls[EMaterialsFormControls.expectedCAPEXInvestment])"

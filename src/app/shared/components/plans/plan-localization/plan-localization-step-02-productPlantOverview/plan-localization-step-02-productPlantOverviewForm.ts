@@ -26,6 +26,8 @@ import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
   selector: 'app-plan-localization-step-02-product-plant-overview-form',
@@ -41,6 +43,8 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
     BaseErrorMessages,
     TextareaModule,
     TooltipModule,
+    InputGroupModule,
+    InputGroupAddonModule,
     InputNumberModule,
     BaseErrorMessages,
     BaseLabelComponent,
