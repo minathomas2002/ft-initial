@@ -41,6 +41,20 @@
         />
       </div>
       <div class="flex flex-col gap-2 flex-1">
+        <app-base-label [title]="'plans.table.opportunityType' | translate" />
+        <input
+          type="text"
+          pInputText
+          fluid
+          [value]="'plans.filter.service' | translate"
+          readonly
+          disabled
+          class="text-gray-400"
+        />
+      </div>
+    </div>
+    <div class="flex flex-col gap-2 md:w-1/2">
+      <div class="flex flex-col gap-2 flex-1">
         <app-base-label [title]="'plans.form.submissionDate' | translate" />
         <app-group-input-with-checkbox
           [showCheckbox]="showCheckbox()"

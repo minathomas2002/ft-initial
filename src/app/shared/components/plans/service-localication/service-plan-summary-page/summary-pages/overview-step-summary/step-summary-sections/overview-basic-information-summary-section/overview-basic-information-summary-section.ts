@@ -36,6 +36,20 @@ export class OverviewBasicInformationSummarySection extends SummarySectionBaseCl
     };
   });
 
+  opportunityTypeSummaryField = computed<IPlanSummaryField>(() => {
+    this.doRefresh();
+    this.i18n.currentLanguage();
+    return {
+      label: this.i18n.translate('plans.table.opportunityType'),
+      beforeValue: '',
+      currantValue: this.i18n.translate('plans.filter.service'),
+      hasError: false,
+      hasComment: false,
+      isResolved: false,
+      showDifference: false,
+    };
+  });
+
   submissionDateSummaryField = computed<IPlanSummaryField>(() => {
     this.doRefresh();
     this.i18n.currentLanguage();

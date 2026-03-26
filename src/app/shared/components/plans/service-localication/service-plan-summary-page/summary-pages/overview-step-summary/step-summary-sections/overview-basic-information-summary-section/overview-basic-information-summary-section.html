@@ -2,6 +2,9 @@
   <h3 class="plans-summary-subsection-title">{{ 'plans.form.basicInformation' | translate }}</h3>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <app-plan-summary-flied [planSummaryField]="opportunitySummaryField()" />
+    <app-plan-summary-flied [planSummaryField]="opportunityTypeSummaryField()" />
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <app-plan-summary-flied [planSummaryField]="submissionDateSummaryField()" />
   </div>
 </div>
