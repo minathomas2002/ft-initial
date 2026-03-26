@@ -147,7 +147,7 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     }
 
     baseHeaders.push(
-      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: false, sortingKey: 'slaCountDown' },
+      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
       { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
       { label: this.i18nService.translate('plans.table.actions'), isSortable: false });
 
@@ -188,7 +188,6 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
         this.handleOpenWizardFromQueryParams(params);
-
       })
   }
 
@@ -234,26 +233,13 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     const isServicePlan = wizardPlanType === EOpportunityType.SERVICES;
 
     if (!isProductPlan && !isServicePlan) return;
-
-    this.hasOpenedWizardFromQueryParams = true;
-
-    this.planStore.setWizardMode('view');
-    this.planStore.setSelectedPlanId(wizardPlanId);
-
-    if (wizardPlanStatus !== null && wizardPlanStatus !== undefined && wizardPlanStatus !== '') {
-      this.planStore.setPlanStatus(Number(wizardPlanStatus));
-    }
-
-    if (isProductPlan) {
-      this.productLocalizationPlanWizardVisibility.set(true);
-      return;
-    }
-
-    this.serviceLocalizationPlanWizardVisibility.set(true);
+    setTimeout(() => {
+      this.onViewDetails({ id: wizardPlanId, status: Number(wizardPlanStatus), planType: wizardPlanType });
+    }, 600);
   }
 
   //#region Actions
-  onViewDetails(plan: IPlanRecord) {
+  onViewDetails(plan: { id: string; status: number; planType: EOpportunityType }) {
     this.planStore.setWizardMode('view');
     this.planStore.setSelectedPlanId(plan.id);
     this.planStore.setPlanStatus(plan.status);

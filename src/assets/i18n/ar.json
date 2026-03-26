@@ -1,5 +1,6 @@
 {
   "common": {
+    "changeLanguage": "تغيير اللغة",
     "invalidDate": "تاريخ غير صالح",
     "welcome": "مرحباً",
     "hello": "مرحبا",
