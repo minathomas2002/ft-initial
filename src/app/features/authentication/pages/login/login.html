@@ -1,5 +1,4 @@
 @if (isSecInternal() && windowsLoginLoader()) {
-<div class="pt-10">
   <div class="flex flex-col gap-3">
     <p-skeleton
       width="14rem"
@@ -41,9 +40,7 @@
       height="2.75rem"
     ></p-skeleton>
   </div>
-</div>
 } @else if(!isFakeDev()){
-<div class="pt-10">
   <div class="flex flex-col gap-3">
     <h1 class="text-3xl font-semibold text-gray-900">{{ 'auth.login.title' | translate }}</h1>
     <!-- TODO: set color -->
@@ -131,7 +128,6 @@
       }
     </form>
   </div>
-</div>
 }@else {
 <!-- fake login form -->
 <div class="w-full my-10">
