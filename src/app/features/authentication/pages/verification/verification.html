@@ -1,9 +1,8 @@
-<div class="pt-10 px-10 w-full min-h-[75vh] flex flex-col gap-3">
+<div class="pt-10 w-full min-h-[75vh] flex flex-col gap-3">
 
   <div class="flex flex-col gap-3">
     <!-- Success Icon -->
-    <div
-      class="p-[14px] w-[40px] h-[40px] rounded-xl bg-warning-50 flex border border-gray-300 items-center justify-center">
+    <div class="p-[14px] w-[40px] h-[40px] rounded-xl bg-warning-50 flex border border-gray-300 items-center justify-center">
       <i class="icon-check-circle text-gray-700 text-xl"></i>
     </div>
 
@@ -11,13 +10,22 @@
     <p class="text-gray-600">{{ 'auth.verification.subtitle' | translate }}</p>
 
     <div class="text-sm text-gray-700">
-      <app-reset-button [title]="'auth.verification.didntReceiveEmail' | translate"
-        [buttonLabel]="'auth.verification.clickToResend' | translate" [isLoading]="isButtonLoading()"
-        [successToken]="resendSuccessToken" (resend)="resendVerificationEmail()" />
+      <app-reset-button
+        [title]="'auth.verification.didntReceiveEmail' | translate"
+        [buttonLabel]="'auth.verification.clickToResend' | translate"
+        [isLoading]="isButtonLoading()"
+        [successToken]="resendSuccessToken"
+        (resend)="resendVerificationEmail()"
+      />
     </div>
   </div>
 
-  <p-button class="flex w-full mt-auto" [label]="'auth.verifyEmail.backToLogin' | translate" fluid severity="primary"
-    (click)="onBackToLogin()"></p-button>
+  <p-button
+    class="flex w-full mt-auto"
+    [label]="'auth.verifyEmail.backToLogin' | translate"
+    fluid
+    severity="primary"
+    (click)="onBackToLogin()"
+  ></p-button>
 
 </div>

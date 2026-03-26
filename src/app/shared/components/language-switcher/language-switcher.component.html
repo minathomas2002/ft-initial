@@ -1,16 +1,58 @@
 <button
-	type="button"
-	class="language-switcher__pill"
-	(click)="onLanguageChange(otherLanguage())"
-	[attr.aria-label]="ariaLabel()"
+  type="button"
+  class="border-0 cursor-pointer"
+  [class]="triggerClass()"
+  (click)="toggleLanguagePopover($event)"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-expanded]="panelOpen()"
+  aria-haspopup="listbox"
 >
-	<span class="language-switcher__label">{{ otherLanguageOption().label }}</span>
-	<span
-		class="language-switcher__flag"
-		[class.language-switcher__flag--sa]="otherLanguage() === 'ar'"
-		[class.language-switcher__flag--uk]="otherLanguage() === 'en'"
-		aria-hidden="true"
-	>
-		<img [src]="otherLanguageOption().icon" alt="" />
-	</span>
+  <img
+    class="language-switcher__globe shrink-0"
+    src="assets/images/globe.svg"
+    alt=""
+    aria-hidden="true"
+  />
+  <span class="leading-none">{{ currentOption().shortLabel }}</span>
+  <i
+    class="icon-chevron-down text-gray-500 text-xs shrink-0 transition-transform"
+    [class.rotate-180]="panelOpen()"
+    aria-hidden="true"
+  ></i>
 </button>
+
+<p-popover
+  #languagePopover
+  appendTo="body"
+  [dismissable]="true"
+  styleClass="language-switcher-popover border border-gray-200 rounded-xl shadow-lg !p-1 !min-w-[10rem]"
+  (onShow)="onPanelShow()"
+  (onHide)="onPanelHide()"
+>
+  <ul
+    class="m-0 list-none p-0"
+    role="listbox"
+    [attr.aria-label]="ariaLabel()"
+  >
+    @for (lang of languages; track lang.value) {
+    <li role="none">
+      <button
+        type="button"
+        role="option"
+        class="language-switcher__option flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50"
+        [class.bg-gray-100]="currentLanguage() === lang.value"
+        [attr.aria-selected]="currentLanguage() === lang.value"
+        (click)="selectLanguage(lang.value)"
+      >
+        <span class="flex-1">{{ lang.label }}</span>
+        @if (currentLanguage() === lang.value) {
+        <i
+          class="icon-check text-gray-600 text-sm shrink-0"
+          aria-hidden="true"
+        ></i>
+        }
+      </button>
+    </li>
+    }
+  </ul>
+</p-popover>
