@@ -23,7 +23,7 @@ export class LanguageSwitcherComponent {
 	public readonly currentLanguage = this.i18nService.currentLanguage;
 
 	public readonly languages = [
-		{ label: 'English', value: 'en' as SupportedLanguage, icon: 'assets/images/uk.webp' },
+		{ label: 'English', value: 'en' as SupportedLanguage, icon: 'assets/images/uk.svg' },
 		{ label: 'عربي', value: 'ar' as SupportedLanguage, icon: 'assets/images/SA.svg' },
 	];
 
