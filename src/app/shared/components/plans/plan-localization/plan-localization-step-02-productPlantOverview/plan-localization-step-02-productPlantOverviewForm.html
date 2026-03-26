@@ -141,12 +141,14 @@
               label: 'plans.form.timeRequiredToSetupFactory'
             })"
           >
-            <input
-              type="text"
-              pInputText
+            <p-inputnumber
               fluid
-              maxlength="50"
               [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTimeToSetupFactory' | translate"
+              mode="decimal"
+              [min]="0"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="0"
+              [suffix]="isArabic() ? ' شهور' : ' months'"
               [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.timeRequiredToSetupFactory])"
               [appConditionalColorClass]="highlightInput('timeRequiredToSetupFactory')"
               [color]="selectedInputColor()"
