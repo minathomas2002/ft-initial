@@ -39,6 +39,7 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
   });
 
   rows = computed(() => {
+    this.i18nService.currentLanguage();
     this.doRefresh()
     const items = this.itemsArray();
     if (!items || !items.controls.length) return [];
@@ -104,10 +105,21 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
     });
   });
 
-  formatInHouseProcured(value: number | null | undefined): string {
-    if (value == null) return '';
-    const key = EInHouseProcuredType[value as unknown as keyof typeof EInHouseProcuredType];
-    return key != null ? String(key).replace(/([A-Z])/g, ' $1').trim() : String(value);
+  formatInHouseProcured(value: number | string | null | undefined): string {
+    if (value == null || value === '') return '';
+
+    const normalizedValue =
+      typeof value === 'string' && /^\d+$/.test(value.trim()) ? Number(value) : value;
+
+    if (normalizedValue === EInHouseProcuredType.InHouse) {
+      return this.i18nService.translate('plans.options.inHouse');
+    }
+
+    if (normalizedValue === EInHouseProcuredType.Procured) {
+      return this.i18nService.translate('plans.options.procured');
+    }
+
+    return String(value);
   }
 
   formatYearColumnLabel(year: number): string {
