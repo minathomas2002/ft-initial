@@ -24,7 +24,7 @@ export class LanguageSwitcherComponent {
 
 	public readonly languages = [
 		{ label: 'English', value: 'en' as SupportedLanguage, icon: 'assets/images/uk.svg' },
-		{ label: 'عربي', value: 'ar' as SupportedLanguage, icon: 'assets/images/SA.svg' },
+		{ label: 'العربية', value: 'ar' as SupportedLanguage, icon: 'assets/images/SA.svg' },
 	];
 
 	public readonly otherLanguage = computed<SupportedLanguage>(() =>
