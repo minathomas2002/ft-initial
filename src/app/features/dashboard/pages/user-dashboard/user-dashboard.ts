@@ -147,7 +147,7 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
     }
 
     baseHeaders.push(
-      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: false, sortingKey: 'slaCountDown' },
+      { label: this.i18nService.translate('plans.table.slaCountdown'), isSortable: true, sortingKey: 'slaCountDown' },
       { label: this.i18nService.translate('plans.table.currentStatus'), isSortable: false, sortingKey: 'status' },
       { label: this.i18nService.translate('plans.table.actions'), isSortable: false });
 
