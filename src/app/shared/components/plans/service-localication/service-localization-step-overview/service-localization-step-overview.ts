@@ -21,7 +21,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EOpportunityType, EPlanPageTitle } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
@@ -177,6 +177,11 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   serviceProvidedToOptions = this.planStore.serviceProvidedToOptionsTranslated;
   yesNoOptions = this.planStore.yesNoOptionsTranslated;
   localizationMethodologyOptions = this.planStore.localizationMethodologyOptionsTranslated;
+
+  readonly selectedOpportunityType = EOpportunityType.SERVICES;
+  readonly serviceOpportunityTypeOptions = [
+    { id: EOpportunityType.SERVICES, name: 'plans.filter.service' },
+  ];
 
   availableOpportunities = this.planStore.availableOpportunities;
   isLoadingAvailableOpportunities = this.planStore.isLoadingAvailableOpportunities;
