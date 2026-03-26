@@ -27,13 +27,28 @@
               tooltipPosition="top">
               {{ opportunitiesStore.details()?.title }}
             </h2>
-            @if(opportunitiesStore.details()?.opportunityType) { @let opportunityTypeConfig =
-            getOpportunityTypeConfig(opportunitiesStore.details()?.opportunityType!);
-            <app-base-tag [color]="opportunityTypeConfig.color" [value]="opportunityTypeConfig.label | translate" />
-            }
             @if(opportunitiesStore.details()?.status === EOpportunityStatus.DRAFT){
             @let statusConfig = getStatusConfig();
+            @if (shouldShowWarning()) {
+            <div class="relative inline-block">
+              <span [pTooltip]="draftWarningTooltipContent" [tooltipDisabled]="!shouldShowWarning()"
+                tooltipPosition="bottom" [tooltipStyleClass]="'draft-warning-tooltip'">
+                <app-base-tag [color]="statusConfig.color" [value]="statusConfig.label | translate"></app-base-tag>
+              </span>
+
+              <ng-template #draftWarningTooltipContent>
+                <div class="draft-warning-tooltip-content">
+                  <i class="icon-info draft-warning-tooltip-icon"></i>
+                  <span class="p-0 my-0 mx-1 text-[#4A4E5A] font-semibold">{{'opportunity.warning.draftAfterStartDate' |
+                    translate}}</span>
+                </div>
+              </ng-template>
+
+              <span class="absolute top-0 ltr:right-0 rtl:left-0 h-[6px] w-[6px] rounded-full bg-[#FFC90C]"></span>
+            </div>
+            } @else {
             <app-base-tag [color]="statusConfig.color" [value]="statusConfig.label | translate"></app-base-tag>
+            }
             } @else {
             @let stateConfig = getStateConfig();
             <app-base-tag [color]="stateConfig.color" [value]="stateConfig.label | translate"></app-base-tag>
