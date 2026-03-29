@@ -1866,7 +1866,7 @@
     "reassignConfirmMessage": "I confirm that I want to reassign this plan from [{{currentEmployee}}] to [{{newAssignee}}]."
   },
   "WarningMesages": {
-    "deletedOppprtuinity": "This draft plan is no longer valid because the associated opportunity has been deleted. Please delete this plan and submit a new one for an available opportunity."
+    "deletedOppprtuinity": "This draft plan is no longer valid because the associated opportunity has been INACTIVE. Please delete this plan and submit a new one for an available opportunity."
   },
   "contactUs": {
     "title": "Contact Us",

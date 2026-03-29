@@ -1,4 +1,4 @@
-<div class="relative bg-[url('assets/images/3a37d3291647ce37d8c852eddd7c4dff8855ea34.jpg')] bg-size-[250%] bg-left h-full">
+<div class="relative bg-[url('assets/images/company-building.png')] bg-cover bg-center h-full">
   <!-- overlay color with opacity -->
   <div class="flex justify-end items-center p-4">
     <app-language-switcher
@@ -8,16 +8,16 @@
   </div>
 
   <!-- bottom-aligned content -->
-  <div class="absolute bottom-0 left-0 w-full text-white p-20 z-10">
-    <!-- <img
-      src="assets/images/logo.png"
+  <div class="absolute bottom-0 left-0 w-full text-white py-[80px] px-[60px]  z-10">
+    <img
+      src="assets/images/logo-white.svg"
       alt="logo"
-      class="w-15"
+      class="w-[150px]"
       appImageError
-    > -->
-    <div class="flex flex-col gap-4 mt-10">
+    >
+    <div class="flex flex-col gap-4 mt-5">
       <h2 class="text-3xl md:text-4xl lg:text-5xl font-semibold">{{ 'auth.gatewayTitle' | translate }}</h2>
-      <p>{{ 'auth.gatewayDescription' | translate }}</p>
+      <p class="text-lg">{{ 'auth.gatewayDescription' | translate }}</p>
     </div>
   </div>
 </div>

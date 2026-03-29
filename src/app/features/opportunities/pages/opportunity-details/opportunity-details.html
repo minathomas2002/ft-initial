@@ -14,7 +14,7 @@
           (onMoveToDraft)="onAction(EOpportunityAction.MoveToDraft)" (onPublish)="onAction(EOpportunityAction.Publish)"
           (onViewPlans)="onViewPlans()" [hasLabel]="true" />
         } }@else{
-        @if(canApplyOnOpportunity()){
+        @if(canApplyOnOpportunity()|| isAnonymous()){
         <p-button [label]="'opportunity.details.apply' | translate" (click)="onApply()"></p-button>
         }
         }
