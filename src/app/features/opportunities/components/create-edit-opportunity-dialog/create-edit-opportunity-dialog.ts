@@ -21,6 +21,8 @@ import { BaseTagComponent } from 'src/app/shared/components/base-components/base
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { WizardActionFactory } from 'src/app/shared/services/wizard/wizard-action-factory';
 import { IBaseWizardAction } from 'src/app/shared/components/base-components/base-wizard-actions/base-wizard-actions';
+import { ToolbarModule } from 'primeng/toolbar';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-create-edit-opportunity-dialog',
@@ -32,7 +34,9 @@ import { IBaseWizardAction } from 'src/app/shared/components/base-components/bas
     ButtonModule,
     TranslatePipe,
     BaseTagComponent,
-    GeneralConfirmationDialogComponent
+    GeneralConfirmationDialogComponent,
+    ToolbarModule,
+    Tooltip
   ],
   templateUrl: './create-edit-opportunity-dialog.html',
   styleUrl: './create-edit-opportunity-dialog.scss',
@@ -69,6 +73,9 @@ export class CreateEditOpportunityDialog implements OnInit {
   wizardTitle = computed(() => (this.viewMode() === EViewMode.Edit ? this.i18nService.translate('opportunity.wizard.editOpportunity') : this.i18nService.translate('opportunity.wizard.createOpportunity')));
   showConfirmLeaveDialog = signal<boolean>(false);
 
+  shouldShowWarning = computed(() => {
+    return !!this.opportunity()?.isActive && this.opportunity()?.status === EOpportunityStatus.DRAFT;
+  });
   // Total steps computed signal
   totalSteps = computed(() => this.steps().length);
 
