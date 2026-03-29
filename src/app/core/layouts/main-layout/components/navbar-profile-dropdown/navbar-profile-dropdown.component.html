@@ -62,11 +62,11 @@
             shape="circle"
             size="normal"
           />
-          <div class="min-w-0 flex-1 flex flex-col items-start overflow-hidden">
-            <span class="block truncate w-full min-w-0 font-medium text-gray-900 text-start">
+          <div class="flex-1 flex flex-col items-start">
+            <span class="block w-full font-medium text-gray-900 text-start">
               {{ i18nService.currentLanguage() === 'ar' ? option.nameAr : option.nameEn }}
             </span>
-            <span class="block truncate w-full min-w-0 text-sm text-gray-600 text-start">
+            <span class="block w-full text-sm text-gray-600 text-start">
               {{ getRoleLabel(option.role) }}
             </span>
           </div>
