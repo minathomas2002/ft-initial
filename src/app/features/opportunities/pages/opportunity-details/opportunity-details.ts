@@ -333,4 +333,8 @@ export class OpportunityDetails implements OnInit, OnDestroy {
     const normalized = this.normalizeDecimalSeparator(value);
     return `${this.lri}${normalized}+${this.pdi}`;
   }
+
+  isAdminPersona(): boolean {
+    return this.permissionService.canAccessOnOpportunityAdmin();
+  }
 }
