@@ -57,6 +57,16 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 body.rtl .ltr {
   text-align: right;
 }
+
+/* bidi-override on inputs reverses Arabic in ::placeholder in Firefox (override applies to
+   the whole box; ::placeholder cannot escape it). Isolate keeps LTR typing for email/phone
+   without forcing every glyph to LTR. Non-input .ltr (e.g. table cells) keeps bidi-override. */
+input.ltr,
+textarea.ltr,
+.ltr input,
+.ltr textarea {
+  unicode-bidi: isolate;
+}
 .plans-summary-subsection-title {
   position: relative;
   color: #1d1e23;
