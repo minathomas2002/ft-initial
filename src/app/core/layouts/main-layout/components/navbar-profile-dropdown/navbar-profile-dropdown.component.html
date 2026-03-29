@@ -1,6 +1,7 @@
 <button
   #profileTrigger
   (click)="toggleProfilePopover($event)"
+  [class.cursor-pointer]="this.dropdownItems().length > 0"
   class="w-full border-0 bg-transparent text-start rounded-none"
 >
   <div class="items-center md:!flex hidden text-sm">
