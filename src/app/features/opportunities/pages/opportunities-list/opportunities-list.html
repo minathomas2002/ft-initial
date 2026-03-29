@@ -35,10 +35,12 @@
             </ng-container>
             <ng-container ngProjectAs="opportunity-card-actions">
               @if(permissionService.canViewOpportunityPlansNumber()) {
-              <app-opportunity-detail-item
-                [label]="'opportunity.list.numberOfPlans' | translate"
-                [value]="item.numberOfPlans?.toString()"
-              />
+              <div class="flex flex-col gap-2 bg-[#F0F9FF] p-3 border border-[#7CD4FD] rounded-lg">
+                <app-opportunity-detail-item
+                  [label]="'opportunity.list.numberOfPlans' | translate"
+                  [value]="item.numberOfPlans?.toString()"
+                />
+              </div>
               }
               <div class="flex gap-4">
                 @if(item.numberOfPlans > 0 && permissionService.canViewOpportunityPlansNumber()) {
