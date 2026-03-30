@@ -83,7 +83,7 @@ export class AddEmployeeFormService {
       phoneNumber: user.phoneNumber,
     });
 
-    if (isEditMode) {
+    if (isEditMode && !user.isAddedManually) {
       this.job.disable();
     }
   }

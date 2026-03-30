@@ -19,6 +19,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-add-edit-employee-dialog',
@@ -32,7 +33,8 @@ import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.dire
     InputTextModule,
     IconFieldModule,
     InputIconModule,
-    TrimOnBlurDirective
+    TrimOnBlurDirective,
+    Tooltip
   ],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
@@ -86,7 +88,14 @@ export class AddEditEmployeeDialog implements OnInit {
         this.jobIdErrorMessage.set(null);
       }), // Clear error when new value is entered
       switchMap(() => {
-        if (!this.formService.job.value) {
+        const jobId = this.formService.job.value;
+        if (!jobId) {
+          return of(null);
+        }
+        if (this.employeeStore.employeeDetails()?.isAddedManually) {
+          this.formService.form.patchValue({
+            email: jobId + '@se.com.sa',
+          })
           return of(null);
         }
         return this.employeeStore.getEmployeeDateFromHR(this.formService.job.value!).pipe(
@@ -96,7 +105,7 @@ export class AddEditEmployeeDialog implements OnInit {
             this.formService.form.patchValue({
               nameAr: null,
               nameEn: null,
-              email: null,
+              email: jobId + '@se.com.sa',
               phoneNumber: null,
               roleId: null,
             })
@@ -168,6 +177,8 @@ export class AddEditEmployeeDialog implements OnInit {
     const form = this.formService.form;
     const req: IUpdateSystemEmployeeRequest = {
       id: this.SelectedItem()?.id ?? '',
+      userId: form.controls.job.value!,
+      email: form.controls.email.value! ?? '',
       name_Ar: form.controls.nameAr.value!,
       name_En: form.controls.nameEn.value!.trim(),
       phoneNumber: form.controls.phoneNumber.value!,
@@ -205,6 +216,9 @@ export class AddEditEmployeeDialog implements OnInit {
         const employee = res.body;
         if (employee) {
           this.formService.patchForm(employee, this.isEditMode());
+          if (employee.isAddedManually) {
+            this.listenToJobIdChanges();
+          }
         }
       },
     });

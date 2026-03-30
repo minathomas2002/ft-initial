@@ -52,7 +52,7 @@ export interface ISystemEmployeeDetails {
   active: boolean;
   userId: string;
   joinDate: string;
-
+  isAddedManually: boolean;
 }
 
 export interface ICreateSystemEmployeeRequest {
@@ -97,6 +97,8 @@ export interface ISystemEmployeeFilterRequest extends IFilterBase<TSystemEmploye
 
 export interface IUpdateSystemEmployeeRequest {
   id: string;
+  userId: string;
+  email: string;
   name_Ar: string;
   name_En: string;
   phoneNumber: string;

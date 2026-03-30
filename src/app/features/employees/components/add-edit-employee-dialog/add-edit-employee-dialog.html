@@ -14,11 +14,18 @@
   <!-- 
   [isConfirmationDisabled]="formService.form.invalid" -->
   <div class="mb-5">
-    <p class="text-lg font-semibold text-gray-900 mb-1">{{
-      isEditMode()
-      ? ('users.dialog.edit.confirmedit' | translate)
-      : ('users.dialog.add.confirmAdd' | translate)
-      }}</p>
+    <p class="text-lg font-semibold text-gray-900 mb-1">
+      @if(isEditMode()){
+      {{'users.dialog.edit.confirmedit' | translate}} <span class="ms-2">
+        <i
+          class="icon-info"
+          [pTooltip]="'Yon can edit the employee ID for manually added employees only.'"
+          [tooltipStyleClass]="'!max-w-[90%] !w-auto'"
+        ></i></span>
+      }@else{
+      {{'users.dialog.add.confirmAdd' | translate}}
+      }
+    </p>
   </div>
   @if(!roleStore.loading()){
   <div class="grid grid-cols-12 gap-4">
