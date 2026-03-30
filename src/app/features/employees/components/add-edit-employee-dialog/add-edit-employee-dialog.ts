@@ -20,6 +20,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 import { Tooltip } from 'primeng/tooltip';
+import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
 @Component({
   selector: 'app-add-edit-employee-dialog',
@@ -34,7 +35,8 @@ import { Tooltip } from 'primeng/tooltip';
     IconFieldModule,
     InputIconModule,
     TrimOnBlurDirective,
-    Tooltip
+    Tooltip,
+    BaseErrorMessages
   ],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
@@ -59,6 +61,7 @@ export class AddEditEmployeeDialog implements OnInit {
 
 
   userRoles = this.roleStore.filteredRoles;
+  employeeIDRegex = AddEmployeeFormService.EMPLOYEE_ID_REGEX;
 
   ngOnInit() {
     forkJoin(
@@ -103,11 +106,7 @@ export class AddEditEmployeeDialog implements OnInit {
             // Handle error gracefully without crashing
             this.jobIdErrorMessage.set(this.i18nService.translate('users.dialog.add.invalidJobNo'));
             this.formService.form.patchValue({
-              nameAr: null,
-              nameEn: null,
               email: jobId + '@se.com.sa',
-              phoneNumber: null,
-              roleId: null,
             })
             return of(null);
           })

@@ -622,7 +622,8 @@
         "nameEnglishInvalidLength": "English name must be between 3 and 100 characters.",
         "phoneInvalidLength": "Phone number must be between 8 and 15 digits",
         "phoneInvalid": "Phone number must contain digits only.",
-        "invalidJobNo": "Invalid job number. Please enter a valid job number."
+        "invalidJobNo": "Invalid job number. Please enter a valid job number.",
+        "employeeIdInvalid": "Employee ID must be small letters or digits only"
       },
       "edit": {
         "confirmedit": "Edit Employee",

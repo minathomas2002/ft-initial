@@ -41,6 +41,7 @@
           pInputText
           [placeholder]="'users.dialog.add.employeeIdPlaceholder' | translate"
           [formControl]="formService.job"
+          [pattern]="employeeIDRegex"
           [maxlength]="20"
           [minlength]="6"
         />
@@ -54,6 +55,9 @@
       }
       @if(formService.job.hasError('minlength') || formService.job.hasError('maxlength')){
       <app-base-error [message]="'users.dialog.add.employeeIdInvalidLength' | translate" />
+      }
+      @if(formService.job.hasError('pattern')){
+      <app-base-error [message]="'users.dialog.add.employeeIdInvalid' | translate" />
       }
       }
     </div>

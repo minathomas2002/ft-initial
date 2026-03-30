@@ -22,6 +22,10 @@ export class AddEmployeeFormService {
   static readonly PHONE_REGEX =
     /^\+?[0-9]+$/;
 
+  /* small english letters and numbers */
+  static readonly EMPLOYEE_ID_REGEX =
+    /^[a-z0-9]+$/;
+
   private fb = inject(FormBuilder);
 
   /**  declare Strongly-typed form */
@@ -33,7 +37,7 @@ export class AddEmployeeFormService {
     nameEn: FormControl<string | null>;
     phoneNumber: FormControl<string | null>;
   }> = this.fb.group({
-    roleId: this.fb.control<string | null>(null, [Validators.required]),
+    roleId: this.fb.control<string | null>(null, [Validators.required, Validators.pattern(AddEmployeeFormService.EMPLOYEE_ID_REGEX)]),
 
     job: this.fb.control<string | null>(null, [
       Validators.required,
