@@ -1,8 +1,8 @@
 <app-base-dialog
   [(visible)]="dialogVisible"
   icon="icon-user-plus"
-  [confirmLabel]="isEditMode() 
-  ? ('users.dialog.edit.confirmedit' | translate) 
+  [confirmLabel]="isEditMode()
+  ? ('users.dialog.edit.confirmedit' | translate)
   : ('users.dialog.add.confirmAdd' | translate)"
   [confirmButtonClass]="'w-fit'"
   [cancelButtonClass]="'w-fit'"
@@ -11,7 +11,7 @@
   (onClose)="resetForm()"
   [isLoading]="isProcessing()"
 >
-  <!-- 
+  <!--
   [isConfirmationDisabled]="formService.form.invalid" -->
   <div class="mb-5">
     <p class="text-lg font-semibold text-gray-900 mb-1">
@@ -111,6 +111,7 @@
       <app-base-label [title]="'users.dialog.add.email' | translate">
       </app-base-label>
       <input
+        class="ltr"
         [formControl]="formService.email"
         pInputText
         [placeholder]="'users.dialog.add.emailPlaceholder' | translate"
