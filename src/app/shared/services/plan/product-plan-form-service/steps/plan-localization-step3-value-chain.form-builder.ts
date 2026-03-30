@@ -36,15 +36,15 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
       rowId: [null],
       [EMaterialsFormControls.expenseHeader]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.maxLength(100)]],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
       }),
       [EMaterialsFormControls.inHouseOrProcured]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null],
+        [EMaterialsFormControls.value]: [null, [Validators.required]],
       }),
       [EMaterialsFormControls.costPercentage]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null, [Validators.min(0), Validators.max(100)]],
+        [EMaterialsFormControls.value]: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
       }),
     };
 
@@ -62,7 +62,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
     yearControls.forEach(yearControl => {
       itemGroup[yearControl] = this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: [null],
+        [EMaterialsFormControls.value]: [null, [Validators.required]],
       });
     });
 
