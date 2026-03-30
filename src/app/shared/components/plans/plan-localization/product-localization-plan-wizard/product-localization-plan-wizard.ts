@@ -644,11 +644,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           return this.loadPlanData$(currentPlanId).pipe(
             tap((responseBody) => {
               if (responseBody) this.mapPlanDataToForm(responseBody);
-              if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
-                this.opportunitiesStore.getOpportunityLocalizationTablesValidation(this.planStore.productPlanData()?.productPlan.id ?? '')
-                  .pipe(takeUntilDestroyed(this.destroyRef))
-                  .subscribe((validation) => { })
-              }
             })
           );
         }
@@ -854,6 +849,31 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
         opportunityControl.disable({ emitEvent: false });
       }
     }
+
+    // Apply opportunity-based value chain rules immediately so step 3 validity matches loaded data
+    // without opening the value chain step (validators were only run from step 1 / step 3 before).
+    this.syncValueChainValidationAfterPlanLoad(response);
+  }
+
+  /**
+   * Loads localization-table rules for the plan's opportunity and reapplies step 3 validators.
+   */
+  private syncValueChainValidationAfterPlanLoad(response: IProductPlanResponse): void {
+    const opportunityId =
+      response.productPlan?.overviewCompanyInfo?.basicInfo?.opportunityId?.trim() ?? '';
+    if (!opportunityId) {
+      this.productPlanFormService.updateValueChainValidation(null);
+      return;
+    }
+    this.opportunitiesStore
+      .getOpportunityLocalizationTablesValidation(opportunityId)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError(() => of(null))
+      )
+      .subscribe((validation) => {
+        this.productPlanFormService.updateValueChainValidation(validation);
+      });
   }
 
   disableAllForms(): void {

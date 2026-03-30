@@ -163,6 +163,9 @@ export class ProductPlanFormService {
 
   updateValueChainValidation(validation: IOpportunityLocalizationTablesValidationResponse | null): void {
     this._step3Builder.updateValueChainValidation(this._step3FormGroup, validation);
+    // Propagate validity to the step root so subscribers (e.g. wizard step status) refresh;
+    // builder updates use emitEvent: false on child controls.
+    this._step3FormGroup.updateValueAndValidity({ emitEvent: true });
   }
 
   /**
