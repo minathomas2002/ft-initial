@@ -77,7 +77,7 @@ export class TimelineComponent {
   }
 
   get planRejectedActionsEnum() {
-    return [EActionPlanTimeLine.Rejected, EActionPlanTimeLine.DeptRejected, EActionPlanTimeLine.DVRejected, EActionPlanTimeLine.DVRejectionAcknowledged];
+    return [EActionPlanTimeLine.Rejected, EActionPlanTimeLine.DeptRejected, EActionPlanTimeLine.DVRejected, EActionPlanTimeLine.DVRejectionAcknowledged, EActionPlanTimeLine.AutoRejected];
   }
 
   getUserTranslatedRole(roleCode: ERoles): string {
