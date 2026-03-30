@@ -1,14 +1,15 @@
 <div class="flex flex-col min-h-screen w-full">
   <app-impersonation-message />
-  <div class="flex flex-col md:flex-row flex-1 min-w-0">
-  <app-layout-sidebar
-    [isSidebarExpanded]="isSidebarExpanded()"
-    (toggleSidebar)="toggleSidebar()"
-  />
-  <div class="flex-1 min-w-0 bg-gray-50">
-    <app-layout-navbar (toggleDesktopSidebar)="toggleSidebar()" />
-    <app-layout-content />
-    <app-layout-footer />
-  </div>
+  <div class="flex flex-1 min-w-0">
+    <app-layout-sidebar
+      [isSidebarExpanded]="isSidebarExpanded()"
+      (toggleSidebar)="toggleSidebar()"
+      class="hidden md:block"
+    />
+    <div class="flex-1 min-w-0 bg-gray-50">
+      <app-layout-navbar (toggleDesktopSidebar)="toggleSidebar()" />
+      <app-layout-content />
+      <app-layout-footer />
+    </div>
   </div>
 </div>

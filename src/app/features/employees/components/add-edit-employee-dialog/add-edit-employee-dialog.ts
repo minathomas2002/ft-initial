@@ -35,8 +35,7 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
     IconFieldModule,
     InputIconModule,
     TrimOnBlurDirective,
-    Tooltip,
-    BaseErrorMessages
+    Tooltip
   ],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
