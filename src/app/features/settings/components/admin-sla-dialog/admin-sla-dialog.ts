@@ -31,18 +31,15 @@ export class AdminSlaDialog {
   i18nService = inject(I18nService);
   toasterService = inject(ToasterService);
 
-  // Reactive signal to track form invalid state
-  // Merge statusChanges and valueChanges to ensure we catch all validity updates
+  // Reactive signal to track form invalid state (confirm button enabled when false).
+  // Include each control's valueChanges: FormGroup.valueChanges can miss some PrimeNG InputNumber updates.
   isFormInvalid = toSignal(
     merge(
       this.formService.form.statusChanges.pipe(startWith(this.formService.form.status)),
-      this.formService.form.valueChanges.pipe(
-        map(() => this.formService.form.status),
-        startWith(this.formService.form.status)
-      )
-    ).pipe(
-      map(() => this.formService.form.invalid)
-    ),
+      this.formService.form.valueChanges.pipe(startWith(null)),
+      this.formService.form.controls.internalCycle.valueChanges.pipe(startWith(null)),
+      this.formService.form.controls.investorReply.valueChanges.pipe(startWith(null))
+    ).pipe(map(() => this.formService.form.invalid)),
     { initialValue: this.formService.form.invalid }
   );
 
