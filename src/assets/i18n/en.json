@@ -625,7 +625,8 @@
         "invalidJobNo": "Invalid job number. Please enter a valid job number."
       },
       "edit": {
-        "confirmedit": "Edit Employee"
+        "confirmedit": "Edit Employee",
+        "employeeIdTooltip": "You can edit the employee ID for manually added employees only."
       },
       "transferRole": {
         "employeeLabel": "Employee",
