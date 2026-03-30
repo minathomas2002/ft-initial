@@ -8,6 +8,7 @@ import {
   inject,
   signal,
   viewChild,
+  computed,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { BadgeModule } from 'primeng/badge';
@@ -71,6 +72,10 @@ export class NavbarNotificationsComponent implements OnInit, AfterViewInit, OnDe
   get ERoutes() {
     return ERoutes;
   }
+
+  unreadCountMessage = computed(() => {
+    return this.unreadCount() < 100 ? this.unreadCount() : '99+';
+  });
 
   ngOnInit(): void {
     // Start SignalR connection

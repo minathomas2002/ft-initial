@@ -9,11 +9,14 @@
 
   .p-overlaybadge .p-badge {
     background-color: #EF4444 !important;
+    width: 25px !important;
+    height: 25px !important;
+    border-radius: 50% !important;
   }
 
   .p-popover {
     box-shadow: none !important;
-    border-radius: 20px !important;
+    border-radius: 50% !important;
   }
 
   .p-popover-content {
