@@ -865,15 +865,17 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       this.productPlanFormService.updateValueChainValidation(null);
       return;
     }
-    this.opportunitiesStore
-      .getOpportunityLocalizationTablesValidation(opportunityId)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        catchError(() => of(null))
-      )
-      .subscribe((validation) => {
-        this.productPlanFormService.updateValueChainValidation(validation);
-      });
+    if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
+      this.opportunitiesStore
+        .getOpportunityLocalizationTablesValidation(opportunityId)
+        .pipe(
+          takeUntilDestroyed(this.destroyRef),
+          catchError(() => of(null))
+        )
+        .subscribe((validation) => {
+          this.productPlanFormService.updateValueChainValidation(validation);
+        });
+    }
   }
 
   disableAllForms(): void {
