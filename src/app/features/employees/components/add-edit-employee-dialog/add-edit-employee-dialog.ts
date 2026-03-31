@@ -57,10 +57,14 @@ export class AddEditEmployeeDialog implements OnInit {
   isProcessing = this.employeeStore.isProcessing;
   isLoadingDetails = this.employeeStore.isLoadingDetails;
   jobIdErrorMessage = signal<string | null>(null);
+  isHrDataValid = signal<boolean>(false);
 
 
   userRoles = this.roleStore.filteredRoles;
   employeeIDRegex = AddEmployeeFormService.EMPLOYEE_ID_REGEX;
+  isConfirmDisabled = computed(() =>
+    this.formService.form.invalid || (!this.isEditMode() && !this.isHrDataValid())
+  );
 
   ngOnInit() {
     forkJoin(
@@ -88,7 +92,8 @@ export class AddEditEmployeeDialog implements OnInit {
       filter(() => (this.formService.job.value?.length ?? 0) >= 6 && (this.formService.job.value?.length ?? 0) != 0),
       tap(() => {
         this.jobIdErrorMessage.set(null);
-      }), // Clear error when new value is entered
+        this.isHrDataValid.set(false);
+      }), // Clear error and HR status when new value is entered
       switchMap(() => {
         const jobId = this.formService.job.value;
         if (!jobId) {
@@ -104,6 +109,7 @@ export class AddEditEmployeeDialog implements OnInit {
           catchError((error) => {
             // Handle error gracefully without crashing
             this.jobIdErrorMessage.set(this.i18nService.translate('users.dialog.add.invalidJobNo'));
+            this.isHrDataValid.set(false);
             this.formService.form.patchValue({
               email: jobId + '@se.com.sa',
             })
@@ -116,6 +122,7 @@ export class AddEditEmployeeDialog implements OnInit {
       next: (res) => {
         if (res?.body) {
           this.jobIdErrorMessage.set(null); // Clear error on success
+          this.isHrDataValid.set(true);
           this.formService.form.patchValue({
             nameAr: res.body.nameAr,
             nameEn: res.body.nameEn,
@@ -128,7 +135,7 @@ export class AddEditEmployeeDialog implements OnInit {
   }
 
   onConfirm() {
-    // check if create or edit 
+    // check if create or edit
     if (this.isEditMode())
       this.UpdateExistingEmployee();
     else

@@ -22,9 +22,9 @@ export class AddEmployeeFormService {
   static readonly PHONE_REGEX =
     /^\+?[0-9]+$/;
 
-  /* small english letters and numbers */
+  /* small english letters, numbers, and hyphen */
   static readonly EMPLOYEE_ID_REGEX =
-    /^[a-z0-9]+$/;
+    /^[a-z0-9-]+$/;
 
   private fb = inject(FormBuilder);
 
