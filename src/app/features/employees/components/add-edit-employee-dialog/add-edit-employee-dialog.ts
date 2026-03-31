@@ -62,9 +62,7 @@ export class AddEditEmployeeDialog implements OnInit {
 
   userRoles = this.roleStore.filteredRoles;
   employeeIDRegex = AddEmployeeFormService.EMPLOYEE_ID_REGEX;
-  isConfirmDisabled = computed(() =>
-    this.formService.form.invalid || (!this.isEditMode() && !this.isHrDataValid())
-  );
+  isConfirmDisabled = computed(() => this.isHrDataValid());
 
   ngOnInit() {
     forkJoin(
@@ -92,7 +90,6 @@ export class AddEditEmployeeDialog implements OnInit {
       filter(() => (this.formService.job.value?.length ?? 0) >= 6 && (this.formService.job.value?.length ?? 0) != 0),
       tap(() => {
         this.jobIdErrorMessage.set(null);
-        this.isHrDataValid.set(false);
       }), // Clear error and HR status when new value is entered
       switchMap(() => {
         const jobId = this.formService.job.value;

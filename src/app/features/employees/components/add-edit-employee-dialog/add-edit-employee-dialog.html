@@ -6,11 +6,11 @@
   : ('users.dialog.add.confirmAdd' | translate)"
   [confirmButtonClass]="'w-fit'"
   [cancelButtonClass]="'w-fit'"
-  [isConfirmationDisabled]="isConfirmDisabled()"
   (onConfirm)="onConfirm()"
   (onClose)="resetForm()"
   [isLoading]="isProcessing()"
->
+  [isConfirmationDisabled]="!isConfirmDisabled()"
+  >
   <!--
   [isConfirmationDisabled]="formService.form.invalid" -->
   <div class="mb-5">
