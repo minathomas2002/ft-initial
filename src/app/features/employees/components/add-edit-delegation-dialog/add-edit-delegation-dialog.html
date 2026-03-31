@@ -91,6 +91,7 @@
         [minDate]="today"
         [maxDate]="formService.to.value"
         [placeholder]="'delegation.dialog.selectStartDate' | translate"
+        [keepInvalid]="formService.from.disabled"
         appendTo="body"
         fluid
       ></p-datepicker>
