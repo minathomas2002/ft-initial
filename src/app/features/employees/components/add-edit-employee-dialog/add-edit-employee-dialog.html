@@ -10,7 +10,7 @@
   (onClose)="resetForm()"
   [isLoading]="isProcessing()"
   [isConfirmationDisabled]="!isConfirmDisabled()"
-  >
+>
   <!--
   [isConfirmationDisabled]="formService.form.invalid" -->
   <div class="mb-5">
@@ -43,7 +43,7 @@
           [formControl]="formService.job"
           [pattern]="employeeIDRegex"
           [maxlength]="20"
-          [minlength]="6"
+          [minlength]="5"
         />
         @if(isLoadingDetails()){
         <p-inputicon class="spinner" />

@@ -605,7 +605,7 @@
         "employeeId": "الرقم",
         "employeeIdPlaceholder": "أدخل رقم الموظف",
         "employeeIdRequired": "رقم الموظف مطلوب",
-        "employeeIdInvalidLength": "يجب أن يكون رقم الموظف بين 6 و 20 حرفاً",
+        "employeeIdInvalidLength": "يجب أن يكون رقم الموظف بين 5 و 20 حرفاً",
         "job": "رقم الوظيفة",
         "jobLabel": "رقم الوظيفة",
         "enName": "الاسم باللغة الإنجليزية",

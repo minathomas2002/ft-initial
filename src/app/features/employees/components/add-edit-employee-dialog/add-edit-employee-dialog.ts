@@ -87,7 +87,7 @@ export class AddEditEmployeeDialog implements OnInit {
       debounceTime(500),
       distinctUntilChanged(),
       takeUntilDestroyed(this.destroyRef),
-      filter(() => (this.formService.job.value?.length ?? 0) >= 6 && (this.formService.job.value?.length ?? 0) != 0),
+      filter(() => (this.formService.job.value?.length ?? 0) >= 5 && (this.formService.job.value?.length ?? 0) != 0),
       tap(() => {
         this.jobIdErrorMessage.set(null);
       }), // Clear error and HR status when new value is entered

@@ -596,7 +596,7 @@
         "employeeId": "ID",
         "employeeIdPlaceholder": "Enter Employee ID",
         "employeeIdRequired": "Employee ID is required",
-        "employeeIdInvalidLength": "Employee ID must be between 6 and 20 characters",
+        "employeeIdInvalidLength": "Employee ID must be between 5 and 20 characters",
         "enName": "English Name",
         "arName": "Arabic Name",
         "email": "Email",
