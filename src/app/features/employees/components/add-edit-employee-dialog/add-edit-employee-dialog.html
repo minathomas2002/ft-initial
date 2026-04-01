@@ -9,19 +9,14 @@
   (onConfirm)="onConfirm()"
   (onClose)="resetForm()"
   [isLoading]="isProcessing()"
-  [isConfirmationDisabled]="!isConfirmDisabled()"
+  [isConfirmationDisabled]="formService.form.invalid"
 >
   <!--
   [isConfirmationDisabled]="formService.form.invalid" -->
   <div class="mb-5">
     <p class="text-lg font-semibold text-gray-900 mb-1">
       @if(isEditMode()){
-      {{'users.dialog.edit.confirmedit' | translate}} <span class="ms-2">
-        <i
-          class="icon-info"
-          [pTooltip]="'users.dialog.edit.employeeIdTooltip' | translate"
-          [tooltipStyleClass]="'!max-w-[90%] !w-auto'"
-        ></i></span>
+      {{'users.dialog.edit.confirmedit' | translate}}
       }@else{
       {{'users.dialog.add.confirmAdd' | translate}}
       }

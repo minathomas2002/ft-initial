@@ -22,9 +22,9 @@ export class AddEmployeeFormService {
   static readonly PHONE_REGEX =
     /^\+?[0-9]+$/;
 
-  /* small english letters, numbers, and hyphen */
+  /* english letters, numbers, and special characters */
   static readonly EMPLOYEE_ID_REGEX =
-    /^[a-z0-9-]+$/;
+    /^[A-Za-z0-9\p{P}\p{S}]+$/u;
 
   private fb = inject(FormBuilder);
 
@@ -87,7 +87,7 @@ export class AddEmployeeFormService {
       phoneNumber: user.phoneNumber,
     });
 
-    if (isEditMode && !user.isAddedManually) {
+    if (isEditMode) {
       this.job.disable();
     }
   }

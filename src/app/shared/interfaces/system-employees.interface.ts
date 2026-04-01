@@ -52,7 +52,6 @@ export interface ISystemEmployeeDetails {
   active: boolean;
   userId: string;
   joinDate: string;
-  isAddedManually: boolean;
 }
 
 export interface ICreateSystemEmployeeRequest {

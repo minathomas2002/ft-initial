@@ -623,7 +623,7 @@
         "phoneInvalidLength": "Phone number must be between 8 and 15 digits",
         "phoneInvalid": "Phone number must contain digits only.",
         "invalidJobNo": "Invalid job number. Please enter a valid job number.",
-        "employeeIdInvalid": "Employee ID must be small letters or digits only"
+        "employeeIdInvalid": "Please enter valid employee ID"
       },
       "edit": {
         "confirmedit": "Edit Employee",

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { BaseDialogComponent } from "src/app/shared/components/base-components/base-dialog/base-dialog.component";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { AddEmployeeFormService } from '../../services/add-employee-form/add-employee-form-service';
@@ -7,9 +7,8 @@ import { BaseErrorComponent } from "src/app/shared/components/base-components/ba
 import { RolesStore } from 'src/app/shared/stores/roles/roles.store'
 import { I18nService } from 'src/app/shared/services/i18n';
 import { Select } from "primeng/select";
-import { Message } from "primeng/message";
 import { ReactiveFormsModule } from '@angular/forms';
-import { catchError, debounceTime, distinctUntilChanged, filter, forkJoin, of, skip, switchMap, take, tap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, forkJoin, of, switchMap, take, tap } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { SystemEmployeesStore } from 'src/app/shared/stores/system-employees/system-employees.store';
@@ -19,8 +18,6 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
-import { Tooltip } from 'primeng/tooltip';
-import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
 
 @Component({
   selector: 'app-add-edit-employee-dialog',
@@ -35,7 +32,6 @@ import { BaseErrorMessages } from 'src/app/shared/components/base-components/bas
     IconFieldModule,
     InputIconModule,
     TrimOnBlurDirective,
-    Tooltip
   ],
   templateUrl: './add-edit-employee-dialog.html',
   styleUrl: './add-edit-employee-dialog.scss',
@@ -57,12 +53,10 @@ export class AddEditEmployeeDialog implements OnInit {
   isProcessing = this.employeeStore.isProcessing;
   isLoadingDetails = this.employeeStore.isLoadingDetails;
   jobIdErrorMessage = signal<string | null>(null);
-  isHrDataValid = signal<boolean>(false);
-
 
   userRoles = this.roleStore.filteredRoles;
   employeeIDRegex = AddEmployeeFormService.EMPLOYEE_ID_REGEX;
-  isConfirmDisabled = computed(() => this.isHrDataValid());
+
 
   ngOnInit() {
     forkJoin(
@@ -87,7 +81,7 @@ export class AddEditEmployeeDialog implements OnInit {
       debounceTime(500),
       distinctUntilChanged(),
       takeUntilDestroyed(this.destroyRef),
-      filter(() => (this.formService.job.value?.length ?? 0) >= 5 && (this.formService.job.value?.length ?? 0) != 0),
+      filter(() => (this.formService.job.valid && (this.formService.job.value?.length ?? 0) >= 5 && (this.formService.job.value?.length ?? 0) != 0)),
       tap(() => {
         this.jobIdErrorMessage.set(null);
       }), // Clear error and HR status when new value is entered
@@ -96,19 +90,16 @@ export class AddEditEmployeeDialog implements OnInit {
         if (!jobId) {
           return of(null);
         }
-        if (this.employeeStore.employeeDetails()?.isAddedManually) {
-          this.formService.form.patchValue({
-            email: jobId + '@se.com.sa',
-          })
-          return of(null);
-        }
         return this.employeeStore.getEmployeeDateFromHR(this.formService.job.value!).pipe(
           catchError((error) => {
             // Handle error gracefully without crashing
             this.jobIdErrorMessage.set(this.i18nService.translate('users.dialog.add.invalidJobNo'));
-            this.isHrDataValid.set(false);
             this.formService.form.patchValue({
-              email: jobId + '@se.com.sa',
+              email: null,
+              nameAr: null,
+              nameEn: null,
+              phoneNumber: null,
+              roleId: null,
             })
             return of(null);
           })
@@ -119,7 +110,6 @@ export class AddEditEmployeeDialog implements OnInit {
       next: (res) => {
         if (res?.body) {
           this.jobIdErrorMessage.set(null); // Clear error on success
-          this.isHrDataValid.set(true);
           this.formService.form.patchValue({
             nameAr: res.body.nameAr,
             nameEn: res.body.nameEn,
@@ -218,9 +208,6 @@ export class AddEditEmployeeDialog implements OnInit {
         const employee = res.body;
         if (employee) {
           this.formService.patchForm(employee, this.isEditMode());
-          if (employee.isAddedManually) {
-            this.listenToJobIdChanges();
-          }
         }
       },
     });
