@@ -30,6 +30,7 @@ const isLoginEndpoint = (url: string): boolean => {
     API_ENDPOINTS.auth.passwordResetTokenExpiry,
     API_ENDPOINTS.auth.verifyEmail,
     API_ENDPOINTS.auth.resendVerifyEmail,
+    'assets'
   ];
   return loginPaths.some((path) => url.includes(path));
 };
