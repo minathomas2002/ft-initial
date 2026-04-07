@@ -7,7 +7,7 @@ import { StepContentDirective } from "src/app/shared/directives";
 import { ProductPlanFormService } from "src/app/shared/services/plan/product-plan-form-service/product-plan-form-service";
 import { ProductPlanValidationService } from "src/app/shared/services/plan/validation/product-plan-validation.service";
 import { IWizardStepState } from "src/app/shared/interfaces/wizard-state.interface";
-import { PlanStore } from "src/app/shared/stores/plan/plan.store";
+import { PlanStore, TWizardMode } from "src/app/shared/stores/plan/plan.store";
 import { mapProductLocalizationPlanFormToRequest, convertRequestToFormData, mapProductPlanResponseToForm } from "src/app/shared/utils/product-localization-plan.mapper";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
 import { switchMap, catchError, finalize, of, map, tap, combineLatest, EMPTY, distinctUntilChanged, Observable, take } from "rxjs";
@@ -43,6 +43,7 @@ export interface ICommentsCountAndPhase {
 }
 import { IPlanWizardStepCommentDescriptor, IStepValidationStatus } from "src/app/shared/types/plan-comments.types";
 import { OpportunitiesStore } from "src/app/shared/stores/opportunities/opportunities.store";
+import { RequiredFieldsMessage } from "../../required-fields-message/required-fields-message";
 type ProductLocalizationWizardStepId =
   | 'overview'
   | 'productPlant'
@@ -68,7 +69,7 @@ type ProductLocalizationWizardStepId =
     GeneralConfirmationDialogComponent,
     ApproveRejectDialogComponent,
     TranslatePipe,
-    PageCommentBox
+    PageCommentBox,
   ],
   templateUrl: './product-localization-plan-wizard.html',
   styleUrl: './product-localization-plan-wizard.scss',
@@ -110,6 +111,12 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     }
 
     return this.i18nService.translate('plans.wizard.sendBack.confirmationMessageToDivisionManager');
+  })
+
+  showRequiredFieldsMessage = computed(() => {
+    const availableModes: TWizardMode[] = ['create', 'edit'];
+    const availablePages = [1, 2, 3];
+    return availableModes.includes(this.mode()) && availablePages.includes(this.activeStep())
   })
 
   readonly approvalDialogTitle = computed(() => {

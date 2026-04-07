@@ -1814,7 +1814,8 @@
       "rejected": "Plan has been rejected successfully.",
       "resubmitted": "Plan has been resubmitted successfully.",
       "rejectionAcknowledged": "Plan rejection has been acknowledged successfully.",
-      "rejectionAcknowledgeError": "Error acknowledging plan rejection. Please try again."
+      "rejectionAcknowledgeError": "Error acknowledging plan rejection. Please try again.",
+      "requiredFieldsMessage": "All fields below are required — please make sure to fill them in."
     },
     "rejection": {
       "reason": "Rejection Reason",

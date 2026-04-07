@@ -12,7 +12,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
+import { PlanStore, TWizardMode } from 'src/app/shared/stores/plan/plan.store';
 import { ELocalizationMethodology, EPlanPageTitle } from 'src/app/shared/enums';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
@@ -89,6 +89,13 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   private readonly planStatusFactory = inject(HandlePlanStatusFactory);
   private readonly serviceLocalizationFormService = inject(ServicePlanFormService);
   override readonly toasterService = inject(ToasterService);
+
+  showRequiredFieldsMessage = computed(() => {
+    const availableModes: TWizardMode[] = ['create', 'edit'];
+    const availablePages = this.activeStep() != this.steps().length;
+    return availableModes.includes(this.mode()) && availablePages
+  })
+
 
   readonly sendBackConfirmationMessage = computed(() => {
     if (this.isDVManagerPersona()) {

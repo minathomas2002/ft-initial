@@ -5,6 +5,7 @@
   [wizardTitle]="wizardTitle()"
   [actions]="wizardActions()"
   (onClose)="onClose()"
+  [showRequiredFieldsMessage]="showRequiredFieldsMessage()"
 >
   <ng-container ngProjectAs="status">
     @if (isLoadingPlan()) {

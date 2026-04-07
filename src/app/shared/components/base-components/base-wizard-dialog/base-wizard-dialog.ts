@@ -10,6 +10,7 @@ import { IWizardStepState } from 'src/app/shared/interfaces/wizard-state.interfa
 import { ImageErrorDirective } from '../../../directives/image-error.directive';
 import { BaseWizardActions, IBaseWizardAction } from '../base-wizard-actions/base-wizard-actions';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { RequiredFieldsMessage } from '../../plans/required-fields-message/required-fields-message';
 
 
 
@@ -24,6 +25,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
     WizardStepStateComponent,
     ImageErrorDirective,
     BaseWizardActions,
+    RequiredFieldsMessage
   ],
   templateUrl: './base-wizard-dialog.html',
   styleUrl: './base-wizard-dialog.scss',
@@ -31,6 +33,7 @@ import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 })
 export class BaseWizardDialog {
   activeStep = model<number>(1);
+  showRequiredFieldsMessage = input<boolean>(false)
   visible = model<boolean>(false);
   isFinalStep = computed(() => this.activeStep() === this.steps().length);
   isFirstStep = computed(() => this.activeStep() === 1);

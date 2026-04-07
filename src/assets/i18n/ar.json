@@ -1037,7 +1037,8 @@
       "rejected": "تم رفض الخطة بنجاح.",
       "resubmitted": "تم إعادة تقديم الخطة بنجاح.",
       "rejectionAcknowledged": "تم إقرار رفض الخطة بنجاح.",
-      "rejectionAcknowledgeError": "خطأ في إقرار رفض الخطة. يرجى المحاولة مرة أخرى."
+      "rejectionAcknowledgeError": "خطأ في إقرار رفض الخطة. يرجى المحاولة مرة أخرى.",
+      "requiredFieldsMessage": "جميع الحقول أدناه مطلوبة - يرجى التأكد من ملئها."
     },
     "delete": {
       "confirmMessage": "هل أنت متأكد من حذف الخطة؟ لا يمكن التراجع عن هذا الإجراء."

@@ -27,7 +27,6 @@ import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
-import { RoleService } from 'src/app/shared/services/role/role-service';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
