@@ -108,7 +108,7 @@
             </td>
             @if (isInternalUser()) {
             <td>
-              <p class="text-sm text-gray-900 font-medium max-w-[25ch]" [appTruncateTooltip]="getAssigneeName(item.assignedEmployee)"
+              <p class="text-sm text-gray-900 font-medium max-w-[25ch]" [appTruncateTooltip]="getAssigneeName(item.pendingPersonName)"
                 [maxChars]="20">
                 {{item.pendingPersonName || '-'}}
               </p>
