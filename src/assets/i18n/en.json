@@ -1742,7 +1742,8 @@
       "days": "Days",
       "dayOverdue": "Day Overdue",
       "daysOverdue": "Days Overdue",
-      "assignee": "Assignee"
+      "assignee": "Assignee",
+      "pendingPersonName": "Pending Person Name"
     },
     "statistics": {
       "totalPlans": "Total Plans",

@@ -1534,7 +1534,8 @@
       "days": "أيام",
       "dayOverdue": "يوم متأخر",
       "daysOverdue": "أيام متأخرة",
-      "assignee": "المعين"
+      "assignee": "المعين",
+      "pendingPersonName": "اسم الشخص المعلق"
     },
     "statistics": {
       "totalPlans": "إجمالي الخطط",
