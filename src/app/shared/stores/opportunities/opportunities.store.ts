@@ -14,6 +14,7 @@ const initialState: {
   isCheckingApplyOpportunity: boolean;
   isLoadingopportunitiesList: boolean;
   details: IOpportunityDetails | null;
+  selectedOpportunityQuantityUnit: IOpportunityDetails['quantityUnit'] | null;
   opportunityLocalizationTablesValidation: IOpportunityLocalizationTablesValidationResponse | null;
 } = {
   loading: false,
@@ -24,6 +25,7 @@ const initialState: {
   listLookup: [],
   details: null,
   isCheckingApplyOpportunity: false,
+  selectedOpportunityQuantityUnit: null,
   opportunityLocalizationTablesValidation: null,
   isLoadingopportunitiesList:false
 };
@@ -68,7 +70,10 @@ export const OpportunitiesStore = signalStore(
         patchState(store, { loading: true, error: null });
         return opportunitiesApiService.getOpportunityById(id).pipe(
           tap((res) => {
-            patchState(store, { details: res.body });
+            patchState(store, {
+              details: res.body,
+              selectedOpportunityQuantityUnit: res.body.quantityUnit ?? null,
+            });
           }),
           finalize(() => {
             patchState(store, { loading: false });
@@ -100,6 +105,9 @@ export const OpportunitiesStore = signalStore(
       },
       resetOpportunityLocalizationTablesValidation() {
         patchState(store, { opportunityLocalizationTablesValidation: null });
+      },
+      resetSelectedOpportunityQuantityUnit() {
+        patchState(store, { selectedOpportunityQuantityUnit: null });
       }
     };
   })

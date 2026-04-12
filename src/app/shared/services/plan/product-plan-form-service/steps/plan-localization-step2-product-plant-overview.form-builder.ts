@@ -19,7 +19,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       }),
       [EMaterialsFormControls.targetedAnnualPlantCapacity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(50)]),
+        [EMaterialsFormControls.value]: this.fb.control<number | null>(null, [Validators.min(0), Validators.required, Validators.max(9999999999999999)]),
       }),
       [EMaterialsFormControls.timeRequiredToSetupFactory]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),

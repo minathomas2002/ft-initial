@@ -7,6 +7,7 @@ import { SignaturePadComponent } from "../../form/signature-pad/signature-pad.co
 import { ProfileStore } from 'src/app/shared/stores/profile/profile.store';
 import { take } from 'rxjs';
 import { TranslatePipe } from 'src/app/shared/pipes';
+import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 
 @Component({
   selector: 'app-approve-reject-dialog',
@@ -37,14 +38,16 @@ export class ApproveRejectDialogComponent {
   signature = model<string | null>(null);
 
   private readonly profileStore = inject(ProfileStore);
+  private readonly authStore = inject(AuthStore);
   private hasFetchedSignatureForCurrentOpen = false;
 
   constructor() {
     effect(() => {
       const isVisible = this.visible();
       const showPad = this.showSignaturePad();
+      const isImpersonating = this.authStore.isImpersonating()
 
-      if (isVisible && showPad) {
+      if (isVisible && showPad && !isImpersonating) {
         if (!this.hasFetchedSignatureForCurrentOpen) {
           this.hasFetchedSignatureForCurrentOpen = true;
           this.profileStore.getUserProfile()

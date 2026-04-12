@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, model, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
@@ -27,6 +27,7 @@ import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-plan-localization-step-01-overview-company-information-form',
@@ -211,13 +212,26 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
 
     effect(() => {
       const opportunityControlSignal = this.opportunityControlSignal();
-      if (opportunityControlSignal === null) this.opportunitiesStore.resetOpportunityLocalizationTablesValidation();
+      if (!opportunityControlSignal) {
+        this.opportunitiesStore.resetOpportunityLocalizationTablesValidation();
+        this.opportunitiesStore.resetSelectedOpportunityQuantityUnit();
+        return;
+      }
+
+      untracked(() => {
+        this.opportunitiesStore.getOpportunityDetails(opportunityControlSignal.id)
+          .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+          .subscribe();
+      });
+
       if (this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])()) {
-        this.opportunitiesStore.getOpportunityLocalizationTablesValidation(opportunityControlSignal!.id)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe((response) => {
-            this.planFormService.updateValueChainValidation(response);
-          });
+        untracked(() => {
+          this.opportunitiesStore.getOpportunityLocalizationTablesValidation(opportunityControlSignal.id)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((response) => {
+              this.planFormService.updateValueChainValidation(response);
+            });
+        });
       }
     });
 

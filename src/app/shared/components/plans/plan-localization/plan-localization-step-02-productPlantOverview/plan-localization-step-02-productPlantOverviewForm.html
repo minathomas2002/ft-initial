@@ -94,7 +94,7 @@
           <div>
             <app-base-label
               [title]="'plans.form.targetedAnnualPlantCapacity' | translate"
-              [secondaryTitle]="'plans.form.placeholders.mentionUnitOfMeasurement' | translate"
+              [helpTooltip]="'plans.form.placeholders.mentionUnitOfMeasurement' | translate"
             />
           </div>
           <app-group-input-with-checkbox
@@ -106,16 +106,24 @@
               label: 'plans.form.targetedAnnualPlantCapacity'
             })"
           >
-            <input
-              type="text"
-              pInputText
-              fluid
-              [maxlength]="50"
-              [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTargetedAnnualCapacity' | translate"
-              [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
-              [appConditionalColorClass]="highlightInput('targetedAnnualPlantCapacity')"
-              [color]="selectedInputColor()"
-            />
+            <p-inputgroup class="w-full">
+              <p-inputnumber
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTargetedAnnualCapacity' | translate"
+                mode="decimal"
+                [useGrouping]="true"
+                [min]="0"
+                [maxlength]="16"
+                [max]="9999999999999999"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="0"
+                [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
+                [appConditionalColorClass]="highlightInput('targetedAnnualPlantCapacity')"
+                [color]="selectedInputColor()"
+              />
+              @if(targetedAnnualPlantCapacityUnit()){
+              <p-inputgroup-addon>{{ targetedAnnualPlantCapacityUnit() }}</p-inputgroup-addon>
+              }
+            </p-inputgroup>
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"

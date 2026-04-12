@@ -28,6 +28,8 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { EOpportunityQuantity } from 'src/app/shared/enums/opportunities.enum';
 
 @Component({
   selector: 'app-plan-localization-step-02-product-plant-overview-form',
@@ -62,6 +64,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 })
 export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBaseClass {
   override readonly planStore = inject(PlanStore);
+  readonly opportunitiesStore = inject(OpportunitiesStore);
   readonly planFormService = inject(ProductPlanFormService);
   readonly isArabic = computed(() => this.i18nService.currentLanguage() === 'ar');
 
@@ -154,6 +157,34 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
       initialValue: this.othersPercentageControl.value
     }
   );
+
+  private opportunityControl = this.getFormControl(
+    this.planFormService.basicInformationFormGroup.controls[EMaterialsFormControls.opportunity]
+  );
+  private opportunitySignal = toSignal(
+    this.opportunityControl.valueChanges,
+    {
+      initialValue: this.opportunityControl.value
+    }
+  );
+
+  isOpportunitySelected = computed(() => !!this.opportunitySignal());
+
+  targetedAnnualPlantCapacityUnit = computed(() => {
+    const unit = this.opportunitiesStore.selectedOpportunityQuantityUnit();
+    if (!unit) return '';
+
+    const unitMap: Record<EOpportunityQuantity, string> = {
+      [EOpportunityQuantity.KM]: this.i18nService.translate('opportunity.units.km'),
+      [EOpportunityQuantity.Panels]: this.i18nService.translate('opportunity.units.panels'),
+      [EOpportunityQuantity.CB]: this.i18nService.translate('opportunity.units.cb'),
+      [EOpportunityQuantity.Discs]: this.i18nService.translate('opportunity.units.discs'),
+      [EOpportunityQuantity.KTons]: this.i18nService.translate('opportunity.units.ktons'),
+      [EOpportunityQuantity.Unit]: this.i18nService.translate('opportunity.units.unit'),
+    };
+
+    return unitMap[unit] ?? '';
+  });
 
   // Conditional visibility computed signals
   showSECFields = computed(() => {
@@ -335,6 +366,22 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     effect(() => {
       const othersPercentageValue = this.othersPercentageSignal();
       this.planFormService.toggleOthersDescriptionValidation(othersPercentageValue);
+    });
+
+    effect(() => {
+      const hasSelectedOpportunity = this.isOpportunitySelected();
+      const targetedAnnualPlantCapacityControl = this.getValueControl(
+        this.overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]
+      );
+
+      if (!hasSelectedOpportunity) {
+        targetedAnnualPlantCapacityControl.disable({ emitEvent: false });
+        return;
+      }
+
+      if (!this.isResubmitMode() && !this.isViewMode()) {
+        targetedAnnualPlantCapacityControl.enable({ emitEvent: false });
+      }
     });
   }
 

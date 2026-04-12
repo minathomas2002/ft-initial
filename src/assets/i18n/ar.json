@@ -1243,7 +1243,7 @@
         "select": "اختر",
         "enterProductName": "أدخل اسم المنتج",
         "enterProductSpecifications": "أدخل مواصفات المنتج",
-        "mentionUnitOfMeasurement": "(ذكر وحدة القياس)",
+        "mentionUnitOfMeasurement": "تعتمد وحدة القياس على الفرصة المحددة. لا يمكن تعديل هذا الحقل إلا بعد اختيارها.",
         "oncePlanApproved": "(بعد الموافقة على خطة التوطين)",
         "enterTargetedAnnualCapacity": "أدخل السعة السنوية المستهدفة للمصنع",
         "enterTimeToSetupFactory": "أدخل المدة المطلوبة بالأشهر (على سبيل المثال، 12 شهرًا)",
