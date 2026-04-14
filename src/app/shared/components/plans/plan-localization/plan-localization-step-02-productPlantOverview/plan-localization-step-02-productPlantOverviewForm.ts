@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -29,6 +29,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
+import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportunities/admin-opportunities.store';
 import { EOpportunityQuantity } from 'src/app/shared/enums/opportunities.enum';
 
 @Component({
@@ -65,6 +66,7 @@ import { EOpportunityQuantity } from 'src/app/shared/enums/opportunities.enum';
 export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBaseClass {
   override readonly planStore = inject(PlanStore);
   readonly opportunitiesStore = inject(OpportunitiesStore);
+  readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   readonly planFormService = inject(ProductPlanFormService);
   readonly isArabic = computed(() => this.i18nService.currentLanguage() === 'ar');
 
@@ -169,10 +171,10 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
   );
 
   isOpportunitySelected = computed(() => !!this.opportunitySignal());
+  opportunityUnits = this.adminOpportunitiesStore.opportunityUnits;
 
-  targetedAnnualPlantCapacityUnit = computed(() => {
-    const unit = this.opportunitiesStore.selectedOpportunityQuantityUnit();
-    if (!unit) return '';
+  private getUnitLabel(unit: string | number | null | undefined): string {
+    if (unit === null || unit === undefined || unit === '') return '';
 
     const unitMap: Record<EOpportunityQuantity, string> = {
       [EOpportunityQuantity.KM]: this.i18nService.translate('opportunity.units.km'),
@@ -183,7 +185,17 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
       [EOpportunityQuantity.Unit]: this.i18nService.translate('opportunity.units.unit'),
     };
 
-    return unitMap[unit] ?? '';
+    return unitMap[Number(unit) as EOpportunityQuantity] ?? '';
+  }
+
+  getQuantityUnitControl(): FormControl<string | null> {
+    return this.overviewFormGroupControls[EMaterialsFormControls.quantityUnit] as FormControl<string | null>;
+  }
+
+  targetedAnnualPlantCapacityUnit = computed(() => {
+    const opportunityUnit = this.opportunitiesStore.selectedOpportunityQuantityUnit();
+    if (opportunityUnit === null || opportunityUnit === undefined) return '';
+    return this.getUnitLabel(opportunityUnit);
   });
 
   // Conditional visibility computed signals
@@ -373,10 +385,30 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
       const targetedAnnualPlantCapacityControl = this.getValueControl(
         this.overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]
       );
+      const quantityUnitControl = this.getQuantityUnitControl();
+      const selectedOpportunityUnit = this.opportunitiesStore.selectedOpportunityQuantityUnit();
 
       if (!hasSelectedOpportunity) {
         targetedAnnualPlantCapacityControl.disable({ emitEvent: false });
+        quantityUnitControl.disable({ emitEvent: false });
         return;
+      }
+
+      if (selectedOpportunityUnit !== null && selectedOpportunityUnit !== undefined) {
+        const selectedOpportunityUnitAsString = selectedOpportunityUnit.toString();
+        if (quantityUnitControl.value !== selectedOpportunityUnitAsString) {
+          quantityUnitControl.setValue(selectedOpportunityUnitAsString, { emitEvent: false });
+        }
+
+        quantityUnitControl.clearValidators();
+        quantityUnitControl.disable({ emitEvent: false });
+        quantityUnitControl.updateValueAndValidity({ emitEvent: false });
+      } else {
+        quantityUnitControl.setValidators([Validators.required]);
+        if (!this.isResubmitMode() && !this.isViewMode()) {
+          quantityUnitControl.enable({ emitEvent: false });
+        }
+        quantityUnitControl.updateValueAndValidity({ emitEvent: false });
       }
 
       if (!this.isResubmitMode() && !this.isViewMode()) {

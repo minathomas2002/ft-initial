@@ -1,5 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
+import { EOpportunityQuantity } from 'src/app/shared/enums/opportunities.enum';
 import { BasicPlanBuilder } from './basicPlanBuilder';
 
 export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicPlanBuilder {
@@ -21,6 +22,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control<number | null>(null, [Validators.min(0), Validators.required, Validators.max(9999999999999999)]),
       }),
+      [EMaterialsFormControls.quantityUnit]: this.fb.control<string | null>(EOpportunityQuantity.Unit.toString()),
       [EMaterialsFormControls.timeRequiredToSetupFactory]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
         [EMaterialsFormControls.value]: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),

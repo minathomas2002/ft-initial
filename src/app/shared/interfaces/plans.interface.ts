@@ -66,6 +66,7 @@ export interface Overview {
   productName: string
   productSpecifications: string
   targetedAnnualPlantCapacity: string
+  quantityUnit?: string | null
   timeRequiredToSetupFactory: string
 }
 

@@ -173,6 +173,7 @@ function mapProductPlantOverview(formService: ProductPlanFormService): ProductPl
     productName: getFormValue(overviewForm, EMaterialsFormControls.productName) ?? null,
     productSpecifications: getFormValue(overviewForm, EMaterialsFormControls.productSpecifications) ?? null,
     targetedAnnualPlantCapacity: getFormValue(overviewForm, EMaterialsFormControls.targetedAnnualPlantCapacity) ?? null,
+    quantityUnit: getFormValue(overviewForm, EMaterialsFormControls.quantityUnit) ?? null,
     timeRequiredToSetupFactory: getFormValue(overviewForm, EMaterialsFormControls.timeRequiredToSetupFactory) ?? null,
   } as any; // Allow null values for FormData conversion
 
@@ -573,6 +574,7 @@ export function mapProductPlanResponseToForm(
     setFormGroupValue(overviewForm, EMaterialsFormControls.productName, overview.productName);
     setFormGroupValue(overviewForm, EMaterialsFormControls.productSpecifications, overview.productSpecifications);
     setFormGroupValue(overviewForm, EMaterialsFormControls.targetedAnnualPlantCapacity, overview.targetedAnnualPlantCapacity);
+    overviewForm.get(EMaterialsFormControls.quantityUnit)?.setValue(overview.quantityUnit != null ? String(overview.quantityUnit) : null);
     setFormGroupValue(overviewForm, EMaterialsFormControls.timeRequiredToSetupFactory, overview.timeRequiredToSetupFactory);
   }
 
@@ -925,6 +927,7 @@ export function convertRequestToFormData(request: IProductLocalizationPlanReques
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.Overview.ProductName', productPlan.productPlantOverview.overview.productName);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.Overview.ProductSpecifications', productPlan.productPlantOverview.overview.productSpecifications);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.Overview.TargetedAnnualPlantCapacity', productPlan.productPlantOverview.overview.targetedAnnualPlantCapacity);
+  appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.Overview.QuantityUnit', productPlan.productPlantOverview.overview.quantityUnit);
   appendFormDataValue(formData, 'ProductPlan.ProductPlantOverview.Overview.TimeRequiredToSetupFactory', productPlan.productPlantOverview.overview.timeRequiredToSetupFactory);
 
   // ExpectedCapex

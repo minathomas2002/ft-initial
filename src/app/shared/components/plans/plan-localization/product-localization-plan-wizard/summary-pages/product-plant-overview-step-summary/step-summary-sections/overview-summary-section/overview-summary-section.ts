@@ -33,11 +33,11 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
   private readonly productNameControl = computed(() => this.getValueFormControl(EMaterialsFormControls.productName));
   private readonly productSpecificationsControl = computed(() => this.getValueFormControl(EMaterialsFormControls.productSpecifications));
   private readonly targetedAnnualPlantCapacityControl = computed(() => this.getValueFormControl(EMaterialsFormControls.targetedAnnualPlantCapacity));
+  private readonly quantityUnitControl = computed(() => this.getFormControl(EMaterialsFormControls.quantityUnit));
   private readonly timeRequiredToSetupFactoryControl = computed(() => this.getValueFormControl(EMaterialsFormControls.timeRequiredToSetupFactory));
 
-  private targetedAnnualPlantCapacityUnitSuffix = computed(() => {
-    const unit = this.opportunitiesStore.selectedOpportunityQuantityUnit();
-    if (!unit) return '';
+  private getQuantityUnitLabel(unit: string | number | null | undefined): string {
+    if (unit === null || unit === undefined || unit === '') return '';
 
     const unitMap: Record<EOpportunityQuantity, string> = {
       [EOpportunityQuantity.KM]: this.i18nService.translate('opportunity.units.km'),
@@ -48,7 +48,16 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
       [EOpportunityQuantity.Unit]: this.i18nService.translate('opportunity.units.unit'),
     };
 
-    return unitMap[unit] ?? '';
+    return unitMap[Number(unit) as EOpportunityQuantity] ?? '';
+  }
+
+  private targetedAnnualPlantCapacityUnitSuffix = computed(() => {
+    const selectedOpportunityUnit = this.opportunitiesStore.selectedOpportunityQuantityUnit();
+    if (selectedOpportunityUnit !== null && selectedOpportunityUnit !== undefined) {
+      return this.getQuantityUnitLabel(selectedOpportunityUnit);
+    }
+
+    return this.getQuantityUnitLabel(this.quantityUnitControl()?.value);
   });
 
   productNameSummaryField = computed<IPlanSummaryField>(() => {
@@ -86,6 +95,8 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
     const unitSuffix = this.targetedAnnualPlantCapacityUnitSuffix();
     const currantValue = this.targetedAnnualPlantCapacityControl()?.value ?? '';
     const beforeValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.targetedAnnualPlantCapacity ?? '';
+    const beforeUnitValue = this.planStore.productPlanData()?.productPlan.productPlantOverview.overview.quantityUnit;
+    const beforeSuffix = this.getQuantityUnitLabel(beforeUnitValue) || unitSuffix;
     return {
       label: this.i18nService.translate('plans.form.targetedAnnualPlantCapacity'),
       beforeValue: String(beforeValue),
@@ -94,7 +105,7 @@ export class OverviewSummarySection extends SummarySectionBaseClass {
       hasComment: this.shouldShowCommentIcon(EMaterialsFormControls.targetedAnnualPlantCapacity),
       isResolved: this.isResolvedField(EMaterialsFormControls.targetedAnnualPlantCapacity),
       showDifference: this.shouldShowDifference(currantValue, beforeValue),
-      beforeSuffix: unitSuffix,
+      beforeSuffix,
       suffix: unitSuffix,
     };
   });

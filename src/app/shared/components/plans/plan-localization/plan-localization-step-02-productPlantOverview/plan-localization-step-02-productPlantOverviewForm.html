@@ -106,6 +106,7 @@
               label: 'plans.form.targetedAnnualPlantCapacity'
             })"
           >
+            @if(targetedAnnualPlantCapacityUnit()){
             <p-inputgroup class="w-full">
               <p-inputnumber
                 [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTargetedAnnualCapacity' | translate"
@@ -120,15 +121,59 @@
                 [appConditionalColorClass]="highlightInput('targetedAnnualPlantCapacity')"
                 [color]="selectedInputColor()"
               />
-              @if(targetedAnnualPlantCapacityUnit()){
               <p-inputgroup-addon>{{ targetedAnnualPlantCapacityUnit() }}</p-inputgroup-addon>
-              }
             </p-inputgroup>
+            } @else {
+            <div class="flex items-start gap-2 w-full">
+              <p-inputnumber
+                class="flex-1"
+                [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterTargetedAnnualCapacity' | translate"
+                mode="decimal"
+                [useGrouping]="true"
+                [min]="0"
+                [maxlength]="16"
+                [max]="9999999999999999"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="0"
+                [formControl]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
+                [appConditionalColorClass]="highlightInput('targetedAnnualPlantCapacity')"
+                [color]="selectedInputColor()"
+              />
+              <p-select
+                [formControl]="getQuantityUnitControl()"
+                [options]="opportunityUnits()"
+                optionLabel="name"
+                optionValue="id"
+                [placeholder]="'opportunity.form.select' | translate"
+                appendTo="body"
+                class="w-[180px]"
+              >
+                <ng-template
+                  pTemplate="item"
+                  let-item
+                >
+                  {{ item.name | translate }}
+                </ng-template>
+                <ng-template
+                  pTemplate="selectedItem"
+                  let-item
+                >
+                  {{ item.name | translate }}
+                </ng-template>
+              </p-select>
+            </div>
+            }
           </app-group-input-with-checkbox>
           <app-base-error-messages
             [control]="getValueControl(overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity])"
             [label]="'plans.form.targetedAnnualPlantCapacity' | translate"
           />
+          @if(!targetedAnnualPlantCapacityUnit()){
+          <app-base-error-messages
+            [control]="getQuantityUnitControl()"
+            [label]="'opportunity.form.measureUnits' | translate"
+          />
+          }
         </div>
 
         <!-- Time Required to Setup Factory -->

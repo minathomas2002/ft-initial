@@ -59,6 +59,7 @@ export enum EMaterialsFormControls {
   productName = 'productName',
   productSpecifications = 'productSpecifications',
   targetedAnnualPlantCapacity = 'targetedAnnualPlantCapacity',
+  quantityUnit = 'quantityUnit',
   timeRequiredToSetupFactory = 'timeRequiredToSetupFactory',
 
   // Step 2 - Expected CAPEX Investment Controls
