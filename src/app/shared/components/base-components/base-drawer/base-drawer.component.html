@@ -4,7 +4,7 @@
   #drawerRef
   (onShow)="onShow.emit()"
   (onHide)="onHide.emit()"
-  styleClass="!w-[550px] max-w-[95%] !border-none"
+  [styleClass]="'!w-[550px] max-w-[95%] !border-none ' + dialogStyleClass()"
   [blockScroll]="true"
 >
   <ng-template #headless>
