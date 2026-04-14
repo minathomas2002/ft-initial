@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
-import { EMaterialsFormControls, EPlanPageTitle, ETargetedCustomer } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle, ETargetedCustomer, EOpportunityType } from 'src/app/shared/enums';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TextareaModule } from 'primeng/textarea';
@@ -198,6 +198,11 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
     return this.getUnitLabel(opportunityUnit);
   });
 
+  showQuantityUnitDropdown = computed(() => {
+    const opportunityType = this.opportunitiesStore.details()?.opportunityType;
+    return opportunityType !== undefined && opportunityType !== null && Number(opportunityType) === EOpportunityType.OTHER;
+  });
+
   // Conditional visibility computed signals
   showSECFields = computed(() => {
     // Show SEC fields if radio button is Yes OR if any SEC field is selected for comment
@@ -382,6 +387,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
 
     effect(() => {
       const hasSelectedOpportunity = this.isOpportunitySelected();
+      const shouldShowQuantityUnitDropdown = this.showQuantityUnitDropdown();
       const targetedAnnualPlantCapacityControl = this.getValueControl(
         this.overviewFormGroupControls[EMaterialsFormControls.targetedAnnualPlantCapacity]
       );
@@ -394,16 +400,7 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
         return;
       }
 
-      if (selectedOpportunityUnit !== null && selectedOpportunityUnit !== undefined) {
-        const selectedOpportunityUnitAsString = selectedOpportunityUnit.toString();
-        if (quantityUnitControl.value !== selectedOpportunityUnitAsString) {
-          quantityUnitControl.setValue(selectedOpportunityUnitAsString, { emitEvent: false });
-        }
-
-        quantityUnitControl.clearValidators();
-        quantityUnitControl.disable({ emitEvent: false });
-        quantityUnitControl.updateValueAndValidity({ emitEvent: false });
-      } else {
+      if (shouldShowQuantityUnitDropdown) {
         if (!quantityUnitControl.value) {
           quantityUnitControl.setValue(EOpportunityQuantity.Unit.toString(), { emitEvent: false });
         }
@@ -411,6 +408,17 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
         if (!this.isResubmitMode() && !this.isViewMode()) {
           quantityUnitControl.enable({ emitEvent: false });
         }
+        quantityUnitControl.updateValueAndValidity({ emitEvent: false });
+      } else {
+        if (selectedOpportunityUnit !== null && selectedOpportunityUnit !== undefined) {
+          const selectedOpportunityUnitAsString = selectedOpportunityUnit.toString();
+          if (quantityUnitControl.value !== selectedOpportunityUnitAsString) {
+            quantityUnitControl.setValue(selectedOpportunityUnitAsString, { emitEvent: false });
+          }
+        }
+
+        quantityUnitControl.clearValidators();
+        quantityUnitControl.disable({ emitEvent: false });
         quantityUnitControl.updateValueAndValidity({ emitEvent: false });
       }
 

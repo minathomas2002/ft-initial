@@ -701,6 +701,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     });
   }
 
+  private resetSelectedOpportunityDetailsOnClose(): void {
+    this.opportunitiesStore.resetSelectedOpportunityDetails();
+  }
+
   previousStep(): void {
     this.activeStep.set(this.activeStep() - 1);
   }
@@ -1081,6 +1085,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           this.isSubmitted.set(true);
           // Reset wizard state in store
           this.planStore.resetWizardState();
+          this.resetSelectedOpportunityDetailsOnClose();
         },
         error: (error) => {
           this.isProcessing.set(false);
@@ -1106,6 +1111,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           this.isSubmitted.set(true);
           // Reset wizard state in store
           this.planStore.resetWizardState();
+          this.resetSelectedOpportunityDetailsOnClose();
         },
         error: (error) => {
           this.isProcessing.set(false);
@@ -1194,6 +1200,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
           this.doRefresh.emit();
           this.visibility.set(false);
           this.isSubmitted.set(true);
+          this.resetSelectedOpportunityDetailsOnClose();
         },
         error: () => {
           this.isProcessing.set(false);
@@ -1295,6 +1302,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.isSubmitted.set(false);
     // Reset wizard state in store
     this.planStore.resetWizardState();
+    this.resetSelectedOpportunityDetailsOnClose();
   }
 
   onContinueEditing(): void {
@@ -1309,6 +1317,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       this.visibility.set(false);
       this.activeStep.set(1);
       this.planStore.resetWizardState();
+      this.resetSelectedOpportunityDetailsOnClose();
       return;
     }
 
@@ -1325,12 +1334,14 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     this.doRefresh.emit();
     this.isSubmitted.set(false);
     this.planStore.resetWizardState();
+    this.resetSelectedOpportunityDetailsOnClose();
 
   }
 
   ngOnDestroy(): void {
     this.productPlanFormService.resetAllForms();
     this.opportunitiesStore.resetOpportunityLocalizationTablesValidation();
+    this.resetSelectedOpportunityDetailsOnClose();
   }
 
   /** Step comment descriptors for shared collect/validate logic. */

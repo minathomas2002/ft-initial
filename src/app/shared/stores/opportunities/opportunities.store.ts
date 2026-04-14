@@ -108,6 +108,12 @@ export const OpportunitiesStore = signalStore(
       },
       resetSelectedOpportunityQuantityUnit() {
         patchState(store, { selectedOpportunityQuantityUnit: null });
+      },
+      resetSelectedOpportunityDetails() {
+        patchState(store, {
+          details: null,
+          selectedOpportunityQuantityUnit: null,
+        });
       }
     };
   })
