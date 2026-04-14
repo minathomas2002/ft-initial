@@ -17,7 +17,9 @@
   <!-- Attachments Section -->
   <div class="flex flex-col gap-4">
     <div>
-      <h2 class="text-lg font-semibold text-gray-900">{{ 'plans.form.attachmentsOptional' | translate }}</h2>
+      <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">{{ 'plans.form.attachments' | translate }}
+        <app-optional-message />
+      </h2>
       <p class="text-xs text-gray-600">{{ 'plans.form.attachmentsSizeNote' | translate }}</p>
     </div>
 
@@ -61,7 +63,7 @@
     [commentsCount]="selectedInputs().length"
     [(commentPhase)]="commentPhase"
     [commentFormControl]="commentFormControl"
-      [incomingCommentText]="incomingCommentText()"
+    [incomingCommentText]="incomingCommentText()"
     [isResubmitMode]="isResubmitMode()"
     [hasInvestorComment]="hasInvestorComment()"
     (deleteComments)="onDeleteComments()"

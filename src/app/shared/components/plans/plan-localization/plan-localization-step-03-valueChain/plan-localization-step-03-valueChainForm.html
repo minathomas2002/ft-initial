@@ -26,9 +26,9 @@
 
     <!-- Design & Engineering Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.designEngineering' | translate }}
-        @if(isRequired(EOpportunityLocalizationTablesValidation.DesignEngineering)){
-        <span class="text-red-500">*</span>
+      <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">{{ 'plans.form.designEngineering' | translate }}
+        @if(!isRequired(EOpportunityLocalizationTablesValidation.DesignEngineering)){
+        <app-optional-message />
         }
       </h3>
       @if (hasSectionInResponse('designEngineering') || !isViewMode()) {
@@ -399,9 +399,9 @@
 
     <!-- Sourcing Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.sourcing' | translate }}
-        @if(isRequired(EOpportunityLocalizationTablesValidation.Sourcing)){
-        <span class="text-red-500">*</span>
+      <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">{{ 'plans.form.sourcing' | translate }}
+        @if(!isRequired(EOpportunityLocalizationTablesValidation.Sourcing)){
+        <app-optional-message />
         }
       </h3>
       @if (hasSectionInResponse('sourcing') || !isViewMode()) {
@@ -772,9 +772,9 @@
 
     <!-- Manufacturing Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.manufacturing' | translate }}
-        @if(isRequired(EOpportunityLocalizationTablesValidation.Manufacturing)){
-        <span class="text-red-500">*</span>
+      <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">{{ 'plans.form.manufacturing' | translate }}
+        @if(!isRequired(EOpportunityLocalizationTablesValidation.Manufacturing)){
+        <app-optional-message />
         }
       </h3>
       @if (hasSectionInResponse('manufacturing') || !isViewMode()) {
@@ -1132,9 +1132,9 @@
 
     <!-- Assembly & Testing Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.assemblyTesting' | translate }}
-        @if(isRequired(EOpportunityLocalizationTablesValidation.AssemblyTesting)){
-        <span class="text-red-500">*</span>
+      <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">{{ 'plans.form.assemblyTesting' | translate }}
+        @if(!isRequired(EOpportunityLocalizationTablesValidation.AssemblyTesting)){
+        <app-optional-message />
         }
       </h3>
       @if (hasSectionInResponse('assemblyTesting') || !isViewMode()) {
@@ -1506,9 +1506,9 @@
 
     <!-- After-Sales Section -->
     <div class="flex flex-col gap-4">
-      <h3 class="text-base font-semibold text-gray-900">{{ 'plans.form.afterSales' | translate }}
-        @if(isRequired(EOpportunityLocalizationTablesValidation.AfterSales)){
-        <span class="text-red-500">*</span>
+      <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">{{ 'plans.form.afterSales' | translate }}
+        @if(!isRequired(EOpportunityLocalizationTablesValidation.AfterSales)){
+        <app-optional-message />
         }
       </h3>
       @if (hasSectionInResponse('afterSales') || !isViewMode()) {

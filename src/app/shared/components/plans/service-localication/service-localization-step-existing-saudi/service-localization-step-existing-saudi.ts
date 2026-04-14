@@ -27,6 +27,7 @@ import { ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirecti
 import { CommentInputComponent } from '../../comment-input/comment-input';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { OptionalMessage } from '../../optional-message/optional-message';
 
 @Component({
   selector: 'app-service-localization-step-existing-saudi',
@@ -49,6 +50,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
     ConditionalColorClassDirective,
     HidePlaceholderWhenDisabledEmptyDirective,
     CommentInputComponent,
+    OptionalMessage
   ],
   templateUrl: './service-localization-step-existing-saudi.html',
   styleUrl: './service-localization-step-existing-saudi.scss',
@@ -61,6 +63,9 @@ export class ServiceLocalizationStepExistingSaudi extends PlanStepBaseClass impl
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
   private readonly i18n = inject(I18nService);
+  isAttachmentRequired = computed(() => {
+    return this._incomingProvideAgreementCopyCommentValue() == 'yes'
+  })
 
   getTranslatedLabel(key: string, year: string | number): string {
     return this.i18n.translate(key, { year: String(year) });

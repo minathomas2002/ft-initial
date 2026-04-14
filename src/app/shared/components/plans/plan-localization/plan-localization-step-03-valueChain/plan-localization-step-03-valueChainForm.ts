@@ -27,6 +27,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { OptionalMessage } from '../../optional-message/optional-message';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -50,7 +51,8 @@ import { I18nService } from 'src/app/shared/services/i18n';
     FormsModule,
     GeneralConfirmationDialogComponent,
     CommentStateComponent,
-    CommentInputComponent
+    CommentInputComponent,
+    OptionalMessage
   ],
   templateUrl: './plan-localization-step-03-valueChainForm.html',
   styleUrl: './plan-localization-step-03-valueChainForm.scss',
