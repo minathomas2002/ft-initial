@@ -35,9 +35,6 @@ import { TColors } from 'src/app/shared/interfaces';
 export class BaseWizardDialog {
   activeStep = model<number>(1);
   showRequiredFieldsMessage = input<boolean>(false);
-  requiredFieldsMessageColor = computed<TColors>(() => {
-    return this.steps()[this.activeStep() - 1].formState?.dirty && this.steps()[this.activeStep() - 1].hasErrors ? 'red' : 'primary'
-  })
   visible = model<boolean>(false);
   isFinalStep = computed(() => this.activeStep() === this.steps().length);
   isFirstStep = computed(() => this.activeStep() === 1);

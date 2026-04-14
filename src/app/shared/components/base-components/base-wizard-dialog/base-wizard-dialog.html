@@ -70,10 +70,7 @@
         </div>
         <ng-content select="status-extra"></ng-content>
         @if(showRequiredFieldsMessage()){
-        <app-required-fields-message
-          class="mb-4"
-          [color]="requiredFieldsMessageColor()"
-        ></app-required-fields-message>
+        <app-required-fields-message class="mb-4"></app-required-fields-message>
         }
       </div>
       <div
