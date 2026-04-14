@@ -404,6 +404,9 @@ export class PlanLocalizationStep02ProductPlantOverviewForm extends PlanStepBase
         quantityUnitControl.disable({ emitEvent: false });
         quantityUnitControl.updateValueAndValidity({ emitEvent: false });
       } else {
+        if (!quantityUnitControl.value) {
+          quantityUnitControl.setValue(EOpportunityQuantity.Unit.toString(), { emitEvent: false });
+        }
         quantityUnitControl.setValidators([Validators.required]);
         if (!this.isResubmitMode() && !this.isViewMode()) {
           quantityUnitControl.enable({ emitEvent: false });
