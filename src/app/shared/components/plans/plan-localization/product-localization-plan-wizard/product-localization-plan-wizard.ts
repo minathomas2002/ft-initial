@@ -118,8 +118,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   showRequiredFieldsMessage = computed(() => {
     const availableModes: TWizardMode[] = ['create', 'edit'];
-    const availablePages = [1, 2, 3];
-    return availableModes.includes(this.mode()) && availablePages.includes(this.activeStep())
+    const availablePages = this.activeStep() != this.steps().length;
+    return availableModes.includes(this.mode()) && availablePages
   })
 
   readonly approvalDialogTitle = computed(() => {

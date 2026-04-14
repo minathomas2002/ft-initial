@@ -20,6 +20,7 @@ import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { ConditionalColorClassDirective } from 'src/app/shared/directives';
 import { SAUDIZATION_ROW_KEYS } from './saudization.constants';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
+import { OptionalMessage } from '../../optional-message/optional-message';
 
 @Component({
   selector: 'app-plan-localization-step-04-saudization-form',
@@ -36,6 +37,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
     TextareaModule,
     CommentInputComponent,
     ConditionalColorClassDirective,
+    OptionalMessage
   ],
   templateUrl: './plan-localization-step-04-saudizationForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

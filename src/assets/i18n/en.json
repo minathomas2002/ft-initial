@@ -1313,7 +1313,8 @@
       "commentYourComment": "Your Comment",
       "otherLocationDetails": "Other Location Details",
       "locationType": "Location Type",
-      "targetingLocalSuppliersNote": "If Targeting \"SE's approved local suppliers\", mention the following:\""
+      "targetingLocalSuppliersNote": "If Targeting \"SE's approved local suppliers\", mention the following:\"",
+      "optional": "optional"
     },
     "placeholders": {
       "selectOpportunity": "Select opportunity",
@@ -1816,7 +1817,7 @@
       "resubmitted": "Plan has been resubmitted successfully.",
       "rejectionAcknowledged": "Plan rejection has been acknowledged successfully.",
       "rejectionAcknowledgeError": "Error acknowledging plan rejection. Please try again.",
-      "requiredFieldsMessage": "All fields below are required — please make sure to fill them in."
+      "requiredFieldsMessage": "All fields across all steps are required to submit the plan."
     },
     "rejection": {
       "reason": "Rejection Reason",

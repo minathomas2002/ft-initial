@@ -11,6 +11,7 @@ import { ImageErrorDirective } from '../../../directives/image-error.directive';
 import { BaseWizardActions, IBaseWizardAction } from '../base-wizard-actions/base-wizard-actions';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { RequiredFieldsMessage } from '../../plans/required-fields-message/required-fields-message';
+import { TColors } from 'src/app/shared/interfaces';
 
 
 
@@ -33,7 +34,10 @@ import { RequiredFieldsMessage } from '../../plans/required-fields-message/requi
 })
 export class BaseWizardDialog {
   activeStep = model<number>(1);
-  showRequiredFieldsMessage = input<boolean>(false)
+  showRequiredFieldsMessage = input<boolean>(false);
+  requiredFieldsMessageColor = computed<TColors>(() => {
+    return this.steps()[this.activeStep() - 1].formState?.dirty && this.steps()[this.activeStep() - 1].hasErrors ? 'red' : 'primary'
+  })
   visible = model<boolean>(false);
   isFinalStep = computed(() => this.activeStep() === this.steps().length);
   isFirstStep = computed(() => this.activeStep() === 1);

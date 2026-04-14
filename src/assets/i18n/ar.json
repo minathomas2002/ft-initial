@@ -1038,7 +1038,7 @@
       "resubmitted": "تم إعادة تقديم الخطة بنجاح.",
       "rejectionAcknowledged": "تم إقرار رفض الخطة بنجاح.",
       "rejectionAcknowledgeError": "خطأ في إقرار رفض الخطة. يرجى المحاولة مرة أخرى.",
-      "requiredFieldsMessage": "جميع الحقول أدناه مطلوبة - يرجى التأكد من ملئها."
+      "requiredFieldsMessage": "جميع الحقول في جميع الخطوات مطلوبة لتقديم الخطة."
     },
     "delete": {
       "confirmMessage": "هل أنت متأكد من حذف الخطة؟ لا يمكن التراجع عن هذا الإجراء."
@@ -1340,7 +1340,8 @@
       },
       "commentYourComment": "تعليقك",
       "locationType": "نوع الموقع",
-      "targetingLocalSuppliersNote": "إذا كان الهدف \"موردي السعودية للطاقة المحليين المعتمدين\"، اذكر ما يلي:"
+      "targetingLocalSuppliersNote": "إذا كان الهدف \"موردي السعودية للطاقة المحليين المعتمدين\"، اذكر ما يلي:",
+      "optional": "إختياري"
     },
     "placeholders": {
       "selectOpportunity": "اختر الفرصة",
