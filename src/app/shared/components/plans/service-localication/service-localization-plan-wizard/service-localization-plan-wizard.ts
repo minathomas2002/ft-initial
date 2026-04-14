@@ -175,7 +175,10 @@ export class ServiceLocalizationPlanWizard extends BasePlanWizard implements OnI
   showDirectLocalizationStep = signal(false);
 
   showWarningMesageDeletedOpportunity = computed(() => {
-    return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT
+    const linkedToDeletedOpportunity = this.planStore.linkedToDeletedOpportunity();
+    const isDraft = this.planStatus() === EInvestorPlanStatus.DRAFT;
+    const isInvestor = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])();
+    return linkedToDeletedOpportunity && isDraft && isInvestor;
   });
   // Comment phase signals for each step
   step1CommentPhase = signal<TCommentPhase>('none');

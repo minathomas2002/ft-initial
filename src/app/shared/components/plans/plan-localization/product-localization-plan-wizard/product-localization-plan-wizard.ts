@@ -89,7 +89,10 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   doRefresh = output<void>();
   isSubmitted = signal<boolean>(false);
   showWarningMessageDeletedOpportunity = computed(() => {
-    return this.planStore.linkedToDeletedOpportunity() && this.planStatus() === EInvestorPlanStatus.DRAFT
+    const linkedToDeletedOpportunity = this.planStore.linkedToDeletedOpportunity();
+    const isDraft = this.planStatus() === EInvestorPlanStatus.DRAFT;
+    const isInvestor = this.roleService.hasAnyRoleSignal([ERoles.INVESTOR])();
+    return linkedToDeletedOpportunity && isDraft && isInvestor;
   });
 
   timelineVisibility = signal(false);
