@@ -1,6 +1,6 @@
 import { computed, inject } from "@angular/core";
 import { OpportunitiesApiService } from "../../api/opportunities/opportunities-api-service";
-import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType, EPlanPageTitle } from "../../enums";
+import { AgreementType, EExperienceRange, EInHouseProcuredType, ELocalizationApproach, ELocation, ELocalizationMethodology, ELocalizationStatusType, EOpportunityType, EServiceCategory, EServiceProvidedTo, EServiceQualificationStatus, EServiceType, ETargetedCustomer, EYesNo, EemployeePlanAction, ERoles, EServiceCompanyType, EPlanPageTitle, SRMApprovalStatus } from "../../enums";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { PlanApiService } from "../../api/plans/plan-api-service";
 import { catchError, finalize, map, Observable, of, tap, throwError } from "rxjs";
@@ -945,6 +945,21 @@ export const PlanStore = signalStore(
         );
       },
 
+      updateSrmApprovalStatus(planId: string, status: SRMApprovalStatus): Observable<IBaseApiResponse<boolean>> {
+        patchState(store, { isProcessing: true, error: null });
+        return planApiService.updateSRMApprovalStatus(planId, status).pipe(
+          tap(() => {
+            patchState(store, { isProcessing: false });
+          }),
+          catchError((error) => {
+            patchState(store, { error: error.errorMessage || i18n.translate('plans.errors.updateSrmApprovalStatus') });
+            return throwError(() => new Error(i18n.translate('plans.errors.updateSrmApprovalStatus')));
+          }),
+          finalize(() => {
+            patchState(store, { isProcessing: false });
+          })
+        );
+      }
     };
   })
 );

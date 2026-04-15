@@ -1,5 +1,5 @@
 import { IFilterBase } from './filter.interface';
-import { EOpportunityType } from '../enums';
+import { EOpportunityType, SRMApprovalStatus } from '../enums';
 import { IApiPaginatedResponse } from './api.interface';
 
 export enum EInvestorPlanStatus {
@@ -43,6 +43,7 @@ export interface IPlanRecord {
   assignee?: string;
   linkedToDeletedOpportunity?: boolean;
   pendingPersonName?: string;
+  srmApprovalStatus?: SRMApprovalStatus;
 }
 
 export type TPlansSortingKeys = keyof IPlanRecord;

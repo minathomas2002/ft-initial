@@ -7,7 +7,7 @@ import { IActiveEmployee, IAssignActiveEmployee, IAssignee, IAssignReassignActiv
 import { API_ENDPOINTS } from '../api-endpoints';
 import { IProductLocalizationPlanRequest, IProductPlanResponse, IServiceLocalizationPlanResponse, IServicePlanGetResponse, ITimeLineResponse, ReviewPlanRequest, IPlanCommentResponse } from '../../interfaces/plans.interface';
 import { extractFilenameFromHeaders, handleBlobError } from '../../utils/file-download.utils';
-import { EemployeePlanAction } from 'src/app/shared/enums';
+import { EemployeePlanAction, SRMApprovalStatus } from 'src/app/shared/enums';
 import { I18nService } from '../../services/i18n/i18n.service';
 import { DatePipe } from '@angular/common';
 
@@ -169,6 +169,10 @@ export class PlanApiService {
     responseType: 'blob',
     observe: 'response',
   });
+ }
+
+ updateSRMApprovalStatus(planId: string, status: SRMApprovalStatus): Observable<IBaseApiResponse<boolean>> {
+   return this.baseHttpService.post<boolean, { planId: string; SRMApprovalStatus: SRMApprovalStatus }, unknown>(API_ENDPOINTS.plans.updateSRMApprovalStatus, { planId, SRMApprovalStatus: status });
  }
 
 }

@@ -99,12 +99,17 @@
               </p>
             </td>
             }
-            <td>
+            <td [class.min-w-[250px]]="isEmployee() && item.srmApprovalStatus">
               <app-base-tag
                 [value]="getStatusLabelKey(item.status) | translate"
                 [color]="getStatusBadgeColor(item.status)"
                 [maxChars]="27"
               ></app-base-tag>
+              @if (isEmployee() && item.srmApprovalStatus) {
+                <p>
+                  SRM: <span class="text-success-500 font-medium">{{ getSrmApprovalStatusLabel(item.srmApprovalStatus) | translate }}</span>
+                </p>
+              }
             </td>
             @if (isInternalUser()) {
             <td>
@@ -150,6 +155,7 @@
                 (onReAssign)="onReAssign($event)"
                 (onDelete)="onDelete($event)"
                 (onResubmitted)="onResubmitted($event)"
+                (onSRMSubmit)="onSRMSubmit($event)"
               />
             </td>
           </ng-template>
@@ -215,3 +221,11 @@
   (onCancel)="onCancelDeletePlan()"
 />
 }
+
+<app-srm-approval-dialog
+  [(visible)]="viewSrmSubmitDialog"
+  [currentStatus]="srmSubmitPlan()?.srmApprovalStatus ?? null"
+  [isLoading]="planStore.isProcessing()"
+  (onSubmit)="onSrmApprovalSubmitted($event)"
+  (onCancel)="onCancelSrmSubmitDialog()"
+></app-srm-approval-dialog>

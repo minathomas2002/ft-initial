@@ -10,7 +10,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
 import { NgClass } from '@angular/common';
-import { EOpportunityType } from 'src/app/shared/enums';
+import { EOpportunityType, ERoles, SRMApprovalStatus } from 'src/app/shared/enums';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
@@ -31,6 +31,7 @@ import { GeneralConfirmationDialogComponent } from "src/app/shared/components/ut
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ERoutes } from 'src/app/shared/enums';
+import { SrmApprovalDialog } from '../../components/srm-approval-dialog/srm-approval-dialog';
 
 @Component({
   selector: 'app-plans-list',
@@ -55,7 +56,8 @@ import { ERoutes } from 'src/app/shared/enums';
     TruncateTooltipDirective,
     AssignReassignManualEmployee,
     BaseTagComponent,
-    GeneralConfirmationDialogComponent
+    GeneralConfirmationDialogComponent,
+    SrmApprovalDialog
   ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
@@ -78,6 +80,8 @@ export class PlansList extends PlanDashboardBase implements OnInit {
   isDeleteMode = signal<boolean>(false);
   planItem = signal<IPlanRecord | null>(null);
   investorName = signal<string | null>(null);
+  viewSrmSubmitDialog = signal<boolean>(false);
+  srmSubmitPlan = signal<IPlanRecord | null>(null);
 
   eInvestorPlanStatus = EInvestorPlanStatus;
   eInternalUserPlanStatus = EInternalUserPlanStatus;
@@ -88,6 +92,7 @@ export class PlansList extends PlanDashboardBase implements OnInit {
   private readonly i18nService = inject(I18nService);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
+  readonly isEmployee = computed(() => this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])())
   private readonly toastService = inject(ToasterService);
   private readonly route = inject(ActivatedRoute);
   // Get the appropriate filter service based on role
@@ -353,6 +358,32 @@ export class PlansList extends PlanDashboardBase implements OnInit {
     this.planItem.set(plan);
     this.isDeleteMode.set(true);
   }
+
+  onSRMSubmit(plan: IPlanRecord) {
+    this.srmSubmitPlan.set(plan);
+    this.viewSrmSubmitDialog.set(true);
+  }
+
+  onCancelSrmSubmitDialog() {
+    this.viewSrmSubmitDialog.set(false);
+    this.srmSubmitPlan.set(null);
+  }
+
+  onSrmApprovalSubmitted(status: SRMApprovalStatus) {
+    const selectedPlan = this.srmSubmitPlan();
+
+    if (!selectedPlan) {
+      return;
+    }
+
+    this.planStore.updateSrmApprovalStatus(selectedPlan.id, status).pipe(take(1)).subscribe({
+      next: () => {
+        this.toastService.success(this.i18nService.translate('plans.messages.srmSubmitted'));
+        this.applyFilter();
+        this.onCancelSrmSubmitDialog();
+      },
+    });
+  }
   onCancelDeletePlan() {
     this.viewDeleteDialog.set(false);
     this.planItem.set(null);
@@ -403,5 +434,18 @@ export class PlansList extends PlanDashboardBase implements OnInit {
         this.toastService.error(error.errorMessage || this.i18nService.translate('plans.errors.exportPlans'));
       }
     });
+  }
+
+  getSrmApprovalStatusLabel(status: SRMApprovalStatus) {
+    switch (status) {
+      case SRMApprovalStatus.RegistrationApproval:
+        return 'plans.srmApproval.statuses.registrationApproval';
+      case SRMApprovalStatus.QualificationApproval:
+        return 'plans.srmApproval.statuses.qualificationApproval';
+      case SRMApprovalStatus.FinalApproval:
+        return 'plans.srmApproval.statuses.finalApproval';
+      default:
+        return '';
+    }
   }
 }

@@ -37,6 +37,7 @@ export class PlanActionsMapper {
         [EActionPlanTimeLine.DVReview]: { labelKey: 'plans.actions.dvReview' },
         [EActionPlanTimeLine.DeptManagerReview]: { labelKey: 'plans.actions.deptManagerReview' },
         [EActionPlanTimeLine.ViewOpportunityDetails]: { labelKey: 'plans.actions.viewOpportunityDetails' },
+        [EActionPlanTimeLine.SRMSubmit]: { labelKey: 'plans.actions.srmSubmit' },
     };
 
     getActions(

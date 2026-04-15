@@ -47,6 +47,7 @@ export class PlansActionMenu {
   onDelete = output<IPlanRecord>();
   onAutoRejected = output<IPlanRecord>();
   onViewOpportunityDetails = output<IPlanRecord>();
+  onSRMSubmit = output<IPlanRecord>();
 
   handleEventsMapper = {
     [EActionPlanTimeLine.EditPlan]: this.onEdit,
@@ -75,6 +76,8 @@ export class PlansActionMenu {
     [EActionPlanTimeLine.DVReview]: null,
     [EActionPlanTimeLine.DeptManagerReview]: null,
     [EActionPlanTimeLine.ViewOpportunityDetails]: this.onViewOpportunityDetails,
+    [EActionPlanTimeLine.SRMSubmit]: this.onSRMSubmit,
+
   };
 
   menuItems = computed<MenuItem[]>(() => {

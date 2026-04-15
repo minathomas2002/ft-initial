@@ -1036,6 +1036,7 @@
       "approvedForwarded": "تمت الموافقة على الخطة وإرسالها بنجاح.",
       "rejected": "تم رفض الخطة بنجاح.",
       "resubmitted": "تم إعادة تقديم الخطة بنجاح.",
+      "srmSubmitted": "تم إرسال موافقة SRM بنجاح.",
       "rejectionAcknowledged": "تم إقرار رفض الخطة بنجاح.",
       "rejectionAcknowledgeError": "خطأ في إقرار رفض الخطة. يرجى المحاولة مرة أخرى.",
       "requiredFieldsMessage": "جميع الحقول في جميع الخطوات مطلوبة لتقديم الخطة."
@@ -1045,6 +1046,20 @@
     },
     "sendBack": {
       "confirmMessage": "هل أنت متأكد من إرجاع الخطة؟"
+    },
+    "srmApproval": {
+      "dialogTitle": "حالة الموافقة على SRM",
+      "subTitle": "اختر مرحلة موافقة SRM لتتبع تقدم الموافقات الداخلية.",
+      "statusLabel": "حالة الموافقة على SRM",
+      "statusPlaceholder": "حدد حالة الموافقة في SRM",
+      "statuses": {
+        "registrationApproval": "اعتماد التسجيل",
+        "qualificationApproval": "اعتماد التأهيل",
+        "finalApproval": "الاعتماد النهائي"
+      },
+      "validation": {
+        "statusRequired": "يرجى اختيار الحالة."
+      }
     },
     "rejection": {
       "reason": "سبب الرفض",
@@ -1492,7 +1507,8 @@
       "generateServicePdf": "خطأ في إنشاء ملف PDF لخطة الخدمة",
       "loadComments": "خطأ في تحميل تعليقات الخطة",
       "deleteDraft": "خطأ في حذف مسودة الخطة",
-      "exportPlans": "خطأ في تصدير الخطط"
+      "exportPlans": "خطأ في تصدير الخطط",
+      "updateSrmApprovalStatus": "خطأ في تحديث حالة موافقة SRM. يرجى المحاولة مرة أخرى."
     },
     "employee_status": {
       "pending": "قيد الانتظار",
@@ -1576,7 +1592,8 @@
       "dvReview": "مراجعة القسم",
       "deptManagerReview": "مراجعة مدير الإدارة",
       "viewOpportunityDetails": "عرض الفرصة",
-      "editResubmit": "تعديل / إعادة الإرسال"
+      "editResubmit": "تعديل / إعادة الإرسال",
+      "srmSubmit": "إرسال حالة الموافقة على SRM"
     },
     "submission": {
       "confirmTitle": "هل أنت متأكد من تقديم هذه الخطة؟",

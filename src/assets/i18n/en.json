@@ -1465,7 +1465,8 @@
       "generateServicePdf": "Error generating service plan pdf",
       "loadComments": "Error loading plan comments",
       "deleteDraft": "Error deleting draft plan",
-      "exportPlans": "Error exporting plans"
+      "exportPlans": "Error exporting plans",
+      "updateSrmApprovalStatus": "Error updating SRM approval status. Please try again."
     },
     "noCommentFound": "No comment found",
     "filter": {
@@ -1784,7 +1785,8 @@
       "dvReview": "DV Review",
       "deptManagerReview": "Department Manager Review",
       "viewOpportunityDetails": "View Opportunity",
-      "editResubmit": "Edit / Resubmit"
+      "editResubmit": "Edit / Resubmit",
+      "srmSubmit": "Submit SRM Approval Status"
     },
     "comments": {
       "addComment": "Add Comment",
@@ -1815,6 +1817,7 @@
       "approvedForwarded": "Plan has been approved and forwarded successfully.",
       "rejected": "Plan has been rejected successfully.",
       "resubmitted": "Plan has been resubmitted successfully.",
+      "srmSubmitted": "SRM approval has been submitted successfully.",
       "rejectionAcknowledged": "Plan rejection has been acknowledged successfully.",
       "rejectionAcknowledgeError": "Error acknowledging plan rejection. Please try again.",
       "requiredFieldsMessage": "All fields across all steps are required to submit the plan."
@@ -1823,6 +1826,20 @@
       "reason": "Rejection Reason",
       "approvalNote": "Approval Note",
       "acknowledgeNote": "Acknowledge Rejection Note"
+    },
+    "srmApproval": {
+      "dialogTitle": "SRM Approval Status",
+      "subTitle": "Select the SRM approval stage to track internal approval progress.",
+      "statusLabel": "SRM Approval Status",
+      "statusPlaceholder": "Select SRM Approval Status",
+      "statuses": {
+        "registrationApproval": "Registration Approval",
+        "qualificationApproval": "Qualification Approval",
+        "finalApproval": "Final Approval"
+      },
+      "validation": {
+        "statusRequired": "Please select a status."
+      }
     }
   },
   "timeline": {

@@ -1,0 +1,42 @@
+<app-base-dialog
+  [(visible)]="visible"
+  [icon]="'icon-check-circle'"
+  [confirmLabel]="'common.submit'"
+  [cancelLabel]="'common.back'"
+  [confirmButtonClass]="'w-fit'"
+  [cancelButtonClass]="'w-fit'"
+  [isConfirmationDisabled]="!hasStatusChanged()"
+  [isLoading]="isLoading()"
+  (onConfirm)="onConfirm()"
+  (onCancel)="handleCancel()"
+  (onClose)="handleClose()"
+>
+  <div class="mb-5">
+    <p class="text-lg font-semibold text-gray-900 mb-1">
+      {{ 'plans.srmApproval.dialogTitle' | translate }}
+    </p>
+    <p class="text-sm text-gray-600">
+      {{ 'plans.srmApproval.subTitle' | translate }}
+    </p>
+  </div>
+
+  <div class="flex flex-col gap-4">
+    <div class="form-group">
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        {{ 'plans.srmApproval.statusLabel' | translate }}
+      </label>
+      <p-select
+        [options]="srmApprovalStatusOptions()"
+        [ngModel]="selectedSrmApprovalStatus()"
+        (ngModelChange)="selectedSrmApprovalStatus.set($event)"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        [showClear]="false"
+        [placeholder]="'plans.srmApproval.statusPlaceholder' | translate"
+        dropdownIcon="icon-chevron-down"
+        fluid
+      />
+    </div>
+  </div>
+</app-base-dialog>

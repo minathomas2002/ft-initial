@@ -135,3 +135,9 @@ export enum EPlanPageTitle {
   OpportunityInformation = 'opportunity.wizard.opportunityInformation',
   OpportunityLocalization = 'opportunity.wizard.opportunityLocalization',
 }
+
+export enum SRMApprovalStatus {
+  RegistrationApproval = 1,
+  QualificationApproval = 2,
+  FinalApproval = 3
+}
