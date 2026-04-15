@@ -87,6 +87,10 @@ export class PlansActionMenu {
       .map((mItem) => {
         return {
           ...mItem,
+          styleClass:
+            mItem.key === EActionPlanTimeLine.SRMSubmit
+              ? 'plans-action-menu-srm-submit'
+              : undefined,
           command: () => {
             this.handleEventsMapper[mItem.key]?.emit(plan);
           },
