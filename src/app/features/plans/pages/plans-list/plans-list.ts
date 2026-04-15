@@ -92,7 +92,6 @@ export class PlansList extends PlanDashboardBase implements OnInit {
   private readonly i18nService = inject(I18nService);
 
   newPlanOpportunityType = computed(() => this.planStore.newPlanOpportunityType());
-  readonly isEmployee = computed(() => this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])())
   private readonly toastService = inject(ToasterService);
   private readonly route = inject(ActivatedRoute);
   // Get the appropriate filter service based on role

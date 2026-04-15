@@ -99,13 +99,13 @@
               </p>
             </td>
             }
-            <td [class.min-w-[250px]]="isEmployee() && item.srmApprovalStatus">
+            <td [class.min-w-[250px]]="item.srmApprovalStatus">
               <app-base-tag
                 [value]="getStatusLabelKey(item.status) | translate"
                 [color]="getStatusBadgeColor(item.status)"
                 [maxChars]="27"
               ></app-base-tag>
-              @if (isEmployee() && item.srmApprovalStatus) {
+              @if (item.srmApprovalStatus) {
                 <p>
                   SRM: <span class="text-success-500 font-medium">{{ getSrmApprovalStatusLabel(item.srmApprovalStatus) | translate }}</span>
                 </p>
