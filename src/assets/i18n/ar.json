@@ -380,6 +380,7 @@
     },
     "form": {
       "basicInformation": "المعلومات الأساسية",
+      "measureUnitsConcern":"لا يمكن تغيير الوحدة بمجرد ربط خطط  بهذه الفرصة",
       "forecastedDemand": "الطلب المتوقع لالسعودية للطاقة (2024–2030)",
       "forecastedDemandWithYears": "الطلب المتوقع لالسعودية للطاقة ({{startYear}}–{{endYear}})",
       "supplierBase": "قاعدة الموردين",

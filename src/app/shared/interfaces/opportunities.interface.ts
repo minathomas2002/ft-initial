@@ -81,6 +81,7 @@ export interface IOpportunityDetails {
   attachments: IOpportunityAttachment[];
   linkedPlans: number;
   hasActivePlans: boolean;
+  hasAnyPlans: boolean;
   quantityUnit: EOpportunityQuantity;
 }
 

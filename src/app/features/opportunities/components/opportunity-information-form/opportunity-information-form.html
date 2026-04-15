@@ -311,7 +311,7 @@
         </div>
         <div class="flex gap-2">
           <div>
-            <app-base-label [title]="'opportunity.form.measureUnits' | translate" />
+            <app-base-label [title]="'opportunity.form.measureUnits' | translate" [helpTooltip]="'opportunity.form.measureUnitsConcern'|translate" />
             <p-select
               [formControl]="getControl('quantityUnit')"
               [options]="opportunityUnits()"

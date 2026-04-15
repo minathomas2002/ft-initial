@@ -120,6 +120,12 @@ export class CreateEditOpportunityDialog implements OnInit {
               } else {
                 this.opportunityFormService.opportunityInformationForm.get('opportunityType')?.enable({ emitEvent: false });
               }
+
+              if (res.body.hasAnyPlans) {
+                this.opportunityFormService.opportunityInformationForm.get('quantityUnit')?.disable({ emitEvent: false });
+              } else {
+                this.opportunityFormService.opportunityInformationForm.get('quantityUnit')?.enable({ emitEvent: false });
+              }
             },
           });
         } else {
@@ -128,6 +134,7 @@ export class CreateEditOpportunityDialog implements OnInit {
           // Ensure title and opportunityType are enabled in create mode
           this.opportunityFormService.opportunityInformationForm.get('title')?.enable({ emitEvent: false });
           this.opportunityFormService.opportunityInformationForm.get('opportunityType')?.enable({ emitEvent: false });
+          this.opportunityFormService.opportunityInformationForm.get('quantityUnit')?.enable({ emitEvent: false });
         }
       }
     });

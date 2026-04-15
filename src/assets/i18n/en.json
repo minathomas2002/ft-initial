@@ -380,6 +380,7 @@
     },
     "form": {
       "basicInformation": "Basic Information",
+      "measureUnitsConcern": "Measure units cannot be changed once plans are linked to this opportunity",
       "forecastedDemand": "Forecasted SE Demand (2024–2030)",
       "forecastedDemandWithYears": "Forecasted SE Demand ({{startYear}}–{{endYear}})",
       "supplierBase": "Supplier Base",
