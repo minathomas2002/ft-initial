@@ -12,17 +12,17 @@
     <div class="flex flex-col gap-3">
       <!-- Name -->
       <div class="field">
-        <app-base-label [title]="'auth.name' | translate"></app-base-label>
+        <app-base-label [title]="'auth.companyName' | translate"></app-base-label>
         <input
           type="text"
           pInputText
           [formControl]="registerFormService.fullName"
-          [placeholder]="'auth.enterYourName' | translate"
+          [placeholder]="'auth.enterYourCompanyName' | translate"
           fluid
         />
         @if (registerFormService.fullName.touched && registerFormService.fullName.invalid) {
-        <app-base-error [message]="registerFormService.fullName.hasError('required') ? ('auth.nameRequired' | translate) :
-          ('auth.invalidFullName' | translate)" />
+        <app-base-error [message]="registerFormService.fullName.hasError('required') ? ('auth.companyNameRequired' | translate) :
+          ('auth.invalidCompanyName' | translate)" />
         }
       </div>
 
