@@ -31,10 +31,12 @@
         <app-optional-message />
         }
       </h3>
+
       @if (hasSectionInResponse('designEngineering') || !isViewMode()) {
       <app-form-array-input
         [ft]="getDesignEngineeringFormArray()!"
         [hideAddButton]="isViewMode()"
+        [hideDeleteButton]="isViewMode()"
         [addButtonMessage]="'plans.form.placeholders.addDesignEngineeringItem' | translate"
         [createNewItem]="createDesignEngineeringItem"
         [maxItems]="20"
@@ -408,6 +410,7 @@
       <app-form-array-input
         [ft]="getSourcingFormArray()!"
         [hideAddButton]="isViewMode()"
+        [hideDeleteButton]="isViewMode()"
         [addButtonMessage]="'plans.form.placeholders.addSourcingItem' | translate"
         [createNewItem]="createSourcingItem"
         [maxItems]="20"
@@ -781,6 +784,7 @@
       <app-form-array-input
         [ft]="getManufacturingFormArray()!"
         [hideAddButton]="isViewMode()"
+        [hideDeleteButton]="isViewMode()"
         [addButtonMessage]="'plans.form.placeholders.addManufacturingItem' | translate"
         [createNewItem]="createManufacturingItem"
         [maxItems]="20"
@@ -1141,6 +1145,7 @@
       <app-form-array-input
         [ft]="getAssemblyTestingFormArray()!"
         [hideAddButton]="isViewMode()"
+        [hideDeleteButton]="isViewMode()"
         [addButtonMessage]="'plans.form.placeholders.addAssemblyTestingItem' | translate"
         [createNewItem]="createAssemblyTestingItem"
         [maxItems]="20"
@@ -1515,6 +1520,7 @@
       <app-form-array-input
         [ft]="getAfterSalesFormArray()!"
         [hideAddButton]="isViewMode()"
+        [hideDeleteButton]="isViewMode()"
         [addButtonMessage]="'plans.form.placeholders.addAfterSalesItem' | translate"
         [createNewItem]="createAfterSalesItem"
         [maxItems]="20"

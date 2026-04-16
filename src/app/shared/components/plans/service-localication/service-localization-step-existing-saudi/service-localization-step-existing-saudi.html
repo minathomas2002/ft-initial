@@ -5,7 +5,7 @@
     <app-form-array-input
       [ft]="getSaudiCompanyDetailsFormArray()"
       [hideAddButton]="isViewMode()"
-      [hideDeleteButton]="isViewMode() || isReviewMode()"
+      [hideDeleteButton]="isViewMode()"
       [addButtonMessage]="'plans.form.addSaudiCompany' | translate"
       [createNewItem]="createSaudiCompanyDetailItem"
       [maxItems]="20"
@@ -324,7 +324,7 @@
     <app-form-array-input
       [ft]="getCollaborationPartnershipFormArray()"
       [hideAddButton]="isViewMode()"
-      [hideDeleteButton]="isViewMode() || isReviewMode()"
+      [hideDeleteButton]="isViewMode()"
       [addButtonMessage]="'plans.form.addCollaborationPartnership' | translate"
       [createNewItem]="createCollaborationPartnershipItem"
       [maxItems]="20"
