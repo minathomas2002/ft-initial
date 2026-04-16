@@ -7,7 +7,7 @@ import { AuthStore } from '../../stores/auth/auth.store';
   imports: [],
   template: `
   @if(isImpersonating()) {
-    <div class="fixed top-0 left-0 right-0 z-[99999999999] bg-primary-500 py-3">
+    <div class="fixed top-0 left-0 right-0 z-10000 bg-primary-500 py-3">
       <p class="text-center text-white">{{ impersonationMessage() }}</p>
     </div>
     <div class="h-[45px] shrink-0" aria-hidden="true"></div>

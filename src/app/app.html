@@ -2,9 +2,11 @@
   <router-outlet></router-outlet>
   <app-delegation-canceled-dialog />
   <p-toast
-    [life]="5000"
+    [life]="500000"
+    [autoZIndex]="true"
+    [baseZIndex]="2147483000"
+    appendTo="body"
     position="top-right"
-    baseZIndex="999"
     [breakpoints]="{
       '640px':{
         'width':'80vw',
