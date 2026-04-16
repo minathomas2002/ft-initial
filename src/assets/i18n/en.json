@@ -1821,7 +1821,7 @@
       "srmSubmitted": "SRM approval has been submitted successfully.",
       "rejectionAcknowledged": "Plan rejection has been acknowledged successfully.",
       "rejectionAcknowledgeError": "Error acknowledging plan rejection. Please try again.",
-      "requiredFieldsMessage": "All fields across all steps are required to submit the plan."
+      "requiredFieldsMessage": "All fields in every step must be completed to submit the plan, except those marked as “optional”."
     },
     "rejection": {
       "reason": "Rejection Reason",
