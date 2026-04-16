@@ -38,7 +38,7 @@ export class InvestorsList implements OnInit {
     this.i18nService.currentLanguage();
     return [
       { label: this.i18nService.translate('investors.table.BenaID'), isSortable: false, sortingKey: 'code' },
-      { label: this.i18nService.translate('investors.table.name'), isSortable: true, sortingKey: 'fullName' },
+      { label: this.i18nService.translate('investors.table.companyName'), isSortable: true, sortingKey: 'fullName' },
       { label: this.i18nService.translate('investors.table.email'), isSortable: false, sortingKey: 'email' },
       { label: this.i18nService.translate('investors.table.phoneNumber'), isSortable: false, sortingKey: 'phoneNumber' },
       { label: this.i18nService.translate('investors.table.otherNumber'), isSortable: false, sortingKey: 'otherPhone' },

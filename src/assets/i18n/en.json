@@ -230,7 +230,7 @@
     "updateDetailsDesc": "Update your personal details here.",
     "viewDetailsDesc": "View your personal details here.",
     "update": "Update",
-    "name": "Name",
+    "companyName": "Company Name",
     "nameEn": "Name / English Name",
     "englishName": "English Name",
     "fullName": "Full Name",
@@ -751,7 +751,7 @@
     },
     "table": {
       "BenaID": "BENA ID",
-      "name": "Name",
+      "companyName": "Company Name",
       "email": "Email",
       "phoneNumber": "Phone Number",
       "otherNumber": "Other Number",

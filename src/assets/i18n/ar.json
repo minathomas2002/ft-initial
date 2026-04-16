@@ -230,7 +230,7 @@
     "updateDetailsDesc": "قم بتحديث بياناتك الشخصية هنا.",
     "viewDetailsDesc": "عرض بياناتك الشخصية هنا.",
     "update": "تحديث",
-    "name": "الاسم",
+    "companyName": "اسم الشركة",
     "nameEn": "الاسم / الاسم الإنجليزي",
     "englishName": "الاسم الإنجليزي",
     "fullName": "الاسم الكامل",
@@ -767,7 +767,7 @@
     "table": {
       "BenaID": "معرف BENA",
       "id": "المعرف",
-      "name": "الاسم",
+      "companyName": "اسم الشركة",
       "email": "البريد الإلكتروني",
       "phoneNumber": "رقم الهاتف",
       "otherNumber": "رقم آخر",
