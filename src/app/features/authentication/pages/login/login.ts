@@ -64,6 +64,7 @@ export class Login implements OnInit {
       .subscribe({
         next: (response) => {
           if (response.success) {
+            localStorage.removeItem(VERIFICATION_EMAIL_STORAGE_KEY)
             this.router.navigate(['/', ERoutes.dashboard]);
           }
         },
@@ -99,6 +100,7 @@ export class Login implements OnInit {
           if (response.success) {
             this.showResendVerification.set(false);
             this.unverifiedEmail.set(null);
+            localStorage.removeItem(VERIFICATION_EMAIL_STORAGE_KEY)
             this.router.navigate(['/', ERoutes.dashboard]);
           }
         },
@@ -117,6 +119,7 @@ export class Login implements OnInit {
     this.authStore.fakeWindowsLogin(userName).subscribe({
       next: (response) => {
         if (response.success) {
+          localStorage.removeItem(VERIFICATION_EMAIL_STORAGE_KEY)
           this.router.navigate(['/', ERoutes.dashboard]);
         }
       },

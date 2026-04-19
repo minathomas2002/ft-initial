@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, output, signal } from '@angular/core';
 import { BaseDialogComponent } from '../../base-components/base-dialog/base-dialog.component';
-import { FormsModule } from '@angular/forms';
+import { AbstractControl, FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { BaseLabelComponent } from '../../base-components/base-label/base-label.component';
 import { BaseErrorComponent } from '../../base-components/base-error/base-error.component';
@@ -9,6 +9,7 @@ import { RadioButton } from 'primeng/radiobutton';
 import { EOpportunityType } from 'src/app/shared/enums';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { TranslatePipe } from '../../../pipes';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 @Component({
   selector: 'app-new-plan-dialog',
@@ -33,6 +34,7 @@ export class NewPlanDialog implements OnInit {
 
   newPlanTitle = signal('');
   newPlanOpportunityType = signal<EOpportunityType | null>(null);
+  private readonly planTitleSafeTextValidator = safeTextValidator();
 
   private readonly planStore = inject(PlanStore);
   protected readonly disableChangingOpportunityType = computed(() => this.planStore.isPresetSelected());
@@ -47,7 +49,11 @@ export class NewPlanDialog implements OnInit {
   }
 
   canGoNext() {
-    return this.newPlanTitle().trim().length > 0 && this.newPlanOpportunityType();
+    return this.newPlanTitle().trim().length > 0 && this.newPlanOpportunityType() && !this.hasUnsafePlanTitleCharacters();
+  }
+
+  hasUnsafePlanTitleCharacters(): boolean {
+    return !!this.planTitleSafeTextValidator({ value: this.newPlanTitle() } as AbstractControl)?.['potentiallyMaliciousCharacters'];
   }
 
   savePlanBasicData(): void {

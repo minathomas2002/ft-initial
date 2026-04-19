@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr';
+import { HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr';
 import { Subject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { LocalStorage } from '../local-storage/local-storage';
@@ -67,6 +67,7 @@ export class NotificationHubService {
 							? Promise.resolve(currentToken)
 							: Promise.reject(new Error('No authentication token available'));
 					},
+          transport: HttpTransportType.LongPolling
 				})
 				.withAutomaticReconnect({
 					nextRetryDelayInMilliseconds: (retryContext: any) => {
