@@ -11,7 +11,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
 import { LoginFormService } from '../../services/login-form/login-form';
 import { environment } from 'src/environments/environment';
-import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { AuthStore, VERIFICATION_EMAIL_STORAGE_KEY } from 'src/app/shared/stores/auth/auth.store';
 import { ERoutes } from 'src/app/shared/enums';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
@@ -135,8 +135,10 @@ export class Login implements OnInit {
       return;
     }
 
+    localStorage.setItem(VERIFICATION_EMAIL_STORAGE_KEY, email);
+
     this.router.navigate(['/', ERoutes.auth, ERoutes.verification], {
-      queryParams: { email, autoResend: '1' },
+      queryParams: { autoResend: '1' },
     });
   }
 }

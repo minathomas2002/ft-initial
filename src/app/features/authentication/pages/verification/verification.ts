@@ -7,7 +7,7 @@ import { ERoutes } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
-import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { AuthStore, VERIFICATION_EMAIL_STORAGE_KEY } from 'src/app/shared/stores/auth/auth.store';
 
 @Component({
   selector: 'app-verification',
@@ -29,7 +29,7 @@ export class Verification implements OnInit {
 
   ngOnInit(): void {
     const queryParams = this.route.snapshot.queryParamMap;
-    const emailParam = queryParams.get('email');
+    const emailParam = localStorage.getItem(VERIFICATION_EMAIL_STORAGE_KEY);
     const shouldAutoResend = queryParams.get('autoResend') === '1';
 
     if (emailParam) {

@@ -122,6 +122,7 @@ export const API_ENDPOINTS = {
     investorLogin: `${Auth}/investor-login`,
     windowsLogin: `${Auth}/WinLogin`, //production
     fakeWindowsLogin: `${Auth}/login`,
+    logout: `${Auth}/logout`,
     refreshToken: `${Auth}/refresh-token`,
     register: `${Auth}/register-investor`,
     resetPassword: `${Auth}/reset-password`,

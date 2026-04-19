@@ -10,9 +10,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { JwtService } from '../../services/auth/jwt-service';
 import { EImpersonationStatus, ERoutes } from '../../enums';
 import type { SupportedLanguage } from '../../services/i18n/i18n.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const REFRESH_BEFORE_EXPIRY_MS = 2 * 60 * 1000; // 2 minutes before expiry
+export const VERIFICATION_EMAIL_STORAGE_KEY = 'verificationEmail';
 
 const initialState: {
   authResponse: IAuthData | null;
@@ -134,9 +134,18 @@ export const AuthStore = signalStore(
 
       logout(): void {
         this.clearRefreshTimer();
+        const authData = localStorage.getAuthData();
+
+        if (authData?.refreshToken) {
+          authApiService.logout(authData.refreshToken).pipe(take(1)).subscribe({
+            error: () => {
+              // no-op: user is already logged out locally
+            },
+          });
+        }
+
         localStorage.cleanAll();
         patchState(store, { authResponse: null, jwtUserDetails: null, userProfile: null });
-        authApiService.logout();
       },
 
       login(email: string, password: string): Observable<IBaseApiResponse<IAuthData>> {

@@ -9,7 +9,7 @@ import { RegisterFormService } from '../../services/register-form/register-form'
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { BaseErrorComponent } from 'src/app/shared/components/base-components/base-error/base-error.component';
 import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
-import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { AuthStore, VERIFICATION_EMAIL_STORAGE_KEY } from 'src/app/shared/stores/auth/auth.store';
 import { IRegisterRequest } from 'src/app/shared/interfaces';
 import { ERoutes } from 'src/app/shared/enums';
 import { TranslatePipe } from 'src/app/shared/pipes';
@@ -62,8 +62,9 @@ export class Register {
         next: (response) => {
           if (response.success) {
             this.toast.success(response.message as unknown as string || this.i18nService.translate('auth.register.verificationSentSuccess'));
+            localStorage.setItem(VERIFICATION_EMAIL_STORAGE_KEY, this.registerForm.value.email!);
             this.router.navigate(['/', ERoutes.auth, ERoutes.verification], {
-              queryParams: { email: this.registerForm.value.email! },
+              replaceUrl: true,
             });
           }
         },

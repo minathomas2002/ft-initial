@@ -66,8 +66,10 @@ export class AuthApiService {
     return this.http.get<IBaseApiResponse<any>>(`${this.baseUrl}/${API_ENDPOINTS.auth.verifyEmail}?token=${token}`);
   }
 
-  logout() {
-
+  logout(refreshToken: string): Observable<IBaseApiResponse<void>> {
+    return this.http.post<IBaseApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.auth.logout}`, {
+      refreshToken,
+    });
   }
 
   passwordResetTokenExpiry(token: string): Observable<IBaseApiResponse<boolean>> {
