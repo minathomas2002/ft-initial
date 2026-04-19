@@ -4,6 +4,7 @@ import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { EYesNo } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 import { registeredVendorIDPatternValidator } from 'src/app/shared/validators/registered-vendor-id.validator';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 export class ServiceLocalizationStepOverviewFormBuilder {
   constructor(
@@ -25,7 +26,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.ceoName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100), safeTextValidator()]),
       }),
       [EMaterialsFormControls.ceoEmailID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -38,7 +39,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.globalHQLocation]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255), safeTextValidator()]),
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -56,15 +57,15 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.localAgentDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Text area, conditional
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]), // Text area, conditional
       }),
       [EMaterialsFormControls.localAgentName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator()]),
       }),
       [EMaterialsFormControls.contactPersonName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator()]),
       }),
       [EMaterialsFormControls.emailID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -76,7 +77,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.companyLocation]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''), // Required, not conditional
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator()]), // Required, not conditional
       }),
     });
   }
@@ -102,7 +103,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.serviceDescription]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]),
       }),
       [EMaterialsFormControls.serviceProvidedTo]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -110,11 +111,11 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       }),
       [EMaterialsFormControls.serviceProvidedToCompanyNames]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255), safeTextValidator()]),
       }),
       [EMaterialsFormControls.totalBusinessDoneLast5Years]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150), safeTextValidator()]),
       }),
       [EMaterialsFormControls.serviceTargetedForLocalization]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -203,22 +204,23 @@ export class ServiceLocalizationStepOverviewFormBuilder {
       const localAgentDetailsValueControl = (localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails) as FormGroup)?.get(EMaterialsFormControls.value);
       if (localAgentDetailsValueControl) {
         localAgentDetailsValueControl.addValidators([Validators.required]);
+        localAgentDetailsValueControl.addValidators([safeTextValidator({ allowNewLines: true })]);
         localAgentDetailsValueControl.updateValueAndValidity();
       }
 
       // Individual fields (conditional)
-      (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100)]);
-      (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100)]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100), safeTextValidator()]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100), safeTextValidator()]);
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.email]);
       (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, phoneNumberPatternValidator(), Validators.maxLength(15)]);
-      (localAgentFormGroup.controls[EMaterialsFormControls.companyLocation] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(255)]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.companyLocation] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(255), safeTextValidator()]);
     } else {
       // Reset and clear validators for conditional fields
       const localAgentDetailsValueControl = (localAgentFormGroup.get(EMaterialsFormControls.localAgentDetails) as FormGroup)?.get(EMaterialsFormControls.value);
       if (localAgentDetailsValueControl) {
         localAgentDetailsValueControl.reset();
         // Keep max length constraint even when section is not required
-        localAgentDetailsValueControl.setValidators([Validators.maxLength(255)]);
+        localAgentDetailsValueControl.setValidators([Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
         localAgentDetailsValueControl.updateValueAndValidity();
       }
 
@@ -259,7 +261,7 @@ export class ServiceLocalizationStepOverviewFormBuilder {
     const hasOthers = selected.includes(EServiceProvidedTo.Others.toString()) || selected.includes('Others');
 
     if (hasOthers) {
-      companyNamesControl.setValidators([Validators.required, Validators.maxLength(255)]);
+      companyNamesControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator()]);
     } else {
       companyNamesControl.clearValidators();
       companyNamesControl.reset();

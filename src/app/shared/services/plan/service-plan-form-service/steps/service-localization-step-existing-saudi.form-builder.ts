@@ -2,6 +2,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AgreementType, EMaterialsFormControls, EServiceCompanyType, EServiceQualificationStatus, EYesNo } from 'src/app/shared/enums';
 import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
 import { registeredVendorIDPatternValidator } from 'src/app/shared/validators/registered-vendor-id.validator';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 export class ServiceLocalizationStepExistingSaudiFormBuilder {
   constructor(
@@ -16,7 +17,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       rowId: [null], // Hidden control to store the row ID (for edit mode)
       [EMaterialsFormControls.saudiCompanyName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100), safeTextValidator()]),
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -36,23 +37,23 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.products]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Manufacturer + Qualified/Under Pre-Qualification
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]), // Conditional - Manufacturer + Qualified/Under Pre-Qualification
       }),
       [EMaterialsFormControls.companyOverview]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Manufacturer + Not Qualified
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]), // Conditional - Manufacturer + Not Qualified
       }),
       [EMaterialsFormControls.keyProjectsExecutedByContractorForSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Contractor
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]), // Conditional - Contractor
       }),
       [EMaterialsFormControls.companyOverviewKeyProjectDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Contractor
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]), // Conditional - Contractor
       }),
       [EMaterialsFormControls.companyOverviewOther]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255)]), // Conditional - Other
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]), // Conditional - Other
       }),
     });
   }
@@ -83,19 +84,19 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
       }),
       [EMaterialsFormControls.agreementOtherDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(100)]), // Conditional - required if "Other"
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(100), safeTextValidator({ allowNewLines: true })]), // Conditional - required if "Other"
       }),
       [EMaterialsFormControls.supervisionOversightEntity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(100)]), // Optional
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.maxLength(100), safeTextValidator()]), // Optional
       }),
       [EMaterialsFormControls.whyChoseThisCompany]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]),
       }),
       [EMaterialsFormControls.summaryOfKeyAgreementClauses]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]),
       }),
       [EMaterialsFormControls.provideAgreementCopy]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -203,13 +204,13 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     // Key Measures to Upskill Saudis (required)
     itemGroup[EMaterialsFormControls.keyMeasuresToUpskillSaudis] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
-      [EMaterialsFormControls.value]: ['', [Validators.required]], // Required, Description of training/hiring plans
+      [EMaterialsFormControls.value]: ['', [Validators.required, safeTextValidator({ allowNewLines: true })]], // Required, Description of training/hiring plans
     });
 
     // Mention Support Required from SEC (optional)
     itemGroup[EMaterialsFormControls.mentionSupportRequiredFromSEC] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
-      [EMaterialsFormControls.value]: ['', [Validators.maxLength(500)]], // Optional, Max 500
+      [EMaterialsFormControls.value]: ['', [Validators.maxLength(500), safeTextValidator({ allowNewLines: true })]], // Optional, Max 500
     });
 
     return this.fb.group(itemGroup);
@@ -412,7 +413,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     const keyProjectsControl = itemFormGroup.get(`${EMaterialsFormControls.keyProjectsExecutedByContractorForSEC}.${EMaterialsFormControls.value}`);
     if (keyProjectsControl) {
       if (hasContractor) {
-        keyProjectsControl.setValidators([Validators.required, Validators.maxLength(255)]);
+        keyProjectsControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
       } else {
         keyProjectsControl.clearValidators();
         keyProjectsControl.reset();
@@ -424,7 +425,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     const companyOverviewKeyProjectControl = itemFormGroup.get(`${EMaterialsFormControls.companyOverviewKeyProjectDetails}.${EMaterialsFormControls.value}`);
     if (companyOverviewKeyProjectControl) {
       if (hasContractor) {
-        companyOverviewKeyProjectControl.setValidators([Validators.required, Validators.maxLength(255)]);
+        companyOverviewKeyProjectControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
       } else {
         companyOverviewKeyProjectControl.clearValidators();
         companyOverviewKeyProjectControl.reset();
@@ -436,7 +437,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     const companyOverviewOtherControl = itemFormGroup.get(`${EMaterialsFormControls.companyOverviewOther}.${EMaterialsFormControls.value}`);
     if (companyOverviewOtherControl) {
       if (hasOther) {
-        companyOverviewOtherControl.setValidators([Validators.required, Validators.maxLength(255)]);
+        companyOverviewOtherControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
       } else {
         companyOverviewOtherControl.clearValidators();
         companyOverviewOtherControl.reset();
@@ -462,7 +463,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     const isQualifiedOrPreQualified = qualificationStatus === EServiceQualificationStatus.Qualified.toString() || qualificationStatus === EServiceQualificationStatus.UnderPreQualification.toString();
 
     if (hasManufacturer && isQualifiedOrPreQualified) {
-      productsControl.setValidators([Validators.required, Validators.maxLength(255)]);
+      productsControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
     } else {
       productsControl.clearValidators();
       productsControl.reset();
@@ -488,7 +489,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     const isNotQualified = qualificationStatus === EServiceQualificationStatus.NotQualified.toString();
 
     if (hasManufacturer && isNotQualified) {
-      companyOverviewControl.setValidators([Validators.required, Validators.maxLength(255)]);
+      companyOverviewControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
     } else {
       companyOverviewControl.clearValidators();
       companyOverviewControl.reset();
@@ -511,7 +512,7 @@ export class ServiceLocalizationStepExistingSaudiFormBuilder {
     if (!otherDetailsControl) return;
 
     if (agreementType === AgreementType.Other.toString()) {
-      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(100)]);
+      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(100), safeTextValidator({ allowNewLines: true })]);
     } else {
       otherDetailsControl.clearValidators();
       otherDetailsControl.reset();

@@ -21,6 +21,7 @@ type ValidationMessageKey =
   | 'dateRangeInvalid'
   | 'minQuantityError'
   | 'maxQuantityError'
+  | 'potentiallyMaliciousCharacters'
   | 'invalidRegisteredVendorIDLength';
 
 @Injectable({
@@ -111,6 +112,7 @@ export class ErrorMessagesService {
       'dateRangeInvalid',
       'minQuantityError',
       'maxQuantityError',
+      'potentiallyMaliciousCharacters',
       'invalidRegisteredVendorIDLength',
     ];
     return keys.includes(errorKey as ValidationMessageKey);
@@ -209,6 +211,10 @@ export class ErrorMessagesService {
         const msg = err?.['message'];
         return (typeof msg === 'string' ? msg : null) ?? this.i18n.translate('common.validation.maxQuantityError', { label });
       }
+      case 'potentiallyMaliciousCharacters':
+        return this.i18n.translate('common.validation.potentiallyMaliciousCharacters', {
+          label,
+        });
       default:
         return this.i18n.translate('common.validation.fallback');
     }

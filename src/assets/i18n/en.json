@@ -99,6 +99,7 @@
       "dateRangeInvalid": "{{label}} must be after the start date",
       "minQuantityError": "{{label}} must be less than max quantity",
       "maxQuantityError": "{{label}} must be greater than min quantity",
+      "potentiallyMaliciousCharacters": "{{label}} contains invalid characters.",
       "fallback": "This field is invalid",
       "characters": "characters",
       "digits": "digits"

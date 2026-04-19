@@ -1,6 +1,7 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ELocalizationApproach, ELocation, EMaterialsFormControls, EYesNo } from 'src/app/shared/enums';
 import { fileSizeValidator } from 'src/app/shared/validators/file-size.validator';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 export class ServiceLocalizationStepDirectLocalizationFormBuilder {
   constructor(
@@ -78,7 +79,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       }),
       [EMaterialsFormControls.localizationApproachOtherDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.maxLength(250)]], // Conditional - if "Other"
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(250), safeTextValidator({ allowNewLines: true })]], // Conditional - if "Other"
       }),
       [EMaterialsFormControls.location]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -86,7 +87,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       }),
       [EMaterialsFormControls.locationOtherDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255)]], // Conditional - if "Other"
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]], // Conditional - if "Other"
       }),
       [EMaterialsFormControls.capexRequired]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -94,7 +95,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       }),
       [EMaterialsFormControls.supervisionOversightByGovernmentEntity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255)]], // Optional
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]], // Optional
       }),
       [EMaterialsFormControls.willBeAnyProprietaryToolsSystems]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
@@ -102,7 +103,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
       }),
       [EMaterialsFormControls.proprietaryToolsSystemsDetails]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255)]], // Conditional - if "Yes"
+        [EMaterialsFormControls.value]: ['', [Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]], // Conditional - if "Yes"
       }),
     };
 
@@ -135,13 +136,13 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     // Key Measures to Upskill Saudis (required)
     itemGroup[EMaterialsFormControls.keyMeasuresToUpskillSaudis] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
-      [EMaterialsFormControls.value]: ['', [Validators.required]], // Required, Description of training/hiring plans
+      [EMaterialsFormControls.value]: ['', [Validators.required, safeTextValidator({ allowNewLines: true })]], // Required, Description of training/hiring plans
     });
 
     // Mention Support Required from SEC (optional)
     itemGroup[EMaterialsFormControls.mentionSupportRequiredFromSEC] = this.fb.group({
       [EMaterialsFormControls.hasComment]: [false],
-      [EMaterialsFormControls.value]: ['', [Validators.maxLength(500)]], // Optional, Max 500
+      [EMaterialsFormControls.value]: ['', [Validators.maxLength(500), safeTextValidator({ allowNewLines: true })]], // Optional, Max 500
     });
 
     return this.fb.group(itemGroup);
@@ -258,7 +259,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     if (!otherDetailsControl) return;
 
     if (localizationApproach === ELocalizationApproach.Other.toString()) {
-      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
+      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
     } else {
       otherDetailsControl.clearValidators();
       otherDetailsControl.reset();
@@ -281,7 +282,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     if (!otherDetailsControl) return;
 
     if (location === ELocation.Other.toString()) {
-      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
+      otherDetailsControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
     } else {
       otherDetailsControl.clearValidators();
       otherDetailsControl.reset();
@@ -304,7 +305,7 @@ export class ServiceLocalizationStepDirectLocalizationFormBuilder {
     if (!detailsControl) return;
     const isYes = willBeAnyProprietaryToolsSystems === EYesNo.Yes.toString();
     if (isYes) {
-      detailsControl.setValidators([Validators.required, Validators.maxLength(255)]);
+      detailsControl.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
     } else {
       detailsControl.clearValidators();
       detailsControl.reset();

@@ -2,6 +2,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls, ETargetedCustomer } from 'src/app/shared/enums';
 import { EOpportunityQuantity } from 'src/app/shared/enums/opportunities.enum';
 import { BasicPlanBuilder } from './basicPlanBuilder';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicPlanBuilder {
   constructor(fb: FormBuilder) {
@@ -12,11 +13,11 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
     return this.fb.group({
       [EMaterialsFormControls.productName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100), safeTextValidator()]),
       }),
       [EMaterialsFormControls.productSpecifications]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(500)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(500), safeTextValidator({ allowNewLines: true })]),
       }),
       [EMaterialsFormControls.targetedAnnualPlantCapacity]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -54,7 +55,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       }),
       [EMaterialsFormControls.othersDescription]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator({ allowNewLines: true })]),
       }),
     });
   }
@@ -67,11 +68,11 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       }),
       [EMaterialsFormControls.namesOfTargetedSuppliers]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator()]),
       }),
       [EMaterialsFormControls.productsUtilizeTargetedProduct]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator({ allowNewLines: true })]),
       }),
     });
   }
@@ -85,7 +86,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       [EMaterialsFormControls.provideToSEC]: this.fb.control(null, [Validators.required]),
       [EMaterialsFormControls.qualifiedPlantLocationSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator()]),
       }),
       [EMaterialsFormControls.approvedVendorIDSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -103,11 +104,11 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
       [EMaterialsFormControls.provideToLocalSuppliers]: this.fb.control(null, [Validators.required]),
       [EMaterialsFormControls.namesOfSECApprovedSuppliers]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator()]),
       }),
       [EMaterialsFormControls.qualifiedPlantLocation]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(''),
+        [EMaterialsFormControls.value]: this.fb.control('', [safeTextValidator()]),
       }),
       [EMaterialsFormControls.yearsOfExperience]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -141,7 +142,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
     }
 
     if (provideToSEC) {
-      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocationSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator()]);
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperienceSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required, Validators.max(99)]);
       experienceFormGroup.get(`${EMaterialsFormControls.totalQuantitiesSEC}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required, Validators.max(9999999999999999)]);
     } else {
@@ -171,8 +172,8 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
     }
 
     if (provideToLocalSuppliers) {
-      experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
-      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
+      experienceFormGroup.get(`${EMaterialsFormControls.namesOfSECApprovedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator()]);
+      experienceFormGroup.get(`${EMaterialsFormControls.qualifiedPlantLocation}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator()]);
       experienceFormGroup.get(`${EMaterialsFormControls.yearsOfExperience}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required, Validators.max(99)]);
       experienceFormGroup.get(`${EMaterialsFormControls.totalQuantities}.${EMaterialsFormControls.value}`)?.setValidators([Validators.min(0), Validators.required, Validators.max(9999999999999999)]);
     } else {
@@ -206,7 +207,7 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
     const othersDescriptionControl = capexFormGroup.get(`${EMaterialsFormControls.othersDescription}.${EMaterialsFormControls.value}`);
 
     if (othersPercentage !== null && othersPercentage > 0) {
-      othersDescriptionControl?.setValidators([Validators.required, Validators.maxLength(255)]);
+      othersDescriptionControl?.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
     } else {
       othersDescriptionControl?.clearValidators();
       othersDescriptionControl?.reset();
@@ -228,8 +229,8 @@ export class PlanLocalizationStep2ProductPlantOverviewFormBuilder extends BasicP
     const hasLocalSuppliers = targetedCustomers.includes(ETargetedCustomer.SEC_APPROVED_LOCAL_SUPPLIERS.toString());
 
     if (hasLocalSuppliers) {
-      targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
-      targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255)]);
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator()]);
+      targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.setValidators([Validators.required, Validators.maxLength(255), safeTextValidator({ allowNewLines: true })]);
     } else {
       targetCustomersFormGroup.get(`${EMaterialsFormControls.namesOfTargetedSuppliers}.${EMaterialsFormControls.value}`)?.clearValidators();
       targetCustomersFormGroup.get(`${EMaterialsFormControls.productsUtilizeTargetedProduct}.${EMaterialsFormControls.value}`)?.clearValidators();

@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IAddContactUsRequest } from 'src/app/shared/interfaces/contact-us.interface';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 @Injectable({ providedIn: 'root' })
 export class ContactUsFormService {
   private fb = inject(FormBuilder);
@@ -8,8 +9,8 @@ export class ContactUsFormService {
     title: FormControl<string | null>;
     description: FormControl<string | null>;
   }> = this.fb.group({
-    title: this.fb.control<string | null>(null, [Validators.required,Validators.maxLength(150), Validators.minLength(3)]),
-    description: this.fb.control<string | null>(null, [Validators.required,Validators.maxLength(1000), Validators.minLength(10)]),
+    title: this.fb.control<string | null>(null, [Validators.required, Validators.maxLength(150), Validators.minLength(3), safeTextValidator()]),
+    description: this.fb.control<string | null>(null, [Validators.required, Validators.maxLength(1000), Validators.minLength(10), safeTextValidator({ allowNewLines: true })]),
   });
 
   get title() {

@@ -99,6 +99,7 @@
       "dateRangeInvalid": "{{label}} يجب أن يكون بعد تاريخ البدء",
       "minQuantityError": "{{label}} يجب أن يكون أقل من الكمية القصوى",
       "maxQuantityError": "{{label}} يجب أن يكون أكبر من الكمية الدنيا",
+      "potentiallyMaliciousCharacters": "{{label}} يحتوي على أحرف غير صالحة.",
       "fallback": "هذا الحقل غير صالح",
       "characters": "حروف",
       "digits": "أرقام"

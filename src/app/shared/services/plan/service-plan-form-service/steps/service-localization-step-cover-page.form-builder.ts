@@ -1,6 +1,7 @@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EMaterialsFormControls } from 'src/app/shared/enums';
 import { v4 as uuidv4 } from 'uuid';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 export class ServiceLocalizationStepCoverPageFormBuilder {
   constructor(
@@ -12,11 +13,11 @@ export class ServiceLocalizationStepCoverPageFormBuilder {
     return this.fb.group({
       [EMaterialsFormControls.planTitle]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(this.newPlanTitle, [Validators.required, Validators.maxLength(150)]),
+        [EMaterialsFormControls.value]: this.fb.control(this.newPlanTitle, [Validators.required, Validators.maxLength(150), safeTextValidator()]),
       }),
       [EMaterialsFormControls.companyName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100), safeTextValidator()]),
       }),
     });
   }
@@ -30,7 +31,7 @@ export class ServiceLocalizationStepCoverPageFormBuilder {
       [EMaterialsFormControls.serviceId]: this.fb.control(uuidv4()), // Generate GUID for service
       [EMaterialsFormControls.serviceName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(150), safeTextValidator()]),
       }),
     });
   }

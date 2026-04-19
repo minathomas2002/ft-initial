@@ -5,12 +5,13 @@ import { EViewMode } from 'src/app/shared/enums';
 import { IPhoneValue, IProfileResponse } from 'src/app/shared/interfaces';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 import { registeredVendorIDPatternValidator } from 'src/app/shared/validators/registered-vendor-id.validator';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 @Injectable()
 export class PersonalInformationFormService {
   private fb = inject(FormBuilder);
   personalInformationForm = this.fb.group({
-    fullName: new FormControl<string>('', [Validators.required, Validators.maxLength(150)]),
+    fullName: new FormControl<string>('', [Validators.required, Validators.maxLength(150), safeTextValidator()]),
     email: new FormControl<string>('', [Validators.required, Validators.email, Validators.maxLength(100)]),
     phoneNumber: new FormControl<IPhoneValue | null>(null, [Validators.required, phoneNumberPatternValidator()]),
     otherPhoneNumber: new FormControl<IPhoneValue | null>(null, [phoneNumberPatternValidator()]),

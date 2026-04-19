@@ -3,6 +3,7 @@ import { EOpportunityType, EMaterialsFormControls } from 'src/app/shared/enums';
 import { phoneNumberPatternValidator } from 'src/app/shared/validators/phone-number.validator';
 import { BasicPlanBuilder } from './basicPlanBuilder';
 import { registeredVendorIDPatternValidator } from 'src/app/shared/validators/registered-vendor-id.validator';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
   constructor(fb: FormBuilder, private readonly newPlanTitle: string) {
@@ -13,7 +14,7 @@ export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
     return this.fb.group({
       [EMaterialsFormControls.planTitle]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control(this.newPlanTitle, [Validators.required, Validators.maxLength(150)]),
+        [EMaterialsFormControls.value]: this.fb.control(this.newPlanTitle, [Validators.required, Validators.maxLength(150), safeTextValidator()]),
       }),
       [EMaterialsFormControls.opportunityType]: this.fb.control({ value: EOpportunityType.PRODUCT.toString(), disabled: true }, [Validators.required]),
       [EMaterialsFormControls.opportunity]: [null, [Validators.required]],
@@ -25,11 +26,11 @@ export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
     return this.fb.group({
       [EMaterialsFormControls.companyName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100), safeTextValidator()]),
       }),
       [EMaterialsFormControls.ceoName]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(100), safeTextValidator()]),
       }),
       [EMaterialsFormControls.ceoEmailID]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -42,7 +43,7 @@ export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
     return this.fb.group({
       [EMaterialsFormControls.globalHQLocation]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
-        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
+        [EMaterialsFormControls.value]: this.fb.control('', [Validators.required, Validators.maxLength(255), safeTextValidator()]),
       }),
       [EMaterialsFormControls.registeredVendorIDwithSEC]: this.fb.group({
         [EMaterialsFormControls.hasComment]: this.fb.control(false),
@@ -99,7 +100,9 @@ export class PlanLocalizationStep1OverviewFormBuilder extends BasicPlanBuilder {
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(100)]);
       (localAgentFormGroup.controls[EMaterialsFormControls.emailID] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.email]);
       (localAgentFormGroup.controls[EMaterialsFormControls.contactNumber] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, phoneNumberPatternValidator(), Validators.maxLength(15)]);
-      (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(255)]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([safeTextValidator()]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].addValidators([safeTextValidator()]);
+      (localAgentFormGroup.controls[EMaterialsFormControls.companyHQLocation] as FormGroup).controls[EMaterialsFormControls.value].addValidators([Validators.required, Validators.maxLength(255), safeTextValidator()]);
     } else {
       (localAgentFormGroup.controls[EMaterialsFormControls.localAgentName] as FormGroup).controls[EMaterialsFormControls.value].reset();
       (localAgentFormGroup.controls[EMaterialsFormControls.contactPersonName] as FormGroup).controls[EMaterialsFormControls.value].reset();

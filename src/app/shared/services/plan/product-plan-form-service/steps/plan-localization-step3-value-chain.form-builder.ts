@@ -4,6 +4,7 @@ import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls }
 import { hasIncompleteControl } from 'src/app/shared/validators/form-control-helpers';
 import { BasicPlanBuilder } from './basicPlanBuilder';
 import { IOpportunityLocalizationTablesValidationResponse } from 'src/app/shared/interfaces';
+import { safeTextValidator } from 'src/app/shared/validators/safe-text.validator';
 
 const ALL_VALUE_CONTROL_NAMES = [
   EMaterialsFormControls.expenseHeader,
@@ -36,7 +37,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
       rowId: [null],
       [EMaterialsFormControls.expenseHeader]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
-        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100)]],
+        [EMaterialsFormControls.value]: ['', [Validators.required, Validators.maxLength(100), safeTextValidator()]],
       }),
       [EMaterialsFormControls.inHouseOrProcured]: this.fb.group({
         [EMaterialsFormControls.hasComment]: [false],
