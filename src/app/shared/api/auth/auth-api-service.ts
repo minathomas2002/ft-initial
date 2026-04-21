@@ -46,8 +46,8 @@ export class AuthApiService {
     return this.http.get<any>(`${this.baseUrl}/${API_ENDPOINTS.auth.getUserProfile}`);
   }
 
-  forgotPassword(email: string): Observable<IBaseApiResponse<void>> {
-    return this.http.post<IBaseApiResponse<void>>(`${this.baseUrl}/${API_ENDPOINTS.auth.forgotPassword}`, {
+  forgotPassword(email: string): Observable<IBaseApiResponse<{ message: string }>> {
+    return this.http.post<IBaseApiResponse<{ message: string }>>(`${this.baseUrl}/${API_ENDPOINTS.auth.forgotPassword}`, {
       email,
     });
   }

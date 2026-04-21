@@ -251,7 +251,7 @@ export const AuthStore = signalStore(
         );
       },
 
-      forgotPassword(email: string): Observable<IBaseApiResponse<void>> {
+      forgotPassword(email: string): Observable<IBaseApiResponse<{ message: string }>> {
         patchState(store, { loading: true });
         return authApiService.forgotPassword(email).pipe(
           finalize(() => {

@@ -60,9 +60,7 @@ export class ForgotPassword {
               this.showResendResetLink.set(true);
               this.isResetPasswordDisabled.set(true);
               this.resendSuccessToken++;
-              this.toast.success(this.i18nService.translate('auth.forgot.success'));
-
-              // Redirect to login on success
+              this.toast.success(response.body.message);
             }
           },
           error: (error) => {
@@ -84,7 +82,7 @@ export class ForgotPassword {
         .subscribe({
           next: (response) => {
             if (response.statusCode === 200 || response.statusCode === 201) {
-              this.toast.success(this.i18nService.translate('auth.forgot.success'));
+              this.toast.success(response.body.message);
               this.resendSuccessToken++;
             }
           },
