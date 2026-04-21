@@ -60,9 +60,7 @@ export class ForgotPassword {
               this.showResendResetLink.set(true);
               this.isResetPasswordDisabled.set(true);
               this.resendSuccessToken++;
-              this.toast.success(this.i18nService.translate('auth.forgot.success'));
-
-              // Redirect to login on success
+              this.toast.success(response.body.message);
             }
           },
           error: (error) => {
