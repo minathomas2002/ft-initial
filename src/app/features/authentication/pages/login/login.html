@@ -49,7 +49,6 @@
 
   <div class="mt-5 mb-5">
     <form
-      autocomplete="off"
       id="login"
       [formGroup]="loginForm"
       (ngSubmit)="publicLogin()"
@@ -60,9 +59,11 @@
         <div class="field">
           <app-base-label [title]="'auth.login.email' | translate"></app-base-label>
           <input
-            autocomplete="new-field"
+            id="login-email"
+            name="email"
             type="email"
             pInputText
+            autocomplete="username"
             class="ltr"
             [formControl]="loginFormService.email"
             [placeholder]="'auth.login.enterYourEmail' | translate"
@@ -80,6 +81,7 @@
           <app-password-toggle
             [control]="loginFormService.password"
             [placeholder]="'auth.login.enterYourPassword' | translate"
+            [autocomplete]="'current-password'"
           ></app-password-toggle>
           @if(loginFormService.password.touched && loginFormService.password.invalid) {
           <app-base-error [message]="loginFormService.password.hasError('required') ? ('auth.login.passwordRequired' | translate) :
