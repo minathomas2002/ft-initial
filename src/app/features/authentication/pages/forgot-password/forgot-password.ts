@@ -82,7 +82,7 @@ export class ForgotPassword {
         .subscribe({
           next: (response) => {
             if (response.statusCode === 200 || response.statusCode === 201) {
-              this.toast.success(this.i18nService.translate('auth.forgot.success'));
+              this.toast.success(response.body.message);
               this.resendSuccessToken++;
             }
           },
