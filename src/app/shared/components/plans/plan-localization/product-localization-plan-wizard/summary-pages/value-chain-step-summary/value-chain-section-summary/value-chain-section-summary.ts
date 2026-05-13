@@ -130,8 +130,8 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
 
   formatYearValue(value: number | null | undefined): string {
     if (value == null) return '';
-    const key = ELocalizationStatusType[(value as unknown) as keyof typeof ELocalizationStatusType];
-    return key != null ? String(key) : String(value);
+    const label = this.getLocalizationStatusLabel(value);
+    return label ?? String(value);
   }
 
   formatCostPercent(value: unknown): string {
@@ -140,13 +140,37 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
 
   formatCellValue(value: unknown): string {
     if (value == null || value === '') return '-';
+    const localizationStatusLabel = this.getLocalizationStatusLabel(value);
+    if (localizationStatusLabel != null) return localizationStatusLabel;
+
     if (typeof value === 'number') {
-      const key = ELocalizationStatusType[value as unknown as keyof typeof ELocalizationStatusType];
-      if (key != null) return String(key);
       const key2 = EInHouseProcuredType[value as unknown as keyof typeof EInHouseProcuredType];
       if (key2 != null) return String(key2).replace(/([A-Z])/g, ' $1').trim();
     }
     return String(value);
+  }
+
+  private getLocalizationStatusLabel(value: unknown): string | null {
+    if (value == null || value === '') return null;
+
+    const normalized =
+      typeof value === 'string' && /^\d+$/.test(value.trim())
+        ? Number(value)
+        : value;
+
+    if (normalized === ELocalizationStatusType.Yes || String(normalized).toLowerCase() === 'yes' || String(normalized).toLowerCase() === 'local') {
+      return this.i18nService.translate('plans.options.localizationStatusYes');
+    }
+
+    if (normalized === ELocalizationStatusType.No || String(normalized).toLowerCase() === 'no' || String(normalized).toLowerCase() === 'foreign') {
+      return this.i18nService.translate('plans.options.localizationStatusNo');
+    }
+
+    if (normalized === ELocalizationStatusType.Partial || String(normalized).toLowerCase() === 'partial') {
+      return this.i18nService.translate('plans.options.localizationStatusPartial');
+    }
+
+    return null;
   }
 
   /** Maps a table cell to IPlanSummaryField for use with app-plan-summary-flied */
