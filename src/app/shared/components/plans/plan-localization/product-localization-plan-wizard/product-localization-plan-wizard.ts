@@ -505,10 +505,6 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   override onAddComment(): void {
     // Requirement: For non-investors, show an info/confirmation dialog when starting comments on Value Chain step.
-    if (!this.isInvestorPersona() && this.activeStep() === 3 && !this.showValueChainAddCommentInfoDialog()) {
-      this.showValueChainAddCommentInfoDialog.set(true);
-      return;
-    }
     super.onAddComment(this.commentColor());
   }
 
