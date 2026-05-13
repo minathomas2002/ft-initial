@@ -381,6 +381,11 @@ export class ProductPlanFormService {
       }
     });
 
+    const valueChainPageComment = this._step3FormGroup.get(EMaterialsFormControls.valueChainPageCommentGroup);
+    if (valueChainPageComment instanceof FormGroup) {
+      valueChainPageComment.get(EMaterialsFormControls.hasComment)?.setValue(false, { emitEvent: false });
+    }
+
     // Reset Step 4: Saudization
     this._step4FormGroup.reset();
 

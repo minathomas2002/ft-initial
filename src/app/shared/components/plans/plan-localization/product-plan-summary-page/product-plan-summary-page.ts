@@ -4,7 +4,7 @@ import { ProductPlantOverviewStepSummary } from '../product-localization-plan-wi
 import { ValueChainStepSummary } from '../product-localization-plan-wizard/summary-pages/value-chain-step-summary/value-chain-step-summary';
 import { SaudizationStepSummary } from '../product-localization-plan-wizard/summary-pages/saudization-step-summary/saudization-step-summary';
 import { ICommentsCountAndPhase } from 'src/app/shared/types/plan-comments.types';
-import { Signature } from 'src/app/shared/interfaces/plans.interface';
+import { IProductPlanResponse, Signature } from 'src/app/shared/interfaces/plans.interface';
 import { SummarySectionSignature } from '../../summary-section-signature/summary-section-signature';
 import { EInternalUserPlanStatus, EInvestorPlanStatus } from 'src/app/shared/interfaces';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
@@ -51,6 +51,8 @@ export class ProductPlanSummaryPage {
 
   signature = input<Signature | null>(null);
   approvalDepartmentSignature = input<string | null>(null);
+  /** Baseline plan (e.g. pre–resubmit snapshot) for value-chain row add/remove/diff on the summary. */
+  originalPlanResponse = input<IProductPlanResponse | null>(null);
 
   /** From wizard: selectedInputs().length per step (indicator for selected/commented fields). */
   step1CommentsCountAndPhase = input<ICommentsCountAndPhase>({ count: 0, phase: 'none' });

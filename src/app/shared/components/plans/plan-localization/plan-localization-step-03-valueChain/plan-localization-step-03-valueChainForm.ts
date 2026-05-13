@@ -19,6 +19,7 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -32,6 +33,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
     GeneralConfirmationDialogComponent,
     CommentStateComponent,
     CommentInputComponent,
+    GroupInputWithCheckbox,
   ],
   templateUrl: './plan-localization-step-03-valueChainForm.html',
   styleUrl: './plan-localization-step-03-valueChainForm.scss',
@@ -92,6 +94,24 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   // Implement abstract method from base class
   getFormGroup(): FormGroup {
     return this.formGroup;
+  }
+
+  /** Whole-step comment checkbox (Review mode); bound to `valueChainPageCommentGroup.hasComment`. */
+  get valueChainPageCommentGroup(): FormGroup | null {
+    const g = this.formGroup.get(EMaterialsFormControls.valueChainPageCommentGroup);
+    return g instanceof FormGroup ? g : null;
+  }
+
+  protected override shouldEnableEntireFormInResubmitMode(): boolean {
+    if (!this.isResubmitMode()) return false;
+    return this.pageComments().some(c => {
+      if ((c.comment ?? '').trim().length > 0) return true;
+      return (c.fields ?? []).some(f => f.section === 'valueChain' && f.inputKey === 'valueChainPage');
+    });
+  }
+
+  protected override onEntireFormEnabledInResubmit(): void {
+    setTimeout(() => this.applyYearsViewForAllRows(), 0);
   }
 
   // Expose base class methods as public for template access

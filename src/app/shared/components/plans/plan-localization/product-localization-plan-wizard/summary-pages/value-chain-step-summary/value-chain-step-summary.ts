@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { merge } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
 import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
-import { IFieldInformation } from 'src/app/shared/interfaces/plans.interface';
+import { IFieldInformation, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
 import { ValueChainSectionSummaryComponent } from './value-chain-section-summary/value-chain-section-summary';
@@ -13,6 +13,11 @@ import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { TooltipModule } from 'primeng/tooltip';
 
+/**
+ * Step 3 summary: per-section field lists still come from {@link SummaryStepBaseClass.getSectionSummaryFields};
+ * add/remove row detection and per-cell before/after (without relying only on commented fields) live in
+ * {@link ValueChainSectionSummaryComponent}.
+ */
 @Component({
   selector: 'app-value-chain-step-summary',
   imports: [
@@ -31,6 +36,9 @@ export class ValueChainStepSummary extends SummaryStepBaseClass {
   readonly pageTitleForTL = EPlanPageTitle.ValueChain;
   formGroup = this.productPlanFormService.step3_valueChain;
   doRefresh = signal(new Date());
+
+  /** Baseline plan for value-chain row add/remove/diff (optional; section summary falls back to store). */
+  readonly originalPlanResponse = input<IProductPlanResponse | null>(null);
 
   private readonly _designEngineeringFormGroup = this.formGroup.get(EMaterialsFormControls.designEngineeringFormGroup) as FormGroup;
   private readonly _sourcingFormGroup = this.formGroup.get(EMaterialsFormControls.sourcingFormGroup) as FormGroup;
