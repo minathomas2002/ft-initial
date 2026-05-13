@@ -6,15 +6,16 @@ table {
   border-collapse: collapse;
 }
 
-/** Removed baseline row (no longer in the form). */
-:host ::ng-deep tr.vc-row-removed td {
-  background-color: var(--p-red-50); 
+/** Removed row red tint — resubmit only (see .vc-row-removed-highlight on tr). */
+:host ::ng-deep tr.vc-row-removed-highlight td {
+  background-color: var(--p-red-50);
 }
 
-:host ::ng-deep tr.vc-row-removed:hover td {
+:host ::ng-deep tr.vc-row-removed-highlight:hover td {
   background-color: var(--p-red-100);
 }
 
+/** Removed baseline row (no longer in the form): strike-through in all modes. */
 :host ::ng-deep tr.vc-row-removed td,
 :host ::ng-deep tr.vc-row-removed td * {
   text-decoration: line-through;
@@ -22,7 +23,7 @@ table {
   color: rgb(107 114 128);
 }
 
-/** New row vs baseline snapshot (resubmit / summary). */
+/** Added row green tint — resubmit only (see .vc-row-added on tr). */
 :host ::ng-deep tr.vc-row-added td {
   background-color: rgb(236 253 245);
 }
