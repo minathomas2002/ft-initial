@@ -67,6 +67,9 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
   /** Baseline rows (e.g. investor submission) for add/remove/field diff; falls back to current plan data when omitted. */
   readonly originalPlanResponse = input<IProductPlanResponse | null>(null);
 
+  /** Green (added) / red (removed) row backgrounds only during resubmit. */
+  readonly applyValueChainRowTint = computed(() => this.planStore.wizardMode() === 'resubmit');
+
   itemsArray = computed<FormArray>(() => {
     const section = this.sectionFormGroup().get('items');
     return section instanceof FormArray ? section : (null as unknown as FormArray);
