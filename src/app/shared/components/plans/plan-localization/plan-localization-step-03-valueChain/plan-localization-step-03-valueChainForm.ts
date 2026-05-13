@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls, EOpportunityLocalizationTablesValidation, EPlanPageTitle } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
@@ -478,8 +479,43 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
       this.applyYearsViewForAllRows();
     } else {
       // In resubmit: run after base class effect (setTimeout ensures we run after disableUnselectedSiblings)
-      setTimeout(() => this.applyYearsViewForAllRows(), 0);
+      setTimeout(() => {
+        this.applyYearsViewForAllRows();
+        // Nested setTimeout: subscribe AFTER all initial programmatic value changes
+        // (base class enable + applyYearsViewForAllRows from both ngOnInit and the
+        // initializeStepSpecificLogic effect) have settled.
+        setTimeout(() => this.setupResubmitClearIndicatorOnChange(), 0);
+      }, 0);
     }
+  }
+
+  /** Tracks whether the resubmit "clear indicator" subscription is already attached. */
+  private resubmitClearIndicatorSubscribed = false;
+
+  /**
+   * In resubmit mode, once the investor mutates any value chain section
+   * (row added/removed or a field value edited), the step's orange indicator
+   * should be cleared because the investor has acted on the corrections.
+   *
+   * Only watches the five section FormArrays (designEngineering, sourcing,
+   * manufacturing, assemblyTesting, afterSales). Changes to the page-level
+   * comment input or hasComment groups are intentionally excluded.
+   */
+  private setupResubmitClearIndicatorOnChange(): void {
+    if (this.resubmitClearIndicatorSubscribed) return;
+    this.resubmitClearIndicatorSubscribed = true;
+
+    PlanLocalizationStep03ValueChainForm.SECTION_CONFIG.forEach(({ getArray }) => {
+      const arr = getArray(this);
+      if (!arr) return;
+      arr.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          if (!this.isResubmitMode()) return;
+          if (this.selectedInputs().length === 0) return;
+          this.selectedInputs.set([]);
+        });
+    });
   }
 
   // Override hook method for step-specific initialization

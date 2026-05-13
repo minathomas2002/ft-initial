@@ -538,7 +538,7 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
 
   allowUserToResubmit = computed(() => {
     const mode = this.planStore.wizardMode();
-    const incomingStepsComments = [this.hasIncomingStep1Comments(), this.hasIncomingStep2Comments(), this.hasIncomingStep4Comments()];
+    const incomingStepsComments = [this.hasIncomingStep1Comments(), this.hasIncomingStep2Comments(), this.hasIncomingStep3Comments(), this.hasIncomingStep4Comments()];
     return mode === 'resubmit' && (this.steps().every(step => !step.commentsCount) || (incomingStepsComments.every(step => !step)));
   });
 
