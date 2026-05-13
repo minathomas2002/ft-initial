@@ -1,28 +1,40 @@
 <div class="flex flex-col gap-[32px] pb-10">
   <!-- Value Chain Components Section -->
   <div class="flex flex-col gap-4">
-    <h2 class="text-lg font-semibold text-gray-900">
-      {{ 'plans.form.valueChainComponents' | translate }}
-      <span>
-        <i
-          class="icon-info text-sm ms-2 text-gray-400"
-          tooltipPosition="top"
-          [pTooltip]="tooltipContent"
-          [tooltipStyleClass]="'min-w-[450px]'"
-        ></i>
-        <ng-template #tooltipContent>
-          <div class="flex flex-col gap-2 text-start">
-            <p>{{ 'plans.form.placeholders.valueChainTooltipIntro' | translate }}</p>
-            <p><strong>A)</strong> {{ 'plans.form.placeholders.valueChainTooltipA' | translate }}</p>
-            <p><strong>B)</strong> {{ 'plans.form.placeholders.valueChainTooltipB' | translate }}</p>
-            <p><strong>C)</strong> {{ 'plans.form.placeholders.valueChainTooltipC' | translate }}</p>
-            <p><strong>C.i)</strong> {{ 'plans.form.placeholders.valueChainInHouse100' | translate }}</p>
-            <p><strong>C.ii)</strong> {{ 'plans.form.placeholders.valueChainTooltipCii' | translate }}</p>
-            <p><strong>C.iii)</strong> {{ 'plans.form.placeholders.valueChainImported0' | translate }}</p>
-          </div>
-        </ng-template>
-      </span>
-    </h2>
+    <app-group-input-with-checkbox
+      [showCheckbox]="showCheckbox() && planStore.wizardMode() === 'Review'"
+      [hasCommentControl]="valueChainPageCommentGroup ? getHasCommentControl(valueChainPageCommentGroup) : null"
+      (valueChanged)="
+        upDateSelectedInputs($event, {
+          section: 'valueChain',
+          inputKey: 'valueChainPage',
+          label: 'plans.form.valueChainComponents'
+        })
+      "
+    >
+      <h2 class="text-lg font-semibold text-gray-900">
+        {{ 'plans.form.valueChainComponents' | translate }}
+        <span>
+          <i
+            class="icon-info text-sm ms-2 text-gray-400"
+            tooltipPosition="top"
+            [pTooltip]="tooltipContent"
+            [tooltipStyleClass]="'min-w-[450px]'"
+          ></i>
+          <ng-template #tooltipContent>
+            <div class="flex flex-col gap-2 text-start">
+              <p>{{ 'plans.form.placeholders.valueChainTooltipIntro' | translate }}</p>
+              <p><strong>A)</strong> {{ 'plans.form.placeholders.valueChainTooltipA' | translate }}</p>
+              <p><strong>B)</strong> {{ 'plans.form.placeholders.valueChainTooltipB' | translate }}</p>
+              <p><strong>C)</strong> {{ 'plans.form.placeholders.valueChainTooltipC' | translate }}</p>
+              <p><strong>C.i)</strong> {{ 'plans.form.placeholders.valueChainInHouse100' | translate }}</p>
+              <p><strong>C.ii)</strong> {{ 'plans.form.placeholders.valueChainTooltipCii' | translate }}</p>
+              <p><strong>C.iii)</strong> {{ 'plans.form.placeholders.valueChainImported0' | translate }}</p>
+            </div>
+          </ng-template>
+        </span>
+      </h2>
+    </app-group-input-with-checkbox>
 
     <app-plan-value-chain-section
       sectionKey="designEngineering"

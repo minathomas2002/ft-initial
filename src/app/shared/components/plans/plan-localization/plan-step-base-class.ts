@@ -233,6 +233,12 @@ export abstract class PlanStepBaseClass implements OnInit {
     // Disable all controls first
     formGroup.disable({ emitEvent: false });
 
+    if (this.shouldEnableEntireFormInResubmitMode()) {
+      formGroup.enable({ emitEvent: false });
+      this.onEntireFormEnabledInResubmit();
+      return;
+    }
+
     if (!correctedFields?.length) {
       return;
     }
@@ -293,6 +299,17 @@ export abstract class PlanStepBaseClass implements OnInit {
   ): { controls: AbstractControl[]; parentChains: Map<AbstractControl, AbstractControl[]> } {
     return { controls: [], parentChains: new Map() };
   }
+
+  /**
+   * When true in resubmit mode, the entire step form is enabled (edit-like), bypassing per-field enablement.
+   * Subclasses (e.g. value chain with a page-level investor comment) may override.
+   */
+  protected shouldEnableEntireFormInResubmitMode(): boolean {
+    return false;
+  }
+
+  /** Hook after full form enable in resubmit; override for step-specific sync (e.g. year controls). */
+  protected onEntireFormEnabledInResubmit(): void {}
 
   /**
    * Collects all controls and their parent chains that should be enabled.

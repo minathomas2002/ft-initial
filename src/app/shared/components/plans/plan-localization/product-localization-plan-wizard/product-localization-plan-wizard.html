@@ -194,7 +194,7 @@
       />
       }
       <app-plan-localization-step-03-valueChain-form
-        [isViewMode]="isViewMode() || isReviewMode() || isResubmitMode()"
+        [isViewMode]="step3FormReadOnlyChrome()"
         [pageTitle]="steps()[2].title"
         [(commentPhase)]="step3CommentPhase"
         [(selectedInputs)]="step3SelectedInputs"
@@ -282,6 +282,7 @@
     <app-product-plan-summary-page
       [signature]="planSignature()"
       [approvalDepartmentSignature]="planDepartmentApprovalSignature()"
+      [originalPlanResponse]="originalPlanResponse()"
       [step1CommentsCountAndPhase]="step1CommentsCountAndPhase()"
       [step2CommentsCountAndPhase]="step2CommentsCountAndPhase()"
       [step3CommentsCountAndPhase]="step3CommentsCountAndPhase()"

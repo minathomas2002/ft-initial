@@ -95,6 +95,8 @@ export enum EMaterialsFormControls {
   manufacturingFormGroup = 'manufacturingFormGroup',
   assemblyTestingFormGroup = 'assemblyTestingFormGroup',
   afterSalesFormGroup = 'afterSalesFormGroup',
+  /** Review-mode checkbox group: comment on whole value-chain step (not a single table cell). */
+  valueChainPageCommentGroup = 'valueChainPageCommentGroup',
 
   // Step 3 - Value Chain Item Controls (used in FormArray items)
   expenseHeader = 'expenseHeader',

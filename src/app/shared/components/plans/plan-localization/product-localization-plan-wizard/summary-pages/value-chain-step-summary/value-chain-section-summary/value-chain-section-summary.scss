@@ -5,3 +5,28 @@
 table {
   border-collapse: collapse;
 }
+
+/** Removed baseline row (no longer in the form). */
+:host ::ng-deep tr.vc-row-removed td {
+  background-color: var(--p-red-50); 
+}
+
+:host ::ng-deep tr.vc-row-removed:hover td {
+  background-color: var(--p-red-100);
+}
+
+:host ::ng-deep tr.vc-row-removed td,
+:host ::ng-deep tr.vc-row-removed td * {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  color: rgb(107 114 128);
+}
+
+/** New row vs baseline snapshot (resubmit / summary). */
+:host ::ng-deep tr.vc-row-added td {
+  background-color: rgb(236 253 245);
+}
+
+:host ::ng-deep tr.vc-row-added td.bg-gray-100 {
+  background-color: rgb(243 244 246);
+}

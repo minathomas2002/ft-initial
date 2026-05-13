@@ -270,6 +270,20 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
     return comments.filter(c => c.pageTitleForTL === stepTitle || c.pageTitleForTL === EPlanPageTitle.ValueChain);
   });
 
+  /** Resubmit: investor left prose and/or a whole-page value-chain flag — treat step 3 like full edit. */
+  step3ResubmitFullPageEdit = computed(() => {
+    if (!this.isResubmitMode()) return false;
+    return this.step3Comments().some(c => {
+      if ((c.comment ?? '').trim().length > 0) return true;
+      return (c.fields ?? []).some(f => f.section === 'valueChain' && f.inputKey === 'valueChainPage');
+    });
+  });
+
+  /** Read-only chrome for step 3 (per-field disabled, hide add/remove) unless resubmit full-page edit. */
+  step3FormReadOnlyChrome = computed(
+    () => this.isViewMode() || this.isReviewMode() || (this.isResubmitMode() && !this.step3ResubmitFullPageEdit())
+  );
+
   step4Comments = computed<IPageComment[]>(() => {
     const comments = this.planComments()?.comments || [];
     const stepTitle = this.i18nService.translate('plans.wizard.step4.title');
@@ -813,9 +827,8 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
   }
 
   private mapPlanDataToForm(response: IProductPlanResponse): void {
-    // Store original plan response for before/after comparison in resubmit mode or view mode
-    if (this.isResubmitMode() || this.isViewMode() || this.isReviewMode()) {
-      // Store original plan response for before/after comparison
+    // Server snapshot for resubmit diff, review, and value-chain summary (removed rows vs current form).
+    if (response) {
       this.originalPlanResponse.set(response);
     }
 
