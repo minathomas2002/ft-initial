@@ -374,9 +374,9 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
 
     let total = 0;
 
-    // All sections include years
+    // All sections include years (excluding design & engineering)
     const sections = [
-      EMaterialsFormControls.designEngineeringFormGroup,
+      // EMaterialsFormControls.designEngineeringFormGroup,
       EMaterialsFormControls.sourcingFormGroup,
       EMaterialsFormControls.manufacturingFormGroup,
       EMaterialsFormControls.assemblyTestingFormGroup,
