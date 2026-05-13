@@ -2,22 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, mo
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls, EOpportunityLocalizationTablesValidation, EPlanPageTitle } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
-import { FormArrayInput } from '../../../utility-components/form-array-input/form-array-input';
-import { GroupInputWithCheckbox } from '../../../form/group-input-with-checkbox/group-input-with-checkbox';
-import { SelectModule } from 'primeng/select';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
+import { PlanValueChainSectionComponent } from './plan-value-chain-section/plan-value-chain-section.component';
 import { TooltipModule } from 'primeng/tooltip';
-import { ButtonModule } from 'primeng/button';
 import { ValueChainSummaryComponent } from './value-chain-summary/value-chain-summary.component';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
-import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { IFieldInformation, IPageComment, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { getFieldValueFromProductPlanResponse } from 'src/app/shared/utils/plan-original-value-from-response';
 import { createValueChainFieldKey, extractValueChainControlName, extractValueChainIndex } from 'src/app/shared/utils/value-chain-field-helpers';
 import { TColors } from 'src/app/shared/interfaces';
-import { TextareaModule } from 'primeng/textarea';
-import { FormsModule } from '@angular/forms';
 import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component';
 import { PlanStepBaseClass } from '../plan-step-base-class';
 import { TCommentPhase } from 'src/app/shared/types/plan-comments.types';
@@ -27,7 +19,6 @@ import { CommentInputComponent } from '../../comment-input/comment-input';
 import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportunities.store';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n';
-import { OptionalMessage } from '../../optional-message/optional-message';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -35,24 +26,12 @@ import { OptionalMessage } from '../../optional-message/optional-message';
     TranslatePipe,
     ReactiveFormsModule,
     BaseErrorMessages,
-    FormArrayInput,
-    GroupInputWithCheckbox,
-    SelectModule,
-    InputNumberModule,
-    InputTextModule,
+    PlanValueChainSectionComponent,
     TooltipModule,
-    ButtonModule,
     ValueChainSummaryComponent,
-    BaseErrorMessages,
-    TrimOnBlurDirective,
-    ConditionalColorClassDirective,
-    HidePlaceholderWhenDisabledEmptyDirective,
-    TextareaModule,
-    FormsModule,
     GeneralConfirmationDialogComponent,
     CommentStateComponent,
     CommentInputComponent,
-    OptionalMessage
   ],
   templateUrl: './plan-localization-step-03-valueChainForm.html',
   styleUrl: './plan-localization-step-03-valueChainForm.scss',
@@ -64,28 +43,25 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   isViewMode = input<boolean>(false);
 
   /** Translated table headers for value chain sections (Expense Header, In-house/Procured, Cost %, Year 1–7) */
-  valueChainHeaderLabels = computed(() => ({
-    [EMaterialsFormControls.expenseHeader]: this.i18n.translate('plans.form.expenseHeader'),
-    [EMaterialsFormControls.inHouseOrProcured]: this.i18n.translate('plans.form.inHouseProcured'),
-    [EMaterialsFormControls.costPercentage]: this.i18n.translate('plans.form.costPercentage'),
-    [EMaterialsFormControls.year1]: this.i18n.translate('plans.summary.year1'),
-    [EMaterialsFormControls.year2]: this.i18n.translate('plans.summary.year2'),
-    [EMaterialsFormControls.year3]: this.i18n.translate('plans.summary.year3'),
-    [EMaterialsFormControls.year4]: this.i18n.translate('plans.summary.year4'),
-    [EMaterialsFormControls.year5]: this.i18n.translate('plans.summary.year5'),
-    [EMaterialsFormControls.year6]: this.i18n.translate('plans.summary.year6'),
-    [EMaterialsFormControls.year7]: this.i18n.translate('plans.summary.year7'),
-  }));
   override readonly planStore = inject(PlanStore);
   readonly planFormService = inject(ProductPlanFormService);
+
+  /** Stable callbacks for `app-plan-value-chain-section` (template function inputs). */
+  readonly valueChainGetHasCommentControl = (formGroup: AbstractControl) => this.getHasCommentControl(formGroup);
+  readonly valueChainGetValueControl = (formGroup: AbstractControl) => this.getValueControl(formGroup);
+  readonly valueChainHighlightInput = (inputKey: string, rowId?: string) => this.highlightInput(inputKey, rowId);
+  readonly valueChainShouldHighlightTdInReviewMode = (
+    inputKey: string,
+    rowId: string | undefined | null,
+    itemControl: AbstractControl,
+    controlName: string
+  ) => this.shouldHighlightTdInReviewMode(inputKey, rowId, itemControl, controlName);
+  readonly valueChainOnInHouseOrProcuredChange = (itemControl: AbstractControl) =>
+    this.onInHouseOrProcuredChange(itemControl);
 
   pageTitle = input<EPlanPageTitle>(EPlanPageTitle.ValueChain);
 
   formGroup = this.planFormService.step3_valueChain;
-
-  // Dropdown options
-  inHouseOrProcuredOptions = this.planStore.inHouseProcuredOptionsTranslated;
-  localizationStatusOptions = this.planStore.localizationStatusOptionsTranslated;
 
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');
@@ -192,18 +168,6 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   /** Create unique field key for value chain: section_control_index */
   createFieldKey = createValueChainFieldKey;
-
-  /** Returns true when in-house/procured selection is In-house */
-  isInHouse(itemControl: AbstractControl): boolean {
-    const val = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value)?.value;
-    return val === '1' || val === EInHouseProcuredType.InHouse || val === EInHouseProcuredType.InHouse.toString();
-  }
-
-  /** In create/edit: show year form controls only when Procured; when In House show "No". In view/review: always show. */
-  showYearFormControls(itemControl: AbstractControl): boolean {
-    return !this.isInHouse(itemControl)
-  }
-
   /**
    * TD orange background: Review mode only, corrected field, and user has NOT checked the box (not yet addressed).
    * When user selects/checks the input, no orange.

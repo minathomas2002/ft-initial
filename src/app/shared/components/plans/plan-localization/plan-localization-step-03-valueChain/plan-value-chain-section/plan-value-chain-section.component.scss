@@ -1,0 +1,20 @@
+// RTL: match group-input-with-checkbox — row reverses so input order follows reading direction
+:host-context(html[dir='rtl']) {
+  .vc-field-row.flex.items-center {
+    flex-direction: row-reverse;
+  }
+}
+
+:host ::ng-deep {
+  .has-comment-checkbox {
+    --p-checkbox-checked-border-color: var(--p-orange-500);
+    --p-checkbox-checked-background: var(--p-orange-500);
+    --p-checkbox-checked-hover-background: var(--p-orange-500);
+    --p-checkbox-checked-hover-border-color: var(--p-orange-500);
+    --p-checkbox-checked-focus-background: var(--p-orange-500);
+    --p-checkbox-checked-focus-border-color: var(--p-orange-500);
+    --p-checkbox-checked-active-background: var(--p-orange-500);
+    --p-checkbox-checked-active-border-color: var(--p-orange-500);
+    --p-checkbox-hover-border-color: var(--p-orange-500);
+  }
+}
