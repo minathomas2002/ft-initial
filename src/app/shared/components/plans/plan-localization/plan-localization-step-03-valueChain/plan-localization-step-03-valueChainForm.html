@@ -36,15 +36,18 @@
       </h2>
     </app-group-input-with-checkbox>
 
-    <app-plan-value-chain-section
-      sectionKey="designEngineering"
-      [ft]="getDesignEngineeringFormArray()!"
-      [showSection]="hasSectionInResponse('designEngineering') || !isViewMode()"
-      [isViewMode]="isViewMode()"
-      [showOptionalBadge]="!isRequired(EOpportunityLocalizationTablesValidation.DesignEngineering)"
-      [onInHouseOrProcuredChange]="valueChainOnInHouseOrProcuredChange"
-      [upDateSelectedInputs]="upDateSelectedInputs"
-    />
+    <div class="flex flex-col bg-[#F9FAFA] border border-gray-200 rounded-lg p-4">
+      <app-plan-value-chain-section
+        sectionKey="designEngineering"
+        [ft]="getDesignEngineeringFormArray()!"
+        [showSection]="hasSectionInResponse('designEngineering') || !isViewMode()"
+        [isViewMode]="isViewMode()"
+        [showOptionalBadge]="!isRequired(EOpportunityLocalizationTablesValidation.DesignEngineering)"
+        [onInHouseOrProcuredChange]="valueChainOnInHouseOrProcuredChange"
+        [upDateSelectedInputs]="upDateSelectedInputs"
+      />
+      <app-design-engineering-note />
+    </div>
 
     <app-plan-value-chain-section
       sectionKey="sourcing"

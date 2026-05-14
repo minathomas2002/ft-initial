@@ -22,6 +22,7 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { DEFAULT_PLAN_SECTION_TITLE_TEXT_CLASS } from 'src/app/shared/utils/plan-wizard-comment-color';
+import { DesignEngineeringNote } from "../../design-engineering-note/design-engineering-note";
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -36,6 +37,7 @@ import { DEFAULT_PLAN_SECTION_TITLE_TEXT_CLASS } from 'src/app/shared/utils/plan
     CommentStateComponent,
     CommentInputComponent,
     GroupInputWithCheckbox,
+    DesignEngineeringNote
   ],
   templateUrl: './plan-localization-step-03-valueChainForm.html',
   styleUrl: './plan-localization-step-03-valueChainForm.scss',
