@@ -13,7 +13,7 @@ import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { TooltipModule } from 'primeng/tooltip';
 import { RoleService } from 'src/app/shared/services/role/role-service';
-import { resolvePlanStepTitleTextClassForComments } from 'src/app/shared/utils/plan-wizard-comment-color';
+import { getCommentColorKeyForStep } from 'src/app/shared/utils/plan-wizard-comment-color';
 
 /**
  * Step 3 summary: per-section field lists still come from {@link SummaryStepBaseClass.getSectionSummaryFields};
@@ -38,13 +38,30 @@ export class ValueChainStepSummary extends SummaryStepBaseClass {
   private readonly roleService = inject(RoleService);
   readonly pageTitleForTL = EPlanPageTitle.ValueChain;
 
-  readonly valueChainSummaryTitleColorClass = computed(() => {
+  readonly shouldShowResolvedDot = computed(() => {
     const { count, phase } = this.stepCommentsCountAndPhaseFromWizard();
-    return resolvePlanStepTitleTextClassForComments(count, phase, {
+    if (count <= 0) {
+      return false;
+    }
+
+    return getCommentColorKeyForStep(phase, {
       planStatus: this.planStore.planStatus(),
       wizardMode: this.planStore.wizardMode(),
       isEmployee: this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])(),
-    });
+    }) === 'green';
+  });
+
+  readonly shouldShowHasCommentTooltip = computed(() => {
+    const { count, phase } = this.stepCommentsCountAndPhaseFromWizard();
+    if (count <= 0) {
+      return false;
+    }
+
+    return getCommentColorKeyForStep(phase, {
+      planStatus: this.planStore.planStatus(),
+      wizardMode: this.planStore.wizardMode(),
+      isEmployee: this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])(),
+    }) === 'orange';
   });
   formGroup = this.productPlanFormService.step3_valueChain;
   doRefresh = signal(new Date());
