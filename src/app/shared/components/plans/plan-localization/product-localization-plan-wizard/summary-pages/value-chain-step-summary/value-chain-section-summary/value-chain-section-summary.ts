@@ -38,6 +38,8 @@ export type VcSummaryBodyRow =
       rowIndex: number;
       rowId: string | null;
       isAddedRow: boolean;
+      /** False for all-placeholder rows so resubmit green tint is not applied. */
+      shouldApplyAddedRowHighlight: boolean;
       isInHouse: boolean;
       expenseHeader: VcSummaryCellVm;
       inHouseOrProcured: VcSummaryCellVm;
@@ -118,6 +120,8 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
       const rowIdStr = rowId != null && String(rowId).trim() !== '' ? String(rowId) : '';
       const beforeRow = rowIdStr ? baselineRows.find((r: ValueChainRow) => String(r.id) === rowIdStr) : undefined;
       const isAddedRow = !rowIdStr || !baselineIds.has(rowIdStr);
+      const isEmptyPlaceholderRow = this.isValueChainFormRowEmpty(item);
+      const shouldApplyAddedRowHighlight = isAddedRow && !isEmptyPlaceholderRow;
 
       const cell = (
         controlName: string,
@@ -155,6 +159,7 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
         rowIndex: index,
         rowId,
         isAddedRow,
+        shouldApplyAddedRowHighlight,
         isInHouse,
         expenseHeader: cell(EMaterialsFormControls.expenseHeader, this.formatCellValue(beforeRow?.expenseHeader), v => this.formatCellValue(v)),
         inHouseOrProcured: cell(
@@ -285,5 +290,34 @@ export class ValueChainSectionSummaryComponent extends SummarySectionBaseClass {
     const key = `year${year}` as keyof ValueChainRow;
     const v = beforeRow[key] as number | null | undefined;
     return this.formatYearValue(v);
+  }
+
+  /** True when the row has no filled value-chain fields (summary shows placeholders only). */
+  private isValueChainFormRowEmpty(item: FormGroup): boolean {
+    const nestedValue = (controlName: string): unknown => {
+      const fieldGroup = item.get(controlName);
+      if (fieldGroup instanceof FormGroup) {
+        return fieldGroup.get(EMaterialsFormControls.value)?.value;
+      }
+      return undefined;
+    };
+    const isBlank = (v: unknown): boolean => v == null || (typeof v === 'string' && v.trim() === '');
+
+    if (!isBlank(nestedValue(EMaterialsFormControls.expenseHeader))) return false;
+    if (!isBlank(nestedValue(EMaterialsFormControls.inHouseOrProcured))) return false;
+    if (!isBlank(nestedValue(EMaterialsFormControls.costPercentage))) return false;
+    const yearKeys = [
+      EMaterialsFormControls.year1,
+      EMaterialsFormControls.year2,
+      EMaterialsFormControls.year3,
+      EMaterialsFormControls.year4,
+      EMaterialsFormControls.year5,
+      EMaterialsFormControls.year6,
+      EMaterialsFormControls.year7,
+    ] as const;
+    for (const yk of yearKeys) {
+      if (!isBlank(nestedValue(yk))) return false;
+    }
+    return true;
   }
 }
