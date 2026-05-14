@@ -3,7 +3,21 @@
   [class.mb-6]="isExpanded() || !showExpandButton()"
 >
   <div class="flex items-center gap-2">
-    <h2 [class]="'text-2xl font-semibold ' + titleColorClass()">{{ title() | translate }}</h2>
+    <h2 [class]="'text-2xl font-semibold text-[#1D1E23]'">{{ title() | translate }}</h2>
+    @if (showHasCommentTooltip()) {
+    <i
+      class="icon-info text-orange-600 text-sm bg-orange-50 p-1 rounded-full font-medium"
+      pTooltip="{{ 'plans.summary.fieldHasComment' | translate }}"
+      tooltipPosition="top"
+    ></i>
+    }
+    @if (showResolvedDot()) {
+    <span
+      class="inline-block h-2 w-2 rounded-full relative bg-success-500"
+      aria-label="Section resolved"
+      title="Section resolved"
+    ></span>
+    }
   </div>
   <div class="flex items-center gap-2">
     @if(!hideEditButton()) {

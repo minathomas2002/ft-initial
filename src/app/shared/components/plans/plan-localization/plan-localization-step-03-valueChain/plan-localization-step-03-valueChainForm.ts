@@ -381,6 +381,7 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     const userChangedInHouse = !!(inHouseCtrl && inHouseCtrl.dirty);
     const anyFieldInRowDirty = this.isAnyControlInRowDirty(itemControl);
     const isCreateOrEdit = !this.isViewMode() && this.planStore.wizardMode() !== 'Review' && this.planStore.wizardMode() !== 'resubmit';
+    const isEntireFormEnabledInResubmit = this.isResubmitMode() && this.shouldEnableEntireFormInResubmitMode();
 
     for (const yearKey of PlanLocalizationStep03ValueChainForm.YEAR_KEYS) {
       const yearGroup = itemControl.get(yearKey);
@@ -406,7 +407,13 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
         }
         // In resubmit: enable when any field in row is corrected and current is Procured (on load/revisit)
         const procuredRowWithCorrectedField = this.shouldEnableYearsForProcuredRowInResubmit(sectionKey, index, rowId, !isInHouse);
-        const canEdit = !this.isResubmitMode() || isYearCorrected || userChangedInHouse || anyFieldInRowDirty || procuredRowWithCorrectedField;
+        const canEdit =
+          !this.isResubmitMode() ||
+          isEntireFormEnabledInResubmit ||
+          isYearCorrected ||
+          userChangedInHouse ||
+          anyFieldInRowDirty ||
+          procuredRowWithCorrectedField;
         if (canEdit) {
           yearGroup.enable({ emitEvent: false, onlySelf: true });
           valueCtrl.enable();

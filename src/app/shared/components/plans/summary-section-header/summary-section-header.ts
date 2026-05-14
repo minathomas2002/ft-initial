@@ -14,8 +14,8 @@ export class SummarySectionHeader {
   hideEditButton = input<boolean>(false);
   showExpandButton = input<boolean>(true);
   isExpanded = input<boolean>(false);
-  /** Tailwind text color utilities for the title (default matches previous header color). */
-  titleColorClass = input<string>('text-[#1D1E23]');
+  showResolvedDot = input<boolean>(false);
+  showHasCommentTooltip = input<boolean>(false);
   title = input.required<string>();
   onEdit = output<void>();
   onToggleExpand = output<void>();
