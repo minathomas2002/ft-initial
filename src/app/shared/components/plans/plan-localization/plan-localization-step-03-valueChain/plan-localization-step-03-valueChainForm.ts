@@ -305,6 +305,13 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
     const section = this.getSectionForItemControl(itemControl);
     if (!section) return;
 
+    // Resubmit: year fields gate on `userChangedInHouse` (value control dirty). PrimeNG may emit
+    // `onChange` before the control is marked dirty; ensure dirty so years enable when switching to Procured.
+    if (this.isResubmitMode()) {
+      const inHouseValueCtrl = itemControl.get(EMaterialsFormControls.inHouseOrProcured)?.get(EMaterialsFormControls.value);
+      inHouseValueCtrl?.markAsDirty();
+    }
+
     this.applyYearsViewForItem(itemControl, section.key, section.index, true);
 
     // In resubmit mode: when switching to In House, years become null (not applicable). Remove them from selectedInputs

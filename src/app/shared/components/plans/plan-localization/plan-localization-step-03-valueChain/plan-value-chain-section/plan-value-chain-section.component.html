@@ -51,6 +51,7 @@
               [appHidePlaceholderWhenDisabledEmpty]="'plans.form.placeholders.enterInHouseProcured' | translate"
               [appendTo]="'body'"
               fluid
+              (onChange)="onInHouseOrProcuredChange()(itemControl)"
             />
           </div>
         </div>
