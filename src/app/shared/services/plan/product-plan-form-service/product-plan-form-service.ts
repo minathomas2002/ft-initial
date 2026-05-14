@@ -157,6 +157,10 @@ export class ProductPlanFormService {
     return this._step3Builder.calculateSectionTotalCostPercentage(this._step3FormGroup, sectionName);
   }
 
+  calculateTotalValueChainCostPercentage(): number {
+    return this._step3Builder.calculateTotalValueChainCostPercentage(this._step3FormGroup);
+  }
+
   createValueChainItem(): FormGroup {
     return this._step3Builder.createValueChainItemFormGroup();
   }
