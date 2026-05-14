@@ -1054,6 +1054,13 @@
       "inHouseProcured": "In-house / Procured",
       "costPercentage": "Cost %",
       "totalCostPercentage": "Total Cost Percentage",
+      "totalCostIndicator": {
+        "title": "Localization Calculation Notice",
+        "ofTotalCost": "of Total Cost",
+        "description": "Use the visual percentage counter to distribute values accurately without manual calculations. Remaining allocation will update automatically based on selected percentages.",
+        "includedInCostOnly": "Included in Cost Only",
+        "exceeds100": "Total coast should be 100%"
+      },
       "detailsOfServiceProvided": "Details of Service Provided",
       "serviceDetails": "Service Details",
       "saudiCompanyDetails": "Saudi Company Details",

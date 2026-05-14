@@ -36,7 +36,18 @@
       </h2>
     </app-group-input-with-checkbox>
 
-    <div class="flex flex-col bg-[#F9FAFA] border border-gray-200 rounded-lg p-4">
+    <div class="flex flex-col gap-1 bg-[#F9FAFA] border border-gray-200 rounded-lg p-4">
+      @if (showTotalCostIndicator()) {
+      <app-total-cost-indicator
+        class="mb-4 block w-full"
+        [percentage]="totalCostPercentage()"
+      >
+        <app-base-error-messages
+          [control]="formGroup"
+          [label]="'plans.form.totalCostPercentage' | translate"
+        />
+      </app-total-cost-indicator>
+      }
       <app-plan-value-chain-section
         sectionKey="designEngineering"
         [ft]="getDesignEngineeringFormArray()!"
@@ -89,10 +100,6 @@
       [upDateSelectedInputs]="upDateSelectedInputs"
     />
     <app-value-chain-summary></app-value-chain-summary>
-    <app-base-error-messages
-      [control]="formGroup"
-      [label]="'plans.form.totalCostPercentage' | translate"
-    />
   </div>
 
   <app-comment-input

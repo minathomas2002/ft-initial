@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, model, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { startWith } from 'rxjs';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EInHouseProcuredType, ELocalizationStatusType, EMaterialsFormControls, EOpportunityLocalizationTablesValidation, EPlanPageTitle } from 'src/app/shared/enums';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
@@ -22,7 +23,8 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { DEFAULT_PLAN_SECTION_TITLE_TEXT_CLASS } from 'src/app/shared/utils/plan-wizard-comment-color';
-import { DesignEngineeringNote } from "../../design-engineering-note/design-engineering-note";
+import { DesignEngineeringNote } from '../../design-engineering-note/design-engineering-note';
+import { TotalCostIndicator } from '../../total-cost-indicator/total-cost-indicator';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -37,7 +39,8 @@ import { DesignEngineeringNote } from "../../design-engineering-note/design-engi
     CommentStateComponent,
     CommentInputComponent,
     GroupInputWithCheckbox,
-    DesignEngineeringNote
+    DesignEngineeringNote,
+    TotalCostIndicator,
   ],
   templateUrl: './plan-localization-step-03-valueChainForm.html',
   styleUrl: './plan-localization-step-03-valueChainForm.scss',
@@ -68,6 +71,15 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   pageTitle = input<EPlanPageTitle>(EPlanPageTitle.ValueChain);
 
   formGroup = this.planFormService.step3_valueChain;
+
+  /** Sum of all Cost % value controls across value-chain sections; kept in sync via `valueChanges`. */
+  readonly totalCostPercentage = signal(0);
+
+  /** Shown only in supplier editing flows (not view or investor review). */
+  readonly showTotalCostIndicator = computed(() => {
+    const mode = this.planStore.wizardMode();
+    return mode === 'create' || mode === 'edit' || mode === 'resubmit';
+  });
 
   selectedInputColor = input<TColors>('orange');
   commentPhase = model<TCommentPhase>('none');
@@ -139,6 +151,10 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   override onSaveEditedComment(): void {
     super.onSaveEditedComment();
+  }
+
+  private refreshTotalCostPercentage(): void {
+    this.totalCostPercentage.set(this.planFormService.calculateTotalValueChainCostPercentage());
   }
 
 
@@ -494,6 +510,11 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
 
   override ngOnInit(): void {
     super.ngOnInit();
+    this.refreshTotalCostPercentage();
+    this.formGroup.valueChanges
+      .pipe(startWith(this.formGroup.value), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.refreshTotalCostPercentage());
+
     if (!this.isResubmitMode()) {
       this.applyYearsViewForAllRows();
     } else {

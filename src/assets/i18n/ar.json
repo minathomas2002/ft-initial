@@ -1096,6 +1096,13 @@
       "inHouseProcured": "داخلي / مشترى",
       "costPercentage": "نسبة التكلفة %",
       "totalCostPercentage": "إجمالي نسبة التكلفة",
+      "totalCostIndicator": {
+        "title": "إشعار حساب التوطين",
+        "ofTotalCost": "من إجمالي التكلفة",
+        "description": "استخدم عداد النسبة المرئي لتوزيع القيم بدقة دون حسابات يدوية. سيتم تحديث التخصيص المتبقي تلقائيًا بناءً على النسب المحددة.",
+        "includedInCostOnly": "مدرج في التكلفة فقط",
+        "exceeds100": "يجب أن يكون إجمالي التكلفة 100٪"
+      },
       "detailsOfServiceProvided": "تفاصيل الخدمة المقدمة",
       "serviceDetails": "تفاصيل الخدمة",
       "saudiCompanyDetails": "تفاصيل الشركة السعودية",

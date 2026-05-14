@@ -433,6 +433,22 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
     return total;
   }
 
+  /** Sum of all Cost % fields across every value-chain section (matches total-cost validation). */
+  calculateTotalValueChainCostPercentage(formGroup: FormGroup): number {
+    const sections = [
+      EMaterialsFormControls.designEngineeringFormGroup,
+      EMaterialsFormControls.sourcingFormGroup,
+      EMaterialsFormControls.manufacturingFormGroup,
+      EMaterialsFormControls.assemblyTestingFormGroup,
+      EMaterialsFormControls.afterSalesFormGroup,
+    ];
+    let grandTotal = 0;
+    for (const sectionName of sections) {
+      grandTotal += this.calculateSectionTotalCostPercentage(formGroup, sectionName);
+    }
+    return Number(grandTotal.toFixed(2));
+  }
+
   /**
    * Validator to check if any control in the form array is dirty, invalid, and has a required error
    * Returns {inComplete: true} if such a control is found
@@ -514,18 +530,7 @@ export class PlanLocalizationStep3ValueChainFormBuilder extends BasicPlanBuilder
         return null;
       }
 
-      const sections = [
-        EMaterialsFormControls.designEngineeringFormGroup,
-        EMaterialsFormControls.sourcingFormGroup,
-        EMaterialsFormControls.manufacturingFormGroup,
-        EMaterialsFormControls.assemblyTestingFormGroup,
-        EMaterialsFormControls.afterSalesFormGroup,
-      ];
-
-      let grandTotal = 0;
-      sections.forEach(sectionName => {
-        grandTotal += this.calculateSectionTotalCostPercentage(formGroup, sectionName);
-      });
+      const grandTotal = this.calculateTotalValueChainCostPercentage(formGroup);
 
       if (grandTotal !== 100) {
         return {
