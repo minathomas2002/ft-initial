@@ -1663,6 +1663,8 @@
         "inHouseProcured": "داخلي / مشترى",
         "costPercentage": "نسبة التكلفة %"
       },
+      "designEngineeringNoteBadge": "ملاحظة",
+      "designEngineeringNoteMessage": "لا يُدرج «التصميم والهندسة» في حساب التوطين السنوي، ومع ذلك يظل مشمولًا في نسبة التكلفة الإجمالية.",
       "year": "السنة",
       "summary": "على مدار عام",
       "year1": "السنة 1",

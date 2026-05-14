@@ -1694,6 +1694,8 @@
         "inHouseProcured": "In-house / Procured",
         "costPercentage": "Cost %"
       },
+      "designEngineeringNoteBadge": "Note",
+      "designEngineeringNoteMessage": "Design & Engineering is excluded from the Yearly Localization calculation, but it is still included in the Total Cost percentage.",
       "year": "Year",
       "summary": "Year-on-Year Localization %",
       "year1": "Year 1",
