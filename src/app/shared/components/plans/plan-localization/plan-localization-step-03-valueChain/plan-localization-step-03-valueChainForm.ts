@@ -21,6 +21,7 @@ import { OpportunitiesStore } from 'src/app/shared/stores/opportunities/opportun
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
+import { DEFAULT_PLAN_SECTION_TITLE_TEXT_CLASS } from 'src/app/shared/utils/plan-wizard-comment-color';
 
 @Component({
   selector: 'app-plan-localization-step-03-valueChain-form',
@@ -75,6 +76,8 @@ export class PlanLocalizationStep03ValueChainForm extends PlanStepBaseClass {
   correctedFields = input<IFieldInformation[]>([]);
   showCommentState = input<boolean>(false);
   originalPlanResponse = input<IProductPlanResponse | null>(null);
+  /** Tailwind text color for the value-chain section title; driven by wizard when step has comments. */
+  valueChainComponentsTitleColorClass = input<string>(DEFAULT_PLAN_SECTION_TITLE_TEXT_CLASS);
 
   // Check if investor comment exists for this step
   hasInvestorComment = computed((): boolean => {

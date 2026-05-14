@@ -42,6 +42,7 @@ export interface ICommentsCountAndPhase {
   phase: TCommentPhase;
 }
 import { IPlanWizardStepCommentDescriptor, IStepValidationStatus } from "src/app/shared/types/plan-comments.types";
+import { resolvePlanStepTitleTextClassForComments } from "src/app/shared/utils/plan-wizard-comment-color";
 import { OpportunitiesStore } from "src/app/shared/stores/opportunities/opportunities.store";
 import { RequiredFieldsMessage } from "../../required-fields-message/required-fields-message";
 type ProductLocalizationWizardStepId =
@@ -377,6 +378,16 @@ export class ProductLocalizationPlanWizard extends BasePlanWizard implements OnD
       count: this.steps()[2].commentsCount ?? 0,
       phase: this.step3CommentPhase()
     };
+  });
+
+  /** Value-chain form section title color when step 3 has comments (matches stepper comment color rules). */
+  step3ValueChainComponentsTitleColorClass = computed(() => {
+    const { count, phase } = this.step3CommentsCountAndPhase();
+    return resolvePlanStepTitleTextClassForComments(count, phase, {
+      planStatus: this.planStore.planStatus(),
+      wizardMode: this.planStore.wizardMode(),
+      isEmployee: this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])(),
+    });
   });
 
   step4CommentsCountAndPhase = computed<ICommentsCountAndPhase>(() => {

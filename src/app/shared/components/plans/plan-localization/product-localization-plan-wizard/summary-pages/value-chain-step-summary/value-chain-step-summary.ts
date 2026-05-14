@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { merge } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
-import { EMaterialsFormControls, EPlanPageTitle } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle, ERoles } from 'src/app/shared/enums';
 import { IFieldInformation, IProductPlanResponse } from 'src/app/shared/interfaces/plans.interface';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { SummarySectionHeader } from '../../../../summary-section-header/summary-section-header';
@@ -12,6 +12,8 @@ import { PageCommentBox } from '../../../../page-comment-box/page-comment-box';
 import { SummaryStepBaseClass } from 'src/app/shared/classes/plans/base-classes/summary-step-base.class';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { TooltipModule } from 'primeng/tooltip';
+import { RoleService } from 'src/app/shared/services/role/role-service';
+import { resolvePlanStepTitleTextClassForComments } from 'src/app/shared/utils/plan-wizard-comment-color';
 
 /**
  * Step 3 summary: per-section field lists still come from {@link SummaryStepBaseClass.getSectionSummaryFields};
@@ -33,7 +35,17 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class ValueChainStepSummary extends SummaryStepBaseClass {
   private readonly productPlanFormService = inject(ProductPlanFormService);
+  private readonly roleService = inject(RoleService);
   readonly pageTitleForTL = EPlanPageTitle.ValueChain;
+
+  readonly valueChainSummaryTitleColorClass = computed(() => {
+    const { count, phase } = this.stepCommentsCountAndPhaseFromWizard();
+    return resolvePlanStepTitleTextClassForComments(count, phase, {
+      planStatus: this.planStore.planStatus(),
+      wizardMode: this.planStore.wizardMode(),
+      isEmployee: this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])(),
+    });
+  });
   formGroup = this.productPlanFormService.step3_valueChain;
   doRefresh = signal(new Date());
 

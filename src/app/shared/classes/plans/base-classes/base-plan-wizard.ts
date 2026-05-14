@@ -10,6 +10,7 @@ import { EInternalUserPlanStatus } from 'src/app/shared/interfaces/dashboard-pla
 import { RoleService } from 'src/app/shared/services/role/role-service';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { getCommentColorKeyForStep } from 'src/app/shared/utils/plan-wizard-comment-color';
 
 /**
  * Abstract base class for plan wizard components using Template Method pattern.
@@ -173,16 +174,11 @@ export abstract class BasePlanWizard {
    * Centralized for product and service wizards.
    */
   protected getCommentColorForStep(stepCommentPhase: TCommentPhase): 'green' | 'orange' {
-    const status = this.planStore.planStatus();
-    const isViewOrReview = this.planStore.wizardMode() === 'view' || this.planStore.wizardMode() === 'Review';
-
-    const showGreenColor =
-      isViewOrReview &&
-      status === EInternalUserPlanStatus.UNDER_REVIEW &&
-      this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])() &&
-      stepCommentPhase === 'none'
-
-    return showGreenColor ? 'green' : 'orange';
+    return getCommentColorKeyForStep(stepCommentPhase, {
+      planStatus: this.planStore.planStatus(),
+      wizardMode: this.planStore.wizardMode(),
+      isEmployee: this.roleService.hasAnyRoleSignal([ERoles.EMPLOYEE])(),
+    });
   }
 
   /**
