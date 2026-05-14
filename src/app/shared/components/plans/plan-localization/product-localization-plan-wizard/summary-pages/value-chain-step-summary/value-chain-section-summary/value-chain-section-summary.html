@@ -43,7 +43,7 @@
         } @else {
         <tr
           class="hover:bg-gray-50/50"
-          [class.vc-row-added]="row.isAddedRow && applyValueChainRowTint()"
+          [class.vc-row-added]="row.shouldApplyAddedRowHighlight && applyValueChainRowTint()"
         >
           <td class="border-t border-gray-300 p-3">
             <app-plan-summary-flied [planSummaryField]="getSummaryField(row.expenseHeader, formatCellValue(row.expenseHeader.value))" />
