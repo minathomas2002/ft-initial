@@ -202,17 +202,17 @@ export abstract class BasePlanWizard {
   onAddComment(stepCommentColor: 'green' | 'orange'): void {
     if (this.getIsResubmitMode()) {
       this.getShowCommentState().set(true);
-      const step = this.getActiveStep();
-      const stepForm = this.getStepFormForComment(step);
-      if (!stepForm) return;
+      // const step = this.getActiveStep();
+      // const stepForm = this.getStepFormForComment(step);
+      // if (!stepForm) return;
 
-      const commentControl = stepForm.get(EMaterialsFormControls.comment) as FormControl<string> | null;
-      const hasComment = !!(commentControl?.value && commentControl.value.trim().length > 0);
-      const stepId = this.getStepIdFromStepIndex(step);
-      const phaseSignal = stepId ? this.getCommentPhaseSignalForStepId(stepId) : null;
-      if (phaseSignal?.() === 'none') {
-        phaseSignal.set(hasComment ? 'viewing' : 'none');
-      }
+      // const commentControl = stepForm.get(EMaterialsFormControls.comment) as FormControl<string> | null;
+      // const hasComment = !!(commentControl?.value && commentControl.value.trim().length > 0);
+      // const stepId = this.getStepIdFromStepIndex(step);
+      // const phaseSignal = stepId ? this.getCommentPhaseSignalForStepId(stepId) : null;
+      // if (phaseSignal?.() === 'none') {
+      //   phaseSignal.set(hasComment ? 'viewing' : 'none');
+      // }
       return;
     }
 
