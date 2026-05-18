@@ -139,6 +139,12 @@ export class TimelineComponent {
     const sectionDisplay = translatedSection === sectionKey
       ? this.camelCaseToWordPipe.transform(field.section)
       : translatedSection;
+
+    // Avoid duplicated output when both section and label resolve to the same text.
+    if (sectionDisplay.trim().toLowerCase() === translatedLabel.trim().toLowerCase()) {
+      return translatedLabel;
+    }
+
     return sectionDisplay + ' - ' + translatedLabel;
   }
 
@@ -154,6 +160,10 @@ export class TimelineComponent {
 
   /** Resolve section to translation key; handles camelCase and legacy display strings */
   private getSectionTranslationKey(section: string): string {
+    if (section === 'valueChain' || section === 'Value Chain') {
+      return 'plans.wizard.step3.title';
+    }
+
     // Normalize display strings like "Attachments" to lowercase for key lookup
     const normalizedSection = section.charAt(0).toLowerCase() + section.slice(1);
     const key = 'plans.form.' + normalizedSection;
