@@ -160,15 +160,13 @@ export class TimelineComponent {
 
   /** Resolve section to translation key; handles camelCase and legacy display strings */
   private getSectionTranslationKey(section: string): string {
-    if (section === 'valueChain' || section === 'Value Chain') {
-      return 'plans.wizard.step3.title';
-    }
-
     // Normalize display strings like "Attachments" to lowercase for key lookup
     const normalizedSection = section.charAt(0).toLowerCase() + section.slice(1);
     const key = 'plans.form.' + normalizedSection;
     if (this.i18nService.translate(key) !== key) return key;
     const displayToKey: Record<string, string> = {
+      'valueChain': 'plans.wizard.step3.title',
+      'Value Chain': 'plans.wizard.step3.title',
       'Service Details': 'serviceDetails',
       'Entity Level': 'entityLevel',
       'Service Level': 'serviceLevel',
@@ -183,7 +181,12 @@ export class TimelineComponent {
       'After Sales': 'afterSales',
       'Attachments': 'attachments',
     };
-    const normalized = displayToKey[section] ?? section.replace(/\s+/g, '');
+    const mappedValue = displayToKey[section];
+    if (mappedValue?.startsWith('plans.')) {
+      return mappedValue;
+    }
+
+    const normalized = mappedValue ?? section.replace(/\s+/g, '');
     return 'plans.form.' + normalized;
   }
 }
