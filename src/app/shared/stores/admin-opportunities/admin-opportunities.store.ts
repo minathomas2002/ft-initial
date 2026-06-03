@@ -42,48 +42,38 @@ const initialState: {
     id: EOpportunityType.PRODUCT.toString(),
     name: 'opportunity.type.product',
   }],
-  opportunityUnits:[
+  opportunityUnits: [
     {
       id: EOpportunityQuantity.KM.toString(),
-      name:'opportunity.units.km'
+      name: 'opportunity.units.km'
     },
-     {
+    {
       id: EOpportunityQuantity.Panels.toString(),
-      name:'opportunity.units.panels'
+      name: 'opportunity.units.panels'
     },
-     {
+    {
       id: EOpportunityQuantity.CB.toString(),
-      name:'opportunity.units.cb'
+      name: 'opportunity.units.cb'
     },
-     {
+    {
       id: EOpportunityQuantity.Discs.toString(),
-      name:'opportunity.units.discs'
+      name: 'opportunity.units.discs'
     },
-     {
+    {
       id: EOpportunityQuantity.KTons.toString(),
-      name:'opportunity.units.ktons'
+      name: 'opportunity.units.ktons'
     },
     {
       id: EOpportunityQuantity.Unit.toString(),
-      name:'opportunity.units.unit'
+      name: 'opportunity.units.unit'
     },
   ],
   opportunityCategories: [
     {
       id: '1',
-      name: 'opportunity.form.categoryBellIcon',
-      icon: 'icon-bell'
+      name: 'opportunity.form.categoryChartLineIcon',
+      icon: 'icon-chart-line-solid-full'
     },
-    {
-      id: '2',
-      name: 'opportunity.form.categoryIdeaIcon',
-      icon: 'icon-idea'
-    },
-    {
-      id: '3',
-      name: 'opportunity.form.categoryDataIcon',
-      icon: 'icon-data'
-    }
   ],
   statusOptions: [
     { id: EOpportunityStatus.PUBLISHED.toString(), name: 'opportunity.status.published' },

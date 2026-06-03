@@ -21,18 +21,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-.icon-chevron-down-small:before {
-  content: "\f00e";
-}
 
-.icon-chevron-up-small:before {
-  content: "\f00d";
-}
-.icon-check-circle-outline:before {
-  content: "\f00c";
-}
-.icon-alert-circle-outline:before {
-  content: "\f00b";
+.icon-chart-line-solid-full:before {
+    content: "\f00b";
 }
 .icon-download:before {
     content: "\f00a";
@@ -41,22 +32,22 @@
     content: "\f009";
 }
 .icon-briefcase-02:before {
-  content: "\f008";
+    content: "\f008";
 }
 .icon-help-circle:before {
     content: "\f007";
 }
 .icon-key-02:before {
-  content: "\f006";
+    content: "\f006";
 }
 .icon-edit-04:before {
     content: "\f005";
 }
-.icon-image-up:before {
-    content: "\f004";
-}
 .icon-edit-05:before {
     content: "\f003";
+}
+.icon-image-up:before {
+    content: "\f004";
 }
 .icon-profile:before {
     content: "\f002";
@@ -190,4 +181,3 @@
 .icon-umbrella:before {
     content: "\e927";
 }
-
