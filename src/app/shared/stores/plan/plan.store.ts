@@ -9,7 +9,6 @@ import { IProductPlanResponse, IServiceLocalizationPlanResponse, ITimeLineRespon
 import { downloadFileFromBlob } from "../../utils/file-download.utils";
 import { I18nService } from "../../services/i18n/i18n.service";
 import { RoleService } from "../../services/role/role-service";
-import { AuthStore } from "../auth/auth.store";
 
 export interface IPlanTypeDropdownOption {
   label: string;
@@ -113,8 +112,11 @@ const initialState: {
     { id: EServiceProvidedTo.Others.toString(), name: 'Others' },
   ],
   serviceCategoryOptions: [
-    { id: EServiceCategory.CategoryA.toString(), name: 'Category A' },
-    { id: EServiceCategory.CategoryB.toString(), name: 'Category B' },
+    { id: EServiceCategory.General.toString(), name: 'General' },
+    { id: EServiceCategory.Construction.toString(), name: 'Construction' },
+    { id: EServiceCategory.Installation.toString(), name: 'Installation' },
+    { id: EServiceCategory.CommissioningAndTesting.toString(), name: 'Commissioning and Testing' },
+    { id: EServiceCategory.ProjectCloseout.toString(), name: 'Project Closeout' },
   ],
   companyTypeOptions: [
     { id: EServiceCompanyType.Contractors.toString(), name: 'Contractor' },
@@ -183,14 +185,14 @@ export const PlanStore = signalStore(
     return {
       isFinalStatus: computed(() =>
         roleService.hasAnyRoleSignal([ERoles.INVESTOR])() ?
-       [EInvestorPlanStatus.REJECTED].includes(store.planStatus() as EInvestorPlanStatus) :
-       [
-          EInternalUserPlanStatus.DEPT_REJECTED,
-          EInternalUserPlanStatus.DEPT_APPROVED,
-          EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
-          EInternalUserPlanStatus.DEPT_REJECTED,
-          EInternalUserPlanStatus.DV_REJECTED,
-        ].includes(store.planStatus() as EInternalUserPlanStatus)),
+          [EInvestorPlanStatus.REJECTED].includes(store.planStatus() as EInvestorPlanStatus) :
+          [
+            EInternalUserPlanStatus.DEPT_REJECTED,
+            EInternalUserPlanStatus.DEPT_APPROVED,
+            EInternalUserPlanStatus.DV_REJECTION_ACKNOWLEDGED,
+            EInternalUserPlanStatus.DEPT_REJECTED,
+            EInternalUserPlanStatus.DV_REJECTED,
+          ].includes(store.planStatus() as EInternalUserPlanStatus)),
 
       planTypeOptions: computed<IPlanTypeDropdownOption[]>(() => {
         i18nService.currentLanguage();
@@ -276,8 +278,11 @@ export const PlanStore = signalStore(
         i18nService.currentLanguage();
         const opts = store.serviceCategoryOptions();
         const keyMap: Record<string, string> = {
-          [EServiceCategory.CategoryA.toString()]: 'plans.options.serviceCategoryA',
-          [EServiceCategory.CategoryB.toString()]: 'plans.options.serviceCategoryB',
+          [EServiceCategory.General.toString()]: 'plans.options.serviceCategoryGeneral',
+          [EServiceCategory.Construction.toString()]: 'plans.options.serviceCategoryConstruction',
+          [EServiceCategory.Installation.toString()]: 'plans.options.serviceCategoryInstallation',
+          [EServiceCategory.CommissioningAndTesting.toString()]: 'plans.options.serviceCategoryCommissioningAndTesting',
+          [EServiceCategory.ProjectCloseout.toString()]: 'plans.options.serviceCategoryProjectCloseout',
         };
         return opts.map((o) => ({ id: o.id, name: i18nService.translate(keyMap[o.id] ?? o.name) }));
       }),
@@ -928,7 +933,7 @@ export const PlanStore = signalStore(
         patchState(store, { isProcessing: true, error: null });
 
         return planApiService.exportPlans(filter).pipe(
-          map((res:any) => {
+          map((res: any) => {
             patchState(store, { isProcessing: false });
             return res.body!;
           }),

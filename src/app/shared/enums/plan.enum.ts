@@ -45,8 +45,11 @@ export enum EServiceCompanyType {
 }
 
 export enum EServiceCategory {
-  CategoryA = 1,
-  CategoryB = 2,
+  General = 1,
+  Construction = 2,
+  Installation = 3,
+  CommissioningAndTesting = 4,
+  ProjectCloseout = 5,
 }
 
 export enum EServiceQualificationStatus {
