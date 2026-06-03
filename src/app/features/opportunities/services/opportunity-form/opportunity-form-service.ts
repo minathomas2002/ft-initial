@@ -386,11 +386,14 @@ export class OpportunityFormService {
     let image: File | null = null;
     let imageIbmIdentifier: string | null = null;
     if (value.attachments && value.attachments.length > 0) {
-      var attachment = value.attachments[0];
-      const fileUrl = `data:${attachment?.ibmFileBase64?.fileBase64MimeType};base64,${attachment?.ibmFileBase64?.fileBase64}`;
+      const attachment = value.attachments[0];
+      const base64 = attachment?.ibmFileBase64?.fileBase64;
+      const mimeType = attachment?.ibmFileBase64?.fileBase64MimeType;
       const fileName = attachment.fileName || 'image';
       imageIbmIdentifier = attachment.ibmIdentifier;
-      image = await this.createFileFromUrl(fileUrl, fileName);
+      if (base64 && mimeType) {
+        image = this.createFileFromBase64(base64, mimeType, fileName);
+      }
     }
 
     // disable title and opportunityType if has active plans
@@ -493,37 +496,38 @@ export class OpportunityFormService {
 
   }
 
-  private async createFileFromUrl(
-    fileUrl: string,
-    fileName: string = "image.jpg"
-  ): Promise<File> {
-    const response = await fetch(fileUrl);
-    const blob = await response.blob();
+  private createFileFromBase64(
+    base64: string,
+    mimeType: string,
+    fileName: string = 'image.jpg'
+  ): File {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: mimeType });
 
-    // Ensure file has correct extension based on blob type
     let finalFileName = fileName;
-    const blobType = blob.type.toLowerCase();
+    const blobType = mimeType.toLowerCase();
 
-    // Determine extension from MIME type if fileName doesn't have valid extension
     if (!fileName.match(/\.(jpg|jpeg|png)$/i)) {
       if (blobType.includes('jpeg') || blobType.includes('jpg')) {
         finalFileName = fileName.replace(/\.[^.]*$/, '') + '.jpg';
       } else if (blobType.includes('png')) {
         finalFileName = fileName.replace(/\.[^.]*$/, '') + '.png';
       } else {
-        // Default to jpg if type is unknown
         finalFileName = fileName.replace(/\.[^.]*$/, '') + '.jpg';
       }
     }
 
-    // Ensure the blob type matches the extension
-    let finalBlobType = blob.type;
+    let finalBlobType = mimeType;
     if (finalFileName.endsWith('.jpg') || finalFileName.endsWith('.jpeg')) {
       finalBlobType = blobType.includes('jpeg') || blobType.includes('jpg')
-        ? blob.type
+        ? mimeType
         : 'image/jpeg';
     } else if (finalFileName.endsWith('.png')) {
-      finalBlobType = blobType.includes('png') ? blob.type : 'image/png';
+      finalBlobType = blobType.includes('png') ? mimeType : 'image/png';
     }
 
     return new File([blob], finalFileName, { type: finalBlobType });
