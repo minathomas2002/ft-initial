@@ -1,35 +1,40 @@
 import { Routes } from '@angular/router';
 import { visitorsGuard } from 'src/app/core/guards/visitors/visitors.guard';
+import { ERoutes } from 'src/app/shared/enums';
 
 export const AUTHENTICATION_ROUTES: Routes = [
     {
-        path: 'login',
+        path: ERoutes.login,
         canActivate: [visitorsGuard],    
         loadComponent: () => import('./pages/login/login').then((m) => m.Login),
     },
     {
-        path: 'forgot-password',
+        path: ERoutes.forgotPassword,
         loadComponent: () => import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
     },
     {
-        path: 'reset-password',
+        path: ERoutes.resetPassword,
         loadComponent: () => import('./pages/reset-password/reset-password').then((m) => m.ResetPassword),
     },
     {
-        path: 'register',
+        path: ERoutes.register,
         loadComponent: () => import('./pages/register/register').then((m) => m.Register),
     },
     {
-        path: 'verify-email',
+        path: ERoutes.verifyEmail,
         loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
     },
     {
-        path: 'verification',
+        path: ERoutes.verification,
         loadComponent: () => import('./pages/verification/verification').then((m) => m.Verification),
     },
     {
+        path: ERoutes.unauthorizedInternalUser,
+        loadComponent: () => import('./pages/un-authorized-internal-user/un-authorized-internal-user').then((m) => m.UnAuthorizedInternalUser),
+    },
+    {
         path: '',
-        redirectTo: 'login',
+        redirectTo: ERoutes.login,
         pathMatch: 'full',
     },
 ];

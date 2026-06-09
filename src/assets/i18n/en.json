@@ -149,6 +149,7 @@
     "alreadyHaveAccount": "Already have an account?",
     "gatewayTitle": "Your gateway to investment and sustainable growth",
     "gatewayDescription": "Together we grow. BENA connects you to industrial and investment opportunities for Vision 2030.",
+    "unAuthorizedInternalUserTitle": "You do not have access to login, please contact your administrator.",
     "login": {
       "title": "Log in",
       "description": "Welcome back! Please enter your details.",
