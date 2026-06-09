@@ -8,6 +8,6 @@ export const environment = {
 	apiVersion: 'v1',
 	appName: 'BENA - DEV',
 	enableDebug: true,
-	secDomain: 'http://localhost:4200//'//should be updated with sec internal domain
+	secDomain: 'http://localhost:4200'//should be updated with sec internal domain
 };
 

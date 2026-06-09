@@ -11,13 +11,13 @@ import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { PasswordToggleComponent } from 'src/app/shared/components/form/password-toggle/password-toggle.component';
 import { LoginFormService } from '../../services/login-form/login-form';
 import { environment } from 'src/environments/environment';
+import { isSecInternal } from 'src/app/core/initializers/sec-internal-auth.initializer';
 import { AuthStore, VERIFICATION_EMAIL_STORAGE_KEY } from 'src/app/shared/stores/auth/auth.store';
 import { ERoutes } from 'src/app/shared/enums';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
 import { SkeletonModule } from 'primeng/skeleton';
-import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -48,7 +48,7 @@ export class Login implements OnInit {
   toast = inject(ToasterService);
   i18nService = inject(I18nService);
 
-  isSecInternal = signal(window.location.origin == environment.secDomain);
+  isSecInternal = isSecInternal;
   isFakeDev = signal(false);
   showResendVerification = signal<boolean>(false);
   unverifiedEmail = signal<string | null>(null);
@@ -57,28 +57,7 @@ export class Login implements OnInit {
   windowsLoginLoader = signal(false);
 
   ngOnInit(): void {
-    //if domain is sec domain
-    if (this.isSecInternal()) {
-      this.authStore.windowsLogin()
-      .pipe(finalize(() => this.windowsLoginLoader.set(false)))
-      .subscribe({
-        next: (response) => {
-          if (response.success) {
-            localStorage.removeItem(VERIFICATION_EMAIL_STORAGE_KEY)
-            this.router.navigate(['/', ERoutes.dashboard]);
-          }
-        },
-        error: (error) => {
-          if (error.status === 500) {
-            this.toast.error(error?.error?.message || error?.error || 'Server error');
-          } else {
-            this.toast.error(
-              this.i18nService.translate('auth.login.noPortalAccess')
-            );
-          }
-        }
-      });
-    } else if (!environment.production && this.route.snapshot.queryParamMap.get('dev')) {
+    if (!environment.production && this.route.snapshot.queryParamMap.get('dev')) {
       this.isFakeDev.set(true);
     }
   }

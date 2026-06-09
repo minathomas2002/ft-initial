@@ -9,6 +9,7 @@ import { errorInterceptor } from './core/interceptors/error/error.interceptor';
 import { cultureInterceptor } from './core/interceptors/culture/culture.interceptor';
 import { MessageService } from 'primeng/api';
 import { DatePipe, DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
+import { provideSecInternalAuthInitializer } from './core/initializers/sec-internal-auth.initializer';
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: "disabled",
 };
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
+    provideSecInternalAuthInitializer(),
     provideRouter(
       routes,
       withInMemoryScrolling(scrollConfig),
