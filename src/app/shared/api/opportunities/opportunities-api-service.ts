@@ -52,7 +52,7 @@ export class OpportunitiesApiService {
   }
 
   deleteOpportunity(opportunityId: string): Observable<IBaseApiResponse<void>> {
-    return this.baseHttpService.delete<void, never>(`${API_ENDPOINTS.opportunities.deleteOpportunity}/${opportunityId}`);
+    return this.baseHttpService.post<void, unknown, {}>(`${API_ENDPOINTS.opportunities.deleteOpportunity}/${opportunityId}`, {});
   }
 
   getActiveOpportunityLookUps(opportunityType: EOpportunityType): Observable<IBaseApiResponse<ISelectItem[]>> {
