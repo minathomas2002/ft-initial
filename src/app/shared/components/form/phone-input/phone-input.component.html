@@ -30,7 +30,7 @@
               [src]="country.flagUrl"
               [alt]="isArabic() ? country.nameAr : country.name"
               class="flag-icon"
-              onerror="this.style.display='none'"
+              (error)="hideOnError($event)"
             />
             <span class="dial-code text-sm font-medium ltr">{{ country.dialCode }}</span>
           </div>
@@ -45,7 +45,7 @@
               [src]="country.flagUrl"
               [alt]="isArabic() ? country.nameAr : country.name"
               class="flag-icon"
-              onerror="this.style.display='none'"
+              (error)="hideOnError($event)"
             />
             <span class="country-name">{{ isArabic() ? country.nameAr : country.name }}</span>
             <span class="dial-code ml-auto text-sm font-medium ltr">{{ country.dialCode }}</span>

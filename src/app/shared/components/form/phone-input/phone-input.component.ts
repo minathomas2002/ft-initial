@@ -93,6 +93,10 @@ export class PhoneInputComponent implements ControlValueAccessor {
 		this.onTouched();
 	}
 
+	hideOnError(event: Event) {
+		(event.target as HTMLImageElement).style.display = 'none';
+	}
+
 	private updateValue() {
 		const country = this.selectedCountry();
 		const phone = this.phoneNumber();
