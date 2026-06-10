@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { ERoutes } from 'src/app/shared/enums';
 import { AuthStore, VERIFICATION_EMAIL_STORAGE_KEY } from 'src/app/shared/stores/auth/auth.store';
 
-export const isSecInternal = signal(window.location.origin === environment.secDomain);
+export const isSecInternal = signal(window.location.origin.toLowerCase() === environment.secDomain.toLowerCase());
 
 export function provideSecInternalAuthInitializer() {
   return provideAppInitializer(() => {

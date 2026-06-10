@@ -46,7 +46,7 @@ export class NavbarProfileDropdownComponent implements OnInit {
   profilePopover = viewChild<Popover>('profilePopover');
   delegationStore = inject(DelegationStore);
   private readonly roleMapper = new SystemEmployeeRoleMapper(this.i18nService);
-  isSecInternal = signal<boolean>(window.location.origin == environment.secDomain);
+  isSecInternal = signal<boolean>(window.location.origin.toLowerCase() == environment.secDomain.toLowerCase());
 
   /** Whether the current user can have impersonation options (employee, division/department manager) */
   canHaveImpersonationOptions = computed(() =>
@@ -103,14 +103,16 @@ export class NavbarProfileDropdownComponent implements OnInit {
       }
     ];
 
-    items.push({
-      label: this.i18nService.translate('navigation.signOut'),
-      icon: 'icon-log-out',
-      command: () => {
-        this.authStore.logout();
-        this.router.navigate(['/', ERoutes.auth, ERoutes.login])
-      },
-    })
+    if (!this.isSecInternal()) {
+      items.push({
+        label: this.i18nService.translate('navigation.signOut'),
+        icon: 'icon-log-out',
+        command: () => {
+          this.authStore.logout();
+          this.router.navigate(['/', ERoutes.auth, ERoutes.login])
+        },
+      })
+    }
     return items;
   });
 
