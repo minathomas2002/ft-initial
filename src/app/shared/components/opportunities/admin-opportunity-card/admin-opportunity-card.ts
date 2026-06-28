@@ -13,6 +13,7 @@ import { AdminOpportunitiesStore } from 'src/app/shared/stores/admin-opportuniti
 import { TruncateTooltipDirective } from 'src/app/shared/directives/truncate-tooltip.directive';
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-opportunity-card',
@@ -76,8 +77,8 @@ export class AdminOpportunityCard {
   }
 
   handleViewPlans() {
-    this.router.navigate(['/',ERoutes.plans], {
-      queryParams: { opportunityId: this.opportunity().id}
+    this.router.navigate([environment.baseHref, ERoutes.plans], {
+      queryParams: { opportunityId: this.opportunity().id }
     });
   }
 }

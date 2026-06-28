@@ -8,6 +8,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { AddEditHolidayDialog } from '../../components/add-edit-holiday-dialog/add-edit-holiday-dialog';
 import { HolidaysFilterService } from '../../services/holidays-filter/holidays-filter-service';
 import { AdminHolidaysManagementView } from '../../components/admin-holidays-management-view/admin-holidays-management-view';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-vacations-management',
@@ -39,7 +40,7 @@ export class AdminVacationsManagement {
   }
 
   goBack() {
-    this.router.navigate([`/${ERoutes.settings}`]);
+    this.router.navigate([environment.baseHref, ERoutes.settings]);
   }
 }
 

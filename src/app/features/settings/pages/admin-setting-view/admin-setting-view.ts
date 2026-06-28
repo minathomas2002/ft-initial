@@ -8,6 +8,7 @@ import { AdminAutoAssignDialog } from '../../components/admin-auto-assign-dialog
 import { AdminNotificationDialog } from '../../components/admin-notification-dialog/admin-notification-dialog';
 import { AdminSlaDialog } from '../../components/admin-sla-dialog/admin-sla-dialog';
 import { SettingCard } from '../../components/setting-card/setting-card';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-setting-view',
@@ -37,6 +38,6 @@ export class AdminSettingView {
   }
 
   onHolidaysClick() {
-    this.router.navigate([`/${ERoutes.settings}/${ERoutes.holidaysManagement}`]);
+    this.router.navigate([environment.baseHref, ERoutes.settings, ERoutes.holidaysManagement]);
   }
 }

@@ -18,6 +18,7 @@ import { GeneralConfirmationDialogComponent } from 'src/app/shared/components/ut
 import { take } from 'rxjs';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-opportunities-view',
@@ -54,7 +55,7 @@ export class AdminOpportunitiesView implements OnInit, OnDestroy {
   }
 
   onViewDetails(opportunity: IAdminOpportunity) {
-    this.router.navigate(['/', ERoutes.opportunities, opportunity.id]);
+    this.router.navigate([environment.baseHref, ERoutes.opportunities, opportunity.id]);
   }
 
   onAddOpportunity() {

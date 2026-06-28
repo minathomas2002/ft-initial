@@ -37,6 +37,7 @@ import { I18nService } from 'src/app/shared/services/i18n';
 import { opportunityUnitsMapper } from '../../classes/opportunity-units-mapper';
 import { OpportunityAuditDetails } from "./opportunity-audit-details/opportunity-audit-details";
 import { TColors } from 'src/app/shared/interfaces';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-opportunity-details',
@@ -129,11 +130,11 @@ export class OpportunityDetails implements OnInit, OnDestroy {
 
   onBack() {
     if (this.isAnonymous()) {
-      this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities]);
+      this.router.navigate([environment.baseHref, ERoutes.anonymous, ERoutes.opportunities]);
     } else if (this.permissionService.canAccessOnOpportunityAdmin()) {
-      this.router.navigate(['/', ERoutes.opportunities, ERoutes.admin]);
+      this.router.navigate([environment.baseHref, ERoutes.opportunities, ERoutes.admin]);
     } else {
-      this.router.navigate(['/', ERoutes.opportunities]);
+      this.router.navigate([environment.baseHref, ERoutes.opportunities]);
     }
   }
 
@@ -152,7 +153,7 @@ export class OpportunityDetails implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+      this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
     }
   }
 
@@ -254,7 +255,7 @@ export class OpportunityDetails implements OnInit, OnDestroy {
   }
 
   onViewPlans() {
-    this.router.navigate(['/', ERoutes.plans], {
+    this.router.navigate([environment.baseHref, ERoutes.plans], {
       queryParams: { opportunityId: this.opportunityId() }
     });
   }

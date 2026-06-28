@@ -22,6 +22,7 @@ import { ServiceLocalizationPlanWizard } from 'src/app/shared/components/plans/s
 import { PlanTermsAndConditionsDialog } from 'src/app/shared/components/plans/plan-terms-and-conditions-dialog/plan-terms-and-conditions-dialog';
 import { NewPlanDialog } from 'src/app/shared/components/plans/new-plan-dialog/new-plan-dialog';
 import { OpportunityDetailItem } from "src/app/shared/components/opportunities/opportunity-detail-item/opportunity-detail-item";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-opportunities-list',
@@ -40,7 +41,7 @@ import { OpportunityDetailItem } from "src/app/shared/components/opportunities/o
     PlanTermsAndConditionsDialog,
     NewPlanDialog,
     OpportunityDetailItem
-],
+  ],
   templateUrl: './opportunities-list.html',
   styleUrl: './opportunities-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -79,19 +80,19 @@ export class OpportunitiesList implements OnInit, OnDestroy {
 
   onViewDetails(opportunity: IOpportunity) {
     if (this.isAnonymous()) {
-      this.router.navigate(['/', ERoutes.anonymous, ERoutes.opportunities, opportunity.id], {
+      this.router.navigate([environment.baseHref, ERoutes.anonymous, ERoutes.opportunities, opportunity.id], {
         queryParams: { from: 'list' },
       });
     } else {
-      this.router.navigate(['/', ERoutes.opportunities, opportunity.id], {
+      this.router.navigate([environment.baseHref, ERoutes.opportunities, opportunity.id], {
         queryParams: { from: 'list' },
       });
     }
   }
 
-  onViewPlans(opportunity: IOpportunity){
-    this.router.navigate(['/',ERoutes.plans], {
-      queryParams: { opportunityId: opportunity.id}
+  onViewPlans(opportunity: IOpportunity) {
+    this.router.navigate([environment.baseHref, ERoutes.plans], {
+      queryParams: { opportunityId: opportunity.id }
     });
   }
   onApply(opportunity: IOpportunity) {
@@ -106,7 +107,7 @@ export class OpportunitiesList implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+      this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
     }
   }
 
@@ -140,10 +141,10 @@ export class OpportunitiesList implements OnInit, OnDestroy {
   }
 
   onUserConfirmNewPlanDialog() {
-     this.newPlanDialogVisibility.set(false);
-      this.planStore.newPlanOpportunityType() === EOpportunityType.PRODUCT
-    ? this.productLocalizationPlanWizardVisibility.set(true)
-    : this.serviceLocalizationPlanWizardVisibility.set(true);
+    this.newPlanDialogVisibility.set(false);
+    this.planStore.newPlanOpportunityType() === EOpportunityType.PRODUCT
+      ? this.productLocalizationPlanWizardVisibility.set(true)
+      : this.serviceLocalizationPlanWizardVisibility.set(true);
   }
 
   ngOnDestroy(): void {

@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { JwtService } from '../../services/auth/jwt-service';
 import { EImpersonationStatus, ERoutes } from '../../enums';
 import type { SupportedLanguage } from '../../services/i18n/i18n.service';
+import { environment } from 'src/environments/environment';
 
 const REFRESH_BEFORE_EXPIRY_MS = 2 * 60 * 1000; // 2 minutes before expiry
 export const VERIFICATION_EMAIL_STORAGE_KEY = 'verificationEmail';
@@ -122,12 +123,12 @@ export const AuthStore = signalStore(
               this.scheduleTokenRefresh();
             } else {
               this.logout();
-              router.navigate(['/', ERoutes.auth, ERoutes.login]);
+              router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
             }
           },
           error: () => {
             this.logout();
-            router.navigate(['/', ERoutes.auth, ERoutes.login]);
+            router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
           },
         });
       },

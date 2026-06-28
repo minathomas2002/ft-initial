@@ -17,6 +17,7 @@ import { ToasterService } from 'src/app/shared/services/toaster/toaster.service'
 import { I18nService } from 'src/app/shared/services/i18n/i18n.service';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { TrimOnBlurDirective } from 'src/app/shared/directives/trim-on-blur.directive';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-register',
   imports: [
@@ -63,7 +64,7 @@ export class Register {
           if (response.success) {
             this.toast.success(response.message as unknown as string || this.i18nService.translate('auth.register.verificationSentSuccess'));
             localStorage.setItem(VERIFICATION_EMAIL_STORAGE_KEY, this.registerForm.value.email!);
-            this.router.navigate(['/', ERoutes.auth, ERoutes.verification], {
+            this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.verification], {
               replaceUrl: true,
             });
           }
@@ -74,7 +75,7 @@ export class Register {
           } else if (error.status === 400) {
             //route to login page when email already exists
             //TODO: enhance this error, currently it depends on bad request which may be diffrenet error
-            this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+            this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
           }
         },
       });

@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { Router, type CanActivateFn } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
+import { environment } from 'src/environments/environment';
 
 export const visitorsGuard: CanActivateFn = (route, state) => {
   const authStore = inject(AuthStore);
@@ -10,6 +11,6 @@ export const visitorsGuard: CanActivateFn = (route, state) => {
   if (!authStore.isAuthenticated()) {
     return true;
   } else {
-    return router.navigate(['/', ERoutes.dashboard]);
+    return router.navigate([environment.baseHref, ERoutes.dashboard]);
   }
 };

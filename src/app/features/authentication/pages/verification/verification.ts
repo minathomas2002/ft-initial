@@ -8,6 +8,7 @@ import { TranslatePipe } from 'src/app/shared/pipes';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { AuthStore, VERIFICATION_EMAIL_STORAGE_KEY } from 'src/app/shared/stores/auth/auth.store';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-verification',
@@ -68,6 +69,6 @@ export class Verification implements OnInit {
   }
 
   onBackToLogin() {
-    this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+    this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
   }
 }

@@ -80,7 +80,7 @@ export class Login implements OnInit {
             this.showResendVerification.set(false);
             this.unverifiedEmail.set(null);
             localStorage.removeItem(VERIFICATION_EMAIL_STORAGE_KEY)
-            this.router.navigate(['/', ERoutes.dashboard]);
+            this.router.navigate([environment.baseHref, ERoutes.dashboard]);
           }
         },
         error: (error) => {
@@ -99,14 +99,14 @@ export class Login implements OnInit {
       next: (response) => {
         if (response.success) {
           localStorage.removeItem(VERIFICATION_EMAIL_STORAGE_KEY)
-          this.router.navigate(['/', ERoutes.dashboard]);
+          this.router.navigate([environment.baseHref, ERoutes.dashboard]);
         }
       },
     });
   }
 
   onCloseResendAlert() {
-    this.router.navigate(['/', ERoutes.auth, ERoutes.login], {
+    this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login], {
       replaceUrl: true,
     });
   }
@@ -119,7 +119,7 @@ export class Login implements OnInit {
 
     localStorage.setItem(VERIFICATION_EMAIL_STORAGE_KEY, email);
 
-    this.router.navigate(['/', ERoutes.auth, ERoutes.verification], {
+    this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.verification], {
       queryParams: { autoResend: '1' },
     });
   }

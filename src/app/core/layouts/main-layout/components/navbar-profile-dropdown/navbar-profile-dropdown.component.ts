@@ -109,7 +109,7 @@ export class NavbarProfileDropdownComponent implements OnInit {
         icon: 'icon-log-out',
         command: () => {
           this.authStore.logout();
-          this.router.navigate(['/', ERoutes.auth, ERoutes.login])
+          this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login])
         },
       })
     }
@@ -174,7 +174,7 @@ export class NavbarProfileDropdownComponent implements OnInit {
               window.location.href = `/${ERoutes.dashboard}`;
             }, 0);
             // this.router.resetConfig(this.router.config);
-            // this.router.navigate([`/${ERoutes.dashboard}`], {
+            // this.router.navigate([environment.baseHref, ERoutes.dashboard], {
             //   replaceUrl: true
             // });
           }

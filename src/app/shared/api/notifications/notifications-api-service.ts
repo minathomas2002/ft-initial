@@ -32,12 +32,13 @@ export class NotificationsApiService {
     console.log('markNotificationAsRead called with id:', id);
     const endpoint = `${API_ENDPOINTS.notifications.markNotificationAsRead}/${id}/read`;
     console.log('Calling endpoint:', endpoint);
-    return this.baseHttpService.put<any, any, unknown>(endpoint);
+    return this.baseHttpService.post<any, unknown, unknown>(endpoint, {});
   }
 
   markAllNotificationsAsRead(): Observable<IBaseApiResponse<any>> {
-    return this.baseHttpService.put<any, any, unknown>(
-      API_ENDPOINTS.notifications.markAllNotificationsAsRead
+    return this.baseHttpService.post<any, unknown, unknown>(
+      API_ENDPOINTS.notifications.markAllNotificationsAsRead,
+      {}
     );
   }
 }

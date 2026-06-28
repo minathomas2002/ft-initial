@@ -7,6 +7,7 @@ import { ERoutes } from 'src/app/shared/enums';
 import { AuthStore } from 'src/app/shared/stores/auth/auth.store';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
 import { I18nService } from 'src/app/shared/services/i18n';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-verify-email',
@@ -37,7 +38,7 @@ export class VerifyEmail implements OnInit {
 
       if (!tokenValue) {
         // If no token, redirect to login
-        this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+        this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
         return;
       }
 
@@ -55,17 +56,17 @@ export class VerifyEmail implements OnInit {
           this.verified.set(true);
           this.toaster.success(this.i18nService.translate('auth.verifyEmail.success'));
           // On failure, redirect to login
-          this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+          this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
         }
       },
       error: (error) => {
-        this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+        this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
       }
     });
   }
 
   onBackToLogin() {
-    this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+    this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
   }
 }
 

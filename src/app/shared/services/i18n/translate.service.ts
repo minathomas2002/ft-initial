@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { SupportedLanguage } from './i18n.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class TranslateService {
-	private readonly translationsPath = '/assets/i18n';
+	private readonly translationsPath = environment.isDMZ ? 'assets/i18n' : '/assets/i18n';
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) { }
 
 	/**
 	 * Load translations for a specific language

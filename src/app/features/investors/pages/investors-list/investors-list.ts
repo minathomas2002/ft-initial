@@ -11,6 +11,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { Router } from '@angular/router';
 import { ERoutes } from 'src/app/shared/enums';
 import { LocalizedDatePipe, TranslatePipe } from 'src/app/shared/pipes';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-investors-list',
@@ -56,7 +57,7 @@ export class InvestorsList implements OnInit {
   }
 
   goToInvestorPlans(investorId: string, investorName: string) {
-    this.router.navigate(['/', ERoutes.plans], {
+    this.router.navigate([environment.baseHref, ERoutes.plans], {
       queryParams: { investorId: investorId, investorName: investorName }
     });
   }

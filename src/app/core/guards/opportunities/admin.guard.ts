@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { Router, type CanActivateFn } from '@angular/router';
 import { ERoles, ERoutes } from 'src/app/shared/enums';
 import { RoleService } from 'src/app/shared/services/role/role-service';
+import { environment } from 'src/environments/environment';
 
 export const adminGuard: CanActivateFn = (route, state) => {
   const roleService = inject(RoleService);
@@ -9,5 +10,5 @@ export const adminGuard: CanActivateFn = (route, state) => {
   if (roleService.hasAnyRoleSignal([ERoles.ADMIN])()) {
     return true;
   }
-  return router.navigate(['/', ERoutes.dashboard]);
+  return router.navigate([environment.baseHref, ERoutes.dashboard]);
 };

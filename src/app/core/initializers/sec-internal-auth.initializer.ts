@@ -22,14 +22,14 @@ export function provideSecInternalAuthInitializer() {
       tap((response) => {
         if (response.success) {
           localStorage.removeItem(VERIFICATION_EMAIL_STORAGE_KEY);
-          void router.navigate(['/', ERoutes.dashboard]);
+          void router.navigate([environment.baseHref, ERoutes.dashboard]);
           return;
         }
 
-        void router.navigate(['/', ERoutes.auth, ERoutes.unauthorizedInternalUser]);
+        void router.navigate([environment.baseHref, ERoutes.auth, ERoutes.unauthorizedInternalUser]);
       }),
       catchError(() => {
-        void router.navigate(['/', ERoutes.auth, ERoutes.unauthorizedInternalUser]);
+        void router.navigate([environment.baseHref, ERoutes.auth, ERoutes.unauthorizedInternalUser]);
         return of(undefined);
       }),
     );

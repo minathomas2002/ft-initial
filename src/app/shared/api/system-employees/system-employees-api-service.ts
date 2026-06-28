@@ -41,7 +41,7 @@ export class SystemEmployeesApiService {
   }
 
   updateSystemEmployee(employee: IUpdateSystemEmployeeRequest): Observable<IBaseApiResponse<void>> {
-    return this.baseHttpService.put<void, IUpdateSystemEmployeeRequest, unknown>(API_ENDPOINTS.systemEmployees.updateSystemEmployee, employee);
+    return this.baseHttpService.post<void, IUpdateSystemEmployeeRequest, unknown>(API_ENDPOINTS.systemEmployees.updateSystemEmployee, employee);
   }
 
   toggleSystemEmployeeStatus(id: string): Observable<IBaseApiResponse<void>> {

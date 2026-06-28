@@ -10,6 +10,7 @@ import { LocalStorage } from 'src/app/shared/services/local-storage/local-storag
 import { JwtService } from 'src/app/shared/services/auth/jwt-service';
 import { EImpersonationStatus, ERoutes } from 'src/app/shared/enums';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 // Shared refresh token observable to prevent multiple refresh calls
 let refreshTokenInProgress: Observable<IBaseApiResponse<IAuthData>> | null = null;
@@ -105,7 +106,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             // Refresh failed, return error - lazy-inject AuthStore for logout
             const authStore = injector.get(AuthStore);
             authStore.logout();
-            router.navigate(['/', ERoutes.auth, ERoutes.login]);
+            router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
             return throwError(() => refreshError);
           })
         );

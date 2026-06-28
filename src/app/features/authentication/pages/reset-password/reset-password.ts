@@ -15,6 +15,7 @@ import { ERoutes } from 'src/app/shared/enums';
 import { IResetPasswordRequest } from 'src/app/shared/interfaces';
 import { I18nService } from 'src/app/shared/services/i18n';
 import { ToasterService } from 'src/app/shared/services/toaster/toaster.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-reset-password',
@@ -51,7 +52,7 @@ export class ResetPassword implements OnInit {
       const token = params['token'] || null;
       if (!token) {
         // If no token, redirect to login
-        this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+        this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
       } else {
         // Set token in hidden form field
         this.resetPasswordFormService.token.setValue(token);
@@ -59,13 +60,13 @@ export class ResetPassword implements OnInit {
           next: (response) => {
             if (response.success && response.body !== true) {
               this.toast.error(this.i18nService.translate('auth.reset.tokenExpired'));
-              this.router.navigate(['/', ERoutes.auth, ERoutes.forgotPassword]);
+              this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.forgotPassword]);
             } else {
               this.isValidToken.set(true);
             }
           },
           error: (error) => {
-            this.router.navigate(['/', ERoutes.auth, ERoutes.forgotPassword]);
+            this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.forgotPassword]);
           },
         });
       }
@@ -84,7 +85,7 @@ export class ResetPassword implements OnInit {
         next: (response) => {
           if (response.success) {
             // Redirect to login on success
-            this.router.navigate(['/', ERoutes.auth, ERoutes.login]);
+            this.router.navigate([environment.baseHref, ERoutes.auth, ERoutes.login]);
             this.toast.success(this.i18nService.translate('auth.reset.success'));
           }
         },
