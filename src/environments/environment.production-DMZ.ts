@@ -1,11 +1,11 @@
 export const environment = {
 	production: true,
-	baseUrl: 'https://benabe.sec.se.com.sa/api', // Production API URL
+	baseUrl: 'https://www.se.com.sa/bena/api/api', // Production API URL
 	apiVersion: 'v1',
-	appName: 'Benaa',
+	appName: 'BENA - Production',
 	enableDebug: false,
 	secDomain: 'https://bena.sec.se.com.sa',//should be updated with sec internal domain
-	isDMZ: false,
+	isDMZ: true,
 	baseHref: '/',
 };
 
