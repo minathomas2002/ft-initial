@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, injec
 import { NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TableLayoutComponent } from 'src/app/shared/components/layout-components/table-layout/table-layout.component';
 import { MenuModule } from 'primeng/menu';
 import { TableSkeletonComponent } from 'src/app/shared/components/skeletons/table-skeleton/table-skeleton.component';
@@ -60,7 +60,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NewPlanDialog,
     PlanTermsAndConditionsDialog,
     TruncateTooltipDirective,
-    GeneralConfirmationDialogComponent
+    GeneralConfirmationDialogComponent,
+    RouterLink
   ],
   templateUrl: './user-dashboard.html',
   styleUrl: './user-dashboard.scss',
@@ -85,6 +86,7 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   //#endregion
 
   //#region Enums
+  ERoutes = ERoutes;
   EInternalUserPlanStatus = EInternalUserPlanStatus;
   EInvestorPlanStatus = EInvestorPlanStatus;
   //#endregion
@@ -204,19 +206,6 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
       return this.i18nService.translate('opportunity.type.product');
 
     return '';
-  }
-
-  getPlanDetailsUrl(plan: IPlanRecord): string {
-    return this.router.serializeUrl(
-      this.router.createUrlTree([ERoutes.dashboard], {
-        queryParams: {
-          wizardMode: 'view',
-          wizardPlanId: plan.id,
-          wizardPlanType: plan.planType,
-          wizardPlanStatus: plan.status,
-        },
-      })
-    );
   }
 
   private handleOpenWizardFromQueryParams(params: Record<string, unknown>) {

@@ -56,7 +56,8 @@
           >
             <td>
               <a
-                [href]="getPlanDetailsUrl(item)"
+                [routerLink]="[ERoutes.plans]"
+                [queryParams]="{ wizardMode: 'view', wizardPlanId: item.id, wizardPlanType: item.planType, wizardPlanStatus: item.status }"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-[#4767A5] font-normal underline hover:text-[#3b5688] cursor-pointer"

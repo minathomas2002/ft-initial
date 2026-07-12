@@ -28,7 +28,7 @@ import { AssignReassignManualEmployee } from "../../components/assign-reassign-m
 import { PlanDashboardBase } from 'src/app/shared/classes/plan-dashboard-base';
 import { BaseTagComponent } from 'src/app/shared/components/base-components/base-tag/base-tag.component';
 import { GeneralConfirmationDialogComponent } from "src/app/shared/components/utility-components/general-confirmation-dialog/general-confirmation-dialog.component";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ERoutes } from 'src/app/shared/enums';
 import { SrmApprovalDialog } from '../../components/srm-approval-dialog/srm-approval-dialog';
@@ -57,7 +57,8 @@ import { SrmApprovalDialog } from '../../components/srm-approval-dialog/srm-appr
     AssignReassignManualEmployee,
     BaseTagComponent,
     GeneralConfirmationDialogComponent,
-    SrmApprovalDialog
+    SrmApprovalDialog,
+    RouterLink
   ],
   templateUrl: './plans-list.html',
   styleUrl: './plans-list.scss',
@@ -86,6 +87,7 @@ export class PlansList extends PlanDashboardBase implements OnInit {
   eInvestorPlanStatus = EInvestorPlanStatus;
   eInternalUserPlanStatus = EInternalUserPlanStatus;
   EInternalUserPlanStatus = EInternalUserPlanStatus;
+  ERoutes = ERoutes;
 
   private readonly investorFilterService = inject(InvestorPlansFilterService);
   private readonly internalUsersFilterService = inject(InternalUsersPlansFilterService);
@@ -175,19 +177,6 @@ export class PlansList extends PlanDashboardBase implements OnInit {
         this.investorName.set(params["investorName"]);
         this.handleOpenWizardFromQueryParams(params);
       })
-  }
-
-  getPlanDetailsUrl(plan: IPlanRecord): string {
-    return this.router.serializeUrl(
-      this.router.createUrlTree([ERoutes.plans], {
-        queryParams: {
-          wizardMode: 'view',
-          wizardPlanId: plan.id,
-          wizardPlanType: plan.planType,
-          wizardPlanStatus: plan.status,
-        },
-      })
-    );
   }
 
   private handleOpenWizardFromQueryParams(params: Record<string, unknown>) {
