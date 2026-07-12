@@ -42,13 +42,13 @@ export class ErrorMessagesService {
       )
       .filter((message): message is string => message !== null && typeof message === 'string');
 
-    // #region agent log
-    if (messages.length > 0 && control!.errors!['required']) {
-      const payload = {sessionId:'bd8107',location:'error-messages.service.ts:getErrorMessages',message:'getErrorMessages with required error',data:{labelType:typeof label,labelValue:label,labelIsObject:typeof label==='object',messages,messagesTypes:messages.map(m=>typeof m),controlErrors:control!.errors},timestamp:Date.now(),hypothesisId:'H1'};
-      fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify(payload)}).catch(()=>{});
-      if (typeof label !== 'string') console.warn('[DEBUG-bd8107] getErrorMessages label was not string:', payload);
-    }
-    // #endregion
+    // // #region agent log
+    // if (messages.length > 0 && control!.errors!['required']) {
+    //   const payload = {sessionId:'bd8107',location:'error-messages.service.ts:getErrorMessages',message:'getErrorMessages with required error',data:{labelType:typeof label,labelValue:label,labelIsObject:typeof label==='object',messages,messagesTypes:messages.map(m=>typeof m),controlErrors:control!.errors},timestamp:Date.now(),hypothesisId:'H1'};
+    //   fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify(payload)}).catch(()=>{});
+    //   if (typeof label !== 'string') console.warn('[DEBUG-bd8107] getErrorMessages label was not string:', payload);
+    // }
+    // // #endregion
 
     return messages;
   }
@@ -56,11 +56,11 @@ export class ErrorMessagesService {
   private hasErrors(control: AbstractControl | null): boolean {
     const hasErr = !!control?.errors && (control.dirty || control.touched);
     // #region agent log
-    if (control?.errors?.['required'] && !hasErr && control.invalid) {
-      const payload = {sessionId:'bd8107',location:'error-messages.service.ts:hasErrors',message:'hasErrors false for required control',data:{dirty:control.dirty,touched:control.touched,invalid:control.invalid},timestamp:Date.now(),hypothesisId:'H4'};
-      fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify(payload)}).catch(()=>{});
-      console.warn('[DEBUG-bd8107] hasErrors blocked:', payload);
-    }
+    // if (control?.errors?.['required'] && !hasErr && control.invalid) {
+    //   const payload = {sessionId:'bd8107',location:'error-messages.service.ts:hasErrors',message:'hasErrors false for required control',data:{dirty:control.dirty,touched:control.touched,invalid:control.invalid},timestamp:Date.now(),hypothesisId:'H4'};
+    //   fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify(payload)}).catch(()=>{});
+    //   console.warn('[DEBUG-bd8107] hasErrors blocked:', payload);
+    // }
     // #endregion
     return hasErr;
   }
@@ -136,9 +136,9 @@ export class ErrorMessagesService {
       case 'required': {
         const result = this.i18n.translate('common.validation.required', { label });
         // #region agent log
-        if (typeof label !== 'string') {
-          fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify({sessionId:'bd8107',location:'error-messages.service.ts:getValidationMessage',message:'required case with non-string label',data:{labelType:typeof label,labelValue:JSON.stringify(label),resultType:typeof result,result},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-        }
+        // if (typeof label !== 'string') {
+        //   fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify({sessionId:'bd8107',location:'error-messages.service.ts:getValidationMessage',message:'required case with non-string label',data:{labelType:typeof label,labelValue:JSON.stringify(label),resultType:typeof result,result},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+        // }
         // #endregion
         return result;
       }

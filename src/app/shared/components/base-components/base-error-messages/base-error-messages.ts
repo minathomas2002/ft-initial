@@ -51,10 +51,10 @@ export class BaseErrorMessages {
     const customRequiredMessage = this.customRequiredMessage();
 
     // #region agent log
-    if (messages.length > 0) {
-      const hasObjectMessage = messages.some(m => typeof m !== 'string');
-      fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify({sessionId:'bd8107',location:'base-error-messages.ts:errorMessages',message:'errorMessages computed',data:{labelType:typeof label,labelValue:label,messages,messagesTypes:messages.map(m=>typeof m),hasObjectMessage,controlErrors:control?.errors},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-    }
+    // if (messages.length > 0) {
+    //   const hasObjectMessage = messages.some(m => typeof m !== 'string');
+    //   fetch('http://127.0.0.1:7242/ingest/5b034c01-0b5b-4320-b714-d662075e070b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bd8107'},body:JSON.stringify({sessionId:'bd8107',location:'base-error-messages.ts:errorMessages',message:'errorMessages computed',data:{labelType:typeof label,labelValue:label,messages,messagesTypes:messages.map(m=>typeof m),hasObjectMessage,controlErrors:control?.errors},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+    // }
     // #endregion
 
     if (!customRequiredMessage) {
