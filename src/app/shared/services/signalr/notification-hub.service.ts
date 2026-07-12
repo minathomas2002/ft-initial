@@ -24,8 +24,11 @@ export class NotificationHubService {
 	/**
 	 * Get the base URL for SignalR hub (removes /api/ from baseUrl)
 	 */
+
+	
+
 	private getHubBaseUrl(): string {
-		const baseUrl = environment.baseUrl.replace('/api', '');
+		const baseUrl = environment.baseUrl.replace(/\/api$/, '');
 		return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 	}
 
