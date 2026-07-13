@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { LocationStrategy, NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { take } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -96,6 +96,7 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
   private readonly i18nService = inject(I18nService);
   private readonly toasterService = inject(ToasterService);
   private readonly router = inject(Router);
+  private readonly locationStrategy = inject(LocationStrategy);
   private readonly authStore = inject(AuthStore);
 
   private readonly internalUsersFilterService = inject(InternalUsersDashboardPlansFilterService);
@@ -246,8 +247,9 @@ export class UserDashboard extends PlanDashboardBase implements OnInit {
       return;
     }
 
-    const url = `/opportunities/${plan.opportunityId}`;
-    window.open(url, '_blank');
+    const routePath = `/${ERoutes.opportunities}/${plan.opportunityId}`;
+    const externalUrl = this.locationStrategy.prepareExternalUrl(routePath);
+    window.open(externalUrl, '_blank');
   }
 
   onEdit(plan: IPlanRecord) {

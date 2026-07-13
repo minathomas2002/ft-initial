@@ -9,6 +9,7 @@ import {
   signal,
   DestroyRef,
 } from '@angular/core';
+import { LocationStrategy } from '@angular/common';
 import { FormArray, ReactiveFormsModule, FormControl, AbstractControl, FormGroup } from '@angular/forms';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -21,7 +22,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhenDisabledEmptyDirective } from 'src/app/shared/directives';
 import { PlanStore } from 'src/app/shared/stores/plan/plan.store';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { EMaterialsFormControls, EOpportunityType, EPlanPageTitle } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EOpportunityType, EPlanPageTitle, ERoutes } from 'src/app/shared/enums';
 import { EServiceProvidedTo } from 'src/app/shared/enums';
 import { PhoneInputComponent } from 'src/app/shared/components/form/phone-input/phone-input.component';
 import { ServicePlanFormService } from 'src/app/shared/services/plan/service-plan-form-service/service-plan-form-service';
@@ -77,6 +78,7 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   readonly planFormService = inject(ServicePlanFormService);
   override readonly planStore = inject(PlanStore);
   override readonly destroyRef = inject(DestroyRef);
+  private readonly locationStrategy = inject(LocationStrategy);
   private readonly i18n = inject(I18nService);
 
   pageTitle = input.required<EPlanPageTitle>();
@@ -215,6 +217,19 @@ export class ServiceLocalizationStepOverview extends PlanStepBaseClass {
   }
   opportunityControlSignal = toSignal<ISelectItem | null>(this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).valueChanges, {
     initialValue: this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).value ?? null
+  });
+
+  readonly opportunityDetailsUrl = computed<string | null>(() => {
+    if (this.showWarningMesageDeletedOpportunity()) {
+      return null;
+    }
+
+    const opportunityId = this.opportunityControlSignal()?.id;
+    if (!opportunityId) {
+      return null;
+    }
+
+    return this.locationStrategy.prepareExternalUrl(`/${ERoutes.opportunities}/${opportunityId}`);
   });
 
   // Expose base class methods as public for template access

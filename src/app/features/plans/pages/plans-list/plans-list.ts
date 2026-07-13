@@ -9,7 +9,7 @@ import { LocalizedDatePipe, TranslatePipe, SlaCountdownNounPipe } from 'src/app/
 import { I18nService } from 'src/app/shared/services/i18n';
 import { InvestorPlansFilterService } from '../../services/investor-plans-filter-service/investor-plans-filter-service';
 import { InternalUsersPlansFilterService } from '../../services/internal-users-plans-filter-service/internal-users-plans-filter-service';
-import { NgClass } from '@angular/common';
+import { LocationStrategy, NgClass } from '@angular/common';
 import { EOpportunityType, ERoles, SRMApprovalStatus } from 'src/app/shared/enums';
 import { InvestorPlansFilter } from '../../components/investor-plans-filter/investor-plans-filter';
 import { InternalUsersPlansFilter } from '../../components/internal-users-plans-filter/internal-users-plans-filter';
@@ -68,6 +68,7 @@ import { SrmApprovalDialog } from '../../components/srm-approval-dialog/srm-appr
 export class PlansList extends PlanDashboardBase implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly locationStrategy = inject(LocationStrategy);
   private hasOpenedWizardFromQueryParams = false;
   planTermsAndConditionsDialogVisibility = signal(false);
   newPlanDialogVisibility = signal(false);
@@ -256,8 +257,9 @@ export class PlansList extends PlanDashboardBase implements OnInit {
       return;
     }
 
-    const url = `/opportunities/${plan.opportunityId}`;
-    window.open(url, '_blank');
+    const routePath = `/${ERoutes.opportunities}/${plan.opportunityId}`;
+    const externalUrl = this.locationStrategy.prepareExternalUrl(routePath);
+    window.open(externalUrl, '_blank');
   }
 
   onEdit(plan: IPlanRecord) {

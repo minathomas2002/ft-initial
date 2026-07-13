@@ -75,7 +75,7 @@
         <a
           class="text-[#4767A5] font-normal underline mt-2 cursor-pointer"
           target="_blank"
-          [attr.href]="showWarningMessageDeletedOpportunity() ? null : `/opportunities/${opportunityControlSignal()?.id}`"
+          [attr.href]="opportunityDetailsUrl()"
           (click)="onViewOpportunityDetails($event)"
         >{{`common.viewDetails`|translate}}</a>
         }

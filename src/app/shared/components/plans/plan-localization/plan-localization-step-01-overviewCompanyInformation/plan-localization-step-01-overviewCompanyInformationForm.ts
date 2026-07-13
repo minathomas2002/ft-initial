@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, model, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LocationStrategy } from '@angular/common';
 import { ProductPlanFormService } from 'src/app/shared/services/plan/product-plan-form-service/product-plan-form-service';
 import { BaseLabelComponent } from 'src/app/shared/components/base-components/base-label/base-label.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,7 +13,7 @@ import { TrimOnBlurDirective, ConditionalColorClassDirective, HidePlaceholderWhe
 import { GroupInputWithCheckbox } from 'src/app/shared/components/form/group-input-with-checkbox/group-input-with-checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { EMaterialsFormControls, EPlanPageTitle, ERoles } from 'src/app/shared/enums';
+import { EMaterialsFormControls, EPlanPageTitle, ERoles, ERoutes } from 'src/app/shared/enums';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from 'src/app/shared/pipes/translate.pipe';
 import { BaseErrorMessages } from 'src/app/shared/components/base-components/base-error-messages/base-error-messages';
@@ -61,6 +62,7 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
   private readonly adminOpportunitiesStore = inject(AdminOpportunitiesStore);
   override readonly planStore = inject(PlanStore);
   override readonly destroyRef = inject(DestroyRef);
+  private readonly locationStrategy = inject(LocationStrategy);
 
   readonly planFormService = inject(ProductPlanFormService);
 
@@ -188,6 +190,19 @@ export class PlanLocalizationStep01OverviewCompanyInformationForm extends PlanSt
 
   opportunityControlSignal = toSignal<ISelectItem | null>(this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).valueChanges, {
     initialValue: this.getFormControl(this.basicInformationFormGroupControls[EMaterialsFormControls.opportunity]).value ?? null
+  });
+
+  readonly opportunityDetailsUrl = computed<string | null>(() => {
+    if (this.showWarningMessageDeletedOpportunity()) {
+      return null;
+    }
+
+    const opportunityId = this.opportunityControlSignal()?.id;
+    if (!opportunityId) {
+      return null;
+    }
+
+    return this.locationStrategy.prepareExternalUrl(`/${ERoutes.opportunities}/${opportunityId}`);
   });
 
   onViewOpportunityDetails(event: MouseEvent): void {
