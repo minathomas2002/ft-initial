@@ -1,16 +1,32 @@
 @font-face {
-    font-family: 'Inter';
-    src: url('../../fonts/inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
-    font-weight: 100 900;
+    font-family: 'SE';
+    src: url('../../fonts/se/SE-Regular.b249f2ca02b1f708c870.woff2') format('woff2');
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'Inter';
-    src: url('../../fonts/inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
-    font-weight: 100 900;
-    font-style: italic;
+    font-family: 'SE';
+    src: url('../../fonts/se/SE-SemiBold.68702f0134c55f94dda7.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SE';
+    src: url('../../fonts/se/SE-Light.d4a4e98dec311e0915ab.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SE';
+    src: url('../../fonts/se/SE-Medium.92ccfb160b25e6c2ec23.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
     font-display: swap;
 }
 
